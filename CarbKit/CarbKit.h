@@ -2,11 +2,11 @@
 //  CarbKit.h
 //  CarbKit
 //
-//  Created by Nathan Racklyeft on 1/3/16.
+//  Created by Nathan Racklyeft on 2/15/16.
 //  Copyright © 2016 Nathan Racklyeft. All rights reserved.
 //
 
-@import Foundation;
+#import <UIKit/UIKit.h>
 
 //! Project version number for CarbKit.
 FOUNDATION_EXPORT double CarbKitVersionNumber;
