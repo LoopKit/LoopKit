@@ -1,3 +1,4 @@
-# naterade-ios
+# LoopKit
 
-WIP
+Coming soon.
+
