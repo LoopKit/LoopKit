@@ -97,6 +97,9 @@
 		43D8FEF31C7294E90073BE78 /* ReservoirTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEF01C7294E90073BE78 /* ReservoirTableViewController.swift */; };
 		43D8FEF61C72954F0073BE78 /* basal.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEF41C7295490073BE78 /* basal.json */; };
 		43D8FEF71C7295500073BE78 /* basal.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEF41C7295490073BE78 /* basal.json */; };
+		43D8FEFA1C72A1EF0073BE78 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
+		43D8FEFB1C72A1F40073BE78 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
+		43D8FEFC1C72A1F90073BE78 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -253,6 +256,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43D8FEFA1C72A1EF0073BE78 /* LoopKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +272,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43D8FEFB1C72A1F40073BE78 /* LoopKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +288,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43D8FEFC1C72A1F90073BE78 /* LoopKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
