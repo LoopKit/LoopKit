@@ -60,7 +60,6 @@
 		43D8FE641C7291D80073BE78 /* SegmentedControlInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE5C1C7291D80073BE78 /* SegmentedControlInputAccessoryView.swift */; };
 		43D8FE681C7292B00073BE78 /* read_carb_ratios.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FE661C7292950073BE78 /* read_carb_ratios.json */; };
 		43D8FE691C7292B00073BE78 /* read_carb_ratios.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FE661C7292950073BE78 /* read_carb_ratios.json */; };
-		43D8FE721C7293070073BE78 /* GlucoseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D8FE711C7293070073BE78 /* GlucoseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43D8FE881C72934C0073BE78 /* GlucoseMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE861C72934C0073BE78 /* GlucoseMath.swift */; };
 		43D8FE891C72934C0073BE78 /* GlucoseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE871C72934C0073BE78 /* GlucoseStore.swift */; };
 		43D8FE931C7293C70073BE78 /* GlucoseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FE6F1C7293070073BE78 /* GlucoseKit.framework */; };
@@ -73,7 +72,6 @@
 		43D8FEA91C7293FA0073BE78 /* momentum_effect_rising_glucose_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEA11C7293FA0073BE78 /* momentum_effect_rising_glucose_output.json */; };
 		43D8FEAA1C7293FA0073BE78 /* momentum_effect_stable_glucose_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEA21C7293FA0073BE78 /* momentum_effect_stable_glucose_input.json */; };
 		43D8FEAB1C7293FA0073BE78 /* momentum_effect_stable_glucose_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEA31C7293FA0073BE78 /* momentum_effect_stable_glucose_output.json */; };
-		43D8FEB41C7294520073BE78 /* InsulinKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D8FEB31C7294520073BE78 /* InsulinKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43D8FEBB1C7294520073BE78 /* InsulinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FEB11C7294520073BE78 /* InsulinKit.framework */; };
 		43D8FEC91C7294640073BE78 /* InsulinMathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEC81C7294640073BE78 /* InsulinMathTests.swift */; };
 		43D8FED31C7294B80073BE78 /* iob_from_bolus_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FECB1C7294B80073BE78 /* iob_from_bolus_input.json */; };
@@ -100,6 +98,8 @@
 		43D8FEFA1C72A1EF0073BE78 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		43D8FEFB1C72A1F40073BE78 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		43D8FEFC1C72A1F90073BE78 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
+		43D8FF091C72C0360073BE78 /* GlucoseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D8FE711C7293070073BE78 /* GlucoseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43D8FF0A1C72C03D0073BE78 /* InsulinKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D8FEB31C7294520073BE78 /* InsulinKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -552,8 +552,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43D8FE721C7293070073BE78 /* GlucoseKit.h in Headers */,
-				43D8FEB41C7294520073BE78 /* InsulinKit.h in Headers */,
 				43D8FE2D1C72914D0073BE78 /* CarbKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -562,6 +560,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43D8FF091C72C0360073BE78 /* GlucoseKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +568,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43D8FF0A1C72C03D0073BE78 /* InsulinKit.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1361,6 +1361,7 @@
 				43D8FE3D1C72914D0073BE78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		43D8FE3E1C72914D0073BE78 /* Build configuration list for PBXNativeTarget "CarbKitTests" */ = {
 			isa = XCConfigurationList;
@@ -1369,6 +1370,7 @@
 				43D8FE401C72914D0073BE78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		43D8FE801C7293070073BE78 /* Build configuration list for PBXNativeTarget "GlucoseKit" */ = {
 			isa = XCConfigurationList;
@@ -1377,6 +1379,7 @@
 				43D8FE821C7293070073BE78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		43D8FE961C7293C70073BE78 /* Build configuration list for PBXNativeTarget "GlucoseKitTests" */ = {
 			isa = XCConfigurationList;
@@ -1385,6 +1388,7 @@
 				43D8FE981C7293C70073BE78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		43D8FEC21C7294520073BE78 /* Build configuration list for PBXNativeTarget "InsulinKit" */ = {
 			isa = XCConfigurationList;
@@ -1393,6 +1397,7 @@
 				43D8FEC41C7294520073BE78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		43D8FEC51C7294520073BE78 /* Build configuration list for PBXNativeTarget "InsulinKitTests" */ = {
 			isa = XCConfigurationList;
@@ -1401,6 +1406,7 @@
 				43D8FEC71C7294520073BE78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
