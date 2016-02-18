@@ -37,8 +37,8 @@ public struct LoopMath {
                     minDate = sample.startDate
                 }
 
-                if sample.startDate > maxDate {
-                    maxDate = sample.startDate
+                if sample.endDate > maxDate {
+                    maxDate = sample.endDate
                 }
             }
 

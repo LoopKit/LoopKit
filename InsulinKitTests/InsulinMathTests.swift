@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import HealthKit
 import LoopKit
 @testable import InsulinKit
 
@@ -55,6 +56,15 @@ class InsulinMathTests: XCTestCase {
         }
     }
 
+    func loadGlucoseEffectFixture(resourceName: String) -> [GlucoseEffect] {
+        let fixture: [JSONDictionary] = loadFixture(resourceName)
+        let dateFormatter = NSDateFormatter.ISO8601LocalTimeDateFormatter()
+
+        return fixture.map {
+            return GlucoseEffect(startDate: dateFormatter.dateFromString($0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit(fromString: $0["unit"] as! String), doubleValue:$0["amount"] as! Double))
+        }
+    }
+
     func loadBasalRateScheduleFixture(resourceName: String) -> BasalRateSchedule {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
 
@@ -63,6 +73,10 @@ class InsulinMathTests: XCTestCase {
         }
 
         return BasalRateSchedule(dailyItems: items)!
+    }
+
+    var insulinSensitivitySchedule: InsulinSensitivitySchedule {
+        return InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliterUnit(), dailyItems: [RepeatingScheduleValue(startTime: 0.0, value: 40.0)])!
     }
 
     func testDoseEntriesFromReservoirValues() {
@@ -80,7 +94,7 @@ class InsulinMathTests: XCTestCase {
     }
 
     func testIOBFromDoses() {
-        let input = loadDoseFixture("iob_from_doses_input")
+        let input = loadDoseFixture("normalized_doses")
         let output = loadInsulinValueFixture("iob_from_doses_output")
 
         let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: NSTimeInterval(hours: 4))
@@ -92,7 +106,7 @@ class InsulinMathTests: XCTestCase {
     }
 
     func testIOBFromBolus() {
-        let input = loadDoseFixture("iob_from_bolus_input")
+        let input = loadDoseFixture("bolus_dose")
         let output = loadInsulinValueFixture("iob_from_bolus_output")
 
         let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: NSTimeInterval(hours: 4))
@@ -127,6 +141,54 @@ class InsulinMathTests: XCTestCase {
         for (expected, calculated) in zip(output, iob) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: pow(1, -14))
+        }
+    }
+
+    func testGlucoseEffectFromBolus() {
+        let input = loadDoseFixture("bolus_dose")
+        let output = loadGlucoseEffectFixture("effect_from_bolus_output")
+
+        let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
+
+        for (expected, calculated) in zip(output, effects) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), calculated.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), accuracy: pow(1, -14))
+        }
+    }
+
+    func testGlucoseEffectFromShortTempBasal() {
+        let input = loadDoseFixture("short_basal_dose")
+        let output = loadGlucoseEffectFixture("effect_from_bolus_output")
+
+        let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
+
+        for (expected, calculated) in zip(output, effects) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), calculated.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), accuracy: pow(1, -14))
+        }
+    }
+
+    func testGlucoseEffectFromTempBasal() {
+        let input = loadDoseFixture("basal_dose")
+        let output = loadGlucoseEffectFixture("effect_from_basal_output")
+
+        let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
+
+        for (expected, calculated) in zip(output, effects) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), calculated.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), accuracy: pow(1, -14), String(expected.startDate))
+        }
+    }
+
+    func testGlucoseEffectFromHistory() {
+        let input = loadDoseFixture("normalized_doses")
+        let output = loadGlucoseEffectFixture("effect_from_history_output")
+
+        let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
+
+        for (expected, calculated) in zip(output, effects) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), calculated.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), accuracy: pow(1, -14))
         }
     }
 }

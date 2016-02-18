@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import HealthKit
 import LoopKit
 
 
@@ -68,7 +69,7 @@ struct InsulinMath {
 
         repeat {
             let segment = max(0, min(doseDate + delta, doseDuration) - doseDate) / doseDuration
-            iob += segment * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)!
+            iob += segment * walshPercentEffectRemainingAtTime(time - delay - doseDate, actionDuration: actionDuration)!
             doseDate += delta
         } while doseDate <= min(floor((time + delay) / delta) * delta, doseDuration)
 
@@ -92,6 +93,40 @@ struct InsulinMath {
         }
 
         return iob
+    }
+
+    private static func glucoseEffectForContinuousDose(dose: DoseEntry, atDate date: NSDate, actionDuration: NSTimeInterval, delay: NSTimeInterval, delta: NSTimeInterval) -> Double {
+        let doseDuration = dose.endDate.timeIntervalSinceDate(dose.startDate)  // t1
+        let time = date.timeIntervalSinceDate(dose.startDate)
+        var value: Double = 0
+        var doseDate = NSTimeInterval(0)  // i
+
+        repeat {
+            let segment = max(0, min(doseDate + delta, doseDuration) - doseDate) / doseDuration
+            value += segment * (1.0 - walshPercentEffectRemainingAtTime(time - delay - doseDate, actionDuration: actionDuration)!)
+            doseDate += delta
+        } while doseDate <= min(floor((time + delay) / delta) * delta, doseDuration)
+
+        return value
+    }
+
+    private static func glucoseEffectForDose(dose: DoseEntry, atDate date: NSDate, actionDuration: NSTimeInterval, insulinSensitivity: Double, delay: NSTimeInterval, delta: NSTimeInterval) -> Double {
+        let time = date.timeIntervalSinceDate(dose.startDate)
+        let value: Double
+
+        if time >= 0 {
+            if dose.unit == .Units {
+                value = dose.value * -insulinSensitivity * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)!)
+            } else if dose.unit == .UnitsPerHour && dose.endDate.timeIntervalSinceDate(dose.startDate) <= 1.05 * delta {
+                value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1) * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)!)
+            } else {
+                value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1) * glucoseEffectForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
+            }
+        } else {
+            value = 0
+        }
+
+        return value
     }
 
     /**
@@ -253,6 +288,44 @@ struct InsulinMath {
             }
 
             values.append(InsulinValue(startDate: date, value: value))
+            date = date.dateByAddingTimeInterval(delta)
+        } while date <= endDate
+
+        return values
+    }
+
+    static func glucoseEffectsForDoses<T: CollectionType where T.Generator.Element == DoseEntry>(
+        doses: T,
+        actionDuration: NSTimeInterval,
+        insulinSensitivity: InsulinSensitivitySchedule,
+        fromDate: NSDate? = nil,
+        toDate: NSDate? = nil,
+        delay: NSTimeInterval = NSTimeInterval(minutes: 10),
+        delta: NSTimeInterval = NSTimeInterval(minutes: 5)
+    ) -> [GlucoseEffect] {
+        var validActionDuration = false
+
+        for hours in 3...6 {
+            if actionDuration == NSTimeInterval(hours: Double(hours)) {
+                validActionDuration = true
+                break
+            }
+        }
+
+        guard validActionDuration, let (startDate, endDate) = LoopMath.simulationDateRangeForSamples(doses, fromDate: fromDate, toDate: toDate, duration: actionDuration, delay: delay, delta: delta) else {
+            return []
+        }
+
+        var date = startDate
+        var values = [GlucoseEffect]()
+        let unit = HKUnit.milligramsPerDeciliterUnit()
+
+        repeat {
+            let value = doses.reduce(0) { (value, dose) -> Double in
+                return value + glucoseEffectForDose(dose, atDate: date, actionDuration: actionDuration, insulinSensitivity: insulinSensitivity.quantityAt(dose.startDate).doubleValueForUnit(unit), delay: delay, delta: delta)
+            }
+
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
             date = date.dateByAddingTimeInterval(delta)
         } while date <= endDate
 

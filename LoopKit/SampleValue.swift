@@ -12,6 +12,14 @@ import HealthKit
 
 public protocol TimelineValue {
     var startDate: NSDate { get }
+    var endDate: NSDate { get }
+}
+
+
+public extension TimelineValue {
+    var endDate: NSDate {
+        return startDate
+    }
 }
 
 

@@ -36,8 +36,20 @@ public class CarbStore: HealthKitSampleStore {
 
     public private(set) var preferredUnit: HKUnit = HKUnit.gramUnit()
 
+    public var carbRatioSchedule: CarbRatioSchedule? {
+        didSet {
+            clearCalculationCache()
+        }
+    }
+
     /// A span of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
     public let defaultAbsorptionTimes: DefaultAbsorptionTimes
+
+    public var insulinSensitivitySchedule: InsulinSensitivitySchedule? {
+        didSet {
+            clearCalculationCache()
+        }
+    }
 
     /// The longest expected absorption time interval for carbohydrates. Defaults to 4 hours.
     private let maximumAbsorptionTimeInterval: NSTimeInterval
@@ -321,9 +333,12 @@ public class CarbStore: HealthKitSampleStore {
 
     private func clearCalculationCache() {
         carbsOnBoardCache = nil
+        glucoseEffectsCache = nil
     }
 
     private var carbsOnBoardCache: [CarbValue]?
+
+    private var glucoseEffectsCache: [GlucoseEffect]?
 
     public func carbsOnBoardAtDate(date: NSDate, resultHandler: (CarbValue?) -> Void) {
         dispatch_async(dataAccessQueue) { [unowned self] in
