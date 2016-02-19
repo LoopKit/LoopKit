@@ -51,6 +51,14 @@ public class ReservoirTableViewController: UITableViewController {
         }
     }
 
+    private var updateTimer: NSTimer? {
+        willSet {
+            if let timer = updateTimer {
+                timer.invalidate()
+            }
+        }
+    }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -64,18 +72,41 @@ public class ReservoirTableViewController: UITableViewController {
         }
     }
 
+    public override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        updateTimelyStats(nil)
+    }
+
+    public override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        let updateInterval = NSTimeInterval(minutes: 5)
+        let timer = NSTimer(
+            fireDate: NSDate().dateCeiledToTimeInterval(updateInterval).dateByAddingTimeInterval(2),
+            interval: updateInterval,
+            target: self,
+            selector: "updateTimelyStats:",
+            userInfo: nil,
+            repeats: true
+        )
+        updateTimer = timer
+
+        NSRunLoop.currentRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
+    }
+
+    public override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        updateTimer = nil
+    }
+
     public override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
 
         if tableView.editing {
             tableView.endEditing(true)
         }
-    }
-
-    public override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-
-        updateTimelyStats(nil)
     }
 
     deinit {

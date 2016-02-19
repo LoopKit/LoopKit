@@ -74,7 +74,7 @@ public class CarbEntryTableViewController: UITableViewController {
             state = .Unavailable
         }
 
-        navigationItem.leftBarButtonItem = editButtonItem()
+        navigationItem.rightBarButtonItems?.append(editButtonItem())
     }
 
     public override func viewWillAppear(animated: Bool) {
@@ -138,8 +138,7 @@ public class CarbEntryTableViewController: UITableViewController {
         case .AuthorizationRequired:
             tableView.backgroundView = authorizationRequiredMessageView
         case .Display:
-            navigationItem.leftBarButtonItem?.enabled = true
-            navigationItem.rightBarButtonItem?.enabled = true
+            navigationItem.rightBarButtonItems?.forEach { $0.enabled = true }
 
             tableView.backgroundView = nil
             tableView.tableHeaderView?.hidden = false
