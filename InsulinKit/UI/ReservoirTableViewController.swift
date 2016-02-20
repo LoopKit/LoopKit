@@ -31,7 +31,9 @@ public class ReservoirTableViewController: UITableViewController {
 
                     switch note.name {
                     case DoseStore.ReservoirValuesDidChangeNotification:
-                        self.reloadData()
+                        if self.isViewLoaded() {
+                            self.reloadData()
+                        }
                     case DoseStore.ReadyStateDidChangeNotification:
                         switch doseStore.readyState {
                         case .Ready:
