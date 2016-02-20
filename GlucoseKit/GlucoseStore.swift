@@ -67,4 +67,24 @@ public class GlucoseStore: HealthKitSampleStore {
             })
         }
     }
+
+    private func recentSamplesPredicate(interval: NSTimeInterval) -> NSPredicate {
+        return HKQuery.predicateForSamplesWithStartDate(NSDate(timeIntervalSinceNow: -interval), endDate: NSDate.distantFuture(), options: [.StrictStartDate])
+    }
+
+    private func recentSamplesSortDescriptors() -> [NSSortDescriptor] {
+        return [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
+    }
+
+    public func getRecentGlucoseValues(forTimeInterval interval: NSTimeInterval = NSTimeInterval(hours: 6), resultsHandler: (values: [GlucoseValue], error: NSError?) -> Void) {
+        let query = HKSampleQuery(sampleType: glucoseType, predicate: recentSamplesPredicate(interval), limit: Int(HKObjectQueryNoLimit), sortDescriptors: recentSamplesSortDescriptors()) { (_, samples, error) -> Void in
+
+            resultsHandler(
+                values: (samples as? [HKQuantitySample])?.map { GlucoseValue(startDate: $0.startDate, quantity: $0.quantity) } ?? [],
+                error: error
+            )
+        }
+
+        healthStore.executeQuery(query)
+    }
 }
