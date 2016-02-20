@@ -13,6 +13,11 @@ import HealthKit
 public struct DoubleRange {
     public let minValue: Double
     public let maxValue: Double
+
+    public init(minValue: Double, maxValue: Double) {
+        self.minValue = minValue
+        self.maxValue = maxValue
+    }
 }
 
 
