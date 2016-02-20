@@ -11,12 +11,9 @@ import LoopKit
 import HealthKit
 
 
-public struct GlucoseValue: SampleValue {
-    public let startDate: NSDate
-    public let quantity: HKQuantity
+public protocol GlucoseValue: SampleValue {
+}
 
-    public init(startDate: NSDate, quantity: HKQuantity) {
-        self.startDate = startDate
-        self.quantity = quantity
-    }
+
+extension HKQuantitySample: GlucoseValue {
 }

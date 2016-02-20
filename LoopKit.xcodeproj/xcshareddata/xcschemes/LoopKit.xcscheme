@@ -38,6 +38,36 @@
                ReferencedContainer = "container:LoopKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "43D8FE321C72914D0073BE78"
+               BuildableName = "CarbKitTests.xctest"
+               BlueprintName = "CarbKitTests"
+               ReferencedContainer = "container:LoopKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "43D8FE8D1C7293C70073BE78"
+               BuildableName = "GlucoseKitTests.xctest"
+               BlueprintName = "GlucoseKitTests"
+               ReferencedContainer = "container:LoopKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "43D8FEB91C7294520073BE78"
+               BuildableName = "InsulinKitTests.xctest"
+               BlueprintName = "InsulinKitTests"
+               ReferencedContainer = "container:LoopKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

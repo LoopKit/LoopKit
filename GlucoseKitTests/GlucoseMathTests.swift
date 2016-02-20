@@ -14,6 +14,17 @@ import HealthKit
 typealias JSONDictionary = [String: AnyObject]
 
 
+public struct GlucoseFixtureValue: GlucoseValue {
+    public let startDate: NSDate
+    public let quantity: HKQuantity
+
+    public init(startDate: NSDate, quantity: HKQuantity) {
+        self.startDate = startDate
+        self.quantity = quantity
+    }
+}
+
+
 class GlucoseMathTests: XCTestCase {
 
     func loadFixture<T>(resourceName: String) -> T {
@@ -21,12 +32,12 @@ class GlucoseMathTests: XCTestCase {
         return try! NSJSONSerialization.JSONObjectWithData(NSData(contentsOfFile: path)!, options: []) as! T
     }
 
-    func loadInputFixture(resourceName: String) -> [GlucoseValue] {
+    func loadInputFixture(resourceName: String) -> [GlucoseFixtureValue] {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
         let dateFormatter = NSDateFormatter.ISO8601LocalTimeDateFormatter()
 
         return fixture.map {
-            return GlucoseValue(startDate: dateFormatter.dateFromString($0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliterUnit(), doubleValue: $0["amount"] as! Double))
+            return GlucoseFixtureValue(startDate: dateFormatter.dateFromString($0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliterUnit(), doubleValue: $0["amount"] as! Double))
         }
     }
 

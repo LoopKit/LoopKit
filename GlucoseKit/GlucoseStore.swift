@@ -11,6 +11,27 @@ import HealthKit
 import LoopKit
 
 
+/**
+ Manages storage, retrieval, and calculation of glucose data.
+ 
+ There are three tiers of storage:
+ 
+ * In-memory cache, used for momentum calculation
+```
+ 0    [momentumDataInterval]
+ |––––|
+```
+ * HealthKit data, managed by the current application
+```
+ 0    [managedDataInterval]
+ |––––––––––––|
+```
+ * HealthKit data, managed by the manufacturer's application
+```
+      [managedDataInterval]           [maxPurgeInterval]
+              |––––––––––––>
+```
+ */
 public class GlucoseStore: HealthKitSampleStore {
 
     private let glucoseType = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
@@ -23,14 +44,24 @@ public class GlucoseStore: HealthKitSampleStore {
         return Set(arrayLiteral: glucoseType)
     }
 
-    /// The maximum interval to purge automatically
-    private var purgeBeforeInterval: NSTimeInterval = NSTimeInterval(hours: 24) * 7
+    /// The oldest interval to include when purging managed data
+    private let maxPurgeInterval: NSTimeInterval = NSTimeInterval(hours: 24) * 7
 
     /// The interval before which glucose values should be purged from HealthKit.
-    private var purgeAfterInterval: NSTimeInterval? = NSTimeInterval(hours: 3)
+    private var managedDataInterval: NSTimeInterval? = NSTimeInterval(hours: 3)
+
+    /// The interval of glucose data to use for momentum calculation
+    private var momentumDataInterval: NSTimeInterval = NSTimeInterval(minutes: 15)
+
+    /// Glucose sample cache, used for momentum calculation
+    private var momentumDataCache: Set<HKQuantitySample> = []
+
+    private var dataAccessQueue: dispatch_queue_t = dispatch_queue_create("com.loudnate.GlucoseKit.dataAccessQueue", DISPATCH_QUEUE_SERIAL)
 
     /**
-     Add a new glucose value to HealthKit
+     Add a new glucose value to HealthKit.
+     
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
      - parameter quantity:      The glucose sample quantity
      - parameter date:          The date the sample was collected
@@ -45,46 +76,80 @@ public class GlucoseStore: HealthKitSampleStore {
         let glucose = HKQuantitySample(type: glucoseType, quantity: quantity, startDate: date, endDate: date, device: device, metadata: nil)
 
         healthStore.saveObject(glucose) { (completed, error) -> Void in
-            resultHandler(success: completed, sample: glucose, error: error)
-        }
+            dispatch_async(self.dataAccessQueue) {
+                self.momentumDataCache.insert(glucose)
+                self.purgeOldGlucoseSamples()
 
-        purgeOldGlucoseSamples()
+                resultHandler(success: completed, sample: glucose, error: error)
+            }
+        }
     }
 
+    /**
+     Cleans the in-memory and HealthKit caches.
+     
+     *This method should only be called from the `dataAccessQueue`*
+     */
     private func purgeOldGlucoseSamples() {
-        if let purgeAfterInterval = purgeAfterInterval {
+        let momentumStartDate = NSDate(timeIntervalSinceNow: -momentumDataInterval)
+
+        momentumDataCache = Set(momentumDataCache.filter { $0.startDate >= momentumStartDate })
+
+        if let managedDataInterval = managedDataInterval {
             guard UIApplication.sharedApplication().protectedDataAvailable else {
                 return
             }
 
-            let predicate = HKQuery.predicateForSamplesWithStartDate(NSDate(timeIntervalSinceNow: -purgeBeforeInterval), endDate: NSDate(timeIntervalSinceNow: -purgeAfterInterval), options: [])
+            let predicate = HKQuery.predicateForSamplesWithStartDate(NSDate(timeIntervalSinceNow: -maxPurgeInterval), endDate: NSDate(timeIntervalSinceNow: -managedDataInterval), options: [])
 
             healthStore.deleteObjectsOfType(glucoseType, predicate: predicate, withCompletion: { (success, count, error) -> Void in
                 if let error = error {
-                    // TODO: Remote error handling
+                    // TODO: Send this to the delegate
                     NSLog("Error deleting objects: %@", error)
                 }
             })
         }
     }
 
-    private func recentSamplesPredicate(interval: NSTimeInterval) -> NSPredicate {
-        return HKQuery.predicateForSamplesWithStartDate(NSDate(timeIntervalSinceNow: -interval), endDate: NSDate.distantFuture(), options: [.StrictStartDate])
-    }
+    /**
+     Retrieves recent glucose values from HealthKit.
+     
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
-    private func recentSamplesSortDescriptors() -> [NSSortDescriptor] {
-        return [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
-    }
-
+     - parameter interval:       The past interval of values to retrieve
+     - parameter resultsHandler: A closure called once the values have been retrieved. The closure takes two arguments:
+        - values: The retrieved values
+        - error:  An error object explaining why the retrieval failed
+     */
     public func getRecentGlucoseValues(forTimeInterval interval: NSTimeInterval = NSTimeInterval(hours: 6), resultsHandler: (values: [GlucoseValue], error: NSError?) -> Void) {
-        let query = HKSampleQuery(sampleType: glucoseType, predicate: recentSamplesPredicate(interval), limit: Int(HKObjectQueryNoLimit), sortDescriptors: recentSamplesSortDescriptors()) { (_, samples, error) -> Void in
+        let predicate = HKQuery.predicateForSamplesWithStartDate(NSDate(timeIntervalSinceNow: -interval), endDate: NSDate.distantFuture(), options: [.StrictStartDate])
+        let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
+
+        let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
+
+            // TODO: Should we include recent samples, just-in-case HealthKit is lagging?
 
             resultsHandler(
-                values: (samples as? [HKQuantitySample])?.map { GlucoseValue(startDate: $0.startDate, quantity: $0.quantity) } ?? [],
+                values: (samples as? [HKQuantitySample])?.map { $0 } ?? [],
                 error: error
             )
         }
 
         healthStore.executeQuery(query)
+    }
+
+    // MARK: - Math
+
+    /**
+     Calculates the momentum effect for recent glucose values
+
+     - parameter resultsHandler: A closure called once the calculation has completed. The closure takes two arguments:
+        - effects: The calculated effect values
+        - error:   An error explaining why the calculation failed
+    */
+    public func getRecentMomentumEffect(resultsHandler: (effects: [GlucoseEffect], error: NSError?) -> Void) {
+        dispatch_async(dataAccessQueue) {
+            resultsHandler(effects: GlucoseMath.linearMomentumEffectForGlucoseEntries(self.momentumDataCache.sort({ $0.startDate < $1.startDate })), error: nil)
+        }
     }
 }

@@ -59,8 +59,8 @@ struct GlucoseMath {
 
      - returns: An array of glucose effects
      */
-    static func linearMomentumEffectForGlucoseEntries(
-        samples: [GlucoseValue],  // Chronological order for now
+    static func linearMomentumEffectForGlucoseEntries<T: CollectionType where T.Generator.Element: GlucoseValue, T.Index == Int>(
+        samples: T,
         duration: NSTimeInterval = NSTimeInterval(minutes: 30),
         delta: NSTimeInterval = NSTimeInterval(minutes: 5)
     ) -> [GlucoseEffect] {
