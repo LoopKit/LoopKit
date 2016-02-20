@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4346D1EE1C7801AD00ABAFE3 /* GlucoseValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1ED1C7801AD00ABAFE3 /* GlucoseValue.swift */; };
 		43B99AFC1C744CE300D050F5 /* bolus_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99AFB1C744CE300D050F5 /* bolus_dose.json */; };
 		43B99AFE1C744E5F00D050F5 /* effect_from_bolus_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99AFD1C744E5F00D050F5 /* effect_from_bolus_output.json */; };
 		43B99B001C7450EE00D050F5 /* effect_from_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99AFF1C7450EE00D050F5 /* effect_from_history_output.json */; };
@@ -139,6 +140,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4346D1ED1C7801AD00ABAFE3 /* GlucoseValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseValue.swift; sourceTree = "<group>"; };
 		43B99AFB1C744CE300D050F5 /* bolus_dose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bolus_dose.json; sourceTree = "<group>"; };
 		43B99AFD1C744E5F00D050F5 /* effect_from_bolus_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = effect_from_bolus_output.json; sourceTree = "<group>"; };
 		43B99AFF1C7450EE00D050F5 /* effect_from_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = effect_from_history_output.json; sourceTree = "<group>"; };
@@ -465,6 +467,7 @@
 				43D8FE731C7293070073BE78 /* Info.plist */,
 				43D8FE861C72934C0073BE78 /* GlucoseMath.swift */,
 				43D8FE871C72934C0073BE78 /* GlucoseStore.swift */,
+				4346D1ED1C7801AD00ABAFE3 /* GlucoseValue.swift */,
 			);
 			path = GlucoseKit;
 			sourceTree = "<group>";
@@ -961,6 +964,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D8FE891C72934C0073BE78 /* GlucoseStore.swift in Sources */,
+				4346D1EE1C7801AD00ABAFE3 /* GlucoseValue.swift in Sources */,
 				43D8FE881C72934C0073BE78 /* GlucoseMath.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
