@@ -11,12 +11,6 @@ import HealthKit
 import LoopKit
 
 
-struct GlucoseValue: SampleValue {
-    let startDate: NSDate
-    let quantity: HKQuantity
-}
-
-
 /// To determine if we have a contiguous set of values, we require readings to be an average of 5 minutes apart
 private let ContinuousGlucoseInterval = NSTimeInterval(minutes: 5)
 
