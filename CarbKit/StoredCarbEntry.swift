@@ -8,36 +8,94 @@
 
 import HealthKit
 
+private let unit = HKUnit.gramUnit()
+
 
 struct StoredCarbEntry: CarbEntry {
 
-    let sample: HKQuantitySample
-
-    init(sample: HKQuantitySample) {
-        self.sample = sample
-    }
+    let sampleUUID: NSUUID
 
     // MARK: - SampleValue
 
-    var startDate: NSDate {
-        return sample.startDate
-    }
-
-    var quantity: HKQuantity {
-        return sample.quantity
-    }
+    let startDate: NSDate
+    let quantity: HKQuantity
 
     // MARK: - CarbEntry
 
-    var foodType: String? {
-        return sample.foodType
+    let foodType: String?
+    let absorptionTime: NSTimeInterval?
+    let createdByCurrentApp: Bool
+
+    init(sample: HKQuantitySample) {
+        self.init(sampleUUID: sample.UUID, startDate: sample.startDate, unitString: unit.unitString, value: sample.quantity.doubleValueForUnit(unit), foodType: sample.foodType, absorptionTime: sample.absorptionTime, createdByCurrentApp: sample.createdByCurrentApp)
+
     }
 
-    var absorptionTime: NSTimeInterval? {
-        return sample.absorptionTime
+    init(sampleUUID: NSUUID, startDate: NSDate, unitString: String, value: Double, foodType: String?, absorptionTime: NSTimeInterval?, createdByCurrentApp: Bool) {
+        self.sampleUUID = sampleUUID
+        self.startDate = startDate
+        self.quantity = HKQuantity(unit: HKUnit(fromString: unitString), doubleValue: value)
+        self.foodType = foodType
+        self.absorptionTime = absorptionTime
+        self.createdByCurrentApp = createdByCurrentApp
+    }
+}
+
+
+extension StoredCarbEntry: Hashable {
+    var hashValue: Int {
+        return sampleUUID.hashValue
+    }
+}
+
+
+func ==(lhs: StoredCarbEntry, rhs: StoredCarbEntry) -> Bool {
+    return lhs.sampleUUID.isEqual(rhs.sampleUUID)
+}
+
+
+extension StoredCarbEntry: RawRepresentable {
+    typealias RawValue = [String: AnyObject]
+
+    init?(rawValue: RawValue) {
+        guard let
+            sampleUUID = rawValue["sampleUUID"] as? NSUUID,
+            startDate = rawValue["startDate"] as? NSDate,
+            unitString = rawValue["unitString"] as? String,
+            value = rawValue["value"] as? Double,
+            createdByCurrentApp = rawValue["createdByCurrentApp"] as? Bool else
+        {
+            return nil
+        }
+
+        self.init(
+            sampleUUID: sampleUUID,
+            startDate: startDate,
+            unitString: unitString,
+            value: value,
+            foodType: rawValue["foodType"] as? String,
+            absorptionTime: rawValue["absorptionTime"] as? NSTimeInterval,
+            createdByCurrentApp: createdByCurrentApp
+        )
     }
 
-    var createdByCurrentApp: Bool {
-        return sample.createdByCurrentApp
+    var rawValue: RawValue {
+        var raw: RawValue = [
+            "sampleUUID": sampleUUID,
+            "startDate": startDate,
+            "unitString": unit.unitString,
+            "value": quantity.doubleValueForUnit(unit),
+            "createdByCurrentApp": createdByCurrentApp
+        ]
+
+        if let foodType = foodType {
+            raw["foodType"] = foodType
+        }
+
+        if let absorptionTime = absorptionTime {
+            raw["absorptionTime"] = absorptionTime
+        }
+
+        return raw
     }
 }

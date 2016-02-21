@@ -37,7 +37,9 @@ public class CarbEntryTableViewController: UITableViewController {
 
                         switch note.name {
                         case CarbStore.CarbEntriesDidUpdateNotification:
-                            self.reloadData()
+                            if self.isViewLoaded() {
+                                self.reloadData()
+                            }
                         case CarbStore.AuthorizationStatusDidChangeNotification:
                             break
                         default:

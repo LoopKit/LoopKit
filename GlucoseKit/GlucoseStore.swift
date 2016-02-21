@@ -29,7 +29,7 @@ import LoopKit
  * HealthKit data, managed by the manufacturer's application
 ```
       [managedDataInterval]           [maxPurgeInterval]
-              |––––––––––––>
+              |–––––––––--->
 ```
  */
 public class GlucoseStore: HealthKitSampleStore {
@@ -126,8 +126,6 @@ public class GlucoseStore: HealthKitSampleStore {
         let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
 
         let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
-
-            // TODO: Should we include recent samples, just-in-case HealthKit is lagging?
 
             resultsHandler(
                 values: (samples as? [HKQuantitySample])?.map { $0 } ?? [],

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4346D1EE1C7801AD00ABAFE3 /* GlucoseValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1ED1C7801AD00ABAFE3 /* GlucoseValue.swift */; };
+		4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
 		43B99AFC1C744CE300D050F5 /* bolus_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99AFB1C744CE300D050F5 /* bolus_dose.json */; };
 		43B99AFE1C744E5F00D050F5 /* effect_from_bolus_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99AFD1C744E5F00D050F5 /* effect_from_bolus_output.json */; };
 		43B99B001C7450EE00D050F5 /* effect_from_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99AFF1C7450EE00D050F5 /* effect_from_history_output.json */; };
@@ -141,6 +142,7 @@
 
 /* Begin PBXFileReference section */
 		4346D1ED1C7801AD00ABAFE3 /* GlucoseValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseValue.swift; sourceTree = "<group>"; };
+		4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		43B99AFB1C744CE300D050F5 /* bolus_dose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bolus_dose.json; sourceTree = "<group>"; };
 		43B99AFD1C744E5F00D050F5 /* effect_from_bolus_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = effect_from_bolus_output.json; sourceTree = "<group>"; };
 		43B99AFF1C7450EE00D050F5 /* effect_from_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = effect_from_history_output.json; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 				43D8FE4B1C7291BD0073BE78 /* CarbMath.swift */,
 				43D8FE4C1C7291BD0073BE78 /* CarbStore.swift */,
 				43D8FE4D1C7291BD0073BE78 /* HKQuantitySample.swift */,
+				4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */,
 				43D8FE4E1C7291BD0073BE78 /* StoredCarbEntry.swift */,
 				43D8FE541C7291C70073BE78 /* UI */,
 			);
@@ -946,6 +949,7 @@
 				43D8FE5F1C7291D80073BE78 /* CarbEntryTableViewController.swift in Sources */,
 				43D8FE631C7291D80073BE78 /* NewCarbEntry.swift in Sources */,
 				43D8FE5D1C7291D80073BE78 /* AbsorptionTimeTextFieldTableViewCell.swift in Sources */,
+				4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */,
 				43D8FE611C7291D80073BE78 /* DatePickerTableViewCell.swift in Sources */,
 				43D8FE641C7291D80073BE78 /* SegmentedControlInputAccessoryView.swift in Sources */,
 			);

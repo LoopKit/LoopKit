@@ -160,7 +160,7 @@ struct CarbMath {
         return values
     }
 
-    static func totalCarbsForCarbEntries(entries: [CarbEntry]) -> CarbValue? {
+    static func totalCarbsForCarbEntries<T: CollectionType where T.Generator.Element: CarbEntry>(entries: T) -> CarbValue? {
         guard entries.count > 0 else {
             return nil
         }

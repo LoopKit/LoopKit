@@ -12,11 +12,39 @@ import LoopKit
 
 
 public protocol CarbStoreDelegate: class {
-    func carbStoreDidError(error: ErrorType)
+    /**
+     Informs the delegate that an internal error occurred
+
+     - parameter carbStore: The carb store
+     - parameter error:     The error describing the issue
+     */
+    func carbStore(carbStore: CarbStore, didError error: ErrorType)
 }
 
 
+/**
+ Manages storage, retrieval, and calculation of carbohydrate data.
+
+ There are three tiers of storage:
+
+ * In-memory cache, used for COB and glucose effect calculation
+ ```
+ 0    [maximumAbsorptionTimeInterval]
+ |––––––––––––|
+ ```
+ * Short-term persistant cache, stored in NSUserDefaults, used to re-populate the in-memory cache if the app is suspended and re-launched while the Health database is protected
+ ```
+ 0    [maximumAbsorptionTimeInterval]
+ |––––––––––––|
+ ```
+ * HealthKit data, managed by the current application and persisted indefinitely
+ ```
+ 0
+ |––––––––––––––––––--->
+ ```
+ */
 public class CarbStore: HealthKitSampleStore {
+    public typealias CarbEntryCacheRawValue = [[String: AnyObject]]
 
     public typealias DefaultAbsorptionTimes = (fast: NSTimeInterval, medium: NSTimeInterval, slow: NSTimeInterval)
 
@@ -25,7 +53,7 @@ public class CarbStore: HealthKitSampleStore {
     private let carbType = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierDietaryCarbohydrates)!
 
     /// All the sample types we need permission to read.
-    /// Eventually, we want to consider fat, protein, and other factors to estimate carb absorption.
+    /// Eventually, we may want to consider fat, protein, and other factors to estimate carb absorption.
     public override var readTypes: Set<HKSampleType> {
         return Set(arrayLiteral: carbType)
     }
@@ -34,17 +62,20 @@ public class CarbStore: HealthKitSampleStore {
         return Set(arrayLiteral: carbType)
     }
 
+    /// The preferred unit. iOS currently only supports grams for dietary carbohydrates.
     public private(set) var preferredUnit: HKUnit = HKUnit.gramUnit()
 
+    /// Carbohydrate-to-insulin ratio
     public var carbRatioSchedule: CarbRatioSchedule? {
         didSet {
             clearCalculationCache()
         }
     }
 
-    /// A span of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
+    /// A trio of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
     public let defaultAbsorptionTimes: DefaultAbsorptionTimes
 
+    /// Insulin-to-glucose sensitivity
     public var insulinSensitivitySchedule: InsulinSensitivitySchedule? {
         didSet {
             clearCalculationCache()
@@ -66,6 +97,7 @@ public class CarbStore: HealthKitSampleStore {
     public init?(defaultAbsorptionTimes: DefaultAbsorptionTimes = (NSTimeInterval(hours: 2), NSTimeInterval(hours: 3), NSTimeInterval(hours: 4))) {
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
         self.maximumAbsorptionTimeInterval = defaultAbsorptionTimes.slow
+        self.carbEntryCache = Set(NSUserDefaults.standardUserDefaults().carbEntryCache ?? [])
 
         super.init()
 
@@ -86,11 +118,14 @@ public class CarbStore: HealthKitSampleStore {
 
     // MARK: - Query
 
+    /// All active observer queries
     private var observerQueries: [HKObserverQuery] = []
 
-    private var anchoredObjectQueries: [HKObserverQuery: HKAnchoredObjectQuery] = [:]
+    /// All active anchored object queries, by sample type
+    private var anchoredObjectQueries: [HKSampleType: HKAnchoredObjectQuery] = [:]
 
-    private var queryAnchor: HKQueryAnchor?
+    /// The last-retreived anchor for each anchored object query, by sample type
+    private var queryAnchors: [HKSampleType: HKQueryAnchor] = [:]
 
     private func createQueries() {
         let predicate = recentSamplesPredicate()
@@ -99,14 +134,14 @@ public class CarbStore: HealthKitSampleStore {
             let observerQuery = HKObserverQuery(sampleType: type, predicate: predicate, updateHandler: { [unowned self] (query, completionHandler, error) -> Void in
 
                 if let error = error {
-                    self.delegate?.carbStoreDidError(error)
+                    self.delegate?.carbStore(self, didError: error)
                 } else {
                     dispatch_async(self.dataAccessQueue) {
-                        if self.anchoredObjectQueries[query] == nil {
-                            let anchoredObjectQuery = HKAnchoredObjectQuery(type: type, predicate: predicate, anchor: self.queryAnchor, limit: Int(HKObjectQueryNoLimit), resultsHandler: self.processResultsFromAnchoredQuery)
+                        if self.anchoredObjectQueries[type] == nil {
+                            let anchoredObjectQuery = HKAnchoredObjectQuery(type: type, predicate: predicate, anchor: self.queryAnchors[type], limit: Int(HKObjectQueryNoLimit), resultsHandler: self.processResultsFromAnchoredQuery)
                             anchoredObjectQuery.updateHandler = self.processResultsFromAnchoredQuery
 
-                            self.anchoredObjectQueries[query] = anchoredObjectQuery
+                            self.anchoredObjectQueries[type] = anchoredObjectQuery
                             self.healthStore.executeQuery(anchoredObjectQuery)
                         }
                     }
@@ -122,6 +157,10 @@ public class CarbStore: HealthKitSampleStore {
 
     deinit {
         for query in observerQueries {
+            healthStore.stopQuery(query)
+        }
+
+        for query in anchoredObjectQueries.values {
             healthStore.stopQuery(query)
         }
     }
@@ -203,39 +242,36 @@ public class CarbStore: HealthKitSampleStore {
     private func processResultsFromAnchoredQuery(query: HKAnchoredObjectQuery, newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, anchor: HKQueryAnchor?, error: NSError?) {
 
         if let error = error {
-            self.delegate?.carbStoreDidError(error)
+            self.delegate?.carbStore(self, didError: error)
             return
         }
 
         dispatch_async(dataAccessQueue) {
             // Prune the sample data based on the startDate and deletedSamples array
-            var removedSamples: [HKQuantitySample] = []
-
             let cutoffDate = NSDate().dateByAddingTimeInterval(-self.maximumAbsorptionTimeInterval)
 
-            // Filter samples to remove
-            for sample in self.recentSamples {
+            self.carbEntryCache = Set(self.carbEntryCache.filter { (sample) in
                 if sample.startDate < cutoffDate {
-                    removedSamples.append(sample)
-                } else if let deletedSamples = deletedSamples where deletedSamples.contains({ $0.UUID == sample.UUID }) {
-                    removedSamples.append(sample)
+                    return false
+                } else if let deletedSamples = deletedSamples where deletedSamples.contains({ $0.UUID == sample.sampleUUID }) {
+                    return false
+                } else {
+                    return true
                 }
-            }
-
-            // Remove old samples
-            removedSamples = removedSamples.flatMap({ self.recentSamples.remove($0) })
+            })
 
             // Append the new samples
             if let samples = newSamples as? [HKQuantitySample] {
                 for sample in samples {
-                    self.recentSamples.insert(sample)
+                    self.carbEntryCache.insert(StoredCarbEntry(sample: sample))
                 }
             }
 
             // Update the anchor
-            self.queryAnchor = anchor
+            self.queryAnchors[query.sampleType] = anchor
 
             self.clearCalculationCache()
+            self.persistCarbEntryCache()
 
             // Notify listeners
             NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.CarbEntriesDidUpdateNotification,
@@ -244,7 +280,7 @@ public class CarbStore: HealthKitSampleStore {
         }
     }
 
-    private var recentSamples: Set<HKQuantitySample> = []
+    private var carbEntryCache: Set<StoredCarbEntry>
 
     private var dataAccessQueue: dispatch_queue_t = dispatch_queue_create("com.loudnate.CarbKit.dataAccessQueue", DISPATCH_QUEUE_SERIAL)
 
@@ -252,11 +288,10 @@ public class CarbStore: HealthKitSampleStore {
         return HKQuery.predicateForSamplesWithStartDate(NSDate(timeIntervalSinceNow: -maximumAbsorptionTimeInterval), endDate: NSDate.distantFuture(), options: [.StrictStartDate])
     }
 
+    // TODO: try to query healthkit first
     public func getRecentCarbEntries(resultsHandler: ([CarbEntry], NSError?) -> Void) {
         dispatch_async(dataAccessQueue) {
-            let entries: [CarbEntry] = self.recentSamples.map({ (sample) in
-                return StoredCarbEntry(sample: sample)
-            })
+            let entries: [CarbEntry] = self.carbEntryCache.map({ $0 })
 
             resultsHandler(entries, nil)
         }
@@ -277,12 +312,14 @@ public class CarbStore: HealthKitSampleStore {
         let carbs = HKQuantitySample(type: carbType, quantity: quantity, startDate: entry.startDate, endDate: entry.startDate, device: nil, metadata: metadata)
 
         healthStore.saveObject(carbs) { (completed, error) -> Void in
-            if !UIApplication.sharedApplication().protectedDataAvailable {
-                self.recentSamples.insert(carbs)
+            dispatch_async(self.dataAccessQueue) {
+                let storedObject = StoredCarbEntry(sample: carbs)
+                self.carbEntryCache.insert(storedObject)
                 self.clearCalculationCache()
-            }
+                self.persistCarbEntryCache()
 
-            resultHandler(completed, StoredCarbEntry(sample: carbs), error)
+                resultHandler(completed, storedObject, error)
+            }
         }
     }
 
@@ -299,7 +336,11 @@ public class CarbStore: HealthKitSampleStore {
     public func deleteCarbEntry(entry: CarbEntry, resultHandler: (Bool, NSError?) -> Void) {
         if let entry = entry as? StoredCarbEntry {
             if entry.createdByCurrentApp {
-                healthStore.deleteObject(entry.sample, withCompletion: resultHandler)
+                let predicate = HKQuery.predicateForObjectsWithUUIDs([entry.sampleUUID])
+
+                healthStore.deleteObjectsOfType(carbType, predicate: predicate, withCompletion: { (success, count, error) -> Void in
+                    resultHandler(success, error)
+                })
             } else {
                 resultHandler(
                     false,
@@ -328,6 +369,14 @@ public class CarbStore: HealthKitSampleStore {
         }
     }
 
+    /**
+     Persists the in-memory cache to NSUserDefaults.
+     
+     *This method should only be called from the `dataAccessQueue`*
+     */
+    private func persistCarbEntryCache() {
+        NSUserDefaults.standardUserDefaults().carbEntryCache = Array<StoredCarbEntry>(carbEntryCache)
+    }
 
     // MARK: - Math
 
@@ -343,7 +392,7 @@ public class CarbStore: HealthKitSampleStore {
     public func carbsOnBoardAtDate(date: NSDate, resultHandler: (CarbValue?) -> Void) {
         dispatch_async(dataAccessQueue) { [unowned self] in
             if self.carbsOnBoardCache == nil {
-                self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(self.recentSamples.map { StoredCarbEntry(sample: $0) }, defaultAbsorptionTime: self.defaultAbsorptionTimes.medium)
+                self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(self.carbEntryCache, defaultAbsorptionTime: self.defaultAbsorptionTimes.medium)
             }
 
             resultHandler(self.carbsOnBoardCache?.closestToDate(date))
@@ -352,9 +401,7 @@ public class CarbStore: HealthKitSampleStore {
 
     public func getTotalRecentCarbValue(resultHandler: (CarbValue?) -> Void) {
         dispatch_async(dataAccessQueue) { [unowned self] in
-            let entries: [CarbEntry] = self.recentSamples.map({ StoredCarbEntry(sample: $0) })
-
-            resultHandler(CarbMath.totalCarbsForCarbEntries(entries))
+            resultHandler(CarbMath.totalCarbsForCarbEntries(self.carbEntryCache))
         }
     }
 }
