@@ -59,7 +59,8 @@ extension StoredCarbEntry: RawRepresentable {
 
     init?(rawValue: RawValue) {
         guard let
-            sampleUUID = rawValue["sampleUUID"] as? NSUUID,
+            sampleUUIDString = rawValue["sampleUUID"] as? String,
+            sampleUUID = NSUUID(UUIDString: sampleUUIDString),
             startDate = rawValue["startDate"] as? NSDate,
             unitString = rawValue["unitString"] as? String,
             value = rawValue["value"] as? Double,
@@ -81,7 +82,7 @@ extension StoredCarbEntry: RawRepresentable {
 
     var rawValue: RawValue {
         var raw: RawValue = [
-            "sampleUUID": sampleUUID,
+            "sampleUUID": sampleUUID.UUIDString,
             "startDate": startDate,
             "unitString": unit.unitString,
             "value": quantity.doubleValueForUnit(unit),
