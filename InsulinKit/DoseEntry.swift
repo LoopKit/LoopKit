@@ -10,16 +10,16 @@ import Foundation
 import LoopKit
 
 
-enum DoseUnit {
+public enum DoseUnit {
     case UnitsPerHour
     case Units
 }
 
 
-struct DoseEntry: TimelineValue {
-    let startDate: NSDate
-    let endDate: NSDate
-    let value: Double
-    let unit: DoseUnit
-    let description: String?
+public struct DoseEntry: TimelineValue {
+    public let startDate: NSDate
+    public let endDate: NSDate
+    public let value: Double
+    public let unit: DoseUnit
+    public let description: String?
 }

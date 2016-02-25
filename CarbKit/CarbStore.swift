@@ -337,10 +337,15 @@ public class CarbStore: HealthKitSampleStore {
         if let entry = entry as? StoredCarbEntry {
             if entry.createdByCurrentApp {
                 let predicate = HKQuery.predicateForObjectsWithUUIDs([entry.sampleUUID])
-
-                healthStore.deleteObjectsOfType(carbType, predicate: predicate, withCompletion: { (success, count, error) -> Void in
-                    resultHandler(success, error)
+                let query = HKSampleQuery(sampleType: carbType, predicate: predicate, limit: 1, sortDescriptors: nil, resultsHandler: { (_, objects, error) -> Void in
+                    if let error = error {
+                        resultHandler(false, error)
+                    } else if let objects = objects {
+                        self.healthStore.deleteObjects(objects, withCompletion: resultHandler)
+                    }
                 })
+
+                healthStore.executeQuery(query)
             } else {
                 resultHandler(
                     false,

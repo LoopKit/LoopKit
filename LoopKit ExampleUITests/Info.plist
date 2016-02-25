@@ -13,18 +13,12 @@
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
-	<string>FMWK</string>
+	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.1.0</string>
+	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>NSPrincipalClass</key>
-	<string></string>
-	<key>NSHealthShareUsageDescription</key>
-	<string>Glucose data is retrieved from HealthKit for graphing and analysis.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>Glucose data is stored securely in HealthKit.</string>
+	<string>1</string>
 </dict>
 </plist>

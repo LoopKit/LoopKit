@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "43D8FDCA1C728FDF0073BE78"
-               BuildableName = "LoopKit.framework"
-               BlueprintName = "LoopKit"
+               BlueprintIdentifier = "430157F61C7EC03B00B64B63"
+               BuildableName = "LoopKit Example.app"
+               BlueprintName = "LoopKit Example"
                ReferencedContainer = "container:LoopKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -26,8 +26,49 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4301580B1C7EC03B00B64B63"
+               BuildableName = "LoopKit ExampleUITests.xctest"
+               BlueprintName = "LoopKit ExampleUITests"
+               ReferencedContainer = "container:LoopKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "43D8FE321C72914D0073BE78"
+               BuildableName = "CarbKitTests.xctest"
+               BlueprintName = "CarbKitTests"
+               ReferencedContainer = "container:LoopKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "43D8FE8D1C7293C70073BE78"
+               BuildableName = "GlucoseKitTests.xctest"
+               BlueprintName = "GlucoseKitTests"
+               ReferencedContainer = "container:LoopKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "43D8FEB91C7294520073BE78"
+               BuildableName = "InsulinKitTests.xctest"
+               BlueprintName = "InsulinKitTests"
+               ReferencedContainer = "container:LoopKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
          <TestableReference
             skipped = "NO">
             <BuildableReference
@@ -42,9 +83,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "43D8FDCA1C728FDF0073BE78"
-            BuildableName = "LoopKit.framework"
-            BlueprintName = "LoopKit"
+            BlueprintIdentifier = "430157F61C7EC03B00B64B63"
+            BuildableName = "LoopKit Example.app"
+            BlueprintName = "LoopKit Example"
             ReferencedContainer = "container:LoopKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -61,15 +102,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "43D8FDCA1C728FDF0073BE78"
-            BuildableName = "LoopKit.framework"
-            BlueprintName = "LoopKit"
+            BlueprintIdentifier = "430157F61C7EC03B00B64B63"
+            BuildableName = "LoopKit Example.app"
+            BlueprintName = "LoopKit Example"
             ReferencedContainer = "container:LoopKit.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -79,15 +121,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "43D8FDCA1C728FDF0073BE78"
-            BuildableName = "LoopKit.framework"
-            BlueprintName = "LoopKit"
+            BlueprintIdentifier = "430157F61C7EC03B00B64B63"
+            BuildableName = "LoopKit Example.app"
+            BlueprintName = "LoopKit Example"
             ReferencedContainer = "container:LoopKit.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

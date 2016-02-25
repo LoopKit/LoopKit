@@ -33,12 +33,12 @@ public class CarbEntryTableViewController: UITableViewController {
                 carbStoreObserver = NSNotificationCenter.defaultCenter().addObserverForName(nil,
                     object: carbStore,
                     queue: NSOperationQueue.mainQueue(),
-                    usingBlock: { [unowned self] (note) -> Void in
+                    usingBlock: { [weak self] (note) -> Void in
 
                         switch note.name {
                         case CarbStore.CarbEntriesDidUpdateNotification:
-                            if self.isViewLoaded() {
-                                self.reloadData()
+                            if let strongSelf = self where strongSelf.isViewLoaded() {
+                                strongSelf.reloadData()
                             }
                         case CarbStore.AuthorizationStatusDidChangeNotification:
                             break

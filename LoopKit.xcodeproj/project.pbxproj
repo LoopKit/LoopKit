@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430157F91C7EC03B00B64B63 /* AppDelegate.swift */; };
+		430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430157FB1C7EC03B00B64B63 /* MasterViewController.swift */; };
+		430158011C7EC03B00B64B63 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 430157FF1C7EC03B00B64B63 /* Main.storyboard */; };
+		430158031C7EC03B00B64B63 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 430158021C7EC03B00B64B63 /* Assets.xcassets */; };
+		430158061C7EC03B00B64B63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 430158041C7EC03B00B64B63 /* LaunchScreen.storyboard */; };
+		430158111C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430158101C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift */; };
+		430158191C7ECB5E00B64B63 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
+		4301581A1C7ECB5E00B64B63 /* LoopKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4301581E1C7ECB6200B64B63 /* CarbKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FE2A1C72914D0073BE78 /* CarbKit.framework */; };
+		4301581F1C7ECB6200B64B63 /* CarbKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FE2A1C72914D0073BE78 /* CarbKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		430158221C7ECB6500B64B63 /* GlucoseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FE6F1C7293070073BE78 /* GlucoseKit.framework */; };
+		430158231C7ECB6500B64B63 /* GlucoseKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FE6F1C7293070073BE78 /* GlucoseKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		430158261C7ECB6800B64B63 /* InsulinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FEB11C7294520073BE78 /* InsulinKit.framework */; };
+		430158271C7ECB6800B64B63 /* InsulinKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FEB11C7294520073BE78 /* InsulinKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4301582B1C7ECCEF00B64B63 /* LoopKitExample.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */; };
+		4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
 		4346D1EE1C7801AD00ABAFE3 /* GlucoseValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1ED1C7801AD00ABAFE3 /* GlucoseValue.swift */; };
 		4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
 		43B99AFC1C744CE300D050F5 /* bolus_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99AFB1C744CE300D050F5 /* bolus_dose.json */; };
@@ -110,6 +126,41 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4301580D1C7EC03B00B64B63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430157F61C7EC03B00B64B63;
+			remoteInfo = "LoopKit Example";
+		};
+		4301581B1C7ECB5E00B64B63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D8FDCA1C728FDF0073BE78;
+			remoteInfo = LoopKit;
+		};
+		430158201C7ECB6200B64B63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D8FE291C72914D0073BE78;
+			remoteInfo = CarbKit;
+		};
+		430158241C7ECB6500B64B63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D8FE6E1C7293070073BE78;
+			remoteInfo = GlucoseKit;
+		};
+		430158281C7ECB6800B64B63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D8FEB01C7294520073BE78;
+			remoteInfo = InsulinKit;
+		};
 		43D8FDD71C728FDF0073BE78 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
@@ -140,7 +191,36 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4301581D1C7ECB5E00B64B63 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4301581A1C7ECB5E00B64B63 /* LoopKit.framework in Embed Frameworks */,
+				430158231C7ECB6500B64B63 /* GlucoseKit.framework in Embed Frameworks */,
+				430158271C7ECB6800B64B63 /* InsulinKit.framework in Embed Frameworks */,
+				4301581F1C7ECB6200B64B63 /* CarbKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		430157F71C7EC03B00B64B63 /* LoopKit Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LoopKit Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		430157F91C7EC03B00B64B63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		430157FB1C7EC03B00B64B63 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		430158001C7EC03B00B64B63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		430158021C7EC03B00B64B63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		430158051C7EC03B00B64B63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		430158071C7EC03B00B64B63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4301580C1C7EC03B00B64B63 /* LoopKit ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LoopKit ExampleUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		430158101C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopKit_ExampleUITests.swift; sourceTree = "<group>"; };
+		430158121C7EC03B00B64B63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoopKitExample.entitlements; sourceTree = "<group>"; };
+		4301582C1C7ECD7A00B64B63 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4346D1ED1C7801AD00ABAFE3 /* GlucoseValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseValue.swift; sourceTree = "<group>"; };
 		4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		43B99AFB1C744CE300D050F5 /* bolus_dose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bolus_dose.json; sourceTree = "<group>"; };
@@ -251,6 +331,25 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		430157F41C7EC03B00B64B63 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */,
+				430158191C7ECB5E00B64B63 /* LoopKit.framework in Frameworks */,
+				430158221C7ECB6500B64B63 /* GlucoseKit.framework in Frameworks */,
+				430158261C7ECB6800B64B63 /* InsulinKit.framework in Frameworks */,
+				4301581E1C7ECB6200B64B63 /* CarbKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		430158091C7EC03B00B64B63 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		43D8FDC71C728FDF0073BE78 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -317,6 +416,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		430157F81C7EC03B00B64B63 /* LoopKit Example */ = {
+			isa = PBXGroup;
+			children = (
+				4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */,
+				430158071C7EC03B00B64B63 /* Info.plist */,
+				430157F91C7EC03B00B64B63 /* AppDelegate.swift */,
+				430157FB1C7EC03B00B64B63 /* MasterViewController.swift */,
+				430158021C7EC03B00B64B63 /* Assets.xcassets */,
+				430158041C7EC03B00B64B63 /* LaunchScreen.storyboard */,
+				430157FF1C7EC03B00B64B63 /* Main.storyboard */,
+			);
+			path = "LoopKit Example";
+			sourceTree = "<group>";
+		};
+		4301580F1C7EC03B00B64B63 /* LoopKit ExampleUITests */ = {
+			isa = PBXGroup;
+			children = (
+				430158101C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift */,
+				430158121C7EC03B00B64B63 /* Info.plist */,
+			);
+			path = "LoopKit ExampleUITests";
+			sourceTree = "<group>";
+		};
 		43D8FDC11C728FDF0073BE78 = {
 			isa = PBXGroup;
 			children = (
@@ -329,7 +451,10 @@
 				43D8FEBE1C7294520073BE78 /* InsulinKitTests */,
 				43D8FDCD1C728FDF0073BE78 /* LoopKit */,
 				43D8FDD91C728FDF0073BE78 /* LoopKitTests */,
+				430157F81C7EC03B00B64B63 /* LoopKit Example */,
+				4301580F1C7EC03B00B64B63 /* LoopKit ExampleUITests */,
 				43D8FDCC1C728FDF0073BE78 /* Products */,
+				4301582C1C7ECD7A00B64B63 /* HealthKit.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -344,6 +469,8 @@
 				43D8FE8E1C7293C70073BE78 /* GlucoseKitTests.xctest */,
 				43D8FEB11C7294520073BE78 /* InsulinKit.framework */,
 				43D8FEBA1C7294520073BE78 /* InsulinKitTests.xctest */,
+				430157F71C7EC03B00B64B63 /* LoopKit Example.app */,
+				4301580C1C7EC03B00B64B63 /* LoopKit ExampleUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -596,6 +723,46 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		430157F61C7EC03B00B64B63 /* LoopKit Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 430158171C7EC03B00B64B63 /* Build configuration list for PBXNativeTarget "LoopKit Example" */;
+			buildPhases = (
+				430157F31C7EC03B00B64B63 /* Sources */,
+				430157F41C7EC03B00B64B63 /* Frameworks */,
+				430157F51C7EC03B00B64B63 /* Resources */,
+				4301581D1C7ECB5E00B64B63 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4301581C1C7ECB5E00B64B63 /* PBXTargetDependency */,
+				430158211C7ECB6200B64B63 /* PBXTargetDependency */,
+				430158251C7ECB6500B64B63 /* PBXTargetDependency */,
+				430158291C7ECB6800B64B63 /* PBXTargetDependency */,
+			);
+			name = "LoopKit Example";
+			productName = "LoopKit Example";
+			productReference = 430157F71C7EC03B00B64B63 /* LoopKit Example.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4301580B1C7EC03B00B64B63 /* LoopKit ExampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 430158181C7EC03B00B64B63 /* Build configuration list for PBXNativeTarget "LoopKit ExampleUITests" */;
+			buildPhases = (
+				430158081C7EC03B00B64B63 /* Sources */,
+				430158091C7EC03B00B64B63 /* Frameworks */,
+				4301580A1C7EC03B00B64B63 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4301580E1C7EC03B00B64B63 /* PBXTargetDependency */,
+			);
+			name = "LoopKit ExampleUITests";
+			productName = "LoopKit ExampleUITests";
+			productReference = 4301580C1C7EC03B00B64B63 /* LoopKit ExampleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		43D8FDCA1C728FDF0073BE78 /* LoopKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43D8FDDF1C728FDF0073BE78 /* Build configuration list for PBXNativeTarget "LoopKit" */;
@@ -750,6 +917,14 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Nathan Racklyeft";
 				TargetAttributes = {
+					430157F61C7EC03B00B64B63 = {
+						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 26AMK8X5DW;
+					};
+					4301580B1C7EC03B00B64B63 = {
+						CreatedOnToolsVersion = 7.2.1;
+						TestTargetID = 430157F61C7EC03B00B64B63;
+					};
 					43D8FDCA1C728FDF0073BE78 = {
 						CreatedOnToolsVersion = 7.2.1;
 					};
@@ -789,6 +964,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				430157F61C7EC03B00B64B63 /* LoopKit Example */,
+				4301580B1C7EC03B00B64B63 /* LoopKit ExampleUITests */,
 				43D8FDCA1C728FDF0073BE78 /* LoopKit */,
 				43D8FDD41C728FDF0073BE78 /* LoopKitTests */,
 				43D8FE291C72914D0073BE78 /* CarbKit */,
@@ -802,6 +979,24 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		430157F51C7EC03B00B64B63 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				430158061C7EC03B00B64B63 /* LaunchScreen.storyboard in Resources */,
+				430158031C7EC03B00B64B63 /* Assets.xcassets in Resources */,
+				430158011C7EC03B00B64B63 /* Main.storyboard in Resources */,
+				4301582B1C7ECCEF00B64B63 /* LoopKitExample.entitlements in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4301580A1C7EC03B00B64B63 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		43D8FDC91C728FDF0073BE78 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -893,6 +1088,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		430157F31C7EC03B00B64B63 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */,
+				430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		430158081C7EC03B00B64B63 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				430158111C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		43D8FDC61C728FDF0073BE78 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1009,6 +1221,31 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4301580E1C7EC03B00B64B63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430157F61C7EC03B00B64B63 /* LoopKit Example */;
+			targetProxy = 4301580D1C7EC03B00B64B63 /* PBXContainerItemProxy */;
+		};
+		4301581C1C7ECB5E00B64B63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
+			targetProxy = 4301581B1C7ECB5E00B64B63 /* PBXContainerItemProxy */;
+		};
+		430158211C7ECB6200B64B63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D8FE291C72914D0073BE78 /* CarbKit */;
+			targetProxy = 430158201C7ECB6200B64B63 /* PBXContainerItemProxy */;
+		};
+		430158251C7ECB6500B64B63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D8FE6E1C7293070073BE78 /* GlucoseKit */;
+			targetProxy = 430158241C7ECB6500B64B63 /* PBXContainerItemProxy */;
+		};
+		430158291C7ECB6800B64B63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D8FEB01C7294520073BE78 /* InsulinKit */;
+			targetProxy = 430158281C7ECB6800B64B63 /* PBXContainerItemProxy */;
+		};
 		43D8FDD81C728FDF0073BE78 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
@@ -1032,6 +1269,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		430157FF1C7EC03B00B64B63 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				430158001C7EC03B00B64B63 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		430158041C7EC03B00B64B63 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				430158051C7EC03B00B64B63 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1043,6 +1296,62 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		430158131C7EC03B00B64B63 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "LoopKit Example/LoopKitExample.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = "LoopKit Example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.loudnate.LoopKit-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Debug;
+		};
+		430158141C7EC03B00B64B63 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "LoopKit Example/LoopKitExample.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = "LoopKit Example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.loudnate.LoopKit-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Release;
+		};
+		430158151C7EC03B00B64B63 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "LoopKit ExampleUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.loudnate.LoopKit-ExampleUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = "LoopKit Example";
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		430158161C7EC03B00B64B63 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "LoopKit ExampleUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.loudnate.LoopKit-ExampleUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = "LoopKit Example";
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
 		43D8FDDD1C728FDF0073BE78 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1355,6 +1664,22 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		430158171C7EC03B00B64B63 /* Build configuration list for PBXNativeTarget "LoopKit Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				430158131C7EC03B00B64B63 /* Debug */,
+				430158141C7EC03B00B64B63 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		430158181C7EC03B00B64B63 /* Build configuration list for PBXNativeTarget "LoopKit ExampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				430158151C7EC03B00B64B63 /* Debug */,
+				430158161C7EC03B00B64B63 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		43D8FDC51C728FDF0073BE78 /* Build configuration list for PBXProject "LoopKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

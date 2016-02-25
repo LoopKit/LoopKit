@@ -21,7 +21,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Meal data from the Health database is used to determine carbhydrate content</string>
+	<string>Meal data from the Health database is used to determine glucose effects.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Carbhydrate meal data entered in the app is stored in the Health database</string>
 	<key>NSPrincipalClass</key>
