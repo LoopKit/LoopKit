@@ -8,6 +8,7 @@
 
 import UIKit
 import CarbKit
+import LoopKit
 import InsulinKit
 
 

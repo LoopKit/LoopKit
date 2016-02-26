@@ -225,20 +225,18 @@ public class DoseStore {
                 var error: Error?
 
                 if self.recentReservoirObjectsCache == nil {
-                    if case .Ready = self.readyState {
-                        do {
-                            try self.purgeReservoirObjects()
+                    do {
+                        try self.purgeReservoirObjects()
 
-                            var recentReservoirObjects: [Reservoir] = []
+                        var recentReservoirObjects: [Reservoir] = []
 
-                            recentReservoirObjects += try Reservoir.objectsInContext(persistenceController.managedObjectContext, predicate: self.recentReservoirValuesPredicate, sortedBy: "date", ascending: false)
+                        recentReservoirObjects += try Reservoir.objectsInContext(persistenceController.managedObjectContext, predicate: self.recentReservoirValuesPredicate, sortedBy: "date", ascending: false)
 
-                            self.recentReservoirObjectsCache = recentReservoirObjects
-                        } catch let fetchError as NSError {
-                            error = .FetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
-                        }
-                    } else {
-                        error = .ConfigurationError
+                        self.recentReservoirObjectsCache = recentReservoirObjects
+                    } catch let fetchError as NSError {
+                        error = .FetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
+                    } catch let fetchError as Error {
+                        error = fetchError
                     }
                 }
 
@@ -250,7 +248,7 @@ public class DoseStore {
     }
 
     private func getRecentReservoirDoseEntries(resultsHandler: (doses: [DoseEntry], error: Error?) -> Void) {
-        if recentReservoirDoseEntriesCache == nil, case .Ready = readyState {
+        if recentReservoirDoseEntriesCache == nil {
             getRecentReservoirObjects { (reservoirValues, error) -> Void in
                 self.recentReservoirDoseEntriesCache = InsulinMath.doseEntriesFromReservoirValues(reservoirValues.reverse())
 
@@ -263,7 +261,7 @@ public class DoseStore {
 
     private func getRecentNormalizedReservoirDoseEntries(resultsHandler: (doses: [DoseEntry], error: Error?) -> Void) {
         if recentReservoirNormalizedDoseEntriesCache == nil {
-            if case .Ready = readyState, let basalProfile = basalProfile {
+            if let basalProfile = basalProfile {
                 getRecentReservoirDoseEntries { (doses, error) -> Void in
                     self.recentReservoirNormalizedDoseEntriesCache = InsulinMath.normalize(doses, againstBasalSchedule: basalProfile)
 
@@ -279,7 +277,7 @@ public class DoseStore {
 
     public func deleteReservoirValue(value: ReservoirValue, completionHandler: (deletedValues: [ReservoirValue], error: Error?) -> Void) {
 
-        if case .Ready = readyState, let persistenceController = persistenceController {
+        if let persistenceController = persistenceController {
             persistenceController.managedObjectContext.performBlock {
                 var deletedObjects = [Reservoir]()
                 var error: Error?
@@ -346,6 +344,8 @@ public class DoseStore {
                 recentReservoirObjectsCache?.removeAll()
                 persistenceController.managedObjectContext.reset()
             }
+        } else {
+            throw Error.ConfigurationError
         }
     }
 

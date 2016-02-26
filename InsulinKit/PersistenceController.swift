@@ -102,7 +102,7 @@ class PersistenceController {
     // MARK: - 
 
     private func initializeStack(readyCallback: (error: Error?) -> Void) {
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0)) {
+        managedObjectContext.performBlock {
             var error: Error?
 
             let modelURL = NSBundle(forClass: self.dynamicType).URLForResource("Model", withExtension: "momd")!
