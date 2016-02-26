@@ -144,53 +144,55 @@ public class DoseStore {
     public func addReservoirValue(unitVolume: Double, atDate date: NSDate, completionHandler: (value: ReservoirValue?, error: Error?) -> Void) {
 
         if let pumpID = pumpID, persistenceController = persistenceController {
-            let reservoir = Reservoir.insertNewObjectInContext(persistenceController.managedObjectContext)
+            persistenceController.managedObjectContext.performBlock {
+                let reservoir = Reservoir.insertNewObjectInContext(persistenceController.managedObjectContext)
 
-            reservoir.volume = unitVolume
-            reservoir.date = date
-            reservoir.pumpID = pumpID
+                reservoir.volume = unitVolume
+                reservoir.date = date
+                reservoir.pumpID = pumpID
 
-            if recentReservoirObjectsCache != nil, let predicate = recentReservoirValuesPredicate {
-                recentReservoirObjectsCache = recentReservoirObjectsCache!.filter { predicate.evaluateWithObject($0) }
+                if self.recentReservoirObjectsCache != nil, let predicate = self.recentReservoirValuesPredicate {
+                    self.recentReservoirObjectsCache = self.recentReservoirObjectsCache!.filter { predicate.evaluateWithObject($0) }
 
-                if recentReservoirDoseEntriesCache != nil, let
-                    basalProfile = basalProfile,
-                    minEndDate = recentReservoirValuesMinDate
-                {
-                    recentReservoirDoseEntriesCache = recentReservoirDoseEntriesCache!.filter { $0.endDate >= minEndDate }
+                    if self.recentReservoirDoseEntriesCache != nil, let
+                        basalProfile = self.basalProfile,
+                        minEndDate = self.recentReservoirValuesMinDate
+                    {
+                        self.recentReservoirDoseEntriesCache = self.recentReservoirDoseEntriesCache!.filter { $0.endDate >= minEndDate }
 
-                    var newValues: [Reservoir] = []
+                        var newValues: [Reservoir] = []
 
-                    if let previousValue = recentReservoirObjectsCache?.first {
-                        newValues.append(previousValue)
+                        if let previousValue = self.recentReservoirObjectsCache?.first {
+                            newValues.append(previousValue)
+                        }
+
+                        newValues.append(reservoir)
+
+                        let newDoseEntries = InsulinMath.doseEntriesFromReservoirValues(newValues)
+
+                        self.recentReservoirDoseEntriesCache! += newDoseEntries
+
+                        if self.recentReservoirNormalizedDoseEntriesCache != nil {
+                            self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filter { $0.endDate > minEndDate }
+
+                            self.recentReservoirNormalizedDoseEntriesCache! += InsulinMath.normalize(newDoseEntries, againstBasalSchedule: basalProfile)
+                        }
                     }
 
-                    newValues.append(reservoir)
+                    self.recentReservoirObjectsCache!.insert(reservoir, atIndex: 0)
+                }
 
-                    let newDoseEntries = InsulinMath.doseEntriesFromReservoirValues(newValues)
+                self.clearCalculationCache()
 
-                    recentReservoirDoseEntriesCache! += newDoseEntries
-
-                    if recentReservoirNormalizedDoseEntriesCache != nil {
-                        recentReservoirNormalizedDoseEntriesCache = recentReservoirNormalizedDoseEntriesCache!.filter { $0.endDate > minEndDate }
-
-                        recentReservoirNormalizedDoseEntriesCache! += InsulinMath.normalize(newDoseEntries, againstBasalSchedule: basalProfile)
+                persistenceController.save { (error) -> Void in
+                    if let error = error {
+                        completionHandler(value: reservoir, error: .PersistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion))
+                    } else {
+                        completionHandler(value: reservoir, error: nil)
                     }
+
+                    NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ReservoirValuesDidChangeNotification, object: self)
                 }
-
-                recentReservoirObjectsCache!.insert(reservoir, atIndex: 0)
-            }
-
-            clearCalculationCache()
-
-            persistenceController.save { (error) -> Void in
-                if let error = error {
-                    completionHandler(value: reservoir, error: .PersistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion))
-                } else {
-                    completionHandler(value: reservoir, error: nil)
-                }
-
-                NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ReservoirValuesDidChangeNotification, object: self)
             }
         } else {
             completionHandler(value: nil, error: .ConfigurationError)
@@ -218,27 +220,33 @@ public class DoseStore {
         - error:   An error object explaining why the results could not be fetched
      */
     private func getRecentReservoirObjects(resultsHandler: (objects: [Reservoir], error: Error?) -> Void) {
-        var error: Error?
+        if let persistenceController = persistenceController {
+            persistenceController.managedObjectContext.performBlock {
+                var error: Error?
 
-        if recentReservoirObjectsCache == nil {
-            if case .Ready = readyState, let persistenceController = persistenceController {
-                do {
-                    try purgeReservoirObjects()
+                if self.recentReservoirObjectsCache == nil {
+                    if case .Ready = self.readyState {
+                        do {
+                            try self.purgeReservoirObjects()
 
-                    var recentReservoirObjects: [Reservoir] = []
+                            var recentReservoirObjects: [Reservoir] = []
 
-                    recentReservoirObjects += try Reservoir.objectsInContext(persistenceController.managedObjectContext, predicate: recentReservoirValuesPredicate, sortedBy: "date", ascending: false)
+                            recentReservoirObjects += try Reservoir.objectsInContext(persistenceController.managedObjectContext, predicate: self.recentReservoirValuesPredicate, sortedBy: "date", ascending: false)
 
-                    self.recentReservoirObjectsCache = recentReservoirObjects
-                } catch let fetchError as NSError {
-                    error = .FetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
+                            self.recentReservoirObjectsCache = recentReservoirObjects
+                        } catch let fetchError as NSError {
+                            error = .FetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
+                        }
+                    } else {
+                        error = .ConfigurationError
+                    }
                 }
-            } else {
-                error = .ConfigurationError
-            }
-        }
 
-        resultsHandler(objects: recentReservoirObjectsCache ?? [], error: error)
+                resultsHandler(objects: self.recentReservoirObjectsCache ?? [], error: error)
+            }
+        } else {
+            resultsHandler(objects: [], error: .ConfigurationError)
+        }
     }
 
     private func getRecentReservoirDoseEntries(resultsHandler: (doses: [DoseEntry], error: Error?) -> Void) {
@@ -272,37 +280,45 @@ public class DoseStore {
     public func deleteReservoirValue(value: ReservoirValue, completionHandler: (deletedValues: [ReservoirValue], error: Error?) -> Void) {
 
         if case .Ready = readyState, let persistenceController = persistenceController {
-            var deletedObjects = [Reservoir]()
-            var error: Error?
+            persistenceController.managedObjectContext.performBlock {
+                var deletedObjects = [Reservoir]()
+                var error: Error?
 
-            if let object = value as? Reservoir {
-                deleteReservoirObject(object)
-                deletedObjects.append(object)
-            } else if let pumpID = pumpID {
-                // TODO: Unecessary case handling?
-                let predicate = NSPredicate(format: "date = %@ && pumpID = %@", value.startDate, pumpID)
+                if let object = value as? Reservoir {
+                    self.deleteReservoirObject(object)
+                    deletedObjects.append(object)
+                } else if let pumpID = self.pumpID {
+                    // TODO: Unecessary case handling?
+                    let predicate = NSPredicate(format: "date = %@ && pumpID = %@", value.startDate, pumpID)
 
-                // TODO: Background queue
-                do {
-                    for object in try Reservoir.objectsInContext(persistenceController.managedObjectContext, predicate: predicate) {
-                        deleteReservoirObject(object)
-                        deletedObjects.append(object)
+                    do {
+                        for object in try Reservoir.objectsInContext(persistenceController.managedObjectContext, predicate: predicate) {
+                            self.deleteReservoirObject(object)
+                            deletedObjects.append(object)
+                        }
+                    } catch let deleteError as NSError {
+                        error = .PersistenceError(description: deleteError.localizedDescription, recoverySuggestion: deleteError.localizedRecoverySuggestion)
                     }
-                } catch let deleteError as NSError {
-                    error = .PersistenceError(description: deleteError.localizedDescription, recoverySuggestion: deleteError.localizedRecoverySuggestion)
                 }
+
+                self.clearDoseCache()
+
+                completionHandler(deletedValues: deletedObjects.map { $0 }, error: error)
+
+                NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ReservoirValuesDidChangeNotification, object: self)
             }
-
-            clearDoseCache()
-
-            completionHandler(deletedValues: deletedObjects.map { $0 }, error: error)
-
-            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ReservoirValuesDidChangeNotification, object: self)
         } else {
             completionHandler(deletedValues: [], error: .ConfigurationError)
         }
     }
 
+    /**
+     Deletes a specified reservoir object from the context and removes it from the cache
+
+     *This method should only be called from within a managed object context block.*
+
+     - parameter object: The object to delete
+     */
     private func deleteReservoirObject(object: Reservoir) {
         persistenceController?.managedObjectContext.deleteObject(object)
 
@@ -311,6 +327,13 @@ public class DoseStore {
         }
     }
 
+    /**
+     Removes reservoir objects older than the recency predicate
+
+     *This method should only be called from within a managed object context block.*
+
+     - throws: A core data exception if the delete request failed
+     */
     private func purgeReservoirObjects() throws {
         if let subPredicate = recentReservoirValuesPredicate, persistenceController = persistenceController {
             let predicate = NSCompoundPredicate(notPredicateWithSubpredicate: subPredicate)
@@ -362,6 +385,24 @@ public class DoseStore {
             }
         } else {
             resultHandler(iob: insulinOnBoardCache?.closestToDate(date), error: nil)
+        }
+    }
+
+    public func getInsulinOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (valus: [InsulinValue], error: Error?) -> Void) {
+        if insulinOnBoardCache == nil {
+            if let insulinActionDuration = insulinActionDuration {
+                getRecentNormalizedReservoirDoseEntries { (doses, error) -> Void in
+                    if error == nil {
+                        self.insulinOnBoardCache = InsulinMath.insulinOnBoardForDoses(doses, actionDuration: insulinActionDuration)
+                    }
+
+                    resultHandler(valus: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+                }
+            } else {
+                resultHandler(valus: [], error: .ConfigurationError)
+            }
+        } else {
+            resultHandler(valus: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: nil)
         }
     }
 

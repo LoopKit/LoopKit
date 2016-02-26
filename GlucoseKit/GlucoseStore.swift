@@ -116,13 +116,18 @@ public class GlucoseStore: HealthKitSampleStore {
      
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
-     - parameter interval:       The past interval of values to retrieve
+     - parameter startDate:      The earliest date of values to retrieve. Defaults to the managed data interval before the current date.
+     - parameter endDate:        The latest date of values to retrieve. Defaults to the distant future.
      - parameter resultsHandler: A closure called once the values have been retrieved. The closure takes two arguments:
         - values: The retrieved values
         - error:  An error object explaining why the retrieval failed
      */
-    public func getRecentGlucoseValues(forTimeInterval interval: NSTimeInterval = NSTimeInterval(hours: 6), resultsHandler: (values: [GlucoseValue], error: NSError?) -> Void) {
-        let predicate = HKQuery.predicateForSamplesWithStartDate(NSDate(timeIntervalSinceNow: -interval), endDate: NSDate.distantFuture(), options: [.StrictStartDate])
+    public func getRecentGlucoseValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (values: [GlucoseValue], error: NSError?) -> Void) {
+        let predicate = HKQuery.predicateForSamplesWithStartDate(
+            startDate ?? NSDate(timeIntervalSinceNow: -(managedDataInterval ?? NSTimeInterval(hours: 3))),
+            endDate: endDate ?? NSDate.distantFuture(),
+            options: [.StrictStartDate]
+        )
         let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
 
         let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
