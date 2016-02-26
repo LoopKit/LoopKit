@@ -26,8 +26,8 @@ struct StoredCarbEntry: CarbEntry {
     let absorptionTime: NSTimeInterval?
     let createdByCurrentApp: Bool
 
-    init(sample: HKQuantitySample) {
-        self.init(sampleUUID: sample.UUID, startDate: sample.startDate, unitString: unit.unitString, value: sample.quantity.doubleValueForUnit(unit), foodType: sample.foodType, absorptionTime: sample.absorptionTime, createdByCurrentApp: sample.createdByCurrentApp)
+    init(sample: HKQuantitySample, createdByCurrentApp: Bool? = nil) {
+        self.init(sampleUUID: sample.UUID, startDate: sample.startDate, unitString: unit.unitString, value: sample.quantity.doubleValueForUnit(unit), foodType: sample.foodType, absorptionTime: sample.absorptionTime, createdByCurrentApp: createdByCurrentApp ?? sample.createdByCurrentApp)
 
     }
 

@@ -313,7 +313,7 @@ public class CarbStore: HealthKitSampleStore {
 
         healthStore.saveObject(carbs) { (completed, error) -> Void in
             dispatch_async(self.dataAccessQueue) {
-                let storedObject = StoredCarbEntry(sample: carbs)
+                let storedObject = StoredCarbEntry(sample: carbs, createdByCurrentApp: true)
                 self.carbEntryCache.insert(storedObject)
                 self.clearCalculationCache()
                 self.persistCarbEntryCache()
