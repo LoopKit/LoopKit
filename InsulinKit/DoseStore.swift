@@ -371,24 +371,12 @@ public class DoseStore {
     private var insulinOnBoardCache: [InsulinValue]?
 
     public func insulinOnBoardAtDate(date: NSDate, resultHandler: (iob: InsulinValue?, error: Error?) -> Void) {
-        if insulinOnBoardCache == nil {
-            if let insulinActionDuration = insulinActionDuration {
-                getRecentNormalizedReservoirDoseEntries { (doses, error) -> Void in
-                    if error == nil {
-                        self.insulinOnBoardCache = InsulinMath.insulinOnBoardForDoses(doses, actionDuration: insulinActionDuration)
-                    }
-
-                    resultHandler(iob: self.insulinOnBoardCache?.closestToDate(date), error: error)
-                }
-            } else {
-                resultHandler(iob: nil, error: .ConfigurationError)
-            }
-        } else {
-            resultHandler(iob: insulinOnBoardCache?.closestToDate(date), error: nil)
+        getInsulinOnBoardValues { (values, error) -> Void in
+            resultHandler(iob: values.closestToDate(date), error: error)
         }
     }
 
-    public func getInsulinOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (valus: [InsulinValue], error: Error?) -> Void) {
+    public func getInsulinOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (values: [InsulinValue], error: Error?) -> Void) {
         if insulinOnBoardCache == nil {
             if let insulinActionDuration = insulinActionDuration {
                 getRecentNormalizedReservoirDoseEntries { (doses, error) -> Void in
@@ -396,13 +384,13 @@ public class DoseStore {
                         self.insulinOnBoardCache = InsulinMath.insulinOnBoardForDoses(doses, actionDuration: insulinActionDuration)
                     }
 
-                    resultHandler(valus: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+                    resultHandler(values: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: error)
                 }
             } else {
-                resultHandler(valus: [], error: .ConfigurationError)
+                resultHandler(values: [], error: .ConfigurationError)
             }
         } else {
-            resultHandler(valus: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: nil)
+            resultHandler(values: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: nil)
         }
     }
 
