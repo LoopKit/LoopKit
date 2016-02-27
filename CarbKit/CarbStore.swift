@@ -171,9 +171,11 @@ public class CarbStore: HealthKitSampleStore {
     public private(set) var isBackgroundDeliveryEnabled = false
 
     /**
-     Enables the background delivery of updates to carbohydrate data.
+     Enables the background delivery of updates to carbohydrate data from the Health database.
      
-     This is necessary if carbohydrate data is used in a long-running task (like automated dosing) and new entries are expected from other apps or input sources.
+     This is only necessary if carbohydrate data is used in a long-running task (like automated dosing) and new entries are expected from other apps or input sources.
+     
+     It is extremely battery-intensive to leave this enabled, although that might just be an iOS bug.
      
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
