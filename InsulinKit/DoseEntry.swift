@@ -22,4 +22,12 @@ public struct DoseEntry: TimelineValue {
     public let value: Double
     public let unit: DoseUnit
     public let description: String?
+
+    public init(startDate: NSDate, endDate: NSDate, value: Double, unit: DoseUnit, description: String?) {
+        self.startDate = startDate
+        self.endDate = endDate
+        self.value = value
+        self.unit = unit
+        self.description = description
+    }
 }
