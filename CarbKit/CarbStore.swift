@@ -174,9 +174,7 @@ public class CarbStore: HealthKitSampleStore {
      Enables the background delivery of updates to carbohydrate data from the Health database.
      
      This is only necessary if carbohydrate data is used in a long-running task (like automated dosing) and new entries are expected from other apps or input sources.
-     
-     It is extremely battery-intensive to leave this enabled, although that might just be an iOS bug.
-     
+
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
      - parameter enabled:    Whether to enable or disable background delivery
@@ -397,12 +395,18 @@ public class CarbStore: HealthKitSampleStore {
     private var glucoseEffectsCache: [GlucoseEffect]?
 
     public func carbsOnBoardAtDate(date: NSDate, resultHandler: (CarbValue?) -> Void) {
+        getCarbsOnBoardValues { (values) -> Void in
+            resultHandler(values.closestToDate(date))
+        }
+    }
+
+    public func getCarbsOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (values: [CarbValue]) -> Void) {
         dispatch_async(dataAccessQueue) { [unowned self] in
             if self.carbsOnBoardCache == nil {
                 self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(self.carbEntryCache, defaultAbsorptionTime: self.defaultAbsorptionTimes.medium)
             }
 
-            resultHandler(self.carbsOnBoardCache?.closestToDate(date))
+            resultHandler(values: self.carbsOnBoardCache?.filterDateRange(startDate, endDate) ?? [])
         }
     }
 
