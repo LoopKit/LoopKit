@@ -259,19 +259,30 @@ public class DoseStore {
         }
     }
 
-    private func getRecentNormalizedReservoirDoseEntries(resultsHandler: (doses: [DoseEntry], error: Error?) -> Void) {
+    /**
+     Retrieves recent dose values.
+
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
+     - parameter startDate:      The earliest date of entries to retrieve. The default, and earliest supported value, is the earlier of the current date less `insulinActionDuration` or the previous midnight in the current time zone.
+     - parameter endDate:        The latest date of entries to retrieve. Defaults to the distant future.
+     - parameter resultsHandler: A closure called once the entries have been retrieved. The closure takes two arguments:
+        - doses: The retrieved entries
+        - error: An error object explaining why the retrieval failed
+     */
+    public func getRecentNormalizedReservoirDoseEntries(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (doses: [DoseEntry], error: Error?) -> Void) {
         if recentReservoirNormalizedDoseEntriesCache == nil {
             if let basalProfile = basalProfile {
                 getRecentReservoirDoseEntries { (doses, error) -> Void in
                     self.recentReservoirNormalizedDoseEntriesCache = InsulinMath.normalize(doses, againstBasalSchedule: basalProfile)
 
-                    resultsHandler(doses: self.recentReservoirNormalizedDoseEntriesCache ?? [], error: error)
+                    resultsHandler(doses: self.recentReservoirNormalizedDoseEntriesCache?.filterDateRange(startDate, endDate) ?? [], error: error)
                 }
             } else {
-                resultsHandler(doses: recentReservoirDoseEntriesCache ?? [], error: .ConfigurationError)
+                resultsHandler(doses: [], error: .ConfigurationError)
             }
         } else {
-            resultsHandler(doses: recentReservoirNormalizedDoseEntriesCache ?? [], error: nil)
+            resultsHandler(doses: recentReservoirNormalizedDoseEntriesCache?.filterDateRange(startDate, endDate) ?? [], error: nil)
         }
     }
 
