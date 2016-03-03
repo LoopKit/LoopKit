@@ -154,7 +154,7 @@ class InsulinMathTests: XCTestCase {
 
         let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
 
-        XCTAssertEqual(output.count, effects.count)
+        XCTAssertEqualWithAccuracy(Float(output.count), Float(effects.count), accuracy: 1.0)
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
