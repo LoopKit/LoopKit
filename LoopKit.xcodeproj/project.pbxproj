@@ -123,6 +123,11 @@
 		43D8FEFC1C72A1F90073BE78 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		43D8FF091C72C0360073BE78 /* GlucoseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D8FE711C7293070073BE78 /* GlucoseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43D8FF0A1C72C03D0073BE78 /* InsulinKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D8FEB31C7294520073BE78 /* InsulinKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43D9888B1C87E47800DA4467 /* GlucoseValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D9888A1C87E47800DA4467 /* GlucoseValue.swift */; };
+		43D9888D1C87EBE400DA4467 /* LoopMathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D9888C1C87EBE400DA4467 /* LoopMathTests.swift */; };
+		43D9888E1C87F36900DA4467 /* LoopKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDDA1C728FDF0073BE78 /* LoopKitTests.swift */; };
+		43D9888F1C87F36A00DA4467 /* LoopKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDDA1C728FDF0073BE78 /* LoopKitTests.swift */; };
+		43D988901C87F36B00DA4467 /* LoopKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDDA1C728FDF0073BE78 /* LoopKitTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -328,6 +333,8 @@
 		43D8FEEF1C7294E90073BE78 /* ErrorBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorBackgroundView.swift; sourceTree = "<group>"; };
 		43D8FEF01C7294E90073BE78 /* ReservoirTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirTableViewController.swift; sourceTree = "<group>"; };
 		43D8FEF41C7295490073BE78 /* basal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = basal.json; sourceTree = "<group>"; };
+		43D9888A1C87E47800DA4467 /* GlucoseValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseValue.swift; sourceTree = "<group>"; };
+		43D9888C1C87EBE400DA4467 /* LoopMathTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopMathTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -488,6 +495,7 @@
 				43D8FDEA1C7290350073BE78 /* GlucoseEffect.swift */,
 				43D8FDEB1C7290350073BE78 /* GlucoseRangeSchedule.swift */,
 				43D8FDEC1C7290350073BE78 /* GlucoseSchedule.swift */,
+				43D9888A1C87E47800DA4467 /* GlucoseValue.swift */,
 				43D8FDED1C7290350073BE78 /* HealthKitSampleStore.swift */,
 				43D8FDEE1C7290350073BE78 /* HKUnit.swift */,
 				43D8FDEF1C7290350073BE78 /* LoopMath.swift */,
@@ -503,6 +511,7 @@
 		43D8FDD91C728FDF0073BE78 /* LoopKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				43D9888C1C87EBE400DA4467 /* LoopMathTests.swift */,
 				43D8FDDC1C728FDF0073BE78 /* Info.plist */,
 				43D8FE1A1C72906E0073BE78 /* BasalRateScheduleTests.swift */,
 				43D8FDDA1C728FDF0073BE78 /* LoopKitTests.swift */,
@@ -1124,6 +1133,7 @@
 				43D8FE021C7290350073BE78 /* SampleValue.swift in Sources */,
 				43D8FE101C7290530073BE78 /* DailyValueScheduleTableViewController.swift in Sources */,
 				43D8FE191C7290530073BE78 /* UIViewController.swift in Sources */,
+				43D9888B1C87E47800DA4467 /* GlucoseValue.swift in Sources */,
 				43D8FE141C7290530073BE78 /* IdentifiableClass.swift in Sources */,
 				43D8FDF41C7290350073BE78 /* BasalRateSchedule.swift in Sources */,
 				43D8FDFA1C7290350073BE78 /* GlucoseRangeSchedule.swift in Sources */,
@@ -1141,6 +1151,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D8FE1E1C72906E0073BE78 /* NSDateTests.swift in Sources */,
+				43D9888D1C87EBE400DA4467 /* LoopMathTests.swift in Sources */,
 				43D8FE1F1C72906E0073BE78 /* QuantityScheduleTests.swift in Sources */,
 				43D8FE1D1C72906E0073BE78 /* BasalRateScheduleTests.swift in Sources */,
 				43D8FDDB1C728FDF0073BE78 /* LoopKitTests.swift in Sources */,
@@ -1171,6 +1182,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43D9888E1C87F36900DA4467 /* LoopKitTests.swift in Sources */,
 				43D8FE421C7291900073BE78 /* CarbMathTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1189,6 +1201,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43D9888F1C87F36A00DA4467 /* LoopKitTests.swift in Sources */,
 				43D8FE9A1C7293D00073BE78 /* GlucoseMathTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1214,6 +1227,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43D988901C87F36B00DA4467 /* LoopKitTests.swift in Sources */,
 				43D8FEC91C7294640073BE78 /* InsulinMathTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1671,6 +1685,7 @@
 				430158141C7EC03B00B64B63 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		430158181C7EC03B00B64B63 /* Build configuration list for PBXNativeTarget "LoopKit ExampleUITests" */ = {
 			isa = XCConfigurationList;
@@ -1679,6 +1694,7 @@
 				430158161C7EC03B00B64B63 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		43D8FDC51C728FDF0073BE78 /* Build configuration list for PBXProject "LoopKit" */ = {
 			isa = XCConfigurationList;

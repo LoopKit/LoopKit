@@ -11,9 +11,5 @@ import LoopKit
 import HealthKit
 
 
-public protocol GlucoseValue: SampleValue {
-}
-
-
 extension HKQuantitySample: GlucoseValue {
 }

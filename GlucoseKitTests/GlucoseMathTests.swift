@@ -11,8 +11,6 @@ import XCTest
 import LoopKit
 import HealthKit
 
-typealias JSONDictionary = [String: AnyObject]
-
 
 public struct GlucoseFixtureValue: GlucoseValue {
     public let startDate: NSDate
@@ -26,11 +24,6 @@ public struct GlucoseFixtureValue: GlucoseValue {
 
 
 class GlucoseMathTests: XCTestCase {
-
-    func loadFixture<T>(resourceName: String) -> T {
-        let path = NSBundle(forClass: self.dynamicType).pathForResource(resourceName, ofType: "json")!
-        return try! NSJSONSerialization.JSONObjectWithData(NSData(contentsOfFile: path)!, options: []) as! T
-    }
 
     func loadInputFixture(resourceName: String) -> [GlucoseFixtureValue] {
         let fixture: [JSONDictionary] = loadFixture(resourceName)

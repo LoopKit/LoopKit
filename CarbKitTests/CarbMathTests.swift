@@ -11,15 +11,8 @@ import XCTest
 import LoopKit
 import HealthKit
 
-typealias JSONDictionary = [String: AnyObject]
-
 
 class CarbMathTests: XCTestCase {
-
-    func loadFixture<T>(resourceName: String) -> T {
-        let path = NSBundle(forClass: self.dynamicType).pathForResource(resourceName, ofType: "json")!
-        return try! NSJSONSerialization.JSONObjectWithData(NSData(contentsOfFile: path)!, options: []) as! T
-    }
 
     func loadSchedules() -> (CarbRatioSchedule, InsulinSensitivitySchedule) {
         let fixture: JSONDictionary = loadFixture("read_carb_ratios")

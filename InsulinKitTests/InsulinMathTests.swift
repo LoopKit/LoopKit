@@ -11,8 +11,6 @@ import HealthKit
 import LoopKit
 @testable import InsulinKit
 
-typealias JSONDictionary = [String: AnyObject]
-
 
 struct NewReservoirValue: ReservoirValue {
     let startDate: NSDate
@@ -21,13 +19,9 @@ struct NewReservoirValue: ReservoirValue {
 
 
 class InsulinMathTests: XCTestCase {
-    
-    func loadFixture<T>(resourceName: String) -> T {
-        let path = NSBundle(forClass: self.dynamicType).pathForResource(resourceName, ofType: "json")!
-        return try! NSJSONSerialization.JSONObjectWithData(NSData(contentsOfFile: path)!, options: []) as! T
-    }
 
     func loadReservoirFixture(resourceName: String) -> [NewReservoirValue] {
+
         let fixture: [JSONDictionary] = loadFixture(resourceName)
         let dateFormatter = NSDateFormatter.ISO8601LocalTimeDateFormatter()
 
