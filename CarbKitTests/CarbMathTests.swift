@@ -67,6 +67,8 @@ class CarbMathTests: XCTestCase {
 
         let effects = CarbMath.glucoseEffectsForCarbEntries(input, carbRatios: carbRatios, insulinSensitivities: insulinSensitivities, defaultAbsorptionTime: NSTimeInterval(minutes: 180))
 
+        XCTAssertEqual(output.count, effects.count)
+
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), calculated.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), accuracy: pow(1, -11))
@@ -78,6 +80,8 @@ class CarbMathTests: XCTestCase {
         let output = loadCOBOutputFixture()
 
         let cob = CarbMath.carbsOnBoardForCarbEntries(input, defaultAbsorptionTime: NSTimeInterval(minutes: 180), delay: NSTimeInterval(minutes: 10), delta: NSTimeInterval(minutes: 5))
+
+        XCTAssertEqual(output.count, cob.count)
 
         for (expected, calculated) in zip(output, cob) {
             XCTAssertEqual(expected.startDate, calculated.startDate)

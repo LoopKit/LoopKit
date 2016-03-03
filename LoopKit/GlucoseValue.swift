@@ -7,5 +7,19 @@
 //
 
 
+import HealthKit
+
+
 public protocol GlucoseValue: SampleValue {
+}
+
+
+struct PredictedGlucoseValue: GlucoseValue {
+    let startDate: NSDate
+    let quantity: HKQuantity
+
+    init(startDate: NSDate, quantity: HKQuantity) {
+        self.startDate = startDate
+        self.quantity = quantity
+    }
 }

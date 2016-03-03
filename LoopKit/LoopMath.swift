@@ -48,4 +48,21 @@ public struct LoopMath {
         
         return (startDate, endDate)
     }
+
+    /**
+     Calculates a timeline of predicted glucose values from a variety of effects timelines.
+
+     Glucose effect timelines are applied with equal weight.
+     Each overlapping effect timeline should have matching deltas to ensure a smooth result.
+
+     - parameter startingGlucose: The starting glucose value
+     - parameter momentum:        The momentum effect determined from prior glucose values
+     - parameter effects:         The glucose effect timelines to apply to the prediction.
+
+     - returns: A timeline of glucose values
+     */
+    public static func predictGlucose(startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [GlucoseEffect]...) -> [GlucoseValue] {
+
+        return []
+    }
 }

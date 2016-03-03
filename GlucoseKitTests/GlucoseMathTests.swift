@@ -50,6 +50,8 @@ class GlucoseMathTests: XCTestCase {
         let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
         let unit = HKUnit.milligramsPerDeciliterUnit()
 
+        XCTAssertEqual(output.count, effects.count)
+
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(unit), calculated.quantity.doubleValueForUnit(unit), accuracy: pow(1, -14))
@@ -62,6 +64,8 @@ class GlucoseMathTests: XCTestCase {
 
         let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
         let unit = HKUnit.milligramsPerDeciliterUnit()
+
+        XCTAssertEqual(output.count, effects.count)
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
@@ -76,6 +80,8 @@ class GlucoseMathTests: XCTestCase {
         let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
         let unit = HKUnit.milligramsPerDeciliterUnit()
 
+        XCTAssertEqual(output.count, effects.count)
+
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(unit), calculated.quantity.doubleValueForUnit(unit), accuracy: pow(1, -14))
@@ -88,6 +94,8 @@ class GlucoseMathTests: XCTestCase {
 
         let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
         let unit = HKUnit.milligramsPerDeciliterUnit()
+
+        XCTAssertEqual(output.count, effects.count)
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)

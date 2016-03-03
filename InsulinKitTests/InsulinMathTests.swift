@@ -79,6 +79,8 @@ class InsulinMathTests: XCTestCase {
 
         let doses = InsulinMath.doseEntriesFromReservoirValues(input)
 
+        XCTAssertEqual(output.count, doses.count)
+
         for (expected, calculated) in zip(output, doses) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqual(expected.endDate, calculated.endDate)
@@ -93,6 +95,8 @@ class InsulinMathTests: XCTestCase {
 
         let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: NSTimeInterval(hours: 4))
 
+        XCTAssertEqual(output.count, iob.count)
+
         for (expected, calculated) in zip(output, iob) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: pow(1, -14))
@@ -104,6 +108,8 @@ class InsulinMathTests: XCTestCase {
         let output = loadInsulinValueFixture("iob_from_bolus_output")
 
         let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: NSTimeInterval(hours: 4))
+
+        XCTAssertEqual(output.count, iob.count)
 
         for (expected, calculated) in zip(output, iob) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
@@ -117,6 +123,8 @@ class InsulinMathTests: XCTestCase {
         let basals = loadBasalRateScheduleFixture("basal")
 
         let doses = InsulinMath.normalize(input, againstBasalSchedule: basals)
+
+        XCTAssertEqual(output.count, doses.count)
 
         for (expected, calculated) in zip(output, doses) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
@@ -132,6 +140,8 @@ class InsulinMathTests: XCTestCase {
 
         let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: NSTimeInterval(hours: 4))
 
+        XCTAssertEqual(output.count, iob.count)
+
         for (expected, calculated) in zip(output, iob) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: pow(1, -14))
@@ -143,6 +153,8 @@ class InsulinMathTests: XCTestCase {
         let output = loadGlucoseEffectFixture("effect_from_bolus_output")
 
         let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
+
+        XCTAssertEqual(output.count, effects.count)
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
@@ -156,6 +168,8 @@ class InsulinMathTests: XCTestCase {
 
         let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
 
+        XCTAssertEqual(output.count, effects.count)
+
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), calculated.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), accuracy: pow(1, -14))
@@ -168,6 +182,8 @@ class InsulinMathTests: XCTestCase {
 
         let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
 
+        XCTAssertEqual(output.count, effects.count)
+
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), calculated.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), accuracy: pow(1, -14), String(expected.startDate))
@@ -179,6 +195,8 @@ class InsulinMathTests: XCTestCase {
         let output = loadGlucoseEffectFixture("effect_from_history_output")
 
         let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
+
+        XCTAssertEqual(output.count, effects.count)
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
