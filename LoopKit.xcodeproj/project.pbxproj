@@ -23,7 +23,6 @@
 		430158271C7ECB6800B64B63 /* InsulinKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FEB11C7294520073BE78 /* InsulinKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4301582B1C7ECCEF00B64B63 /* LoopKitExample.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */; };
 		4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
-		4346D1EE1C7801AD00ABAFE3 /* GlucoseValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1ED1C7801AD00ABAFE3 /* GlucoseValue.swift */; };
 		4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
 		43B99AFC1C744CE300D050F5 /* bolus_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99AFB1C744CE300D050F5 /* bolus_dose.json */; };
 		43B99AFE1C744E5F00D050F5 /* effect_from_bolus_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99AFD1C744E5F00D050F5 /* effect_from_bolus_output.json */; };
@@ -143,6 +142,7 @@
 		43D988AD1C87FFA300DA4467 /* glucose_from_effects_insulin_effect_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D9889E1C87FFA300DA4467 /* glucose_from_effects_insulin_effect_input.json */; };
 		43D988AE1C87FFA300DA4467 /* glucose_from_effects_glucose_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D9889F1C87FFA300DA4467 /* glucose_from_effects_glucose_input.json */; };
 		43D988AF1C87FFA300DA4467 /* glucose_from_effects_carb_effect_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D988A01C87FFA300DA4467 /* glucose_from_effects_carb_effect_input.json */; };
+		43FADDFB1C89679200DDE013 /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -241,7 +241,6 @@
 		430158121C7EC03B00B64B63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoopKitExample.entitlements; sourceTree = "<group>"; };
 		4301582C1C7ECD7A00B64B63 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		4346D1ED1C7801AD00ABAFE3 /* GlucoseValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseValue.swift; sourceTree = "<group>"; };
 		4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		43B99AFB1C744CE300D050F5 /* bolus_dose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bolus_dose.json; sourceTree = "<group>"; };
 		43B99AFD1C744E5F00D050F5 /* effect_from_bolus_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = effect_from_bolus_output.json; sourceTree = "<group>"; };
@@ -365,6 +364,7 @@
 		43D9889E1C87FFA300DA4467 /* glucose_from_effects_insulin_effect_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glucose_from_effects_insulin_effect_input.json; sourceTree = "<group>"; };
 		43D9889F1C87FFA300DA4467 /* glucose_from_effects_glucose_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glucose_from_effects_glucose_input.json; sourceTree = "<group>"; };
 		43D988A01C87FFA300DA4467 /* glucose_from_effects_carb_effect_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glucose_from_effects_carb_effect_input.json; sourceTree = "<group>"; };
+		43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -637,7 +637,7 @@
 				43D8FE731C7293070073BE78 /* Info.plist */,
 				43D8FE861C72934C0073BE78 /* GlucoseMath.swift */,
 				43D8FE871C72934C0073BE78 /* GlucoseStore.swift */,
-				4346D1ED1C7801AD00ABAFE3 /* GlucoseValue.swift */,
+				43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */,
 			);
 			path = GlucoseKit;
 			sourceTree = "<group>";
@@ -1259,8 +1259,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43FADDFB1C89679200DDE013 /* HKQuantitySample.swift in Sources */,
 				43D8FE891C72934C0073BE78 /* GlucoseStore.swift in Sources */,
-				4346D1EE1C7801AD00ABAFE3 /* GlucoseValue.swift in Sources */,
 				43D8FE881C72934C0073BE78 /* GlucoseMath.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
