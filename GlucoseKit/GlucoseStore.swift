@@ -71,7 +71,7 @@ public class GlucoseStore: HealthKitSampleStore {
         - sample:  The sample object
         - error:   An error object explaining why the save failed
      */
-    public func addGlucose(quantity: HKQuantity, date: NSDate, device: HKDevice?, resultHandler: (success: Bool, sample: HKQuantitySample?, error: NSError?) -> Void) {
+    public func addGlucose(quantity: HKQuantity, date: NSDate, device: HKDevice?, resultHandler: (success: Bool, sample: GlucoseValue?, error: NSError?) -> Void) {
 
         let glucose = HKQuantitySample(type: glucoseType, quantity: quantity, startDate: date, endDate: date, device: device, metadata: nil)
 
