@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import HealthKit
 
 
 public struct LoopMath {
@@ -52,17 +53,74 @@ public struct LoopMath {
     /**
      Calculates a timeline of predicted glucose values from a variety of effects timelines.
 
-     Glucose effect timelines are applied with equal weight.
-     Each overlapping effect timeline should have matching deltas to ensure a smooth result.
+     Each effect timeline:
+     - Is given equal weight, with the exception of the momentum effect timeline
+     - Can be of arbitrary size and start date
+     - Should be in ascending order
+     - Should have aligning dates with any overlapping timelines to ensure a smooth result
 
      - parameter startingGlucose: The starting glucose value
-     - parameter momentum:        The momentum effect determined from prior glucose values
+     - parameter momentum:        The momentum effect timeline determined from prior glucose values
      - parameter effects:         The glucose effect timelines to apply to the prediction.
 
      - returns: A timeline of glucose values
      */
     public static func predictGlucose(startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [GlucoseEffect]...) -> [GlucoseValue] {
+        var effectValuesAtDate: [NSDate: Double] = [:]
+        let unit = HKUnit.milligramsPerDeciliterUnit()
 
-        return []
+        for timeline in effects {
+            var previousEffectValue: Double = 0
+
+            for effect in timeline {
+                let value = effect.quantity.doubleValueForUnit(unit)
+                effectValuesAtDate[effect.startDate] = (effectValuesAtDate[effect.startDate] ?? 0) + value - previousEffectValue
+                previousEffectValue = value
+            }
+        }
+
+        // Blend the momentum effect linearly into the summed effect list
+        if momentum.count > 1 {
+            var previousEffectValue: Double = 0
+
+            // The blend begins delta minutes after after the last glucose (1.0) and ends at the last momentum point (0.0)
+            // We're assuming the first one occurs on or before the starting glucose.
+            let blendCount = momentum.count - 2
+
+            let timeDelta = momentum[1].startDate.timeIntervalSinceDate(momentum[0].startDate)
+
+            // The difference between the first momentum value and the starting glucose value
+            let momentumOffset = startingGlucose.startDate.timeIntervalSinceDate(momentum[0].startDate)
+
+            let blendSlope = 1.0 / Double(blendCount)
+            let blendOffset = momentumOffset / timeDelta * blendSlope
+
+            for (index, effect) in momentum.enumerate() {
+                let value = effect.quantity.doubleValueForUnit(unit)
+                let effectValueChange = value - previousEffectValue
+
+                let split = min(1.0, max(0.0, Double(momentum.count - index) / Double(blendCount) - blendSlope + blendOffset))
+                let effectBlend = (1.0 - split) * (effectValuesAtDate[effect.startDate] ?? 0)
+                let momentumBlend = split * effectValueChange
+
+                effectValuesAtDate[effect.startDate] = effectBlend + momentumBlend
+
+                previousEffectValue = value
+            }
+        }
+
+        let prediction = effectValuesAtDate.sort { $0.0 < $1.0 }.reduce([PredictedGlucoseValue(startDate: startingGlucose.startDate, quantity: startingGlucose.quantity)]) { (prediction, effect) -> [GlucoseValue] in
+            if effect.0 > startingGlucose.startDate, let lastValue = prediction.last {
+                let nextValue: GlucoseValue = PredictedGlucoseValue(
+                    startDate: effect.0,
+                    quantity: HKQuantity(unit: unit, doubleValue: effect.1 + lastValue.quantity.doubleValueForUnit(unit))
+                )
+                return prediction + [nextValue]
+            } else {
+                return prediction
+            }
+        }
+
+        return prediction
     }
 }
