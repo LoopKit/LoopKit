@@ -123,6 +123,28 @@ public class GlucoseStore: HealthKitSampleStore {
         )
     }
 
+    private func getRecentGlucoseSamples(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (samples: [HKQuantitySample], error: NSError?) -> Void) {
+        if UIApplication.sharedApplication().protectedDataAvailable {
+            let predicate = recentSamplesPredicate(startDate: startDate, endDate: endDate)
+            let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
+
+            let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
+
+                resultsHandler(
+                    samples: (samples as? [HKQuantitySample]) ?? [],
+                    error: error
+                )
+            }
+            
+            healthStore.executeQuery(query)
+        } else {
+            dispatch_async(dataAccessQueue) {
+                let samples = self.momentumDataCache.filterDateRange(startDate, endDate)
+                resultsHandler(samples: samples, error: nil)
+            }
+        }
+    }
+
     /**
      Retrieves recent glucose values from HealthKit.
      
@@ -135,18 +157,9 @@ public class GlucoseStore: HealthKitSampleStore {
         - error:  An error object explaining why the retrieval failed
      */
     public func getRecentGlucoseValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (values: [GlucoseValue], error: NSError?) -> Void) {
-        let predicate = recentSamplesPredicate(startDate: startDate, endDate: endDate)
-        let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
-
-        let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
-
-            resultsHandler(
-                values: (samples as? [HKQuantitySample])?.map { $0 } ?? [],
-                error: error
-            )
+        getRecentGlucoseSamples { (values, error) -> Void in
+            resultsHandler(values: values.map { $0 }, error: error)
         }
-
-        healthStore.executeQuery(query)
     }
 
     // MARK: - Math
@@ -159,8 +172,12 @@ public class GlucoseStore: HealthKitSampleStore {
         - error:   An error explaining why the calculation failed
     */
     public func getRecentMomentumEffect(resultsHandler: (effects: [GlucoseEffect], error: NSError?) -> Void) {
-        dispatch_async(dataAccessQueue) {
-            resultsHandler(effects: GlucoseMath.linearMomentumEffectForGlucoseEntries(self.momentumDataCache.sort({ $0.startDate < $1.startDate })), error: nil)
+        getRecentGlucoseSamples(startDate: NSDate(timeIntervalSinceNow: -momentumDataInterval), endDate: NSDate.distantFuture()) { (samples, error) -> Void in
+            dispatch_async(self.dataAccessQueue) {
+                self.momentumDataCache.unionInPlace(samples)
+            }
+
+            resultsHandler(effects: GlucoseMath.linearMomentumEffectForGlucoseEntries(samples), error: error)
         }
     }
 }

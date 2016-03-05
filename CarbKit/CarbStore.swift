@@ -455,10 +455,8 @@ public class CarbStore: HealthKitSampleStore {
     }
 
     public func getTotalRecentCarbValue(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (value: CarbValue?, error: NSError?) -> Void) {
-        dispatch_async(dataAccessQueue) { [unowned self] in
-            self.getRecentCarbSamples(startDate: startDate, endDate: endDate) { (entries, error) -> Void in
-                resultHandler(value: CarbMath.totalCarbsForCarbEntries(entries), error: error)
-            }
+        self.getRecentCarbSamples(startDate: startDate, endDate: endDate) { (entries, error) -> Void in
+            resultHandler(value: CarbMath.totalCarbsForCarbEntries(entries), error: error)
         }
     }
 }
