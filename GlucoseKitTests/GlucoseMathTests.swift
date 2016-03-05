@@ -110,8 +110,15 @@ class GlucoseMathTests: XCTestCase {
         XCTAssertEqual(0, effects.count)
     }
 
-    func testMomentumEffectForIncompleteGlucose() {
+    func testMomentumEffectForSpacedOutGlucose() {
         let input = loadInputFixture("momentum_effect_incomplete_glucose_input")
+        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+
+        XCTAssertEqual(0, effects.count)
+    }
+
+    func testMomentumEffectForTooFewGlucose() {
+        let input = loadInputFixture("momentum_effect_bouncing_glucose_input")[0...1]
         let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
 
         XCTAssertEqual(0, effects.count)

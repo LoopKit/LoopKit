@@ -65,7 +65,7 @@ struct GlucoseMath {
         delta: NSTimeInterval = NSTimeInterval(minutes: 5)
     ) -> [GlucoseEffect] {
         guard
-            samples.count > 1,
+            samples.count > 2,  // Linear regression isn't much use without 3 or more entries.
             let firstSample = samples.first,
                 lastSample = samples.last,
                 (startDate, endDate) = LoopMath.simulationDateRangeForSamples([lastSample], duration: duration, delta: delta)
