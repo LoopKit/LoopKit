@@ -16,7 +16,7 @@ class MasterViewController: UITableViewController {
 
     lazy var carbStore = CarbStore()
 
-    lazy var doseStore = DoseStore(pumpID: nil, insulinActionDuration: nil, basalProfile: nil)
+    lazy var doseStore = DoseStore(pumpID: nil, insulinActionDuration: nil, basalProfile: nil, insulinSensitivitySchedule: nil)
 
     override func viewWillAppear(animated: Bool) {
         self.clearsSelectionOnViewWillAppear = self.splitViewController!.collapsed

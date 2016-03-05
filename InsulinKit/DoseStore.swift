@@ -46,28 +46,42 @@ public class DoseStore {
 
     public var pumpID: String? {
         didSet {
-            clearReservoirCache()
+            persistenceController?.managedObjectContext.performBlock {
+                self.clearReservoirCache()
+            }
             configurationDidChange()
         }
     }
 
     public var insulinActionDuration: NSTimeInterval? {
         didSet {
-            clearCalculationCache()
+            persistenceController?.managedObjectContext.performBlock {
+                self.clearCalculationCache()
+            }
             configurationDidChange()
         }
     }
 
     public var basalProfile: BasalRateSchedule? {
         didSet {
-            clearDoseCache()
-            configurationDidChange()
+            persistenceController?.managedObjectContext.performBlock {
+                self.clearDoseCache()
+            }
         }
     }
 
-    public init(pumpID: String?, insulinActionDuration: NSTimeInterval?, basalProfile: BasalRateSchedule?) {
+    public var insulinSensitivitySchedule: InsulinSensitivitySchedule? {
+        didSet {
+            persistenceController?.managedObjectContext.performBlock {
+                self.clearDoseCache()
+            }
+        }
+    }
+
+    public init(pumpID: String?, insulinActionDuration: NSTimeInterval?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?) {
         self.pumpID = pumpID
         self.insulinActionDuration = insulinActionDuration
+        self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.basalProfile = basalProfile
 
         configurationDidChange()
@@ -218,42 +232,50 @@ public class DoseStore {
         - error:   An error object explaining why the results could not be fetched
      */
     private func getRecentReservoirObjects(resultsHandler: (objects: [Reservoir], error: Error?) -> Void) {
-        if let persistenceController = persistenceController {
-            persistenceController.managedObjectContext.performBlock {
-                var error: Error?
-
-                if self.recentReservoirObjectsCache == nil {
-                    do {
-                        try self.purgeReservoirObjects()
-
-                        var recentReservoirObjects: [Reservoir] = []
-
-                        recentReservoirObjects += try Reservoir.objectsInContext(persistenceController.managedObjectContext, predicate: self.recentReservoirValuesPredicate, sortedBy: "date", ascending: false)
-
-                        self.recentReservoirObjectsCache = recentReservoirObjects
-                    } catch let fetchError as NSError {
-                        error = .FetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
-                    } catch let fetchError as Error {
-                        error = fetchError
-                    }
-                }
-
-                resultsHandler(objects: self.recentReservoirObjectsCache ?? [], error: error)
-            }
-        } else {
+        guard let persistenceController = persistenceController else {
             resultsHandler(objects: [], error: .ConfigurationError)
+            return
+        }
+
+        persistenceController.managedObjectContext.performBlock {
+            var error: Error?
+
+            if self.recentReservoirObjectsCache == nil {
+                do {
+                    try self.purgeReservoirObjects()
+
+                    var recentReservoirObjects: [Reservoir] = []
+
+                    recentReservoirObjects += try Reservoir.objectsInContext(persistenceController.managedObjectContext, predicate: self.recentReservoirValuesPredicate, sortedBy: "date", ascending: false)
+
+                    self.recentReservoirObjectsCache = recentReservoirObjects
+                } catch let fetchError as NSError {
+                    error = .FetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
+                } catch let fetchError as Error {
+                    error = fetchError
+                }
+            }
+
+            resultsHandler(objects: self.recentReservoirObjectsCache ?? [], error: error)
         }
     }
 
     private func getRecentReservoirDoseEntries(resultsHandler: (doses: [DoseEntry], error: Error?) -> Void) {
-        if recentReservoirDoseEntriesCache == nil {
-            getRecentReservoirObjects { (reservoirValues, error) -> Void in
-                self.recentReservoirDoseEntriesCache = InsulinMath.doseEntriesFromReservoirValues(reservoirValues.reverse())
+        guard let persistenceController = persistenceController else {
+            resultsHandler(doses: [], error: .ConfigurationError)
+            return
+        }
 
-                resultsHandler(doses: self.recentReservoirDoseEntriesCache ?? [], error: error)
+        persistenceController.managedObjectContext.performBlock {
+            if self.recentReservoirDoseEntriesCache == nil {
+                self.getRecentReservoirObjects { (reservoirValues, error) -> Void in
+                    self.recentReservoirDoseEntriesCache = InsulinMath.doseEntriesFromReservoirValues(reservoirValues.reverse())
+
+                    resultsHandler(doses: self.recentReservoirDoseEntriesCache ?? [], error: error)
+                }
+            } else {
+                resultsHandler(doses: self.recentReservoirDoseEntriesCache ?? [], error: nil)
             }
-        } else {
-            resultsHandler(doses: recentReservoirDoseEntriesCache ?? [], error: nil)
         }
     }
 
@@ -269,18 +291,25 @@ public class DoseStore {
         - error: An error object explaining why the retrieval failed
      */
     public func getRecentNormalizedReservoirDoseEntries(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (doses: [DoseEntry], error: Error?) -> Void) {
-        if recentReservoirNormalizedDoseEntriesCache == nil {
-            if let basalProfile = basalProfile {
-                getRecentReservoirDoseEntries { (doses, error) -> Void in
-                    self.recentReservoirNormalizedDoseEntriesCache = InsulinMath.normalize(doses, againstBasalSchedule: basalProfile)
+        guard let persistenceController = persistenceController else {
+            resultsHandler(doses: [], error: .ConfigurationError)
+            return
+        }
 
-                    resultsHandler(doses: self.recentReservoirNormalizedDoseEntriesCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+        persistenceController.managedObjectContext.performBlock {
+            if self.recentReservoirNormalizedDoseEntriesCache == nil {
+                if let basalProfile = self.basalProfile {
+                    self.getRecentReservoirDoseEntries { (doses, error) -> Void in
+                        self.recentReservoirNormalizedDoseEntriesCache = InsulinMath.normalize(doses, againstBasalSchedule: basalProfile)
+
+                        resultsHandler(doses: self.recentReservoirNormalizedDoseEntriesCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+                    }
+                } else {
+                    resultsHandler(doses: [], error: .ConfigurationError)
                 }
             } else {
-                resultsHandler(doses: [], error: .ConfigurationError)
+                resultsHandler(doses: self.recentReservoirNormalizedDoseEntriesCache?.filterDateRange(startDate, endDate) ?? [], error: nil)
             }
-        } else {
-            resultsHandler(doses: recentReservoirNormalizedDoseEntriesCache?.filterDateRange(startDate, endDate) ?? [], error: nil)
         }
     }
 
@@ -360,12 +389,18 @@ public class DoseStore {
 
     // MARK: Math
 
+    /**
+    *This method should only be called from within a managed object context block.*
+    */
     private func clearReservoirCache() {
         recentReservoirObjectsCache = nil
 
         clearDoseCache()
     }
 
+    /**
+     *This method should only be called from within a managed object context block.*
+     */
     private func clearDoseCache() {
         recentReservoirDoseEntriesCache = nil
         recentReservoirNormalizedDoseEntriesCache = nil
@@ -373,37 +408,108 @@ public class DoseStore {
         clearCalculationCache()
     }
 
+    /**
+     *This method should only be called from within a managed object context block.*
+     */
     private func clearCalculationCache() {
-        insulinOnBoardCache = nil
+        self.insulinOnBoardCache = nil
+        self.glucoseEffectsCache = nil
     }
 
     private var insulinOnBoardCache: [InsulinValue]?
 
+    private var glucoseEffectsCache: [GlucoseEffect]?
+
+    /**
+     TODO: Calculate IOB to the exact provided date.
+     */
     public func insulinOnBoardAtDate(date: NSDate, resultHandler: (value: InsulinValue?, error: Error?) -> Void) {
         getInsulinOnBoardValues { (values, error) -> Void in
             resultHandler(value: values.closestToDate(date), error: error)
         }
     }
 
-    public func getInsulinOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (values: [InsulinValue], error: Error?) -> Void) {
-        // TODO: Should we guard access to `insulinOnBoardCache` using the serial queue?
-        if insulinOnBoardCache == nil {
-            if let insulinActionDuration = insulinActionDuration {
-                getRecentNormalizedReservoirDoseEntries { (doses, error) -> Void in
-                    if error == nil {
-                        self.insulinOnBoardCache = InsulinMath.insulinOnBoardForDoses(doses, actionDuration: insulinActionDuration)
-                    }
+    /**
+     Retrieves a timeline of unabsorbed insulin values.
 
-                    resultHandler(values: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
+     - parameter startDate:     The earliest date of values to retrieve. The default, and earliest supported value, is the previous midnight in the current time zone.
+     - parameter endDate:       The latest date of values to retrieve. Defaults to the distant future.
+     - parameter resultHandler: A closure called once the values have been retrieved. The closure takes two arguments:
+     - values: The retrieved values
+     - error:  An error object explaining why the retrieval failed
+     */
+    public func getInsulinOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (values: [InsulinValue], error: Error?) -> Void) {
+        guard let persistenceController = persistenceController else {
+            resultHandler(values: [], error: .ConfigurationError)
+            return
+        }
+
+        persistenceController.managedObjectContext.performBlock {
+            if self.insulinOnBoardCache == nil {
+                if let insulinActionDuration = self.insulinActionDuration {
+                    self.getRecentNormalizedReservoirDoseEntries { (doses, error) -> Void in
+                        if error == nil {
+                            self.insulinOnBoardCache = InsulinMath.insulinOnBoardForDoses(doses, actionDuration: insulinActionDuration)
+                        }
+
+                        resultHandler(values: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+                    }
+                } else {
+                    resultHandler(values: [], error: .ConfigurationError)
                 }
             } else {
-                resultHandler(values: [], error: .ConfigurationError)
+                resultHandler(values: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: nil)
             }
-        } else {
-            resultHandler(values: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: nil)
         }
     }
 
+    /**
+     Retrieves a timeline of effect on blood glucose from doses
+
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
+     - parameter startDate:     The earliest date of effects to retrieve. The default, and earliest supported value, is the previous midnight in the current time zone.
+     - parameter endDate:       The latest date of effects to retrieve. Defaults to the distant future.
+     - parameter resultHandler: A closure called once the effects have been retrieved. The closure takes two arguments:
+        - effects: The retrieved timeline of effects
+        - error:   An error object explaining why the retrieval failed
+     */
+    public func getGlucoseEffects(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (effects: [GlucoseEffect], error: Error?) -> Void) {
+        guard let persistenceController = persistenceController else {
+            resultHandler(effects: [], error: .ConfigurationError)
+            return
+        }
+
+        persistenceController.managedObjectContext.performBlock {
+            if self.glucoseEffectsCache == nil {
+                if let insulinActionDuration = self.insulinActionDuration, insulinSensitivitySchedule = self.insulinSensitivitySchedule {
+                    self.getRecentNormalizedReservoirDoseEntries { (doses, error) -> Void in
+                        if error == nil {
+                            self.glucoseEffectsCache = InsulinMath.glucoseEffectsForDoses(doses, actionDuration: insulinActionDuration, insulinSensitivity: insulinSensitivitySchedule)
+                        }
+
+                        resultHandler(effects: self.glucoseEffectsCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+                    }
+                } else {
+                    resultHandler(effects: [], error: .ConfigurationError)
+                }
+            } else {
+                resultHandler(effects: self.glucoseEffectsCache?.filterDateRange(startDate, endDate) ?? [], error: nil)
+            }
+        }
+    }
+
+     /**
+     Retrieves the total number of units delivered for a default time period: the earlier of the current date less `insulinActionDuration` or the previous midnight in the current time zone, and the distant future.
+
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
+     - parameter resultHandler: A closure called once the total has been retrieved. The closure takes two arguments:
+        - total: The retrieved value
+        - error: An error object explaining why the retrieval failed
+     */
     public func getTotalRecentUnitsDelivered(resultHandler: (total: Double, error: Error?) -> Void) {
         getRecentReservoirDoseEntries { (doses, error) -> Void in
             resultHandler(total: InsulinMath.totalDeliveryForDoses(doses), error: error)

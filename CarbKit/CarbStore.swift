@@ -75,7 +75,9 @@ public class CarbStore: HealthKitSampleStore {
     /// Carbohydrate-to-insulin ratio
     public var carbRatioSchedule: CarbRatioSchedule? {
         didSet {
-            clearCalculationCache()
+            dispatch_async(dataAccessQueue) {
+                self.clearCalculationCache()
+            }
         }
     }
 
@@ -85,7 +87,9 @@ public class CarbStore: HealthKitSampleStore {
     /// Insulin-to-glucose sensitivity
     public var insulinSensitivitySchedule: InsulinSensitivitySchedule? {
         didSet {
-            clearCalculationCache()
+            dispatch_async(dataAccessQueue) {
+                self.clearCalculationCache()
+            }
         }
     }
 
@@ -428,11 +432,12 @@ public class CarbStore: HealthKitSampleStore {
 
     // MARK: - Math
 
+    /**
+    *This method should only be called from the `dataAccessQueue`*
+    */
     private func clearCalculationCache() {
-        dispatch_async(dataAccessQueue) {
-            self.carbsOnBoardCache = nil
-            self.glucoseEffectsCache = nil
-        }
+        carbsOnBoardCache = nil
+        glucoseEffectsCache = nil
     }
 
     private var carbsOnBoardCache: [CarbValue]?
@@ -450,7 +455,7 @@ public class CarbStore: HealthKitSampleStore {
 
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
-     - parameter startDate:     The earliest date of values to retrieve. Defaults to the earlier of the current date less `maximumAbsorptionTimeInterval`, or the previous midnight in the current time zone.
+     - parameter startDate:     The earliest date of values to retrieve. The default, and earliest supported value, is the previous midnight in the current time zone.
      - parameter endDate:       The latest date of values to retrieve. Defaults to the distant future.
      - parameter resultHandler: A closure called once the values have been retrieved. The closure takes two arguments:
         - values: The retrieved values
@@ -477,7 +482,7 @@ public class CarbStore: HealthKitSampleStore {
 
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
-     - parameter startDate:     The earliest date of effects to retrieve. Defaults to the earlier of the current date less `maximumAbsorptionTimeInterval`, or the previous midnight in the current time zone.
+     - parameter startDate:     The earliest date of effects to retrieve. The default, and earliest supported value, is the previous midnight in the current time zone.
      - parameter endDate:       The latest date of effects to retrieve. Defaults to the distant future.
      - parameter resultHandler: A closure called once the effects have been retrieved. The closure takes two arguments:
         - effects: The retrieved timeline of effects
@@ -496,7 +501,7 @@ public class CarbStore: HealthKitSampleStore {
                             )
                         }
 
-                        resultHandler(effects: self.glucoseEffectsCache?.filterDateRange(startDate, endDate).map { $0 } ?? [], error: error)
+                        resultHandler(effects: self.glucoseEffectsCache?.filterDateRange(startDate, endDate) ?? [], error: error)
                     }
                 } else {
                     resultHandler(effects: [], error: .ConfigurationError)
@@ -509,7 +514,7 @@ public class CarbStore: HealthKitSampleStore {
 
     /**
      Retrieves the total number of recorded carbohydrates for the specified period.
-     
+
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
      - parameter startDate:     The earliest date of entries to include. Defaults to the earlier of the current date less `maximumAbsorptionTimeInterval`, or the previous midnight in the current time zone.
@@ -519,7 +524,7 @@ public class CarbStore: HealthKitSampleStore {
         - error: An error object explaining why the retrieval failed
      */
     public func getTotalRecentCarbValue(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (value: CarbValue?, error: Error?) -> Void) {
-        self.getRecentCarbSamples(startDate: startDate, endDate: endDate) { (entries, error) -> Void in
+        getRecentCarbSamples(startDate: startDate, endDate: endDate) { (entries, error) -> Void in
             resultHandler(value: CarbMath.totalCarbsForCarbEntries(entries), error: error)
         }
     }
