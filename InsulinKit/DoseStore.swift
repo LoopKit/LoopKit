@@ -213,8 +213,6 @@ public class DoseStore {
     }
 
     /**
-     Note: Must be called on the main queue
-
      - parameter resultsHandler: A closure called when the results are ready. This closure takes two arguments:
         - objects: An array of reservoir objects
         - error:   An error object explaining why the results could not be fetched

@@ -18,7 +18,7 @@ public protocol CarbStoreDelegate: class {
      - parameter carbStore: The carb store
      - parameter error:     The error describing the issue
      */
-    func carbStore(carbStore: CarbStore, didError error: ErrorType)
+    func carbStore(carbStore: CarbStore, didError error: CarbStore.Error)
 }
 
 
@@ -49,6 +49,13 @@ public class CarbStore: HealthKitSampleStore {
     public typealias DefaultAbsorptionTimes = (fast: NSTimeInterval, medium: NSTimeInterval, slow: NSTimeInterval)
 
     public static let CarbEntriesDidUpdateNotification = "com.loudnate.CarbKit.CarbEntriesDidUpdateNotification"
+
+    public enum Error: ErrorType {
+        case ConfigurationError
+        case HealthStoreError(NSError)
+        case UnauthorizedError(description: String, recoverySuggestion: String)
+        case ArgumentError(description: String, recoverySuggestion: String)
+    }
 
     private let carbType = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierDietaryCarbohydrates)!
 
@@ -107,7 +114,7 @@ public class CarbStore: HealthKitSampleStore {
     }
 
     public override func authorize(completion: (success: Bool, error: NSError?) -> Void) {
-        super.authorize { (success, error) -> Void in
+        authorize { (success: Bool, error: NSError?) -> Void in
             if success {
                 self.createQueries()
             }
@@ -134,7 +141,7 @@ public class CarbStore: HealthKitSampleStore {
             let observerQuery = HKObserverQuery(sampleType: type, predicate: predicate, updateHandler: { [unowned self] (query, completionHandler, error) -> Void in
 
                 if let error = error {
-                    self.delegate?.carbStore(self, didError: error)
+                    self.delegate?.carbStore(self, didError: .HealthStoreError(error))
                 } else {
                     dispatch_async(self.dataAccessQueue) {
                         if self.anchoredObjectQueries[type] == nil {
@@ -182,7 +189,7 @@ public class CarbStore: HealthKitSampleStore {
         - success: Whether the background delivery preference was successfully updated
         - error:   An error object explaining why the preference failed to update
      */
-    public func setBackgroundDeliveryEnabled(enabled: Bool, completion: (success: Bool, error: NSError?) -> Void) {
+    public func setBackgroundDeliveryEnabled(enabled: Bool, completion: (success: Bool, error: Error?) -> Void) {
         dispatch_async(self.dataAccessQueue) { () -> Void in
             let oldValue = self.isBackgroundDeliveryEnabled
             self.isBackgroundDeliveryEnabled = enabled
@@ -190,7 +197,7 @@ public class CarbStore: HealthKitSampleStore {
             switch (oldValue, enabled) {
             case (false, true):
                 let group = dispatch_group_create()
-                var lastError: NSError?
+                var lastError: Error?
 
                 for type in self.readTypes {
                     dispatch_group_enter(group)
@@ -198,8 +205,8 @@ public class CarbStore: HealthKitSampleStore {
                         if !enabled {
                             self.isBackgroundDeliveryEnabled = oldValue
 
-                            if error != nil {
-                                lastError = error
+                            if let error = error {
+                                lastError = .HealthStoreError(error)
                             }
                         }
 
@@ -211,7 +218,7 @@ public class CarbStore: HealthKitSampleStore {
                 completion(success: enabled == self.isBackgroundDeliveryEnabled, error: lastError)
             case (true, false):
                 let group = dispatch_group_create()
-                var lastError: NSError?
+                var lastError: Error?
 
                 for type in self.readTypes {
                     dispatch_group_enter(group)
@@ -219,8 +226,8 @@ public class CarbStore: HealthKitSampleStore {
                         if !disabled {
                             self.isBackgroundDeliveryEnabled = oldValue
 
-                            if error != nil {
-                                lastError = error
+                            if let error = error {
+                                lastError = .HealthStoreError(error)
                             }
                         }
 
@@ -242,7 +249,7 @@ public class CarbStore: HealthKitSampleStore {
     private func processResultsFromAnchoredQuery(query: HKAnchoredObjectQuery, newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, anchor: HKQueryAnchor?, error: NSError?) {
 
         if let error = error {
-            self.delegate?.carbStore(self, didError: error)
+            self.delegate?.carbStore(self, didError: .HealthStoreError(error))
             return
         }
 
@@ -294,7 +301,7 @@ public class CarbStore: HealthKitSampleStore {
         return HKQuery.predicateForSamplesWithStartDate(startDate ?? recentSamplesStartDate, endDate: endDate ?? NSDate.distantFuture(), options: [.StrictStartDate])
     }
 
-    private func getRecentCarbSamples(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (entries: [StoredCarbEntry], error: NSError?) -> Void) {
+    private func getRecentCarbSamples(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (entries: [StoredCarbEntry], error: Error?) -> Void) {
         if UIApplication.sharedApplication().protectedDataAvailable {
             let predicate = recentSamplesPredicate(startDate: startDate, endDate: endDate)
             let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
@@ -305,7 +312,7 @@ public class CarbStore: HealthKitSampleStore {
                     entries: (samples as? [HKQuantitySample])?.map {
                         StoredCarbEntry(sample: $0)
                         } ?? [],
-                    error: error
+                    error: error != nil ? .HealthStoreError(error!) : nil
                 )
             }
 
@@ -323,19 +330,19 @@ public class CarbStore: HealthKitSampleStore {
 
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
-     - parameter startDate:      The earliest date of entries to retrieve. Defaults to the earlier of the current date less the maximum absorption time, or the previous midnight.
+     - parameter startDate:      The earliest date of entries to retrieve. Defaults to the earlier of the current date less `maximumAbsorptionTimeInterval`, or the previous midnight in the current time zone.
      - parameter endDate:        The latest date of entries to retrieve. Defaults to the distance future.
      - parameter resultsHandler: A closure called once the entries have been retrieved. The closure takes two arguments:
         - entries: The retrieved entries
         - error:   An error object explaning why the retrieval failed
      */
-    public func getRecentCarbEntries(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (entries: [CarbEntry], error: NSError?) -> Void) {
+    public func getRecentCarbEntries(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (entries: [CarbEntry], error: Error?) -> Void) {
         getRecentCarbSamples(startDate: startDate, endDate: endDate) { (entries, error) -> Void in
             resultsHandler(entries: entries.map { $0 }, error: error)
         }
     }
 
-    public func addCarbEntry(entry: CarbEntry, resultHandler: (Bool, CarbEntry?, NSError?) -> Void) {
+    public func addCarbEntry(entry: CarbEntry, resultHandler: (success: Bool, entry: CarbEntry?, error: Error?) -> Void) {
         let quantity = entry.quantity
         var metadata = [String: AnyObject]()
 
@@ -356,57 +363,55 @@ public class CarbStore: HealthKitSampleStore {
                 self.clearCalculationCache()
                 self.persistCarbEntryCache()
 
-                resultHandler(completed, storedObject, error)
+                resultHandler(
+                    success: completed,
+                    entry: storedObject,
+                    error: error != nil ? .HealthStoreError(error!) : nil
+                )
             }
         }
     }
 
-    public func replaceCarbEntry(oldEntry: CarbEntry, withEntry newEntry: CarbEntry, resultHandler: (Bool, CarbEntry?, NSError?) -> Void) {
+    public func replaceCarbEntry(oldEntry: CarbEntry, withEntry newEntry: CarbEntry, resultHandler: (success: Bool, entry: CarbEntry?, error: Error?) -> Void) {
         deleteCarbEntry(oldEntry) { (completed, error) -> Void in
             if let error = error {
-                resultHandler(false, nil, error)
+                resultHandler(success: false, entry: nil, error: error)
             } else {
                 self.addCarbEntry(newEntry, resultHandler: resultHandler)
             }
         }
     }
 
-    public func deleteCarbEntry(entry: CarbEntry, resultHandler: (Bool, NSError?) -> Void) {
+    public func deleteCarbEntry(entry: CarbEntry, resultHandler: (success: Bool, error: Error?) -> Void) {
         if let entry = entry as? StoredCarbEntry {
             if entry.createdByCurrentApp {
                 let predicate = HKQuery.predicateForObjectsWithUUIDs([entry.sampleUUID])
                 let query = HKSampleQuery(sampleType: carbType, predicate: predicate, limit: 1, sortDescriptors: nil, resultsHandler: { (_, objects, error) -> Void in
                     if let error = error {
-                        resultHandler(false, error)
+                        resultHandler(success: false, error: .HealthStoreError(error))
                     } else if let objects = objects {
-                        self.healthStore.deleteObjects(objects, withCompletion: resultHandler)
+                        self.healthStore.deleteObjects(objects) { (success, error) in
+                            resultHandler(success: success, error: error != nil ? .HealthStoreError(error!) : nil)
+                        }
                     }
                 })
 
                 healthStore.executeQuery(query)
             } else {
                 resultHandler(
-                    false,
-                    NSError(
-                        domain: HKErrorDomain,
-                        code: HKErrorCode.ErrorAuthorizationDenied.rawValue,
-                        userInfo: [
-                            NSLocalizedDescriptionKey: NSLocalizedString("com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription", tableName: "CarbKit", value: "Authorization Denied", comment: "The description of an error returned when attempting to delete a sample not shared by the current app"),
-                            NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString("com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion", tableName: "CarbKit", value: "This sample can be deleted from the Health app", comment: "The error recovery suggestion when attempting to delete a sample not shared by the current app")
-                        ]
+                    success: false,
+                    error: .UnauthorizedError(
+                        description: NSLocalizedString("com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription", tableName: "CarbKit", value: "Authorization Denied", comment: "The description of an error returned when attempting to delete a sample not shared by the current app"),
+                        recoverySuggestion: NSLocalizedString("com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion", tableName: "CarbKit", value: "This sample can be deleted from the Health app", comment: "The error recovery suggestion when attempting to delete a sample not shared by the current app")
                     )
                 )
             }
         } else {
             resultHandler(
-                false,
-                NSError(
-                    domain: HKErrorDomain,
-                    code: HKErrorCode.ErrorInvalidArgument.rawValue,
-                    userInfo: [
-                        NSLocalizedDescriptionKey: NSLocalizedString("com.loudnate.CarbKit.deleteCarbEntryInvalid", tableName: "CarbKit", value: "Invalid Entry", comment: "The description of an error returned when attempting to delete a non-HealthKit sample"),
-                        NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString("com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion", tableName: "CarbKit", value: "This object is not saved in the Health database and therefore cannot be deleted", comment: "The error recovery suggestion when attempting to delete a non-HealthKit sample")
-                    ]
+                success: false,
+                error: .ArgumentError(
+                    description: NSLocalizedString("com.loudnate.CarbKit.deleteCarbEntryInvalid", tableName: "CarbKit", value: "Invalid Entry", comment: "The description of an error returned when attempting to delete a non-HealthKit sample"),
+                    recoverySuggestion: NSLocalizedString("com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion", tableName: "CarbKit", value: "This object is not saved in the Health database and therefore cannot be deleted", comment: "The error recovery suggestion when attempting to delete a non-HealthKit sample")
                 )
             )
         }
@@ -424,24 +429,37 @@ public class CarbStore: HealthKitSampleStore {
     // MARK: - Math
 
     private func clearCalculationCache() {
-        carbsOnBoardCache = nil
-        glucoseEffectsCache = nil
+        dispatch_async(dataAccessQueue) {
+            self.carbsOnBoardCache = nil
+            self.glucoseEffectsCache = nil
+        }
     }
 
     private var carbsOnBoardCache: [CarbValue]?
 
     private var glucoseEffectsCache: [GlucoseEffect]?
 
-    public func carbsOnBoardAtDate(date: NSDate, resultHandler: (value: CarbValue?, error: NSError?) -> Void) {
+    public func carbsOnBoardAtDate(date: NSDate, resultHandler: (value: CarbValue?, error: Error?) -> Void) {
         getCarbsOnBoardValues { (values, error) -> Void in
             resultHandler(value: values.closestToDate(date), error: error)
         }
     }
 
-    public func getCarbsOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (values: [CarbValue], error: NSError?) -> Void) {
+    /**
+     Retrieves a timeline of unabsorbed carbohyrdates.
+
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
+     - parameter startDate:     The earliest date of values to retrieve. Defaults to the earlier of the current date less `maximumAbsorptionTimeInterval`, or the previous midnight in the current time zone.
+     - parameter endDate:       The latest date of values to retrieve. Defaults to the distant future.
+     - parameter resultHandler: A closure called once the values have been retrieved. The closure takes two arguments:
+        - values: The retrieved values
+        - error:  An error object explaining why the retrieval failed
+     */
+    public func getCarbsOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (values: [CarbValue], error: Error?) -> Void) {
         dispatch_async(dataAccessQueue) { [unowned self] in
             if self.carbsOnBoardCache == nil {
-                self.getRecentCarbSamples(startDate: startDate, endDate: endDate) { (entries, error) -> Void in
+                self.getRecentCarbSamples { (entries, error) -> Void in
                     if error == nil {
                         self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(entries, defaultAbsorptionTime: self.defaultAbsorptionTimes.medium)
                     }
@@ -454,7 +472,53 @@ public class CarbStore: HealthKitSampleStore {
         }
     }
 
-    public func getTotalRecentCarbValue(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (value: CarbValue?, error: NSError?) -> Void) {
+    /**
+     Retrieves a timeline of effect on blood glucose from carbohydrates
+
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
+     - parameter startDate:     The earliest date of effects to retrieve. Defaults to the earlier of the current date less `maximumAbsorptionTimeInterval`, or the previous midnight in the current time zone.
+     - parameter endDate:       The latest date of effects to retrieve. Defaults to the distant future.
+     - parameter resultHandler: A closure called once the effects have been retrieved. The closure takes two arguments:
+        - effects: The retrieved timeline of effects
+        - error:   An error object explaining why the retrieval failed
+     */
+    public func getGlucoseEffects(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (effects: [GlucoseEffect], error: Error?) -> Void) {
+        dispatch_async(dataAccessQueue) {
+            if self.glucoseEffectsCache == nil {
+                if let carbRatioSchedule = self.carbRatioSchedule, insulinSensitivitySchedule = self.insulinSensitivitySchedule {
+                    self.getRecentCarbSamples { (entries, error) -> Void in
+                        if error == nil {
+                            self.glucoseEffectsCache = CarbMath.glucoseEffectsForCarbEntries(entries,
+                                carbRatios: carbRatioSchedule,
+                                insulinSensitivities: insulinSensitivitySchedule,
+                                defaultAbsorptionTime: self.defaultAbsorptionTimes.medium
+                            )
+                        }
+
+                        resultHandler(effects: self.glucoseEffectsCache?.filterDateRange(startDate, endDate).map { $0 } ?? [], error: error)
+                    }
+                } else {
+                    resultHandler(effects: [], error: .ConfigurationError)
+                }
+            } else {
+                resultHandler(effects: self.glucoseEffectsCache?.filterDateRange(startDate, endDate) ?? [], error: nil)
+            }
+        }
+    }
+
+    /**
+     Retrieves the total number of recorded carbohydrates for the specified period.
+     
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
+     - parameter startDate:     The earliest date of entries to include. Defaults to the earlier of the current date less `maximumAbsorptionTimeInterval`, or the previous midnight in the current time zone.
+     - parameter endDate:       The latest date of entries to include. Defaults to the distant future.
+     - parameter resultHandler: A closure called once the value has been retrieved. The closure takes two arguments:
+        - value: The retrieved value
+        - error: An error object explaining why the retrieval failed
+     */
+    public func getTotalRecentCarbValue(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (value: CarbValue?, error: Error?) -> Void) {
         self.getRecentCarbSamples(startDate: startDate, endDate: endDate) { (entries, error) -> Void in
             resultHandler(value: CarbMath.totalCarbsForCarbEntries(entries), error: error)
         }
