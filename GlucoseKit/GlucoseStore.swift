@@ -111,6 +111,18 @@ public class GlucoseStore: HealthKitSampleStore {
         }
     }
 
+    private func recentSamplesPredicate(var startDate startDate: NSDate?, endDate: NSDate?) -> NSPredicate {
+        if startDate == nil, let managedDataInterval = managedDataInterval {
+            startDate = NSDate(timeIntervalSinceNow: -managedDataInterval)
+        }
+
+        return HKQuery.predicateForSamplesWithStartDate(
+            startDate,
+            endDate: endDate ?? NSDate.distantFuture(),
+            options: [.StrictStartDate]
+        )
+    }
+
     /**
      Retrieves recent glucose values from HealthKit.
      
@@ -123,11 +135,7 @@ public class GlucoseStore: HealthKitSampleStore {
         - error:  An error object explaining why the retrieval failed
      */
     public func getRecentGlucoseValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (values: [GlucoseValue], error: NSError?) -> Void) {
-        let predicate = HKQuery.predicateForSamplesWithStartDate(
-            startDate ?? NSDate(timeIntervalSinceNow: -(managedDataInterval ?? NSTimeInterval(hours: 3))),
-            endDate: endDate ?? NSDate.distantFuture(),
-            options: [.StrictStartDate]
-        )
+        let predicate = recentSamplesPredicate(startDate: startDate, endDate: endDate)
         let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
 
         let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in

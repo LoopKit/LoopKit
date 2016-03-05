@@ -153,20 +153,22 @@ public class ReservoirTableViewController: UITableViewController {
             self.tableView.tableFooterView = nil
 
             doseStore?.getRecentReservoirValues({ [unowned self] (reservoirValues, error) -> Void in
-                if error != nil {
-                    self.state = .Unavailable(error)
-                } else {
-                    self.reservoirValues = reservoirValues
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    if error != nil {
+                        self.state = .Unavailable(error)
+                    } else {
+                        self.reservoirValues = reservoirValues
 
-                    if reservoirValues.count > 0 {
-                        self.navigationItem.rightBarButtonItem = self.editButtonItem()
+                        if reservoirValues.count > 0 {
+                            self.navigationItem.rightBarButtonItem = self.editButtonItem()
+                        }
+
+                        self.tableView.reloadData()
                     }
-
-                    self.tableView.reloadData()
-
-                    self.updateTimelyStats(nil)
-                    self.updateTotal()
                 }
+
+                self.updateTimelyStats(nil)
+                self.updateTotal()
             })
         }
     }

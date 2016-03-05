@@ -284,16 +284,54 @@ public class CarbStore: HealthKitSampleStore {
 
     private var dataAccessQueue: dispatch_queue_t = dispatch_queue_create("com.loudnate.CarbKit.dataAccessQueue", DISPATCH_QUEUE_SERIAL)
 
-    private func recentSamplesPredicate() -> NSPredicate {
-        return HKQuery.predicateForSamplesWithStartDate(NSDate(timeIntervalSinceNow: -maximumAbsorptionTimeInterval), endDate: NSDate.distantFuture(), options: [.StrictStartDate])
+    private var recentSamplesStartDate: NSDate {
+        let calendar = NSCalendar.currentCalendar()
+
+        return min(calendar.startOfDayForDate(NSDate()), NSDate(timeIntervalSinceNow: -maximumAbsorptionTimeInterval - NSTimeInterval(minutes: 5)))
     }
 
-    // TODO: try to query healthkit first
-    public func getRecentCarbEntries(resultsHandler: ([CarbEntry], NSError?) -> Void) {
-        dispatch_async(dataAccessQueue) {
-            let entries: [CarbEntry] = self.carbEntryCache.map({ $0 })
+    private func recentSamplesPredicate(startDate startDate: NSDate? = nil, endDate: NSDate? = nil) -> NSPredicate {
+        return HKQuery.predicateForSamplesWithStartDate(startDate ?? recentSamplesStartDate, endDate: endDate ?? NSDate.distantFuture(), options: [.StrictStartDate])
+    }
 
-            resultsHandler(entries, nil)
+    private func getRecentCarbSamples(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (entries: [StoredCarbEntry], error: NSError?) -> Void) {
+        if UIApplication.sharedApplication().protectedDataAvailable {
+            let predicate = recentSamplesPredicate(startDate: startDate, endDate: endDate)
+            let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
+
+            let query = HKSampleQuery(sampleType: carbType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
+
+                resultsHandler(
+                    entries: (samples as? [HKQuantitySample])?.map {
+                        StoredCarbEntry(sample: $0)
+                        } ?? [],
+                    error: error
+                )
+            }
+
+            healthStore.executeQuery(query)
+        } else {
+            dispatch_async(dataAccessQueue) {
+                let entries = self.carbEntryCache.filterDateRange(startDate, endDate)
+                resultsHandler(entries: entries, error: nil)
+            }
+        }
+    }
+
+    /**
+     Retrieves recent carb entries from HealthKit, or from the short-term cache if HealthKit is inaccessible.
+
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
+     - parameter startDate:      The earliest date of entries to retrieve. Defaults to the earlier of the current date less the maximum absorption time, or the previous midnight.
+     - parameter endDate:        The latest date of entries to retrieve. Defaults to the distance future.
+     - parameter resultsHandler: A closure called once the entries have been retrieved. The closure takes two arguments:
+        - entries: The retrieved entries
+        - error:   An error object explaning why the retrieval failed
+     */
+    public func getRecentCarbEntries(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (entries: [CarbEntry], error: NSError?) -> Void) {
+        getRecentCarbSamples(startDate: startDate, endDate: endDate) { (entries, error) -> Void in
+            resultsHandler(entries: entries.map { $0 }, error: error)
         }
     }
 
@@ -394,25 +432,33 @@ public class CarbStore: HealthKitSampleStore {
 
     private var glucoseEffectsCache: [GlucoseEffect]?
 
-    public func carbsOnBoardAtDate(date: NSDate, resultHandler: (CarbValue?) -> Void) {
-        getCarbsOnBoardValues { (values) -> Void in
-            resultHandler(values.closestToDate(date))
+    public func carbsOnBoardAtDate(date: NSDate, resultHandler: (value: CarbValue?, error: NSError?) -> Void) {
+        getCarbsOnBoardValues { (values, error) -> Void in
+            resultHandler(value: values.closestToDate(date), error: error)
         }
     }
 
-    public func getCarbsOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (values: [CarbValue]) -> Void) {
+    public func getCarbsOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (values: [CarbValue], error: NSError?) -> Void) {
         dispatch_async(dataAccessQueue) { [unowned self] in
             if self.carbsOnBoardCache == nil {
-                self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(self.carbEntryCache, defaultAbsorptionTime: self.defaultAbsorptionTimes.medium)
-            }
+                self.getRecentCarbSamples(startDate: startDate, endDate: endDate) { (entries, error) -> Void in
+                    if error == nil {
+                        self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(entries, defaultAbsorptionTime: self.defaultAbsorptionTimes.medium)
+                    }
 
-            resultHandler(values: self.carbsOnBoardCache?.filterDateRange(startDate, endDate) ?? [])
+                    resultHandler(values: self.carbsOnBoardCache?.filterDateRange(startDate, endDate).map { $0 } ?? [], error: error)
+                }
+            } else {
+                resultHandler(values: self.carbsOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: nil)
+            }
         }
     }
 
-    public func getTotalRecentCarbValue(resultHandler: (CarbValue?) -> Void) {
+    public func getTotalRecentCarbValue(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (value: CarbValue?, error: NSError?) -> Void) {
         dispatch_async(dataAccessQueue) { [unowned self] in
-            resultHandler(CarbMath.totalCarbsForCarbEntries(self.carbEntryCache))
+            self.getRecentCarbSamples(startDate: startDate, endDate: endDate) { (entries, error) -> Void in
+                resultHandler(value: CarbMath.totalCarbsForCarbEntries(entries), error: error)
+            }
         }
     }
 }

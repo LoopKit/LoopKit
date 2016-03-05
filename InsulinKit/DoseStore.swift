@@ -121,7 +121,7 @@ public class DoseStore {
 
     private var recentReservoirDoseEntriesCache: [DoseEntry]?
 
-    private var recentReservoirValuesMinDate: NSDate? {
+    private var recentReservoirValuesStartDate: NSDate? {
         if let insulinActionDuration = insulinActionDuration {
             let calendar = NSCalendar.currentCalendar()
 
@@ -132,7 +132,7 @@ public class DoseStore {
     }
 
     private var recentReservoirValuesPredicate: NSPredicate? {
-        if let pumpID = pumpID, startDate = recentReservoirValuesMinDate {
+        if let pumpID = pumpID, startDate = recentReservoirValuesStartDate {
             let predicate = NSPredicate(format: "date >= %@ && pumpID = %@", startDate, pumpID)
 
             return predicate
@@ -156,7 +156,7 @@ public class DoseStore {
 
                     if self.recentReservoirDoseEntriesCache != nil, let
                         basalProfile = self.basalProfile,
-                        minEndDate = self.recentReservoirValuesMinDate
+                        minEndDate = self.recentReservoirValuesStartDate
                     {
                         self.recentReservoirDoseEntriesCache = self.recentReservoirDoseEntriesCache!.filter { $0.endDate >= minEndDate }
 
@@ -381,13 +381,14 @@ public class DoseStore {
 
     private var insulinOnBoardCache: [InsulinValue]?
 
-    public func insulinOnBoardAtDate(date: NSDate, resultHandler: (iob: InsulinValue?, error: Error?) -> Void) {
+    public func insulinOnBoardAtDate(date: NSDate, resultHandler: (value: InsulinValue?, error: Error?) -> Void) {
         getInsulinOnBoardValues { (values, error) -> Void in
-            resultHandler(iob: values.closestToDate(date), error: error)
+            resultHandler(value: values.closestToDate(date), error: error)
         }
     }
 
     public func getInsulinOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (values: [InsulinValue], error: Error?) -> Void) {
+        // TODO: Should we guard access to `insulinOnBoardCache` using the serial queue?
         if insulinOnBoardCache == nil {
             if let insulinActionDuration = insulinActionDuration {
                 getRecentNormalizedReservoirDoseEntries { (doses, error) -> Void in

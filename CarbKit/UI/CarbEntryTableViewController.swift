@@ -168,7 +168,7 @@ public class CarbEntryTableViewController: UITableViewController {
 
     private func updateCOB() {
         if case .Display = state, let carbStore = carbStore {
-            carbStore.carbsOnBoardAtDate(NSDate(), resultHandler: { (value) -> Void in
+            carbStore.carbsOnBoardAtDate(NSDate(), resultHandler: { (value, error) -> Void in
                 dispatch_async(dispatch_get_main_queue()) {
                     if let value = value {
                         self.COBValueLabel.text = NSNumberFormatter.localizedStringFromNumber(value.quantity.doubleValueForUnit(carbStore.preferredUnit), numberStyle: .NoStyle)
@@ -184,7 +184,7 @@ public class CarbEntryTableViewController: UITableViewController {
 
     private func updateTotal() {
         if case .Display = state, let carbStore = carbStore {
-            carbStore.getTotalRecentCarbValue { (value) -> Void in
+            carbStore.getTotalRecentCarbValue { (value, error) -> Void in
                 dispatch_async(dispatch_get_main_queue()) {
                     if let value = value {
                         self.totalValueLabel.text = NSNumberFormatter.localizedStringFromNumber(value.quantity.doubleValueForUnit(carbStore.preferredUnit), numberStyle: .NoStyle)
