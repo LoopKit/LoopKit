@@ -142,6 +142,7 @@
 		43D988AD1C87FFA300DA4467 /* glucose_from_effects_insulin_effect_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D9889E1C87FFA300DA4467 /* glucose_from_effects_insulin_effect_input.json */; };
 		43D988AE1C87FFA300DA4467 /* glucose_from_effects_glucose_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D9889F1C87FFA300DA4467 /* glucose_from_effects_glucose_input.json */; };
 		43D988AF1C87FFA300DA4467 /* glucose_from_effects_carb_effect_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D988A01C87FFA300DA4467 /* glucose_from_effects_carb_effect_input.json */; };
+		43DC87B61C8A9567005BC30D /* momentum_effect_incomplete_glucose_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87B51C8A9567005BC30D /* momentum_effect_incomplete_glucose_input.json */; };
 		43FADDFB1C89679200DDE013 /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */; };
 /* End PBXBuildFile section */
 
@@ -364,6 +365,7 @@
 		43D9889E1C87FFA300DA4467 /* glucose_from_effects_insulin_effect_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glucose_from_effects_insulin_effect_input.json; sourceTree = "<group>"; };
 		43D9889F1C87FFA300DA4467 /* glucose_from_effects_glucose_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glucose_from_effects_glucose_input.json; sourceTree = "<group>"; };
 		43D988A01C87FFA300DA4467 /* glucose_from_effects_carb_effect_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glucose_from_effects_carb_effect_input.json; sourceTree = "<group>"; };
+		43DC87B51C8A9567005BC30D /* momentum_effect_incomplete_glucose_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = momentum_effect_incomplete_glucose_input.json; sourceTree = "<group>"; };
 		43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -655,6 +657,7 @@
 		43D8FE9B1C7293EB0073BE78 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				43DC87B51C8A9567005BC30D /* momentum_effect_incomplete_glucose_input.json */,
 				43D8FE9C1C7293FA0073BE78 /* momentum_effect_bouncing_glucose_input.json */,
 				43D8FE9D1C7293FA0073BE78 /* momentum_effect_bouncing_glucose_output.json */,
 				43D8FE9E1C7293FA0073BE78 /* momentum_effect_falling_glucose_input.json */,
@@ -1127,6 +1130,7 @@
 				43D8FEA41C7293FA0073BE78 /* momentum_effect_bouncing_glucose_input.json in Resources */,
 				43D8FEAB1C7293FA0073BE78 /* momentum_effect_stable_glucose_output.json in Resources */,
 				43D8FEA51C7293FA0073BE78 /* momentum_effect_bouncing_glucose_output.json in Resources */,
+				43DC87B61C8A9567005BC30D /* momentum_effect_incomplete_glucose_input.json in Resources */,
 				43D8FEA71C7293FA0073BE78 /* momentum_effect_falling_glucose_output.json in Resources */,
 				43D8FEA61C7293FA0073BE78 /* momentum_effect_falling_glucose_input.json in Resources */,
 				43D8FEA81C7293FA0073BE78 /* momentum_effect_rising_glucose_input.json in Resources */,

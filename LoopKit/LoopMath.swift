@@ -66,6 +66,25 @@ public struct LoopMath {
      - returns: A timeline of glucose values
      */
     public static func predictGlucose(startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [GlucoseEffect]...) -> [GlucoseValue] {
+        return predictGlucose(startingGlucose, momentum: momentum, effects: effects)
+    }
+
+    /**
+     Calculates a timeline of predicted glucose values from a variety of effects timelines.
+
+     Each effect timeline:
+     - Is given equal weight, with the exception of the momentum effect timeline
+     - Can be of arbitrary size and start date
+     - Should be in ascending order
+     - Should have aligning dates with any overlapping timelines to ensure a smooth result
+
+     - parameter startingGlucose: The starting glucose value
+     - parameter momentum:        The momentum effect timeline determined from prior glucose values
+     - parameter effects:         The glucose effect timelines to apply to the prediction.
+
+     - returns: A timeline of glucose values
+     */
+    public static func predictGlucose(startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [[GlucoseEffect]]) -> [GlucoseValue] {
         var effectValuesAtDate: [NSDate: Double] = [:]
         let unit = HKUnit.milligramsPerDeciliterUnit()
 

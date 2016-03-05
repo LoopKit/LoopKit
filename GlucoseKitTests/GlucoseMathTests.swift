@@ -102,4 +102,18 @@ class GlucoseMathTests: XCTestCase {
             XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(unit), calculated.quantity.doubleValueForUnit(unit), accuracy: pow(1, -14))
         }
     }
+
+    func testMomentumEffectForEmptyGlucose() {
+        let input = [GlucoseFixtureValue]()
+        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+
+        XCTAssertEqual(0, effects.count)
+    }
+
+    func testMomentumEffectForIncompleteGlucose() {
+        let input = loadInputFixture("momentum_effect_incomplete_glucose_input")
+        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+
+        XCTAssertEqual(0, effects.count)
+    }
 }
