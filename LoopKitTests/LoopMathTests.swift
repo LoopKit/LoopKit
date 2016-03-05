@@ -25,6 +25,15 @@ class LoopMathTests: XCTestCase {
         }
     }
 
+    func loadSampleValueFixture(resourceName: String) -> [(startDate: NSDate, quantity: HKQuantity)] {
+        let fixture: [JSONDictionary] = loadFixture(resourceName)
+        let dateFormatter = NSDateFormatter.ISO8601StrictDateFormatter()
+
+        return fixture.map {
+            (dateFormatter.dateFromString($0["startDate"] as! String)!, HKQuantity(unit: HKUnit(fromString: $0["unit"] as! String), doubleValue: $0["value"] as! Double))
+        }
+    }
+
     func loadGlucoseHistoryFixture(resourceName: String) -> RecentGlucoseValue {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
         let dateFormatter = NSDateFormatter.ISO8601LocalTimeDateFormatter()
@@ -118,6 +127,30 @@ class LoopMathTests: XCTestCase {
         let expected = loadGlucoseValueFixture("glucose_from_effects_momentum_blend_output")
 
         let calculated = LoopMath.predictGlucose(glucose, momentum: momentum, effects: insulinEffect)
+
+        XCTAssertEqual(expected.count, calculated.count)
+
+        for (expected, calculated) in zip(expected, calculated) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), calculated.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), accuracy: pow(1, -14))
+        }
+    }
+
+    func testPredictGlucoseStartingEffectsNonZero() {
+        let glucose = loadSampleValueFixture("glucose_from_effects_non_zero_glucose_input").first!
+        let insulinEffect = loadSampleValueFixture("glucose_from_effects_non_zero_insulin_input").map {
+            GlucoseEffect(startDate: $0.startDate, quantity: $0.quantity)
+        }
+        let carbEffect = loadSampleValueFixture("glucose_from_effects_non_zero_carb_input").map {
+            GlucoseEffect(startDate: $0.startDate, quantity: $0.quantity)
+        }
+        let expected = loadSampleValueFixture("glucose_from_effects_non_zero_output").map {
+            GlucoseEffect(startDate: $0.startDate, quantity: $0.quantity)
+        }
+
+        let calculated = LoopMath.predictGlucose(RecentGlucoseValue(startDate: glucose.startDate, quantity: glucose.quantity),
+            effects: insulinEffect, carbEffect
+        )
 
         XCTAssertEqual(expected.count, calculated.count)
 

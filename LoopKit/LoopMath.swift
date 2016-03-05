@@ -89,7 +89,7 @@ public struct LoopMath {
         let unit = HKUnit.milligramsPerDeciliterUnit()
 
         for timeline in effects {
-            var previousEffectValue: Double = 0
+            var previousEffectValue: Double = timeline.first?.quantity.doubleValueForUnit(unit) ?? 0
 
             for effect in timeline {
                 let value = effect.quantity.doubleValueForUnit(unit)
@@ -100,7 +100,7 @@ public struct LoopMath {
 
         // Blend the momentum effect linearly into the summed effect list
         if momentum.count > 1 {
-            var previousEffectValue: Double = 0
+            var previousEffectValue: Double = momentum[0].quantity.doubleValueForUnit(unit)
 
             // The blend begins delta minutes after after the last glucose (1.0) and ends at the last momentum point (0.0)
             // We're assuming the first one occurs on or before the starting glucose.
