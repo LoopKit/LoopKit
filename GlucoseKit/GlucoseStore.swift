@@ -58,6 +58,8 @@ public class GlucoseStore: HealthKitSampleStore {
 
     private var dataAccessQueue: dispatch_queue_t = dispatch_queue_create("com.loudnate.GlucoseKit.dataAccessQueue", DISPATCH_QUEUE_SERIAL)
 
+    public private(set) var latestGlucose: GlucoseValue?
+
     /**
      Add a new glucose value to HealthKit.
      
@@ -79,6 +81,10 @@ public class GlucoseStore: HealthKitSampleStore {
             dispatch_async(self.dataAccessQueue) {
                 self.momentumDataCache.insert(glucose)
                 self.purgeOldGlucoseSamples()
+
+                if self.latestGlucose == nil || self.latestGlucose!.startDate < glucose.startDate {
+                    self.latestGlucose = glucose
+                }
 
                 resultHandler(success: completed, sample: glucose, error: error)
             }
@@ -129,6 +135,10 @@ public class GlucoseStore: HealthKitSampleStore {
             let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
 
             let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
+
+                if let lastGlucose = samples?.last as? HKQuantitySample where self.latestGlucose == nil || self.latestGlucose!.startDate < lastGlucose.startDate {
+                    self.latestGlucose = lastGlucose
+                }
 
                 resultsHandler(
                     samples: (samples as? [HKQuantitySample]) ?? [],
