@@ -105,9 +105,11 @@ public class CarbStore: HealthKitSampleStore {
 
      - returns: A new instance of the store
      */
-    public init?(defaultAbsorptionTimes: DefaultAbsorptionTimes = (NSTimeInterval(hours: 2), NSTimeInterval(hours: 3), NSTimeInterval(hours: 4))) {
+    public init?(defaultAbsorptionTimes: DefaultAbsorptionTimes = (NSTimeInterval(hours: 2), NSTimeInterval(hours: 3), NSTimeInterval(hours: 4)), carbRatioSchedule: CarbRatioSchedule? = nil, insulinSensitivitySchedule :InsulinSensitivitySchedule? = nil) {
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
         self.maximumAbsorptionTimeInterval = defaultAbsorptionTimes.slow
+        self.carbRatioSchedule = carbRatioSchedule
+        self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.carbEntryCache = Set(NSUserDefaults.standardUserDefaults().carbEntryCache ?? [])
 
         super.init()
