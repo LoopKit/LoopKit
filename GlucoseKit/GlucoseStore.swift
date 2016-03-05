@@ -157,7 +157,7 @@ public class GlucoseStore: HealthKitSampleStore {
         - error:  An error object explaining why the retrieval failed
      */
     public func getRecentGlucoseValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (values: [GlucoseValue], error: NSError?) -> Void) {
-        getRecentGlucoseSamples { (values, error) -> Void in
+        getRecentGlucoseSamples(startDate: startDate, endDate: endDate) { (values, error) -> Void in
             resultsHandler(values: values.map { $0 }, error: error)
         }
     }
