@@ -59,7 +59,7 @@ struct GlucoseMath {
 
      - returns: An array of glucose effects
      */
-    static func linearMomentumEffectForGlucoseEntries<T: CollectionType where T.Generator.Element: GlucoseValue, T.Index == Int>(
+    static func linearMomentumEffectForGlucoseEntries<T: CollectionType where T.Generator.Element: GlucoseSampleValue, T.Index == Int>(
         samples: T,
         duration: NSTimeInterval = NSTimeInterval(minutes: 30),
         delta: NSTimeInterval = NSTimeInterval(minutes: 5)
@@ -71,7 +71,9 @@ struct GlucoseMath {
                 (startDate, endDate) = LoopMath.simulationDateRangeForSamples([lastSample], duration: duration, delta: delta)
             where
                 // Ensure that the entries are contiguous
-                abs(firstSample.startDate.timeIntervalSinceDate(lastSample.startDate)) < ContinuousGlucoseInterval * Double(samples.count)
+                abs(firstSample.startDate.timeIntervalSinceDate(lastSample.startDate)) < ContinuousGlucoseInterval * Double(samples.count) &&
+                // Ensure that the entries are all calibrated
+                samples.filter({ $0.displayOnly }).count == 0
             else {
             return []
         }

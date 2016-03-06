@@ -1,0 +1,17 @@
+[
+  {
+    "date": "2015-10-25T19:19:37",
+    "amount": 123,
+    "display_only": false,
+  },
+  {
+    "date": "2015-10-25T19:24:36",
+    "amount": 120,
+    "display_only": true,
+  },
+  {
+    "date": "2015-10-25T19:29:37",
+    "amount": 129,
+    "display_only": false,
+  }
+]

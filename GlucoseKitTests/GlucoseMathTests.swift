@@ -12,13 +12,15 @@ import LoopKit
 import HealthKit
 
 
-public struct GlucoseFixtureValue: GlucoseValue {
+public struct GlucoseFixtureValue: GlucoseSampleValue {
     public let startDate: NSDate
     public let quantity: HKQuantity
+    public let displayOnly: Bool
 
-    public init(startDate: NSDate, quantity: HKQuantity) {
+    public init(startDate: NSDate, quantity: HKQuantity, displayOnly: Bool) {
         self.startDate = startDate
         self.quantity = quantity
+        self.displayOnly = displayOnly
     }
 }
 
@@ -30,7 +32,11 @@ class GlucoseMathTests: XCTestCase {
         let dateFormatter = NSDateFormatter.ISO8601LocalTimeDateFormatter()
 
         return fixture.map {
-            return GlucoseFixtureValue(startDate: dateFormatter.dateFromString($0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliterUnit(), doubleValue: $0["amount"] as! Double))
+            return GlucoseFixtureValue(
+                startDate: dateFormatter.dateFromString($0["date"] as! String)!,
+                quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliterUnit(), doubleValue: $0["amount"] as! Double),
+                displayOnly: ($0["display_only"] as? Bool) ?? false
+            )
         }
     }
 
@@ -119,6 +125,13 @@ class GlucoseMathTests: XCTestCase {
 
     func testMomentumEffectForTooFewGlucose() {
         let input = loadInputFixture("momentum_effect_bouncing_glucose_input")[0...1]
+        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+
+        XCTAssertEqual(0, effects.count)
+    }
+
+    func testMomentumEffectForDisplayOnlyGlucose() {
+        let input = loadInputFixture("momentum_effect_display_only_glucose_input")
         let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
 
         XCTAssertEqual(0, effects.count)
