@@ -67,15 +67,25 @@ public class GlucoseStore: HealthKitSampleStore {
 
      - parameter quantity:      The glucose sample quantity
      - parameter date:          The date the sample was collected
+     - parameter displayOnly:   Whether the reading was shifted for visual consistency after calibration
      - parameter device:        The description of the device the collected the sample
      - parameter resultHandler: A closure called once the glucose value was saved. The closure takes three arguments:
         - success: Whether the sample was successfully saved
         - sample:  The sample object
         - error:   An error object explaining why the save failed
      */
-    public func addGlucose(quantity: HKQuantity, date: NSDate, device: HKDevice?, resultHandler: (success: Bool, sample: GlucoseValue?, error: NSError?) -> Void) {
+    public func addGlucose(quantity: HKQuantity, date: NSDate, displayOnly: Bool, device: HKDevice?, resultHandler: (success: Bool, sample: GlucoseValue?, error: NSError?) -> Void) {
 
-        let glucose = HKQuantitySample(type: glucoseType, quantity: quantity, startDate: date, endDate: date, device: device, metadata: nil)
+        let glucose = HKQuantitySample(
+            type: glucoseType,
+            quantity: quantity,
+            startDate: date,
+            endDate: date,
+            device: device,
+            metadata: [
+                MetadataKeyGlucoseIsDisplayOnly: displayOnly
+            ]
+        )
 
         healthStore.saveObject(glucose) { (completed, error) -> Void in
             dispatch_async(self.dataAccessQueue) {
