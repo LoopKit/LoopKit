@@ -23,7 +23,7 @@ public struct DoseEntry: TimelineValue {
     public let unit: DoseUnit
     public let description: String?
 
-    public init(startDate: NSDate, endDate: NSDate, value: Double, unit: DoseUnit, description: String?) {
+    public init(startDate: NSDate, endDate: NSDate, value: Double, unit: DoseUnit, description: String? = nil) {
         self.startDate = startDate
         self.endDate = endDate
         self.value = value
