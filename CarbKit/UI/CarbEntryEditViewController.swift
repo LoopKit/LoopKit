@@ -10,9 +10,9 @@ import UIKit
 import HealthKit
 
 
-class CarbEntryEditViewController: UITableViewController, DatePickerTableViewCellDelegate, TextFieldTableViewCellDelegate {
+public class CarbEntryEditViewController: UITableViewController, DatePickerTableViewCellDelegate, TextFieldTableViewCellDelegate {
 
-    var defaultAbsorptionTimes: CarbStore.DefaultAbsorptionTimes? {
+    public var defaultAbsorptionTimes: CarbStore.DefaultAbsorptionTimes? {
         didSet {
             if originalCarbEntry == nil, let times = defaultAbsorptionTimes {
                 absorptionTime = times.1
@@ -20,9 +20,9 @@ class CarbEntryEditViewController: UITableViewController, DatePickerTableViewCel
         }
     }
 
-    var preferredUnit: HKUnit = HKUnit.gramUnit()
+    public var preferredUnit: HKUnit = HKUnit.gramUnit()
 
-    var originalCarbEntry: CarbEntry? {
+    public var originalCarbEntry: CarbEntry? {
         didSet {
             if let entry = originalCarbEntry {
                 quantity = entry.quantity
@@ -41,7 +41,7 @@ class CarbEntryEditViewController: UITableViewController, DatePickerTableViewCel
 
     private var absorptionTime: NSTimeInterval?
 
-    var updatedCarbEntry: CarbEntry? {
+    public var updatedCarbEntry: CarbEntry? {
         if let  quantity = quantity,
                 absorptionTime = absorptionTime
         {
@@ -59,7 +59,7 @@ class CarbEntryEditViewController: UITableViewController, DatePickerTableViewCel
         return originalCarbEntry?.createdByCurrentApp != false
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.estimatedRowHeight = 44
@@ -81,15 +81,15 @@ class CarbEntryEditViewController: UITableViewController, DatePickerTableViewCel
         case AbsorptionTime
     }
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch Row(rawValue: indexPath.row)! {
         case .Value:
             let cell = tableView.dequeueReusableCellWithIdentifier(DecimalTextFieldTableViewCell.className) as! DecimalTextFieldTableViewCell
@@ -129,21 +129,21 @@ class CarbEntryEditViewController: UITableViewController, DatePickerTableViewCel
 
     // MARK: - UITableViewDelegate
 
-    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+    public override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
 
         tableView.endEditing(false)
         tableView.beginUpdates()
         return indexPath
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.endUpdates()
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    public override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         self.tableView.endEditing(true)
     }
 
