@@ -27,21 +27,21 @@ public class ReservoirTableViewController: UITableViewController {
     public var doseStore: DoseStore? {
         didSet {
             if let doseStore = doseStore {
-                doseStoreObserver = NSNotificationCenter.defaultCenter().addObserverForName(nil, object: doseStore, queue: NSOperationQueue.mainQueue(), usingBlock: { [unowned self] (note) -> Void in
+                doseStoreObserver = NSNotificationCenter.defaultCenter().addObserverForName(nil, object: doseStore, queue: NSOperationQueue.mainQueue(), usingBlock: { [weak self] (note) -> Void in
 
                     switch note.name {
                     case DoseStore.ReservoirValuesDidChangeNotification:
-                        if self.isViewLoaded() {
-                            self.reloadData()
+                        if self?.isViewLoaded() == true {
+                            self?.reloadData()
                         }
                     case DoseStore.ReadyStateDidChangeNotification:
                         switch doseStore.readyState {
                         case .Ready:
-                            self.state = .Display
+                            self?.state = .Display
                         case .Failed(let error):
-                            self.state = .Unavailable(error)
+                            self?.state = .Unavailable(error)
                         default:
-                            self.state = .Unavailable(nil)
+                            self?.state = .Unavailable(nil)
                         }
                     default:
                         break
