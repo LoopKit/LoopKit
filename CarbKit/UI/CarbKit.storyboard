@@ -407,6 +407,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Add/Edit Carb Entry" id="bM2-yI-YmX">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="7Qi-am-Msi">
+                            <connections>
+                                <segue destination="T5h-mI-vtL" kind="unwind" unwindAction="unwindFromEditing:" id="UWh-NX-iGp"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="V0S-Me-oAl">
                             <connections>
                                 <segue destination="T5h-mI-vtL" kind="unwind" unwindAction="unwindFromEditing:" id="U4m-iq-v7u"/>
@@ -414,6 +419,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="saveButtonItem" destination="V0S-Me-oAl" id="jte-UB-Cfb"/>
                         <outlet property="segmentedControlInputAccessoryView" destination="yOQ-K4-a5x" id="K2x-Pr-HOL"/>
                     </connections>
                 </tableViewController>

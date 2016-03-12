@@ -73,6 +73,8 @@ public class CarbEntryEditViewController: UITableViewController, DatePickerTable
 
     @IBOutlet var segmentedControlInputAccessoryView: SegmentedControlInputAccessoryView!
 
+    @IBOutlet weak var saveButtonItem: UIBarButtonItem!
+
     // MARK: - Table view data source
 
     private enum Row: Int {
@@ -145,6 +147,10 @@ public class CarbEntryEditViewController: UITableViewController, DatePickerTable
 
     public override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         self.tableView.endEditing(true)
+
+        if sender !== saveButtonItem {
+            quantity = nil
+        }
     }
 
     // MARK: - DatePickerTableViewCellDelegate
