@@ -139,6 +139,13 @@ public class GlucoseStore: HealthKitSampleStore {
         )
     }
 
+    private func getCachedGlucoseSamples(startDate startDate: NSDate = nil, endDate: NSDate? = nil, resultsHandler: (samples: [HKQuantitySample], error: NSError?) -> Void) {
+        dispatch_async(dataAccessQueue) {
+            let samples = self.momentumDataCache.filterDateRange(startDate, endDate)
+            resultsHandler(samples: samples, error: nil)
+        }
+    }
+
     private func getRecentGlucoseSamples(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (samples: [HKQuantitySample], error: NSError?) -> Void) {
         if UIApplication.sharedApplication().protectedDataAvailable {
             let predicate = recentSamplesPredicate(startDate: startDate, endDate: endDate)
@@ -146,22 +153,23 @@ public class GlucoseStore: HealthKitSampleStore {
 
             let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
 
-                if let lastGlucose = samples?.last as? HKQuantitySample where self.latestGlucose == nil || self.latestGlucose!.startDate < lastGlucose.startDate {
-                    self.latestGlucose = lastGlucose
-                }
+                if let error = error where error.code == HKErrorCode.ErrorDatabaseInaccessible.rawValue {
+                    self.getCachedGlucoseSamples(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
+                } else {
+                    if let lastGlucose = samples?.last as? HKQuantitySample where self.latestGlucose == nil || self.latestGlucose!.startDate < lastGlucose.startDate {
+                        self.latestGlucose = lastGlucose
+                    }
 
-                resultsHandler(
-                    samples: (samples as? [HKQuantitySample]) ?? [],
-                    error: error
-                )
+                    resultsHandler(
+                        samples: (samples as? [HKQuantitySample]) ?? [],
+                        error: error
+                    )
+                }
             }
-            
+
             healthStore.executeQuery(query)
         } else {
-            dispatch_async(dataAccessQueue) {
-                let samples = self.momentumDataCache.filterDateRange(startDate, endDate)
-                resultsHandler(samples: samples, error: nil)
-            }
+            getCachedGlucoseSamples(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
         }
     }
 

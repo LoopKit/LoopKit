@@ -307,6 +307,13 @@ public class CarbStore: HealthKitSampleStore {
         return HKQuery.predicateForSamplesWithStartDate(startDate ?? recentSamplesStartDate, endDate: endDate ?? NSDate.distantFuture(), options: [.StrictStartDate])
     }
 
+    private func getCachedCarbSamples(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (entries: [StoredCarbEntry], error: Error?) -> Void) {
+        dispatch_async(dataAccessQueue) {
+            let entries = self.carbEntryCache.filterDateRange(startDate, endDate)
+            resultsHandler(entries: entries, error: nil)
+        }
+    }
+
     private func getRecentCarbSamples(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (entries: [StoredCarbEntry], error: Error?) -> Void) {
         if UIApplication.sharedApplication().protectedDataAvailable {
             let predicate = recentSamplesPredicate(startDate: startDate, endDate: endDate)
@@ -314,20 +321,21 @@ public class CarbStore: HealthKitSampleStore {
 
             let query = HKSampleQuery(sampleType: carbType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
 
-                resultsHandler(
-                    entries: (samples as? [HKQuantitySample])?.map {
-                        StoredCarbEntry(sample: $0)
-                        } ?? [],
-                    error: error != nil ? .HealthStoreError(error!) : nil
-                )
+                if let error = error where error.code == HKErrorCode.ErrorDatabaseInaccessible.rawValue {
+                    self.getCachedCarbSamples(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
+                } else {
+                    resultsHandler(
+                        entries: (samples as? [HKQuantitySample])?.map {
+                            StoredCarbEntry(sample: $0)
+                            } ?? [],
+                        error: error != nil ? .HealthStoreError(error!) : nil
+                    )
+                }
             }
 
             healthStore.executeQuery(query)
         } else {
-            dispatch_async(dataAccessQueue) {
-                let entries = self.carbEntryCache.filterDateRange(startDate, endDate)
-                resultsHandler(entries: entries, error: nil)
-            }
+            getCachedCarbSamples(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
         }
     }
 
