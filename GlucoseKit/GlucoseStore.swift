@@ -139,7 +139,7 @@ public class GlucoseStore: HealthKitSampleStore {
         )
     }
 
-    private func getCachedGlucoseSamples(startDate startDate: NSDate = nil, endDate: NSDate? = nil, resultsHandler: (samples: [HKQuantitySample], error: NSError?) -> Void) {
+    private func getCachedGlucoseSamples(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (samples: [HKQuantitySample], error: NSError?) -> Void) {
         dispatch_async(dataAccessQueue) {
             let samples = self.momentumDataCache.filterDateRange(startDate, endDate)
             resultsHandler(samples: samples, error: nil)
