@@ -38,6 +38,12 @@ extension UIViewController {
         alert.addAction(action)
         alert.preferredAction = action
 
-        self.presentViewController(alert, animated: animated, completion: completion)
+        var presentingViewController: UIViewController? = self
+
+        if presentingViewController?.view.window == nil {
+            presentingViewController = UIApplication.sharedApplication().delegate?.window??.rootViewController
+        }
+
+        presentingViewController?.presentViewController(alert, animated: animated, completion: completion)
     }
 }
