@@ -29,12 +29,12 @@ public protocol CarbStoreDelegate: class {
 
  * In-memory cache, used for COB and glucose effect calculation
  ```
- 0    [maximumAbsorptionTimeInterval]
+ 0    [2 ✕ maximumAbsorptionTimeInterval]
  |––––––––––––|
  ```
  * Short-term persistant cache, stored in NSUserDefaults, used to re-populate the in-memory cache if the app is suspended and re-launched while the Health database is protected
  ```
- 0    [maximumAbsorptionTimeInterval]
+ 0    [2 ✕ maximumAbsorptionTimeInterval]
  |––––––––––––|
  ```
  * HealthKit data, managed by the current application and persisted indefinitely
@@ -93,7 +93,7 @@ public class CarbStore: HealthKitSampleStore {
         }
     }
 
-    /// The longest expected absorption time interval for carbohydrates. Defaults to 4 hours.
+    /// The longest expected absorption time interval for carbohydrates. Defaults to 8 hours.
     private let maximumAbsorptionTimeInterval: NSTimeInterval
 
     public weak var delegate: CarbStoreDelegate?
@@ -107,7 +107,7 @@ public class CarbStore: HealthKitSampleStore {
      */
     public init?(defaultAbsorptionTimes: DefaultAbsorptionTimes = (NSTimeInterval(hours: 2), NSTimeInterval(hours: 3), NSTimeInterval(hours: 4)), carbRatioSchedule: CarbRatioSchedule? = nil, insulinSensitivitySchedule :InsulinSensitivitySchedule? = nil) {
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
-        self.maximumAbsorptionTimeInterval = defaultAbsorptionTimes.slow
+        self.maximumAbsorptionTimeInterval = defaultAbsorptionTimes.slow * 2
         self.carbRatioSchedule = carbRatioSchedule
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.carbEntryCache = Set(NSUserDefaults.standardUserDefaults().carbEntryCache ?? [])
@@ -262,11 +262,13 @@ public class CarbStore: HealthKitSampleStore {
         dispatch_async(dataAccessQueue) {
             // Prune the sample data based on the startDate and deletedSamples array
             let cutoffDate = NSDate().dateByAddingTimeInterval(-self.maximumAbsorptionTimeInterval)
+            var notificationRequired = false
 
-            self.carbEntryCache = Set(self.carbEntryCache.filter { (sample) in
-                if sample.startDate < cutoffDate {
+            self.carbEntryCache = Set(self.carbEntryCache.filter { (entry) in
+                if entry.startDate < cutoffDate {
                     return false
-                } else if let deletedSamples = deletedSamples where deletedSamples.contains({ $0.UUID == sample.sampleUUID }) {
+                } else if let deletedSamples = deletedSamples where deletedSamples.contains({ $0.UUID == entry.sampleUUID }) {
+                    notificationRequired = true
                     return false
                 } else {
                     return true
@@ -276,20 +278,27 @@ public class CarbStore: HealthKitSampleStore {
             // Append the new samples
             if let samples = newSamples as? [HKQuantitySample] {
                 for sample in samples {
-                    self.carbEntryCache.insert(StoredCarbEntry(sample: sample))
+                    let entry = StoredCarbEntry(sample: sample)
+
+                    if entry.startDate >= cutoffDate && !self.carbEntryCache.contains(entry) {
+                        notificationRequired = true
+                        self.carbEntryCache.insert(entry)
+                    }
                 }
             }
 
             // Update the anchor
             self.queryAnchors[query.sampleType] = anchor
 
-            self.clearCalculationCache()
-            self.persistCarbEntryCache()
+            // Notify listeners only if a meaningful change was made
+            if notificationRequired {
+                self.clearCalculationCache()
+                self.persistCarbEntryCache()
 
-            // Notify listeners
-            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.CarbEntriesDidUpdateNotification,
-                object: self
-            )
+                NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.CarbEntriesDidUpdateNotification,
+                    object: self
+                )
+            }
         }
     }
 
@@ -382,6 +391,10 @@ public class CarbStore: HealthKitSampleStore {
                     entry: storedObject,
                     error: error != nil ? .HealthStoreError(error!) : nil
                 )
+
+                NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.CarbEntriesDidUpdateNotification,
+                    object: self
+                )
             }
         }
     }
@@ -405,7 +418,10 @@ public class CarbStore: HealthKitSampleStore {
                         resultHandler(success: false, error: .HealthStoreError(error))
                     } else if let objects = objects {
                         self.healthStore.deleteObjects(objects) { (success, error) in
-                            resultHandler(success: success, error: error != nil ? .HealthStoreError(error!) : nil)
+                            dispatch_async(self.dataAccessQueue) {
+                                self.carbEntryCache.remove(entry)
+                                resultHandler(success: success, error: error != nil ? .HealthStoreError(error!) : nil)
+                            }
                         }
                     }
                 })
@@ -474,7 +490,7 @@ public class CarbStore: HealthKitSampleStore {
     public func getCarbsOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (values: [CarbValue], error: Error?) -> Void) {
         dispatch_async(dataAccessQueue) { [unowned self] in
             if self.carbsOnBoardCache == nil {
-                self.getRecentCarbSamples { (entries, error) -> Void in
+                self.getCachedCarbSamples { (entries, error) -> Void in
                     if error == nil {
                         self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(entries, defaultAbsorptionTime: self.defaultAbsorptionTimes.medium)
                     }
@@ -502,7 +518,7 @@ public class CarbStore: HealthKitSampleStore {
         dispatch_async(dataAccessQueue) {
             if self.glucoseEffectsCache == nil {
                 if let carbRatioSchedule = self.carbRatioSchedule, insulinSensitivitySchedule = self.insulinSensitivitySchedule {
-                    self.getRecentCarbSamples { (entries, error) -> Void in
+                    self.getCachedCarbSamples { (entries, error) -> Void in
                         if error == nil {
                             self.glucoseEffectsCache = CarbMath.glucoseEffectsForCarbEntries(entries,
                                 carbRatios: carbRatioSchedule,
