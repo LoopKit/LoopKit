@@ -71,18 +71,18 @@ public class DailyValueSchedule<T: RawRepresentable where T.RawValue: AnyObject>
 
     public required convenience init?(rawValue: RawValue) {
         guard let
-            timeZoneName = rawValue["timeZone"] as? String,
+            timeZoneOffset = rawValue["timeZone"] as? Int,
             rawItems = rawValue["items"] as? [RepeatingScheduleValue.RawValue] else
         {
             return nil
         }
 
-        self.init(dailyItems: rawItems.flatMap { RepeatingScheduleValue(rawValue: $0) }, timeZone: NSTimeZone(name: timeZoneName))
+        self.init(dailyItems: rawItems.flatMap { RepeatingScheduleValue(rawValue: $0) }, timeZone: NSTimeZone(forSecondsFromGMT: timeZoneOffset))
     }
 
     public var rawValue: RawValue {
         return [
-            "timeZone": timeZone.name,
+            "timeZone": timeZone.secondsFromGMT,
             "items": items.map { $0.rawValue }
         ]
     }

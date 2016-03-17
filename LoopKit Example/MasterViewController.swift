@@ -48,6 +48,12 @@ class MasterViewController: UITableViewController {
 
                 reservoirViewController.doseStore = doseStore
                 rootViewController = reservoirViewController
+            case .BasalRates:
+                let scheduleVC = SingleValueScheduleTableViewController()
+
+                scheduleVC.title = NSLocalizedString("Basal Rates", comment: "The title of the basal rate profile screen")
+
+                rootViewController = scheduleVC
             }
 
             navController.viewControllers = [rootViewController]
@@ -61,8 +67,9 @@ class MasterViewController: UITableViewController {
     enum Row: Int {
         case Carbs = 0
         case Reservoir
+        case BasalRates
 
-        static let count = 2
+        static let count = 3
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -81,6 +88,8 @@ class MasterViewController: UITableViewController {
             cell.textLabel?.text = NSLocalizedString("Carbs", comment: "The title for the cell navigating to the carbs screen")
         case .Reservoir:
             cell.textLabel?.text = NSLocalizedString("Reservoir", comment: "The title for the cell navigating to the reservoir screen")
+        case .BasalRates:
+            cell.textLabel?.text = NSLocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
         }
 
         return cell

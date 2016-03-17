@@ -220,6 +220,15 @@ public class DailyValueScheduleTableViewController: UITableViewController, Ident
         }
     }
 
+    public override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let locale = NSLocale.currentLocale()
+
+        return String(
+            format: NSLocalizedString("Times in %@", comment: "The schedule table view header describing the configured time zone for the times. The substitution parameter is the localized time zone name"),
+            timeZone.localizedName(.Generic, locale: locale) ?? "\(NSTimeInterval(timeZone.secondsFromGMT).hours)"
+        )
+    }
+
     // MARK: - RepeatingScheduleValueTableViewCellDelegate
 
     func repeatingScheduleValueTableViewCellDidUpdateDate(cell: RepeatingScheduleValueTableViewCell) {
