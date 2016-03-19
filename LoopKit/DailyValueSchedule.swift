@@ -59,7 +59,7 @@ public class DailyValueSchedule<T: RawRepresentable where T.RawValue: AnyObject>
 
     init?(dailyItems: [RepeatingScheduleValue<T>], timeZone: NSTimeZone?) {
         self.items = dailyItems.sort { $0.startTime < $1.startTime }
-        self.timeZone = timeZone ?? NSTimeZone.localTimeZone()
+        self.timeZone = timeZone ?? NSTimeZone.defaultTimeZone()
 
         guard let firstItem = self.items.first else {
             referenceTimeInterval = 0

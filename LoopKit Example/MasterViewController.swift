@@ -58,8 +58,6 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 if let basalRates = dataManager.basalRateSchedule {
                     scheduleVC.scheduleItems = basalRates.items
                     scheduleVC.timeZone = basalRates.timeZone
-                } else {
-                    scheduleVC.timeZone = NSTimeZone(abbreviation: "EDT")!
                 }
 
                 scheduleVC.delegate = self

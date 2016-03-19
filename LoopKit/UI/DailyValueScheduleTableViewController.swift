@@ -112,7 +112,7 @@ public class DailyValueScheduleTableViewController: UITableViewController, Ident
 
     // MARK: - State
 
-    public var timeZone = NSTimeZone.localTimeZone() {
+    public var timeZone = NSTimeZone.defaultTimeZone() {
         didSet {
             calendar.timeZone = timeZone
         }
