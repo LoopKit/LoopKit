@@ -68,6 +68,7 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
         let item = scheduleItems[indexPath.row]
         let interval = cell.datePickerInterval
 
+        cell.timeZone = timeZone
         cell.date = midnight.dateByAddingTimeInterval(item.startTime)
 
         cell.valueNumberFormatter.minimumFractionDigits = preferredValueMinimumFractionDigits()

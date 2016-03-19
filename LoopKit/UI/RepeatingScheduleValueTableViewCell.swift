@@ -20,9 +20,24 @@ class RepeatingScheduleValueTableViewCell: UITableViewCell, UITextFieldDelegate 
 
     weak var delegate: RepeatingScheduleValueTableViewCellDelegate?
 
+    var timeZone: NSTimeZone! {
+        didSet {
+            dateFormatter.timeZone = timeZone
+            datePicker.timeZone = timeZone
+        }
+    }
+
+    private lazy var dateFormatter: NSDateFormatter = {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = .NoStyle
+        dateFormatter.timeStyle = .ShortStyle
+
+        return dateFormatter
+    }()
+
     var date: NSDate = NSDate() {
         didSet {
-            dateLabel.text = NSDateFormatter.localizedStringFromDate(date, dateStyle: .NoStyle, timeStyle: .ShortStyle)
+            dateLabel.text = dateFormatter.stringFromDate(date)
 
             if datePicker.date != date {
                 datePicker.date = date

@@ -73,6 +73,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         let item = scheduleItems[indexPath.row]
         let interval = cell.datePickerInterval
 
+        cell.timeZone = timeZone
         cell.date = midnight.dateByAddingTimeInterval(item.startTime)
 
         cell.valueNumberFormatter.minimumFractionDigits = unit.preferredMinimumFractionDigits

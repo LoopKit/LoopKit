@@ -24,6 +24,8 @@
 		4301582B1C7ECCEF00B64B63 /* LoopKitExample.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */; };
 		4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
 		4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
+		435F355E1C9CD16A00C204D2 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */; };
+		435F35611C9CD25F00C204D2 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */; };
 		43971A401C8CABFF0013154F /* GlucoseSampleValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */; };
 		43971A421C8CAEF20013154F /* momentum_effect_display_only_glucose_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43971A411C8CAEF20013154F /* momentum_effect_display_only_glucose_input.json */; };
 		43AF1FB21C926CDD00EA2F3D /* HKQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */; };
@@ -250,6 +252,8 @@
 		4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoopKitExample.entitlements; sourceTree = "<group>"; };
 		4301582C1C7ECD7A00B64B63 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
+		435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
+		435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
 		43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseSampleValue.swift; sourceTree = "<group>"; };
 		43971A411C8CAEF20013154F /* momentum_effect_display_only_glucose_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = momentum_effect_display_only_glucose_input.json; sourceTree = "<group>"; };
 		43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantity.swift; sourceTree = "<group>"; };
@@ -472,6 +476,8 @@
 		430157F81C7EC03B00B64B63 /* LoopKit Example */ = {
 			isa = PBXGroup;
 			children = (
+				435F355F1C9CD23D00C204D2 /* Managers */,
+				435F355C1C9CD14E00C204D2 /* Extensions */,
 				4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */,
 				430158071C7EC03B00B64B63 /* Info.plist */,
 				430157F91C7EC03B00B64B63 /* AppDelegate.swift */,
@@ -490,6 +496,22 @@
 				430158121C7EC03B00B64B63 /* Info.plist */,
 			);
 			path = "LoopKit ExampleUITests";
+			sourceTree = "<group>";
+		};
+		435F355C1C9CD14E00C204D2 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		435F355F1C9CD23D00C204D2 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		43D8FDC11C728FDF0073BE78 = {
@@ -1201,6 +1223,8 @@
 			files = (
 				430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */,
 				430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */,
+				435F355E1C9CD16A00C204D2 /* NSUserDefaults.swift in Sources */,
+				435F35611C9CD25F00C204D2 /* DeviceDataManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -51,6 +51,13 @@ public class DailyValueScheduleTableViewController: UITableViewController, Ident
 
         navigationItem.rightBarButtonItems = [insertButtonItem(), editButtonItem()]
 
+        let locale = NSLocale.currentLocale()
+
+        navigationItem.prompt = String(
+            format: NSLocalizedString("Times in %@", comment: "The schedule table view header describing the configured time zone for the times. The substitution parameter is the localized time zone name"),
+            timeZone.localizedName(.Generic, locale: locale) ?? "\(NSTimeInterval(timeZone.secondsFromGMT).hours)"
+        )
+
         tableView.keyboardDismissMode = .OnDrag
 
         keyboardWillShowNotificationObserver = NSNotificationCenter.defaultCenter().addObserverForName(UIKeyboardWillShowNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: { [unowned self] (note) -> Void in
@@ -94,9 +101,7 @@ public class DailyValueScheduleTableViewController: UITableViewController, Ident
 
         tableView.endEditing(true)
 
-        if isMovingFromParentViewController() {
-            delegate?.dailyValueScheduleTableViewControllerWillFinishUpdating(self)
-        }
+        delegate?.dailyValueScheduleTableViewControllerWillFinishUpdating(self)
     }
 
     public weak var delegate: DailyValueScheduleTableViewControllerDelegate?
@@ -118,7 +123,7 @@ public class DailyValueScheduleTableViewController: UITableViewController, Ident
     private var calendar = NSCalendar.currentCalendar()
 
     var midnight: NSDate {
-        return calendar.startOfDayForDate(NSDate(timeIntervalSinceReferenceDate: 0))
+        return calendar.startOfDayForDate(NSDate())
     }
 
     func addScheduleItem(sender: AnyObject?) {
@@ -218,15 +223,6 @@ public class DailyValueScheduleTableViewController: UITableViewController, Ident
 
             return NSIndexPath(forRow: closestRow, inSection: proposedDestinationIndexPath.section)
         }
-    }
-
-    public override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let locale = NSLocale.currentLocale()
-
-        return String(
-            format: NSLocalizedString("Times in %@", comment: "The schedule table view header describing the configured time zone for the times. The substitution parameter is the localized time zone name"),
-            timeZone.localizedName(.Generic, locale: locale) ?? "\(NSTimeInterval(timeZone.secondsFromGMT).hours)"
-        )
     }
 
     // MARK: - RepeatingScheduleValueTableViewCellDelegate

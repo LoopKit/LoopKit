@@ -135,4 +135,23 @@ class BasalRateScheduleTests: XCTestCase {
         XCTAssertEqualWithAccuracy(20.275, schedule.total(), accuracy: 1e-14)
     }
 
+    func testRawValueSerialization() {
+        let schedule = BasalRateSchedule(dailyItems: items)!
+        let reSchedule = BasalRateSchedule(rawValue: schedule.rawValue)!
+
+        let calendar = NSCalendar.currentCalendar()
+        let midnight = calendar.startOfDayForDate(NSDate())
+
+        XCTAssertEqual(reSchedule.timeZone.secondsFromGMT, schedule.timeZone.secondsFromGMT)
+        XCTAssertEqual(reSchedule.valueAt(midnight), schedule.valueAt(midnight))
+
+        let threethirty = midnight.dateByAddingTimeInterval(NSTimeInterval(hours: 3.5))
+
+        XCTAssertEqual(reSchedule.valueAt(threethirty), schedule.valueAt(threethirty))
+
+        let fourthirty = midnight.dateByAddingTimeInterval(NSTimeInterval(hours: 4.5))
+
+        XCTAssertEqual(reSchedule.valueAt(fourthirty), schedule.valueAt(fourthirty))
+    }
+
 }
