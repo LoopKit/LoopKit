@@ -22,13 +22,18 @@ public class DailyQuantitySchedule<T: RawRepresentable where T.RawValue: AnyObje
     public required convenience init?(rawValue: RawValue) {
         guard let
             rawUnit = rawValue["unit"] as? String,
-            timeZoneName = rawValue["timeZone"] as? String,
             rawItems = rawValue["items"] as? [RepeatingScheduleValue.RawValue] else
         {
             return nil
         }
 
-        self.init(unit: HKUnit(fromString: rawUnit), dailyItems: rawItems.flatMap { RepeatingScheduleValue(rawValue: $0) }, timeZone: NSTimeZone(name: timeZoneName))
+        var timeZone: NSTimeZone?
+
+        if let offset = rawValue["timeZone"] as? Int {
+            timeZone = NSTimeZone(forSecondsFromGMT: offset)
+        }
+
+        self.init(unit: HKUnit(fromString: rawUnit), dailyItems: rawItems.flatMap { RepeatingScheduleValue(rawValue: $0) }, timeZone: timeZone)
     }
 
     public override var rawValue: RawValue {
