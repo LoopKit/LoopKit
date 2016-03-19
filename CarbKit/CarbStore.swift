@@ -382,7 +382,14 @@ public class CarbStore: HealthKitSampleStore {
         healthStore.saveObject(carbs) { (completed, error) -> Void in
             dispatch_async(self.dataAccessQueue) {
                 let storedObject = StoredCarbEntry(sample: carbs, createdByCurrentApp: true)
-                self.carbEntryCache.insert(storedObject)
+
+                var notificationRequired = false
+
+                if !self.carbEntryCache.contains(storedObject) {
+                    self.carbEntryCache.insert(storedObject)
+                    notificationRequired = true
+                }
+
                 self.clearCalculationCache()
                 self.persistCarbEntryCache()
 
@@ -392,9 +399,11 @@ public class CarbStore: HealthKitSampleStore {
                     error: error != nil ? .HealthStoreError(error!) : nil
                 )
 
-                NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.CarbEntriesDidUpdateNotification,
-                    object: self
-                )
+                if notificationRequired {
+                    NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.CarbEntriesDidUpdateNotification,
+                        object: self
+                    )
+                }
             }
         }
     }
