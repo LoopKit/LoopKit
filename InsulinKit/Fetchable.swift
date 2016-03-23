@@ -11,7 +11,7 @@ import CoreData
 
 
 protocol Fetchable {
-    typealias FetchableType: NSManagedObject = Self
+    associatedtype FetchableType: NSManagedObject = Self
 
     static func entityName() -> String
     static func objectsInContext(context: NSManagedObjectContext, predicate: NSPredicate?, sortedBy: String?, ascending: Bool) throws -> [FetchableType]

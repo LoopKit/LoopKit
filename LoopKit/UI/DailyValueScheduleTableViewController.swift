@@ -107,7 +107,7 @@ public class DailyValueScheduleTableViewController: UITableViewController, Ident
     public weak var delegate: DailyValueScheduleTableViewControllerDelegate?
 
     public func insertButtonItem() -> UIBarButtonItem {
-        return UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "addScheduleItem:")
+        return UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(addScheduleItem(_:)))
     }
 
     // MARK: - State

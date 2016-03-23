@@ -120,7 +120,7 @@ public class CarbStore: HealthKitSampleStore {
     }
 
     public override func authorize(completion: (success: Bool, error: NSError?) -> Void) {
-        authorize { (success: Bool, error: NSError?) -> Void in
+        super.authorize { (success: Bool, error: NSError?) -> Void in
             if success {
                 self.createQueries()
             }
@@ -138,7 +138,7 @@ public class CarbStore: HealthKitSampleStore {
     private var anchoredObjectQueries: [HKSampleType: HKAnchoredObjectQuery] = [:]
 
     /// The last-retreived anchor for each anchored object query, by sample type
-    private var queryAnchors: [HKSampleType: HKQueryAnchor] = [:]
+    private var queryAnchors: [HKObjectType: HKQueryAnchor] = [:]
 
     private func createQueries() {
         let predicate = recentSamplesPredicate()
@@ -288,7 +288,7 @@ public class CarbStore: HealthKitSampleStore {
             }
 
             // Update the anchor
-            self.queryAnchors[query.sampleType] = anchor
+            self.queryAnchors[query.objectType!] = anchor
 
             // Notify listeners only if a meaningful change was made
             if notificationRequired {
@@ -428,8 +428,24 @@ public class CarbStore: HealthKitSampleStore {
                     } else if let objects = objects {
                         self.healthStore.deleteObjects(objects) { (success, error) in
                             dispatch_async(self.dataAccessQueue) {
-                                self.carbEntryCache.remove(entry)
+                                var notificationRequired = false
+
+                                if self.carbEntryCache.contains(entry) {
+                                    self.carbEntryCache.remove(entry)
+                                    notificationRequired = true
+                                }
+
+                                self.clearCalculationCache()
+                                self.persistCarbEntryCache()
+
                                 resultHandler(success: success, error: error != nil ? .HealthStoreError(error!) : nil)
+
+                                // TODO: "Should notify"
+                                if notificationRequired {
+                                    NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.CarbEntriesDidUpdateNotification,
+                                        object: self
+                                    )
+                                }
                             }
                         }
                     }
