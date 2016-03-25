@@ -127,7 +127,9 @@ public class GlucoseStore: HealthKitSampleStore {
         }
     }
 
-    private func recentSamplesPredicate(var startDate startDate: NSDate?, endDate: NSDate?) -> NSPredicate {
+    private func recentSamplesPredicate(startDate startDate: NSDate?, endDate: NSDate?) -> NSPredicate {
+        var startDate = startDate
+
         if startDate == nil, let managedDataInterval = managedDataInterval {
             startDate = NSDate(timeIntervalSinceNow: -managedDataInterval)
         }

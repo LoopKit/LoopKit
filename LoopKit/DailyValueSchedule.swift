@@ -62,7 +62,6 @@ public class DailyValueSchedule<T: RawRepresentable where T.RawValue: AnyObject>
         self.timeZone = timeZone ?? NSTimeZone.defaultTimeZone()
 
         guard let firstItem = self.items.first else {
-            referenceTimeInterval = 0
             return nil
         }
 
