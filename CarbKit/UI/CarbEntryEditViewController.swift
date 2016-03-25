@@ -103,6 +103,10 @@ public class CarbEntryEditViewController: UITableViewController, DatePickerTable
             cell.unitLabel.text = String(preferredUnit)
             cell.delegate = self
 
+            if originalCarbEntry == nil {
+                cell.textField.becomeFirstResponder()
+            }
+
             return cell
         case .Date:
             let cell = tableView.dequeueReusableCellWithIdentifier(DatePickerTableViewCell.className) as! DatePickerTableViewCell

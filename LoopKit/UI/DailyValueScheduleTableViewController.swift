@@ -51,12 +51,20 @@ public class DailyValueScheduleTableViewController: UITableViewController, Ident
 
         navigationItem.rightBarButtonItems = [insertButtonItem(), editButtonItem()]
 
-        let locale = NSLocale.currentLocale()
+        let localTimeZone = NSTimeZone.defaultTimeZone()
+        let timeZoneDiff = NSTimeInterval(timeZone.secondsFromGMT - localTimeZone.secondsFromGMT)
 
-        navigationItem.prompt = String(
-            format: NSLocalizedString("Times in %@", comment: "The schedule table view header describing the configured time zone for the times. The substitution parameter is the localized time zone name"),
-            timeZone.localizedName(.Generic, locale: locale) ?? "\(NSTimeInterval(timeZone.secondsFromGMT).hours)"
-        )
+        if timeZoneDiff != 0 {
+            let localTimeZoneName = localTimeZone.abbreviation ?? localTimeZone.name
+            let formatter = NSDateComponentsFormatter()
+            formatter.allowedUnits = [.Hour, .Minute]
+            let diffString = formatter.stringFromTimeInterval(abs(timeZoneDiff)) ?? String(abs(timeZoneDiff))
+
+            navigationItem.prompt = String(
+                format: NSLocalizedString("Times in %1$@%2$@%3$@", comment: "The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval)"),
+                localTimeZoneName, timeZoneDiff < 0 ? "-" : "+", diffString
+            )
+        }
 
         tableView.keyboardDismissMode = .OnDrag
 
