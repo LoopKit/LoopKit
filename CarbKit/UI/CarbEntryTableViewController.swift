@@ -34,7 +34,6 @@ public class CarbEntryTableViewController: UITableViewController {
                     object: carbStore,
                     queue: NSOperationQueue.mainQueue(),
                     usingBlock: { [weak self] (note) -> Void in
-
                         switch note.name {
                         case CarbStore.CarbEntriesDidUpdateNotification:
                             if let strongSelf = self where strongSelf.isViewLoaded() {
@@ -45,8 +44,6 @@ public class CarbEntryTableViewController: UITableViewController {
                         default:
                             break
                         }
-
-
                     }
                 )
             }
@@ -259,6 +256,10 @@ public class CarbEntryTableViewController: UITableViewController {
                 dispatch_async(dispatch_get_main_queue()) {
                     if success {
                         tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                        self.updateTimelyStats(nil)
+                        self.updateTotal()
+
+                        NSNotificationCenter.defaultCenter().postNotificationName(CarbStore.CarbEntriesDidUpdateNotification, object: self)
                     } else if let error = error {
                         self.presentAlertControllerWithError(error)
                     }
@@ -287,17 +288,25 @@ public class CarbEntryTableViewController: UITableViewController {
         {
             if let originalEntry = editVC.originalCarbEntry {
                 carbStore?.replaceCarbEntry(originalEntry, withEntry: updatedEntry) { (_, _, error) -> Void in
-                    if let error = error {
-                        dispatch_async(dispatch_get_main_queue()) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if let error = error {
                             self.presentAlertControllerWithError(error)
+                        } else {
+                            self.reloadData()
+
+                            NSNotificationCenter.defaultCenter().postNotificationName(CarbStore.CarbEntriesDidUpdateNotification, object: self)
                         }
                     }
                 }
             } else {
                 carbStore?.addCarbEntry(updatedEntry) { (_, _, error) -> Void in
-                    if let error = error {
-                        dispatch_async(dispatch_get_main_queue()) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if let error = error {
                             self.presentAlertControllerWithError(error)
+                        } else {
+                            self.reloadData()
+
+                            NSNotificationCenter.defaultCenter().postNotificationName(CarbStore.CarbEntriesDidUpdateNotification, object: self)
                         }
                     }
                 }

@@ -48,6 +48,7 @@ public class CarbStore: HealthKitSampleStore {
 
     public typealias DefaultAbsorptionTimes = (fast: NSTimeInterval, medium: NSTimeInterval, slow: NSTimeInterval)
 
+    /// Notification posted when carb entries were changed by an external source
     public static let CarbEntriesDidUpdateNotification = "com.loudnate.CarbKit.CarbEntriesDidUpdateNotification"
 
     public enum Error: ErrorType {
@@ -378,30 +379,24 @@ public class CarbStore: HealthKitSampleStore {
         }
 
         let carbs = HKQuantitySample(type: carbType, quantity: quantity, startDate: entry.startDate, endDate: entry.startDate, device: nil, metadata: metadata)
+        let storedObject = StoredCarbEntry(sample: carbs, createdByCurrentApp: true)
 
-        healthStore.saveObject(carbs) { (completed, error) -> Void in
-            dispatch_async(self.dataAccessQueue) {
-                let storedObject = StoredCarbEntry(sample: carbs, createdByCurrentApp: true)
+        dispatch_async(dataAccessQueue) {
+            self.carbEntryCache.insert(storedObject)
 
-                var notificationRequired = false
+            self.healthStore.saveObject(carbs) { (completed, error) -> Void in
+                dispatch_async(self.dataAccessQueue) {
+                    if !completed {
+                        self.carbEntryCache.remove(storedObject)
+                    } else {
+                        self.clearCalculationCache()
+                        self.persistCarbEntryCache()
+                    }
 
-                if !self.carbEntryCache.contains(storedObject) {
-                    self.carbEntryCache.insert(storedObject)
-                    notificationRequired = true
-                }
-
-                self.clearCalculationCache()
-                self.persistCarbEntryCache()
-
-                resultHandler(
-                    success: completed,
-                    entry: storedObject,
-                    error: error != nil ? .HealthStoreError(error!) : nil
-                )
-
-                if notificationRequired {
-                    NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.CarbEntriesDidUpdateNotification,
-                        object: self
+                    resultHandler(
+                        success: completed,
+                        entry: storedObject,
+                        error: error != nil ? .HealthStoreError(error!) : nil
                     )
                 }
             }
@@ -426,25 +421,19 @@ public class CarbStore: HealthKitSampleStore {
                     if let error = error {
                         resultHandler(success: false, error: .HealthStoreError(error))
                     } else if let objects = objects {
-                        self.healthStore.deleteObjects(objects) { (success, error) in
-                            dispatch_async(self.dataAccessQueue) {
-                                var notificationRequired = false
+                        dispatch_async(self.dataAccessQueue) {
+                            self.carbEntryCache.remove(entry)
 
-                                if self.carbEntryCache.contains(entry) {
-                                    self.carbEntryCache.remove(entry)
-                                    notificationRequired = true
-                                }
+                            self.healthStore.deleteObjects(objects) { (success, error) in
+                                dispatch_async(self.dataAccessQueue) {
+                                    if !success {
+                                        self.carbEntryCache.insert(entry)
+                                    } else {
+                                        self.clearCalculationCache()
+                                        self.persistCarbEntryCache()
+                                    }
 
-                                self.clearCalculationCache()
-                                self.persistCarbEntryCache()
-
-                                resultHandler(success: success, error: error != nil ? .HealthStoreError(error!) : nil)
-
-                                // TODO: "Should notify"
-                                if notificationRequired {
-                                    NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.CarbEntriesDidUpdateNotification,
-                                        object: self
-                                    )
+                                    resultHandler(success: success, error: error != nil ? .HealthStoreError(error!) : nil)
                                 }
                             }
                         }
