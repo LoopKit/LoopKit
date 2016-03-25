@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/loudnate/LoopKit.svg?branch=master)](https://travis-ci.org/loudnate/LoopKit)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Join the chat at https://gitter.im/loudnate/LoopKit](https://badges.gitter.im/loudnate/LoopKit.svg)](https://gitter.im/loudnate/LoopKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Coming soon.
 

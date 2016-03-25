@@ -33,7 +33,7 @@ class AbsorptionTimeTextFieldTableViewCell: DecimalTextFieldTableViewCell {
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         textField.inputAccessoryView = segmentedControlInputAccessoryView
 
-        segmentedControlInputAccessoryView?.segmentedControl?.addTarget(self, action: "selectedSegmentChanged:", forControlEvents: .ValueChanged)
+        segmentedControlInputAccessoryView?.segmentedControl?.addTarget(self, action: #selector(selectedSegmentChanged(_:)), forControlEvents: .ValueChanged)
 
         return true
     }
@@ -41,7 +41,7 @@ class AbsorptionTimeTextFieldTableViewCell: DecimalTextFieldTableViewCell {
     override func textFieldDidEndEditing(textField: UITextField) {
         super.textFieldDidEndEditing(textField)
 
-        segmentedControlInputAccessoryView?.segmentedControl?.removeTarget(self, action: "selectedSegmentChanged:", forControlEvents: .ValueChanged)
+        segmentedControlInputAccessoryView?.segmentedControl?.removeTarget(self, action: #selector(selectedSegmentChanged(_:)), forControlEvents: .ValueChanged)
     }
 
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {

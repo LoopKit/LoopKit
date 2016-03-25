@@ -48,6 +48,7 @@ public class CarbStore: HealthKitSampleStore {
 
     public typealias DefaultAbsorptionTimes = (fast: NSTimeInterval, medium: NSTimeInterval, slow: NSTimeInterval)
 
+    /// Notification posted when carb entries were changed by an external source
     public static let CarbEntriesDidUpdateNotification = "com.loudnate.CarbKit.CarbEntriesDidUpdateNotification"
 
     public enum Error: ErrorType {
@@ -120,7 +121,7 @@ public class CarbStore: HealthKitSampleStore {
     }
 
     public override func authorize(completion: (success: Bool, error: NSError?) -> Void) {
-        authorize { (success: Bool, error: NSError?) -> Void in
+        super.authorize { (success: Bool, error: NSError?) -> Void in
             if success {
                 self.createQueries()
             }
@@ -138,7 +139,7 @@ public class CarbStore: HealthKitSampleStore {
     private var anchoredObjectQueries: [HKSampleType: HKAnchoredObjectQuery] = [:]
 
     /// The last-retreived anchor for each anchored object query, by sample type
-    private var queryAnchors: [HKSampleType: HKQueryAnchor] = [:]
+    private var queryAnchors: [HKObjectType: HKQueryAnchor] = [:]
 
     private func createQueries() {
         let predicate = recentSamplesPredicate()
@@ -288,7 +289,7 @@ public class CarbStore: HealthKitSampleStore {
             }
 
             // Update the anchor
-            self.queryAnchors[query.sampleType] = anchor
+            self.queryAnchors[query.objectType!] = anchor
 
             // Notify listeners only if a meaningful change was made
             if notificationRequired {
@@ -378,30 +379,24 @@ public class CarbStore: HealthKitSampleStore {
         }
 
         let carbs = HKQuantitySample(type: carbType, quantity: quantity, startDate: entry.startDate, endDate: entry.startDate, device: nil, metadata: metadata)
+        let storedObject = StoredCarbEntry(sample: carbs, createdByCurrentApp: true)
 
-        healthStore.saveObject(carbs) { (completed, error) -> Void in
-            dispatch_async(self.dataAccessQueue) {
-                let storedObject = StoredCarbEntry(sample: carbs, createdByCurrentApp: true)
+        dispatch_async(dataAccessQueue) {
+            self.carbEntryCache.insert(storedObject)
 
-                var notificationRequired = false
+            self.healthStore.saveObject(carbs) { (completed, error) -> Void in
+                dispatch_async(self.dataAccessQueue) {
+                    if !completed {
+                        self.carbEntryCache.remove(storedObject)
+                    } else {
+                        self.clearCalculationCache()
+                        self.persistCarbEntryCache()
+                    }
 
-                if !self.carbEntryCache.contains(storedObject) {
-                    self.carbEntryCache.insert(storedObject)
-                    notificationRequired = true
-                }
-
-                self.clearCalculationCache()
-                self.persistCarbEntryCache()
-
-                resultHandler(
-                    success: completed,
-                    entry: storedObject,
-                    error: error != nil ? .HealthStoreError(error!) : nil
-                )
-
-                if notificationRequired {
-                    NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.CarbEntriesDidUpdateNotification,
-                        object: self
+                    resultHandler(
+                        success: completed,
+                        entry: storedObject,
+                        error: error != nil ? .HealthStoreError(error!) : nil
                     )
                 }
             }
@@ -426,10 +421,20 @@ public class CarbStore: HealthKitSampleStore {
                     if let error = error {
                         resultHandler(success: false, error: .HealthStoreError(error))
                     } else if let objects = objects {
-                        self.healthStore.deleteObjects(objects) { (success, error) in
-                            dispatch_async(self.dataAccessQueue) {
-                                self.carbEntryCache.remove(entry)
-                                resultHandler(success: success, error: error != nil ? .HealthStoreError(error!) : nil)
+                        dispatch_async(self.dataAccessQueue) {
+                            self.carbEntryCache.remove(entry)
+
+                            self.healthStore.deleteObjects(objects) { (success, error) in
+                                dispatch_async(self.dataAccessQueue) {
+                                    if !success {
+                                        self.carbEntryCache.insert(entry)
+                                    } else {
+                                        self.clearCalculationCache()
+                                        self.persistCarbEntryCache()
+                                    }
+
+                                    resultHandler(success: success, error: error != nil ? .HealthStoreError(error!) : nil)
+                                }
                             }
                         }
                     }

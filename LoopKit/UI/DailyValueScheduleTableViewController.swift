@@ -107,12 +107,12 @@ public class DailyValueScheduleTableViewController: UITableViewController, Ident
     public weak var delegate: DailyValueScheduleTableViewControllerDelegate?
 
     public func insertButtonItem() -> UIBarButtonItem {
-        return UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "addScheduleItem:")
+        return UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(addScheduleItem(_:)))
     }
 
     // MARK: - State
 
-    public var timeZone = NSTimeZone.localTimeZone() {
+    public var timeZone = NSTimeZone.defaultTimeZone() {
         didSet {
             calendar.timeZone = timeZone
         }

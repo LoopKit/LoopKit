@@ -88,7 +88,7 @@ public class ReservoirTableViewController: UITableViewController {
             fireDate: NSDate().dateCeiledToTimeInterval(updateInterval).dateByAddingTimeInterval(2),
             interval: updateInterval,
             target: self,
-            selector: "updateTimelyStats:",
+            selector: #selector(updateTimelyStats(_:)),
             userInfo: nil,
             repeats: true
         )
