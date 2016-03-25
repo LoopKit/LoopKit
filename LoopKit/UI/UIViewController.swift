@@ -25,7 +25,7 @@ extension UIViewController {
 
         let alert = UIAlertController(
             title: castedError.userInfo[NSLocalizedDescriptionKey] as? String ?? NSLocalizedString("com.loudnate.LoopKit.errorAlertDefaultTitle", tableName: "LoopKit", value: "Error", comment: "The default title for an alert displaying an error"),
-            message: castedError.userInfo[NSLocalizedRecoverySuggestionErrorKey] as? String ?? NSLocalizedString("com.loudnate.LoopKit.errorAlertDefaultMessage", tableName: "LoopKit", value: "Please try again", comment: "The default message for an alert displaying an error"),
+            message: castedError.userInfo[NSLocalizedRecoverySuggestionErrorKey] as? String ?? String(error),
             preferredStyle: .Alert
         )
 
