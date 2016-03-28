@@ -92,8 +92,13 @@ class InsulinMathTests: XCTestCase {
     func testIOBFromDoses() {
         let input = loadDoseFixture("normalized_doses")
         let output = loadInsulinValueFixture("iob_from_doses_output")
+        let actionDuration = NSTimeInterval(hours: 4)
 
-        let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: NSTimeInterval(hours: 4))
+        measureBlock {
+            InsulinMath.insulinOnBoardForDoses(input, actionDuration: actionDuration)
+        }
+
+        let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: actionDuration)
 
         XCTAssertEqual(output.count, iob.count)
 
@@ -106,8 +111,13 @@ class InsulinMathTests: XCTestCase {
     func testIOBFromBolus() {
         let input = loadDoseFixture("bolus_dose")
         let output = loadInsulinValueFixture("iob_from_bolus_output")
+        let actionDuration = NSTimeInterval(hours: 4)
 
-        let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: NSTimeInterval(hours: 4))
+        measureBlock {
+            InsulinMath.insulinOnBoardForDoses(input, actionDuration: actionDuration)
+        }
+
+        let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: actionDuration)
 
         XCTAssertEqual(output.count, iob.count)
 
@@ -121,6 +131,10 @@ class InsulinMathTests: XCTestCase {
         let input = loadDoseFixture("reservoir_history_with_rewind_and_prime_output")
         let output = loadDoseFixture("normalized_reservoir_history_output")
         let basals = loadBasalRateScheduleFixture("basal")
+
+        measureBlock {
+            InsulinMath.normalize(input, againstBasalSchedule: basals)
+        }
 
         let doses = InsulinMath.normalize(input, againstBasalSchedule: basals)
 
@@ -137,8 +151,13 @@ class InsulinMathTests: XCTestCase {
     func testIOBFromReservoirDoses() {
         let input = loadDoseFixture("normalized_reservoir_history_output")
         let output = loadInsulinValueFixture("iob_from_reservoir_output")
+        let actionDuration = NSTimeInterval(hours: 4)
 
-        let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: NSTimeInterval(hours: 4))
+        measureBlock { 
+            InsulinMath.insulinOnBoardForDoses(input, actionDuration: actionDuration)
+        }
+
+        let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: actionDuration)
 
         XCTAssertEqual(output.count, iob.count)
 
@@ -151,6 +170,11 @@ class InsulinMathTests: XCTestCase {
     func testGlucoseEffectFromBolus() {
         let input = loadDoseFixture("bolus_dose")
         let output = loadGlucoseEffectFixture("effect_from_bolus_output")
+        let insulinSensitivitySchedule = self.insulinSensitivitySchedule
+
+        measureBlock {
+            InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
+        }
 
         let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
 
@@ -165,6 +189,11 @@ class InsulinMathTests: XCTestCase {
     func testGlucoseEffectFromShortTempBasal() {
         let input = loadDoseFixture("short_basal_dose")
         let output = loadGlucoseEffectFixture("effect_from_bolus_output")
+        let insulinSensitivitySchedule = self.insulinSensitivitySchedule
+
+        measureBlock {
+            InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
+        }
 
         let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
 
@@ -179,6 +208,11 @@ class InsulinMathTests: XCTestCase {
     func testGlucoseEffectFromTempBasal() {
         let input = loadDoseFixture("basal_dose")
         let output = loadGlucoseEffectFixture("effect_from_basal_output")
+        let insulinSensitivitySchedule = self.insulinSensitivitySchedule
+
+        measureBlock {
+            InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
+        }
 
         let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
 
@@ -193,6 +227,11 @@ class InsulinMathTests: XCTestCase {
     func testGlucoseEffectFromHistory() {
         let input = loadDoseFixture("normalized_doses")
         let output = loadGlucoseEffectFixture("effect_from_history_output")
+        let insulinSensitivitySchedule = self.insulinSensitivitySchedule
+
+        measureBlock {
+            InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
+        }
 
         let effects = InsulinMath.glucoseEffectsForDoses(input, actionDuration: NSTimeInterval(hours: 4), insulinSensitivity: insulinSensitivitySchedule)
 
