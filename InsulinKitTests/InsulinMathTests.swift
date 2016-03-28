@@ -46,7 +46,7 @@ class InsulinMathTests: XCTestCase {
         let dateFormatter = NSDateFormatter.ISO8601LocalTimeDateFormatter()
 
         return fixture.map {
-            return InsulinValue(startDate: dateFormatter.dateFromString($0["date"] as! String)!, value: $0["amount"] as! Double)
+            return InsulinValue(startDate: dateFormatter.dateFromString($0["date"] as! String)!, value: $0["value"] as! Double)
         }
     }
 
@@ -110,20 +110,19 @@ class InsulinMathTests: XCTestCase {
 
     func testIOBFromBolus() {
         let input = loadDoseFixture("bolus_dose")
-        let output = loadInsulinValueFixture("iob_from_bolus_output")
-        let actionDuration = NSTimeInterval(hours: 4)
 
-        measureBlock {
-            InsulinMath.insulinOnBoardForDoses(input, actionDuration: actionDuration)
-        }
+        for hours in [2, 3, 4, 5, 5.2, 6, 7] {
+            let actionDuration = NSTimeInterval(hours: hours)
+            let output = loadInsulinValueFixture("iob_from_bolus_\(Int(actionDuration.minutes))min_output")
 
-        let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: actionDuration)
+            let iob = InsulinMath.insulinOnBoardForDoses(input, actionDuration: actionDuration)
 
-        XCTAssertEqual(output.count, iob.count)
+            XCTAssertEqual(output.count, iob.count)
 
-        for (expected, calculated) in zip(output, iob) {
-            XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: pow(1, -14))
+            for (expected, calculated) in zip(output, iob) {
+                XCTAssertEqual(expected.startDate, calculated.startDate)
+                XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: pow(1, -14))
+            }
         }
     }
 
