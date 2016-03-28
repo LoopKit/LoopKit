@@ -175,6 +175,11 @@ struct InsulinMath {
         return doses
     }
 
+    private static func reconcileDoses<T: CollectionType where T.Generator.Element == DoseEntry>(doses: T) -> [DoseEntry] {
+
+        return []
+    }
+
     private static func normalizeBasalDose(dose: DoseEntry, againstBasalSchedule basalSchedule: BasalRateSchedule) -> [DoseEntry] {
 
         var normalizedDoses: [DoseEntry] = []

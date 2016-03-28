@@ -34,12 +34,13 @@ class PersistenceController {
         }
     }
 
-    let managedObjectContext: NSManagedObjectContext
-
     private let privateManagedObjectContext: NSManagedObjectContext
 
+    var managedObjectContext: NSManagedObjectContext {
+        return privateManagedObjectContext
+    }
+
     init(readyCallback: (error: Error?) -> Void) {
-        managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
         privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
 
         initializeStack(readyCallback)
@@ -76,23 +77,13 @@ class PersistenceController {
     }
 
     func save(completionHandler: (error: Error?) -> Void) {
-        managedObjectContext.performBlock { [unowned self] in
+        self.privateManagedObjectContext.performBlock { [unowned self] in
             do {
-                if self.managedObjectContext.hasChanges {
-                    try self.managedObjectContext.save()
+                if self.privateManagedObjectContext.hasChanges {
+                    try self.privateManagedObjectContext.save()
                 }
 
-                self.privateManagedObjectContext.performBlock { [unowned self] in
-                    do {
-                        if self.privateManagedObjectContext.hasChanges {
-                            try self.privateManagedObjectContext.save()
-                        }
-
-                        completionHandler(error: nil)
-                    } catch let saveError as NSError {
-                        completionHandler(error: .CoreDataError(saveError))
-                    }
-                }
+                completionHandler(error: nil)
             } catch let saveError as NSError {
                 completionHandler(error: .CoreDataError(saveError))
             }
@@ -102,7 +93,7 @@ class PersistenceController {
     // MARK: - 
 
     private func initializeStack(readyCallback: (error: Error?) -> Void) {
-        managedObjectContext.performBlock {
+        privateManagedObjectContext.performBlock {
             var error: Error?
 
             let modelURL = NSBundle(forClass: self.dynamicType).URLForResource("Model", withExtension: "momd")!
@@ -110,7 +101,6 @@ class PersistenceController {
             let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
 
             self.privateManagedObjectContext.persistentStoreCoordinator = coordinator
-            self.managedObjectContext.parentContext = self.privateManagedObjectContext
 
             let bundle = NSBundle(forClass: self.dynamicType)
 
