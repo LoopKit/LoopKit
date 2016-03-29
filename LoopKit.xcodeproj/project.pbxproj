@@ -47,6 +47,8 @@
 		43CE7CE81CA9EC1F003CC1B0 /* iob_from_bolus_312min_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CE71CA9EC1F003CC1B0 /* iob_from_bolus_312min_output.json */; };
 		43CE7CEA1CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CE91CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json */; };
 		43CE7CEC1CA9EC88003CC1B0 /* iob_from_bolus_420min_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CEB1CA9EC88003CC1B0 /* iob_from_bolus_420min_output.json */; };
+		43CE7CEE1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CED1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json */; };
+		43CE7CF01CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CEF1CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json */; };
 		43D8FDCF1C728FDF0073BE78 /* LoopKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D8FDCE1C728FDF0073BE78 /* LoopKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43D8FDD61C728FDF0073BE78 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		43D8FDDB1C728FDF0073BE78 /* LoopKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDDA1C728FDF0073BE78 /* LoopKitTests.swift */; };
@@ -285,6 +287,8 @@
 		43CE7CE71CA9EC1F003CC1B0 /* iob_from_bolus_312min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_312min_output.json; sourceTree = "<group>"; };
 		43CE7CE91CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_360min_output.json; sourceTree = "<group>"; };
 		43CE7CEB1CA9EC88003CC1B0 /* iob_from_bolus_420min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_420min_output.json; sourceTree = "<group>"; };
+		43CE7CED1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = normalize_edge_case_doses_input.json; sourceTree = "<group>"; };
+		43CE7CEF1CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = normalize_edge_case_doses_output.json; sourceTree = "<group>"; };
 		43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoopKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D8FDCE1C728FDF0073BE78 /* LoopKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoopKit.h; sourceTree = "<group>"; };
 		43D8FDD01C728FDF0073BE78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -778,6 +782,8 @@
 				43CE7CEB1CA9EC88003CC1B0 /* iob_from_bolus_420min_output.json */,
 				43D8FECE1C7294B80073BE78 /* iob_from_doses_output.json */,
 				43D8FECF1C7294B80073BE78 /* iob_from_reservoir_output.json */,
+				43CE7CED1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json */,
+				43CE7CEF1CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json */,
 				43B99B011C7451E500D050F5 /* normalized_doses.json */,
 				43D8FED01C7294B80073BE78 /* normalized_reservoir_history_output.json */,
 				43D8FED11C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_input.json */,
@@ -1241,9 +1247,11 @@
 				43B99B081C74553900D050F5 /* effect_from_basal_output.json in Resources */,
 				43CE7CE01CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json in Resources */,
 				43B99AFC1C744CE300D050F5 /* bolus_dose.json in Resources */,
+				43CE7CEE1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json in Resources */,
 				43D8FED81C7294B80073BE78 /* normalized_reservoir_history_output.json in Resources */,
 				43D8FEDA1C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json in Resources */,
 				43CE7CEA1CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json in Resources */,
+				43CE7CF01CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json in Resources */,
 				43D8FED71C7294B80073BE78 /* iob_from_reservoir_output.json in Resources */,
 				43B99B001C7450EE00D050F5 /* effect_from_history_output.json in Resources */,
 				43B99AFE1C744E5F00D050F5 /* effect_from_bolus_output.json in Resources */,
