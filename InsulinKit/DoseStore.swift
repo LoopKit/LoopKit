@@ -221,61 +221,66 @@ public class DoseStore {
         - error:   An error object explaining why the results could not be fetched
      */
     public func getRecentReservoirValues(resultsHandler: (values: [ReservoirValue], error: Error?) -> Void) {
-        getRecentReservoirObjects { (reservoirObjects, error) -> Void in
-            resultsHandler(values: reservoirObjects.map({ $0 as ReservoirValue}), error: error)
+        guard let persistenceController = persistenceController else {
+            resultsHandler(values: [], error: .ConfigurationError)
+            return
+        }
+
+        persistenceController.managedObjectContext.performBlock {
+            do {
+                let objects = try self.getRecentReservoirObjects()
+
+                resultsHandler(values: objects.map({ $0 as ReservoirValue}), error: nil)
+            } catch let error as Error {
+                resultsHandler(values: [], error: error)
+            } catch {
+                assertionFailure()
+            }
         }
     }
 
     /**
-     - parameter resultsHandler: A closure called when the results are ready. This closure takes two arguments:
-        - objects: An array of reservoir objects
-        - error:   An error object explaining why the results could not be fetched
+     *This method should only be called from within a managed object context block.*
+
+     - throws: An error describing the failure to fetch objects
+     
+     - returns: An array of recently saved reservoir managed objects, in reverse-chronological order
      */
-    private func getRecentReservoirObjects(resultsHandler: (objects: [Reservoir], error: Error?) -> Void) {
-        guard let persistenceController = persistenceController else {
-            resultsHandler(objects: [], error: .ConfigurationError)
-            return
-        }
+    private func getRecentReservoirObjects() throws -> [Reservoir] {
+        if let objects = recentReservoirObjectsCache {
+            return objects
+        } else {
+            do {
+                try self.purgeReservoirObjects()
 
-        persistenceController.managedObjectContext.performBlock {
-            var error: Error?
+                var recentReservoirObjects: [Reservoir] = []
 
-            if self.recentReservoirObjectsCache == nil {
-                do {
-                    try self.purgeReservoirObjects()
+                recentReservoirObjects += try Reservoir.objectsInContext(persistenceController!.managedObjectContext, predicate: self.recentReservoirValuesPredicate, sortedBy: "date", ascending: false)
 
-                    var recentReservoirObjects: [Reservoir] = []
+                self.recentReservoirObjectsCache = recentReservoirObjects
 
-                    recentReservoirObjects += try Reservoir.objectsInContext(persistenceController.managedObjectContext, predicate: self.recentReservoirValuesPredicate, sortedBy: "date", ascending: false)
-
-                    self.recentReservoirObjectsCache = recentReservoirObjects
-                } catch let fetchError as NSError {
-                    error = .FetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
-                } catch let fetchError as Error {
-                    error = fetchError
-                }
+                return recentReservoirObjects
+            } catch let fetchError as NSError {
+                throw Error.FetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
             }
-
-            resultsHandler(objects: self.recentReservoirObjectsCache ?? [], error: error)
         }
     }
 
-    private func getRecentReservoirDoseEntries(resultsHandler: (doses: [DoseEntry], error: Error?) -> Void) {
-        guard let persistenceController = persistenceController else {
-            resultsHandler(doses: [], error: .ConfigurationError)
-            return
-        }
+    /**
+     *This method should only be called from within a managed object context block.*
 
-        persistenceController.managedObjectContext.performBlock {
-            if self.recentReservoirDoseEntriesCache == nil {
-                self.getRecentReservoirObjects { (reservoirValues, error) -> Void in
-                    self.recentReservoirDoseEntriesCache = InsulinMath.doseEntriesFromReservoirValues(reservoirValues.reverse())
+     - throws: An error describing the failure to fetch reservoir data
 
-                    resultsHandler(doses: self.recentReservoirDoseEntriesCache ?? [], error: error)
-                }
-            } else {
-                resultsHandler(doses: self.recentReservoirDoseEntriesCache ?? [], error: nil)
-            }
+     - returns: An array of dose entries, derived from recorded reservoir values
+     */
+    private func getRecentReservoirDoseEntries() throws -> [DoseEntry] {
+        if let doses = self.recentReservoirDoseEntriesCache {
+            return doses
+        } else {
+            let objects = try self.getRecentReservoirObjects()
+
+            self.recentReservoirDoseEntriesCache = InsulinMath.doseEntriesFromReservoirValues(objects.reverse())
+            return self.recentReservoirDoseEntriesCache ?? []
         }
     }
 
@@ -297,18 +302,24 @@ public class DoseStore {
         }
 
         persistenceController.managedObjectContext.performBlock {
-            if self.recentReservoirNormalizedDoseEntriesCache == nil {
+            if let normalizedDoses = self.recentReservoirNormalizedDoseEntriesCache {
+                resultsHandler(doses: normalizedDoses.filterDateRange(startDate, endDate), error: nil)
+            } else {
                 if let basalProfile = self.basalProfile {
-                    self.getRecentReservoirDoseEntries { (doses, error) -> Void in
-                        self.recentReservoirNormalizedDoseEntriesCache = InsulinMath.normalize(doses, againstBasalSchedule: basalProfile)
+                    do {
+                        let doses = try self.getRecentReservoirDoseEntries()
 
-                        resultsHandler(doses: self.recentReservoirNormalizedDoseEntriesCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+                        let normalizedDoses = InsulinMath.normalize(doses, againstBasalSchedule: basalProfile)
+                        self.recentReservoirNormalizedDoseEntriesCache = normalizedDoses
+                        resultsHandler(doses: normalizedDoses.filterDateRange(startDate, endDate) ?? [], error: nil)
+                    } catch let error as Error {
+                        resultsHandler(doses: [], error: error)
+                    } catch {
+                        assertionFailure()
                     }
                 } else {
                     resultsHandler(doses: [], error: .ConfigurationError)
                 }
-            } else {
-                resultsHandler(doses: self.recentReservoirNormalizedDoseEntriesCache?.filterDateRange(startDate, endDate) ?? [], error: nil)
             }
         }
     }
@@ -506,13 +517,26 @@ public class DoseStore {
 
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
-     - parameter resultHandler: A closure called once the total has been retrieved. The closure takes two arguments:
+     - parameter resultsHandler: A closure called once the total has been retrieved. The closure takes two arguments:
         - total: The retrieved value
         - error: An error object explaining why the retrieval failed
      */
-    public func getTotalRecentUnitsDelivered(resultHandler: (total: Double, error: Error?) -> Void) {
-        getRecentReservoirDoseEntries { (doses, error) -> Void in
-            resultHandler(total: InsulinMath.totalDeliveryForDoses(doses), error: error)
+    public func getTotalRecentUnitsDelivered(resultsHandler: (total: Double, error: Error?) -> Void) {
+        guard let persistenceController = persistenceController else {
+            resultsHandler(total: 0, error: .ConfigurationError)
+            return
+        }
+
+        persistenceController.managedObjectContext.performBlock {
+            do {
+                let doses = try self.getRecentReservoirDoseEntries()
+
+                resultsHandler(total: InsulinMath.totalDeliveryForDoses(doses), error: nil)
+            } catch let error as Error {
+                resultsHandler(total: 0, error: error)
+            } catch {
+                assertionFailure()
+            }
         }
     }
 }
