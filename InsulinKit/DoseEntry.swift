@@ -7,13 +7,8 @@
 //
 
 import Foundation
+import CoreData
 import LoopKit
-
-
-public enum DoseUnit {
-    case UnitsPerHour
-    case Units
-}
 
 
 public struct DoseEntry: TimelineValue {
@@ -22,6 +17,7 @@ public struct DoseEntry: TimelineValue {
     public let value: Double
     public let unit: DoseUnit
     public let description: String?
+    let managedObjectID: NSManagedObjectID? = nil
 
     public init(startDate: NSDate, endDate: NSDate, value: Double, unit: DoseUnit, description: String? = nil) {
         self.startDate = startDate
