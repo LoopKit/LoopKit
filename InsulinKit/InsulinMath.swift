@@ -36,7 +36,7 @@ struct InsulinMath {
 
      - returns: The percentage of total insulin effect remaining
      */
-    private static func walshPercentEffectRemainingAtTime(time: NSTimeInterval, actionDuration: NSTimeInterval) -> Double? {
+    private static func walshPercentEffectRemainingAtTime(time: NSTimeInterval, actionDuration: NSTimeInterval) -> Double {
 
         switch time {
         case let t where t <= 0:
@@ -44,20 +44,34 @@ struct InsulinMath {
         case let t where t >= actionDuration:
             return 0
         default:
+            // We only have Walsh models for a few discrete action durations, so we scale other action durations appropriately to the nearest one.
+            let nearestModeledDuration: NSTimeInterval
+
             switch actionDuration {
-            case NSTimeInterval(hours: 3):
-                return -3.2030e-9 * pow(time.minutes, 4) + 1.354e-6 * pow(time.minutes, 3) - 1.759e-4 * pow(time.minutes, 2) + 9.255e-4 * time.minutes + 0.99951
-            case NSTimeInterval(hours: 4):
-                return -3.310e-10 * pow(time.minutes, 4) + 2.530e-7 * pow(time.minutes, 3) - 5.510e-5 * pow(time.minutes, 2) - 9.086e-4 * time.minutes + 0.99950
-            case NSTimeInterval(hours: 5):
-                return -2.950e-10 * pow(time.minutes, 4) + 2.320e-7 * pow(time.minutes, 3) - 5.550e-5 * pow(time.minutes, 2) + 4.490e-4 * time.minutes + 0.99300
-            case NSTimeInterval(hours: 6):
-                return -1.493e-10 * pow(time.minutes, 4) + 1.413e-7 * pow(time.minutes, 3) - 4.095e-5 * pow(time.minutes, 2) + 6.365e-4 * time.minutes + 0.99700
+            case let x where x < NSTimeInterval(hours: 3):
+                nearestModeledDuration = NSTimeInterval(hours: 3)
+            case let x where x > NSTimeInterval(hours: 6):
+                nearestModeledDuration = NSTimeInterval(hours: 6)
             default:
-                return nil
+                nearestModeledDuration = NSTimeInterval(hours: round(actionDuration.hours))
+            }
+
+            let minutes = time.minutes * nearestModeledDuration / actionDuration
+
+            switch nearestModeledDuration {
+            case NSTimeInterval(hours: 3):
+                return -3.2030e-9 * pow(minutes, 4) + 1.354e-6 * pow(minutes, 3) - 1.759e-4 * pow(minutes, 2) + 9.255e-4 * minutes + 0.99951
+            case NSTimeInterval(hours: 4):
+                return -3.310e-10 * pow(minutes, 4) + 2.530e-7 * pow(minutes, 3) - 5.510e-5 * pow(minutes, 2) - 9.086e-4 * minutes + 0.99950
+            case NSTimeInterval(hours: 5):
+                return -2.950e-10 * pow(minutes, 4) + 2.320e-7 * pow(minutes, 3) - 5.550e-5 * pow(minutes, 2) + 4.490e-4 * minutes + 0.99300
+            case NSTimeInterval(hours: 6):
+                return -1.493e-10 * pow(minutes, 4) + 1.413e-7 * pow(minutes, 3) - 4.095e-5 * pow(minutes, 2) + 6.365e-4 * minutes + 0.99700
+            default:
+                assertionFailure()
+                return 0
             }
         }
-
     }
 
     private static func insulinOnBoardForContinuousDose(dose: DoseEntry, atDate date: NSDate, actionDuration: NSTimeInterval, delay: NSTimeInterval, delta: NSTimeInterval) -> Double {
@@ -69,7 +83,7 @@ struct InsulinMath {
 
         repeat {
             let segment = max(0, min(doseDate + delta, doseDuration) - doseDate) / doseDuration
-            iob += segment * walshPercentEffectRemainingAtTime(time - delay - doseDate, actionDuration: actionDuration)!
+            iob += segment * walshPercentEffectRemainingAtTime(time - delay - doseDate, actionDuration: actionDuration)
             doseDate += delta
         } while doseDate <= min(floor((time + delay) / delta) * delta, doseDuration)
 
@@ -82,9 +96,9 @@ struct InsulinMath {
 
         if time >= 0 {
             if dose.unit == .Units {
-                iob = dose.value * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)!
+                iob = dose.value * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)
             } else if dose.unit == .UnitsPerHour && dose.endDate.timeIntervalSinceDate(dose.startDate) <= 1.05 * delta {
-                iob = dose.value * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1) * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)!
+                iob = dose.value * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1) * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)
             } else {
                 iob = dose.value * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1) * insulinOnBoardForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
             }
@@ -103,7 +117,7 @@ struct InsulinMath {
 
         repeat {
             let segment = max(0, min(doseDate + delta, doseDuration) - doseDate) / doseDuration
-            value += segment * (1.0 - walshPercentEffectRemainingAtTime(time - delay - doseDate, actionDuration: actionDuration)!)
+            value += segment * (1.0 - walshPercentEffectRemainingAtTime(time - delay - doseDate, actionDuration: actionDuration))
             doseDate += delta
         } while doseDate <= min(floor((time + delay) / delta) * delta, doseDuration)
 
@@ -116,9 +130,9 @@ struct InsulinMath {
 
         if time >= 0 {
             if dose.unit == .Units {
-                value = dose.value * -insulinSensitivity * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)!)
+                value = dose.value * -insulinSensitivity * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration))
             } else if dose.unit == .UnitsPerHour && dose.endDate.timeIntervalSinceDate(dose.startDate) <= 1.05 * delta {
-                value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1) * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)!)
+                value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1) * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration))
             } else {
                 value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1) * glucoseEffectForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
             }
@@ -266,16 +280,7 @@ struct InsulinMath {
         delay: NSTimeInterval = NSTimeInterval(minutes: 10),
         delta: NSTimeInterval = NSTimeInterval(minutes: 5)
     ) -> [InsulinValue] {
-        var validActionDuration = false
-
-        for hours in 3...6 {
-            if actionDuration == NSTimeInterval(hours: Double(hours)) {
-                validActionDuration = true
-                break
-            }
-        }
-
-        guard validActionDuration, let (startDate, endDate) = LoopMath.simulationDateRangeForSamples(doses, fromDate: fromDate, toDate: toDate, duration: actionDuration, delay: delay, delta: delta) else {
+        guard let (startDate, endDate) = LoopMath.simulationDateRangeForSamples(doses, fromDate: fromDate, toDate: toDate, duration: actionDuration, delay: delay, delta: delta) else {
             return []
         }
 
@@ -303,16 +308,7 @@ struct InsulinMath {
         delay: NSTimeInterval = NSTimeInterval(minutes: 10),
         delta: NSTimeInterval = NSTimeInterval(minutes: 5)
     ) -> [GlucoseEffect] {
-        var validActionDuration = false
-
-        for hours in 3...6 {
-            if actionDuration == NSTimeInterval(hours: Double(hours)) {
-                validActionDuration = true
-                break
-            }
-        }
-
-        guard validActionDuration, let (startDate, endDate) = LoopMath.simulationDateRangeForSamples(doses, fromDate: fromDate, toDate: toDate, duration: actionDuration, delay: delay, delta: delta) else {
+        guard let (startDate, endDate) = LoopMath.simulationDateRangeForSamples(doses, fromDate: fromDate, toDate: toDate, duration: actionDuration, delay: delay, delta: delta) else {
             return []
         }
 
