@@ -34,17 +34,7 @@ extension UIViewController {
         alert.addAction(action)
         alert.preferredAction = action
 
-        var presentingViewController: UIViewController? = self
-
-        if presentingViewController?.view.window == nil {
-            presentingViewController = UIApplication.sharedApplication().delegate?.window??.rootViewController
-        }
-
-        while presentingViewController?.presentedViewController != nil {
-            presentingViewController = presentingViewController?.presentedViewController
-        }
-
-        presentingViewController?.presentViewController(alert, animated: animated, completion: completion)
+        presentViewControllerOnActiveViewController(alert, animated: animated, completion: completion)
     }
 
     /**
@@ -65,5 +55,29 @@ extension UIViewController {
             animated: animated,
             completion: completion
         )
+    }
+
+    /**
+     Convenience method to present a view controller on the active view controller.
+     
+     If the receiver is not in a window, or already has a presented view controller, this method will
+     attempt to find the most appropriate view controller for presenting.
+
+     - parameter viewControllerToPresent: The view controller to display over the view controller’s content
+     - parameter animated:                Whether to animate the presentation
+     - parameter completion:              An optional closure to execute after the presentation finishes
+     */
+    public func presentViewControllerOnActiveViewController(viewControllerToPresent: UIViewController, animated: Bool, completion: (() -> Void)?) {
+        var presentingViewController: UIViewController? = self
+
+        if presentingViewController?.view.window == nil {
+            presentingViewController = UIApplication.sharedApplication().delegate?.window??.rootViewController
+        }
+
+        while presentingViewController?.presentedViewController != nil {
+            presentingViewController = presentingViewController?.presentedViewController
+        }
+
+        presentingViewController?.presentViewController(viewControllerToPresent, animated: animated, completion: completion)
     }
 }
