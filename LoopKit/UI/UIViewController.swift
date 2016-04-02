@@ -40,6 +40,10 @@ extension UIViewController {
             presentingViewController = UIApplication.sharedApplication().delegate?.window??.rootViewController
         }
 
+        while presentingViewController?.presentedViewController != nil {
+            presentingViewController = presentingViewController?.presentedViewController
+        }
+
         presentingViewController?.presentViewController(alert, animated: animated, completion: completion)
     }
 
