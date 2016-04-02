@@ -11,21 +11,17 @@ import UIKit
 
 extension UIViewController {
     /**
-     Convenience method to display an error object in an alert controller
+     Convenience method to present an alert controller on the active view controller
 
-     - parameter error:      The error to display
+     - parameter title:      The title of the alert
+     - parameter message:    The message of the alert
      - parameter animated:   Whether to animate the alert
      - parameter completion: An optional closure to execute after the presentation finishes
      */
-    public func presentAlertControllerWithError(error: ErrorType, animated: Bool = true, completion: (() -> Void)? = nil) {
-
-        // See: https://forums.developer.apple.com/thread/17431
-        // The compiler automatically emits the code necessary to translate between any ErrorType and NSError.
-        let castedError: NSError = error as NSError
-
+    public func presentAlertControllerWithTitle(title: String?, message: String, animated: Bool = true, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(
-            title: castedError.userInfo[NSLocalizedDescriptionKey] as? String ?? NSLocalizedString("com.loudnate.LoopKit.errorAlertDefaultTitle", tableName: "LoopKit", value: "Error", comment: "The default title for an alert displaying an error"),
-            message: castedError.userInfo[NSLocalizedRecoverySuggestionErrorKey] as? String ?? String(error),
+            title: title,
+            message: message,
             preferredStyle: .Alert
         )
 
@@ -45,5 +41,25 @@ extension UIViewController {
         }
 
         presentingViewController?.presentViewController(alert, animated: animated, completion: completion)
+    }
+
+    /**
+     Convenience method to display an error object in an alert controller
+
+     - parameter error:      The error to display
+     - parameter animated:   Whether to animate the alert
+     - parameter completion: An optional closure to execute after the presentation finishes
+     */
+    public func presentAlertControllerWithError(error: ErrorType, animated: Bool = true, completion: (() -> Void)? = nil) {
+
+        // See: https://forums.developer.apple.com/thread/17431
+        // The compiler automatically emits the code necessary to translate between any ErrorType and NSError.
+        let castedError: NSError = error as NSError
+
+        presentAlertControllerWithTitle(castedError.userInfo[NSLocalizedDescriptionKey] as? String ?? NSLocalizedString("com.loudnate.LoopKit.errorAlertDefaultTitle", tableName: "LoopKit", value: "Error", comment: "The default title for an alert displaying an error"),
+            message: castedError.userInfo[NSLocalizedRecoverySuggestionErrorKey] as? String ?? String(error),
+            animated: animated,
+            completion: completion
+        )
     }
 }
