@@ -39,11 +39,11 @@ class PumpEvent: NSManagedObject {
         }
     }
 
-    var type: DoseType? {
+    var type: PumpEventType? {
         get {
             willAccessValueForKey("type")
             defer { didAccessValueForKey("type") }
-            return DoseType(rawValue: primitiveType ?? "")
+            return PumpEventType(rawValue: primitiveType ?? "")
         }
         set {
             willChangeValueForKey("type")
