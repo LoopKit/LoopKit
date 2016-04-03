@@ -1,5 +1,5 @@
 //
-//  Dose.swift
+//  PumpEvent.swift
 //  LoopKit
 //
 //  Created by Nathan Racklyeft on 3/28/16.
@@ -11,7 +11,7 @@ import CoreData
 import LoopKit
 
 
-class Dose: NSManagedObject {
+class PumpEvent: NSManagedObject {
 
     var duration: NSTimeInterval! {
         get {
@@ -60,10 +60,10 @@ class Dose: NSManagedObject {
 }
 
 
-extension Dose: Fetchable { }
+extension PumpEvent: Fetchable { }
 
 
-extension Dose: TimelineValue {
+extension PumpEvent: TimelineValue {
     var startDate: NSDate {
         return date
     }

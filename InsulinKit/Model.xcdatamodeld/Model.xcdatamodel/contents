@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Xcode 7.0">
-    <entity name="Dose" representedClassName=".Dose" syncable="YES">
+    <entity name="PumpEvent" representedClassName=".Dose" syncable="YES">
         <attribute name="createdAt" attributeType="Date" indexed="YES" syncable="YES"/>
         <attribute name="date" attributeType="Date" indexed="YES" syncable="YES"/>
         <attribute name="duration" attributeType="Double" minValueString="0" defaultValueString="0.0" syncable="YES"/>
@@ -17,7 +17,7 @@
         <attribute name="volume" attributeType="Double" syncable="YES"/>
     </entity>
     <elements>
+        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="150"/>
         <element name="Reservoir" positionX="-63" positionY="-18" width="128" height="120"/>
-        <element name="Dose" positionX="-63" positionY="18" width="128" height="150"/>
     </elements>
 </model>
