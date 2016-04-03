@@ -65,7 +65,7 @@ public class DoseStore {
     public var basalProfile: BasalRateSchedule? {
         didSet {
             persistenceController?.managedObjectContext.performBlock {
-                self.clearDoseCache()
+                self.clearReservoirDoseCache()
             }
         }
     }
@@ -73,7 +73,7 @@ public class DoseStore {
     public var insulinSensitivitySchedule: InsulinSensitivitySchedule? {
         didSet {
             persistenceController?.managedObjectContext.performBlock {
-                self.clearDoseCache()
+                self.clearReservoirDoseCache()
             }
         }
     }
@@ -86,22 +86,6 @@ public class DoseStore {
 
         configurationDidChange()
     }
-
-    public func save(completionHandler: (error: Error?) -> Void) {
-        if let persistenceController = persistenceController {
-            persistenceController.save({ (error) -> Void in
-                if let error = error {
-                    completionHandler(error: .PersistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion))
-                } else {
-                    completionHandler(error: nil)
-                }
-            })
-        } else {
-            completionHandler(error: .ConfigurationError)
-        }
-    }
-
-    // MARK: - Reservoir data
 
     private func configurationDidChange() {
         if insulinActionDuration != nil && pumpID != nil {
@@ -128,6 +112,8 @@ public class DoseStore {
     }
 
     private var persistenceController: PersistenceController?
+
+    // MARK: - Reservoir data
 
     private var recentReservoirObjectsCache: [Reservoir]?
 
@@ -348,7 +334,7 @@ public class DoseStore {
                     }
                 }
 
-                self.clearDoseCache()
+                self.clearReservoirDoseCache()
 
                 completionHandler(deletedValues: deletedObjects.map { $0 }, error: error)
 
@@ -406,13 +392,13 @@ public class DoseStore {
     private func clearReservoirCache() {
         recentReservoirObjectsCache = nil
 
-        clearDoseCache()
+        clearReservoirDoseCache()
     }
 
     /**
      *This method should only be called from within a managed object context block.*
      */
-    private func clearDoseCache() {
+    private func clearReservoirDoseCache() {
         recentReservoirDoseEntriesCache = nil
         recentReservoirNormalizedDoseEntriesCache = nil
 
