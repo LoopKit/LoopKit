@@ -57,7 +57,12 @@ public class DoseStore {
         didSet {
             persistenceController?.managedObjectContext.performBlock {
                 self.clearCalculationCache()
+
+                if let recentValuesStartDate = self.recentValuesStartDate {
+                    self.pumpEventQueryAfterDate = max(self.pumpEventQueryAfterDate, recentValuesStartDate)
+                }
             }
+
             configurationDidChange()
         }
     }
@@ -83,6 +88,7 @@ public class DoseStore {
         self.insulinActionDuration = insulinActionDuration
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.basalProfile = basalProfile
+        self.pumpEventQueryAfterDate = NSUserDefaults.standardUserDefaults().pumpEventQueryAfterDate ?? recentValuesStartDate ?? NSDate.distantPast()
 
         configurationDidChange()
     }
@@ -121,7 +127,7 @@ public class DoseStore {
 
     private var recentReservoirDoseEntriesCache: [DoseEntry]?
 
-    private var recentReservoirValuesStartDate: NSDate? {
+    private var recentValuesStartDate: NSDate? {
         if let insulinActionDuration = insulinActionDuration {
             let calendar = NSCalendar.currentCalendar()
 
@@ -132,7 +138,7 @@ public class DoseStore {
     }
 
     private var recentReservoirValuesPredicate: NSPredicate? {
-        if let pumpID = pumpID, startDate = recentReservoirValuesStartDate {
+        if let pumpID = pumpID, startDate = recentValuesStartDate {
             let predicate = NSPredicate(format: "date >= %@ && pumpID = %@", startDate, pumpID)
 
             return predicate
@@ -141,61 +147,70 @@ public class DoseStore {
         }
     }
 
+    /**
+     Adds and persists a new reservoir value
+
+     - parameter unitVolume:        The reservoir volume, in units
+     - parameter date:              The date of the volume reading
+     - parameter completionHandler: A closure called after the value was saved. This closure takes two arguments:
+        - value: The reservoir value, if it was saved
+        - error: An error object explaining why the value could not be saved
+     */
     public func addReservoirValue(unitVolume: Double, atDate date: NSDate, completionHandler: (value: ReservoirValue?, error: Error?) -> Void) {
-
-        if let pumpID = pumpID, persistenceController = persistenceController {
-            persistenceController.managedObjectContext.performBlock {
-                let reservoir = Reservoir.insertNewObjectInContext(persistenceController.managedObjectContext)
-
-                reservoir.volume = unitVolume
-                reservoir.date = date
-                reservoir.pumpID = pumpID
-
-                if self.recentReservoirObjectsCache != nil, let predicate = self.recentReservoirValuesPredicate {
-                    self.recentReservoirObjectsCache = self.recentReservoirObjectsCache!.filter { predicate.evaluateWithObject($0) }
-
-                    if self.recentReservoirDoseEntriesCache != nil, let
-                        basalProfile = self.basalProfile,
-                        minEndDate = self.recentReservoirValuesStartDate
-                    {
-                        self.recentReservoirDoseEntriesCache = self.recentReservoirDoseEntriesCache!.filter { $0.endDate >= minEndDate }
-
-                        var newValues: [Reservoir] = []
-
-                        if let previousValue = self.recentReservoirObjectsCache?.first {
-                            newValues.append(previousValue)
-                        }
-
-                        newValues.append(reservoir)
-
-                        let newDoseEntries = InsulinMath.doseEntriesFromReservoirValues(newValues)
-
-                        self.recentReservoirDoseEntriesCache! += newDoseEntries
-
-                        if self.recentReservoirNormalizedDoseEntriesCache != nil {
-                            self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filter { $0.endDate > minEndDate }
-
-                            self.recentReservoirNormalizedDoseEntriesCache! += InsulinMath.normalize(newDoseEntries, againstBasalSchedule: basalProfile)
-                        }
-                    }
-
-                    self.recentReservoirObjectsCache!.insert(reservoir, atIndex: 0)
-                }
-
-                self.clearCalculationCache()
-
-                persistenceController.save { (error) -> Void in
-                    if let error = error {
-                        completionHandler(value: reservoir, error: .PersistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion))
-                    } else {
-                        completionHandler(value: reservoir, error: nil)
-                    }
-
-                    NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ReservoirValuesDidChangeNotification, object: self)
-                }
-            }
-        } else {
+        guard let pumpID = pumpID, persistenceController = persistenceController else {
             completionHandler(value: nil, error: .ConfigurationError)
+            return
+        }
+
+        persistenceController.managedObjectContext.performBlock {
+            let reservoir = Reservoir.insertNewObjectInContext(persistenceController.managedObjectContext)
+
+            reservoir.volume = unitVolume
+            reservoir.date = date
+            reservoir.pumpID = pumpID
+
+            if self.recentReservoirObjectsCache != nil, let predicate = self.recentReservoirValuesPredicate {
+                self.recentReservoirObjectsCache = self.recentReservoirObjectsCache!.filter { predicate.evaluateWithObject($0) }
+
+                if self.recentReservoirDoseEntriesCache != nil, let
+                    basalProfile = self.basalProfile,
+                    minEndDate = self.recentValuesStartDate
+                {
+                    self.recentReservoirDoseEntriesCache = self.recentReservoirDoseEntriesCache!.filter { $0.endDate >= minEndDate }
+
+                    var newValues: [Reservoir] = []
+
+                    if let previousValue = self.recentReservoirObjectsCache?.first {
+                        newValues.append(previousValue)
+                    }
+
+                    newValues.append(reservoir)
+
+                    let newDoseEntries = InsulinMath.doseEntriesFromReservoirValues(newValues)
+
+                    self.recentReservoirDoseEntriesCache! += newDoseEntries
+
+                    if self.recentReservoirNormalizedDoseEntriesCache != nil {
+                        self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filter { $0.endDate > minEndDate }
+
+                        self.recentReservoirNormalizedDoseEntriesCache! += InsulinMath.normalize(newDoseEntries, againstBasalSchedule: basalProfile)
+                    }
+                }
+
+                self.recentReservoirObjectsCache!.insert(reservoir, atIndex: 0)
+            }
+
+            self.clearCalculationCache()
+
+            persistenceController.save { (error) -> Void in
+                if let error = error {
+                    completionHandler(value: reservoir, error: .PersistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion))
+                } else {
+                    completionHandler(value: reservoir, error: nil)
+                }
+
+                NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ReservoirValuesDidChangeNotification, object: self)
+            }
         }
     }
 
@@ -310,6 +325,14 @@ public class DoseStore {
         }
     }
 
+    /**
+     Deletes a persisted reservoir value
+
+     - parameter value:             The value to delete
+     - parameter completionHandler: A closure called after the value was deleted. This closure takes two arguments:
+        - deletedValues: An array of removed values
+        - error:         An error object explaining why the value could not be deleted
+     */
     public func deleteReservoirValue(value: ReservoirValue, completionHandler: (deletedValues: [ReservoirValue], error: Error?) -> Void) {
 
         if let persistenceController = persistenceController {
@@ -384,7 +407,85 @@ public class DoseStore {
         }
     }
 
-    // MARK: Math
+    // MARK: - Pump Event History
+
+    /// The earliest event date that should included in subsequent queries for pump event data.
+    public private(set) var pumpEventQueryAfterDate = NSDate.distantPast()
+
+    private var mutablePumpEventDoses: [DoseEntry]?
+
+    /**
+     Adds and persists new pump events.
+     
+     Events are deduplicated by a unique constraint of pump ID, date, and raw data.
+
+     - parameter events:            An array of event tuples
+     - parameter completionHandler: A closure called after the events are saved. The closure takes a single argument:
+        - error: An error object explaining why the events could not be saved.
+     */
+    public func addPumpEvents(events: [(date: NSDate, dose: DoseEntry?, raw: NSData?, isMutable: Bool)], completionHandler: (error: Error?) -> Void) {
+        guard let pumpID = pumpID, persistenceController = persistenceController else {
+            completionHandler(error: .ConfigurationError)
+            return
+        }
+
+        guard events.count > 0 else {
+            completionHandler(error: nil)
+            return
+        }
+
+        persistenceController.managedObjectContext.performBlock {
+            var lastFinalDate: NSDate?
+            var firstMutableDate: NSDate?
+
+            var mutablePumpEventDoses: [DoseEntry] = []
+
+            for event in events {
+                if event.isMutable {
+                    firstMutableDate = min(event.date, firstMutableDate ?? event.date)
+
+                    if let dose = event.dose {
+                        mutablePumpEventDoses.append(dose)
+                    }
+                } else {
+                    lastFinalDate = max(event.date, lastFinalDate ?? event.date)
+
+                    let object = PumpEvent.insertNewObjectInContext(persistenceController.managedObjectContext)
+
+                    object.date = event.date
+                    object.pumpID = pumpID
+                    object.raw = event.raw
+
+                    if let dose = event.dose {
+                        object.duration = dose.endDate.timeIntervalSinceDate(dose.startDate)
+                        object.type = dose.type
+                        object.unit = dose.unit
+                        object.value = dose.value
+                    } else {
+                        object.type = .Other
+                    }
+                }
+            }
+
+            self.mutablePumpEventDoses = mutablePumpEventDoses
+
+            if let mutableDate = firstMutableDate {
+                self.pumpEventQueryAfterDate = mutableDate
+            } else if let finalDate = lastFinalDate {
+                self.pumpEventQueryAfterDate = finalDate
+            }
+
+            persistenceController.save { (error) -> Void in
+                if let error = error {
+                    completionHandler(error: .PersistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion))
+                } else {
+                    completionHandler(error: nil)
+                }
+            }
+        }
+    }
+
+    // MARK: - Math
 
     /**
     *This method should only be called from within a managed object context block.*

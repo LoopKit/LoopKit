@@ -11,17 +11,6 @@ import HealthKit
 import LoopKit
 
 
-public struct InsulinValue: TimelineValue {
-    public let startDate: NSDate
-    public let value: Double
-
-    public init(startDate: NSDate, value: Double) {
-        self.startDate = startDate
-        self.value = value
-    }
-}
-
-
 struct InsulinMath {
 
     /**
@@ -174,6 +163,7 @@ struct InsulinMath {
 
                 if duration > 0 && 0 <= volumeDrop && volumeDrop <= MaximumReservoirDropPerMinute * duration.minutes {
                     doses.append(DoseEntry(
+                        type: .TempBasal,
                         startDate: previousValue.startDate,
                         endDate: value.startDate,
                         value: volumeDrop * NSTimeInterval(hours: 1) / duration,
@@ -217,6 +207,7 @@ struct InsulinMath {
             }
 
             normalizedDoses.append(DoseEntry(
+                type: dose.type,
                 startDate: startDate,
                 endDate: endDate,
                 value: value,

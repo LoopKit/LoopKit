@@ -52,6 +52,19 @@ class PumpEvent: NSManagedObject {
         }
     }
 
+    var value: Double? {
+        get {
+            willAccessValueForKey("value")
+            defer { didAccessValueForKey("value") }
+            return primitiveValue?.doubleValue
+        }
+        set {
+            willChangeValueForKey("value")
+            defer { didChangeValueForKey("value") }
+            primitiveValue = newValue != nil ? NSNumber(double: newValue!) : nil
+        }
+    }
+
     override func awakeFromInsert() {
         super.awakeFromInsert()
 

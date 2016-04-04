@@ -164,6 +164,8 @@
 		43DFE27D1CB1D6A600EFBE95 /* PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27B1CB1D6A600EFBE95 /* PumpEvent.swift */; };
 		43DFE27E1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */; };
 		43DFE2801CB1E12D00EFBE95 /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27F1CB1E12D00EFBE95 /* PumpEventType.swift */; };
+		43DFE2821CB1FB8500EFBE95 /* InsulinValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */; };
+		43DFE2841CB2009C00EFBE95 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE2831CB2009C00EFBE95 /* NSUserDefaults.swift */; };
 		43FADDFB1C89679200DDE013 /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */; };
 /* End PBXBuildFile section */
 
@@ -408,6 +410,8 @@
 		43DFE27B1CB1D6A600EFBE95 /* PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEvent.swift; sourceTree = "<group>"; };
 		43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PumpEvent+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		43DFE27F1CB1E12D00EFBE95 /* PumpEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEventType.swift; sourceTree = "<group>"; };
+		43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinValue.swift; sourceTree = "<group>"; };
+		43DFE2831CB2009C00EFBE95 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -743,6 +747,8 @@
 				43C094451CAA1E98001F6403 /* DoseUnit.swift */,
 				43D8FEDE1C7294D50073BE78 /* Fetchable.swift */,
 				43D8FEDF1C7294D50073BE78 /* InsulinMath.swift */,
+				43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */,
+				43DFE2831CB2009C00EFBE95 /* NSUserDefaults.swift */,
 				43D8FEE21C7294D50073BE78 /* PersistenceController.swift */,
 				43DFE27B1CB1D6A600EFBE95 /* PumpEvent.swift */,
 				43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */,
@@ -1383,7 +1389,9 @@
 				43D8FEEB1C7294D50073BE78 /* Reservoir.swift in Sources */,
 				43D8FEE81C7294D50073BE78 /* InsulinMath.swift in Sources */,
 				43DFE27D1CB1D6A600EFBE95 /* PumpEvent.swift in Sources */,
+				43DFE2821CB1FB8500EFBE95 /* InsulinValue.swift in Sources */,
 				43D8FEF31C7294E90073BE78 /* ReservoirTableViewController.swift in Sources */,
+				43DFE2841CB2009C00EFBE95 /* NSUserDefaults.swift in Sources */,
 				43D8FEE71C7294D50073BE78 /* Fetchable.swift in Sources */,
 				43D8FEE91C7294D50073BE78 /* Model.xcdatamodeld in Sources */,
 				43C094461CAA1E98001F6403 /* DoseUnit.swift in Sources */,
