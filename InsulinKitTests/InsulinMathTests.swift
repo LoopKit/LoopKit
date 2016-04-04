@@ -37,7 +37,14 @@ class InsulinMathTests: XCTestCase {
         return fixture.map {
             let unit = $0["unit"] as! String == "U/hour" ? DoseUnit.UnitsPerHour : DoseUnit.Units
 
-            return DoseEntry(startDate: dateFormatter.dateFromString($0["start_at"] as! String)!, endDate: dateFormatter.dateFromString($0["end_at"] as! String)!, value: $0["amount"] as! Double, unit: unit, description: $0["description"] as? String)
+            return DoseEntry(
+                type: PumpEventType(rawValue: $0["type"] as! String)!,
+                startDate: dateFormatter.dateFromString($0["start_at"] as! String)!,
+                endDate: dateFormatter.dateFromString($0["end_at"] as! String)!,
+                value: $0["amount"] as! Double,
+                unit: unit,
+                description: $0["description"] as? String
+            )
         }
     }
 
