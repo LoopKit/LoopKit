@@ -1,5 +1,5 @@
 //
-//  Dose+CoreDataProperties.swift
+//  PumpEvent+CoreDataProperties.swift
 //  LoopKit
 //
 //  Created by Nathan Racklyeft on 3/28/16.
@@ -12,13 +12,14 @@
 import Foundation
 import CoreData
 
-extension Dose {
+extension PumpEvent {
 
     @NSManaged var createdAt: NSDate!
     @NSManaged var date: NSDate!
     @NSManaged var primitiveDuration: NSNumber?
-    @NSManaged var primitiveUnit: String?
     @NSManaged var primitiveType: String?
+    @NSManaged var primitiveUnit: String?
+    @NSManaged var primitiveValue: NSNumber?
     @NSManaged var pumpID: String?
     @NSManaged var raw: NSData?
 

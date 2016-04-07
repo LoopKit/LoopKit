@@ -42,6 +42,7 @@ class PersistenceController {
 
     init(readyCallback: (error: Error?) -> Void) {
         privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        privateManagedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
 
         initializeStack(readyCallback)
 

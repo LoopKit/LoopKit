@@ -1,5 +1,5 @@
 //
-//  Dose.swift
+//  PumpEvent.swift
 //  LoopKit
 //
 //  Created by Nathan Racklyeft on 3/28/16.
@@ -11,7 +11,7 @@ import CoreData
 import LoopKit
 
 
-class Dose: NSManagedObject {
+class PumpEvent: NSManagedObject {
 
     var duration: NSTimeInterval! {
         get {
@@ -39,16 +39,29 @@ class Dose: NSManagedObject {
         }
     }
 
-    var type: DoseType? {
+    var type: PumpEventType? {
         get {
             willAccessValueForKey("type")
             defer { didAccessValueForKey("type") }
-            return DoseType(rawValue: primitiveType ?? "")
+            return PumpEventType(rawValue: primitiveType ?? "")
         }
         set {
             willChangeValueForKey("type")
             defer { didChangeValueForKey("type") }
             primitiveType = newValue?.rawValue
+        }
+    }
+
+    var value: Double? {
+        get {
+            willAccessValueForKey("value")
+            defer { didAccessValueForKey("value") }
+            return primitiveValue?.doubleValue
+        }
+        set {
+            willChangeValueForKey("value")
+            defer { didChangeValueForKey("value") }
+            primitiveValue = newValue != nil ? NSNumber(double: newValue!) : nil
         }
     }
 
@@ -60,10 +73,10 @@ class Dose: NSManagedObject {
 }
 
 
-extension Dose: Fetchable { }
+extension PumpEvent: Fetchable { }
 
 
-extension Dose: TimelineValue {
+extension PumpEvent: TimelineValue {
     var startDate: NSDate {
         return date
     }
