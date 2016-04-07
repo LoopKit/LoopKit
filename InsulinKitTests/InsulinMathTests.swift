@@ -205,7 +205,7 @@ class InsulinMathTests: XCTestCase {
 
     func testReconcileDoses() {
         let input = loadDoseFixture("reconcile_history_input")
-        let output = loadDoseFixture("reconcile_history_input")
+        let output = loadDoseFixture("reconcile_history_output")
 
         let doses = InsulinMath.reconcileDoses(input, endDate: NSDate())
 

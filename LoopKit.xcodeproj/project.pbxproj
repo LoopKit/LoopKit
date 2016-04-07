@@ -27,6 +27,7 @@
 		434872791CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872761CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_input.json */; };
 		4348727A1CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872771CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_output.json */; };
 		4348727B1CB6256500E55D75 /* reconcile_history_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872781CB6256500E55D75 /* reconcile_history_input.json */; };
+		4348727D1CB626E500E55D75 /* reconcile_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 4348727C1CB626E500E55D75 /* reconcile_history_output.json */; };
 		435F355E1C9CD16A00C204D2 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */; };
 		435F35611C9CD25F00C204D2 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */; };
 		43971A401C8CABFF0013154F /* GlucoseSampleValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */; };
@@ -272,6 +273,7 @@
 		434872761CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_bolus_wizard_duplicates_input.json; sourceTree = "<group>"; };
 		434872771CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_bolus_wizard_duplicates_output.json; sourceTree = "<group>"; };
 		434872781CB6256500E55D75 /* reconcile_history_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_input.json; sourceTree = "<group>"; };
+		4348727C1CB626E500E55D75 /* reconcile_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_output.json; sourceTree = "<group>"; };
 		435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
 		43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseSampleValue.swift; sourceTree = "<group>"; };
@@ -801,6 +803,7 @@
 				434872761CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_input.json */,
 				434872771CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_output.json */,
 				434872781CB6256500E55D75 /* reconcile_history_input.json */,
+				4348727C1CB626E500E55D75 /* reconcile_history_output.json */,
 				43D8FED11C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_input.json */,
 				43D8FED21C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json */,
 				43B99B031C74538D00D050F5 /* short_basal_dose.json */,
@@ -1258,6 +1261,7 @@
 				43B99B061C74552300D050F5 /* basal_dose.json in Resources */,
 				4348727B1CB6256500E55D75 /* reconcile_history_input.json in Resources */,
 				43CE7CE81CA9EC1F003CC1B0 /* iob_from_bolus_312min_output.json in Resources */,
+				4348727D1CB626E500E55D75 /* reconcile_history_output.json in Resources */,
 				43D8FED61C7294B80073BE78 /* iob_from_doses_output.json in Resources */,
 				43D8FEF61C72954F0073BE78 /* basal.json in Resources */,
 				43B99B081C74553900D050F5 /* effect_from_basal_output.json in Resources */,
