@@ -203,7 +203,8 @@ class InsulinMathTests: XCTestCase {
         }
     }
 
-    func testReconcileDoses() {
+    func testReconcileTempBasals() {
+        // Fixture contains numerous overlapping temp basals, as well as a Suspend - Resume event interleaved with a temp basal
         let input = loadDoseFixture("reconcile_history_input")
         let output = loadDoseFixture("reconcile_history_output")
 
@@ -233,6 +234,14 @@ class InsulinMathTests: XCTestCase {
             XCTAssertEqual(expected.value, calculated.value)
             XCTAssertEqual(expected.unit, calculated.unit)
         }
+    }
+
+    func testReconcileUnbalancedSuspend() {
+        XCTFail("Migrate fixture")
+    }
+
+    func testReconcileUnbalancedResume() {
+        XCTFail("Migrate fixture")
     }
 
     func testGlucoseEffectFromBolus() {

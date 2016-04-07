@@ -320,6 +320,14 @@
         "unit": "percent"
     },
     {
+        "amount": 2.5,
+        "description": "TempBasal: 2.5U/hour over 30min",
+        "end_at": "2016-02-15T20:36:08",
+        "start_at": "2016-02-15T20:25:01",
+        "type": "TempBasal",
+        "unit": "U/hour"
+    },
+    {
         "amount": 0.65,
         "description": "Normal bolus: 1.15U",
         "end_at": "2016-02-15T20:18:54",
