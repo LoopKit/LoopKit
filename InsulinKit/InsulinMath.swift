@@ -179,7 +179,17 @@ struct InsulinMath {
         return doses
     }
 
-    private static func reconcileDoses<T: CollectionType where T.Generator.Element == DoseEntry>(doses: T) -> [DoseEntry] {
+    /**
+     Maps a timeline of dose entries with overlapping start and end dates to a timeline of doses that represents actual insulin delivery.
+
+     - parameter doses:     A timeline of dose entries, in chronological order
+     - parameter startDate: The start of the date range covered by the input doses. If an unpaired PumpResume entry is found, this date will be the assumed suspend date.
+     - parameter endDate:   The end of the date range covered by the input doses. If an unpaired PumpSuspend entry is found, this date will be the assumed resume date. Defaults to the current system date.
+
+     - returns: An array of reconciled insulin delivery history, as TempBasal and Bolus records
+     */
+    static func reconcileDoses<T: CollectionType where T.Generator.Element == DoseEntry>(doses: T, betweenStartDate startDate: NSDate? = nil, endDate: NSDate = NSDate()) -> [DoseEntry] {
+
 
         return []
     }
@@ -219,6 +229,16 @@ struct InsulinMath {
         return normalizedDoses
     }
 
+    /**
+     Normalizes a sequence of dose entries against a basal rate schedule to a new sequence where each TempBasal value is relative to the scheduled basal value during that time period.
+
+     Doses which cross boundaries in the basal rate schedule are split into multiple entries.
+
+     - parameter doses:         A sequence of dose entries
+     - parameter basalSchedule: The basal rate schedule to normalize against
+
+     - returns: An array of normalized dose entries
+     */
     static func normalize<T: CollectionType where T.Generator.Element == DoseEntry>(doses: T, againstBasalSchedule basalSchedule: BasalRateSchedule) -> [DoseEntry] {
 
         var normalizedDoses: [DoseEntry] = []
