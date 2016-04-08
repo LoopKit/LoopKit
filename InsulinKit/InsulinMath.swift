@@ -235,8 +235,6 @@ struct InsulinMath {
                 }
 
                 reconciled.append(dose)
-            case .Other:
-                break
             }
         }
 
