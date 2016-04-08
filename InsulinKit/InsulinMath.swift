@@ -183,15 +183,68 @@ struct InsulinMath {
      Maps a timeline of dose entries with overlapping start and end dates to a timeline of doses that represents actual insulin delivery.
 
      - parameter doses:     A timeline of dose entries, in chronological order
-     - parameter startDate: The start of the date range covered by the input doses. If an unpaired PumpResume entry is found, this date will be the assumed suspend date.
-     - parameter endDate:   The end of the date range covered by the input doses. If an unpaired PumpSuspend entry is found, this date will be the assumed resume date. Defaults to the current system date.
 
      - returns: An array of reconciled insulin delivery history, as TempBasal and Bolus records
      */
-    static func reconcileDoses<T: CollectionType where T.Generator.Element == DoseEntry>(doses: T, betweenStartDate startDate: NSDate? = nil, endDate: NSDate = NSDate()) -> [DoseEntry] {
+    static func reconcileDoses<T: CollectionType where T.Generator.Element == DoseEntry>(doses: T) -> [DoseEntry] {
 
+        var reconciled: [DoseEntry] = []
 
-        return []
+        var lastTempBasal: DoseEntry?
+
+        for dose in doses {
+            switch dose.type {
+            case .Bolus:
+                reconciled.append(dose)
+            case .TempBasal:
+                if let temp = lastTempBasal {
+                    reconciled.append(DoseEntry(
+                        type: temp.type,
+                        startDate: temp.startDate,
+                        endDate: min(temp.endDate, dose.startDate),
+                        value: temp.value,
+                        unit: temp.unit,
+                        description: temp.description
+                    ))
+                }
+
+                lastTempBasal = dose
+            case .Suspend:
+                if let temp = lastTempBasal {
+                    reconciled.append(DoseEntry(
+                        type: temp.type,
+                        startDate: temp.startDate,
+                        endDate: min(temp.endDate, dose.startDate),
+                        value: temp.value,
+                        unit: temp.unit,
+                        description: temp.description
+                    ))
+
+                    if temp.endDate > dose.endDate {
+                        lastTempBasal = DoseEntry(
+                            type: temp.type,
+                            startDate: dose.endDate,
+                            endDate: temp.endDate,
+                            value: temp.value,
+                            unit: temp.unit,
+                            description: temp.description
+                        )
+                    } else {
+                        lastTempBasal = nil
+                    }
+                }
+
+                reconciled.append(dose)
+            case .Other:
+                break
+            }
+        }
+
+        if let temp = lastTempBasal {
+            reconciled.append(temp)
+        }
+
+        return reconciled
     }
 
     private static func normalizeBasalDose(dose: DoseEntry, againstBasalSchedule basalSchedule: BasalRateSchedule) -> [DoseEntry] {

@@ -24,8 +24,6 @@
 		4301582B1C7ECCEF00B64B63 /* LoopKitExample.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */; };
 		4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
 		4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
-		434872791CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872761CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_input.json */; };
-		4348727A1CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872771CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_output.json */; };
 		4348727B1CB6256500E55D75 /* reconcile_history_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872781CB6256500E55D75 /* reconcile_history_input.json */; };
 		4348727D1CB626E500E55D75 /* reconcile_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 4348727C1CB626E500E55D75 /* reconcile_history_output.json */; };
 		435F355E1C9CD16A00C204D2 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */; };
@@ -270,8 +268,6 @@
 		4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoopKitExample.entitlements; sourceTree = "<group>"; };
 		4301582C1C7ECD7A00B64B63 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
-		434872761CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_bolus_wizard_duplicates_input.json; sourceTree = "<group>"; };
-		434872771CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_bolus_wizard_duplicates_output.json; sourceTree = "<group>"; };
 		434872781CB6256500E55D75 /* reconcile_history_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_input.json; sourceTree = "<group>"; };
 		4348727C1CB626E500E55D75 /* reconcile_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_output.json; sourceTree = "<group>"; };
 		435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
@@ -800,8 +796,6 @@
 				43CE7CEF1CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json */,
 				43B99B011C7451E500D050F5 /* normalized_doses.json */,
 				43D8FED01C7294B80073BE78 /* normalized_reservoir_history_output.json */,
-				434872761CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_input.json */,
-				434872771CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_output.json */,
 				434872781CB6256500E55D75 /* reconcile_history_input.json */,
 				4348727C1CB626E500E55D75 /* reconcile_history_output.json */,
 				43D8FED11C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_input.json */,
@@ -1270,8 +1264,6 @@
 				43CE7CEE1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json in Resources */,
 				43D8FED81C7294B80073BE78 /* normalized_reservoir_history_output.json in Resources */,
 				43D8FEDA1C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json in Resources */,
-				434872791CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_input.json in Resources */,
-				4348727A1CB6256500E55D75 /* reconcile_bolus_wizard_duplicates_output.json in Resources */,
 				43CE7CEA1CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json in Resources */,
 				43CE7CF01CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json in Resources */,
 				43D8FED71C7294B80073BE78 /* iob_from_reservoir_output.json in Resources */,

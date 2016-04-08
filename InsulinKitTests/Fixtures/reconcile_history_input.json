@@ -316,8 +316,8 @@
         "description": "Pump Suspend",
         "end_at": "2016-02-15T20:25:01",
         "start_at": "2016-02-15T20:19:21",
-        "type": "TempBasal",
-        "unit": "percent"
+        "type": "PumpSuspend",
+        "unit": "U/hour"
     },
     {
         "amount": 0.65,
