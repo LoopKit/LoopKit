@@ -1,0 +1,58 @@
+[
+    {
+        "amount": 2.0,
+        "description": "Normal bolus: 2.0U",
+        "end_at": "2015-06-05T16:21:01",
+        "start_at": "2015-06-05T16:21:01",
+        "type": "Bolus",
+        "unit": "U"
+    },
+    {
+        "amount": 65,
+        "description": "BolusWizard: 65g",
+        "end_at": "2015-06-05T18:44:47",
+        "start_at": "2015-06-05T18:44:47",
+        "type": "Meal",
+        "unit": "g"
+    },
+    {
+        "amount": 65,
+        "description": "BolusWizard: 65g",
+        "end_at": "2015-06-05T18:44:54",
+        "start_at": "2015-06-05T18:44:54",
+        "type": "Meal",
+        "unit": "g"
+    },
+    {
+        "amount": 0.6,
+        "description": "Normal bolus: 0.6U",
+        "end_at": "2015-06-05T18:44:54",
+        "start_at": "2015-06-05T18:44:54",
+        "type": "Bolus",
+        "unit": "U"
+    },
+    {
+        "amount": 30,
+        "description": "BolusWizard: 30g",
+        "end_at": "2015-06-05T18:54:43",
+        "start_at": "2015-06-05T18:54:43",
+        "type": "Meal",
+        "unit": "g"
+    },
+    {
+        "amount": 2.0,
+        "description": "Normal bolus: 2.0U",
+        "end_at": "2015-06-05T18:54:43",
+        "start_at": "2015-06-05T18:54:43",
+        "type": "Bolus",
+        "unit": "U"
+    },
+    {
+        "amount": 10,
+        "description": "BolusWizard: 10g",
+        "end_at": "2015-06-05T18:57:22",
+        "start_at": "2015-06-05T18:57:22",
+        "type": "Meal",
+        "unit": "g"
+    }
+]

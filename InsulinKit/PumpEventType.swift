@@ -11,8 +11,6 @@ import Foundation
 
 public enum PumpEventType: String {
     case Bolus     = "Bolus"
-    case Resume    = "PumpResume"
     case Suspend   = "PumpSuspend"
     case TempBasal = "TempBasal"
-    case Other     = "Other"
 }

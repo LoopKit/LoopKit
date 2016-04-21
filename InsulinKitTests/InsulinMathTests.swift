@@ -34,11 +34,15 @@ class InsulinMathTests: XCTestCase {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
         let dateFormatter = NSDateFormatter.ISO8601LocalTimeDateFormatter()
 
-        return fixture.map {
-            let unit = $0["unit"] as! String == "U/hour" ? DoseUnit.UnitsPerHour : DoseUnit.Units
+        return fixture.flatMap {
+            guard let unit = DoseUnit(rawValue: $0["unit"] as! String),
+                  let type = PumpEventType(rawValue: $0["type"] as! String)
+            else {
+                return nil
+            }
 
             return DoseEntry(
-                type: PumpEventType(rawValue: $0["type"] as! String)!,
+                type: type,
                 startDate: dateFormatter.dateFromString($0["start_at"] as! String)!,
                 endDate: dateFormatter.dateFromString($0["end_at"] as! String)!,
                 value: $0["amount"] as! Double,
@@ -192,6 +196,23 @@ class InsulinMathTests: XCTestCase {
         }
 
         let doses = InsulinMath.normalize(input, againstBasalSchedule: basals)
+
+        XCTAssertEqual(output.count, doses.count)
+
+        for (expected, calculated) in zip(output, doses) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqual(expected.endDate, calculated.endDate)
+            XCTAssertEqual(expected.value, calculated.value)
+            XCTAssertEqual(expected.unit, calculated.unit)
+        }
+    }
+
+    func testReconcileTempBasals() {
+        // Fixture contains numerous overlapping temp basals, as well as a Suspend event interleaved with a temp basal
+        let input = loadDoseFixture("reconcile_history_input")
+        let output = loadDoseFixture("reconcile_history_output").sort { $0.startDate < $1.startDate }
+
+        let doses = InsulinMath.reconcileDoses(input).sort { $0.startDate < $1.startDate }
 
         XCTAssertEqual(output.count, doses.count)
 

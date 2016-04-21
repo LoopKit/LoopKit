@@ -461,8 +461,6 @@ public class DoseStore {
                         object.type = dose.type
                         object.unit = dose.unit
                         object.value = dose.value
-                    } else {
-                        object.type = .Other
                     }
                 }
             }

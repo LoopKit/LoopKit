@@ -179,9 +179,70 @@ struct InsulinMath {
         return doses
     }
 
-    private static func reconcileDoses<T: CollectionType where T.Generator.Element == DoseEntry>(doses: T) -> [DoseEntry] {
+    /**
+     Maps a timeline of dose entries with overlapping start and end dates to a timeline of doses that represents actual insulin delivery.
 
-        return []
+     - parameter doses:     A timeline of dose entries, in chronological order
+
+     - returns: An array of reconciled insulin delivery history, as TempBasal and Bolus records
+     */
+    static func reconcileDoses<T: CollectionType where T.Generator.Element == DoseEntry>(doses: T) -> [DoseEntry] {
+
+        var reconciled: [DoseEntry] = []
+
+        var lastTempBasal: DoseEntry?
+
+        for dose in doses {
+            switch dose.type {
+            case .Bolus:
+                reconciled.append(dose)
+            case .TempBasal:
+                if let temp = lastTempBasal {
+                    reconciled.append(DoseEntry(
+                        type: temp.type,
+                        startDate: temp.startDate,
+                        endDate: min(temp.endDate, dose.startDate),
+                        value: temp.value,
+                        unit: temp.unit,
+                        description: temp.description
+                    ))
+                }
+
+                lastTempBasal = dose
+            case .Suspend:
+                if let temp = lastTempBasal {
+                    reconciled.append(DoseEntry(
+                        type: temp.type,
+                        startDate: temp.startDate,
+                        endDate: min(temp.endDate, dose.startDate),
+                        value: temp.value,
+                        unit: temp.unit,
+                        description: temp.description
+                    ))
+
+                    if temp.endDate > dose.endDate {
+                        lastTempBasal = DoseEntry(
+                            type: temp.type,
+                            startDate: dose.endDate,
+                            endDate: temp.endDate,
+                            value: temp.value,
+                            unit: temp.unit,
+                            description: temp.description
+                        )
+                    } else {
+                        lastTempBasal = nil
+                    }
+                }
+
+                reconciled.append(dose)
+            }
+        }
+
+        if let temp = lastTempBasal {
+            reconciled.append(temp)
+        }
+
+        return reconciled
     }
 
     private static func normalizeBasalDose(dose: DoseEntry, againstBasalSchedule basalSchedule: BasalRateSchedule) -> [DoseEntry] {
@@ -219,6 +280,16 @@ struct InsulinMath {
         return normalizedDoses
     }
 
+    /**
+     Normalizes a sequence of dose entries against a basal rate schedule to a new sequence where each TempBasal value is relative to the scheduled basal value during that time period.
+
+     Doses which cross boundaries in the basal rate schedule are split into multiple entries.
+
+     - parameter doses:         A sequence of dose entries
+     - parameter basalSchedule: The basal rate schedule to normalize against
+
+     - returns: An array of normalized dose entries
+     */
     static func normalize<T: CollectionType where T.Generator.Element == DoseEntry>(doses: T, againstBasalSchedule basalSchedule: BasalRateSchedule) -> [DoseEntry] {
 
         var normalizedDoses: [DoseEntry] = []
