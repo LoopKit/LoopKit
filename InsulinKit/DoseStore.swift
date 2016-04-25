@@ -153,12 +153,13 @@ public class DoseStore {
      - parameter unitVolume:        The reservoir volume, in units
      - parameter date:              The date of the volume reading
      - parameter completionHandler: A closure called after the value was saved. This closure takes two arguments:
-        - value: The reservoir value, if it was saved
-        - error: An error object explaining why the value could not be saved
+        - value:         The new reservoir value, if it was saved
+        - previousValue: The last new reservoir value
+        - error:         An error object explaining why the value could not be saved
      */
-    public func addReservoirValue(unitVolume: Double, atDate date: NSDate, completionHandler: (value: ReservoirValue?, error: Error?) -> Void) {
+    public func addReservoirValue(unitVolume: Double, atDate date: NSDate, completionHandler: (value: ReservoirValue?, previousValue: ReservoirValue?, error: Error?) -> Void) {
         guard let pumpID = pumpID, persistenceController = persistenceController else {
-            completionHandler(value: nil, error: .ConfigurationError)
+            completionHandler(value: nil, previousValue: nil, error: .ConfigurationError)
             return
         }
 
@@ -168,6 +169,8 @@ public class DoseStore {
             reservoir.volume = unitVolume
             reservoir.date = date
             reservoir.pumpID = pumpID
+
+            let previousValue = self.recentReservoirObjectsCache?.first
 
             if self.recentReservoirObjectsCache != nil, let predicate = self.recentReservoirValuesPredicate {
                 self.recentReservoirObjectsCache = self.recentReservoirObjectsCache!.filter { predicate.evaluateWithObject($0) }
@@ -204,9 +207,9 @@ public class DoseStore {
 
             persistenceController.save { (error) -> Void in
                 if let error = error {
-                    completionHandler(value: reservoir, error: .PersistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion))
+                    completionHandler(value: reservoir, previousValue: previousValue, error: .PersistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion))
                 } else {
-                    completionHandler(value: reservoir, error: nil)
+                    completionHandler(value: reservoir, previousValue: previousValue, error: nil)
                 }
 
                 NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ReservoirValuesDidChangeNotification, object: self)
