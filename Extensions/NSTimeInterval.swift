@@ -9,7 +9,7 @@
 import Foundation
 
 
-public extension NSTimeInterval {
+extension NSTimeInterval {
     init(minutes: Double) {
         self.init(minutes * 60)
     }

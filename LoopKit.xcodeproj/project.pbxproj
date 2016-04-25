@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4300591E1CCDC65B00C861EA /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
+		4300591F1CCDC67900C861EA /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
+		430059201CCDC68200C861EA /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430157F91C7EC03B00B64B63 /* AppDelegate.swift */; };
 		430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430157FB1C7EC03B00B64B63 /* MasterViewController.swift */; };
 		430158011C7EC03B00B64B63 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 430157FF1C7EC03B00B64B63 /* Main.storyboard */; };
@@ -505,6 +508,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		430059211CCDC7A200C861EA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		430157F81C7EC03B00B64B63 /* LoopKit Example */ = {
 			isa = PBXGroup;
 			children = (
@@ -549,19 +560,20 @@
 		43D8FDC11C728FDF0073BE78 = {
 			isa = PBXGroup;
 			children = (
+				4301582C1C7ECD7A00B64B63 /* HealthKit.framework */,
 				43D8FE2B1C72914D0073BE78 /* CarbKit */,
 				43D8FE371C72914D0073BE78 /* CarbKitTests */,
+				430059211CCDC7A200C861EA /* Extensions */,
 				43D8FE651C7292690073BE78 /* Fixtures */,
 				43D8FE701C7293070073BE78 /* GlucoseKit */,
 				43D8FE8F1C7293C70073BE78 /* GlucoseKitTests */,
 				43D8FEB21C7294520073BE78 /* InsulinKit */,
 				43D8FEBE1C7294520073BE78 /* InsulinKitTests */,
 				43D8FDCD1C728FDF0073BE78 /* LoopKit */,
-				43D8FDD91C728FDF0073BE78 /* LoopKitTests */,
 				430157F81C7EC03B00B64B63 /* LoopKit Example */,
 				4301580F1C7EC03B00B64B63 /* LoopKit ExampleUITests */,
+				43D8FDD91C728FDF0073BE78 /* LoopKitTests */,
 				43D8FDCC1C728FDF0073BE78 /* Products */,
-				4301582C1C7ECD7A00B64B63 /* HealthKit.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -602,7 +614,6 @@
 				43D8FDEF1C7290350073BE78 /* LoopMath.swift */,
 				43D8FDF01C7290350073BE78 /* NSDate.swift */,
 				43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */,
-				43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */,
 				43D8FDF31C7290350073BE78 /* SampleValue.swift */,
 				43D8FE031C72903B0073BE78 /* UI */,
 			);
@@ -1347,6 +1358,7 @@
 				43D8FE521C7291BD0073BE78 /* HKQuantitySample.swift in Sources */,
 				43D8FE4F1C7291BD0073BE78 /* CarbEntry.swift in Sources */,
 				43D8FE5E1C7291D80073BE78 /* CarbEntryEditViewController.swift in Sources */,
+				4300591E1CCDC65B00C861EA /* NSTimeInterval.swift in Sources */,
 				43D8FE531C7291BD0073BE78 /* StoredCarbEntry.swift in Sources */,
 				43D8FE621C7291D80073BE78 /* DecimalTextFieldTableViewCell.swift in Sources */,
 				43D8FE501C7291BD0073BE78 /* CarbMath.swift in Sources */,
@@ -1375,6 +1387,7 @@
 				43971A401C8CABFF0013154F /* GlucoseSampleValue.swift in Sources */,
 				43FADDFB1C89679200DDE013 /* HKQuantitySample.swift in Sources */,
 				43D8FE891C72934C0073BE78 /* GlucoseStore.swift in Sources */,
+				4300591F1CCDC67900C861EA /* NSTimeInterval.swift in Sources */,
 				43D8FE881C72934C0073BE78 /* GlucoseMath.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1399,6 +1412,7 @@
 				43DFE27D1CB1D6A600EFBE95 /* PumpEvent.swift in Sources */,
 				43DFE2821CB1FB8500EFBE95 /* InsulinValue.swift in Sources */,
 				43D8FEF31C7294E90073BE78 /* ReservoirTableViewController.swift in Sources */,
+				430059201CCDC68200C861EA /* NSTimeInterval.swift in Sources */,
 				43DFE2841CB2009C00EFBE95 /* NSUserDefaults.swift in Sources */,
 				43D8FEE71C7294D50073BE78 /* Fetchable.swift in Sources */,
 				43D8FEE91C7294D50073BE78 /* Model.xcdatamodeld in Sources */,
