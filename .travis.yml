@@ -4,8 +4,8 @@ xcode_sdk: iphonesimulator9.3
 xcode_project: LoopKit.xcodeproj
 xcode_scheme:
     - LoopKit
-before_install:
-    - brew update
-    - brew outdated xctool || brew upgrade xctool
+    - CarbKit
+    - InsulinKit
+    - GlucoseKit
 # script:
 #    - xcodebuild -project LoopKit.xcodeproj -scheme LoopKit -sdk iphonesimulator9.3 build test
