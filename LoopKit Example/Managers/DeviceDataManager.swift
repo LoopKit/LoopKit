@@ -22,7 +22,7 @@ class DeviceDataManager {
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )
         doseStore = DoseStore(
-            pumpID: nil,
+            pumpID: pumpID,
             insulinActionDuration: insulinActionDuration,
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
@@ -73,6 +73,14 @@ class DeviceDataManager {
     var glucoseTargetRangeSchedule = NSUserDefaults.standardUserDefaults().glucoseTargetRangeSchedule {
         didSet {
             NSUserDefaults.standardUserDefaults().glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
+        }
+    }
+
+    var pumpID = NSUserDefaults.standardUserDefaults().pumpID {
+        didSet {
+            NSUserDefaults.standardUserDefaults().pumpID = pumpID
+
+            doseStore.pumpID = pumpID
         }
     }
 

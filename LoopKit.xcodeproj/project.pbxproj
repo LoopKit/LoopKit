@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4300591E1CCDC65B00C861EA /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
+		4300591F1CCDC67900C861EA /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
+		430059201CCDC68200C861EA /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
+		430059221CCDCFBE00C861EA /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */; };
+		430059231CCDCFD100C861EA /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */; };
+		430059241CCDD08C00C861EA /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */; };
+		430059251CCDD09700C861EA /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */; };
 		430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430157F91C7EC03B00B64B63 /* AppDelegate.swift */; };
 		430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430157FB1C7EC03B00B64B63 /* MasterViewController.swift */; };
 		430158011C7EC03B00B64B63 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 430157FF1C7EC03B00B64B63 /* Main.storyboard */; };
@@ -24,6 +31,8 @@
 		4301582B1C7ECCEF00B64B63 /* LoopKitExample.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */; };
 		4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
 		4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
+		4348727B1CB6256500E55D75 /* reconcile_history_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872781CB6256500E55D75 /* reconcile_history_input.json */; };
+		4348727D1CB626E500E55D75 /* reconcile_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 4348727C1CB626E500E55D75 /* reconcile_history_output.json */; };
 		435F355E1C9CD16A00C204D2 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */; };
 		435F35611C9CD25F00C204D2 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */; };
 		43971A401C8CABFF0013154F /* GlucoseSampleValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */; };
@@ -36,6 +45,16 @@
 		43B99B041C74538D00D050F5 /* short_basal_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99B031C74538D00D050F5 /* short_basal_dose.json */; };
 		43B99B061C74552300D050F5 /* basal_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99B051C74552300D050F5 /* basal_dose.json */; };
 		43B99B081C74553900D050F5 /* effect_from_basal_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99B071C74553900D050F5 /* effect_from_basal_output.json */; };
+		43C094461CAA1E98001F6403 /* DoseUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C094451CAA1E98001F6403 /* DoseUnit.swift */; };
+		43CE7CE01CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CDF1CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json */; };
+		43CE7CE21CA9EA1A003CC1B0 /* iob_from_bolus_120min_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CE11CA9EA1A003CC1B0 /* iob_from_bolus_120min_output.json */; };
+		43CE7CE41CA9EB1E003CC1B0 /* iob_from_bolus_180min_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CE31CA9EB1E003CC1B0 /* iob_from_bolus_180min_output.json */; };
+		43CE7CE61CA9EBD2003CC1B0 /* iob_from_bolus_300min_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CE51CA9EBD2003CC1B0 /* iob_from_bolus_300min_output.json */; };
+		43CE7CE81CA9EC1F003CC1B0 /* iob_from_bolus_312min_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CE71CA9EC1F003CC1B0 /* iob_from_bolus_312min_output.json */; };
+		43CE7CEA1CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CE91CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json */; };
+		43CE7CEC1CA9EC88003CC1B0 /* iob_from_bolus_420min_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CEB1CA9EC88003CC1B0 /* iob_from_bolus_420min_output.json */; };
+		43CE7CEE1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CED1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json */; };
+		43CE7CF01CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CEF1CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json */; };
 		43D8FDCF1C728FDF0073BE78 /* LoopKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D8FDCE1C728FDF0073BE78 /* LoopKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43D8FDD61C728FDF0073BE78 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		43D8FDDB1C728FDF0073BE78 /* LoopKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDDA1C728FDF0073BE78 /* LoopKitTests.swift */; };
@@ -51,7 +70,6 @@
 		43D8FDFD1C7290350073BE78 /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
 		43D8FDFE1C7290350073BE78 /* LoopMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEF1C7290350073BE78 /* LoopMath.swift */; };
 		43D8FDFF1C7290350073BE78 /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF01C7290350073BE78 /* NSDate.swift */; };
-		43D8FE001C7290350073BE78 /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */; };
 		43D8FE011C7290350073BE78 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		43D8FE021C7290350073BE78 /* SampleValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF31C7290350073BE78 /* SampleValue.swift */; };
 		43D8FE0F1C7290530073BE78 /* DailyQuantityScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE041C7290530073BE78 /* DailyQuantityScheduleTableViewController.swift */; };
@@ -103,7 +121,6 @@
 		43D8FEAB1C7293FA0073BE78 /* momentum_effect_stable_glucose_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEA31C7293FA0073BE78 /* momentum_effect_stable_glucose_output.json */; };
 		43D8FEBB1C7294520073BE78 /* InsulinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FEB11C7294520073BE78 /* InsulinKit.framework */; };
 		43D8FEC91C7294640073BE78 /* InsulinMathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEC81C7294640073BE78 /* InsulinMathTests.swift */; };
-		43D8FED41C7294B80073BE78 /* iob_from_bolus_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FECC1C7294B80073BE78 /* iob_from_bolus_output.json */; };
 		43D8FED61C7294B80073BE78 /* iob_from_doses_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FECE1C7294B80073BE78 /* iob_from_doses_output.json */; };
 		43D8FED71C7294B80073BE78 /* iob_from_reservoir_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FECF1C7294B80073BE78 /* iob_from_reservoir_output.json */; };
 		43D8FED81C7294B80073BE78 /* normalized_reservoir_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FED01C7294B80073BE78 /* normalized_reservoir_history_output.json */; };
@@ -152,6 +169,11 @@
 		43DC87BB1C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87B91C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json */; };
 		43DC87BC1C8AD0ED005BC30D /* glucose_from_effects_non_zero_carb_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87BA1C8AD0ED005BC30D /* glucose_from_effects_non_zero_carb_input.json */; };
 		43DC87BE1C8AD41D005BC30D /* glucose_from_effects_non_zero_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87BD1C8AD41D005BC30D /* glucose_from_effects_non_zero_output.json */; };
+		43DFE27D1CB1D6A600EFBE95 /* PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27B1CB1D6A600EFBE95 /* PumpEvent.swift */; };
+		43DFE27E1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */; };
+		43DFE2801CB1E12D00EFBE95 /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27F1CB1E12D00EFBE95 /* PumpEventType.swift */; };
+		43DFE2821CB1FB8500EFBE95 /* InsulinValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */; };
+		43DFE2841CB2009C00EFBE95 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE2831CB2009C00EFBE95 /* NSUserDefaults.swift */; };
 		43FADDFB1C89679200DDE013 /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */; };
 /* End PBXBuildFile section */
 
@@ -252,6 +274,8 @@
 		4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoopKitExample.entitlements; sourceTree = "<group>"; };
 		4301582C1C7ECD7A00B64B63 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
+		434872781CB6256500E55D75 /* reconcile_history_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_input.json; sourceTree = "<group>"; };
+		4348727C1CB626E500E55D75 /* reconcile_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_output.json; sourceTree = "<group>"; };
 		435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
 		43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseSampleValue.swift; sourceTree = "<group>"; };
@@ -264,6 +288,16 @@
 		43B99B031C74538D00D050F5 /* short_basal_dose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = short_basal_dose.json; sourceTree = "<group>"; };
 		43B99B051C74552300D050F5 /* basal_dose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = basal_dose.json; sourceTree = "<group>"; };
 		43B99B071C74553900D050F5 /* effect_from_basal_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = effect_from_basal_output.json; sourceTree = "<group>"; };
+		43C094451CAA1E98001F6403 /* DoseUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseUnit.swift; sourceTree = "<group>"; };
+		43CE7CDF1CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_240min_output.json; sourceTree = "<group>"; };
+		43CE7CE11CA9EA1A003CC1B0 /* iob_from_bolus_120min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_120min_output.json; sourceTree = "<group>"; };
+		43CE7CE31CA9EB1E003CC1B0 /* iob_from_bolus_180min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_180min_output.json; sourceTree = "<group>"; };
+		43CE7CE51CA9EBD2003CC1B0 /* iob_from_bolus_300min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_300min_output.json; sourceTree = "<group>"; };
+		43CE7CE71CA9EC1F003CC1B0 /* iob_from_bolus_312min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_312min_output.json; sourceTree = "<group>"; };
+		43CE7CE91CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_360min_output.json; sourceTree = "<group>"; };
+		43CE7CEB1CA9EC88003CC1B0 /* iob_from_bolus_420min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_420min_output.json; sourceTree = "<group>"; };
+		43CE7CED1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = normalize_edge_case_doses_input.json; sourceTree = "<group>"; };
+		43CE7CEF1CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = normalize_edge_case_doses_output.json; sourceTree = "<group>"; };
 		43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoopKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D8FDCE1C728FDF0073BE78 /* LoopKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoopKit.h; sourceTree = "<group>"; };
 		43D8FDD01C728FDF0073BE78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -344,7 +378,6 @@
 		43D8FEBA1C7294520073BE78 /* InsulinKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InsulinKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D8FEC11C7294520073BE78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		43D8FEC81C7294640073BE78 /* InsulinMathTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinMathTests.swift; sourceTree = "<group>"; };
-		43D8FECC1C7294B80073BE78 /* iob_from_bolus_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_output.json; sourceTree = "<group>"; };
 		43D8FECE1C7294B80073BE78 /* iob_from_doses_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_doses_output.json; sourceTree = "<group>"; };
 		43D8FECF1C7294B80073BE78 /* iob_from_reservoir_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_reservoir_output.json; sourceTree = "<group>"; };
 		43D8FED01C7294B80073BE78 /* normalized_reservoir_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = normalized_reservoir_history_output.json; sourceTree = "<group>"; };
@@ -384,6 +417,11 @@
 		43DC87B91C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glucose_from_effects_non_zero_insulin_input.json; sourceTree = "<group>"; };
 		43DC87BA1C8AD0ED005BC30D /* glucose_from_effects_non_zero_carb_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glucose_from_effects_non_zero_carb_input.json; sourceTree = "<group>"; };
 		43DC87BD1C8AD41D005BC30D /* glucose_from_effects_non_zero_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glucose_from_effects_non_zero_output.json; sourceTree = "<group>"; };
+		43DFE27B1CB1D6A600EFBE95 /* PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEvent.swift; sourceTree = "<group>"; };
+		43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PumpEvent+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		43DFE27F1CB1E12D00EFBE95 /* PumpEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEventType.swift; sourceTree = "<group>"; };
+		43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinValue.swift; sourceTree = "<group>"; };
+		43DFE2831CB2009C00EFBE95 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -473,6 +511,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		430059211CCDC7A200C861EA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */,
+				43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		430157F81C7EC03B00B64B63 /* LoopKit Example */ = {
 			isa = PBXGroup;
 			children = (
@@ -517,19 +564,20 @@
 		43D8FDC11C728FDF0073BE78 = {
 			isa = PBXGroup;
 			children = (
+				4301582C1C7ECD7A00B64B63 /* HealthKit.framework */,
 				43D8FE2B1C72914D0073BE78 /* CarbKit */,
 				43D8FE371C72914D0073BE78 /* CarbKitTests */,
+				430059211CCDC7A200C861EA /* Extensions */,
 				43D8FE651C7292690073BE78 /* Fixtures */,
 				43D8FE701C7293070073BE78 /* GlucoseKit */,
 				43D8FE8F1C7293C70073BE78 /* GlucoseKitTests */,
 				43D8FEB21C7294520073BE78 /* InsulinKit */,
 				43D8FEBE1C7294520073BE78 /* InsulinKitTests */,
 				43D8FDCD1C728FDF0073BE78 /* LoopKit */,
-				43D8FDD91C728FDF0073BE78 /* LoopKitTests */,
 				430157F81C7EC03B00B64B63 /* LoopKit Example */,
 				4301580F1C7EC03B00B64B63 /* LoopKit ExampleUITests */,
+				43D8FDD91C728FDF0073BE78 /* LoopKitTests */,
 				43D8FDCC1C728FDF0073BE78 /* Products */,
-				4301582C1C7ECD7A00B64B63 /* HealthKit.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -569,8 +617,6 @@
 				43D8FDEE1C7290350073BE78 /* HKUnit.swift */,
 				43D8FDEF1C7290350073BE78 /* LoopMath.swift */,
 				43D8FDF01C7290350073BE78 /* NSDate.swift */,
-				43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */,
-				43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */,
 				43D8FDF31C7290350073BE78 /* SampleValue.swift */,
 				43D8FE031C72903B0073BE78 /* UI */,
 			);
@@ -716,9 +762,15 @@
 				43D8FEB51C7294520073BE78 /* Info.plist */,
 				43D8FEDC1C7294D50073BE78 /* DoseEntry.swift */,
 				43D8FEDD1C7294D50073BE78 /* DoseStore.swift */,
+				43C094451CAA1E98001F6403 /* DoseUnit.swift */,
 				43D8FEDE1C7294D50073BE78 /* Fetchable.swift */,
 				43D8FEDF1C7294D50073BE78 /* InsulinMath.swift */,
+				43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */,
+				43DFE2831CB2009C00EFBE95 /* NSUserDefaults.swift */,
 				43D8FEE21C7294D50073BE78 /* PersistenceController.swift */,
+				43DFE27B1CB1D6A600EFBE95 /* PumpEvent.swift */,
+				43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */,
+				43DFE27F1CB1E12D00EFBE95 /* PumpEventType.swift */,
 				43D8FEE31C7294D50073BE78 /* Reservoir.swift */,
 				43D8FEE41C7294D50073BE78 /* Reservoir+CoreDataProperties.swift */,
 				43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */,
@@ -745,11 +797,21 @@
 				43B99B071C74553900D050F5 /* effect_from_basal_output.json */,
 				43B99AFD1C744E5F00D050F5 /* effect_from_bolus_output.json */,
 				43B99AFF1C7450EE00D050F5 /* effect_from_history_output.json */,
-				43D8FECC1C7294B80073BE78 /* iob_from_bolus_output.json */,
+				43CE7CE11CA9EA1A003CC1B0 /* iob_from_bolus_120min_output.json */,
+				43CE7CE31CA9EB1E003CC1B0 /* iob_from_bolus_180min_output.json */,
+				43CE7CDF1CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json */,
+				43CE7CE51CA9EBD2003CC1B0 /* iob_from_bolus_300min_output.json */,
+				43CE7CE71CA9EC1F003CC1B0 /* iob_from_bolus_312min_output.json */,
+				43CE7CE91CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json */,
+				43CE7CEB1CA9EC88003CC1B0 /* iob_from_bolus_420min_output.json */,
 				43D8FECE1C7294B80073BE78 /* iob_from_doses_output.json */,
 				43D8FECF1C7294B80073BE78 /* iob_from_reservoir_output.json */,
+				43CE7CED1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json */,
+				43CE7CEF1CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json */,
 				43B99B011C7451E500D050F5 /* normalized_doses.json */,
 				43D8FED01C7294B80073BE78 /* normalized_reservoir_history_output.json */,
+				434872781CB6256500E55D75 /* reconcile_history_input.json */,
+				4348727C1CB626E500E55D75 /* reconcile_history_output.json */,
 				43D8FED11C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_input.json */,
 				43D8FED21C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json */,
 				43B99B031C74538D00D050F5 /* short_basal_dose.json */,
@@ -1197,17 +1259,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43CE7CE61CA9EBD2003CC1B0 /* iob_from_bolus_300min_output.json in Resources */,
+				43CE7CEC1CA9EC88003CC1B0 /* iob_from_bolus_420min_output.json in Resources */,
 				43B99B021C7451E500D050F5 /* normalized_doses.json in Resources */,
+				43CE7CE21CA9EA1A003CC1B0 /* iob_from_bolus_120min_output.json in Resources */,
+				43CE7CE41CA9EB1E003CC1B0 /* iob_from_bolus_180min_output.json in Resources */,
 				43B99B041C74538D00D050F5 /* short_basal_dose.json in Resources */,
 				43D8FED91C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_input.json in Resources */,
 				43B99B061C74552300D050F5 /* basal_dose.json in Resources */,
+				4348727B1CB6256500E55D75 /* reconcile_history_input.json in Resources */,
+				43CE7CE81CA9EC1F003CC1B0 /* iob_from_bolus_312min_output.json in Resources */,
+				4348727D1CB626E500E55D75 /* reconcile_history_output.json in Resources */,
 				43D8FED61C7294B80073BE78 /* iob_from_doses_output.json in Resources */,
 				43D8FEF61C72954F0073BE78 /* basal.json in Resources */,
-				43D8FED41C7294B80073BE78 /* iob_from_bolus_output.json in Resources */,
 				43B99B081C74553900D050F5 /* effect_from_basal_output.json in Resources */,
+				43CE7CE01CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json in Resources */,
 				43B99AFC1C744CE300D050F5 /* bolus_dose.json in Resources */,
+				43CE7CEE1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json in Resources */,
 				43D8FED81C7294B80073BE78 /* normalized_reservoir_history_output.json in Resources */,
 				43D8FEDA1C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json in Resources */,
+				43CE7CEA1CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json in Resources */,
+				43CE7CF01CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json in Resources */,
 				43D8FED71C7294B80073BE78 /* iob_from_reservoir_output.json in Resources */,
 				43B99B001C7450EE00D050F5 /* effect_from_history_output.json in Resources */,
 				43B99AFE1C744E5F00D050F5 /* effect_from_bolus_output.json in Resources */,
@@ -1245,7 +1317,6 @@
 				43D8FE151C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift in Sources */,
 				43D8FDFC1C7290350073BE78 /* HealthKitSampleStore.swift in Sources */,
 				43D8FDF71C7290350073BE78 /* DailyValueSchedule.swift in Sources */,
-				43D8FE001C7290350073BE78 /* NSDateFormatter.swift in Sources */,
 				43D8FE121C7290530073BE78 /* GlucoseRangeTableViewCell.swift in Sources */,
 				43D8FE011C7290350073BE78 /* NSTimeInterval.swift in Sources */,
 				43D8FDF61C7290350073BE78 /* DailyQuantitySchedule.swift in Sources */,
@@ -1278,6 +1349,7 @@
 				43D8FE1F1C72906E0073BE78 /* QuantityScheduleTests.swift in Sources */,
 				43D8FE1D1C72906E0073BE78 /* BasalRateScheduleTests.swift in Sources */,
 				43D8FDDB1C728FDF0073BE78 /* LoopKitTests.swift in Sources */,
+				430059241CCDD08C00C861EA /* NSDateFormatter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1289,6 +1361,7 @@
 				43D8FE521C7291BD0073BE78 /* HKQuantitySample.swift in Sources */,
 				43D8FE4F1C7291BD0073BE78 /* CarbEntry.swift in Sources */,
 				43D8FE5E1C7291D80073BE78 /* CarbEntryEditViewController.swift in Sources */,
+				4300591E1CCDC65B00C861EA /* NSTimeInterval.swift in Sources */,
 				43D8FE531C7291BD0073BE78 /* StoredCarbEntry.swift in Sources */,
 				43D8FE621C7291D80073BE78 /* DecimalTextFieldTableViewCell.swift in Sources */,
 				43D8FE501C7291BD0073BE78 /* CarbMath.swift in Sources */,
@@ -1307,6 +1380,7 @@
 			files = (
 				43D9888E1C87F36900DA4467 /* LoopKitTests.swift in Sources */,
 				43D8FE421C7291900073BE78 /* CarbMathTests.swift in Sources */,
+				430059231CCDCFD100C861EA /* NSDateFormatter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1317,6 +1391,7 @@
 				43971A401C8CABFF0013154F /* GlucoseSampleValue.swift in Sources */,
 				43FADDFB1C89679200DDE013 /* HKQuantitySample.swift in Sources */,
 				43D8FE891C72934C0073BE78 /* GlucoseStore.swift in Sources */,
+				4300591F1CCDC67900C861EA /* NSTimeInterval.swift in Sources */,
 				43D8FE881C72934C0073BE78 /* GlucoseMath.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1327,6 +1402,7 @@
 			files = (
 				43D9888F1C87F36A00DA4467 /* LoopKitTests.swift in Sources */,
 				43D8FE9A1C7293D00073BE78 /* GlucoseMathTests.swift in Sources */,
+				430059251CCDD09700C861EA /* NSDateFormatter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1334,15 +1410,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43DFE2801CB1E12D00EFBE95 /* PumpEventType.swift in Sources */,
 				43D8FEF21C7294E90073BE78 /* ErrorBackgroundView.swift in Sources */,
 				43D8FEEB1C7294D50073BE78 /* Reservoir.swift in Sources */,
 				43D8FEE81C7294D50073BE78 /* InsulinMath.swift in Sources */,
+				43DFE27D1CB1D6A600EFBE95 /* PumpEvent.swift in Sources */,
+				43DFE2821CB1FB8500EFBE95 /* InsulinValue.swift in Sources */,
 				43D8FEF31C7294E90073BE78 /* ReservoirTableViewController.swift in Sources */,
+				430059201CCDC68200C861EA /* NSTimeInterval.swift in Sources */,
+				43DFE2841CB2009C00EFBE95 /* NSUserDefaults.swift in Sources */,
 				43D8FEE71C7294D50073BE78 /* Fetchable.swift in Sources */,
 				43D8FEE91C7294D50073BE78 /* Model.xcdatamodeld in Sources */,
+				43C094461CAA1E98001F6403 /* DoseUnit.swift in Sources */,
 				43D8FEEA1C7294D50073BE78 /* PersistenceController.swift in Sources */,
 				43D8FEEC1C7294D50073BE78 /* Reservoir+CoreDataProperties.swift in Sources */,
 				43D8FEE61C7294D50073BE78 /* DoseStore.swift in Sources */,
+				43DFE27E1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift in Sources */,
 				43D8FEE51C7294D50073BE78 /* DoseEntry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1353,6 +1436,7 @@
 			files = (
 				43D988901C87F36B00DA4467 /* LoopKitTests.swift in Sources */,
 				43D8FEC91C7294640073BE78 /* InsulinMathTests.swift in Sources */,
+				430059221CCDCFBE00C861EA /* NSDateFormatter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
