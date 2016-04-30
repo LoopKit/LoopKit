@@ -5,10 +5,7 @@ xcode_project: LoopKit.xcodeproj
 xcode_scheme:
     - LoopKit
     - CarbKit
-    - GlucoseKit
     - InsulinKit
-script:
-    - xcodebuild -project LoopKit.xcodeproj -scheme LoopKit -sdk iphonesimulator9.3 build test
-    - xcodebuild -project LoopKit.xcodeproj -scheme CarbKit -sdk iphonesimulator9.3 build test
-    - xcodebuild -project LoopKit.xcodeproj -scheme GlucoseKit -sdk iphonesimulator9.3 build test
-    - xcodebuild -project LoopKit.xcodeproj -scheme InsulinKit -sdk iphonesimulator9.3 build test
+    - GlucoseKit
+# script:
+#    - xcodebuild -project LoopKit.xcodeproj -scheme LoopKit -sdk iphonesimulator9.3 build test

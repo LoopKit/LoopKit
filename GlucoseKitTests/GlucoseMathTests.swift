@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import GlucoseKit
-import LoopKit
+@testable import LoopKit
 import HealthKit
 
 
