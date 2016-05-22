@@ -173,7 +173,7 @@ public class ReservoirTableViewController: UITableViewController {
         }
     }
 
-    func updateTimelyStats(_: NSTimer?) {
+    @objc func updateTimelyStats(_: NSTimer?) {
         updateIOB()
     }
 
