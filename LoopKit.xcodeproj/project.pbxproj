@@ -37,6 +37,9 @@
 		434FF1E51CF26A26000DB779 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */; };
 		434FF1E71CF26A3D000DB779 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */; };
 		434FF1E81CF26A49000DB779 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */; };
+		434FF1F11CF29451000DB779 /* TextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */; };
+		434FF1F21CF29451000DB779 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1F01CF29451000DB779 /* TextFieldTableViewCell.swift */; };
+		434FF1F41CF294A9000DB779 /* TextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */; };
 		435F355E1C9CD16A00C204D2 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */; };
 		435F35611C9CD25F00C204D2 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */; };
 		43971A401C8CABFF0013154F /* GlucoseSampleValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */; };
@@ -280,6 +283,9 @@
 		4348727C1CB626E500E55D75 /* reconcile_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_output.json; sourceTree = "<group>"; };
 		434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifiableClass.swift; sourceTree = "<group>"; };
 		434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
+		434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
+		434FF1F01CF29451000DB779 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewController.swift; sourceTree = "<group>"; };
 		435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
 		43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseSampleValue.swift; sourceTree = "<group>"; };
@@ -652,6 +658,9 @@
 				43D8FE0A1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift */,
 				43D8FE0B1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib */,
 				43D8FE0C1C7290530073BE78 /* SingleValueScheduleTableViewController.swift */,
+				434FF1F01CF29451000DB779 /* TextFieldTableViewCell.swift */,
+				434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */,
+				434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */,
 				43D8FE0E1C7290530073BE78 /* UIViewController.swift */,
 			);
 			path = UI;
@@ -1174,6 +1183,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D8FE161C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib in Resources */,
+				434FF1F11CF29451000DB779 /* TextFieldTableViewCell.xib in Resources */,
 				43D8FE131C7290530073BE78 /* GlucoseRangeTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1333,8 +1343,10 @@
 				43D8FDF41C7290350073BE78 /* BasalRateSchedule.swift in Sources */,
 				43D8FDFA1C7290350073BE78 /* GlucoseRangeSchedule.swift in Sources */,
 				43D8FDF91C7290350073BE78 /* GlucoseEffect.swift in Sources */,
+				434FF1F21CF29451000DB779 /* TextFieldTableViewCell.swift in Sources */,
 				43D8FDFE1C7290350073BE78 /* LoopMath.swift in Sources */,
 				43D8FDFF1C7290350073BE78 /* NSDate.swift in Sources */,
+				434FF1F41CF294A9000DB779 /* TextFieldTableViewController.swift in Sources */,
 				43D8FDFB1C7290350073BE78 /* GlucoseSchedule.swift in Sources */,
 				43D8FE171C7290530073BE78 /* SingleValueScheduleTableViewController.swift in Sources */,
 				43D8FE0F1C7290530073BE78 /* DailyQuantityScheduleTableViewController.swift in Sources */,
