@@ -159,7 +159,7 @@ public class CarbEntryTableViewController: UITableViewController {
         }
     }
 
-    func updateTimelyStats(_: NSTimer?) {
+    @objc func updateTimelyStats(_: NSTimer?) {
         updateCOB()
     }
 

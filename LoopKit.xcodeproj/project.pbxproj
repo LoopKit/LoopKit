@@ -33,6 +33,10 @@
 		4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
 		4348727B1CB6256500E55D75 /* reconcile_history_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872781CB6256500E55D75 /* reconcile_history_input.json */; };
 		4348727D1CB626E500E55D75 /* reconcile_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 4348727C1CB626E500E55D75 /* reconcile_history_output.json */; };
+		434FF1E21CF269F8000DB779 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */; };
+		434FF1E51CF26A26000DB779 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */; };
+		434FF1E71CF26A3D000DB779 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */; };
+		434FF1E81CF26A49000DB779 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */; };
 		435F355E1C9CD16A00C204D2 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */; };
 		435F35611C9CD25F00C204D2 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */; };
 		43971A401C8CABFF0013154F /* GlucoseSampleValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */; };
@@ -77,11 +81,9 @@
 		43D8FE111C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE061C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift */; };
 		43D8FE121C7290530073BE78 /* GlucoseRangeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE071C7290530073BE78 /* GlucoseRangeTableViewCell.swift */; };
 		43D8FE131C7290530073BE78 /* GlucoseRangeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FE081C7290530073BE78 /* GlucoseRangeTableViewCell.xib */; };
-		43D8FE141C7290530073BE78 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE091C7290530073BE78 /* IdentifiableClass.swift */; };
 		43D8FE151C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE0A1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift */; };
 		43D8FE161C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FE0B1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib */; };
 		43D8FE171C7290530073BE78 /* SingleValueScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE0C1C7290530073BE78 /* SingleValueScheduleTableViewController.swift */; };
-		43D8FE181C7290530073BE78 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE0D1C7290530073BE78 /* UITableViewCell.swift */; };
 		43D8FE191C7290530073BE78 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE0E1C7290530073BE78 /* UIViewController.swift */; };
 		43D8FE1D1C72906E0073BE78 /* BasalRateScheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE1A1C72906E0073BE78 /* BasalRateScheduleTests.swift */; };
 		43D8FE1E1C72906E0073BE78 /* NSDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE1B1C72906E0073BE78 /* NSDateTests.swift */; };
@@ -276,6 +278,8 @@
 		4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		434872781CB6256500E55D75 /* reconcile_history_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_input.json; sourceTree = "<group>"; };
 		4348727C1CB626E500E55D75 /* reconcile_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_output.json; sourceTree = "<group>"; };
+		434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifiableClass.swift; sourceTree = "<group>"; };
+		434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
 		43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseSampleValue.swift; sourceTree = "<group>"; };
@@ -324,11 +328,9 @@
 		43D8FE061C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseRangeScheduleTableViewController.swift; sourceTree = "<group>"; };
 		43D8FE071C7290530073BE78 /* GlucoseRangeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseRangeTableViewCell.swift; sourceTree = "<group>"; };
 		43D8FE081C7290530073BE78 /* GlucoseRangeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GlucoseRangeTableViewCell.xib; sourceTree = "<group>"; };
-		43D8FE091C7290530073BE78 /* IdentifiableClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifiableClass.swift; sourceTree = "<group>"; };
 		43D8FE0A1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatingScheduleValueTableViewCell.swift; sourceTree = "<group>"; };
 		43D8FE0B1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepeatingScheduleValueTableViewCell.xib; sourceTree = "<group>"; };
 		43D8FE0C1C7290530073BE78 /* SingleValueScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleValueScheduleTableViewController.swift; sourceTree = "<group>"; };
-		43D8FE0D1C7290530073BE78 /* UITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		43D8FE0E1C7290530073BE78 /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		43D8FE1A1C72906E0073BE78 /* BasalRateScheduleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalRateScheduleTests.swift; sourceTree = "<group>"; };
 		43D8FE1B1C72906E0073BE78 /* NSDateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateTests.swift; sourceTree = "<group>"; };
@@ -514,8 +516,10 @@
 		430059211CCDC7A200C861EA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */,
 				43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */,
 				43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */,
+				434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -645,11 +649,9 @@
 				43D8FE061C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift */,
 				43D8FE071C7290530073BE78 /* GlucoseRangeTableViewCell.swift */,
 				43D8FE081C7290530073BE78 /* GlucoseRangeTableViewCell.xib */,
-				43D8FE091C7290530073BE78 /* IdentifiableClass.swift */,
 				43D8FE0A1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift */,
 				43D8FE0B1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib */,
 				43D8FE0C1C7290530073BE78 /* SingleValueScheduleTableViewController.swift */,
-				43D8FE0D1C7290530073BE78 /* UITableViewCell.swift */,
 				43D8FE0E1C7290530073BE78 /* UIViewController.swift */,
 			);
 			path = UI;
@@ -1312,7 +1314,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43D8FE181C7290530073BE78 /* UITableViewCell.swift in Sources */,
 				43D8FDFD1C7290350073BE78 /* HKUnit.swift in Sources */,
 				43D8FE151C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift in Sources */,
 				43D8FDFC1C7290350073BE78 /* HealthKitSampleStore.swift in Sources */,
@@ -1323,11 +1324,12 @@
 				43D8FDF51C7290350073BE78 /* CarbRatioSchedule.swift in Sources */,
 				43D8FE111C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift in Sources */,
 				43D8FDF81C7290350073BE78 /* Double.swift in Sources */,
+				434FF1E81CF26A49000DB779 /* UITableViewCell.swift in Sources */,
 				43D8FE021C7290350073BE78 /* SampleValue.swift in Sources */,
+				434FF1E71CF26A3D000DB779 /* IdentifiableClass.swift in Sources */,
 				43D8FE101C7290530073BE78 /* DailyValueScheduleTableViewController.swift in Sources */,
 				43D8FE191C7290530073BE78 /* UIViewController.swift in Sources */,
 				43D9888B1C87E47800DA4467 /* GlucoseValue.swift in Sources */,
-				43D8FE141C7290530073BE78 /* IdentifiableClass.swift in Sources */,
 				43D8FDF41C7290350073BE78 /* BasalRateSchedule.swift in Sources */,
 				43D8FDFA1C7290350073BE78 /* GlucoseRangeSchedule.swift in Sources */,
 				43D8FDF91C7290350073BE78 /* GlucoseEffect.swift in Sources */,
@@ -1358,7 +1360,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D8FE511C7291BD0073BE78 /* CarbStore.swift in Sources */,
+				434FF1E51CF26A26000DB779 /* UITableViewCell.swift in Sources */,
 				43D8FE521C7291BD0073BE78 /* HKQuantitySample.swift in Sources */,
+				434FF1E21CF269F8000DB779 /* IdentifiableClass.swift in Sources */,
 				43D8FE4F1C7291BD0073BE78 /* CarbEntry.swift in Sources */,
 				43D8FE5E1C7291D80073BE78 /* CarbEntryEditViewController.swift in Sources */,
 				4300591E1CCDC65B00C861EA /* NSTimeInterval.swift in Sources */,
@@ -1593,7 +1597,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1641,7 +1645,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1669,7 +1673,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1687,7 +1691,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1724,7 +1728,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CarbKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1742,7 +1746,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CarbKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1779,7 +1783,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = GlucoseKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1797,7 +1801,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = GlucoseKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1834,7 +1838,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = InsulinKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1852,7 +1856,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 2;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = InsulinKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
