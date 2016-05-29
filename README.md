@@ -8,7 +8,7 @@ LoopKit is a set of tools to speed up development of your own closed-loop insuli
 
 ## Loop
 
-[https://github.com/loudnate/Loop](Loop) is a full-featured app built on top of LoopKit.
+[Loop](https://github.com/loudnate/Loop) is a full-featured app built on top of LoopKit.
 
 ## LoopKit provides
 
