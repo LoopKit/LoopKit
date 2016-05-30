@@ -4,11 +4,11 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Join the chat at https://gitter.im/loudnate/LoopKit](https://badges.gitter.im/loudnate/LoopKit.svg)](https://gitter.im/loudnate/LoopKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Coming soon.
+LoopKit is a set of tools to speed up development of your own closed-loop insulin delivery app. It is agnostic to treatment decisions and input sources.
 
-––––
+## Loop
 
-LoopKit is a set of tools to speed up development of your own app. It is agnostic to treatment decisions and input sources.
+[Loop](https://github.com/loudnate/Loop) is a full-featured app built on top of LoopKit.
 
 ## LoopKit provides
 
