@@ -16,6 +16,24 @@ public protocol ReservoirValue {
 }
 
 
+/**
+ Manages storage, retrieval, and calculation of insulin pump delivery data.
+ 
+ Reservoir volume levels are stored in the following tiers:
+ 
+ * In-memory cache, used for IOB and insulin effect calculation
+ ```
+ 0            [min(1 day ago, insulinActionDuration)]
+ |––––––––––––––––––––––|
+ ```
+ * On-disk Core Data store, accessible after first unlock
+ ```
+ 0            [min(1 day ago, insulinActionDuration)]
+ |––––––––––––––––––––––|
+ ```
+ 
+ TODO: Historical pump events (as well as their delivery interpretation)
+ */
 public class DoseStore {
 
     /// Notification posted when the ready state was modified.
@@ -413,8 +431,9 @@ public class DoseStore {
     // MARK: - Pump Event History
 
     /// The earliest event date that should included in subsequent queries for pump event data.
-    public private(set) var pumpEventQueryAfterDate = NSDate.distantPast()
+    public private(set) var pumpEventQueryAfterDate
 
+    /// The last-seen mutable pump events, which aren't persisted but are used for dose calculation.
     private var mutablePumpEventDoses: [DoseEntry]?
 
     /**
