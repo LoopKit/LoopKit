@@ -24,12 +24,12 @@ public protocol ReservoirValue {
  * In-memory cache, used for IOB and insulin effect calculation
  ```
  0            [min(1 day ago, insulinActionDuration)]
- |––––––––––––––––––––––|
+ |––––––––––––––––––––—————————––|
  ```
  * On-disk Core Data store, accessible after first unlock
  ```
  0            [min(1 day ago, insulinActionDuration)]
- |––––––––––––––––––––––|
+ |––––––––––––––––––––––—————————|
  ```
  
  TODO: Historical pump events (as well as their delivery interpretation)
