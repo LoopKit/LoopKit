@@ -431,7 +431,7 @@ public class DoseStore {
     // MARK: - Pump Event History
 
     /// The earliest event date that should included in subsequent queries for pump event data.
-    public private(set) var pumpEventQueryAfterDate: NSDate
+    public private(set) var pumpEventQueryAfterDate = NSDate.distantPast()
 
     /// The last-seen mutable pump events, which aren't persisted but are used for dose calculation.
     private var mutablePumpEventDoses: [DoseEntry]?
