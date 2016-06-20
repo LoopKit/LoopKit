@@ -27,10 +27,10 @@ extension Fetchable where Self : NSManagedObject, FetchableType == Self {
         return NSStringFromClass(self).componentsSeparatedByString(".").last!
     }
 
-    static func singleObjectInContext(context: NSManagedObjectContext, predicate: NSPredicate? = nil, sortedBy: String? = nil, ascending: Bool = false) throws -> FetchableType? {
-        let managedObjects: [FetchableType] = try objectsInContext(context, predicate: predicate, sortedBy: sortedBy, ascending: ascending)
+    static func singleObjectInContext(context: NSManagedObjectContext, predicate: NSPredicate? = nil, sortedBy: String? = nil, ascending: Bool = false) -> FetchableType? {
+        let managedObjects: [FetchableType]? = try? objectsInContext(context, predicate: predicate, sortedBy: sortedBy, ascending: ascending)
 
-        return managedObjects.first
+        return managedObjects?.first
     }
 
     static func objectCountInContext(context: NSManagedObjectContext, predicate: NSPredicate? = nil) throws -> Int {

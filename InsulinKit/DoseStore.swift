@@ -64,8 +64,13 @@ public class DoseStore {
 
     public var pumpID: String? {
         didSet {
+            guard pumpID != oldValue else {
+                return
+            }
+
             persistenceController?.managedObjectContext.performBlock {
                 self.clearReservoirCache()
+                self.pumpEventQueryAfterDate = self.recentValuesStartDate ?? NSDate.distantPast()
             }
             configurationDidChange()
         }
@@ -106,7 +111,7 @@ public class DoseStore {
         self.insulinActionDuration = insulinActionDuration
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.basalProfile = basalProfile
-        self.pumpEventQueryAfterDate = NSUserDefaults.standardUserDefaults().pumpEventQueryAfterDate ?? recentValuesStartDate ?? NSDate.distantPast()
+        self.pumpEventQueryAfterDate = recentValuesStartDate ?? NSDate.distantPast()
 
         configurationDidChange()
     }
@@ -128,6 +133,17 @@ public class DoseStore {
                     self.readyState = .Failed(.InitializationError(description: error.description, recoverySuggestion: error.recoverySuggestion))
                 } else {
                     self.readyState = .Ready
+
+                    if let context = self.persistenceController?.managedObjectContext, pumpID = self.pumpID {
+                        // Find the newest PumpEvent date we have
+                        if let lastEvent = PumpEvent.singleObjectInContext(context,
+                            predicate: NSPredicate(format: "pumpID = %@", pumpID),
+                            sortedBy: "date",
+                            ascending: false
+                        ) {
+                            self.pumpEventQueryAfterDate = lastEvent.date
+                        }
+                    }
                 }
             })
         } else {
@@ -170,7 +186,7 @@ public class DoseStore {
 
      - parameter unitVolume:        The reservoir volume, in units
      - parameter date:              The date of the volume reading
-     - parameter completionHandler: A closure called after the value was saved. This closure takes two arguments:
+     - parameter completionHandler: A closure called after the value was saved. This closure takes three arguments:
         - value:         The new reservoir value, if it was saved
         - previousValue: The last new reservoir value
         - error:         An error object explaining why the value could not be saved
