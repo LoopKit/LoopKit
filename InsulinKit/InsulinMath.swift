@@ -366,6 +366,18 @@ struct InsulinMath {
         return values
     }
 
+    /**
+     Calculates the timeline of glucose effects for a collection of doses
+
+     - parameter doses:          A collection of doses
+     - parameter actionDuration: The total time of insulin effect
+     - parameter fromDate:       The date to begin the timeline
+     - parameter toDate:         The date to end the timeline
+     - parameter delay:          The time to delay the dose effect
+     - parameter delta:          The differential between timeline entries
+
+     - returns: A sequence of glucose effects
+     */
     static func glucoseEffectsForDoses<T: CollectionType where T.Generator.Element == DoseEntry>(
         doses: T,
         actionDuration: NSTimeInterval,

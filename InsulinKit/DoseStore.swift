@@ -155,7 +155,7 @@ public class DoseStore {
         }
     }
 
-    private var recentReservoirValuesPredicate: NSPredicate? {
+    private var recentValuesPredicate: NSPredicate? {
         if let pumpID = pumpID, startDate = recentValuesStartDate {
             let predicate = NSPredicate(format: "date >= %@ && pumpID = %@", startDate, pumpID)
 
@@ -190,7 +190,7 @@ public class DoseStore {
 
             let previousValue = self.recentReservoirObjectsCache?.first
 
-            if self.recentReservoirObjectsCache != nil, let predicate = self.recentReservoirValuesPredicate {
+            if self.recentReservoirObjectsCache != nil, let predicate = self.recentValuesPredicate {
                 self.recentReservoirObjectsCache = self.recentReservoirObjectsCache!.filter { predicate.evaluateWithObject($0) }
 
                 if self.recentReservoirDoseEntriesCache != nil, let
@@ -277,7 +277,7 @@ public class DoseStore {
 
                 var recentReservoirObjects: [Reservoir] = []
 
-                recentReservoirObjects += try Reservoir.objectsInContext(persistenceController!.managedObjectContext, predicate: self.recentReservoirValuesPredicate, sortedBy: "date", ascending: false)
+                recentReservoirObjects += try Reservoir.objectsInContext(persistenceController!.managedObjectContext, predicate: self.recentValuesPredicate, sortedBy: "date", ascending: false)
 
                 self.recentReservoirObjectsCache = recentReservoirObjects
 
@@ -412,7 +412,7 @@ public class DoseStore {
      - throws: A core data exception if the delete request failed
      */
     private func purgeReservoirObjects() throws {
-        if let subPredicate = recentReservoirValuesPredicate, persistenceController = persistenceController {
+        if let subPredicate = recentValuesPredicate, persistenceController = persistenceController {
             let predicate = NSCompoundPredicate(notPredicateWithSubpredicate: subPredicate)
             let fetchRequest = Reservoir.fetchRequest(persistenceController.managedObjectContext, predicate: predicate)
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
@@ -431,7 +431,7 @@ public class DoseStore {
     // MARK: - Pump Event History
 
     /// The earliest event date that should included in subsequent queries for pump event data.
-    public private(set) var pumpEventQueryAfterDate
+    public private(set) var pumpEventQueryAfterDate: NSDate
 
     /// The last-seen mutable pump events, which aren't persisted but are used for dose calculation.
     private var mutablePumpEventDoses: [DoseEntry]?
