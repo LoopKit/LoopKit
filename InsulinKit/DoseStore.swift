@@ -16,6 +16,24 @@ public protocol ReservoirValue {
 }
 
 
+/**
+ Manages storage, retrieval, and calculation of insulin pump delivery data.
+ 
+ Reservoir volume levels are stored in the following tiers:
+ 
+ * In-memory cache, used for IOB and insulin effect calculation
+ ```
+ 0            [min(1 day ago, insulinActionDuration)]
+ |––––––––––––––––––––—————————––|
+ ```
+ * On-disk Core Data store, accessible after first unlock
+ ```
+ 0            [min(1 day ago, insulinActionDuration)]
+ |––––––––––––––––––––––—————————|
+ ```
+ 
+ TODO: Historical pump events (as well as their delivery interpretation)
+ */
 public class DoseStore {
 
     /// Notification posted when the ready state was modified.
@@ -46,8 +64,13 @@ public class DoseStore {
 
     public var pumpID: String? {
         didSet {
+            guard pumpID != oldValue else {
+                return
+            }
+
             persistenceController?.managedObjectContext.performBlock {
                 self.clearReservoirCache()
+                self.pumpEventQueryAfterDate = self.recentValuesStartDate ?? NSDate.distantPast()
             }
             configurationDidChange()
         }
@@ -88,7 +111,7 @@ public class DoseStore {
         self.insulinActionDuration = insulinActionDuration
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.basalProfile = basalProfile
-        self.pumpEventQueryAfterDate = NSUserDefaults.standardUserDefaults().pumpEventQueryAfterDate ?? recentValuesStartDate ?? NSDate.distantPast()
+        self.pumpEventQueryAfterDate = recentValuesStartDate ?? NSDate.distantPast()
 
         configurationDidChange()
     }
@@ -110,6 +133,17 @@ public class DoseStore {
                     self.readyState = .Failed(.InitializationError(description: error.description, recoverySuggestion: error.recoverySuggestion))
                 } else {
                     self.readyState = .Ready
+
+                    if let context = self.persistenceController?.managedObjectContext, pumpID = self.pumpID {
+                        // Find the newest PumpEvent date we have
+                        if let lastEvent = PumpEvent.singleObjectInContext(context,
+                            predicate: NSPredicate(format: "pumpID = %@", pumpID),
+                            sortedBy: "date",
+                            ascending: false
+                        ) {
+                            self.pumpEventQueryAfterDate = lastEvent.date
+                        }
+                    }
                 }
             })
         } else {
@@ -137,7 +171,7 @@ public class DoseStore {
         }
     }
 
-    private var recentReservoirValuesPredicate: NSPredicate? {
+    private var recentValuesPredicate: NSPredicate? {
         if let pumpID = pumpID, startDate = recentValuesStartDate {
             let predicate = NSPredicate(format: "date >= %@ && pumpID = %@", startDate, pumpID)
 
@@ -152,7 +186,7 @@ public class DoseStore {
 
      - parameter unitVolume:        The reservoir volume, in units
      - parameter date:              The date of the volume reading
-     - parameter completionHandler: A closure called after the value was saved. This closure takes two arguments:
+     - parameter completionHandler: A closure called after the value was saved. This closure takes three arguments:
         - value:         The new reservoir value, if it was saved
         - previousValue: The last new reservoir value
         - error:         An error object explaining why the value could not be saved
@@ -172,7 +206,7 @@ public class DoseStore {
 
             let previousValue = self.recentReservoirObjectsCache?.first
 
-            if self.recentReservoirObjectsCache != nil, let predicate = self.recentReservoirValuesPredicate {
+            if self.recentReservoirObjectsCache != nil, let predicate = self.recentValuesPredicate {
                 self.recentReservoirObjectsCache = self.recentReservoirObjectsCache!.filter { predicate.evaluateWithObject($0) }
 
                 if self.recentReservoirDoseEntriesCache != nil, let
@@ -259,7 +293,7 @@ public class DoseStore {
 
                 var recentReservoirObjects: [Reservoir] = []
 
-                recentReservoirObjects += try Reservoir.objectsInContext(persistenceController!.managedObjectContext, predicate: self.recentReservoirValuesPredicate, sortedBy: "date", ascending: false)
+                recentReservoirObjects += try Reservoir.objectsInContext(persistenceController!.managedObjectContext, predicate: self.recentValuesPredicate, sortedBy: "date", ascending: false)
 
                 self.recentReservoirObjectsCache = recentReservoirObjects
 
@@ -394,7 +428,7 @@ public class DoseStore {
      - throws: A core data exception if the delete request failed
      */
     private func purgeReservoirObjects() throws {
-        if let subPredicate = recentReservoirValuesPredicate, persistenceController = persistenceController {
+        if let subPredicate = recentValuesPredicate, persistenceController = persistenceController {
             let predicate = NSCompoundPredicate(notPredicateWithSubpredicate: subPredicate)
             let fetchRequest = Reservoir.fetchRequest(persistenceController.managedObjectContext, predicate: predicate)
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
@@ -415,6 +449,7 @@ public class DoseStore {
     /// The earliest event date that should included in subsequent queries for pump event data.
     public private(set) var pumpEventQueryAfterDate = NSDate.distantPast()
 
+    /// The last-seen mutable pump events, which aren't persisted but are used for dose calculation.
     private var mutablePumpEventDoses: [DoseEntry]?
 
     /**

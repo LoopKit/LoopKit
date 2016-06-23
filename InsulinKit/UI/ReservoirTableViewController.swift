@@ -191,7 +191,8 @@ public class ReservoirTableViewController: UITableViewController {
             doseStore?.insulinOnBoardAtDate(NSDate()) { (iob, error) -> Void in
                 dispatch_async(dispatch_get_main_queue()) {
                     if error != nil {
-                        self.state = .Unavailable(error)
+                        self.IOBValueLabel.text = "…"
+                        self.IOBDateLabel.text = nil
                     } else if let value = iob {
                         self.IOBValueLabel.text = self.IOBNumberFormatter.stringFromNumber(value.value)
                         self.IOBDateLabel.text = String(format: NSLocalizedString("com.loudnate.InsulinKit.IOBDateLabel", tableName: "InsulinKit", value: "at %1$@", comment: "The format string describing the date of an IOB value. The first format argument is the localized date."), NSDateFormatter.localizedStringFromDate(value.startDate, dateStyle: .NoStyle, timeStyle: .ShortStyle))
