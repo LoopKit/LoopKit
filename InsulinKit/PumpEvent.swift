@@ -52,6 +52,19 @@ class PumpEvent: NSManagedObject {
         }
     }
 
+    var uploaded: Bool {
+        get {
+            willAccessValueForKey("uploaded")
+            defer { didAccessValueForKey("uploaded") }
+            return primitiveUploaded?.boolValue ?? false
+        }
+        set {
+            willChangeValueForKey("uploaded")
+            defer { didChangeValueForKey("uploaded") }
+            primitiveUploaded = NSNumber(bool: newValue)
+        }
+    }
+
     var value: Double? {
         get {
             willAccessValueForKey("value")

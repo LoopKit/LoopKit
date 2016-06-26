@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15E65" minimumToolsVersion="Xcode 7.0">
-    <entity name="PumpEvent" representedClassName=".Dose" syncable="YES">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15F34" minimumToolsVersion="Xcode 7.0">
+    <entity name="PumpEvent" representedClassName=".PumpEvent" syncable="YES">
         <attribute name="createdAt" attributeType="Date" indexed="YES" syncable="YES"/>
         <attribute name="date" attributeType="Date" indexed="YES" syncable="YES"/>
         <attribute name="duration" attributeType="Double" minValueString="0" defaultValueString="0.0" syncable="YES"/>
@@ -8,6 +8,7 @@
         <attribute name="raw" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="unit" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uploaded" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="value" optional="YES" attributeType="Double" syncable="YES"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
@@ -24,7 +25,7 @@
         <attribute name="volume" attributeType="Double" syncable="YES"/>
     </entity>
     <elements>
-        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="165"/>
+        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="180"/>
         <element name="Reservoir" positionX="-63" positionY="-18" width="128" height="120"/>
     </elements>
 </model>
