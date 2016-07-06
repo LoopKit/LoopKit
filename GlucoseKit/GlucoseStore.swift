@@ -76,27 +76,56 @@ public class GlucoseStore: HealthKitSampleStore {
      */
     public func addGlucose(quantity: HKQuantity, date: NSDate, displayOnly: Bool, device: HKDevice?, resultHandler: (success: Bool, sample: GlucoseValue?, error: NSError?) -> Void) {
 
-        let glucose = HKQuantitySample(
-            type: glucoseType,
-            quantity: quantity,
-            startDate: date,
-            endDate: date,
-            device: device,
-            metadata: [
-                MetadataKeyGlucoseIsDisplayOnly: displayOnly
-            ]
-        )
+        addGlucoseValues([(quantity: quantity, date: date, displayOnly: displayOnly)], device: device) { (success, samples, error) in
+            resultHandler(success: success, sample: samples?.last, error: error)
+        }
+    }
 
-        healthStore.saveObject(glucose) { (completed, error) -> Void in
+    /**
+     Add new glucose values to HealthKit.
+     
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
+     - parameter values:        A an array of value tuples:
+        - quantity:    The glucose sample quantity
+        - date:        The date the sample was collected
+        - displayOnly: Whether the reading was shifted for visual consistency after calibration
+     - parameter device:        The description of the device the collected the sample
+     - parameter resultHandler: A closure called once the glucose values were saved. The closure takes three arguments:
+        - success: Whether the sample was successfully saved
+        - samples: The saved samples
+        - error:   An error object explaining why the save failed
+     */
+    public func addGlucoseValues(values: [(quantity: HKQuantity, date: NSDate, displayOnly: Bool)], device: HKDevice?, resultHandler: (success: Bool, samples: [GlucoseValue]?, error: NSError?) -> Void) {
+        let glucose = values.map {
+            return HKQuantitySample(
+                type: glucoseType,
+                quantity: $0.quantity,
+                startDate: $0.date,
+                endDate: $0.date,
+                device: device,
+                metadata: [
+                    MetadataKeyGlucoseIsDisplayOnly: $0.displayOnly
+                ]
+            )
+        }
+
+        healthStore.saveObjects(glucose) { (completed, error) in
             dispatch_async(self.dataAccessQueue) {
-                self.momentumDataCache.insert(glucose)
-                self.purgeOldGlucoseSamples()
+                if completed {
+                    self.momentumDataCache.unionInPlace(glucose)
+                    self.purgeOldGlucoseSamples()
 
-                if self.latestGlucose == nil || self.latestGlucose!.startDate < glucose.startDate {
-                    self.latestGlucose = glucose
+                    let sortedGlucose = glucose.sort({ $0.startDate < $1.startDate })
+
+                    if let latestGlucose = sortedGlucose.last where self.latestGlucose == nil || self.latestGlucose!.startDate < latestGlucose.startDate {
+                        self.latestGlucose = latestGlucose
+                    }
+
+                    resultHandler(success: completed, samples: sortedGlucose.map({ $0 as GlucoseValue }), error: error)
+                } else {
+                    resultHandler(success: completed, samples: [], error: error)
                 }
-
-                resultHandler(success: completed, sample: glucose, error: error)
             }
         }
     }
