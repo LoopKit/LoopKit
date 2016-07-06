@@ -122,7 +122,7 @@ public class GlucoseStore: HealthKitSampleStore {
                         self.latestGlucose = latestGlucose
                     }
 
-                    resultHandler(success: completed, samples: sortedGlucose, error: error)
+                    resultHandler(success: completed, samples: sortedGlucose.map({ $0 as GlucoseValue }), error: error)
                 } else {
                     resultHandler(success: completed, samples: [], error: error)
                 }
