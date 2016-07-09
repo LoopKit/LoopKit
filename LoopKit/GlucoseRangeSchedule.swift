@@ -44,12 +44,28 @@ extension DoubleRange: RawRepresentable {
 }
 
 
+/// Defines a daily schedule of glucose ranges
 public class GlucoseRangeSchedule: DailyQuantitySchedule<DoubleRange> {
+    /// A single override range and its end date (by the system clock)
+    public private(set) var temporaryOverride: AbsoluteScheduleValue<DoubleRange>?
+
+    public func setOverride(override: DoubleRange, untilDate: NSDate) {
+        temporaryOverride = AbsoluteScheduleValue(startDate: untilDate, value: override)
+    }
+
+    public func clearOverride() {
+        temporaryOverride = nil
+    }
+
     public override init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<DoubleRange>], timeZone: NSTimeZone? = nil) {
         super.init(unit: unit, dailyItems: dailyItems, timeZone: timeZone)
     }
 
     public override func valueAt(time: NSDate) -> DoubleRange {
+        if let override = temporaryOverride where override.endDate > NSDate() {
+            return override.value
+        }
+
         return super.valueAt(time)
     }
 }
