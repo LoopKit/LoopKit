@@ -8,6 +8,7 @@
 
 import Foundation
 import CarbKit
+import GlucoseKit
 import InsulinKit
 import LoopKit
 
@@ -34,6 +35,8 @@ class DeviceDataManager {
     let carbStore: CarbStore?
 
     let doseStore: DoseStore
+
+    let glucoseStore = GlucoseStore()
 
     // Settings
 

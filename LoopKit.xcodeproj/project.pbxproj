@@ -30,6 +30,9 @@
 		430158271C7ECB6800B64B63 /* InsulinKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FEB11C7294520073BE78 /* InsulinKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4301582B1C7ECCEF00B64B63 /* LoopKitExample.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */; };
 		4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
+		43177D021D3729E60006E908 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */; };
+		43177D041D372A7F0006E908 /* CarbEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D031D372A7F0006E908 /* CarbEntryTableViewController.swift */; };
+		43177D061D372AA50006E908 /* ReservoirTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D051D372AA50006E908 /* ReservoirTableViewController.swift */; };
 		4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
 		4348727B1CB6256500E55D75 /* reconcile_history_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872781CB6256500E55D75 /* reconcile_history_input.json */; };
 		4348727D1CB626E500E55D75 /* reconcile_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 4348727C1CB626E500E55D75 /* reconcile_history_output.json */; };
@@ -277,6 +280,8 @@
 		430158121C7EC03B00B64B63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoopKitExample.entitlements; sourceTree = "<group>"; };
 		4301582C1C7ECD7A00B64B63 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		43177D031D372A7F0006E908 /* CarbEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryTableViewController.swift; sourceTree = "<group>"; };
+		43177D051D372AA50006E908 /* ReservoirTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirTableViewController.swift; sourceTree = "<group>"; };
 		4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		434872781CB6256500E55D75 /* reconcile_history_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_input.json; sourceTree = "<group>"; };
 		4348727C1CB626E500E55D75 /* reconcile_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_output.json; sourceTree = "<group>"; };
@@ -556,7 +561,9 @@
 		435F355C1C9CD14E00C204D2 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				43177D031D372A7F0006E908 /* CarbEntryTableViewController.swift */,
 				435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */,
+				43177D051D372AA50006E908 /* ReservoirTableViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1307,10 +1314,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43177D041D372A7F0006E908 /* CarbEntryTableViewController.swift in Sources */,
 				430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */,
 				430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */,
+				43177D021D3729E60006E908 /* IdentifiableClass.swift in Sources */,
 				435F355E1C9CD16A00C204D2 /* NSUserDefaults.swift in Sources */,
 				435F35611C9CD25F00C204D2 /* DeviceDataManager.swift in Sources */,
+				43177D061D372AA50006E908 /* ReservoirTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
