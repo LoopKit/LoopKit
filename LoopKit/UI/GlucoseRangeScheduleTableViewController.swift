@@ -14,15 +14,15 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     public var unit: HKUnit = HKUnit.milligramsPerDeciliterUnit() {
         didSet {
-            unitString = "\(unit)"
-            // TODO: Change number format
+            unitDisplayString = unit.glucoseUnitDisplayString
         }
     }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerNib(UINib(nibName: GlucoseRangeTableViewCell.className, bundle: NSBundle(forClass: self.dynamicType)), forCellReuseIdentifier: GlucoseRangeTableViewCell.className)
+        tableView.registerNib(GlucoseRangeTableViewCell.nib(), forCellReuseIdentifier: GlucoseRangeTableViewCell.className)
+        tableView.registerNib(GlucoseRangeOverrideTableViewCell.nib(), forCellReuseIdentifier: GlucoseRangeOverrideTableViewCell.className)
     }
 
     // MARK: - State
@@ -33,7 +33,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         var startTime = NSTimeInterval(0)
         let value: DoubleRange
 
-        if scheduleItems.count > 0, let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: scheduleItems.count - 1, inSection: 0)) as? GlucoseRangeTableViewCell {
+        if scheduleItems.count > 0, let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: scheduleItems.count - 1, inSection: Section.schedule.rawValue)) as? GlucoseRangeTableViewCell {
             let lastItem = scheduleItems.last!
             let interval = cell.datePickerInterval
 
@@ -54,7 +54,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
             )
         )
 
-        tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: scheduleItems.count - 1, inSection: 0)], withRowAnimation: .Automatic)
+        tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: scheduleItems.count - 1, inSection: Section.schedule.rawValue)], withRowAnimation: .Automatic)
     }
 
     override func insertableIndiciesByRemovingRow(row: Int, withInterval timeInterval: NSTimeInterval) -> [Bool] {
@@ -63,41 +63,74 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     // MARK: - UITableViewDataSource
 
+    private enum Section: Int {
+        case schedule = 0
+        case override
+
+        static let count = 2
+    }
+
+    public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return Section.count
+    }
+
     public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return scheduleItems.count
+        switch Section(rawValue: section)! {
+        case .schedule:
+            return scheduleItems.count
+        case .override:
+            return 1
+        }
     }
 
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(GlucoseRangeTableViewCell.className, forIndexPath: indexPath) as! GlucoseRangeTableViewCell
+        switch Section(rawValue: indexPath.section)! {
+        case .schedule:
+            let cell = tableView.dequeueReusableCellWithIdentifier(GlucoseRangeTableViewCell.className, forIndexPath: indexPath) as! GlucoseRangeTableViewCell
 
-        let item = scheduleItems[indexPath.row]
-        let interval = cell.datePickerInterval
+            let item = scheduleItems[indexPath.row]
+            let interval = cell.datePickerInterval
 
-        cell.timeZone = timeZone
-        cell.date = midnight.dateByAddingTimeInterval(item.startTime)
+            cell.timeZone = timeZone
+            cell.date = midnight.dateByAddingTimeInterval(item.startTime)
 
-        cell.valueNumberFormatter.minimumFractionDigits = unit.preferredMinimumFractionDigits
+            cell.valueNumberFormatter.minimumFractionDigits = unit.preferredMinimumFractionDigits
 
-        cell.minValue = item.value.minValue
-        cell.value = item.value.maxValue
-        cell.unitString = unitString
-        cell.delegate = self
+            cell.minValue = item.value.minValue
+            cell.value = item.value.maxValue
+            cell.unitString = unitDisplayString
+            cell.delegate = self
 
-        if indexPath.row > 0 {
-            let lastItem = scheduleItems[indexPath.row - 1]
+            if indexPath.row > 0 {
+                let lastItem = scheduleItems[indexPath.row - 1]
 
-            cell.datePicker.minimumDate = midnight.dateByAddingTimeInterval(lastItem.startTime).dateByAddingTimeInterval(interval)
+                cell.datePicker.minimumDate = midnight.dateByAddingTimeInterval(lastItem.startTime).dateByAddingTimeInterval(interval)
+            }
+
+            if indexPath.row < scheduleItems.endIndex - 1 {
+                let nextItem = scheduleItems[indexPath.row + 1]
+
+                cell.datePicker.maximumDate = midnight.dateByAddingTimeInterval(nextItem.startTime).dateByAddingTimeInterval(-interval)
+            } else {
+                cell.datePicker.maximumDate = midnight.dateByAddingTimeInterval(NSTimeInterval(hours: 24) - interval)
+            }
+
+            return cell
+        case .override:
+            let cell = tableView.dequeueReusableCellWithIdentifier(GlucoseRangeOverrideTableViewCell.className, forIndexPath: indexPath) as! GlucoseRangeOverrideTableViewCell
+
+            cell.valueNumberFormatter.minimumFractionDigits = unit.preferredMinimumFractionDigits
+
+// TODO: Populate with the data model
+//            cell.minValue = 
+//            cell.maxValue = 
+            cell.unitString = unitDisplayString
+            cell.delegate = self
+
+            cell.iconImageView.tintColor = tableView.tintColor
+
+            return cell
         }
-
-        if indexPath.row < scheduleItems.endIndex - 1 {
-            let nextItem = scheduleItems[indexPath.row + 1]
-
-            cell.datePicker.maximumDate = midnight.dateByAddingTimeInterval(nextItem.startTime).dateByAddingTimeInterval(-interval)
-        } else {
-            cell.datePicker.maximumDate = midnight.dateByAddingTimeInterval(NSTimeInterval(hours: 24) - interval)
-        }
-
-        return cell
     }
 
     public override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -109,24 +142,55 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
     }
 
     public override func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
-
         if sourceIndexPath != destinationIndexPath {
-            let item = scheduleItems.removeAtIndex(sourceIndexPath.row)
-            scheduleItems.insert(item, atIndex: destinationIndexPath.row)
+            switch Section(rawValue: destinationIndexPath.section)! {
+            case .schedule:
+                let item = scheduleItems.removeAtIndex(sourceIndexPath.row)
+                scheduleItems.insert(item, atIndex: destinationIndexPath.row)
 
-            guard destinationIndexPath.row > 0, let cell = tableView.cellForRowAtIndexPath(destinationIndexPath) as? GlucoseRangeTableViewCell else {
-                return
+                guard destinationIndexPath.row > 0, let cell = tableView.cellForRowAtIndexPath(destinationIndexPath) as? GlucoseRangeTableViewCell else {
+                    return
+                }
+
+                let interval = cell.datePickerInterval
+                let startTime = scheduleItems[destinationIndexPath.row - 1].startTime + interval
+
+                scheduleItems[destinationIndexPath.row] = RepeatingScheduleValue(startTime: startTime, value: scheduleItems[destinationIndexPath.row].value)
+
+                // Since the valid date ranges of neighboring cells are affected, the lazy solution is to just reload the entire table view
+                dispatch_async(dispatch_get_main_queue()) {
+                    tableView.reloadData()
+                }
+            case .override:
+                break
             }
+        }
+    }
 
-            let interval = cell.datePickerInterval
-            let startTime = scheduleItems[destinationIndexPath.row - 1].startTime + interval
+    public override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        switch Section(rawValue: indexPath.section)! {
+        case .schedule:
+            return true
+        case .override:
+            return false
+        }
+    }
 
-            scheduleItems[destinationIndexPath.row] = RepeatingScheduleValue(startTime: startTime, value: scheduleItems[destinationIndexPath.row].value)
+    public override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        switch Section(rawValue: indexPath.section)! {
+        case .schedule:
+            return true
+        case .override:
+            return false
+        }
+    }
 
-            // Since the valid date ranges of neighboring cells are affected, the lazy solution is to just reload the entire table view
-            dispatch_async(dispatch_get_main_queue()) {
-                tableView.reloadData()
-            }
+    public override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch Section(rawValue: section)! {
+        case .schedule:
+            return nil
+        case .override:
+            return NSLocalizedString("Overrides", comment: "The section title of glucose overrides")
         }
     }
 
@@ -153,4 +217,12 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         }
     }
 
+}
+
+
+extension GlucoseRangeScheduleTableViewController: GlucoseRangeOverrideTableViewCellDelegate {
+    func glucoseRangeOverrideTableViewCellDidUpdateValue(cell: GlucoseRangeOverrideTableViewCell) {
+//        let overrideRange = DoubleRange(minValue: cell.minValue, maxValue: cell.maxValue)
+        // TODO: Update the model
+    }
 }

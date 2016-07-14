@@ -12,10 +12,6 @@ class TextFieldTableViewCell: UITableViewCell {
 
     @IBOutlet var textField: UITextField!
 
-    static func nib() -> UINib {
-        return UINib(nibName: className, bundle: NSBundle(forClass: self))
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
 

@@ -9,5 +9,5 @@
 import UIKit
 
 
-extension UITableViewCell: IdentifiableClass {
+extension UITableViewCell: IdentifiableClass, NibLoadable {
 }
