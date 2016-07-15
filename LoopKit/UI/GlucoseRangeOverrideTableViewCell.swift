@@ -14,7 +14,7 @@ protocol GlucoseRangeOverrideTableViewCellDelegate: class {
 }
 
 
-class GlucoseRangeOverrideTableViewCell: UITableViewCell {
+class GlucoseRangeOverrideTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     weak var delegate: GlucoseRangeOverrideTableViewCellDelegate?
 

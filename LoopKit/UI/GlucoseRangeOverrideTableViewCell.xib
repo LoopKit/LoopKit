@@ -28,6 +28,9 @@
                         <rect key="frame" x="167" y="8" width="35" height="28"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                        <connections>
+                            <outlet property="delegate" destination="bgs-bY-Joo" id="yND-yP-YTl"/>
+                        </connections>
                     </textField>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="–" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pXd-Eo-nXg">
                         <rect key="frame" x="205" y="8" width="9" height="27"/>
@@ -39,6 +42,9 @@
                         <rect key="frame" x="217" y="8" width="35" height="27.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                        <connections>
+                            <outlet property="delegate" destination="bgs-bY-Joo" id="a1k-Mx-ZuX"/>
+                        </connections>
                     </textField>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="U/hour" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xmj-pp-6GS">
                         <rect key="frame" x="255" y="8" width="50" height="27"/>

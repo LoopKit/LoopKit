@@ -29,6 +29,8 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     public var scheduleItems: [RepeatingScheduleValue<DoubleRange>] = []
 
+    public var workoutRange: DoubleRange?
+
     override func addScheduleItem(sender: AnyObject?) {
         var startTime = NSTimeInterval(0)
         let value: DoubleRange
@@ -121,9 +123,11 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
             cell.valueNumberFormatter.minimumFractionDigits = unit.preferredMinimumFractionDigits
 
-// TODO: Populate with the data model
-//            cell.minValue = 
-//            cell.maxValue = 
+            if let workoutRange = workoutRange {
+                cell.minValue = workoutRange.minValue
+                cell.maxValue = workoutRange.maxValue
+            }
+
             cell.unitString = unitDisplayString
             cell.delegate = self
 
@@ -222,7 +226,6 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
 extension GlucoseRangeScheduleTableViewController: GlucoseRangeOverrideTableViewCellDelegate {
     func glucoseRangeOverrideTableViewCellDidUpdateValue(cell: GlucoseRangeOverrideTableViewCell) {
-//        let overrideRange = DoubleRange(minValue: cell.minValue, maxValue: cell.maxValue)
-        // TODO: Update the model
+        workoutRange = DoubleRange(minValue: cell.minValue, maxValue: cell.maxValue)
     }
 }
