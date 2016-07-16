@@ -34,7 +34,7 @@ func insertableIndicesForScheduleItems<T>(scheduleItems: [RepeatingScheduleValue
 }
 
 
-public class DailyValueScheduleTableViewController: UITableViewController, IdentifiableClass {
+public class DailyValueScheduleTableViewController: UITableViewController {
 
     private var keyboardWillShowNotificationObserver: AnyObject?
 
@@ -126,7 +126,7 @@ public class DailyValueScheduleTableViewController: UITableViewController, Ident
         }
     }
 
-    public var unitString: String = "U/hour"
+    public var unitDisplayString: String = "U/hour"
 
     private var calendar = NSCalendar.currentCalendar()
 
@@ -210,6 +210,10 @@ public class DailyValueScheduleTableViewController: UITableViewController, Ident
     }
 
     public override func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
+
+        guard sourceIndexPath.section == proposedDestinationIndexPath.section else {
+            return sourceIndexPath
+        }
 
         guard sourceIndexPath != proposedDestinationIndexPath, let cell = tableView.cellForRowAtIndexPath(sourceIndexPath) as? RepeatingScheduleValueTableViewCell else {
             return proposedDestinationIndexPath
