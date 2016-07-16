@@ -26,4 +26,13 @@ public extension HKUnit {
             return 1
         }
     }
+
+    /// A presentation helper for the localized unit string
+    var glucoseUnitDisplayString: String {
+        if self == HKUnit.millimolesPerLiterUnit() {
+            return NSLocalizedString("mmol/L", comment: "The unit display string for millimoles of glucose per liter")
+        } else {
+            return String(self)
+        }
+    }
 }

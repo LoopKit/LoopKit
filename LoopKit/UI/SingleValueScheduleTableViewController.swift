@@ -13,7 +13,7 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerNib(UINib(nibName: RepeatingScheduleValueTableViewCell.className, bundle: NSBundle(forClass: self.dynamicType)), forCellReuseIdentifier: RepeatingScheduleValueTableViewCell.className)
+        tableView.registerNib(RepeatingScheduleValueTableViewCell.nib(), forCellReuseIdentifier: RepeatingScheduleValueTableViewCell.className)
     }
 
     // MARK: - State
@@ -74,7 +74,7 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
         cell.valueNumberFormatter.minimumFractionDigits = preferredValueMinimumFractionDigits()
 
         cell.value = item.value
-        cell.unitString = unitString
+        cell.unitString = unitDisplayString
         cell.delegate = self
 
         if indexPath.row > 0 {
