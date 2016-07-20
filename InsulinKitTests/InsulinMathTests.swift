@@ -214,8 +214,6 @@ class InsulinMathTests: XCTestCase {
 
         let doses = InsulinMath.reconcileDoses(input).sort { $0.startDate < $1.startDate }
 
-        print(output)
-
         XCTAssertEqual(output.count, doses.count)
 
         for (expected, calculated) in zip(output, doses) {
