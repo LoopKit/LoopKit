@@ -10,6 +10,6 @@ import Foundation
 
 
 public enum DoseUnit: String {
-    case UnitsPerHour = "U/hour"
-    case Units        = "U"
+    case unitsPerHour = "U/hour"
+    case units        = "U"
 }

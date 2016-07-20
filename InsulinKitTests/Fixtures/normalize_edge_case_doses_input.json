@@ -1,7 +1,7 @@
 [
     {
         "type": "TempBasal",
-        "start_at": "2015-07-12T23:59:00",
+        "start_at": "2015-07-12T23:59:59",
         "end_at": "2015-07-13T07:54:00",
         "amount": 2.0,
         "unit": "U/hour"

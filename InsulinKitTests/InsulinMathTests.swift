@@ -214,6 +214,8 @@ class InsulinMathTests: XCTestCase {
 
         let doses = InsulinMath.reconcileDoses(input).sort { $0.startDate < $1.startDate }
 
+        print(output)
+
         XCTAssertEqual(output.count, doses.count)
 
         for (expected, calculated) in zip(output, doses) {
@@ -313,6 +315,6 @@ class InsulinMathTests: XCTestCase {
         let input = loadDoseFixture("normalize_edge_case_doses_input")
         let output = InsulinMath.totalDeliveryForDoses(input)
 
-        XCTAssertEqualWithAccuracy(18.83, output, accuracy: pow(10, -2))
+        XCTAssertEqualWithAccuracy(18.8, output, accuracy: pow(10, -2))
     }
 }
