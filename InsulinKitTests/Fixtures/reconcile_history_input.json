@@ -314,7 +314,7 @@
     {
         "amount": 0,
         "description": "Pump Suspend",
-        "end_at": "2016-02-15T20:25:01",
+        "end_at": "2016-02-15T20:19:21",
         "start_at": "2016-02-15T20:19:21",
         "type": "PumpSuspend",
         "unit": "U/hour"
@@ -326,6 +326,14 @@
         "start_at": "2016-02-15T20:18:54",
         "type": "Bolus",
         "unit": "U"
+    },
+    {
+        "amount": 0,
+        "description": "Pump Resume",
+        "end_at": "2016-02-15T20:25:01",
+        "start_at": "2016-02-15T20:25:01",
+        "type": "PumpResume",
+        "unit": "U/hour"
     },
     {
         "amount": 2.875,

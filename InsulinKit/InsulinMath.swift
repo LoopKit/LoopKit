@@ -84,9 +84,9 @@ struct InsulinMath {
         let iob: Double
 
         if time >= 0 {
-            if dose.unit == .Units {
+            if dose.unit == .units {
                 iob = dose.value * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)
-            } else if dose.unit == .UnitsPerHour && dose.endDate.timeIntervalSinceDate(dose.startDate) <= 1.05 * delta {
+            } else if dose.unit == .unitsPerHour && dose.endDate.timeIntervalSinceDate(dose.startDate) <= 1.05 * delta {
                 iob = dose.value * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1) * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)
             } else {
                 iob = dose.value * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1) * insulinOnBoardForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
@@ -118,9 +118,9 @@ struct InsulinMath {
         let value: Double
 
         if time >= 0 {
-            if dose.unit == .Units {
+            if dose.unit == .units {
                 value = dose.value * -insulinSensitivity * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration))
-            } else if dose.unit == .UnitsPerHour && dose.endDate.timeIntervalSinceDate(dose.startDate) <= 1.05 * delta {
+            } else if dose.unit == .unitsPerHour && dose.endDate.timeIntervalSinceDate(dose.startDate) <= 1.05 * delta {
                 value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1) * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration))
             } else {
                 value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1) * glucoseEffectForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
@@ -163,11 +163,11 @@ struct InsulinMath {
 
                 if duration > 0 && 0 <= volumeDrop && volumeDrop <= MaximumReservoirDropPerMinute * duration.minutes {
                     doses.append(DoseEntry(
-                        type: .TempBasal,
+                        type: .tempBasal,
                         startDate: previousValue.startDate,
                         endDate: value.startDate,
                         value: volumeDrop * NSTimeInterval(hours: 1) / duration,
-                        unit: .UnitsPerHour,
+                        unit: .unitsPerHour,
                         description: "Reservoir decreased \(numberFormatter.stringFromNumber(volumeDrop) ?? String(volumeDrop))U over \(numberFormatter.stringFromNumber(duration.minutes) ?? String(duration.minutes))min"
                     ))
                 }
@@ -190,13 +190,14 @@ struct InsulinMath {
 
         var reconciled: [DoseEntry] = []
 
+        var lastSuspend: DoseEntry?
         var lastTempBasal: DoseEntry?
 
         for dose in doses {
             switch dose.type {
-            case .Bolus:
+            case .bolus:
                 reconciled.append(dose)
-            case .TempBasal:
+            case .tempBasal:
                 if let temp = lastTempBasal {
                     reconciled.append(DoseEntry(
                         type: temp.type,
@@ -209,17 +210,21 @@ struct InsulinMath {
                 }
 
                 lastTempBasal = dose
-            case .Suspend:
-                if let temp = lastTempBasal {
+            case .resume:
+                if let suspend = lastSuspend {
                     reconciled.append(DoseEntry(
-                        type: temp.type,
-                        startDate: temp.startDate,
-                        endDate: min(temp.endDate, dose.startDate),
-                        value: temp.value,
-                        unit: temp.unit,
-                        description: temp.description
+                        type: suspend.type,
+                        startDate: suspend.startDate,
+                        endDate: dose.endDate,
+                        value: suspend.value,
+                        unit: suspend.unit,
+                        description: suspend.description ?? dose.description
                     ))
 
+                    lastSuspend = nil
+                }
+
+                if let temp = lastTempBasal {
                     if temp.endDate > dose.endDate {
                         lastTempBasal = DoseEntry(
                             type: temp.type,
@@ -233,12 +238,29 @@ struct InsulinMath {
                         lastTempBasal = nil
                     }
                 }
+            case .suspend:
+                if let temp = lastTempBasal {
+                    reconciled.append(DoseEntry(
+                        type: temp.type,
+                        startDate: temp.startDate,
+                        endDate: min(temp.endDate, dose.startDate),
+                        value: temp.value,
+                        unit: temp.unit,
+                        description: temp.description
+                    ))
 
-                reconciled.append(dose)
+                    if temp.endDate <= dose.startDate {
+                        lastTempBasal = nil
+                    }
+                }
+
+                lastSuspend = dose
             }
         }
 
-        if let temp = lastTempBasal {
+        if let suspend = lastSuspend {
+            reconciled.append(suspend)
+        } else if let temp = lastTempBasal {
             reconciled.append(temp)
         }
 
@@ -295,7 +317,7 @@ struct InsulinMath {
         var normalizedDoses: [DoseEntry] = []
 
         for dose in doses {
-            if dose.unit == .UnitsPerHour {
+            if dose.unit == .unitsPerHour {
                 normalizedDoses += normalizeBasalDose(dose, againstBasalSchedule: basalSchedule)
             } else {
                 normalizedDoses.append(dose)
@@ -317,9 +339,9 @@ struct InsulinMath {
 
         for dose in doses {
             switch dose.unit {
-            case .Units:
+            case .units:
                 total += dose.value
-            case .UnitsPerHour:
+            case .unitsPerHour:
                 total += dose.value * dose.endDate.timeIntervalSinceDate(dose.startDate) / NSTimeInterval(hours: 1)
             }
         }
