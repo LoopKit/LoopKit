@@ -18,15 +18,10 @@ public struct DoseEntry: TimelineValue {
     public let value: Double
     public let unit: DoseUnit
     public let description: String?
-    let managedObjectID: NSManagedObjectID? = nil
+    let managedObjectID: NSManagedObjectID?
 
     public init(type: PumpEventType, startDate: NSDate, endDate: NSDate? = nil, value: Double, unit: DoseUnit, description: String? = nil) {
-        self.type = type
-        self.startDate = startDate
-        self.endDate = endDate ?? startDate
-        self.value = value
-        self.unit = unit
-        self.description = description
+        self.init(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, description: description, managedObjectID: nil)
     }
 
     public init(suspendDate: NSDate) {
@@ -35,5 +30,15 @@ public struct DoseEntry: TimelineValue {
 
     public init(resumeDate: NSDate) {
         self.init(type: .resume, startDate: resumeDate, value: 0, unit: .unitsPerHour)
+    }
+
+    init(type: PumpEventType, startDate: NSDate, endDate: NSDate? = nil, value: Double, unit: DoseUnit, description: String? = nil, managedObjectID: NSManagedObjectID?) {
+        self.type = type
+        self.startDate = startDate
+        self.endDate = endDate ?? startDate
+        self.value = value
+        self.unit = unit
+        self.description = description
+        self.managedObjectID = managedObjectID
     }
 }
