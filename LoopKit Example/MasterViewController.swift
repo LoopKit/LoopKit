@@ -39,8 +39,9 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
     private enum ConfigurationRow: Int {
         case BasalRate
         case GlucoseTargetRange
+        case PumpID
 
-        static let count = 2
+        static let count = 3
     }
 
     // MARK: UITableViewDataSource
@@ -68,6 +69,8 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 cell.textLabel?.text = NSLocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
             case .GlucoseTargetRange:
                 cell.textLabel?.text = NSLocalizedString("Glucose Target Range", comment: "The title text for the glucose target range schedule")
+            case .PumpID:
+                cell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title text for the pump ID")
             }
         case .Data:
             switch DataRow(rawValue: indexPath.row)! {
@@ -97,14 +100,14 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                     scheduleVC.scheduleItems = profile.items
                 }
                 scheduleVC.delegate = self
-                scheduleVC.title = NSLocalizedString("Basal Rates", comment: "The title of the basal rate profile screen")
+                scheduleVC.title = sender?.textLabel?.text
 
                 showViewController(scheduleVC, sender: sender)
             case .GlucoseTargetRange:
                 let scheduleVC = GlucoseRangeScheduleTableViewController()
 
                 scheduleVC.delegate = self
-                scheduleVC.title = NSLocalizedString("Target Range", comment: "The title of the glucose target range schedule screen")
+                scheduleVC.title = sender?.textLabel?.text
 
                 if let schedule = dataManager.glucoseTargetRangeSchedule {
                     scheduleVC.timeZone = schedule.timeZone
@@ -127,6 +130,17 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 } else {
                     showViewController(scheduleVC, sender: sender)
                 }
+            case .PumpID:
+                let textFieldVC = TextFieldTableViewController()
+
+//                textFieldVC.delegate = self
+                textFieldVC.title = sender?.textLabel?.text
+                textFieldVC.placeholder = NSLocalizedString("Enter the 6-digit pump ID", comment: "The placeholder text instructing users how to enter a pump ID")
+                textFieldVC.value = dataManager.pumpID
+                textFieldVC.keyboardType = .NumberPad
+                textFieldVC.contextHelp = NSLocalizedString("The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).", comment: "Instructions on where to find the pump ID on a Minimed pump")
+
+                showViewController(textFieldVC, sender: sender)
             }
         case .Data:
             switch DataRow(rawValue: indexPath.row)! {
@@ -190,6 +204,8 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                             break
                         }
                     }*/
+                default:
+                    break
                 }
 
                 tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)

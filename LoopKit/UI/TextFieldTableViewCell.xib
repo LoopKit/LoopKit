@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -11,25 +11,36 @@
         <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="89D-8j-fmc" customClass="TextFieldTableViewCell" customModule="LoopKit" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
             <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="89D-8j-fmc" id="Vd0-dM-6je">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" tableViewCell="89D-8j-fmc" id="Vd0-dM-6je">
                 <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Placeholder text" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sr7-Nw-Ul4">
-                        <rect key="frame" x="8" y="8" width="584" height="27"/>
+                        <rect key="frame" x="15" y="10" width="539" height="23"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" spellCheckingType="no" keyboardType="alphabet" returnKeyType="done"/>
                     </textField>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unit" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="coH-9o-F8g">
+                        <rect key="frame" x="562" y="10" width="30" height="23"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="Sr7-Nw-Ul4" firstAttribute="top" secondItem="Vd0-dM-6je" secondAttribute="topMargin" id="4IS-98-Vs1"/>
                     <constraint firstItem="Sr7-Nw-Ul4" firstAttribute="centerY" secondItem="Vd0-dM-6je" secondAttribute="centerY" id="7eS-nS-IMK"/>
-                    <constraint firstItem="Sr7-Nw-Ul4" firstAttribute="trailing" secondItem="Vd0-dM-6je" secondAttribute="trailingMargin" id="QNT-gW-vug"/>
                     <constraint firstItem="Sr7-Nw-Ul4" firstAttribute="leading" secondItem="Vd0-dM-6je" secondAttribute="leadingMargin" id="ZyS-Gh-n22"/>
+                    <constraint firstItem="coH-9o-F8g" firstAttribute="trailing" secondItem="Vd0-dM-6je" secondAttribute="trailingMargin" id="aFj-HW-Dkl"/>
+                    <constraint firstItem="coH-9o-F8g" firstAttribute="leading" secondItem="Sr7-Nw-Ul4" secondAttribute="trailing" constant="8" symbolic="YES" id="cKM-jV-Vg9"/>
+                    <constraint firstItem="coH-9o-F8g" firstAttribute="centerY" secondItem="Vd0-dM-6je" secondAttribute="centerY" id="ciz-Ey-Lmb"/>
+                    <constraint firstItem="coH-9o-F8g" firstAttribute="top" secondItem="Vd0-dM-6je" secondAttribute="topMargin" id="oLt-Wv-qR6"/>
                 </constraints>
+                <edgeInsets key="layoutMargins" top="8" left="15" bottom="8" right="8"/>
             </tableViewCellContentView>
             <connections>
                 <outlet property="textField" destination="Sr7-Nw-Ul4" id="csH-b7-O4d"/>
+                <outlet property="unitLabel" destination="coH-9o-F8g" id="jjs-4y-Ha6"/>
             </connections>
         </tableViewCell>
     </objects>

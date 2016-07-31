@@ -24,11 +24,15 @@ public class TextFieldTableViewController: UITableViewController, UITextFieldDel
 
     public var placeholder: String?
 
+    public var unit: String?
+
     public var value: String? {
         didSet {
             delegate?.textFieldTableViewControllerDidEndEditing(self)
         }
     }
+
+    public var contextHelp: String?
 
     public var keyboardType = UIKeyboardType.Default
 
@@ -41,6 +45,7 @@ public class TextFieldTableViewController: UITableViewController, UITextFieldDel
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.registerNib(TextFieldTableViewCell.nib(), forCellReuseIdentifier: TextFieldTableViewCell.className)
     }
 
@@ -65,8 +70,13 @@ public class TextFieldTableViewController: UITableViewController, UITextFieldDel
         cell.textField.text = value
         cell.textField.keyboardType = keyboardType
         cell.textField.placeholder = placeholder
+        cell.unitLabel.text = unit
 
         return cell
+    }
+
+    public override func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return contextHelp
     }
 
     // MARK: - UITextFieldDelegate

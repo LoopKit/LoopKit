@@ -10,11 +10,14 @@ import UIKit
 
 class TextFieldTableViewCell: UITableViewCell {
 
+    @IBOutlet var unitLabel: UILabel!
+
     @IBOutlet var textField: UITextField!
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
         textField.delegate = nil
+        unitLabel.text = nil
     }
 }
