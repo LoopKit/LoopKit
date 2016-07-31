@@ -91,10 +91,44 @@ extension PumpEvent: Fetchable { }
 
 extension PumpEvent: TimelineValue {
     var startDate: NSDate {
-        return date
+        get {
+            return date
+        }
+        set {
+            date = newValue
+        }
     }
 
     var endDate: NSDate {
-        return date.dateByAddingTimeInterval(duration)
+        get {
+            return date.dateByAddingTimeInterval(duration)
+        }
+        set {
+            duration = newValue.timeIntervalSinceDate(startDate)
+        }
+    }
+}
+
+
+extension PumpEvent {
+    var doseEntry: DoseEntry? {
+        get {
+            guard let type = type, value = value, unit = unit else {
+                return nil
+            }
+
+            return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, managedObjectID: objectID)
+        }
+        set {
+            guard let entry = newValue else {
+                return
+            }
+
+            type = entry.type
+            startDate = entry.startDate
+            endDate = entry.endDate
+            value = entry.value
+            unit = entry.unit
+        }
     }
 }

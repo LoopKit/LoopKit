@@ -1,5 +1,5 @@
 //
-//  ReservoirTableViewController.swift
+//  InsulinDeliveryTableViewController.swift
 //  Naterade
 //
 //  Created by Nathan Racklyeft on 1/30/16.
@@ -9,20 +9,22 @@
 import UIKit
 import LoopKit
 
-private let ReuseIdentifier = "Reservoir"
+private let ReuseIdentifier = "Right Detail"
 
 
-public class ReservoirTableViewController: UITableViewController {
+public class InsulinDeliveryTableViewController: UITableViewController {
 
     @IBOutlet var needsConfigurationMessageView: ErrorBackgroundView!
 
-    @IBOutlet weak var IOBValueLabel: UILabel!
+    @IBOutlet weak var iobValueLabel: UILabel!
 
-    @IBOutlet weak var IOBDateLabel: UILabel!
+    @IBOutlet weak var iobDateLabel: UILabel!
 
     @IBOutlet weak var totalValueLabel: UILabel!
 
     @IBOutlet weak var totalDateLabel: UILabel!
+
+    @IBOutlet weak var dataSourceSegmentedControl: UISegmentedControl!
 
     public var doseStore: DoseStore? {
         didSet {
@@ -30,7 +32,7 @@ public class ReservoirTableViewController: UITableViewController {
                 doseStoreObserver = NSNotificationCenter.defaultCenter().addObserverForName(nil, object: doseStore, queue: NSOperationQueue.mainQueue(), usingBlock: { [weak self] (note) -> Void in
 
                     switch note.name {
-                    case DoseStore.ReservoirValuesDidChangeNotification:
+                    case DoseStore.ValuesDidChangeNotification:
                         if self?.isViewLoaded() == true {
                             self?.reloadData()
                         }
@@ -117,8 +119,6 @@ public class ReservoirTableViewController: UITableViewController {
 
     // MARK: - Data
 
-    private var reservoirValues: [ReservoirValue] = []
-
     private enum State {
         case Unknown
         case Unavailable(ErrorType?)
@@ -129,6 +129,34 @@ public class ReservoirTableViewController: UITableViewController {
         didSet {
             if isViewLoaded() {
                 reloadData()
+            }
+        }
+    }
+
+    private enum DataSourceSegment: Int {
+        case Reservoir = 0
+        case History
+    }
+
+    private enum Values {
+        case Reservoir([ReservoirValue])
+        case History([(date: NSDate, dose: DoseEntry?, isUploaded: Bool)])
+    }
+
+    // Not thread-safe
+    private var values = Values.Reservoir([]) {
+        didSet {
+            let count: Int
+
+            switch values {
+            case .Reservoir(let values):
+                count = values.count
+            case .History(let values):
+                count = values.count
+            }
+
+            if count > 0 {
+                navigationItem.rightBarButtonItem = self.editButtonItem()
             }
         }
     }
@@ -152,24 +180,36 @@ public class ReservoirTableViewController: UITableViewController {
             self.tableView.tableHeaderView?.hidden = false
             self.tableView.tableFooterView = nil
 
-            doseStore?.getRecentReservoirValues({ [unowned self] (reservoirValues, error) -> Void in
-                dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                    if error != nil {
-                        self.state = .Unavailable(error)
-                    } else {
-                        self.reservoirValues = reservoirValues
-
-                        if reservoirValues.count > 0 {
-                            self.navigationItem.rightBarButtonItem = self.editButtonItem()
+            switch DataSourceSegment(rawValue: dataSourceSegmentedControl.selectedSegmentIndex)! {
+            case .Reservoir:
+                doseStore?.getRecentReservoirValues { [unowned self] (reservoirValues, error) -> Void in
+                    dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                        if error != nil {
+                            self.state = .Unavailable(error)
+                        } else {
+                            self.values = .Reservoir(reservoirValues)
+                            self.tableView.reloadData()
                         }
-
-                        self.tableView.reloadData()
                     }
-                }
 
-                self.updateTimelyStats(nil)
-                self.updateTotal()
-            })
+                    self.updateTimelyStats(nil)
+                    self.updateTotal()
+                }
+            case .History:
+                doseStore?.getRecentPumpEventValues { (values, error) in
+                    dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                        if error != nil {
+                            self.state = .Unavailable(error)
+                        } else {
+                            self.values = .History(values)
+                            self.tableView.reloadData()
+                        }
+                    }
+
+                    self.updateTimelyStats(nil)
+                    self.updateTotal()
+                }
+            }
         }
     }
 
@@ -177,11 +217,20 @@ public class ReservoirTableViewController: UITableViewController {
         updateIOB()
     }
 
-    private lazy var IOBNumberFormatter: NSNumberFormatter = {
+    private lazy var iobNumberFormatter: NSNumberFormatter = {
         let formatter = NSNumberFormatter()
 
         formatter.numberStyle = .DecimalStyle
         formatter.maximumFractionDigits = 2
+
+        return formatter
+    }()
+
+    private lazy var timeFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+
+        formatter.dateStyle = .NoStyle
+        formatter.timeStyle = .ShortStyle
 
         return formatter
     }()
@@ -191,14 +240,14 @@ public class ReservoirTableViewController: UITableViewController {
             doseStore?.insulinOnBoardAtDate(NSDate()) { (iob, error) -> Void in
                 dispatch_async(dispatch_get_main_queue()) {
                     if error != nil {
-                        self.IOBValueLabel.text = "…"
-                        self.IOBDateLabel.text = nil
+                        self.iobValueLabel.text = "…"
+                        self.iobDateLabel.text = nil
                     } else if let value = iob {
-                        self.IOBValueLabel.text = self.IOBNumberFormatter.stringFromNumber(value.value)
-                        self.IOBDateLabel.text = String(format: NSLocalizedString("com.loudnate.InsulinKit.IOBDateLabel", tableName: "InsulinKit", value: "at %1$@", comment: "The format string describing the date of an IOB value. The first format argument is the localized date."), NSDateFormatter.localizedStringFromDate(value.startDate, dateStyle: .NoStyle, timeStyle: .ShortStyle))
+                        self.iobValueLabel.text = self.iobNumberFormatter.stringFromNumber(value.value)
+                        self.iobDateLabel.text = String(format: NSLocalizedString("com.loudnate.InsulinKit.IOBDateLabel", tableName: "InsulinKit", value: "at %1$@", comment: "The format string describing the date of an IOB value. The first format argument is the localized date."), self.timeFormatter.stringFromDate(value.startDate))
                     } else {
-                        self.IOBValueLabel.text = NSNumberFormatter.localizedStringFromNumber(0, numberStyle: .NoStyle)
-                        self.IOBDateLabel.text = nil
+                        self.iobValueLabel.text = NSNumberFormatter.localizedStringFromNumber(0, numberStyle: .NoStyle)
+                        self.iobDateLabel.text = nil
                     }
                 }
             }
@@ -214,7 +263,16 @@ public class ReservoirTableViewController: UITableViewController {
                     } else {
                         self.totalValueLabel.text = NSNumberFormatter.localizedStringFromNumber(total, numberStyle: .NoStyle)
 
-                        if let sinceDate = self.reservoirValues.last?.startDate {
+                        let startDate: NSDate?
+
+                        switch self.values {
+                        case .Reservoir(let values):
+                            startDate = values.last?.startDate
+                        case .History(let values):
+                            startDate = values.last?.date
+                        }
+
+                        if let sinceDate = startDate {
                             self.totalDateLabel.text = String(format: NSLocalizedString("com.loudnate.InsulinKit.totalDateLabel", tableName: "InsulinKit", value: "since %1$@", comment: "The format string describing the starting date of a total value. The first format argument is the localized date."), NSDateFormatter.localizedStringFromDate(sinceDate, dateStyle: .NoStyle, timeStyle: .ShortStyle))
                         } else {
                             self.totalDateLabel.text = nil
@@ -233,6 +291,10 @@ public class ReservoirTableViewController: UITableViewController {
         }
     }
 
+    @IBAction func selectedSegmentChanged(sender: AnyObject) {
+        reloadData()
+    }
+
     // MARK: - Table view data source
 
     public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -245,32 +307,55 @@ public class ReservoirTableViewController: UITableViewController {
     }
 
     public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return reservoirValues.count
+        switch values {
+        case .Reservoir(let values):
+            return values.count
+        case .History(let values):
+            return values.count
+        }
     }
 
     public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath)
 
         if case .Display = state {
-            let entry = reservoirValues[indexPath.row]
-            let volume = NSNumberFormatter.localizedStringFromNumber(entry.unitVolume, numberStyle: .DecimalStyle)
-            let time = NSDateFormatter.localizedStringFromDate(entry.startDate, dateStyle: .NoStyle, timeStyle: .MediumStyle)
+            switch self.values {
+            case .Reservoir(let values):
+                let entry = values[indexPath.row]
+                let volume = NSNumberFormatter.localizedStringFromNumber(entry.unitVolume, numberStyle: .DecimalStyle)
+                let time = timeFormatter.stringFromDate(entry.startDate)
 
-            cell.textLabel?.text = "\(volume) U"
-            cell.detailTextLabel?.text = time
+                cell.textLabel?.text = "\(volume) U"
+                cell.detailTextLabel?.text = time
+                cell.accessoryType = .None
+            case .History(let values):
+                let entry = values[indexPath.row]
+                let time = timeFormatter.stringFromDate(entry.date)
+
+                cell.textLabel?.text = entry.dose?.type.rawValue ?? "Unknown"
+                cell.detailTextLabel?.text = time
+                cell.accessoryType = entry.isUploaded ? .Checkmark : .None
+            }
         }
 
         return cell
     }
 
     public override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
+        switch values {
+        case .Reservoir:
+            return true
+        case .History:
+            return false
+        }
     }
 
     public override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete, case .Display = state {
+        if editingStyle == .Delete, case .Display = state, case .Reservoir(let reservoirValues) = values {
 
+            var reservoirValues = reservoirValues
             let value = reservoirValues.removeAtIndex(indexPath.row)
+            self.values = .Reservoir(reservoirValues)
 
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
 

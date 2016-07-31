@@ -30,9 +30,11 @@
 		430158271C7ECB6800B64B63 /* InsulinKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FEB11C7294520073BE78 /* InsulinKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4301582B1C7ECCEF00B64B63 /* LoopKitExample.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */; };
 		4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
+		4302F4D91D4D32D500F0FCAF /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
+		4302F4DD1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4DC1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift */; };
+		4302F4DF1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4DE1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift */; };
 		43177D021D3729E60006E908 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */; };
 		43177D041D372A7F0006E908 /* CarbEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D031D372A7F0006E908 /* CarbEntryTableViewController.swift */; };
-		43177D061D372AA50006E908 /* ReservoirTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D051D372AA50006E908 /* ReservoirTableViewController.swift */; };
 		43177D081D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43177D071D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib */; };
 		43177D0A1D3732C70006E908 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43177D091D3732C70006E908 /* Assets.xcassets */; };
 		43177D0C1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */; };
@@ -148,7 +150,6 @@
 		43D8FEEC1C7294D50073BE78 /* Reservoir+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEE41C7294D50073BE78 /* Reservoir+CoreDataProperties.swift */; };
 		43D8FEF11C7294E90073BE78 /* InsulinKit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */; };
 		43D8FEF21C7294E90073BE78 /* ErrorBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEEF1C7294E90073BE78 /* ErrorBackgroundView.swift */; };
-		43D8FEF31C7294E90073BE78 /* ReservoirTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEF01C7294E90073BE78 /* ReservoirTableViewController.swift */; };
 		43D8FEF61C72954F0073BE78 /* basal.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEF41C7295490073BE78 /* basal.json */; };
 		43D8FEF71C7295500073BE78 /* basal.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEF41C7295490073BE78 /* basal.json */; };
 		43D8FEFA1C72A1EF0073BE78 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
@@ -285,8 +286,9 @@
 		430158121C7EC03B00B64B63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoopKitExample.entitlements; sourceTree = "<group>"; };
 		4301582C1C7ECD7A00B64B63 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		4302F4DC1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinDeliveryTableViewController.swift; sourceTree = "<group>"; };
+		4302F4DE1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinDeliveryTableViewController.swift; sourceTree = "<group>"; };
 		43177D031D372A7F0006E908 /* CarbEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryTableViewController.swift; sourceTree = "<group>"; };
-		43177D051D372AA50006E908 /* ReservoirTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirTableViewController.swift; sourceTree = "<group>"; };
 		43177D071D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GlucoseRangeOverrideTableViewCell.xib; sourceTree = "<group>"; };
 		43177D091D3732C70006E908 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseRangeOverrideTableViewCell.swift; sourceTree = "<group>"; };
@@ -414,7 +416,6 @@
 		43D8FEE41C7294D50073BE78 /* Reservoir+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Reservoir+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		43D8FEEE1C7294E90073BE78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/InsulinKit.storyboard; sourceTree = "<group>"; };
 		43D8FEEF1C7294E90073BE78 /* ErrorBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorBackgroundView.swift; sourceTree = "<group>"; };
-		43D8FEF01C7294E90073BE78 /* ReservoirTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirTableViewController.swift; sourceTree = "<group>"; };
 		43D8FEF41C7295490073BE78 /* basal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = basal.json; sourceTree = "<group>"; };
 		43D9888A1C87E47800DA4467 /* GlucoseValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseValue.swift; sourceTree = "<group>"; };
 		43D9888C1C87EBE400DA4467 /* LoopMathTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopMathTests.swift; sourceTree = "<group>"; };
@@ -572,8 +573,8 @@
 			isa = PBXGroup;
 			children = (
 				43177D031D372A7F0006E908 /* CarbEntryTableViewController.swift */,
+				4302F4DE1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift */,
 				435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */,
-				43177D051D372AA50006E908 /* ReservoirTableViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -851,7 +852,7 @@
 			isa = PBXGroup;
 			children = (
 				43D8FEEF1C7294E90073BE78 /* ErrorBackgroundView.swift */,
-				43D8FEF01C7294E90073BE78 /* ReservoirTableViewController.swift */,
+				4302F4DC1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift */,
 				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
 			);
 			path = UI;
@@ -1329,13 +1330,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4302F4DF1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */,
 				43177D041D372A7F0006E908 /* CarbEntryTableViewController.swift in Sources */,
 				430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */,
 				430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */,
 				43177D021D3729E60006E908 /* IdentifiableClass.swift in Sources */,
+				4302F4D91D4D32D500F0FCAF /* NSTimeInterval.swift in Sources */,
 				435F355E1C9CD16A00C204D2 /* NSUserDefaults.swift in Sources */,
 				435F35611C9CD25F00C204D2 /* DeviceDataManager.swift in Sources */,
-				43177D061D372AA50006E908 /* ReservoirTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1456,13 +1458,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4302F4DD1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */,
 				43DFE2801CB1E12D00EFBE95 /* PumpEventType.swift in Sources */,
 				43D8FEF21C7294E90073BE78 /* ErrorBackgroundView.swift in Sources */,
 				43D8FEEB1C7294D50073BE78 /* Reservoir.swift in Sources */,
 				43D8FEE81C7294D50073BE78 /* InsulinMath.swift in Sources */,
 				43DFE27D1CB1D6A600EFBE95 /* PumpEvent.swift in Sources */,
 				43DFE2821CB1FB8500EFBE95 /* InsulinValue.swift in Sources */,
-				43D8FEF31C7294E90073BE78 /* ReservoirTableViewController.swift in Sources */,
 				430059201CCDC68200C861EA /* NSTimeInterval.swift in Sources */,
 				43D8FEE71C7294D50073BE78 /* Fetchable.swift in Sources */,
 				43D8FEE91C7294D50073BE78 /* Model.xcdatamodeld in Sources */,

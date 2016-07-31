@@ -133,7 +133,7 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
             case .Carbs:
                 performSegueWithIdentifier(CarbEntryTableViewController.className, sender: indexPath)
             case .Reservoir:
-                performSegueWithIdentifier(ReservoirTableViewController.className, sender: indexPath)
+                performSegueWithIdentifier(InsulinDeliveryTableViewController.className, sender: indexPath)
             }
         }
     }
@@ -157,7 +157,7 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 vc.defaultAbsorptionTimes = carbStore.defaultAbsorptionTimes
                 vc.preferredUnit = carbStore.preferredUnit
             }
-        case let vc as ReservoirTableViewController:
+        case let vc as InsulinDeliveryTableViewController:
             vc.doseStore = dataManager.doseStore
         default:
             break
