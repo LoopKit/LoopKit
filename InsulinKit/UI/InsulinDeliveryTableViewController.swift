@@ -1,5 +1,5 @@
 //
-//  ReservoirTableViewController.swift
+//  InsulinDeliveryTableViewController.swift
 //  Naterade
 //
 //  Created by Nathan Racklyeft on 1/30/16.
@@ -12,7 +12,7 @@ import LoopKit
 private let ReuseIdentifier = "Right Detail"
 
 
-public class ReservoirTableViewController: UITableViewController {
+public class InsulinDeliveryTableViewController: UITableViewController {
 
     @IBOutlet var needsConfigurationMessageView: ErrorBackgroundView!
 
