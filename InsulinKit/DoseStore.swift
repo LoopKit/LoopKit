@@ -491,6 +491,10 @@ public class DoseStore {
      Events are deduplicated by a unique constraint of pump ID, date, and raw data.
 
      - parameter events:            An array of event tuples
+        - date:      The date of the event
+        - dose:      The insulin dose associated with the event, if applicable
+        - raw:       The raw data of the event
+        - isMutable: Whether the dose value is expected to change. It will be maintained in memory for calculation purposes only and not persisted.
      - parameter completionHandler: A closure called after the events are saved. The closure takes a single argument:
         - error: An error object explaining why the events could not be saved.
      */
@@ -606,8 +610,11 @@ public class DoseStore {
      Fetches recent pump events
 
      - parameter resultsHandler: A closure called when the results are ready. This closure takes two arguments:
-        - objects: An array of pump events in reverse-chronological order
-        - error:   An error object explaining why the results could not be fetched
+        - values: An array of pump event tuples in reverse-chronological order:
+            - date:       The date of the event
+            - dose:       The insulin dose associated with the event, if applicable
+            - isUploaded: Whether the event has been successfully uploaded by the delegate
+        - error:  An error object explaining why the results could not be fetched
      */
     public func getRecentPumpEventValues(resultsHandler: (values: [(date: NSDate, dose: DoseEntry?, isUploaded: Bool)], error: Error?) -> Void) {
         guard let persistenceController = persistenceController else {
