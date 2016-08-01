@@ -73,7 +73,7 @@ struct GlucoseMath {
                 // Ensure that the entries are contiguous
                 abs(firstSample.startDate.timeIntervalSinceDate(lastSample.startDate)) < ContinuousGlucoseInterval * Double(samples.count) &&
                 // Ensure that the entries are all calibrated
-                samples.filter({ $0.displayOnly }).count == 0
+                samples.filter({ $0.isDisplayOnly }).count == 0
             else {
             return []
         }

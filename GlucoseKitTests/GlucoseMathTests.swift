@@ -15,12 +15,12 @@ import HealthKit
 public struct GlucoseFixtureValue: GlucoseSampleValue {
     public let startDate: NSDate
     public let quantity: HKQuantity
-    public let displayOnly: Bool
+    public let isDisplayOnly: Bool
 
-    public init(startDate: NSDate, quantity: HKQuantity, displayOnly: Bool) {
+    public init(startDate: NSDate, quantity: HKQuantity, isDisplayOnly: Bool) {
         self.startDate = startDate
         self.quantity = quantity
-        self.displayOnly = displayOnly
+        self.isDisplayOnly = isDisplayOnly
     }
 }
 
@@ -35,7 +35,7 @@ class GlucoseMathTests: XCTestCase {
             return GlucoseFixtureValue(
                 startDate: dateFormatter.dateFromString($0["date"] as! String)!,
                 quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliterUnit(), doubleValue: $0["amount"] as! Double),
-                displayOnly: ($0["display_only"] as? Bool) ?? false
+                isDisplayOnly: ($0["display_only"] as? Bool) ?? false
             )
         }
     }

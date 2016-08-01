@@ -313,6 +313,6 @@ class InsulinMathTests: XCTestCase {
         let input = loadDoseFixture("normalize_edge_case_doses_input")
         let output = InsulinMath.totalDeliveryForDoses(input)
 
-        XCTAssertEqualWithAccuracy(18.83, output, accuracy: pow(10, -2))
+        XCTAssertEqualWithAccuracy(18.8, output, accuracy: pow(10, -2))
     }
 }

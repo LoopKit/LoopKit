@@ -67,16 +67,16 @@ public class GlucoseStore: HealthKitSampleStore {
 
      - parameter quantity:      The glucose sample quantity
      - parameter date:          The date the sample was collected
-     - parameter displayOnly:   Whether the reading was shifted for visual consistency after calibration
+     - parameter isDisplayOnly: Whether the reading was shifted for visual consistency after calibration
      - parameter device:        The description of the device the collected the sample
      - parameter resultHandler: A closure called once the glucose value was saved. The closure takes three arguments:
         - success: Whether the sample was successfully saved
         - sample:  The sample object
         - error:   An error object explaining why the save failed
      */
-    public func addGlucose(quantity: HKQuantity, date: NSDate, displayOnly: Bool, device: HKDevice?, resultHandler: (success: Bool, sample: GlucoseValue?, error: NSError?) -> Void) {
+    public func addGlucose(quantity: HKQuantity, date: NSDate, isDisplayOnly: Bool, device: HKDevice?, resultHandler: (success: Bool, sample: GlucoseValue?, error: NSError?) -> Void) {
 
-        addGlucoseValues([(quantity: quantity, date: date, displayOnly: displayOnly)], device: device) { (success, samples, error) in
+        addGlucoseValues([(quantity: quantity, date: date, isDisplayOnly: isDisplayOnly)], device: device) { (success, samples, error) in
             resultHandler(success: success, sample: samples?.last, error: error)
         }
     }
@@ -87,16 +87,16 @@ public class GlucoseStore: HealthKitSampleStore {
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
      - parameter values:        A an array of value tuples:
-        - quantity:    The glucose sample quantity
-        - date:        The date the sample was collected
-        - displayOnly: Whether the reading was shifted for visual consistency after calibration
+        - quantity:      The glucose sample quantity
+        - date:          The date the sample was collected
+        - isDisplayOnly: Whether the reading was shifted for visual consistency after calibration
      - parameter device:        The description of the device the collected the sample
      - parameter resultHandler: A closure called once the glucose values were saved. The closure takes three arguments:
         - success: Whether the sample was successfully saved
         - samples: The saved samples
         - error:   An error object explaining why the save failed
      */
-    public func addGlucoseValues(values: [(quantity: HKQuantity, date: NSDate, displayOnly: Bool)], device: HKDevice?, resultHandler: (success: Bool, samples: [GlucoseValue]?, error: NSError?) -> Void) {
+    public func addGlucoseValues(values: [(quantity: HKQuantity, date: NSDate, isDisplayOnly: Bool)], device: HKDevice?, resultHandler: (success: Bool, samples: [GlucoseValue]?, error: NSError?) -> Void) {
         let glucose = values.map {
             return HKQuantitySample(
                 type: glucoseType,
@@ -105,7 +105,7 @@ public class GlucoseStore: HealthKitSampleStore {
                 endDate: $0.date,
                 device: device,
                 metadata: [
-                    MetadataKeyGlucoseIsDisplayOnly: $0.displayOnly
+                    MetadataKeyGlucoseIsDisplayOnly: $0.isDisplayOnly
                 ]
             )
         }

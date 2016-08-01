@@ -78,7 +78,7 @@ public class GlucoseRangeSchedule: DailyQuantitySchedule<DoubleRange> {
         temporaryOverride = nil
     }
 
-    public init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<DoubleRange>], workoutRange: DoubleRange?, timeZone: NSTimeZone? = nil) {
+    public init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<DoubleRange>], workoutRange: DoubleRange? = nil, timeZone: NSTimeZone? = nil) {
         self.workoutRange = workoutRange
 
         super.init(unit: unit, dailyItems: dailyItems, timeZone: timeZone)

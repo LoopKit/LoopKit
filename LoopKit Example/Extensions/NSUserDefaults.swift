@@ -55,7 +55,7 @@ extension NSUserDefaults {
         get {
             let value = doubleForKey(Key.InsulinActionDuration.rawValue)
 
-            return value > 0 ? value : nil
+            return value > 0 ? value : NSTimeInterval(hours: 4)
         }
         set {
             if let insulinActionDuration = newValue {
@@ -124,7 +124,7 @@ extension NSUserDefaults {
 
     var pumpID: String? {
         get {
-            return stringForKey(Key.PumpID.rawValue)
+            return stringForKey(Key.PumpID.rawValue) ?? "123456"
         }
         set {
             setObject(newValue, forKey: Key.PumpID.rawValue)
