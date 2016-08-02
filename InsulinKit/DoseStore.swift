@@ -10,12 +10,6 @@ import CoreData
 import LoopKit
 
 
-public protocol ReservoirValue {
-    var startDate: NSDate { get }
-    var unitVolume: Double { get }
-}
-
-
 public protocol DoseStoreDelegate: class {
     /**
      Asks the delegate to upload recently-added pump events not yet marked as uploaded.
@@ -23,21 +17,18 @@ public protocol DoseStoreDelegate: class {
      The completion handler must be called in all circumstances, with an array of object IDs that were successfully uploaded and can be purged when they are no longer recent.
      
      - parameter doseStore:  The store instance
-     - parameter pumpEvents: Tuples describing the events to upload:
-        - objectID: The internal storage identifier used by the store for the event
-        - date:     The event's date
-        - dose:     The corresponding insulin dose, if applicable
-        - raw:      The corresponding raw data
+     - parameter pumpEvents: The pump events
+     - parameter pumpID:     The ID of the pump
      - parameter completionHandler: The closure to execute when the upload attempt has finished. The closure takes a single argument of an array of object IDs that were successfully uploaded. If the upload did not succeed, call the closure with an empty array.
      */
-    func doseStore(doseStore: DoseStore, hasEventsNeedingUpload pumpEvents: [(objectID: NSManagedObjectID, date: NSDate, dose: DoseEntry?, raw: NSData?)], withCompletion completionHandler: (uploadedObjects: [NSManagedObjectID]) -> Void)
+    func doseStore(doseStore: DoseStore, hasEventsNeedingUpload pumpEvents: [PersistedPumpEvent], fromPumpID pumpID: String, withCompletion completionHandler: (uploadedObjects: [NSManagedObjectID]) -> Void)
 }
 
 
 /**
  Manages storage, retrieval, and calculation of insulin pump delivery data.
  
- Reservoir volume levels are stored in the following tiers:
+ Pump data are stored in the following tiers:
  
  * In-memory cache, used for IOB and insulin effect calculation
  ```
@@ -49,8 +40,6 @@ public protocol DoseStoreDelegate: class {
  0            [min(1 day ago, 1.5 * insulinActionDuration)]
  |––––––––––––––––––––––—————————|
  ```
- 
- TODO: Historical pump events (as well as their delivery interpretation)
  */
 public class DoseStore {
 
@@ -490,15 +479,12 @@ public class DoseStore {
      
      Events are deduplicated by a unique constraint of pump ID, date, and raw data.
 
-     - parameter events:            An array of event tuples
-        - date:      The date of the event
-        - dose:      The insulin dose associated with the event, if applicable
-        - raw:       The raw data of the event
-        - isMutable: Whether the dose value is expected to change. It will be maintained in memory for calculation purposes only and not persisted.
+     - parameter events:            An array of new pump events
+     - parameter deviceID:          An identifier for the device used to retrieve the events
      - parameter completionHandler: A closure called after the events are saved. The closure takes a single argument:
         - error: An error object explaining why the events could not be saved.
      */
-    public func addPumpEvents(events: [(date: NSDate, dose: DoseEntry?, raw: NSData?, isMutable: Bool)], completionHandler: (error: Error?) -> Void) {
+    public func addPumpEvents(events: [NewPumpEvent], withDeviceID deviceID: String, completionHandler: (error: Error?) -> Void) {
         guard let pumpID = pumpID, persistenceController = persistenceController else {
             completionHandler(error: .ConfigurationError)
             return
@@ -528,9 +514,11 @@ public class DoseStore {
                     let object = PumpEvent.insertNewObjectInContext(persistenceController.managedObjectContext)
 
                     object.date = event.date
-                    object.pumpID = pumpID
                     object.raw = event.raw
-                    object.doseEntry = event.dose
+                    object.dose = event.dose
+                    object.title = event.title
+                    object.deviceID = deviceID
+                    object.pumpID = pumpID
                 }
             }
 
@@ -580,11 +568,9 @@ public class DoseStore {
 
         isUploadRequestPending = true
 
-        let events = objects.map { (object) -> (objectID: NSManagedObjectID, date: NSDate, dose: DoseEntry?, raw: NSData?) in
-            return (objectID: object.objectID, date: object.date, dose: object.doseEntry, raw: object.raw)
-        }
+        let events = objects.map { $0 as PersistedPumpEvent }
 
-        delegate.doseStore(self, hasEventsNeedingUpload: events) { (uploadedObjects) in
+        delegate.doseStore(self, hasEventsNeedingUpload: events, fromPumpID: pumpID) { (uploadedObjects) in
             context.performBlock {
                 for id in uploadedObjects {
                     guard let object = try? context.existingObjectWithID(id), event = object as? PumpEvent else {
@@ -626,7 +612,7 @@ public class DoseStore {
             do {
                 let objects = try self.getRecentPumpEventObjects()
 
-                resultsHandler(values: objects.map({ (date: $0.date, dose: $0.doseEntry, isUploaded: $0.uploaded) }), error: nil)
+                resultsHandler(values: objects.map({ (date: $0.date, dose: $0.dose, isUploaded: $0.uploaded) }), error: nil)
             } catch let error as Error {
                 resultsHandler(values: [], error: error)
             } catch {
