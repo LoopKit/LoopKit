@@ -597,12 +597,12 @@ public class DoseStore {
 
      - parameter resultsHandler: A closure called when the results are ready. This closure takes two arguments:
         - values: An array of pump event tuples in reverse-chronological order:
-            - date:       The date of the event
-            - dose:       The insulin dose associated with the event, if applicable
+            - title:      A human-readable title describing the event
+            - dose:       The insulin dose described by the event, if applicable
             - isUploaded: Whether the event has been successfully uploaded by the delegate
         - error:  An error object explaining why the results could not be fetched
      */
-    public func getRecentPumpEventValues(resultsHandler: (values: [(date: NSDate, dose: DoseEntry?, isUploaded: Bool)], error: Error?) -> Void) {
+    public func getRecentPumpEventValues(resultsHandler: (values: [(title: String?, event: PersistedPumpEvent, isUploaded: Bool)], error: Error?) -> Void) {
         guard let persistenceController = persistenceController else {
             resultsHandler(values: [], error: .ConfigurationError)
             return
@@ -612,7 +612,7 @@ public class DoseStore {
             do {
                 let objects = try self.getRecentPumpEventObjects()
 
-                resultsHandler(values: objects.map({ (date: $0.date, dose: $0.dose, isUploaded: $0.uploaded) }), error: nil)
+                resultsHandler(values: objects.map({ (title: $0.title, event: $0, isUploaded: $0.uploaded) }), error: nil)
             } catch let error as Error {
                 resultsHandler(values: [], error: error)
             } catch {
@@ -782,11 +782,12 @@ public class DoseStore {
 
      - parameter resultsHandler: A closure called once the total has been retrieved. The closure takes two arguments:
         - total: The retrieved value
+        - since: The earliest date included in the total
         - error: An error object explaining why the retrieval failed
      */
-    public func getTotalRecentUnitsDelivered(resultsHandler: (total: Double, error: Error?) -> Void) {
+    public func getTotalRecentUnitsDelivered(resultsHandler: (total: Double, since: NSDate?, error: Error?) -> Void) {
         guard let persistenceController = persistenceController else {
-            resultsHandler(total: 0, error: .ConfigurationError)
+            resultsHandler(total: 0, since: nil, error: .ConfigurationError)
             return
         }
 
@@ -794,9 +795,9 @@ public class DoseStore {
             do {
                 let doses = try self.getRecentReservoirDoseEntries()
 
-                resultsHandler(total: InsulinMath.totalDeliveryForDoses(doses), error: nil)
+                resultsHandler(total: InsulinMath.totalDeliveryForDoses(doses), since: doses.last?.startDate, error: nil)
             } catch let error as Error {
-                resultsHandler(total: 0, error: error)
+                resultsHandler(total: 0, since: nil, error: error)
             } catch {
                 assertionFailure()
             }
