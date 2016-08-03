@@ -2,7 +2,7 @@
 //  PumpEvent+CoreDataProperties.swift
 //  LoopKit
 //
-//  Created by Nathan Racklyeft on 6/19/16.
+//  Created by Nate Racklyeft on 8/1/16.
 //  Copyright © 2016 Nathan Racklyeft. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -16,6 +16,7 @@ extension PumpEvent {
 
     @NSManaged var createdAt: NSDate!
     @NSManaged var date: NSDate!
+    @NSManaged var deviceID: String!
     @NSManaged var primitiveDuration: NSNumber?
     @NSManaged var primitiveType: String?
     @NSManaged var primitiveUnit: String?
@@ -23,5 +24,6 @@ extension PumpEvent {
     @NSManaged var primitiveValue: NSNumber?
     @NSManaged var pumpID: String?
     @NSManaged var raw: NSData?
+    @NSManaged var title: String?
 
 }
