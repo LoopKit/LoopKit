@@ -13,8 +13,6 @@ import Foundation
 public protocol PersistedPumpEvent {
     /// The date of the event
     var date: NSDate! { get }
-    /// The identifier of the device used to retrieve the event
-    var deviceID: String! { get }
     /// The insulin dose described by the event, if applicable
     var dose: DoseEntry? { get }
     /// The internal identifier of the event used by the store

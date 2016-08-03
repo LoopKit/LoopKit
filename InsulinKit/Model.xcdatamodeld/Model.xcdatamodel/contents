@@ -3,7 +3,6 @@
     <entity name="PumpEvent" representedClassName=".PumpEvent" syncable="YES">
         <attribute name="createdAt" attributeType="Date" indexed="YES" syncable="YES"/>
         <attribute name="date" attributeType="Date" indexed="YES" syncable="YES"/>
-        <attribute name="deviceID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="duration" attributeType="Double" minValueString="0" defaultValueString="0.0" syncable="YES"/>
         <attribute name="pumpID" attributeType="String" syncable="YES"/>
         <attribute name="raw" optional="YES" attributeType="Binary" syncable="YES"/>
@@ -27,7 +26,7 @@
         <attribute name="volume" attributeType="Double" syncable="YES"/>
     </entity>
     <elements>
-        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="210"/>
+        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="195"/>
         <element name="Reservoir" positionX="-63" positionY="-18" width="128" height="120"/>
     </elements>
 </model>

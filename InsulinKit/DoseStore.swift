@@ -480,11 +480,10 @@ public class DoseStore {
      Events are deduplicated by a unique constraint of pump ID, date, and raw data.
 
      - parameter events:            An array of new pump events
-     - parameter deviceID:          An identifier for the device used to retrieve the events
      - parameter completionHandler: A closure called after the events are saved. The closure takes a single argument:
         - error: An error object explaining why the events could not be saved.
      */
-    public func addPumpEvents(events: [NewPumpEvent], withDeviceID deviceID: String, completionHandler: (error: Error?) -> Void) {
+    public func addPumpEvents(events: [NewPumpEvent], completionHandler: (error: Error?) -> Void) {
         guard let pumpID = pumpID, persistenceController = persistenceController else {
             completionHandler(error: .ConfigurationError)
             return
@@ -517,7 +516,6 @@ public class DoseStore {
                     object.raw = event.raw
                     object.dose = event.dose
                     object.title = event.title
-                    object.deviceID = deviceID
                     object.pumpID = pumpID
                 }
             }
