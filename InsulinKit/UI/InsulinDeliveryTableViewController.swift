@@ -140,7 +140,7 @@ public class InsulinDeliveryTableViewController: UITableViewController {
 
     private enum Values {
         case Reservoir([ReservoirValue])
-        case History([(date: NSDate, dose: DoseEntry?, isUploaded: Bool)])
+        case History([(title: String?, event: PersistedPumpEvent, isUploaded: Bool)])
     }
 
     // Not thread-safe
@@ -256,23 +256,14 @@ public class InsulinDeliveryTableViewController: UITableViewController {
 
     private func updateTotal() {
         if case .Display = state {
-            doseStore?.getTotalRecentUnitsDelivered { (total, error) -> Void in
+            doseStore?.getTotalRecentUnitsDelivered { (total, date, error) -> Void in
                 dispatch_async(dispatch_get_main_queue()) {
                     if error != nil {
                         self.state = .Unavailable(error)
                     } else {
                         self.totalValueLabel.text = NSNumberFormatter.localizedStringFromNumber(total, numberStyle: .NoStyle)
 
-                        let startDate: NSDate?
-
-                        switch self.values {
-                        case .Reservoir(let values):
-                            startDate = values.last?.startDate
-                        case .History(let values):
-                            startDate = values.last?.date
-                        }
-
-                        if let sinceDate = startDate {
+                        if let sinceDate = date {
                             self.totalDateLabel.text = String(format: NSLocalizedString("com.loudnate.InsulinKit.totalDateLabel", tableName: "InsulinKit", value: "since %1$@", comment: "The format string describing the starting date of a total value. The first format argument is the localized date."), NSDateFormatter.localizedStringFromDate(sinceDate, dateStyle: .NoStyle, timeStyle: .ShortStyle))
                         } else {
                             self.totalDateLabel.text = nil
@@ -330,9 +321,9 @@ public class InsulinDeliveryTableViewController: UITableViewController {
                 cell.accessoryType = .None
             case .History(let values):
                 let entry = values[indexPath.row]
-                let time = timeFormatter.stringFromDate(entry.date)
+                let time = timeFormatter.stringFromDate(entry.event.date)
 
-                cell.textLabel?.text = entry.dose?.type.rawValue ?? "Unknown"
+                cell.textLabel?.text = entry.title ?? NSLocalizedString("Unknown", comment: "The default title to use when an entry has none")
                 cell.detailTextLabel?.text = time
                 cell.accessoryType = entry.isUploaded ? .Checkmark : .None
             }
