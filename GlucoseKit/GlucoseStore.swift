@@ -18,7 +18,7 @@ import LoopKit
  
  * In-memory cache, used for momentum calculation
 ```
- 0    [momentumDataInterval]
+ 0    [max(momentumDataInterval, reflectionDataInterval)]
  |––––|
 ```
  * HealthKit data, managed by the current application
@@ -48,13 +48,16 @@ public final class GlucoseStore: HealthKitSampleStore {
     private let maxPurgeInterval: NSTimeInterval = NSTimeInterval(hours: 24) * 7
 
     /// The interval before which glucose values should be purged from HealthKit.
-    private var managedDataInterval: NSTimeInterval? = NSTimeInterval(hours: 3)
+    public var managedDataInterval: NSTimeInterval? = NSTimeInterval(hours: 3)
+
+    /// The interval of glucose data to use for reflection adjustments
+    public var reflectionDataInterval: NSTimeInterval = NSTimeInterval(minutes: 30)
 
     /// The interval of glucose data to use for momentum calculation
-    private var momentumDataInterval: NSTimeInterval = NSTimeInterval(minutes: 15)
+    public var momentumDataInterval: NSTimeInterval = NSTimeInterval(minutes: 15)
 
-    /// Glucose sample cache, used for momentum calculation
-    private var momentumDataCache: Set<HKQuantitySample> = []
+    /// Glucose sample cache, used for calculations when HKHealthStore is unavailable
+    private var sampleDataCache: [HKQuantitySample] = []
 
     private var dataAccessQueue: dispatch_queue_t = dispatch_queue_create("com.loudnate.GlucoseKit.dataAccessQueue", DISPATCH_QUEUE_SERIAL)
 
@@ -118,10 +121,10 @@ public final class GlucoseStore: HealthKitSampleStore {
         healthStore.saveObjects(glucose) { (completed, error) in
             dispatch_async(self.dataAccessQueue) {
                 if completed {
-                    self.momentumDataCache.unionInPlace(glucose)
-                    self.purgeOldGlucoseSamples()
+                    let sortedGlucose = glucose.sort { $0.startDate < $1.startDate }
 
-                    let sortedGlucose = glucose.sort({ $0.startDate < $1.startDate })
+                    self.sampleDataCache.appendContentsOf(sortedGlucose)
+                    self.purgeOldGlucoseSamples()
 
                     if let latestGlucose = sortedGlucose.last where self.latestGlucose == nil || self.latestGlucose!.startDate < latestGlucose.startDate {
                         self.latestGlucose = latestGlucose
@@ -141,9 +144,9 @@ public final class GlucoseStore: HealthKitSampleStore {
      *This method should only be called from the `dataAccessQueue`*
      */
     private func purgeOldGlucoseSamples() {
-        let momentumStartDate = NSDate(timeIntervalSinceNow: -momentumDataInterval)
+        let cacheStartDate = NSDate(timeIntervalSinceNow: -max(momentumDataInterval, reflectionDataInterval))
 
-        momentumDataCache = Set(momentumDataCache.filter { $0.startDate >= momentumStartDate })
+        sampleDataCache = sampleDataCache.filter { $0.startDate >= cacheStartDate }
 
         if let managedDataInterval = managedDataInterval {
             guard UIApplication.sharedApplication().protectedDataAvailable else {
@@ -177,7 +180,7 @@ public final class GlucoseStore: HealthKitSampleStore {
 
     private func getCachedGlucoseSamples(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (samples: [HKQuantitySample], error: NSError?) -> Void) {
         dispatch_async(dataAccessQueue) {
-            let samples = self.momentumDataCache.filterDateRange(startDate, endDate)
+            let samples = self.sampleDataCache.filterDateRange(startDate, endDate)
             resultsHandler(samples: samples, error: nil)
         }
     }
@@ -228,20 +231,59 @@ public final class GlucoseStore: HealthKitSampleStore {
 
     // MARK: - Math
 
+    private func unionSampleDataCache(with samples: [HKQuantitySample]) {
+        dispatch_async(self.dataAccessQueue) {
+            let samplesToCache = samples.filter({ !self.sampleDataCache.contains($0) })
+
+            if samplesToCache.count > 0 {
+                self.sampleDataCache.appendContentsOf(samplesToCache)
+                self.sampleDataCache.sortInPlace({ $0.startDate < $1.startDate })
+            }
+        }
+    }
+
     /**
      Calculates the momentum effect for recent glucose values
+     
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
      - parameter resultsHandler: A closure called once the calculation has completed. The closure takes two arguments:
         - effects: The calculated effect values
         - error:   An error explaining why the calculation failed
-    */
+     */
     public func getRecentMomentumEffect(resultsHandler: (effects: [GlucoseEffect], error: NSError?) -> Void) {
         getRecentGlucoseSamples(startDate: NSDate(timeIntervalSinceNow: -momentumDataInterval), endDate: NSDate.distantFuture()) { (samples, error) -> Void in
-            dispatch_async(self.dataAccessQueue) {
-                self.momentumDataCache.unionInPlace(samples)
+            self.unionSampleDataCache(with: samples)
+            resultsHandler(effects: GlucoseMath.linearMomentumEffectForGlucoseEntries(samples), error: error)
+        }
+    }
+
+    /**
+     Calculates the recent change in glucose values
+ 
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+ 
+     - parameter resultsHandler: A closure called once the calculation has completed. The closure takes two arguments:
+        - values:       The first and last glucose values in the requested period
+        - error:        An error explaining why the calculation failed
+     */
+    public func getRecentGlucoseChange(resultsHandler: (values: (GlucoseValue, GlucoseValue)?, error: NSError?) -> Void) {
+        getRecentGlucoseSamples(startDate: NSDate(timeIntervalSinceNow: -reflectionDataInterval), endDate: NSDate.distantFuture()) { (samples, error) in
+            self.unionSampleDataCache(with: samples)
+
+            let change: (GlucoseValue, GlucoseValue)?
+
+            if GlucoseMath.isContinuousAndCalibrated(samples),
+                let first = samples.first,
+                let last = samples.last
+                where first.startDate < last.startDate
+            {
+                change = (first, last)
+            } else {
+                change = nil
             }
 
-            resultsHandler(effects: GlucoseMath.linearMomentumEffectForGlucoseEntries(samples), error: error)
+            resultsHandler(values: change, error: error)
         }
     }
 }

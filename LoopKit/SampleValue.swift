@@ -30,13 +30,13 @@ public protocol SampleValue: TimelineValue {
 
 public extension SequenceType where Generator.Element: TimelineValue {
     /**
-     Returns the closest element in the sequence prior to the specified date
+     Returns the closest element in the sorted sequence prior to the specified date
 
      - parameter date: The date to use in the search
 
      - returns: The closest element, if any exist before the specified date
      */
-    func closestToDate(date: NSDate) -> Generator.Element? {
+    func closestPriorToDate(date: NSDate) -> Generator.Element? {
         var closestElement: Generator.Element?
 
         for value in self {

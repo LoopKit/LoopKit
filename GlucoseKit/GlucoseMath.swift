@@ -51,6 +51,29 @@ struct GlucoseMath {
     }
 
     /**
+     Determines whether a collection of glucose samples can be considered continuous, and contains no calibration entries.
+     
+     - parameter samples: The sequence of glucose, in chronological order
+     
+     - returns: True if the samples are continuous and do not contain calibration entries
+     */
+    static func isContinuousAndCalibrated<T: CollectionType where T.Generator.Element: GlucoseSampleValue, T.Index == Int>(samples: T) -> Bool {
+        if
+            let first = samples.first,
+            let last = samples.last
+            where
+            // Ensure that the entries are contiguous
+            abs(first.startDate.timeIntervalSinceDate(last.startDate)) < ContinuousGlucoseInterval * NSTimeInterval(samples.count) &&
+            // Ensure that the entries are all calibrated
+            samples.filter({ $0.isDisplayOnly }).count == 0
+        {
+            return true
+        }
+
+        return false
+    }
+
+    /**
      Calculates the short-term predicted trend of a sequence of glucose values using linear regression
 
      - parameter samples:  The sequence of glucose, in chronological order
@@ -65,16 +88,12 @@ struct GlucoseMath {
         delta: NSTimeInterval = NSTimeInterval(minutes: 5)
     ) -> [GlucoseEffect] {
         guard
-            samples.count > 2,  // Linear regression isn't much use without 3 or more entries.
+            samples.count > 2 &&  // Linear regression isn't much use without 3 or more entries.
+            isContinuousAndCalibrated(samples),
             let firstSample = samples.first,
                 lastSample = samples.last,
                 (startDate, endDate) = LoopMath.simulationDateRangeForSamples([lastSample], duration: duration, delta: delta)
-            where
-                // Ensure that the entries are contiguous
-                abs(firstSample.startDate.timeIntervalSinceDate(lastSample.startDate)) < ContinuousGlucoseInterval * Double(samples.count) &&
-                // Ensure that the entries are all calibrated
-                samples.filter({ $0.isDisplayOnly }).count == 0
-            else {
+        else {
             return []
         }
 

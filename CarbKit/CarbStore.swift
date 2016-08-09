@@ -486,7 +486,7 @@ public final class CarbStore: HealthKitSampleStore {
 
     public func carbsOnBoardAtDate(date: NSDate, resultHandler: (value: CarbValue?, error: Error?) -> Void) {
         getCarbsOnBoardValues { (values, error) -> Void in
-            resultHandler(value: values.closestToDate(date), error: error)
+            resultHandler(value: values.closestPriorToDate(date), error: error)
         }
     }
 
@@ -497,16 +497,28 @@ public final class CarbStore: HealthKitSampleStore {
 
      - parameter startDate:     The earliest date of values to retrieve. The default, and earliest supported value, is the previous midnight in the current time zone.
      - parameter endDate:       The latest date of values to retrieve. Defaults to the distant future.
+     - parameter delay:         An expected delay in glucose effects, accounting for sensor lag
+     - parameter delta:         The timeline interval of the returned effects
      - parameter resultHandler: A closure called once the values have been retrieved. The closure takes two arguments:
         - values: The retrieved values
         - error:  An error object explaining why the retrieval failed
      */
-    public func getCarbsOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (values: [CarbValue], error: Error?) -> Void) {
+    public func getCarbsOnBoardValues(
+        startDate startDate: NSDate? = nil,
+        endDate: NSDate? = nil,
+        delay: NSTimeInterval = NSTimeInterval(minutes: 10),
+        delta: NSTimeInterval = NSTimeInterval(minutes: 5),
+        resultHandler: (values: [CarbValue], error: Error?) -> Void) {
+
         dispatch_async(dataAccessQueue) { [unowned self] in
             if self.carbsOnBoardCache == nil {
                 self.getCachedCarbSamples { (entries, error) -> Void in
                     if error == nil {
-                        self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(entries, defaultAbsorptionTime: self.defaultAbsorptionTimes.medium)
+                        self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(entries,
+                            defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                            delay: delay,
+                            delta: delta
+                        )
                     }
 
                     resultHandler(values: self.carbsOnBoardCache?.filterDateRange(startDate, endDate).map { $0 } ?? [], error: error)
@@ -524,11 +536,19 @@ public final class CarbStore: HealthKitSampleStore {
 
      - parameter startDate:     The earliest date of effects to retrieve. The default, and earliest supported value, is the previous midnight in the current time zone.
      - parameter endDate:       The latest date of effects to retrieve. Defaults to the distant future.
+     - parameter delay:         An expected delay in glucose effects, accounting for sensor lag
+     - parameter delta:         The timeline interval of the returned effects
      - parameter resultHandler: A closure called once the effects have been retrieved. The closure takes two arguments:
         - effects: The retrieved timeline of effects
         - error:   An error object explaining why the retrieval failed
      */
-    public func getGlucoseEffects(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (effects: [GlucoseEffect], error: Error?) -> Void) {
+    public func getGlucoseEffects(
+        startDate startDate: NSDate? = nil,
+        endDate: NSDate? = nil,
+        delay: NSTimeInterval = NSTimeInterval(minutes: 10),
+        delta: NSTimeInterval = NSTimeInterval(minutes: 5),
+        resultHandler: (effects: [GlucoseEffect], error: Error?) -> Void) {
+
         dispatch_async(dataAccessQueue) {
             if self.glucoseEffectsCache == nil {
                 if let carbRatioSchedule = self.carbRatioSchedule, insulinSensitivitySchedule = self.insulinSensitivitySchedule {
@@ -537,7 +557,9 @@ public final class CarbStore: HealthKitSampleStore {
                             self.glucoseEffectsCache = CarbMath.glucoseEffectsForCarbEntries(entries,
                                 carbRatios: carbRatioSchedule,
                                 insulinSensitivities: insulinSensitivitySchedule,
-                                defaultAbsorptionTime: self.defaultAbsorptionTimes.medium
+                                defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                                delay: delay,
+                                delta: delta
                             )
                         }
 

@@ -697,7 +697,7 @@ public final class DoseStore {
      */
     public func insulinOnBoardAtDate(date: NSDate, resultHandler: (value: InsulinValue?, error: Error?) -> Void) {
         getInsulinOnBoardValues { (values, error) -> Void in
-            resultHandler(value: values.closestToDate(date), error: error)
+            resultHandler(value: values.closestPriorToDate(date), error: error)
         }
     }
 
