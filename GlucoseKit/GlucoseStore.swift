@@ -32,7 +32,7 @@ import LoopKit
               |–––––––––--->
 ```
  */
-public class GlucoseStore: HealthKitSampleStore {
+public final class GlucoseStore: HealthKitSampleStore {
 
     private let glucoseType = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
 

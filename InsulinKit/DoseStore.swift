@@ -41,7 +41,7 @@ public protocol DoseStoreDelegate: class {
  |––––––––––––––––––––––—————————|
  ```
  */
-public class DoseStore {
+public final class DoseStore {
 
     /// Notification posted when the ready state was modified.
     public static let ReadyStateDidChangeNotification = "com.loudnate.InsulinKit.ReadyStateDidUpdateNotification"

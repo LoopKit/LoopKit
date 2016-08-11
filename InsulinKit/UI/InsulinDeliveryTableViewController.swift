@@ -12,7 +12,7 @@ import LoopKit
 private let ReuseIdentifier = "Right Detail"
 
 
-public class InsulinDeliveryTableViewController: UITableViewController {
+public final class InsulinDeliveryTableViewController: UITableViewController {
 
     @IBOutlet var needsConfigurationMessageView: ErrorBackgroundView!
 
