@@ -111,7 +111,7 @@ extension PumpEvent: TimelineValue {
 
 
 extension PumpEvent {
-    var doseEntry: DoseEntry? {
+    var dose: DoseEntry? {
         get {
             guard let type = type, value = value, unit = unit else {
                 return nil
@@ -131,4 +131,8 @@ extension PumpEvent {
             unit = entry.unit
         }
     }
+}
+
+
+extension PumpEvent: PersistedPumpEvent {
 }

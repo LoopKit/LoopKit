@@ -13,7 +13,7 @@ import LoopKit
 private let ReuseIdentifier = "CarbEntry"
 
 
-public class CarbEntryTableViewController: UITableViewController {
+public final class CarbEntryTableViewController: UITableViewController {
 
     @IBOutlet var unavailableMessageView: UIView!
 
