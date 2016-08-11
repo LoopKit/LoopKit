@@ -10,7 +10,7 @@ import UIKit
 import HealthKit
 
 
-public class CarbEntryEditViewController: UITableViewController, DatePickerTableViewCellDelegate, TextFieldTableViewCellDelegate {
+public final class CarbEntryEditViewController: UITableViewController, DatePickerTableViewCellDelegate, TextFieldTableViewCellDelegate {
 
     public var defaultAbsorptionTimes: CarbStore.DefaultAbsorptionTimes? {
         didSet {

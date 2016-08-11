@@ -43,7 +43,7 @@ public protocol CarbStoreDelegate: class {
  |––––––––––––––––––--->
  ```
  */
-public class CarbStore: HealthKitSampleStore {
+public final class CarbStore: HealthKitSampleStore {
     public typealias CarbEntryCacheRawValue = [[String: AnyObject]]
 
     public typealias DefaultAbsorptionTimes = (fast: NSTimeInterval, medium: NSTimeInterval, slow: NSTimeInterval)
