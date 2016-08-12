@@ -97,6 +97,11 @@ public final class GlucoseStore: HealthKitSampleStore {
         - error:   An error object explaining why the save failed
      */
     public func addGlucoseValues(values: [(quantity: HKQuantity, date: NSDate, isDisplayOnly: Bool)], device: HKDevice?, resultHandler: (success: Bool, samples: [GlucoseValue]?, error: NSError?) -> Void) {
+        guard values.count > 0 else {
+            resultHandler(success: false, samples: [], error: nil)
+            return
+        }
+
         let glucose = values.map {
             return HKQuantitySample(
                 type: glucoseType,
