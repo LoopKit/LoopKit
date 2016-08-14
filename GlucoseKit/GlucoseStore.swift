@@ -273,7 +273,7 @@ public final class GlucoseStore: HealthKitSampleStore {
 
             let change: (GlucoseValue, GlucoseValue)?
 
-            if GlucoseMath.isContinuousAndCalibrated(samples),
+            if GlucoseMath.isCalibrated(samples) && samples.count > 2,
                 let first = samples.first,
                 let last = samples.last
                 where first.startDate < last.startDate

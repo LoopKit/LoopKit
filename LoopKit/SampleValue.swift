@@ -75,3 +75,22 @@ public extension SequenceType where Generator.Element: TimelineValue {
         }
     }
 }
+
+
+public extension CollectionType where Generator.Element: TimelineValue, Index: BidirectionalIndexType {
+
+    /**
+     Determines whether the sequence contains boundary elements which span the specified time interval.
+
+     The sequence is assumed to be sorted chronologically.
+
+     TODO: Is this an effective measure to determine if there's enough reservoir entries to be trustworthy?
+
+     - returns: True if the time interval is matched
+     */
+    func spanTimeInterval(timeInterval: NSTimeInterval, within errorInterval: NSTimeInterval = NSTimeInterval(minutes: 5)) -> Bool {
+        guard let lastValue = last, let firstValue = first else { return false }
+
+        return abs(lastValue.startDate.timeIntervalSinceDate(firstValue.startDate) - timeInterval) <= errorInterval / 2
+    }
+}
