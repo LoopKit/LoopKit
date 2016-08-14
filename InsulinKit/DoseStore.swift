@@ -236,7 +236,7 @@ public final class DoseStore {
                     basalProfile = self.basalProfile,
                     minEndDate = self.recentValuesStartDate
                 {
-                    self.recentReservoirDoseEntriesCache = self.recentReservoirDoseEntriesCache!.filter { $0.endDate >= minEndDate }
+                    self.recentReservoirDoseEntriesCache = self.recentReservoirDoseEntriesCache!.filterDateRange(minEndDate, nil)
 
                     var newValues: [Reservoir] = []
 
@@ -793,7 +793,7 @@ public final class DoseStore {
             do {
                 let doses = try self.getRecentReservoirDoseEntries()
 
-                resultsHandler(total: InsulinMath.totalDeliveryForDoses(doses), since: doses.last?.startDate, error: nil)
+                resultsHandler(total: InsulinMath.totalDeliveryForDoses(doses), since: doses.first?.startDate, error: nil)
             } catch let error as Error {
                 resultsHandler(total: 0, since: nil, error: error)
             } catch {
