@@ -210,13 +210,14 @@ public final class DoseStore {
      - parameter unitVolume:        The reservoir volume, in units
      - parameter date:              The date of the volume reading
      - parameter completionHandler: A closure called after the value was saved. This closure takes three arguments:
-        - value:         The new reservoir value, if it was saved
-        - previousValue: The last new reservoir value
-        - error:         An error object explaining why the value could not be saved
+        - value:                    The new reservoir value, if it was saved
+        - previousValue:            The last new reservoir value
+        - areStoredValuesContinous: Whether the current recent state of the stored reservoir data is considered continuous and reliable for deriving insulin effects after addition of this new value.
+        - error:                    An error object explaining why the value could not be saved
      */
-    public func addReservoirValue(unitVolume: Double, atDate date: NSDate, completionHandler: (value: ReservoirValue?, previousValue: ReservoirValue?, error: Error?) -> Void) {
+    public func addReservoirValue(unitVolume: Double, atDate date: NSDate, completionHandler: (value: ReservoirValue?, previousValue: ReservoirValue?, areStoredValuesContinuous: Bool, error: Error?) -> Void) {
         guard let pumpID = pumpID, persistenceController = persistenceController else {
-            completionHandler(value: nil, previousValue: nil, error: .ConfigurationError)
+            completionHandler(value: nil, previousValue: nil, areStoredValuesContinuous: false, error: .ConfigurationError)
             return
         }
 
@@ -228,15 +229,17 @@ public final class DoseStore {
             reservoir.pumpID = pumpID
 
             let previousValue = self.recentReservoirObjectsCache?.first
+            var areStoredValuesContinuous = false
 
             if self.recentReservoirObjectsCache != nil, let predicate = self.recentValuesPredicate {
                 self.recentReservoirObjectsCache = self.recentReservoirObjectsCache!.filter { predicate.evaluateWithObject($0) }
 
-                if self.recentReservoirDoseEntriesCache != nil, let
+                if let
+                    doseEntries = try? self.getRecentReservoirDoseEntries(),
                     basalProfile = self.basalProfile,
                     minEndDate = self.recentValuesStartDate
                 {
-                    self.recentReservoirDoseEntriesCache = self.recentReservoirDoseEntriesCache!.filterDateRange(minEndDate, nil)
+                    var recentDoseEntries = doseEntries.filterDateRange(minEndDate, nil)
 
                     var newValues: [Reservoir] = []
 
@@ -247,11 +250,25 @@ public final class DoseStore {
                     newValues.append(reservoir)
 
                     let newDoseEntries = InsulinMath.doseEntriesFromReservoirValues(newValues)
+                    recentDoseEntries += newDoseEntries
 
-                    self.recentReservoirDoseEntriesCache! += newDoseEntries
+                    // Consider any entries longer than 30 minutes to be unreliable; warn the caller they might want to try a different data source.
+                    // TODO: Move this to InsulinMath and validate on effect generation calls
+                    if let insulinActionDuration = self.insulinActionDuration {
+                        let continuityStartDate = NSDate(timeIntervalSinceNow: -insulinActionDuration)
+                        let doseEntries = recentDoseEntries.filterDateRange(continuityStartDate, nil)
+
+                        areStoredValuesContinuous = doseEntries.count > 0 &&
+                            doseEntries.first!.startDate <= continuityStartDate &&
+                            doseEntries.indexOf { (entry) -> Bool in
+                                entry.endDate.timeIntervalSinceDate(entry.startDate) > NSTimeInterval(minutes: 30)
+                            } == nil
+                    }
+
+                    self.recentReservoirDoseEntriesCache = recentDoseEntries
 
                     if self.recentReservoirNormalizedDoseEntriesCache != nil {
-                        self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filter { $0.endDate > minEndDate }
+                        self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filterDateRange(minEndDate, nil)
 
                         self.recentReservoirNormalizedDoseEntriesCache! += InsulinMath.normalize(newDoseEntries, againstBasalSchedule: basalProfile)
                     }
@@ -264,9 +281,19 @@ public final class DoseStore {
 
             persistenceController.save { (error) -> Void in
                 if let error = error {
-                    completionHandler(value: reservoir, previousValue: previousValue, error: .PersistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion))
+                    completionHandler(
+                        value: reservoir,
+                        previousValue: previousValue,
+                        areStoredValuesContinuous: areStoredValuesContinuous,
+                        error: .PersistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion)
+                    )
                 } else {
-                    completionHandler(value: reservoir, previousValue: previousValue, error: nil)
+                    completionHandler(
+                        value: reservoir,
+                        previousValue: previousValue,
+                        areStoredValuesContinuous: areStoredValuesContinuous,
+                        error: nil
+                    )
                 }
 
                 NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ValuesDidChangeNotification, object: self)
