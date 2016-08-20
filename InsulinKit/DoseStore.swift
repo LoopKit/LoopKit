@@ -687,7 +687,6 @@ public final class DoseStore {
         }
     }
 
-
     /**
      Retrieves recent dose values derived from pump events.
 
