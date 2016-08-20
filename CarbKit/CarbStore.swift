@@ -530,8 +530,8 @@ public final class CarbStore: HealthKitSampleStore {
                     if error == nil {
                         self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(entries,
                             defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                            delay: delay,
-                            delta: delta
+                            delay: self.delay,
+                            delta: self.delta
                         )
                     }
 
@@ -568,8 +568,8 @@ public final class CarbStore: HealthKitSampleStore {
                                 carbRatios: carbRatioSchedule,
                                 insulinSensitivities: insulinSensitivitySchedule,
                                 defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                                delay: delay,
-                                delta: delta
+                                delay: self.delay,
+                                delta: self.delta
                             )
                         }
 
