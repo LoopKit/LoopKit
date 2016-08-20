@@ -94,6 +94,24 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
 
+    /// The expected delay in the appearance of glucose effects, accounting for both digestion and sensor lag
+    public var delay: NSTimeInterval = NSTimeInterval(minutes: 10) {
+        didSet {
+            dispatch_async(dataAccessQueue) {
+                self.clearCalculationCache()
+            }
+        }
+    }
+
+    // The interval between effect values to use for the calculated timelines
+    public var delta: NSTimeInterval = NSTimeInterval(minutes: 5) {
+        didSet {
+            dispatch_async(dataAccessQueue) {
+                self.clearCalculationCache()
+            }
+        }
+    }
+
     /// The longest expected absorption time interval for carbohydrates. Defaults to 8 hours.
     private let maximumAbsorptionTimeInterval: NSTimeInterval
 
@@ -497,8 +515,6 @@ public final class CarbStore: HealthKitSampleStore {
 
      - parameter startDate:     The earliest date of values to retrieve. The default, and earliest supported value, is the previous midnight in the current time zone.
      - parameter endDate:       The latest date of values to retrieve. Defaults to the distant future.
-     - parameter delay:         An expected delay in glucose effects, accounting for sensor lag
-     - parameter delta:         The timeline interval of the returned effects
      - parameter resultHandler: A closure called once the values have been retrieved. The closure takes two arguments:
         - values: The retrieved values
         - error:  An error object explaining why the retrieval failed
@@ -506,8 +522,6 @@ public final class CarbStore: HealthKitSampleStore {
     public func getCarbsOnBoardValues(
         startDate startDate: NSDate? = nil,
         endDate: NSDate? = nil,
-        delay: NSTimeInterval = NSTimeInterval(minutes: 10),
-        delta: NSTimeInterval = NSTimeInterval(minutes: 5),
         resultHandler: (values: [CarbValue], error: Error?) -> Void) {
 
         dispatch_async(dataAccessQueue) { [unowned self] in
@@ -536,8 +550,6 @@ public final class CarbStore: HealthKitSampleStore {
 
      - parameter startDate:     The earliest date of effects to retrieve. The default, and earliest supported value, is the previous midnight in the current time zone.
      - parameter endDate:       The latest date of effects to retrieve. Defaults to the distant future.
-     - parameter delay:         An expected delay in glucose effects, accounting for sensor lag
-     - parameter delta:         The timeline interval of the returned effects
      - parameter resultHandler: A closure called once the effects have been retrieved. The closure takes two arguments:
         - effects: The retrieved timeline of effects
         - error:   An error object explaining why the retrieval failed
@@ -545,8 +557,6 @@ public final class CarbStore: HealthKitSampleStore {
     public func getGlucoseEffects(
         startDate startDate: NSDate? = nil,
         endDate: NSDate? = nil,
-        delay: NSTimeInterval = NSTimeInterval(minutes: 10),
-        delta: NSTimeInterval = NSTimeInterval(minutes: 5),
         resultHandler: (effects: [GlucoseEffect], error: Error?) -> Void) {
 
         dispatch_async(dataAccessQueue) {
