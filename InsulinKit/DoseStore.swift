@@ -106,7 +106,7 @@ public final class DoseStore {
     public var basalProfile: BasalRateSchedule? {
         didSet {
             persistenceController?.managedObjectContext.performBlock {
-                self.clearReservoirDoseCache()
+                self.clearReservoirNormalizedDoseCache()
             }
         }
     }
@@ -114,7 +114,7 @@ public final class DoseStore {
     public var insulinSensitivitySchedule: InsulinSensitivitySchedule? {
         didSet {
             persistenceController?.managedObjectContext.performBlock {
-                self.clearReservoirDoseCache()
+                self.clearCalculationCache()
             }
         }
     }
@@ -186,9 +186,13 @@ public final class DoseStore {
         }
     }
 
-    // MARK: - Reservoir data
+    // MARK: - Reservoir Data
 
-    private var recentReservoirObjectsCache: [Reservoir]?
+    // Whether the current recent state of the stored reservoir data is considered 
+    // continuous and reliable for the derivation of insulin effects
+    public private(set) var areReservoirValuesContinuous = false
+
+    private var lastReservoirObject: Reservoir?
 
     private var recentReservoirNormalizedDoseEntriesCache: [DoseEntry]?
 
@@ -228,54 +232,48 @@ public final class DoseStore {
             reservoir.date = date
             reservoir.pumpID = pumpID
 
-            let previousValue = self.recentReservoirObjectsCache?.first
-            var areStoredValuesContinuous = false
+            let previousValue = self.lastReservoirObject
+            if let
+                doseEntries = try? self.getRecentReservoirDoseEntries(),
+                basalProfile = self.basalProfile,
+                minEndDate = self.recentValuesStartDate
+            {
+                var recentDoseEntries = doseEntries.filterDateRange(minEndDate, nil)
 
-            if self.recentReservoirObjectsCache != nil, let predicate = self.recentValuesPredicate {
-                self.recentReservoirObjectsCache = self.recentReservoirObjectsCache!.filter { predicate.evaluateWithObject($0) }
+                var newValues: [Reservoir] = []
 
-                if let
-                    doseEntries = try? self.getRecentReservoirDoseEntries(),
-                    basalProfile = self.basalProfile,
-                    minEndDate = self.recentValuesStartDate
-                {
-                    var recentDoseEntries = doseEntries.filterDateRange(minEndDate, nil)
-
-                    var newValues: [Reservoir] = []
-
-                    if let previousValue = self.recentReservoirObjectsCache?.first {
-                        newValues.append(previousValue)
-                    }
-
-                    newValues.append(reservoir)
-
-                    let newDoseEntries = InsulinMath.doseEntriesFromReservoirValues(newValues)
-                    recentDoseEntries += newDoseEntries
-
-                    // Consider any entries longer than 30 minutes to be unreliable; warn the caller they might want to try a different data source.
-                    // TODO: Move this to InsulinMath and validate on effect generation calls
-                    if let insulinActionDuration = self.insulinActionDuration {
-                        let continuityStartDate = NSDate(timeIntervalSinceNow: -insulinActionDuration)
-                        let doseEntries = recentDoseEntries.filterDateRange(continuityStartDate, nil)
-
-                        areStoredValuesContinuous = doseEntries.count > 0 &&
-                            doseEntries.first!.startDate <= continuityStartDate &&
-                            doseEntries.indexOf { (entry) -> Bool in
-                                entry.endDate.timeIntervalSinceDate(entry.startDate) > NSTimeInterval(minutes: 30)
-                            } == nil
-                    }
-
-                    self.recentReservoirDoseEntriesCache = recentDoseEntries
-
-                    if self.recentReservoirNormalizedDoseEntriesCache != nil {
-                        self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filterDateRange(minEndDate, nil)
-
-                        self.recentReservoirNormalizedDoseEntriesCache! += InsulinMath.normalize(newDoseEntries, againstBasalSchedule: basalProfile)
-                    }
+                if let previousValue = previousValue {
+                    newValues.append(previousValue)
                 }
 
-                self.recentReservoirObjectsCache!.insert(reservoir, atIndex: 0)
+                newValues.append(reservoir)
+
+                let newDoseEntries = InsulinMath.doseEntriesFromReservoirValues(newValues)
+                recentDoseEntries += newDoseEntries
+
+                // Consider any entries longer than 30 minutes to be unreliable; warn the caller they might want to try a different data source.
+                // TODO: Move this to InsulinMath and validate on effect generation calls
+                if let insulinActionDuration = self.insulinActionDuration {
+                    let continuityStartDate = NSDate(timeIntervalSinceNow: -insulinActionDuration)
+                    let doseEntries = recentDoseEntries.filterDateRange(continuityStartDate, nil)
+
+                    self.areReservoirValuesContinuous = doseEntries.count > 0 &&
+                        doseEntries.first!.startDate <= continuityStartDate &&
+                        doseEntries.indexOf { (entry) -> Bool in
+                            entry.endDate.timeIntervalSinceDate(entry.startDate) > NSTimeInterval(minutes: 30)
+                        } == nil
+                }
+
+                self.recentReservoirDoseEntriesCache = recentDoseEntries
+
+                if self.recentReservoirNormalizedDoseEntriesCache != nil {
+                    self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filterDateRange(minEndDate, nil)
+
+                    self.recentReservoirNormalizedDoseEntriesCache! += InsulinMath.normalize(newDoseEntries, againstBasalSchedule: basalProfile)
+                }
             }
+
+            self.lastReservoirObject = reservoir
 
             self.clearCalculationCache()
 
@@ -284,14 +282,14 @@ public final class DoseStore {
                     completionHandler(
                         value: reservoir,
                         previousValue: previousValue,
-                        areStoredValuesContinuous: areStoredValuesContinuous,
+                        areStoredValuesContinuous: self.areReservoirValuesContinuous,
                         error: .PersistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion)
                     )
                 } else {
                     completionHandler(
                         value: reservoir,
                         previousValue: previousValue,
-                        areStoredValuesContinuous: areStoredValuesContinuous,
+                        areStoredValuesContinuous: self.areReservoirValuesContinuous,
                         error: nil
                     )
                 }
@@ -335,10 +333,6 @@ public final class DoseStore {
      - returns: An array of recently saved reservoir managed objects, in reverse-chronological order
      */
     private func getRecentReservoirObjects() throws -> [Reservoir] {
-        if let objects = recentReservoirObjectsCache {
-            return objects
-        }
-
         do {
             try self.purgeReservoirObjects()
 
@@ -346,7 +340,7 @@ public final class DoseStore {
 
             recentReservoirObjects += try Reservoir.objectsInContext(persistenceController!.managedObjectContext, predicate: self.recentValuesPredicate, sortedBy: "date", ascending: false)
 
-            self.recentReservoirObjectsCache = recentReservoirObjects
+            self.lastReservoirObject = recentReservoirObjects.first
 
             return recentReservoirObjects
         } catch let fetchError as NSError {
@@ -366,14 +360,55 @@ public final class DoseStore {
             return doses
         } else {
             let objects = try self.getRecentReservoirObjects()
+            let recentDoseEntries = InsulinMath.doseEntriesFromReservoirValues(objects.reverse())
 
-            self.recentReservoirDoseEntriesCache = InsulinMath.doseEntriesFromReservoirValues(objects.reverse())
+            // Consider any entries longer than 30 minutes to be unreliable; warn the caller they might want to try a different data source.
+            // TODO: Move this to InsulinMath and validate on effect generation calls
+            if let insulinActionDuration = self.insulinActionDuration {
+                let continuityStartDate = NSDate(timeIntervalSinceNow: -insulinActionDuration)
+                let doseEntries = recentDoseEntries.filterDateRange(continuityStartDate, nil)
+
+                self.areReservoirValuesContinuous = doseEntries.count > 0 &&
+                    doseEntries.first!.startDate <= continuityStartDate &&
+                    doseEntries.indexOf { (entry) -> Bool in
+                        entry.endDate.timeIntervalSinceDate(entry.startDate) > NSTimeInterval(minutes: 30)
+                    } == nil
+            }
+
+            self.recentReservoirDoseEntriesCache = recentDoseEntries
             return self.recentReservoirDoseEntriesCache ?? []
         }
     }
 
     /**
-     Retrieves recent dose values.
+     Retrieves recent dose values derived from either pump events or reservoir readings.
+
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
+     - parameter startDate:      The earliest date of entries to retrieve. The default, and earliest supported value, is the earlier of the current date less `insulinActionDuration` or the previous midnight in the current time zone.
+     - parameter endDate:        The latest date of entries to retrieve. Defaults to the distant future.
+     - parameter resultsHandler: A closure called once the entries have been retrieved. The closure takes two arguments:
+        - doses: The retrieved entries
+        - error: An error object explaining why the retrieval failed
+     */
+    public func getRecentNormalizedDoseEntries(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (doses: [DoseEntry], error: Error?) -> Void) {
+        guard let persistenceController = persistenceController else {
+            resultsHandler(doses: [], error: .ConfigurationError)
+            return
+        }
+
+        persistenceController.managedObjectContext.performBlock { 
+            if self.areReservoirValuesContinuous /* AND there are NO recent history data */ {
+                self.getRecentNormalizedReservoirDoseEntries(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
+            } else {
+                // TODO: Get from history
+                self.getRecentNormalizedReservoirDoseEntries(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
+            }
+        }
+    }
+
+    /**
+     Retrieves recent dose values derived from reservoir readings.
 
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
@@ -464,10 +499,6 @@ public final class DoseStore {
      */
     private func deleteReservoirObject(object: Reservoir) {
         persistenceController?.managedObjectContext.deleteObject(object)
-
-        if let index = recentReservoirObjectsCache?.indexOf(object) {
-            recentReservoirObjectsCache?.removeAtIndex(index)
-        }
     }
 
     /**
@@ -488,12 +519,11 @@ public final class DoseStore {
         deleteRequest.resultType = .ResultTypeCount
 
         if let result = try persistenceController.managedObjectContext.executeRequest(deleteRequest) as? NSBatchDeleteResult, count = result.result as? Int where count > 0 {
-            recentReservoirObjectsCache?.removeAll()
             persistenceController.managedObjectContext.refreshAllObjects()
         }
     }
 
-    // MARK: - Pump Event History
+    // MARK: - Pump Event Data
 
     /// The earliest event date that should included in subsequent queries for pump event data.
     public private(set) var pumpEventQueryAfterDate = NSDate.distantPast()
@@ -692,8 +722,6 @@ public final class DoseStore {
      *This method should only be called from within a managed object context block.*
      */
     private func clearReservoirCache() {
-        recentReservoirObjectsCache = nil
-
         clearReservoirDoseCache()
     }
 
@@ -702,6 +730,11 @@ public final class DoseStore {
      */
     private func clearReservoirDoseCache() {
         recentReservoirDoseEntriesCache = nil
+
+        clearReservoirNormalizedDoseCache()
+    }
+
+    private func clearReservoirNormalizedDoseCache() {
         recentReservoirNormalizedDoseEntriesCache = nil
 
         clearCalculationCache()
