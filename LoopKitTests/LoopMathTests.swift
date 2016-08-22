@@ -159,4 +159,46 @@ class LoopMathTests: XCTestCase {
             XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), calculated.quantity.doubleValueForUnit(HKUnit.milligramsPerDeciliterUnit()), accuracy: pow(10, -11))
         }
     }
+
+    func testDecayEffect() {
+        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+        let glucoseDate = calendar.dateWithEra(1, year: 2016, month: 2, day: 1, hour: 10, minute: 13, second: 20, nanosecond: 0)!
+        let type = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
+        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let glucose = HKQuantitySample(type: type, quantity: HKQuantity(unit: unit, doubleValue: 100), startDate: glucoseDate, endDate: glucoseDate)
+
+        var startingEffect = HKQuantity(unit: unit.unitDividedByUnit(HKUnit.minuteUnit()), doubleValue: 2)
+
+        var effects = LoopMath.decayEffect(from: glucose, atRate: startingEffect, for: NSTimeInterval(30 * 60))
+
+        XCTAssertEqual([100, 110, 118, 124, 128, 130, 130], effects.map { $0.quantity.doubleValueForUnit(unit) })
+
+        let startDate = effects.first!.startDate
+        XCTAssertEqual([0, 5, 10, 15, 20, 25, 30], effects.map { $0.startDate.timeIntervalSinceDate(startDate).minutes })
+
+        startingEffect = HKQuantity(unit: unit.unitDividedByUnit(HKUnit.minuteUnit()), doubleValue: -0.5)
+        effects = LoopMath.decayEffect(from: glucose, atRate: startingEffect, for: NSTimeInterval(30 * 60))
+        XCTAssertEqual([100, 97.5, 95.5, 94, 93, 92.5, 92.5], effects.map { $0.quantity.doubleValueForUnit(unit) })
+    }
+
+    func testDecayEffectWithEvenGlucose() {
+        let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+        let glucoseDate = calendar.dateWithEra(1, year: 2016, month: 2, day: 1, hour: 10, minute: 15, second: 0, nanosecond: 0)!
+        let type = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
+        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let glucose = HKQuantitySample(type: type, quantity: HKQuantity(unit: unit, doubleValue: 100), startDate: glucoseDate, endDate: glucoseDate)
+
+        var startingEffect = HKQuantity(unit: unit.unitDividedByUnit(HKUnit.minuteUnit()), doubleValue: 2)
+
+        var effects = LoopMath.decayEffect(from: glucose, atRate: startingEffect, for: NSTimeInterval(30 * 60))
+
+        XCTAssertEqual([100, 110, 118, 124, 128, 130], effects.map { $0.quantity.doubleValueForUnit(unit) })
+
+        let startDate = effects.first!.startDate
+        XCTAssertEqual([0, 5, 10, 15, 20, 25], effects.map { $0.startDate.timeIntervalSinceDate(startDate).minutes })
+
+        startingEffect = HKQuantity(unit: unit.unitDividedByUnit(HKUnit.minuteUnit()), doubleValue: -0.5)
+        effects = LoopMath.decayEffect(from: glucose, atRate: startingEffect, for: NSTimeInterval(30 * 60))
+        XCTAssertEqual([100, 97.5, 95.5, 94, 93, 92.5], effects.map { $0.quantity.doubleValueForUnit(unit) })
+    }
 }

@@ -30,6 +30,7 @@
 		430158271C7ECB6800B64B63 /* InsulinKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FEB11C7294520073BE78 /* InsulinKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4301582B1C7ECCEF00B64B63 /* LoopKitExample.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */; };
 		4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
+		43025DAF1D5AB2E300106C28 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		4302F4D91D4D32D500F0FCAF /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		4302F4DD1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4DC1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift */; };
 		4302F4DF1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4DE1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift */; };
@@ -42,6 +43,7 @@
 		43177D0A1D3732C70006E908 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43177D091D3732C70006E908 /* Assets.xcassets */; };
 		43177D0C1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */; };
 		43177D0E1D3737420006E908 /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D0D1D3737420006E908 /* NibLoadable.swift */; };
+		432762741D60505F0083215A /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432762731D60505F0083215A /* HKQuantitySample.swift */; };
 		4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
 		4348727B1CB6256500E55D75 /* reconcile_history_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872781CB6256500E55D75 /* reconcile_history_input.json */; };
 		4348727D1CB626E500E55D75 /* reconcile_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 4348727C1CB626E500E55D75 /* reconcile_history_output.json */; };
@@ -299,6 +301,7 @@
 		43177D091D3732C70006E908 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseRangeOverrideTableViewCell.swift; sourceTree = "<group>"; };
 		43177D0D1D3737420006E908 /* NibLoadable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibLoadable.swift; sourceTree = "<group>"; };
+		432762731D60505F0083215A /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
 		4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		434872781CB6256500E55D75 /* reconcile_history_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_input.json; sourceTree = "<group>"; };
 		4348727C1CB626E500E55D75 /* reconcile_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_output.json; sourceTree = "<group>"; };
@@ -646,6 +649,7 @@
 				43D9888A1C87E47800DA4467 /* GlucoseValue.swift */,
 				43D8FDED1C7290350073BE78 /* HealthKitSampleStore.swift */,
 				43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */,
+				432762731D60505F0083215A /* HKQuantitySample.swift */,
 				43D8FDEE1C7290350073BE78 /* HKUnit.swift */,
 				43D8FDEF1C7290350073BE78 /* LoopMath.swift */,
 				43D8FDF01C7290350073BE78 /* NSDate.swift */,
@@ -1371,6 +1375,7 @@
 				43D8FE011C7290350073BE78 /* NSTimeInterval.swift in Sources */,
 				43D8FDF61C7290350073BE78 /* DailyQuantitySchedule.swift in Sources */,
 				43D8FDF51C7290350073BE78 /* CarbRatioSchedule.swift in Sources */,
+				432762741D60505F0083215A /* HKQuantitySample.swift in Sources */,
 				43D8FE111C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift in Sources */,
 				43D8FDF81C7290350073BE78 /* Double.swift in Sources */,
 				434FF1E81CF26A49000DB779 /* UITableViewCell.swift in Sources */,
@@ -1402,6 +1407,7 @@
 				43D9888D1C87EBE400DA4467 /* LoopMathTests.swift in Sources */,
 				43D8FE1F1C72906E0073BE78 /* QuantityScheduleTests.swift in Sources */,
 				43D8FE1D1C72906E0073BE78 /* BasalRateScheduleTests.swift in Sources */,
+				43025DAF1D5AB2E300106C28 /* NSTimeInterval.swift in Sources */,
 				43D8FDDB1C728FDF0073BE78 /* LoopKitTests.swift in Sources */,
 				430059241CCDD08C00C861EA /* NSDateFormatter.swift in Sources */,
 			);

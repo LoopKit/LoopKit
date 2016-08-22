@@ -30,13 +30,13 @@ public protocol SampleValue: TimelineValue {
 
 public extension SequenceType where Generator.Element: TimelineValue {
     /**
-     Returns the closest element in the sequence prior to the specified date
+     Returns the closest element in the sorted sequence prior to the specified date
 
      - parameter date: The date to use in the search
 
      - returns: The closest element, if any exist before the specified date
      */
-    func closestToDate(date: NSDate) -> Generator.Element? {
+    func closestPriorToDate(date: NSDate) -> Generator.Element? {
         var closestElement: Generator.Element?
 
         for value in self {
@@ -73,5 +73,24 @@ public extension SequenceType where Generator.Element: TimelineValue {
 
             return true
         }
+    }
+}
+
+
+public extension CollectionType where Generator.Element: TimelineValue, Index: BidirectionalIndexType {
+
+    /**
+     Determines whether the sequence contains boundary elements which span the specified time interval.
+
+     The sequence is assumed to be sorted chronologically.
+
+     TODO: Is this an effective measure to determine if there's enough reservoir entries to be trustworthy?
+
+     - returns: True if the time interval is matched
+     */
+    func spanTimeInterval(timeInterval: NSTimeInterval, within errorInterval: NSTimeInterval = NSTimeInterval(minutes: 5)) -> Bool {
+        guard let lastValue = last, let firstValue = first else { return false }
+
+        return abs(lastValue.startDate.timeIntervalSinceDate(firstValue.startDate) - timeInterval) <= errorInterval / 2
     }
 }

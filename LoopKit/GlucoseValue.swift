@@ -23,3 +23,6 @@ struct PredictedGlucoseValue: GlucoseValue {
         self.quantity = quantity
     }
 }
+
+
+extension HKQuantitySample: GlucoseValue { }

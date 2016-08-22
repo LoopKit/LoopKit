@@ -51,6 +51,43 @@ public struct LoopMath {
     }
 
     /**
+     Calculates a timeline of glucose effects by applying a linear decay to a rate of change.
+ 
+     - parameter sample:   The starting glucose value
+     - parameter rate:     The glucose velocity
+     - parameter duration: The duration the effect should continue before ending
+     - parameter delta:    The time differential for the returned values
+  
+     - returns: An array of glucose effects
+     */
+    public static func decayEffect<T: GlucoseValue>(from sample: T, atRate rate: HKQuantity, for duration: NSTimeInterval, withDelta delta: NSTimeInterval = NSTimeInterval(minutes: 5)) -> [GlucoseEffect] {
+        guard let (startDate, endDate) = simulationDateRangeForSamples([sample], duration: duration, delta: delta) else {
+            return []
+        }
+
+        let glucoseUnit = HKUnit.milligramsPerDeciliterUnit()
+        let velocityUnit = glucoseUnit.unitDividedByUnit(HKUnit.secondUnit())
+
+        // The starting rate, which we will decay to 0 over the specified duration
+        let intercept = rate.doubleValueForUnit(velocityUnit) // mg/dL/s
+        let decayStartDate = startDate.dateByAddingTimeInterval(delta)
+        let slope = -intercept / (duration - delta)  // mg/dL/s/s
+
+        var values = [GlucoseEffect(startDate: startDate, quantity: sample.quantity)]
+        var date = decayStartDate
+        var lastValue = sample.quantity.doubleValueForUnit(glucoseUnit)
+
+        repeat {
+            let value = lastValue + (intercept + slope * date.timeIntervalSinceDate(decayStartDate)) * delta
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: glucoseUnit, doubleValue: value)))
+            lastValue = value
+            date = date.dateByAddingTimeInterval(delta)
+        } while date < endDate
+
+        return values
+    }
+
+    /**
      Calculates a timeline of predicted glucose values from a variety of effects timelines.
 
      Each effect timeline:
