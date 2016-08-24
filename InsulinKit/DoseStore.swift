@@ -251,7 +251,7 @@ public final class DoseStore {
                 let newDoseEntries = InsulinMath.doseEntriesFromReservoirValues(newValues)
                 recentDoseEntries += newDoseEntries
 
-                // Consider any entries longer than 30 minutes to be unreliable; warn the caller they might want to try a different data source.
+                // Consider any entries longer than 30 minutes, or with a value of 0, to be unreliable; warn the caller they might want to try a different data source.
                 // TODO: Move this to InsulinMath and validate on effect generation calls
                 if let insulinActionDuration = self.insulinActionDuration {
                     let continuityStartDate = NSDate(timeIntervalSinceNow: -insulinActionDuration)
@@ -260,7 +260,7 @@ public final class DoseStore {
                     self.areReservoirValuesContinuous = doseEntries.count > 0 &&
                         doseEntries.first!.startDate <= continuityStartDate &&
                         doseEntries.indexOf { (entry) -> Bool in
-                            entry.endDate.timeIntervalSinceDate(entry.startDate) > NSTimeInterval(minutes: 30)
+                            entry.endDate.timeIntervalSinceDate(entry.startDate) > NSTimeInterval(minutes: 30) || entry.value == 0
                         } == nil
                 }
 
@@ -362,7 +362,7 @@ public final class DoseStore {
             let objects = try self.getRecentReservoirObjects()
             let recentDoseEntries = InsulinMath.doseEntriesFromReservoirValues(objects.reverse())
 
-            // Consider any entries longer than 30 minutes to be unreliable; warn the caller they might want to try a different data source.
+            // Consider any entries longer than 30 minutes, or with a value of 0, to be unreliable; warn the caller they might want to try a different data source.
             // TODO: Move this to InsulinMath and validate on effect generation calls
             if let insulinActionDuration = self.insulinActionDuration {
                 let continuityStartDate = NSDate(timeIntervalSinceNow: -insulinActionDuration)
@@ -371,7 +371,7 @@ public final class DoseStore {
                 self.areReservoirValuesContinuous = doseEntries.count > 0 &&
                     doseEntries.first!.startDate <= continuityStartDate &&
                     doseEntries.indexOf { (entry) -> Bool in
-                        entry.endDate.timeIntervalSinceDate(entry.startDate) > NSTimeInterval(minutes: 30)
+                        entry.endDate.timeIntervalSinceDate(entry.startDate) > NSTimeInterval(minutes: 30) || entry.value == 0
                     } == nil
             }
 
