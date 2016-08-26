@@ -145,8 +145,6 @@ public final class DoseStore {
                 if let error = error {
                     self.readyState = .Failed(.InitializationError(description: error.description, recoverySuggestion: error.recoverySuggestion))
                 } else {
-                    self.readyState = .Ready
-
                     if let context = self.persistenceController?.managedObjectContext, pumpID = self.pumpID {
                         // Find the newest PumpEvent date we have
                         if let lastEvent = PumpEvent.singleObjectInContext(context,
@@ -156,7 +154,19 @@ public final class DoseStore {
                         ) {
                             self.pumpEventQueryAfterDate = lastEvent.date
                         }
+
+                        // Warm the state of the reservoir data
+                        if let recentReservoirObjects = try? self.getRecentReservoirObjects()
+                        {
+                            self.lastReservoirObject = recentReservoirObjects.first
+
+                            if let insulinActionDuration = self.insulinActionDuration {
+                                self.areReservoirValuesContinuous = InsulinMath.isContinuous(recentReservoirObjects, from: NSDate(timeIntervalSinceNow: -insulinActionDuration))
+                            }
+                        }
                     }
+
+                    self.readyState = .Ready
                 }
             })
         } else {
@@ -193,6 +203,11 @@ public final class DoseStore {
     public private(set) var areReservoirValuesContinuous = false
 
     private var lastReservoirObject: Reservoir?
+
+    // The last-saved reservoir value
+    public var lastReservoirValue: ReservoirValue? {
+        return lastReservoirObject
+    }
 
     private var recentReservoirNormalizedDoseEntriesCache: [DoseEntry]?
 
@@ -232,7 +247,7 @@ public final class DoseStore {
             reservoir.date = date
             reservoir.pumpID = pumpID
 
-            let previousValue = self.lastReservoirObject
+            var previousValue: Reservoir?
             if let
                 doseEntries = try? self.getRecentReservoirDoseEntries(),
                 basalProfile = self.basalProfile,
@@ -241,6 +256,8 @@ public final class DoseStore {
                 var recentDoseEntries = doseEntries.filterDateRange(minEndDate, nil)
 
                 var newValues: [Reservoir] = []
+
+                previousValue = self.lastReservoirObject
 
                 if let previousValue = previousValue {
                     newValues.append(previousValue)
@@ -252,16 +269,10 @@ public final class DoseStore {
                 recentDoseEntries += newDoseEntries
 
                 // Consider any entries longer than 30 minutes, or with a value of 0, to be unreliable; warn the caller they might want to try a different data source.
-                // TODO: Move this to InsulinMath and validate on effect generation calls
-                if let insulinActionDuration = self.insulinActionDuration {
-                    let continuityStartDate = NSDate(timeIntervalSinceNow: -insulinActionDuration)
-                    let doseEntries = recentDoseEntries.filterDateRange(continuityStartDate, nil)
-
-                    self.areReservoirValuesContinuous = doseEntries.count > 0 &&
-                        doseEntries.first!.startDate <= continuityStartDate &&
-                        doseEntries.indexOf { (entry) -> Bool in
-                            entry.endDate.timeIntervalSinceDate(entry.startDate) > NSTimeInterval(minutes: 30) || entry.value == 0
-                        } == nil
+                if let insulinActionDuration = self.insulinActionDuration,
+                    let recentReservoirObjects = try? self.getRecentReservoirObjects()
+                {
+                    self.areReservoirValuesContinuous = InsulinMath.isContinuous(recentReservoirObjects, from: NSDate(timeIntervalSinceNow: -insulinActionDuration))
                 }
 
                 self.recentReservoirDoseEntriesCache = recentDoseEntries
@@ -295,6 +306,11 @@ public final class DoseStore {
                 }
 
                 NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ValuesDidChangeNotification, object: self)
+
+                do {
+                    try self.purgeReservoirObjects()
+                } catch {
+                }
             }
         }
     }
@@ -334,15 +350,7 @@ public final class DoseStore {
      */
     private func getRecentReservoirObjects() throws -> [Reservoir] {
         do {
-            try self.purgeReservoirObjects()
-
-            var recentReservoirObjects: [Reservoir] = []
-
-            recentReservoirObjects += try Reservoir.objectsInContext(persistenceController!.managedObjectContext, predicate: self.recentValuesPredicate, sortedBy: "date", ascending: false)
-
-            self.lastReservoirObject = recentReservoirObjects.first
-
-            return recentReservoirObjects
+            return try Reservoir.objectsInContext(persistenceController!.managedObjectContext, predicate: self.recentValuesPredicate, sortedBy: "date", ascending: false)
         } catch let fetchError as NSError {
             throw Error.FetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
         }
@@ -360,22 +368,8 @@ public final class DoseStore {
             return doses
         } else {
             let objects = try self.getRecentReservoirObjects()
-            let recentDoseEntries = InsulinMath.doseEntriesFromReservoirValues(objects.reverse())
 
-            // Consider any entries longer than 30 minutes, or with a value of 0, to be unreliable; warn the caller they might want to try a different data source.
-            // TODO: Move this to InsulinMath and validate on effect generation calls
-            if let insulinActionDuration = self.insulinActionDuration {
-                let continuityStartDate = NSDate(timeIntervalSinceNow: -insulinActionDuration)
-                let doseEntries = recentDoseEntries.filterDateRange(continuityStartDate, nil)
-
-                self.areReservoirValuesContinuous = doseEntries.count > 0 &&
-                    doseEntries.first!.startDate <= continuityStartDate &&
-                    doseEntries.indexOf { (entry) -> Bool in
-                        entry.endDate.timeIntervalSinceDate(entry.startDate) > NSTimeInterval(minutes: 30) || entry.value == 0
-                    } == nil
-            }
-
-            self.recentReservoirDoseEntriesCache = recentDoseEntries
+            self.recentReservoirDoseEntriesCache = InsulinMath.doseEntriesFromReservoirValues(objects.reverse())
             return self.recentReservoirDoseEntriesCache ?? []
         }
     }
@@ -585,6 +579,8 @@ public final class DoseStore {
                 self.pumpEventQueryAfterDate = finalDate
             }
 
+            self.clearCalculationCache()
+
             persistenceController.save { (error) -> Void in
                 if let error = error {
                     completionHandler(error: .PersistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion))
@@ -781,12 +777,23 @@ public final class DoseStore {
         persistenceController.managedObjectContext.performBlock {
             if self.insulinOnBoardCache == nil {
                 if let insulinActionDuration = self.insulinActionDuration {
-                    self.getRecentNormalizedReservoirDoseEntries { (doses, error) -> Void in
-                        if error == nil {
-                            self.insulinOnBoardCache = InsulinMath.insulinOnBoardForDoses(doses, actionDuration: insulinActionDuration)
-                        }
+                    if self.areReservoirValuesContinuous {
+                        self.getRecentNormalizedReservoirDoseEntries { (doses, error) -> Void in
+                            if error == nil {
+                                self.insulinOnBoardCache = InsulinMath.insulinOnBoardForDoses(doses, actionDuration: insulinActionDuration)
+                            }
 
-                        resultHandler(values: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+                            resultHandler(values: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+                        }
+                    } else {
+                        // TODO: Get from history
+                        self.getRecentNormalizedReservoirDoseEntries { (doses, error) in
+                            if error == nil {
+                                self.insulinOnBoardCache = InsulinMath.insulinOnBoardForDoses(doses, actionDuration: insulinActionDuration)
+                            }
+
+                            resultHandler(values: self.insulinOnBoardCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+                        }
                     }
                 } else {
                     resultHandler(values: [], error: .ConfigurationError)
@@ -817,12 +824,23 @@ public final class DoseStore {
         persistenceController.managedObjectContext.performBlock {
             if self.glucoseEffectsCache == nil {
                 if let insulinActionDuration = self.insulinActionDuration, insulinSensitivitySchedule = self.insulinSensitivitySchedule {
-                    self.getRecentNormalizedReservoirDoseEntries { (doses, error) -> Void in
-                        if error == nil {
-                            self.glucoseEffectsCache = InsulinMath.glucoseEffectsForDoses(doses, actionDuration: insulinActionDuration, insulinSensitivity: insulinSensitivitySchedule)
-                        }
+                    if self.areReservoirValuesContinuous {
+                        self.getRecentNormalizedReservoirDoseEntries { (doses, error) -> Void in
+                            if error == nil {
+                                self.glucoseEffectsCache = InsulinMath.glucoseEffectsForDoses(doses, actionDuration: insulinActionDuration, insulinSensitivity: insulinSensitivitySchedule)
+                            }
 
-                        resultHandler(effects: self.glucoseEffectsCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+                            resultHandler(effects: self.glucoseEffectsCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+                        }
+                    } else {
+                        // TODO: Get from history
+                        self.getRecentNormalizedReservoirDoseEntries { (doses, error) -> Void in
+                            if error == nil {
+                                self.glucoseEffectsCache = InsulinMath.glucoseEffectsForDoses(doses, actionDuration: insulinActionDuration, insulinSensitivity: insulinSensitivitySchedule)
+                            }
+
+                            resultHandler(effects: self.glucoseEffectsCache?.filterDateRange(startDate, endDate) ?? [], error: error)
+                        }
                     }
                 } else {
                     resultHandler(effects: [], error: .ConfigurationError)

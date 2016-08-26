@@ -180,6 +180,50 @@ struct InsulinMath {
     }
 
     /**
+     Whether a span of reservoir values is considered continuous and therefore reliable.
+     
+     Reservoir values of 0 are automatically considered unreliable due to the assumption that an unknown amount of insulin can be delivered after the 0 marker.
+
+     - parameter entries:         A collection of reservoir values, in chronological order
+     - parameter startDate:       The beginning of the interval in which to validate continuity
+     - parameter endDate:         The end of the interval in which to validate continuity
+     - parameter maximumDuration: The maximum interval to consider reliable for a reservoir-derived dose
+     
+     - returns: Whether the reservoir values meet the critera for continuity
+     */
+    static func isContinuous<T: CollectionType where T.Generator.Element: ReservoirValue>(values: T, from startDate: NSDate, to endDate: NSDate = NSDate(), within maximumDuration: NSTimeInterval = NSTimeInterval(minutes: 30)) -> Bool {
+
+        // The first value has to be at least as old as the start date, as a reference point.
+        guard let firstValue = values.first where firstValue.endDate <= startDate else {
+            return false
+        }
+        var lastValue = firstValue
+
+        for value in values {
+            defer {
+                lastValue = value
+            }
+
+            // Volume and interval validation only applies for values in the specified range,
+            guard value.endDate >= startDate && value.startDate <= endDate else {
+                continue
+            }
+
+            // We can't trust 0. What else was delivered?
+            guard value.unitVolume > 0 else {
+                return false
+            }
+
+            // Ensure no more than the maximum interval has passed
+            guard value.startDate.timeIntervalSinceDate(lastValue.endDate) <= maximumDuration else {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    /**
      Maps a timeline of dose entries with overlapping start and end dates to a timeline of doses that represents actual insulin delivery.
 
      - parameter doses:     A timeline of dose entries, in chronological order
