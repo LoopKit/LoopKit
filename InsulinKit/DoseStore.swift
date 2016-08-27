@@ -40,6 +40,8 @@ public protocol DoseStoreDelegate: class {
  0            [min(1 day ago, 1.5 * insulinActionDuration)]
  |––––––––––––––––––––––—————————|
  ```
+ 
+ Private members should be assumed to not be thread-safe, and access should be contained to within blocks submitted to `persistenceStore.managedObjectContext`, which executes them on a private, serial queue.
  */
 public final class DoseStore {
 
@@ -767,12 +769,18 @@ public final class DoseStore {
         clearReservoirNormalizedDoseCache()
     }
 
+    /**
+     *This method should only be called from within a managed object context block.*
+     */
     private func clearReservoirNormalizedDoseCache() {
         recentReservoirNormalizedDoseEntriesCache = nil
 
         clearCalculationCache()
     }
 
+    /**
+     *This method should only be called from within a managed object context block.*
+     */
     private func clearPumpEventNormalizedDoseCache() {
         recentPumpEventNormalizedDoseEntriesCache = nil
 
