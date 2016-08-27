@@ -156,12 +156,12 @@ public final class DoseStore {
                         }
 
                         // Warm the state of the reservoir data
-                        if let recentReservoirObjects = try? self.getRecentReservoirObjects()
-                        {
+                        if let recentReservoirObjects = try? self.getRecentReservoirObjects() {
+                            // These are in reverse-chronological order.
                             self.lastReservoirObject = recentReservoirObjects.first
 
                             if let insulinActionDuration = self.insulinActionDuration {
-                                self.areReservoirValuesContinuous = InsulinMath.isContinuous(recentReservoirObjects, from: NSDate(timeIntervalSinceNow: -insulinActionDuration))
+                                self.areReservoirValuesContinuous = InsulinMath.isContinuous(recentReservoirObjects.reverse(), from: NSDate(timeIntervalSinceNow: -insulinActionDuration))
                             }
                         }
                     }
@@ -272,7 +272,7 @@ public final class DoseStore {
                 if let insulinActionDuration = self.insulinActionDuration,
                     let recentReservoirObjects = try? self.getRecentReservoirObjects()
                 {
-                    self.areReservoirValuesContinuous = InsulinMath.isContinuous(recentReservoirObjects, from: NSDate(timeIntervalSinceNow: -insulinActionDuration))
+                    self.areReservoirValuesContinuous = InsulinMath.isContinuous(recentReservoirObjects.reverse(), from: NSDate(timeIntervalSinceNow: -insulinActionDuration))
                 }
 
                 self.recentReservoirDoseEntriesCache = recentDoseEntries
