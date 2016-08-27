@@ -158,7 +158,12 @@ public final class DoseStore {
 
                         // Warm the state of the reservoir data
                         if let recentReservoirObjects = try? self.getRecentReservoirObjects() {
-                            // These are in reverse-chronological order.
+                            // These are in reverse-chronological order. 
+                            // To populate `lastReservoirVolumeDrop`, we set the most recent 2 in-order.
+                            if recentReservoirObjects.count > 1 {
+                                self.lastReservoirObject = recentReservoirObjects[1]
+                            }
+
                             self.lastReservoirObject = recentReservoirObjects.first
 
                             if let insulinActionDuration = self.insulinActionDuration {
@@ -203,7 +208,18 @@ public final class DoseStore {
     // continuous and reliable for the derivation of insulin effects
     public private(set) var areReservoirValuesContinuous = false
 
-    private var lastReservoirObject: Reservoir?
+    /// The last-created reservoir object.
+    /// *This setter should only be called from within a managed object context block.*
+    private var lastReservoirObject: Reservoir? {
+        didSet {
+            if let oldValue = oldValue, newValue = lastReservoirObject {
+                lastReservoirVolumeDrop = oldValue.unitVolume - newValue.unitVolume
+            }
+        }
+    }
+
+    // The last change in reservoir volume.
+    public private(set) var lastReservoirVolumeDrop: Double = 0
 
     // The last-saved reservoir value
     public var lastReservoirValue: ReservoirValue? {
