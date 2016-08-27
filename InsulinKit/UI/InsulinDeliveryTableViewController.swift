@@ -319,6 +319,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 cell.textLabel?.text = "\(volume) U"
                 cell.detailTextLabel?.text = time
                 cell.accessoryType = .None
+                cell.selectionStyle = .None
             case .History(let values):
                 let entry = values[indexPath.row]
                 let time = timeFormatter.stringFromDate(entry.event.date)
@@ -326,6 +327,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 cell.textLabel?.text = entry.title ?? NSLocalizedString("Unknown", comment: "The default title to use when an entry has none")
                 cell.detailTextLabel?.text = time
                 cell.accessoryType = entry.isUploaded ? .Checkmark : .None
+                cell.selectionStyle = .Default
             }
         }
 
@@ -356,6 +358,36 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                     self.reloadData()
                 }
             }
+        }
+    }
+
+    public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if case .Display = state, case .History(let history) = values {
+            let entry = history[indexPath.row]
+
+            let vc = CommandResponseViewController(command: { (completionHandler) -> String in
+                var description = [String]()
+
+                description.append(self.timeFormatter.stringFromDate(entry.event.date))
+
+                if let title = entry.title {
+                    description.append(title)
+                }
+
+                if let dose = entry.event.dose {
+                    description.append(String(dose))
+                }
+
+                if let raw = entry.event.raw {
+                    description.append(raw.hexadecimalString)
+                }
+
+                return description.joinWithSeparator("\n\n")
+            })
+
+            vc.title = NSLocalizedString("Pump Event", comment: "The title of the screen displaying a pump event")
+
+            showViewController(vc, sender: indexPath)
         }
     }
 
