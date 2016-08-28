@@ -64,14 +64,6 @@
         "unit": "U/hour"
     },
     {
-        "amount": 0.0,
-        "description": "TempBasal: 0.0U/hour over 0min",
-        "end_at": "2016-02-15T15:46:05",
-        "start_at": "2016-02-15T15:46:05",
-        "type": "TempBasal",
-        "unit": "U/hour"
-    },
-    {
         "amount": 24,
         "description": "BolusWizard: 24g",
         "end_at": "2016-02-15T15:50:08",
@@ -232,26 +224,10 @@
         "unit": "U/hour"
     },
     {
-        "amount": 0.0,
-        "description": "TempBasal: 0.0U/hour over 0min",
-        "end_at": "2016-02-15T19:01:09",
-        "start_at": "2016-02-15T19:01:09",
-        "type": "TempBasal",
-        "unit": "U/hour"
-    },
-    {
         "amount": 0.05,
         "description": "TempBasal: 0.05U/hour over 30min",
         "end_at": "2016-02-15T19:36:11",
         "start_at": "2016-02-15T19:31:08",
-        "type": "TempBasal",
-        "unit": "U/hour"
-    },
-    {
-        "amount": 0.0,
-        "description": "TempBasal: 0.0U/hour over 0min",
-        "end_at": "2016-02-15T19:36:11",
-        "start_at": "2016-02-15T19:36:11",
         "type": "TempBasal",
         "unit": "U/hour"
     },

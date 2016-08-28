@@ -243,14 +243,18 @@ struct InsulinMath {
                 reconciled.append(dose)
             case .tempBasal:
                 if let temp = lastTempBasal {
-                    reconciled.append(DoseEntry(
-                        type: temp.type,
-                        startDate: temp.startDate,
-                        endDate: min(temp.endDate, dose.startDate),
-                        value: temp.value,
-                        unit: temp.unit,
-                        description: temp.description
-                    ))
+                    let endDate = min(temp.endDate, dose.startDate)
+
+                    if endDate > temp.startDate {
+                        reconciled.append(DoseEntry(
+                            type: temp.type,
+                            startDate: temp.startDate,
+                            endDate: endDate,
+                            value: temp.value,
+                            unit: temp.unit,
+                            description: temp.description
+                        ))
+                    }
                 }
 
                 lastTempBasal = dose
