@@ -807,8 +807,8 @@ public final class DoseStore {
      - parameter startDate:      The earliest date of entries to retrieve. The default, and earliest supported value, is the earlier of the current date less `insulinActionDuration` or the previous midnight in the current time zone.
      - parameter endDate:        The latest date of entries to retrieve. Defaults to the distant future.
      - parameter resultsHandler: A closure called once the entries have been retrieved. The closure takes two arguments:
-     - doses: The retrieved entries
-     - error: An error object explaining why the retrieval failed
+        - doses: The retrieved entries
+        - error: An error object explaining why the retrieval failed
      */
     public func getRecentNormalizedDoseEntries(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (doses: [DoseEntry], error: Error?) -> Void) {
         guard let persistenceController = persistenceController else {
