@@ -7,9 +7,10 @@
 //
 
 import Foundation
+import LoopKit
 
 
-public protocol ReservoirValue {
+public protocol ReservoirValue: TimelineValue {
     var startDate: NSDate { get }
     var unitVolume: Double { get }
 }

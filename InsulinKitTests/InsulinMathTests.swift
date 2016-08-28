@@ -100,6 +100,40 @@ class InsulinMathTests: XCTestCase {
         }
     }
 
+    func testContinuousReservoirValues() {
+        var input = loadReservoirFixture("reservoir_history_with_rewind_and_prime_input")
+
+        let dateFormatter = NSDateFormatter.ISO8601LocalTimeDateFormatter()
+        XCTAssertTrue(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T16:40:00")!, to: dateFormatter.dateFromString("2016-01-30T20:40:00")!))
+
+        // We don't assert whether it's "stale".
+        XCTAssertTrue(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T16:40:00")!, to: dateFormatter.dateFromString("2016-01-30T22:40:00")!))
+        XCTAssertTrue(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T16:40:00")!))
+
+        // The values must extend the startDate boundary
+        XCTAssertFalse(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T15:00:00")!, to: dateFormatter.dateFromString("2016-01-30T20:40:00")!))
+
+        // (the boundary condition is GTE)
+        XCTAssertTrue(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T15:40:49")!, to: dateFormatter.dateFromString("2016-01-30T20:40:00")!))
+
+        // Any values of 0 taint the entire range
+        input.append(NewReservoirValue(startDate: dateFormatter.dateFromString("2016-01-30T20:37:00")!, unitVolume: 0))
+
+        XCTAssertFalse(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T16:40:00")!, to: dateFormatter.dateFromString("2016-01-30T20:40:00")!))
+
+        // As long as the 0 is within the date interval bounds
+        XCTAssertTrue(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T16:40:00")!, to: dateFormatter.dateFromString("2016-01-30T19:40:00")!))
+    }
+
+    func testNonContinuousReservoirValues() {
+        let input = loadReservoirFixture("reservoir_history_with_continuity_holes")
+
+        let dateFormatter = NSDateFormatter.ISO8601LocalTimeDateFormatter()
+        XCTAssertTrue(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T18:30:00")!, to: dateFormatter.dateFromString("2016-01-30T20:40:00")!))
+
+        XCTAssertFalse(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T17:30:00")!, to: dateFormatter.dateFromString("2016-01-30T20:40:00")!))
+    }
+
     func testIOBFromDoses() {
         let input = loadDoseFixture("normalized_doses")
         let output = loadInsulinValueFixture("iob_from_doses_output")
