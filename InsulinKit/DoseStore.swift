@@ -442,37 +442,36 @@ public final class DoseStore {
         - error:         An error object explaining why the value could not be deleted
      */
     public func deleteReservoirValue(value: ReservoirValue, completionHandler: (deletedValues: [ReservoirValue], error: Error?) -> Void) {
-
-        if let persistenceController = persistenceController {
-            persistenceController.managedObjectContext.performBlock {
-                var deletedObjects = [Reservoir]()
-                var error: Error?
-
-                if let object = value as? Reservoir {
-                    self.deleteReservoirObject(object)
-                    deletedObjects.append(object)
-                } else if let pumpID = self.pumpID {
-                    // TODO: Unecessary case handling?
-                    let predicate = NSPredicate(format: "date = %@ && pumpID = %@", value.startDate, pumpID)
-
-                    do {
-                        for object in try Reservoir.objectsInContext(persistenceController.managedObjectContext, predicate: predicate) {
-                            self.deleteReservoirObject(object)
-                            deletedObjects.append(object)
-                        }
-                    } catch let deleteError as NSError {
-                        error = .PersistenceError(description: deleteError.localizedDescription, recoverySuggestion: deleteError.localizedRecoverySuggestion)
-                    }
-                }
-
-                self.clearReservoirDoseCache()
-
-                completionHandler(deletedValues: deletedObjects.map { $0 }, error: error)
-
-                NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ValuesDidChangeNotification, object: self)
-            }
-        } else {
+        guard let persistenceController = persistenceController else {
             completionHandler(deletedValues: [], error: .ConfigurationError)
+            return
+        }
+
+        persistenceController.managedObjectContext.performBlock {
+            var deletedObjects = [Reservoir]()
+            var error: Error?
+
+            if let object = value as? Reservoir {
+                self.deleteReservoirObject(object)
+                deletedObjects.append(object)
+            } else if let pumpID = self.pumpID {
+                // TODO: Unecessary case handling?
+                let predicate = NSPredicate(format: "date = %@ && pumpID = %@", value.startDate, pumpID)
+
+                do {
+                    for object in try Reservoir.objectsInContext(persistenceController.managedObjectContext, predicate: predicate) {
+                        self.deleteReservoirObject(object)
+                        deletedObjects.append(object)
+                    }
+                } catch let deleteError as NSError {
+                    error = .PersistenceError(description: deleteError.localizedDescription, recoverySuggestion: deleteError.localizedRecoverySuggestion)
+                }
+            }
+
+            self.clearReservoirDoseCache()
+            completionHandler(deletedValues: deletedObjects.map { $0 }, error: error)
+
+            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ValuesDidChangeNotification, object: self)
         }
     }
 
@@ -592,6 +591,35 @@ public final class DoseStore {
 
                 self.uploadPumpEventsIfNeeded(for: pumpID, from: persistenceController.managedObjectContext)
             }
+        }
+    }
+
+    public func deletePumpEvent(event: PersistedPumpEvent, completionHandler: (error: Error?) -> Void) {
+        guard let context = persistenceController?.managedObjectContext else {
+            completionHandler(error: .ConfigurationError)
+            return
+        }
+
+        context.performBlock {
+            if let object = event as? NSManagedObject {
+                context.deleteObject(object)
+            }
+
+            // Reset the latest query date to the newest PumpEvent
+            if let pumpID = self.pumpID, let lastEvent = PumpEvent.singleObjectInContext(context,
+                    predicate: NSPredicate(format: "pumpID = %@", pumpID),
+                    sortedBy: "date",
+                    ascending: false
+            ) {
+                self.pumpEventQueryAfterDate = lastEvent.date
+            } else {
+                self.pumpEventQueryAfterDate = self.recentValuesStartDate ?? .distantPast()
+            }
+
+            self.clearPumpEventNormalizedDoseCache()
+            completionHandler(error: nil)
+
+            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.ValuesDidChangeNotification, object: self)
         }
     }
 

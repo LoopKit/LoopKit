@@ -335,27 +335,37 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
     }
 
     public override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        switch values {
-        case .Reservoir:
-            return true
-        case .History:
-            return false
-        }
+        return true
     }
 
     public override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete, case .Display = state, case .Reservoir(let reservoirValues) = values {
+        if editingStyle == .Delete, case .Display = state {
+            switch values {
+            case .Reservoir(let reservoirValues):
+                var reservoirValues = reservoirValues
+                let value = reservoirValues.removeAtIndex(indexPath.row)
+                self.values = .Reservoir(reservoirValues)
 
-            var reservoirValues = reservoirValues
-            let value = reservoirValues.removeAtIndex(indexPath.row)
-            self.values = .Reservoir(reservoirValues)
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
 
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                doseStore?.deleteReservoirValue(value) { (_, error) -> Void in
+                    if let error = error {
+                        self.presentAlertControllerWithError(error)
+                        self.reloadData()
+                    }
+                }
+            case .History(let historyValues):
+                var historyValues = historyValues
+                let value = historyValues.removeAtIndex(indexPath.row)
+                self.values = .History(historyValues)
 
-            doseStore?.deleteReservoirValue(value) { (_, error) -> Void in
-                if let error = error {
-                    self.presentAlertControllerWithError(error)
-                    self.reloadData()
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+
+                doseStore?.deletePumpEvent(value.event) { (error) -> Void in
+                    if let error = error {
+                        self.presentAlertControllerWithError(error)
+                        self.reloadData()
+                    }
                 }
             }
         }
