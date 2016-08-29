@@ -86,7 +86,7 @@
                                     <rect key="frame" x="8" y="91" width="584" height="29"/>
                                     <segments>
                                         <segment title="Reservoir"/>
-                                        <segment title="History"/>
+                                        <segment title="Event History"/>
                                     </segments>
                                     <connections>
                                         <action selector="selectedSegmentChanged:" destination="jGX-GA-nlH" eventType="valueChanged" id="UCQ-qX-Szs"/>
