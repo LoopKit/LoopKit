@@ -94,6 +94,24 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
 
+    /// The expected delay in the appearance of glucose effects, accounting for both digestion and sensor lag
+    public var delay: NSTimeInterval = NSTimeInterval(minutes: 10) {
+        didSet {
+            dispatch_async(dataAccessQueue) {
+                self.clearCalculationCache()
+            }
+        }
+    }
+
+    // The interval between effect values to use for the calculated timelines
+    public var delta: NSTimeInterval = NSTimeInterval(minutes: 5) {
+        didSet {
+            dispatch_async(dataAccessQueue) {
+                self.clearCalculationCache()
+            }
+        }
+    }
+
     /// The longest expected absorption time interval for carbohydrates. Defaults to 8 hours.
     private let maximumAbsorptionTimeInterval: NSTimeInterval
 
@@ -486,7 +504,7 @@ public final class CarbStore: HealthKitSampleStore {
 
     public func carbsOnBoardAtDate(date: NSDate, resultHandler: (value: CarbValue?, error: Error?) -> Void) {
         getCarbsOnBoardValues { (values, error) -> Void in
-            resultHandler(value: values.closestToDate(date), error: error)
+            resultHandler(value: values.closestPriorToDate(date), error: error)
         }
     }
 
@@ -501,12 +519,20 @@ public final class CarbStore: HealthKitSampleStore {
         - values: The retrieved values
         - error:  An error object explaining why the retrieval failed
      */
-    public func getCarbsOnBoardValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (values: [CarbValue], error: Error?) -> Void) {
+    public func getCarbsOnBoardValues(
+        startDate startDate: NSDate? = nil,
+        endDate: NSDate? = nil,
+        resultHandler: (values: [CarbValue], error: Error?) -> Void) {
+
         dispatch_async(dataAccessQueue) { [unowned self] in
             if self.carbsOnBoardCache == nil {
                 self.getCachedCarbSamples { (entries, error) -> Void in
                     if error == nil {
-                        self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(entries, defaultAbsorptionTime: self.defaultAbsorptionTimes.medium)
+                        self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(entries,
+                            defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                            delay: self.delay,
+                            delta: self.delta
+                        )
                     }
 
                     resultHandler(values: self.carbsOnBoardCache?.filterDateRange(startDate, endDate).map { $0 } ?? [], error: error)
@@ -528,7 +554,11 @@ public final class CarbStore: HealthKitSampleStore {
         - effects: The retrieved timeline of effects
         - error:   An error object explaining why the retrieval failed
      */
-    public func getGlucoseEffects(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultHandler: (effects: [GlucoseEffect], error: Error?) -> Void) {
+    public func getGlucoseEffects(
+        startDate startDate: NSDate? = nil,
+        endDate: NSDate? = nil,
+        resultHandler: (effects: [GlucoseEffect], error: Error?) -> Void) {
+
         dispatch_async(dataAccessQueue) {
             if self.glucoseEffectsCache == nil {
                 if let carbRatioSchedule = self.carbRatioSchedule, insulinSensitivitySchedule = self.insulinSensitivitySchedule {
@@ -537,7 +567,9 @@ public final class CarbStore: HealthKitSampleStore {
                             self.glucoseEffectsCache = CarbMath.glucoseEffectsForCarbEntries(entries,
                                 carbRatios: carbRatioSchedule,
                                 insulinSensitivities: insulinSensitivitySchedule,
-                                defaultAbsorptionTime: self.defaultAbsorptionTimes.medium
+                                defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                                delay: self.delay,
+                                delta: self.delta
                             )
                         }
 

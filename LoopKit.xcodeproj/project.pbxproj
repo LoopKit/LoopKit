@@ -30,6 +30,7 @@
 		430158271C7ECB6800B64B63 /* InsulinKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FEB11C7294520073BE78 /* InsulinKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4301582B1C7ECCEF00B64B63 /* LoopKitExample.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */; };
 		4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
+		43025DAF1D5AB2E300106C28 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		4302F4D91D4D32D500F0FCAF /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		4302F4DD1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4DC1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift */; };
 		4302F4DF1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4DE1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift */; };
@@ -42,9 +43,13 @@
 		43177D0A1D3732C70006E908 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43177D091D3732C70006E908 /* Assets.xcassets */; };
 		43177D0C1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */; };
 		43177D0E1D3737420006E908 /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D0D1D3737420006E908 /* NibLoadable.swift */; };
+		432762741D60505F0083215A /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432762731D60505F0083215A /* HKQuantitySample.swift */; };
 		4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
 		4348727B1CB6256500E55D75 /* reconcile_history_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872781CB6256500E55D75 /* reconcile_history_input.json */; };
 		4348727D1CB626E500E55D75 /* reconcile_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 4348727C1CB626E500E55D75 /* reconcile_history_output.json */; };
+		434FB6481D70096A007B9C70 /* reservoir_history_with_continuity_holes.json in Resources */ = {isa = PBXBuildFile; fileRef = 434FB6471D70096A007B9C70 /* reservoir_history_with_continuity_holes.json */; };
+		434FB64A1D712158007B9C70 /* CommandResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FB6491D712158007B9C70 /* CommandResponseViewController.swift */; };
+		434FB64C1D712449007B9C70 /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FB64B1D712449007B9C70 /* NSData.swift */; };
 		434FF1E21CF269F8000DB779 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */; };
 		434FF1E51CF26A26000DB779 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */; };
 		434FF1E71CF26A3D000DB779 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */; };
@@ -299,9 +304,13 @@
 		43177D091D3732C70006E908 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseRangeOverrideTableViewCell.swift; sourceTree = "<group>"; };
 		43177D0D1D3737420006E908 /* NibLoadable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibLoadable.swift; sourceTree = "<group>"; };
+		432762731D60505F0083215A /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
 		4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		434872781CB6256500E55D75 /* reconcile_history_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_input.json; sourceTree = "<group>"; };
 		4348727C1CB626E500E55D75 /* reconcile_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_output.json; sourceTree = "<group>"; };
+		434FB6471D70096A007B9C70 /* reservoir_history_with_continuity_holes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reservoir_history_with_continuity_holes.json; sourceTree = "<group>"; };
+		434FB6491D712158007B9C70 /* CommandResponseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandResponseViewController.swift; sourceTree = "<group>"; };
+		434FB64B1D712449007B9C70 /* NSData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSData.swift; sourceTree = "<group>"; };
 		434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifiableClass.swift; sourceTree = "<group>"; };
 		434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
@@ -646,6 +655,7 @@
 				43D9888A1C87E47800DA4467 /* GlucoseValue.swift */,
 				43D8FDED1C7290350073BE78 /* HealthKitSampleStore.swift */,
 				43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */,
+				432762731D60505F0083215A /* HKQuantitySample.swift */,
 				43D8FDEE1C7290350073BE78 /* HKUnit.swift */,
 				43D8FDEF1C7290350073BE78 /* LoopMath.swift */,
 				43D8FDF01C7290350073BE78 /* NSDate.swift */,
@@ -673,6 +683,7 @@
 			isa = PBXGroup;
 			children = (
 				43177D091D3732C70006E908 /* Assets.xcassets */,
+				434FB6491D712158007B9C70 /* CommandResponseViewController.swift */,
 				43D8FE041C7290530073BE78 /* DailyQuantityScheduleTableViewController.swift */,
 				43D8FE051C7290530073BE78 /* DailyValueScheduleTableViewController.swift */,
 				43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */,
@@ -794,15 +805,17 @@
 		43D8FEB21C7294520073BE78 /* InsulinKit */ = {
 			isa = PBXGroup;
 			children = (
-				43D8FEB31C7294520073BE78 /* InsulinKit.h */,
-				43D8FEB51C7294520073BE78 /* Info.plist */,
 				43D8FEDC1C7294D50073BE78 /* DoseEntry.swift */,
 				43D8FEDD1C7294D50073BE78 /* DoseStore.swift */,
 				43C094451CAA1E98001F6403 /* DoseUnit.swift */,
 				43D8FEDE1C7294D50073BE78 /* Fetchable.swift */,
+				43D8FEB51C7294520073BE78 /* Info.plist */,
+				43D8FEB31C7294520073BE78 /* InsulinKit.h */,
 				43D8FEDF1C7294D50073BE78 /* InsulinMath.swift */,
 				43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */,
+				43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */,
 				4302F4EA1D50670500F0FCAF /* NewPumpEvent.swift */,
+				434FB64B1D712449007B9C70 /* NSData.swift */,
 				4302F4EC1D5068CE00F0FCAF /* PersistedPumpEvent.swift */,
 				43D8FEE21C7294D50073BE78 /* PersistenceController.swift */,
 				43DFE27B1CB1D6A600EFBE95 /* PumpEvent.swift */,
@@ -811,7 +824,6 @@
 				43D8FEE31C7294D50073BE78 /* Reservoir.swift */,
 				43D8FEE41C7294D50073BE78 /* Reservoir+CoreDataProperties.swift */,
 				4302F4E81D5066F400F0FCAF /* ReservoirValue.swift */,
-				43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */,
 				43D8FEDB1C7294C30073BE78 /* UI */,
 			);
 			path = InsulinKit;
@@ -850,6 +862,7 @@
 				43D8FED01C7294B80073BE78 /* normalized_reservoir_history_output.json */,
 				434872781CB6256500E55D75 /* reconcile_history_input.json */,
 				4348727C1CB626E500E55D75 /* reconcile_history_output.json */,
+				434FB6471D70096A007B9C70 /* reservoir_history_with_continuity_holes.json */,
 				43D8FED11C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_input.json */,
 				43D8FED21C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json */,
 				43B99B031C74538D00D050F5 /* short_basal_dose.json */,
@@ -1321,6 +1334,7 @@
 				43B99B081C74553900D050F5 /* effect_from_basal_output.json in Resources */,
 				43CE7CE01CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json in Resources */,
 				43B99AFC1C744CE300D050F5 /* bolus_dose.json in Resources */,
+				434FB6481D70096A007B9C70 /* reservoir_history_with_continuity_holes.json in Resources */,
 				43CE7CEE1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json in Resources */,
 				43D8FED81C7294B80073BE78 /* normalized_reservoir_history_output.json in Resources */,
 				43D8FEDA1C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json in Resources */,
@@ -1363,6 +1377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D8FDFD1C7290350073BE78 /* HKUnit.swift in Sources */,
+				434FB64A1D712158007B9C70 /* CommandResponseViewController.swift in Sources */,
 				43D8FE151C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift in Sources */,
 				43D8FDFC1C7290350073BE78 /* HealthKitSampleStore.swift in Sources */,
 				43D8FDF71C7290350073BE78 /* DailyValueSchedule.swift in Sources */,
@@ -1371,6 +1386,7 @@
 				43D8FE011C7290350073BE78 /* NSTimeInterval.swift in Sources */,
 				43D8FDF61C7290350073BE78 /* DailyQuantitySchedule.swift in Sources */,
 				43D8FDF51C7290350073BE78 /* CarbRatioSchedule.swift in Sources */,
+				432762741D60505F0083215A /* HKQuantitySample.swift in Sources */,
 				43D8FE111C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift in Sources */,
 				43D8FDF81C7290350073BE78 /* Double.swift in Sources */,
 				434FF1E81CF26A49000DB779 /* UITableViewCell.swift in Sources */,
@@ -1402,6 +1418,7 @@
 				43D9888D1C87EBE400DA4467 /* LoopMathTests.swift in Sources */,
 				43D8FE1F1C72906E0073BE78 /* QuantityScheduleTests.swift in Sources */,
 				43D8FE1D1C72906E0073BE78 /* BasalRateScheduleTests.swift in Sources */,
+				43025DAF1D5AB2E300106C28 /* NSTimeInterval.swift in Sources */,
 				43D8FDDB1C728FDF0073BE78 /* LoopKitTests.swift in Sources */,
 				430059241CCDD08C00C861EA /* NSDateFormatter.swift in Sources */,
 			);
@@ -1481,6 +1498,7 @@
 				43C094461CAA1E98001F6403 /* DoseUnit.swift in Sources */,
 				43D8FEEA1C7294D50073BE78 /* PersistenceController.swift in Sources */,
 				4302F4E91D5066F400F0FCAF /* ReservoirValue.swift in Sources */,
+				434FB64C1D712449007B9C70 /* NSData.swift in Sources */,
 				43D8FEEC1C7294D50073BE78 /* Reservoir+CoreDataProperties.swift in Sources */,
 				43D8FEE61C7294D50073BE78 /* DoseStore.swift in Sources */,
 				43DFE27E1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift in Sources */,
@@ -1652,7 +1670,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1700,7 +1718,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1729,7 +1747,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 10;
+				DYLIB_CURRENT_VERSION = 11;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1746,7 +1764,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 10;
+				DYLIB_CURRENT_VERSION = 11;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1783,7 +1801,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 10;
+				DYLIB_CURRENT_VERSION = 11;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CarbKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1800,7 +1818,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 10;
+				DYLIB_CURRENT_VERSION = 11;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CarbKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1837,7 +1855,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 10;
+				DYLIB_CURRENT_VERSION = 11;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = GlucoseKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1854,7 +1872,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 10;
+				DYLIB_CURRENT_VERSION = 11;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = GlucoseKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1891,7 +1909,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 10;
+				DYLIB_CURRENT_VERSION = 11;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = InsulinKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1908,7 +1926,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 10;
+				DYLIB_CURRENT_VERSION = 11;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = InsulinKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
