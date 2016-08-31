@@ -133,12 +133,15 @@ struct InsulinMath {
     }
 
     /**
-     It takes a MM pump about 40s to deliver 1 Unit while bolusing
+     It takes a MM x22 pump about 40s to deliver 1 Unit while bolusing
      See: http://www.healthline.com/diabetesmine/ask-dmine-speed-insulin-pumps#3
+     
+     The x23 and newer pumps can deliver at 2x, 3x, and 4x that speed, targeting
+     a maximum 5-minute delivery for all boluses (8U - 25U)
      
      A basal rate of 30 U/hour (near-max) would deliver an additional 0.5 U/min.
      */
-    private static let MaximumReservoirDropPerMinute = 2.0
+    private static let MaximumReservoirDropPerMinute = 6.5
 
     /**
      Converts a continuous sequence of reservoir values to a sequence of doses
@@ -211,6 +214,12 @@ struct InsulinMath {
 
             // We can't trust 0. What else was delivered?
             guard value.unitVolume > 0 else {
+                return false
+            }
+
+            // Rises in reservoir volume indicate a rewind + prime, and primes
+            // can be easily confused with boluses.
+            guard value.unitVolume <= lastValue.unitVolume else {
                 return false
             }
 

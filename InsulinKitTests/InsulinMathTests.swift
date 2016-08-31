@@ -114,7 +114,10 @@ class InsulinMathTests: XCTestCase {
         XCTAssertFalse(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T15:00:00")!, to: dateFormatter.dateFromString("2016-01-30T20:40:00")!))
 
         // (the boundary condition is GTE)
-        XCTAssertTrue(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T15:40:49")!, to: dateFormatter.dateFromString("2016-01-30T20:40:00")!))
+        XCTAssertTrue(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T16:00:42")!, to: dateFormatter.dateFromString("2016-01-30T20:40:00")!))
+
+        // Rises in reservoir volume taint the entire range
+        XCTAssertFalse(InsulinMath.isContinuous(input, from: dateFormatter.dateFromString("2016-01-30T15:55:00")!, to: dateFormatter.dateFromString("2016-01-30T20:40:00")!))
 
         // Any values of 0 taint the entire range
         input.append(NewReservoirValue(startDate: dateFormatter.dateFromString("2016-01-30T20:37:00")!, unitVolume: 0))
