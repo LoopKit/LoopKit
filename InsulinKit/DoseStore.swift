@@ -641,7 +641,7 @@ public final class DoseStore {
         }
 
         let predicate = NSPredicate(format: "pumpID = %@ && uploaded = false", pumpID)
-        guard let objects = try? PumpEvent.objectsInContext(context, predicate: predicate, sortedBy: "date", ascending: false) where objects.count > 0 else {
+        guard let objects = try? PumpEvent.objectsInContext(context, predicate: predicate, sortedBy: "date", ascending: true) where objects.count > 0 else {
             return
         }
 
