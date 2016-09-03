@@ -200,20 +200,12 @@
     "end_at": "2016-01-30T18:30:42"
   },
   {
-    "amount": 0.5980066445184083,
+    "amount": 0.897009966777613,
     "start_at": "2016-01-30T18:20:42",
     "description": "Reservoir decreased 0.05U over 5.02min",
     "type": "TempBasal",
     "unit": "U/hour",
     "end_at": "2016-01-30T18:25:43"
-  },
-  {
-    "amount": 0.0,
-    "start_at": "2016-01-30T18:15:44",
-    "description": "Reservoir decreased 0.0U over 4.97min",
-    "type": "TempBasal",
-    "unit": "U/hour",
-    "end_at": "2016-01-30T18:20:42"
   },
   {
     "amount": 0.0,
