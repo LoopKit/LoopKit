@@ -219,7 +219,8 @@ struct InsulinMath {
 
             // Rises in reservoir volume indicate a rewind + prime, and primes
             // can be easily confused with boluses.
-            guard value.unitVolume <= lastValue.unitVolume else {
+            // Small rises (1 U) can be ignored as they're indicative of a mixed-precision sequence.
+            guard value.unitVolume <= lastValue.unitVolume + 1 else {
                 return false
             }
 
@@ -254,6 +255,7 @@ struct InsulinMath {
                 if let temp = lastTempBasal {
                     let endDate = min(temp.endDate, dose.startDate)
 
+                    // Ignore 0-duration doses
                     if endDate > temp.startDate {
                         reconciled.append(DoseEntry(
                             type: temp.type,
@@ -317,7 +319,8 @@ struct InsulinMath {
 
         if let suspend = lastSuspend {
             reconciled.append(suspend)
-        } else if let temp = lastTempBasal {
+        } else if let temp = lastTempBasal
+            where temp.endDate > temp.startDate {
             reconciled.append(temp)
         }
 
