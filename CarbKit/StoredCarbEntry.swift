@@ -8,33 +8,33 @@
 
 import HealthKit
 
-private let unit = HKUnit.gramUnit()
+private let unit = HKUnit.gram()
 
 
 struct StoredCarbEntry: CarbEntry {
 
-    let sampleUUID: NSUUID
+    let sampleUUID: UUID
 
     // MARK: - SampleValue
 
-    let startDate: NSDate
+    let startDate: Date
     let quantity: HKQuantity
 
     // MARK: - CarbEntry
 
     let foodType: String?
-    let absorptionTime: NSTimeInterval?
+    let absorptionTime: TimeInterval?
     let createdByCurrentApp: Bool
 
     init(sample: HKQuantitySample, createdByCurrentApp: Bool? = nil) {
-        self.init(sampleUUID: sample.UUID, startDate: sample.startDate, unitString: unit.unitString, value: sample.quantity.doubleValueForUnit(unit), foodType: sample.foodType, absorptionTime: sample.absorptionTime, createdByCurrentApp: createdByCurrentApp ?? sample.createdByCurrentApp)
+        self.init(sampleUUID: sample.uuid, startDate: sample.startDate, unitString: unit.unitString, value: sample.quantity.doubleValue(for: unit), foodType: sample.foodType, absorptionTime: sample.absorptionTime, createdByCurrentApp: createdByCurrentApp ?? sample.createdByCurrentApp)
 
     }
 
-    init(sampleUUID: NSUUID, startDate: NSDate, unitString: String, value: Double, foodType: String?, absorptionTime: NSTimeInterval?, createdByCurrentApp: Bool) {
+    init(sampleUUID: UUID, startDate: Date, unitString: String, value: Double, foodType: String?, absorptionTime: TimeInterval?, createdByCurrentApp: Bool) {
         self.sampleUUID = sampleUUID
         self.startDate = startDate
-        self.quantity = HKQuantity(unit: HKUnit(fromString: unitString), doubleValue: value)
+        self.quantity = HKQuantity(unit: HKUnit(from: unitString), doubleValue: value)
         self.foodType = foodType
         self.absorptionTime = absorptionTime
         self.createdByCurrentApp = createdByCurrentApp
@@ -50,7 +50,7 @@ extension StoredCarbEntry: Hashable {
 
 
 func ==(lhs: StoredCarbEntry, rhs: StoredCarbEntry) -> Bool {
-    return lhs.sampleUUID.isEqual(rhs.sampleUUID)
+    return (lhs.sampleUUID == rhs.sampleUUID)
 }
 
 
@@ -60,11 +60,11 @@ extension StoredCarbEntry: RawRepresentable {
     init?(rawValue: RawValue) {
         guard let
             sampleUUIDString = rawValue["sampleUUID"] as? String,
-            sampleUUID = NSUUID(UUIDString: sampleUUIDString),
-            startDate = rawValue["startDate"] as? NSDate,
-            unitString = rawValue["unitString"] as? String,
-            value = rawValue["value"] as? Double,
-            createdByCurrentApp = rawValue["createdByCurrentApp"] as? Bool else
+            let sampleUUID = UUID(uuidString: sampleUUIDString),
+            let startDate = rawValue["startDate"] as? Date,
+            let unitString = rawValue["unitString"] as? String,
+            let value = rawValue["value"] as? Double,
+            let createdByCurrentApp = rawValue["createdByCurrentApp"] as? Bool else
         {
             return nil
         }
@@ -75,26 +75,26 @@ extension StoredCarbEntry: RawRepresentable {
             unitString: unitString,
             value: value,
             foodType: rawValue["foodType"] as? String,
-            absorptionTime: rawValue["absorptionTime"] as? NSTimeInterval,
+            absorptionTime: rawValue["absorptionTime"] as? TimeInterval,
             createdByCurrentApp: createdByCurrentApp
         )
     }
 
     var rawValue: RawValue {
         var raw: RawValue = [
-            "sampleUUID": sampleUUID.UUIDString,
-            "startDate": startDate,
-            "unitString": unit.unitString,
-            "value": quantity.doubleValueForUnit(unit),
-            "createdByCurrentApp": createdByCurrentApp
+            "sampleUUID": sampleUUID.uuidString as AnyObject,
+            "startDate": startDate as AnyObject,
+            "unitString": unit.unitString as AnyObject,
+            "value": quantity.doubleValue(for: unit) as AnyObject,
+            "createdByCurrentApp": createdByCurrentApp as AnyObject
         ]
 
         if let foodType = foodType {
-            raw["foodType"] = foodType
+            raw["foodType"] = foodType as AnyObject?
         }
 
         if let absorptionTime = absorptionTime {
-            raw["absorptionTime"] = absorptionTime
+            raw["absorptionTime"] = absorptionTime as AnyObject?
         }
 
         return raw

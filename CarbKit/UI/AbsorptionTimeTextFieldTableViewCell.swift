@@ -10,9 +10,9 @@ import UIKit
 
 class AbsorptionTimeTextFieldTableViewCell: DecimalTextFieldTableViewCell {
 
-    override var numberFormatter: NSNumberFormatter {
+    override var numberFormatter: NumberFormatter {
         didSet {
-            numberFormatter.numberStyle = .NoStyle
+            numberFormatter.numberStyle = .none
         }
     }
 
@@ -20,31 +20,31 @@ class AbsorptionTimeTextFieldTableViewCell: DecimalTextFieldTableViewCell {
 
     var segmentedControlInputAccessoryView: SegmentedControlInputAccessoryView?
 
-    func selectedSegmentChanged(sender: UISegmentedControl) {
+    func selectedSegmentChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case let x where x < segmentValues.count:
-            textField.text = numberFormatter.stringFromNumber(NSNumber(double: segmentValues[x]))
+            textField.text = numberFormatter.string(from: NSNumber(value: segmentValues[x] as Double))
             delegate?.textFieldTableViewCellDidUpdateText(self)
         default:
             break
         }
     }
 
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         textField.inputAccessoryView = segmentedControlInputAccessoryView
 
-        segmentedControlInputAccessoryView?.segmentedControl?.addTarget(self, action: #selector(selectedSegmentChanged(_:)), forControlEvents: .ValueChanged)
+        segmentedControlInputAccessoryView?.segmentedControl?.addTarget(self, action: #selector(selectedSegmentChanged(_:)), for: .valueChanged)
 
         return true
     }
 
-    override func textFieldDidEndEditing(textField: UITextField) {
+    override func textFieldDidEndEditing(_ textField: UITextField) {
         super.textFieldDidEndEditing(textField)
 
-        segmentedControlInputAccessoryView?.segmentedControl?.removeTarget(self, action: #selector(selectedSegmentChanged(_:)), forControlEvents: .ValueChanged)
+        segmentedControlInputAccessoryView?.segmentedControl?.removeTarget(self, action: #selector(selectedSegmentChanged(_:)), for: .valueChanged)
     }
 
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         segmentedControlInputAccessoryView?.segmentedControl?.selectedSegmentIndex = -1
 
         return true

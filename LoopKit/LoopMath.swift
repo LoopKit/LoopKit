@@ -11,22 +11,22 @@ import HealthKit
 
 
 public struct LoopMath {
-    public static func simulationDateRangeForSamples<T: CollectionType where T.Generator.Element: TimelineValue>(
-        samples: T,
-        fromDate: NSDate? = nil,
-        toDate: NSDate? = nil,
-        duration: NSTimeInterval,
-        delay: NSTimeInterval = 0,
-        delta: NSTimeInterval) -> (NSDate, NSDate)?
+    public static func simulationDateRangeForSamples<T: Collection>(
+        _ samples: T,
+        fromDate: Date? = nil,
+        toDate: Date? = nil,
+        duration: TimeInterval,
+        delay: TimeInterval = 0,
+        delta: TimeInterval) -> (Date, Date)? where T.Iterator.Element: TimelineValue
     {
         guard samples.count > 0 else {
             return nil
         }
 
-        let startDate: NSDate
-        let endDate: NSDate
+        let startDate: Date
+        let endDate: Date
 
-        if let fromDate = fromDate, toDate = toDate {
+        if let fromDate = fromDate, let toDate = toDate {
             startDate = fromDate
             endDate = toDate
         } else {
@@ -44,7 +44,7 @@ public struct LoopMath {
             }
 
             startDate = fromDate ?? minDate.dateFlooredToTimeInterval(delta)
-            endDate = toDate ?? maxDate.dateByAddingTimeInterval(duration + delay).dateCeiledToTimeInterval(delta)
+            endDate = toDate ?? maxDate.addingTimeInterval(duration + delay).dateCeiledToTimeInterval(delta)
         }
         
         return (startDate, endDate)
@@ -60,28 +60,28 @@ public struct LoopMath {
   
      - returns: An array of glucose effects
      */
-    public static func decayEffect<T: GlucoseValue>(from sample: T, atRate rate: HKQuantity, for duration: NSTimeInterval, withDelta delta: NSTimeInterval = NSTimeInterval(minutes: 5)) -> [GlucoseEffect] {
+    public static func decayEffect<T: GlucoseValue>(from sample: T, atRate rate: HKQuantity, for duration: TimeInterval, withDelta delta: TimeInterval = TimeInterval(minutes: 5)) -> [GlucoseEffect] {
         guard let (startDate, endDate) = simulationDateRangeForSamples([sample], duration: duration, delta: delta) else {
             return []
         }
 
         let glucoseUnit = HKUnit.milligramsPerDeciliterUnit()
-        let velocityUnit = glucoseUnit.unitDividedByUnit(HKUnit.secondUnit())
+        let velocityUnit = glucoseUnit.unitDivided(by: HKUnit.second())
 
         // The starting rate, which we will decay to 0 over the specified duration
-        let intercept = rate.doubleValueForUnit(velocityUnit) // mg/dL/s
-        let decayStartDate = startDate.dateByAddingTimeInterval(delta)
+        let intercept = rate.doubleValue(for: velocityUnit) // mg/dL/s
+        let decayStartDate = startDate.addingTimeInterval(delta)
         let slope = -intercept / (duration - delta)  // mg/dL/s/s
 
         var values = [GlucoseEffect(startDate: startDate, quantity: sample.quantity)]
         var date = decayStartDate
-        var lastValue = sample.quantity.doubleValueForUnit(glucoseUnit)
+        var lastValue = sample.quantity.doubleValue(for: glucoseUnit)
 
         repeat {
-            let value = lastValue + (intercept + slope * date.timeIntervalSinceDate(decayStartDate)) * delta
+            let value = lastValue + (intercept + slope * date.timeIntervalSince(decayStartDate)) * delta
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: glucoseUnit, doubleValue: value)))
             lastValue = value
-            date = date.dateByAddingTimeInterval(delta)
+            date = date.addingTimeInterval(delta)
         } while date < endDate
 
         return values
@@ -102,7 +102,7 @@ public struct LoopMath {
 
      - returns: A timeline of glucose values
      */
-    public static func predictGlucose(startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [GlucoseEffect]...) -> [GlucoseValue] {
+    public static func predictGlucose(_ startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [GlucoseEffect]...) -> [GlucoseValue] {
         return predictGlucose(startingGlucose, momentum: momentum, effects: effects)
     }
 
@@ -121,55 +121,55 @@ public struct LoopMath {
 
      - returns: A timeline of glucose values
      */
-    public static func predictGlucose(startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [[GlucoseEffect]]) -> [GlucoseValue] {
-        var effectValuesAtDate: [NSDate: Double] = [:]
+    public static func predictGlucose(_ startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [[GlucoseEffect]]) -> [GlucoseValue] {
+        var effectValuesAtDate: [Date: Double] = [:]
         let unit = HKUnit.milligramsPerDeciliterUnit()
 
         for timeline in effects {
-            var previousEffectValue: Double = timeline.first?.quantity.doubleValueForUnit(unit) ?? 0
+            var previousEffectValue: Double = timeline.first?.quantity.doubleValue(for: unit) ?? 0
 
             for effect in timeline {
-                let value = effect.quantity.doubleValueForUnit(unit)
-                effectValuesAtDate[effect.startDate] = (effectValuesAtDate[effect.startDate] ?? 0) + value - previousEffectValue
+                let value = effect.quantity.doubleValue(for: unit)
+                effectValuesAtDate[effect.startDate as Date] = (effectValuesAtDate[effect.startDate as Date] ?? 0) + value - previousEffectValue
                 previousEffectValue = value
             }
         }
 
         // Blend the momentum effect linearly into the summed effect list
         if momentum.count > 1 {
-            var previousEffectValue: Double = momentum[0].quantity.doubleValueForUnit(unit)
+            var previousEffectValue: Double = momentum[0].quantity.doubleValue(for: unit)
 
             // The blend begins delta minutes after after the last glucose (1.0) and ends at the last momentum point (0.0)
             // We're assuming the first one occurs on or before the starting glucose.
             let blendCount = momentum.count - 2
 
-            let timeDelta = momentum[1].startDate.timeIntervalSinceDate(momentum[0].startDate)
+            let timeDelta = momentum[1].startDate.timeIntervalSince(momentum[0].startDate as Date)
 
             // The difference between the first momentum value and the starting glucose value
-            let momentumOffset = startingGlucose.startDate.timeIntervalSinceDate(momentum[0].startDate)
+            let momentumOffset = startingGlucose.startDate.timeIntervalSince(momentum[0].startDate as Date)
 
             let blendSlope = 1.0 / Double(blendCount)
             let blendOffset = momentumOffset / timeDelta * blendSlope
 
-            for (index, effect) in momentum.enumerate() {
-                let value = effect.quantity.doubleValueForUnit(unit)
+            for (index, effect) in momentum.enumerated() {
+                let value = effect.quantity.doubleValue(for: unit)
                 let effectValueChange = value - previousEffectValue
 
                 let split = min(1.0, max(0.0, Double(momentum.count - index) / Double(blendCount) - blendSlope + blendOffset))
-                let effectBlend = (1.0 - split) * (effectValuesAtDate[effect.startDate] ?? 0)
+                let effectBlend = (1.0 - split) * (effectValuesAtDate[effect.startDate as Date] ?? 0)
                 let momentumBlend = split * effectValueChange
 
-                effectValuesAtDate[effect.startDate] = effectBlend + momentumBlend
+                effectValuesAtDate[effect.startDate as Date] = effectBlend + momentumBlend
 
                 previousEffectValue = value
             }
         }
 
-        let prediction = effectValuesAtDate.sort { $0.0 < $1.0 }.reduce([PredictedGlucoseValue(startDate: startingGlucose.startDate, quantity: startingGlucose.quantity)]) { (prediction, effect) -> [GlucoseValue] in
-            if effect.0 > startingGlucose.startDate, let lastValue = prediction.last {
+        let prediction = effectValuesAtDate.sorted { $0.0 < $1.0 }.reduce([PredictedGlucoseValue(startDate: startingGlucose.startDate, quantity: startingGlucose.quantity)]) { (prediction, effect) -> [GlucoseValue] in
+            if effect.0 > startingGlucose.startDate as Date, let lastValue = prediction.last {
                 let nextValue: GlucoseValue = PredictedGlucoseValue(
                     startDate: effect.0,
-                    quantity: HKQuantity(unit: unit, doubleValue: effect.1 + lastValue.quantity.doubleValueForUnit(unit))
+                    quantity: HKQuantity(unit: unit, doubleValue: effect.1 + lastValue.quantity.doubleValue(for: unit))
                 )
                 return prediction + [nextValue]
             } else {

@@ -11,10 +11,10 @@ import HealthKit
 
 
 public struct GlucoseEffect: SampleValue {
-    public let startDate: NSDate
+    public let startDate: Date
     public let quantity: HKQuantity
 
-    public init(startDate: NSDate, quantity: HKQuantity) {
+    public init(startDate: Date, quantity: HKQuantity) {
         self.startDate = startDate
         self.quantity = quantity
     }

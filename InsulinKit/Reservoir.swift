@@ -14,21 +14,21 @@ class Reservoir: NSManagedObject {
 
     var volume: Double! {
         get {
-            willAccessValueForKey("volume")
-            defer { didAccessValueForKey("volume") }
+            willAccessValue(forKey: "volume")
+            defer { didAccessValue(forKey: "volume") }
             return primitiveVolume?.doubleValue
         }
         set {
-            willChangeValueForKey("volume")
-            defer { didChangeValueForKey("volume") }
-            primitiveVolume = newValue != nil ? NSNumber(double: newValue) : nil
+            willChangeValue(forKey: "volume")
+            defer { didChangeValue(forKey: "volume") }
+            primitiveVolume = newValue != nil ? NSNumber(value: newValue as Double) : nil
         }
     }
 
     override func awakeFromInsert() {
         super.awakeFromInsert()
 
-        createdAt = NSDate()
+        createdAt = Date()
     }
 }
 
@@ -37,8 +37,8 @@ extension Reservoir: Fetchable { }
 
 
 extension Reservoir: ReservoirValue {
-    var startDate: NSDate {
-        return date
+    var startDate: Date {
+        return date as Date
     }
 
     var unitVolume: Double {

@@ -29,14 +29,14 @@ extension DoubleRange: RawRepresentable {
             return nil
         }
 
-        minValue = rawValue[0].doubleValue
-        maxValue = rawValue[1].doubleValue
+        minValue = (rawValue[0] as AnyObject).doubleValue
+        maxValue = (rawValue[1] as AnyObject).doubleValue
     }
 
     public var rawValue: RawValue {
         let raw: NSArray = [
-            NSNumber(double: minValue),
-            NSNumber(double: maxValue)
+            NSNumber(value: minValue),
+            NSNumber(value: maxValue)
         ]
 
         return raw
@@ -58,7 +58,7 @@ public class GlucoseRangeSchedule: DailyQuantitySchedule<DoubleRange> {
      
      - returns: True if a range was configured to set, false otherwise
      */
-    public func setWorkoutOverrideUntilDate(date: NSDate) -> Bool {
+    public func setWorkoutOverrideUntilDate(_ date: Date) -> Bool {
         guard let workoutRange = workoutRange else {
             return false
         }
@@ -67,7 +67,7 @@ public class GlucoseRangeSchedule: DailyQuantitySchedule<DoubleRange> {
         return true
     }
 
-    public func setOverride(override: DoubleRange, untilDate: NSDate) {
+    public func setOverride(_ override: DoubleRange, untilDate: Date) {
         temporaryOverride = AbsoluteScheduleValue(startDate: untilDate, value: override)
     }
 
@@ -78,7 +78,7 @@ public class GlucoseRangeSchedule: DailyQuantitySchedule<DoubleRange> {
         temporaryOverride = nil
     }
 
-    public init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<DoubleRange>], workoutRange: DoubleRange? = nil, timeZone: NSTimeZone? = nil) {
+    public init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<DoubleRange>], workoutRange: DoubleRange? = nil, timeZone: TimeZone? = nil) {
         self.workoutRange = workoutRange
 
         super.init(unit: unit, dailyItems: dailyItems, timeZone: timeZone)
@@ -87,15 +87,15 @@ public class GlucoseRangeSchedule: DailyQuantitySchedule<DoubleRange> {
     public required convenience init?(rawValue: RawValue) {
         guard let
             rawUnit = rawValue["unit"] as? String,
-            rawItems = rawValue["items"] as? [RepeatingScheduleValue.RawValue] else
+            let rawItems = rawValue["items"] as? [RepeatingScheduleValue.RawValue] else
         {
             return nil
         }
 
-        var timeZone: NSTimeZone?
+        var timeZone: TimeZone?
 
         if let offset = rawValue["timeZone"] as? Int {
-            timeZone = NSTimeZone(forSecondsFromGMT: offset)
+            timeZone = TimeZone(secondsFromGMT: offset)
         }
 
         var workout: DoubleRange?
@@ -104,11 +104,11 @@ public class GlucoseRangeSchedule: DailyQuantitySchedule<DoubleRange> {
             workout = DoubleRange(rawValue: workoutRange)
         }
 
-        self.init(unit: HKUnit(fromString: rawUnit), dailyItems: rawItems.flatMap { RepeatingScheduleValue(rawValue: $0) }, workoutRange: workout, timeZone: timeZone)
+        self.init(unit: HKUnit(from: rawUnit), dailyItems: rawItems.flatMap { RepeatingScheduleValue(rawValue: $0) }, workoutRange: workout, timeZone: timeZone)
     }
 
-    public override func valueAt(time: NSDate) -> DoubleRange {
-        if let override = temporaryOverride where override.endDate > NSDate() {
+    public override func valueAt(_ time: Date) -> DoubleRange {
+        if let override = temporaryOverride, override.endDate as Date > Date() {
             return override.value
         }
 

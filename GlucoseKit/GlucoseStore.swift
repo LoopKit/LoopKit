@@ -34,7 +34,7 @@ import LoopKit
  */
 public final class GlucoseStore: HealthKitSampleStore {
 
-    private let glucoseType = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
+    private let glucoseType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
 
     public override var readTypes: Set<HKSampleType> {
         return Set(arrayLiteral: glucoseType)
@@ -45,21 +45,21 @@ public final class GlucoseStore: HealthKitSampleStore {
     }
 
     /// The oldest interval to include when purging managed data
-    private let maxPurgeInterval: NSTimeInterval = NSTimeInterval(hours: 24) * 7
+    private let maxPurgeInterval: TimeInterval = TimeInterval(hours: 24) * 7
 
     /// The interval before which glucose values should be purged from HealthKit.
-    public var managedDataInterval: NSTimeInterval? = NSTimeInterval(hours: 3)
+    public var managedDataInterval: TimeInterval? = TimeInterval(hours: 3)
 
     /// The interval of glucose data to use for reflection adjustments
-    public var reflectionDataInterval: NSTimeInterval = NSTimeInterval(minutes: 30)
+    public var reflectionDataInterval: TimeInterval = TimeInterval(minutes: 30)
 
     /// The interval of glucose data to use for momentum calculation
-    public var momentumDataInterval: NSTimeInterval = NSTimeInterval(minutes: 15)
+    public var momentumDataInterval: TimeInterval = TimeInterval(minutes: 15)
 
     /// Glucose sample cache, used for calculations when HKHealthStore is unavailable
     private var sampleDataCache: [HKQuantitySample] = []
 
-    private var dataAccessQueue: dispatch_queue_t = dispatch_queue_create("com.loudnate.GlucoseKit.dataAccessQueue", DISPATCH_QUEUE_SERIAL)
+    private var dataAccessQueue: DispatchQueue = DispatchQueue(label: "com.loudnate.GlucoseKit.dataAccessQueue", attributes: [])
 
     public private(set) var latestGlucose: GlucoseValue?
 
@@ -77,10 +77,10 @@ public final class GlucoseStore: HealthKitSampleStore {
         - sample:  The sample object
         - error:   An error object explaining why the save failed
      */
-    public func addGlucose(quantity: HKQuantity, date: NSDate, isDisplayOnly: Bool, device: HKDevice?, resultHandler: (success: Bool, sample: GlucoseValue?, error: NSError?) -> Void) {
+    public func addGlucose(_ quantity: HKQuantity, date: Date, isDisplayOnly: Bool, device: HKDevice?, resultHandler: @escaping (_ success: Bool, _ sample: GlucoseValue?, _ error: Error?) -> Void) {
 
         addGlucoseValues([(quantity: quantity, date: date, isDisplayOnly: isDisplayOnly)], device: device) { (success, samples, error) in
-            resultHandler(success: success, sample: samples?.last, error: error)
+            resultHandler(success, samples?.last, error)
         }
     }
 
@@ -99,9 +99,9 @@ public final class GlucoseStore: HealthKitSampleStore {
         - samples: The saved samples
         - error:   An error object explaining why the save failed
      */
-    public func addGlucoseValues(values: [(quantity: HKQuantity, date: NSDate, isDisplayOnly: Bool)], device: HKDevice?, resultHandler: (success: Bool, samples: [GlucoseValue]?, error: NSError?) -> Void) {
+    public func addGlucoseValues(_ values: [(quantity: HKQuantity, date: Date, isDisplayOnly: Bool)], device: HKDevice?, resultHandler: @escaping (_ success: Bool, _ samples: [GlucoseValue]?, _ error: Error?) -> Void) {
         guard values.count > 0 else {
-            resultHandler(success: false, samples: [], error: nil)
+            resultHandler(false, [], nil)
             return
         }
 
@@ -109,8 +109,8 @@ public final class GlucoseStore: HealthKitSampleStore {
             return HKQuantitySample(
                 type: glucoseType,
                 quantity: $0.quantity,
-                startDate: $0.date,
-                endDate: $0.date,
+                start: $0.date,
+                end: $0.date,
                 device: device,
                 metadata: [
                     MetadataKeyGlucoseIsDisplayOnly: $0.isDisplayOnly
@@ -118,24 +118,24 @@ public final class GlucoseStore: HealthKitSampleStore {
             )
         }
 
-        healthStore.saveObjects(glucose) { (completed, error) in
-            dispatch_async(self.dataAccessQueue) {
+        healthStore.save(glucose, withCompletion: { (completed, error) in
+            self.dataAccessQueue.async {
                 if completed {
-                    let sortedGlucose = glucose.sort { $0.startDate < $1.startDate }
+                    let sortedGlucose = glucose.sorted { $0.startDate < $1.startDate }
 
-                    self.sampleDataCache.appendContentsOf(sortedGlucose)
+                    self.sampleDataCache.append(contentsOf: sortedGlucose)
                     self.purgeOldGlucoseSamples()
 
-                    if let latestGlucose = sortedGlucose.last where self.latestGlucose == nil || self.latestGlucose!.startDate < latestGlucose.startDate {
+                    if let latestGlucose = sortedGlucose.last, self.latestGlucose == nil || self.latestGlucose!.startDate < latestGlucose.startDate {
                         self.latestGlucose = latestGlucose
                     }
 
-                    resultHandler(success: completed, samples: sortedGlucose.map({ $0 as GlucoseValue }), error: error)
+                    resultHandler(completed, sortedGlucose.map({ $0 as GlucoseValue }), error)
                 } else {
-                    resultHandler(success: completed, samples: [], error: error)
+                    resultHandler(completed, [], error)
                 }
             }
-        }
+        }) 
     }
 
     /**
@@ -144,69 +144,66 @@ public final class GlucoseStore: HealthKitSampleStore {
      *This method should only be called from the `dataAccessQueue`*
      */
     private func purgeOldGlucoseSamples() {
-        let cacheStartDate = NSDate(timeIntervalSinceNow: -max(momentumDataInterval, reflectionDataInterval))
+        let cacheStartDate = Date(timeIntervalSinceNow: -max(momentumDataInterval, reflectionDataInterval))
 
         sampleDataCache = sampleDataCache.filter { $0.startDate >= cacheStartDate }
 
         if let managedDataInterval = managedDataInterval {
-            guard UIApplication.sharedApplication().protectedDataAvailable else {
+            guard UIApplication.shared.isProtectedDataAvailable else {
                 return
             }
 
-            let predicate = HKQuery.predicateForSamplesWithStartDate(NSDate(timeIntervalSinceNow: -maxPurgeInterval), endDate: NSDate(timeIntervalSinceNow: -managedDataInterval), options: [])
+            let predicate = HKQuery.predicateForSamples(withStart: Date(timeIntervalSinceNow: -maxPurgeInterval), end: Date(timeIntervalSinceNow: -managedDataInterval), options: [])
 
-            healthStore.deleteObjectsOfType(glucoseType, predicate: predicate, withCompletion: { (success, count, error) -> Void in
-                if let error = error {
-                    // TODO: Send this to the delegate
-                    NSLog("Error deleting objects: %@", error)
-                }
+            healthStore.deleteObjects(of: glucoseType, predicate: predicate, withCompletion: { (success, count, error) -> Void in
+                // TODO: Send this to the delegate
             })
         }
     }
 
-    private func recentSamplesPredicate(startDate startDate: NSDate?, endDate: NSDate?) -> NSPredicate {
+    private func recentSamplesPredicate(startDate: Date?, endDate: Date?) -> NSPredicate {
         var startDate = startDate
 
         if startDate == nil, let managedDataInterval = managedDataInterval {
-            startDate = NSDate(timeIntervalSinceNow: -managedDataInterval)
+            startDate = Date(timeIntervalSinceNow: -managedDataInterval)
         }
 
-        return HKQuery.predicateForSamplesWithStartDate(
-            startDate,
-            endDate: endDate ?? NSDate.distantFuture(),
-            options: [.StrictStartDate]
+        return HKQuery.predicateForSamples(
+            withStart: startDate,
+            end: endDate ?? Date.distantFuture,
+            options: [.strictStartDate]
         )
     }
 
-    private func getCachedGlucoseSamples(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (samples: [HKQuantitySample], error: NSError?) -> Void) {
-        dispatch_async(dataAccessQueue) {
+    private func getCachedGlucoseSamples(startDate: Date? = nil, endDate: Date? = nil, resultsHandler: @escaping (_ samples: [HKQuantitySample], _ error: Error?) -> Void) {
+        dataAccessQueue.async {
             let samples = self.sampleDataCache.filterDateRange(startDate, endDate)
-            resultsHandler(samples: samples, error: nil)
+            resultsHandler(samples, nil)
         }
     }
 
-    private func getRecentGlucoseSamples(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (samples: [HKQuantitySample], error: NSError?) -> Void) {
-        if UIApplication.sharedApplication().protectedDataAvailable {
+    private func getRecentGlucoseSamples(startDate: Date? = nil, endDate: Date? = nil, resultsHandler: @escaping (_ samples: [HKQuantitySample], _ error: Error?) -> Void) {
+        if UIApplication.shared.isProtectedDataAvailable {
             let predicate = recentSamplesPredicate(startDate: startDate, endDate: endDate)
             let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
 
             let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
 
-                if let error = error where error.code == HKErrorCode.ErrorDatabaseInaccessible.rawValue {
+                if let error = error as? NSError, error.code == HKError.errorDatabaseInaccessible.rawValue {
                     self.getCachedGlucoseSamples(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
                 } else {
-                    if let lastGlucose = samples?.last as? HKQuantitySample where self.latestGlucose == nil || self.latestGlucose!.startDate < lastGlucose.startDate {
+                    if let lastGlucose = samples?.last as? HKQuantitySample, self.latestGlucose == nil || self.latestGlucose!.startDate < lastGlucose.startDate {
                         self.latestGlucose = lastGlucose
                     }
 
                     resultsHandler(
-                        samples: (samples as? [HKQuantitySample]) ?? [],
-                        error: error
+                        (samples as? [HKQuantitySample]) ?? [],
+                        error
                     )
                 }
             }
 
-            healthStore.executeQuery(query)
+            healthStore.execute(query)
         } else {
             getCachedGlucoseSamples(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
         }
@@ -223,21 +220,21 @@ public final class GlucoseStore: HealthKitSampleStore {
         - values: The retrieved values
         - error:  An error object explaining why the retrieval failed
      */
-    public func getRecentGlucoseValues(startDate startDate: NSDate? = nil, endDate: NSDate? = nil, resultsHandler: (values: [GlucoseValue], error: NSError?) -> Void) {
+    public func getRecentGlucoseValues(startDate: Date? = nil, endDate: Date? = nil, resultsHandler: @escaping (_ values: [GlucoseValue], _ error: Error?) -> Void) {
         getRecentGlucoseSamples(startDate: startDate, endDate: endDate) { (values, error) -> Void in
-            resultsHandler(values: values.map { $0 }, error: error)
+            resultsHandler(values.map { $0 }, error)
         }
     }
 
     // MARK: - Math
 
     private func unionSampleDataCache(with samples: [HKQuantitySample]) {
-        dispatch_async(self.dataAccessQueue) {
+        self.dataAccessQueue.async {
             let samplesToCache = samples.filter({ !self.sampleDataCache.contains($0) })
 
             if samplesToCache.count > 0 {
-                self.sampleDataCache.appendContentsOf(samplesToCache)
-                self.sampleDataCache.sortInPlace({ $0.startDate < $1.startDate })
+                self.sampleDataCache.append(contentsOf: samplesToCache)
+                self.sampleDataCache.sort(by: { $0.startDate < $1.startDate })
             }
         }
     }
@@ -251,10 +248,10 @@ public final class GlucoseStore: HealthKitSampleStore {
         - effects: The calculated effect values
         - error:   An error explaining why the calculation failed
      */
-    public func getRecentMomentumEffect(resultsHandler: (effects: [GlucoseEffect], error: NSError?) -> Void) {
-        getRecentGlucoseSamples(startDate: NSDate(timeIntervalSinceNow: -momentumDataInterval), endDate: NSDate.distantFuture()) { (samples, error) -> Void in
+    public func getRecentMomentumEffect(_ resultsHandler: @escaping (_ effects: [GlucoseEffect], _ error: Error?) -> Void) {
+        getRecentGlucoseSamples(startDate: Date(timeIntervalSinceNow: -momentumDataInterval), endDate: Date.distantFuture) { (samples, error) -> Void in
             self.unionSampleDataCache(with: samples)
-            resultsHandler(effects: GlucoseMath.linearMomentumEffectForGlucoseEntries(samples), error: error)
+            resultsHandler(GlucoseMath.linearMomentumEffectForGlucoseEntries(samples), error)
         }
     }
 
@@ -267,23 +264,23 @@ public final class GlucoseStore: HealthKitSampleStore {
         - values:       The first and last glucose values in the requested period
         - error:        An error explaining why the calculation failed
      */
-    public func getRecentGlucoseChange(resultsHandler: (values: (GlucoseValue, GlucoseValue)?, error: NSError?) -> Void) {
-        getRecentGlucoseSamples(startDate: NSDate(timeIntervalSinceNow: -reflectionDataInterval), endDate: NSDate.distantFuture()) { (samples, error) in
+    public func getRecentGlucoseChange(_ resultsHandler: @escaping (_ values: (GlucoseValue, GlucoseValue)?, _ error: Error?) -> Void) {
+        getRecentGlucoseSamples(startDate: Date(timeIntervalSinceNow: -reflectionDataInterval), endDate: Date.distantFuture) { (samples, error) in
             self.unionSampleDataCache(with: samples)
 
             let change: (GlucoseValue, GlucoseValue)?
 
-            if GlucoseMath.isCalibrated(samples) && samples.count > 2,
+            if  GlucoseMath.isCalibrated(samples) && samples.count > 2,
                 let first = samples.first,
-                let last = samples.last
-                where first.startDate < last.startDate
+                let last = samples.last,
+                first.startDate < last.startDate
             {
                 change = (first, last)
             } else {
                 change = nil
             }
 
-            resultsHandler(values: change, error: error)
+            resultsHandler(change, error)
         }
     }
 }

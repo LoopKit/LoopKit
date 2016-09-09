@@ -11,7 +11,7 @@ import Foundation
 
 public class BasalRateSchedule: DailyValueSchedule<Double> {
 
-    public override init?(dailyItems: [RepeatingScheduleValue<Double>], timeZone: NSTimeZone? = nil) {
+    public override init?(dailyItems: [RepeatingScheduleValue<Double>], timeZone: TimeZone? = nil) {
         super.init(dailyItems: dailyItems, timeZone: timeZone)
     }
 
@@ -23,20 +23,20 @@ public class BasalRateSchedule: DailyValueSchedule<Double> {
     public func total() -> Double {
         var total: Double = 0
 
-        for (index, item) in items.enumerate() {
+        for (index, item) in items.enumerated() {
             var endTime = maxTimeInterval
 
             if index < items.endIndex - 1 {
                 endTime = items[index + 1].startTime
             }
 
-            total += (endTime - item.startTime) / NSTimeInterval(hours: 1) * item.value
+            total += (endTime - item.startTime) / TimeInterval(hours: 1) * item.value
         }
         
         return total
     }
 
-    public override func valueAt(time: NSDate) -> Double {
+    public override func valueAt(_ time: Date) -> Double {
         return super.valueAt(time)
     }
 

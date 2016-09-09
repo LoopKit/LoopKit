@@ -11,10 +11,10 @@ import LoopKit
 
 
 public struct InsulinValue: TimelineValue {
-    public let startDate: NSDate
+    public let startDate: Date
     public let value: Double
 
-    public init(startDate: NSDate, value: Double) {
+    public init(startDate: Date, value: Double) {
         self.startDate = startDate
         self.value = value
     }
