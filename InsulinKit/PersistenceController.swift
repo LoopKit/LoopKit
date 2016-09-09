@@ -108,7 +108,7 @@ class PersistenceController {
             if let  bundleIdentifier = bundle.bundleIdentifier,
                     documentsURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first?.URLByAppendingPathComponent(bundleIdentifier, isDirectory: true)
             {
-                if !NSFileManager.defaultManager().fileExistsAtPath(documentsURL.absoluteString) {
+                if !NSFileManager.defaultManager().fileExistsAtPath(documentsURL.absoluteString!) {
                     do {
                         try NSFileManager.defaultManager().createDirectoryAtURL(documentsURL, withIntermediateDirectories: true, attributes: nil)
                     } catch {
