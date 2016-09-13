@@ -8,7 +8,7 @@ xcode_scheme:
     - InsulinKit
     - GlucoseKit
 script:
-   - xcodebuild -project LoopKit.xcodeproj -scheme LoopKit -sdk iphonesimulator10.0 build test
-   - xcodebuild -project LoopKit.xcodeproj -scheme CarbKit -sdk iphonesimulator10.0 build test
-   - xcodebuild -project LoopKit.xcodeproj -scheme InsulinKit -sdk iphonesimulator10.0 build test
-   - xcodebuild -project LoopKit.xcodeproj -scheme GlucoseKit -sdk iphonesimulator10.0 build test
+   - xcodebuild -project LoopKit.xcodeproj -scheme LoopKit -sdk iphonesimulator10.0 build -destination 'name=iPhone SE' test
+   - xcodebuild -project LoopKit.xcodeproj -scheme CarbKit -sdk iphonesimulator10.0 build -destination 'name=iPhone SE' test
+   - xcodebuild -project LoopKit.xcodeproj -scheme InsulinKit -sdk iphonesimulator10.0 build -destination 'name=iPhone SE' test
+   - xcodebuild -project LoopKit.xcodeproj -scheme GlucoseKit -sdk iphonesimulator10.0 build -destination 'name=iPhone SE' test
