@@ -27,7 +27,7 @@ extension UserDefaults {
 
     var basalRateSchedule: BasalRateSchedule? {
         get {
-            if let rawValue = dictionary(forKey: Key.BasalRateSchedule.rawValue) as? BasalRateSchedule.RawValue {
+            if let rawValue = dictionary(forKey: Key.BasalRateSchedule.rawValue) {
                 return BasalRateSchedule(rawValue: rawValue)
             } else {
                 return nil
@@ -40,7 +40,7 @@ extension UserDefaults {
 
     var carbRatioSchedule: CarbRatioSchedule? {
         get {
-            if let rawValue = dictionary(forKey: Key.CarbRatioSchedule.rawValue) as? CarbRatioSchedule.RawValue {
+            if let rawValue = dictionary(forKey: Key.CarbRatioSchedule.rawValue) {
                 return CarbRatioSchedule(rawValue: rawValue)
             } else {
                 return nil
@@ -68,7 +68,7 @@ extension UserDefaults {
 
     var insulinSensitivitySchedule: InsulinSensitivitySchedule? {
         get {
-            if let rawValue = dictionary(forKey: Key.InsulinSensitivitySchedule.rawValue) as? InsulinSensitivitySchedule.RawValue {
+            if let rawValue = dictionary(forKey: Key.InsulinSensitivitySchedule.rawValue) {
                 return InsulinSensitivitySchedule(rawValue: rawValue)
             } else {
                 return nil
@@ -81,7 +81,7 @@ extension UserDefaults {
 
     var glucoseTargetRangeSchedule: GlucoseRangeSchedule? {
         get {
-            if let rawValue = dictionary(forKey: Key.GlucoseTargetRangeSchedule.rawValue) as? GlucoseRangeSchedule.RawValue {
+            if let rawValue = dictionary(forKey: Key.GlucoseTargetRangeSchedule.rawValue) {
                 return GlucoseRangeSchedule(rawValue: rawValue)
             } else {
                 return nil

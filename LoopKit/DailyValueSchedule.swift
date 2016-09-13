@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 
 
-public struct RepeatingScheduleValue<T: RawRepresentable> where T.RawValue: AnyObject {
+public struct RepeatingScheduleValue<T: RawRepresentable> where T.RawValue: Any {
     public let startTime: TimeInterval
     public let value: T
 
@@ -26,7 +26,7 @@ public struct AbsoluteScheduleValue<T>: TimelineValue {
 }
 
 extension RepeatingScheduleValue: RawRepresentable {
-    public typealias RawValue = [String: AnyObject]
+    public typealias RawValue = [String: Any]
 
     public init?(rawValue: RawValue) {
         guard let startTime = rawValue["startTime"] as? Double,
@@ -41,15 +41,15 @@ extension RepeatingScheduleValue: RawRepresentable {
 
     public var rawValue: RawValue {
         return [
-            "startTime": startTime as AnyObject,
+            "startTime": startTime,
             "value": value.rawValue
         ]
     }
 }
 
 
-public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable where T.RawValue: AnyObject {
-    public typealias RawValue = [String: AnyObject]
+public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable where T.RawValue: Any {
+    public typealias RawValue = [String: Any]
 
     private let referenceTimeInterval: TimeInterval
     let repeatInterval = TimeInterval(hours: 24)
@@ -86,8 +86,8 @@ public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable where T.R
         let rawItems = items.map { $0.rawValue }
 
         return [
-            "timeZone": timeZone.secondsFromGMT() as AnyObject,
-            "items": rawItems as AnyObject
+            "timeZone": timeZone.secondsFromGMT(),
+            "items": rawItems
         ]
     }
 

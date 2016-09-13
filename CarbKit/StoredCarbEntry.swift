@@ -55,7 +55,7 @@ func ==(lhs: StoredCarbEntry, rhs: StoredCarbEntry) -> Bool {
 
 
 extension StoredCarbEntry: RawRepresentable {
-    typealias RawValue = [String: AnyObject]
+    typealias RawValue = [String: Any]
 
     init?(rawValue: RawValue) {
         guard let
@@ -82,19 +82,19 @@ extension StoredCarbEntry: RawRepresentable {
 
     var rawValue: RawValue {
         var raw: RawValue = [
-            "sampleUUID": sampleUUID.uuidString as AnyObject,
-            "startDate": startDate as AnyObject,
-            "unitString": unit.unitString as AnyObject,
-            "value": quantity.doubleValue(for: unit) as AnyObject,
-            "createdByCurrentApp": createdByCurrentApp as AnyObject
+            "sampleUUID": sampleUUID.uuidString,
+            "startDate": startDate,
+            "unitString": unit.unitString,
+            "value": quantity.doubleValue(for: unit),
+            "createdByCurrentApp": createdByCurrentApp
         ]
 
         if let foodType = foodType {
-            raw["foodType"] = foodType as AnyObject?
+            raw["foodType"] = foodType
         }
 
         if let absorptionTime = absorptionTime {
-            raw["absorptionTime"] = absorptionTime as AnyObject?
+            raw["absorptionTime"] = absorptionTime
         }
 
         return raw

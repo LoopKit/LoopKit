@@ -42,7 +42,7 @@ public class CommandResponseViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareText(_:)))
     }
 
-    @objc func shareText(_: AnyObject?) {
+    @objc func shareText(_: Any?) {
         let activityVC = UIActivityViewController(activityItems: [self], applicationActivities: nil)
 
         present(activityVC, animated: true, completion: nil)

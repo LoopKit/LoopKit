@@ -36,7 +36,7 @@ func insertableIndices<T>(for scheduleItems: [RepeatingScheduleValue<T>], removi
 
 public class DailyValueScheduleTableViewController: UITableViewController {
 
-    private var keyboardWillShowNotificationObserver: AnyObject?
+    private var keyboardWillShowNotificationObserver: Any?
 
     public init() {
         super.init(style: .plain)
@@ -134,7 +134,7 @@ public class DailyValueScheduleTableViewController: UITableViewController {
         return calendar.startOfDay(for: Date())
     }
 
-    func addScheduleItem(_ sender: AnyObject?) {
+    func addScheduleItem(_ sender: Any?) {
         // Updates the table view state. Subclasses should update their data model before calling super
 
         tableView.insertRows(at: [IndexPath(row: tableView.numberOfRows(inSection: 0), section: 0)], with: .automatic)

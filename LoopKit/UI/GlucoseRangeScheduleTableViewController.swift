@@ -31,7 +31,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     public var workoutRange: DoubleRange?
 
-    override func addScheduleItem(_ sender: AnyObject?) {
+    override func addScheduleItem(_ sender: Any?) {
         var startTime = TimeInterval(0)
         let value: DoubleRange
 

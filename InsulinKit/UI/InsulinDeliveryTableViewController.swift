@@ -274,7 +274,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
         }
     }
 
-    private var doseStoreObserver: AnyObject? {
+    private var doseStoreObserver: Any? {
         willSet {
             if let observer = doseStoreObserver {
                 NotificationCenter.default.removeObserver(observer)
@@ -282,7 +282,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
         }
     }
 
-    @IBAction func selectedSegmentChanged(_ sender: AnyObject) {
+    @IBAction func selectedSegmentChanged(_ sender: Any) {
         reloadData()
     }
 

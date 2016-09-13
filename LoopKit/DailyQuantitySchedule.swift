@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 
 
-public class DailyQuantitySchedule<T: RawRepresentable>: DailyValueSchedule<T> where T.RawValue: AnyObject {
+public class DailyQuantitySchedule<T: RawRepresentable>: DailyValueSchedule<T> where T.RawValue: Any {
     public let unit: HKUnit
 
     init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<T>], timeZone: TimeZone?) {
@@ -39,7 +39,7 @@ public class DailyQuantitySchedule<T: RawRepresentable>: DailyValueSchedule<T> w
     public override var rawValue: RawValue {
         var rawValue = super.rawValue
 
-        rawValue["unit"] = unit.unitString as AnyObject?
+        rawValue["unit"] = unit.unitString
 
         return rawValue
     }

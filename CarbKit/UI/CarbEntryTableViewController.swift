@@ -195,7 +195,7 @@ public final class CarbEntryTableViewController: UITableViewController {
         }
     }
 
-    private var carbStoreObserver: AnyObject? {
+    private var carbStoreObserver: Any? {
         willSet {
             if let observer = carbStoreObserver {
                 NotificationCenter.default.removeObserver(observer)
@@ -330,7 +330,7 @@ public final class CarbEntryTableViewController: UITableViewController {
         }
     }
 
-    @IBAction func authorizeHealth(_ sender: AnyObject) {
+    @IBAction func authorizeHealth(_ sender: Any) {
         if case .authorizationRequired = state, let carbStore = carbStore {
             carbStore.authorize { (success, error) in
                 DispatchQueue.main.async {

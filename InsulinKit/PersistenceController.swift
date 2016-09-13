@@ -62,9 +62,9 @@ class PersistenceController {
         }
     }
 
-    private var didEnterBackgroundNotificationObserver: AnyObject?
-    private var willResignActiveNotificationObserver: AnyObject?
-    private var willTerminateNotificationObserver: AnyObject?
+    private var didEnterBackgroundNotificationObserver: Any?
+    private var willResignActiveNotificationObserver: Any?
+    private var willTerminateNotificationObserver: Any?
 
     private func handleSave(_ note: Notification) {
         var taskID: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid

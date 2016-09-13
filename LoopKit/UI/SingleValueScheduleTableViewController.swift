@@ -20,7 +20,7 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
 
     public var scheduleItems: [RepeatingScheduleValue<Double>] = []
 
-    override func addScheduleItem(_ sender: AnyObject?) {
+    override func addScheduleItem(_ sender: Any?) {
         tableView.endEditing(false)
 
         var startTime = TimeInterval(0)

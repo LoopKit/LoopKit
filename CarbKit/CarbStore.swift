@@ -50,7 +50,7 @@ extension NSNotification.Name {
  ```
  */
 public final class CarbStore: HealthKitSampleStore {
-    public typealias CarbEntryCacheRawValue = [[String: AnyObject]]
+    public typealias CarbEntryCacheRawValue = [[String: Any]]
 
     public typealias DefaultAbsorptionTimes = (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)
 
@@ -387,14 +387,14 @@ public final class CarbStore: HealthKitSampleStore {
 
     public func addCarbEntry(_ entry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ entry: CarbEntry?, _ error: CarbStoreError?) -> Void) {
         let quantity = entry.quantity
-        var metadata = [String: AnyObject]()
+        var metadata = [String: Any]()
 
         if let absorptionTime = entry.absorptionTime {
-            metadata[MetadataKeyAbsorptionTimeMinutes] = absorptionTime as AnyObject?
+            metadata[MetadataKeyAbsorptionTimeMinutes] = absorptionTime
         }
 
         if let foodType = entry.foodType {
-            metadata[HKMetadataKeyFoodType] = foodType as AnyObject?
+            metadata[HKMetadataKeyFoodType] = foodType
         }
 
         let carbs = HKQuantitySample(type: carbType, quantity: quantity, start: entry.startDate, end: entry.startDate, device: nil, metadata: metadata)

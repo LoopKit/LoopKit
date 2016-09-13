@@ -29,8 +29,8 @@ extension DoubleRange: RawRepresentable {
             return nil
         }
 
-        minValue = (rawValue[0] as AnyObject).doubleValue
-        maxValue = (rawValue[1] as AnyObject).doubleValue
+        minValue = (rawValue[0] as! NSNumber).doubleValue
+        maxValue = (rawValue[1] as! NSNumber).doubleValue
     }
 
     public var rawValue: RawValue {

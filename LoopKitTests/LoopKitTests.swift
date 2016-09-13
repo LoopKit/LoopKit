@@ -9,7 +9,7 @@
 import XCTest
 import Foundation
 
-public typealias JSONDictionary = [String: AnyObject]
+public typealias JSONDictionary = [String: Any]
 
 
 extension XCTestCase {
