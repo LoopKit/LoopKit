@@ -350,7 +350,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
                 doseStore?.deleteReservoirValue(value) { (_, error) -> Void in
                     if let error = error {
-                        self.presentAlertControllerWithError(error)
+                        self.presentAlertController(with: error)
                         self.reloadData()
                     }
                 }
@@ -363,7 +363,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
                 doseStore?.deletePumpEvent(value.event) { (error) -> Void in
                     if let error = error {
-                        self.presentAlertControllerWithError(error)
+                        self.presentAlertController(with: error)
                         self.reloadData()
                     }
                 }

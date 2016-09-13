@@ -32,25 +32,25 @@ class QuantityScheduleTests: XCTestCase {
 
         let midnight = calendar.startOfDay(for: Date())
 
-        XCTAssertEqual(HKQuantity(unit: HKUnit.gram(), doubleValue: 10), schedule.quantityAt(midnight))
+        XCTAssertEqual(HKQuantity(unit: HKUnit.gram(), doubleValue: 10), schedule.quantity(at: midnight))
         XCTAssertEqual(9,
-            schedule.quantityAt(midnight.addingTimeInterval(-1)).doubleValue(for: schedule.unit)
+            schedule.quantity(at: midnight.addingTimeInterval(-1)).doubleValue(for: schedule.unit)
         )
         XCTAssertEqual(10,
-            schedule.quantityAt(midnight.addingTimeInterval(TimeInterval(hours: 24))).doubleValue(for: schedule.unit)
+            schedule.quantity(at: midnight.addingTimeInterval(TimeInterval(hours: 24))).doubleValue(for: schedule.unit)
         )
 
         let midMorning = calendar.nextDate(after: Date(), matching: DateComponents(hour: 10, minute: 29, second: 4), matchingPolicy: .nextTime)!
 
-        XCTAssertEqual(10, schedule.quantityAt(midMorning).doubleValue(for: schedule.unit))
+        XCTAssertEqual(10, schedule.quantity(at: midMorning).doubleValue(for: schedule.unit))
 
         let lunch = calendar.nextDate(after: midMorning, matching: DateComponents(hour: 12, minute: 01, second: 01), matchingPolicy: .nextTime)!
 
-        XCTAssertEqual(9, schedule.quantityAt(lunch).doubleValue(for: schedule.unit))
+        XCTAssertEqual(9, schedule.quantity(at: lunch).doubleValue(for: schedule.unit))
 
         let dinner = calendar.nextDate(after: midMorning, matching: DateComponents(hour: 19, minute: 0, second: 0), matchingPolicy: .nextTime)!
 
-        XCTAssertEqual(8, schedule.quantityAt(dinner).doubleValue(for: schedule.unit))
+        XCTAssertEqual(8, schedule.quantity(at: dinner).doubleValue(for: schedule.unit))
     }
 
     func testCarbRatioScheduleUTC() {
@@ -67,28 +67,28 @@ class QuantityScheduleTests: XCTestCase {
         let midnight = calendar.startOfDay(for: june1)
 
         // This is 7 AM the next day in the Schedule's time zone
-        XCTAssertEqual(HKQuantity(unit: HKUnit.gram(), doubleValue: 10), schedule.quantityAt(midnight))
+        XCTAssertEqual(HKQuantity(unit: HKUnit.gram(), doubleValue: 10), schedule.quantity(at: midnight))
         XCTAssertEqual(10,
-            schedule.quantityAt(midnight.addingTimeInterval(-1)).doubleValue(for: schedule.unit)
+            schedule.quantity(at: midnight.addingTimeInterval(-1)).doubleValue(for: schedule.unit)
         )
         XCTAssertEqual(10,
-            schedule.quantityAt(midnight.addingTimeInterval(TimeInterval(hours: 24))).doubleValue(for: schedule.unit)
+            schedule.quantity(at: midnight.addingTimeInterval(TimeInterval(hours: 24))).doubleValue(for: schedule.unit)
         )
 
         // 10:29:04 AM -> 5:29:04 PM
         let midMorning = calendar.nextDate(after: june1, matching: DateComponents(hour: 10, minute: 29, second: 4), matchingPolicy: .nextTime)!
 
-        XCTAssertEqual(9, schedule.quantityAt(midMorning).doubleValue(for: schedule.unit))
+        XCTAssertEqual(9, schedule.quantity(at: midMorning).doubleValue(for: schedule.unit))
 
         // 12:01:01 PM -> 7:01:01 PM
         let lunch = calendar.nextDate(after: midMorning, matching: DateComponents(hour: 12, minute: 01, second: 01), matchingPolicy: .nextTime)!
 
-        XCTAssertEqual(8, schedule.quantityAt(lunch).doubleValue(for: schedule.unit))
+        XCTAssertEqual(8, schedule.quantity(at: lunch).doubleValue(for: schedule.unit))
 
         // 7:00 PM -> 2:00 AM
         let dinner = calendar.nextDate(after: midMorning, matching: DateComponents(hour: 19, minute: 0, second: 0), matchingPolicy: .nextTime)!
 
-        XCTAssertEqual(10, schedule.quantityAt(dinner).doubleValue(for: schedule.unit))
+        XCTAssertEqual(10, schedule.quantity(at: dinner).doubleValue(for: schedule.unit))
     }
 
     

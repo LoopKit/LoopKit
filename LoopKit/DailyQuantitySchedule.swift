@@ -47,8 +47,8 @@ public class DailyQuantitySchedule<T: RawRepresentable>: DailyValueSchedule<T> w
 
 
 public class SingleQuantitySchedule: DailyQuantitySchedule<Double> {
-    public func quantityAt(_ time: Date) -> HKQuantity {
-        return HKQuantity(unit: unit, doubleValue: valueAt(time))
+    public func quantity(at time: Date) -> HKQuantity {
+        return HKQuantity(unit: unit, doubleValue: value(at: time))
     }
 
     override init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<Double>], timeZone: TimeZone?) {

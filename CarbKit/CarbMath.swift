@@ -49,7 +49,7 @@ struct CarbMath {
         return carbs * (1 - percentAbsorptionAtTime(time, absorptionTime: absorptionTime))
     }
 
-    private static func carbsOnBoardForCarbEntry(_ entry: CarbEntry, atDate date: Date, defaultAbsorptionTime: TimeInterval, delay: TimeInterval) -> Double {
+    private static func carbsOnBoardForCarbEntry(_ entry: CarbEntry, at date: Date, defaultAbsorptionTime: TimeInterval, delay: TimeInterval) -> Double {
         let time = date.timeIntervalSince(entry.startDate)
         let value: Double
 
@@ -120,7 +120,7 @@ struct CarbMath {
 
         repeat {
             let value = entries.reduce(0.0) { (value, entry) -> Double in
-                return value + carbsOnBoardForCarbEntry(entry, atDate: date, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay)
+                return value + carbsOnBoardForCarbEntry(entry, at: date, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay)
             }
 
             values.append(CarbValue(startDate: date, quantity: HKQuantity(unit: HKUnit.gram(), doubleValue: value)))
@@ -150,7 +150,7 @@ struct CarbMath {
 
         repeat {
             let value = entries.reduce(0.0) { (value, entry) -> Double in
-                return value + glucoseEffectForCarbEntry(entry, atDate: date, carbRatio: carbRatios.quantityAt(entry.startDate), insulinSensitivity: insulinSensitivities.quantityAt(entry.startDate), defaultAbsorptionTime: defaultAbsorptionTime, delay: delay)
+                return value + glucoseEffectForCarbEntry(entry, atDate: date, carbRatio: carbRatios.quantity(at: entry.startDate), insulinSensitivity: insulinSensitivities.quantity(at: entry.startDate), defaultAbsorptionTime: defaultAbsorptionTime, delay: delay)
             }
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))

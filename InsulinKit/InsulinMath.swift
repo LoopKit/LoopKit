@@ -330,7 +330,7 @@ struct InsulinMath {
     private static func normalizeBasalDose(_ dose: DoseEntry, againstBasalSchedule basalSchedule: BasalRateSchedule) -> [DoseEntry] {
 
         var normalizedDoses: [DoseEntry] = []
-        let basalItems = basalSchedule.between(dose.startDate, dose.endDate)
+        let basalItems = basalSchedule.between(start: dose.startDate, end: dose.endDate)
 
         for (index, basalItem) in basalItems.enumerated() {
             let value = dose.value - basalItem.value
@@ -479,7 +479,7 @@ struct InsulinMath {
 
         repeat {
             let value = doses.reduce(0) { (value, dose) -> Double in
-                return value + glucoseEffectForDose(dose, atDate: date, actionDuration: actionDuration, insulinSensitivity: insulinSensitivity.quantityAt(dose.startDate).doubleValue(for: unit), delay: delay, delta: delta)
+                return value + glucoseEffectForDose(dose, atDate: date, actionDuration: actionDuration, insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delay: delay, delta: delta)
             }
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))

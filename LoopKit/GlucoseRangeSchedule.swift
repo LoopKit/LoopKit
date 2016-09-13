@@ -58,17 +58,17 @@ public class GlucoseRangeSchedule: DailyQuantitySchedule<DoubleRange> {
      
      - returns: True if a range was configured to set, false otherwise
      */
-    public func setWorkoutOverrideUntilDate(_ date: Date) -> Bool {
+    public func setWorkoutOverride(until date: Date) -> Bool {
         guard let workoutRange = workoutRange else {
             return false
         }
 
-        setOverride(workoutRange, untilDate: date)
+        setOverride(workoutRange, until: date)
         return true
     }
 
-    public func setOverride(_ override: DoubleRange, untilDate: Date) {
-        temporaryOverride = AbsoluteScheduleValue(startDate: untilDate, value: override)
+    public func setOverride(_ override: DoubleRange, until date: Date) {
+        temporaryOverride = AbsoluteScheduleValue(startDate: date, value: override)
     }
 
     /**
@@ -107,12 +107,12 @@ public class GlucoseRangeSchedule: DailyQuantitySchedule<DoubleRange> {
         self.init(unit: HKUnit(from: rawUnit), dailyItems: rawItems.flatMap { RepeatingScheduleValue(rawValue: $0) }, workoutRange: workout, timeZone: timeZone)
     }
 
-    public override func valueAt(_ time: Date) -> DoubleRange {
+    public override func value(at time: Date) -> DoubleRange {
         if let override = temporaryOverride, override.endDate as Date > Date() {
             return override.value
         }
 
-        return super.valueAt(time)
+        return super.value(at: time)
     }
 
     public override var rawValue: RawValue {

@@ -36,8 +36,8 @@ public class BasalRateSchedule: DailyValueSchedule<Double> {
         return total
     }
 
-    public override func valueAt(_ time: Date) -> Double {
-        return super.valueAt(time)
+    public override func value(at time: Date) -> Double {
+        return super.value(at: time)
     }
 
 }

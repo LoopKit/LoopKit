@@ -66,8 +66,8 @@ class BasalRateScheduleTests: XCTestCase {
         XCTAssert(
             absoluteItems[0..<items.count] ==
             schedule.between(
-                midnight,
-                midnight.addingTimeInterval(TimeInterval(hours: 24))
+                start: midnight,
+                end: midnight.addingTimeInterval(TimeInterval(hours: 24))
             )[0..<items.count]
         )
 
@@ -76,55 +76,55 @@ class BasalRateScheduleTests: XCTestCase {
         XCTAssert(
             absoluteItems[0..<items.count] ==
             schedule.between(
-                midnight,
-                twentyThree30
+                start: midnight,
+                end: twentyThree30
             )[0..<items.count]
         )
 
         XCTAssert(
             absoluteItems[0..<items.count + 1] ==
             schedule.between(
-                midnight,
-                midnight.addingTimeInterval(TimeInterval(hours: 24) + TimeInterval(1))
+                start: midnight,
+                end: midnight.addingTimeInterval(TimeInterval(hours: 24) + TimeInterval(1))
             )[0..<items.count + 1]
         )
 
         XCTAssert(
             absoluteItems[items.count - 1..<items.count * 2] ==
             schedule.between(
-                twentyThree30,
-                twentyThree30.addingTimeInterval(TimeInterval(hours: 24))
+                start: twentyThree30,
+                end: twentyThree30.addingTimeInterval(TimeInterval(hours: 24))
             )[0..<items.count + 1]
         )
 
         XCTAssert(
             absoluteItems[0..<1] ==
             schedule.between(
-                midnight,
-                midnight.addingTimeInterval(TimeInterval(hours: 1))
+                start: midnight,
+                end: midnight.addingTimeInterval(TimeInterval(hours: 1))
             )[0..<1]
         )
 
         XCTAssert(
             absoluteItems[1..<3] ==
             schedule.between(
-                midnight.addingTimeInterval(TimeInterval(hours: 4)),
-                midnight.addingTimeInterval(TimeInterval(hours: 9))
+                start: midnight.addingTimeInterval(TimeInterval(hours: 4)),
+                end: midnight.addingTimeInterval(TimeInterval(hours: 9))
             )[0..<2]
         )
 
         XCTAssert(
             absoluteItems[5..<6] ==
             schedule.between(
-                midnight.addingTimeInterval(TimeInterval(hours: 16)),
-                midnight.addingTimeInterval(TimeInterval(hours: 20))
+                start: midnight.addingTimeInterval(TimeInterval(hours: 16)),
+                end: midnight.addingTimeInterval(TimeInterval(hours: 20))
             )[0..<1]
         )
 
         XCTAssert(
             schedule.between(
-                midnight.addingTimeInterval(TimeInterval(hours: 4)),
-                midnight.addingTimeInterval(TimeInterval(hours: 3))
+                start: midnight.addingTimeInterval(TimeInterval(hours: 4)),
+                end: midnight.addingTimeInterval(TimeInterval(hours: 3))
             ).isEmpty
         )
     }
@@ -143,15 +143,15 @@ class BasalRateScheduleTests: XCTestCase {
         let midnight = calendar.startOfDay(for: Date())
 
         XCTAssertEqual(reSchedule.timeZone.secondsFromGMT(), schedule.timeZone.secondsFromGMT())
-        XCTAssertEqual(reSchedule.valueAt(midnight), schedule.valueAt(midnight))
+        XCTAssertEqual(reSchedule.value(at: midnight), schedule.value(at: midnight))
 
         let threethirty = midnight.addingTimeInterval(TimeInterval(hours: 3.5))
 
-        XCTAssertEqual(reSchedule.valueAt(threethirty), schedule.valueAt(threethirty))
+        XCTAssertEqual(reSchedule.value(at: threethirty), schedule.value(at: threethirty))
 
         let fourthirty = midnight.addingTimeInterval(TimeInterval(hours: 4.5))
 
-        XCTAssertEqual(reSchedule.valueAt(fourthirty), schedule.valueAt(fourthirty))
+        XCTAssertEqual(reSchedule.value(at: fourthirty), schedule.value(at: fourthirty))
     }
 
 }

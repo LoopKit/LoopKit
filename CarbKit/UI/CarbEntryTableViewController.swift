@@ -146,7 +146,7 @@ public final class CarbEntryTableViewController: UITableViewController {
             carbStore?.getRecentCarbEntries { (entries, error) -> Void in
                 DispatchQueue.main.async {
                     if let error = error {
-                        self.presentAlertControllerWithError(error)
+                        self.presentAlertController(with: error)
                     } else {
                         self.carbEntries = entries
                         self.tableView.reloadData()
@@ -261,7 +261,7 @@ public final class CarbEntryTableViewController: UITableViewController {
 
                         NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
                     } else if let error = error {
-                        self.presentAlertControllerWithError(error)
+                        self.presentAlertController(with: error)
                     }
                 }
             })
@@ -290,7 +290,7 @@ public final class CarbEntryTableViewController: UITableViewController {
                 carbStore?.replaceCarbEntry(originalEntry, withEntry: updatedEntry) { (_, _, error) -> Void in
                     DispatchQueue.main.async {
                         if let error = error {
-                            self.presentAlertControllerWithError(error)
+                            self.presentAlertController(with: error)
                         } else {
                             self.reloadData()
 
@@ -302,7 +302,7 @@ public final class CarbEntryTableViewController: UITableViewController {
                 carbStore?.addCarbEntry(updatedEntry) { (_, _, error) -> Void in
                     DispatchQueue.main.async {
                         if let error = error {
-                            self.presentAlertControllerWithError(error)
+                            self.presentAlertController(with: error)
                         } else {
                             self.reloadData()
 
@@ -337,7 +337,7 @@ public final class CarbEntryTableViewController: UITableViewController {
                     if success {
                         self.state = .display
                     } else if let error = error {
-                        self.presentAlertControllerWithError(error)
+                        self.presentAlertController(with: error)
                     }
                 }
             }

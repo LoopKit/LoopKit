@@ -120,7 +120,7 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                     glucoseStore.preferredUnit({ (unit, error) -> Void in
                         DispatchQueue.main.async {
                             if let error = error {
-                                self.presentAlertControllerWithError(error)
+                                self.presentAlertController(with: error)
                             } else if let unit = unit {
                                 scheduleVC.unit = unit
                                 self.show(scheduleVC, sender: sender)

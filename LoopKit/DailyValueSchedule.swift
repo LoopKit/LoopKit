@@ -100,7 +100,7 @@ public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable where T.R
 
      - parameter date: The date to convert
      */
-    private func scheduleOffsetForDate(_ date: Date) -> TimeInterval {
+    private func scheduleOffset(for date: Date) -> TimeInterval {
         // The time interval since a reference date in the specified time zone
         let interval = date.timeIntervalSinceReferenceDate + TimeInterval(timeZone.secondsFromGMT(for: date))
 
@@ -117,18 +117,18 @@ public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable where T.R
 
      - returns: A slice of `ScheduleItem` values
      */
-    public func between(_ startDate: Date, _ endDate: Date) -> [AbsoluteScheduleValue<T>] {
+    public func between(start startDate: Date, end endDate: Date) -> [AbsoluteScheduleValue<T>] {
         guard startDate <= endDate else {
             return []
         }
 
-        let startOffset = scheduleOffsetForDate(startDate)
+        let startOffset = scheduleOffset(for: startDate)
         let endOffset = startOffset + endDate.timeIntervalSince(startDate)
 
         guard endOffset <= maxTimeInterval else {
             let boundaryDate = startDate.addingTimeInterval(maxTimeInterval - startOffset)
 
-            return between(startDate, boundaryDate) + between(boundaryDate, endDate)
+            return between(start: startDate, end: boundaryDate) + between(start: boundaryDate, end: endDate)
         }
 
         var startIndex = 0
@@ -151,8 +151,8 @@ public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable where T.R
         }
     }
 
-    func valueAt(_ time: Date) -> T {
-        return between(time, time).first!.value
+    func value(at time: Date) -> T {
+        return between(start: time, end: time).first!.value
     }
 
 }

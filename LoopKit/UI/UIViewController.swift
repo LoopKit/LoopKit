@@ -18,7 +18,7 @@ extension UIViewController {
      - parameter animated:   Whether to animate the alert
      - parameter completion: An optional closure to execute after the presentation finishes
      */
-    public func presentAlertControllerWithTitle(_ title: String?, message: String, animated: Bool = true, completion: (() -> Void)? = nil) {
+    public func presentAlertController(withTitle title: String?, message: String, animated: Bool = true, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(
             title: title,
             message: message,
@@ -44,13 +44,14 @@ extension UIViewController {
      - parameter animated:   Whether to animate the alert
      - parameter completion: An optional closure to execute after the presentation finishes
      */
-    public func presentAlertControllerWithError(_ error: Error, animated: Bool = true, completion: (() -> Void)? = nil) {
+    public func presentAlertController(with error: Error, animated: Bool = true, completion: (() -> Void)? = nil) {
 
         // See: https://forums.developer.apple.com/thread/17431
         // The compiler automatically emits the code necessary to translate between any ErrorType and NSError.
         let castedError = error as NSError
 
-        presentAlertControllerWithTitle(error.localizedDescription,
+        presentAlertController(
+            withTitle: error.localizedDescription,
             message: castedError.localizedRecoverySuggestion ?? String(describing: error),
             animated: animated,
             completion: completion
