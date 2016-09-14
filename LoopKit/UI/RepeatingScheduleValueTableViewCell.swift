@@ -10,9 +10,9 @@ import UIKit
 
 
 protocol RepeatingScheduleValueTableViewCellDelegate: class {
-    func repeatingScheduleValueTableViewCellDidUpdateDate(cell: RepeatingScheduleValueTableViewCell)
+    func repeatingScheduleValueTableViewCellDidUpdateDate(_ cell: RepeatingScheduleValueTableViewCell)
 
-    func repeatingScheduleValueTableViewCellDidUpdateValue(cell: RepeatingScheduleValueTableViewCell)
+    func repeatingScheduleValueTableViewCellDidUpdateValue(_ cell: RepeatingScheduleValueTableViewCell)
 }
 
 
@@ -20,24 +20,24 @@ class RepeatingScheduleValueTableViewCell: UITableViewCell, UITextFieldDelegate 
 
     weak var delegate: RepeatingScheduleValueTableViewCellDelegate?
 
-    var timeZone: NSTimeZone! {
+    var timeZone: TimeZone! {
         didSet {
             dateFormatter.timeZone = timeZone
             datePicker.timeZone = timeZone
         }
     }
 
-    private lazy var dateFormatter: NSDateFormatter = {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .NoStyle
-        dateFormatter.timeStyle = .ShortStyle
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .none
+        dateFormatter.timeStyle = .short
 
         return dateFormatter
     }()
 
-    var date: NSDate = NSDate() {
+    var date: Date = Date() {
         didSet {
-            dateLabel.text = dateFormatter.stringFromDate(date)
+            dateLabel.text = dateFormatter.string(from: date)
 
             if datePicker.date != date {
                 datePicker.date = date
@@ -47,17 +47,17 @@ class RepeatingScheduleValueTableViewCell: UITableViewCell, UITextFieldDelegate 
 
     var value: Double = 0 {
         didSet {
-            textField.text = valueNumberFormatter.stringFromNumber(value)
+            textField.text = valueNumberFormatter.string(from: value.rawValue)
         }
     }
 
-    var datePickerInterval: NSTimeInterval {
-        return NSTimeInterval(minutes: Double(datePicker.minuteInterval))
+    var datePickerInterval: TimeInterval {
+        return TimeInterval(minutes: Double(datePicker.minuteInterval))
     }
 
-    lazy var valueNumberFormatter: NSNumberFormatter = {
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = .DecimalStyle
+    lazy var valueNumberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 1
 
         return formatter
@@ -81,10 +81,10 @@ class RepeatingScheduleValueTableViewCell: UITableViewCell, UITextFieldDelegate 
         datePickerExpandedHeight = datePickerHeightConstraint.constant
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        datePicker.hidden = !selected
+        datePicker.isHidden = !selected
         datePickerHeightConstraint.constant = selected ? datePickerExpandedHeight : 0
     }
 
@@ -97,7 +97,7 @@ class RepeatingScheduleValueTableViewCell: UITableViewCell, UITextFieldDelegate 
         }
     }
 
-    @IBAction func dateChanged(sender: UIDatePicker) {
+    @IBAction func dateChanged(_ sender: UIDatePicker) {
         date = sender.date
 
         delegate?.repeatingScheduleValueTableViewCellDidUpdateDate(self)
@@ -105,14 +105,14 @@ class RepeatingScheduleValueTableViewCell: UITableViewCell, UITextFieldDelegate 
 
     // MARK: - UITextFieldDelegate
 
-    func textFieldDidBeginEditing(textField: UITextField) {
-        dispatch_async(dispatch_get_main_queue()) {
-            textField.selectedTextRange = textField.textRangeFromPosition(textField.beginningOfDocument, toPosition: textField.endOfDocument)
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        DispatchQueue.main.async {
+            textField.selectedTextRange = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument)
         }
     }
 
-    func textFieldDidEndEditing(textField: UITextField) {
-        value = valueNumberFormatter.numberFromString(textField.text ?? "")?.doubleValue ?? 0
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        value = valueNumberFormatter.number(from: textField.text ?? "")?.doubleValue ?? 0
 
         delegate?.repeatingScheduleValueTableViewCellDidUpdateValue(self)
     }

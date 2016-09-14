@@ -13,7 +13,7 @@ class GlucoseRangeTableViewCell: RepeatingScheduleValueTableViewCell {
 
     var minValue: Double = 0 {
         didSet {
-            minValueTextField.text = valueNumberFormatter.stringFromNumber(minValue)
+            minValueTextField.text = valueNumberFormatter.string(from: NSNumber(value: minValue))
         }
     }
 
@@ -21,9 +21,9 @@ class GlucoseRangeTableViewCell: RepeatingScheduleValueTableViewCell {
 
     // MARK: - UITextFieldDelegate
 
-    override func textFieldDidEndEditing(textField: UITextField) {
+    override func textFieldDidEndEditing(_ textField: UITextField) {
         if textField === minValueTextField {
-            minValue = valueNumberFormatter.numberFromString(textField.text ?? "")?.doubleValue ?? 0
+            minValue = valueNumberFormatter.number(from: textField.text ?? "")?.doubleValue ?? 0
             delegate?.repeatingScheduleValueTableViewCellDidUpdateValue(self)
         } else {
             super.textFieldDidEndEditing(textField)

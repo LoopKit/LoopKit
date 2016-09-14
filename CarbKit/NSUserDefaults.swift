@@ -9,21 +9,21 @@
 import Foundation
 
 
-extension NSUserDefaults {
+extension UserDefaults {
     private enum Key: String {
         case CarbEntryCache = "com.loudnate.CarbKit.CarbEntryCache"
     }
 
     var carbEntryCache: [StoredCarbEntry]? {
         get {
-            if let rawValue = arrayForKey(Key.CarbEntryCache.rawValue) as? [StoredCarbEntry.RawValue] {
+            if let rawValue = array(forKey: Key.CarbEntryCache.rawValue) as? [StoredCarbEntry.RawValue] {
                 return rawValue.flatMap { StoredCarbEntry(rawValue: $0) }
             } else {
                 return nil
             }
         }
         set {
-            setObject(newValue?.map { $0.rawValue }, forKey: Key.CarbEntryCache.rawValue)
+            set(newValue?.map { $0.rawValue }, forKey: Key.CarbEntryCache.rawValue)
         }
     }
 }

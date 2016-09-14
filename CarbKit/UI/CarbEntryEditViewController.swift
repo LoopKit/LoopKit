@@ -20,7 +20,7 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
         }
     }
 
-    public var preferredUnit: HKUnit = HKUnit.gramUnit()
+    public var preferredUnit: HKUnit = HKUnit.gram()
 
     public var originalCarbEntry: CarbEntry? {
         didSet {
@@ -35,17 +35,17 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
 
     private var quantity: HKQuantity?
 
-    private var date = NSDate()
+    private var date = Date()
 
     private var foodType: String?
 
-    private var absorptionTime: NSTimeInterval?
+    private var absorptionTime: TimeInterval?
 
     public var updatedCarbEntry: CarbEntry? {
         if let  quantity = quantity,
-                absorptionTime = absorptionTime
+                let absorptionTime = absorptionTime
         {
-            if let o = originalCarbEntry where o.quantity == quantity && o.startDate == date && o.foodType == foodType && o.absorptionTime == absorptionTime {
+            if let o = originalCarbEntry, o.quantity == quantity && o.startDate == date && o.foodType == foodType && o.absorptionTime == absorptionTime {
                 return nil  // No changes were made
             }
 
@@ -78,29 +78,29 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
     // MARK: - Table view data source
 
     private enum Row: Int {
-        case Value
-        case Date
-        case AbsorptionTime
+        case value
+        case date
+        case absorptionTime
     }
 
-    public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    public override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
 
-    public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch Row(rawValue: indexPath.row)! {
-        case .Value:
-            let cell = tableView.dequeueReusableCellWithIdentifier(DecimalTextFieldTableViewCell.className) as! DecimalTextFieldTableViewCell
+        case .value:
+            let cell = tableView.dequeueReusableCell(withIdentifier: DecimalTextFieldTableViewCell.className) as! DecimalTextFieldTableViewCell
 
             if let quantity = quantity {
-                cell.number = NSNumber(double: quantity.doubleValueForUnit(preferredUnit))
+                cell.number = NSNumber(value: quantity.doubleValue(for: preferredUnit) as Double)
             }
-            cell.textField.enabled = isSampleEditable
-            cell.unitLabel.text = String(preferredUnit)
+            cell.textField.isEnabled = isSampleEditable
+            cell.unitLabel.text = String(describing: preferredUnit)
             cell.delegate = self
 
             if originalCarbEntry == nil {
@@ -108,19 +108,19 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
             }
 
             return cell
-        case .Date:
-            let cell = tableView.dequeueReusableCellWithIdentifier(DatePickerTableViewCell.className) as! DatePickerTableViewCell
+        case .date:
+            let cell = tableView.dequeueReusableCell(withIdentifier: DatePickerTableViewCell.className) as! DatePickerTableViewCell
 
             cell.date = date
-            cell.datePicker.enabled = isSampleEditable
+            cell.datePicker.isEnabled = isSampleEditable
             cell.delegate = self
 
             return cell
-        case .AbsorptionTime:
-            let cell = tableView.dequeueReusableCellWithIdentifier(AbsorptionTimeTextFieldTableViewCell.className) as! AbsorptionTimeTextFieldTableViewCell
+        case .absorptionTime:
+            let cell = tableView.dequeueReusableCell(withIdentifier: AbsorptionTimeTextFieldTableViewCell.className) as! AbsorptionTimeTextFieldTableViewCell
 
             if let absorptionTime = absorptionTime {
-                cell.number = NSNumber(double: absorptionTime.minutes)
+                cell.number = NSNumber(value: absorptionTime.minutes as Double)
             }
 
             if let times = defaultAbsorptionTimes {
@@ -135,47 +135,48 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
 
     // MARK: - UITableViewDelegate
 
-    public override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+    public override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
 
         tableView.endEditing(false)
         tableView.beginUpdates()
         return indexPath
     }
 
-    public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.endUpdates()
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     // MARK: - Navigation
 
-    public override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    public override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         self.tableView.endEditing(true)
 
-        if sender !== saveButtonItem {
+        guard let sender = sender as? UIBarButtonItem, sender === saveButtonItem else {
             quantity = nil
+            return
         }
     }
 
     // MARK: - DatePickerTableViewCellDelegate
 
-    func datePickerTableViewCellDidUpdateDate(cell: DatePickerTableViewCell) {
-        date = cell.date
+    func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
+        date = cell.date as Date
     }
 
     // MARK: - TextFieldTableViewCellDelegate
 
-    func textFieldTableViewCellDidUpdateText(cell: DecimalTextFieldTableViewCell) {
-        switch Row(rawValue: tableView.indexPathForCell(cell)?.row ?? -1) {
-        case .Value?:
+    func textFieldTableViewCellDidUpdateText(_ cell: DecimalTextFieldTableViewCell) {
+        switch Row(rawValue: (tableView.indexPath(for: cell)?.row ?? -1)) {
+        case .value?:
             if let number = cell.number {
                 quantity = HKQuantity(unit: preferredUnit, doubleValue: number.doubleValue)
             } else {
                 quantity = nil
             }
-        case .AbsorptionTime?:
+        case .absorptionTime?:
             if let number = cell.number {
-                absorptionTime = NSTimeInterval(minutes: number.doubleValue)
+                absorptionTime = TimeInterval(minutes: number.doubleValue)
             } else {
                 absorptionTime = nil
             }

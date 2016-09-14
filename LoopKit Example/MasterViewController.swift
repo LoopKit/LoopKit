@@ -16,67 +16,67 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
 
     private var dataManager: DeviceDataManager {
         get {
-            return DeviceDataManager.sharedManager
+            return DeviceDataManager.shared
         }
     }
 
     // MARK: - Data Source
 
     private enum Section: Int {
-        case Data
-        case Configuration
+        case data
+        case configuration
 
         static let count = 2
     }
 
     private enum DataRow: Int {
-        case Carbs = 0
-        case Reservoir
+        case carbs = 0
+        case reservoir
 
         static let count = 2
     }
 
     private enum ConfigurationRow: Int {
-        case BasalRate
-        case GlucoseTargetRange
-        case PumpID
+        case basalRate
+        case glucoseTargetRange
+        case pumpID
 
         static let count = 3
     }
 
     // MARK: UITableViewDataSource
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return Section.count
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
-        case .Configuration:
+        case .configuration:
             return ConfigurationRow.count
-        case .Data:
+        case .data:
             return DataRow.count
         }
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 
         switch Section(rawValue: indexPath.section)! {
-        case .Configuration:
+        case .configuration:
             switch ConfigurationRow(rawValue: indexPath.row)! {
-            case .BasalRate:
+            case .basalRate:
                 cell.textLabel?.text = NSLocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
-            case .GlucoseTargetRange:
+            case .glucoseTargetRange:
                 cell.textLabel?.text = NSLocalizedString("Glucose Target Range", comment: "The title text for the glucose target range schedule")
-            case .PumpID:
+            case .pumpID:
                 cell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title text for the pump ID")
             }
-        case .Data:
+        case .data:
             switch DataRow(rawValue: indexPath.row)! {
-            case .Carbs:
+            case .carbs:
                 cell.textLabel?.text = NSLocalizedString("Carbs", comment: "The title for the cell navigating to the carbs screen")
-            case .Reservoir:
+            case .reservoir:
                 cell.textLabel?.text = NSLocalizedString("Reservoir", comment: "The title for the cell navigating to the reservoir screen")
             }
         }
@@ -86,13 +86,13 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
 
     // MARK: - UITableViewDelegate
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch Section(rawValue: indexPath.section)! {
-        case .Configuration:
-            let sender = tableView.cellForRowAtIndexPath(indexPath)
+        case .configuration:
+            let sender = tableView.cellForRow(at: indexPath)
             let row = ConfigurationRow(rawValue: indexPath.row)!
             switch row {
-            case .BasalRate:
+            case .basalRate:
                 let scheduleVC = SingleValueScheduleTableViewController()
 
                 if let profile = dataManager.basalRateSchedule {
@@ -102,8 +102,8 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 scheduleVC.delegate = self
                 scheduleVC.title = sender?.textLabel?.text
 
-                showViewController(scheduleVC, sender: sender)
-            case .GlucoseTargetRange:
+                show(scheduleVC, sender: sender)
+            case .glucoseTargetRange:
                 let scheduleVC = GlucoseRangeScheduleTableViewController()
 
                 scheduleVC.delegate = self
@@ -115,51 +115,51 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                     scheduleVC.unit = schedule.unit
                     scheduleVC.workoutRange = schedule.workoutRange
 
-                    showViewController(scheduleVC, sender: sender)
+                    show(scheduleVC, sender: sender)
                 } else if let glucoseStore = dataManager.glucoseStore {
                     glucoseStore.preferredUnit({ (unit, error) -> Void in
-                        dispatch_async(dispatch_get_main_queue()) {
+                        DispatchQueue.main.async {
                             if let error = error {
-                                self.presentAlertControllerWithError(error)
+                                self.presentAlertController(with: error)
                             } else if let unit = unit {
                                 scheduleVC.unit = unit
-                                self.showViewController(scheduleVC, sender: sender)
+                                self.show(scheduleVC, sender: sender)
                             }
                         }
                     })
                 } else {
-                    showViewController(scheduleVC, sender: sender)
+                    show(scheduleVC, sender: sender)
                 }
-            case .PumpID:
+            case .pumpID:
                 let textFieldVC = TextFieldTableViewController()
 
 //                textFieldVC.delegate = self
                 textFieldVC.title = sender?.textLabel?.text
                 textFieldVC.placeholder = NSLocalizedString("Enter the 6-digit pump ID", comment: "The placeholder text instructing users how to enter a pump ID")
                 textFieldVC.value = dataManager.pumpID
-                textFieldVC.keyboardType = .NumberPad
+                textFieldVC.keyboardType = .numberPad
                 textFieldVC.contextHelp = NSLocalizedString("The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).", comment: "Instructions on where to find the pump ID on a Minimed pump")
 
-                showViewController(textFieldVC, sender: sender)
+                show(textFieldVC, sender: sender)
             }
-        case .Data:
+        case .data:
             switch DataRow(rawValue: indexPath.row)! {
-            case .Carbs:
-                performSegueWithIdentifier(CarbEntryTableViewController.className, sender: indexPath)
-            case .Reservoir:
-                performSegueWithIdentifier(InsulinDeliveryTableViewController.className, sender: indexPath)
+            case .carbs:
+                performSegue(withIdentifier: CarbEntryTableViewController.className, sender: indexPath)
+            case .reservoir:
+                performSegue(withIdentifier: InsulinDeliveryTableViewController.className, sender: indexPath)
             }
         }
     }
 
     // MARK: - Segues
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepareForSegue(segue, sender: sender)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
 
-        var targetViewController = segue.destinationViewController
+        var targetViewController = segue.destination
 
-        if let navVC = targetViewController as? UINavigationController, topViewController = navVC.topViewController {
+        if let navVC = targetViewController as? UINavigationController, let topViewController = navVC.topViewController {
             targetViewController = topViewController
         }
 
@@ -180,16 +180,16 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
 
     // MARK: - DailyValueScheduleTableViewControllerDelegate
 
-    func dailyValueScheduleTableViewControllerWillFinishUpdating(controller: DailyValueScheduleTableViewController) {
+    func dailyValueScheduleTableViewControllerWillFinishUpdating(_ controller: DailyValueScheduleTableViewController) {
         if let indexPath = tableView.indexPathForSelectedRow {
             switch Section(rawValue: indexPath.section)! {
-            case .Configuration:
+            case .configuration:
                 switch ConfigurationRow(rawValue: indexPath.row)! {
-                case .BasalRate:
+                case .basalRate:
                     if let controller = controller as? SingleValueScheduleTableViewController {
                         dataManager.basalRateSchedule = BasalRateSchedule(dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
                     }
-                case .GlucoseTargetRange:
+                case .glucoseTargetRange:
                     if let controller = controller as? GlucoseRangeScheduleTableViewController {
                         dataManager.glucoseTargetRangeSchedule = GlucoseRangeSchedule(unit: controller.unit, dailyItems: controller.scheduleItems, workoutRange: controller.workoutRange, timeZone: controller.timeZone)
                     }
@@ -208,7 +208,7 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                     break
                 }
 
-                tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+                tableView.reloadRows(at: [indexPath], with: .none)
             default:
                 break
             }

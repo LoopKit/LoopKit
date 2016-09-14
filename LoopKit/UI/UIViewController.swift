@@ -18,16 +18,16 @@ extension UIViewController {
      - parameter animated:   Whether to animate the alert
      - parameter completion: An optional closure to execute after the presentation finishes
      */
-    public func presentAlertControllerWithTitle(title: String?, message: String, animated: Bool = true, completion: (() -> Void)? = nil) {
+    public func presentAlertController(withTitle title: String?, message: String, animated: Bool = true, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(
             title: title,
             message: message,
-            preferredStyle: .Alert
+            preferredStyle: .alert
         )
 
         let action = UIAlertAction(
             title: NSLocalizedString("com.loudnate.LoopKit.errorAlertActionTitle", tableName: "LoopKit", value: "OK", comment: "The title of the action used to dismiss an error alert"),
-            style: .Default,
+            style: .default,
             handler: nil
         )
 
@@ -44,14 +44,15 @@ extension UIViewController {
      - parameter animated:   Whether to animate the alert
      - parameter completion: An optional closure to execute after the presentation finishes
      */
-    public func presentAlertControllerWithError(error: ErrorType, animated: Bool = true, completion: (() -> Void)? = nil) {
+    public func presentAlertController(with error: Error, animated: Bool = true, completion: (() -> Void)? = nil) {
 
         // See: https://forums.developer.apple.com/thread/17431
         // The compiler automatically emits the code necessary to translate between any ErrorType and NSError.
-        let castedError: NSError = error as NSError
+        let castedError = error as NSError
 
-        presentAlertControllerWithTitle(castedError.userInfo[NSLocalizedDescriptionKey] as? String ?? NSLocalizedString("com.loudnate.LoopKit.errorAlertDefaultTitle", tableName: "LoopKit", value: "Error", comment: "The default title for an alert displaying an error"),
-            message: castedError.userInfo[NSLocalizedRecoverySuggestionErrorKey] as? String ?? String(error),
+        presentAlertController(
+            withTitle: error.localizedDescription,
+            message: castedError.localizedRecoverySuggestion ?? String(describing: error),
             animated: animated,
             completion: completion
         )
@@ -67,17 +68,17 @@ extension UIViewController {
      - parameter animated:                Whether to animate the presentation
      - parameter completion:              An optional closure to execute after the presentation finishes
      */
-    public func presentViewControllerOnActiveViewController(viewControllerToPresent: UIViewController, animated: Bool, completion: (() -> Void)?) {
+    public func presentViewControllerOnActiveViewController(_ viewControllerToPresent: UIViewController, animated: Bool, completion: (() -> Void)?) {
         var presentingViewController: UIViewController? = self
 
         if presentingViewController?.view.window == nil {
-            presentingViewController = UIApplication.sharedApplication().delegate?.window??.rootViewController
+            presentingViewController = UIApplication.shared.delegate?.window??.rootViewController
         }
 
         while presentingViewController?.presentedViewController != nil {
             presentingViewController = presentingViewController?.presentedViewController
         }
 
-        presentingViewController?.presentViewController(viewControllerToPresent, animated: animated, completion: completion)
+        presentingViewController?.present(viewControllerToPresent, animated: animated, completion: completion)
     }
 }

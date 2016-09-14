@@ -13,75 +13,75 @@ import LoopKit
 
 class PumpEvent: NSManagedObject {
 
-    var duration: NSTimeInterval! {
+    var duration: TimeInterval! {
         get {
-            willAccessValueForKey("duration")
-            defer { didAccessValueForKey("duration") }
+            willAccessValue(forKey: "duration")
+            defer { didAccessValue(forKey: "duration") }
             return primitiveDuration?.doubleValue
         }
         set {
-            willChangeValueForKey("duration")
-            defer { didChangeValueForKey("duration") }
-            primitiveDuration = newValue != nil ? NSNumber(double: newValue) : nil
+            willChangeValue(forKey: "duration")
+            defer { didChangeValue(forKey: "duration") }
+            primitiveDuration = newValue != nil ? NSNumber(value: newValue as Double) : nil
         }
     }
 
     var unit: DoseUnit? {
         get {
-            willAccessValueForKey("unit")
-            defer { didAccessValueForKey("unit") }
+            willAccessValue(forKey: "unit")
+            defer { didAccessValue(forKey: "unit") }
             return DoseUnit(rawValue: primitiveUnit ?? "")
         }
         set {
-            willChangeValueForKey("unit")
-            defer { didChangeValueForKey("unit") }
+            willChangeValue(forKey: "unit")
+            defer { didChangeValue(forKey: "unit") }
             primitiveUnit = newValue?.rawValue
         }
     }
 
     var type: PumpEventType? {
         get {
-            willAccessValueForKey("type")
-            defer { didAccessValueForKey("type") }
+            willAccessValue(forKey: "type")
+            defer { didAccessValue(forKey: "type") }
             return PumpEventType(rawValue: primitiveType ?? "")
         }
         set {
-            willChangeValueForKey("type")
-            defer { didChangeValueForKey("type") }
+            willChangeValue(forKey: "type")
+            defer { didChangeValue(forKey: "type") }
             primitiveType = newValue?.rawValue
         }
     }
 
     var uploaded: Bool {
         get {
-            willAccessValueForKey("uploaded")
-            defer { didAccessValueForKey("uploaded") }
+            willAccessValue(forKey: "uploaded")
+            defer { didAccessValue(forKey: "uploaded") }
             return primitiveUploaded?.boolValue ?? false
         }
         set {
-            willChangeValueForKey("uploaded")
-            defer { didChangeValueForKey("uploaded") }
-            primitiveUploaded = NSNumber(bool: newValue)
+            willChangeValue(forKey: "uploaded")
+            defer { didChangeValue(forKey: "uploaded") }
+            primitiveUploaded = NSNumber(value: newValue as Bool)
         }
     }
 
     var value: Double? {
         get {
-            willAccessValueForKey("value")
-            defer { didAccessValueForKey("value") }
+            willAccessValue(forKey: "value")
+            defer { didAccessValue(forKey: "value") }
             return primitiveValue?.doubleValue
         }
         set {
-            willChangeValueForKey("value")
-            defer { didChangeValueForKey("value") }
-            primitiveValue = newValue != nil ? NSNumber(double: newValue!) : nil
+            willChangeValue(forKey: "value")
+            defer { didChangeValue(forKey: "value") }
+            primitiveValue = newValue != nil ? NSNumber(value: newValue! as Double) : nil
         }
     }
 
     override func awakeFromInsert() {
         super.awakeFromInsert()
 
-        createdAt = NSDate()
+        createdAt = Date()
     }
 }
 
@@ -90,21 +90,21 @@ extension PumpEvent: Fetchable { }
 
 
 extension PumpEvent: TimelineValue {
-    var startDate: NSDate {
+    var startDate: Date {
         get {
-            return date
+            return date as Date
         }
         set {
             date = newValue
         }
     }
 
-    var endDate: NSDate {
+    var endDate: Date {
         get {
-            return date.dateByAddingTimeInterval(duration)
+            return date.addingTimeInterval(duration) as Date
         }
         set {
-            duration = newValue.timeIntervalSinceDate(startDate)
+            duration = newValue.timeIntervalSince(startDate)
         }
     }
 }
@@ -113,7 +113,7 @@ extension PumpEvent: TimelineValue {
 extension PumpEvent {
     var dose: DoseEntry? {
         get {
-            guard let type = type, value = value, unit = unit else {
+            guard let type = type, let value = value, let unit = unit else {
                 return nil
             }
 
@@ -125,8 +125,8 @@ extension PumpEvent {
             }
 
             type = entry.type
-            startDate = entry.startDate
-            endDate = entry.endDate
+            startDate = entry.startDate as Date
+            endDate = entry.endDate as Date
             value = entry.value
             unit = entry.unit
         }

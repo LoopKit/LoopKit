@@ -10,19 +10,19 @@ import UIKit
 
 
 public protocol DailyValueScheduleTableViewControllerDelegate: class {
-    func dailyValueScheduleTableViewControllerWillFinishUpdating(controller: DailyValueScheduleTableViewController)
+    func dailyValueScheduleTableViewControllerWillFinishUpdating(_ controller: DailyValueScheduleTableViewController)
 }
 
 
-func insertableIndicesForScheduleItems<T>(scheduleItems: [RepeatingScheduleValue<T>], byRemovingRow row: Int, withInterval interval: NSTimeInterval) -> [Bool] {
+func insertableIndices<T>(for scheduleItems: [RepeatingScheduleValue<T>], removing row: Int, with interval: TimeInterval) -> [Bool] {
 
-    let insertableIndices = scheduleItems.enumerate().map { (index, item) -> Bool in
+    let insertableIndices = scheduleItems.enumerated().map { (index, item) -> Bool in
         if row == index {
             return true
         } else if index == 0 {
             return false
         } else if index == scheduleItems.endIndex - 1 {
-            return item.startTime < NSTimeInterval(hours: 24) - interval
+            return item.startTime < TimeInterval(hours: 24) - interval
         } else if index > row {
             return scheduleItems[index + 1].startTime - item.startTime > interval
         } else {
@@ -36,10 +36,10 @@ func insertableIndicesForScheduleItems<T>(scheduleItems: [RepeatingScheduleValue
 
 public class DailyValueScheduleTableViewController: UITableViewController {
 
-    private var keyboardWillShowNotificationObserver: AnyObject?
+    private var keyboardWillShowNotificationObserver: Any?
 
     public init() {
-        super.init(style: .Plain)
+        super.init(style: .plain)
     }
 
     public required init?(coder aDecoder: NSCoder) {
@@ -49,16 +49,16 @@ public class DailyValueScheduleTableViewController: UITableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItems = [insertButtonItem(), editButtonItem()]
+        navigationItem.rightBarButtonItems = [insertButtonItem(), editButtonItem]
 
-        let localTimeZone = NSTimeZone.defaultTimeZone()
-        let timeZoneDiff = NSTimeInterval(timeZone.secondsFromGMT - localTimeZone.secondsFromGMT)
+        let localTimeZone = TimeZone.current
+        let timeZoneDiff = TimeInterval(timeZone.secondsFromGMT() - localTimeZone.secondsFromGMT())
 
         if timeZoneDiff != 0 {
-            let localTimeZoneName = localTimeZone.abbreviation ?? localTimeZone.name
-            let formatter = NSDateComponentsFormatter()
-            formatter.allowedUnits = [.Hour, .Minute]
-            let diffString = formatter.stringFromTimeInterval(abs(timeZoneDiff)) ?? String(abs(timeZoneDiff))
+            let localTimeZoneName = localTimeZone.abbreviation() ?? localTimeZone.identifier
+            let formatter = DateComponentsFormatter()
+            formatter.allowedUnits = [.hour, .minute]
+            let diffString = formatter.string(from: abs(timeZoneDiff)) ?? String(abs(timeZoneDiff))
 
             navigationItem.prompt = String(
                 format: NSLocalizedString("Times in %1$@%2$@%3$@", comment: "The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval)"),
@@ -66,9 +66,9 @@ public class DailyValueScheduleTableViewController: UITableViewController {
             )
         }
 
-        tableView.keyboardDismissMode = .OnDrag
+        tableView.keyboardDismissMode = .onDrag
 
-        keyboardWillShowNotificationObserver = NSNotificationCenter.defaultCenter().addObserverForName(UIKeyboardWillShowNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: { [unowned self] (note) -> Void in
+        keyboardWillShowNotificationObserver = NotificationCenter.default.addObserver(forName: .UIKeyboardWillShow, object: nil, queue: OperationQueue.main, using: { [unowned self] (note) -> Void in
 
             guard note.userInfo?[UIKeyboardIsLocalUserInfoKey] as? Bool == true else {
                 return
@@ -78,33 +78,33 @@ public class DailyValueScheduleTableViewController: UITableViewController {
 
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 self.tableView.beginUpdates()
-                self.tableView.deselectRowAtIndexPath(indexPath, animated: animated)
+                self.tableView.deselectRow(at: indexPath, animated: animated)
                 self.tableView.endUpdates()
             }
         })
     }
 
-    public override func setEditing(editing: Bool, animated: Bool) {
+    public override func setEditing(_ editing: Bool, animated: Bool) {
         if let indexPath = tableView.indexPathForSelectedRow {
             tableView.beginUpdates()
-            tableView.deselectRowAtIndexPath(indexPath, animated: animated)
+            tableView.deselectRow(at: indexPath, animated: animated)
             tableView.endUpdates()
         }
 
         tableView.endEditing(false)
 
-        navigationItem.rightBarButtonItems?[0].enabled = !editing
+        navigationItem.rightBarButtonItems?[0].isEnabled = !editing
 
         super.setEditing(editing, animated: animated)
     }
 
     deinit {
         if let observer = keyboardWillShowNotificationObserver {
-            NSNotificationCenter.defaultCenter().removeObserver(observer)
+            NotificationCenter.default.removeObserver(observer)
         }
     }
 
-    public override func viewWillDisappear(animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         tableView.endEditing(true)
@@ -115,12 +115,12 @@ public class DailyValueScheduleTableViewController: UITableViewController {
     public weak var delegate: DailyValueScheduleTableViewControllerDelegate?
 
     public func insertButtonItem() -> UIBarButtonItem {
-        return UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(addScheduleItem(_:)))
+        return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addScheduleItem(_:)))
     }
 
     // MARK: - State
 
-    public var timeZone = NSTimeZone.defaultTimeZone() {
+    public var timeZone = TimeZone.current {
         didSet {
             calendar.timeZone = timeZone
         }
@@ -128,66 +128,66 @@ public class DailyValueScheduleTableViewController: UITableViewController {
 
     public var unitDisplayString: String = "U/hour"
 
-    private var calendar = NSCalendar.currentCalendar()
+    private var calendar = Calendar.current
 
-    var midnight: NSDate {
-        return calendar.startOfDayForDate(NSDate())
+    var midnight: Date {
+        return calendar.startOfDay(for: Date())
     }
 
-    func addScheduleItem(sender: AnyObject?) {
+    func addScheduleItem(_ sender: Any?) {
         // Updates the table view state. Subclasses should update their data model before calling super
 
-        tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: tableView.numberOfRowsInSection(0), inSection: 0)], withRowAnimation: .Automatic)
+        tableView.insertRows(at: [IndexPath(row: tableView.numberOfRows(inSection: 0), section: 0)], with: .automatic)
     }
 
-    func insertableIndiciesByRemovingRow(row: Int, withInterval timeInterval: NSTimeInterval) -> [Bool] {
+    func insertableIndiciesByRemovingRow(_ row: Int, withInterval timeInterval: TimeInterval) -> [Bool] {
         fatalError("Subclasses must override __FUNCTION__")
     }
 
     // MARK: - UITableViewDataSource
 
-    public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    public override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         fatalError("Subclasses must override __FUNCTION__")
     }
 
-    public override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
 
-    public override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return indexPath.row > 0
     }
 
-    public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         fatalError("Subclasses must override __FUNCTION__")
     }
 
-    public override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
+    public override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
             // Updates the table view state. Subclasses should update their data model before calling super
 
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
 
     // MARK: - UITableViewDelegate
 
-    public override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    public override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return tableView.indexPathForSelectedRow == indexPath ? 196 : 44
     }
 
-    public override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return indexPath.row > 0
     }
 
-    public override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+    public override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         if indexPath == tableView.indexPathForSelectedRow {
             tableView.beginUpdates()
-            tableView.deselectRowAtIndexPath(indexPath, animated: false)
+            tableView.deselectRow(at: indexPath, animated: false)
             tableView.endUpdates()
 
             return nil
@@ -198,24 +198,24 @@ public class DailyValueScheduleTableViewController: UITableViewController {
         return indexPath
     }
 
-    public override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+    public override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         tableView.beginUpdates()
         tableView.endUpdates()
     }
 
-    public override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.endEditing(false)
         tableView.beginUpdates()
         tableView.endUpdates()
     }
 
-    public override func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
+    public override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
 
         guard sourceIndexPath.section == proposedDestinationIndexPath.section else {
             return sourceIndexPath
         }
 
-        guard sourceIndexPath != proposedDestinationIndexPath, let cell = tableView.cellForRowAtIndexPath(sourceIndexPath) as? RepeatingScheduleValueTableViewCell else {
+        guard sourceIndexPath != proposedDestinationIndexPath, let cell = tableView.cellForRow(at: sourceIndexPath) as? RepeatingScheduleValueTableViewCell else {
             return proposedDestinationIndexPath
         }
 
@@ -227,35 +227,35 @@ public class DailyValueScheduleTableViewController: UITableViewController {
         } else {
             var closestRow = sourceIndexPath.row
 
-            for (index, valid) in insertableIndices.enumerate() where valid {
+            for (index, valid) in insertableIndices.enumerated() where valid {
                 if abs(proposedDestinationIndexPath.row - index) < closestRow {
                     closestRow = index
                 }
             }
 
-            return NSIndexPath(forRow: closestRow, inSection: proposedDestinationIndexPath.section)
+            return IndexPath(row: closestRow, section: proposedDestinationIndexPath.section)
         }
     }
 
     // MARK: - RepeatingScheduleValueTableViewCellDelegate
 
-    func repeatingScheduleValueTableViewCellDidUpdateDate(cell: RepeatingScheduleValueTableViewCell) {
+    func repeatingScheduleValueTableViewCellDidUpdateDate(_ cell: RepeatingScheduleValueTableViewCell) {
 
         // Updates the TableView state. Subclasses should update their data model
-        if let indexPath = tableView.indexPathForCell(cell) {
+        if let indexPath = tableView.indexPath(for: cell) {
 
-            var indexPaths: [NSIndexPath] = []
+            var indexPaths: [IndexPath] = []
 
             if indexPath.row > 0 {
-                indexPaths.append(NSIndexPath(forRow: indexPath.row - 1, inSection: indexPath.section))
+                indexPaths.append(IndexPath(row: indexPath.row - 1, section: indexPath.section))
             }
 
-            if indexPath.row < tableView.numberOfRowsInSection(0) - 1 {
-                indexPaths.append(NSIndexPath(forRow: indexPath.row + 1, inSection: indexPath.section))
+            if indexPath.row < tableView.numberOfRows(inSection: 0) - 1 {
+                indexPaths.append(IndexPath(row: indexPath.row + 1, section: indexPath.section))
             }
 
-            dispatch_async(dispatch_get_main_queue()) {
-                self.tableView.reloadRowsAtIndexPaths(indexPaths, withRowAnimation: .None)
+            DispatchQueue.main.async {
+                self.tableView.reloadRows(at: indexPaths, with: .none)
             }
         }
     }

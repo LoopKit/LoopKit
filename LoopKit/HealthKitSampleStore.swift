@@ -10,17 +10,20 @@ import Foundation
 import HealthKit
 
 
-public class HealthKitSampleStore {
+extension Notification.Name {
+    public static let StoreAuthorizationStatusDidChange = Notification.Name(rawValue: "com.loudnate.LoopKit.AuthorizationStatusDidChangeNotification")
+}
 
-    public static let AuthorizationStatusDidChangeNotification = "com.loudnate.LoopKit.AuthorizationStatusDidChangeNotification"
+
+open class HealthKitSampleStore {
 
     /// All the sample types we need permission to read
-    public var readTypes: Set<HKSampleType> {
+    open var readTypes: Set<HKSampleType> {
         return Set()
     }
 
     /// All the sample types we need permission to share
-    public var shareTypes: Set<HKSampleType> {
+    open var shareTypes: Set<HKSampleType> {
         return Set()
     }
 
@@ -36,7 +39,7 @@ public class HealthKitSampleStore {
     /// True if the user has explicitly denied access to any required share types
     public var sharingDenied: Bool {
         for type in shareTypes {
-            if healthStore.authorizationStatusForType(type) == .SharingDenied {
+            if healthStore.authorizationStatus(for: type) == .sharingDenied {
                 return true
             }
         }
@@ -47,7 +50,7 @@ public class HealthKitSampleStore {
     /// True if the store requires authorization
     public var authorizationRequired: Bool {
         for type in readTypes.union(shareTypes) {
-            if healthStore.authorizationStatusForType(type) == .NotDetermined {
+            if healthStore.authorizationStatus(for: type) == .notDetermined {
                 return true
             }
         }
@@ -62,10 +65,10 @@ public class HealthKitSampleStore {
         - success: Whether the authorization to share was successful
         - error:   An error object explaining why the authorization was unsuccessful
      */
-    public func authorize(completion: (success: Bool, error: NSError?) -> Void) {
+    open func authorize(_ completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
         let parentHandler = completion
 
-        healthStore.requestAuthorizationToShareTypes(shareTypes, readTypes: readTypes, completion: { (completed, error) -> Void in
+        healthStore.requestAuthorization(toShare: shareTypes, read: readTypes, completion: { (completed, error) -> Void in
 
             let success = completed && !self.sharingDenied
             var authError = error
@@ -73,7 +76,7 @@ public class HealthKitSampleStore {
             if !success && authError == nil {
                 authError = NSError(
                     domain: HKErrorDomain,
-                    code: HKErrorCode.ErrorAuthorizationDenied.rawValue,
+                    code: HKError.errorAuthorizationDenied.rawValue,
                     userInfo: [
                         NSLocalizedDescriptionKey: NSLocalizedString("com.loudnate.LoopKit.sharingDeniedErrorDescription", tableName: "LoopKit", value: "Authorization Denied", comment: "The error description describing when Health sharing was denied"),
                         NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString("com.loudnate.LoopKit.sharingDeniedErrorRecoverySuggestion", tableName: "LoopKit", value: "Please re-enable sharing in Health", comment: "The error recovery suggestion when Health sharing was denied")
@@ -81,9 +84,9 @@ public class HealthKitSampleStore {
                 )
             }
 
-            parentHandler(success: success, error: authError)
+            parentHandler(success, authError)
 
-            NSNotificationCenter.defaultCenter().postNotificationName(self.dynamicType.AuthorizationStatusDidChangeNotification, object: self)
+            NotificationCenter.default.post(name: .StoreAuthorizationStatusDidChange, object: self)
         })
     }
 
@@ -95,21 +98,21 @@ public class HealthKitSampleStore {
         - unit:  The retrieved unit
         - error: An error object explaining why the retrieval was unsuccessful
      */
-    public func preferredUnit(completion: (unit: HKUnit?, error: NSError?) -> Void) {
+    public func preferredUnit(_ completion: @escaping (_ unit: HKUnit?, _ error: Error?) -> Void) {
         let postAuthHandler = {
             let quantityTypes = self.shareTypes.flatMap { (sampleType) -> HKQuantityType? in
                 return sampleType as? HKQuantityType
             }
 
-            self.healthStore.preferredUnitsForQuantityTypes(Set(quantityTypes)) { (quantityToUnit, error) -> Void in
-                completion(unit: quantityToUnit.values.first, error: error)
+            self.healthStore.preferredUnits(for: Set(quantityTypes)) { (quantityToUnit, error) -> Void in
+                completion(quantityToUnit.values.first, error)
             }
         }
 
         if authorizationRequired || sharingDenied {
             authorize({ (success, error) -> Void in
                 if error != nil {
-                    completion(unit: nil, error: error)
+                    completion(nil, error)
                 } else {
                     postAuthHandler()
                 }

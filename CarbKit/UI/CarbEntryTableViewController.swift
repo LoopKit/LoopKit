@@ -30,16 +30,16 @@ public final class CarbEntryTableViewController: UITableViewController {
     public var carbStore: CarbStore? {
         didSet {
             if let carbStore = carbStore {
-                carbStoreObserver = NSNotificationCenter.defaultCenter().addObserverForName(nil,
+                carbStoreObserver = NotificationCenter.default.addObserver(forName: nil,
                     object: carbStore,
-                    queue: NSOperationQueue.mainQueue(),
-                    usingBlock: { [weak self] (note) -> Void in
+                    queue: OperationQueue.main,
+                    using: { [weak self] (note) -> Void in
                         switch note.name {
-                        case CarbStore.CarbEntriesDidUpdateNotification:
-                            if let strongSelf = self where strongSelf.isViewLoaded() {
+                        case Notification.Name.CarbEntriesDidUpdate:
+                            if let strongSelf = self, strongSelf.isViewLoaded {
                                 strongSelf.reloadData()
                             }
-                        case CarbStore.AuthorizationStatusDidChangeNotification:
+                        case Notification.Name.StoreAuthorizationStatusDidChange:
                             break
                         default:
                             break
@@ -50,7 +50,7 @@ public final class CarbEntryTableViewController: UITableViewController {
         }
     }
 
-    private var updateTimer: NSTimer? {
+    private var updateTimer: Timer? {
         willSet {
             if let timer = updateTimer {
                 timer.invalidate()
@@ -63,31 +63,31 @@ public final class CarbEntryTableViewController: UITableViewController {
 
         if let carbStore = carbStore {
             if carbStore.authorizationRequired {
-                state = .AuthorizationRequired
+                state = .authorizationRequired
             } else if carbStore.sharingDenied {
-                state = .Unavailable
+                state = .unavailable
             } else {
-                state = .Display
+                state = .display
             }
         } else {
-            state = .Unavailable
+            state = .unavailable
         }
 
-        navigationItem.rightBarButtonItems?.append(editButtonItem())
+        navigationItem.rightBarButtonItems?.append(editButtonItem)
     }
 
-    public override func viewWillAppear(animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         updateTimelyStats(nil)
     }
 
-    public override func viewDidAppear(animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        let updateInterval = NSTimeInterval(minutes: 5)
-        let timer = NSTimer(
-            fireDate: NSDate().dateCeiledToTimeInterval(updateInterval).dateByAddingTimeInterval(2),
+        let updateInterval = TimeInterval(minutes: 5)
+        let timer = Timer(
+            fireAt: Date().dateCeiledToTimeInterval(updateInterval).addingTimeInterval(2),
             interval: updateInterval,
             target: self,
             selector: #selector(updateTimelyStats(_:)),
@@ -96,10 +96,10 @@ public final class CarbEntryTableViewController: UITableViewController {
         )
         updateTimer = timer
 
-        NSRunLoop.currentRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
+        RunLoop.current.add(timer, forMode: RunLoopMode.defaultRunLoopMode)
     }
 
-    public override func viewWillDisappear(animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         updateTimer = nil
@@ -114,15 +114,15 @@ public final class CarbEntryTableViewController: UITableViewController {
     private var carbEntries: [CarbEntry] = []
 
     private enum State {
-        case Unknown
-        case Unavailable
-        case AuthorizationRequired
-        case Display
+        case unknown
+        case unavailable
+        case authorizationRequired
+        case display
     }
 
-    private var state = State.Unknown {
+    private var state = State.unknown {
         didSet {
-            if isViewLoaded() {
+            if isViewLoaded {
                 reloadData()
             }
         }
@@ -130,23 +130,23 @@ public final class CarbEntryTableViewController: UITableViewController {
 
     private func reloadData() {
         switch state {
-        case .Unknown:
+        case .unknown:
             break
-        case .Unavailable:
+        case .unavailable:
             tableView.backgroundView = unavailableMessageView
-        case .AuthorizationRequired:
+        case .authorizationRequired:
             tableView.backgroundView = authorizationRequiredMessageView
-        case .Display:
-            navigationItem.rightBarButtonItems?.forEach { $0.enabled = true }
+        case .display:
+            navigationItem.rightBarButtonItems?.forEach { $0.isEnabled = true }
 
             tableView.backgroundView = nil
-            tableView.tableHeaderView?.hidden = false
+            tableView.tableHeaderView?.isHidden = false
             tableView.tableFooterView = nil
 
             carbStore?.getRecentCarbEntries { (entries, error) -> Void in
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     if let error = error {
-                        self.presentAlertControllerWithError(error)
+                        self.presentAlertController(with: error)
                     } else {
                         self.carbEntries = entries
                         self.tableView.reloadData()
@@ -159,19 +159,19 @@ public final class CarbEntryTableViewController: UITableViewController {
         }
     }
 
-    @objc func updateTimelyStats(_: NSTimer?) {
+    @objc func updateTimelyStats(_: Timer?) {
         updateCOB()
     }
 
     private func updateCOB() {
-        if case .Display = state, let carbStore = carbStore {
-            carbStore.carbsOnBoardAtDate(NSDate(), resultHandler: { (value, error) -> Void in
-                dispatch_async(dispatch_get_main_queue()) {
+        if case .display = state, let carbStore = carbStore {
+            carbStore.carbsOnBoardAtDate(Date(), resultHandler: { (value, error) -> Void in
+                DispatchQueue.main.async {
                     if let value = value {
-                        self.COBValueLabel.text = NSNumberFormatter.localizedStringFromNumber(value.quantity.doubleValueForUnit(carbStore.preferredUnit), numberStyle: .NoStyle)
-                        self.COBDateLabel.text = String(format: NSLocalizedString("com.loudnate.CarbKit.COBDateLabel", tableName: "CarbKit", value: "at %1$@", comment: "The format string describing the date of a COB value. The first format argument is the localized date."), NSDateFormatter.localizedStringFromDate(value.startDate, dateStyle: .NoStyle, timeStyle: .ShortStyle))
+                        self.COBValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: value.quantity.doubleValue(for: carbStore.preferredUnit)), number: .none)
+                        self.COBDateLabel.text = String(format: NSLocalizedString("com.loudnate.CarbKit.COBDateLabel", tableName: "CarbKit", value: "at %1$@", comment: "The format string describing the date of a COB value. The first format argument is the localized date."), DateFormatter.localizedString(from: value.startDate, dateStyle: .none, timeStyle: .short))
                     } else {
-                        self.COBValueLabel.text = NSNumberFormatter.localizedStringFromNumber(0, numberStyle: .NoStyle)
+                        self.COBValueLabel.text = NumberFormatter.localizedString(from: 0, number: .none)
                         self.COBDateLabel.text = nil
                     }
                 }
@@ -180,14 +180,14 @@ public final class CarbEntryTableViewController: UITableViewController {
     }
 
     private func updateTotal() {
-        if case .Display = state, let carbStore = carbStore {
+        if case .display = state, let carbStore = carbStore {
             carbStore.getTotalRecentCarbValue { (value, error) -> Void in
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     if let value = value {
-                        self.totalValueLabel.text = NSNumberFormatter.localizedStringFromNumber(value.quantity.doubleValueForUnit(carbStore.preferredUnit), numberStyle: .NoStyle)
-                        self.totalDateLabel.text = String(format: NSLocalizedString("com.loudnate.CarbKit.totalDateLabel", tableName: "CarbKit", value: "since %1$@", comment: "The format string describing the starting date of a total value. The first format argument is the localized date."), NSDateFormatter.localizedStringFromDate(value.startDate, dateStyle: .NoStyle, timeStyle: .ShortStyle))
+                        self.totalValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: value.quantity.doubleValue(for: carbStore.preferredUnit)), number: .none)
+                        self.totalDateLabel.text = String(format: NSLocalizedString("com.loudnate.CarbKit.totalDateLabel", tableName: "CarbKit", value: "since %1$@", comment: "The format string describing the starting date of a total value. The first format argument is the localized date."), DateFormatter.localizedString(from: value.startDate as Date, dateStyle: .none, timeStyle: .short))
                     } else {
-                        self.totalValueLabel.text = NSNumberFormatter.localizedStringFromNumber(0, numberStyle: .NoStyle)
+                        self.totalValueLabel.text = NumberFormatter.localizedString(from: 0, number: .none)
                         self.totalDateLabel.text = nil
                     }
                 }
@@ -195,35 +195,35 @@ public final class CarbEntryTableViewController: UITableViewController {
         }
     }
 
-    private var carbStoreObserver: AnyObject? {
+    private var carbStoreObserver: Any? {
         willSet {
             if let observer = carbStoreObserver {
-                NSNotificationCenter.defaultCenter().removeObserver(observer)
+                NotificationCenter.default.removeObserver(observer)
             }
         }
     }
 
     // MARK: - Table view data source
 
-    public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    public override func numberOfSections(in tableView: UITableView) -> Int {
         switch state {
-        case .Unknown, .Unavailable, .AuthorizationRequired:
+        case .unknown, .unavailable, .authorizationRequired:
             return 0
-        case .Display:
+        case .display:
             return 1
         }
     }
 
-    public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return carbEntries.count
     }
 
-    public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(ReuseIdentifier, forIndexPath: indexPath)
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ReuseIdentifier, for: indexPath)
 
-        if case .Display = state, let carbStore = carbStore {
+        if case .display = state, let carbStore = carbStore {
             let entry = carbEntries[indexPath.row]
-            let value = NSNumberFormatter.localizedStringFromNumber(entry.quantity.doubleValueForUnit(carbStore.preferredUnit), numberStyle: .NoStyle)
+            let value = NumberFormatter.localizedString(from: NSNumber(value: entry.quantity.doubleValue(for: carbStore.preferredUnit)), number: .none)
 
             var titleText = "\(value) \(carbStore.preferredUnit)"
 
@@ -233,10 +233,10 @@ public final class CarbEntryTableViewController: UITableViewController {
 
             cell.textLabel?.text = titleText
 
-            var detailText = NSDateFormatter.localizedStringFromDate(entry.startDate, dateStyle: .NoStyle, timeStyle: .ShortStyle)
+            var detailText = DateFormatter.localizedString(from: entry.startDate, dateStyle: .none, timeStyle: .short)
 
             if let absorptionTime = entry.absorptionTime {
-                let minutes = NSNumberFormatter.localizedStringFromNumber(absorptionTime.minutes, numberStyle: .NoStyle)
+                let minutes = NumberFormatter.localizedString(from: NSNumber(value: absorptionTime.minutes), number: .none)
                 detailText += " + \(minutes) min"
             }
 
@@ -245,23 +245,23 @@ public final class CarbEntryTableViewController: UITableViewController {
         return cell
     }
 
-    public override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return carbEntries[indexPath.row].createdByCurrentApp
     }
 
-    public override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete, case .Display = state, let carbStore = carbStore {
-            let entry = carbEntries.removeAtIndex(indexPath.row)
+    public override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete, case .display = state, let carbStore = carbStore {
+            let entry = carbEntries.remove(at: indexPath.row)
             carbStore.deleteCarbEntry(entry, resultHandler: { (success, error) -> Void in
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     if success {
-                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                        tableView.deleteRows(at: [indexPath], with: .automatic)
                         self.updateTimelyStats(nil)
                         self.updateTotal()
 
-                        NSNotificationCenter.defaultCenter().postNotificationName(CarbStore.CarbEntriesDidUpdateNotification, object: self)
+                        NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
                     } else if let error = error {
-                        self.presentAlertControllerWithError(error)
+                        self.presentAlertController(with: error)
                     }
                 }
             })
@@ -270,7 +270,7 @@ public final class CarbEntryTableViewController: UITableViewController {
 
     // MARK: - UITableViewDelegate
 
-    public override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+    public override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let entry = carbEntries[indexPath.row]
 
         if !entry.createdByCurrentApp {
@@ -282,31 +282,31 @@ public final class CarbEntryTableViewController: UITableViewController {
 
     // MARK: - Navigation
 
-    @IBAction func unwindFromEditing(segue: UIStoryboardSegue) {
-        if let  editVC = segue.sourceViewController as? CarbEntryEditViewController,
-                updatedEntry = editVC.updatedCarbEntry
+    @IBAction func unwindFromEditing(_ segue: UIStoryboardSegue) {
+        if let  editVC = segue.source as? CarbEntryEditViewController,
+                let updatedEntry = editVC.updatedCarbEntry
         {
             if let originalEntry = editVC.originalCarbEntry {
                 carbStore?.replaceCarbEntry(originalEntry, withEntry: updatedEntry) { (_, _, error) -> Void in
-                    dispatch_async(dispatch_get_main_queue()) {
+                    DispatchQueue.main.async {
                         if let error = error {
-                            self.presentAlertControllerWithError(error)
+                            self.presentAlertController(with: error)
                         } else {
                             self.reloadData()
 
-                            NSNotificationCenter.defaultCenter().postNotificationName(CarbStore.CarbEntriesDidUpdateNotification, object: self)
+                            NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
                         }
                     }
                 }
             } else {
                 carbStore?.addCarbEntry(updatedEntry) { (_, _, error) -> Void in
-                    dispatch_async(dispatch_get_main_queue()) {
+                    DispatchQueue.main.async {
                         if let error = error {
-                            self.presentAlertControllerWithError(error)
+                            self.presentAlertController(with: error)
                         } else {
                             self.reloadData()
 
-                            NSNotificationCenter.defaultCenter().postNotificationName(CarbStore.CarbEntriesDidUpdateNotification, object: self)
+                            NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
                         }
                     }
                 }
@@ -314,15 +314,15 @@ public final class CarbEntryTableViewController: UITableViewController {
         }
     }
 
-    public override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        var editVC = segue.destinationViewController as? CarbEntryEditViewController
+    public override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        var editVC = segue.destination as? CarbEntryEditViewController
 
-        if editVC == nil, let navVC = segue.destinationViewController as? UINavigationController {
+        if editVC == nil, let navVC = segue.destination as? UINavigationController {
             editVC = navVC.viewControllers.first as? CarbEntryEditViewController
         }
 
         if let editVC = editVC {
-            if let selectedCell = sender as? UITableViewCell, indexPath = tableView.indexPathForCell(selectedCell) where indexPath.row < carbEntries.count {
+            if let selectedCell = sender as? UITableViewCell, let indexPath = tableView.indexPath(for: selectedCell), indexPath.row < carbEntries.count {
                 editVC.originalCarbEntry = carbEntries[indexPath.row]
             }
 
@@ -330,14 +330,14 @@ public final class CarbEntryTableViewController: UITableViewController {
         }
     }
 
-    @IBAction func authorizeHealth(sender: AnyObject) {
-        if case .AuthorizationRequired = state, let carbStore = carbStore {
+    @IBAction func authorizeHealth(_ sender: Any) {
+        if case .authorizationRequired = state, let carbStore = carbStore {
             carbStore.authorize { (success, error) in
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     if success {
-                        self.state = .Display
+                        self.state = .display
                     } else if let error = error {
-                        self.presentAlertControllerWithError(error)
+                        self.presentAlertController(with: error)
                     }
                 }
             }

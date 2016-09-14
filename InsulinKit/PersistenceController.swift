@@ -11,25 +11,30 @@ import UIKit
 
 class PersistenceController {
 
-    enum Error: ErrorType {
-        case ConfigurationError(String)
-        case CoreDataError(NSError)
+    enum PersistenceControllerError: Error {
+        case configurationError(String)
+        case coreDataError(Error)
 
+        // TODO: Drop in favor of `localizedDescription`
         var description: String {
             switch self {
-            case .ConfigurationError(let description):
+            case .configurationError(let description):
                 return description
-            case .CoreDataError(let error):
+            case .coreDataError(let error):
                 return error.localizedDescription
             }
         }
 
+        var localizedDescription: String {
+            return description
+        }
+
         var recoverySuggestion: String {
             switch self {
-            case .ConfigurationError:
+            case .configurationError:
                 return "Unrecoverable Error"
-            case .CoreDataError(let error):
-                return error.localizedRecoverySuggestion ?? "Please try again later"
+            case .coreDataError(let error):
+                return (error as NSError).localizedRecoverySuggestion ?? "Please try again later"
             }
         }
     }
@@ -40,101 +45,101 @@ class PersistenceController {
         return privateManagedObjectContext
     }
 
-    init(readyCallback: (error: Error?) -> Void) {
-        privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+    init(readyCallback: @escaping (_ error: PersistenceControllerError?) -> Void) {
+        privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         privateManagedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
 
         initializeStack(readyCallback)
 
-        didEnterBackgroundNotificationObserver = NSNotificationCenter.defaultCenter().addObserverForName(UIApplicationDidEnterBackgroundNotification, object: UIApplication.sharedApplication(), queue: nil, usingBlock: handleSave)
-        willResignActiveNotificationObserver = NSNotificationCenter.defaultCenter().addObserverForName(UIApplicationWillResignActiveNotification, object: UIApplication.sharedApplication(), queue: nil, usingBlock: handleSave)
-        willTerminateNotificationObserver = NSNotificationCenter.defaultCenter().addObserverForName(UIApplicationWillTerminateNotification, object: UIApplication.sharedApplication(), queue: nil, usingBlock: handleSave)
+        didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(forName: .UIApplicationDidEnterBackground, object: UIApplication.shared, queue: nil, using: handleSave)
+        willResignActiveNotificationObserver = NotificationCenter.default.addObserver(forName: .UIApplicationWillResignActive, object: UIApplication.shared, queue: nil, using: handleSave)
+        willTerminateNotificationObserver = NotificationCenter.default.addObserver(forName: .UIApplicationWillTerminate, object: UIApplication.shared, queue: nil, using: handleSave)
     }
 
     deinit {
         for observer in [didEnterBackgroundNotificationObserver, willResignActiveNotificationObserver, willTerminateNotificationObserver] where observer != nil {
-            NSNotificationCenter.defaultCenter().removeObserver(observer!)
+            NotificationCenter.default.removeObserver(observer!)
         }
     }
 
-    private var didEnterBackgroundNotificationObserver: AnyObject?
-    private var willResignActiveNotificationObserver: AnyObject?
-    private var willTerminateNotificationObserver: AnyObject?
+    private var didEnterBackgroundNotificationObserver: Any?
+    private var willResignActiveNotificationObserver: Any?
+    private var willTerminateNotificationObserver: Any?
 
-    private func handleSave(note: NSNotification) {
+    private func handleSave(_ note: Notification) {
         var taskID: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
 
-        taskID = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler { () -> Void in
-            UIApplication.sharedApplication().endBackgroundTask(taskID)
-        }
+        taskID = UIApplication.shared.beginBackgroundTask (expirationHandler: { () -> Void in
+            UIApplication.shared.endBackgroundTask(taskID)
+        })
 
         if taskID != UIBackgroundTaskInvalid {
             save({ (error) -> Void in
                 // Log the error?
 
-                UIApplication.sharedApplication().endBackgroundTask(taskID)
+                UIApplication.shared.endBackgroundTask(taskID)
             })
         }
     }
 
-    func save(completionHandler: (error: Error?) -> Void) {
-        self.privateManagedObjectContext.performBlock { [unowned self] in
+    func save(_ completionHandler: @escaping (_ error: PersistenceControllerError?) -> Void) {
+        self.privateManagedObjectContext.perform { [unowned self] in
             do {
                 if self.privateManagedObjectContext.hasChanges {
                     try self.privateManagedObjectContext.save()
                 }
 
-                completionHandler(error: nil)
-            } catch let saveError as NSError {
-                completionHandler(error: .CoreDataError(saveError))
+                completionHandler(nil)
+            } catch let saveError {
+                completionHandler(.coreDataError(saveError))
             }
         }
     }
 
     // MARK: - 
 
-    private func initializeStack(readyCallback: (error: Error?) -> Void) {
-        privateManagedObjectContext.performBlock {
-            var error: Error?
+    private func initializeStack(_ readyCallback: @escaping (_ error: PersistenceControllerError?) -> Void) {
+        privateManagedObjectContext.perform {
+            var error: PersistenceControllerError?
 
-            let modelURL = NSBundle(forClass: self.dynamicType).URLForResource("Model", withExtension: "momd")!
-            let model = NSManagedObjectModel(contentsOfURL: modelURL)!
+            let modelURL = Bundle(for: type(of: self)).url(forResource: "Model", withExtension: "momd")!
+            let model = NSManagedObjectModel(contentsOf: modelURL)!
             let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
 
             self.privateManagedObjectContext.persistentStoreCoordinator = coordinator
 
-            let bundle = NSBundle(forClass: self.dynamicType)
+            let bundle = Bundle(for: type(of: self))
 
             if let  bundleIdentifier = bundle.bundleIdentifier,
-                    documentsURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first?.URLByAppendingPathComponent(bundleIdentifier, isDirectory: true)
+                    let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(bundleIdentifier, isDirectory: true)
             {
-                if !NSFileManager.defaultManager().fileExistsAtPath(documentsURL.absoluteString) {
+                if !FileManager.default.fileExists(atPath: documentsURL.absoluteString) {
                     do {
-                        try NSFileManager.defaultManager().createDirectoryAtURL(documentsURL, withIntermediateDirectories: true, attributes: nil)
+                        try FileManager.default.createDirectory(at: documentsURL, withIntermediateDirectories: true, attributes: nil)
                     } catch {
                         // Ignore errors here, let Core Data explain the problem
                     }
                 }
 
-                let storeURL = documentsURL.URLByAppendingPathComponent("Model.sqlite")
+                let storeURL = documentsURL.appendingPathComponent("Model.sqlite")
 
                 do {
-                    try coordinator.addPersistentStoreWithType(NSSQLiteStoreType,
-                        configuration: nil,
-                        URL: storeURL,
+                    try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
+                        configurationName: nil,
+                        at: storeURL,
                         options: [
                             NSMigratePersistentStoresAutomaticallyOption: true,
                             NSInferMappingModelAutomaticallyOption: true
                         ]
                     )
-                } catch let storeError as NSError {
-                    error = .CoreDataError(storeError)
+                } catch let storeError {
+                    error = .coreDataError(storeError)
                 }
             } else {
-                error = .ConfigurationError("Cannot configure persistent store for bundle: \(bundle.bundleIdentifier) in directory: \(NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask))")
+                error = .configurationError("Cannot configure persistent store for bundle: \(bundle.bundleIdentifier) in directory: \(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))")
             }
 
-            readyCallback(error: error)
+            readyCallback(error)
         }
     }
 }
