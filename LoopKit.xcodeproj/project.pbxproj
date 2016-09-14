@@ -150,7 +150,6 @@
 		43D8FEDA1C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FED21C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json */; };
 		43D8FEE51C7294D50073BE78 /* DoseEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEDC1C7294D50073BE78 /* DoseEntry.swift */; };
 		43D8FEE61C7294D50073BE78 /* DoseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEDD1C7294D50073BE78 /* DoseStore.swift */; };
-		43D8FEE71C7294D50073BE78 /* Fetchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEDE1C7294D50073BE78 /* Fetchable.swift */; };
 		43D8FEE81C7294D50073BE78 /* InsulinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEDF1C7294D50073BE78 /* InsulinMath.swift */; };
 		43D8FEE91C7294D50073BE78 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */; };
 		43D8FEEA1C7294D50073BE78 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEE21C7294D50073BE78 /* PersistenceController.swift */; };
@@ -190,6 +189,7 @@
 		43DC87BB1C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87B91C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json */; };
 		43DC87BC1C8AD0ED005BC30D /* glucose_from_effects_non_zero_carb_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87BA1C8AD0ED005BC30D /* glucose_from_effects_non_zero_carb_input.json */; };
 		43DC87BE1C8AD41D005BC30D /* glucose_from_effects_non_zero_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87BD1C8AD41D005BC30D /* glucose_from_effects_non_zero_output.json */; };
+		43DF8DB41D829024006EB38E /* Fetchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEDE1C7294D50073BE78 /* Fetchable.swift */; };
 		43DFE27D1CB1D6A600EFBE95 /* PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27B1CB1D6A600EFBE95 /* PumpEvent.swift */; };
 		43DFE27E1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */; };
 		43DFE2801CB1E12D00EFBE95 /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27F1CB1E12D00EFBE95 /* PumpEventType.swift */; };
@@ -284,7 +284,7 @@
 /* Begin PBXFileReference section */
 		430157F71C7EC03B00B64B63 /* LoopKit Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LoopKit Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		430157F91C7EC03B00B64B63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		430157FB1C7EC03B00B64B63 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		430157FB1C7EC03B00B64B63 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MasterViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		430158001C7EC03B00B64B63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		430158021C7EC03B00B64B63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		430158051C7EC03B00B64B63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -294,7 +294,7 @@
 		430158121C7EC03B00B64B63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoopKitExample.entitlements; sourceTree = "<group>"; };
 		4301582C1C7ECD7A00B64B63 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		4302F4DC1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinDeliveryTableViewController.swift; sourceTree = "<group>"; };
+		4302F4DC1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = InsulinDeliveryTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4302F4DE1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinDeliveryTableViewController.swift; sourceTree = "<group>"; };
 		4302F4E81D5066F400F0FCAF /* ReservoirValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirValue.swift; sourceTree = "<group>"; };
 		4302F4EA1D50670500F0FCAF /* NewPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPumpEvent.swift; sourceTree = "<group>"; };
@@ -360,13 +360,13 @@
 		43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTimeInterval.swift; sourceTree = "<group>"; };
 		43D8FDF31C7290350073BE78 /* SampleValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleValue.swift; sourceTree = "<group>"; };
 		43D8FE041C7290530073BE78 /* DailyQuantityScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyQuantityScheduleTableViewController.swift; sourceTree = "<group>"; };
-		43D8FE051C7290530073BE78 /* DailyValueScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DailyValueScheduleTableViewController.swift; sourceTree = "<group>"; };
-		43D8FE061C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseRangeScheduleTableViewController.swift; sourceTree = "<group>"; };
+		43D8FE051C7290530073BE78 /* DailyValueScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DailyValueScheduleTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		43D8FE061C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = GlucoseRangeScheduleTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		43D8FE071C7290530073BE78 /* GlucoseRangeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseRangeTableViewCell.swift; sourceTree = "<group>"; };
 		43D8FE081C7290530073BE78 /* GlucoseRangeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GlucoseRangeTableViewCell.xib; sourceTree = "<group>"; };
 		43D8FE0A1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepeatingScheduleValueTableViewCell.swift; sourceTree = "<group>"; };
 		43D8FE0B1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RepeatingScheduleValueTableViewCell.xib; sourceTree = "<group>"; };
-		43D8FE0C1C7290530073BE78 /* SingleValueScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleValueScheduleTableViewController.swift; sourceTree = "<group>"; };
+		43D8FE0C1C7290530073BE78 /* SingleValueScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SingleValueScheduleTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		43D8FE0E1C7290530073BE78 /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		43D8FE1A1C72906E0073BE78 /* BasalRateScheduleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalRateScheduleTests.swift; sourceTree = "<group>"; };
 		43D8FE1B1C72906E0073BE78 /* NSDateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateTests.swift; sourceTree = "<group>"; };
@@ -386,8 +386,8 @@
 		43D8FE4D1C7291BD0073BE78 /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
 		43D8FE4E1C7291BD0073BE78 /* StoredCarbEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoredCarbEntry.swift; sourceTree = "<group>"; };
 		43D8FE551C7291D80073BE78 /* AbsorptionTimeTextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AbsorptionTimeTextFieldTableViewCell.swift; sourceTree = "<group>"; };
-		43D8FE561C7291D80073BE78 /* CarbEntryEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryEditViewController.swift; sourceTree = "<group>"; };
-		43D8FE571C7291D80073BE78 /* CarbEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryTableViewController.swift; sourceTree = "<group>"; };
+		43D8FE561C7291D80073BE78 /* CarbEntryEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CarbEntryEditViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		43D8FE571C7291D80073BE78 /* CarbEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CarbEntryTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		43D8FE581C7291D80073BE78 /* CarbKit.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CarbKit.storyboard; sourceTree = "<group>"; };
 		43D8FE591C7291D80073BE78 /* DatePickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerTableViewCell.swift; sourceTree = "<group>"; };
 		43D8FE5A1C7291D80073BE78 /* DecimalTextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecimalTextFieldTableViewCell.swift; sourceTree = "<group>"; };
@@ -1135,12 +1135,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Nathan Racklyeft";
 				TargetAttributes = {
 					430157F61C7EC03B00B64B63 = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = 57NRR26737;
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.HealthKit = {
 								enabled = 1;
@@ -1149,31 +1150,40 @@
 					};
 					4301580B1C7EC03B00B64B63 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 						TestTargetID = 430157F61C7EC03B00B64B63;
 					};
 					43D8FDCA1C728FDF0073BE78 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					43D8FDD41C728FDF0073BE78 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					43D8FE291C72914D0073BE78 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					43D8FE321C72914D0073BE78 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					43D8FE6E1C7293070073BE78 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					43D8FE8D1C7293C70073BE78 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					43D8FEB01C7294520073BE78 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					43D8FEB91C7294520073BE78 = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -1492,8 +1502,8 @@
 				43DFE27D1CB1D6A600EFBE95 /* PumpEvent.swift in Sources */,
 				43DFE2821CB1FB8500EFBE95 /* InsulinValue.swift in Sources */,
 				4302F4EB1D50670500F0FCAF /* NewPumpEvent.swift in Sources */,
+				43DF8DB41D829024006EB38E /* Fetchable.swift in Sources */,
 				430059201CCDC68200C861EA /* NSTimeInterval.swift in Sources */,
-				43D8FEE71C7294D50073BE78 /* Fetchable.swift in Sources */,
 				43D8FEE91C7294D50073BE78 /* Model.xcdatamodeld in Sources */,
 				43C094461CAA1E98001F6403 /* DoseUnit.swift in Sources */,
 				43D8FEEA1C7294D50073BE78 /* PersistenceController.swift in Sources */,
@@ -1598,32 +1608,34 @@
 		430158131C7EC03B00B64B63 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "LoopKit Example/LoopKitExample.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "LoopKit Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.loudnate.LoopKit-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		430158141C7EC03B00B64B63 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "LoopKit Example/LoopKitExample.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "LoopKit Example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.loudnate.LoopKit-Example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1634,6 +1646,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.loudnate.LoopKit-ExampleUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = "LoopKit Example";
 				USES_XCTRUNNER = YES;
 			};
@@ -1646,6 +1659,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.loudnate.LoopKit-ExampleUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = "LoopKit Example";
 				USES_XCTRUNNER = YES;
 			};
@@ -1664,13 +1678,15 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1712,13 +1728,15 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1745,9 +1763,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 12;
+				DYLIB_CURRENT_VERSION = 13;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1755,6 +1774,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.LoopKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1762,9 +1782,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 12;
+				DYLIB_CURRENT_VERSION = 13;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1772,6 +1793,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.LoopKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1782,6 +1804,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.LoopKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1792,6 +1815,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.LoopKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1799,9 +1823,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 12;
+				DYLIB_CURRENT_VERSION = 13;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CarbKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1809,6 +1834,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.CarbKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1816,9 +1842,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 12;
+				DYLIB_CURRENT_VERSION = 13;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CarbKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1826,6 +1853,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.CarbKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1836,6 +1864,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.CarbKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1846,6 +1875,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.CarbKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1853,9 +1883,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 12;
+				DYLIB_CURRENT_VERSION = 13;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = GlucoseKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1863,6 +1894,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.GlucoseKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1870,9 +1902,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 12;
+				DYLIB_CURRENT_VERSION = 13;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = GlucoseKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1880,6 +1913,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.GlucoseKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1890,6 +1924,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.GlucoseKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1900,6 +1935,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.GlucoseKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1907,9 +1943,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 12;
+				DYLIB_CURRENT_VERSION = 13;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = InsulinKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1917,6 +1954,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.InsulinKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1924,9 +1962,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 12;
+				DYLIB_CURRENT_VERSION = 13;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = InsulinKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1934,6 +1973,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.InsulinKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1944,6 +1984,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.InsulinKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1954,6 +1995,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loudnate.InsulinKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

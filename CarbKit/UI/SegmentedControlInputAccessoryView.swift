@@ -14,8 +14,8 @@ class SegmentedControlInputAccessoryView: UIView {
     @IBOutlet weak var segmentedControl: UISegmentedControl? {
         didSet {
             segmentedControl?.setTitleTextAttributes(
-                [NSFontAttributeName: UIFont.systemFontOfSize(40)],
-                forState: .Normal
+                [NSFontAttributeName: UIFont.systemFont(ofSize: 40)],
+                for: UIControlState()
             )
         }
     }

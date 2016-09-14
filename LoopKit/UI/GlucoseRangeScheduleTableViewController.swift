@@ -21,8 +21,8 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerNib(GlucoseRangeTableViewCell.nib(), forCellReuseIdentifier: GlucoseRangeTableViewCell.className)
-        tableView.registerNib(GlucoseRangeOverrideTableViewCell.nib(), forCellReuseIdentifier: GlucoseRangeOverrideTableViewCell.className)
+        tableView.register(GlucoseRangeTableViewCell.nib(), forCellReuseIdentifier: GlucoseRangeTableViewCell.className)
+        tableView.register(GlucoseRangeOverrideTableViewCell.nib(), forCellReuseIdentifier: GlucoseRangeOverrideTableViewCell.className)
     }
 
     // MARK: - State
@@ -31,18 +31,18 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     public var workoutRange: DoubleRange?
 
-    override func addScheduleItem(sender: AnyObject?) {
-        var startTime = NSTimeInterval(0)
+    override func addScheduleItem(_ sender: Any?) {
+        var startTime = TimeInterval(0)
         let value: DoubleRange
 
-        if scheduleItems.count > 0, let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: scheduleItems.count - 1, inSection: Section.schedule.rawValue)) as? GlucoseRangeTableViewCell {
+        if scheduleItems.count > 0, let cell = tableView.cellForRow(at: IndexPath(row: scheduleItems.count - 1, section: Section.schedule.rawValue)) as? GlucoseRangeTableViewCell {
             let lastItem = scheduleItems.last!
             let interval = cell.datePickerInterval
 
             startTime = lastItem.startTime + interval
             value = lastItem.value
 
-            if startTime >= NSTimeInterval(hours: 24) {
+            if startTime >= TimeInterval(hours: 24) {
                 return
             }
         } else {
@@ -51,16 +51,16 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
         scheduleItems.append(
             RepeatingScheduleValue(
-                startTime: min(NSTimeInterval(hours: 23.5), startTime),
+                startTime: min(TimeInterval(hours: 23.5), startTime),
                 value: value
             )
         )
 
-        tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: scheduleItems.count - 1, inSection: Section.schedule.rawValue)], withRowAnimation: .Automatic)
+        tableView.insertRows(at: [IndexPath(row: scheduleItems.count - 1, section: Section.schedule.rawValue)], with: .automatic)
     }
 
-    override func insertableIndiciesByRemovingRow(row: Int, withInterval timeInterval: NSTimeInterval) -> [Bool] {
-        return insertableIndicesForScheduleItems(scheduleItems, byRemovingRow: row, withInterval: timeInterval)
+    override func insertableIndiciesByRemovingRow(_ row: Int, withInterval timeInterval: TimeInterval) -> [Bool] {
+        return insertableIndices(for: scheduleItems, removing: row, with: timeInterval)
     }
 
     // MARK: - UITableViewDataSource
@@ -72,11 +72,11 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         static let count = 2
     }
 
-    public override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    public override func numberOfSections(in tableView: UITableView) -> Int {
         return Section.count
     }
 
-    public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
         case .schedule:
             return scheduleItems.count
@@ -85,16 +85,16 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         }
     }
 
-    public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch Section(rawValue: indexPath.section)! {
         case .schedule:
-            let cell = tableView.dequeueReusableCellWithIdentifier(GlucoseRangeTableViewCell.className, forIndexPath: indexPath) as! GlucoseRangeTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: GlucoseRangeTableViewCell.className, for: indexPath) as! GlucoseRangeTableViewCell
 
             let item = scheduleItems[indexPath.row]
             let interval = cell.datePickerInterval
 
             cell.timeZone = timeZone
-            cell.date = midnight.dateByAddingTimeInterval(item.startTime)
+            cell.date = midnight.addingTimeInterval(item.startTime)
 
             cell.valueNumberFormatter.minimumFractionDigits = unit.preferredMinimumFractionDigits
 
@@ -106,20 +106,20 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
             if indexPath.row > 0 {
                 let lastItem = scheduleItems[indexPath.row - 1]
 
-                cell.datePicker.minimumDate = midnight.dateByAddingTimeInterval(lastItem.startTime).dateByAddingTimeInterval(interval)
+                cell.datePicker.minimumDate = midnight.addingTimeInterval(lastItem.startTime).addingTimeInterval(interval)
             }
 
             if indexPath.row < scheduleItems.endIndex - 1 {
                 let nextItem = scheduleItems[indexPath.row + 1]
 
-                cell.datePicker.maximumDate = midnight.dateByAddingTimeInterval(nextItem.startTime).dateByAddingTimeInterval(-interval)
+                cell.datePicker.maximumDate = midnight.addingTimeInterval(nextItem.startTime).addingTimeInterval(-interval)
             } else {
-                cell.datePicker.maximumDate = midnight.dateByAddingTimeInterval(NSTimeInterval(hours: 24) - interval)
+                cell.datePicker.maximumDate = midnight.addingTimeInterval(TimeInterval(hours: 24) - interval)
             }
 
             return cell
         case .override:
-            let cell = tableView.dequeueReusableCellWithIdentifier(GlucoseRangeOverrideTableViewCell.className, forIndexPath: indexPath) as! GlucoseRangeOverrideTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: GlucoseRangeOverrideTableViewCell.className, for: indexPath) as! GlucoseRangeOverrideTableViewCell
 
             cell.valueNumberFormatter.minimumFractionDigits = unit.preferredMinimumFractionDigits
 
@@ -137,22 +137,22 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         }
     }
 
-    public override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            scheduleItems.removeAtIndex(indexPath.row)
+    public override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            scheduleItems.remove(at: indexPath.row)
 
-            super.tableView(tableView, commitEditingStyle: editingStyle, forRowAtIndexPath: indexPath)
+            super.tableView(tableView, commit: editingStyle, forRowAt: indexPath)
         }
     }
 
-    public override func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+    public override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if sourceIndexPath != destinationIndexPath {
             switch Section(rawValue: destinationIndexPath.section)! {
             case .schedule:
-                let item = scheduleItems.removeAtIndex(sourceIndexPath.row)
-                scheduleItems.insert(item, atIndex: destinationIndexPath.row)
+                let item = scheduleItems.remove(at: sourceIndexPath.row)
+                scheduleItems.insert(item, at: destinationIndexPath.row)
 
-                guard destinationIndexPath.row > 0, let cell = tableView.cellForRowAtIndexPath(destinationIndexPath) as? GlucoseRangeTableViewCell else {
+                guard destinationIndexPath.row > 0, let cell = tableView.cellForRow(at: destinationIndexPath) as? GlucoseRangeTableViewCell else {
                     return
                 }
 
@@ -162,7 +162,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
                 scheduleItems[destinationIndexPath.row] = RepeatingScheduleValue(startTime: startTime, value: scheduleItems[destinationIndexPath.row].value)
 
                 // Since the valid date ranges of neighboring cells are affected, the lazy solution is to just reload the entire table view
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     tableView.reloadData()
                 }
             case .override:
@@ -171,7 +171,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         }
     }
 
-    public override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         switch Section(rawValue: indexPath.section)! {
         case .schedule:
             return true
@@ -180,7 +180,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         }
     }
 
-    public override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    public override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         switch Section(rawValue: indexPath.section)! {
         case .schedule:
             return true
@@ -189,7 +189,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         }
     }
 
-    public override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
         case .schedule:
             return nil
@@ -200,12 +200,12 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     // MARK: - RepeatingScheduleValueTableViewCellDelegate
 
-    override func repeatingScheduleValueTableViewCellDidUpdateDate(cell: RepeatingScheduleValueTableViewCell) {
-        if let indexPath = tableView.indexPathForCell(cell) {
+    override func repeatingScheduleValueTableViewCellDidUpdateDate(_ cell: RepeatingScheduleValueTableViewCell) {
+        if let indexPath = tableView.indexPath(for: cell) {
             let currentItem = scheduleItems[indexPath.row]
 
             scheduleItems[indexPath.row] = RepeatingScheduleValue(
-                startTime: cell.date.timeIntervalSinceDate(midnight),
+                startTime: cell.date.timeIntervalSince(midnight),
                 value: currentItem.value
             )
         }
@@ -213,8 +213,8 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         super.repeatingScheduleValueTableViewCellDidUpdateDate(cell)
     }
 
-    func repeatingScheduleValueTableViewCellDidUpdateValue(cell: RepeatingScheduleValueTableViewCell) {
-        if let indexPath = tableView.indexPathForCell(cell), cell = cell as? GlucoseRangeTableViewCell {
+    func repeatingScheduleValueTableViewCellDidUpdateValue(_ cell: RepeatingScheduleValueTableViewCell) {
+        if let indexPath = tableView.indexPath(for: cell), let cell = cell as? GlucoseRangeTableViewCell {
             let currentItem = scheduleItems[indexPath.row]
 
             scheduleItems[indexPath.row] = RepeatingScheduleValue(startTime: currentItem.startTime, value: DoubleRange(minValue: cell.minValue, maxValue: cell.value))
@@ -225,7 +225,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
 
 extension GlucoseRangeScheduleTableViewController: GlucoseRangeOverrideTableViewCellDelegate {
-    func glucoseRangeOverrideTableViewCellDidUpdateValue(cell: GlucoseRangeOverrideTableViewCell) {
+    func glucoseRangeOverrideTableViewCellDidUpdateValue(_ cell: GlucoseRangeOverrideTableViewCell) {
         workoutRange = DoubleRange(minValue: cell.minValue, maxValue: cell.maxValue)
     }
 }

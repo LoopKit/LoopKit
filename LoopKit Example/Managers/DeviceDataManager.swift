@@ -15,7 +15,7 @@ import LoopKit
 
 class DeviceDataManager {
 
-    static let sharedManager = DeviceDataManager()
+    static let shared = DeviceDataManager()
 
     init() {
         carbStore = CarbStore(
@@ -40,48 +40,48 @@ class DeviceDataManager {
 
     // Settings
 
-    var basalRateSchedule = NSUserDefaults.standardUserDefaults().basalRateSchedule {
+    var basalRateSchedule = UserDefaults.standard.basalRateSchedule {
         didSet {
-            NSUserDefaults.standardUserDefaults().basalRateSchedule = basalRateSchedule
+            UserDefaults.standard.basalRateSchedule = basalRateSchedule
 
             doseStore.basalProfile = basalRateSchedule
         }
     }
 
-    var carbRatioSchedule = NSUserDefaults.standardUserDefaults().carbRatioSchedule {
+    var carbRatioSchedule = UserDefaults.standard.carbRatioSchedule {
         didSet {
-            NSUserDefaults.standardUserDefaults().carbRatioSchedule = carbRatioSchedule
+            UserDefaults.standard.carbRatioSchedule = carbRatioSchedule
 
             carbStore?.carbRatioSchedule = carbRatioSchedule
         }
     }
 
-    var insulinActionDuration = NSUserDefaults.standardUserDefaults().insulinActionDuration {
+    var insulinActionDuration = UserDefaults.standard.insulinActionDuration {
         didSet {
-            NSUserDefaults.standardUserDefaults().insulinActionDuration = insulinActionDuration
+            UserDefaults.standard.insulinActionDuration = insulinActionDuration
 
             doseStore.insulinActionDuration = insulinActionDuration
         }
     }
 
-    var insulinSensitivitySchedule = NSUserDefaults.standardUserDefaults().insulinSensitivitySchedule {
+    var insulinSensitivitySchedule = UserDefaults.standard.insulinSensitivitySchedule {
         didSet {
-            NSUserDefaults.standardUserDefaults().insulinSensitivitySchedule = insulinSensitivitySchedule
+            UserDefaults.standard.insulinSensitivitySchedule = insulinSensitivitySchedule
 
             carbStore?.insulinSensitivitySchedule = insulinSensitivitySchedule
             doseStore.insulinSensitivitySchedule = insulinSensitivitySchedule
         }
     }
 
-    var glucoseTargetRangeSchedule = NSUserDefaults.standardUserDefaults().glucoseTargetRangeSchedule {
+    var glucoseTargetRangeSchedule = UserDefaults.standard.glucoseTargetRangeSchedule {
         didSet {
-            NSUserDefaults.standardUserDefaults().glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
+            UserDefaults.standard.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
         }
     }
 
-    var pumpID = NSUserDefaults.standardUserDefaults().pumpID {
+    var pumpID = UserDefaults.standard.pumpID {
         didSet {
-            NSUserDefaults.standardUserDefaults().pumpID = pumpID
+            UserDefaults.standard.pumpID = pumpID
 
             doseStore.pumpID = pumpID
         }

@@ -9,16 +9,16 @@
 import XCTest
 import Foundation
 
-public typealias JSONDictionary = [String: AnyObject]
+public typealias JSONDictionary = [String: Any]
 
 
 extension XCTestCase {
-    public var bundle: NSBundle {
-        return NSBundle(forClass: self.dynamicType)
+    public var bundle: Bundle {
+        return Bundle(for: type(of: self))
     }
 
-    public func loadFixture<T>(resourceName: String) -> T {
-        let path = bundle.pathForResource(resourceName, ofType: "json")!
-        return try! NSJSONSerialization.JSONObjectWithData(NSData(contentsOfFile: path)!, options: []) as! T
+    public func loadFixture<T>(_ resourceName: String) -> T {
+        let path = bundle.path(forResource: resourceName, ofType: "json")!
+        return try! JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: path)), options: []) as! T
     }
 }

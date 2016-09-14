@@ -11,13 +11,13 @@ import HealthKit
 
 
 public protocol TimelineValue {
-    var startDate: NSDate { get }
-    var endDate: NSDate { get }
+    var startDate: Date { get }
+    var endDate: Date { get }
 }
 
 
 public extension TimelineValue {
-    var endDate: NSDate {
+    var endDate: Date {
         return startDate
     }
 }
@@ -28,7 +28,7 @@ public protocol SampleValue: TimelineValue {
 }
 
 
-public extension SequenceType where Generator.Element: TimelineValue {
+public extension Sequence where Iterator.Element: TimelineValue {
     /**
      Returns the closest element in the sorted sequence prior to the specified date
 
@@ -36,8 +36,8 @@ public extension SequenceType where Generator.Element: TimelineValue {
 
      - returns: The closest element, if any exist before the specified date
      */
-    func closestPriorToDate(date: NSDate) -> Generator.Element? {
-        var closestElement: Generator.Element?
+    func closestPriorToDate(_ date: Date) -> Iterator.Element? {
+        var closestElement: Iterator.Element?
 
         for value in self {
             if value.startDate <= date {
@@ -61,13 +61,13 @@ public extension SequenceType where Generator.Element: TimelineValue {
 
      - returns: A new array of elements
      */
-    func filterDateRange(startDate: NSDate?, _ endDate: NSDate?) -> [Generator.Element] {
+    func filterDateRange(_ startDate: Date?, _ endDate: Date?) -> [Iterator.Element] {
         return filter { (value) -> Bool in
-            if let startDate = startDate where value.endDate < startDate {
+            if let startDate = startDate, value.endDate < startDate {
                 return false
             }
 
-            if let endDate = endDate where value.startDate > endDate {
+            if let endDate = endDate, value.startDate > endDate {
                 return false
             }
 
@@ -77,7 +77,7 @@ public extension SequenceType where Generator.Element: TimelineValue {
 }
 
 
-public extension CollectionType where Generator.Element: TimelineValue, Index: BidirectionalIndexType {
+public extension BidirectionalCollection where Iterator.Element: TimelineValue, Index: Comparable {
 
     /**
      Determines whether the sequence contains boundary elements which span the specified time interval.
@@ -88,9 +88,9 @@ public extension CollectionType where Generator.Element: TimelineValue, Index: B
 
      - returns: True if the time interval is matched
      */
-    func spanTimeInterval(timeInterval: NSTimeInterval, within errorInterval: NSTimeInterval = NSTimeInterval(minutes: 5)) -> Bool {
+    func spanTimeInterval(_ timeInterval: TimeInterval, within errorInterval: TimeInterval = TimeInterval(minutes: 5)) -> Bool {
         guard let lastValue = last, let firstValue = first else { return false }
 
-        return abs(lastValue.startDate.timeIntervalSinceDate(firstValue.startDate) - timeInterval) <= errorInterval / 2
+        return abs(lastValue.startDate.timeIntervalSince(firstValue.startDate) - timeInterval) <= errorInterval / 2
     }
 }

@@ -14,48 +14,43 @@ protocol Fetchable {
     associatedtype FetchableType: NSManagedObject = Self
 
     static func entityName() -> String
-    static func objectsInContext(context: NSManagedObjectContext, predicate: NSPredicate?, sortedBy: String?, ascending: Bool) throws -> [FetchableType]
-    static func singleObjectInContext(context: NSManagedObjectContext, predicate: NSPredicate?, sortedBy: String?, ascending: Bool) throws -> FetchableType?
-    static func objectCountInContext(context: NSManagedObjectContext, predicate: NSPredicate?) throws -> Int
-    static func fetchRequest(context: NSManagedObjectContext, predicate: NSPredicate?, sortedBy: String?, ascending: Bool) -> NSFetchRequest
+    static func objectsInContext(_ context: NSManagedObjectContext, predicate: NSPredicate?, sortedBy: String?, ascending: Bool) throws -> [FetchableType]
+    static func singleObjectInContext(_ context: NSManagedObjectContext, predicate: NSPredicate?, sortedBy: String?, ascending: Bool) throws -> FetchableType?
+    static func objectCountInContext(_ context: NSManagedObjectContext, predicate: NSPredicate?) throws -> Int
+    static func fetchRequest(_ context: NSManagedObjectContext, predicate: NSPredicate?, sortedBy: String?, ascending: Bool) -> NSFetchRequest<FetchableType>
 }
 
 
 extension Fetchable where Self : NSManagedObject, FetchableType == Self {
 
     static func entityName() -> String {
-        return NSStringFromClass(self).componentsSeparatedByString(".").last!
+        if #available(iOS 10.0, *) {
+            return self.entity().name!
+        } else {
+            return NSStringFromClass(self).components(separatedBy: ".").last!
+        }
     }
 
-    static func singleObjectInContext(context: NSManagedObjectContext, predicate: NSPredicate? = nil, sortedBy: String? = nil, ascending: Bool = false) -> FetchableType? {
+    static func singleObjectInContext(_ context: NSManagedObjectContext, predicate: NSPredicate? = nil, sortedBy: String? = nil, ascending: Bool = false) -> FetchableType? {
         let managedObjects: [FetchableType]? = try? objectsInContext(context, predicate: predicate, sortedBy: sortedBy, ascending: ascending)
 
         return managedObjects?.first
     }
 
-    static func objectCountInContext(context: NSManagedObjectContext, predicate: NSPredicate? = nil) throws -> Int {
+    static func objectCountInContext(_ context: NSManagedObjectContext, predicate: NSPredicate? = nil) throws -> Int {
         let request = fetchRequest(context, predicate: predicate)
-        var error: NSError? = nil;
-        let count = context.countForFetchRequest(request, error: &error)
-
-        if let error = error {
-            throw error
-        }
-
-        return count;
+        return try context.count(for: request)
     }
 
-    static func objectsInContext(context: NSManagedObjectContext, predicate: NSPredicate? = nil, sortedBy: String? = nil, ascending: Bool = false) throws -> [FetchableType] {
+    static func objectsInContext(_ context: NSManagedObjectContext, predicate: NSPredicate? = nil, sortedBy: String? = nil, ascending: Bool = false) throws -> [FetchableType] {
         let request = fetchRequest(context, predicate: predicate, sortedBy: sortedBy, ascending: ascending)
-        let fetchResults = try context.executeFetchRequest(request)
-
-        return fetchResults as! [FetchableType]
+        return try context.fetch(request)
     }
 
-    static func fetchRequest(context: NSManagedObjectContext, predicate: NSPredicate? = nil, sortedBy: String? = nil, ascending: Bool = false) -> NSFetchRequest {
-        let request = NSFetchRequest()
+    static func fetchRequest(_ context: NSManagedObjectContext, predicate: NSPredicate? = nil, sortedBy: String? = nil, ascending: Bool = false) -> NSFetchRequest<FetchableType> {
+        let request = NSFetchRequest<FetchableType>()
 
-        request.entity = NSEntityDescription.entityForName(entityName(), inManagedObjectContext: context)
+        request.entity = NSEntityDescription.entity(forEntityName: entityName(), in: context)
         request.predicate = predicate
 
         if (sortedBy != nil) {
@@ -67,8 +62,8 @@ extension Fetchable where Self : NSManagedObject, FetchableType == Self {
         return request
     }
 
-    static func insertNewObjectInContext(context: NSManagedObjectContext) -> FetchableType {
+    static func insertNewObjectInContext(_ context: NSManagedObjectContext) -> FetchableType {
 
-        return NSEntityDescription.insertNewObjectForEntityForName(entityName(), inManagedObjectContext: context) as! FetchableType
+        return NSEntityDescription.insertNewObject(forEntityName: entityName(), into: context) as! FetchableType
     }
 }

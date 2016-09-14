@@ -14,10 +14,10 @@ import CoreData
 
 extension Reservoir {
 
-    @NSManaged var date: NSDate!
-    @NSManaged var raw: NSData?
+    @NSManaged var date: Date!
+    @NSManaged var raw: Data?
     @NSManaged var primitiveVolume: NSNumber?
-    @NSManaged var createdAt: NSDate!
+    @NSManaged var createdAt: Date!
     @NSManaged var pumpID: String!
 
 }

@@ -13,11 +13,11 @@ import HealthKit
 
 
 public struct GlucoseFixtureValue: GlucoseSampleValue {
-    public let startDate: NSDate
+    public let startDate: Date
     public let quantity: HKQuantity
     public let isDisplayOnly: Bool
 
-    public init(startDate: NSDate, quantity: HKQuantity, isDisplayOnly: Bool) {
+    public init(startDate: Date, quantity: HKQuantity, isDisplayOnly: Bool) {
         self.startDate = startDate
         self.quantity = quantity
         self.isDisplayOnly = isDisplayOnly
@@ -27,25 +27,25 @@ public struct GlucoseFixtureValue: GlucoseSampleValue {
 
 class GlucoseMathTests: XCTestCase {
 
-    func loadInputFixture(resourceName: String) -> [GlucoseFixtureValue] {
+    func loadInputFixture(_ resourceName: String) -> [GlucoseFixtureValue] {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
-        let dateFormatter = NSDateFormatter.ISO8601LocalTimeDateFormatter()
+        let dateFormatter = DateFormatter.ISO8601LocalTime()
 
         return fixture.map {
             return GlucoseFixtureValue(
-                startDate: dateFormatter.dateFromString($0["date"] as! String)!,
+                startDate: dateFormatter.date(from: $0["date"] as! String)!,
                 quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliterUnit(), doubleValue: $0["amount"] as! Double),
                 isDisplayOnly: ($0["display_only"] as? Bool) ?? false
             )
         }
     }
 
-    func loadOutputFixture(resourceName: String) -> [GlucoseEffect] {
+    func loadOutputFixture(_ resourceName: String) -> [GlucoseEffect] {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
-        let dateFormatter = NSDateFormatter.ISO8601LocalTimeDateFormatter()
+        let dateFormatter = DateFormatter.ISO8601LocalTime()
 
         return fixture.map {
-            return GlucoseEffect(startDate: dateFormatter.dateFromString($0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit(fromString: $0["unit"] as! String), doubleValue:$0["amount"] as! Double))
+            return GlucoseEffect(startDate: dateFormatter.date(from: $0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit(from: $0["unit"] as! String), doubleValue:$0["amount"] as! Double))
         }
     }
     
@@ -60,7 +60,7 @@ class GlucoseMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(unit), calculated.quantity.doubleValueForUnit(unit), accuracy: pow(10, -14))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: pow(10, -14))
         }
     }
 
@@ -75,7 +75,7 @@ class GlucoseMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(unit), calculated.quantity.doubleValueForUnit(unit), accuracy: pow(10, -14))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: pow(10, -14))
         }
     }
 
@@ -90,7 +90,7 @@ class GlucoseMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(unit), calculated.quantity.doubleValueForUnit(unit), accuracy: pow(10, -14))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: pow(10, -14))
         }
     }
 
@@ -105,7 +105,7 @@ class GlucoseMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValueForUnit(unit), calculated.quantity.doubleValueForUnit(unit), accuracy: pow(10, -14))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: pow(10, -14))
         }
     }
 

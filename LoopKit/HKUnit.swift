@@ -11,11 +11,11 @@ import HealthKit
 
 public extension HKUnit {
     static func milligramsPerDeciliterUnit() -> HKUnit {
-        return HKUnit.gramUnitWithMetricPrefix(.Milli).unitDividedByUnit(HKUnit.literUnitWithMetricPrefix(.Deci))
+        return HKUnit.gramUnit(with: .milli).unitDivided(by: HKUnit.literUnit(with: .deci))
     }
 
     static func millimolesPerLiterUnit() -> HKUnit {
-        return HKUnit.moleUnitWithMetricPrefix(.Milli, molarMass: HKUnitMolarMassBloodGlucose).unitDividedByUnit(HKUnit.literUnit())
+        return HKUnit.moleUnit(with: .milli, molarMass: HKUnitMolarMassBloodGlucose).unitDivided(by: HKUnit.liter())
     }
 
     /// A formatting helper for determining the preferred decimal style for a given unit
@@ -32,7 +32,7 @@ public extension HKUnit {
         if self == HKUnit.millimolesPerLiterUnit() {
             return NSLocalizedString("mmol/L", comment: "The unit display string for millimoles of glucose per liter")
         } else {
-            return String(self)
+            return String(describing: self)
         }
     }
 }

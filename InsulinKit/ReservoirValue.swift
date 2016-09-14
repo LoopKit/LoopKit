@@ -11,6 +11,6 @@ import LoopKit
 
 
 public protocol ReservoirValue: TimelineValue {
-    var startDate: NSDate { get }
+    var startDate: Date { get }
     var unitVolume: Double { get }
 }

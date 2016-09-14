@@ -10,9 +10,9 @@ import UIKit
 
 
 public protocol TextFieldTableViewControllerDelegate: class {
-    func textFieldTableViewControllerDidEndEditing(controller: TextFieldTableViewController)
+    func textFieldTableViewControllerDidEndEditing(_ controller: TextFieldTableViewController)
 
-    func textFieldTableViewControllerDidReturn(controller: TextFieldTableViewController)
+    func textFieldTableViewControllerDidReturn(_ controller: TextFieldTableViewController)
 }
 
 
@@ -20,7 +20,7 @@ public class TextFieldTableViewController: UITableViewController, UITextFieldDel
 
     private weak var textField: UITextField?
 
-    public var indexPath: NSIndexPath?
+    public var indexPath: IndexPath?
 
     public var placeholder: String?
 
@@ -34,22 +34,22 @@ public class TextFieldTableViewController: UITableViewController, UITextFieldDel
 
     public var contextHelp: String?
 
-    public var keyboardType = UIKeyboardType.Default
+    public var keyboardType = UIKeyboardType.default
 
     public weak var delegate: TextFieldTableViewControllerDelegate?
 
     public convenience init() {
-        self.init(style: .Grouped)
+        self.init(style: .grouped)
     }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.cellLayoutMarginsFollowReadableWidth = true
-        tableView.registerNib(TextFieldTableViewCell.nib(), forCellReuseIdentifier: TextFieldTableViewCell.className)
+        tableView.register(TextFieldTableViewCell.nib(), forCellReuseIdentifier: TextFieldTableViewCell.className)
     }
 
-    public override func viewDidAppear(animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         textField?.becomeFirstResponder()
@@ -57,12 +57,12 @@ public class TextFieldTableViewController: UITableViewController, UITextFieldDel
 
     // MARK: - UITableViewDataSource
 
-    public override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
 
-    public override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(TextFieldTableViewCell.className, forIndexPath: indexPath) as! TextFieldTableViewCell
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: TextFieldTableViewCell.className, for: indexPath) as! TextFieldTableViewCell
 
         textField = cell.textField
 
@@ -75,19 +75,19 @@ public class TextFieldTableViewController: UITableViewController, UITextFieldDel
         return cell
     }
 
-    public override func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+    public override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return contextHelp
     }
 
     // MARK: - UITextFieldDelegate
 
-    public func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+    public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         value = textField.text
 
         return true
     }
 
-    public func textFieldShouldReturn(textField: UITextField) -> Bool {
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         value = textField.text
 
         textField.delegate = nil

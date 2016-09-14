@@ -10,28 +10,28 @@ import Foundation
 import HealthKit
 
 
-public struct RepeatingScheduleValue<T: RawRepresentable where T.RawValue: AnyObject> {
-    public let startTime: NSTimeInterval
+public struct RepeatingScheduleValue<T: RawRepresentable> where T.RawValue: Any {
+    public let startTime: TimeInterval
     public let value: T
 
-    public init(startTime: NSTimeInterval, value: T) {
+    public init(startTime: TimeInterval, value: T) {
         self.startTime = startTime
         self.value = value
     }
 }
 
 public struct AbsoluteScheduleValue<T>: TimelineValue {
-    public let startDate: NSDate
+    public let startDate: Date
     public let value: T
 }
 
 extension RepeatingScheduleValue: RawRepresentable {
-    public typealias RawValue = [String: AnyObject]
+    public typealias RawValue = [String: Any]
 
     public init?(rawValue: RawValue) {
         guard let startTime = rawValue["startTime"] as? Double,
-            rawValue = rawValue["value"] as? T.RawValue,
-            value = T(rawValue: rawValue) else
+            let rawValue = rawValue["value"] as? T.RawValue,
+            let value = T(rawValue: rawValue) else
         {
             return nil
         }
@@ -48,18 +48,18 @@ extension RepeatingScheduleValue: RawRepresentable {
 }
 
 
-public class DailyValueSchedule<T: RawRepresentable where T.RawValue: AnyObject>: RawRepresentable {
-    public typealias RawValue = [String: AnyObject]
+public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable where T.RawValue: Any {
+    public typealias RawValue = [String: Any]
 
-    private let referenceTimeInterval: NSTimeInterval
-    let repeatInterval = NSTimeInterval(hours: 24)
+    private let referenceTimeInterval: TimeInterval
+    let repeatInterval = TimeInterval(hours: 24)
 
     public let items: [RepeatingScheduleValue<T>]
-    public let timeZone: NSTimeZone
+    public let timeZone: TimeZone
 
-    init?(dailyItems: [RepeatingScheduleValue<T>], timeZone: NSTimeZone?) {
-        self.items = dailyItems.sort { $0.startTime < $1.startTime }
-        self.timeZone = timeZone ?? NSTimeZone.defaultTimeZone()
+    init?(dailyItems: [RepeatingScheduleValue<T>], timeZone: TimeZone?) {
+        self.items = dailyItems.sorted { $0.startTime < $1.startTime }
+        self.timeZone = timeZone ?? TimeZone.current
 
         guard let firstItem = self.items.first else {
             return nil
@@ -73,23 +73,25 @@ public class DailyValueSchedule<T: RawRepresentable where T.RawValue: AnyObject>
             return nil
         }
 
-        var timeZone: NSTimeZone?
+        var timeZone: TimeZone?
 
         if let offset = rawValue["timeZone"] as? Int {
-            timeZone = NSTimeZone(forSecondsFromGMT: offset)
+            timeZone = TimeZone(secondsFromGMT: offset)
         }
 
         self.init(dailyItems: rawItems.flatMap { RepeatingScheduleValue(rawValue: $0) }, timeZone: timeZone)
     }
 
     public var rawValue: RawValue {
+        let rawItems = items.map { $0.rawValue }
+
         return [
-            "timeZone": timeZone.secondsFromGMT,
-            "items": items.map { $0.rawValue }
+            "timeZone": timeZone.secondsFromGMT(),
+            "items": rawItems
         ]
     }
 
-    var maxTimeInterval: NSTimeInterval {
+    var maxTimeInterval: TimeInterval {
         return referenceTimeInterval + repeatInterval
     }
 
@@ -98,13 +100,13 @@ public class DailyValueSchedule<T: RawRepresentable where T.RawValue: AnyObject>
 
      - parameter date: The date to convert
      */
-    private func scheduleOffsetForDate(date: NSDate) -> NSTimeInterval {
+    private func scheduleOffset(for date: Date) -> TimeInterval {
         // The time interval since a reference date in the specified time zone
-        let interval = date.timeIntervalSinceReferenceDate + NSTimeInterval(timeZone.secondsFromGMTForDate(date))
+        let interval = date.timeIntervalSinceReferenceDate + TimeInterval(timeZone.secondsFromGMT(for: date))
 
         // The offset of the time interval since the last occurence of the reference time + n * repeatIntervals.
         // If the repeat interval was 1 day, this is the fractional amount of time since the most recent repeat interval starting at the reference time
-        return ((interval - referenceTimeInterval) % repeatInterval) + referenceTimeInterval
+        return ((interval - referenceTimeInterval).truncatingRemainder(dividingBy: repeatInterval)) + referenceTimeInterval
     }
 
     /**
@@ -115,24 +117,24 @@ public class DailyValueSchedule<T: RawRepresentable where T.RawValue: AnyObject>
 
      - returns: A slice of `ScheduleItem` values
      */
-    public func between(startDate: NSDate, _ endDate: NSDate) -> [AbsoluteScheduleValue<T>] {
+    public func between(start startDate: Date, end endDate: Date) -> [AbsoluteScheduleValue<T>] {
         guard startDate <= endDate else {
             return []
         }
 
-        let startOffset = scheduleOffsetForDate(startDate)
-        let endOffset = startOffset + endDate.timeIntervalSinceDate(startDate)
+        let startOffset = scheduleOffset(for: startDate)
+        let endOffset = startOffset + endDate.timeIntervalSince(startDate)
 
         guard endOffset <= maxTimeInterval else {
-            let boundaryDate = startDate.dateByAddingTimeInterval(maxTimeInterval - startOffset)
+            let boundaryDate = startDate.addingTimeInterval(maxTimeInterval - startOffset)
 
-            return between(startDate, boundaryDate) + between(boundaryDate, endDate)
+            return between(start: startDate, end: boundaryDate) + between(start: boundaryDate, end: endDate)
         }
 
         var startIndex = 0
         var endIndex = items.count
 
-        for (index, item) in items.enumerate() {
+        for (index, item) in items.enumerated() {
             if startOffset >= item.startTime {
                 startIndex = index
             }
@@ -142,15 +144,15 @@ public class DailyValueSchedule<T: RawRepresentable where T.RawValue: AnyObject>
             }
         }
 
-        let referenceDate = startDate.dateByAddingTimeInterval(-startOffset)
+        let referenceDate = startDate.addingTimeInterval(-startOffset)
 
         return items[startIndex..<endIndex].map {
-            return AbsoluteScheduleValue(startDate: referenceDate.dateByAddingTimeInterval($0.startTime), value: $0.value)
+            return AbsoluteScheduleValue(startDate: referenceDate.addingTimeInterval($0.startTime), value: $0.value)
         }
     }
 
-    func valueAt(time: NSDate) -> T {
-        return between(time, time).first!.value
+    func value(at time: Date) -> T {
+        return between(start: time, end: time).first!.value
     }
 
 }

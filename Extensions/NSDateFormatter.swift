@@ -9,30 +9,30 @@
 import Foundation
 
 
-extension NSDateFormatter {
-    static func ISO8601StrictDateFormatter() -> Self {
+extension DateFormatter {
+    static func ISO8601Strict() -> Self {
         let dateFormatter = self.init()
 
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
 
         return dateFormatter
     }
 
-    static func ISO8601LocalTimeDateFormatter() -> Self {
+    static func ISO8601LocalTime() -> Self {
         let dateFormatter = self.init()
 
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
 
         return dateFormatter
     }
 
-    static func localTimeFormatter() -> Self {
+    static func localTime() -> Self {
         let timeFormatter = self.init()
 
         timeFormatter.dateFormat = "HH:mm:ss"
-        timeFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        timeFormatter.locale = Locale(identifier: "en_US_POSIX")
 
         return timeFormatter
     }

@@ -10,7 +10,7 @@ import UIKit
 
 
 protocol TextFieldTableViewCellDelegate: class {
-    func textFieldTableViewCellDidUpdateText(cell: DecimalTextFieldTableViewCell)
+    func textFieldTableViewCellDidUpdateText(_ cell: DecimalTextFieldTableViewCell)
 }
 
 
@@ -24,11 +24,11 @@ class DecimalTextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     @IBOutlet weak var unitLabel: UILabel!
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: true)
 
         if selected {
-            if textField.isFirstResponder() {
+            if textField.isFirstResponder {
                 textField.resignFirstResponder()
             } else {
                 textField.becomeFirstResponder()
@@ -38,20 +38,20 @@ class DecimalTextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     weak var delegate: TextFieldTableViewCellDelegate?
 
-    var numberFormatter: NSNumberFormatter = {
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = .DecimalStyle
+    var numberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
 
         return formatter
     }()
 
     var number: NSNumber? {
         get {
-            return numberFormatter.numberFromString(textField.text ?? "")
+            return numberFormatter.number(from: textField.text ?? "")
         }
         set {
             if let value = newValue {
-                textField.text = numberFormatter.stringFromNumber(value)
+                textField.text = numberFormatter.string(from: value)
             } else {
                 textField.text = nil
             }
@@ -60,9 +60,9 @@ class DecimalTextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     // MARK: - UITextFieldDelegate
 
-    func textFieldDidEndEditing(textField: UITextField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         if let number = number {
-            textField.text = numberFormatter.stringFromNumber(number)
+            textField.text = numberFormatter.string(from: number)
         } else {
             textField.text = nil
         }

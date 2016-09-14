@@ -10,10 +10,10 @@ import Foundation
 import HealthKit
 
 
-public class DailyQuantitySchedule<T: RawRepresentable where T.RawValue: AnyObject>: DailyValueSchedule<T> {
+public class DailyQuantitySchedule<T: RawRepresentable>: DailyValueSchedule<T> where T.RawValue: Any {
     public let unit: HKUnit
 
-    init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<T>], timeZone: NSTimeZone?) {
+    init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<T>], timeZone: TimeZone?) {
         self.unit = unit
 
         super.init(dailyItems: dailyItems, timeZone: timeZone)
@@ -22,18 +22,18 @@ public class DailyQuantitySchedule<T: RawRepresentable where T.RawValue: AnyObje
     public required convenience init?(rawValue: RawValue) {
         guard let
             rawUnit = rawValue["unit"] as? String,
-            rawItems = rawValue["items"] as? [RepeatingScheduleValue.RawValue] else
+            let rawItems = rawValue["items"] as? [RepeatingScheduleValue.RawValue] else
         {
             return nil
         }
 
-        var timeZone: NSTimeZone?
+        var timeZone: TimeZone?
 
         if let offset = rawValue["timeZone"] as? Int {
-            timeZone = NSTimeZone(forSecondsFromGMT: offset)
+            timeZone = TimeZone(secondsFromGMT: offset)
         }
 
-        self.init(unit: HKUnit(fromString: rawUnit), dailyItems: rawItems.flatMap { RepeatingScheduleValue(rawValue: $0) }, timeZone: timeZone)
+        self.init(unit: HKUnit(from: rawUnit), dailyItems: rawItems.flatMap { RepeatingScheduleValue(rawValue: $0) }, timeZone: timeZone)
     }
 
     public override var rawValue: RawValue {
@@ -47,18 +47,18 @@ public class DailyQuantitySchedule<T: RawRepresentable where T.RawValue: AnyObje
 
 
 public class SingleQuantitySchedule: DailyQuantitySchedule<Double> {
-    public func quantityAt(time: NSDate) -> HKQuantity {
-        return HKQuantity(unit: unit, doubleValue: valueAt(time))
+    public func quantity(at time: Date) -> HKQuantity {
+        return HKQuantity(unit: unit, doubleValue: value(at: time))
     }
 
-    override init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<Double>], timeZone: NSTimeZone?) {
+    override init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<Double>], timeZone: TimeZone?) {
         super.init(unit: unit, dailyItems: dailyItems, timeZone: timeZone)
     }
 
     func averageValue() -> Double {
         var total: Double = 0
 
-        for (index, item) in items.enumerate() {
+        for (index, item) in items.enumerated() {
             var endTime = maxTimeInterval
 
             if index < items.endIndex - 1 {

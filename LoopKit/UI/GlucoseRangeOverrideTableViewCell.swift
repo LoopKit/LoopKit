@@ -10,7 +10,7 @@ import UIKit
 
 
 protocol GlucoseRangeOverrideTableViewCellDelegate: class {
-    func glucoseRangeOverrideTableViewCellDidUpdateValue(cell: GlucoseRangeOverrideTableViewCell)
+    func glucoseRangeOverrideTableViewCellDidUpdateValue(_ cell: GlucoseRangeOverrideTableViewCell)
 }
 
 
@@ -20,19 +20,19 @@ class GlucoseRangeOverrideTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     var minValue: Double = 0 {
         didSet {
-            minValueTextField.text = valueNumberFormatter.stringFromNumber(minValue)
+            minValueTextField.text = valueNumberFormatter.string(from: minValue.rawValue)
         }
     }
 
     var maxValue: Double = 0 {
         didSet {
-            maxValueTextField.text = valueNumberFormatter.stringFromNumber(maxValue)
+            maxValueTextField.text = valueNumberFormatter.string(from: maxValue.rawValue)
         }
     }
 
-    lazy var valueNumberFormatter: NSNumberFormatter = {
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = .DecimalStyle
+    lazy var valueNumberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 1
 
         return formatter
@@ -59,14 +59,14 @@ class GlucoseRangeOverrideTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     // MARK: - UITextFieldDelegate
 
-    func textFieldDidBeginEditing(textField: UITextField) {
-        dispatch_async(dispatch_get_main_queue()) {
-            textField.selectedTextRange = textField.textRangeFromPosition(textField.beginningOfDocument, toPosition: textField.endOfDocument)
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        DispatchQueue.main.async {
+            textField.selectedTextRange = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument)
         }
     }
 
-    func textFieldDidEndEditing(textField: UITextField) {
-        let value = valueNumberFormatter.numberFromString(textField.text ?? "")?.doubleValue ?? 0
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        let value = valueNumberFormatter.number(from: textField.text ?? "")?.doubleValue ?? 0
 
         switch textField {
         case minValueTextField:
