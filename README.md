@@ -1,14 +1,14 @@
 # LoopKit
 
-[![Build Status](https://travis-ci.org/loudnate/LoopKit.svg?branch=master)](https://travis-ci.org/loudnate/LoopKit)
+[![Build Status](https://travis-ci.org/LoopKit/LoopKit.svg?branch=master)](https://travis-ci.org/LoopKit/LoopKit)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Join the chat at https://gitter.im/loudnate/LoopKit](https://badges.gitter.im/loudnate/LoopKit.svg)](https://gitter.im/loudnate/LoopKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/LoopKit/LoopKit](https://badges.gitter.im/LoopKit/LoopKit.svg)](https://gitter.im/LoopKit/LoopKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 LoopKit is a set of tools to speed up development of your own closed-loop insulin delivery app. It is agnostic to treatment decisions and input sources.
 
 ## Loop
 
-[Loop](https://github.com/loudnate/Loop) is a full-featured app built on top of LoopKit.
+[Loop](https://github.com/LoopKit/Loop) is a full-featured app built on top of LoopKit.
 
 ## LoopKit provides
 
@@ -28,4 +28,4 @@ LoopKit is available under the MIT license. See the LICENSE file for more info.
 
 # Code of Conduct
 
-Please note that this project is released with a [Contributor Code of Conduct](https://github.com/loudnate/LoopKit/blob/master/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+Please note that this project is released with a [Contributor Code of Conduct](https://github.com/LoopKit/LoopKit/blob/master/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.

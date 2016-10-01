@@ -283,4 +283,23 @@ public final class GlucoseStore: HealthKitSampleStore {
             resultsHandler(change, error)
         }
     }
+
+    /// Generates a diagnostic report about the current state
+    ///
+    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+    ///
+    /// - parameter completionHandler: A closure called once the report has been generated. The closure takes a single argument of the report string.
+    public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
+        let report: [String] = [
+            "## GlucoseStore",
+            "",
+            "* managedDataInterval: \(managedDataInterval ?? 0)",
+            "* reflectionDataInterval: \(reflectionDataInterval)",
+            "* momentumDataInterval: \(momentumDataInterval)",
+            "* sampleDataCache: \(sampleDataCache)",
+            "* authorizationRequired: \(authorizationRequired)"
+        ]
+
+        completionHandler(report.joined(separator: "\n"))
+    }
 }

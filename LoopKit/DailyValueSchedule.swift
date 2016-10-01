@@ -48,7 +48,7 @@ extension RepeatingScheduleValue: RawRepresentable {
 }
 
 
-public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable where T.RawValue: Any {
+public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomDebugStringConvertible where T.RawValue: Any {
     public typealias RawValue = [String: Any]
 
     private let referenceTimeInterval: TimeInterval
@@ -155,4 +155,7 @@ public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable where T.R
         return between(start: time, end: time).first!.value
     }
 
+    public var debugDescription: String {
+        return rawValue.debugDescription
+    }
 }

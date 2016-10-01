@@ -10,7 +10,7 @@ import UIKit
 
 
 public class CommandResponseViewController: UIViewController {
-    public typealias Command = (_ completionHandler: (_ responseText: String) -> Void) -> String
+    public typealias Command = (_ completionHandler: @escaping (_ responseText: String) -> Void) -> String
 
     public init(command: @escaping Command) {
         self.command = command
@@ -51,11 +51,11 @@ public class CommandResponseViewController: UIViewController {
 
 extension CommandResponseViewController: UIActivityItemSource {
     public func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return title ?? textView.text
+        return title ?? textView.text ?? ""
     }
 
     public func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType) -> Any? {
-        return textView.attributedText
+        return textView.attributedText ?? ""
     }
 
     public func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivityType?) -> String {
