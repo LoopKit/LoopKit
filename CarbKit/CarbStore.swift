@@ -106,8 +106,8 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
 
-    // The interval between effect values to use for the calculated timelines
-    public var delta: TimeInterval = TimeInterval(minutes: 5) {
+    /// The interval between effect values to use for the calculated timelines.
+    private(set) public var delta: TimeInterval = TimeInterval(minutes: 5) {
         didSet {
             dataAccessQueue.async {
                 self.clearCalculationCache()
@@ -601,4 +601,39 @@ public final class CarbStore: HealthKitSampleStore {
             resultHandler(CarbMath.totalCarbsForCarbEntries(entries), error)
         }
     }
+
+    /// Generates a diagnostic report about the current state
+    ///
+    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+    ///
+    /// - parameter completionHandler: A closure called once the report has been generated. The closure takes a single argument of the report string.
+    public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
+        var report: [String] = [
+            "## CarbStore",
+            "",
+            "* carbRatioSchedule: \(carbRatioSchedule?.debugDescription ?? "")",
+            "* defaultAbsorptionTimes: \(defaultAbsorptionTimes)",
+            "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
+            "* delay: \(delay)",
+            "* authorizationRequired: \(authorizationRequired)",
+            "* isBackgroundDeliveryEnabled: \(isBackgroundDeliveryEnabled)"
+        ]
+
+        getRecentCarbEntries { (entries, error) in
+            report.append("")
+            report.append("### getRecentCarbEntries")
+
+            if let error = error {
+                report.append("Error: \(error)")
+            } else {
+                report.append("")
+                for entry in entries {
+                    report.append("* \(entry.startDate), \(entry.quantity), \(entry.absorptionTime ?? self.defaultAbsorptionTimes.medium), \(entry.createdByCurrentApp ? "" : "External")")
+                }
+            }
+
+            completionHandler(report.joined(separator: "\n"))
+        }
+    }
+
 }

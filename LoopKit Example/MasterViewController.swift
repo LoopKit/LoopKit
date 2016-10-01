@@ -153,12 +153,40 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 performSegue(withIdentifier: InsulinDeliveryTableViewController.className, sender: indexPath)
             case .diagnostic:
                 let vc = CommandResponseViewController(command: { (completionHandler) -> String in
+                    let group = DispatchGroup()
 
-                    self.dataManager.doseStore.generateDiagnosticReport({ (report) in
-                        DispatchQueue.main.async {
-                            completionHandler(report)
+                    var doseStoreResponse = ""
+                    group.enter()
+                    self.dataManager.doseStore.generateDiagnosticReport { (report) in
+                        doseStoreResponse = report
+                        group.leave()
+                    }
+
+                    var carbStoreResponse = ""
+                    if let carbStore = self.dataManager.carbStore {
+                        group.enter()
+                        carbStore.generateDiagnosticReport { (report) in
+                            carbStoreResponse = report
+                            group.leave()
                         }
-                    })
+                    }
+
+                    var glucoseStoreResponse = ""
+                    if let glucoseStore = self.dataManager.glucoseStore {
+                        group.enter()
+                        glucoseStore.generateDiagnosticReport { (report) in
+                            glucoseStoreResponse = report
+                            group.leave()
+                        }
+                    }
+
+                    group.notify(queue: DispatchQueue.main) {
+                        completionHandler([
+                            doseStoreResponse,
+                            carbStoreResponse,
+                            glucoseStoreResponse
+                        ].joined(separator: "\n\n"))
+                    }
 
                     return "..."
                 })

@@ -997,9 +997,14 @@ public final class DoseStore {
         }
     }
 
+    /// Generates a diagnostic report about the current state
+    ///
+    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+    ///
+    /// - parameter completionHandler: The closure takes a single argument of the report string.
     public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
         var report: [String] = [
-            "## doseStore",
+            "## DoseStore",
             "",
             "* readyState: \(readyState)",
             "* insulinActionDuration: \(insulinActionDuration ?? 0)",
