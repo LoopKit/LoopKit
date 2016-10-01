@@ -32,8 +32,9 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
     private enum DataRow: Int {
         case carbs = 0
         case reservoir
+        case diagnostic
 
-        static let count = 2
+        static let count = 3
     }
 
     private enum ConfigurationRow: Int {
@@ -78,6 +79,8 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 cell.textLabel?.text = NSLocalizedString("Carbs", comment: "The title for the cell navigating to the carbs screen")
             case .reservoir:
                 cell.textLabel?.text = NSLocalizedString("Reservoir", comment: "The title for the cell navigating to the reservoir screen")
+            case .diagnostic:
+                cell.textLabel?.text = NSLocalizedString("Diagnostic", comment: "The title for the cell displaying diagnostic data")
             }
         }
 
@@ -148,6 +151,20 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 performSegue(withIdentifier: CarbEntryTableViewController.className, sender: indexPath)
             case .reservoir:
                 performSegue(withIdentifier: InsulinDeliveryTableViewController.className, sender: indexPath)
+            case .diagnostic:
+                let vc = CommandResponseViewController(command: { (completionHandler) -> String in
+
+                    self.dataManager.doseStore.generateDiagnosticReport({ (report) in
+                        DispatchQueue.main.async {
+                            completionHandler(report)
+                        }
+                    })
+
+                    return "..."
+                })
+                vc.title = "Diagnostic"
+
+                show(vc, sender: indexPath)
             }
         }
     }

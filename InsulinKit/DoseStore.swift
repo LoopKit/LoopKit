@@ -996,4 +996,60 @@ public final class DoseStore {
             }
         }
     }
+
+    public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
+        var report: [String] = [
+            "## doseStore",
+            "",
+            "* readyState: \(readyState)",
+            "* insulinActionDuration: \(insulinActionDuration ?? 0)",
+            "* basalProfile: \(basalProfile?.debugDescription ?? "")",
+            "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
+            "* areReservoirValuesContinuous: \(areReservoirValuesContinuous)"
+        ]
+
+        getRecentReservoirValues { (values, error) in
+            report.append("")
+            report.append("### getRecentReservoirValues")
+
+            if let error = error {
+                report.append("Error: \(error)")
+            } else {
+                report.append("")
+                for value in values {
+                    report.append("* \(value.startDate), \(value.unitVolume)")
+                }
+            }
+
+            self.getRecentPumpEventValues { (values, error) in
+                report.append("")
+                report.append("### getRecentPumpEventValues")
+
+                if let error = error {
+                    report.append("Error: \(error)")
+                } else {
+                    report.append("")
+                    for value in values {
+                        report.append("* \(value)")
+                    }
+                }
+
+                self.getRecentNormalizedDoseEntries { (entries, error) in
+                    report.append("")
+                    report.append("### getRecentNormalizedDoseEntries")
+
+                    if let error = error {
+                        report.append("Error: \(error)")
+                    } else {
+                        report.append("")
+                        for entry in entries {
+                            report.append("* \(entry)")
+                        }
+                    }
+
+                    completionHandler(report.joined(separator: "\n"))
+                }
+            }
+        }
+    }
 }
