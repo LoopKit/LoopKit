@@ -59,7 +59,7 @@ public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomDe
 
     init?(dailyItems: [RepeatingScheduleValue<T>], timeZone: TimeZone?) {
         self.items = dailyItems.sorted { $0.startTime < $1.startTime }
-        self.timeZone = timeZone ?? TimeZone.current
+        self.timeZone = timeZone ?? TimeZone.currentFixed
 
         guard let firstItem = self.items.first else {
             return nil
