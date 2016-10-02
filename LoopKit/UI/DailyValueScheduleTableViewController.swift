@@ -120,7 +120,7 @@ public class DailyValueScheduleTableViewController: UITableViewController {
 
     // MARK: - State
 
-    public var timeZone = TimeZone.current {
+    public var timeZone = TimeZone.currentFixed {
         didSet {
             calendar.timeZone = timeZone
         }
