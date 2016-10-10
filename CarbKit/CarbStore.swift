@@ -19,17 +19,6 @@ public protocol CarbStoreDelegate: class {
      - parameter error:     The error describing the issue
      */
     func carbStore(_ carbStore: CarbStore, didError error: CarbStore.CarbStoreError)
-
-    /**
-     Asks the delegate to upload recently-added carb entries not yet marked as uploaded.
-
-     The completion handler must be called in all circumstances, with an array of object IDs that were successfully uploaded or an empty array if the upload failed.
-
-     - parameter carbStore: The store instance
-     - parameter entries:   The carb entries
-     - parameter completionHandler: The closure to execute when the upload attempt has finished. The closure takes a single argument of an array external ids for each entry. If the upload did not succeed, call the closure with an empty array.
-     */
-    func carbStore(_ carbStore: CarbStore, hasEventsNeedingUpload entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
 }
 
 
@@ -327,7 +316,6 @@ public final class CarbStore: HealthKitSampleStore {
             if notificationRequired {
                 self.clearCalculationCache()
                 self.persistCarbEntryCache()
-                self.uploadCarbEntriesIfNeeded()
 
                 NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
             }
@@ -398,13 +386,6 @@ public final class CarbStore: HealthKitSampleStore {
     }
 
     public func addCarbEntry(_ entry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ entry: CarbEntry?, _ error: CarbStoreError?) -> Void) {
-        addCarbEntryInternal(entry) { (success, entry, error) in
-            resultHandler(success, entry, error)
-            self.uploadCarbEntriesIfNeeded()
-        }
-    }
-
-    private func addCarbEntryInternal(_ entry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ entry: CarbEntry?, _ error: CarbStoreError?) -> Void) {
         let quantity = entry.quantity
         var metadata = [String: Any]()
 
@@ -415,8 +396,6 @@ public final class CarbStore: HealthKitSampleStore {
         if let foodType = entry.foodType {
             metadata[HKMetadataKeyFoodType] = foodType
         }
-
-        metadata[MetadataKeyExternalId] = entry.externalId
 
         let carbs = HKQuantitySample(type: carbType, quantity: quantity, start: entry.startDate, end: entry.startDate, device: nil, metadata: metadata)
         let storedObject = StoredCarbEntry(sample: carbs, createdByCurrentApp: true)
@@ -448,7 +427,7 @@ public final class CarbStore: HealthKitSampleStore {
             if let error = error {
                 resultHandler(false, nil, error)
             } else {
-                self.addCarbEntryInternal(newEntry, resultHandler: resultHandler)
+                self.addCarbEntry(newEntry, resultHandler: resultHandler)
             }
         }
     }
@@ -654,28 +633,6 @@ public final class CarbStore: HealthKitSampleStore {
             }
 
             completionHandler(report.joined(separator: "\n"))
-        }
-    }
-
-    private func uploadCarbEntriesIfNeeded() {
-        getRecentCarbEntries() { (entries, error) -> Void in
-            let entriesToUpload = entries.filter { (entry) in
-                return !entry.isUploaded
-            }
-            self.delegate?.carbStore(self, hasEventsNeedingUpload: entriesToUpload, withCompletion: { (externalIds) in
-                if externalIds.count != entriesToUpload.count {
-                    // Upload failed
-                    return
-                }
-                for (entry,id) in zip(entriesToUpload,externalIds) {
-                    let newEntry = NewCarbEntry(quantity: entry.quantity, startDate: entry.startDate, foodType: entry.foodType, absorptionTime: entry.absorptionTime, isUploaded: true, externalId: id)
-                    self.replaceCarbEntry(entry, withEntry: newEntry, resultHandler: { (replaced, entry, error) in
-//                        if let error = error {
-//                            print("Error marking carb entry as uploaded: \(error)")
-//                        }
-                    })
-                }
-            })
         }
     }
 

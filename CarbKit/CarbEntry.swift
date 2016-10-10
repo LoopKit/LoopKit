@@ -14,6 +14,4 @@ public protocol CarbEntry: SampleValue {
     var foodType: String? { get }
     var absorptionTime: TimeInterval? { get }
     var createdByCurrentApp: Bool { get }
-    var isUploaded: Bool { get }
-    var externalId: String? { get }
 }
