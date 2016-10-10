@@ -13,7 +13,7 @@ import InsulinKit
 import LoopKit
 
 
-class DeviceDataManager {
+class DeviceDataManager : CarbStoreDelegate {
 
     static let shared = DeviceDataManager()
 
@@ -28,6 +28,7 @@ class DeviceDataManager {
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )
+        carbStore?.delegate = self
     }
 
     // Data stores
@@ -86,5 +87,14 @@ class DeviceDataManager {
             doseStore.pumpID = pumpID
         }
     }
+
+    func carbStore(_ carbStore: CarbStore, didError error: CarbStore.CarbStoreError) {
+        print("carbstore error: \(error)")
+    }
+
+    func carbStore(_ carbStore: CarbStore, hasEventsNeedingUpload entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void) {
+        completionHandler([])
+    }
+
 
 }

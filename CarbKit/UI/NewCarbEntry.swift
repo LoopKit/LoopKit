@@ -16,11 +16,15 @@ public struct NewCarbEntry: CarbEntry {
     public var foodType: String?
     public var absorptionTime: TimeInterval?
     public let createdByCurrentApp = true
+    public let externalId: String?
+    public let isUploaded: Bool
 
-    public init(quantity: HKQuantity, startDate: Date, foodType: String?, absorptionTime: TimeInterval?) {
+    public init(quantity: HKQuantity, startDate: Date, foodType: String?, absorptionTime: TimeInterval?, isUploaded: Bool = false, externalId: String? = nil) {
         self.quantity = quantity
         self.startDate = startDate
         self.foodType = foodType
         self.absorptionTime = absorptionTime
+        self.isUploaded = isUploaded
+        self.externalId = externalId
     }
 }
