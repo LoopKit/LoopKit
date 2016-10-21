@@ -416,7 +416,7 @@ public final class CarbStore: HealthKitSampleStore {
             metadata[HKMetadataKeyFoodType] = foodType
         }
 
-        metadata[MetadataKeyExternalId] = entry.externalId
+        metadata[HKMetadataKeyExternalUUID] = entry.externalId
 
         let carbs = HKQuantitySample(type: carbType, quantity: quantity, start: entry.startDate, end: entry.startDate, device: nil, metadata: metadata)
         let storedObject = StoredCarbEntry(sample: carbs, createdByCurrentApp: true)
