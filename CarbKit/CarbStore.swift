@@ -730,22 +730,25 @@ public final class CarbStore: HealthKitSampleStore {
             })
         }
 
-        if self.modifiedCarbEntries.count > 0 {
-            self.delegate?.carbStore(self, hasEventNeedingModification: Array<StoredCarbEntry>(self.modifiedCarbEntries), withCompletion: { (uploadedEntries) in
-                if uploadedEntries.count == self.modifiedCarbEntries.count {
-                    self.modifiedCarbEntries = []
-                    self.persistModifiedCarbEntries()
-                }
-            })
-        }
+        dataAccessQueue.async {
 
-        if self.deletedCarbEntryIds.count > 0 {
-            self.delegate?.carbStore(self, hasEventsNeedingDeletion: Array<String>(self.deletedCarbEntryIds), withCompletion: { (ids) in
-                if ids.count == self.deletedCarbEntryIds.count {
-                    self.deletedCarbEntryIds = []
-                    self.persistDeletedCarbEntryIds()
-                }
-            })
+            if self.modifiedCarbEntries.count > 0 {
+                self.delegate?.carbStore(self, hasEventNeedingModification: Array<StoredCarbEntry>(self.modifiedCarbEntries), withCompletion: { (uploadedEntries) in
+                    if uploadedEntries.count == self.modifiedCarbEntries.count {
+                        self.modifiedCarbEntries = []
+                        self.persistModifiedCarbEntries()
+                    }
+                })
+            }
+
+            if self.deletedCarbEntryIds.count > 0 {
+                self.delegate?.carbStore(self, hasEventsNeedingDeletion: Array<String>(self.deletedCarbEntryIds), withCompletion: { (ids) in
+                    if ids.count == self.deletedCarbEntryIds.count {
+                        self.deletedCarbEntryIds = []
+                        self.persistDeletedCarbEntryIds()
+                    }
+                })
+            }
         }
     }
 
