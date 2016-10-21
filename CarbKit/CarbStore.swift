@@ -12,23 +12,22 @@ import LoopKit
 
 
 public protocol CarbStoreDelegate: class {
-    /**
-     Informs the delegate that an internal error occurred
 
-     - parameter carbStore: The carb store
-     - parameter error:     The error describing the issue
-     */
+    /// Informs the delegate that an internal error occurred
+    ///
+    /// - parameter carbStore: The carb store
+    /// - parameter error:     The error describing the issue
+    ///
+    /// - returns: <#return value description#>
     func carbStore(_ carbStore: CarbStore, didError error: CarbStore.CarbStoreError)
 
-    /**
-     Asks the delegate to upload recently-added carb entries not yet marked as uploaded.
-
-     The completion handler must be called in all circumstances, with an array of object IDs that were successfully uploaded or an empty array if the upload failed.
-
-     - parameter carbStore: The store instance
-     - parameter entries:   The carb entries
-     - parameter completionHandler: The closure to execute when the upload attempt has finished. The closure takes a single argument of an array external ids for each entry. If the upload did not succeed, call the closure with an empty array.
-     */
+    /// Asks the delegate to upload recently-added carb entries not yet marked as uploaded.
+    ///
+    /// The completion handler must be called in all circumstances, with an array of object IDs that were successfully uploaded or an empty array if the upload failed.
+    ///
+    /// - parameter carbStore:         The store instance
+    /// - parameter entries:           The carb entries
+    /// - parameter completionHandler: The closure to execute when the upload attempt has finished. The closure takes a single argument of an array external ids for each entry. If the upload did not succeed, call the closure with an empty array.
     func carbStore(_ carbStore: CarbStore, hasEventsNeedingUpload entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
 }
 
