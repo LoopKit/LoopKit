@@ -20,6 +20,9 @@ public protocol CarbStoreDelegate: class {
     ///
     /// - returns: <#return value description#>
     func carbStore(_ carbStore: CarbStore, didError error: CarbStore.CarbStoreError)
+}
+
+public protocol CarbStoreSyncDelegate: class {
 
     /// Asks the delegate to upload recently-added carb entries not yet marked as uploaded.
     ///
@@ -44,7 +47,6 @@ public protocol CarbStoreDelegate: class {
     /// - parameter completionHandler: The closure to execute when the modification attempt has finished. The closure takes a single argument of an array external ids for each entry. If the modification did not succeed, call the closure with an empty array.
     func carbStore(_ carbStore: CarbStore, hasModifiedEntries entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
 }
-
 
 extension NSNotification.Name {
     /// Notification posted when carb entries were changed by an external source
@@ -143,6 +145,8 @@ public final class CarbStore: HealthKitSampleStore {
     private let maximumAbsorptionTimeInterval: TimeInterval
 
     public weak var delegate: CarbStoreDelegate?
+
+    public weak var syncDelegate: CarbStoreSyncDelegate?
 
     // Tracks modified carbEntries that need to modified in the external store
     private var modifiedCarbEntries: Set<StoredCarbEntry>
@@ -467,7 +471,7 @@ public final class CarbStore: HealthKitSampleStore {
 
     public func replaceCarbEntry(_ oldEntry: CarbEntry, withEntry newEntry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ entry: CarbEntry?, _ error: CarbStoreError?) -> Void) {
         replaceCarbEntryInternal(oldEntry, withEntry: newEntry) { (success, entry, error) in
-            if let entry = entry, success {
+            if let entry = entry, success, self.syncDelegate != nil {
                 self.modifiedCarbEntries.insert(entry)
                 self.persistModifiedCarbEntries()
                 self.syncExternalDB()
@@ -488,7 +492,7 @@ public final class CarbStore: HealthKitSampleStore {
 
     public func deleteCarbEntry(_ entry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ error: CarbStoreError?) -> Void) {
         deleteCarbEntryInternal(entry) { (success, error) in
-            if let externalId = entry.externalId, success {
+            if let externalId = entry.externalId, success, self.syncDelegate != nil {
                 self.deletedCarbEntryIds.insert(externalId)
                 self.persistDeletedCarbEntryIds()
                 self.syncExternalDB()
@@ -714,7 +718,7 @@ public final class CarbStore: HealthKitSampleStore {
             let entriesToUpload = entries.filter { (entry) in
                 return !entry.isUploaded
             }
-            self.delegate?.carbStore(self, hasEntriesNeedingUpload: entriesToUpload, withCompletion: { (externalIds) in
+            self.syncDelegate?.carbStore(self, hasEntriesNeedingUpload: entriesToUpload, withCompletion: { (externalIds) in
                 if externalIds.count != entriesToUpload.count {
                     // Upload failed
                     return
@@ -733,7 +737,7 @@ public final class CarbStore: HealthKitSampleStore {
         dataAccessQueue.async {
 
             if self.modifiedCarbEntries.count > 0 {
-                self.delegate?.carbStore(self, hasModifiedEntries: Array<StoredCarbEntry>(self.modifiedCarbEntries), withCompletion: { (uploadedEntries) in
+                self.syncDelegate?.carbStore(self, hasModifiedEntries: Array<StoredCarbEntry>(self.modifiedCarbEntries), withCompletion: { (uploadedEntries) in
                     if uploadedEntries.count == self.modifiedCarbEntries.count {
                         self.modifiedCarbEntries = []
                         self.persistModifiedCarbEntries()
@@ -742,7 +746,7 @@ public final class CarbStore: HealthKitSampleStore {
             }
 
             if self.deletedCarbEntryIds.count > 0 {
-                self.delegate?.carbStore(self, hasDeletedEntries: Array<String>(self.deletedCarbEntryIds), withCompletion: { (ids) in
+                self.syncDelegate?.carbStore(self, hasDeletedEntries: Array<String>(self.deletedCarbEntryIds), withCompletion: { (ids) in
                     if ids.count == self.deletedCarbEntryIds.count {
                         self.deletedCarbEntryIds = []
                         self.persistDeletedCarbEntryIds()
