@@ -12,26 +12,41 @@ import LoopKit
 
 
 public protocol CarbStoreDelegate: class {
-    /**
-     Informs the delegate that an internal error occurred
 
-     - parameter carbStore: The carb store
-     - parameter error:     The error describing the issue
-     */
+    /// Informs the delegate that an internal error occurred
+    ///
+    /// - parameter carbStore: The carb store
+    /// - parameter error:     The error describing the issue
+    ///
+    /// - returns: <#return value description#>
     func carbStore(_ carbStore: CarbStore, didError error: CarbStore.CarbStoreError)
-
-    /**
-     Asks the delegate to upload recently-added carb entries not yet marked as uploaded.
-
-     The completion handler must be called in all circumstances, with an array of object IDs that were successfully uploaded or an empty array if the upload failed.
-
-     - parameter carbStore: The store instance
-     - parameter entries:   The carb entries
-     - parameter completionHandler: The closure to execute when the upload attempt has finished. The closure takes a single argument of an array external ids for each entry. If the upload did not succeed, call the closure with an empty array.
-     */
-    func carbStore(_ carbStore: CarbStore, hasEventsNeedingUpload entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
 }
 
+public protocol CarbStoreSyncDelegate: class {
+
+    /// Asks the delegate to upload recently-added carb entries not yet marked as uploaded.
+    ///
+    /// The completion handler must be called in all circumstances, with an array of object IDs that were successfully uploaded or an empty array if the upload failed.
+    ///
+    /// - parameter carbStore:         The store instance
+    /// - parameter entries:           The carb entries
+    /// - parameter completionHandler: The closure to execute when the upload attempt has finished. The closure takes a single argument of an array external ids for each entry. If the upload did not succeed, call the closure with an empty array.
+    func carbStore(_ carbStore: CarbStore, hasEntriesNeedingUpload entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
+
+    /// Asks the delegate to delete carb entries that were previously uploaded.
+    ///
+    /// - parameter carbStore:         The store instance
+    /// - parameter ids:               The external ids of entries to be deleted
+    /// - parameter completionHandler: The closure to execute when the deletion attempt has finished. The closure takes a single argument of an array external ids for each entry. If the deletion did not succeed, call the closure with an empty array.
+    func carbStore(_ carbStore: CarbStore, hasDeletedEntries ids: [String], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
+
+    /// Asks the delegate to modify carb entries that were previously uploaded.
+    ///
+    /// - parameter carbStore:         The store instance
+    /// - parameter entries:           The carb entries to be uploaded. External id will be set on each carb entry.
+    /// - parameter completionHandler: The closure to execute when the modification attempt has finished. The closure takes a single argument of an array external ids for each entry. If the modification did not succeed, call the closure with an empty array.
+    func carbStore(_ carbStore: CarbStore, hasModifiedEntries entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
+}
 
 extension NSNotification.Name {
     /// Notification posted when carb entries were changed by an external source
@@ -131,6 +146,15 @@ public final class CarbStore: HealthKitSampleStore {
 
     public weak var delegate: CarbStoreDelegate?
 
+    public weak var syncDelegate: CarbStoreSyncDelegate?
+
+    // Tracks modified carbEntries that need to modified in the external store
+    private var modifiedCarbEntries: Set<StoredCarbEntry>
+
+    // Track deleted carbEntry ids that need to be delete from the external store
+    private var deletedCarbEntryIds: Set<String>
+
+
     /**
      Initializes a new instance of the store.
      
@@ -144,6 +168,8 @@ public final class CarbStore: HealthKitSampleStore {
         self.carbRatioSchedule = carbRatioSchedule
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.carbEntryCache = Set(UserDefaults.standard.carbEntryCache ?? [])
+        self.modifiedCarbEntries = Set(UserDefaults.standard.modifiedCarbEntries ?? [])
+        self.deletedCarbEntryIds = Set(UserDefaults.standard.deletedCarbEntryIds ?? [])
 
         super.init()
 
@@ -327,7 +353,7 @@ public final class CarbStore: HealthKitSampleStore {
             if notificationRequired {
                 self.clearCalculationCache()
                 self.persistCarbEntryCache()
-                self.uploadCarbEntriesIfNeeded()
+                self.syncExternalDB()
 
                 NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
             }
@@ -400,11 +426,11 @@ public final class CarbStore: HealthKitSampleStore {
     public func addCarbEntry(_ entry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ entry: CarbEntry?, _ error: CarbStoreError?) -> Void) {
         addCarbEntryInternal(entry) { (success, entry, error) in
             resultHandler(success, entry, error)
-            self.uploadCarbEntriesIfNeeded()
+            self.syncExternalDB()
         }
     }
 
-    private func addCarbEntryInternal(_ entry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ entry: CarbEntry?, _ error: CarbStoreError?) -> Void) {
+    private func addCarbEntryInternal(_ entry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ entry: StoredCarbEntry?, _ error: CarbStoreError?) -> Void) {
         let quantity = entry.quantity
         var metadata = [String: Any]()
 
@@ -416,7 +442,7 @@ public final class CarbStore: HealthKitSampleStore {
             metadata[HKMetadataKeyFoodType] = foodType
         }
 
-        metadata[MetadataKeyExternalId] = entry.externalId
+        metadata[HKMetadataKeyExternalUUID] = entry.externalId
 
         let carbs = HKQuantitySample(type: carbType, quantity: quantity, start: entry.startDate, end: entry.startDate, device: nil, metadata: metadata)
         let storedObject = StoredCarbEntry(sample: carbs, createdByCurrentApp: true)
@@ -444,7 +470,18 @@ public final class CarbStore: HealthKitSampleStore {
     }
 
     public func replaceCarbEntry(_ oldEntry: CarbEntry, withEntry newEntry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ entry: CarbEntry?, _ error: CarbStoreError?) -> Void) {
-        deleteCarbEntry(oldEntry) { (completed, error) -> Void in
+        replaceCarbEntryInternal(oldEntry, withEntry: newEntry) { (success, entry, error) in
+            if let entry = entry, success, self.syncDelegate != nil {
+                self.modifiedCarbEntries.insert(entry)
+                self.persistModifiedCarbEntries()
+                self.syncExternalDB()
+            }
+            resultHandler(success, entry, error)
+        }
+    }
+
+    private func replaceCarbEntryInternal(_ oldEntry: CarbEntry, withEntry newEntry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ entry: StoredCarbEntry?, _ error: CarbStoreError?) -> Void) {
+        deleteCarbEntryInternal(oldEntry) { (completed, error) -> Void in
             if let error = error {
                 resultHandler(false, nil, error)
             } else {
@@ -454,6 +491,17 @@ public final class CarbStore: HealthKitSampleStore {
     }
 
     public func deleteCarbEntry(_ entry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ error: CarbStoreError?) -> Void) {
+        deleteCarbEntryInternal(entry) { (success, error) in
+            if let externalId = entry.externalId, success, self.syncDelegate != nil {
+                self.deletedCarbEntryIds.insert(externalId)
+                self.persistDeletedCarbEntryIds()
+                self.syncExternalDB()
+            }
+            resultHandler(success, error)
+        }
+    }
+
+    private func deleteCarbEntryInternal(_ entry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ error: CarbStoreError?) -> Void) {
         if let entry = entry as? StoredCarbEntry {
             if entry.createdByCurrentApp {
                 let predicate = HKQuery.predicateForObjects(with: [entry.sampleUUID as UUID])
@@ -508,6 +556,14 @@ public final class CarbStore: HealthKitSampleStore {
      */
     private func persistCarbEntryCache() {
         UserDefaults.standard.carbEntryCache = Array<StoredCarbEntry>(carbEntryCache)
+    }
+
+    private func persistModifiedCarbEntries() {
+        UserDefaults.standard.modifiedCarbEntries = Array<StoredCarbEntry>(self.modifiedCarbEntries)
+    }
+
+    private func persistDeletedCarbEntryIds() {
+        UserDefaults.standard.deletedCarbEntryIds = Array<String>(self.deletedCarbEntryIds)
     }
 
     // MARK: - Math
@@ -657,25 +713,46 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
 
-    private func uploadCarbEntriesIfNeeded() {
+    private func syncExternalDB() {
         getRecentCarbEntries() { (entries, error) -> Void in
             let entriesToUpload = entries.filter { (entry) in
                 return !entry.isUploaded
             }
-            self.delegate?.carbStore(self, hasEventsNeedingUpload: entriesToUpload, withCompletion: { (externalIds) in
+            self.syncDelegate?.carbStore(self, hasEntriesNeedingUpload: entriesToUpload, withCompletion: { (externalIds) in
                 if externalIds.count != entriesToUpload.count {
                     // Upload failed
                     return
                 }
                 for (entry,id) in zip(entriesToUpload,externalIds) {
                     let newEntry = NewCarbEntry(quantity: entry.quantity, startDate: entry.startDate, foodType: entry.foodType, absorptionTime: entry.absorptionTime, isUploaded: true, externalId: id)
-                    self.replaceCarbEntry(entry, withEntry: newEntry, resultHandler: { (replaced, entry, error) in
-//                        if let error = error {
-//                            print("Error marking carb entry as uploaded: \(error)")
-//                        }
+                    self.replaceCarbEntryInternal(entry, withEntry: newEntry, resultHandler: { (replaced, entry, error) in
+                        if let error = error {
+                            print("Unable to mark local carb entry as uploaded: \(error)")
+                        }
                     })
                 }
             })
+        }
+
+        dataAccessQueue.async {
+
+            if self.modifiedCarbEntries.count > 0 {
+                self.syncDelegate?.carbStore(self, hasModifiedEntries: Array<StoredCarbEntry>(self.modifiedCarbEntries), withCompletion: { (uploadedEntries) in
+                    if uploadedEntries.count == self.modifiedCarbEntries.count {
+                        self.modifiedCarbEntries = []
+                        self.persistModifiedCarbEntries()
+                    }
+                })
+            }
+
+            if self.deletedCarbEntryIds.count > 0 {
+                self.syncDelegate?.carbStore(self, hasDeletedEntries: Array<String>(self.deletedCarbEntryIds), withCompletion: { (ids) in
+                    if ids.count == self.deletedCarbEntryIds.count {
+                        self.deletedCarbEntryIds = []
+                        self.persistDeletedCarbEntryIds()
+                    }
+                })
+            }
         }
     }
 
