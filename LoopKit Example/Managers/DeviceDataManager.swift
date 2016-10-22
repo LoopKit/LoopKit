@@ -94,17 +94,17 @@ class DeviceDataManager : CarbStoreDelegate {
         print("carbstore error: \(error)")
     }
 
-    func carbStore(_ carbStore: CarbStore, hasEventsNeedingUpload entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void) {
+    func carbStore(_ carbStore: CarbStore, hasEntriesNeedingUpload entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void) {
         print("Need to upload \(entries.count) entries")
         completionHandler(entries.map { $0.externalId ?? "OK" })
     }
 
-    func carbStore(_ carbStore: CarbStore, hasEventNeedingModification entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void) {
+    func carbStore(_ carbStore: CarbStore, hasModifiedEntries entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void) {
         print("Need to modify \(entries.count) entries: \(entries.count)")
         completionHandler([])
     }
 
-    func carbStore(_ carbStore: CarbStore, hasEventsNeedingDeletion ids: [String], withCompletion completionHandler: @escaping ([String]) -> Void) {
+    func carbStore(_ carbStore: CarbStore, hasDeletedEntries ids: [String], withCompletion completionHandler: @escaping ([String]) -> Void) {
         print("Need to delete \(ids.count) entries")
         completionHandler([])
     }

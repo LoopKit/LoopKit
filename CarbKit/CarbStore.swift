@@ -28,21 +28,21 @@ public protocol CarbStoreDelegate: class {
     /// - parameter carbStore:         The store instance
     /// - parameter entries:           The carb entries
     /// - parameter completionHandler: The closure to execute when the upload attempt has finished. The closure takes a single argument of an array external ids for each entry. If the upload did not succeed, call the closure with an empty array.
-    func carbStore(_ carbStore: CarbStore, hasEventsNeedingUpload entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
+    func carbStore(_ carbStore: CarbStore, hasEntriesNeedingUpload entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
 
     /// Asks the delegate to delete carb entries that were previously uploaded.
     ///
     /// - parameter carbStore:         The store instance
     /// - parameter ids:               The external ids of entries to be deleted
     /// - parameter completionHandler: The closure to execute when the deletion attempt has finished. The closure takes a single argument of an array external ids for each entry. If the deletion did not succeed, call the closure with an empty array.
-    func carbStore(_ carbStore: CarbStore, hasEventsNeedingDeletion ids: [String], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
+    func carbStore(_ carbStore: CarbStore, hasDeletedEntries ids: [String], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
 
     /// Asks the delegate to modify carb entries that were previously uploaded.
     ///
     /// - parameter carbStore:         The store instance
     /// - parameter entries:           The carb entries to be uploaded. External id will be set on each carb entry.
     /// - parameter completionHandler: The closure to execute when the modification attempt has finished. The closure takes a single argument of an array external ids for each entry. If the modification did not succeed, call the closure with an empty array.
-    func carbStore(_ carbStore: CarbStore, hasEventNeedingModification entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
+    func carbStore(_ carbStore: CarbStore, hasModifiedEntries entries: [CarbEntry], withCompletion completionHandler: @escaping (_ uploadedObjects: [String]) -> Void)
 }
 
 
@@ -714,7 +714,7 @@ public final class CarbStore: HealthKitSampleStore {
             let entriesToUpload = entries.filter { (entry) in
                 return !entry.isUploaded
             }
-            self.delegate?.carbStore(self, hasEventsNeedingUpload: entriesToUpload, withCompletion: { (externalIds) in
+            self.delegate?.carbStore(self, hasEntriesNeedingUpload: entriesToUpload, withCompletion: { (externalIds) in
                 if externalIds.count != entriesToUpload.count {
                     // Upload failed
                     return
@@ -733,7 +733,7 @@ public final class CarbStore: HealthKitSampleStore {
         dataAccessQueue.async {
 
             if self.modifiedCarbEntries.count > 0 {
-                self.delegate?.carbStore(self, hasEventNeedingModification: Array<StoredCarbEntry>(self.modifiedCarbEntries), withCompletion: { (uploadedEntries) in
+                self.delegate?.carbStore(self, hasModifiedEntries: Array<StoredCarbEntry>(self.modifiedCarbEntries), withCompletion: { (uploadedEntries) in
                     if uploadedEntries.count == self.modifiedCarbEntries.count {
                         self.modifiedCarbEntries = []
                         self.persistModifiedCarbEntries()
@@ -742,7 +742,7 @@ public final class CarbStore: HealthKitSampleStore {
             }
 
             if self.deletedCarbEntryIds.count > 0 {
-                self.delegate?.carbStore(self, hasEventsNeedingDeletion: Array<String>(self.deletedCarbEntryIds), withCompletion: { (ids) in
+                self.delegate?.carbStore(self, hasDeletedEntries: Array<String>(self.deletedCarbEntryIds), withCompletion: { (ids) in
                     if ids.count == self.deletedCarbEntryIds.count {
                         self.deletedCarbEntryIds = []
                         self.persistDeletedCarbEntryIds()
