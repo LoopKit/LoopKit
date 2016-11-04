@@ -124,7 +124,7 @@ public final class GlucoseStore: HealthKitSampleStore {
                     let sortedGlucose = glucose.sorted { $0.startDate < $1.startDate }
 
                     self.sampleDataCache.append(contentsOf: sortedGlucose)
-                    self.purgeOldGlucoseSamples()
+                    //self.purgeOldGlucoseSamples()
 
                     if let latestGlucose = sortedGlucose.last, self.latestGlucose == nil || self.latestGlucose!.startDate < latestGlucose.startDate {
                         self.latestGlucose = latestGlucose
