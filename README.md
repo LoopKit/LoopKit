@@ -19,7 +19,7 @@ LoopKit is a set of tools to speed up development of your own closed-loop insuli
 
 ## LoopKit does not provide
 
-* Treatment decisions: Your Diabetes My Vary.
+* Treatment decisions: Your Diabetes May Vary.
 * Device communications: Device-specific libraries are maintained separately.
 
 # License
