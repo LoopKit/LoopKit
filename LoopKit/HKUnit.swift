@@ -19,7 +19,7 @@ public extension HKUnit {
     }
 
     /// A formatting helper for determining the preferred decimal style for a given unit
-    var preferredMinimumFractionDigits: Int {
+    var preferredFractionDigits: Int {
         if self == HKUnit.milligramsPerDeciliterUnit() {
             return 0
         } else {

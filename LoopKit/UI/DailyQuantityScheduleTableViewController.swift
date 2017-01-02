@@ -18,8 +18,8 @@ public class DailyQuantityScheduleTableViewController: SingleValueScheduleTableV
         }
     }
 
-    override func preferredValueMinimumFractionDigits() -> Int {
-        return unit.preferredMinimumFractionDigits
+    override func preferredValueFractionDigits() -> Int {
+        return unit.preferredFractionDigits
     }
 
 }

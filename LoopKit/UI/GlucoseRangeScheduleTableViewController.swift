@@ -96,7 +96,8 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
             cell.timeZone = timeZone
             cell.date = midnight.addingTimeInterval(item.startTime)
 
-            cell.valueNumberFormatter.minimumFractionDigits = unit.preferredMinimumFractionDigits
+            cell.valueNumberFormatter.minimumFractionDigits = unit.preferredFractionDigits
+            cell.valueNumberFormatter.maximumFractionDigits = unit.preferredFractionDigits
 
             cell.minValue = item.value.minValue
             cell.value = item.value.maxValue
@@ -121,7 +122,8 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         case .override:
             let cell = tableView.dequeueReusableCell(withIdentifier: GlucoseRangeOverrideTableViewCell.className, for: indexPath) as! GlucoseRangeOverrideTableViewCell
 
-            cell.valueNumberFormatter.minimumFractionDigits = unit.preferredMinimumFractionDigits
+            cell.valueNumberFormatter.minimumFractionDigits = unit.preferredFractionDigits
+            cell.valueNumberFormatter.maximumFractionDigits = unit.preferredFractionDigits
 
             if let workoutRange = workoutRange {
                 cell.minValue = workoutRange.minValue
