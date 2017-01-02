@@ -52,7 +52,7 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
         return insertableIndices(for: scheduleItems, removing: row, with: timeInterval)
     }
 
-    func preferredValueMinimumFractionDigits() -> Int {
+    func preferredValueFractionDigits() -> Int {
         return 1
     }
 
@@ -71,7 +71,8 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
         cell.timeZone = timeZone
         cell.date = midnight.addingTimeInterval(item.startTime)
 
-        cell.valueNumberFormatter.minimumFractionDigits = preferredValueMinimumFractionDigits()
+        cell.valueNumberFormatter.minimumFractionDigits = preferredValueFractionDigits()
+        cell.valueNumberFormatter.maximumFractionDigits = preferredValueFractionDigits()
 
         cell.value = item.value
         cell.unitString = unitDisplayString
