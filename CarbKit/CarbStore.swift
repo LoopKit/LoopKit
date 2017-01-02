@@ -374,13 +374,6 @@ public final class CarbStore: HealthKitSampleStore {
         return HKQuery.predicateForSamples(withStart: startDate ?? recentSamplesStartDate, end: endDate ?? Date.distantFuture, options: [.strictStartDate])
     }
 
-    private func getCachedCarbSamples(startDate: Date? = nil, endDate: Date? = nil, resultsHandler: @escaping (_ entries: [StoredCarbEntry], _ error: CarbStoreError?) -> Void) {
-        dataAccessQueue.async {
-            let entries = self.carbEntryCache.filterDateRange(startDate, endDate)
-            resultsHandler(entries, nil)
-        }
-    }
-
     private func getRecentCarbSamples(startDate: Date? = nil, endDate: Date? = nil, resultsHandler: @escaping (_ entries: [StoredCarbEntry], _ error: CarbStoreError?) -> Void) {
         if UIApplication.shared.isProtectedDataAvailable {
             let predicate = recentSamplesPredicate(startDate: startDate, endDate: endDate)
@@ -389,7 +382,9 @@ public final class CarbStore: HealthKitSampleStore {
             let query = HKSampleQuery(sampleType: carbType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
 
                 if let error = error as? NSError, error.code == HKError.errorDatabaseInaccessible.rawValue {
-                    self.getCachedCarbSamples(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
+                    self.dataAccessQueue.async {
+                        resultsHandler(self.carbEntryCache.filterDateRange(startDate, endDate), nil)
+                    }
                 } else {
                     resultsHandler(
                         (samples as? [HKQuantitySample])?.map {
@@ -402,7 +397,9 @@ public final class CarbStore: HealthKitSampleStore {
 
             healthStore.execute(query)
         } else {
-            getCachedCarbSamples(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
+            dataAccessQueue.async {
+                resultsHandler(self.carbEntryCache.filterDateRange(startDate, endDate), nil)
+            }
         }
     }
 
@@ -601,20 +598,15 @@ public final class CarbStore: HealthKitSampleStore {
         startDate: Date? = nil,
         endDate: Date? = nil,
         resultHandler: @escaping (_ values: [CarbValue], _ error: Error?) -> Void) {
-
         dataAccessQueue.async { [unowned self] in
             if self.carbsOnBoardCache == nil {
-                self.getCachedCarbSamples { (entries, error) -> Void in
-                    if error == nil {
-                        self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(entries,
-                            defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                            delay: self.delay,
-                            delta: self.delta
-                        )
-                    }
+                self.carbsOnBoardCache = CarbMath.carbsOnBoardForCarbEntries(self.carbEntryCache,
+                    defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                    delay: self.delay,
+                    delta: self.delta
+                )
 
-                    resultHandler(self.carbsOnBoardCache?.filterDateRange(startDate, endDate).map { $0 } ?? [], error)
-                }
+                resultHandler(self.carbsOnBoardCache?.filterDateRange(startDate, endDate).map { $0 } ?? [], nil)
             } else {
                 resultHandler(self.carbsOnBoardCache?.filterDateRange(startDate, endDate) ?? [], nil)
             }
@@ -640,19 +632,15 @@ public final class CarbStore: HealthKitSampleStore {
         dataAccessQueue.async {
             if self.glucoseEffectsCache == nil {
                 if let carbRatioSchedule = self.carbRatioSchedule, let insulinSensitivitySchedule = self.insulinSensitivitySchedule {
-                    self.getCachedCarbSamples { (entries, error) -> Void in
-                        if error == nil {
-                            self.glucoseEffectsCache = CarbMath.glucoseEffectsForCarbEntries(entries,
-                                carbRatios: carbRatioSchedule,
-                                insulinSensitivities: insulinSensitivitySchedule,
-                                defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                                delay: self.delay,
-                                delta: self.delta
-                            )
-                        }
+                    self.glucoseEffectsCache = CarbMath.glucoseEffectsForCarbEntries(self.carbEntryCache,
+                        carbRatios: carbRatioSchedule,
+                        insulinSensitivities: insulinSensitivitySchedule,
+                        defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                        delay: self.delay,
+                        delta: self.delta
+                    )
 
-                        resultHandler(self.glucoseEffectsCache?.filterDateRange(startDate, endDate) ?? [], error)
-                    }
+                    resultHandler(self.glucoseEffectsCache?.filterDateRange(startDate, endDate) ?? [], nil)
                 } else {
                     resultHandler([], .configurationError)
                 }
@@ -685,6 +673,10 @@ public final class CarbStore: HealthKitSampleStore {
     ///
     /// - parameter completionHandler: A closure called once the report has been generated. The closure takes a single argument of the report string.
     public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
+        func entryReport(_ entry: CarbEntry) -> String {
+            return "* \(entry.startDate), \(entry.quantity), \(entry.absorptionTime ?? self.defaultAbsorptionTimes.medium), \(entry.createdByCurrentApp ? "" : "External")"
+        }
+
         var report: [String] = [
             "## CarbStore",
             "",
@@ -693,8 +685,14 @@ public final class CarbStore: HealthKitSampleStore {
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
             "* delay: \(delay)",
             "* authorizationRequired: \(authorizationRequired)",
-            "* isBackgroundDeliveryEnabled: \(isBackgroundDeliveryEnabled)"
+            "* isBackgroundDeliveryEnabled: \(isBackgroundDeliveryEnabled)",
+            "",
+            "### carbEntryCache"
         ]
+
+        for entry in carbEntryCache {
+            report.append(entryReport(entry))
+        }
 
         getRecentCarbEntries { (entries, error) in
             report.append("")
@@ -705,7 +703,7 @@ public final class CarbStore: HealthKitSampleStore {
             } else {
                 report.append("")
                 for entry in entries {
-                    report.append("* \(entry.startDate), \(entry.quantity), \(entry.absorptionTime ?? self.defaultAbsorptionTimes.medium), \(entry.createdByCurrentApp ? "" : "External")")
+                    report.append(entryReport(entry))
                 }
             }
 
