@@ -11,7 +11,11 @@ import HealthKit
 
 
 public final class CarbEntryEditViewController: UITableViewController, DatePickerTableViewCellDelegate, TextFieldTableViewCellDelegate {
-
+    
+    static let SaveUnwindSegue = "CarbEntrySaveUnwind"
+    
+    var navigationDelegate: CarbEntryNavigationDelegate = CarbEntryNavigationDelegate()
+    
     public var defaultAbsorptionTimes: CarbStore.DefaultAbsorptionTimes? {
         didSet {
             if originalCarbEntry == nil, let times = defaultAbsorptionTimes {
@@ -40,6 +44,8 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
     private var foodType: String?
 
     private var absorptionTime: TimeInterval?
+    
+    private let maxAbsorptionTime = TimeInterval(minutes: 999)
 
     public var updatedCarbEntry: CarbEntry? {
         if let  quantity = quantity,
@@ -48,7 +54,7 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
             if let o = originalCarbEntry, o.quantity == quantity && o.startDate == date && o.foodType == foodType && o.absorptionTime == absorptionTime {
                 return nil  // No changes were made
             }
-
+            
             return NewCarbEntry(quantity: quantity, startDate: date, foodType: foodType, absorptionTime: absorptionTime, externalId: originalCarbEntry?.externalId)
         } else {
             return nil
@@ -74,10 +80,30 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
     @IBOutlet var segmentedControlInputAccessoryView: SegmentedControlInputAccessoryView!
 
     @IBOutlet weak var saveButtonItem: UIBarButtonItem!
+    
+    @IBAction func saveButtonPressed(_ sender: Any) {
+        //do validation for absorption time
+        let absorptionTimeIndex = IndexPath(row: Row.absorptionTime.rawValue, section: 0)
+        if let absorptionCell = tableView.cellForRow(at: absorptionTimeIndex) as? AbsorptionTimeTextFieldTableViewCell,
+            let absorptionNumber = absorptionCell.number {
+            
+            let enteredAbsorptionTime = TimeInterval(minutes: absorptionNumber.doubleValue)
+            
+            if validateAbsorptionTime(enteredAbsorptionTime) {
+                // perform unwind segue if it passes
+                
+                // values will update during the unwind segue
+                navigationDelegate.performSegue(withIdentifier: CarbEntryEditViewController.SaveUnwindSegue, sender: self.saveButtonItem, for: self)
+                return
+            } else {
+                showAbsorptionTimeValidationWarning()
+            }
+        }
+    }
 
     // MARK: - Table view data source
 
-    private enum Row: Int {
+    enum Row: Int {
         case value
         case date
         case absorptionTime
@@ -183,5 +209,13 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
         default:
             break
         }
+    }
+    
+    func validateAbsorptionTime(_ absorptionTime: TimeInterval) -> Bool {
+        return absorptionTime <= maxAbsorptionTime
+    }
+    
+    func showAbsorptionTimeValidationWarning() {
+        self.navigationDelegate.showAbsorptionTimeValidationWarning(for: self)
     }
 }
