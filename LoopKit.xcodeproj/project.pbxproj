@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2FBCE30F1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBCE30E1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift */; };
+		2FBCE3121E4A5B54008AF09C /* CarbKit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FE581C7291D80073BE78 /* CarbKit.storyboard */; };
+		2FD1A6B01E4A76CC0042EF39 /* CarbEntryValidationNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD1A6AF1E4A76CC0042EF39 /* CarbEntryValidationNavigationDelegate.swift */; };
 		4300591E1CCDC65B00C861EA /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		4300591F1CCDC67900C861EA /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		430059201CCDC68200C861EA /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
@@ -283,6 +286,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2FBCE30E1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryEditViewControllerTests.swift; sourceTree = "<group>"; };
+		2FD1A6AF1E4A76CC0042EF39 /* CarbEntryValidationNavigationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryValidationNavigationDelegate.swift; sourceTree = "<group>"; };
 		430157F71C7EC03B00B64B63 /* LoopKit Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LoopKit Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		430157F91C7EC03B00B64B63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		430157FB1C7EC03B00B64B63 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MasterViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -549,6 +554,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2FBCE30D1E4A4B38008AF09C /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				2FBCE30E1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		430059211CCDC7A200C861EA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -727,6 +740,7 @@
 				43D8FE3A1C72914D0073BE78 /* Info.plist */,
 				43D8FE411C7291900073BE78 /* CarbMathTests.swift */,
 				43D8FE431C7291930073BE78 /* Fixtures */,
+				2FBCE30D1E4A4B38008AF09C /* UI */,
 			);
 			path = CarbKitTests;
 			sourceTree = "<group>";
@@ -752,6 +766,7 @@
 				43D8FE5A1C7291D80073BE78 /* DecimalTextFieldTableViewCell.swift */,
 				43D8FE5B1C7291D80073BE78 /* NewCarbEntry.swift */,
 				43D8FE5C1C7291D80073BE78 /* SegmentedControlInputAccessoryView.swift */,
+				2FD1A6AF1E4A76CC0042EF39 /* CarbEntryValidationNavigationDelegate.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1292,6 +1307,7 @@
 				43D8FE681C7292B00073BE78 /* read_carb_ratios.json in Resources */,
 				43D8FE491C7291A60073BE78 /* carbs_on_board_output.json in Resources */,
 				43D8FE471C7291A60073BE78 /* carb_effect_from_history_input.json in Resources */,
+				2FBCE3121E4A5B54008AF09C /* CarbKit.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1458,6 +1474,7 @@
 				43D8FE5D1C7291D80073BE78 /* AbsorptionTimeTextFieldTableViewCell.swift in Sources */,
 				4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */,
 				43D8FE611C7291D80073BE78 /* DatePickerTableViewCell.swift in Sources */,
+				2FD1A6B01E4A76CC0042EF39 /* CarbEntryValidationNavigationDelegate.swift in Sources */,
 				43D8FE641C7291D80073BE78 /* SegmentedControlInputAccessoryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1469,6 +1486,7 @@
 				43D9888E1C87F36900DA4467 /* LoopKitTests.swift in Sources */,
 				43D8FE421C7291900073BE78 /* CarbMathTests.swift in Sources */,
 				430059231CCDCFD100C861EA /* NSDateFormatter.swift in Sources */,
+				2FBCE30F1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
