@@ -425,7 +425,6 @@
                     <connections>
                         <outlet property="saveButtonItem" destination="V0S-Me-oAl" id="jte-UB-Cfb"/>
                         <outlet property="segmentedControlInputAccessoryView" destination="yOQ-K4-a5x" id="K2x-Pr-HOL"/>
-                        <segue destination="rUL-yg-cFX" kind="custom" id="n3a-zd-YSP"/>
                         <segue destination="T5h-mI-vtL" kind="unwind" identifier="CarbEntrySaveUnwind" unwindAction="unwindFromEditing:" id="orp-DK-fJO"/>
                     </connections>
                 </tableViewController>
