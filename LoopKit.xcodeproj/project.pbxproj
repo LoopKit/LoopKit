@@ -40,6 +40,11 @@
 		4302F4E91D5066F400F0FCAF /* ReservoirValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4E81D5066F400F0FCAF /* ReservoirValue.swift */; };
 		4302F4EB1D50670500F0FCAF /* NewPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4EA1D50670500F0FCAF /* NewPumpEvent.swift */; };
 		4302F4ED1D5068CE00F0FCAF /* PersistedPumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4EC1D5068CE00F0FCAF /* PersistedPumpEvent.swift */; };
+		4303C4921E2D665000ADEDC8 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
+		4303C4931E2D665200ADEDC8 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
+		4303C4941E2D665F00ADEDC8 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
+		4303C4951E2D665F00ADEDC8 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
+		4303C4961E2D666000ADEDC8 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
 		43177D021D3729E60006E908 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */; };
 		43177D041D372A7F0006E908 /* CarbEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D031D372A7F0006E908 /* CarbEntryTableViewController.swift */; };
 		43177D081D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43177D071D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib */; };
@@ -62,7 +67,6 @@
 		434FF1F41CF294A9000DB779 /* TextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */; };
 		435F355E1C9CD16A00C204D2 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */; };
 		435F35611C9CD25F00C204D2 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */; };
-		438248E01DA1905F00B3433F /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438248DF1DA1905F00B3433F /* TimeZone.swift */; };
 		43971A401C8CABFF0013154F /* GlucoseSampleValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */; };
 		43971A421C8CAEF20013154F /* momentum_effect_display_only_glucose_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43971A411C8CAEF20013154F /* momentum_effect_display_only_glucose_input.json */; };
 		43AF1FB21C926CDD00EA2F3D /* HKQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */; };
@@ -305,6 +309,7 @@
 		4302F4E81D5066F400F0FCAF /* ReservoirValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirValue.swift; sourceTree = "<group>"; };
 		4302F4EA1D50670500F0FCAF /* NewPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPumpEvent.swift; sourceTree = "<group>"; };
 		4302F4EC1D5068CE00F0FCAF /* PersistedPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedPumpEvent.swift; sourceTree = "<group>"; };
+		4303C4901E2D664200ADEDC8 /* TimeZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeZone.swift; sourceTree = "<group>"; };
 		43177D031D372A7F0006E908 /* CarbEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryTableViewController.swift; sourceTree = "<group>"; };
 		43177D071D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GlucoseRangeOverrideTableViewCell.xib; sourceTree = "<group>"; };
 		43177D091D3732C70006E908 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -324,7 +329,6 @@
 		434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewController.swift; sourceTree = "<group>"; };
 		435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
-		438248DF1DA1905F00B3433F /* TimeZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeZone.swift; sourceTree = "<group>"; };
 		43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseSampleValue.swift; sourceTree = "<group>"; };
 		43971A411C8CAEF20013154F /* momentum_effect_display_only_glucose_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = momentum_effect_display_only_glucose_input.json; sourceTree = "<group>"; };
 		43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantity.swift; sourceTree = "<group>"; };
@@ -569,6 +573,7 @@
 				43177D0D1D3737420006E908 /* NibLoadable.swift */,
 				43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */,
 				43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */,
+				4303C4901E2D664200ADEDC8 /* TimeZone.swift */,
 				434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */,
 			);
 			path = Extensions;
@@ -675,7 +680,6 @@
 				43D8FDEF1C7290350073BE78 /* LoopMath.swift */,
 				43D8FDF01C7290350073BE78 /* NSDate.swift */,
 				43D8FDF31C7290350073BE78 /* SampleValue.swift */,
-				438248DF1DA1905F00B3433F /* TimeZone.swift */,
 				43D8FE031C72903B0073BE78 /* UI */,
 			);
 			path = LoopKit;
@@ -1425,7 +1429,7 @@
 				43D8FE191C7290530073BE78 /* UIViewController.swift in Sources */,
 				43D9888B1C87E47800DA4467 /* GlucoseValue.swift in Sources */,
 				43D8FDF41C7290350073BE78 /* BasalRateSchedule.swift in Sources */,
-				438248E01DA1905F00B3433F /* TimeZone.swift in Sources */,
+				4303C4921E2D665000ADEDC8 /* TimeZone.swift in Sources */,
 				43D8FDFA1C7290350073BE78 /* GlucoseRangeSchedule.swift in Sources */,
 				43177D0E1D3737420006E908 /* NibLoadable.swift in Sources */,
 				43D8FDF91C7290350073BE78 /* GlucoseEffect.swift in Sources */,
@@ -1448,6 +1452,7 @@
 				43D9888D1C87EBE400DA4467 /* LoopMathTests.swift in Sources */,
 				43D8FE1F1C72906E0073BE78 /* QuantityScheduleTests.swift in Sources */,
 				43D8FE1D1C72906E0073BE78 /* BasalRateScheduleTests.swift in Sources */,
+				4303C4941E2D665F00ADEDC8 /* TimeZone.swift in Sources */,
 				43025DAF1D5AB2E300106C28 /* NSTimeInterval.swift in Sources */,
 				43D8FDDB1C728FDF0073BE78 /* LoopKitTests.swift in Sources */,
 				430059241CCDD08C00C861EA /* NSDateFormatter.swift in Sources */,
@@ -1483,6 +1488,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4303C4951E2D665F00ADEDC8 /* TimeZone.swift in Sources */,
 				43D9888E1C87F36900DA4467 /* LoopKitTests.swift in Sources */,
 				43D8FE421C7291900073BE78 /* CarbMathTests.swift in Sources */,
 				430059231CCDCFD100C861EA /* NSDateFormatter.swift in Sources */,
@@ -1506,6 +1512,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4303C4961E2D666000ADEDC8 /* TimeZone.swift in Sources */,
 				43D9888F1C87F36A00DA4467 /* LoopKitTests.swift in Sources */,
 				43D8FE9A1C7293D00073BE78 /* GlucoseMathTests.swift in Sources */,
 				430059251CCDD09700C861EA /* NSDateFormatter.swift in Sources */,
@@ -1543,6 +1550,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4303C4931E2D665200ADEDC8 /* TimeZone.swift in Sources */,
 				43D988901C87F36B00DA4467 /* LoopKitTests.swift in Sources */,
 				43D8FEC91C7294640073BE78 /* InsulinMathTests.swift in Sources */,
 				430059221CCDCFBE00C861EA /* NSDateFormatter.swift in Sources */,
