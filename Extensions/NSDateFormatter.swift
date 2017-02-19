@@ -9,6 +9,7 @@
 import Foundation
 
 
+// MARK: - Extensions useful in parsing fixture dates
 extension DateFormatter {
     static func ISO8601Strict() -> Self {
         let dateFormatter = self.init()
@@ -24,6 +25,7 @@ extension DateFormatter {
 
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = TimeZone.currentFixed
 
         return dateFormatter
     }

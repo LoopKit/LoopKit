@@ -6,6 +6,8 @@
 //  Copyright © 2016 LoopKit Authors. All rights reserved.
 //
 
+import Foundation
+
 
 extension TimeZone {
     static var currentFixed: TimeZone {
