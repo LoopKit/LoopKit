@@ -72,7 +72,6 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
         cell.date = midnight.addingTimeInterval(item.startTime)
 
         cell.valueNumberFormatter.minimumFractionDigits = preferredValueFractionDigits()
-        cell.valueNumberFormatter.maximumFractionDigits = preferredValueFractionDigits()
 
         cell.value = item.value
         cell.unitString = unitDisplayString
