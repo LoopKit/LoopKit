@@ -23,12 +23,12 @@ import LoopKit
 ```
  * HealthKit data, managed by the current application
 ```
- 0    [managedDataInterval]
+ 0    [managedDataInterval?]
  |––––––––––––|
 ```
  * HealthKit data, managed by the manufacturer's application
 ```
-      [managedDataInterval]           [maxPurgeInterval]
+      [managedDataInterval?]           [maxPurgeInterval]
               |–––––––––--->
 ```
  */
@@ -47,7 +47,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     /// The oldest interval to include when purging managed data
     private let maxPurgeInterval: TimeInterval = TimeInterval(hours: 24) * 7
 
-    /// The interval before which glucose values should be purged from HealthKit.
+    /// The interval before which glucose values should be purged from HealthKit. If nil, glucose values are not purged.
     public var managedDataInterval: TimeInterval? = TimeInterval(hours: 3)
 
     /// The interval of glucose data to use for reflection adjustments
@@ -61,6 +61,7 @@ public final class GlucoseStore: HealthKitSampleStore {
 
     private var dataAccessQueue: DispatchQueue = DispatchQueue(label: "com.loudnate.GlucoseKit.dataAccessQueue", attributes: [])
 
+    /// The most-recent glucose value. Reading this value is thread-safe as `GlucoseValue` is immutable.
     public private(set) var latestGlucose: GlucoseValue?
 
     /**
@@ -161,13 +162,7 @@ public final class GlucoseStore: HealthKitSampleStore {
         }
     }
 
-    private func recentSamplesPredicate(startDate: Date?, endDate: Date?) -> NSPredicate {
-        var startDate = startDate
-
-        if startDate == nil, let managedDataInterval = managedDataInterval {
-            startDate = Date(timeIntervalSinceNow: -managedDataInterval)
-        }
-
+    private func recentSamplesPredicate(startDate: Date, endDate: Date?) -> NSPredicate {
         return HKQuery.predicateForSamples(
             withStart: startDate,
             end: endDate ?? Date.distantFuture,
@@ -182,16 +177,16 @@ public final class GlucoseStore: HealthKitSampleStore {
         }
     }
 
-    private func getRecentGlucoseSamples(startDate: Date? = nil, endDate: Date? = nil, resultsHandler: @escaping (_ samples: [HKQuantitySample], _ error: Error?) -> Void) {
-        if UIApplication.shared.isProtectedDataAvailable {
-            let predicate = recentSamplesPredicate(startDate: startDate, endDate: endDate)
-            let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
+    private func getRecentGlucoseSamples(startDate: Date, endDate: Date? = nil, resultsHandler: @escaping (_ samples: [HKQuantitySample], _ error: Error?) -> Void) {
+        let predicate = recentSamplesPredicate(startDate: startDate, endDate: endDate)
+        let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
 
-            let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
+        let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
 
-                if let error = error as? NSError, error.code == HKError.errorDatabaseInaccessible.rawValue {
-                    self.getCachedGlucoseSamples(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
-                } else {
+            if let error = error as? NSError, error.code == HKError.errorDatabaseInaccessible.rawValue {
+                self.getCachedGlucoseSamples(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
+            } else {
+                self.dataAccessQueue.async {
                     if let lastGlucose = samples?.last as? HKQuantitySample, self.latestGlucose == nil || self.latestGlucose!.startDate < lastGlucose.startDate {
                         self.latestGlucose = lastGlucose
                     }
@@ -202,11 +197,9 @@ public final class GlucoseStore: HealthKitSampleStore {
                     )
                 }
             }
-
-            healthStore.execute(query)
-        } else {
-            getCachedGlucoseSamples(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
         }
+
+        healthStore.execute(query)
     }
 
     /**
@@ -214,13 +207,13 @@ public final class GlucoseStore: HealthKitSampleStore {
      
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
-     - parameter startDate:      The earliest date of values to retrieve. Defaults to the managed data interval before the current date.
+     - parameter startDate:      The earliest date of values to retrieve.
      - parameter endDate:        The latest date of values to retrieve. Defaults to the distant future.
      - parameter resultsHandler: A closure called once the values have been retrieved. The closure takes two arguments:
         - values: The retrieved values
         - error:  An error object explaining why the retrieval failed
      */
-    public func getRecentGlucoseValues(startDate: Date? = nil, endDate: Date? = nil, resultsHandler: @escaping (_ values: [GlucoseValue], _ error: Error?) -> Void) {
+    public func getRecentGlucoseValues(startDate: Date, endDate: Date? = nil, resultsHandler: @escaping (_ values: [GlucoseValue], _ error: Error?) -> Void) {
         getRecentGlucoseSamples(startDate: startDate, endDate: endDate) { (values, error) -> Void in
             resultsHandler(values.map { $0 }, error)
         }
@@ -293,6 +286,7 @@ public final class GlucoseStore: HealthKitSampleStore {
         let report: [String] = [
             "## GlucoseStore",
             "",
+            "* latestGlucoseValue: \(String(reflecting: latestGlucose))",
             "* managedDataInterval: \(managedDataInterval ?? 0)",
             "* reflectionDataInterval: \(reflectionDataInterval)",
             "* momentumDataInterval: \(momentumDataInterval)",
