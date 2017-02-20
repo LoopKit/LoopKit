@@ -16,11 +16,13 @@ public struct GlucoseFixtureValue: GlucoseSampleValue {
     public let startDate: Date
     public let quantity: HKQuantity
     public let isDisplayOnly: Bool
+    public let provenanceIdentifier: String
 
-    public init(startDate: Date, quantity: HKQuantity, isDisplayOnly: Bool) {
+    public init(startDate: Date, quantity: HKQuantity, isDisplayOnly: Bool, provenanceIdentifier: String?) {
         self.startDate = startDate
         self.quantity = quantity
         self.isDisplayOnly = isDisplayOnly
+        self.provenanceIdentifier = provenanceIdentifier ?? "com.loopkit.LoopKitTests"
     }
 }
 
@@ -35,7 +37,8 @@ class GlucoseMathTests: XCTestCase {
             return GlucoseFixtureValue(
                 startDate: dateFormatter.date(from: $0["date"] as! String)!,
                 quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliterUnit(), doubleValue: $0["amount"] as! Double),
-                isDisplayOnly: ($0["display_only"] as? Bool) ?? false
+                isDisplayOnly: ($0["display_only"] as? Bool) ?? false,
+                provenanceIdentifier: $0["provenance_identifier"] as? String
             )
         }
     }
@@ -109,6 +112,13 @@ class GlucoseMathTests: XCTestCase {
         }
     }
 
+    func testMomentumEffectForDuplicateGlucose() {
+        let input = loadInputFixture("momentum_effect_duplicate_glucose_input")
+        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+
+        XCTAssertEqual(0, effects.count)
+    }
+
     func testMomentumEffectForEmptyGlucose() {
         let input = [GlucoseFixtureValue]()
         let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
@@ -132,6 +142,13 @@ class GlucoseMathTests: XCTestCase {
 
     func testMomentumEffectForDisplayOnlyGlucose() {
         let input = loadInputFixture("momentum_effect_display_only_glucose_input")
+        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+
+        XCTAssertEqual(0, effects.count)
+    }
+
+    func testMomentumEffectForMixedProvenanceGlucose() {
+        let input = loadInputFixture("momentum_effect_mixed_provenance_glucose_input")
         let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
 
         XCTAssertEqual(0, effects.count)

@@ -12,4 +12,7 @@ import LoopKit
 protocol GlucoseSampleValue: GlucoseValue {
     /// Whether the glucose value was provided for visual consistency, rather than an actual, calibrated reading.
     var isDisplayOnly: Bool { get }
+
+    /// Uniquely identifies the source of the sample.
+    var provenanceIdentifier: String { get }
 }

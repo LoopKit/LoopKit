@@ -80,6 +80,22 @@ struct GlucoseMath {
         return false
     }
 
+    /// Determines whether a collection of glucose samples is all from the same source.
+    ///
+    /// - Parameter samples: The sequence of glucose
+    /// - Returns: True if the samples all have the same source
+    static func hasSingleProvenance<T: Collection>(_ samples: T) -> Bool where T.Iterator.Element: GlucoseSampleValue {
+        let firstProvenance = samples.first?.provenanceIdentifier
+
+        for sample in samples {
+            if sample.provenanceIdentifier != firstProvenance {
+                return false
+            }
+        }
+
+        return true
+    }
+
     /**
      Calculates the short-term predicted trend of a sequence of glucose values using linear regression
 
@@ -96,7 +112,7 @@ struct GlucoseMath {
     ) -> [GlucoseEffect] where T.Iterator.Element: GlucoseSampleValue, T.Index == Int, T.IndexDistance == Int {
         guard
             samples.count > 2,  // Linear regression isn't much use without 3 or more entries.
-            isContinuous(samples) && isCalibrated(samples),
+            isContinuous(samples) && isCalibrated(samples) && hasSingleProvenance(samples),
             let firstSample = samples.first,
             let lastSample = samples.last,
             let (startDate, endDate) = LoopMath.simulationDateRangeForSamples([lastSample], duration: duration, delta: delta)
@@ -110,6 +126,10 @@ struct GlucoseMath {
         ) }
 
         let (slope: slope, intercept: _) = linearRegression(xy)
+
+        guard slope.isFinite else {
+            return []
+        }
 
         var date = startDate
         var values = [GlucoseEffect]()

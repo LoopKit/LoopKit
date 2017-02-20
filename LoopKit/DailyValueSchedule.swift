@@ -151,7 +151,7 @@ public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomDe
         }
     }
 
-    func value(at time: Date) -> T {
+    public func value(at time: Date) -> T {
         return between(start: time, end: time).first!.value
     }
 
