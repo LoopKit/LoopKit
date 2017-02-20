@@ -16,4 +16,8 @@ extension HKQuantitySample: GlucoseSampleValue {
     var isDisplayOnly: Bool {
         return metadata?[MetadataKeyGlucoseIsDisplayOnly] as? Bool ?? false
     }
+
+    var provenanceIdentifier: String {
+        return sourceRevision.source.bundleIdentifier
+    }
 }
