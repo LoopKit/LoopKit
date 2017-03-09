@@ -33,17 +33,6 @@ class CarbEntryEditViewControllerTests: XCTestCase {
         sut.navigationDelegate = navigationDelegateStub
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testSanity() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        XCTAssertNotNil(sut)
-    }
-    
     func testAbsorptionValidationFailureDoesntCallSegue() {
         tableViewStub.absorptionViewCell = createAbsoprtionCell(withValue: 1000)
         

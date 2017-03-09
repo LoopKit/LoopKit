@@ -15,8 +15,12 @@ public protocol PersistedPumpEvent {
     var date: Date! { get }
     /// The insulin dose described by the event, if applicable
     var dose: DoseEntry? { get }
+    /// Whether the event has been successfully uploaded
+    var isUploaded: Bool { get }
     /// The internal identifier of the event used by the store
     var objectID: NSManagedObjectID { get }
     /// The opaque raw data representing the event
     var raw: Data? { get }
+    /// A human-readable short description of the event
+    var title: String? { get }
 }

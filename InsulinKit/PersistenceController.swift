@@ -129,7 +129,9 @@ class PersistenceController {
                         at: storeURL,
                         options: [
                             NSMigratePersistentStoresAutomaticallyOption: true,
-                            NSInferMappingModelAutomaticallyOption: true
+                            NSInferMappingModelAutomaticallyOption: true,
+                            // Data should be available on reboot before first unlock
+                            NSPersistentStoreFileProtectionKey: FileProtectionType.none
                         ]
                     )
                 } catch let storeError {
