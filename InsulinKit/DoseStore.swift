@@ -246,10 +246,15 @@ public final class DoseStore {
         if let insulinActionDuration = insulinActionDuration {
             // Consider any entries longer than 30 minutes, or with a value of 0, to be unreliable
             let maximumInterval = TimeInterval(minutes: 30)
-            let continuityStartDate = date.addingTimeInterval(-(insulinActionDuration + maximumInterval))
+            let continuityStartDate = date.addingTimeInterval(-insulinActionDuration)
 
-            if let recentReservoirObjects = try? self.getReservoirObjects(since: continuityStartDate) {
-                self.areReservoirValuesContinuous = InsulinMath.isContinuous(recentReservoirObjects.reversed(), within: maximumInterval)
+            if let recentReservoirObjects = try? self.getReservoirObjects(since: continuityStartDate - maximumInterval) {
+                self.areReservoirValuesContinuous = InsulinMath.isContinuous(
+                    recentReservoirObjects.reversed(),
+                    from: continuityStartDate,
+                    to: date,
+                    within: maximumInterval
+                )
                 return recentReservoirObjects
             }
         }
