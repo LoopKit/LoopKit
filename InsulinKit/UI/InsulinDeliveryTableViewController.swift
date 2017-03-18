@@ -140,7 +140,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
     private enum Values {
         case reservoir([ReservoirValue])
-        case history([(title: String?, event: PersistedPumpEvent, isUploaded: Bool)])
+        case history([PersistedPumpEvent])
     }
 
     // Not thread-safe
@@ -182,11 +182,12 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
             switch DataSourceSegment(rawValue: dataSourceSegmentedControl.selectedSegmentIndex)! {
             case .reservoir:
-                doseStore?.getRecentReservoirValues { [unowned self] (reservoirValues, error) -> Void in
+                doseStore?.getReservoirValues(since: Date.distantPast) { (result) in
                     DispatchQueue.main.async { () -> Void in
-                        if error != nil {
+                        switch result {
+                        case .failure(let error):
                             self.state = .unavailable(error)
-                        } else {
+                        case .success(let reservoirValues):
                             self.values = .reservoir(reservoirValues)
                             self.tableView.reloadData()
                         }
@@ -196,12 +197,13 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                     self.updateTotal()
                 }
             case .history:
-                doseStore?.getRecentPumpEventValues { (values, error) in
+                doseStore?.getPumpEventValues(since: Date.distantPast) { (result) in
                     DispatchQueue.main.async { () -> Void in
-                        if error != nil {
+                        switch result {
+                        case .failure(let error):
                             self.state = .unavailable(error)
-                        } else {
-                            self.values = .history(values)
+                        case .success(let pumpEventValues):
+                            self.values = .history(pumpEventValues)
                             self.tableView.reloadData()
                         }
                     }
@@ -237,17 +239,15 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
     private func updateIOB() {
         if case .display = state {
-            doseStore?.insulinOnBoardAtDate(Date()) { (iob, error) -> Void in
+            doseStore?.insulinOnBoard(at: Date()) { (result) -> Void in
                 DispatchQueue.main.async {
-                    if error != nil {
+                    switch result {
+                    case .failure:
                         self.iobValueLabel.text = "…"
                         self.iobDateLabel.text = nil
-                    } else if let iob = iob {
+                    case .success(let iob):
                         self.iobValueLabel.text = self.iobNumberFormatter.string(from: NSNumber(value: iob.value))
                         self.iobDateLabel.text = String(format: NSLocalizedString("com.loudnate.InsulinKit.IOBDateLabel", tableName: "InsulinKit", value: "at %1$@", comment: "The format string describing the date of an IOB value. The first format argument is the localized date."), self.timeFormatter.string(from: iob.startDate))
-                    } else {
-                        self.iobValueLabel.text = NumberFormatter.localizedString(from: 0, number: .none)
-                        self.iobDateLabel.text = nil
                     }
                 }
             }
@@ -256,18 +256,17 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
     private func updateTotal() {
         if case .display = state {
-            doseStore?.getTotalRecentUnitsDelivered { (total, date, error) -> Void in
-                DispatchQueue.main.async {
-                    if error != nil {
-                        self.state = .unavailable(error)
-                    } else {
-                        self.totalValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: total), number: .none)
+            let midnight = Calendar.current.startOfDay(for: Date())
 
-                        if let sinceDate = date {
-                            self.totalDateLabel.text = String(format: NSLocalizedString("com.loudnate.InsulinKit.totalDateLabel", tableName: "InsulinKit", value: "since %1$@", comment: "The format string describing the starting date of a total value. The first format argument is the localized date."), DateFormatter.localizedString(from: sinceDate as Date, dateStyle: .none, timeStyle: .short))
-                        } else {
-                            self.totalDateLabel.text = nil
-                        }
+            doseStore?.getTotalUnitsDelivered(since: midnight) { (result) in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .failure(let error):
+                        self.state = .unavailable(error)
+                    case .success(let result):
+                        self.totalValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: result.value), number: .none)
+
+                        self.totalDateLabel.text = String(format: NSLocalizedString("com.loudnate.InsulinKit.totalDateLabel", tableName: "InsulinKit", value: "since %1$@", comment: "The format string describing the starting date of a total value. The first format argument is the localized date."), DateFormatter.localizedString(from: result.startDate, dateStyle: .none, timeStyle: .short))
                     }
                 }
             }
@@ -314,7 +313,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
             case .reservoir(let values):
                 let entry = values[indexPath.row]
                 let volume = NumberFormatter.localizedString(from: NSNumber(value: entry.unitVolume), number: .decimal)
-                let time = timeFormatter.string(from: entry.startDate as Date)
+                let time = timeFormatter.string(from: entry.startDate)
 
                 cell.textLabel?.text = "\(volume) U"
                 cell.detailTextLabel?.text = time
@@ -322,7 +321,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 cell.selectionStyle = .none
             case .history(let values):
                 let entry = values[indexPath.row]
-                let time = timeFormatter.string(from: entry.event.date as Date)
+                let time = timeFormatter.string(from: entry.date)
 
                 cell.textLabel?.text = entry.title ?? NSLocalizedString("Unknown", comment: "The default title to use when an entry has none")
                 cell.detailTextLabel?.text = time
@@ -361,7 +360,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
                 tableView.deleteRows(at: [indexPath], with: .automatic)
 
-                doseStore?.deletePumpEvent(value.event) { (error) -> Void in
+                doseStore?.deletePumpEvent(value) { (error) -> Void in
                     if let error = error {
                         self.presentAlertController(with: error)
                         self.reloadData()
@@ -378,17 +377,17 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
             let vc = CommandResponseViewController(command: { (completionHandler) -> String in
                 var description = [String]()
 
-                description.append(self.timeFormatter.string(from: entry.event.date))
+                description.append(self.timeFormatter.string(from: entry.date))
 
                 if let title = entry.title {
                     description.append(title)
                 }
 
-                if let dose = entry.event.dose {
+                if let dose = entry.dose {
                     description.append(String(describing: dose))
                 }
 
-                if let raw = entry.event.raw {
+                if let raw = entry.raw {
                     description.append(raw.hexadecimalString)
                 }
 

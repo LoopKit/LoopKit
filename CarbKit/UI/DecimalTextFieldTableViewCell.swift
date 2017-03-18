@@ -47,8 +47,7 @@ class DecimalTextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     var number: NSNumber? {
         get {
-            let strippedField = textField.text?.replacingOccurrences(of: ",", with: "")
-            return numberFormatter.number(from: strippedField ?? "")
+            return numberFormatter.number(from: textField.text ?? "")
         }
         set {
             if let value = newValue {

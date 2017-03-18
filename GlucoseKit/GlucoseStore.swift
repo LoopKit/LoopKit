@@ -11,6 +11,12 @@ import HealthKit
 import LoopKit
 
 
+public enum GlucoseStoreResult<T> {
+    case success(T)
+    case failure(Error)
+}
+
+
 /**
  Manages storage, retrieval, and calculation of glucose data.
  
@@ -95,14 +101,14 @@ public final class GlucoseStore: HealthKitSampleStore {
         - date:          The date the sample was collected
         - isDisplayOnly: Whether the reading was shifted for visual consistency after calibration
      - parameter device:        The description of the device the collected the sample
-     - parameter resultHandler: A closure called once the glucose values were saved. The closure takes three arguments:
+     - parameter completionHandler: A closure called once the glucose values were saved. The closure takes three arguments:
         - success: Whether the sample was successfully saved
         - samples: The saved samples
         - error:   An error object explaining why the save failed
      */
-    public func addGlucoseValues(_ values: [(quantity: HKQuantity, date: Date, isDisplayOnly: Bool)], device: HKDevice?, resultHandler: @escaping (_ success: Bool, _ samples: [GlucoseValue]?, _ error: Error?) -> Void) {
+    public func addGlucoseValues(_ values: [(quantity: HKQuantity, date: Date, isDisplayOnly: Bool)], device: HKDevice?, completionHandler: @escaping (_ success: Bool, _ samples: [GlucoseValue]?, _ error: Error?) -> Void) {
         guard values.count > 0 else {
-            resultHandler(false, [], nil)
+            completionHandler(false, [], nil)
             return
         }
 
@@ -131,9 +137,9 @@ public final class GlucoseStore: HealthKitSampleStore {
                         self.latestGlucose = latestGlucose
                     }
 
-                    resultHandler(completed, sortedGlucose.map({ $0 as GlucoseValue }), error)
+                    completionHandler(completed, sortedGlucose.map({ $0 as GlucoseValue }), error)
                 } else {
-                    resultHandler(completed, [], error)
+                    completionHandler(completed, [], error)
                 }
             }
         }) 
@@ -162,44 +168,70 @@ public final class GlucoseStore: HealthKitSampleStore {
         }
     }
 
-    private func recentSamplesPredicate(startDate: Date, endDate: Date?) -> NSPredicate {
+    private func glucoseSamplesPredicate(start: Date, end: Date?) -> NSPredicate {
         return HKQuery.predicateForSamples(
-            withStart: startDate,
-            end: endDate ?? Date.distantFuture,
+            withStart: start,
+            end: end ?? Date.distantFuture,
             options: [.strictStartDate]
         )
     }
 
-    private func getCachedGlucoseSamples(startDate: Date? = nil, endDate: Date? = nil, resultsHandler: @escaping (_ samples: [HKQuantitySample], _ error: Error?) -> Void) {
-        dataAccessQueue.async {
-            let samples = self.sampleDataCache.filterDateRange(startDate, endDate)
-            resultsHandler(samples, nil)
+    private func getCachedGlucoseSamples(start: Date, end: Date? = nil, completionHandler: @escaping (_ samples: [HKQuantitySample]) -> Void) {
+        if UIApplication.shared.isProtectedDataAvailable {
+            getGlucoseSamples(start: start, end: end) { (result) in
+                switch result {
+                case .success(let samples):
+                    completionHandler(samples)
+                case .failure:
+                    completionHandler(self.sampleDataCache.filterDateRange(start, end))
+                }
+            }
+        } else {
+            dataAccessQueue.async {
+                let samples = self.sampleDataCache.filterDateRange(start, end)
+                completionHandler(samples)
+            }
         }
     }
 
-    private func getRecentGlucoseSamples(startDate: Date, endDate: Date? = nil, resultsHandler: @escaping (_ samples: [HKQuantitySample], _ error: Error?) -> Void) {
-        let predicate = recentSamplesPredicate(startDate: startDate, endDate: endDate)
+    private func getGlucoseSamples(start: Date, end: Date? = nil, completionHandler: @escaping (_ result: GlucoseStoreResult<[HKQuantitySample]>) -> Void) {
+        let predicate = glucoseSamplesPredicate(start: start, end: end)
         let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
 
         let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
 
-            if let error = error as? NSError, error.code == HKError.errorDatabaseInaccessible.rawValue {
-                self.getCachedGlucoseSamples(startDate: startDate, endDate: endDate, resultsHandler: resultsHandler)
-            } else {
-                self.dataAccessQueue.async {
-                    if let lastGlucose = samples?.last as? HKQuantitySample, self.latestGlucose == nil || self.latestGlucose!.startDate < lastGlucose.startDate {
-                        self.latestGlucose = lastGlucose
-                    }
+            self.dataAccessQueue.async {
+                if let lastGlucose = samples?.last as? HKQuantitySample, self.latestGlucose == nil || self.latestGlucose!.startDate < lastGlucose.startDate {
+                    self.latestGlucose = lastGlucose
+                }
 
-                    resultsHandler(
-                        (samples as? [HKQuantitySample]) ?? [],
-                        error
-                    )
+                if let error = error {
+                    completionHandler(.failure(error))
+                } else {
+                    completionHandler(.success((samples as? [HKQuantitySample]) ?? []))
                 }
             }
         }
 
         healthStore.execute(query)
+    }
+
+    /// Retrieves glucose values from HealthKit within the specified date range
+    ///
+    /// - Parameters:
+    ///   - start: The earliest date of values to retrieve
+    ///   - end: The latest date of values to retrieve, provided
+    ///   - completionHandler: A closure called once the values have been retrieved
+    ///   - result: An array of glucose values, in chronological order by startDate
+    public func getGlucoseValues(start: Date, end: Date? = nil, completionHandler: @escaping (_ result: GlucoseStoreResult<[GlucoseValue]>) -> Void) {
+        getGlucoseSamples(start: start, end: end) { (result) -> Void in
+            switch result {
+            case .success(let samples):
+                completionHandler(.success(samples.map { $0 }))
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+        }
     }
 
     /**
@@ -213,9 +245,15 @@ public final class GlucoseStore: HealthKitSampleStore {
         - values: The retrieved values
         - error:  An error object explaining why the retrieval failed
      */
+    @available(*, deprecated, message: "Use getGlucoseValues(start:end:completionHandler:) instead")
     public func getRecentGlucoseValues(startDate: Date, endDate: Date? = nil, resultsHandler: @escaping (_ values: [GlucoseValue], _ error: Error?) -> Void) {
-        getRecentGlucoseSamples(startDate: startDate, endDate: endDate) { (values, error) -> Void in
-            resultsHandler(values.map { $0 }, error)
+        getGlucoseValues(start: startDate, end: endDate) { (result) in
+            switch result {
+            case .success(let samples):
+                resultsHandler(samples, nil)
+            case .failure(let error):
+                resultsHandler([], error)
+            }
         }
     }
 
@@ -234,31 +272,39 @@ public final class GlucoseStore: HealthKitSampleStore {
 
     /**
      Calculates the momentum effect for recent glucose values
-     
+
+     The duration of effect data returned is determined by the `momentumDataInterval`, and the delta between data points is 5 minutes.
+
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
-     - parameter resultsHandler: A closure called once the calculation has completed. The closure takes two arguments:
-        - effects: The calculated effect values
-        - error:   An error explaining why the calculation failed
+     - Parameters:
+        - completionHandler: A closure called once the calculation has completed. The closure takes two arguments:
+        - effects: The calculated effect values, or an empty array if the glucose data isn't suitable for momentum calculation.
+        - error:   Error is always nil
      */
-    public func getRecentMomentumEffect(_ resultsHandler: @escaping (_ effects: [GlucoseEffect], _ error: Error?) -> Void) {
-        getRecentGlucoseSamples(startDate: Date(timeIntervalSinceNow: -momentumDataInterval), endDate: Date.distantFuture) { (samples, error) -> Void in
+    public func getRecentMomentumEffect(_ completionHandler: @escaping (_ effects: [GlucoseEffect], _ error: Error?) -> Void) {
+        getCachedGlucoseSamples(start: Date(timeIntervalSinceNow: -momentumDataInterval)) { (samples) in
             self.unionSampleDataCache(with: samples)
-            resultsHandler(GlucoseMath.linearMomentumEffectForGlucoseEntries(samples), error)
+            let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(samples,
+                duration: self.momentumDataInterval,
+                delta: TimeInterval(minutes: 5)
+            )
+            completionHandler(effects, nil)
         }
     }
 
     /**
      Calculates the recent change in glucose values
- 
+
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
- 
-     - parameter resultsHandler: A closure called once the calculation has completed. The closure takes two arguments:
-        - values:       The first and last glucose values in the requested period
-        - error:        An error explaining why the calculation failed
+
+     - Parameters:
+        - completionHandler: A closure called once the calculation has completed. The closure takes two arguments:
+        - values:       The first and last glucose values in the requested period, or nil if the glucose data is missing or contains a calibration shift
+        - error:        Error is always nil
      */
-    public func getRecentGlucoseChange(_ resultsHandler: @escaping (_ values: (GlucoseValue, GlucoseValue)?, _ error: Error?) -> Void) {
-        getRecentGlucoseSamples(startDate: Date(timeIntervalSinceNow: -reflectionDataInterval), endDate: Date.distantFuture) { (samples, error) in
+    public func getRecentGlucoseChange(_ completionHandler: @escaping (_ values: (GlucoseValue, GlucoseValue)?, _ error: Error?) -> Void) {
+        getCachedGlucoseSamples(start: Date(timeIntervalSinceNow: -reflectionDataInterval)) { (samples) in
             self.unionSampleDataCache(with: samples)
 
             let change: (GlucoseValue, GlucoseValue)?
@@ -273,7 +319,7 @@ public final class GlucoseStore: HealthKitSampleStore {
                 change = nil
             }
 
-            resultsHandler(change, error)
+            completionHandler(change, nil)
         }
     }
 

@@ -170,9 +170,7 @@ struct InsulinMath {
                         startDate: previousValue.startDate,
                         endDate: value.startDate,
                         value: volumeDrop * TimeInterval(hours: 1) / duration,
-                        unit: .unitsPerHour,
-                        // TODO: Get rid of this property or properly localize it
-                        description: "Reservoir decreased \(numberFormatter.string(from: NSNumber(value: volumeDrop)) ?? String(volumeDrop))U over \(numberFormatter.string(from: NSNumber(value: duration.minutes)) ?? String(duration.minutes))min"
+                        unit: .unitsPerHour
                     ))
                 }
             }
@@ -195,12 +193,17 @@ struct InsulinMath {
      
      - returns: Whether the reservoir values meet the critera for continuity
      */
-    static func isContinuous<T: Collection>(_ values: T, from startDate: Date, to endDate: Date = Date(), within maximumDuration: TimeInterval = TimeInterval(minutes: 30)) -> Bool where T.Iterator.Element: ReservoirValue {
-
-        // The first value has to be at least as old as the start date, as a reference point.
-        guard let firstValue = values.first, firstValue.endDate <= startDate else {
+    static func isContinuous<T: Collection>(_ values: T, from startDate: Date? = nil, to endDate: Date = Date(), within maximumDuration: TimeInterval = TimeInterval(minutes: 30)) -> Bool where T.Iterator.Element: ReservoirValue {
+        guard let firstValue = values.first else {
             return false
         }
+
+        // The first value has to be at least as old as the start date, as a reference point.
+        let startDate = startDate ?? firstValue.endDate
+        guard firstValue.endDate <= startDate else {
+            return false
+        }
+
         var lastValue = firstValue
 
         for value in values {
