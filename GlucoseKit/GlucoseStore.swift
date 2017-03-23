@@ -137,7 +137,7 @@ public final class GlucoseStore: HealthKitSampleStore {
                         self.latestGlucose = latestGlucose
                     }
 
-                    completionHandler(completed, sortedGlucose.map({ $0 as GlucoseValue }), error)
+                    completionHandler(completed, sortedGlucose, error)
                 } else {
                     completionHandler(completed, [], error)
                 }
@@ -227,7 +227,7 @@ public final class GlucoseStore: HealthKitSampleStore {
         getGlucoseSamples(start: start, end: end) { (result) -> Void in
             switch result {
             case .success(let samples):
-                completion(.success(samples.map { $0 }))
+                completion(.success(samples))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -243,7 +243,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     ///   - values: An array of glucose values, in chronological order by startDate
     public func getCachedGlucoseValues(start: Date, end: Date? = nil, completion: @escaping (_ values: [GlucoseValue]) -> Void) {
         getCachedGlucoseSamples(start: start, end: end) { (samples) in
-            completion(samples.map({ $0 }))
+            completion(samples)
         }
     }
 

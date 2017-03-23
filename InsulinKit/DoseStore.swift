@@ -388,7 +388,7 @@ public final class DoseStore {
             do {
                 let objects = try self.getReservoirObjects(since: startDate)
 
-                completionHandler(.success(objects.map({ $0 as ReservoirValue })))
+                completionHandler(.success(objects))
             } catch let error as DoseStoreError {
                 completionHandler(.failure(error))
             } catch {
@@ -487,7 +487,7 @@ public final class DoseStore {
             }
 
             self.clearReservoirNormalizedDoseCache()
-            completionHandler(deletedObjects.map { $0 }, error)
+            completionHandler(deletedObjects, error)
 
             NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
         }
@@ -648,9 +648,7 @@ public final class DoseStore {
 
         isUploadRequestPending = true
 
-        let events = objects.map { $0 as PersistedPumpEvent }
-
-        delegate.doseStore(self, hasEventsNeedingUpload: events, fromPumpID: pumpID) { (uploadedObjects) in
+        delegate.doseStore(self, hasEventsNeedingUpload: objects, fromPumpID: pumpID) { (uploadedObjects) in
             context.perform {
                 for id in uploadedObjects {
                     guard let object = try? context.existingObject(with: id), let event = object as? PumpEvent else {
