@@ -402,7 +402,7 @@ public final class CarbStore: HealthKitSampleStore {
      */
     public func getRecentCarbEntries(startDate: Date? = nil, endDate: Date? = nil, resultsHandler: @escaping (_ entries: [CarbEntry], _ error: Error?) -> Void) {
         getRecentCarbSamples(startDate: startDate, endDate: endDate) { (entries, error) -> Void in
-            resultsHandler(entries.map { $0 }, error)
+            resultsHandler(entries, error)
         }
     }
 
@@ -594,7 +594,7 @@ public final class CarbStore: HealthKitSampleStore {
                     delta: self.delta
                 )
 
-                resultHandler(self.carbsOnBoardCache?.filterDateRange(startDate, endDate).map { $0 } ?? [], nil)
+                resultHandler(self.carbsOnBoardCache?.filterDateRange(startDate, endDate) ?? [], nil)
             } else {
                 resultHandler(self.carbsOnBoardCache?.filterDateRange(startDate, endDate) ?? [], nil)
             }

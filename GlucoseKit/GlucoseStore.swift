@@ -137,7 +137,7 @@ public final class GlucoseStore: HealthKitSampleStore {
                         self.latestGlucose = latestGlucose
                     }
 
-                    completionHandler(completed, sortedGlucose.map({ $0 as GlucoseValue }), error)
+                    completionHandler(completed, sortedGlucose, error)
                 } else {
                     completionHandler(completed, [], error)
                 }
@@ -220,17 +220,30 @@ public final class GlucoseStore: HealthKitSampleStore {
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
-    ///   - end: The latest date of values to retrieve, provided
-    ///   - completionHandler: A closure called once the values have been retrieved
+    ///   - end: The latest date of values to retrieve, if provided
+    ///   - completion: A closure called once the values have been retrieved
     ///   - result: An array of glucose values, in chronological order by startDate
-    public func getGlucoseValues(start: Date, end: Date? = nil, completionHandler: @escaping (_ result: GlucoseStoreResult<[GlucoseValue]>) -> Void) {
+    public func getGlucoseValues(start: Date, end: Date? = nil, completion: @escaping (_ result: GlucoseStoreResult<[GlucoseValue]>) -> Void) {
         getGlucoseSamples(start: start, end: end) { (result) -> Void in
             switch result {
             case .success(let samples):
-                completionHandler(.success(samples.map { $0 }))
+                completion(.success(samples))
             case .failure(let error):
-                completionHandler(.failure(error))
+                completion(.failure(error))
             }
+        }
+    }
+
+    /// Retrieves glucose values from either HealthKit or the in-memory cache.
+    ///
+    /// - Parameters:
+    ///   - start: The earliest date of values to retrieve
+    ///   - end: The latest date of values to retrieve, if provided
+    ///   - completion: A closure called once the values have been retrieved
+    ///   - values: An array of glucose values, in chronological order by startDate
+    public func getCachedGlucoseValues(start: Date, end: Date? = nil, completion: @escaping (_ values: [GlucoseValue]) -> Void) {
+        getCachedGlucoseSamples(start: start, end: end) { (samples) in
+            completion(samples)
         }
     }
 
