@@ -3,16 +3,18 @@
 //  LoopKit
 //
 //  Created by Nate Racklyeft on 8/1/16.
-//  Copyright © 2016 Nathan Racklyeft. All rights reserved.
-//
-//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
-//  to delete and recreate this implementation file for your updated model.
+//  Copyright © 2017 LoopKit Authors. All rights reserved.
 //
 
 import Foundation
 import CoreData
 
+
 extension PumpEvent {
+
+    @nonobjc class func fetchRequest() -> NSFetchRequest<PumpEvent> {
+        return NSFetchRequest<PumpEvent>(entityName: "PumpEvent");
+    }
 
     @NSManaged var createdAt: Date!
     @NSManaged var date: Date!

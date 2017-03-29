@@ -131,6 +131,10 @@ extension PumpEvent {
             unit = entry.unit
         }
     }
+
+    var isUploaded: Bool {
+        return uploaded
+    }
 }
 
 

@@ -45,11 +45,11 @@ class PersistenceController {
         return privateManagedObjectContext
     }
 
-    init(readyCallback: @escaping (_ error: PersistenceControllerError?) -> Void) {
+    init(databasePath: String = "com.loudnate.InsulinKit", readyCallback: @escaping (_ error: PersistenceControllerError?) -> Void) {
         privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         privateManagedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
 
-        initializeStack(readyCallback)
+        initializeStack(atPath: databasePath, readyCallback)
 
         didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(forName: .UIApplicationDidEnterBackground, object: UIApplication.shared, queue: nil, using: handleSave)
         willResignActiveNotificationObserver = NotificationCenter.default.addObserver(forName: .UIApplicationWillResignActive, object: UIApplication.shared, queue: nil, using: handleSave)
@@ -98,7 +98,7 @@ class PersistenceController {
 
     // MARK: - 
 
-    private func initializeStack(_ readyCallback: @escaping (_ error: PersistenceControllerError?) -> Void) {
+    private func initializeStack(atPath path: String, _ readyCallback: @escaping (_ error: PersistenceControllerError?) -> Void) {
         privateManagedObjectContext.perform {
             var error: PersistenceControllerError?
 
@@ -108,10 +108,7 @@ class PersistenceController {
 
             self.privateManagedObjectContext.persistentStoreCoordinator = coordinator
 
-            let bundle = Bundle(for: type(of: self))
-
-            if let  bundleIdentifier = bundle.bundleIdentifier,
-                    let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(bundleIdentifier, isDirectory: true)
+            if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(path, isDirectory: true)
             {
                 if !FileManager.default.fileExists(atPath: documentsURL.absoluteString) {
                     do {
@@ -129,14 +126,16 @@ class PersistenceController {
                         at: storeURL,
                         options: [
                             NSMigratePersistentStoresAutomaticallyOption: true,
-                            NSInferMappingModelAutomaticallyOption: true
+                            NSInferMappingModelAutomaticallyOption: true,
+                            // Data should be available on reboot before first unlock
+                            NSPersistentStoreFileProtectionKey: FileProtectionType.none
                         ]
                     )
                 } catch let storeError {
                     error = .coreDataError(storeError)
                 }
             } else {
-                error = .configurationError("Cannot configure persistent store for bundle: \(bundle.bundleIdentifier) in directory: \(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))")
+                error = .configurationError("Cannot configure persistent store for path: \(path) in directory: \(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))")
             }
 
             readyCallback(error)
