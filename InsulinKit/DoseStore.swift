@@ -1142,7 +1142,7 @@ public final class DoseStore {
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
             "* areReservoirValuesContinuous: \(areReservoirValuesContinuous)",
-            "* totalDeliveryCache: \(totalDeliveryCache)"
+            "* totalDeliveryCache: \(String(describing: totalDeliveryCache))"
         ]
 
         getReservoirValues(since: Date.distantPast) { (result) in
