@@ -367,7 +367,7 @@ public final class CarbStore: HealthKitSampleStore {
 
             let query = HKSampleQuery(sampleType: carbType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
 
-                if let error = error as? NSError, error.code == HKError.errorDatabaseInaccessible.rawValue {
+                if let error = error as NSError?, error.code == HKError.errorDatabaseInaccessible.rawValue {
                     self.dataAccessQueue.async {
                         resultsHandler(self.carbEntryCache.filterDateRange(startDate, endDate), nil)
                     }
