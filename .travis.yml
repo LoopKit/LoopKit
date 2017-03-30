@@ -1,5 +1,5 @@
 language: objective-c
-osx_image: xcode8.2
+osx_image: xcode8.3
 xcode_sdk: iphonesimulator10.2
 xcode_project: LoopKit.xcodeproj
 xcode_scheme:
