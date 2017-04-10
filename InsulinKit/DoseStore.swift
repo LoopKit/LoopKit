@@ -1017,14 +1017,13 @@ public final class DoseStore {
 
      - parameter startDate:     The earliest date of effects to retrieve. The earliest supported value is the previous midnight in the current time zone.
      - parameter endDate:       The latest date of effects to retrieve. Defaults to the distant future.
-     - parameter basalDosingEnd: The date at which continuing doses should be assumed to be cancelled
      - parameter resultHandler: A closure called once the effects have been retrieved. The closure takes two arguments:
         - effects: The retrieved timeline of effects
         - error:   An error object explaining why the retrieval failed
      */
     @available(*, deprecated, message: "Use getGlucoseEffects(start:end:completionHandler:) instead")
-    public func getGlucoseEffects(startDate: Date, endDate: Date? = nil, basalDosingEnd: Date? = Date(), resultHandler: @escaping (_ effects: [GlucoseEffect], _ error: DoseStoreError?) -> Void) {
-        getGlucoseEffects(start: startDate, end: endDate, basalDosingEnd: basalDosingEnd) { (result) in
+    public func getGlucoseEffects(startDate: Date, endDate: Date? = nil, resultHandler: @escaping (_ effects: [GlucoseEffect], _ error: DoseStoreError?) -> Void) {
+        getGlucoseEffects(start: startDate, end: endDate) { (result) in
             switch result {
             case .failure(let error):
                 resultHandler([], error)
