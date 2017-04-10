@@ -987,7 +987,7 @@ public final class DoseStore {
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
-    ///   - parameter basalDosingEnd: The date at which continuing doses should be assumed to be cancelled
+    ///   - basalDosingEnd: The date at which continuing doses should be assumed to be cancelled
     ///   - completionHandler: A closure called once the values have been retrieved
     ///   - result: An array of insulin values, in chronological order
     public func getInsulinOnBoardValues(start: Date, end: Date? = nil, basalDosingEnd: Date? = nil,completionHandler: @escaping (_ result: DoseStoreResult<[InsulinValue]>) -> Void) {
@@ -1041,7 +1041,7 @@ public final class DoseStore {
     /// - Parameters:
     ///   - start: The earliest date of effects to retrieve
     ///   - end: The latest date of effects to retrieve, if provided
-    ///   - parameter basalDosingEnd: The date at which continuing doses should be assumed to be cancelled
+    ///   - basalDosingEnd: The date at which continuing doses should be assumed to be cancelled
     ///   - completionHandler: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completionHandler: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
