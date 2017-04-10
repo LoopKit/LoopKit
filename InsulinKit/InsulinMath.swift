@@ -494,31 +494,20 @@ struct InsulinMath {
 
     static func trimContinuingDoses<T: Collection>(_ doses: T, endDate: Date?) -> [DoseEntry] where T.Iterator.Element == DoseEntry {
 
-        guard let endDate = endDate else {
-            return doses as! [DoseEntry]
-        }
+        return doses.map {
 
-        var trimmed: [DoseEntry] = []
-
-        for dose in doses {
-            switch dose.type {
-            case .tempBasal:
-                if dose.endDate > endDate {
-                    trimmed.append(DoseEntry(
-                        type: dose.type,
-                        startDate: dose.startDate,
-                        endDate: endDate,
-                        value: dose.value,
-                        unit: dose.unit,
-                        description: dose.description
-                    ))
-                } else {
-                    trimmed.append(dose)
-                }
-            default:
-                trimmed.append(dose)
+            if let endDate = endDate, $0.type == .tempBasal, $0.endDate > endDate {
+                return DoseEntry(
+                    type: $0.type,
+                    startDate: $0.startDate,
+                    endDate: endDate,
+                    value: $0.value,
+                    unit: $0.unit,
+                    description: $0.description)
+            } else {
+                return $0
             }
         }
-        return trimmed
+
     }
 }

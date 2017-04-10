@@ -362,6 +362,7 @@ class InsulinMathTests: XCTestCase {
         let trimmed = InsulinMath.trimContinuingDoses(input, endDate: endDate)
 
         XCTAssertEqual(endDate, trimmed.last!.endDate)
+        XCTAssertEqual(input.count, trimmed.count)
     }
 
 }
