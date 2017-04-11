@@ -1,14 +1,14 @@
 language: objective-c
-osx_image: xcode8.2
-xcode_sdk: iphonesimulator10.2
-xcode_project: LoopKit.xcodeproj
+osx_image: xcode8.3
+#xcode_sdk: iphonesimulator10.2
+#xcode_project: LoopKit.xcodeproj
 xcode_scheme:
     - LoopKit
     - CarbKit
     - InsulinKit
     - GlucoseKit
 script:
-   - xcodebuild -project LoopKit.xcodeproj -scheme LoopKit -sdk iphonesimulator10.2 build -destination 'name=iPhone SE' test
-   - xcodebuild -project LoopKit.xcodeproj -scheme CarbKit -sdk iphonesimulator10.2 build -destination 'name=iPhone SE' test
-   - xcodebuild -project LoopKit.xcodeproj -scheme InsulinKit -sdk iphonesimulator10.2 build -destination 'name=iPhone SE' test
-   - xcodebuild -project LoopKit.xcodeproj -scheme GlucoseKit -sdk iphonesimulator10.2 build -destination 'name=iPhone SE' test
+   - xcodebuild -project LoopKit.xcodeproj -scheme LoopKit build -destination 'name=iPhone SE' test
+   - xcodebuild -project LoopKit.xcodeproj -scheme CarbKit  build -destination 'name=iPhone SE' test
+   - xcodebuild -project LoopKit.xcodeproj -scheme InsulinKit build -destination 'name=iPhone SE' test
+   - xcodebuild -project LoopKit.xcodeproj -scheme GlucoseKit build -destination 'name=iPhone SE' test
