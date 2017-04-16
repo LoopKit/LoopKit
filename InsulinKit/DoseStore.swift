@@ -987,9 +987,10 @@ public final class DoseStore {
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
+    ///   - basalDosingEnd: The date at which continuing doses should be assumed to be cancelled
     ///   - completionHandler: A closure called once the values have been retrieved
     ///   - result: An array of insulin values, in chronological order
-    public func getInsulinOnBoardValues(start: Date, end: Date? = nil, completionHandler: @escaping (_ result: DoseStoreResult<[InsulinValue]>) -> Void) {
+    public func getInsulinOnBoardValues(start: Date, end: Date? = nil, basalDosingEnd: Date? = nil,completionHandler: @escaping (_ result: DoseStoreResult<[InsulinValue]>) -> Void) {
         guard let insulinActionDuration = self.insulinActionDuration else {
             completionHandler(.failure(.configurationError))
             return
@@ -1002,7 +1003,8 @@ public final class DoseStore {
             case .failure(let error):
                 completionHandler(.failure(error))
             case .success(let doses):
-                let insulinOnBoard = InsulinMath.insulinOnBoardForDoses(doses, actionDuration: insulinActionDuration)
+                let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
+                let insulinOnBoard = InsulinMath.insulinOnBoardForDoses(trimmedDoses, actionDuration: insulinActionDuration)
                 completionHandler(.success(insulinOnBoard.filterDateRange(start, end)))
             }
         }
@@ -1038,9 +1040,10 @@ public final class DoseStore {
     /// - Parameters:
     ///   - start: The earliest date of effects to retrieve
     ///   - end: The latest date of effects to retrieve, if provided
+    ///   - basalDosingEnd: The date at which continuing doses should be assumed to be cancelled
     ///   - completionHandler: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
-    public func getGlucoseEffects(start: Date, end: Date? = nil, completionHandler: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
+    public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completionHandler: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
         guard let insulinActionDuration = self.insulinActionDuration,
               let insulinSensitivitySchedule = self.insulinSensitivitySchedule
         else {
@@ -1055,7 +1058,8 @@ public final class DoseStore {
             case .failure(let error):
                 completionHandler(.failure(error))
             case .success(let doses):
-                let glucoseEffects = InsulinMath.glucoseEffectsForDoses(doses, actionDuration: insulinActionDuration, insulinSensitivity: insulinSensitivitySchedule)
+                let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
+                let glucoseEffects = InsulinMath.glucoseEffectsForDoses(trimmedDoses, actionDuration: insulinActionDuration, insulinSensitivity: insulinSensitivitySchedule)
                 completionHandler(.success(glucoseEffects.filterDateRange(start, end)))
             }
         }
