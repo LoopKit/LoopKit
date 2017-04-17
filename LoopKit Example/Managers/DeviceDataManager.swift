@@ -23,7 +23,6 @@ class DeviceDataManager : CarbStoreDelegate {
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )
         doseStore = DoseStore(
-            pumpID: pumpID,
             insulinActionDuration: insulinActionDuration,
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
@@ -84,7 +83,9 @@ class DeviceDataManager : CarbStoreDelegate {
         didSet {
             UserDefaults.standard.pumpID = pumpID
 
-            doseStore.pumpID = pumpID
+            if pumpID != oldValue {
+                doseStore.resetPumpData()
+            }
         }
     }
 

@@ -19,7 +19,6 @@ extension Reservoir {
     @NSManaged var createdAt: Date!
     @NSManaged var date: Date!
     @NSManaged var primitiveVolume: NSNumber?
-    @NSManaged var pumpID: String!
     @NSManaged var raw: Data?
 
 }

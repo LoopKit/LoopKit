@@ -39,59 +39,25 @@ class PersistenceController {
         }
     }
 
-    private let privateManagedObjectContext: NSManagedObjectContext
+    let managedObjectContext: NSManagedObjectContext
 
-    var managedObjectContext: NSManagedObjectContext {
-        return privateManagedObjectContext
-    }
-
-    init(databasePath: String = "com.loudnate.InsulinKit", readyCallback: @escaping (_ error: PersistenceControllerError?) -> Void) {
-        privateManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        privateManagedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
+    init(databasePath: String, readyCallback: @escaping (_ error: PersistenceControllerError?) -> Void) {
+        managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
 
         initializeStack(atPath: databasePath, readyCallback)
-
-        didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(forName: .UIApplicationDidEnterBackground, object: UIApplication.shared, queue: nil, using: handleSave)
-        willResignActiveNotificationObserver = NotificationCenter.default.addObserver(forName: .UIApplicationWillResignActive, object: UIApplication.shared, queue: nil, using: handleSave)
-        willTerminateNotificationObserver = NotificationCenter.default.addObserver(forName: .UIApplicationWillTerminate, object: UIApplication.shared, queue: nil, using: handleSave)
     }
 
-    deinit {
-        for observer in [didEnterBackgroundNotificationObserver, willResignActiveNotificationObserver, willTerminateNotificationObserver] where observer != nil {
-            NotificationCenter.default.removeObserver(observer!)
-        }
-    }
-
-    private var didEnterBackgroundNotificationObserver: Any?
-    private var willResignActiveNotificationObserver: Any?
-    private var willTerminateNotificationObserver: Any?
-
-    private func handleSave(_ note: Notification) {
-        var taskID: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
-
-        taskID = UIApplication.shared.beginBackgroundTask (expirationHandler: { () -> Void in
-            UIApplication.shared.endBackgroundTask(taskID)
-        })
-
-        if taskID != UIBackgroundTaskInvalid {
-            save({ (error) -> Void in
-                // Log the error?
-
-                UIApplication.shared.endBackgroundTask(taskID)
-            })
-        }
-    }
-
-    func save(_ completionHandler: @escaping (_ error: PersistenceControllerError?) -> Void) {
-        self.privateManagedObjectContext.perform { [unowned self] in
+    func save(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) {
+        self.managedObjectContext.perform { [unowned self] in
             do {
-                if self.privateManagedObjectContext.hasChanges {
-                    try self.privateManagedObjectContext.save()
+                if self.managedObjectContext.hasChanges {
+                    try self.managedObjectContext.save()
                 }
 
-                completionHandler(nil)
+                completion?(nil)
             } catch let saveError {
-                completionHandler(.coreDataError(saveError))
+                completion?(.coreDataError(saveError))
             }
         }
     }
@@ -99,14 +65,14 @@ class PersistenceController {
     // MARK: - 
 
     private func initializeStack(atPath path: String, _ readyCallback: @escaping (_ error: PersistenceControllerError?) -> Void) {
-        privateManagedObjectContext.perform {
+        managedObjectContext.perform {
             var error: PersistenceControllerError?
 
             let modelURL = Bundle(for: type(of: self)).url(forResource: "Model", withExtension: "momd")!
             let model = NSManagedObjectModel(contentsOf: modelURL)!
             let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
 
-            self.privateManagedObjectContext.persistentStoreCoordinator = coordinator
+            self.managedObjectContext.persistentStoreCoordinator = coordinator
 
             if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(path, isDirectory: true)
             {
