@@ -23,4 +23,6 @@ public protocol PersistedPumpEvent {
     var raw: Data? { get }
     /// A human-readable short description of the event
     var title: String? { get }
+    /// The type of pump event
+    var type: PumpEventType? { get }
 }
