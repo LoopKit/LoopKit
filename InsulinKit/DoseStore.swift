@@ -248,8 +248,16 @@ public final class DoseStore {
 
     // Whether the current recent state of the stored reservoir data is considered
     // continuous and reliable for the derivation of insulin effects
-    public private(set) var areReservoirValuesContinuous = false
-
+    public var areReservoirValuesValid: Bool {
+        return areReservoirValuesContinuous && !primeEventExistsWithinInsulinOnboardTime
+    }
+    
+    // Are the reservoir values continuous enough to make a accurate derivation of insulin effects
+    private(set) var areReservoirValuesContinuous = false
+    
+    // Does a prime event exist during Insulin Onboard time that would make reservoir values unusable
+    private(set) var primeEventExistsWithinInsulinOnboardTime = false
+    
     /// Validates the current reservoir data for reliability in glucose effect calculation at the specified date
     ///
     /// *This method should only be called from within a managed object context block.*
@@ -266,20 +274,23 @@ public final class DoseStore {
             if  let recentReservoirObjects = try? self.getReservoirObjects(since: continuityStartDate - maximumInterval),
                 let oldestRelevantReservoirObject = recentReservoirObjects.last
             {
-                // If we find that reservoir timestamps are continuous, also make sure that there weren't any recent prime events.
-                // The order of these two checks is intentional, since not all users may regularly update pump events.
+                // Verify reservoir timestamps are continuous
                 self.areReservoirValuesContinuous = InsulinMath.isContinuous(
                     recentReservoirObjects.reversed(),
                     from: continuityStartDate,
                     to: date,
                     within: maximumInterval
-                ) && lastPrimeEventDate < oldestRelevantReservoirObject.startDate
+                )
+                
+                // also make sure prime events don't exist withing the Insulin On Board time
+                self.primeEventExistsWithinInsulinOnboardTime = lastPrimeEventDate >= oldestRelevantReservoirObject.startDate
 
                 return recentReservoirObjects
             }
         }
 
         self.areReservoirValuesContinuous = false
+        self.primeEventExistsWithinInsulinOnboardTime = false
         return []
     }
 
@@ -350,7 +361,7 @@ public final class DoseStore {
                 completionHandler(
                     reservoir,
                     previousValue,
-                    self.areReservoirValuesContinuous,
+                    self.areReservoirValuesValid,
                     saveError
                 )
 
@@ -838,7 +849,7 @@ public final class DoseStore {
             do {
                 let doses: [DoseEntry]
                 // Reservoir data is used only if its continuous and we haven't seen pump events in the last 20 minutes
-                if self.areReservoirValuesContinuous && self.lastAddedPumpEvents.timeIntervalSinceNow < -TimeInterval(minutes: 20) {
+                if self.areReservoirValuesValid && self.lastAddedPumpEvents.timeIntervalSinceNow < -TimeInterval(minutes: 20) {
                     doses = try self.getNormalizedReservoirDoseEntries(start: start, end: end)
                 } else {
                     doses = try self.getNormalizedPumpEventDoseEntries(start: start, end: end)
@@ -1080,6 +1091,7 @@ public final class DoseStore {
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
             "* areReservoirValuesContinuous: \(areReservoirValuesContinuous)",
+            "* primeEventExistsWithinInsulinOnboardTime: \(primeEventExistsWithinInsulinOnboardTime)",
             "* totalDeliveryCache: \(String(describing: totalDeliveryCache))",
             "* lastPrimeEventDate: \(lastPrimeEventDate)",
         ]
