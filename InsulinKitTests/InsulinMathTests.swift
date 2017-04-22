@@ -352,4 +352,17 @@ class InsulinMathTests: XCTestCase {
 
         XCTAssertEqualWithAccuracy(18.8, output, accuracy: pow(10, -2))
     }
+
+    func testTrimContinuingDoses() {
+        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let input = loadDoseFixture("normalized_doses")
+
+        // Last temp ends at 2015-10-15T18:14:35
+        let endDate = dateFormatter.date(from: "2015-10-15T18:00:00")!
+        let trimmed = InsulinMath.trimContinuingDoses(input, endDate: endDate)
+
+        XCTAssertEqual(endDate, trimmed.last!.endDate)
+        XCTAssertEqual(input.count, trimmed.count)
+    }
+
 }
