@@ -600,6 +600,8 @@ public final class DoseStore {
             } else {
                 self.pumpEventQueryAfterDate = self.recentValuesStartDate ?? .distantPast
             }
+            
+            self.invalidateLastPrimeEvent()
 
             self.persistenceController.save { (error) in
                 completion(DoseStoreError(error: error))
