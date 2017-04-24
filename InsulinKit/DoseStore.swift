@@ -147,9 +147,6 @@ public final class DoseStore {
                         self.pumpEventQueryAfterDate = lastEvent.date
                     }
 
-                    // Warm the state of pump event data, looking for prime events, before validating reservoir continuity
-                    //self.lastPrimeEventDate = self.getLastPrimeEventDateFromStore()
-
                     // Warm the state of the reservoir data.
                     // These are in reverse-chronological order
                     // To populate `lastReservoirVolumeDrop`, we set the most recent 2 in-order.
