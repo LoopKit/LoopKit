@@ -148,14 +148,7 @@ public final class DoseStore {
                     }
 
                     // Warm the state of pump event data, looking for prime events, before validating reservoir continuity
-                    if  let pumpEvents = try? self.getPumpEventObjects(
-                            matching: NSPredicate(format: "type = %@", PumpEventType.prime.rawValue),
-                            chronological: false
-                        ),
-                        let lastPrimeEvent = pumpEvents.first
-                    {
-                        self.lastPrimeEventDate = lastPrimeEvent.date
-                    }
+                    //self.lastPrimeEventDate = self.getLastPrimeEventDateFromStore()
 
                     // Warm the state of the reservoir data.
                     // These are in reverse-chronological order
@@ -283,7 +276,7 @@ public final class DoseStore {
                 )
                 
                 // also make sure prime events don't exist withing the Insulin On Board time
-                self.primeEventExistsWithinInsulinOnboardTime = lastPrimeEventDate >= oldestRelevantReservoirObject.startDate
+                self.primeEventExistsWithinInsulinOnboardTime = getLastPrimeEventDate() >= oldestRelevantReservoirObject.startDate
 
                 return recentReservoirObjects
             }
@@ -516,7 +509,7 @@ public final class DoseStore {
     /// The last time `addPumpEvents` was called, used to estimate recency of data.
     private var lastAddedPumpEvents = Date.distantPast
 
-    /// The date of the most recent pump prime event, if known
+    /// The date of the most recent pump prime event, if known. This value should not be read directly use getLastPrimeEventDate()
     private var lastPrimeEventDate = Date.distantPast
 
     /// The last-seen mutable pump events, which aren't persisted but are used for dose calculation.
@@ -543,7 +536,7 @@ public final class DoseStore {
         persistenceController.managedObjectContext.perform { [unowned self] in
             var lastFinalDate: Date?
             var firstMutableDate: Date?
-            var lastPrimeEventDate: Date?
+            var primeValueAdded = false
 
             var mutablePumpEventDoses: [DoseEntry] = []
 
@@ -551,7 +544,7 @@ public final class DoseStore {
             for event in events {
                 if let dose = event.dose {
                     if dose.type == PumpEventType.prime {
-                        lastPrimeEventDate = max(event.date, lastPrimeEventDate ?? event.date)
+                        primeValueAdded = true
                     }
                 }
 
@@ -581,8 +574,8 @@ public final class DoseStore {
                 self.pumpEventQueryAfterDate = finalDate
             }
 
-            if let lastPrimeEventDate = lastPrimeEventDate {
-                self.lastPrimeEventDate = lastPrimeEventDate
+            if primeValueAdded {
+                self.invalidateLastPrimeEvent()
                 self.validateReservoirContinuity()
             }
 
@@ -1095,7 +1088,7 @@ public final class DoseStore {
             "* areReservoirValuesContinuous: \(areReservoirValuesContinuous)",
             "* primeEventExistsWithinInsulinOnboardTime: \(primeEventExistsWithinInsulinOnboardTime)",
             "* totalDeliveryCache: \(String(describing: totalDeliveryCache))",
-            "* lastPrimeEventDate: \(lastPrimeEventDate)",
+            "* lastPrimeEventDate: \(getLastPrimeEventDate())",
         ]
 
         getReservoirValues(since: Date.distantPast) { (result) in
@@ -1145,5 +1138,40 @@ public final class DoseStore {
                 }
             }
         }
+    }
+    
+    /// Flag the existing last prime event date as invalid
+    func invalidateLastPrimeEvent() {
+        lastPrimeEventDate = Date.distantPast
+    }
+    
+    func lastPrimeEventDateIsValid() -> Bool {
+        return lastPrimeEventDate > Date.distantPast
+    }
+    
+    /// Get the date of the last prime event. Updates from CoreData if value is invalid
+    ///
+    /// - Returns: Date of the last Prime Event, or Distant Past if none found
+    func getLastPrimeEventDate() -> Date {
+        if !lastPrimeEventDateIsValid() {
+            lastPrimeEventDate = getLastPrimeEventDateFromStore()
+        }
+        
+        return lastPrimeEventDate
+    }
+
+    /// Read Last Prime Event date from core data
+    ///
+    /// - Returns: Date of the last Prime Event
+    func getLastPrimeEventDateFromStore() -> Date {
+        if let pumpEvents = try? self.getPumpEventObjects(
+                matching: NSPredicate(format: "type = %@", PumpEventType.prime.rawValue),
+                chronological: false
+                ),
+            let firstEvent = pumpEvents.first {
+            return firstEvent.date
+        }
+        
+        return Date.distantPast
     }
 }
