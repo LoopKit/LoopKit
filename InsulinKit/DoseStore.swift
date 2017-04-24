@@ -549,8 +549,10 @@ public final class DoseStore {
 
             // There is no guarantee of event ordering, so we must search the entire array to find key date boundaries.
             for event in events {
-                if case .prime? = event.type {
-                    lastPrimeEventDate = max(event.date, lastPrimeEventDate ?? event.date)
+                if let dose = event.dose {
+                    if dose.type == PumpEventType.prime {
+                        lastPrimeEventDate = max(event.date, lastPrimeEventDate ?? event.date)
+                    }
                 }
 
                 if event.isMutable {
