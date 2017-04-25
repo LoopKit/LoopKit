@@ -273,7 +273,11 @@ public final class DoseStore {
                 )
                 
                 // also make sure prime events don't exist withing the Insulin On Board time
-                self.primeEventExistsWithinInsulinOnboardTime = getLastPrimeEventDate() >= oldestRelevantReservoirObject.startDate
+                if let lastPrimeEventData = getLastPrimeEventDate() {
+                    self.primeEventExistsWithinInsulinOnboardTime = lastPrimeEventData >= oldestRelevantReservoirObject.startDate
+                } else {
+                    self.primeEventExistsWithinInsulinOnboardTime = false
+                }
 
                 return recentReservoirObjects
             }
@@ -506,8 +510,9 @@ public final class DoseStore {
     /// The last time `addPumpEvents` was called, used to estimate recency of data.
     private var lastAddedPumpEvents = Date.distantPast
 
-    /// The date of the most recent pump prime event, if known. This value should not be read directly use getLastPrimeEventDate()
-    private var lastPrimeEventDate = Date.distantPast
+    /// The date of the most recent pump prime event, if known.
+    /// To to read and check for updates use getLastPrimeEventDate()
+    private var _lastRecordedPrimeEventDate: Date?
 
     /// The last-seen mutable pump events, which aren't persisted but are used for dose calculation.
     private var mutablePumpEventDoses: [DoseEntry]?
@@ -539,12 +544,10 @@ public final class DoseStore {
 
             // There is no guarantee of event ordering, so we must search the entire array to find key date boundaries.
             for event in events {
-                if let dose = event.dose {
-                    if dose.type == PumpEventType.prime {
-                        primeValueAdded = true
-                    }
+                if event.type == PumpEventType.prime {
+                    primeValueAdded = true
                 }
-
+                
                 if event.isMutable {
                     firstMutableDate = min(event.date, firstMutableDate ?? event.date)
 
@@ -1088,7 +1091,7 @@ public final class DoseStore {
             "* areReservoirValuesContinuous: \(areReservoirValuesContinuous)",
             "* primeEventExistsWithinInsulinOnboardTime: \(primeEventExistsWithinInsulinOnboardTime)",
             "* totalDeliveryCache: \(String(describing: totalDeliveryCache))",
-            "* lastPrimeEventDate: \(getLastPrimeEventDate())",
+            "* lastPrimeEventDate: \(_lastRecordedPrimeEventDate)",
         ]
 
         getReservoirValues(since: Date.distantPast) { (result) in
@@ -1141,37 +1144,24 @@ public final class DoseStore {
     }
     
     /// Flag the existing last prime event date as invalid
-    func invalidateLastPrimeEvent() {
-        lastPrimeEventDate = Date.distantPast
-    }
-    
-    func lastPrimeEventDateIsValid() -> Bool {
-        return lastPrimeEventDate > Date.distantPast
+    private func invalidateLastPrimeEvent() {
+        _lastRecordedPrimeEventDate = nil
     }
     
     /// Get the date of the last prime event. Updates from CoreData if value is invalid
     ///
-    /// - Returns: Date of the last Prime Event, or Distant Past if none found
-    func getLastPrimeEventDate() -> Date {
-        if !lastPrimeEventDateIsValid() {
-            lastPrimeEventDate = getLastPrimeEventDateFromStore()
-        }
-        
-        return lastPrimeEventDate
-    }
-
-    /// Read Last Prime Event date from core data
-    ///
-    /// - Returns: Date of the last Prime Event
-    func getLastPrimeEventDateFromStore() -> Date {
-        if let pumpEvents = try? self.getPumpEventObjects(
+    /// - Returns: Date of the last Prime Event, or nil if none found
+    private func getLastPrimeEventDate() -> Date? {
+        if _lastRecordedPrimeEventDate == nil {
+            if let pumpEvents = try? self.getPumpEventObjects(
                 matching: NSPredicate(format: "type = %@", PumpEventType.prime.rawValue),
                 chronological: false
                 ),
-            let firstEvent = pumpEvents.first {
-            return firstEvent.date
+                let firstEvent = pumpEvents.first {
+                _lastRecordedPrimeEventDate =  firstEvent.date
+            }
         }
         
-        return Date.distantPast
+        return _lastRecordedPrimeEventDate
     }
 }
