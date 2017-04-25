@@ -539,7 +539,7 @@ public final class DoseStore {
             var lastFinalDate: Date?
             var firstMutableDate: Date?
             var primeValueAdded = false
-            var typeDetected: PumpEventType?
+            var typeOverride: PumpEventType?
 
             var mutablePumpEventDoses: [DoseEntry] = []
 
@@ -547,7 +547,7 @@ public final class DoseStore {
             for event in events {
                 if event.type == PumpEventType.prime {
                     primeValueAdded = true
-                    typeDetected = .prime
+                    typeOverride = .prime
                 }
                 
                 if event.isMutable {
@@ -566,8 +566,8 @@ public final class DoseStore {
                     object.dose = event.dose
                     object.title = event.title
                     
-                    if let type = typeDetected {
-                        object.type = type
+                    if let typeOverride = typeOverride {
+                        object.type = typeOverride
                     }
                 }
             }
@@ -613,10 +613,10 @@ public final class DoseStore {
             self.persistenceController.save { (error) in
                 completion(DoseStoreError(error: error))
                 NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
+                
+                self.invalidateLastPrimeEvent()
+                self.validateReservoirContinuity()
             }
-            
-            self.invalidateLastPrimeEvent()
-            self.validateReservoirContinuity()
         }
     }
 
