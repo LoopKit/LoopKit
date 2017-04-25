@@ -273,11 +273,7 @@ public final class DoseStore {
                 )
                 
                 // also make sure prime events don't exist withing the Insulin On Board time
-                if let lastPrimeEventData = getLastPrimeEventDate() {
-                    self.primeEventExistsWithinInsulinOnboardTime = lastPrimeEventData >= oldestRelevantReservoirObject.startDate
-                } else {
-                    self.primeEventExistsWithinInsulinOnboardTime = false
-                }
+                self.primeEventExistsWithinInsulinOnboardTime = getLastPrimeEventDate() >= oldestRelevantReservoirObject.startDate
 
                 return recentReservoirObjects
             }
@@ -1157,7 +1153,7 @@ public final class DoseStore {
     /// Get the date of the last prime event. Updates from CoreData if value is invalid
     ///
     /// - Returns: Date of the last Prime Event, or nil if none found
-    private func getLastPrimeEventDate() -> Date? {
+    private func getLastPrimeEventDate() -> Date {
         if _lastRecordedPrimeEventDate == nil {
             if let pumpEvents = try? self.getPumpEventObjects(
                 matching: NSPredicate(format: "type = %@", PumpEventType.prime.rawValue),
@@ -1165,9 +1161,11 @@ public final class DoseStore {
                 ),
                 let firstEvent = pumpEvents.first {
                 _lastRecordedPrimeEventDate =  firstEvent.date
+            } else {
+                _lastRecordedPrimeEventDate = Date.distantPast
             }
         }
         
-        return _lastRecordedPrimeEventDate
+        return _lastRecordedPrimeEventDate ?? Date.distantPast
     }
 }
