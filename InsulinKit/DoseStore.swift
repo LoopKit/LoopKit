@@ -539,6 +539,7 @@ public final class DoseStore {
             var lastFinalDate: Date?
             var firstMutableDate: Date?
             var primeValueAdded = false
+            var typeDetected: PumpEventType?
 
             var mutablePumpEventDoses: [DoseEntry] = []
 
@@ -546,6 +547,7 @@ public final class DoseStore {
             for event in events {
                 if event.type == PumpEventType.prime {
                     primeValueAdded = true
+                    typeDetected = .prime
                 }
                 
                 if event.isMutable {
@@ -563,6 +565,10 @@ public final class DoseStore {
                     object.raw = event.raw
                     object.dose = event.dose
                     object.title = event.title
+                    
+                    if let type = typeDetected {
+                        object.type = type
+                    }
                 }
             }
 
