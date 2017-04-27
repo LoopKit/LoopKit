@@ -535,12 +535,13 @@ public final class DoseStore {
             var lastFinalDate: Date?
             var firstMutableDate: Date?
             var primeValueAdded = false
-            var typeOverride: PumpEventType?
 
             var mutablePumpEventDoses: [DoseEntry] = []
 
             // There is no guarantee of event ordering, so we must search the entire array to find key date boundaries.
             for event in events {
+                var typeOverride: PumpEventType?
+                
                 if event.type == PumpEventType.prime {
                     primeValueAdded = true
                     typeOverride = .prime
@@ -1093,7 +1094,7 @@ public final class DoseStore {
             "* areReservoirValuesContinuous: \(areReservoirValuesContinuous)",
             "* primeEventExistsWithinInsulinOnboardTime: \(primeEventExistsWithinInsulinOnboardTime)",
             "* totalDeliveryCache: \(String(describing: totalDeliveryCache))",
-            "* lastPrimeEventDate: \(_lastRecordedPrimeEventDate)",
+            "* lastPrimeEventDate: \(String(describing: _lastRecordedPrimeEventDate))",
         ]
 
         getReservoirValues(since: Date.distantPast) { (result) in
