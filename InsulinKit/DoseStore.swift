@@ -566,21 +566,7 @@ public final class DoseStore {
                     object.raw = event.raw
                     object.title = event.title
                     
-                    if let dose = event.dose {
-                        object.type = dose.type
-                        object.startDate = dose.startDate as Date
-                        object.endDate = dose.endDate as Date
-                        object.value = dose.value
-                        object.unit = dose.unit
-                    }
-                    
-                    // NewEventType.type takes precedence over the Dose.type if they conflict
-                    if let newPumpEventType = newPumpEventType {
-                        object.type = newPumpEventType
-                    }
-
-                    
-                    
+                    object.setValuesWith(pumpEventType: event.type, dose: event.dose)
                 }
             }
 
