@@ -540,11 +540,15 @@ public final class DoseStore {
 
             // There is no guarantee of event ordering, so we must search the entire array to find key date boundaries.
             for event in events {
-                var typeOverride: PumpEventType?
+                var newPumpEventType: PumpEventType?
                 
-                if event.type == PumpEventType.prime {
-                    primeValueAdded = true
-                    typeOverride = .prime
+                if let eventType = event.type {
+                    
+                    if eventType == .prime {
+                        primeValueAdded = true
+                    }
+                    
+                    newPumpEventType = eventType
                 }
                 
                 if event.isMutable {
@@ -560,12 +564,23 @@ public final class DoseStore {
 
                     object.date = event.date
                     object.raw = event.raw
-                    object.dose = event.dose
                     object.title = event.title
                     
-                    if let typeOverride = typeOverride {
-                        object.type = typeOverride
+                    if let dose = event.dose {
+                        object.type = dose.type
+                        object.startDate = dose.startDate as Date
+                        object.endDate = dose.endDate as Date
+                        object.value = dose.value
+                        object.unit = dose.unit
                     }
+                    
+                    // NewEventType.type takes precedence over the Dose.type if they conflict
+                    if let newPumpEventType = newPumpEventType {
+                        object.type = newPumpEventType
+                    }
+
+                    
+                    
                 }
             }
 

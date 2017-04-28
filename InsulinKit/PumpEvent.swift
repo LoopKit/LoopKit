@@ -119,17 +119,17 @@ extension PumpEvent {
 
             return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, managedObjectID: objectID)
         }
-        set {
-            guard let entry = newValue else {
-                return
-            }
-
-            type = entry.type
-            startDate = entry.startDate as Date
-            endDate = entry.endDate as Date
-            value = entry.value
-            unit = entry.unit
-        }
+//        set {
+//            guard let entry = newValue else {
+//                return
+//            }
+//
+//            type = entry.type
+//            startDate = entry.startDate as Date
+//            endDate = entry.endDate as Date
+//            value = entry.value
+//            unit = entry.unit
+//        }
     }
 
     var isUploaded: Bool {
