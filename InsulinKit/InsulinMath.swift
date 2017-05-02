@@ -318,6 +318,8 @@ struct InsulinMath {
                 }
 
                 lastSuspend = dose
+            case .prime:
+                break
             }
         }
 

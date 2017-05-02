@@ -119,16 +119,22 @@ extension PumpEvent {
 
             return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, managedObjectID: objectID)
         }
-        set {
-            guard let entry = newValue else {
-                return
-            }
-
-            type = entry.type
-            startDate = entry.startDate as Date
-            endDate = entry.endDate as Date
-            value = entry.value
-            unit = entry.unit
+    }
+    
+    func setValuesWith(pumpEventType: PumpEventType?, dose: DoseEntry?) {
+        // This could also be done inline in DoseStore.addPumpEvents
+        // I'm OK with either place since it's only used once
+        if let dose = dose {
+            type = dose.type
+            startDate = dose.startDate as Date
+            endDate = dose.endDate as Date
+            value = dose.value
+            unit = dose.unit
+        }
+        
+        // PumpEventType takes precedence over the Dose.type if they conflict
+        if let pumpEventType = pumpEventType {
+            type = pumpEventType
         }
     }
 
