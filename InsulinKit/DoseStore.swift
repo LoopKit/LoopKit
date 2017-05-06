@@ -560,8 +560,7 @@ public final class DoseStore {
                     object.date = event.date
                     object.raw = event.raw
                     object.title = event.title
-                    
-                    object.setValuesWith(pumpEventType: event.type, dose: event.dose)
+                    object.dose = event.dose
                 }
             }
 
