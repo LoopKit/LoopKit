@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 
 
-public struct GlucoseEffect: SampleValue {
+public struct GlucoseEffect: GlucoseValue {
     public let startDate: Date
     public let quantity: HKQuantity
 
