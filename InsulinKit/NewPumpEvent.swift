@@ -18,14 +18,17 @@ public struct NewPumpEvent {
     public let isMutable: Bool
     /// The opaque raw data representing the event
     public let raw: Data?
+    /// The type of pump event
+    public let type: PumpEventType?
     /// A human-readable title to describe the event
     public let title: String
 
-    public init(date: Date, dose: DoseEntry?, isMutable: Bool, raw: Data, title: String) {
+    public init(date: Date, dose: DoseEntry?, isMutable: Bool, raw: Data, title: String, type: PumpEventType? = nil) {
         self.date = date
         self.dose = dose
         self.isMutable = isMutable
         self.raw = raw
         self.title = title
+        self.type = type
     }
 }
