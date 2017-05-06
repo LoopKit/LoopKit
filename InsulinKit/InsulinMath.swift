@@ -417,8 +417,8 @@ struct InsulinMath {
 
      - parameter doses:          A collection of doses
      - parameter actionDuration: The total time of insulin effect
-     - parameter fromDate:       The date to begin the timeline
-     - parameter toDate:         The date to end the timeline
+     - parameter start:          The date to begin the timeline
+     - parameter end:            The date to end the timeline
      - parameter delay:          The time to delay the dose effect
      - parameter delta:          The differential between timeline entries
 
@@ -427,16 +427,16 @@ struct InsulinMath {
     static func insulinOnBoardForDoses<T: Collection>(
         _ doses: T,
         actionDuration: TimeInterval,
-        fromDate: Date? = nil,
-        toDate: Date? = nil,
+        from start: Date? = nil,
+        to end: Date? = nil,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [InsulinValue] where T.Iterator.Element == DoseEntry {
-        guard let (startDate, endDate) = LoopMath.simulationDateRangeForSamples(doses, fromDate: fromDate, toDate: toDate, duration: actionDuration, delay: delay, delta: delta) else {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(doses, from: start, to: end, duration: actionDuration, delay: delay, delta: delta) else {
             return []
         }
 
-        var date = startDate
+        var date = start
         var values = [InsulinValue]()
 
         repeat {
@@ -446,7 +446,7 @@ struct InsulinMath {
 
             values.append(InsulinValue(startDate: date, value: value))
             date = date.addingTimeInterval(delta)
-        } while date <= endDate
+        } while date <= end
 
         return values
     }
@@ -456,8 +456,8 @@ struct InsulinMath {
 
      - parameter doses:          A collection of doses
      - parameter actionDuration: The total time of insulin effect
-     - parameter fromDate:       The date to begin the timeline
-     - parameter toDate:         The date to end the timeline
+     - parameter start:          The date to begin the timeline
+     - parameter end:            The date to end the timeline
      - parameter delay:          The time to delay the dose effect
      - parameter delta:          The differential between timeline entries
 
@@ -467,16 +467,16 @@ struct InsulinMath {
         _ doses: T,
         actionDuration: TimeInterval,
         insulinSensitivity: InsulinSensitivitySchedule,
-        fromDate: Date? = nil,
-        toDate: Date? = nil,
+        from start: Date? = nil,
+        to end: Date? = nil,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [GlucoseEffect] where T.Iterator.Element == DoseEntry {
-        guard let (startDate, endDate) = LoopMath.simulationDateRangeForSamples(doses, fromDate: fromDate, toDate: toDate, duration: actionDuration, delay: delay, delta: delta) else {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(doses, from: start, to: end, duration: actionDuration, delay: delay, delta: delta) else {
             return []
         }
 
-        var date = startDate
+        var date = start
         var values = [GlucoseEffect]()
         let unit = HKUnit.milligramsPerDeciliterUnit()
 
@@ -487,7 +487,7 @@ struct InsulinMath {
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
             date = date.addingTimeInterval(delta)
-        } while date <= endDate
+        } while date <= end
 
         return values
     }
