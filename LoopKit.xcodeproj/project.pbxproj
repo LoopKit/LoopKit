@@ -204,6 +204,10 @@
 		43DFE27E1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */; };
 		43DFE2801CB1E12D00EFBE95 /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27F1CB1E12D00EFBE95 /* PumpEventType.swift */; };
 		43DFE2821CB1FB8500EFBE95 /* InsulinValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */; };
+		43EBE4491EAC77290073A0B5 /* grouped_by_overlapping_absorption_times_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43EBE4471EAC77290073A0B5 /* grouped_by_overlapping_absorption_times_input.json */; };
+		43EBE44A1EAC77290073A0B5 /* grouped_by_overlapping_absorption_times_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43EBE4481EAC77290073A0B5 /* grouped_by_overlapping_absorption_times_output.json */; };
+		43EBE44D1EAC7F0C0073A0B5 /* grouped_by_overlapping_absorption_times_border_case_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43EBE44B1EAC7F0C0073A0B5 /* grouped_by_overlapping_absorption_times_border_case_output.json */; };
+		43EBE44E1EAC7F0C0073A0B5 /* grouped_by_overlapping_absorption_times_border_case_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43EBE44C1EAC7F0C0073A0B5 /* grouped_by_overlapping_absorption_times_border_case_input.json */; };
 		43F41C311D374A3000C11ED6 /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D0D1D3737420006E908 /* NibLoadable.swift */; };
 		43FADDFB1C89679200DDE013 /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */; };
 /* End PBXBuildFile section */
@@ -473,6 +477,10 @@
 		43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PumpEvent+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		43DFE27F1CB1E12D00EFBE95 /* PumpEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEventType.swift; sourceTree = "<group>"; };
 		43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinValue.swift; sourceTree = "<group>"; };
+		43EBE4471EAC77290073A0B5 /* grouped_by_overlapping_absorption_times_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = grouped_by_overlapping_absorption_times_input.json; sourceTree = "<group>"; };
+		43EBE4481EAC77290073A0B5 /* grouped_by_overlapping_absorption_times_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = grouped_by_overlapping_absorption_times_output.json; sourceTree = "<group>"; };
+		43EBE44B1EAC7F0C0073A0B5 /* grouped_by_overlapping_absorption_times_border_case_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = grouped_by_overlapping_absorption_times_border_case_output.json; sourceTree = "<group>"; };
+		43EBE44C1EAC7F0C0073A0B5 /* grouped_by_overlapping_absorption_times_border_case_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = grouped_by_overlapping_absorption_times_border_case_input.json; sourceTree = "<group>"; };
 		43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -759,6 +767,10 @@
 				43D8FE441C7291A60073BE78 /* carb_effect_from_history_input.json */,
 				43D8FE451C7291A60073BE78 /* carb_effect_from_history_output.json */,
 				43D8FE461C7291A60073BE78 /* carbs_on_board_output.json */,
+				43EBE44C1EAC7F0C0073A0B5 /* grouped_by_overlapping_absorption_times_border_case_input.json */,
+				43EBE44B1EAC7F0C0073A0B5 /* grouped_by_overlapping_absorption_times_border_case_output.json */,
+				43EBE4471EAC77290073A0B5 /* grouped_by_overlapping_absorption_times_input.json */,
+				43EBE4481EAC77290073A0B5 /* grouped_by_overlapping_absorption_times_output.json */,
 			);
 			path = Fixtures;
 			sourceTree = "<group>";
@@ -1312,10 +1324,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43EBE4491EAC77290073A0B5 /* grouped_by_overlapping_absorption_times_input.json in Resources */,
+				43EBE44E1EAC7F0C0073A0B5 /* grouped_by_overlapping_absorption_times_border_case_input.json in Resources */,
 				43D8FE481C7291A60073BE78 /* carb_effect_from_history_output.json in Resources */,
 				43D8FE681C7292B00073BE78 /* read_carb_ratios.json in Resources */,
+				43EBE44A1EAC77290073A0B5 /* grouped_by_overlapping_absorption_times_output.json in Resources */,
 				43D8FE491C7291A60073BE78 /* carbs_on_board_output.json in Resources */,
 				43D8FE471C7291A60073BE78 /* carb_effect_from_history_input.json in Resources */,
+				43EBE44D1EAC7F0C0073A0B5 /* grouped_by_overlapping_absorption_times_border_case_output.json in Resources */,
 				2FBCE3121E4A5B54008AF09C /* CarbKit.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -28,3 +28,16 @@ public struct NewCarbEntry: CarbEntry {
         self.externalId = externalId
     }
 }
+
+
+extension NewCarbEntry: Equatable {
+    public static func ==(lhs: NewCarbEntry, rhs: NewCarbEntry) -> Bool {
+        return lhs.quantity.compare(rhs.quantity) == .orderedSame &&
+        lhs.startDate == rhs.startDate &&
+        lhs.foodType == rhs.foodType &&
+        lhs.absorptionTime == rhs.absorptionTime &&
+        lhs.createdByCurrentApp == rhs.createdByCurrentApp &&
+        lhs.externalId == rhs.externalId &&
+        lhs.isUploaded == rhs.isUploaded
+    }
+}
