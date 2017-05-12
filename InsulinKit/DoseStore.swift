@@ -560,6 +560,7 @@ public final class DoseStore {
                     object.date = event.date
                     object.raw = event.raw
                     object.title = event.title
+                    object.type = event.type
                     object.dose = event.dose
                 }
             }
