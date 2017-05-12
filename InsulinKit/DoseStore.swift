@@ -560,6 +560,7 @@ public final class DoseStore {
                     object.date = event.date
                     object.raw = event.raw
                     object.title = event.title
+                    // Generally the type is set from the dose, but in some cases (primes) we do not have a dose
                     object.type = event.type
                     object.dose = event.dose
                 }
