@@ -61,7 +61,7 @@ public struct LoopMath {
             return []
         }
 
-        let glucoseUnit = HKUnit.milligramsPerDeciliterUnit()
+        let glucoseUnit = HKUnit.milligramsPerDeciliter()
         let velocityUnit = glucoseUnit.unitDivided(by: HKUnit.second())
 
         // The starting rate, which we will decay to 0 over the specified duration
@@ -119,7 +119,7 @@ public struct LoopMath {
      */
     public static func predictGlucose(_ startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [[GlucoseEffect]]) -> [GlucoseValue] {
         var effectValuesAtDate: [Date: Double] = [:]
-        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let unit = HKUnit.milligramsPerDeciliter()
 
         for timeline in effects {
             var previousEffectValue: Double = timeline.first?.quantity.doubleValue(for: unit) ?? 0

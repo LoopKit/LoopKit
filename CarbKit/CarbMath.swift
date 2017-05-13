@@ -76,7 +76,7 @@ struct CarbMath {
         let unit = HKUnit.gram()
 
         if time >= 0 {
-            value = insulinSensitivity.doubleValue(for: HKUnit.milligramsPerDeciliterUnit()) / carbRatio.doubleValue(for: unit) * absorbedCarbs(entry.quantity.doubleValue(for: unit), atTime: time - delay, absorptionTime: entry.absorptionTime ?? defaultAbsorptionTime)
+            value = insulinSensitivity.doubleValue(for: HKUnit.milligramsPerDeciliter()) / carbRatio.doubleValue(for: unit) * absorbedCarbs(entry.quantity.doubleValue(for: unit), atTime: time - delay, absorptionTime: entry.absorptionTime ?? defaultAbsorptionTime)
         } else {
             value = 0
         }
@@ -171,7 +171,7 @@ struct CarbMath {
 
         var date = startDate
         var values = [GlucoseEffect]()
-        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let unit = HKUnit.milligramsPerDeciliter()
 
         repeat {
             let value = entries.reduce(0.0) { (value, entry) -> Double in

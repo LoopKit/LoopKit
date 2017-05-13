@@ -480,7 +480,7 @@ struct InsulinMath {
 
         var date = start
         var values = [GlucoseEffect]()
-        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let unit = HKUnit.milligramsPerDeciliter()
 
         repeat {
             let value = doses.reduce(0) { (value, dose) -> Double in
