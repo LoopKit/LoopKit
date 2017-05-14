@@ -24,7 +24,7 @@ class CarbMathTests: XCTestCase {
 
         return (
             CarbRatioSchedule(unit: HKUnit.gram(), dailyItems: items)!,
-            InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliterUnit(), dailyItems: [RepeatingScheduleValue(startTime: 0.0, value: 40.0)])!
+            InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliter(), dailyItems: [RepeatingScheduleValue(startTime: 0.0, value: 40.0)])!
         )
     }
 
@@ -75,7 +75,7 @@ class CarbMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliterUnit()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliterUnit()), accuracy: pow(10, -11))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: pow(10, -11))
         }
     }
 

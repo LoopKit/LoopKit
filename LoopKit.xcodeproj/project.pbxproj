@@ -70,6 +70,10 @@
 		435F35611C9CD25F00C204D2 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */; };
 		43971A401C8CABFF0013154F /* GlucoseSampleValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */; };
 		43971A421C8CAEF20013154F /* momentum_effect_display_only_glucose_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43971A411C8CAEF20013154F /* momentum_effect_display_only_glucose_input.json */; };
+		439A1E8A1EC6B54600662F2B /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
+		439A1E8B1EC6B56800662F2B /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
+		439A1E8C1EC6B58A00662F2B /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
+		439A1E8D1EC6B5A300662F2B /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
 		43AF1FB21C926CDD00EA2F3D /* HKQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */; };
 		43B99AFC1C744CE300D050F5 /* bolus_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99AFB1C744CE300D050F5 /* bolus_dose.json */; };
 		43B99AFE1C744E5F00D050F5 /* effect_from_bolus_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99AFD1C744E5F00D050F5 /* effect_from_bolus_output.json */; };
@@ -581,6 +585,7 @@
 		430059211CCDC7A200C861EA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				43D8FDEE1C7290350073BE78 /* HKUnit.swift */,
 				434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */,
 				43177D0D1D3737420006E908 /* NibLoadable.swift */,
 				43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */,
@@ -688,7 +693,6 @@
 				43D8FDED1C7290350073BE78 /* HealthKitSampleStore.swift */,
 				43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */,
 				432762731D60505F0083215A /* HKQuantitySample.swift */,
-				43D8FDEE1C7290350073BE78 /* HKUnit.swift */,
 				43D8FDEF1C7290350073BE78 /* LoopMath.swift */,
 				43D8FDF01C7290350073BE78 /* NSDate.swift */,
 				43D8FDF31C7290350073BE78 /* SampleValue.swift */,
@@ -1488,6 +1492,7 @@
 			files = (
 				43D8FE511C7291BD0073BE78 /* CarbStore.swift in Sources */,
 				43F41C311D374A3000C11ED6 /* NibLoadable.swift in Sources */,
+				439A1E8A1EC6B54600662F2B /* HKUnit.swift in Sources */,
 				434FF1E51CF26A26000DB779 /* UITableViewCell.swift in Sources */,
 				43D8FE521C7291BD0073BE78 /* HKQuantitySample.swift in Sources */,
 				434FF1E21CF269F8000DB779 /* IdentifiableClass.swift in Sources */,
@@ -1525,6 +1530,7 @@
 			files = (
 				43971A401C8CABFF0013154F /* GlucoseSampleValue.swift in Sources */,
 				43FADDFB1C89679200DDE013 /* HKQuantitySample.swift in Sources */,
+				439A1E8C1EC6B58A00662F2B /* HKUnit.swift in Sources */,
 				43D8FE891C72934C0073BE78 /* GlucoseStore.swift in Sources */,
 				4300591F1CCDC67900C861EA /* NSTimeInterval.swift in Sources */,
 				43D8FE881C72934C0073BE78 /* GlucoseMath.swift in Sources */,
@@ -1535,6 +1541,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				439A1E8D1EC6B5A300662F2B /* HKUnit.swift in Sources */,
 				4303C4961E2D666000ADEDC8 /* TimeZone.swift in Sources */,
 				43D9888F1C87F36A00DA4467 /* LoopKitTests.swift in Sources */,
 				43D8FE9A1C7293D00073BE78 /* GlucoseMathTests.swift in Sources */,
@@ -1557,6 +1564,7 @@
 				43DF8DB41D829024006EB38E /* Fetchable.swift in Sources */,
 				430059201CCDC68200C861EA /* NSTimeInterval.swift in Sources */,
 				43D8FEE91C7294D50073BE78 /* Model.xcdatamodeld in Sources */,
+				439A1E8B1EC6B56800662F2B /* HKUnit.swift in Sources */,
 				43C094461CAA1E98001F6403 /* DoseUnit.swift in Sources */,
 				43D8FEEA1C7294D50073BE78 /* PersistenceController.swift in Sources */,
 				4302F4E91D5066F400F0FCAF /* ReservoirValue.swift in Sources */,

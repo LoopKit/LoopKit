@@ -36,7 +36,7 @@ class GlucoseMathTests: XCTestCase {
         return fixture.map {
             return GlucoseFixtureValue(
                 startDate: dateFormatter.date(from: $0["date"] as! String)!,
-                quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliterUnit(), doubleValue: $0["amount"] as! Double),
+                quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliter(), doubleValue: $0["amount"] as! Double),
                 isDisplayOnly: ($0["display_only"] as? Bool) ?? false,
                 provenanceIdentifier: $0["provenance_identifier"] as? String
             )
@@ -57,7 +57,7 @@ class GlucoseMathTests: XCTestCase {
         let output = loadOutputFixture("momentum_effect_bouncing_glucose_output")
 
         let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
-        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let unit = HKUnit.milligramsPerDeciliter()
 
         XCTAssertEqual(output.count, effects.count)
 
@@ -72,7 +72,7 @@ class GlucoseMathTests: XCTestCase {
         let output = loadOutputFixture("momentum_effect_rising_glucose_output")
 
         let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
-        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let unit = HKUnit.milligramsPerDeciliter()
 
         XCTAssertEqual(output.count, effects.count)
 
@@ -87,7 +87,7 @@ class GlucoseMathTests: XCTestCase {
         let output = loadOutputFixture("momentum_effect_falling_glucose_output")
 
         let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
-        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let unit = HKUnit.milligramsPerDeciliter()
 
         XCTAssertEqual(output.count, effects.count)
 
@@ -102,7 +102,7 @@ class GlucoseMathTests: XCTestCase {
         let output = loadOutputFixture("momentum_effect_stable_glucose_output")
 
         let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
-        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let unit = HKUnit.milligramsPerDeciliter()
 
         XCTAssertEqual(output.count, effects.count)
 
