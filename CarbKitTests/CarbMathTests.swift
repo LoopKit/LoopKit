@@ -14,7 +14,7 @@ import HealthKit
 
 class CarbMathTests: XCTestCase {
 
-    func loadSchedules() -> (CarbRatioSchedule, InsulinSensitivitySchedule) {
+    private func loadSchedules() -> (CarbRatioSchedule, InsulinSensitivitySchedule) {
         let fixture: JSONDictionary = loadFixture("read_carb_ratios")
         let schedule = fixture["schedule"] as! [JSONDictionary]
 
@@ -24,12 +24,16 @@ class CarbMathTests: XCTestCase {
 
         return (
             CarbRatioSchedule(unit: HKUnit.gram(), dailyItems: items)!,
-            InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliterUnit(), dailyItems: [RepeatingScheduleValue(startTime: 0.0, value: 40.0)])!
+            InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliter(), dailyItems: [RepeatingScheduleValue(startTime: 0.0, value: 40.0)])!
         )
     }
 
-    func loadInputFixture() -> [NewCarbEntry] {
-        let fixture: [JSONDictionary] = loadFixture("carb_effect_from_history_input")
+    private func loadHistoryFixture(_ name: String) -> [NewCarbEntry] {
+        let fixture: [JSONDictionary] = loadFixture(name)
+        return carbEntriesFromFixture(fixture)
+    }
+
+    private func carbEntriesFromFixture(_ fixture: [JSONDictionary]) -> [NewCarbEntry] {
         let dateFormatter = DateFormatter.ISO8601LocalTime()
 
         return fixture.map {
@@ -42,7 +46,7 @@ class CarbMathTests: XCTestCase {
         }
     }
 
-    func loadEffectOutputFixture() -> [GlucoseEffect] {
+    private func loadEffectOutputFixture() -> [GlucoseEffect] {
         let fixture: [JSONDictionary] = loadFixture("carb_effect_from_history_output")
         let dateFormatter = DateFormatter.ISO8601LocalTime()
 
@@ -51,7 +55,7 @@ class CarbMathTests: XCTestCase {
         }
     }
 
-    func loadCOBOutputFixture() -> [CarbValue] {
+    private func loadCOBOutputFixture() -> [CarbValue] {
         let fixture: [JSONDictionary] = loadFixture("carbs_on_board_output")
         let dateFormatter = DateFormatter.ISO8601LocalTime()
 
@@ -61,7 +65,7 @@ class CarbMathTests: XCTestCase {
     }
 
     func testCarbEffectFromHistory() {
-        let input = loadInputFixture()
+        let input = loadHistoryFixture("carb_effect_from_history_input")
         let output = loadEffectOutputFixture()
         let (carbRatios, insulinSensitivities) = loadSchedules()
 
@@ -71,12 +75,12 @@ class CarbMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliterUnit()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliterUnit()), accuracy: pow(10, -11))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: pow(10, -11))
         }
     }
 
     func testCarbsOnBoardFromHistory() {
-        let input = loadInputFixture()
+        let input = loadHistoryFixture("carb_effect_from_history_input")
         let output = loadCOBOutputFixture()
 
         let cob = CarbMath.carbsOnBoardForCarbEntries(input, defaultAbsorptionTime: TimeInterval(minutes: 180), delay: TimeInterval(minutes: 10), delta: TimeInterval(minutes: 5))
@@ -86,6 +90,32 @@ class CarbMathTests: XCTestCase {
         for (expected, calculated) in zip(output, cob) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: pow(10, -11))
+        }
+    }
+
+    func testGroupedByOverlappingAbsorptionTimeFromHistory() {
+        let input = loadHistoryFixture("grouped_by_overlapping_absorption_times_input")
+        let outputFixture: [[JSONDictionary]] = loadFixture("grouped_by_overlapping_absorption_times_output")
+        let output = outputFixture.map { self.carbEntriesFromFixture($0) }
+        let grouped = CarbMath.groupedByOverlappingAbsorptionTimes(input, defaultAbsorptionTime: TimeInterval(minutes: 180))
+
+        XCTAssertEqual(output.count, grouped.count)
+
+        for (expected, calculated) in zip(output, grouped) {
+            XCTAssertEqual(expected, calculated)
+        }
+    }
+
+    func testGroupedByOverlappingAbsorptionTimeEdgeCases() {
+        let input = loadHistoryFixture("grouped_by_overlapping_absorption_times_border_case_input")
+        let outputFixture: [[JSONDictionary]] = loadFixture("grouped_by_overlapping_absorption_times_border_case_output")
+        let output = outputFixture.map { self.carbEntriesFromFixture($0) }
+        let grouped = CarbMath.groupedByOverlappingAbsorptionTimes(input, defaultAbsorptionTime: TimeInterval(minutes: 180))
+
+        XCTAssertEqual(output.count, grouped.count)
+
+        for (expected, calculated) in zip(output, grouped) {
+            XCTAssertEqual(expected, calculated)
         }
     }
 }

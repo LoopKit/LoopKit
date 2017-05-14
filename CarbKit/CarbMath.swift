@@ -65,7 +65,7 @@ struct CarbMath {
     // mg/dL / g * g
     private static func glucoseEffectForCarbEntry(
         _ entry: CarbEntry,
-        atDate date: Date,
+        at date: Date,
         carbRatio: HKQuantity,
         insulinSensitivity: HKQuantity,
         defaultAbsorptionTime: TimeInterval,
@@ -76,7 +76,7 @@ struct CarbMath {
         let unit = HKUnit.gram()
 
         if time >= 0 {
-            value = insulinSensitivity.doubleValue(for: HKUnit.milligramsPerDeciliterUnit()) / carbRatio.doubleValue(for: unit) * absorbedCarbs(entry.quantity.doubleValue(for: unit), atTime: time - delay, absorptionTime: entry.absorptionTime ?? defaultAbsorptionTime)
+            value = insulinSensitivity.doubleValue(for: HKUnit.milligramsPerDeciliter()) / carbRatio.doubleValue(for: unit) * absorbedCarbs(entry.quantity.doubleValue(for: unit), atTime: time - delay, absorptionTime: entry.absorptionTime ?? defaultAbsorptionTime)
         } else {
             value = 0
         }
@@ -86,12 +86,12 @@ struct CarbMath {
 
     private static func simulationDateRangeForCarbEntries<T: Collection>(
         _ entries: T,
-        fromDate: Date?,
-        toDate: Date?,
+        from start: Date? = nil,
+        to end: Date? = nil,
         defaultAbsorptionTime: TimeInterval,
         delay: TimeInterval,
         delta: TimeInterval
-    ) -> (Date, Date)? where T.Iterator.Element: CarbEntry {
+    ) -> (start: Date, end: Date)? where T.Iterator.Element: CarbEntry {
         var maxAbsorptionTime = defaultAbsorptionTime
 
         for entry in entries {
@@ -100,18 +100,43 @@ struct CarbMath {
             }
         }
 
-        return LoopMath.simulationDateRangeForSamples(entries, fromDate: fromDate, toDate: toDate, duration: maxAbsorptionTime, delay: delay, delta: delta)
+        return LoopMath.simulationDateRangeForSamples(entries, from: start, to: end, duration: maxAbsorptionTime, delay: delay, delta: delta)
+    }
+
+    /// Creates groups of entries that have overlapping absorption date intervals
+    ///
+    /// - Parameters:
+    ///   - entries: A collection of entries from which to make groups
+    ///   - defaultAbsorptionTime: The default absorption time value, if not set on the entry
+    /// - Returns: An array of arrays representing groups of entries, in chronological order by entry startDate
+    static func groupedByOverlappingAbsorptionTimes<T: Collection>(
+        _ entries: T,
+        defaultAbsorptionTime: TimeInterval
+    ) -> [[T.Iterator.Element]] where T.Iterator.Element: CarbEntry {
+        var batches: [[T.Iterator.Element]] = []
+
+        for entry in entries.sorted(by: { $0.startDate < $1.startDate }) {
+            if let lastEntry = batches.last?.last,
+                lastEntry.startDate.addingTimeInterval(lastEntry.absorptionTime ?? defaultAbsorptionTime) > entry.startDate
+            {
+                batches[batches.count - 1].append(entry)
+            } else {
+                batches.append([entry])
+            }
+        }
+
+        return batches
     }
 
     static func carbsOnBoardForCarbEntries<T: Collection>(
         _ entries: T,
-        fromDate: Date? = nil,
-        toDate: Date? = nil,
+        from start: Date? = nil,
+        to end: Date? = nil,
         defaultAbsorptionTime: TimeInterval,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [CarbValue] where T.Iterator.Element: CarbEntry {
-        guard let (startDate, endDate) = simulationDateRangeForCarbEntries(entries, fromDate: fromDate, toDate: toDate, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, delta: delta) else {
+        guard let (startDate, endDate) = simulationDateRangeForCarbEntries(entries, from: start, to: end, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, delta: delta) else {
             return []
         }
 
@@ -132,25 +157,25 @@ struct CarbMath {
 
     static func glucoseEffectsForCarbEntries<T: Collection>(
         _ entries: T,
-        fromDate: Date? = nil,
-        toDate: Date? = nil,
+        from start: Date? = nil,
+        to end: Date? = nil,
         carbRatios: CarbRatioSchedule,
         insulinSensitivities: InsulinSensitivitySchedule,
         defaultAbsorptionTime: TimeInterval,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [GlucoseEffect] where T.Iterator.Element: CarbEntry {
-        guard let (startDate, endDate) = simulationDateRangeForCarbEntries(entries, fromDate: fromDate, toDate: toDate, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, delta: delta) else {
+        guard let (startDate, endDate) = simulationDateRangeForCarbEntries(entries, from: start, to: end, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, delta: delta) else {
             return []
         }
 
         var date = startDate
         var values = [GlucoseEffect]()
-        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let unit = HKUnit.milligramsPerDeciliter()
 
         repeat {
             let value = entries.reduce(0.0) { (value, entry) -> Double in
-                return value + glucoseEffectForCarbEntry(entry, atDate: date, carbRatio: carbRatios.quantity(at: entry.startDate), insulinSensitivity: insulinSensitivities.quantity(at: entry.startDate), defaultAbsorptionTime: defaultAbsorptionTime, delay: delay)
+                return value + glucoseEffectForCarbEntry(entry, at: date, carbRatio: carbRatios.quantity(at: entry.startDate), insulinSensitivity: insulinSensitivities.quantity(at: entry.startDate), defaultAbsorptionTime: defaultAbsorptionTime, delay: delay)
             }
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))

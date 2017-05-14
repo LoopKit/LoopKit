@@ -123,15 +123,15 @@ extension PumpEvent {
             guard let entry = newValue else {
                 return
             }
-
+            
             type = entry.type
-            startDate = entry.startDate as Date
-            endDate = entry.endDate as Date
+            startDate = entry.startDate
+            endDate = entry.endDate
             value = entry.value
             unit = entry.unit
         }
     }
-
+    
     var isUploaded: Bool {
         return uploaded
     }

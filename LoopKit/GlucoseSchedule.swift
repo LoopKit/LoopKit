@@ -14,7 +14,7 @@ public class GlucoseSchedule: SingleQuantitySchedule {
     public override init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<Double>], timeZone: TimeZone? = nil) {
         super.init(unit: unit, dailyItems: dailyItems, timeZone: timeZone)
 
-        guard unit == HKUnit.milligramsPerDeciliterUnit() || unit == HKUnit.millimolesPerLiterUnit() else {
+        guard unit == HKUnit.milligramsPerDeciliter() || unit == HKUnit.millimolesPerLiter() else {
             return nil
         }
     }

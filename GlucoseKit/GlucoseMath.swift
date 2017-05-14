@@ -15,7 +15,7 @@ import LoopKit
 private let ContinuousGlucoseInterval = TimeInterval(minutes: 5)
 
 /// The unit to use during calculation
-private let CalculationUnit = HKUnit.milligramsPerDeciliterUnit()
+private let CalculationUnit = HKUnit.milligramsPerDeciliter()
 
 
 struct GlucoseMath {

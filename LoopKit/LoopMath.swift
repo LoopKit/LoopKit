@@ -13,22 +13,18 @@ import HealthKit
 public struct LoopMath {
     public static func simulationDateRangeForSamples<T: Collection>(
         _ samples: T,
-        fromDate: Date? = nil,
-        toDate: Date? = nil,
+        from start: Date? = nil,
+        to end: Date? = nil,
         duration: TimeInterval,
         delay: TimeInterval = 0,
-        delta: TimeInterval) -> (Date, Date)? where T.Iterator.Element: TimelineValue
-    {
+        delta: TimeInterval
+    ) -> (start: Date, end: Date)? where T.Iterator.Element: TimelineValue {
         guard samples.count > 0 else {
             return nil
         }
 
-        let startDate: Date
-        let endDate: Date
-
-        if let fromDate = fromDate, let toDate = toDate {
-            startDate = fromDate
-            endDate = toDate
+        if let start = start, let end = end {
+            return (start: start, end: end)
         } else {
             var minDate = samples.first!.startDate
             var maxDate = minDate
@@ -43,11 +39,11 @@ public struct LoopMath {
                 }
             }
 
-            startDate = fromDate ?? minDate.dateFlooredToTimeInterval(delta)
-            endDate = toDate ?? maxDate.addingTimeInterval(duration + delay).dateCeiledToTimeInterval(delta)
+            return (
+                start: start ?? minDate.dateFlooredToTimeInterval(delta),
+                end: end ?? maxDate.addingTimeInterval(duration + delay).dateCeiledToTimeInterval(delta)
+            )
         }
-        
-        return (startDate, endDate)
     }
 
     /**
@@ -65,7 +61,7 @@ public struct LoopMath {
             return []
         }
 
-        let glucoseUnit = HKUnit.milligramsPerDeciliterUnit()
+        let glucoseUnit = HKUnit.milligramsPerDeciliter()
         let velocityUnit = glucoseUnit.unitDivided(by: HKUnit.second())
 
         // The starting rate, which we will decay to 0 over the specified duration
@@ -123,7 +119,7 @@ public struct LoopMath {
      */
     public static func predictGlucose(_ startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [[GlucoseEffect]]) -> [GlucoseValue] {
         var effectValuesAtDate: [Date: Double] = [:]
-        let unit = HKUnit.milligramsPerDeciliterUnit()
+        let unit = HKUnit.milligramsPerDeciliter()
 
         for timeline in effects {
             var previousEffectValue: Double = timeline.first?.quantity.doubleValue(for: unit) ?? 0

@@ -179,7 +179,8 @@ public final class DoseStore {
 
             self.persistenceController.save { (error) in
                 self.clearReservoirCache()
-                self.pumpEventQueryAfterDate = self.recentValuesStartDate ?? Date.distantPast
+                self.pumpEventQueryAfterDate = self.recentValuesStartDate ?? .distantPast
+                self.lastAddedPumpEvents = .distantPast
 
                 completion?(error)
             }
@@ -237,8 +238,16 @@ public final class DoseStore {
 
     // Whether the current recent state of the stored reservoir data is considered
     // continuous and reliable for the derivation of insulin effects
-    public private(set) var areReservoirValuesContinuous = false
-
+    public var areReservoirValuesValid: Bool {
+        return areReservoirValuesContinuous && !primeEventExistsWithinInsulinOnboardTime
+    }
+    
+    // Are the reservoir values continuous enough to make a accurate derivation of insulin effects
+    private(set) var areReservoirValuesContinuous = false
+    
+    // Does a prime event exist during Insulin Onboard time that would make reservoir values unusable
+    private(set) var primeEventExistsWithinInsulinOnboardTime = false
+    
     /// Validates the current reservoir data for reliability in glucose effect calculation at the specified date
     ///
     /// *This method should only be called from within a managed object context block.*
@@ -252,18 +261,26 @@ public final class DoseStore {
             let maximumInterval = TimeInterval(minutes: 30)
             let continuityStartDate = date.addingTimeInterval(-insulinActionDuration)
 
-            if let recentReservoirObjects = try? self.getReservoirObjects(since: continuityStartDate - maximumInterval) {
+            if  let recentReservoirObjects = try? self.getReservoirObjects(since: continuityStartDate - maximumInterval),
+                let oldestRelevantReservoirObject = recentReservoirObjects.last
+            {
+                // Verify reservoir timestamps are continuous
                 self.areReservoirValuesContinuous = InsulinMath.isContinuous(
                     recentReservoirObjects.reversed(),
                     from: continuityStartDate,
                     to: date,
                     within: maximumInterval
                 )
+                
+                // also make sure prime events don't exist withing the Insulin On Board time
+                self.primeEventExistsWithinInsulinOnboardTime = getLastPrimeEventDate() >= oldestRelevantReservoirObject.startDate
+
                 return recentReservoirObjects
             }
         }
 
         self.areReservoirValuesContinuous = false
+        self.primeEventExistsWithinInsulinOnboardTime = false
         return []
     }
 
@@ -334,7 +351,7 @@ public final class DoseStore {
                 completionHandler(
                     reservoir,
                     previousValue,
-                    self.areReservoirValuesContinuous,
+                    self.areReservoirValuesValid,
                     saveError
                 )
 
@@ -489,6 +506,10 @@ public final class DoseStore {
     /// The last time `addPumpEvents` was called, used to estimate recency of data.
     private var lastAddedPumpEvents = Date.distantPast
 
+    /// The date of the most recent pump prime event, if known.
+    /// To to read and check for updates use getLastPrimeEventDate()
+    private var _lastRecordedPrimeEventDate: Date?
+
     /// The last-seen mutable pump events, which aren't persisted but are used for dose calculation.
     private var mutablePumpEventDoses: [DoseEntry]?
 
@@ -513,25 +534,36 @@ public final class DoseStore {
         persistenceController.managedObjectContext.perform { [unowned self] in
             var lastFinalDate: Date?
             var firstMutableDate: Date?
+            var primeValueAdded = false
 
             var mutablePumpEventDoses: [DoseEntry] = []
 
+            // There is no guarantee of event ordering, so we must search the entire array to find key date boundaries.
             for event in events {
+                if let eventType = event.type {
+                    if eventType == .prime {
+                        primeValueAdded = true
+                    }
+                }
+                
                 if event.isMutable {
-                    firstMutableDate = min(event.date as Date, firstMutableDate ?? event.date as Date)
+                    firstMutableDate = min(event.date, firstMutableDate ?? event.date)
 
                     if let dose = event.dose {
                         mutablePumpEventDoses.append(dose)
                     }
                 } else {
-                    lastFinalDate = max(event.date as Date, lastFinalDate ?? event.date as Date)
+                    lastFinalDate = max(event.date, lastFinalDate ?? event.date)
 
                     let object = PumpEvent.insertNewObjectInContext(self.persistenceController.managedObjectContext)
 
                     object.date = event.date
                     object.raw = event.raw
-                    object.dose = event.dose
                     object.title = event.title
+                    // Generally the type is set from the dose, but in some cases (primes) we do not have a dose
+                    object.type = event.type
+                    // If dose is nil (as it is in the case of a prime), then nothing will be overwritten by this assignment
+                    object.dose = event.dose
                 }
             }
 
@@ -541,6 +573,11 @@ public final class DoseStore {
                 self.pumpEventQueryAfterDate = mutableDate
             } else if let finalDate = lastFinalDate {
                 self.pumpEventQueryAfterDate = finalDate
+            }
+
+            if primeValueAdded {
+                self.invalidateLastPrimeEvent()
+                self.validateReservoirContinuity()
             }
 
             self.persistenceController.save { [unowned self] (error) -> Void in
@@ -571,6 +608,9 @@ public final class DoseStore {
             self.persistenceController.save { (error) in
                 completion(DoseStoreError(error: error))
                 NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
+                
+                self.invalidateLastPrimeEvent()
+                self.validateReservoirContinuity()
             }
         }
     }
@@ -674,13 +714,10 @@ public final class DoseStore {
     /// - Returns: An array of pump event managed objects, in reverse-chronological order
     /// - Throws: An error describing the failure to fetch objects
     private func getPumpEventObjects(since startDate: Date) throws -> [PumpEvent] {
-        let predicate = NSPredicate(format: "date >= %@", startDate as NSDate)
-
-        do {
-            return try PumpEvent.objectsInContext(persistenceController.managedObjectContext, predicate: predicate, sortedBy: "date", ascending: false)
-        } catch let fetchError as NSError {
-            throw DoseStoreError.fetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
-        }
+        return try getPumpEventObjects(
+            matching: NSPredicate(format: "date >= %@", startDate as NSDate),
+            chronological: false
+        )
     }
 
     /// *This method should only be called from within a managed object context block.*
@@ -689,10 +726,22 @@ public final class DoseStore {
     /// - Returns: An array of doses from pump events in chronological order
     /// - Throws: An error describing the failure to fetch objects
     private func getPumpEventDoseObjects(since startDate: Date) throws -> [DoseEntry] {
-        let predicate = NSPredicate(format: "date >= %@ && type != nil", startDate as NSDate)
+        return try getPumpEventObjects(
+            matching: NSPredicate(format: "date >= %@ && type != nil", startDate as NSDate),
+            chronological: true
+        ).flatMap({ $0.dose })
+    }
 
+    /// *This method should only be called from within a managed object context block.*
+    ///
+    /// - Parameters:
+    ///   - predicate: The predicate to apply to the objects
+    ///   - chronological: Whether to return the objects in chronological or reverse-chronological order
+    /// - Returns: An array of pump events in the specified order by date
+    /// - Throws: An error describing the failure to fetch objects
+    private func getPumpEventObjects(matching predicate: NSPredicate, chronological: Bool) throws -> [PumpEvent] {
         do {
-            return try PumpEvent.objectsInContext(persistenceController.managedObjectContext, predicate: predicate, sortedBy: "date", ascending: true).flatMap({ $0.dose })
+            return try PumpEvent.objectsInContext(persistenceController.managedObjectContext, predicate: predicate, sortedBy: "date", ascending: chronological)
         } catch let fetchError as NSError {
             throw DoseStoreError.fetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
         }
@@ -749,6 +798,8 @@ public final class DoseStore {
         validateReservoirContinuity()
         clearReservoirNormalizedDoseCache()
         totalDeliveryCache = nil
+        lastReservoirObject = nil
+        lastReservoirVolumeDrop = 0
     }
 
     /**
@@ -797,7 +848,7 @@ public final class DoseStore {
             do {
                 let doses: [DoseEntry]
                 // Reservoir data is used only if its continuous and we haven't seen pump events in the last 20 minutes
-                if self.areReservoirValuesContinuous && self.lastAddedPumpEvents.timeIntervalSinceNow < -TimeInterval(minutes: 20) {
+                if self.areReservoirValuesValid && self.lastAddedPumpEvents.timeIntervalSinceNow < -TimeInterval(minutes: 20) {
                     doses = try self.getNormalizedReservoirDoseEntries(start: start, end: end)
                 } else {
                     doses = try self.getNormalizedPumpEventDoseEntries(start: start, end: end)
@@ -1039,7 +1090,9 @@ public final class DoseStore {
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
             "* areReservoirValuesContinuous: \(areReservoirValuesContinuous)",
-            "* totalDeliveryCache: \(String(describing: totalDeliveryCache))"
+            "* primeEventExistsWithinInsulinOnboardTime: \(primeEventExistsWithinInsulinOnboardTime)",
+            "* totalDeliveryCache: \(String(describing: totalDeliveryCache))",
+            "* lastPrimeEventDate: \(String(describing: _lastRecordedPrimeEventDate))",
         ]
 
         getReservoirValues(since: Date.distantPast) { (result) in
@@ -1089,5 +1142,29 @@ public final class DoseStore {
                 }
             }
         }
+    }
+    
+    /// Flag the existing last prime event date as invalid
+    private func invalidateLastPrimeEvent() {
+        _lastRecordedPrimeEventDate = nil
+    }
+    
+    /// Get the date of the last prime event. Updates from CoreData if value is invalid
+    ///
+    /// - Returns: Date of the last Prime Event, or nil if none found
+    private func getLastPrimeEventDate() -> Date {
+        if _lastRecordedPrimeEventDate == nil {
+            if let pumpEvents = try? self.getPumpEventObjects(
+                matching: NSPredicate(format: "type = %@", PumpEventType.prime.rawValue),
+                chronological: false
+                ),
+                let firstEvent = pumpEvents.first {
+                _lastRecordedPrimeEventDate =  firstEvent.date
+            } else {
+                _lastRecordedPrimeEventDate = Date.distantPast
+            }
+        }
+        
+        return _lastRecordedPrimeEventDate ?? Date.distantPast
     }
 }
