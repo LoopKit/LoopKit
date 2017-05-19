@@ -55,7 +55,7 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
                 return nil  // No changes were made
             }
             
-            return NewCarbEntry(quantity: quantity, startDate: date, foodType: foodType, absorptionTime: absorptionTime, externalId: originalCarbEntry?.externalId)
+            return NewCarbEntry(quantity: quantity, startDate: date, foodType: foodType, absorptionTime: absorptionTime, externalID: originalCarbEntry?.externalID)
         } else {
             return nil
         }

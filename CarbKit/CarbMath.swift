@@ -17,7 +17,7 @@ public struct CarbValue: SampleValue {
 }
 
 
-struct CarbMath {
+enum CarbMath {
     /**
      Returns the percentage of total carbohydrates absorbed as blood glucose at a specified interval after eating.
 

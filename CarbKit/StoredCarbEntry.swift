@@ -25,23 +25,23 @@ struct StoredCarbEntry: CarbEntry {
     let foodType: String?
     let absorptionTime: TimeInterval?
     let createdByCurrentApp: Bool
-    let externalId: String?
+    let externalID: String?
     let isUploaded: Bool
 
     init(sample: HKQuantitySample, createdByCurrentApp: Bool? = nil) {
-        self.init(sampleUUID: sample.uuid, startDate: sample.startDate, unitString: unit.unitString, value: sample.quantity.doubleValue(for: unit), foodType: sample.foodType, absorptionTime: sample.absorptionTime, createdByCurrentApp: createdByCurrentApp ?? sample.createdByCurrentApp, externalId: sample.externalId)
+        self.init(sampleUUID: sample.uuid, startDate: sample.startDate, unitString: unit.unitString, value: sample.quantity.doubleValue(for: unit), foodType: sample.foodType, absorptionTime: sample.absorptionTime, createdByCurrentApp: createdByCurrentApp ?? sample.createdByCurrentApp, externalID: sample.externalID)
 
     }
 
-    init(sampleUUID: UUID, startDate: Date, unitString: String, value: Double, foodType: String?, absorptionTime: TimeInterval?, createdByCurrentApp: Bool, externalId: String?) {
+    init(sampleUUID: UUID, startDate: Date, unitString: String, value: Double, foodType: String?, absorptionTime: TimeInterval?, createdByCurrentApp: Bool, externalID: String?) {
         self.sampleUUID = sampleUUID
         self.startDate = startDate
         self.quantity = HKQuantity(unit: HKUnit(from: unitString), doubleValue: value)
         self.foodType = foodType
         self.absorptionTime = absorptionTime
         self.createdByCurrentApp = createdByCurrentApp
-        self.externalId = externalId
-        self.isUploaded = self.externalId != nil
+        self.externalID = externalID
+        self.isUploaded = self.externalID != nil
     }
 
 
@@ -56,7 +56,12 @@ extension StoredCarbEntry: Hashable {
 
 
 func ==(lhs: StoredCarbEntry, rhs: StoredCarbEntry) -> Bool {
-    return (lhs.sampleUUID == rhs.sampleUUID)
+    return lhs.sampleUUID == rhs.sampleUUID
+}
+
+
+func <(lhs: StoredCarbEntry, rhs: StoredCarbEntry) -> Bool {
+    return lhs.startDate < rhs.startDate
 }
 
 
@@ -75,7 +80,7 @@ extension StoredCarbEntry: RawRepresentable {
             return nil
         }
 
-        let externalId = rawValue["externalId"]
+        let externalID = rawValue["externalId"]
 
         self.init(
             sampleUUID: sampleUUID,
@@ -85,7 +90,7 @@ extension StoredCarbEntry: RawRepresentable {
             foodType: rawValue["foodType"] as? String,
             absorptionTime: rawValue["absorptionTime"] as? TimeInterval,
             createdByCurrentApp: createdByCurrentApp,
-            externalId: externalId as? String
+            externalID: externalID as? String
         )
     }
 
@@ -98,8 +103,8 @@ extension StoredCarbEntry: RawRepresentable {
             "createdByCurrentApp": createdByCurrentApp,
         ]
 
-        if let externalId = externalId {
-            raw["externalId"] = externalId
+        if let externalID = externalID {
+            raw["externalId"] = externalID
         }
 
         if let foodType = foodType {
