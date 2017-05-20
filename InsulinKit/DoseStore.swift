@@ -238,15 +238,15 @@ public final class DoseStore {
 
     // Whether the current recent state of the stored reservoir data is considered
     // continuous and reliable for the derivation of insulin effects
-    public var areReservoirValuesValid: Bool {
-        return areReservoirValuesContinuous && !primeEventExistsWithinInsulinOnboardTime
+    private var areReservoirValuesValid: Bool {
+        return areReservoirValuesContinuous && !primeEventExistsWithinInsulinActionDuration
     }
     
-    // Are the reservoir values continuous enough to make a accurate derivation of insulin effects
+    // Is the frequency of reservoir entries great enough to estimate when insulin was delivered
     private(set) var areReservoirValuesContinuous = false
     
-    // Does a prime event exist during Insulin Onboard time that would make reservoir values unusable
-    private(set) var primeEventExistsWithinInsulinOnboardTime = false
+    // Did a pump prime occur, suggesting reservoir drop isn't representative of insulin delivery
+    private(set) var primeEventExistsWithinInsulinActionDuration = false
     
     /// Validates the current reservoir data for reliability in glucose effect calculation at the specified date
     ///
@@ -272,30 +272,30 @@ public final class DoseStore {
                     within: maximumInterval
                 )
                 
-                // also make sure prime events don't exist withing the Insulin On Board time
-                self.primeEventExistsWithinInsulinOnboardTime = getLastPrimeEventDate() >= oldestRelevantReservoirObject.startDate
+                // also make sure prime events don't exist withing the insulin action duration
+                self.primeEventExistsWithinInsulinActionDuration = getLastPrimeEventDate() >= oldestRelevantReservoirObject.startDate
 
                 return recentReservoirObjects
             }
         }
 
         self.areReservoirValuesContinuous = false
-        self.primeEventExistsWithinInsulinOnboardTime = false
+        self.primeEventExistsWithinInsulinActionDuration = false
         return []
     }
 
     /**
      Adds and persists a new reservoir value
 
-     - parameter unitVolume:        The reservoir volume, in units
-     - parameter date:              The date of the volume reading
-     - parameter completionHandler: A closure called after the value was saved. This closure takes three arguments:
+     - parameter unitVolume: The reservoir volume, in units
+     - parameter date:       The date of the volume reading
+     - parameter completion: A closure called after the value was saved. This closure takes three arguments:
         - value:                    The new reservoir value, if it was saved
         - previousValue:            The last new reservoir value
         - areStoredValuesContinous: Whether the current recent state of the stored reservoir data is considered continuous and reliable for deriving insulin effects after addition of this new value.
         - error:                    An error object explaining why the value could not be saved
      */
-    public func addReservoirValue(_ unitVolume: Double, atDate date: Date, completionHandler: @escaping (_ value: ReservoirValue?, _ previousValue: ReservoirValue?, _ areStoredValuesContinuous: Bool, _ error: DoseStoreError?) -> Void) {
+    public func addReservoirValue(_ unitVolume: Double, atDate date: Date, completion: @escaping (_ value: ReservoirValue?, _ previousValue: ReservoirValue?, _ areStoredValuesContinuous: Bool, _ error: DoseStoreError?) -> Void) {
         persistenceController.managedObjectContext.perform { [unowned self] in
             let reservoir = Reservoir.insertNewObjectInContext(self.persistenceController.managedObjectContext)
 
@@ -348,7 +348,7 @@ public final class DoseStore {
                     )
                 }
 
-                completionHandler(
+                completion(
                     reservoir,
                     previousValue,
                     self.areReservoirValuesValid,
@@ -388,16 +388,16 @@ public final class DoseStore {
     ///
     /// - Parameters:
     ///   - startDate: The earliest reservoir record date to include
-    ///   - completionHandler: A closure called after retrieval
+    ///   - completion: A closure called after retrieval
     ///   - result: An array of reservoir values in reverse-chronological order
-    public func getReservoirValues(since startDate: Date, completionHandler: @escaping (_ result: DoseStoreResult<[ReservoirValue]>) -> Void) {
+    public func getReservoirValues(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<[ReservoirValue]>) -> Void) {
         persistenceController.managedObjectContext.perform {
             do {
                 let objects = try self.getReservoirObjects(since: startDate)
 
-                completionHandler(.success(objects))
+                completion(.success(objects))
             } catch let error as DoseStoreError {
-                completionHandler(.failure(error))
+                completion(.failure(error))
             } catch {
                 assertionFailure()
             }
@@ -540,10 +540,8 @@ public final class DoseStore {
 
             // There is no guarantee of event ordering, so we must search the entire array to find key date boundaries.
             for event in events {
-                if let eventType = event.type {
-                    if eventType == .prime {
-                        primeValueAdded = true
-                    }
+                if case .prime? = event.type {
+                    primeValueAdded = true
                 }
                 
                 if event.isMutable {
@@ -671,7 +669,7 @@ public final class DoseStore {
             - isUploaded: Whether the event has been successfully uploaded by the delegate
         - error:  An error object explaining why the results could not be fetched
      */
-    @available(*, deprecated, message: "Use getPumpEventValues(since:completionHandler:) instead")
+    @available(*, deprecated, message: "Use getPumpEventValues(since:completion:) instead")
     public func getRecentPumpEventValues(_ resultsHandler: @escaping (_ values: [(title: String?, event: PersistedPumpEvent, isUploaded: Bool)], _ error: DoseStoreError?) -> Void) {
         guard let startDate = recentValuesStartDate else {
             resultsHandler([], .configurationError)
@@ -692,16 +690,16 @@ public final class DoseStore {
     ///
     /// - Parameters:
     ///   - startDate: The earliest pump event date to include
-    ///   - completionHandler: A closure called after retrieval
+    ///   - completion: A closure called after retrieval
     ///   - result: An array of pump event values in reverse-chronological order
-    public func getPumpEventValues(since startDate: Date, completionHandler: @escaping (_ result: DoseStoreResult<[PersistedPumpEvent]>) -> Void) {
+    public func getPumpEventValues(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<[PersistedPumpEvent]>) -> Void) {
         persistenceController.managedObjectContext.perform {
             do {
                 let objects: [PersistedPumpEvent] = try self.getPumpEventObjects(since: startDate)
 
-                completionHandler(.success(objects))
+                completion(.success(objects))
             } catch let error as DoseStoreError {
-                completionHandler(.failure(error))
+                completion(.failure(error))
             } catch {
                 assertionFailure()
             }
@@ -871,7 +869,7 @@ public final class DoseStore {
         - value: The retrieved value
         - error: An error object explaining why the retrieval failed
      */
-    @available(*, deprecated, message: "Use insulinOnBoard(at:completionHandler:) instead")
+    @available(*, deprecated, message: "Use insulinOnBoard(at:completion:) instead")
     public func insulinOnBoardAtDate(_ date: Date, resultHandler: @escaping (_ value: InsulinValue?, _ error: Error?) -> Void) {
         insulinOnBoard(at: date) { (result) in
             switch result {
@@ -889,19 +887,19 @@ public final class DoseStore {
     ///
     /// - Parameters:
     ///   - date: The date of the value to retrieve
-    ///   - completionHandler: A closure called once the value has been retrieved
+    ///   - completion: A closure called once the value has been retrieved
     ///   - result: The insulin on-board value
-    public func insulinOnBoard(at date: Date, completionHandler: @escaping (_ result: DoseStoreResult<InsulinValue>) -> Void) {
+    public func insulinOnBoard(at date: Date, completion: @escaping (_ result: DoseStoreResult<InsulinValue>) -> Void) {
         getInsulinOnBoardValues(start: date.addingTimeInterval(TimeInterval(minutes: -5))) { (result) -> Void in
             switch result {
             case .failure(let error):
-                completionHandler(.failure(error))
+                completion(.failure(error))
             case .success(let values):
                 guard let value = values.closestPriorToDate(date) else {
-                    completionHandler(.failure(.fetchError(description: "No values found", recoverySuggestion: "Ensure insulin data exists for the specified date")))
+                    completion(.failure(.fetchError(description: "No values found", recoverySuggestion: "Ensure insulin data exists for the specified date")))
                     return
                 }
-                completionHandler(.success(value))
+                completion(.success(value))
             }
         }
     }
@@ -917,7 +915,7 @@ public final class DoseStore {
         - values: The retrieved values
         - error:  An error object explaining why the retrieval failed
      */
-    @available(*, deprecated, message: "Use getInsulinOnBoardValues(start:end:completionHandler:) instead")
+    @available(*, deprecated, message: "Use getInsulinOnBoardValues(start:end:completion:) instead")
     public func getInsulinOnBoardValues(startDate: Date, endDate: Date? = nil, resultHandler: @escaping (_ values: [InsulinValue], _ error: DoseStoreError?) -> Void) {
         getInsulinOnBoardValues(start: startDate, end: endDate) { (result) in
             switch result {
@@ -937,11 +935,11 @@ public final class DoseStore {
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
     ///   - basalDosingEnd: The date at which continuing doses should be assumed to be cancelled
-    ///   - completionHandler: A closure called once the values have been retrieved
+    ///   - completion: A closure called once the values have been retrieved
     ///   - result: An array of insulin values, in chronological order
-    public func getInsulinOnBoardValues(start: Date, end: Date? = nil, basalDosingEnd: Date? = nil,completionHandler: @escaping (_ result: DoseStoreResult<[InsulinValue]>) -> Void) {
+    public func getInsulinOnBoardValues(start: Date, end: Date? = nil, basalDosingEnd: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[InsulinValue]>) -> Void) {
         guard let insulinActionDuration = self.insulinActionDuration else {
-            completionHandler(.failure(.configurationError))
+            completion(.failure(.configurationError))
             return
         }
 
@@ -950,11 +948,11 @@ public final class DoseStore {
         getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
             switch result {
             case .failure(let error):
-                completionHandler(.failure(error))
+                completion(.failure(error))
             case .success(let doses):
                 let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
                 let insulinOnBoard = InsulinMath.insulinOnBoardForDoses(trimmedDoses, actionDuration: insulinActionDuration)
-                completionHandler(.success(insulinOnBoard.filterDateRange(start, end)))
+                completion(.success(insulinOnBoard.filterDateRange(start, end)))
             }
         }
     }
@@ -970,7 +968,7 @@ public final class DoseStore {
         - effects: The retrieved timeline of effects
         - error:   An error object explaining why the retrieval failed
      */
-    @available(*, deprecated, message: "Use getGlucoseEffects(start:end:completionHandler:) instead")
+    @available(*, deprecated, message: "Use getGlucoseEffects(start:end:completion:) instead")
     public func getGlucoseEffects(startDate: Date, endDate: Date? = nil, resultHandler: @escaping (_ effects: [GlucoseEffect], _ error: DoseStoreError?) -> Void) {
         getGlucoseEffects(start: startDate, end: endDate) { (result) in
             switch result {
@@ -990,13 +988,13 @@ public final class DoseStore {
     ///   - start: The earliest date of effects to retrieve
     ///   - end: The latest date of effects to retrieve, if provided
     ///   - basalDosingEnd: The date at which continuing doses should be assumed to be cancelled
-    ///   - completionHandler: A closure called once the effects have been retrieved
+    ///   - completion: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
-    public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completionHandler: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
+    public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completion: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
         guard let insulinActionDuration = self.insulinActionDuration,
               let insulinSensitivitySchedule = self.insulinSensitivitySchedule
         else {
-            completionHandler(.failure(.configurationError))
+            completion(.failure(.configurationError))
             return
         }
 
@@ -1005,11 +1003,11 @@ public final class DoseStore {
         getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
             switch result {
             case .failure(let error):
-                completionHandler(.failure(error))
+                completion(.failure(error))
             case .success(let doses):
                 let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
                 let glucoseEffects = InsulinMath.glucoseEffectsForDoses(trimmedDoses, actionDuration: insulinActionDuration, insulinSensitivity: insulinSensitivitySchedule)
-                completionHandler(.success(glucoseEffects.filterDateRange(start, end)))
+                completion(.success(glucoseEffects.filterDateRange(start, end)))
             }
         }
     }
@@ -1024,7 +1022,7 @@ public final class DoseStore {
      - parameter since: The earliest date included in the total
      - parameter error: An error object explaining why the retrieval failed
      */
-    @available(*, deprecated, message: "Use getTotalUnitsDelivered(since:completionHandler:)")
+    @available(*, deprecated, message: "Use getTotalUnitsDelivered(since:completion:)")
     public func getTotalRecentUnitsDelivered(_ resultsHandler: @escaping (_ total: Double, _ since: Date?, _ error: DoseStoreError?) -> Void) {
         guard let startDate = recentValuesStartDate else {
             resultsHandler(0, nil, DoseStoreError.configurationError)
@@ -1045,14 +1043,14 @@ public final class DoseStore {
     ///
     /// - Parameters:
     ///   - startDate: The date after which delivery should be calculated
-    ///   - completionHandler: A closure called once the total has been retrieved with arguments:
+    ///   - completion: A closure called once the total has been retrieved with arguments:
     ///   - result: The total units delivered and the date of the first dose
-    public func getTotalUnitsDelivered(since startDate: Date, completionHandler: @escaping (_ result: DoseStoreResult<InsulinValue>) -> Void) {
+    public func getTotalUnitsDelivered(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<InsulinValue>) -> Void) {
         persistenceController.managedObjectContext.perform {
             if  let totalDeliveryCache = self.totalDeliveryCache,
                 totalDeliveryCache.startDate >= startDate
             {
-                completionHandler(.success(totalDeliveryCache))
+                completion(.success(totalDeliveryCache))
                 return
             }
 
@@ -1067,9 +1065,9 @@ public final class DoseStore {
                     self.totalDeliveryCache = result
                 }
 
-                completionHandler(.success(result))
+                completion(.success(result))
             } catch let error as DoseStoreError {
-                completionHandler(.failure(error))
+                completion(.failure(error))
             } catch {
                 assertionFailure()
             }
@@ -1080,8 +1078,8 @@ public final class DoseStore {
     ///
     /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
     ///
-    /// - parameter completionHandler: The closure takes a single argument of the report string.
-    public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
+    /// - parameter completion: The closure takes a single argument of the report string.
+    public func generateDiagnosticReport(_ completion: @escaping (_ report: String) -> Void) {
         var report: [String] = [
             "## DoseStore",
             "",
@@ -1090,7 +1088,7 @@ public final class DoseStore {
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
             "* areReservoirValuesContinuous: \(areReservoirValuesContinuous)",
-            "* primeEventExistsWithinInsulinOnboardTime: \(primeEventExistsWithinInsulinOnboardTime)",
+            "* primeEventExistsWithinInsulinActionDuration: \(primeEventExistsWithinInsulinActionDuration)",
             "* totalDeliveryCache: \(String(describing: totalDeliveryCache))",
             "* lastPrimeEventDate: \(String(describing: _lastRecordedPrimeEventDate))",
         ]
@@ -1138,7 +1136,7 @@ public final class DoseStore {
                     }
 
                     report.append("")
-                    completionHandler(report.joined(separator: "\n"))
+                    completion(report.joined(separator: "\n"))
                 }
             }
         }
@@ -1149,9 +1147,9 @@ public final class DoseStore {
         _lastRecordedPrimeEventDate = nil
     }
     
-    /// Get the date of the last prime event. Updates from CoreData if value is invalid
+    /// Get the date of the last prime event. Updates from Core Data if value is invalid
     ///
-    /// - Returns: Date of the last Prime Event, or nil if none found
+    /// - Returns: Date of the last prime event, or distant past if none found
     private func getLastPrimeEventDate() -> Date {
         if _lastRecordedPrimeEventDate == nil {
             if let pumpEvents = try? self.getPumpEventObjects(

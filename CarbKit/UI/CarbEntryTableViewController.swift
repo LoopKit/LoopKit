@@ -143,14 +143,16 @@ public final class CarbEntryTableViewController: UITableViewController {
             tableView.tableHeaderView?.isHidden = false
             tableView.tableFooterView = nil
 
-            carbStore?.getRecentCarbEntries { (entries, error) -> Void in
-                DispatchQueue.main.async {
-                    if let error = error {
-                        self.presentAlertController(with: error)
-                    } else {
-                        self.carbEntries = entries
-                        self.tableView.reloadData()
-                    }
+            guard let carbStore = carbStore else { return }
+
+            let start = min(Calendar.current.startOfDay(for: Date()), Date(timeIntervalSinceNow: -2 * carbStore.defaultAbsorptionTimes.slow))
+            carbStore.getCarbEntries(start: start) { (result) in
+                switch result {
+                case .success(let entries):
+                    self.carbEntries = entries
+                    self.tableView.reloadData()
+                case .failure(let error):
+                    self.presentAlertController(with: error)
                 }
 
                 self.updateTimelyStats(nil)
@@ -165,28 +167,28 @@ public final class CarbEntryTableViewController: UITableViewController {
 
     private func updateCOB() {
         if case .display = state, let carbStore = carbStore {
-            carbStore.carbsOnBoardAtDate(Date(), resultHandler: { (value, error) -> Void in
-                DispatchQueue.main.async {
-                    if let value = value {
-                        self.COBValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: value.quantity.doubleValue(for: carbStore.preferredUnit)), number: .none)
-                        self.COBDateLabel.text = String(format: NSLocalizedString("com.loudnate.CarbKit.COBDateLabel", tableName: "CarbKit", value: "at %1$@", comment: "The format string describing the date of a COB value. The first format argument is the localized date."), DateFormatter.localizedString(from: value.startDate, dateStyle: .none, timeStyle: .short))
-                    } else {
-                        self.COBValueLabel.text = NumberFormatter.localizedString(from: 0, number: .none)
-                        self.COBDateLabel.text = nil
-                    }
+            carbStore.carbsOnBoard(at: Date()) { (result) in
+                switch result {
+                case .success(let value):
+                    self.COBValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: value.quantity.doubleValue(for: carbStore.preferredUnit)), number: .none)
+                    self.COBDateLabel.text = String(format: NSLocalizedString("com.loudnate.CarbKit.COBDateLabel", tableName: "CarbKit", value: "at %1$@", comment: "The format string describing the date of a COB value. The first format argument is the localized date."), DateFormatter.localizedString(from: value.startDate, dateStyle: .none, timeStyle: .short))
+                case .failure:
+                    self.COBValueLabel.text = NumberFormatter.localizedString(from: 0, number: .none)
+                    self.COBDateLabel.text = nil
                 }
-            })
+            }
         }
     }
 
     private func updateTotal() {
         if case .display = state, let carbStore = carbStore {
-            carbStore.getTotalRecentCarbValue { (value, error) -> Void in
+            carbStore.getTotalCarbs(since: Calendar.current.startOfDay(for: Date())) { (result) -> Void in
                 DispatchQueue.main.async {
-                    if let value = value {
+                    switch result {
+                    case .success(let value):
                         self.totalValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: value.quantity.doubleValue(for: carbStore.preferredUnit)), number: .none)
                         self.totalDateLabel.text = String(format: NSLocalizedString("com.loudnate.CarbKit.totalDateLabel", tableName: "CarbKit", value: "since %1$@", comment: "The format string describing the starting date of a total value. The first format argument is the localized date."), DateFormatter.localizedString(from: value.startDate as Date, dateStyle: .none, timeStyle: .short))
-                    } else {
+                    case .failure:
                         self.totalValueLabel.text = NumberFormatter.localizedString(from: 0, number: .none)
                         self.totalDateLabel.text = nil
                     }

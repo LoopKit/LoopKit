@@ -13,7 +13,7 @@ import CoreData
 extension Reservoir {
 
     @nonobjc class func fetchRequest() -> NSFetchRequest<Reservoir> {
-        return NSFetchRequest<Reservoir>(entityName: "Reservoir");
+        return NSFetchRequest<Reservoir>(entityName: "Reservoir")
     }
 
     @NSManaged var createdAt: Date!

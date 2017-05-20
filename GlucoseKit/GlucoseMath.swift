@@ -61,6 +61,22 @@ struct GlucoseMath {
         return samples.filter({ $0.isDisplayOnly }).count == 0
     }
 
+    /// Filters a timeline of glucose samples to only include those after the last calibration.
+    ///
+    /// - Parameter samples: The timeline of glucose samples, in chronological order
+    /// - Returns: A filtered timeline
+    static func filterAfterCalibration<T: BidirectionalCollection>(_ samples: T) -> [T.Iterator.Element] where T.Iterator.Element: GlucoseSampleValue, T.Index == Int {
+        var postCalibration = true
+
+        return samples.reversed().filter({ (sample) in
+            if sample.isDisplayOnly {
+                postCalibration = false
+            }
+
+            return postCalibration
+        }).reversed()
+    }
+
     /**
      Determines whether a collection of glucose samples can be considered continuous.
      

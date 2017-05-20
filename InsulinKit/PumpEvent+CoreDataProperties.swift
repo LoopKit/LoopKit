@@ -13,7 +13,7 @@ import CoreData
 extension PumpEvent {
 
     @nonobjc class func fetchRequest() -> NSFetchRequest<PumpEvent> {
-        return NSFetchRequest<PumpEvent>(entityName: "PumpEvent");
+        return NSFetchRequest<PumpEvent>(entityName: "PumpEvent")
     }
 
     @NSManaged var createdAt: Date!
