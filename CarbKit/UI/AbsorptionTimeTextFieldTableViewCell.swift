@@ -23,7 +23,7 @@ class AbsorptionTimeTextFieldTableViewCell: DecimalTextFieldTableViewCell {
     func selectedSegmentChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case let x where x < segmentValues.count:
-            textField.text = numberFormatter.string(from: NSNumber(value: segmentValues[x] as Double))
+            textField.text = numberFormatter.string(from: NSNumber(value: segmentValues[x]))
             delegate?.textFieldTableViewCellDidUpdateText(self)
         default:
             break

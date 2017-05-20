@@ -187,7 +187,7 @@ public final class CarbEntryTableViewController: UITableViewController {
                     switch result {
                     case .success(let value):
                         self.totalValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: value.quantity.doubleValue(for: carbStore.preferredUnit)), number: .none)
-                        self.totalDateLabel.text = String(format: NSLocalizedString("com.loudnate.CarbKit.totalDateLabel", tableName: "CarbKit", value: "since %1$@", comment: "The format string describing the starting date of a total value. The first format argument is the localized date."), DateFormatter.localizedString(from: value.startDate as Date, dateStyle: .none, timeStyle: .short))
+                        self.totalDateLabel.text = String(format: NSLocalizedString("com.loudnate.CarbKit.totalDateLabel", tableName: "CarbKit", value: "since %1$@", comment: "The format string describing the starting date of a total value. The first format argument is the localized date."), DateFormatter.localizedString(from: value.startDate, dateStyle: .none, timeStyle: .short))
                     case .failure:
                         self.totalValueLabel.text = NumberFormatter.localizedString(from: 0, number: .none)
                         self.totalDateLabel.text = nil

@@ -123,7 +123,7 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
             let cell = tableView.dequeueReusableCell(withIdentifier: DecimalTextFieldTableViewCell.className) as! DecimalTextFieldTableViewCell
 
             if let quantity = quantity {
-                cell.number = NSNumber(value: quantity.doubleValue(for: preferredUnit) as Double)
+                cell.number = NSNumber(value: quantity.doubleValue(for: preferredUnit))
             }
             cell.textField.isEnabled = isSampleEditable
             cell.unitLabel.text = String(describing: preferredUnit)
@@ -146,7 +146,7 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
             let cell = tableView.dequeueReusableCell(withIdentifier: AbsorptionTimeTextFieldTableViewCell.className) as! AbsorptionTimeTextFieldTableViewCell
 
             if let absorptionTime = absorptionTime {
-                cell.number = NSNumber(value: absorptionTime.minutes as Double)
+                cell.number = NSNumber(value: absorptionTime.minutes)
             }
 
             if let times = defaultAbsorptionTimes {
@@ -187,7 +187,7 @@ public final class CarbEntryEditViewController: UITableViewController, DatePicke
     // MARK: - DatePickerTableViewCellDelegate
 
     func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
-        date = cell.date as Date
+        date = cell.date
     }
 
     // MARK: - TextFieldTableViewCellDelegate

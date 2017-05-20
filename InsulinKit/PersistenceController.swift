@@ -11,12 +11,11 @@ import UIKit
 
 class PersistenceController {
 
-    enum PersistenceControllerError: Error {
+    enum PersistenceControllerError: Error, LocalizedError {
         case configurationError(String)
-        case coreDataError(Error)
+        case coreDataError(NSError)
 
-        // TODO: Drop in favor of `localizedDescription`
-        var description: String {
+        var errorDescription: String? {
             switch self {
             case .configurationError(let description):
                 return description
@@ -25,16 +24,12 @@ class PersistenceController {
             }
         }
 
-        var localizedDescription: String {
-            return description
-        }
-
-        var recoverySuggestion: String {
+        var recoverySuggestion: String? {
             switch self {
             case .configurationError:
                 return "Unrecoverable Error"
             case .coreDataError(let error):
-                return (error as NSError).localizedRecoverySuggestion ?? "Please try again later"
+                return error.localizedRecoverySuggestion
             }
         }
     }
@@ -56,7 +51,7 @@ class PersistenceController {
                 }
 
                 completion?(nil)
-            } catch let saveError {
+            } catch let saveError as NSError {
                 completion?(.coreDataError(saveError))
             }
         }
@@ -97,7 +92,7 @@ class PersistenceController {
                             NSPersistentStoreFileProtectionKey: FileProtectionType.none
                         ]
                     )
-                } catch let storeError {
+                } catch let storeError as NSError {
                     error = .coreDataError(storeError)
                 }
             } else {
