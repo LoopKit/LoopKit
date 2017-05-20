@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 
 
-public struct LoopMath {
+public enum LoopMath {
     public static func simulationDateRangeForSamples<T: Collection>(
         _ samples: T,
         from start: Date? = nil,
