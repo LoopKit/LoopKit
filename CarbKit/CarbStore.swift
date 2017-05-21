@@ -110,7 +110,12 @@ public final class CarbStore: HealthKitSampleStore {
     public var carbRatioSchedule: CarbRatioSchedule?
 
     /// A trio of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
-    public var defaultAbsorptionTimes: DefaultAbsorptionTimes
+    public var defaultAbsorptionTimes: DefaultAbsorptionTimes {
+        didSet {
+            self.maximumAbsorptionTimeInterval = defaultAbsorptionTimes.slow * 2
+            createQueries()
+        }
+    }
 
     /// Insulin-to-glucose sensitivity
     public var insulinSensitivitySchedule: InsulinSensitivitySchedule?
