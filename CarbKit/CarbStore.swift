@@ -631,8 +631,7 @@ public final class CarbStore: HealthKitSampleStore {
         // To know COB at the requested start date, we need to fetch samples that might still be absorbing
         let foodStart = start.addingTimeInterval(-maximumAbsorptionTimeInterval)
         getCachedCarbSamples(start: foodStart, end: end) { (entries) in
-            let carbsOnBoard = CarbMath.carbsOnBoardForCarbEntries(
-                entries,
+            let carbsOnBoard = entries.carbsOnBoard(
                 defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
                 delay: self.delay,
                 delta: self.delta
@@ -690,8 +689,7 @@ public final class CarbStore: HealthKitSampleStore {
             let delay = self.delay
             let delta = self.delta
             self.getCachedCarbSamples(start: foodStart, end: end) { (samples) in
-                let effects = CarbMath.glucoseEffectsForCarbEntries(
-                    samples,
+                let effects = samples.glucoseEffects(
                     carbRatios: carbRatioSchedule,
                     insulinSensitivities: insulinSensitivitySchedule,
                     defaultAbsorptionTime: defaultAbsorptionTime,
@@ -739,7 +737,7 @@ public final class CarbStore: HealthKitSampleStore {
         getCarbSamples(start: start) { (result) in
             switch result {
             case .success(let samples):
-                let total = CarbMath.totalCarbsForCarbEntries(samples) ?? CarbValue(
+                let total = samples.totalCarbs ?? CarbValue(
                     startDate: start,
                     quantity: HKQuantity(unit: .gram(), doubleValue: 0)
                 )
