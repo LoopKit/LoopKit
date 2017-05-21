@@ -113,6 +113,8 @@ public final class CarbStore: HealthKitSampleStore {
     public var defaultAbsorptionTimes: DefaultAbsorptionTimes {
         didSet {
             self.maximumAbsorptionTimeInterval = defaultAbsorptionTimes.slow * 2
+            healthStore.stop(query)
+            self.queryAnchors = [:]
             createQueries()
         }
     }
