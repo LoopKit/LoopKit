@@ -65,8 +65,8 @@ struct InsulinMath {
 
     private static func insulinOnBoardForContinuousDose(_ dose: DoseEntry, atDate date: Date, actionDuration: TimeInterval, delay: TimeInterval, delta: TimeInterval) -> Double {
 
-        let doseDuration = dose.endDate.timeIntervalSince(dose.startDate as Date)  // t1
-        let time = date.timeIntervalSince(dose.startDate as Date)
+        let doseDuration = dose.endDate.timeIntervalSince(dose.startDate)  // t1
+        let time = date.timeIntervalSince(dose.startDate)
         var iob: Double = 0
         var doseDate = TimeInterval(0)  // i
 
@@ -80,16 +80,16 @@ struct InsulinMath {
     }
 
     private static func insulinOnBoardForDose(_ dose: DoseEntry, atDate date: Date, actionDuration: TimeInterval, delay: TimeInterval, delta: TimeInterval) -> Double {
-        let time = date.timeIntervalSince(dose.startDate as Date)
+        let time = date.timeIntervalSince(dose.startDate)
         let iob: Double
 
         if time >= 0 {
             if dose.unit == .units {
                 iob = dose.value * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)
-            } else if dose.unit == .unitsPerHour && dose.endDate.timeIntervalSince(dose.startDate as Date) <= 1.05 * delta {
-                iob = dose.value * dose.endDate.timeIntervalSince(dose.startDate as Date) / TimeInterval(hours: 1) * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)
+            } else if dose.unit == .unitsPerHour && dose.endDate.timeIntervalSince(dose.startDate) <= 1.05 * delta {
+                iob = dose.value * dose.endDate.timeIntervalSince(dose.startDate) / TimeInterval(hours: 1) * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)
             } else {
-                iob = dose.value * dose.endDate.timeIntervalSince(dose.startDate as Date) / TimeInterval(hours: 1) * insulinOnBoardForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
+                iob = dose.value * dose.endDate.timeIntervalSince(dose.startDate) / TimeInterval(hours: 1) * insulinOnBoardForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
             }
         } else {
             iob = 0
@@ -99,8 +99,8 @@ struct InsulinMath {
     }
 
     private static func glucoseEffectForContinuousDose(_ dose: DoseEntry, atDate date: Date, actionDuration: TimeInterval, delay: TimeInterval, delta: TimeInterval) -> Double {
-        let doseDuration = dose.endDate.timeIntervalSince(dose.startDate as Date)  // t1
-        let time = date.timeIntervalSince(dose.startDate as Date)
+        let doseDuration = dose.endDate.timeIntervalSince(dose.startDate)  // t1
+        let time = date.timeIntervalSince(dose.startDate)
         var value: Double = 0
         var doseDate = TimeInterval(0)  // i
 
@@ -114,16 +114,16 @@ struct InsulinMath {
     }
 
     private static func glucoseEffectForDose(_ dose: DoseEntry, atDate date: Date, actionDuration: TimeInterval, insulinSensitivity: Double, delay: TimeInterval, delta: TimeInterval) -> Double {
-        let time = date.timeIntervalSince(dose.startDate as Date)
+        let time = date.timeIntervalSince(dose.startDate)
         let value: Double
 
         if time >= 0 {
             if dose.unit == .units {
                 value = dose.value * -insulinSensitivity * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration))
-            } else if dose.unit == .unitsPerHour && dose.endDate.timeIntervalSince(dose.startDate as Date) <= 1.05 * delta {
-                value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSince(dose.startDate as Date) / TimeInterval(hours: 1) * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration))
+            } else if dose.unit == .unitsPerHour && dose.endDate.timeIntervalSince(dose.startDate) <= 1.05 * delta {
+                value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSince(dose.startDate) / TimeInterval(hours: 1) * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration))
             } else {
-                value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSince(dose.startDate as Date) / TimeInterval(hours: 1) * glucoseEffectForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
+                value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSince(dose.startDate) / TimeInterval(hours: 1) * glucoseEffectForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
             }
         } else {
             value = 0
@@ -162,7 +162,7 @@ struct InsulinMath {
         for value in values {
             if let previousValue = previousValue {
                 let volumeDrop = previousValue.unitVolume - value.unitVolume
-                let duration = value.startDate.timeIntervalSince(previousValue.startDate as Date)
+                let duration = value.startDate.timeIntervalSince(previousValue.startDate)
 
                 if duration > 0 && 0 <= volumeDrop && volumeDrop <= MaximumReservoirDropPerMinute * duration.minutes {
                     doses.append(DoseEntry(
@@ -407,7 +407,7 @@ struct InsulinMath {
             case .units:
                 total += dose.value
             case .unitsPerHour:
-                total += dose.value * dose.endDate.timeIntervalSince(dose.startDate as Date) / TimeInterval(hours: 1)
+                total += dose.value * dose.endDate.timeIntervalSince(dose.startDate) / TimeInterval(hours: 1)
             }
         }
 

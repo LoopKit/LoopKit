@@ -512,7 +512,7 @@ public final class CarbStore: HealthKitSampleStore {
     private func deleteCarbEntryInternal(_ entry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ error: CarbStoreError?) -> Void) {
         if let entry = entry as? StoredCarbEntry {
             if entry.createdByCurrentApp {
-                let predicate = HKQuery.predicateForObjects(with: [entry.sampleUUID as UUID])
+                let predicate = HKQuery.predicateForObjects(with: [entry.sampleUUID])
                 let query = HKSampleQuery(sampleType: carbType, predicate: predicate, limit: 1, sortDescriptors: nil, resultsHandler: { (_, objects, error) -> Void in
                     if let error = error {
                         resultHandler(false, .healthStoreError(error))

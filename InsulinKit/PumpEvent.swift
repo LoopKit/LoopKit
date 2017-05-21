@@ -22,7 +22,7 @@ class PumpEvent: NSManagedObject {
         set {
             willChangeValue(forKey: "duration")
             defer { didChangeValue(forKey: "duration") }
-            primitiveDuration = newValue != nil ? NSNumber(value: newValue as Double) : nil
+            primitiveDuration = newValue != nil ? NSNumber(value: newValue) : nil
         }
     }
 
@@ -61,7 +61,7 @@ class PumpEvent: NSManagedObject {
         set {
             willChangeValue(forKey: "uploaded")
             defer { didChangeValue(forKey: "uploaded") }
-            primitiveUploaded = NSNumber(value: newValue as Bool)
+            primitiveUploaded = NSNumber(value: newValue)
         }
     }
 
@@ -74,7 +74,7 @@ class PumpEvent: NSManagedObject {
         set {
             willChangeValue(forKey: "value")
             defer { didChangeValue(forKey: "value") }
-            primitiveValue = newValue != nil ? NSNumber(value: newValue! as Double) : nil
+            primitiveValue = newValue != nil ? NSNumber(value: newValue!) : nil
         }
     }
 
@@ -92,7 +92,7 @@ extension PumpEvent: Fetchable { }
 extension PumpEvent: TimelineValue {
     var startDate: Date {
         get {
-            return date as Date
+            return date
         }
         set {
             date = newValue
@@ -101,7 +101,7 @@ extension PumpEvent: TimelineValue {
 
     var endDate: Date {
         get {
-            return date.addingTimeInterval(duration) as Date
+            return date.addingTimeInterval(duration)
         }
         set {
             duration = newValue.timeIntervalSince(startDate)

@@ -17,6 +17,6 @@ extension Double: RawRepresentable {
     }
 
     public var rawValue: RawValue {
-        return NSNumber(value: self as Double)
+        return NSNumber(value: self)
     }
 }
