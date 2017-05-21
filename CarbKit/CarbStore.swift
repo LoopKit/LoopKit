@@ -112,7 +112,9 @@ public final class CarbStore: HealthKitSampleStore {
     /// A trio of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
     public var defaultAbsorptionTimes: DefaultAbsorptionTimes {
         didSet {
-            healthStore.stop(query)
+            for query in observerQueries {
+                healthStore.stop(query)
+            }
             self.queryAnchors.removeAll()
             createQueries()
         }
