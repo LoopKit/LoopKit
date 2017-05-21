@@ -95,7 +95,7 @@ class InsulinMathTests: XCTestCase {
         for (expected, calculated) in zip(output, doses) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqual(expected.endDate, calculated.endDate)
-            XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: pow(10, -14))
+            XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: Double(Float.ulpOfOne))
             XCTAssertEqual(expected.unit, calculated.unit)
         }
     }
@@ -178,7 +178,7 @@ class InsulinMathTests: XCTestCase {
 
             for (expected, calculated) in zip(output, iob) {
                 XCTAssertEqual(expected.startDate, calculated.startDate)
-                XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: pow(10, -14))
+                XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: Double(Float.ulpOfOne))
             }
         }
     }
@@ -218,7 +218,7 @@ class InsulinMathTests: XCTestCase {
         for (expected, calculated) in zip(output, doses) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqual(expected.endDate, calculated.endDate)
-            XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: pow(10, -14))
+            XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: Double(Float.ulpOfOne))
             XCTAssertEqual(expected.unit, calculated.unit)
         }
     }
@@ -295,7 +295,7 @@ class InsulinMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: .milligramsPerDeciliter()), calculated.quantity.doubleValue(for: .milligramsPerDeciliter()), accuracy: pow(10, -14))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: .milligramsPerDeciliter()), calculated.quantity.doubleValue(for: .milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -350,7 +350,7 @@ class InsulinMathTests: XCTestCase {
         let input = loadDoseFixture("normalize_edge_case_doses_input")
         let output = InsulinMath.totalDeliveryForDoses(input)
 
-        XCTAssertEqualWithAccuracy(18.8, output, accuracy: pow(10, -2))
+        XCTAssertEqualWithAccuracy(18.8, output, accuracy: 0.01)
     }
 
     func testTrimContinuingDoses() {

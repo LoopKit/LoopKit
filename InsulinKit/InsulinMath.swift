@@ -84,12 +84,11 @@ struct InsulinMath {
         let iob: Double
 
         if time >= 0 {
-            if dose.unit == .units {
-                iob = dose.value * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)
-            } else if dose.unit == .unitsPerHour && dose.endDate.timeIntervalSince(dose.startDate) <= 1.05 * delta {
-                iob = dose.value * dose.endDate.timeIntervalSince(dose.startDate) / TimeInterval(hours: 1) * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)
+            // Consider doses within the delta time window as momentary
+            if dose.endDate.timeIntervalSince(dose.startDate) <= 1.05 * delta {
+                iob = dose.units * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)
             } else {
-                iob = dose.value * dose.endDate.timeIntervalSince(dose.startDate) / TimeInterval(hours: 1) * insulinOnBoardForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
+                iob = dose.units * insulinOnBoardForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
             }
         } else {
             iob = 0
@@ -118,12 +117,11 @@ struct InsulinMath {
         let value: Double
 
         if time >= 0 {
-            if dose.unit == .units {
-                value = dose.value * -insulinSensitivity * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration))
-            } else if dose.unit == .unitsPerHour && dose.endDate.timeIntervalSince(dose.startDate) <= 1.05 * delta {
-                value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSince(dose.startDate) / TimeInterval(hours: 1) * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration))
+            // Consider doses within the delta time window as momentary
+            if dose.endDate.timeIntervalSince(dose.startDate) <= 1.05 * delta {
+                value = dose.units * -insulinSensitivity * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration))
             } else {
-                value = dose.value * -insulinSensitivity * dose.endDate.timeIntervalSince(dose.startDate) / TimeInterval(hours: 1) * glucoseEffectForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
+                value = dose.units * -insulinSensitivity * glucoseEffectForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
             }
         } else {
             value = 0
@@ -169,8 +167,8 @@ struct InsulinMath {
                         type: .tempBasal,
                         startDate: previousValue.startDate,
                         endDate: value.startDate,
-                        value: volumeDrop * TimeInterval(hours: 1) / duration,
-                        unit: .unitsPerHour
+                        value: volumeDrop,
+                        unit: .units
                     ))
                 }
             }
@@ -253,6 +251,8 @@ struct InsulinMath {
 
         for dose in doses {
             switch dose.type {
+            case .basal:
+                reconciled.append(dose)
             case .bolus:
                 reconciled.append(dose)
             case .tempBasal:
@@ -338,7 +338,7 @@ struct InsulinMath {
         let basalItems = basalSchedule.between(start: dose.startDate, end: dose.endDate)
 
         for (index, basalItem) in basalItems.enumerated() {
-            let value = dose.value - basalItem.value
+            let unitsPerHour = dose.unitsPerHour - basalItem.value
             let startDate: Date
             let endDate: Date
 
@@ -358,8 +358,8 @@ struct InsulinMath {
                 type: dose.type,
                 startDate: startDate,
                 endDate: endDate,
-                value: value,
-                unit: dose.unit,
+                value: unitsPerHour,
+                unit: .unitsPerHour,
                 description: dose.description
             ))
         }
@@ -382,10 +382,13 @@ struct InsulinMath {
         var normalizedDoses: [DoseEntry] = []
 
         for dose in doses {
-            if dose.unit == .unitsPerHour {
+            switch dose.type {
+            case .tempBasal, .suspend, .resume:
                 normalizedDoses += normalizeBasalDose(dose, againstBasalSchedule: basalSchedule)
-            } else {
+            case .bolus:
                 normalizedDoses.append(dose)
+            case .prime, .basal:
+                break
             }
         }
 
@@ -400,18 +403,9 @@ struct InsulinMath {
      - returns: The total insulin insulin, in Units
      */
     static func totalDeliveryForDoses<T: Collection>(_ doses: T) -> Double where T.Iterator.Element == DoseEntry {
-        var total: Double = 0
-
-        for dose in doses {
-            switch dose.unit {
-            case .units:
-                total += dose.value
-            case .unitsPerHour:
-                total += dose.value * dose.endDate.timeIntervalSince(dose.startDate) / TimeInterval(hours: 1)
-            }
+        return doses.reduce(0) { (total, dose) -> Double in
+            return total + dose.units
         }
-
-        return total
     }
 
     /**
