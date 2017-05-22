@@ -30,7 +30,7 @@ public class BasalRateSchedule: DailyValueSchedule<Double> {
                 endTime = items[index + 1].startTime
             }
 
-            total += (endTime - item.startTime) / TimeInterval(hours: 1) * item.value
+            total += (endTime - item.startTime).hours * item.value
         }
         
         return total
