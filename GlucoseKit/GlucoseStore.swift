@@ -129,16 +129,14 @@ public final class GlucoseStore: HealthKitSampleStore {
         healthStore.save(glucose, withCompletion: { (completed, error) in
             self.dataAccessQueue.async {
                 if completed {
-                    let sortedGlucose = glucose.sorted { $0.startDate < $1.startDate }
-
-                    self.sampleDataCache.append(contentsOf: sortedGlucose)
+                    self.unionSampleDataCache(with: glucose)
                     self.purgeOldGlucoseSamples()
 
-                    if let latestGlucose = sortedGlucose.last, self.latestGlucose == nil || self.latestGlucose!.startDate < latestGlucose.startDate {
+                    if let latestGlucose = self.sampleDataCache.last, self.latestGlucose == nil || self.latestGlucose!.startDate < latestGlucose.startDate {
                         self.latestGlucose = latestGlucose
                     }
 
-                    completion(completed, sortedGlucose, error)
+                    completion(completed, glucose, error)
                 } else {
                     completion(completed, [], error)
                 }
@@ -276,8 +274,9 @@ public final class GlucoseStore: HealthKitSampleStore {
         let samplesToCache = samples.filter({ !self.sampleDataCache.contains($0) })
 
         if samplesToCache.count > 0 {
-            self.sampleDataCache.append(contentsOf: samplesToCache)
-            self.sampleDataCache.sort(by: { $0.startDate < $1.startDate })
+            sampleDataCache.append(contentsOf: samplesToCache)
+            purgeOldGlucoseSamples()
+            sampleDataCache.sort(by: { $0.startDate < $1.startDate })
         }
     }
 
