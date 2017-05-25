@@ -68,6 +68,10 @@
 		434FF1F41CF294A9000DB779 /* TextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */; };
 		435F355E1C9CD16A00C204D2 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */; };
 		435F35611C9CD25F00C204D2 /* DeviceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */; };
+		4378B6431ED55E81000AE785 /* suspend_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 4378B6421ED55E81000AE785 /* suspend_dose.json */; };
+		4378B6471ED55F8C000AE785 /* suspend_dose_reconciled_normalized_iob.json in Resources */ = {isa = PBXBuildFile; fileRef = 4378B6441ED55F8C000AE785 /* suspend_dose_reconciled_normalized_iob.json */; };
+		4378B6481ED55F8C000AE785 /* suspend_dose_reconciled_normalized.json in Resources */ = {isa = PBXBuildFile; fileRef = 4378B6451ED55F8C000AE785 /* suspend_dose_reconciled_normalized.json */; };
+		4378B6491ED55F8C000AE785 /* suspend_dose_reconciled.json in Resources */ = {isa = PBXBuildFile; fileRef = 4378B6461ED55F8C000AE785 /* suspend_dose_reconciled.json */; };
 		43971A401C8CABFF0013154F /* GlucoseSampleValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */; };
 		43971A421C8CAEF20013154F /* momentum_effect_display_only_glucose_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43971A411C8CAEF20013154F /* momentum_effect_display_only_glucose_input.json */; };
 		439A1E8A1EC6B54600662F2B /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
@@ -340,6 +344,10 @@
 		434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewController.swift; sourceTree = "<group>"; };
 		435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		435F35601C9CD25F00C204D2 /* DeviceDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDataManager.swift; sourceTree = "<group>"; };
+		4378B6421ED55E81000AE785 /* suspend_dose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = suspend_dose.json; sourceTree = "<group>"; };
+		4378B6441ED55F8C000AE785 /* suspend_dose_reconciled_normalized_iob.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = suspend_dose_reconciled_normalized_iob.json; sourceTree = "<group>"; };
+		4378B6451ED55F8C000AE785 /* suspend_dose_reconciled_normalized.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = suspend_dose_reconciled_normalized.json; sourceTree = "<group>"; };
+		4378B6461ED55F8C000AE785 /* suspend_dose_reconciled.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = suspend_dose_reconciled.json; sourceTree = "<group>"; };
 		43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseSampleValue.swift; sourceTree = "<group>"; };
 		43971A411C8CAEF20013154F /* momentum_effect_display_only_glucose_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = momentum_effect_display_only_glucose_input.json; sourceTree = "<group>"; };
 		43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantity.swift; sourceTree = "<group>"; };
@@ -910,6 +918,10 @@
 				43D8FED11C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_input.json */,
 				43D8FED21C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json */,
 				43B99B031C74538D00D050F5 /* short_basal_dose.json */,
+				4378B6441ED55F8C000AE785 /* suspend_dose_reconciled_normalized_iob.json */,
+				4378B6451ED55F8C000AE785 /* suspend_dose_reconciled_normalized.json */,
+				4378B6461ED55F8C000AE785 /* suspend_dose_reconciled.json */,
+				4378B6421ED55E81000AE785 /* suspend_dose.json */,
 			);
 			path = Fixtures;
 			sourceTree = "<group>";
@@ -1380,6 +1392,8 @@
 			files = (
 				43CE7CE61CA9EBD2003CC1B0 /* iob_from_bolus_300min_output.json in Resources */,
 				43CE7CEC1CA9EC88003CC1B0 /* iob_from_bolus_420min_output.json in Resources */,
+				4378B6491ED55F8C000AE785 /* suspend_dose_reconciled.json in Resources */,
+				4378B6481ED55F8C000AE785 /* suspend_dose_reconciled_normalized.json in Resources */,
 				43B99B021C7451E500D050F5 /* normalized_doses.json in Resources */,
 				43CE7CE21CA9EA1A003CC1B0 /* iob_from_bolus_120min_output.json in Resources */,
 				43CE7CE41CA9EB1E003CC1B0 /* iob_from_bolus_180min_output.json in Resources */,
@@ -1393,9 +1407,11 @@
 				43D8FEF61C72954F0073BE78 /* basal.json in Resources */,
 				43B99B081C74553900D050F5 /* effect_from_basal_output.json in Resources */,
 				43CE7CE01CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json in Resources */,
+				4378B6431ED55E81000AE785 /* suspend_dose.json in Resources */,
 				43B99AFC1C744CE300D050F5 /* bolus_dose.json in Resources */,
 				434FB6481D70096A007B9C70 /* reservoir_history_with_continuity_holes.json in Resources */,
 				43CE7CEE1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json in Resources */,
+				4378B6471ED55F8C000AE785 /* suspend_dose_reconciled_normalized_iob.json in Resources */,
 				43D8FED81C7294B80073BE78 /* normalized_reservoir_history_output.json in Resources */,
 				43D8FEDA1C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json in Resources */,
 				43CE7CEA1CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json in Resources */,

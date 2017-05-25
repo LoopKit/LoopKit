@@ -57,7 +57,12 @@ extension DoseEntry {
     public var unitsPerHour: Double {
         switch unit {
         case .units:
-            return value / endDate.timeIntervalSince(startDate).hours
+            let hours = endDate.timeIntervalSince(startDate).hours
+            guard hours != 0 else {
+                return 0
+            }
+
+            return value / hours
         case .unitsPerHour:
             return value
         }

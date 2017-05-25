@@ -137,6 +137,46 @@ class InsulinMathTests: XCTestCase {
         XCTAssertFalse(InsulinMath.isContinuous(input, from: dateFormatter.date(from: "2016-01-30T17:30:00")!, to: dateFormatter.date(from: "2016-01-30T20:40:00")!))
     }
 
+    func testIOBFromSuspend() {
+        let input = loadDoseFixture("suspend_dose")
+        let reconciledOutput = loadDoseFixture("suspend_dose_reconciled")
+        let normalizedOutput = loadDoseFixture("suspend_dose_reconciled_normalized")
+        let iobOutput = loadInsulinValueFixture("suspend_dose_reconciled_normalized_iob")
+        let basals = loadBasalRateScheduleFixture("basal")
+        let actionDuration = TimeInterval(hours: 4)
+
+        let reconciled = InsulinMath.reconcileDoses(input)
+
+        XCTAssertEqual(reconciledOutput.count, reconciled.count)
+
+        for (expected, calculated) in zip(reconciledOutput, reconciled) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqual(expected.endDate, calculated.endDate)
+            XCTAssertEqual(expected.value, calculated.value)
+            XCTAssertEqual(expected.unit, calculated.unit)
+        }
+
+        let normalized = InsulinMath.normalize(reconciled, againstBasalSchedule: basals)
+
+        XCTAssertEqual(normalizedOutput.count, normalized.count)
+
+        for (expected, calculated) in zip(normalizedOutput, normalized) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqual(expected.endDate, calculated.endDate)
+            XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.unit, calculated.unit)
+        }
+
+        let iob = InsulinMath.insulinOnBoardForDoses(normalized, actionDuration: actionDuration)
+
+        XCTAssertEqual(iobOutput.count, iob.count)
+
+        for (expected, calculated) in zip(iobOutput, iob) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqualWithAccuracy(expected.value, calculated.value, accuracy: Double(Float.ulpOfOne))
+        }
+    }
+
     func testIOBFromDoses() {
         let input = loadDoseFixture("normalized_doses")
         let output = loadInsulinValueFixture("iob_from_doses_output")
