@@ -140,7 +140,7 @@ extension UserDefaults {
             }
         } set {
             if let value = newValue {
-                set(NSNumber(value: value.secondsFromGMT() as Int), forKey: Key.PumpTimeZone.rawValue)
+                set(NSNumber(value: value.secondsFromGMT()), forKey: Key.PumpTimeZone.rawValue)
             } else {
                 removeObject(forKey: Key.PumpTimeZone.rawValue)
             }

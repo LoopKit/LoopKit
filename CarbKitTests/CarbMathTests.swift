@@ -69,13 +69,13 @@ class CarbMathTests: XCTestCase {
         let output = loadEffectOutputFixture()
         let (carbRatios, insulinSensitivities) = loadSchedules()
 
-        let effects = CarbMath.glucoseEffectsForCarbEntries(input, carbRatios: carbRatios, insulinSensitivities: insulinSensitivities, defaultAbsorptionTime: TimeInterval(minutes: 180))
+        let effects = input.glucoseEffects(carbRatios: carbRatios, insulinSensitivities: insulinSensitivities, defaultAbsorptionTime: TimeInterval(minutes: 180))
 
         XCTAssertEqual(output.count, effects.count)
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: pow(10, -11))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -83,13 +83,13 @@ class CarbMathTests: XCTestCase {
         let input = loadHistoryFixture("carb_effect_from_history_input")
         let output = loadCOBOutputFixture()
 
-        let cob = CarbMath.carbsOnBoardForCarbEntries(input, defaultAbsorptionTime: TimeInterval(minutes: 180), delay: TimeInterval(minutes: 10), delta: TimeInterval(minutes: 5))
+        let cob = input.carbsOnBoard(defaultAbsorptionTime: TimeInterval(minutes: 180), delay: TimeInterval(minutes: 10), delta: TimeInterval(minutes: 5))
 
         XCTAssertEqual(output.count, cob.count)
 
         for (expected, calculated) in zip(output, cob) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: pow(10, -11))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -97,7 +97,7 @@ class CarbMathTests: XCTestCase {
         let input = loadHistoryFixture("grouped_by_overlapping_absorption_times_input")
         let outputFixture: [[JSONDictionary]] = loadFixture("grouped_by_overlapping_absorption_times_output")
         let output = outputFixture.map { self.carbEntriesFromFixture($0) }
-        let grouped = CarbMath.groupedByOverlappingAbsorptionTimes(input, defaultAbsorptionTime: TimeInterval(minutes: 180))
+        let grouped = input.groupedByOverlappingAbsorptionTimes(defaultAbsorptionTime: TimeInterval(minutes: 180))
 
         XCTAssertEqual(output.count, grouped.count)
 
@@ -110,7 +110,7 @@ class CarbMathTests: XCTestCase {
         let input = loadHistoryFixture("grouped_by_overlapping_absorption_times_border_case_input")
         let outputFixture: [[JSONDictionary]] = loadFixture("grouped_by_overlapping_absorption_times_border_case_output")
         let output = outputFixture.map { self.carbEntriesFromFixture($0) }
-        let grouped = CarbMath.groupedByOverlappingAbsorptionTimes(input, defaultAbsorptionTime: TimeInterval(minutes: 180))
+        let grouped = input.groupedByOverlappingAbsorptionTimes(defaultAbsorptionTime: TimeInterval(minutes: 180))
 
         XCTAssertEqual(output.count, grouped.count)
 

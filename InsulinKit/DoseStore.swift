@@ -75,13 +75,13 @@ public final class DoseStore {
 
     public enum DoseStoreError: Error {
         case configurationError
-        case initializationError(description: String, recoverySuggestion: String)
+        case initializationError(description: String, recoverySuggestion: String?)
         case persistenceError(description: String, recoverySuggestion: String?)
         case fetchError(description: String, recoverySuggestion: String?)
 
         init?(error: PersistenceController.PersistenceControllerError?) {
             if let error = error {
-                self = .persistenceError(description: error.description, recoverySuggestion: error.recoverySuggestion)
+                self = .persistenceError(description: String(describing: error), recoverySuggestion: error.recoverySuggestion)
             } else {
                 return nil
             }
@@ -343,7 +343,7 @@ public final class DoseStore {
 
                 if let error = error {
                     saveError = .persistenceError(
-                        description: error.description,
+                        description: String(describing: error),
                         recoverySuggestion: error.recoverySuggestion
                     )
                 }
