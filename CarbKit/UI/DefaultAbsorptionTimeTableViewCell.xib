@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DefaultAbsorptionTimeTableViewCell" rowHeight="244" id="EQr-YJ-wKb" customClass="DefaultAbsorptionTimeTableViewCell" customModule="CarbKit" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="244"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EQr-YJ-wKb" id="Awp-iX-crE">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="244"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kib-Lx-amc">
+                        <rect key="frame" x="8" y="8" width="359" height="28"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1uV-wH-vtO">
+                                <rect key="frame" x="8" y="0.0" width="42" height="28"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8dN-g4-lCY">
+                                <rect key="frame" x="310" y="0.0" width="42" height="28"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="28" id="Kp3-CY-Rbx"/>
+                            <constraint firstItem="1uV-wH-vtO" firstAttribute="leading" secondItem="kib-Lx-amc" secondAttribute="leading" constant="8" id="dBA-gA-fCd"/>
+                            <constraint firstAttribute="bottom" secondItem="8dN-g4-lCY" secondAttribute="bottom" id="eDn-gI-eaM"/>
+                            <constraint firstAttribute="bottom" secondItem="1uV-wH-vtO" secondAttribute="bottom" id="r6c-4q-RQK"/>
+                            <constraint firstItem="1uV-wH-vtO" firstAttribute="top" secondItem="kib-Lx-amc" secondAttribute="top" id="tfO-tb-yn4"/>
+                            <constraint firstItem="8dN-g4-lCY" firstAttribute="top" secondItem="kib-Lx-amc" secondAttribute="top" id="uYO-lC-jUX"/>
+                            <constraint firstAttribute="trailing" secondItem="8dN-g4-lCY" secondAttribute="trailing" constant="7" id="wvK-2b-1De"/>
+                        </constraints>
+                    </view>
+                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="countDownTimer" minuteInterval="15" translatesAutoresizingMaskIntoConstraints="NO" id="ei2-ME-SIc">
+                        <rect key="frame" x="0.0" y="44" width="375" height="199"/>
+                        <constraints>
+                            <constraint firstAttribute="height" priority="750" constant="200" id="upW-Ec-qIo"/>
+                        </constraints>
+                        <date key="date" timeIntervalSinceReferenceDate="474584803.36239803">
+                            <!--2016-01-15 21:06:43 +0000-->
+                        </date>
+                        <connections>
+                            <action selector="timeChanged:" destination="EQr-YJ-wKb" eventType="valueChanged" id="pHY-gP-HFD"/>
+                        </connections>
+                    </datePicker>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="ei2-ME-SIc" firstAttribute="top" secondItem="kib-Lx-amc" secondAttribute="bottom" constant="8" id="54Z-nQ-aJO"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="ei2-ME-SIc" secondAttribute="bottom" constant="-8" id="7se-Xd-HBw"/>
+                    <constraint firstItem="ei2-ME-SIc" firstAttribute="leading" secondItem="Awp-iX-crE" secondAttribute="leading" id="R8Y-QW-8fv"/>
+                    <constraint firstAttribute="trailing" secondItem="ei2-ME-SIc" secondAttribute="trailing" id="ScK-ua-aJb"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="kib-Lx-amc" secondAttribute="trailing" id="WxM-lP-8ZT"/>
+                    <constraint firstItem="kib-Lx-amc" firstAttribute="top" secondItem="Awp-iX-crE" secondAttribute="topMargin" id="jsE-J9-3Kv"/>
+                    <constraint firstItem="kib-Lx-amc" firstAttribute="leading" secondItem="Awp-iX-crE" secondAttribute="leadingMargin" id="pyA-Ht-jwf"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="absorptionSpeedLabel" destination="1uV-wH-vtO" id="90o-L6-HIk"/>
+                <outlet property="timeLabel" destination="8dN-g4-lCY" id="Sko-An-nyt"/>
+                <outlet property="timePicker" destination="ei2-ME-SIc" id="3vO-vE-w39"/>
+                <outlet property="timePickerHeightConstraint" destination="upW-Ec-qIo" id="qUZ-fD-6oc"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>
