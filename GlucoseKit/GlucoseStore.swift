@@ -96,19 +96,20 @@ public final class GlucoseStore: HealthKitSampleStore {
      
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
-     - parameter values:        A an array of value tuples:
-        - quantity:      The glucose sample quantity
-        - date:          The date the sample was collected
-        - isDisplayOnly: Whether the reading was shifted for visual consistency after calibration
-     - parameter device:        The description of the device the collected the sample
-     - parameter completionHandler: A closure called once the glucose values were saved. The closure takes three arguments:
+     - Parameters:
+        - values:        A an array of value tuples:
+            - `quantity`:      The glucose sample quantity
+            - `date`:          The date the sample was collected
+            - `isDisplayOnly`: Whether the reading was shifted for visual consistency after calibration
+        - device:        The description of the device the collected the sample
+        - completion: A closure called once the glucose values were saved. The closure takes three arguments:
         - success: Whether the sample was successfully saved
         - samples: The saved samples
         - error:   An error object explaining why the save failed
      */
-    public func addGlucoseValues(_ values: [(quantity: HKQuantity, date: Date, isDisplayOnly: Bool)], device: HKDevice?, completionHandler: @escaping (_ success: Bool, _ samples: [GlucoseValue]?, _ error: Error?) -> Void) {
+    public func addGlucoseValues(_ values: [(quantity: HKQuantity, date: Date, isDisplayOnly: Bool)], device: HKDevice?, completion: @escaping (_ success: Bool, _ samples: [GlucoseValue]?, _ error: Error?) -> Void) {
         guard values.count > 0 else {
-            completionHandler(false, [], nil)
+            completion(false, [], nil)
             return
         }
 
@@ -128,18 +129,16 @@ public final class GlucoseStore: HealthKitSampleStore {
         healthStore.save(glucose, withCompletion: { (completed, error) in
             self.dataAccessQueue.async {
                 if completed {
-                    let sortedGlucose = glucose.sorted { $0.startDate < $1.startDate }
-
-                    self.sampleDataCache.append(contentsOf: sortedGlucose)
+                    self.unionSampleDataCache(with: glucose)
                     self.purgeOldGlucoseSamples()
 
-                    if let latestGlucose = sortedGlucose.last, self.latestGlucose == nil || self.latestGlucose!.startDate < latestGlucose.startDate {
+                    if let latestGlucose = self.sampleDataCache.last, self.latestGlucose == nil || self.latestGlucose!.startDate < latestGlucose.startDate {
                         self.latestGlucose = latestGlucose
                     }
 
-                    completionHandler(completed, sortedGlucose, error)
+                    completion(completed, glucose, error)
                 } else {
-                    completionHandler(completed, [], error)
+                    completion(completed, [], error)
                 }
             }
         }) 
@@ -170,37 +169,29 @@ public final class GlucoseStore: HealthKitSampleStore {
         }
     }
 
-    private func glucoseSamplesPredicate(start: Date, end: Date?) -> NSPredicate {
-        return HKQuery.predicateForSamples(
-            withStart: start,
-            end: end ?? Date.distantFuture,
-            options: [.strictStartDate]
-        )
-    }
-
-    private func getCachedGlucoseSamples(start: Date, end: Date? = nil, completionHandler: @escaping (_ samples: [HKQuantitySample]) -> Void) {
+    private func getCachedGlucoseSamples(start: Date, end: Date? = nil, completion: @escaping (_ samples: [HKQuantitySample]) -> Void) {
         if UIApplication.shared.isProtectedDataAvailable {
             getGlucoseSamples(start: start, end: end) { (result) in
                 switch result {
                 case .success(let samples):
-                    completionHandler(samples)
+                    completion(samples)
                 case .failure:
-                    completionHandler(self.sampleDataCache.filterDateRange(start, end))
+                    completion(self.sampleDataCache.filterDateRange(start, end))
                 }
             }
         } else {
             dataAccessQueue.async {
                 let samples = self.sampleDataCache.filterDateRange(start, end)
-                completionHandler(samples)
+                completion(samples)
             }
         }
     }
 
-    private func getGlucoseSamples(start: Date, end: Date? = nil, completionHandler: @escaping (_ result: GlucoseStoreResult<[HKQuantitySample]>) -> Void) {
-        let predicate = glucoseSamplesPredicate(start: start, end: end)
+    private func getGlucoseSamples(start: Date, end: Date? = nil, completion: @escaping (_ result: GlucoseStoreResult<[HKQuantitySample]>) -> Void) {
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: end)
         let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
 
-        let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
+        let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
 
             self.dataAccessQueue.async {
                 let samples = samples as? [HKQuantitySample] ?? []
@@ -210,10 +201,10 @@ public final class GlucoseStore: HealthKitSampleStore {
                 }
 
                 if let error = error {
-                    completionHandler(.failure(error))
+                    completion(.failure(error))
                 } else {
                     self.unionSampleDataCache(with: samples)
-                    completionHandler(.success(samples))
+                    completion(.success(samples))
                 }
             }
         }
@@ -283,8 +274,9 @@ public final class GlucoseStore: HealthKitSampleStore {
         let samplesToCache = samples.filter({ !self.sampleDataCache.contains($0) })
 
         if samplesToCache.count > 0 {
-            self.sampleDataCache.append(contentsOf: samplesToCache)
-            self.sampleDataCache.sort(by: { $0.startDate < $1.startDate })
+            sampleDataCache.append(contentsOf: samplesToCache)
+            purgeOldGlucoseSamples()
+            sampleDataCache.sort(by: { $0.startDate < $1.startDate })
         }
     }
 
@@ -296,17 +288,17 @@ public final class GlucoseStore: HealthKitSampleStore {
      This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
      - Parameters:
-        - completionHandler: A closure called once the calculation has completed. The closure takes two arguments:
+        - completion: A closure called once the calculation has completed. The closure takes two arguments:
         - effects: The calculated effect values, or an empty array if the glucose data isn't suitable for momentum calculation.
         - error:   Error is always nil
      */
-    public func getRecentMomentumEffect(_ completionHandler: @escaping (_ effects: [GlucoseEffect], _ error: Error?) -> Void) {
+    public func getRecentMomentumEffect(_ completion: @escaping (_ effects: [GlucoseEffect], _ error: Error?) -> Void) {
         getCachedGlucoseSamples(start: Date(timeIntervalSinceNow: -momentumDataInterval)) { (samples) in
             let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(samples,
                 duration: self.momentumDataInterval,
                 delta: TimeInterval(minutes: 5)
             )
-            completionHandler(effects, nil)
+            completion(effects, nil)
         }
     }
 
@@ -341,11 +333,9 @@ public final class GlucoseStore: HealthKitSampleStore {
         getCachedGlucoseSamples(start: start, end: end) { (samples) in
             let change: (GlucoseValue, GlucoseValue)?
 
-            if  GlucoseMath.isCalibrated(samples),
-                let provenanceIdentifier = samples.last?.provenanceIdentifier
-            {
+            if let provenanceIdentifier = samples.last?.provenanceIdentifier {
                 // Enforce a single source
-                let samples = samples.filter { $0.provenanceIdentifier == provenanceIdentifier }
+                let samples = GlucoseMath.filterAfterCalibration(samples).filter { $0.provenanceIdentifier == provenanceIdentifier }
 
                 if samples.count > 1,
                     let first = samples.first,

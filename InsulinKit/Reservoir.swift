@@ -21,7 +21,7 @@ class Reservoir: NSManagedObject {
         set {
             willChangeValue(forKey: "volume")
             defer { didChangeValue(forKey: "volume") }
-            primitiveVolume = newValue != nil ? NSNumber(value: newValue as Double) : nil
+            primitiveVolume = newValue != nil ? NSNumber(value: newValue) : nil
         }
     }
 
@@ -38,7 +38,7 @@ extension Reservoir: Fetchable { }
 
 extension Reservoir: ReservoirValue {
     var startDate: Date {
-        return date as Date
+        return date
     }
 
     var unitVolume: Double {

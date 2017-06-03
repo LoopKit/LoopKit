@@ -108,7 +108,7 @@ public class GlucoseRangeSchedule: DailyQuantitySchedule<DoubleRange> {
     }
 
     public override func value(at time: Date) -> DoubleRange {
-        if let override = temporaryOverride, override.endDate as Date > Date() {
+        if let override = temporaryOverride, override.endDate > Date() {
             return override.value
         }
 

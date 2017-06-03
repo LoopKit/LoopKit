@@ -11,6 +11,7 @@ import Foundation
 
 /// A subset of pump event types, with raw values matching decocare's strings
 public enum PumpEventType: String {
+    case basal     = "BasalProfileStart"
     case bolus     = "Bolus"
     case prime     = "Prime"
     case resume    = "PumpResume"

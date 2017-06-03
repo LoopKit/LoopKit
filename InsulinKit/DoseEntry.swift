@@ -15,7 +15,7 @@ public struct DoseEntry: TimelineValue {
     public let type: PumpEventType
     public let startDate: Date
     public let endDate: Date
-    public let value: Double
+    internal let value: Double
     public let unit: DoseUnit
     public let description: String?
     let managedObjectID: NSManagedObjectID?
@@ -25,11 +25,11 @@ public struct DoseEntry: TimelineValue {
     }
 
     public init(suspendDate: Date) {
-        self.init(type: .suspend, startDate: suspendDate, value: 0, unit: .unitsPerHour)
+        self.init(type: .suspend, startDate: suspendDate, value: 0, unit: .units)
     }
 
     public init(resumeDate: Date) {
-        self.init(type: .resume, startDate: resumeDate, value: 0, unit: .unitsPerHour)
+        self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units)
     }
 
     init(type: PumpEventType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil, managedObjectID: NSManagedObjectID?) {
@@ -40,5 +40,31 @@ public struct DoseEntry: TimelineValue {
         self.unit = unit
         self.description = description
         self.managedObjectID = managedObjectID
+    }
+}
+
+
+extension DoseEntry {
+    public var units: Double {
+        switch unit {
+        case .units:
+            return value
+        case .unitsPerHour:
+            return value * endDate.timeIntervalSince(startDate).hours
+        }
+    }
+
+    public var unitsPerHour: Double {
+        switch unit {
+        case .units:
+            let hours = endDate.timeIntervalSince(startDate).hours
+            guard hours != 0 else {
+                return 0
+            }
+
+            return value / hours
+        case .unitsPerHour:
+            return value
+        }
     }
 }

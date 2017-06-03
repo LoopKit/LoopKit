@@ -63,7 +63,7 @@ class GlucoseMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: pow(10, -14))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -78,7 +78,7 @@ class GlucoseMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: pow(10, -14))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -93,7 +93,7 @@ class GlucoseMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: pow(10, -14))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -108,7 +108,7 @@ class GlucoseMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: pow(10, -14))
+            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -153,4 +153,6 @@ class GlucoseMathTests: XCTestCase {
 
         XCTAssertEqual(0, effects.count)
     }
+
+
 }

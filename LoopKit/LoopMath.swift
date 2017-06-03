@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 
 
-public struct LoopMath {
+public enum LoopMath {
     public static func simulationDateRangeForSamples<T: Collection>(
         _ samples: T,
         from start: Date? = nil,
@@ -126,7 +126,7 @@ public struct LoopMath {
 
             for effect in timeline {
                 let value = effect.quantity.doubleValue(for: unit)
-                effectValuesAtDate[effect.startDate as Date] = (effectValuesAtDate[effect.startDate as Date] ?? 0) + value - previousEffectValue
+                effectValuesAtDate[effect.startDate] = (effectValuesAtDate[effect.startDate] ?? 0) + value - previousEffectValue
                 previousEffectValue = value
             }
         }
@@ -139,10 +139,10 @@ public struct LoopMath {
             // We're assuming the first one occurs on or before the starting glucose.
             let blendCount = momentum.count - 2
 
-            let timeDelta = momentum[1].startDate.timeIntervalSince(momentum[0].startDate as Date)
+            let timeDelta = momentum[1].startDate.timeIntervalSince(momentum[0].startDate)
 
             // The difference between the first momentum value and the starting glucose value
-            let momentumOffset = startingGlucose.startDate.timeIntervalSince(momentum[0].startDate as Date)
+            let momentumOffset = startingGlucose.startDate.timeIntervalSince(momentum[0].startDate)
 
             let blendSlope = 1.0 / Double(blendCount)
             let blendOffset = momentumOffset / timeDelta * blendSlope
@@ -152,17 +152,17 @@ public struct LoopMath {
                 let effectValueChange = value - previousEffectValue
 
                 let split = min(1.0, max(0.0, Double(momentum.count - index) / Double(blendCount) - blendSlope + blendOffset))
-                let effectBlend = (1.0 - split) * (effectValuesAtDate[effect.startDate as Date] ?? 0)
+                let effectBlend = (1.0 - split) * (effectValuesAtDate[effect.startDate] ?? 0)
                 let momentumBlend = split * effectValueChange
 
-                effectValuesAtDate[effect.startDate as Date] = effectBlend + momentumBlend
+                effectValuesAtDate[effect.startDate] = effectBlend + momentumBlend
 
                 previousEffectValue = value
             }
         }
 
         let prediction = effectValuesAtDate.sorted { $0.0 < $1.0 }.reduce([PredictedGlucoseValue(startDate: startingGlucose.startDate, quantity: startingGlucose.quantity)]) { (prediction, effect) -> [GlucoseValue] in
-            if effect.0 > startingGlucose.startDate as Date, let lastValue = prediction.last {
+            if effect.0 > startingGlucose.startDate, let lastValue = prediction.last {
                 let nextValue: GlucoseValue = PredictedGlucoseValue(
                     startDate: effect.0,
                     quantity: HKQuantity(unit: unit, doubleValue: effect.1 + lastValue.quantity.doubleValue(for: unit))
