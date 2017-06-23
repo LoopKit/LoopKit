@@ -168,13 +168,15 @@ public final class CarbEntryTableViewController: UITableViewController {
     private func updateCOB() {
         if case .display = state, let carbStore = carbStore {
             carbStore.carbsOnBoard(at: Date()) { (result) in
-                switch result {
-                case .success(let value):
-                    self.COBValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: value.quantity.doubleValue(for: carbStore.preferredUnit)), number: .none)
-                    self.COBDateLabel.text = String(format: NSLocalizedString("com.loudnate.CarbKit.COBDateLabel", tableName: "CarbKit", value: "at %1$@", comment: "The format string describing the date of a COB value. The first format argument is the localized date."), DateFormatter.localizedString(from: value.startDate, dateStyle: .none, timeStyle: .short))
-                case .failure:
-                    self.COBValueLabel.text = NumberFormatter.localizedString(from: 0, number: .none)
-                    self.COBDateLabel.text = nil
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let value):
+                        self.COBValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: value.quantity.doubleValue(for: carbStore.preferredUnit)), number: .none)
+                        self.COBDateLabel.text = String(format: NSLocalizedString("com.loudnate.CarbKit.COBDateLabel", tableName: "CarbKit", value: "at %1$@", comment: "The format string describing the date of a COB value. The first format argument is the localized date."), DateFormatter.localizedString(from: value.startDate, dateStyle: .none, timeStyle: .short))
+                    case .failure:
+                        self.COBValueLabel.text = NumberFormatter.localizedString(from: 0, number: .none)
+                        self.COBDateLabel.text = nil
+                    }
                 }
             }
         }
