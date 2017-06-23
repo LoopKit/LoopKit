@@ -74,7 +74,7 @@ extension CarbStatus {
             let time = date.timeIntervalSince(startDate) - delay
             let absorptionTime = absorption.estimatedDate.duration
 
-            return LinearCarbAbsorption.unabsorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
+            return LinearAbsorption.unabsorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
         }
 
         guard let end = observedTimeline.last?.endDate, date <= end else {
@@ -83,7 +83,7 @@ extension CarbStatus {
             let time = date.timeIntervalSince(absorption.observedDate.end)
             let absorptionTime = absorption.estimatedTimeRemaining
 
-            return LinearCarbAbsorption.unabsorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
+            return LinearAbsorption.unabsorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
         }
 
         // Observed absorption
@@ -110,7 +110,7 @@ extension CarbStatus {
             let time = date.timeIntervalSince(startDate) - delay
             let absorptionTime = absorption.estimatedDate.duration
 
-            return LinearCarbAbsorption.absorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
+            return LinearAbsorption.absorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
         }
 
         guard let end = observedTimeline.last?.endDate, date <= end else {
@@ -119,7 +119,7 @@ extension CarbStatus {
             let time = date.timeIntervalSince(absorption.observedDate.end)
             let absorptionTime = absorption.estimatedTimeRemaining
 
-            return absorption.clamped.doubleValue(for: unit) + LinearCarbAbsorption.absorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
+            return absorption.clamped.doubleValue(for: unit) + LinearAbsorption.absorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
         }
 
         // Observed absorption

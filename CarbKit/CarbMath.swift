@@ -63,7 +63,7 @@ extension CarbAbsorptionComputable {
 
 // MARK: - Parabolic absorption as described by Scheiner
 // This is the integral approximation of the Scheiner GI curve found in Think Like a Pancreas, Fig 7-8, which first appeared in [GlucoDyn](https://github.com/kenstack/GlucoDyn)
-struct Scheiner: CarbAbsorptionComputable {
+struct ParabolicAbsorption: CarbAbsorptionComputable {
     static func percentAbsorptionAtTime(_ time: TimeInterval, absorptionTime: TimeInterval) -> Double {
         switch time {
         case let t where t < 0:
@@ -93,7 +93,7 @@ struct Scheiner: CarbAbsorptionComputable {
 
 
 // MARK: - Linear absorption as a factor of reported duration
-struct LinearCarbAbsorption: CarbAbsorptionComputable {
+struct LinearAbsorption: CarbAbsorptionComputable {
     static func percentAbsorptionAtTime(_ time: TimeInterval, absorptionTime: TimeInterval) -> Double {
         switch time {
         case let t where t <= 0:
@@ -119,17 +119,12 @@ struct LinearCarbAbsorption: CarbAbsorptionComputable {
 
 
 extension CarbEntry {
-    fileprivate static var algorithm: CarbAbsorptionComputable.Type {
-        // TODO: Change/remove this
-        return Scheiner.self
-    }
-
     func carbsOnBoard(at date: Date, defaultAbsorptionTime: TimeInterval, delay: TimeInterval) -> Double {
         let time = date.timeIntervalSince(startDate)
         let value: Double
 
         if time >= 0 {
-            value = Self.algorithm.unabsorbedCarbs(of: quantity.doubleValue(for: HKUnit.gram()), atTime: time - delay, absorptionTime: absorptionTime ?? defaultAbsorptionTime)
+            value = ParabolicAbsorption.unabsorbedCarbs(of: quantity.doubleValue(for: HKUnit.gram()), atTime: time - delay, absorptionTime: absorptionTime ?? defaultAbsorptionTime)
         } else {
             value = 0
         }
@@ -145,7 +140,7 @@ extension CarbEntry {
     ) -> Double {
         let time = date.timeIntervalSince(startDate)
 
-        return Self.algorithm.absorbedCarbs(
+        return ParabolicAbsorption.absorbedCarbs(
             of: quantity.doubleValue(for: .gram()),
             atTime: time - delay,
             absorptionTime: absorptionTime
@@ -166,7 +161,7 @@ extension CarbEntry {
     fileprivate func estimatedAbsorptionTime(forAbsorbedCarbs carbs: Double, at date: Date) -> TimeInterval {
         let time = date.timeIntervalSince(startDate)
 
-        return max(time, Self.algorithm.absorptionTime(forPercentAbsorption: carbs / quantity.doubleValue(for: .gram()), atTime: time))
+        return max(time, ParabolicAbsorption.absorptionTime(forPercentAbsorption: carbs / quantity.doubleValue(for: .gram()), atTime: time))
     }
 }
 
@@ -433,7 +428,7 @@ fileprivate class CarbStatusBuilder {
     private var minPredictedGrams: Double {
         // We incorporate a delay when calculating minimum absorption values
         let time = lastEffectDate.timeIntervalSince(entry.startDate).adding(-delay)
-        return LinearCarbAbsorption.absorbedCarbs(of: entryGrams, atTime: time, absorptionTime: maxAbsorptionTime)
+        return LinearAbsorption.absorbedCarbs(of: entryGrams, atTime: time, absorptionTime: maxAbsorptionTime)
     }
 
 
@@ -616,9 +611,6 @@ extension Collection where Iterator.Element: CarbEntry, Index == Int, IndexDista
             )
         }
 
-        // TODO: Attempt to make iteration more efficient
-//        let startedBuilders = builders
-
         for dxEffect in effectVelocities {
             guard dxEffect.endDate > dxEffect.startDate else {
                 assertionFailure()
@@ -629,14 +621,6 @@ extension Collection where Iterator.Element: CarbEntry, Index == Int, IndexDista
             guard dxEffect.startDate >= builders.first!.entry.startDate else {
                 continue
             }
-
-            // TODO: Attempt to make the iteration more efficient
-            /*
-            // Extend the possibly active subrange to include any next entries whose start date fall into this effect's interval
-            while startedBuilders.endIndex < builders.count && builders[startedBuilders.endIndex].entry.startDate >= dxEffect.startDate {
-                startedBuilders = builders[startedBuilders.startIndex..<startedBuilders.endIndex + 1]
-            }
-            */
 
             // Apply effect to all active entries
 
@@ -669,20 +653,6 @@ extension Collection where Iterator.Element: CarbEntry, Index == Int, IndexDista
                     builder.addNextEffect(effectValue, start: dxEffect.startDate, end: dxEffect.endDate)
                 }
             }
-
-            // TODO: Attempt to make the iteration more efficient
-            /*
-            // Trim the possibly active subrange after each item's expected completion date
-            while startedBuilders.startIndex < builders.count - 1 && startedBuilders.first!.maxEndDate <= dxEffect.endDate {
-                let newStartIndex = startedBuilders.startIndex + 1
-                startedBuilders = builders[newStartIndex..<Swift.max(newStartIndex + 1, startedBuilders.endIndex)]
-            }
-
-            // Quit after
-            guard dxEffect.endDate < startedBuilders.last!.maxEndDate else {
-                break
-            }
-            */
         }
 
         return builders.map { $0.result }
