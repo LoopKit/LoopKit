@@ -65,11 +65,11 @@ class DatePickerTableViewCell: UITableViewCell {
                 datePicker.isHidden = newValue
                 datePickerHeightConstraint.constant = newValue ? 0 : datePickerExpandedHeight
 
-                if !newValue, case .countDownTimer = datePicker.datePickerMode {
+                if newValue {
                     // Workaround for target-action change notifications not firing if initial value is set while view is hidden
                     DispatchQueue.main.async {
-                        self.datePicker.date = self.datePicker.date
                         self.datePicker.countDownDuration = self.datePicker.countDownDuration
+                        self.datePicker.date = self.datePicker.date
                     }
                 }
             }

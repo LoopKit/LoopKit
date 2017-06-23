@@ -147,18 +147,16 @@ public final class CarbEntryTableViewController: UITableViewController {
 
             let start = min(Calendar.current.startOfDay(for: Date()), Date(timeIntervalSinceNow: -2 * carbStore.defaultAbsorptionTimes.slow))
             carbStore.getCarbEntries(start: start) { (result) in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let entries):
-                        self.carbEntries = entries
-                        self.tableView.reloadData()
-                    case .failure(let error):
-                        self.presentAlertController(with: error)
-                    }
-
-                    self.updateTimelyStats(nil)
-                    self.updateTotal()
+                switch result {
+                case .success(let entries):
+                    self.carbEntries = entries
+                    self.tableView.reloadData()
+                case .failure(let error):
+                    self.presentAlertController(with: error)
                 }
+
+                self.updateTimelyStats(nil)
+                self.updateTotal()
             }
         }
     }
