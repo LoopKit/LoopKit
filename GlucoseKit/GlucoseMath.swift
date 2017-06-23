@@ -159,4 +159,64 @@ struct GlucoseMath {
 
         return values
     }
+
+    /// Calculates a timeline of effect velocity (glucose/time) observed in glucose readings that counteract the specified effects.
+    ///
+    /// - Parameters:
+    ///   - glucoseSamples: Glucose samples in chronological order
+    ///   - effects: Glucose effects to be countered, in chronological order
+    /// - Returns: An array of velocities describing the change in glucose samples compared to the specified effects
+    public static func counteractionEffects(of glucoseSamples: [GlucoseSampleValue], to effects: [GlucoseEffect]) -> [GlucoseEffectVelocity] {
+        let mgdL = HKUnit.milligramsPerDeciliter()
+        let velocityUnit = mgdL.unitDivided(by: .second())
+        var velocities = [GlucoseEffectVelocity]()
+        var effectIndex = 0
+
+        for (index, endGlucose) in glucoseSamples.dropFirst().enumerated() {
+            // Find a valid change in glucose, requiring identical provenance and no calibration
+            let startGlucose = glucoseSamples[index]
+
+            guard startGlucose.provenanceIdentifier == endGlucose.provenanceIdentifier,
+                !startGlucose.isDisplayOnly, !endGlucose.isDisplayOnly
+            else {
+                continue
+            }
+
+            let glucoseChange = endGlucose.quantity.doubleValue(for: mgdL) - startGlucose.quantity.doubleValue(for: mgdL)
+
+            // Compare that to a change in insulin effects
+            guard effects.count > effectIndex else {
+                break
+            }
+
+            var startEffect: GlucoseEffect?
+            var endEffect: GlucoseEffect?
+
+            for effect in effects[effectIndex..<effects.count] {
+                if startEffect == nil && effect.startDate >= startGlucose.startDate {
+                    startEffect = effect
+                } else if endEffect == nil && effect.startDate >= endGlucose.startDate {
+                    endEffect = effect
+                    break
+                }
+
+                effectIndex += 1
+            }
+
+            guard let startEffectValue = startEffect?.quantity.doubleValue(for: mgdL),
+                let endEffectValue = endEffect?.quantity.doubleValue(for: mgdL)
+            else {
+                break
+            }
+
+            let effectChange = endEffectValue - startEffectValue
+            let discrepancy = glucoseChange - effectChange
+            let averageVelocity = HKQuantity(unit: velocityUnit, doubleValue: discrepancy / endGlucose.startDate.timeIntervalSince(startGlucose.startDate))
+            let effect = GlucoseEffectVelocity(startDate: startGlucose.startDate, endDate: endGlucose.startDate, quantity: averageVelocity)
+            
+            velocities.append(effect)
+        }
+        
+        return velocities
+    }
 }
