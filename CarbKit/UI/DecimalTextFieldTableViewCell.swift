@@ -10,19 +10,19 @@ import UIKit
 
 
 protocol TextFieldTableViewCellDelegate: class {
-    func textFieldTableViewCellDidUpdateText(_ cell: DecimalTextFieldTableViewCell)
+    func textFieldTableViewCellDidBeginEditing(_ cell: TextFieldTableViewCell)
+
+    func textFieldTableViewCellDidEndEditing(_ cell: TextFieldTableViewCell)
 }
 
 
-class DecimalTextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
+class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     @IBOutlet weak var textField: UITextField! {
         didSet {
             textField.delegate = self
         }
     }
-
-    @IBOutlet weak var unitLabel: UILabel!
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: true)
@@ -36,7 +36,30 @@ class DecimalTextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
         }
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        contentView.layoutMargins.left = separatorInset.left
+        contentView.layoutMargins.right = separatorInset.left
+    }
+
     weak var delegate: TextFieldTableViewCellDelegate?
+
+    // MARK: - UITextFieldDelegate
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        delegate?.textFieldTableViewCellDidBeginEditing(self)
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        delegate?.textFieldTableViewCellDidEndEditing(self)
+    }
+}
+
+
+class DecimalTextFieldTableViewCell: TextFieldTableViewCell {
+
+    @IBOutlet weak var unitLabel: UILabel!
 
     var numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -60,14 +83,14 @@ class DecimalTextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     // MARK: - UITextFieldDelegate
 
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    override func textFieldDidEndEditing(_ textField: UITextField) {
         if let number = number {
             textField.text = numberFormatter.string(from: number)
         } else {
             textField.text = nil
         }
 
-        delegate?.textFieldTableViewCellDidUpdateText(self)
+        super.textFieldDidEndEditing(textField)
     }
 }
 

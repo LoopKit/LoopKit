@@ -1,0 +1,20 @@
+[
+  {
+    "amount": 44,
+    "start_at": "2015-10-15T21:35:12",
+    "absorption_time": 120,
+    "unit": "g"
+  },
+  {
+    "amount": 30,
+    "start_at": "2015-10-15T21:55:00",
+    "absorption_time": 120,
+    "unit": "g"
+  },
+  {
+    "amount": 30,
+    "start_at": "2015-10-15T23:00:00",
+    "absorption_time": 120,
+    "unit": "g"
+  }
+]

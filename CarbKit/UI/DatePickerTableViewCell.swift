@@ -22,10 +22,31 @@ class DatePickerTableViewCell: UITableViewCell {
             return datePicker.date
         }
         set {
-            datePicker.date = newValue
-            dateChanged(datePicker)
+            datePicker.setDate(newValue, animated: true)
+            updateDateLabel()
         }
     }
+
+    var duration: TimeInterval {
+        get {
+            return datePicker.countDownDuration
+        }
+        set {
+            datePicker.countDownDuration = newValue
+            updateDateLabel()
+        }
+    }
+
+    private lazy var durationFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+
+        formatter.allowedUnits = [.hour, .minute]
+        formatter.unitsStyle = .short
+
+        return formatter
+    }()
+
+    @IBOutlet weak var titleLabel: UILabel!
 
     @IBOutlet weak var dateLabel: UILabel!
 
@@ -35,28 +56,61 @@ class DatePickerTableViewCell: UITableViewCell {
 
     private var datePickerExpandedHeight: CGFloat = 0
 
+    var isDatePickerHidden: Bool {
+        get {
+            return datePicker.isHidden || !datePicker.isEnabled
+        }
+        set {
+            if datePicker.isEnabled {
+                datePicker.isHidden = newValue
+                datePickerHeightConstraint.constant = newValue ? 0 : datePickerExpandedHeight
+
+                if !newValue, case .countDownTimer = datePicker.datePickerMode {
+                    // Workaround for target-action change notifications not firing if initial value is set while view is hidden
+                    DispatchQueue.main.async {
+                        self.datePicker.date = self.datePicker.date
+                        self.datePicker.countDownDuration = self.datePicker.countDownDuration
+                    }
+                }
+            }
+        }
+    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
 
         datePickerExpandedHeight = datePickerHeightConstraint.constant
 
         setSelected(true, animated: false)
-        dateChanged(datePicker)
+        updateDateLabel()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        if selected && datePicker.isEnabled {
-            let closed = datePicker.isHidden
+        if selected {
+            isDatePickerHidden = !isDatePickerHidden
+        }
+    }
 
-            datePicker.isHidden = !closed
-            datePickerHeightConstraint.constant = closed ? datePickerExpandedHeight : 0
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        contentView.layoutMargins.left = separatorInset.left
+        contentView.layoutMargins.right = separatorInset.left
+    }
+
+    private func updateDateLabel() {
+        switch datePicker.datePickerMode {
+        case .countDownTimer:
+            dateLabel.text = durationFormatter.string(from: duration)
+        case .date, .dateAndTime, .time:
+            dateLabel.text = DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .short)
         }
     }
 
     @IBAction func dateChanged(_ sender: UIDatePicker) {
-        dateLabel.text = DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .short)
+        updateDateLabel()
 
         delegate?.datePickerTableViewCellDidUpdateDate(self)
     }

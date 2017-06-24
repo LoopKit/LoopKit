@@ -7,108 +7,82 @@
 //
 
 import XCTest
+import HealthKit
 @testable import CarbKit
 
 class CarbEntryEditViewControllerTests: XCTestCase {
-    
-    var baseVC: CarbEntryTableViewController!
-    var sut: CarbKit.CarbEntryEditViewController!
+
+    var vc: CarbKit.CarbEntryEditViewController!
     var storyboard: UIStoryboard!
     
     var navigationDelegateStub: CarbEntryNavigationDelegateStub!
-    var tableViewStub: TableViewStub!
     
     override func setUp() {
         super.setUp()
         storyboard = UIStoryboard(name: "CarbKit", bundle: Bundle(for: type(of:self)))
-        sut = storyboard.instantiateViewController(withIdentifier: "CarbEntryEditViewController") as! CarbEntryEditViewController
-        let _ = sut.view
+        vc = storyboard.instantiateViewController(withIdentifier: "CarbEntryEditViewController") as! CarbEntryEditViewController
+        let _ = vc.view
         
         navigationDelegateStub = CarbEntryNavigationDelegateStub()
-        sut.navigationDelegate = navigationDelegateStub
-        
-        tableViewStub = TableViewStub(frame: CGRect.zero)
-        sut.tableView = tableViewStub
-        
-        sut.navigationDelegate = navigationDelegateStub
+        vc.navigationDelegate = navigationDelegateStub
     }
     
-    func testAbsorptionValidationFailureDoesntCallSegue() {
-        tableViewStub.absorptionViewCell = createAbsoprtionCell(withValue: 1000)
-        
-        sut.saveButtonPressed(sut.saveButtonItem)
-        
-        XCTAssertFalse(navigationDelegateStub.performSegueWasCalled)
-    }
-    
-    func testAbsorptionValidationSuccessCallsSegue() {
-        tableViewStub.absorptionViewCell = createAbsoprtionCell(withValue: 500)
+    func testAbsorptionValidationFailure() {
+        vc.originalCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 1), startDate: Date(), foodType: nil, absorptionTime: .minutes(1000))
 
-        sut.saveButtonPressed(sut.saveButtonItem)
+        let shouldPerform = vc.shouldPerformSegue(withIdentifier: "", sender: vc.saveButtonItem)
         
-        XCTAssertEqual(navigationDelegateStub.performSegueArguments?.identifier, CarbEntryEditViewController.SaveUnwindSegue)
+        XCTAssertFalse(shouldPerform)
+        XCTAssertTrue(navigationDelegateStub.absorptionTimeValidationWarningWasCalled)
+        XCTAssertFalse(navigationDelegateStub.quantityValidationWarningWasCalled)
     }
     
-    func testPassedValidationDoesntShowWarning() {
-        tableViewStub.absorptionViewCell = createAbsoprtionCell(withValue: 998)
-        
-        sut.saveButtonPressed(sut.saveButtonItem)
-        
-        XCTAssertFalse(navigationDelegateStub.showAbsorptionTimeValidationWarningWasCalled)
+    func testAbsorptionValidationSuccess() {
+        vc.originalCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 1), startDate: Date(), foodType: nil, absorptionTime: TimeInterval(hours: 7))
+
+        let shouldPerform = vc.shouldPerformSegue(withIdentifier: "", sender: vc.saveButtonItem)
+
+        XCTAssertTrue(shouldPerform)
+        XCTAssertFalse(navigationDelegateStub.absorptionTimeValidationWarningWasCalled)
+        XCTAssertFalse(navigationDelegateStub.quantityValidationWarningWasCalled)
     }
-    
-    func testFailedValidationPresentsWarning() {
-        tableViewStub.absorptionViewCell = createAbsoprtionCell(withValue: 1000)
-        
-        sut.saveButtonPressed(sut.saveButtonItem)
-        
-        // should present a warning
-        XCTAssertTrue(navigationDelegateStub.showAbsorptionTimeValidationWarningWasCalled)
+
+    func testNoEntry() {
+        XCTAssertFalse(vc.shouldPerformSegue(withIdentifier: "", sender: vc.saveButtonItem))
+        XCTAssertFalse(navigationDelegateStub.absorptionTimeValidationWarningWasCalled)
+        XCTAssertFalse(navigationDelegateStub.quantityValidationWarningWasCalled)
     }
-    
-    func createAbsoprtionCell(withValue value: Int) -> AbsorptionTimeTextFieldTableViewCell{
-        let absorptionViewCell = AbsorptionTimeTextFieldTableViewCell()
-        absorptionViewCell.textField = UITextField()
-        absorptionViewCell.number =  NSNumber(value: value)
-        
-        return absorptionViewCell
-    }
-    
-    class CarbEntryNavigationDelegateStub : CarbEntryNavigationDelegate {
-        var performSegueArguments: (identifier: String, sender: Any?, viewController: UIViewController)?
-        var performSegueWasCalled: Bool { return performSegueArguments != nil }
-        
-        var showAbsorptionTimeValidationWarningWasCalled = false
-        
-        override func performSegue(withIdentifier identifier: String, sender: Any?, for viewController: UIViewController) {
-            
-            performSegueArguments = (identifier, sender, viewController)
+
+    func testQuantityValidationSuccess() {
+        for value in [-100, 0, 150, 250] as [Double] {
+            vc.originalCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: value), startDate: Date(), foodType: nil, absorptionTime: .minutes(180))
+            XCTAssertTrue(vc.shouldPerformSegue(withIdentifier: "", sender: vc.saveButtonItem))
         }
-        
-        override func showAbsorptionTimeValidationWarning(for viewController: UIViewController) {
-            showAbsorptionTimeValidationWarningWasCalled = true
-        }
+
+        XCTAssertFalse(navigationDelegateStub.absorptionTimeValidationWarningWasCalled)
+        XCTAssertFalse(navigationDelegateStub.quantityValidationWarningWasCalled)
     }
-    
-    class TableViewStub: UITableView {
-        let absorptionTimeIndex = IndexPath(row: CarbEntryEditViewController.Row.absorptionTime.rawValue, section: 0)
-        
-        var absorptionViewCell: AbsorptionTimeTextFieldTableViewCell?
-        
-        override init(frame: CGRect, style: UITableViewStyle) {
-            super.init(frame: frame, style: style)
+
+    func testQuantityValidationFailure() {
+        for value in [251, 500] as [Double] {
+            vc.originalCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: value), startDate: Date(), foodType: nil, absorptionTime: .minutes(180))
+            XCTAssertFalse(vc.shouldPerformSegue(withIdentifier: "", sender: vc.saveButtonItem))
         }
-        
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
+
+        XCTAssertFalse(navigationDelegateStub.absorptionTimeValidationWarningWasCalled)
+        XCTAssertTrue(navigationDelegateStub.quantityValidationWarningWasCalled)
+    }
+
+    class CarbEntryNavigationDelegateStub: CarbEntryNavigationDelegate {
+        var absorptionTimeValidationWarningWasCalled = false
+        var quantityValidationWarningWasCalled = false
+
+        override func showAbsorptionTimeValidationWarning(for viewController: UIViewController, maxAbsorptionTime: TimeInterval) {
+            absorptionTimeValidationWarningWasCalled = true
         }
-        
-        override func cellForRow(at indexPath: IndexPath) -> UITableViewCell? {
-            if indexPath == absorptionTimeIndex {
-                return absorptionViewCell
-            }
-            
-            return UITableViewCell()
+
+        override func showMaxQuantityValidationWarning(for viewController: UIViewController, maxQuantityGrams: Double) {
+            quantityValidationWarningWasCalled = true
         }
     }
 }

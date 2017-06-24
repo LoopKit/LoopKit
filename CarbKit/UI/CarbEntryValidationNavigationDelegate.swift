@@ -9,12 +9,29 @@
 import Foundation
 
 class CarbEntryNavigationDelegate {
-    
-    func performSegue(withIdentifier identifier: String, sender: Any?, for viewController: UIViewController) {
-        viewController.performSegue(withIdentifier: identifier, sender: sender)
+    lazy var validationTitle = NSLocalizedString("Warning", comment: "Title of an alert containing a validation warning")
+
+    func showAbsorptionTimeValidationWarning(for viewController: UIViewController, maxAbsorptionTime: TimeInterval) {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.minute]
+        formatter.unitsStyle = .full
+
+        viewController.presentAlertController(
+            withTitle: validationTitle,
+            message: String(
+                format: NSLocalizedString("The maximum absorption time is %@", comment: "Alert body displayed absorption time greater than max (1: maximum absorption time)"),
+                formatter.string(from: maxAbsorptionTime) ?? String(describing: maxAbsorptionTime)
+            )
+        )
     }
-    
-    func showAbsorptionTimeValidationWarning(for viewController: UIViewController) {
-        viewController.presentAlertController(withTitle: NSLocalizedString("Warning", comment:"Title of the warning displayed after entering a carb absorption time greater than the max"), message: NSLocalizedString("That's a long time for absorption. Try a number below 999", comment:"Warning message body displayed after entering a carb absorption time greater than the max"))
+
+    func showMaxQuantityValidationWarning(for viewController: UIViewController, maxQuantityGrams: Double) {
+        viewController.presentAlertController(
+            withTitle: validationTitle,
+            message: String(
+                format: NSLocalizedString("The maximum allowed amount is %@ grams", comment: "Alert body displayed for quantity greater than max (1: maximum quantity in grams)"),
+                NumberFormatter.localizedString(from: NSNumber(value: maxQuantityGrams), number: .none)
+            )
+        )
     }
 }

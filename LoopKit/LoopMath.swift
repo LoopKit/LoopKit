@@ -24,7 +24,7 @@ public enum LoopMath {
         }
 
         if let start = start, let end = end {
-            return (start: start, end: end)
+            return (start: start.dateFlooredToTimeInterval(delta), end: end.dateCeiledToTimeInterval(delta))
         } else {
             var minDate = samples.first!.startDate
             var maxDate = minDate
@@ -40,8 +40,8 @@ public enum LoopMath {
             }
 
             return (
-                start: start ?? minDate.dateFlooredToTimeInterval(delta),
-                end: end ?? maxDate.addingTimeInterval(duration + delay).dateCeiledToTimeInterval(delta)
+                start: (start ?? minDate).dateFlooredToTimeInterval(delta),
+                end: (end ?? maxDate.addingTimeInterval(duration + delay)).dateCeiledToTimeInterval(delta)
             )
         }
     }
