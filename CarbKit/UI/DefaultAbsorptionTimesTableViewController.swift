@@ -30,11 +30,11 @@ public class DefaultAbsorptionTimesTableViewController: UITableViewController {
         var labelText: String {
             switch self {
             case .fast:
-                return "🍭 Fast"
+                return NSLocalizedString("🍭 Fast", comment: "The label text for the fast absorption time cell.")
             case .medium:
-                return "🌮 Medium"
+                return NSLocalizedString("🌮 Medium", comment: "The label text for the medium absorption time cell.")
             case .slow:
-                return "🍕 Slow"
+                return NSLocalizedString("🍕 Slow", comment: "The label text for the slow absorption time cell.")
             }
         }
         

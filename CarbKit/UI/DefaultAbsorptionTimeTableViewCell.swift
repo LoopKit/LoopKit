@@ -59,8 +59,8 @@ class DefaultAbsorptionTimeTableViewCell: UITableViewCell {
     }
     
     @IBAction func timeChanged(_ sender: UIDatePicker) {
-        timeLabel.text = "\(Int(time.minutes)) min"
-        
+        timeLabel.text = DateComponentsFormatter.localizedString(from: DateComponents(minute: Int(time.minutes)), unitsStyle: .short)
+
         delegate?.defaultAbsorptionTimeTableViewCellDidUpdateTime(self)
     }
 }
