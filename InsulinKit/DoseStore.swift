@@ -890,7 +890,7 @@ public final class DoseStore {
     ///   - completion: A closure called once the value has been retrieved
     ///   - result: The insulin on-board value
     public func insulinOnBoard(at date: Date, completion: @escaping (_ result: DoseStoreResult<InsulinValue>) -> Void) {
-        getInsulinOnBoardValues(start: date.addingTimeInterval(TimeInterval(minutes: -5))) { (result) -> Void in
+        getInsulinOnBoardValues(start: date.addingTimeInterval(TimeInterval(minutes: -5)), end: date) { (result) -> Void in
             switch result {
             case .failure(let error):
                 completion(.failure(error))

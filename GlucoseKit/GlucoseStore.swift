@@ -219,7 +219,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     ///   - end: The latest date of values to retrieve, if provided
     ///   - completion: A closure called once the values have been retrieved
     ///   - result: An array of glucose values, in chronological order by startDate
-    public func getGlucoseValues(start: Date, end: Date? = nil, completion: @escaping (_ result: GlucoseStoreResult<[GlucoseValue]>) -> Void) {
+    public func getGlucoseValues(start: Date, end: Date? = nil, completion: @escaping (_ result: GlucoseStoreResult<[GlucoseSampleValue]>) -> Void) {
         getGlucoseSamples(start: start, end: end) { (result) -> Void in
             switch result {
             case .success(let samples):
@@ -237,7 +237,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     ///   - end: The latest date of values to retrieve, if provided
     ///   - completion: A closure called once the values have been retrieved
     ///   - values: An array of glucose values, in chronological order by startDate
-    public func getCachedGlucoseValues(start: Date, end: Date? = nil, completion: @escaping (_ values: [GlucoseValue]) -> Void) {
+    public func getCachedGlucoseValues(start: Date, end: Date? = nil, completion: @escaping (_ values: [GlucoseSampleValue]) -> Void) {
         getCachedGlucoseSamples(start: start, end: end) { (samples) in
             completion(samples)
         }

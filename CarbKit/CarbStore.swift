@@ -121,6 +121,9 @@ public final class CarbStore: HealthKitSampleStore {
     /// The interval between effect values to use for the calculated timelines.
     private(set) public var delta: TimeInterval = TimeInterval(minutes: 5)
 
+    /// The factor by which the entered absorption time can be extended to accomodate slower-than-expected absorption
+    public var absorptionTimeOverrun: Double = 1.5
+
     /// The longest expected absorption time interval for carbohydrates. Defaults to 8 hours.
     public let maximumAbsorptionTimeInterval: TimeInterval
 
@@ -421,6 +424,40 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
 
+    /// Retrieves carb entries from HealthKit within the specified date range and interprets their
+    /// absorption status based on the provided glucose effect
+    ///
+    /// - Parameters:
+    ///   - start: The earliest date of values to retrieve
+    ///   - end: The latest date of values to retrieve, if provided
+    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
+    ///   - completion: A closure calld once the values have been retrieved
+    ///   - result: An array of carb entries, in chronological order by startDate
+    public func getCarbStatus(
+        start: Date,
+        end: Date? = nil,
+        effectVelocities: [GlucoseEffectVelocity]? = nil,
+        completion: @escaping (_ result: CarbStoreResult<[CarbStatus]>) -> Void
+    ) {
+        getCarbSamples(start: start, end: end) { (result) in
+            switch result {
+            case .success(let samples):
+                let status = samples.map(
+                    to: effectVelocities ?? [],
+                    carbRatio: self.carbRatioSchedule,
+                    insulinSensitivity: self.insulinSensitivitySchedule,
+                    absorptionTimeOverrun: self.absorptionTimeOverrun,
+                    defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                    delay: self.delay
+                )
+
+                completion(.success(status))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
     /// Retrieves carb entries from either HealthKit or the in-memory cache.
     ///
     /// - Parameters:
@@ -586,10 +623,11 @@ public final class CarbStore: HealthKitSampleStore {
     ///
     /// - Parameters:
     ///   - date: The date of the value to retrieve
+    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
     ///   - completion: A closure called once the value has been retrieved
     ///   - result: The carbs on-board value
-    public func carbsOnBoard(at date: Date, completion: @escaping (_ result: CarbStoreResult<CarbValue>) -> Void) {
-        getCarbsOnBoardValues(start: date.addingTimeInterval(-delta)) { (values) in
+    public func carbsOnBoard(at date: Date, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping (_ result: CarbStoreResult<CarbValue>) -> Void) {
+        getCarbsOnBoardValues(start: date.addingTimeInterval(-delta), end: date, effectVelocities: effectVelocities) { (values) in
             guard let value = values.closestPriorToDate(date) else {
                 completion(.failure(.fetchError(description: "No values found", recoverySuggestion: "Ensure carb data exists for the specified date")))
                 return
@@ -625,18 +663,41 @@ public final class CarbStore: HealthKitSampleStore {
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
+    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
     ///   - completion: A closure called once the values have been retrieved
     ///   - values: A timeline of carb values, in chronological order
-    public func getCarbsOnBoardValues(start: Date, end: Date? = nil, completion: @escaping (_ values: [CarbValue]) -> Void) {
+    public func getCarbsOnBoardValues(start: Date, end: Date? = nil, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping (_ values: [CarbValue]) -> Void) {
         // To know COB at the requested start date, we need to fetch samples that might still be absorbing
         let foodStart = start.addingTimeInterval(-maximumAbsorptionTimeInterval)
-        getCachedCarbSamples(start: foodStart, end: end) { (entries) in
-            let carbsOnBoard = entries.carbsOnBoard(
-                defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                delay: self.delay,
-                delta: self.delta
-            )
-            completion(carbsOnBoard.filterDateRange(start, end))
+        getCachedCarbSamples(start: foodStart, end: end) { (samples) in
+            let carbsOnBoard: [CarbValue]
+
+            if let velocities = effectVelocities, let carbRatioSchedule = self.carbRatioSchedule, let insulinSensitivitySchedule = self.insulinSensitivitySchedule {
+                carbsOnBoard = samples.map(
+                    to: velocities,
+                    carbRatio: carbRatioSchedule,
+                    insulinSensitivity: insulinSensitivitySchedule,
+                    absorptionTimeOverrun: self.absorptionTimeOverrun,
+                    defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                    delay: self.delay
+                ).dynamicCarbsOnBoard(
+                    from: start,
+                    to: end,
+                    defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                    delay: self.delay,
+                    delta: self.delta
+                )
+            } else {
+                carbsOnBoard = samples.carbsOnBoard(
+                    from: start,
+                    to: end,
+                    defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                    delay: self.delay,
+                    delta: self.delta
+                )
+            }
+
+            completion(carbsOnBoard)
         }
     }
 
@@ -674,9 +735,10 @@ public final class CarbStore: HealthKitSampleStore {
     /// - Parameters:
     ///   - start: The earliest date of effects to retrieve
     ///   - end: The latest date of effects to retrieve, if provided
+    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
     ///   - completion: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
-    public func getGlucoseEffects(start: Date, end: Date? = nil, completion: @escaping(_ result: CarbStoreResult<[GlucoseEffect]>) -> Void) {
+    public func getGlucoseEffects(start: Date, end: Date? = nil, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping(_ result: CarbStoreResult<[GlucoseEffect]>) -> Void) {
         dataAccessQueue.async {
             guard let carbRatioSchedule = self.carbRatioSchedule, let insulinSensitivitySchedule = self.insulinSensitivitySchedule else {
                 completion(.failure(.configurationError))
@@ -685,19 +747,44 @@ public final class CarbStore: HealthKitSampleStore {
 
             // To know glucose effects at the requested start date, we need to fetch samples that might still be absorbing
             let foodStart = start.addingTimeInterval(-self.maximumAbsorptionTimeInterval)
-            let defaultAbsorptionTime = self.defaultAbsorptionTimes.medium
+            let defaultAbsorptionTimes = self.defaultAbsorptionTimes
+            let absorptionTimeOverrun = self.absorptionTimeOverrun
             let delay = self.delay
             let delta = self.delta
+            
             self.getCachedCarbSamples(start: foodStart, end: end) { (samples) in
-                let effects = samples.glucoseEffects(
-                    carbRatios: carbRatioSchedule,
-                    insulinSensitivities: insulinSensitivitySchedule,
-                    defaultAbsorptionTime: defaultAbsorptionTime,
-                    delay: delay,
-                    delta: delta
-                )
+                let effects: [GlucoseEffect]
 
-                completion(.success(effects.filterDateRange(start, end)))
+                if let effectVelocities = effectVelocities {
+                    effects = samples.map(
+                        to: effectVelocities,
+                        carbRatio: carbRatioSchedule,
+                        insulinSensitivity: insulinSensitivitySchedule,
+                        absorptionTimeOverrun: absorptionTimeOverrun,
+                        defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                        delay: delay
+                    ).dynamicGlucoseEffects(
+                        from: start,
+                        to: end,
+                        carbRatios: carbRatioSchedule,
+                        insulinSensitivities: insulinSensitivitySchedule,
+                        defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                        delay: delay,
+                        delta: delta
+                    )
+                } else {
+                    effects = samples.glucoseEffects(
+                        from: start,
+                        to: end,
+                        carbRatios: carbRatioSchedule,
+                        insulinSensitivities: insulinSensitivitySchedule,
+                        defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                        delay: delay,
+                        delta: delta
+                    )
+                }
+
+                completion(.success(effects))
             }
         }
     }
