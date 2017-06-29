@@ -37,6 +37,14 @@ class DatePickerTableViewCell: UITableViewCell {
         }
     }
 
+    var maximumDuration = TimeInterval(hours: 8) {
+        didSet {
+            if duration > maximumDuration {
+                duration = maximumDuration
+            }
+        }
+    }
+
     private lazy var durationFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
 
@@ -110,8 +118,22 @@ class DatePickerTableViewCell: UITableViewCell {
     }
 
     @IBAction func dateChanged(_ sender: UIDatePicker) {
-        updateDateLabel()
+        if case .countDownTimer = sender.datePickerMode, duration > maximumDuration {
+            duration = maximumDuration
+        } else {
+            updateDateLabel()
+        }
 
         delegate?.datePickerTableViewCellDidUpdateDate(self)
+    }
+}
+
+
+/// UITableViewController extensions to aid working with DatePickerTableViewCell
+extension DatePickerTableViewCellDelegate where Self: UITableViewController {
+    func hideDatePickerCells(excluding indexPath: IndexPath? = nil) {
+        for case let cell as DatePickerTableViewCell in tableView.visibleCells where tableView.indexPath(for: cell) != indexPath && cell.isDatePickerHidden == false {
+            cell.isDatePickerHidden = true
+        }
     }
 }
