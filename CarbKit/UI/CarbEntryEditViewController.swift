@@ -26,11 +26,14 @@ public final class CarbEntryEditViewController: UITableViewController {
 
     public var preferredUnit = HKUnit.gram()
 
-    public var maxAbsorptionTime = TimeInterval(hours: 8)
+    public var maxQuantity = HKQuantity(unit: .gram(), doubleValue: 250)
 
+    /// Entry configuration values. Must be set before presenting.
     public var absorptionTimePickerInterval = TimeInterval(minutes: 30)
 
-    public var maxQuantity = HKQuantity(unit: .gram(), doubleValue: 250)
+    public var maxAbsorptionTime = TimeInterval(hours: 8)
+
+    public var maximumDateFutureInterval = TimeInterval(hours: 4)
 
     public var originalCarbEntry: CarbEntry? {
         didSet {
@@ -142,6 +145,7 @@ public final class CarbEntryEditViewController: UITableViewController {
             cell.titleLabel.text = NSLocalizedString("Date", comment: "Title of the carb entry date picker cell")
             cell.datePicker.isEnabled = isSampleEditable
             cell.datePicker.datePickerMode = .dateAndTime
+            cell.datePicker.maximumDate = Date() + maximumDateFutureInterval
             cell.datePicker.minuteInterval = 1
             cell.date = date
             cell.delegate = self
