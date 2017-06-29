@@ -110,7 +110,16 @@ public final class CarbStore: HealthKitSampleStore {
     public var carbRatioSchedule: CarbRatioSchedule?
 
     /// A trio of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
-    public let defaultAbsorptionTimes: DefaultAbsorptionTimes
+    public var defaultAbsorptionTimes: DefaultAbsorptionTimes {
+        didSet {
+            for query in self.observerQueries {
+                healthStore.stop(query)
+            }
+            self.observerQueries = []
+            self.queryAnchors.removeAll()
+            createQueries()
+        }
+    }
 
     /// Insulin-to-glucose sensitivity
     public var insulinSensitivitySchedule: InsulinSensitivitySchedule?
@@ -125,7 +134,9 @@ public final class CarbStore: HealthKitSampleStore {
     public var absorptionTimeOverrun: Double = 1.5
 
     /// The longest expected absorption time interval for carbohydrates. Defaults to 8 hours.
-    public let maximumAbsorptionTimeInterval: TimeInterval
+    public var maximumAbsorptionTimeInterval: TimeInterval {
+        return defaultAbsorptionTimes.slow * 2
+    }
 
     public weak var delegate: CarbStoreDelegate?
 
@@ -155,7 +166,6 @@ public final class CarbStore: HealthKitSampleStore {
      */
     public init?(defaultAbsorptionTimes: DefaultAbsorptionTimes = (fast: TimeInterval(hours: 2), medium: TimeInterval(hours: 3), slow: TimeInterval(hours: 4)), carbRatioSchedule: CarbRatioSchedule? = nil, insulinSensitivitySchedule :InsulinSensitivitySchedule? = nil) {
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
-        self.maximumAbsorptionTimeInterval = defaultAbsorptionTimes.slow * 2
         self.carbRatioSchedule = carbRatioSchedule
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.carbEntryCache = Set(UserDefaults.standard.carbEntryCache ?? [])
