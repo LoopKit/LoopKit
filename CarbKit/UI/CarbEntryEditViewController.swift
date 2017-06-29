@@ -202,6 +202,10 @@ public final class CarbEntryEditViewController: UITableViewController {
         }
     }
 
+    public override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return NSLocalizedString("Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact.", comment: "Carb entry section footer text explaining absorption time")
+    }
+
     // MARK: - UITableViewDelegate
 
     public override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
