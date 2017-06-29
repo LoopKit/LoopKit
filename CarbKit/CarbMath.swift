@@ -427,7 +427,7 @@ fileprivate class CarbStatusBuilder {
     /// The minimum amount of carbs we assume must have absorbed at the last observation date
     private var minPredictedGrams: Double {
         // We incorporate a delay when calculating minimum absorption values
-        let time = lastEffectDate.timeIntervalSince(entry.startDate).adding(-delay)
+        let time = lastEffectDate.timeIntervalSince(entry.startDate) - delay
         return LinearAbsorption.absorbedCarbs(of: entryGrams, atTime: time, absorptionTime: maxAbsorptionTime)
     }
 
