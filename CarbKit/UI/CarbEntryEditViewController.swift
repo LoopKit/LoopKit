@@ -86,6 +86,7 @@ public final class CarbEntryEditViewController: UITableViewController {
         super.viewDidLoad()
 
         tableView.estimatedRowHeight = 44
+        tableView.register(DatePickerTableViewCell.nib(), forCellReuseIdentifier: DatePickerTableViewCell.className)
 
         if originalCarbEntry != nil {
             title = NSLocalizedString("carb-entry-title-edit", tableName: "CarbKit", value: "Edit Carb Entry", comment: "The title of the view controller to edit an existing carb entry")
@@ -97,12 +98,6 @@ public final class CarbEntryEditViewController: UITableViewController {
     private var foodKeyboard: CarbAbsorptionInputController!
 
     @IBOutlet weak var saveButtonItem: UIBarButtonItem!
-
-    fileprivate func hideDatePickerCells(excluding indexPath: IndexPath? = nil) {
-        for case let cell as DatePickerTableViewCell in tableView.visibleCells where tableView.indexPath(for: cell) != indexPath && cell.isDatePickerHidden == false {
-            cell.isDatePickerHidden = true
-        }
-    }
 
     // MARK: - Table view data source
 
@@ -196,6 +191,7 @@ public final class CarbEntryEditViewController: UITableViewController {
                 cell.duration = duration
             }
 
+            cell.maximumDuration = maxAbsorptionTime
             cell.delegate = self
 
             return cell
@@ -288,10 +284,6 @@ extension CarbEntryEditViewController: DatePickerTableViewCellDelegate {
         case .date?:
             date = cell.date
         case .absorptionTime?:
-            if cell.duration > maxAbsorptionTime {
-                cell.duration = maxAbsorptionTime
-            }
-
             absorptionTime = cell.duration
             absorptionTimeWasEdited = true
         default:

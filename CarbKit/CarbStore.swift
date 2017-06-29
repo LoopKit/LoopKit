@@ -110,7 +110,14 @@ public final class CarbStore: HealthKitSampleStore {
     public var carbRatioSchedule: CarbRatioSchedule?
 
     /// A trio of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
-    public let defaultAbsorptionTimes: DefaultAbsorptionTimes
+    public var defaultAbsorptionTimes: DefaultAbsorptionTimes {
+        didSet {
+            // If maximumAbsorptionTimeInterval increases, reset our anchored queries
+            if defaultAbsorptionTimes.slow > oldValue.slow {
+                createQueries()
+            }
+        }
+    }
 
     /// Insulin-to-glucose sensitivity
     public var insulinSensitivitySchedule: InsulinSensitivitySchedule?
@@ -125,7 +132,9 @@ public final class CarbStore: HealthKitSampleStore {
     public var absorptionTimeOverrun: Double = 1.5
 
     /// The longest expected absorption time interval for carbohydrates. Defaults to 8 hours.
-    public let maximumAbsorptionTimeInterval: TimeInterval
+    public var maximumAbsorptionTimeInterval: TimeInterval {
+        return defaultAbsorptionTimes.slow * 2
+    }
 
     public weak var delegate: CarbStoreDelegate?
 
@@ -155,7 +164,6 @@ public final class CarbStore: HealthKitSampleStore {
      */
     public init?(defaultAbsorptionTimes: DefaultAbsorptionTimes = (fast: TimeInterval(hours: 2), medium: TimeInterval(hours: 3), slow: TimeInterval(hours: 4)), carbRatioSchedule: CarbRatioSchedule? = nil, insulinSensitivitySchedule :InsulinSensitivitySchedule? = nil) {
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
-        self.maximumAbsorptionTimeInterval = defaultAbsorptionTimes.slow * 2
         self.carbRatioSchedule = carbRatioSchedule
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.carbEntryCache = Set(UserDefaults.standard.carbEntryCache ?? [])
@@ -188,23 +196,36 @@ public final class CarbStore: HealthKitSampleStore {
     private var queryAnchors: [HKObjectType: HKQueryAnchor] = [:]
 
     private func createQueries() {
-        let predicate = HKQuery.predicateForSamples(withStart: Date(timeIntervalSinceNow: -maximumAbsorptionTimeInterval), end: nil)
+        // Clear and reset query state
+        for query in observerQueries {
+            healthStore.stop(query)
+        }
 
+        observerQueries = []
+        queryAnchors = [:]
+
+        let predicate = HKQuery.predicateForSamples(withStart: Date(timeIntervalSinceNow: -maximumAbsorptionTimeInterval), end: nil)
         for type in readTypes {
-            let observerQuery = HKObserverQuery(sampleType: type, predicate: predicate, updateHandler: { [unowned self] (query, completionHandler, error) -> Void in
+            let observerQuery = HKObserverQuery(sampleType: type, predicate: predicate) { [unowned self] (query, completionHandler, error) -> Void in
 
                 if let error = error {
                     self.delegate?.carbStore(self, didError: .healthStoreError(error))
                 } else {
                     self.dataAccessQueue.async {
-                        let anchoredObjectQuery = HKAnchoredObjectQuery(type: type, predicate: predicate, anchor: self.queryAnchors[type], limit: HKObjectQueryNoLimit, resultsHandler: self.processResultsFromAnchoredQuery)
+                        let anchoredObjectQuery = HKAnchoredObjectQuery(
+                            type: type,
+                            predicate: predicate,
+                            anchor: self.queryAnchors[type],
+                            limit: HKObjectQueryNoLimit,
+                            resultsHandler: self.processResultsFromAnchoredQuery
+                        )
 
                         self.healthStore.execute(anchoredObjectQuery)
                     }
                 }
 
                 completionHandler()
-            })
+            }
 
             healthStore.execute(observerQuery)
             observerQueries.append(observerQuery)
