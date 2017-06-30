@@ -26,11 +26,14 @@ public final class CarbEntryEditViewController: UITableViewController {
 
     public var preferredUnit = HKUnit.gram()
 
-    public var maxAbsorptionTime = TimeInterval(hours: 8)
+    public var maxQuantity = HKQuantity(unit: .gram(), doubleValue: 250)
 
+    /// Entry configuration values. Must be set before presenting.
     public var absorptionTimePickerInterval = TimeInterval(minutes: 30)
 
-    public var maxQuantity = HKQuantity(unit: .gram(), doubleValue: 250)
+    public var maxAbsorptionTime = TimeInterval(hours: 8)
+
+    public var maximumDateFutureInterval = TimeInterval(hours: 4)
 
     public var originalCarbEntry: CarbEntry? {
         didSet {
@@ -86,6 +89,7 @@ public final class CarbEntryEditViewController: UITableViewController {
         super.viewDidLoad()
 
         tableView.estimatedRowHeight = 44
+        tableView.register(DatePickerTableViewCell.nib(), forCellReuseIdentifier: DatePickerTableViewCell.className)
 
         if originalCarbEntry != nil {
             title = NSLocalizedString("carb-entry-title-edit", tableName: "CarbKit", value: "Edit Carb Entry", comment: "The title of the view controller to edit an existing carb entry")
@@ -97,12 +101,6 @@ public final class CarbEntryEditViewController: UITableViewController {
     private var foodKeyboard: CarbAbsorptionInputController!
 
     @IBOutlet weak var saveButtonItem: UIBarButtonItem!
-
-    fileprivate func hideDatePickerCells(excluding indexPath: IndexPath? = nil) {
-        for case let cell as DatePickerTableViewCell in tableView.visibleCells where tableView.indexPath(for: cell) != indexPath && cell.isDatePickerHidden == false {
-            cell.isDatePickerHidden = true
-        }
-    }
 
     // MARK: - Table view data source
 
@@ -147,6 +145,7 @@ public final class CarbEntryEditViewController: UITableViewController {
             cell.titleLabel.text = NSLocalizedString("Date", comment: "Title of the carb entry date picker cell")
             cell.datePicker.isEnabled = isSampleEditable
             cell.datePicker.datePickerMode = .dateAndTime
+            cell.datePicker.maximumDate = Date() + maximumDateFutureInterval
             cell.datePicker.minuteInterval = 1
             cell.date = date
             cell.delegate = self
@@ -196,10 +195,15 @@ public final class CarbEntryEditViewController: UITableViewController {
                 cell.duration = duration
             }
 
+            cell.maximumDuration = maxAbsorptionTime
             cell.delegate = self
 
             return cell
         }
+    }
+
+    public override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return NSLocalizedString("Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact.", comment: "Carb entry section footer text explaining absorption time")
     }
 
     // MARK: - UITableViewDelegate
@@ -288,10 +292,6 @@ extension CarbEntryEditViewController: DatePickerTableViewCellDelegate {
         case .date?:
             date = cell.date
         case .absorptionTime?:
-            if cell.duration > maxAbsorptionTime {
-                cell.duration = maxAbsorptionTime
-            }
-
             absorptionTime = cell.duration
             absorptionTimeWasEdited = true
         default:

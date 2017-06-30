@@ -256,72 +256,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DatePickerTableViewCell" rowHeight="244" id="QwR-YG-xXK" customClass="DatePickerTableViewCell" customModule="CarbKit">
-                                <rect key="frame" x="0.0" y="55.5" width="375" height="244"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="QwR-YG-xXK" id="F91-OJ-fDB">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="243.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <view contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="51k-zq-nab">
-                                            <rect key="frame" x="8" y="8" width="359" height="28"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bi0-3A-425">
-                                                    <rect key="frame" x="0.0" y="0.0" width="36" height="28"/>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vZi-6E-S8E">
-                                                    <rect key="frame" x="317" y="0.0" width="42" height="28"/>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="28" id="JSe-rA-3NP"/>
-                                                <constraint firstItem="Bi0-3A-425" firstAttribute="leading" secondItem="51k-zq-nab" secondAttribute="leading" id="L6p-k1-Muj"/>
-                                                <constraint firstItem="vZi-6E-S8E" firstAttribute="top" secondItem="51k-zq-nab" secondAttribute="top" id="SpI-ew-EPL"/>
-                                                <constraint firstAttribute="trailing" secondItem="vZi-6E-S8E" secondAttribute="trailing" id="V6t-Ns-2LJ"/>
-                                                <constraint firstItem="Bi0-3A-425" firstAttribute="top" secondItem="51k-zq-nab" secondAttribute="top" id="aQe-7I-Nm8"/>
-                                                <constraint firstAttribute="bottom" secondItem="vZi-6E-S8E" secondAttribute="bottom" id="cRB-8I-gN2"/>
-                                                <constraint firstAttribute="bottom" secondItem="Bi0-3A-425" secondAttribute="bottom" id="st9-07-EsG"/>
-                                            </constraints>
-                                        </view>
-                                        <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="OoS-gi-VDF">
-                                            <rect key="frame" x="0.0" y="44" width="375" height="216"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" priority="750" constant="200" id="lIl-gg-fGA"/>
-                                            </constraints>
-                                            <date key="date" timeIntervalSinceReferenceDate="474584803.36239803">
-                                                <!--2016-01-15 21:06:43 +0000-->
-                                            </date>
-                                            <connections>
-                                                <action selector="dateChanged:" destination="QwR-YG-xXK" eventType="valueChanged" id="quY-jk-rYE"/>
-                                            </connections>
-                                        </datePicker>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="51k-zq-nab" firstAttribute="leading" secondItem="F91-OJ-fDB" secondAttribute="leadingMargin" id="1p0-0V-z8v"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="51k-zq-nab" secondAttribute="trailing" id="LRB-DJ-kqV"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="OoS-gi-VDF" secondAttribute="bottom" priority="750" constant="-8" id="M0M-we-Sfg"/>
-                                        <constraint firstItem="OoS-gi-VDF" firstAttribute="top" secondItem="51k-zq-nab" secondAttribute="bottom" constant="8" id="dD4-Ma-kdn"/>
-                                        <constraint firstItem="OoS-gi-VDF" firstAttribute="leading" secondItem="F91-OJ-fDB" secondAttribute="leading" id="dtD-W5-Dbc"/>
-                                        <constraint firstItem="51k-zq-nab" firstAttribute="top" secondItem="F91-OJ-fDB" secondAttribute="topMargin" id="oLA-cl-OGI"/>
-                                        <constraint firstAttribute="trailing" secondItem="OoS-gi-VDF" secondAttribute="trailing" id="syZ-qC-owk"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="dateLabel" destination="vZi-6E-S8E" id="L0E-Vm-F9I"/>
-                                    <outlet property="datePicker" destination="OoS-gi-VDF" id="lZs-aV-Svd"/>
-                                    <outlet property="datePickerHeightConstraint" destination="lIl-gg-fGA" id="baE-jm-nfP"/>
-                                    <outlet property="titleLabel" destination="Bi0-3A-425" id="5mZ-cc-UzE"/>
-                                </connections>
-                            </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DecimalTextFieldTableViewCell" id="Ace-JU-zKh" customClass="DecimalTextFieldTableViewCell" customModule="CarbKit">
-                                <rect key="frame" x="0.0" y="299.5" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ace-JU-zKh" id="vvs-Vh-Dbj">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -364,7 +300,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TextFieldTableViewCell" id="99D-xi-Yp9" customClass="TextFieldTableViewCell" customModule="CarbKit" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="343.5" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="99.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="99D-xi-Yp9" id="Zoy-aN-TbY">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -398,7 +334,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FoodTypeShortcutCell" id="WC7-gw-ru6" customClass="FoodTypeShortcutCell" customModule="CarbKit" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="387.5" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="143.5" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WC7-gw-ru6" id="9ds-EY-fUr">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
