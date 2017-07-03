@@ -77,7 +77,7 @@ public extension Sequence where Iterator.Element: TimelineValue {
 }
 
 
-public extension BidirectionalCollection where Iterator.Element: TimelineValue, Index: Comparable {
+public extension BidirectionalCollection where Iterator.Element: TimelineValue {
 
     /**
      Determines whether the sequence contains boundary elements which span the specified time interval.
@@ -88,7 +88,7 @@ public extension BidirectionalCollection where Iterator.Element: TimelineValue, 
 
      - returns: True if the time interval is matched
      */
-    func spanTimeInterval(_ timeInterval: TimeInterval, within errorInterval: TimeInterval = TimeInterval(minutes: 5)) -> Bool {
+    func spanTimeInterval(_ timeInterval: TimeInterval, within errorInterval: TimeInterval = 5 * 60) -> Bool {
         guard let lastValue = last, let firstValue = first else { return false }
 
         return abs(lastValue.startDate.timeIntervalSince(firstValue.startDate) - timeInterval) <= errorInterval / 2

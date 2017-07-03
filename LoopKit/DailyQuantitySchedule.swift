@@ -22,7 +22,7 @@ public class DailyQuantitySchedule<T: RawRepresentable>: DailyValueSchedule<T> w
     public required convenience init?(rawValue: RawValue) {
         guard let
             rawUnit = rawValue["unit"] as? String,
-            let rawItems = rawValue["items"] as? [RepeatingScheduleValue.RawValue] else
+            let rawItems = rawValue["items"] as? [RepeatingScheduleValue<T>.RawValue] else
         {
             return nil
         }

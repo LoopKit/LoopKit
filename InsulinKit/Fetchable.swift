@@ -13,7 +13,6 @@ import CoreData
 protocol Fetchable {
     associatedtype FetchableType: NSManagedObject = Self
 
-    static func entityName() -> String
     static func objectsInContext(_ context: NSManagedObjectContext, predicate: NSPredicate?, sortedBy: String?, ascending: Bool) throws -> [FetchableType]
     static func singleObjectInContext(_ context: NSManagedObjectContext, predicate: NSPredicate?, sortedBy: String?, ascending: Bool) throws -> FetchableType?
     static func objectCountInContext(_ context: NSManagedObjectContext, predicate: NSPredicate?) throws -> Int
@@ -21,15 +20,7 @@ protocol Fetchable {
 }
 
 
-extension Fetchable where Self : NSManagedObject, FetchableType == Self {
-
-    static func entityName() -> String {
-        if #available(iOS 10.0, *) {
-            return self.entity().name!
-        } else {
-            return NSStringFromClass(self).components(separatedBy: ".").last!
-        }
-    }
+extension Fetchable where FetchableType == Self {
 
     static func singleObjectInContext(_ context: NSManagedObjectContext, predicate: NSPredicate? = nil, sortedBy: String? = nil, ascending: Bool = false) -> FetchableType? {
         let managedObjects: [FetchableType]? = try? objectsInContext(context, predicate: predicate, sortedBy: sortedBy, ascending: ascending)
@@ -50,7 +41,7 @@ extension Fetchable where Self : NSManagedObject, FetchableType == Self {
     static func fetchRequest(_ context: NSManagedObjectContext, predicate: NSPredicate? = nil, sortedBy: String? = nil, ascending: Bool = false) -> NSFetchRequest<FetchableType> {
         let request = NSFetchRequest<FetchableType>()
 
-        request.entity = NSEntityDescription.entity(forEntityName: entityName(), in: context)
+        request.entity = NSEntityDescription.entity(forEntityName: entity().name!, in: context)
         request.predicate = predicate
 
         if (sortedBy != nil) {
@@ -63,7 +54,6 @@ extension Fetchable where Self : NSManagedObject, FetchableType == Self {
     }
 
     static func insertNewObjectInContext(_ context: NSManagedObjectContext) -> FetchableType {
-
-        return NSEntityDescription.insertNewObject(forEntityName: entityName(), into: context) as! FetchableType
+        return NSEntityDescription.insertNewObject(forEntityName: entity().name!, into: context) as! FetchableType
     }
 }

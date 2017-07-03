@@ -56,7 +56,7 @@ public enum LoopMath {
   
      - returns: An array of glucose effects
      */
-    public static func decayEffect<T: GlucoseValue>(from sample: T, atRate rate: HKQuantity, for duration: TimeInterval, withDelta delta: TimeInterval = TimeInterval(minutes: 5)) -> [GlucoseEffect] {
+    public static func decayEffect<T: GlucoseValue>(from sample: T, atRate rate: HKQuantity, for duration: TimeInterval, withDelta delta: TimeInterval = 5 * 60) -> [GlucoseEffect] {
         guard let (startDate, endDate) = simulationDateRangeForSamples([sample], duration: duration, delta: delta) else {
             return []
         }

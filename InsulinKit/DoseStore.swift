@@ -487,7 +487,7 @@ public final class DoseStore {
      - throws: A core data exception if the delete request failed
      */
     private func purgeReservoirObjects(matching predicate: NSPredicate? = nil) throws {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Reservoir.entityName())
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: Reservoir.entity().name!)
         fetchRequest.predicate = predicate
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
 
@@ -772,7 +772,7 @@ public final class DoseStore {
      - throws: A core data exception if the delete request failed
      */
     private func purgePumpEventObjects(matching predicate: NSPredicate? = nil) throws {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: PumpEvent.entityName())
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: PumpEvent.entity().name!)
         fetchRequest.predicate = predicate
 
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
