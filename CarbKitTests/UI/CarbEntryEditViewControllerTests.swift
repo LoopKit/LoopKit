@@ -54,7 +54,7 @@ class CarbEntryEditViewControllerTests: XCTestCase {
     }
 
     func testQuantityValidationSuccess() {
-        for value in [-100, 0, 150, 250] as [Double] {
+        for value in [150, 250] as [Double] {
             vc.originalCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: value), startDate: Date(), foodType: nil, absorptionTime: .minutes(180))
             XCTAssertTrue(vc.shouldPerformSegue(withIdentifier: "", sender: vc.saveButtonItem))
         }
@@ -64,7 +64,8 @@ class CarbEntryEditViewControllerTests: XCTestCase {
     }
 
     func testQuantityValidationFailure() {
-        for value in [251, 500] as [Double] {
+
+        for value in [0, -100, 251, 500] as [Double] {
             vc.originalCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: value), startDate: Date(), foodType: nil, absorptionTime: .minutes(180))
             XCTAssertFalse(vc.shouldPerformSegue(withIdentifier: "", sender: vc.saveButtonItem))
         }
