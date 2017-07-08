@@ -246,7 +246,7 @@ public final class CarbEntryEditViewController: UITableViewController {
             return false
         }
 
-        guard let quantity = quantity else { return false }
+        guard let quantity = quantity, quantity.doubleValue(for: HKUnit.gram()) > 0 else { return false }
         guard quantity.compare(maxQuantity) != .orderedDescending else {
             navigationDelegate.showMaxQuantityValidationWarning(for: self, maxQuantityGrams: maxQuantity.doubleValue(for: .gram()))
             return false

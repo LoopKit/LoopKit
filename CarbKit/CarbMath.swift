@@ -471,6 +471,9 @@ fileprivate class CarbStatusBuilder {
 
     /// The maximum amount of time needed for the remaining entry grams to absorb, at the fixed minimum absorption rate
     private var estimatedTimeRemaining: TimeInterval {
+        guard minAbsorptionRate > 0 else {
+            return 0
+        }
         return (entryGrams - clampedGrams) / minAbsorptionRate
     }
 
