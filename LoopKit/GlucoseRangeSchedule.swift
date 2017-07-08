@@ -87,7 +87,7 @@ public class GlucoseRangeSchedule: DailyQuantitySchedule<DoubleRange> {
     public required convenience init?(rawValue: RawValue) {
         guard let
             rawUnit = rawValue["unit"] as? String,
-            let rawItems = rawValue["items"] as? [RepeatingScheduleValue.RawValue] else
+            let rawItems = rawValue["items"] as? [RepeatingScheduleValue<DoubleRange>.RawValue] else
         {
             return nil
         }
