@@ -105,6 +105,36 @@ class CarbMathTests: XCTestCase {
                 quantity: quantity)
         }
     }
+    
+    func testCarbEffectWithZeroEntry() {
+        let inputICE = loadICEInputFixture("ice_35_min_input")
+        
+        let (carbRatios, insulinSensitivities) = loadSchedules()
+        let defaultAbsorptionTimes = CarbStore.DefaultAbsorptionTimes(
+            fast: TimeInterval(hours: 1),
+            medium: TimeInterval(hours: 2),
+            slow: TimeInterval(hours: 4)
+        )
+        
+        let carbEntry = NewCarbEntry(
+            quantity: HKQuantity(unit: HKUnit.gram(), doubleValue: 0),
+            startDate: inputICE[0].startDate,
+            foodType: nil,
+            absorptionTime: TimeInterval(minutes: 120)
+        )
+        
+        let statuses = [carbEntry].map(
+            to: inputICE,
+            carbRatio: carbRatios,
+            insulinSensitivity: insulinSensitivities,
+            absorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium,
+            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+            delay: TimeInterval(minutes: 0)
+        )
+        
+        XCTAssertEqual(statuses.count, 1)
+        XCTAssertEqual(statuses[0].absorption?.estimatedTimeRemaining, 0)
+    }
 
     func testCarbEffectFromHistory() {
         let input = loadHistoryFixture("carb_effect_from_history_input")
@@ -363,5 +393,5 @@ class CarbMathTests: XCTestCase {
         for (expected, calculated) in zip(output, grouped) {
             XCTAssertEqual(expected, calculated)
         }
-    }
+    }    
 }

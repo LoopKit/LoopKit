@@ -16,7 +16,9 @@ public protocol DailyValueScheduleTableViewControllerDelegate: class {
 
 func insertableIndices<T>(for scheduleItems: [RepeatingScheduleValue<T>], removing row: Int, with interval: TimeInterval) -> [Bool] {
 
-    let insertableIndices = scheduleItems.enumerated().map { (index, item) -> Bool in
+    let insertableIndices = scheduleItems.enumerated().map { (enumeration) -> Bool in
+        let (index, item) = enumeration
+
         if row == index {
             return true
         } else if index == 0 {
@@ -134,7 +136,7 @@ public class DailyValueScheduleTableViewController: UITableViewController {
         return calendar.startOfDay(for: Date())
     }
 
-    func addScheduleItem(_ sender: Any?) {
+    @objc func addScheduleItem(_ sender: Any?) {
         // Updates the table view state. Subclasses should update their data model before calling super
 
         tableView.insertRows(at: [IndexPath(row: tableView.numberOfRows(inSection: 0), section: 0)], with: .automatic)

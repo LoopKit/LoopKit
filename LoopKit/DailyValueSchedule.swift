@@ -69,7 +69,7 @@ public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomDe
     }
 
     public required convenience init?(rawValue: RawValue) {
-        guard let rawItems = rawValue["items"] as? [RepeatingScheduleValue.RawValue] else {
+        guard let rawItems = rawValue["items"] as? [RepeatingScheduleValue<T>.RawValue] else {
             return nil
         }
 

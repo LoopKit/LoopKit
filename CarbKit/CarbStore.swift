@@ -83,6 +83,8 @@ public final class CarbStore: HealthKitSampleStore {
 
     public typealias DefaultAbsorptionTimes = (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)
 
+    public static let defaultAbsorptionTimes: DefaultAbsorptionTimes = (fast: TimeInterval(hours: 2), medium: TimeInterval(hours: 3), slow: TimeInterval(hours: 4))
+
     public enum CarbStoreError: Error {
         case configurationError
         case healthStoreError(Error)
@@ -162,7 +164,7 @@ public final class CarbStore: HealthKitSampleStore {
 
      - returns: A new instance of the store
      */
-    public init?(defaultAbsorptionTimes: DefaultAbsorptionTimes = (fast: TimeInterval(hours: 2), medium: TimeInterval(hours: 3), slow: TimeInterval(hours: 4)), carbRatioSchedule: CarbRatioSchedule? = nil, insulinSensitivitySchedule :InsulinSensitivitySchedule? = nil) {
+    public init?(defaultAbsorptionTimes: DefaultAbsorptionTimes = defaultAbsorptionTimes, carbRatioSchedule: CarbRatioSchedule? = nil, insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil) {
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
         self.carbRatioSchedule = carbRatioSchedule
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
@@ -889,7 +891,7 @@ public final class CarbStore: HealthKitSampleStore {
 
     private func syncExternalDB() {
         dataAccessQueue.async {
-            let entriesToUpload = self.carbEntryCache.filter { !$0.isUploaded }
+            let entriesToUpload: [CarbEntry] = self.carbEntryCache.filter { !$0.isUploaded }
             if entriesToUpload.count > 0 {
                 self.syncDelegate?.carbStore(self, hasEntriesNeedingUpload: entriesToUpload) { (externalIDs) in
                     if externalIDs.count == entriesToUpload.count {

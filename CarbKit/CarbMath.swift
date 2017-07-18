@@ -376,6 +376,28 @@ extension Collection where Iterator.Element == CarbStatus {
         
         return values
     }
+
+    /// The quantity of carbs expected to still absorb at the last date of absorption
+    public var clampedCarbsOnBoard: CarbValue? {
+        guard let firstAbsorption = first?.absorption else {
+            return nil
+        }
+
+        let gram = HKUnit.gram()
+        var maxObservedEndDate = firstAbsorption.observedDate.end
+        var remainingTotalGrams: Double = 0
+
+        for entry in self {
+            guard let absorption = entry.absorption else {
+                continue
+            }
+
+            maxObservedEndDate = Swift.max(maxObservedEndDate, absorption.observedDate.end)
+            remainingTotalGrams = absorption.remaining.doubleValue(for: gram)
+        }
+
+        return CarbValue(startDate: maxObservedEndDate, quantity: HKQuantity(unit: gram, doubleValue: remainingTotalGrams))
+    }
 }
 
 
@@ -471,6 +493,9 @@ fileprivate class CarbStatusBuilder {
 
     /// The maximum amount of time needed for the remaining entry grams to absorb, at the fixed minimum absorption rate
     private var estimatedTimeRemaining: TimeInterval {
+        guard minAbsorptionRate > 0 else {
+            return 0
+        }
         return (entryGrams - clampedGrams) / minAbsorptionRate
     }
 
