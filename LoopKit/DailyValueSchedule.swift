@@ -48,16 +48,40 @@ extension RepeatingScheduleValue: RawRepresentable {
 }
 
 
-public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomDebugStringConvertible where T.RawValue: Any {
+public protocol DailySchedule: RawRepresentable, CustomDebugStringConvertible {
+    associatedtype T: RawRepresentable
+
+    var items: [RepeatingScheduleValue<T>] { get }
+
+    var timeZone: TimeZone { get set }
+
+    func between(start startDate: Date, end endDate: Date) -> [AbsoluteScheduleValue<T>]
+
+    func value(at time: Date) -> T
+}
+
+
+public extension DailySchedule {
+    func value(at time: Date) -> T {
+        return between(start: time, end: time).first!.value
+    }
+
+    var debugDescription: String {
+        return String(reflecting: rawValue)
+    }
+}
+
+
+public struct DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomDebugStringConvertible, DailySchedule where T.RawValue: Any {
     public typealias RawValue = [String: Any]
 
     private let referenceTimeInterval: TimeInterval
     let repeatInterval = TimeInterval(hours: 24)
 
     public let items: [RepeatingScheduleValue<T>]
-    public let timeZone: TimeZone
+    public var timeZone: TimeZone
 
-    init?(dailyItems: [RepeatingScheduleValue<T>], timeZone: TimeZone?) {
+    public init?(dailyItems: [RepeatingScheduleValue<T>], timeZone: TimeZone? = nil) {
         self.items = dailyItems.sorted { $0.startTime < $1.startTime }
         self.timeZone = timeZone ?? TimeZone.currentFixed
 
@@ -68,7 +92,7 @@ public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomDe
         referenceTimeInterval = firstItem.startTime
     }
 
-    public required convenience init?(rawValue: RawValue) {
+    public init?(rawValue: RawValue) {
         guard let rawItems = rawValue["items"] as? [RepeatingScheduleValue<T>.RawValue] else {
             return nil
         }
@@ -149,13 +173,5 @@ public class DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomDe
         return items[startIndex..<endIndex].map {
             return AbsoluteScheduleValue(startDate: referenceDate.addingTimeInterval($0.startTime), value: $0.value)
         }
-    }
-
-    public func value(at time: Date) -> T {
-        return between(start: time, end: time).first!.value
-    }
-
-    public var debugDescription: String {
-        return rawValue.debugDescription
     }
 }

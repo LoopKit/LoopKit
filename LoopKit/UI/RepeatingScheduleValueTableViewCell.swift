@@ -47,7 +47,7 @@ class RepeatingScheduleValueTableViewCell: UITableViewCell, UITextFieldDelegate 
 
     var value: Double = 0 {
         didSet {
-            textField.text = valueNumberFormatter.string(from: value.rawValue)
+            textField.text = valueNumberFormatter.string(from: NSNumber(value: value))
         }
     }
 

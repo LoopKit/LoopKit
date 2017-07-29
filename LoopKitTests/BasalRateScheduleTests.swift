@@ -50,7 +50,7 @@ class BasalRateScheduleTests: XCTestCase {
     }
 
     func testBasalScheduleRanges() {
-        let schedule = BasalRateSchedule(dailyItems: items)!
+        let schedule = BasalRateSchedule(dailyItems: items, timeZone: nil)!
         let calendar = Calendar.current
 
         let midnight = calendar.startOfDay(for: Date())
@@ -130,13 +130,13 @@ class BasalRateScheduleTests: XCTestCase {
     }
 
     func testTotalDelivery() {
-        let schedule = BasalRateSchedule(dailyItems: items)!
+        let schedule = BasalRateSchedule(dailyItems: items, timeZone: nil)!
 
         XCTAssertEqualWithAccuracy(20.275, schedule.total(), accuracy: 1e-14)
     }
 
     func testRawValueSerialization() {
-        let schedule = BasalRateSchedule(dailyItems: items)!
+        let schedule = BasalRateSchedule(dailyItems: items, timeZone: nil)!
         let reSchedule = BasalRateSchedule(rawValue: schedule.rawValue)!
 
         let calendar = Calendar.current

@@ -20,13 +20,13 @@ class GlucoseRangeOverrideTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     var minValue: Double = 0 {
         didSet {
-            minValueTextField.text = valueNumberFormatter.string(from: minValue.rawValue)
+            minValueTextField.text = valueNumberFormatter.string(from: NSNumber(value: minValue))
         }
     }
 
     var maxValue: Double = 0 {
         didSet {
-            maxValueTextField.text = valueNumberFormatter.string(from: maxValue.rawValue)
+            maxValueTextField.text = valueNumberFormatter.string(from: NSNumber(value: maxValue))
         }
     }
 
@@ -50,6 +50,8 @@ class GlucoseRangeOverrideTableViewCell: UITableViewCell, UITextFieldDelegate {
     // MARK: Outlets
 
     @IBOutlet weak var iconImageView: UIImageView!
+
+    @IBOutlet weak var titleLabel: UILabel!
 
     @IBOutlet weak var unitLabel: UILabel!
 

@@ -10,15 +10,5 @@ import Foundation
 import HealthKit
 
 
-public class GlucoseSchedule: SingleQuantitySchedule {
-    public override init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<Double>], timeZone: TimeZone? = nil) {
-        super.init(unit: unit, dailyItems: dailyItems, timeZone: timeZone)
-
-        guard unit == HKUnit.milligramsPerDeciliter() || unit == HKUnit.millimolesPerLiter() else {
-            return nil
-        }
-    }
-}
-
-
+public typealias GlucoseSchedule = SingleQuantitySchedule
 public typealias InsulinSensitivitySchedule = GlucoseSchedule

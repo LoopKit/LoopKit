@@ -33,9 +33,6 @@ class Reservoir: NSManagedObject {
 }
 
 
-extension Reservoir: Fetchable { }
-
-
 extension Reservoir: ReservoirValue {
     var startDate: Date {
         return date

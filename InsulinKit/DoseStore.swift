@@ -129,9 +129,9 @@ public final class DoseStore {
         self.insulinActionDuration = insulinActionDuration
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.basalProfile = basalProfile
-        self.pumpEventQueryAfterDate = recentValuesStartDate ?? Date.distantPast
+        self.readyState = .initializing
 
-        readyState = .initializing
+        self.pumpEventQueryAfterDate = recentValuesStartDate ?? Date.distantPast
 
         persistenceController = PersistenceController(databasePath: databasePath, readyCallback: { [unowned self] (error) -> Void in
             if let error = error {
@@ -139,11 +139,11 @@ public final class DoseStore {
             } else {
                 self.persistenceController.managedObjectContext.perform {
                     // Find the newest PumpEvent date we have
-                    if let lastEvent = PumpEvent.singleObjectInContext(self.persistenceController.managedObjectContext,
-                        predicate: nil,
-                        sortedBy: "date",
-                        ascending: false
-                    ) {
+                    let request: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
+                    request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+                    request.fetchLimit = 1
+
+                    if let events = try? self.persistenceController.managedObjectContext.fetch(request), let lastEvent = events.first {
                         self.pumpEventQueryAfterDate = lastEvent.date
                     }
 
@@ -297,7 +297,7 @@ public final class DoseStore {
      */
     public func addReservoirValue(_ unitVolume: Double, atDate date: Date, completion: @escaping (_ value: ReservoirValue?, _ previousValue: ReservoirValue?, _ areStoredValuesContinuous: Bool, _ error: DoseStoreError?) -> Void) {
         persistenceController.managedObjectContext.perform { [unowned self] in
-            let reservoir = Reservoir.insertNewObjectInContext(self.persistenceController.managedObjectContext)
+            let reservoir = Reservoir(entity: Reservoir.entity(), insertInto: self.persistenceController.managedObjectContext)
 
             reservoir.volume = unitVolume
             reservoir.date = date
@@ -410,10 +410,12 @@ public final class DoseStore {
     /// - Returns: An array of reservoir managed objects, in reverse-chronological order
     /// - Throws: An error describing the failure to fetch objects
     private func getReservoirObjects(since startDate: Date) throws -> [Reservoir] {
-        let predicate = NSPredicate(format: "date >= %@", startDate as NSDate)
+        let request: NSFetchRequest<Reservoir> = Reservoir.fetchRequest()
+        request.predicate = NSPredicate(format: "date >= %@", startDate as NSDate)
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
 
         do {
-            return try Reservoir.objectsInContext(persistenceController.managedObjectContext, predicate: predicate, sortedBy: "date", ascending: false)
+            return try persistenceController.managedObjectContext.fetch(request)
         } catch let fetchError as NSError {
             throw DoseStoreError.fetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
         }
@@ -553,7 +555,7 @@ public final class DoseStore {
                 } else {
                     lastFinalDate = max(event.date, lastFinalDate ?? event.date)
 
-                    let object = PumpEvent.insertNewObjectInContext(self.persistenceController.managedObjectContext)
+                    let object = PumpEvent(entity: PumpEvent.entity(), insertInto: self.persistenceController.managedObjectContext)
 
                     object.date = event.date
                     object.raw = event.raw
@@ -593,11 +595,13 @@ public final class DoseStore {
             }
 
             // Reset the latest query date to the newest PumpEvent
-            if let lastEvent = PumpEvent.singleObjectInContext(self.persistenceController.managedObjectContext,
-                predicate: nil,
-                sortedBy: "date",
-                ascending: false
-            ) {
+            let request: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+            request.fetchLimit = 1
+
+            if let events = try? self.persistenceController.managedObjectContext.fetch(request),
+                let lastEvent = events.first
+            {
                 self.pumpEventQueryAfterDate = lastEvent.date
             } else {
                 self.pumpEventQueryAfterDate = self.recentValuesStartDate ?? .distantPast
@@ -630,8 +634,10 @@ public final class DoseStore {
             return
         }
 
-        let predicate = NSPredicate(format: "uploaded = false")
-        guard let objects = try? PumpEvent.objectsInContext(self.persistenceController.managedObjectContext, predicate: predicate, sortedBy: "date", ascending: true), objects.count > 0 else {
+        let request: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
+        request.predicate = NSPredicate(format: "uploaded = false")
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+        guard let objects = try? self.persistenceController.managedObjectContext.fetch(request), objects.count > 0 else {
             return
         }
 
@@ -738,8 +744,12 @@ public final class DoseStore {
     /// - Returns: An array of pump events in the specified order by date
     /// - Throws: An error describing the failure to fetch objects
     private func getPumpEventObjects(matching predicate: NSPredicate, chronological: Bool) throws -> [PumpEvent] {
+        let request: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
+        request.predicate = predicate
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: chronological)]
+
         do {
-            return try PumpEvent.objectsInContext(persistenceController.managedObjectContext, predicate: predicate, sortedBy: "date", ascending: chronological)
+            return try persistenceController.managedObjectContext.fetch(request)
         } catch let fetchError as NSError {
             throw DoseStoreError.fetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
         }

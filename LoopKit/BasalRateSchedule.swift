@@ -9,12 +9,10 @@
 import Foundation
 
 
-public class BasalRateSchedule: DailyValueSchedule<Double> {
+public typealias BasalRateSchedule = DailyValueSchedule<Double>
 
-    public override init?(dailyItems: [RepeatingScheduleValue<Double>], timeZone: TimeZone? = nil) {
-        super.init(dailyItems: dailyItems, timeZone: timeZone)
-    }
 
+public extension DailyValueSchedule where T == Double {
     /**
      Calculates the total basal delivery for a day
 
@@ -35,9 +33,4 @@ public class BasalRateSchedule: DailyValueSchedule<Double> {
         
         return total
     }
-
-    public override func value(at time: Date) -> Double {
-        return super.value(at: time)
-    }
-
 }
