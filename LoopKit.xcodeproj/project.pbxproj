@@ -234,9 +234,14 @@
 		43F41C311D374A3000C11ED6 /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D0D1D3737420006E908 /* NibLoadable.swift */; };
 		43FADDFB1C89679200DDE013 /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */; };
 		C1110E991EE98CF5009BB852 /* ice_35_min_input.json in Resources */ = {isa = PBXBuildFile; fileRef = C1110E981EE98CF5009BB852 /* ice_35_min_input.json */; };
+		C12EE16C1F2964B3007DB9F1 /* InsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */; };
 		C13E6D2A1EEB1CB9006F5880 /* ice_slow_absorption.json in Resources */ = {isa = PBXBuildFile; fileRef = C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */; };
 		C17F4CB31EE9B6DF005079B1 /* carb_entry_input.json in Resources */ = {isa = PBXBuildFile; fileRef = C17F4CB21EE9B6DF005079B1 /* carb_entry_input.json */; };
 		C1CBF61C1EEA2A1E001E4851 /* ice_1_hour_input.json in Resources */ = {isa = PBXBuildFile; fileRef = C1CBF61B1EEA2A1E001E4851 /* ice_1_hour_input.json */; };
+		C1DB55B11F2E95FD00C483A2 /* WalshInsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DB55B01F2E95FD00C483A2 /* WalshInsulinModel.swift */; };
+		C1DB55B31F2E964400C483A2 /* ExponentialInsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DB55B21F2E964400C483A2 /* ExponentialInsulinModel.swift */; };
+		C1DB55B51F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json in Resources */ = {isa = PBXBuildFile; fileRef = C1DB55B41F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json */; };
+		C1DB55B71F2EACD500C483A2 /* iob_from_bolus_exponential_output.json in Resources */ = {isa = PBXBuildFile; fileRef = C1DB55B61F2EACD500C483A2 /* iob_from_bolus_exponential_output.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -528,9 +533,14 @@
 		43F1372A1EDF9B500048468C /* CarbAbsorptionInputHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbAbsorptionInputHeaderView.swift; sourceTree = "<group>"; };
 		43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
 		C1110E981EE98CF5009BB852 /* ice_35_min_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_input.json; sourceTree = "<group>"; };
+		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
 		C17F4CB21EE9B6DF005079B1 /* carb_entry_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = carb_entry_input.json; sourceTree = "<group>"; };
 		C1CBF61B1EEA2A1E001E4851 /* ice_1_hour_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_1_hour_input.json; sourceTree = "<group>"; };
+		C1DB55B01F2E95FD00C483A2 /* WalshInsulinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalshInsulinModel.swift; sourceTree = "<group>"; };
+		C1DB55B21F2E964400C483A2 /* ExponentialInsulinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModel.swift; sourceTree = "<group>"; };
+		C1DB55B41F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_doses_exponential_output.json; sourceTree = "<group>"; };
+		C1DB55B61F2EACD500C483A2 /* iob_from_bolus_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_bolus_exponential_output.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -916,9 +926,11 @@
 				43D8FEDC1C7294D50073BE78 /* DoseEntry.swift */,
 				43D8FEDD1C7294D50073BE78 /* DoseStore.swift */,
 				43C094451CAA1E98001F6403 /* DoseUnit.swift */,
+				C1DB55B21F2E964400C483A2 /* ExponentialInsulinModel.swift */,
 				43D8FEB51C7294520073BE78 /* Info.plist */,
 				43D8FEB31C7294520073BE78 /* InsulinKit.h */,
 				43D8FEDF1C7294D50073BE78 /* InsulinMath.swift */,
+				C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */,
 				43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */,
 				43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */,
 				4302F4EA1D50670500F0FCAF /* NewPumpEvent.swift */,
@@ -932,6 +944,7 @@
 				43D8FEE41C7294D50073BE78 /* Reservoir+CoreDataProperties.swift */,
 				4302F4E81D5066F400F0FCAF /* ReservoirValue.swift */,
 				43D8FEDB1C7294C30073BE78 /* UI */,
+				C1DB55B01F2E95FD00C483A2 /* WalshInsulinModel.swift */,
 			);
 			path = InsulinKit;
 			sourceTree = "<group>";
@@ -961,6 +974,8 @@
 				43CE7CE71CA9EC1F003CC1B0 /* iob_from_bolus_312min_output.json */,
 				43CE7CE91CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json */,
 				43CE7CEB1CA9EC88003CC1B0 /* iob_from_bolus_420min_output.json */,
+				C1DB55B61F2EACD500C483A2 /* iob_from_bolus_exponential_output.json */,
+				C1DB55B41F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json */,
 				43D8FECE1C7294B80073BE78 /* iob_from_doses_output.json */,
 				43D8FECF1C7294B80073BE78 /* iob_from_reservoir_output.json */,
 				43CE7CED1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json */,
@@ -1477,12 +1492,14 @@
 				434FB6481D70096A007B9C70 /* reservoir_history_with_continuity_holes.json in Resources */,
 				43CE7CEE1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json in Resources */,
 				4378B6471ED55F8C000AE785 /* suspend_dose_reconciled_normalized_iob.json in Resources */,
+				C1DB55B71F2EACD500C483A2 /* iob_from_bolus_exponential_output.json in Resources */,
 				43D8FED81C7294B80073BE78 /* normalized_reservoir_history_output.json in Resources */,
 				43D8FEDA1C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json in Resources */,
 				43CE7CEA1CA9EC50003CC1B0 /* iob_from_bolus_360min_output.json in Resources */,
 				43CE7CF01CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json in Resources */,
 				43D8FED71C7294B80073BE78 /* iob_from_reservoir_output.json in Resources */,
 				43B99B001C7450EE00D050F5 /* effect_from_history_output.json in Resources */,
+				C1DB55B51F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json in Resources */,
 				43B99AFE1C744E5F00D050F5 /* effect_from_bolus_output.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1646,12 +1663,15 @@
 			files = (
 				4302F4DD1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */,
 				43DFE2801CB1E12D00EFBE95 /* PumpEventType.swift in Sources */,
+				C1DB55B31F2E964400C483A2 /* ExponentialInsulinModel.swift in Sources */,
 				43D8FEF21C7294E90073BE78 /* ErrorBackgroundView.swift in Sources */,
+				C1DB55B11F2E95FD00C483A2 /* WalshInsulinModel.swift in Sources */,
 				43D8FEEB1C7294D50073BE78 /* Reservoir.swift in Sources */,
 				43D8FEE81C7294D50073BE78 /* InsulinMath.swift in Sources */,
 				43DFE27D1CB1D6A600EFBE95 /* PumpEvent.swift in Sources */,
 				43DFE2821CB1FB8500EFBE95 /* InsulinValue.swift in Sources */,
 				4302F4EB1D50670500F0FCAF /* NewPumpEvent.swift in Sources */,
+				C12EE16C1F2964B3007DB9F1 /* InsulinModel.swift in Sources */,
 				430059201CCDC68200C861EA /* NSTimeInterval.swift in Sources */,
 				43D8FEE91C7294D50073BE78 /* Model.xcdatamodeld in Sources */,
 				439A1E8B1EC6B56800662F2B /* HKUnit.swift in Sources */,
