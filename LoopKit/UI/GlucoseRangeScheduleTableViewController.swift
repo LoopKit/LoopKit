@@ -29,7 +29,19 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     public var scheduleItems: [RepeatingScheduleValue<DoubleRange>] = []
 
-    public var workoutRange: DoubleRange?
+    @available(*, deprecated, message: "Use `overrideRanges` instead")
+    public var workoutRange: DoubleRange? {
+        get {
+            return overrideRanges[.workout]
+        }
+        set {
+            overrideRanges[.workout] = newValue
+        }
+    }
+
+    public let overrideContexts: [GlucoseRangeSchedule.Override.Context] = [.workout]
+
+    public var overrideRanges: [GlucoseRangeSchedule.Override.Context: DoubleRange] = [:]
 
     override func addScheduleItem(_ sender: Any?) {
         var startTime = TimeInterval(0)
@@ -56,7 +68,15 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
             )
         )
 
+        tableView.beginUpdates()
+
         tableView.insertRows(at: [IndexPath(row: scheduleItems.count - 1, section: Section.schedule.rawValue)], with: .automatic)
+
+        if scheduleItems.count == 1 {
+            tableView.insertSections(IndexSet(integer: Section.override.rawValue), with: .automatic)
+        }
+
+        tableView.endUpdates()
     }
 
     override func insertableIndiciesByRemovingRow(_ row: Int, withInterval timeInterval: TimeInterval) -> [Bool] {
@@ -73,7 +93,11 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
     }
 
     public override func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.count
+        if scheduleItems.count == 0 {
+            return Section.count - 1
+        } else {
+            return Section.count
+        }
     }
 
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -81,7 +105,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         case .schedule:
             return scheduleItems.count
         case .override:
-            return 1
+            return overrideContexts.count
         }
     }
 
@@ -125,15 +149,18 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
             cell.valueNumberFormatter.minimumFractionDigits = unit.preferredFractionDigits
             cell.valueNumberFormatter.maximumFractionDigits = unit.preferredFractionDigits
 
-            if let workoutRange = workoutRange {
-                cell.minValue = workoutRange.minValue
-                cell.maxValue = workoutRange.maxValue
+            let context = overrideContexts[indexPath.row]
+
+            if let range = overrideRanges[context], !range.isZero {
+                cell.minValue = range.minValue
+                cell.maxValue = range.maxValue
             }
+
+            cell.titleLabel.text = context.title
+            cell.iconImageView.image = context.image
 
             cell.unitString = unitDisplayString
             cell.delegate = self
-
-            cell.iconImageView.tintColor = tableView.tintColor
 
             return cell
         }
@@ -143,7 +170,15 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         if editingStyle == .delete {
             scheduleItems.remove(at: indexPath.row)
 
-            super.tableView(tableView, commit: editingStyle, forRowAt: indexPath)
+            tableView.beginUpdates()
+
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+
+            if scheduleItems.count == 0 {
+                tableView.deleteSections(IndexSet(integer: Section.override.rawValue), with: .automatic)
+            }
+
+            tableView.endUpdates()
         }
     }
 
@@ -228,6 +263,11 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
 extension GlucoseRangeScheduleTableViewController: GlucoseRangeOverrideTableViewCellDelegate {
     func glucoseRangeOverrideTableViewCellDidUpdateValue(_ cell: GlucoseRangeOverrideTableViewCell) {
-        workoutRange = DoubleRange(minValue: cell.minValue, maxValue: cell.maxValue)
+        guard let indexPath = tableView.indexPath(for: cell) else {
+            return
+        }
+
+        let context = overrideContexts[indexPath.row]
+        overrideRanges[context] = DoubleRange(minValue: cell.minValue, maxValue: cell.maxValue)
     }
 }

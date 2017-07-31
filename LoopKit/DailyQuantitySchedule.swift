@@ -10,65 +10,92 @@ import Foundation
 import HealthKit
 
 
-public class DailyQuantitySchedule<T: RawRepresentable>: DailyValueSchedule<T> where T.RawValue: Any {
+public struct DailyQuantitySchedule<T: RawRepresentable>: DailySchedule {
+    public typealias RawValue = [String: Any]
     public let unit: HKUnit
+    var valueSchedule: DailyValueSchedule<T>
 
-    init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<T>], timeZone: TimeZone?) {
+    public init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<T>], timeZone: TimeZone? = nil) {
+        guard let valueSchedule = DailyValueSchedule<T>(dailyItems: dailyItems, timeZone: timeZone) else {
+            return nil
+        }
+
         self.unit = unit
-
-        super.init(dailyItems: dailyItems, timeZone: timeZone)
+        self.valueSchedule = valueSchedule
     }
 
-    public required convenience init?(rawValue: RawValue) {
-        guard let
-            rawUnit = rawValue["unit"] as? String,
-            let rawItems = rawValue["items"] as? [RepeatingScheduleValue<T>.RawValue] else
+    public init?(rawValue: RawValue) {
+        guard let rawUnit = rawValue["unit"] as? String,
+            let valueSchedule = DailyValueSchedule<T>(rawValue: rawValue)
+            else
         {
             return nil
         }
 
-        var timeZone: TimeZone?
-
-        if let offset = rawValue["timeZone"] as? Int {
-            timeZone = TimeZone(secondsFromGMT: offset)
-        }
-
-        self.init(unit: HKUnit(from: rawUnit), dailyItems: rawItems.flatMap { RepeatingScheduleValue(rawValue: $0) }, timeZone: timeZone)
+        self.unit = HKUnit(from: rawUnit)
+        self.valueSchedule = valueSchedule
     }
 
-    public override var rawValue: RawValue {
-        var rawValue = super.rawValue
+    public var items: [RepeatingScheduleValue<T>] {
+        return valueSchedule.items
+    }
+
+    public var timeZone: TimeZone {
+        get {
+            return valueSchedule.timeZone
+        }
+        set {
+            valueSchedule.timeZone = newValue
+        }
+    }
+
+    public var rawValue: RawValue {
+        var rawValue = valueSchedule.rawValue
 
         rawValue["unit"] = unit.unitString
 
         return rawValue
     }
+
+    public func between(start startDate: Date, end endDate: Date) -> [AbsoluteScheduleValue<T>] {
+        return valueSchedule.between(start: startDate, end: endDate)
+    }
+
+    public func value(at time: Date) -> T {
+        return valueSchedule.value(at: time)
+    }
 }
 
 
-public class SingleQuantitySchedule: DailyQuantitySchedule<Double> {
-    public func quantity(at time: Date) -> HKQuantity {
-        return HKQuantity(unit: unit, doubleValue: value(at: time))
+extension DailyQuantitySchedule: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return String(reflecting: rawValue)
     }
+}
 
-    override init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<Double>], timeZone: TimeZone?) {
-        super.init(unit: unit, dailyItems: dailyItems, timeZone: timeZone)
+
+public typealias SingleQuantitySchedule = DailyQuantitySchedule<Double>
+
+
+public extension DailyQuantitySchedule where T == Double {
+    public func quantity(at time: Date) -> HKQuantity {
+        return HKQuantity(unit: unit, doubleValue: valueSchedule.value(at: time))
     }
 
     func averageValue() -> Double {
         var total: Double = 0
 
-        for (index, item) in items.enumerated() {
-            var endTime = maxTimeInterval
+        for (index, item) in valueSchedule.items.enumerated() {
+            var endTime = valueSchedule.maxTimeInterval
 
-            if index < items.endIndex - 1 {
-                endTime = items[index + 1].startTime
+            if index < valueSchedule.items.endIndex - 1 {
+                endTime = valueSchedule.items[index + 1].startTime
             }
 
             total += (endTime - item.startTime) * item.value
         }
 
-        return total / repeatInterval
+        return total / valueSchedule.repeatInterval
     }
 
     public func averageQuantity() -> HKQuantity {

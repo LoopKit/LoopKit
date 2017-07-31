@@ -28,12 +28,14 @@ open class HealthKitSampleStore {
     }
 
     /// The health store used for underlying queries
-    public let healthStore = HKHealthStore()
+    public let healthStore: HKHealthStore
 
-    public init?() {
+    public init?(healthStore: HKHealthStore = HKHealthStore()) {
         guard HKHealthStore.isHealthDataAvailable() else {
             return nil
         }
+
+        self.healthStore = healthStore
     }
 
     /// True if the user has explicitly denied access to any required share types

@@ -6,17 +6,15 @@
 //  Copyright © 2016 Nathan Racklyeft. All rights reserved.
 //
 
-import Foundation
-
 
 extension Double: RawRepresentable {
-    public typealias RawValue = NSNumber
+    public typealias RawValue = Double
 
     public init?(rawValue: RawValue) {
-        self = rawValue.doubleValue
+        self = rawValue
     }
 
     public var rawValue: RawValue {
-        return NSNumber(value: self)
+        return self
     }
 }

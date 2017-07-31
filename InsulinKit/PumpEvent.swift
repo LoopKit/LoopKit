@@ -86,9 +86,6 @@ class PumpEvent: NSManagedObject {
 }
 
 
-extension PumpEvent: Fetchable { }
-
-
 extension PumpEvent: TimelineValue {
     var startDate: Date {
         get {

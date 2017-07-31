@@ -32,11 +32,11 @@ class DeviceDataManager : CarbStoreDelegate {
 
     // Data stores
 
-    let carbStore: CarbStore?
+    let carbStore: CarbStore!
 
     let doseStore: DoseStore
 
-    let glucoseStore = GlucoseStore()
+    let glucoseStore = GlucoseStore()!
 
     // Settings
 
