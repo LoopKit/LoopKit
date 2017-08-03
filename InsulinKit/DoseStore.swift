@@ -93,8 +93,21 @@ public final class DoseStore {
             isUploadRequestPending = false
         }
     }
-
+    
     public var insulinActionDuration: TimeInterval? {
+        get {
+            return self.insulinModel?.effectDuration
+        }
+        set {
+            if let duration = newValue {
+                self.insulinModel = WalshInsulinModel(actionDuration: duration)
+            } else {
+                self.insulinModel = nil
+            }
+        }
+    }
+
+    public var insulinModel: InsulinModel? {
         didSet {
             persistenceController.managedObjectContext.perform {
                 if let recentValuesStartDate = self.recentValuesStartDate {
@@ -120,13 +133,26 @@ public final class DoseStore {
     }
 
     /// Initializes the store with configuration values
+    /// Deprecated.  Constructs a DoseStore using the WalshInsulinModel
     ///
     /// - Parameters:
     ///   - insulinActionDuration: The length of time insulin has an effect on blood glucose
     ///   - basalProfile: The daily schedule of basal insulin rates
     ///   - insulinSensitivitySchedule: The daily schedule of insulin sensitivity (also known as ISF)
-    public init(insulinActionDuration: TimeInterval?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?, databasePath: String = "com.loudnate.InsulinKit") {
-        self.insulinActionDuration = insulinActionDuration
+    @available(*, deprecated, message: "Use init(insulinModel:basalProfile:insulinSensitivitySchedule:databasePath:) instead")
+    convenience public init(insulinActionDuration: TimeInterval?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?, databasePath: String = "com.loudnate.InsulinKit") {
+        
+        var insulinModel: InsulinModel? = nil
+        
+        if let insulinActionDuration = insulinActionDuration {
+            insulinModel = WalshInsulinModel(actionDuration: insulinActionDuration)
+        }
+        
+        self.init(insulinModel: insulinModel, basalProfile: basalProfile, insulinSensitivitySchedule: insulinSensitivitySchedule)
+    }
+    
+    public init(insulinModel: InsulinModel?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?, databasePath: String = "com.loudnate.InsulinKit") {
+        self.insulinModel = insulinModel
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.basalProfile = basalProfile
         self.readyState = .initializing
@@ -146,7 +172,7 @@ public final class DoseStore {
                     if let events = try? self.persistenceController.managedObjectContext.fetch(request), let lastEvent = events.first {
                         self.pumpEventQueryAfterDate = lastEvent.date
                     }
-
+                    
                     // Warm the state of the reservoir data.
                     // These are in reverse-chronological order
                     // To populate `lastReservoirVolumeDrop`, we set the most recent 2 in-order.
@@ -155,12 +181,13 @@ public final class DoseStore {
                         self.lastReservoirObject = recentReservoirObjects[1]
                     }
                     self.lastReservoirObject = recentReservoirObjects.first
-
+                    
                     self.readyState = .ready
                 }
             }
         })
     }
+
 
     /// Clears all pump data from the on-disk store.
     ///
@@ -204,10 +231,10 @@ public final class DoseStore {
 
     /// The definition of "recency". Deprecated.
     private var recentValuesStartDate: Date? {
-        if let insulinActionDuration = insulinActionDuration {
+        if let insulinModel = insulinModel {
             let calendar = Calendar.current
 
-            return min(calendar.startOfDay(for: Date()), Date(timeIntervalSinceNow: -insulinActionDuration * 3 / 2 - TimeInterval(minutes: 5)))
+            return min(calendar.startOfDay(for: Date()), Date(timeIntervalSinceNow: -insulinModel.effectDuration * 3 / 2 - TimeInterval(minutes: 5)))
         } else {
             return nil
         }
@@ -256,10 +283,10 @@ public final class DoseStore {
     /// - Returns: The array of reservoir data used in the calculation
     @discardableResult
     private func validateReservoirContinuity(at date: Date = Date()) -> [Reservoir] {
-        if let insulinActionDuration = insulinActionDuration {
+        if let insulinModel = insulinModel {
             // Consider any entries longer than 30 minutes, or with a value of 0, to be unreliable
             let maximumInterval = TimeInterval(minutes: 30)
-            let continuityStartDate = date.addingTimeInterval(-insulinActionDuration)
+            let continuityStartDate = date.addingTimeInterval(-insulinModel.effectDuration)
 
             if  let recentReservoirObjects = try? self.getReservoirObjects(since: continuityStartDate - maximumInterval),
                 let oldestRelevantReservoirObject = recentReservoirObjects.last
@@ -948,20 +975,20 @@ public final class DoseStore {
     ///   - completion: A closure called once the values have been retrieved
     ///   - result: An array of insulin values, in chronological order
     public func getInsulinOnBoardValues(start: Date, end: Date? = nil, basalDosingEnd: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[InsulinValue]>) -> Void) {
-        guard let insulinActionDuration = self.insulinActionDuration else {
+        guard let insulinModel = self.insulinModel else {
             completion(.failure(.configurationError))
             return
         }
 
         // To properly know IOB at startDate, we need to go back another DIA hours
-        let doseStart = start.addingTimeInterval(-insulinActionDuration)
+        let doseStart = start.addingTimeInterval(-insulinModel.effectDuration)
         getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
             switch result {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
                 let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
-                let insulinOnBoard = InsulinMath.insulinOnBoardForDoses(trimmedDoses, actionDuration: insulinActionDuration)
+                let insulinOnBoard = InsulinMath.insulinOnBoardForDoses(trimmedDoses, insulinModel: insulinModel)
                 completion(.success(insulinOnBoard.filterDateRange(start, end)))
             }
         }
@@ -1001,7 +1028,7 @@ public final class DoseStore {
     ///   - completion: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completion: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
-        guard let insulinActionDuration = self.insulinActionDuration,
+        guard let insulinModel = self.insulinModel,
               let insulinSensitivitySchedule = self.insulinSensitivitySchedule
         else {
             completion(.failure(.configurationError))
@@ -1009,14 +1036,14 @@ public final class DoseStore {
         }
 
         // To properly know glucose effects at startDate, we need to go back another DIA hours
-        let doseStart = start.addingTimeInterval(-insulinActionDuration)
+        let doseStart = start.addingTimeInterval(-insulinModel.effectDuration)
         getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
             switch result {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
                 let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
-                let glucoseEffects = InsulinMath.glucoseEffectsForDoses(trimmedDoses, actionDuration: insulinActionDuration, insulinSensitivity: insulinSensitivitySchedule)
+                let glucoseEffects = InsulinMath.glucoseEffectsForDoses(trimmedDoses, insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             }
         }
@@ -1094,7 +1121,7 @@ public final class DoseStore {
             "## DoseStore",
             "",
             "* readyState: \(readyState)",
-            "* insulinActionDuration: \(insulinActionDuration ?? 0)",
+            "* insulinModel: \(String(reflecting: insulinModel))",
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
             "* areReservoirValuesContinuous: \(areReservoirValuesContinuous)",

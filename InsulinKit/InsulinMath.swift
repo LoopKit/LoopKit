@@ -10,60 +10,9 @@ import Foundation
 import HealthKit
 import LoopKit
 
-
 struct InsulinMath {
 
-    /**
-     Returns the percentage of total insulin effect remaining at a specified interval after delivery; also known as Insulin On Board (IOB).
-
-     These are 4th-order polynomial fits of John Walsh's IOB curve plots, and they first appeared in GlucoDyn.
-
-     See: https://github.com/kenstack/GlucoDyn
-
-     - parameter time:           The interval after insulin delivery
-     - parameter actionDuration: The total time of insulin effect
-
-     - returns: The percentage of total insulin effect remaining
-     */
-    private static func walshPercentEffectRemainingAtTime(_ time: TimeInterval, actionDuration: TimeInterval) -> Double {
-
-        switch time {
-        case let t where t <= 0:
-            return 1
-        case let t where t >= actionDuration:
-            return 0
-        default:
-            // We only have Walsh models for a few discrete action durations, so we scale other action durations appropriately to the nearest one.
-            let nearestModeledDuration: TimeInterval
-
-            switch actionDuration {
-            case let x where x < TimeInterval(hours: 3):
-                nearestModeledDuration = TimeInterval(hours: 3)
-            case let x where x > TimeInterval(hours: 6):
-                nearestModeledDuration = TimeInterval(hours: 6)
-            default:
-                nearestModeledDuration = TimeInterval(hours: round(actionDuration.hours))
-            }
-
-            let minutes = time.minutes * nearestModeledDuration / actionDuration
-
-            switch nearestModeledDuration {
-            case TimeInterval(hours: 3):
-                return -3.2030e-9 * pow(minutes, 4) + 1.354e-6 * pow(minutes, 3) - 1.759e-4 * pow(minutes, 2) + 9.255e-4 * minutes + 0.99951
-            case TimeInterval(hours: 4):
-                return -3.310e-10 * pow(minutes, 4) + 2.530e-7 * pow(minutes, 3) - 5.510e-5 * pow(minutes, 2) - 9.086e-4 * minutes + 0.99950
-            case TimeInterval(hours: 5):
-                return -2.950e-10 * pow(minutes, 4) + 2.320e-7 * pow(minutes, 3) - 5.550e-5 * pow(minutes, 2) + 4.490e-4 * minutes + 0.99300
-            case TimeInterval(hours: 6):
-                return -1.493e-10 * pow(minutes, 4) + 1.413e-7 * pow(minutes, 3) - 4.095e-5 * pow(minutes, 2) + 6.365e-4 * minutes + 0.99700
-            default:
-                assertionFailure()
-                return 0
-            }
-        }
-    }
-
-    private static func insulinOnBoardForContinuousDose(_ dose: DoseEntry, atDate date: Date, actionDuration: TimeInterval, delay: TimeInterval, delta: TimeInterval) -> Double {
+    private static func insulinOnBoardForContinuousDose(_ dose: DoseEntry, atDate date: Date, insulinModel: InsulinModel, delay: TimeInterval, delta: TimeInterval) -> Double {
 
         let doseDuration = dose.endDate.timeIntervalSince(dose.startDate)  // t1
         let time = date.timeIntervalSince(dose.startDate)
@@ -72,23 +21,23 @@ struct InsulinMath {
 
         repeat {
             let segment = max(0, min(doseDate + delta, doseDuration) - doseDate) / doseDuration
-            iob += segment * walshPercentEffectRemainingAtTime(time - delay - doseDate, actionDuration: actionDuration)
+            iob += segment * insulinModel.percentEffectRemainingAtTime(time - delay - doseDate)
             doseDate += delta
         } while doseDate <= min(floor((time + delay) / delta) * delta, doseDuration)
 
         return iob
     }
 
-    private static func insulinOnBoardForDose(_ dose: DoseEntry, atDate date: Date, actionDuration: TimeInterval, delay: TimeInterval, delta: TimeInterval) -> Double {
+    private static func insulinOnBoardForDose(_ dose: DoseEntry, atDate date: Date, insulinModel: InsulinModel, delay: TimeInterval, delta: TimeInterval) -> Double {
         let time = date.timeIntervalSince(dose.startDate)
         let iob: Double
 
         if time >= 0 {
             // Consider doses within the delta time window as momentary
             if dose.endDate.timeIntervalSince(dose.startDate) <= 1.05 * delta {
-                iob = dose.units * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)
+                iob = dose.units * insulinModel.percentEffectRemainingAtTime(time - delay)
             } else {
-                iob = dose.units * insulinOnBoardForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
+                iob = dose.units * insulinOnBoardForContinuousDose(dose, atDate: date, insulinModel: insulinModel, delay: delay, delta: delta)
             }
         } else {
             iob = 0
@@ -97,7 +46,7 @@ struct InsulinMath {
         return iob
     }
 
-    private static func glucoseEffectForContinuousDose(_ dose: DoseEntry, atDate date: Date, actionDuration: TimeInterval, delay: TimeInterval, delta: TimeInterval) -> Double {
+    private static func glucoseEffectForContinuousDose(_ dose: DoseEntry, atDate date: Date, insulinModel: InsulinModel, delay: TimeInterval, delta: TimeInterval) -> Double {
         let doseDuration = dose.endDate.timeIntervalSince(dose.startDate)  // t1
         let time = date.timeIntervalSince(dose.startDate)
         var value: Double = 0
@@ -105,23 +54,23 @@ struct InsulinMath {
 
         repeat {
             let segment = max(0, min(doseDate + delta, doseDuration) - doseDate) / doseDuration
-            value += segment * (1.0 - walshPercentEffectRemainingAtTime(time - delay - doseDate, actionDuration: actionDuration))
+            value += segment * (1.0 - insulinModel.percentEffectRemainingAtTime(time - delay - doseDate))
             doseDate += delta
         } while doseDate <= min(floor((time + delay) / delta) * delta, doseDuration)
 
         return value
     }
 
-    private static func glucoseEffectForDose(_ dose: DoseEntry, atDate date: Date, actionDuration: TimeInterval, insulinSensitivity: Double, delay: TimeInterval, delta: TimeInterval) -> Double {
+    private static func glucoseEffectForDose(_ dose: DoseEntry, atDate date: Date, insulinModel: InsulinModel, insulinSensitivity: Double, delay: TimeInterval, delta: TimeInterval) -> Double {
         let time = date.timeIntervalSince(dose.startDate)
         let value: Double
 
         if time >= 0 {
             // Consider doses within the delta time window as momentary
             if dose.endDate.timeIntervalSince(dose.startDate) <= 1.05 * delta {
-                value = dose.units * -insulinSensitivity * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration))
+                value = dose.units * -insulinSensitivity * (1.0 - insulinModel.percentEffectRemainingAtTime(time - delay))
             } else {
-                value = dose.units * -insulinSensitivity * glucoseEffectForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
+                value = dose.units * -insulinSensitivity * glucoseEffectForContinuousDose(dose, atDate: date, insulinModel: insulinModel, delay: delay, delta: delta)
             }
         } else {
             value = 0
@@ -422,13 +371,13 @@ struct InsulinMath {
      */
     static func insulinOnBoardForDoses<T: Collection>(
         _ doses: T,
-        actionDuration: TimeInterval,
+        insulinModel: InsulinModel,
         from start: Date? = nil,
         to end: Date? = nil,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [InsulinValue] where T.Iterator.Element == DoseEntry {
-        guard let (start, end) = LoopMath.simulationDateRangeForSamples(doses, from: start, to: end, duration: actionDuration, delay: delay, delta: delta) else {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(doses, from: start, to: end, duration: insulinModel.effectDuration, delay: delay, delta: delta) else {
             return []
         }
 
@@ -437,7 +386,7 @@ struct InsulinMath {
 
         repeat {
             let value = doses.reduce(0) { (value, dose) -> Double in
-                return value + insulinOnBoardForDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
+                return value + insulinOnBoardForDose(dose, atDate: date, insulinModel: insulinModel, delay: delay, delta: delta)
             }
 
             values.append(InsulinValue(startDate: date, value: value))
@@ -461,14 +410,14 @@ struct InsulinMath {
      */
     static func glucoseEffectsForDoses<T: Collection>(
         _ doses: T,
-        actionDuration: TimeInterval,
+        insulinModel: InsulinModel,
         insulinSensitivity: InsulinSensitivitySchedule,
         from start: Date? = nil,
         to end: Date? = nil,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [GlucoseEffect] where T.Iterator.Element == DoseEntry {
-        guard let (start, end) = LoopMath.simulationDateRangeForSamples(doses, from: start, to: end, duration: actionDuration, delay: delay, delta: delta) else {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(doses, from: start, to: end, duration: insulinModel.effectDuration, delay: delay, delta: delta) else {
             return []
         }
 
@@ -478,7 +427,7 @@ struct InsulinMath {
 
         repeat {
             let value = doses.reduce(0) { (value, dose) -> Double in
-                return value + glucoseEffectForDose(dose, atDate: date, actionDuration: actionDuration, insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delay: delay, delta: delta)
+                return value + glucoseEffectForDose(dose, atDate: date, insulinModel: insulinModel, insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delay: delay, delta: delta)
             }
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
