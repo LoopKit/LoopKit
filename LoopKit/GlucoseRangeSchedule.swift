@@ -51,6 +51,7 @@ public struct GlucoseRangeSchedule: DailySchedule {
     public struct Override {
         public enum Context: String {
             case workout
+            case preMeal
         }
 
         public let context: Context

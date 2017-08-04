@@ -13,6 +13,8 @@ extension GlucoseRangeSchedule.Override.Context {
         switch self {
         case .workout:
             return UIImage(named: "workout")
+        case .preMeal:
+            return UIImage(named: "Pre-Meal")
         }
     }
 
@@ -20,6 +22,8 @@ extension GlucoseRangeSchedule.Override.Context {
         switch self {
         case .workout:
             return NSLocalizedString("Workout", comment: "Title for the workout override range")
+        case .preMeal:
+            return NSLocalizedString("Pre-Meal", comment: "Title for the pre-meal override range")
         }
     }
 }
