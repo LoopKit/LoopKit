@@ -10,32 +10,14 @@ import Foundation
 
 
 // MARK: - Extensions useful in parsing fixture dates
-extension DateFormatter {
-    static func ISO8601Strict() -> Self {
-        let dateFormatter = self.init()
+extension ISO8601DateFormatter {
+    static func localTimeDate() -> Self {
+        let formatter = self.init()
 
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.formatOptions = .withInternetDateTime
+        formatter.formatOptions.subtract(.withTimeZone)
+        formatter.timeZone = .currentFixed
 
-        return dateFormatter
-    }
-
-    static func ISO8601LocalTime() -> Self {
-        let dateFormatter = self.init()
-
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.timeZone = TimeZone.currentFixed
-
-        return dateFormatter
-    }
-
-    static func localTime() -> Self {
-        let timeFormatter = self.init()
-
-        timeFormatter.dateFormat = "HH:mm:ss"
-        timeFormatter.locale = Locale(identifier: "en_US_POSIX")
-
-        return timeFormatter
+        return formatter
     }
 }

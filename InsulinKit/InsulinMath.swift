@@ -196,32 +196,46 @@ struct InsulinMath {
         var reconciled: [DoseEntry] = []
 
         var lastSuspend: DoseEntry?
-        var lastTempBasal: DoseEntry?
+        var lastBasal: DoseEntry?
 
         for dose in doses {
             switch dose.type {
-            case .basal:
-                reconciled.append(dose)
             case .bolus:
                 reconciled.append(dose)
+            case .basal:
+                // A basal start can indicate a resume in the case of a rewind
+                if let suspend = lastSuspend {
+                    reconciled.append(DoseEntry(
+                        type: suspend.type,
+                        startDate: suspend.startDate,
+                        endDate: dose.endDate,
+                        value: suspend.value,
+                        unit: suspend.unit,
+                        description: suspend.description ?? dose.description
+                    ))
+
+                    lastSuspend = nil
+                }
+
+                fallthrough  // Reconcile scheduled basals along with temporary
             case .tempBasal:
-                if let temp = lastTempBasal {
-                    let endDate = min(temp.endDate, dose.startDate)
+                if let last = lastBasal {
+                    let endDate = min(last.endDate, dose.startDate)
 
                     // Ignore 0-duration doses
-                    if endDate > temp.startDate {
+                    if endDate > last.startDate {
                         reconciled.append(DoseEntry(
-                            type: temp.type,
-                            startDate: temp.startDate,
+                            type: last.type,
+                            startDate: last.startDate,
                             endDate: endDate,
-                            value: temp.value,
-                            unit: temp.unit,
-                            description: temp.description
+                            value: last.value,
+                            unit: last.unit,
+                            description: last.description
                         ))
                     }
                 }
 
-                lastTempBasal = dose
+                lastBasal = dose
             case .resume:
                 if let suspend = lastSuspend {
                     reconciled.append(DoseEntry(
@@ -236,46 +250,45 @@ struct InsulinMath {
                     lastSuspend = nil
                 }
 
-                if let temp = lastTempBasal {
-                    if temp.endDate > dose.endDate {
-                        lastTempBasal = DoseEntry(
-                            type: temp.type,
+                // Continue temp basals that may have started before suspending
+                if let last = lastBasal, last.type == .tempBasal {
+                    if last.endDate > dose.endDate {
+                        lastBasal = DoseEntry(
+                            type: last.type,
                             startDate: dose.endDate,
-                            endDate: temp.endDate,
-                            value: temp.value,
-                            unit: temp.unit,
-                            description: temp.description
+                            endDate: last.endDate,
+                            value: last.value,
+                            unit: last.unit,
+                            description: last.description
                         )
                     } else {
-                        lastTempBasal = nil
+                        lastBasal = nil
                     }
                 }
             case .suspend:
-                if let temp = lastTempBasal {
+                if let last = lastBasal {
                     reconciled.append(DoseEntry(
-                        type: temp.type,
-                        startDate: temp.startDate,
-                        endDate: min(temp.endDate, dose.startDate),
-                        value: temp.value,
-                        unit: temp.unit,
-                        description: temp.description
+                        type: last.type,
+                        startDate: last.startDate,
+                        endDate: min(last.endDate, dose.startDate),
+                        value: last.value,
+                        unit: last.unit,
+                        description: last.description
                     ))
 
-                    if temp.endDate <= dose.startDate {
-                        lastTempBasal = nil
+                    if last.endDate <= dose.startDate {
+                        lastBasal = nil
                     }
                 }
 
                 lastSuspend = dose
-            case .prime:
-                break
             }
         }
 
         if let suspend = lastSuspend {
             reconciled.append(suspend)
-        } else if let temp = lastTempBasal, temp.endDate > temp.startDate {
-            reconciled.append(temp)
+        } else if let last = lastBasal, last.endDate > last.startDate {
+            reconciled.append(last)
         }
 
         return reconciled
@@ -301,6 +314,11 @@ struct InsulinMath {
                 endDate = dose.endDate
             } else {
                 endDate = basalItems[index + 1].startDate
+            }
+
+            // Ignore net-zero basals
+            guard abs(unitsPerHour) > .ulpOfOne else {
+                continue
             }
 
             normalizedDoses.append(DoseEntry(
@@ -336,7 +354,7 @@ struct InsulinMath {
                 normalizedDoses += normalizeBasalDose(dose, againstBasalSchedule: basalSchedule)
             case .bolus:
                 normalizedDoses.append(dose)
-            case .prime, .basal:
+            case .basal:
                 break
             }
         }
@@ -438,7 +456,6 @@ struct InsulinMath {
     }
 
     static func trimContinuingDoses<T: Collection>(_ doses: T, endDate: Date?) -> [DoseEntry] where T.Iterator.Element == DoseEntry {
-
         return doses.map {
             if let endDate = endDate, $0.type == .tempBasal, $0.endDate > endDate {
                 return DoseEntry(

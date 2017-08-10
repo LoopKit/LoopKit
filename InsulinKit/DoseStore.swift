@@ -533,7 +533,7 @@ public final class DoseStore {
     public private(set) var pumpEventQueryAfterDate = Date.distantPast
 
     /// The last time `addPumpEvents` was called, used to estimate recency of data.
-    private var lastAddedPumpEvents = Date.distantPast
+    private(set) public var lastAddedPumpEvents = Date.distantPast
 
     /// The date of the most recent pump prime event, if known.
     /// To to read and check for updates use getLastPrimeEventDate()
@@ -587,9 +587,7 @@ public final class DoseStore {
                     object.date = event.date
                     object.raw = event.raw
                     object.title = event.title
-                    // Generally the type is set from the dose, but in some cases (primes) we do not have a dose
                     object.type = event.type
-                    // If dose is nil (as it is in the case of a prime), then nothing will be overwritten by this assignment
                     object.dose = event.dose
                 }
             }
@@ -1125,6 +1123,12 @@ public final class DoseStore {
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
             "* areReservoirValuesContinuous: \(areReservoirValuesContinuous)",
+            "* isUploadRequestPending: \(isUploadRequestPending)",
+            "* lastAddedPumpEvents: \(lastAddedPumpEvents)",
+            "* lastReservoirObject: \(String(describing: lastReservoirObject))",
+            "* lastReservoirVolumeDrop: \(lastReservoirVolumeDrop)",
+            "* mutablePumpEventDoses: \(String(describing: mutablePumpEventDoses))",
+            "* pumpEventQueryAfterDate: \(pumpEventQueryAfterDate)",
             "* primeEventExistsWithinInsulinActionDuration: \(primeEventExistsWithinInsulinActionDuration)",
             "* totalDeliveryCache: \(String(describing: totalDeliveryCache))",
             "* lastPrimeEventDate: \(String(describing: _lastRecordedPrimeEventDate))",

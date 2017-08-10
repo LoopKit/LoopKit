@@ -93,6 +93,8 @@
 		439BCD8E1EEDD22900100EAA /* ice_35_min_none_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 439BCD8D1EEDD22900100EAA /* ice_35_min_none_output.json */; };
 		439BCD901EEDD2AD00100EAA /* ice_1_hour_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 439BCD8F1EEDD2AD00100EAA /* ice_1_hour_output.json */; };
 		439BCD921EEDD33F00100EAA /* ice_slow_absorption_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 439BCD911EEDD33F00100EAA /* ice_slow_absorption_output.json */; };
+		43A0670F1F23CAC700E9E90F /* DoseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A0670E1F23CAC700E9E90F /* DoseType.swift */; };
+		43A067131F245A2F00E9E90F /* DoseStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A067121F245A2F00E9E90F /* DoseStoreTests.swift */; };
 		43A275181F1C6E4000EAFEBD /* GlucoseRangeSchedule+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A275171F1C6E4000EAFEBD /* GlucoseRangeSchedule+UI.swift */; };
 		43AF1FB21C926CDD00EA2F3D /* HKQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */; };
 		43B99AFC1C744CE300D050F5 /* bolus_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99AFB1C744CE300D050F5 /* bolus_dose.json */; };
@@ -221,7 +223,7 @@
 		43DC87BB1C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87B91C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json */; };
 		43DC87BC1C8AD0ED005BC30D /* glucose_from_effects_non_zero_carb_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87BA1C8AD0ED005BC30D /* glucose_from_effects_non_zero_carb_input.json */; };
 		43DC87BE1C8AD41D005BC30D /* glucose_from_effects_non_zero_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87BD1C8AD41D005BC30D /* glucose_from_effects_non_zero_output.json */; };
-		43DFE27D1CB1D6A600EFBE95 /* PumpEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27B1CB1D6A600EFBE95 /* PumpEvent.swift */; };
+		43DFE27D1CB1D6A600EFBE95 /* PumpEvent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27B1CB1D6A600EFBE95 /* PumpEvent+CoreDataClass.swift */; };
 		43DFE27E1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */; };
 		43DFE2801CB1E12D00EFBE95 /* PumpEventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE27F1CB1E12D00EFBE95 /* PumpEventType.swift */; };
 		43DFE2821CB1FB8500EFBE95 /* InsulinValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */; };
@@ -388,6 +390,8 @@
 		439BCD8D1EEDD22900100EAA /* ice_35_min_none_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_none_output.json; sourceTree = "<group>"; };
 		439BCD8F1EEDD2AD00100EAA /* ice_1_hour_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_1_hour_output.json; sourceTree = "<group>"; };
 		439BCD911EEDD33F00100EAA /* ice_slow_absorption_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption_output.json; sourceTree = "<group>"; };
+		43A0670E1F23CAC700E9E90F /* DoseType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseType.swift; sourceTree = "<group>"; };
+		43A067121F245A2F00E9E90F /* DoseStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseStoreTests.swift; sourceTree = "<group>"; };
 		43A275171F1C6E4000EAFEBD /* GlucoseRangeSchedule+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GlucoseRangeSchedule+UI.swift"; sourceTree = "<group>"; };
 		43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantity.swift; sourceTree = "<group>"; };
 		43B99AFB1C744CE300D050F5 /* bolus_dose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bolus_dose.json; sourceTree = "<group>"; };
@@ -521,7 +525,7 @@
 		43DC87B91C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glucose_from_effects_non_zero_insulin_input.json; sourceTree = "<group>"; };
 		43DC87BA1C8AD0ED005BC30D /* glucose_from_effects_non_zero_carb_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glucose_from_effects_non_zero_carb_input.json; sourceTree = "<group>"; };
 		43DC87BD1C8AD41D005BC30D /* glucose_from_effects_non_zero_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = glucose_from_effects_non_zero_output.json; sourceTree = "<group>"; };
-		43DFE27B1CB1D6A600EFBE95 /* PumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEvent.swift; sourceTree = "<group>"; };
+		43DFE27B1CB1D6A600EFBE95 /* PumpEvent+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PumpEvent+CoreDataClass.swift"; sourceTree = "<group>"; };
 		43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PumpEvent+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		43DFE27F1CB1E12D00EFBE95 /* PumpEventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpEventType.swift; sourceTree = "<group>"; };
 		43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinValue.swift; sourceTree = "<group>"; };
@@ -925,6 +929,7 @@
 			children = (
 				43D8FEDC1C7294D50073BE78 /* DoseEntry.swift */,
 				43D8FEDD1C7294D50073BE78 /* DoseStore.swift */,
+				43A0670E1F23CAC700E9E90F /* DoseType.swift */,
 				43C094451CAA1E98001F6403 /* DoseUnit.swift */,
 				C1DB55B21F2E964400C483A2 /* ExponentialInsulinModel.swift */,
 				43D8FEB51C7294520073BE78 /* Info.plist */,
@@ -937,7 +942,7 @@
 				434FB64B1D712449007B9C70 /* NSData.swift */,
 				4302F4EC1D5068CE00F0FCAF /* PersistedPumpEvent.swift */,
 				43D8FEE21C7294D50073BE78 /* PersistenceController.swift */,
-				43DFE27B1CB1D6A600EFBE95 /* PumpEvent.swift */,
+				43DFE27B1CB1D6A600EFBE95 /* PumpEvent+CoreDataClass.swift */,
 				43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */,
 				43DFE27F1CB1E12D00EFBE95 /* PumpEventType.swift */,
 				43D8FEE31C7294D50073BE78 /* Reservoir.swift */,
@@ -952,6 +957,7 @@
 		43D8FEBE1C7294520073BE78 /* InsulinKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				43A067121F245A2F00E9E90F /* DoseStoreTests.swift */,
 				43D8FEC11C7294520073BE78 /* Info.plist */,
 				43D8FEC81C7294640073BE78 /* InsulinMathTests.swift */,
 				43D8FECA1C7294670073BE78 /* Fixtures */,
@@ -1668,11 +1674,12 @@
 				C1DB55B11F2E95FD00C483A2 /* WalshInsulinModel.swift in Sources */,
 				43D8FEEB1C7294D50073BE78 /* Reservoir.swift in Sources */,
 				43D8FEE81C7294D50073BE78 /* InsulinMath.swift in Sources */,
-				43DFE27D1CB1D6A600EFBE95 /* PumpEvent.swift in Sources */,
+				43DFE27D1CB1D6A600EFBE95 /* PumpEvent+CoreDataClass.swift in Sources */,
 				43DFE2821CB1FB8500EFBE95 /* InsulinValue.swift in Sources */,
 				4302F4EB1D50670500F0FCAF /* NewPumpEvent.swift in Sources */,
 				C12EE16C1F2964B3007DB9F1 /* InsulinModel.swift in Sources */,
 				430059201CCDC68200C861EA /* NSTimeInterval.swift in Sources */,
+				43A0670F1F23CAC700E9E90F /* DoseType.swift in Sources */,
 				43D8FEE91C7294D50073BE78 /* Model.xcdatamodeld in Sources */,
 				439A1E8B1EC6B56800662F2B /* HKUnit.swift in Sources */,
 				43C094461CAA1E98001F6403 /* DoseUnit.swift in Sources */,
@@ -1692,6 +1699,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4303C4931E2D665200ADEDC8 /* TimeZone.swift in Sources */,
+				43A067131F245A2F00E9E90F /* DoseStoreTests.swift in Sources */,
 				43D988901C87F36B00DA4467 /* LoopKitTests.swift in Sources */,
 				43D8FEC91C7294640073BE78 /* InsulinMathTests.swift in Sources */,
 				430059221CCDCFBE00C861EA /* NSDateFormatter.swift in Sources */,
