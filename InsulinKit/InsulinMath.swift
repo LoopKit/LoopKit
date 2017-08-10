@@ -208,7 +208,7 @@ struct InsulinMath {
                     reconciled.append(DoseEntry(
                         type: suspend.type,
                         startDate: suspend.startDate,
-                        endDate: dose.endDate,
+                        endDate: dose.startDate,
                         value: suspend.value,
                         unit: suspend.unit,
                         description: suspend.description ?? dose.description
@@ -241,7 +241,7 @@ struct InsulinMath {
                     reconciled.append(DoseEntry(
                         type: suspend.type,
                         startDate: suspend.startDate,
-                        endDate: dose.endDate,
+                        endDate: dose.startDate,
                         value: suspend.value,
                         unit: suspend.unit,
                         description: suspend.description ?? dose.description
@@ -379,7 +379,7 @@ struct InsulinMath {
      Calculates the timeline of insulin remaining for a collection of doses
 
      - parameter doses:          A collection of doses
-     - parameter actionDuration: The total time of insulin effect
+     - parameter insulinModel:   The model of insulin activity over time
      - parameter start:          The date to begin the timeline
      - parameter end:            The date to end the timeline
      - parameter delay:          The time to delay the dose effect
@@ -471,3 +471,4 @@ struct InsulinMath {
         }
     }
 }
+
