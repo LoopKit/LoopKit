@@ -224,13 +224,13 @@ class InsulinMathTests: XCTestCase {
     func testInsulinOnBoardLimitsForExponentialModel() {
         let insulinModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75))
         
-        XCTAssertEqualWithAccuracy(1, insulinModel.percentEffectRemainingAtTime(TimeInterval(minutes: -1)), accuracy: 0.001)
-        XCTAssertEqualWithAccuracy(1, insulinModel.percentEffectRemainingAtTime(TimeInterval(minutes: 0)), accuracy: 0.001)
-        XCTAssertEqualWithAccuracy(0, insulinModel.percentEffectRemainingAtTime(TimeInterval(minutes: 360)), accuracy: 0.001)
-        XCTAssertEqualWithAccuracy(0, insulinModel.percentEffectRemainingAtTime(TimeInterval(minutes: 361)), accuracy: 0.001)
+        XCTAssertEqualWithAccuracy(1, insulinModel.percentEffectRemaining(at: .minutes(-1)), accuracy: 0.001)
+        XCTAssertEqualWithAccuracy(1, insulinModel.percentEffectRemaining(at: .minutes(0)), accuracy: 0.001)
+        XCTAssertEqualWithAccuracy(0, insulinModel.percentEffectRemaining(at: .minutes(360)), accuracy: 0.001)
+        XCTAssertEqualWithAccuracy(0, insulinModel.percentEffectRemaining(at: .minutes(361)), accuracy: 0.001)
         
         // Test random point
-        XCTAssertEqualWithAccuracy(0.5110493617156, insulinModel.percentEffectRemainingAtTime(TimeInterval(minutes: 108)), accuracy: 0.001)
+        XCTAssertEqualWithAccuracy(0.5110493617156, insulinModel.percentEffectRemaining(at: .minutes(108)), accuracy: 0.001)
 
     }
     
@@ -374,10 +374,10 @@ class InsulinMathTests: XCTestCase {
         let insulinModel = WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
 
         measure {
-            _ = InsulinMath.glucoseEffectsForDoses(input, insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+            _ = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
         }
 
-        let effects = InsulinMath.glucoseEffectsForDoses(input, insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqualWithAccuracy(Float(output.count), Float(effects.count), accuracy: 1.0)
 
@@ -394,10 +394,10 @@ class InsulinMathTests: XCTestCase {
         let insulinModel = WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
 
         measure {
-            _ = InsulinMath.glucoseEffectsForDoses(input, insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+            _ = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
         }
 
-        let effects = InsulinMath.glucoseEffectsForDoses(input, insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(output.count, effects.count)
 
@@ -414,10 +414,10 @@ class InsulinMathTests: XCTestCase {
         let insulinModel = WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
 
         measure {
-            _ = InsulinMath.glucoseEffectsForDoses(input, insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+            _ = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
         }
 
-        let effects = InsulinMath.glucoseEffectsForDoses(input, insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(output.count, effects.count)
 
@@ -434,10 +434,10 @@ class InsulinMathTests: XCTestCase {
         let insulinModel = WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
 
         measure {
-            _ = InsulinMath.glucoseEffectsForDoses(input, insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+            _ = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
         }
 
-        let effects = InsulinMath.glucoseEffectsForDoses(input, insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(output.count, effects.count)
 
@@ -452,7 +452,7 @@ class InsulinMathTests: XCTestCase {
         let insulinSensitivitySchedule = self.insulinSensitivitySchedule
         let insulinModel = WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
 
-        let effects = InsulinMath.glucoseEffectsForDoses(input, insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(0, effects.count)
     }

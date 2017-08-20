@@ -8,18 +8,15 @@
 
 import Foundation
 
-public struct WalshInsulinModel: InsulinModel {
-    
-    let actionDuration: TimeInterval
+public struct WalshInsulinModel {
+    public let actionDuration: TimeInterval
     
     public init(actionDuration: TimeInterval) {
         self.actionDuration = actionDuration
     }
-    
-    public var debugDescription: String {
-        return "WalshInsulinModel(actionDuration: \(actionDuration))"
-    }
-    
+}
+
+extension WalshInsulinModel: InsulinModel {
     public var effectDuration: TimeInterval {
         return self.actionDuration
     }
@@ -33,7 +30,7 @@ public struct WalshInsulinModel: InsulinModel {
     ///
     /// - Parameter time: The interval after insulin delivery
     /// - Returns: The percentage of total insulin effect remaining
-    public func percentEffectRemainingAtTime(_ time: TimeInterval) -> Double {
+    public func percentEffectRemaining(at time: TimeInterval) -> Double {
         
         switch time {
         case let t where t <= 0:
@@ -69,6 +66,18 @@ public struct WalshInsulinModel: InsulinModel {
                 return 0
             }
         }
+    }
+}
+
+extension WalshInsulinModel: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "WalshInsulinModel(actionDuration: \(actionDuration))"
+    }
+}
+
+extension WalshInsulinModel: Equatable {
+    public static func ==(lhs: WalshInsulinModel, rhs: WalshInsulinModel) -> Bool {
+        return abs(lhs.actionDuration - rhs.actionDuration) < .ulpOfOne
     }
 }
 
