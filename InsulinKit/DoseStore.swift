@@ -865,7 +865,7 @@ public final class DoseStore {
         }
     }
 
-    /// Retrieves dose entries normalized to the current basal schedule.
+    /// Retrieves dose entries normalized to the current basal schedule, for visualization purposes.
     ///
     /// Doses are derived from pump events if they've been updated within the last 20 minutes or reservoir data is incomplete.
     ///
@@ -1035,14 +1035,23 @@ public final class DoseStore {
 
         // To properly know glucose effects at startDate, we need to go back another DIA hours
         let doseStart = start.addingTimeInterval(-insulinModel.effectDuration)
-        getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
-            switch result {
-            case .failure(let error):
-                completion(.failure(error))
-            case .success(let doses):
+        persistenceController.managedObjectContext.perform {
+            do {
+                let doses: [DoseEntry]
+                // Reservoir data is used only if its continuous
+                if self.areReservoirValuesValid {
+                    doses = try self.getNormalizedReservoirDoseEntries(start: doseStart, end: end)
+                } else {
+                    doses = try self.getNormalizedPumpEventDoseEntries(start: doseStart, end: end)
+                }
+
                 let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
                 let glucoseEffects = InsulinMath.glucoseEffectsForDoses(trimmedDoses, insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
+            } catch let error as DoseStoreError {
+                completion(.failure(error))
+            } catch {
+                assertionFailure()
             }
         }
     }
