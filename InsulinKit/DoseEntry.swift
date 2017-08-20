@@ -12,7 +12,7 @@ import LoopKit
 
 
 public struct DoseEntry: TimelineValue {
-    public let type: PumpEventType
+    public let type: DoseType
     public let startDate: Date
     public let endDate: Date
     internal let value: Double
@@ -20,7 +20,7 @@ public struct DoseEntry: TimelineValue {
     public let description: String?
     let managedObjectID: NSManagedObjectID?
 
-    public init(type: PumpEventType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil) {
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil) {
         self.init(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, description: description, managedObjectID: nil)
     }
 
@@ -32,7 +32,7 @@ public struct DoseEntry: TimelineValue {
         self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units)
     }
 
-    init(type: PumpEventType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil, managedObjectID: NSManagedObjectID?) {
+    init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil, managedObjectID: NSManagedObjectID?) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate

@@ -11,10 +11,13 @@ import Foundation
 
 /// A subset of pump event types, with raw values matching decocare's strings
 public enum PumpEventType: String {
-    case basal     = "BasalProfileStart"
-    case bolus     = "Bolus"
-    case prime     = "Prime"
-    case resume    = "PumpResume"
-    case suspend   = "PumpSuspend"
-    case tempBasal = "TempBasal"
+    case alarm      = "AlarmPump"
+    case alarmClear = "ClearAlarm"
+    case basal      = "BasalProfileStart"
+    case bolus      = "Bolus"
+    case prime      = "Prime"
+    case resume     = "PumpResume"
+    case rewind     = "Rewind"
+    case suspend    = "PumpSuspend"
+    case tempBasal  = "TempBasal"
 }

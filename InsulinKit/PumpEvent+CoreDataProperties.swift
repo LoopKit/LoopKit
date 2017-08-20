@@ -18,6 +18,7 @@ extension PumpEvent {
 
     @NSManaged var createdAt: Date!
     @NSManaged var date: Date!
+    @NSManaged var primitiveDoseType: String?
     @NSManaged var primitiveDuration: NSNumber?
     @NSManaged var primitiveType: String?
     @NSManaged var primitiveUnit: String?

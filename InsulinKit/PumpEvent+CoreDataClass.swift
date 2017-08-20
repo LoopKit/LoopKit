@@ -13,6 +13,19 @@ import LoopKit
 
 class PumpEvent: NSManagedObject {
 
+    var doseType: DoseType? {
+        get {
+            willAccessValue(forKey: "doseType")
+            defer { didAccessValue(forKey: "doseType") }
+            return DoseType(rawValue: primitiveDoseType ?? "")
+        }
+        set {
+            willChangeValue(forKey: "doseType")
+            defer { willChangeValue(forKey: "doseType") }
+            primitiveDoseType = newValue?.rawValue
+        }
+    }
+
     var duration: TimeInterval! {
         get {
             willAccessValue(forKey: "duration")
@@ -108,20 +121,29 @@ extension PumpEvent: TimelineValue {
 
 
 extension PumpEvent {
+
     var dose: DoseEntry? {
         get {
+            // To handle migration, we're requiring any dose to also have a PumpEventType
             guard let type = type, let value = value, let unit = unit else {
                 return nil
             }
 
-            return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, managedObjectID: objectID)
+            return DoseEntry(
+                type: doseType ?? DoseType(pumpEventType: type)!,
+                startDate: startDate,
+                endDate: endDate,
+                value: value,
+                unit: unit,
+                managedObjectID: objectID
+            )
         }
         set {
             guard let entry = newValue else {
                 return
             }
             
-            type = entry.type
+            doseType = entry.type
             startDate = entry.startDate
             endDate = entry.endDate
             value = entry.value

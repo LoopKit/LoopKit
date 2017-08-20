@@ -25,7 +25,7 @@ class InsulinMathTests: XCTestCase {
         print(String(data: try! JSONSerialization.data(
             withJSONObject: insulinValues.map({ (value) -> [String: Any] in
                 return [
-                    "date": DateFormatter.ISO8601LocalTime().string(from: value.startDate),
+                    "date": ISO8601DateFormatter.localTimeDate().string(from: value.startDate),
                     "value": value.value,
                     "unit": "U"
                 ]
@@ -38,7 +38,7 @@ class InsulinMathTests: XCTestCase {
     func loadReservoirFixture(_ resourceName: String) -> [NewReservoirValue] {
 
         let fixture: [JSONDictionary] = loadFixture(resourceName)
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.map {
             return NewReservoirValue(startDate: dateFormatter.date(from: $0["date"] as! String)!, unitVolume: $0["amount"] as! Double)
@@ -47,11 +47,12 @@ class InsulinMathTests: XCTestCase {
 
     func loadDoseFixture(_ resourceName: String) -> [DoseEntry] {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.flatMap {
             guard let unit = DoseUnit(rawValue: $0["unit"] as! String),
-                  let type = PumpEventType(rawValue: $0["type"] as! String)
+                  let pumpType = PumpEventType(rawValue: $0["type"] as! String),
+                  let type = DoseType(pumpEventType: pumpType)
             else {
                 return nil
             }
@@ -69,7 +70,7 @@ class InsulinMathTests: XCTestCase {
 
     func loadInsulinValueFixture(_ resourceName: String) -> [InsulinValue] {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.map {
             return InsulinValue(startDate: dateFormatter.date(from: $0["date"] as! String)!, value: $0["value"] as! Double)
@@ -78,7 +79,7 @@ class InsulinMathTests: XCTestCase {
 
     func loadGlucoseEffectFixture(_ resourceName: String) -> [GlucoseEffect] {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.map {
             return GlucoseEffect(startDate: dateFormatter.date(from: $0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit(from: $0["unit"] as! String), doubleValue:$0["amount"] as! Double))
@@ -118,7 +119,7 @@ class InsulinMathTests: XCTestCase {
     func testContinuousReservoirValues() {
         var input = loadReservoirFixture("reservoir_history_with_rewind_and_prime_input")
 
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
         XCTAssertTrue(InsulinMath.isContinuous(input, from: dateFormatter.date(from: "2016-01-30T16:40:00")!, to: dateFormatter.date(from: "2016-01-30T20:40:00")!))
 
         // We don't assert whether it's "stale".
@@ -146,7 +147,7 @@ class InsulinMathTests: XCTestCase {
     func testNonContinuousReservoirValues() {
         let input = loadReservoirFixture("reservoir_history_with_continuity_holes")
 
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
         XCTAssertTrue(InsulinMath.isContinuous(input, from: dateFormatter.date(from: "2016-01-30T18:30:00")!, to: dateFormatter.date(from: "2016-01-30T20:40:00")!))
 
         XCTAssertFalse(InsulinMath.isContinuous(input, from: dateFormatter.date(from: "2016-01-30T17:30:00")!, to: dateFormatter.date(from: "2016-01-30T20:40:00")!))
@@ -464,7 +465,7 @@ class InsulinMathTests: XCTestCase {
     }
 
     func testTrimContinuingDoses() {
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
         let input = loadDoseFixture("normalized_doses")
 
         // Last temp ends at 2015-10-15T18:14:35
