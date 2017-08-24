@@ -7,6 +7,7 @@
 //
 
 import CoreData
+import HealthKit
 import LoopKit
 
 
@@ -133,7 +134,7 @@ public final class DoseStore {
     }
 
     /// Initializes the store with configuration values
-    /// Deprecated.  Constructs a DoseStore using the WalshInsulinModel
+    /// Deprecated. Constructs a DoseStore using the WalshInsulinModel
     ///
     /// - Parameters:
     ///   - insulinActionDuration: The length of time insulin has an effect on blood glucose
@@ -148,10 +149,10 @@ public final class DoseStore {
             insulinModel = WalshInsulinModel(actionDuration: insulinActionDuration)
         }
         
-        self.init(insulinModel: insulinModel, basalProfile: basalProfile, insulinSensitivitySchedule: insulinSensitivitySchedule)
+        self.init(healthStore: HKHealthStore(), insulinModel: insulinModel, basalProfile: basalProfile, insulinSensitivitySchedule: insulinSensitivitySchedule)
     }
     
-    public init(insulinModel: InsulinModel?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?, databasePath: String = "com.loudnate.InsulinKit") {
+    public init(healthStore: HKHealthStore, insulinModel: InsulinModel?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?, databasePath: String = "com.loudnate.InsulinKit") {
         self.insulinModel = insulinModel
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.basalProfile = basalProfile
@@ -1046,7 +1047,7 @@ public final class DoseStore {
                 }
 
                 let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
-                let glucoseEffects = InsulinMath.glucoseEffectsForDoses(trimmedDoses, insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+                let glucoseEffects = trimmedDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             } catch let error as DoseStoreError {
                 completion(.failure(error))

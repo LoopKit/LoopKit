@@ -157,7 +157,18 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
             }
 
             cell.titleLabel.text = context.title
-            cell.iconImageView.image = context.image
+
+            let bundle = Bundle(for: type(of: self))
+            let image: UIImage?
+
+            switch context {
+            case .workout:
+                image = UIImage(named: "workout", in: bundle, compatibleWith: traitCollection)
+            case .preMeal:
+                image = UIImage(named: "Pre-Meal", in: bundle, compatibleWith: traitCollection)
+            }
+
+            cell.iconImageView.image = image
 
             cell.unitString = unitDisplayString
             cell.delegate = self
@@ -232,6 +243,35 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
             return nil
         case .override:
             return NSLocalizedString("Overrides", comment: "The section title of glucose overrides")
+        }
+    }
+
+    // MARK: - UITableViewDelegate
+
+    public override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        switch Section(rawValue: indexPath.section)! {
+        case .schedule:
+            return super.tableView(tableView, shouldHighlightRowAt: indexPath)
+        case .override:
+            return false
+        }
+    }
+
+    public override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        switch Section(rawValue: indexPath.section)! {
+        case .schedule:
+            return super.tableView(tableView, willSelectRowAt: indexPath)
+        case .override:
+            return nil
+        }
+    }
+
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch Section(rawValue: indexPath.section)! {
+        case .schedule:
+            super.tableView(tableView, didSelectRowAt: indexPath)
+        case .override:
+            break
         }
     }
 

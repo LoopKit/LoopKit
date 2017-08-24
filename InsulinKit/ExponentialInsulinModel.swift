@@ -8,15 +8,14 @@
 
 import Foundation
 
-public struct ExponentialInsulinModel: InsulinModel {
-    
-    let actionDuration: TimeInterval
-    let peakActivityTime: TimeInterval
+public struct ExponentialInsulinModel {
+    public let actionDuration: TimeInterval
+    public let peakActivityTime: TimeInterval
     
     // Precomputed terms
-    private let τ: Double
-    private let a: Double
-    private let S: Double
+    fileprivate let τ: Double
+    fileprivate let a: Double
+    fileprivate let S: Double
 
     /// Configures a new exponential insulin model
     ///
@@ -31,11 +30,9 @@ public struct ExponentialInsulinModel: InsulinModel {
         self.a = 2 * τ / actionDuration
         self.S = 1 / (1 - a + (1 + a) * exp(-actionDuration / τ))
     }
-    
-    public var debugDescription: String {
-        return "ExponentialInsulinModel(actionDuration: \(actionDuration), peakActivityTime: \(peakActivityTime))"
-    }
-    
+}
+
+extension ExponentialInsulinModel: InsulinModel {
     public var effectDuration: TimeInterval {
         return self.actionDuration
     }
@@ -51,7 +48,7 @@ public struct ExponentialInsulinModel: InsulinModel {
     /// - Parameter time: The interval after insulin delivery
     /// - Returns: The percentage of total insulin effect remaining
 
-    public func percentEffectRemainingAtTime(_ time: TimeInterval) -> Double {
+    public func percentEffectRemaining(at time: TimeInterval) -> Double {
         switch time {
         case let t where t <= 0:
             return 1
@@ -61,6 +58,12 @@ public struct ExponentialInsulinModel: InsulinModel {
             return 1 - S * (1 - a) *
                 ((pow(time, 2) / (τ * actionDuration * (1 - a)) - time / τ - 1) * exp(-time / τ) + 1)
         }
+    }
+}
+
+extension ExponentialInsulinModel: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "ExponentialInsulinModel(actionDuration: \(actionDuration), peakActivityTime: \(peakActivityTime))"
     }
 }
 

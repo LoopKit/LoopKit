@@ -9,15 +9,6 @@ import UIKit
 
 
 extension GlucoseRangeSchedule.Override.Context {
-    var image: UIImage? {
-        switch self {
-        case .workout:
-            return UIImage(named: "workout")
-        case .preMeal:
-            return UIImage(named: "Pre-Meal")
-        }
-    }
-
     var title: String {
         switch self {
         case .workout:

@@ -16,7 +16,7 @@ public protocol InsulinModel: CustomDebugStringConvertible {
     ///
     /// - Parameters:
     ///   - time: The interval after insulin delivery
-    func percentEffectRemainingAtTime(_ time: TimeInterval) -> Double
+    func percentEffectRemaining(at time: TimeInterval) -> Double
     
     /// The expected duration of an insulin dose
     var effectDuration: TimeInterval { get }
