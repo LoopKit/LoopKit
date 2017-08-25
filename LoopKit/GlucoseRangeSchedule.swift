@@ -99,7 +99,8 @@ public struct GlucoseRangeSchedule: DailySchedule {
             return nil
         }
 
-        return AbsoluteScheduleValue(startDate: override.end ?? .distantFuture, value: override.value)
+        let endDate = override.end ?? .distantFuture
+        return AbsoluteScheduleValue(startDate: endDate, endDate: endDate, value: override.value)
     }
 
     /// The last-configured override of the range schedule

@@ -34,6 +34,27 @@ class InsulinMathTests: XCTestCase {
         print("\n\n")
     }
 
+    private func printDoses(_ doses: [DoseEntry]) {
+        print("\n\n")
+        print(String(data: try! JSONSerialization.data(
+            withJSONObject: doses.map({ (value) -> [String: Any] in
+                var obj: [String: Any] = [
+                    "type": value.type.pumpEventType!.rawValue,
+                    "start_at": ISO8601DateFormatter.localTimeDate().string(from: value.startDate),
+                    "end_at": ISO8601DateFormatter.localTimeDate().string(from: value.endDate),
+                    "amount": value.value,
+                    "unit": value.unit.rawValue
+                ]
+
+                if let syncIdentifier = value.syncIdentifier {
+                    obj["raw"] = syncIdentifier
+                }
+
+                return obj
+            }),
+            options: .prettyPrinted), encoding: .utf8)!)
+        print("\n\n")
+    }
 
     func loadReservoirFixture(_ resourceName: String) -> [NewReservoirValue] {
 
@@ -63,7 +84,9 @@ class InsulinMathTests: XCTestCase {
                 endDate: dateFormatter.date(from: $0["end_at"] as! String)!,
                 value: $0["amount"] as! Double,
                 unit: unit,
-                description: $0["description"] as? String
+                description: $0["description"] as? String,
+                syncIdentifier: $0["raw"] as? String,
+                managedObjectID: nil
             )
         }
     }
@@ -364,6 +387,7 @@ class InsulinMathTests: XCTestCase {
             XCTAssertEqual(expected.endDate, calculated.endDate)
             XCTAssertEqual(expected.value, calculated.value)
             XCTAssertEqual(expected.unit, calculated.unit)
+            XCTAssertEqual(expected.syncIdentifier, calculated.syncIdentifier)
         }
     }
 
@@ -476,4 +500,57 @@ class InsulinMathTests: XCTestCase {
         XCTAssertEqual(input.count, trimmed.count)
     }
 
+    #if swift(>=3.2)
+    @available(iOS 11.0, *)
+    func testDosesOverlayBasalProfile() {
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
+        let input = loadDoseFixture("reconcile_history_output").sorted { $0.startDate < $1.startDate }
+        let output = loadDoseFixture("doses_overlay_basal_profile_output")
+        let basals = loadBasalRateScheduleFixture("basal")
+
+        let doses = input.overlayBasalSchedule(
+            basals,
+            // A start date before the first entry should generate a basal
+            startingAt: dateFormatter.date(from: "2016-02-15T14:01:04")!,
+            endingAt: Date(),
+            insertingBasalEntries: true
+        )
+
+        XCTAssertEqual(output.count, doses.count)
+
+        XCTAssertEqual(doses.first?.startDate, dateFormatter.date(from: "2016-02-15T14:01:04")!)
+
+        for (expected, calculated) in zip(output, doses) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqual(expected.endDate, calculated.endDate)
+            XCTAssertEqual(expected.value, calculated.value)
+            XCTAssertEqual(expected.unit, calculated.unit)
+        }
+
+        // Test trimming end
+        let dosesTrimmedEnd = input[0..<input.count - 11].overlayBasalSchedule(
+            basals,
+            startingAt: dateFormatter.date(from: "2016-02-15T14:01:04")!,
+            // An end date before some input entries should omit them
+            endingAt: dateFormatter.date(from: "2016-02-15T19:45:00")!,
+            insertingBasalEntries: true
+        )
+
+        XCTAssertEqual(output.count - 14, dosesTrimmedEnd.count)
+        // The BasalProfileStart event shouldn't be generated
+        XCTAssertEqual(dosesTrimmedEnd.last!.endDate, dateFormatter.date(from: "2016-02-15T19:36:11")!)
+
+        // Test a start date equal to the first entry, the expected case
+        let dosesMatchingStart = input.overlayBasalSchedule(
+            basals,
+            startingAt: dateFormatter.date(from: "2016-02-15T15:06:05")!,
+            endingAt: Date(),
+            insertingBasalEntries: true
+        )
+
+        // The inserted entries aren't included
+        XCTAssertEqual(output.count - 2, dosesMatchingStart.count)
+        XCTAssertEqual(dosesMatchingStart.first!.startDate, dateFormatter.date(from: "2016-02-15T15:06:05")!)
+    }
+    #endif
 }

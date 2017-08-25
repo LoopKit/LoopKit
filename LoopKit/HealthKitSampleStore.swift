@@ -63,6 +63,8 @@ open class HealthKitSampleStore {
     /**
      Initializes the HealthKit authorization flow for all required sample types
 
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+
      - parameter completion: A closure called after authorization is completed. This closure takes two arguments:
         - success: Whether the authorization to share was successful
         - error:   An error object explaining why the authorization was unsuccessful
@@ -112,13 +114,13 @@ open class HealthKitSampleStore {
         }
 
         if authorizationRequired || sharingDenied {
-            authorize({ (success, error) -> Void in
+            authorize { (success, error) -> Void in
                 if error != nil {
                     completion(nil, error)
                 } else {
                     postAuthHandler()
                 }
-            })
+            }
         } else {
             postAuthHandler()
         }

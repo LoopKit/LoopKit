@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import HealthKit
 import LoopKit
 
 
@@ -18,10 +19,14 @@ public struct DoseEntry: TimelineValue {
     internal let value: Double
     public let unit: DoseUnit
     public let description: String?
+    internal(set) public var syncIdentifier: String?
     let managedObjectID: NSManagedObjectID?
 
+    /// The scheduled basal rate during this dose entry
+    internal var scheduledBasalRate: HKQuantity?
+
     public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil) {
-        self.init(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, description: description, managedObjectID: nil)
+        self.init(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, description: description, syncIdentifier: nil, managedObjectID: nil)
     }
 
     public init(suspendDate: Date) {
@@ -32,13 +37,14 @@ public struct DoseEntry: TimelineValue {
         self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units)
     }
 
-    init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil, managedObjectID: NSManagedObjectID?) {
+    init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil, syncIdentifier: String?, managedObjectID: NSManagedObjectID?) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
         self.value = value
         self.unit = unit
         self.description = description
+        self.syncIdentifier = syncIdentifier
         self.managedObjectID = managedObjectID
     }
 }
@@ -66,5 +72,26 @@ extension DoseEntry {
         case .unitsPerHour:
             return value
         }
+    }
+
+    /// Rounds down a given entry to the minimum increment of hourly delivery rates for a Minimed pump
+    internal var unitsFlooredToMinimedIncrements: Double {
+        guard case .unitsPerHour = unit else {
+            return self.units
+        }
+        let minimumIncrementPerUnit: Double = 20
+        let units = self.units
+
+        return floor(units * minimumIncrementPerUnit) / minimumIncrementPerUnit
+    }
+
+    internal var unitsRoundedToMinimedIncrements: Double {
+        guard case .unitsPerHour = unit else {
+            return self.units
+        }
+        let minimumIncrementPerUnit: Double = 20
+        let units = self.units
+
+        return round(units * minimumIncrementPerUnit) / minimumIncrementPerUnit
     }
 }

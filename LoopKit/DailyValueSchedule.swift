@@ -22,6 +22,7 @@ public struct RepeatingScheduleValue<T: RawRepresentable> where T.RawValue: Any 
 
 public struct AbsoluteScheduleValue<T>: TimelineValue {
     public let startDate: Date
+    public let endDate: Date
     public let value: T
 }
 
@@ -170,8 +171,15 @@ public struct DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomD
 
         let referenceDate = startDate.addingTimeInterval(-startOffset)
 
-        return items[startIndex..<endIndex].map {
-            return AbsoluteScheduleValue(startDate: referenceDate.addingTimeInterval($0.startTime), value: $0.value)
+        return (startIndex..<endIndex).map { (index) in
+            let item = items[index]
+            let endTime = index + 1 < items.count ? items[index + 1].startTime : maxTimeInterval
+
+            return AbsoluteScheduleValue(
+                startDate: referenceDate.addingTimeInterval(item.startTime),
+                endDate: referenceDate.addingTimeInterval(endTime),
+                value: item.value
+            )
         }
     }
 }

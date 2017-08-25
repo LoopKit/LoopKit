@@ -15,7 +15,7 @@ func ==<T: Equatable>(lhs: RepeatingScheduleValue<T>, rhs: RepeatingScheduleValu
 }
 
 func ==<T: Equatable>(lhs: AbsoluteScheduleValue<T>, rhs: AbsoluteScheduleValue<T>) -> Bool {
-    return lhs.startDate == rhs.startDate && lhs.value == rhs.value
+    return lhs.startDate == rhs.startDate && lhs.endDate == rhs.endDate && lhs.value == rhs.value
 }
 
 
@@ -55,12 +55,22 @@ class BasalRateScheduleTests: XCTestCase {
 
         let midnight = calendar.startOfDay(for: Date())
 
-        var absoluteItems: [AbsoluteScheduleValue] = items[0..<items.count].map {
-            AbsoluteScheduleValue(startDate: midnight.addingTimeInterval($0.startTime), value: $0.value)
+        var absoluteItems: [AbsoluteScheduleValue<Double>] = (0..<items.count).map {
+            let endTime = ($0 + 1) < items.count ? items[$0 + 1].startTime : .hours(24)
+            return AbsoluteScheduleValue(
+                startDate: midnight.addingTimeInterval(items[$0].startTime),
+                endDate: midnight.addingTimeInterval(endTime),
+                value: items[$0].value
+            )
         }
 
-        absoluteItems += items[0..<items.count].map {
-            AbsoluteScheduleValue(startDate: midnight.addingTimeInterval($0.startTime + TimeInterval(hours: 24)), value: $0.value)
+        absoluteItems += (0..<items.count).map {
+            let endTime = ($0 + 1) < items.count ? items[$0 + 1].startTime : .hours(24)
+            return AbsoluteScheduleValue(
+                startDate: midnight.addingTimeInterval(items[$0].startTime + .hours(24)),
+                endDate: midnight.addingTimeInterval(endTime + .hours(24)),
+                value: items[$0].value
+            )
         }
 
         XCTAssert(
