@@ -135,6 +135,7 @@ extension PumpEvent {
                 endDate: endDate,
                 value: value,
                 unit: unit,
+                syncIdentifier: syncIdentifier,
                 managedObjectID: objectID
             )
         }
@@ -150,7 +151,11 @@ extension PumpEvent {
             unit = entry.unit
         }
     }
-    
+
+    var syncIdentifier: String? {
+        return raw?.hexadecimalString
+    }
+
     var isUploaded: Bool {
         return uploaded
     }

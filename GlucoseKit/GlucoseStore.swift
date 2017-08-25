@@ -65,7 +65,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     /// Glucose sample cache, used for calculations when HKHealthStore is unavailable
     private var sampleDataCache: [HKQuantitySample] = []
 
-    private var dataAccessQueue: DispatchQueue = DispatchQueue(label: "com.loudnate.GlucoseKit.dataAccessQueue", attributes: [])
+    private var dataAccessQueue: DispatchQueue = DispatchQueue(label: "com.loudnate.GlucoseKit.dataAccessQueue")
 
     /// The most-recent glucose value. Reading this value is thread-safe as `GlucoseValue` is immutable.
     public private(set) var latestGlucose: GlucoseValue?
@@ -157,32 +157,22 @@ public final class GlucoseStore: HealthKitSampleStore {
         sampleDataCache = sampleDataCache.filter { $0.startDate >= cacheStartDate }
 
         if let managedDataInterval = managedDataInterval {
-            guard UIApplication.shared.isProtectedDataAvailable else {
-                return
-            }
-
             let predicate = HKQuery.predicateForSamples(withStart: Date(timeIntervalSinceNow: -maxPurgeInterval), end: Date(timeIntervalSinceNow: -managedDataInterval), options: [])
 
             healthStore.deleteObjects(of: glucoseType, predicate: predicate, withCompletion: { (success, count, error) -> Void in
+                // error is expected and ignored if protected data is unavailable
                 // TODO: Send this to the delegate
             })
         }
     }
 
     private func getCachedGlucoseSamples(start: Date, end: Date? = nil, completion: @escaping (_ samples: [HKQuantitySample]) -> Void) {
-        if UIApplication.shared.isProtectedDataAvailable {
-            getGlucoseSamples(start: start, end: end) { (result) in
-                switch result {
-                case .success(let samples):
-                    completion(samples)
-                case .failure:
-                    completion(self.sampleDataCache.filterDateRange(start, end))
-                }
-            }
-        } else {
-            dataAccessQueue.async {
-                let samples = self.sampleDataCache.filterDateRange(start, end)
+        getGlucoseSamples(start: start, end: end) { (result) in
+            switch result {
+            case .success(let samples):
                 completion(samples)
+            case .failure:
+                completion(self.sampleDataCache.filterDateRange(start, end))
             }
         }
     }
