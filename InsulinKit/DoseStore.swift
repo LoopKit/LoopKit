@@ -417,6 +417,8 @@ public final class DoseStore {
             }
 
             self.lastReservoirObject = reservoir
+            // Reset our mutable pump events, since they are considered in addition to reservoir in dosing
+            self.mutablePumpEventDoses = []
 
             try? self.purgeReservoirObjects(matching: self.purgeableValuesPredicate)
 
@@ -595,12 +597,12 @@ public final class DoseStore {
     private var _lastRecordedPrimeEventDate: Date?
 
     /// The last-seen mutable pump events, which aren't persisted but are used for dose calculation.
-    private var mutablePumpEventDoses: [DoseEntry]?
+    private var mutablePumpEventDoses: [DoseEntry] = []
 
     /**
      Adds and persists new pump events.
      
-     Events are deduplicated by a unique constraint of pump ID, date, and raw data.
+     Events are deduplicated by a unique constraint on `NewPumpEvent.getter:raw`.
 
      - parameter events:     An array of new pump events
      - parameter completion: A closure called after the events are saved. The closure takes a single argument:
@@ -670,6 +672,25 @@ public final class DoseStore {
                 }
                 #endif
             }
+        }
+    }
+
+    /// Appends a temporary pump event to be considered in dose calculation.
+    ///
+    /// Events added using this method will be cleared during calls to `addPumpEvents(_:completion:)` and `addReservoirValue(_:atDate:completion:)`
+    ///
+    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+    ///
+    /// - Parameters:
+    ///   - event: The event to append
+    ///   - completion: A closure called when the add has completed
+    public func addPendingPumpEvent(_ event: NewPumpEvent, completion: @escaping () -> Void) {
+        persistenceController.managedObjectContext.perform { [unowned self] in
+            if let dose = event.dose {
+                self.mutablePumpEventDoses.append(dose)
+            }
+
+            completion()
         }
     }
 
@@ -906,7 +927,7 @@ public final class DoseStore {
         }
 
         let doses = try getPumpEventDoseObjects(since: start)
-        let reconciledDoses = InsulinMath.reconcileDoses(doses + (mutablePumpEventDoses ?? []))
+        let reconciledDoses = InsulinMath.reconcileDoses(doses)
         let normalizedDoses = InsulinMath.normalize(reconciledDoses, againstBasalSchedule: basalProfile)
 
         return normalizedDoses.filterDateRange(start, end)
@@ -993,14 +1014,15 @@ public final class DoseStore {
         persistenceController.managedObjectContext.perform {
             do {
                 let doses: [DoseEntry]
-                // Reservoir data is used only if its continuous and we haven't seen pump events in the last 15 minutes
-                if self.areReservoirValuesValid && self.lastAddedPumpEvents.timeIntervalSinceNow < -TimeInterval(minutes: 15) {
+                // Reservoir data is used only if its continuous and we haven't seen pump events since the last reservoir reading
+                if self.areReservoirValuesValid &&
+                    self.lastAddedPumpEvents.timeIntervalSince(self.lastReservoirObject!.startDate) < 0 {
                     doses = try self.getNormalizedReservoirDoseEntries(start: start, end: end)
                 } else {
                     doses = try self.getNormalizedPumpEventDoseEntries(start: start, end: end)
                 }
 
-                completion(.success(doses))
+                completion(.success(doses + self.mutablePumpEventDoses))
             } catch let error as DoseStoreError {
                 completion(.failure(error))
             } catch {
@@ -1148,23 +1170,14 @@ public final class DoseStore {
 
         // To properly know glucose effects at startDate, we need to go back another DIA hours
         let doseStart = start.addingTimeInterval(-insulinModel.effectDuration)
-        persistenceController.managedObjectContext.perform {
-            do {
-                let doses: [DoseEntry]
-                // Reservoir data is used only if its continuous
-                if self.areReservoirValuesValid {
-                    doses = try self.getNormalizedReservoirDoseEntries(start: doseStart, end: end)
-                } else {
-                    doses = try self.getNormalizedPumpEventDoseEntries(start: doseStart, end: end)
-                }
-
+        getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success(let doses):
                 let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
                 let glucoseEffects = trimmedDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
-            } catch let error as DoseStoreError {
-                completion(.failure(error))
-            } catch {
-                assertionFailure()
             }
         }
     }
@@ -1249,7 +1262,7 @@ public final class DoseStore {
             "* lastAddedPumpEvents: \(lastAddedPumpEvents)",
             "* lastReservoirObject: \(String(describing: lastReservoirObject))",
             "* lastReservoirVolumeDrop: \(lastReservoirVolumeDrop)",
-            "* mutablePumpEventDoses: \(String(describing: mutablePumpEventDoses))",
+            "* mutablePumpEventDoses: \(mutablePumpEventDoses)",
             "* pumpEventQueryAfterDate: \(pumpEventQueryAfterDate)",
             "* primeEventExistsWithinInsulinActionDuration: \(primeEventExistsWithinInsulinActionDuration)",
             "* totalDeliveryCache: \(String(describing: totalDeliveryCache))",

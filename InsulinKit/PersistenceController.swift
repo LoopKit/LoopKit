@@ -64,8 +64,8 @@ class PersistenceController {
             var error: PersistenceControllerError?
 
             let modelURL = Bundle(for: type(of: self)).url(forResource: "Model", withExtension: "momd")!
-            let model = NSManagedObjectModel(contentsOf: modelURL)!
-            let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+            let model: NSManagedObjectModel? = NSManagedObjectModel(contentsOf: modelURL)
+            let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model!)
 
             self.managedObjectContext.persistentStoreCoordinator = coordinator
 
