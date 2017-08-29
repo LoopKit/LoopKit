@@ -74,24 +74,27 @@ extension DoseEntry {
         }
     }
 
-    /// Rounds down a given entry to the minimum increment of hourly delivery rates for a Minimed pump
+    /// The smallest increment per unit of hourly basal delivery
+    /// TODO: Is this 40 for x23 models?
+    internal static let minimumMinimedIncrementPerUnit: Double = 20
+
+    /// Rounds down a given entry to the smallest increment of hourly delivery
     internal var unitsFlooredToMinimedIncrements: Double {
         guard case .unitsPerHour = unit else {
             return self.units
         }
-        let minimumIncrementPerUnit: Double = 20
         let units = self.units
 
-        return floor(units * minimumIncrementPerUnit) / minimumIncrementPerUnit
+        return floor(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
     }
 
+    /// Rounds a given entry to the smallest increment of hourly delivery
     internal var unitsRoundedToMinimedIncrements: Double {
         guard case .unitsPerHour = unit else {
             return self.units
         }
-        let minimumIncrementPerUnit: Double = 20
         let units = self.units
 
-        return round(units * minimumIncrementPerUnit) / minimumIncrementPerUnit
+        return round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
     }
 }
