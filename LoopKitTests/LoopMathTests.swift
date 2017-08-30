@@ -18,7 +18,7 @@ class LoopMathTests: XCTestCase {
 
     func loadGlucoseEffectFixture(_ resourceName: String) -> [GlucoseEffect] {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.map {
             return GlucoseEffect(startDate: dateFormatter.date(from: $0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit(from: $0["unit"] as! String), doubleValue:$0["amount"] as! Double))
@@ -27,7 +27,7 @@ class LoopMathTests: XCTestCase {
 
     func loadSampleValueFixture(_ resourceName: String) -> [(startDate: Date, quantity: HKQuantity)] {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
-        let dateFormatter = DateFormatter.ISO8601Strict()
+        let dateFormatter = ISO8601DateFormatter()
 
         return fixture.map {
             (dateFormatter.date(from: $0["startDate"] as! String)!, HKQuantity(unit: HKUnit(from: $0["unit"] as! String), doubleValue: $0["value"] as! Double))
@@ -36,7 +36,7 @@ class LoopMathTests: XCTestCase {
 
     func loadGlucoseHistoryFixture(_ resourceName: String) -> RecentGlucoseValue {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.map {
             return RecentGlucoseValue(startDate: dateFormatter.date(from: $0["display_time"] as! String)!, quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliter(), doubleValue:$0["glucose"] as! Double))
@@ -45,7 +45,7 @@ class LoopMathTests: XCTestCase {
 
     func loadGlucoseValueFixture(_ resourceName: String) -> [PredictedGlucoseValue] {
         let fixture: [JSONDictionary] = loadFixture(resourceName)
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.map {
             return PredictedGlucoseValue(startDate: dateFormatter.date(from: $0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit(from: $0["unit"] as! String), doubleValue:$0["amount"] as! Double))

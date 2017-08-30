@@ -393,7 +393,7 @@ extension Collection where Iterator.Element == CarbStatus {
             }
 
             maxObservedEndDate = Swift.max(maxObservedEndDate, absorption.observedDate.end)
-            remainingTotalGrams = absorption.remaining.doubleValue(for: gram)
+            remainingTotalGrams += absorption.remaining.doubleValue(for: gram)
         }
 
         return CarbValue(startDate: maxObservedEndDate, quantity: HKQuantity(unit: gram, doubleValue: remainingTotalGrams))

@@ -21,7 +21,7 @@ class CarbMathTests: XCTestCase {
         print(String(data: try! JSONSerialization.data(
             withJSONObject: carbValues.map({ (value) -> [String: Any] in
                 return [
-                    "date": DateFormatter.ISO8601LocalTime().string(from: value.startDate),
+                    "date": ISO8601DateFormatter.localTimeDate().string(from: value.startDate),
                     "amount": value.quantity.doubleValue(for: unit),
                     "unit": "g"
                 ]
@@ -55,7 +55,7 @@ class CarbMathTests: XCTestCase {
     }
 
     private func carbEntriesFromFixture(_ fixture: [JSONDictionary]) -> [NewCarbEntry] {
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.map {
             let absorptionTime: TimeInterval?
@@ -75,7 +75,7 @@ class CarbMathTests: XCTestCase {
 
     private func loadEffectOutputFixture() -> [GlucoseEffect] {
         let fixture: [JSONDictionary] = loadFixture("carb_effect_from_history_output")
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.map {
             return GlucoseEffect(startDate: dateFormatter.date(from: $0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit(from: $0["unit"] as! String), doubleValue:$0["amount"] as! Double))
@@ -84,7 +84,7 @@ class CarbMathTests: XCTestCase {
 
     private func loadCOBOutputFixture(_ name: String) -> [CarbValue] {
         let fixture: [JSONDictionary] = loadFixture(name)
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.map {
             return CarbValue(startDate: dateFormatter.date(from: $0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit(from: $0["unit"] as! String), doubleValue:$0["amount"] as! Double))
@@ -93,7 +93,7 @@ class CarbMathTests: XCTestCase {
 
     private func loadICEInputFixture(_ name: String) -> [GlucoseEffectVelocity] {
         let fixture: [JSONDictionary] = loadFixture(name)
-        let dateFormatter = DateFormatter.ISO8601LocalTime()
+        let dateFormatter = ISO8601DateFormatter.localTimeDate()
         
         let unit = HKUnit.milligramsPerDeciliter().unitDivided(by: .minute())
         

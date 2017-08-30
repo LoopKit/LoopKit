@@ -116,11 +116,11 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                     scheduleVC.timeZone = schedule.timeZone
                     scheduleVC.scheduleItems = schedule.items
                     scheduleVC.unit = schedule.unit
-                    scheduleVC.workoutRange = schedule.workoutRange
+                    scheduleVC.overrideRanges = schedule.overrideRanges
 
                     show(scheduleVC, sender: sender)
-                } else if let glucoseStore = dataManager.glucoseStore {
-                    glucoseStore.preferredUnit({ (unit, error) -> Void in
+                } else {
+                    dataManager.glucoseStore.preferredUnit({ (unit, error) -> Void in
                         DispatchQueue.main.async {
                             if let error = error {
                                 self.presentAlertController(with: error)
@@ -130,8 +130,6 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                             }
                         }
                     })
-                } else {
-                    show(scheduleVC, sender: sender)
                 }
             case .pumpID:
                 let textFieldVC = TextFieldTableViewController()
@@ -172,12 +170,10 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                     }
 
                     var glucoseStoreResponse = ""
-                    if let glucoseStore = self.dataManager.glucoseStore {
-                        group.enter()
-                        glucoseStore.generateDiagnosticReport { (report) in
-                            glucoseStoreResponse = report
-                            group.leave()
-                        }
+                    group.enter()
+                    self.dataManager.glucoseStore.generateDiagnosticReport { (report) in
+                        glucoseStoreResponse = report
+                        group.leave()
                     }
 
                     group.notify(queue: DispatchQueue.main) {
@@ -236,7 +232,7 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                     }
                 case .glucoseTargetRange:
                     if let controller = controller as? GlucoseRangeScheduleTableViewController {
-                        dataManager.glucoseTargetRangeSchedule = GlucoseRangeSchedule(unit: controller.unit, dailyItems: controller.scheduleItems, workoutRange: controller.workoutRange, timeZone: controller.timeZone)
+                        dataManager.glucoseTargetRangeSchedule = GlucoseRangeSchedule(unit: controller.unit, dailyItems: controller.scheduleItems, timeZone: controller.timeZone, overrideRanges: controller.overrideRanges)
                     }
                 /*case let row:
                     if let controller = controller as? DailyQuantityScheduleTableViewController {

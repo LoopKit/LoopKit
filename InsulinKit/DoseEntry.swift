@@ -8,20 +8,25 @@
 
 import Foundation
 import CoreData
+import HealthKit
 import LoopKit
 
 
 public struct DoseEntry: TimelineValue {
-    public let type: PumpEventType
+    public let type: DoseType
     public let startDate: Date
     public let endDate: Date
     internal let value: Double
     public let unit: DoseUnit
     public let description: String?
+    internal(set) public var syncIdentifier: String?
     let managedObjectID: NSManagedObjectID?
 
-    public init(type: PumpEventType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil) {
-        self.init(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, description: description, managedObjectID: nil)
+    /// The scheduled basal rate during this dose entry
+    internal var scheduledBasalRate: HKQuantity?
+
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil) {
+        self.init(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, description: description, syncIdentifier: nil, managedObjectID: nil)
     }
 
     public init(suspendDate: Date) {
@@ -32,13 +37,14 @@ public struct DoseEntry: TimelineValue {
         self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units)
     }
 
-    init(type: PumpEventType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil, managedObjectID: NSManagedObjectID?) {
+    init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil, syncIdentifier: String?, managedObjectID: NSManagedObjectID?) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
         self.value = value
         self.unit = unit
         self.description = description
+        self.syncIdentifier = syncIdentifier
         self.managedObjectID = managedObjectID
     }
 }
@@ -66,5 +72,29 @@ extension DoseEntry {
         case .unitsPerHour:
             return value
         }
+    }
+
+    /// The smallest increment per unit of hourly basal delivery
+    /// TODO: Is this 40 for x23 models?
+    internal static let minimumMinimedIncrementPerUnit: Double = 20
+
+    /// Rounds down a given entry to the smallest increment of hourly delivery
+    internal var unitsFlooredToMinimedIncrements: Double {
+        guard case .unitsPerHour = unit else {
+            return self.units
+        }
+        let units = self.units
+
+        return floor(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
+    }
+
+    /// Rounds a given entry to the smallest increment of hourly delivery
+    internal var unitsRoundedToMinimedIncrements: Double {
+        guard case .unitsPerHour = unit else {
+            return self.units
+        }
+        let units = self.units
+
+        return round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
     }
 }

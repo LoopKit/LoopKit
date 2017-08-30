@@ -28,12 +28,14 @@ open class HealthKitSampleStore {
     }
 
     /// The health store used for underlying queries
-    public let healthStore = HKHealthStore()
+    public let healthStore: HKHealthStore
 
-    public init?() {
+    public init?(healthStore: HKHealthStore = HKHealthStore()) {
         guard HKHealthStore.isHealthDataAvailable() else {
             return nil
         }
+
+        self.healthStore = healthStore
     }
 
     /// True if the user has explicitly denied access to any required share types
@@ -60,6 +62,8 @@ open class HealthKitSampleStore {
 
     /**
      Initializes the HealthKit authorization flow for all required sample types
+
+     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
 
      - parameter completion: A closure called after authorization is completed. This closure takes two arguments:
         - success: Whether the authorization to share was successful
@@ -110,13 +114,13 @@ open class HealthKitSampleStore {
         }
 
         if authorizationRequired || sharingDenied {
-            authorize({ (success, error) -> Void in
+            authorize { (success, error) -> Void in
                 if error != nil {
                     completion(nil, error)
                 } else {
                     postAuthHandler()
                 }
-            })
+            }
         } else {
             postAuthHandler()
         }

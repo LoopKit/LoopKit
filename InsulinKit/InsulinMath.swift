@@ -10,60 +10,9 @@ import Foundation
 import HealthKit
 import LoopKit
 
-
 struct InsulinMath {
 
-    /**
-     Returns the percentage of total insulin effect remaining at a specified interval after delivery; also known as Insulin On Board (IOB).
-
-     These are 4th-order polynomial fits of John Walsh's IOB curve plots, and they first appeared in GlucoDyn.
-
-     See: https://github.com/kenstack/GlucoDyn
-
-     - parameter time:           The interval after insulin delivery
-     - parameter actionDuration: The total time of insulin effect
-
-     - returns: The percentage of total insulin effect remaining
-     */
-    private static func walshPercentEffectRemainingAtTime(_ time: TimeInterval, actionDuration: TimeInterval) -> Double {
-
-        switch time {
-        case let t where t <= 0:
-            return 1
-        case let t where t >= actionDuration:
-            return 0
-        default:
-            // We only have Walsh models for a few discrete action durations, so we scale other action durations appropriately to the nearest one.
-            let nearestModeledDuration: TimeInterval
-
-            switch actionDuration {
-            case let x where x < TimeInterval(hours: 3):
-                nearestModeledDuration = TimeInterval(hours: 3)
-            case let x where x > TimeInterval(hours: 6):
-                nearestModeledDuration = TimeInterval(hours: 6)
-            default:
-                nearestModeledDuration = TimeInterval(hours: round(actionDuration.hours))
-            }
-
-            let minutes = time.minutes * nearestModeledDuration / actionDuration
-
-            switch nearestModeledDuration {
-            case TimeInterval(hours: 3):
-                return -3.2030e-9 * pow(minutes, 4) + 1.354e-6 * pow(minutes, 3) - 1.759e-4 * pow(minutes, 2) + 9.255e-4 * minutes + 0.99951
-            case TimeInterval(hours: 4):
-                return -3.310e-10 * pow(minutes, 4) + 2.530e-7 * pow(minutes, 3) - 5.510e-5 * pow(minutes, 2) - 9.086e-4 * minutes + 0.99950
-            case TimeInterval(hours: 5):
-                return -2.950e-10 * pow(minutes, 4) + 2.320e-7 * pow(minutes, 3) - 5.550e-5 * pow(minutes, 2) + 4.490e-4 * minutes + 0.99300
-            case TimeInterval(hours: 6):
-                return -1.493e-10 * pow(minutes, 4) + 1.413e-7 * pow(minutes, 3) - 4.095e-5 * pow(minutes, 2) + 6.365e-4 * minutes + 0.99700
-            default:
-                assertionFailure()
-                return 0
-            }
-        }
-    }
-
-    private static func insulinOnBoardForContinuousDose(_ dose: DoseEntry, atDate date: Date, actionDuration: TimeInterval, delay: TimeInterval, delta: TimeInterval) -> Double {
+    private static func insulinOnBoardForContinuousDose(_ dose: DoseEntry, atDate date: Date, insulinModel: InsulinModel, delay: TimeInterval, delta: TimeInterval) -> Double {
 
         let doseDuration = dose.endDate.timeIntervalSince(dose.startDate)  // t1
         let time = date.timeIntervalSince(dose.startDate)
@@ -72,23 +21,23 @@ struct InsulinMath {
 
         repeat {
             let segment = max(0, min(doseDate + delta, doseDuration) - doseDate) / doseDuration
-            iob += segment * walshPercentEffectRemainingAtTime(time - delay - doseDate, actionDuration: actionDuration)
+            iob += segment * insulinModel.percentEffectRemaining(at: time - delay - doseDate)
             doseDate += delta
         } while doseDate <= min(floor((time + delay) / delta) * delta, doseDuration)
 
         return iob
     }
 
-    private static func insulinOnBoardForDose(_ dose: DoseEntry, atDate date: Date, actionDuration: TimeInterval, delay: TimeInterval, delta: TimeInterval) -> Double {
+    private static func insulinOnBoardForDose(_ dose: DoseEntry, atDate date: Date, insulinModel: InsulinModel, delay: TimeInterval, delta: TimeInterval) -> Double {
         let time = date.timeIntervalSince(dose.startDate)
         let iob: Double
 
         if time >= 0 {
             // Consider doses within the delta time window as momentary
             if dose.endDate.timeIntervalSince(dose.startDate) <= 1.05 * delta {
-                iob = dose.units * walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration)
+                iob = dose.units * insulinModel.percentEffectRemaining(at: time - delay)
             } else {
-                iob = dose.units * insulinOnBoardForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
+                iob = dose.units * insulinOnBoardForContinuousDose(dose, atDate: date, insulinModel: insulinModel, delay: delay, delta: delta)
             }
         } else {
             iob = 0
@@ -97,7 +46,7 @@ struct InsulinMath {
         return iob
     }
 
-    private static func glucoseEffectForContinuousDose(_ dose: DoseEntry, atDate date: Date, actionDuration: TimeInterval, delay: TimeInterval, delta: TimeInterval) -> Double {
+    private static func glucoseEffectForContinuousDose(_ dose: DoseEntry, atDate date: Date, insulinModel: InsulinModel, delay: TimeInterval, delta: TimeInterval) -> Double {
         let doseDuration = dose.endDate.timeIntervalSince(dose.startDate)  // t1
         let time = date.timeIntervalSince(dose.startDate)
         var value: Double = 0
@@ -105,23 +54,23 @@ struct InsulinMath {
 
         repeat {
             let segment = max(0, min(doseDate + delta, doseDuration) - doseDate) / doseDuration
-            value += segment * (1.0 - walshPercentEffectRemainingAtTime(time - delay - doseDate, actionDuration: actionDuration))
+            value += segment * (1.0 - insulinModel.percentEffectRemaining(at: time - delay - doseDate))
             doseDate += delta
         } while doseDate <= min(floor((time + delay) / delta) * delta, doseDuration)
 
         return value
     }
 
-    private static func glucoseEffectForDose(_ dose: DoseEntry, atDate date: Date, actionDuration: TimeInterval, insulinSensitivity: Double, delay: TimeInterval, delta: TimeInterval) -> Double {
+    fileprivate static func glucoseEffectForDose(_ dose: DoseEntry, atDate date: Date, insulinModel: InsulinModel, insulinSensitivity: Double, delay: TimeInterval, delta: TimeInterval) -> Double {
         let time = date.timeIntervalSince(dose.startDate)
         let value: Double
 
         if time >= 0 {
             // Consider doses within the delta time window as momentary
             if dose.endDate.timeIntervalSince(dose.startDate) <= 1.05 * delta {
-                value = dose.units * -insulinSensitivity * (1.0 - walshPercentEffectRemainingAtTime(time - delay, actionDuration: actionDuration))
+                value = dose.units * -insulinSensitivity * (1.0 - insulinModel.percentEffectRemaining(at: time - delay))
             } else {
-                value = dose.units * -insulinSensitivity * glucoseEffectForContinuousDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
+                value = dose.units * -insulinSensitivity * glucoseEffectForContinuousDose(dose, atDate: date, insulinModel: insulinModel, delay: delay, delta: delta)
             }
         } else {
             value = 0
@@ -247,86 +196,110 @@ struct InsulinMath {
         var reconciled: [DoseEntry] = []
 
         var lastSuspend: DoseEntry?
-        var lastTempBasal: DoseEntry?
+        var lastBasal: DoseEntry?
 
         for dose in doses {
             switch dose.type {
-            case .basal:
-                reconciled.append(dose)
             case .bolus:
                 reconciled.append(dose)
-            case .tempBasal:
-                if let temp = lastTempBasal {
-                    let endDate = min(temp.endDate, dose.startDate)
-
-                    // Ignore 0-duration doses
-                    if endDate > temp.startDate {
-                        reconciled.append(DoseEntry(
-                            type: temp.type,
-                            startDate: temp.startDate,
-                            endDate: endDate,
-                            value: temp.value,
-                            unit: temp.unit,
-                            description: temp.description
-                        ))
-                    }
-                }
-
-                lastTempBasal = dose
-            case .resume:
+            case .basal:
+                // A basal start can indicate a resume in the case of a rewind
                 if let suspend = lastSuspend {
                     reconciled.append(DoseEntry(
                         type: suspend.type,
                         startDate: suspend.startDate,
-                        endDate: dose.endDate,
+                        endDate: dose.startDate,
                         value: suspend.value,
                         unit: suspend.unit,
-                        description: suspend.description ?? dose.description
+                        description: suspend.description ?? dose.description,
+                        syncIdentifier: suspend.syncIdentifier,
+                        managedObjectID: nil
                     ))
 
                     lastSuspend = nil
                 }
 
-                if let temp = lastTempBasal {
-                    if temp.endDate > dose.endDate {
-                        lastTempBasal = DoseEntry(
-                            type: temp.type,
+                fallthrough  // Reconcile scheduled basals along with temporary
+            case .tempBasal:
+                if let last = lastBasal {
+                    let endDate = min(last.endDate, dose.startDate)
+
+                    // Ignore 0-duration doses
+                    if endDate > last.startDate {
+                        reconciled.append(DoseEntry(
+                            type: last.type,
+                            startDate: last.startDate,
+                            endDate: endDate,
+                            value: last.value,
+                            unit: last.unit,
+                            description: last.description,
+                            syncIdentifier: last.syncIdentifier,
+                            managedObjectID: nil
+                        ))
+                    }
+                }
+
+                lastBasal = dose
+            case .resume:
+                if let suspend = lastSuspend {
+                    reconciled.append(DoseEntry(
+                        type: suspend.type,
+                        startDate: suspend.startDate,
+                        endDate: dose.startDate,
+                        value: suspend.value,
+                        unit: suspend.unit,
+                        description: suspend.description ?? dose.description,
+                        syncIdentifier: suspend.syncIdentifier,
+                        managedObjectID: nil
+                    ))
+
+                    lastSuspend = nil
+                }
+
+                // Continue temp basals that may have started before suspending
+                if let last = lastBasal, last.type == .tempBasal {
+                    if last.endDate > dose.endDate {
+                        lastBasal = DoseEntry(
+                            type: last.type,
                             startDate: dose.endDate,
-                            endDate: temp.endDate,
-                            value: temp.value,
-                            unit: temp.unit,
-                            description: temp.description
+                            endDate: last.endDate,
+                            value: last.value,
+                            unit: last.unit,
+                            description: last.description,
+                            // We intentionally use the resume's identifier as the basal entry has already been entered
+                            syncIdentifier: dose.syncIdentifier,
+                            managedObjectID: nil
                         )
                     } else {
-                        lastTempBasal = nil
+                        lastBasal = nil
                     }
                 }
             case .suspend:
-                if let temp = lastTempBasal {
+                if let last = lastBasal {
                     reconciled.append(DoseEntry(
-                        type: temp.type,
-                        startDate: temp.startDate,
-                        endDate: min(temp.endDate, dose.startDate),
-                        value: temp.value,
-                        unit: temp.unit,
-                        description: temp.description
+                        type: last.type,
+                        startDate: last.startDate,
+                        endDate: min(last.endDate, dose.startDate),
+                        value: last.value,
+                        unit: last.unit,
+                        description: last.description,
+                        syncIdentifier: last.syncIdentifier,
+                        managedObjectID: nil
                     ))
 
-                    if temp.endDate <= dose.startDate {
-                        lastTempBasal = nil
+                    if last.endDate <= dose.startDate {
+                        lastBasal = nil
                     }
                 }
 
                 lastSuspend = dose
-            case .prime:
-                break
             }
         }
 
         if let suspend = lastSuspend {
             reconciled.append(suspend)
-        } else if let temp = lastTempBasal, temp.endDate > temp.startDate {
-            reconciled.append(temp)
+        } else if let last = lastBasal, last.endDate > last.startDate {
+            reconciled.append(last)
         }
 
         return reconciled
@@ -352,6 +325,11 @@ struct InsulinMath {
                 endDate = dose.endDate
             } else {
                 endDate = basalItems[index + 1].startDate
+            }
+
+            // Ignore net-zero basals
+            guard abs(unitsPerHour) > .ulpOfOne else {
+                continue
             }
 
             normalizedDoses.append(DoseEntry(
@@ -387,7 +365,7 @@ struct InsulinMath {
                 normalizedDoses += normalizeBasalDose(dose, againstBasalSchedule: basalSchedule)
             case .bolus:
                 normalizedDoses.append(dose)
-            case .prime, .basal:
+            case .basal:
                 break
             }
         }
@@ -412,7 +390,7 @@ struct InsulinMath {
      Calculates the timeline of insulin remaining for a collection of doses
 
      - parameter doses:          A collection of doses
-     - parameter actionDuration: The total time of insulin effect
+     - parameter insulinModel:   The model of insulin activity over time
      - parameter start:          The date to begin the timeline
      - parameter end:            The date to end the timeline
      - parameter delay:          The time to delay the dose effect
@@ -422,13 +400,13 @@ struct InsulinMath {
      */
     static func insulinOnBoardForDoses<T: Collection>(
         _ doses: T,
-        actionDuration: TimeInterval,
+        insulinModel: InsulinModel,
         from start: Date? = nil,
         to end: Date? = nil,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [InsulinValue] where T.Iterator.Element == DoseEntry {
-        guard let (start, end) = LoopMath.simulationDateRangeForSamples(doses, from: start, to: end, duration: actionDuration, delay: delay, delta: delta) else {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(doses, from: start, to: end, duration: insulinModel.effectDuration, delay: delay, delta: delta) else {
             return []
         }
 
@@ -437,7 +415,7 @@ struct InsulinMath {
 
         repeat {
             let value = doses.reduce(0) { (value, dose) -> Double in
-                return value + insulinOnBoardForDose(dose, atDate: date, actionDuration: actionDuration, delay: delay, delta: delta)
+                return value + insulinOnBoardForDose(dose, atDate: date, insulinModel: insulinModel, delay: delay, delta: delta)
             }
 
             values.append(InsulinValue(startDate: date, value: value))
@@ -447,49 +425,7 @@ struct InsulinMath {
         return values
     }
 
-    /**
-     Calculates the timeline of glucose effects for a collection of doses
-
-     - parameter doses:          A collection of doses
-     - parameter actionDuration: The total time of insulin effect
-     - parameter start:          The date to begin the timeline
-     - parameter end:            The date to end the timeline
-     - parameter delay:          The time to delay the dose effect
-     - parameter delta:          The differential between timeline entries
-
-     - returns: A sequence of glucose effects
-     */
-    static func glucoseEffectsForDoses<T: Collection>(
-        _ doses: T,
-        actionDuration: TimeInterval,
-        insulinSensitivity: InsulinSensitivitySchedule,
-        from start: Date? = nil,
-        to end: Date? = nil,
-        delay: TimeInterval = TimeInterval(minutes: 10),
-        delta: TimeInterval = TimeInterval(minutes: 5)
-    ) -> [GlucoseEffect] where T.Iterator.Element == DoseEntry {
-        guard let (start, end) = LoopMath.simulationDateRangeForSamples(doses, from: start, to: end, duration: actionDuration, delay: delay, delta: delta) else {
-            return []
-        }
-
-        var date = start
-        var values = [GlucoseEffect]()
-        let unit = HKUnit.milligramsPerDeciliter()
-
-        repeat {
-            let value = doses.reduce(0) { (value, dose) -> Double in
-                return value + glucoseEffectForDose(dose, atDate: date, actionDuration: actionDuration, insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delay: delay, delta: delta)
-            }
-
-            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
-            date = date.addingTimeInterval(delta)
-        } while date <= end
-
-        return values
-    }
-
     static func trimContinuingDoses<T: Collection>(_ doses: T, endDate: Date?) -> [DoseEntry] where T.Iterator.Element == DoseEntry {
-
         return doses.map {
             if let endDate = endDate, $0.type == .tempBasal, $0.endDate > endDate {
                 return DoseEntry(
@@ -498,10 +434,140 @@ struct InsulinMath {
                     endDate: endDate,
                     value: $0.value,
                     unit: $0.unit,
-                    description: $0.description)
+                    description: $0.description
+                )
             } else {
                 return $0
             }
         }
     }
 }
+
+
+extension Collection where Iterator.Element == DoseEntry {
+    /// Calculates the timeline of glucose effects for a collection of doses
+    ///
+    /// - Parameters:
+    ///   - insulinModel: The model of insulin activity over time
+    ///   - insulinSensitivity: The schedule of glucose effect per unit of insulin
+    ///   - start: The earliest date of effects to return
+    ///   - end: The latest date of effects to return
+    ///   - delay: The time after a dose to begin its modeled effects
+    ///   - delta: The interval between returned effects
+    /// - Returns: An array of glucose effects for the duration of the doses
+    public func glucoseEffects(
+        insulinModel: InsulinModel,
+        insulinSensitivity: InsulinSensitivitySchedule,
+        from start: Date? = nil,
+        to end: Date? = nil,
+        delay: TimeInterval = TimeInterval(/* minutes: */60 * 10),
+        delta: TimeInterval = TimeInterval(/* minutes: */60 * 5)
+    ) -> [GlucoseEffect] {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: insulinModel.effectDuration, delay: delay, delta: delta) else {
+            return []
+        }
+
+        var date = start
+        var values = [GlucoseEffect]()
+        let unit = HKUnit.milligramsPerDeciliter()
+
+        repeat {
+            let value = reduce(0) { (value, dose) -> Double in
+                return value + InsulinMath.glucoseEffectForDose(dose, atDate: date, insulinModel: insulinModel, insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delay: delay, delta: delta)
+            }
+
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
+            date = date.addingTimeInterval(delta)
+        } while date <= end
+
+        return values
+    }
+}
+
+
+#if swift(>=3.2)
+@available(iOS 11.0, *)
+extension Collection where Iterator.Element == DoseEntry {
+
+    /// Applies the current basal schedule to a collection of reconciled doses in chronological order
+    ///
+    /// The scheduled basal rate is associated doses that override it, for later derivation of net delivery
+    ///
+    /// - Parameters:
+    ///   - basalSchedule: The active basal schedule during the dose delivery
+    ///   - start: The earliest date to apply the basal schedule
+    ///   - end: The latest date to include. Doses must end before this time to be included.
+    ///   - insertingBasalEntries: Whether basal doses should be created from the schedule. Pass true only for pump models that do not report their basal rates in event history.
+    /// - Returns: An array of doses, 
+    func overlayBasalSchedule(_ basalSchedule: BasalRateSchedule, startingAt start: Date, endingAt end: Date, insertingBasalEntries: Bool) -> [DoseEntry] {
+        let dateFormatter = ISO8601DateFormatter()  // GMT-based ISO formatting
+        let perHour = HKUnit.internationalUnit().unitDivided(by: .hour())
+        var newEntries = [DoseEntry]()
+        var lastBasal: DoseEntry?
+
+        if insertingBasalEntries {
+            // Create a placeholder entry at our start date, so we know the correct duration of the
+            // inserted basal entries
+            lastBasal = DoseEntry(resumeDate: start)
+        }
+
+        for dose in self {
+            switch dose.type {
+            case .tempBasal, .basal, .suspend:
+                // Only include entries if they have ended by the end date, since they may be cancelled
+                guard dose.endDate <= end else {
+                    continue
+                }
+
+                if let lastBasal = lastBasal {
+                    if insertingBasalEntries {
+                        // For older pumps which don't report the start/end of scheduled basal delivery,
+                        // generate a basal entry from the specified schedule.
+                        for scheduled in basalSchedule.between(start: lastBasal.endDate, end: dose.startDate) {
+                            // Generate a unique identifier based on the start/end timestamps
+                            let start = Swift.max(lastBasal.endDate, scheduled.startDate)
+                            let end = Swift.min(dose.startDate, scheduled.endDate)
+
+                            guard end.timeIntervalSince(start) > .ulpOfOne else {
+                                continue
+                            }
+
+                            let syncIdentifier = "BasalRateSchedule \(dateFormatter.string(from: start)) \(dateFormatter.string(from: end))"
+
+                            newEntries.append(DoseEntry(
+                                type: .basal,
+                                startDate: start,
+                                endDate: end,
+                                value: scheduled.value,
+                                unit: .unitsPerHour,
+                                syncIdentifier: syncIdentifier,
+                                managedObjectID: nil
+                            ))
+                        }
+                    }
+                }
+
+                if case .basal = dose.type {
+                    lastBasal = dose
+                } else {
+                    // Associate the scheduled rate to temp basal and suspend windows
+                    var tempBasal = dose
+                    tempBasal.scheduledBasalRate = HKQuantity(unit: perHour, doubleValue: basalSchedule.value(at: dose.startDate))
+                    lastBasal = tempBasal
+                }
+
+                // Only include the last basal entry if has ended by our end date
+                if let lastBasal = lastBasal {
+                    newEntries.append(lastBasal)
+                }
+            case .resume:
+                assertionFailure("No resume events should be present in reconciled doses")
+            case .bolus:
+                newEntries.append(dose)
+            }
+        }
+
+        return newEntries
+    }
+}
+#endif

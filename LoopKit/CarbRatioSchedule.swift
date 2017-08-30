@@ -10,12 +10,4 @@ import Foundation
 import HealthKit
 
 
-public class CarbRatioSchedule: SingleQuantitySchedule {
-    public override init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<Double>], timeZone: TimeZone? = nil) {
-        super.init(unit: unit, dailyItems: dailyItems, timeZone: timeZone)
-
-        guard unit == HKUnit.gram() else {
-            return nil
-        }
-    }
-}
+public typealias CarbRatioSchedule = SingleQuantitySchedule
