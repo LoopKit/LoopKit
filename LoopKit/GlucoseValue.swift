@@ -14,11 +14,11 @@ public protocol GlucoseValue: SampleValue {
 }
 
 
-struct PredictedGlucoseValue: GlucoseValue {
-    let startDate: Date
-    let quantity: HKQuantity
+public struct PredictedGlucoseValue: GlucoseValue {
+    public let startDate: Date
+    public let quantity: HKQuantity
 
-    init(startDate: Date, quantity: HKQuantity) {
+    public init(startDate: Date, quantity: HKQuantity) {
         self.startDate = startDate
         self.quantity = quantity
     }
