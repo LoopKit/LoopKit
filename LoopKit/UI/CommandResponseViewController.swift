@@ -65,7 +65,7 @@ extension CommandResponseViewController: UIActivityItemSource {
         return title ?? textView.text ?? ""
     }
 
-    public func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType) -> Any? {
+    public func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType?) -> Any? {
         return textView.attributedText ?? ""
     }
 
