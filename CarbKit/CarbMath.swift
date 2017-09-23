@@ -446,6 +446,11 @@ fileprivate class CarbStatusBuilder {
         return entryGrams / maxAbsorptionTime
     }
 
+    /// The expected carb absorption rate for this entry, in g/s
+    var expectedAbsorptionRate: Double {
+        return entryGrams / entry.absorptionTime!
+    }
+    
     /// The minimum amount of carbs we assume must have absorbed at the last observation date
     private var minPredictedGrams: Double {
         // We incorporate a delay when calculating minimum absorption values
@@ -496,7 +501,7 @@ fileprivate class CarbStatusBuilder {
         guard minAbsorptionRate > 0 else {
             return 0
         }
-        return (entryGrams - clampedGrams) / minAbsorptionRate
+        return (entryGrams - clampedGrams) / expectedAbsorptionRate
     }
 
     /// The timeline of observed absorption, if greater than the minimum required absorption.
