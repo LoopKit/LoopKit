@@ -391,6 +391,25 @@ class InsulinMathTests: XCTestCase {
         }
     }
 
+    func testReconcileResumeBeforeRewind() {
+        let input = loadDoseFixture("reconcile_resume_before_rewind_input")
+        let output = loadDoseFixture("reconcile_resume_before_rewind_output")
+
+        let doses = InsulinMath.reconcileDoses(input)
+
+        XCTAssertEqual(output.count, doses.count)
+
+        for (expected, calculated) in zip(output, doses) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqual(expected.endDate, calculated.endDate)
+            XCTAssertEqual(expected.value, calculated.value)
+            XCTAssertEqual(expected.unit, calculated.unit)
+            XCTAssertEqual(expected.syncIdentifier, calculated.syncIdentifier)
+        }
+
+        printDoses(doses)
+    }
+
     func testGlucoseEffectFromBolus() {
         let input = loadDoseFixture("bolus_dose")
         let output = loadGlucoseEffectFixture("effect_from_bolus_output")

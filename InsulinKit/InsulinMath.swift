@@ -202,25 +202,7 @@ struct InsulinMath {
             switch dose.type {
             case .bolus:
                 reconciled.append(dose)
-            case .basal:
-                // A basal start can indicate a resume in the case of a rewind
-                if let suspend = lastSuspend {
-                    reconciled.append(DoseEntry(
-                        type: suspend.type,
-                        startDate: suspend.startDate,
-                        endDate: dose.startDate,
-                        value: suspend.value,
-                        unit: suspend.unit,
-                        description: suspend.description ?? dose.description,
-                        syncIdentifier: suspend.syncIdentifier,
-                        managedObjectID: nil
-                    ))
-
-                    lastSuspend = nil
-                }
-
-                fallthrough  // Reconcile scheduled basals along with temporary
-            case .tempBasal:
+            case .basal, .tempBasal:
                 if let last = lastBasal {
                     let endDate = min(last.endDate, dose.startDate)
 
