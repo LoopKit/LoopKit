@@ -347,8 +347,7 @@ public final class DoseStore {
                 let oldestRelevantReservoirObject = recentReservoirObjects.last
             {
                 // Verify reservoir timestamps are continuous
-                self.areReservoirValuesContinuous = InsulinMath.isContinuous(
-                    recentReservoirObjects.reversed(),
+                self.areReservoirValuesContinuous = recentReservoirObjects.reversed().isContinuous(
                     from: continuityStartDate,
                     to: date,
                     within: maximumInterval
@@ -396,7 +395,7 @@ public final class DoseStore {
 
                 newValues.append(reservoir)
 
-                let newDoseEntries = InsulinMath.doseEntriesFromReservoirValues(newValues)
+                let newDoseEntries = newValues.doseEntries
 
                 // Update the understanding of reservoir continuity to warn the caller they might want to try a different data source.
                 self.validateReservoirContinuity()
@@ -404,14 +403,14 @@ public final class DoseStore {
                 if self.recentReservoirNormalizedDoseEntriesCache != nil {
                     self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filterDateRange(self.cacheStartDate, nil)
 
-                    self.recentReservoirNormalizedDoseEntriesCache! += InsulinMath.normalize(newDoseEntries, againstBasalSchedule: basalProfile)
+                    self.recentReservoirNormalizedDoseEntriesCache! += newDoseEntries.normalize(against: basalProfile)
                 }
 
                 /// Increment the total delivery cache
                 if let totalDelivery = self.totalDeliveryCache {
                     self.totalDeliveryCache = InsulinValue(
                         startDate: totalDelivery.startDate,
-                        value: totalDelivery.value + InsulinMath.totalDeliveryForDoses(newDoseEntries)
+                        value: totalDelivery.value + newDoseEntries.totalDelivery
                     )
                 }
             }
@@ -513,7 +512,7 @@ public final class DoseStore {
     private func getReservoirDoseEntries(since startDate: Date) throws -> [DoseEntry] {
         let objects = try self.getReservoirObjects(since: startDate)
 
-        return InsulinMath.doseEntriesFromReservoirValues(objects.reversed())
+        return objects.reversed().doseEntries
     }
 
     /// Retrieves normalized dose values derived from reservoir readings
@@ -535,7 +534,7 @@ public final class DoseStore {
 
             let doses = try self.getReservoirDoseEntries(since: start)
 
-            let normalizedDoses = InsulinMath.normalize(doses, againstBasalSchedule: basalProfile)
+            let normalizedDoses = doses.normalize(against: basalProfile)
             self.recentReservoirNormalizedDoseEntriesCache = normalizedDoses
             return normalizedDoses.filterDateRange(start, end)
         }
@@ -757,7 +756,7 @@ public final class DoseStore {
             return
         }
 
-        let reconciledDoses = InsulinMath.reconcileDoses(doses).overlayBasalSchedule(basalSchedule, startingAt: start, endingAt: lastAddedPumpEvents, insertingBasalEntries: !pumpRecordsBasalProfileStartEvents)
+        let reconciledDoses = doses.reconcile().overlayBasalSchedule(basalSchedule, startingAt: start, endingAt: lastAddedPumpEvents, insertingBasalEntries: !pumpRecordsBasalProfileStartEvents)
         insulinDeliveryStore?.addReconciledDoses(reconciledDoses, from: device) { (result) in
             if case .failure(let error) = result {
                 NSLog("%@", String(describing: error))
@@ -927,8 +926,8 @@ public final class DoseStore {
         }
 
         let doses = try getPumpEventDoseObjects(since: start)
-        let reconciledDoses = InsulinMath.reconcileDoses(doses)
-        let normalizedDoses = InsulinMath.normalize(reconciledDoses, againstBasalSchedule: basalProfile)
+        let reconciledDoses = doses.reconcile()
+        let normalizedDoses = reconciledDoses.normalize(against: basalProfile)
 
         return normalizedDoses.filterDateRange(start, end)
     }
@@ -1120,8 +1119,8 @@ public final class DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-                let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
-                let insulinOnBoard = InsulinMath.insulinOnBoardForDoses(trimmedDoses, insulinModel: insulinModel)
+                let trimmedDoses = doses.trim(to: basalDosingEnd)
+                let insulinOnBoard = trimmedDoses.insulinOnBoard(model: insulinModel)
                 completion(.success(insulinOnBoard.filterDateRange(start, end)))
             }
         }
@@ -1175,7 +1174,7 @@ public final class DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-                let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
+            let trimmedDoses = doses.trim(to: basalDosingEnd)
                 let glucoseEffects = trimmedDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             }
@@ -1228,7 +1227,7 @@ public final class DoseStore {
                 let doses = try self.getReservoirDoseEntries(since: startDate)
                 let result = InsulinValue(
                     startDate: doses.first?.startDate ?? Date(),
-                    value: InsulinMath.totalDeliveryForDoses(doses)
+                    value: doses.totalDelivery
                 )
 
                 if doses.count > 0 {

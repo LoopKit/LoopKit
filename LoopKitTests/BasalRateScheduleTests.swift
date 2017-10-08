@@ -142,7 +142,7 @@ class BasalRateScheduleTests: XCTestCase {
     func testTotalDelivery() {
         let schedule = BasalRateSchedule(dailyItems: items, timeZone: nil)!
 
-        XCTAssertEqualWithAccuracy(20.275, schedule.total(), accuracy: 1e-14)
+        XCTAssertEqual(20.275, schedule.total(), accuracy: 1e-14)
     }
 
     func testRawValueSerialization() {
