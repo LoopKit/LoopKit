@@ -107,6 +107,8 @@
 		43B99B041C74538D00D050F5 /* short_basal_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99B031C74538D00D050F5 /* short_basal_dose.json */; };
 		43B99B061C74552300D050F5 /* basal_dose.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99B051C74552300D050F5 /* basal_dose.json */; };
 		43B99B081C74553900D050F5 /* effect_from_basal_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43B99B071C74553900D050F5 /* effect_from_basal_output.json */; };
+		43BDD7E81F804FAC005BA15C /* reconcile_resume_before_rewind_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43BDD7E71F804ED5005BA15C /* reconcile_resume_before_rewind_input.json */; };
+		43BDD7EA1F8050C4005BA15C /* reconcile_resume_before_rewind_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43BDD7E91F8050C3005BA15C /* reconcile_resume_before_rewind_output.json */; };
 		43C094461CAA1E98001F6403 /* DoseUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C094451CAA1E98001F6403 /* DoseUnit.swift */; };
 		43C27D931E3C4E7D00613CE1 /* momentum_effect_mixed_provenance_glucose_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43C27D921E3C4E7D00613CE1 /* momentum_effect_mixed_provenance_glucose_input.json */; };
 		43CE7CE01CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43CE7CDF1CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json */; };
@@ -407,6 +409,8 @@
 		43B99B031C74538D00D050F5 /* short_basal_dose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = short_basal_dose.json; sourceTree = "<group>"; };
 		43B99B051C74552300D050F5 /* basal_dose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = basal_dose.json; sourceTree = "<group>"; };
 		43B99B071C74553900D050F5 /* effect_from_basal_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = effect_from_basal_output.json; sourceTree = "<group>"; };
+		43BDD7E71F804ED5005BA15C /* reconcile_resume_before_rewind_input.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = reconcile_resume_before_rewind_input.json; sourceTree = "<group>"; };
+		43BDD7E91F8050C3005BA15C /* reconcile_resume_before_rewind_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_resume_before_rewind_output.json; sourceTree = "<group>"; };
 		43C094451CAA1E98001F6403 /* DoseUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseUnit.swift; sourceTree = "<group>"; };
 		43C27D921E3C4E7D00613CE1 /* momentum_effect_mixed_provenance_glucose_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = momentum_effect_mixed_provenance_glucose_input.json; sourceTree = "<group>"; };
 		43CE7CDF1CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_240min_output.json; sourceTree = "<group>"; };
@@ -965,8 +969,8 @@
 		43D8FEBE1C7294520073BE78 /* InsulinKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				43A067121F245A2F00E9E90F /* DoseStoreTests.swift */,
 				43D8FEC11C7294520073BE78 /* Info.plist */,
+				43A067121F245A2F00E9E90F /* DoseStoreTests.swift */,
 				43D8FEC81C7294640073BE78 /* InsulinMathTests.swift */,
 				43D8FECA1C7294670073BE78 /* Fixtures */,
 			);
@@ -999,6 +1003,8 @@
 				43D8FED01C7294B80073BE78 /* normalized_reservoir_history_output.json */,
 				434872781CB6256500E55D75 /* reconcile_history_input.json */,
 				4348727C1CB626E500E55D75 /* reconcile_history_output.json */,
+				43BDD7E71F804ED5005BA15C /* reconcile_resume_before_rewind_input.json */,
+				43BDD7E91F8050C3005BA15C /* reconcile_resume_before_rewind_output.json */,
 				434FB6471D70096A007B9C70 /* reservoir_history_with_continuity_holes.json */,
 				43D8FED11C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_input.json */,
 				43D8FED21C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json */,
@@ -1496,6 +1502,7 @@
 				43D8FED91C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_input.json in Resources */,
 				43B99B061C74552300D050F5 /* basal_dose.json in Resources */,
 				4348727B1CB6256500E55D75 /* reconcile_history_input.json in Resources */,
+				43BDD7E81F804FAC005BA15C /* reconcile_resume_before_rewind_input.json in Resources */,
 				43CE7CE81CA9EC1F003CC1B0 /* iob_from_bolus_312min_output.json in Resources */,
 				4348727D1CB626E500E55D75 /* reconcile_history_output.json in Resources */,
 				43D8FED61C7294B80073BE78 /* iob_from_doses_output.json in Resources */,
@@ -1508,6 +1515,7 @@
 				434FB6481D70096A007B9C70 /* reservoir_history_with_continuity_holes.json in Resources */,
 				43CE7CEE1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json in Resources */,
 				4378B6471ED55F8C000AE785 /* suspend_dose_reconciled_normalized_iob.json in Resources */,
+				43BDD7EA1F8050C4005BA15C /* reconcile_resume_before_rewind_output.json in Resources */,
 				C1DB55B71F2EACD500C483A2 /* iob_from_bolus_exponential_output.json in Resources */,
 				43D8FED81C7294B80073BE78 /* normalized_reservoir_history_output.json in Resources */,
 				43D8FEDA1C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json in Resources */,
