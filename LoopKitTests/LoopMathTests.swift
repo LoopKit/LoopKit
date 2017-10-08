@@ -71,7 +71,7 @@ class LoopMathTests: XCTestCase {
 
         for (expected, calculated) in zip(expected, calculated) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -86,7 +86,7 @@ class LoopMathTests: XCTestCase {
 
         for (expected, calculated) in zip(expected, calculated) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -101,7 +101,7 @@ class LoopMathTests: XCTestCase {
 
         for (expected, calculated) in zip(expected, calculated) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -116,7 +116,7 @@ class LoopMathTests: XCTestCase {
 
         for (expected, calculated) in zip(expected, calculated) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -132,7 +132,7 @@ class LoopMathTests: XCTestCase {
 
         for (expected, calculated) in zip(expected, calculated) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -156,7 +156,7 @@ class LoopMathTests: XCTestCase {
 
         for (expected, calculated) in zip(expected, calculated) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
         }
     }
 
