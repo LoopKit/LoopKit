@@ -519,7 +519,6 @@ class InsulinMathTests: XCTestCase {
         XCTAssertEqual(input.count, trimmed.count)
     }
 
-    #if swift(>=3.2)
     @available(iOS 11.0, *)
     func testDosesOverlayBasalProfile() {
         let dateFormatter = ISO8601DateFormatter.localTimeDate()
@@ -571,5 +570,4 @@ class InsulinMathTests: XCTestCase {
         XCTAssertEqual(output.count - 2, dosesMatchingStart.count)
         XCTAssertEqual(dosesMatchingStart.first!.startDate, dateFormatter.date(from: "2016-02-15T15:06:05")!)
     }
-    #endif
 }

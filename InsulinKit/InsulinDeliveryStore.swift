@@ -13,7 +13,6 @@ enum InsulinDeliveryStoreResult<T> {
     case failure(Error)
 }
 
-#if swift(>=3.2)
 @available(iOS 11.0, *)
 public class InsulinDeliveryStore: HealthKitSampleStore {
     fileprivate let insulinType = HKQuantityType.quantityType(forIdentifier: .insulinDelivery)!
@@ -158,4 +157,3 @@ extension InsulinDeliveryStore {
         }
     }
 }
-#endif

@@ -34,16 +34,12 @@ public class CommandResponseViewController: UIViewController {
         super.viewDidLoad()
 
         let font = UIFont(name: "Menlo-Regular", size: 14)
-        #if swift(>=3.2)
         if #available(iOS 11.0, *), let font = font {
             let metrics = UIFontMetrics(forTextStyle: .body)
             textView.font = metrics.scaledFont(for: font)
         } else {
             textView.font = font
         }
-        #else
-        textView.font = font
-        #endif
 
         textView.text = command { [weak self] (responseText) -> Void in
             self?.textView.text = responseText

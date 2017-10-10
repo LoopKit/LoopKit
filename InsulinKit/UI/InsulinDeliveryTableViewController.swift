@@ -349,8 +349,10 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
                 doseStore?.deleteReservoirValue(value) { (_, error) -> Void in
                     if let error = error {
-                        self.presentAlertController(with: error)
-                        self.reloadData()
+                        DispatchQueue.main.async {
+                            self.presentAlertController(with: error)
+                            self.reloadData()
+                        }
                     }
                 }
             case .history(let historyValues):
@@ -362,8 +364,10 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
                 doseStore?.deletePumpEvent(value) { (error) -> Void in
                     if let error = error {
-                        self.presentAlertController(with: error)
-                        self.reloadData()
+                        DispatchQueue.main.async {
+                            self.presentAlertController(with: error)
+                            self.reloadData()
+                        }
                     }
                 }
             }

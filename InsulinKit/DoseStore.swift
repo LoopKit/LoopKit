@@ -130,12 +130,10 @@ public final class DoseStore {
 
     private var _insulinDeliveryStore: HealthKitSampleStore?
 
-    #if swift(>=3.2)
     @available(iOS 11.0, *)
     public var insulinDeliveryStore: InsulinDeliveryStore? {
         return _insulinDeliveryStore as? InsulinDeliveryStore
     }
-    #endif
 
     /// All the sample types we need permission to read
     open var readTypes: Set<HKSampleType> {
@@ -196,11 +194,9 @@ public final class DoseStore {
     }
 
     public init(healthStore: HKHealthStore, insulinModel: InsulinModel?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?, databasePath: String = "com.loudnate.InsulinKit") {
-        #if swift(>=3.2)
         if #available(iOS 11.0, *) {
             _insulinDeliveryStore = InsulinDeliveryStore(healthStore: healthStore)
         }
-        #endif
         self.insulinModel = insulinModel
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.basalProfile = basalProfile
@@ -232,11 +228,9 @@ public final class DoseStore {
                     self.lastReservoirObject = recentReservoirObjects.first
 
                     // Warm the state of insulin delivery samples
-                    #if swift(>=3.2)
                     if #available(iOS 11.0, *) {
                         self.insulinDeliveryStore?.getLastBasalEndDate { (_) in }
                     }
-                    #endif
 
                     self.readyState = .ready
                 }
@@ -665,11 +659,9 @@ public final class DoseStore {
                 completion(DoseStoreError(error: error))
                 NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
                 self.uploadPumpEventsIfNeeded()
-                #if swift(>=3.2)
                 if #available(iOS 11.0, *) {
                     self.syncPumpEventsToHealthStore()
                 }
-                #endif
             }
         }
     }
@@ -722,7 +714,6 @@ public final class DoseStore {
         }
     }
 
-    #if swift(>=3.2)
     /// Attempts to store doses from pump events to Health
     /// *This method should only be called from within a managed object context block*
     @available(iOS 11.0, *)
@@ -763,7 +754,6 @@ public final class DoseStore {
             }
         }
     }
-    #endif
 
     /**
      Whether there's an outstanding upload request to the delegate.
@@ -1312,7 +1302,6 @@ public final class DoseStore {
                         }
                     }
 
-                    #if swift(>=3.2)
                     if #available(iOS 11.0, *) {
                         if let store = self.insulinDeliveryStore {
                             store.generateDiagnosticReport { (result) in
@@ -1330,10 +1319,6 @@ public final class DoseStore {
                         report.append("")
                         completion(report.joined(separator: "\n"))
                     }
-                    #else
-                        report.append("")
-                        completion(report.joined(separator: "\n"))
-                    #endif
                 }
             }
         }

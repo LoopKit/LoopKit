@@ -131,7 +131,7 @@ public final class CarbEntryEditViewController: UITableViewController {
                 cell.number = NSNumber(value: quantity.doubleValue(for: preferredUnit))
             }
             cell.textField.isEnabled = isSampleEditable
-            cell.unitLabel.text = String(describing: preferredUnit)
+            cell.unitLabel?.text = String(describing: preferredUnit)
 
             if originalCarbEntry == nil {
                 cell.textField.becomeFirstResponder()
