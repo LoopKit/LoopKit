@@ -10,6 +10,7 @@ import XCTest
 import HealthKit
 @testable import CarbKit
 
+/// These tests have been disabled until they can be properly rewritten as actual UI tests
 class CarbEntryEditViewControllerTests: XCTestCase {
 
     var vc: CarbKit.CarbEntryEditViewController!
@@ -19,7 +20,7 @@ class CarbEntryEditViewControllerTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        storyboard = UIStoryboard(name: "CarbKit", bundle: Bundle(for: type(of:self)))
+        storyboard = UIStoryboard(name: "CarbKit", bundle: Bundle(for: type(of: self)))
         vc = storyboard.instantiateViewController(withIdentifier: "CarbEntryEditViewController") as! CarbEntryEditViewController
         let _ = vc.view
         

@@ -130,12 +130,10 @@ public final class DoseStore {
 
     private var _insulinDeliveryStore: HealthKitSampleStore?
 
-    #if swift(>=3.2)
     @available(iOS 11.0, *)
     public var insulinDeliveryStore: InsulinDeliveryStore? {
         return _insulinDeliveryStore as? InsulinDeliveryStore
     }
-    #endif
 
     /// All the sample types we need permission to read
     open var readTypes: Set<HKSampleType> {
@@ -196,11 +194,9 @@ public final class DoseStore {
     }
 
     public init(healthStore: HKHealthStore, insulinModel: InsulinModel?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?, databasePath: String = "com.loudnate.InsulinKit") {
-        #if swift(>=3.2)
         if #available(iOS 11.0, *) {
             _insulinDeliveryStore = InsulinDeliveryStore(healthStore: healthStore)
         }
-        #endif
         self.insulinModel = insulinModel
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.basalProfile = basalProfile
@@ -232,11 +228,9 @@ public final class DoseStore {
                     self.lastReservoirObject = recentReservoirObjects.first
 
                     // Warm the state of insulin delivery samples
-                    #if swift(>=3.2)
                     if #available(iOS 11.0, *) {
                         self.insulinDeliveryStore?.getLastBasalEndDate { (_) in }
                     }
-                    #endif
 
                     self.readyState = .ready
                 }
@@ -347,8 +341,7 @@ public final class DoseStore {
                 let oldestRelevantReservoirObject = recentReservoirObjects.last
             {
                 // Verify reservoir timestamps are continuous
-                self.areReservoirValuesContinuous = InsulinMath.isContinuous(
-                    recentReservoirObjects.reversed(),
+                self.areReservoirValuesContinuous = recentReservoirObjects.reversed().isContinuous(
                     from: continuityStartDate,
                     to: date,
                     within: maximumInterval
@@ -396,7 +389,7 @@ public final class DoseStore {
 
                 newValues.append(reservoir)
 
-                let newDoseEntries = InsulinMath.doseEntriesFromReservoirValues(newValues)
+                let newDoseEntries = newValues.doseEntries
 
                 // Update the understanding of reservoir continuity to warn the caller they might want to try a different data source.
                 self.validateReservoirContinuity()
@@ -404,14 +397,14 @@ public final class DoseStore {
                 if self.recentReservoirNormalizedDoseEntriesCache != nil {
                     self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filterDateRange(self.cacheStartDate, nil)
 
-                    self.recentReservoirNormalizedDoseEntriesCache! += InsulinMath.normalize(newDoseEntries, againstBasalSchedule: basalProfile)
+                    self.recentReservoirNormalizedDoseEntriesCache! += newDoseEntries.normalize(against: basalProfile)
                 }
 
                 /// Increment the total delivery cache
                 if let totalDelivery = self.totalDeliveryCache {
                     self.totalDeliveryCache = InsulinValue(
                         startDate: totalDelivery.startDate,
-                        value: totalDelivery.value + InsulinMath.totalDeliveryForDoses(newDoseEntries)
+                        value: totalDelivery.value + newDoseEntries.totalDelivery
                     )
                 }
             }
@@ -513,7 +506,7 @@ public final class DoseStore {
     private func getReservoirDoseEntries(since startDate: Date) throws -> [DoseEntry] {
         let objects = try self.getReservoirObjects(since: startDate)
 
-        return InsulinMath.doseEntriesFromReservoirValues(objects.reversed())
+        return objects.reversed().doseEntries
     }
 
     /// Retrieves normalized dose values derived from reservoir readings
@@ -535,7 +528,7 @@ public final class DoseStore {
 
             let doses = try self.getReservoirDoseEntries(since: start)
 
-            let normalizedDoses = InsulinMath.normalize(doses, againstBasalSchedule: basalProfile)
+            let normalizedDoses = doses.normalize(against: basalProfile)
             self.recentReservoirNormalizedDoseEntriesCache = normalizedDoses
             return normalizedDoses.filterDateRange(start, end)
         }
@@ -666,11 +659,9 @@ public final class DoseStore {
                 completion(DoseStoreError(error: error))
                 NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
                 self.uploadPumpEventsIfNeeded()
-                #if swift(>=3.2)
                 if #available(iOS 11.0, *) {
                     self.syncPumpEventsToHealthStore()
                 }
-                #endif
             }
         }
     }
@@ -723,7 +714,6 @@ public final class DoseStore {
         }
     }
 
-    #if swift(>=3.2)
     /// Attempts to store doses from pump events to Health
     /// *This method should only be called from within a managed object context block*
     @available(iOS 11.0, *)
@@ -757,14 +747,13 @@ public final class DoseStore {
             return
         }
 
-        let reconciledDoses = InsulinMath.reconcileDoses(doses).overlayBasalSchedule(basalSchedule, startingAt: start, endingAt: lastAddedPumpEvents, insertingBasalEntries: !pumpRecordsBasalProfileStartEvents)
+        let reconciledDoses = doses.reconcile().overlayBasalSchedule(basalSchedule, startingAt: start, endingAt: lastAddedPumpEvents, insertingBasalEntries: !pumpRecordsBasalProfileStartEvents)
         insulinDeliveryStore?.addReconciledDoses(reconciledDoses, from: device) { (result) in
             if case .failure(let error) = result {
                 NSLog("%@", String(describing: error))
             }
         }
     }
-    #endif
 
     /**
      Whether there's an outstanding upload request to the delegate.
@@ -927,8 +916,8 @@ public final class DoseStore {
         }
 
         let doses = try getPumpEventDoseObjects(since: start)
-        let reconciledDoses = InsulinMath.reconcileDoses(doses)
-        let normalizedDoses = InsulinMath.normalize(reconciledDoses, againstBasalSchedule: basalProfile)
+        let reconciledDoses = doses.reconcile()
+        let normalizedDoses = reconciledDoses.normalize(against: basalProfile)
 
         return normalizedDoses.filterDateRange(start, end)
     }
@@ -1120,8 +1109,8 @@ public final class DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-                let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
-                let insulinOnBoard = InsulinMath.insulinOnBoardForDoses(trimmedDoses, insulinModel: insulinModel)
+                let trimmedDoses = doses.trim(to: basalDosingEnd)
+                let insulinOnBoard = trimmedDoses.insulinOnBoard(model: insulinModel)
                 completion(.success(insulinOnBoard.filterDateRange(start, end)))
             }
         }
@@ -1175,7 +1164,7 @@ public final class DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-                let trimmedDoses = InsulinMath.trimContinuingDoses(doses, endDate: basalDosingEnd)
+            let trimmedDoses = doses.trim(to: basalDosingEnd)
                 let glucoseEffects = trimmedDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             }
@@ -1228,7 +1217,7 @@ public final class DoseStore {
                 let doses = try self.getReservoirDoseEntries(since: startDate)
                 let result = InsulinValue(
                     startDate: doses.first?.startDate ?? Date(),
-                    value: InsulinMath.totalDeliveryForDoses(doses)
+                    value: doses.totalDelivery
                 )
 
                 if doses.count > 0 {
@@ -1313,7 +1302,6 @@ public final class DoseStore {
                         }
                     }
 
-                    #if swift(>=3.2)
                     if #available(iOS 11.0, *) {
                         if let store = self.insulinDeliveryStore {
                             store.generateDiagnosticReport { (result) in
@@ -1331,10 +1319,6 @@ public final class DoseStore {
                         report.append("")
                         completion(report.joined(separator: "\n"))
                     }
-                    #else
-                        report.append("")
-                        completion(report.joined(separator: "\n"))
-                    #endif
                 }
             }
         }

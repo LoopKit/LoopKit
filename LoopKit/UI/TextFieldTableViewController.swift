@@ -70,7 +70,7 @@ open class TextFieldTableViewController: UITableViewController, UITextFieldDeleg
         cell.textField.text = value
         cell.textField.keyboardType = keyboardType
         cell.textField.placeholder = placeholder
-        cell.unitLabel.text = unit
+        cell.unitLabel?.text = unit
 
         return cell
     }

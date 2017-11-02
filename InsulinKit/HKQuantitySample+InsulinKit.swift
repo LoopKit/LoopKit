@@ -11,7 +11,6 @@ import HealthKit
 /// Defines the scheduled basal insulin rate during the time of the basal delivery sample
 let MetadataKeyScheduledBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduledBasalRate"
 
-#if swift(>=3.2)
 @available(iOS 11.0, *)
 extension HKQuantitySample {
     convenience init?(type: HKQuantityType, unit: HKUnit, dose: DoseEntry, device: HKDevice?) {
@@ -67,4 +66,3 @@ extension HKQuantitySample {
         return HKInsulinDeliveryReason(rawValue: reason)
     }
 }
-#endif

@@ -147,7 +147,7 @@ class CarbMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
         }
     }
 
@@ -161,7 +161,7 @@ class CarbMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, cob) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: Double(Float.ulpOfOne))
         }
     }
     
@@ -191,7 +191,7 @@ class CarbMathTests: XCTestCase {
         XCTAssertEqual(statuses.count, 1)
         
         // Full absorption remains
-        XCTAssertEqualWithAccuracy(statuses[0].absorption!.estimatedTimeRemaining, TimeInterval(hours: 4), accuracy: 1)
+        XCTAssertEqual(statuses[0].absorption!.estimatedTimeRemaining, TimeInterval(hours: 4), accuracy: 1)
         
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
             from: inputICE[0].startDate,
@@ -206,11 +206,11 @@ class CarbMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, carbsOnBoard) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: Double(Float.ulpOfOne))
         }
 
-        XCTAssertEqualWithAccuracy(carbsOnBoard.first!.quantity.doubleValue(for: unit), 0, accuracy: 1)
-        XCTAssertEqualWithAccuracy(carbsOnBoard.last!.quantity.doubleValue(for: unit), 0, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard.first!.quantity.doubleValue(for: unit), 0, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard.last!.quantity.doubleValue(for: unit), 0, accuracy: 1)
     }
     
     func testDynamicAbsorptionPartiallyObserved() {
@@ -235,12 +235,12 @@ class CarbMathTests: XCTestCase {
         
         XCTAssertEqual(statuses.count, 1)
         
-        XCTAssertEqualWithAccuracy(statuses[0].absorption!.estimatedTimeRemaining, 8509, accuracy: 1)
+        XCTAssertEqual(statuses[0].absorption!.estimatedTimeRemaining, 8509, accuracy: 1)
 
         let absorption = statuses[0].absorption!
         let unit = HKUnit.gram()
 
-        XCTAssertEqualWithAccuracy(absorption.observed.doubleValue(for: unit), 18, accuracy: Double(Float.ulpOfOne))
+        XCTAssertEqual(absorption.observed.doubleValue(for: unit), 18, accuracy: Double(Float.ulpOfOne))
         
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
             from: inputICE[0].startDate,
@@ -254,13 +254,13 @@ class CarbMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, carbsOnBoard) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: Double(Float.ulpOfOne))
         }
 
-        XCTAssertEqualWithAccuracy(carbsOnBoard.first!.quantity.doubleValue(for: unit), 0, accuracy: 1)
-        XCTAssertEqualWithAccuracy(carbsOnBoard[2].quantity.doubleValue(for: unit), 44, accuracy: 1)
-        XCTAssertEqualWithAccuracy(carbsOnBoard[25].quantity.doubleValue(for: unit), 9, accuracy: 1)
-        XCTAssertEqualWithAccuracy(carbsOnBoard.last!.quantity.doubleValue(for: unit), 0, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard.first!.quantity.doubleValue(for: unit), 0, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard[2].quantity.doubleValue(for: unit), 44, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard[25].quantity.doubleValue(for: unit), 9, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard.last!.quantity.doubleValue(for: unit), 0, accuracy: 1)
     }
     
     
@@ -289,13 +289,13 @@ class CarbMathTests: XCTestCase {
         XCTAssertNotNil(statuses[0].absorption)
         
         // No remaining absorption
-        XCTAssertEqualWithAccuracy(statuses[0].absorption!.estimatedTimeRemaining, 0, accuracy: 1)
+        XCTAssertEqual(statuses[0].absorption!.estimatedTimeRemaining, 0, accuracy: 1)
         
         let absorption = statuses[0].absorption!
         let unit = HKUnit.gram()
         
         // All should be absorbed
-        XCTAssertEqualWithAccuracy(absorption.observed.doubleValue(for: unit), 44, accuracy: 1)
+        XCTAssertEqual(absorption.observed.doubleValue(for: unit), 44, accuracy: 1)
         
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
             from: inputICE[0].startDate,
@@ -309,16 +309,16 @@ class CarbMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, carbsOnBoard) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: Double(Float.ulpOfOne))
         }
 
-        XCTAssertEqualWithAccuracy(carbsOnBoard[0].quantity.doubleValue(for: unit), 0, accuracy: 1)
-        XCTAssertEqualWithAccuracy(carbsOnBoard[1].quantity.doubleValue(for: unit), 44, accuracy: 1)
-        XCTAssertEqualWithAccuracy(carbsOnBoard[2].quantity.doubleValue(for: unit), 44, accuracy: 1)
-        XCTAssertEqualWithAccuracy(carbsOnBoard[10].quantity.doubleValue(for: unit), 21, accuracy: 1)
-        XCTAssertEqualWithAccuracy(carbsOnBoard[17].quantity.doubleValue(for: unit), 7, accuracy: 1)
-        XCTAssertEqualWithAccuracy(carbsOnBoard[18].quantity.doubleValue(for: unit), 4, accuracy: 1)
-        XCTAssertEqualWithAccuracy(carbsOnBoard[30].quantity.doubleValue(for: unit), 0, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard[0].quantity.doubleValue(for: unit), 0, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard[1].quantity.doubleValue(for: unit), 44, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard[2].quantity.doubleValue(for: unit), 44, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard[10].quantity.doubleValue(for: unit), 21, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard[17].quantity.doubleValue(for: unit), 7, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard[18].quantity.doubleValue(for: unit), 4, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard[30].quantity.doubleValue(for: unit), 0, accuracy: 1)
     }
     
     func testDynamicAbsorptionNeverFullyObserved() {
@@ -344,7 +344,7 @@ class CarbMathTests: XCTestCase {
         XCTAssertEqual(statuses.count, 1)
         XCTAssertNotNil(statuses[0].absorption)
         
-        XCTAssertEqualWithAccuracy(statuses[0].absorption!.estimatedTimeRemaining, 10488, accuracy: 1)
+        XCTAssertEqual(statuses[0].absorption!.estimatedTimeRemaining, 10488, accuracy: 1)
         
         // Check 12 hours later
         let carbsOnBoard = statuses.dynamicCarbsOnBoard(
@@ -361,12 +361,12 @@ class CarbMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, carbsOnBoard) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqualWithAccuracy(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.gram()), calculated.quantity.doubleValue(for: HKUnit.gram()), accuracy: Double(Float.ulpOfOne))
         }
 
-        XCTAssertEqualWithAccuracy(carbsOnBoard.first!.quantity.doubleValue(for: unit), 0, accuracy: 1)
-        XCTAssertEqualWithAccuracy(carbsOnBoard[5].quantity.doubleValue(for: unit), 30, accuracy: 1)
-        XCTAssertEqualWithAccuracy(carbsOnBoard.last!.quantity.doubleValue(for: unit), 0, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard.first!.quantity.doubleValue(for: unit), 0, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard[5].quantity.doubleValue(for: unit), 30, accuracy: 1)
+        XCTAssertEqual(carbsOnBoard.last!.quantity.doubleValue(for: unit), 0, accuracy: 1)
     }
 
     func testGroupedByOverlappingAbsorptionTimeFromHistory() {
