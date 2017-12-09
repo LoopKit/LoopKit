@@ -84,6 +84,21 @@ extension DoseEntry {
             return units * -insulinSensitivity * continuousDeliveryGlucoseEffect(at: date, model: model, delay: delay, delta: delta)
         }
     }
+
+    func trim(to end: Date?) -> DoseEntry {
+        if let end = end, unit == .unitsPerHour, endDate > end {
+            return DoseEntry(
+                type: type,
+                startDate: startDate,
+                endDate: end,
+                value: value,
+                unit: unit,
+                description: description
+            )
+        } else {
+            return self
+        }
+    }
 }
 
 
@@ -410,23 +425,6 @@ extension Collection where Iterator.Element == DoseEntry {
         } while date <= end
 
         return values
-    }
-
-    func trim(to end: Date?) -> [DoseEntry] {
-        return map {
-            if let end = end, $0.type == .tempBasal, $0.endDate > end {
-                return DoseEntry(
-                    type: $0.type,
-                    startDate: $0.startDate,
-                    endDate: end,
-                    value: $0.value,
-                    unit: $0.unit,
-                    description: $0.description
-                )
-            } else {
-                return $0
-            }
-        }
     }
 
     /// Calculates the timeline of glucose effects for a collection of doses

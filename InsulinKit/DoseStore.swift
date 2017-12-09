@@ -411,7 +411,7 @@ public final class DoseStore {
 
             self.lastReservoirObject = reservoir
             // Reset our mutable pump events, since they are considered in addition to reservoir in dosing
-            self.mutablePumpEventDoses = []
+            self.mutablePumpEventDoses = self.mutablePumpEventDoses.filterDateRange(reservoir.startDate, nil)
 
             try? self.purgeReservoirObjects(matching: self.purgeableValuesPredicate)
 
@@ -642,7 +642,13 @@ public final class DoseStore {
                 }
             }
 
-            self.mutablePumpEventDoses = mutablePumpEventDoses
+            // This is a hack to prevent doubling up mutable doses on a MM x23+ model pump.
+            // Assume it's safe to override any pre-reported pending doses if a new history read found mutable doses.
+            if mutablePumpEventDoses.count > 0 {
+                self.mutablePumpEventDoses = mutablePumpEventDoses
+            } else {
+                self.mutablePumpEventDoses = self.mutablePumpEventDoses.filterDateRange(lastFinalDate, nil)
+            }
 
             if let mutableDate = firstMutableDate {
                 self.pumpEventQueryAfterDate = mutableDate
@@ -1109,7 +1115,7 @@ public final class DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-                let trimmedDoses = doses.trim(to: basalDosingEnd)
+                let trimmedDoses = doses.map { $0.trim(to: basalDosingEnd) }
                 let insulinOnBoard = trimmedDoses.insulinOnBoard(model: insulinModel)
                 completion(.success(insulinOnBoard.filterDateRange(start, end)))
             }
@@ -1164,7 +1170,7 @@ public final class DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-            let trimmedDoses = doses.trim(to: basalDosingEnd)
+                let trimmedDoses = doses.map { $0.trim(to: basalDosingEnd) }
                 let glucoseEffects = trimmedDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             }
