@@ -238,6 +238,20 @@
 		43F41C311D374A3000C11ED6 /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D0D1D3737420006E908 /* NibLoadable.swift */; };
 		43F959591F88922800825D7B /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1F01CF29451000DB779 /* TextFieldTableViewCell.swift */; };
 		43FADDFB1C89679200DDE013 /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */; };
+		7D68A9FF1FE0AE6C00522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA011FE0AE6C00522C49 /* Localizable.strings */; };
+		7D68AA041FE0AE6C00522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA061FE0AE6C00522C49 /* Localizable.strings */; };
+		7D68AA091FE0AE6C00522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA0B1FE0AE6C00522C49 /* InfoPlist.strings */; };
+		7D68AA0E1FE0AE6D00522C49 /* InsulinKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA101FE0AE6D00522C49 /* InsulinKit.strings */; };
+		7D68AA131FE0AE6D00522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA151FE0AE6D00522C49 /* InfoPlist.strings */; };
+		7D68AA181FE0AE6D00522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA1A1FE0AE6D00522C49 /* InfoPlist.strings */; };
+		7D68AA1D1FE0AE6E00522C49 /* CarbKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA1F1FE0AE6E00522C49 /* CarbKit.strings */; };
+		7D68AA221FE0AE6E00522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA241FE0AE6E00522C49 /* Localizable.strings */; };
+		7D68AA271FE0AE6E00522C49 /* LoopKit.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA291FE0AE6E00522C49 /* LoopKit.strings */; };
+		7D68AA2C1FE0AE6F00522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA2E1FE0AE6F00522C49 /* Localizable.strings */; };
+		7D68AA311FE0AE6F00522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA331FE0AE6F00522C49 /* Localizable.strings */; };
+		7D68AA361FE0AE6F00522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA381FE0AE6F00522C49 /* Localizable.strings */; };
+		7D68AA3B1FE0AE7000522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA3D1FE0AE7000522C49 /* InfoPlist.strings */; };
+		7D68AA401FE0AE7000522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68AA421FE0AE7000522C49 /* InfoPlist.strings */; };
 		C1110E991EE98CF5009BB852 /* ice_35_min_input.json in Resources */ = {isa = PBXBuildFile; fileRef = C1110E981EE98CF5009BB852 /* ice_35_min_input.json */; };
 		C12EE16C1F2964B3007DB9F1 /* InsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */; };
 		C13E6D2A1EEB1CB9006F5880 /* ice_slow_absorption.json in Resources */ = {isa = PBXBuildFile; fileRef = C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */; };
@@ -544,6 +558,23 @@
 		43F137281EDF9B310048468C /* CarbAbsorptionInputCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbAbsorptionInputCell.swift; sourceTree = "<group>"; };
 		43F1372A1EDF9B500048468C /* CarbAbsorptionInputHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbAbsorptionInputHeaderView.swift; sourceTree = "<group>"; };
 		43FADDFA1C89679200DDE013 /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
+		7D68A9FA1FE0A75F00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		7D68A9FB1FE0A75F00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		7D68A9FC1FE0A75F00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		7D68AA001FE0AE6C00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D68AA051FE0AE6C00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D68AA0A1FE0AE6C00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D68AA0F1FE0AE6D00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		7D68AA141FE0AE6D00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D68AA191FE0AE6D00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D68AA1E1FE0AE6E00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		7D68AA231FE0AE6E00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D68AA281FE0AE6E00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LoopKit.strings; sourceTree = "<group>"; };
+		7D68AA2D1FE0AE6F00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D68AA321FE0AE6F00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D68AA371FE0AE6F00522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D68AA3C1FE0AE7000522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D68AA411FE0AE7000522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C1110E981EE98CF5009BB852 /* ice_35_min_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_input.json; sourceTree = "<group>"; };
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
@@ -658,6 +689,8 @@
 		430157F81C7EC03B00B64B63 /* LoopKit Example */ = {
 			isa = PBXGroup;
 			children = (
+				7D68AA0B1FE0AE6C00522C49 /* InfoPlist.strings */,
+				7D68AA011FE0AE6C00522C49 /* Localizable.strings */,
 				435F355F1C9CD23D00C204D2 /* Managers */,
 				435F355C1C9CD14E00C204D2 /* Extensions */,
 				4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */,
@@ -739,6 +772,9 @@
 		43D8FDCD1C728FDF0073BE78 /* LoopKit */ = {
 			isa = PBXGroup;
 			children = (
+				7D68AA331FE0AE6F00522C49 /* Localizable.strings */,
+				7D68AA291FE0AE6E00522C49 /* LoopKit.strings */,
+				7D68AA151FE0AE6D00522C49 /* InfoPlist.strings */,
 				43D8FDCE1C728FDF0073BE78 /* LoopKit.h */,
 				43D8FDD01C728FDF0073BE78 /* Info.plist */,
 				43D8FDE51C7290340073BE78 /* BasalRateSchedule.swift */,
@@ -803,6 +839,9 @@
 		43D8FE2B1C72914D0073BE78 /* CarbKit */ = {
 			isa = PBXGroup;
 			children = (
+				7D68AA3D1FE0AE7000522C49 /* InfoPlist.strings */,
+				7D68AA381FE0AE6F00522C49 /* Localizable.strings */,
+				7D68AA1F1FE0AE6E00522C49 /* CarbKit.strings */,
 				43D8FE2C1C72914D0073BE78 /* CarbKit.h */,
 				43D8FE2E1C72914D0073BE78 /* Info.plist */,
 				4378B64C1ED61C22000AE785 /* AbsorbedCarbValue.swift */,
@@ -885,6 +924,8 @@
 		43D8FE701C7293070073BE78 /* GlucoseKit */ = {
 			isa = PBXGroup;
 			children = (
+				7D68AA1A1FE0AE6D00522C49 /* InfoPlist.strings */,
+				7D68AA061FE0AE6C00522C49 /* Localizable.strings */,
 				43D8FE711C7293070073BE78 /* GlucoseKit.h */,
 				43D8FE731C7293070073BE78 /* Info.plist */,
 				43D8FE861C72934C0073BE78 /* GlucoseMath.swift */,
@@ -898,6 +939,7 @@
 		43D8FE8F1C7293C70073BE78 /* GlucoseKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				7D68AA241FE0AE6E00522C49 /* Localizable.strings */,
 				43D8FE921C7293C70073BE78 /* Info.plist */,
 				43D8FE991C7293D00073BE78 /* GlucoseMathTests.swift */,
 				43D8FE9B1C7293EB0073BE78 /* Fixtures */,
@@ -927,6 +969,9 @@
 		43D8FEB21C7294520073BE78 /* InsulinKit */ = {
 			isa = PBXGroup;
 			children = (
+				7D68AA421FE0AE7000522C49 /* InfoPlist.strings */,
+				7D68AA2E1FE0AE6F00522C49 /* Localizable.strings */,
+				7D68AA101FE0AE6D00522C49 /* InsulinKit.strings */,
 				43D8FEDC1C7294D50073BE78 /* DoseEntry.swift */,
 				43D8FEDD1C7294D50073BE78 /* DoseStore.swift */,
 				43A0670E1F23CAC700E9E90F /* DoseType.swift */,
@@ -1355,6 +1400,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D68A9FF1FE0AE6C00522C49 /* Localizable.strings in Resources */,
+				7D68AA091FE0AE6C00522C49 /* InfoPlist.strings in Resources */,
 				430158061C7EC03B00B64B63 /* LaunchScreen.storyboard in Resources */,
 				430158031C7EC03B00B64B63 /* Assets.xcassets in Resources */,
 				430158011C7EC03B00B64B63 /* Main.storyboard in Resources */,
@@ -1374,8 +1421,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				43177D081D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib in Resources */,
+				7D68AA131FE0AE6D00522C49 /* InfoPlist.strings in Resources */,
+				7D68AA271FE0AE6E00522C49 /* LoopKit.strings in Resources */,
 				43D8FE161C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib in Resources */,
 				434FF1F11CF29451000DB779 /* TextFieldTableViewCell.xib in Resources */,
+				7D68AA311FE0AE6F00522C49 /* Localizable.strings in Resources */,
 				43D8FE131C7290530073BE78 /* GlucoseRangeTableViewCell.xib in Resources */,
 				43177D0A1D3732C70006E908 /* Assets.xcassets in Resources */,
 			);
@@ -1413,9 +1463,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D68AA361FE0AE6F00522C49 /* Localizable.strings in Resources */,
+				7D68AA3B1FE0AE7000522C49 /* InfoPlist.strings in Resources */,
 				4327113A1EDE91EF00171F6A /* Assets.xcassets in Resources */,
 				434A01D01F019D9100938125 /* DatePickerTableViewCell.xib in Resources */,
 				43D8FE601C7291D80073BE78 /* CarbKit.storyboard in Resources */,
+				7D68AA1D1FE0AE6E00522C49 /* CarbKit.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1446,6 +1499,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D68AA041FE0AE6C00522C49 /* Localizable.strings in Resources */,
+				7D68AA181FE0AE6D00522C49 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1462,6 +1517,7 @@
 				43D8FEA51C7293FA0073BE78 /* momentum_effect_bouncing_glucose_output.json in Resources */,
 				43DC87B61C8A9567005BC30D /* momentum_effect_incomplete_glucose_input.json in Resources */,
 				43D8FEA71C7293FA0073BE78 /* momentum_effect_falling_glucose_output.json in Resources */,
+				7D68AA221FE0AE6E00522C49 /* Localizable.strings in Resources */,
 				4303C48C1E29DD4200ADEDC8 /* momentum_effect_duplicate_glucose_input.json in Resources */,
 				43D8FEA61C7293FA0073BE78 /* momentum_effect_falling_glucose_input.json in Resources */,
 				43D8FEA81C7293FA0073BE78 /* momentum_effect_rising_glucose_input.json in Resources */,
@@ -1472,6 +1528,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D68AA0E1FE0AE6D00522C49 /* InsulinKit.strings in Resources */,
+				7D68AA401FE0AE7000522C49 /* InfoPlist.strings in Resources */,
+				7D68AA2C1FE0AE6F00522C49 /* Localizable.strings in Resources */,
 				43D8FEF11C7294E90073BE78 /* InsulinKit.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1769,6 +1828,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				430158001C7EC03B00B64B63 /* Base */,
+				7D68A9FC1FE0A75F00522C49 /* ru */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -1777,6 +1837,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				430158051C7EC03B00B64B63 /* Base */,
+				7D68A9FB1FE0A75F00522C49 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1785,8 +1846,121 @@
 			isa = PBXVariantGroup;
 			children = (
 				43D8FEEE1C7294E90073BE78 /* Base */,
+				7D68A9FA1FE0A75F00522C49 /* ru */,
 			);
 			name = InsulinKit.storyboard;
+			sourceTree = "<group>";
+		};
+		7D68AA011FE0AE6C00522C49 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA001FE0AE6C00522C49 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA061FE0AE6C00522C49 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA051FE0AE6C00522C49 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA0B1FE0AE6C00522C49 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA0A1FE0AE6C00522C49 /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA101FE0AE6D00522C49 /* InsulinKit.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA0F1FE0AE6D00522C49 /* ru */,
+			);
+			name = InsulinKit.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA151FE0AE6D00522C49 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA141FE0AE6D00522C49 /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA1A1FE0AE6D00522C49 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA191FE0AE6D00522C49 /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA1F1FE0AE6E00522C49 /* CarbKit.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA1E1FE0AE6E00522C49 /* ru */,
+			);
+			name = CarbKit.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA241FE0AE6E00522C49 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA231FE0AE6E00522C49 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA291FE0AE6E00522C49 /* LoopKit.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA281FE0AE6E00522C49 /* ru */,
+			);
+			name = LoopKit.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA2E1FE0AE6F00522C49 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA2D1FE0AE6F00522C49 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA331FE0AE6F00522C49 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA321FE0AE6F00522C49 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA381FE0AE6F00522C49 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA371FE0AE6F00522C49 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA3D1FE0AE7000522C49 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA3C1FE0AE7000522C49 /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7D68AA421FE0AE7000522C49 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D68AA411FE0AE7000522C49 /* ru */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1854,6 +2028,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1911,6 +2086,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
