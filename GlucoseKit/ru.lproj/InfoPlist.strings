@@ -1,0 +1,9 @@
+/* (No Comment) */
+"CFBundleName" = "$(PRODUCT_NAME)";
+
+/* (No Comment) */
+"NSHealthShareUsageDescription" = "Данные гликемии для графики и анализа получены из HealthKit ";
+
+/* (No Comment) */
+"NSHealthUpdateUsageDescription" = "Данные гликемии безопасно хранятся в HealthKit ";
+
