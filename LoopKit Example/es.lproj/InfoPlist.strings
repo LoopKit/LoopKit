@@ -1,0 +1,9 @@
+/* (No Comment) */
+"CFBundleName" = "$(PRODUCT_NAME)";
+
+/* (No Comment) */
+"NSHealthShareUsageDescription" = "Datos de alimentos de la base de datos de Salud se utiliza para determinar los efectos en el nivel de glucosa. Datos de glucosa de la bsase de datos de Salud se utilizan para graficar y determinar cálculos de momentum.";
+
+/* (No Comment) */
+"NSHealthUpdateUsageDescription" = "Datos de alimentos ingresados en la aplicación y en el relój son almacenados en la base de datos de Salud. Los datos de glucosa extraídos del monitor contínuo de glucosa se almacenan de manera segura en Kit de Salud.";
+
