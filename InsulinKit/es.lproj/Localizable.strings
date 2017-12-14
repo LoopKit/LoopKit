@@ -1,0 +1,9 @@
+/* The title of the screen displaying a pump event */
+"Pump Event" = "Evento de microinfusadora";
+
+/* The default title to use when an entry has none */
+"Unknown" = "Desconocido";
+
+/* The unit display string for millimoles of glucose per liter */
+"mmol/L" = "mmol/L";
+
