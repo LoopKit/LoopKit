@@ -1,0 +1,22 @@
+/* The title of the view controller to create a new carb entry */
+"carb-entry-title-add" = "Добавить запись углеводов";
+
+/* The title of the view controller to edit an existing carb entry */
+"carb-entry-title-edit" = "Редактировать запись углеводов";
+
+/* The format string describing the date of a COB value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.COBDateLabel" = "В %1$@";
+
+/* The description of an error returned when attempting to delete a non-HealthKit sample */
+"com.loudnate.CarbKit.deleteCarbEntryInvalid" = "Неверная запись";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Отказ авторизации";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.totalDateLabel" = "после %1$@";
+
+/* The error recovery suggestion when attempting to delete a non-HealthKit sample
+   The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Этот образец может быть удален из приложения Здоровье";
+
