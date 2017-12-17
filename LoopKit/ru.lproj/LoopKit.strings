@@ -1,0 +1,9 @@
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* The error description describing when Health sharing was denied */
+"com.loudnate.LoopKit.sharingDeniedErrorDescription" = "Отказ авторизации";
+
+/* The error recovery suggestion when Health sharing was denied */
+"com.loudnate.LoopKit.sharingDeniedErrorRecoverySuggestion" = "Пожалуйста повторно активируйте совместный доступ в базе данных Здоровье";
+

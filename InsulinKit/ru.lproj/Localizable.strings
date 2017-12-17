@@ -1,0 +1,9 @@
+/* The title of the screen displaying a pump event */
+"Pump Event" = "Событие помпы";
+
+/* The default title to use when an entry has none */
+"Unknown" = "Неизвестно";
+
+/* The unit display string for millimoles of glucose per liter */
+"mmol/L" = "ммоль/л";
+
