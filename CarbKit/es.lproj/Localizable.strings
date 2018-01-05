@@ -1,0 +1,33 @@
+/* Title of the carb entry absorption time cell */
+"Absorption Time" = "Tiempo de absorción";
+
+/* Carb entry section footer text explaining absorption time */
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Elija un tiempo de absorción más largo para comidas más grandes, o aquellas que contienen grasas y proteínas. Esta es solo una guía para el algoritmo y no necesita ser exacta.";
+
+/* Title of the carb entry date picker cell */
+"Date" = "Fecha";
+
+/* Section title for fast absorbing food */
+"Fast" = "Rápido";
+
+/* Section title for medium absorbing food */
+"Medium" = "Medio";
+
+/* Section title for no-carb food */
+"Other" = "Otro";
+
+/* Section title for slow absorbing food */
+"Slow" = "Lento";
+
+/* Alert body displayed absorption time greater than max (1: maximum absorption time) */
+"The maximum absorption time is %@" = "El tiempo máximo de absorción es %@";
+
+/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
+"The maximum allowed amount is %@ grams" = "La cantidad máxima permitida es %@ gramos";
+
+/* Title of an alert containing a validation warning */
+"Warning" = "Aviso";
+
+/* The unit display string for millimoles of glucose per liter */
+"mmol/L" = "mmol/L";
+

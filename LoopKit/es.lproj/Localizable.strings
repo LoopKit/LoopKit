@@ -1,0 +1,15 @@
+/* The section title of glucose overrides */
+"Overrides" = "Anulas";
+
+/* Title for the pre-meal override range */
+"Pre-Meal" = "Pre-Comida";
+
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "Horario in %1$@%2$@%3$@";
+
+/* Title for the workout override range */
+"Workout" = "Ejercicio";
+
+/* The unit display string for millimoles of glucose per liter */
+"mmol/L" = "mmol/L";
+

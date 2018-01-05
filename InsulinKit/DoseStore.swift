@@ -411,7 +411,9 @@ public final class DoseStore {
 
             self.lastReservoirObject = reservoir
             // Reset our mutable pump events, since they are considered in addition to reservoir in dosing
-            self.mutablePumpEventDoses = self.mutablePumpEventDoses.filterDateRange(reservoir.startDate, nil)
+            if self.areReservoirValuesValid {
+                self.mutablePumpEventDoses = self.mutablePumpEventDoses.filterDateRange(Date(), nil)
+            }
 
             try? self.purgeReservoirObjects(matching: self.purgeableValuesPredicate)
 
@@ -647,7 +649,7 @@ public final class DoseStore {
             if mutablePumpEventDoses.count > 0 {
                 self.mutablePumpEventDoses = mutablePumpEventDoses
             } else {
-                self.mutablePumpEventDoses = self.mutablePumpEventDoses.filterDateRange(lastFinalDate, nil)
+                self.mutablePumpEventDoses = self.mutablePumpEventDoses.filterDateRange(self.lastAddedPumpEvents, nil)
             }
 
             if let mutableDate = firstMutableDate {
