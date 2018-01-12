@@ -748,17 +748,19 @@ public final class DoseStore {
     /// - Parameter start: The date at which
     @available(iOS 11.0, *)
     private func savePumpEventsToHealthStore(after start: Date) {
-        guard let doses = try? getPumpEventDoseObjects(since: start),
-            doses.count > 0,
-            let basalSchedule = self.basalProfile
-        else {
-            return
-        }
+        self.persistenceController.managedObjectContext.perform {
+            guard let doses = try? self.getPumpEventDoseObjects(since: start),
+                doses.count > 0,
+                let basalSchedule = self.basalProfile
+                else {
+                    return
+            }
 
-        let reconciledDoses = doses.reconcile().overlayBasalSchedule(basalSchedule, startingAt: start, endingAt: lastAddedPumpEvents, insertingBasalEntries: !pumpRecordsBasalProfileStartEvents)
-        insulinDeliveryStore?.addReconciledDoses(reconciledDoses, from: device) { (result) in
-            if case .failure(let error) = result {
-                NSLog("%@", String(describing: error))
+            let reconciledDoses = doses.reconcile().overlayBasalSchedule(basalSchedule, startingAt: start, endingAt: self.lastAddedPumpEvents, insertingBasalEntries: !self.pumpRecordsBasalProfileStartEvents)
+            self.insulinDeliveryStore?.addReconciledDoses(reconciledDoses, from: self.device) { (result) in
+                if case .failure(let error) = result {
+                    NSLog("%@", String(describing: error))
+                }
             }
         }
     }
