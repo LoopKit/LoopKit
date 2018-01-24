@@ -42,14 +42,6 @@ public final class GlucoseStore: HealthKitSampleStore {
 
     private let glucoseType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
 
-    public override var readTypes: Set<HKSampleType> {
-        return Set(arrayLiteral: glucoseType)
-    }
-
-    public override var shareTypes: Set<HKSampleType> {
-        return Set(arrayLiteral: glucoseType)
-    }
-
     /// The oldest interval to include when purging managed data
     private let maxPurgeInterval: TimeInterval = TimeInterval(hours: 24) * 7
 
@@ -57,7 +49,11 @@ public final class GlucoseStore: HealthKitSampleStore {
     public var managedDataInterval: TimeInterval? = TimeInterval(hours: 3)
 
     /// The interval of glucose data to keep in cache
-    public var reflectionDataInterval: TimeInterval = TimeInterval(minutes: 30)
+    public var reflectionDataInterval: TimeInterval = TimeInterval(minutes: 30) {
+        didSet {
+            observationStart = Date(timeIntervalSinceNow: -reflectionDataInterval)
+        }
+    }
 
     /// The interval of glucose data to use for momentum calculation
     public var momentumDataInterval: TimeInterval = TimeInterval(minutes: 15)
@@ -70,6 +66,10 @@ public final class GlucoseStore: HealthKitSampleStore {
     /// The most-recent glucose value. Reading this value is thread-safe as `GlucoseValue` is immutable.
     public private(set) var latestGlucose: GlucoseValue?
 
+    public init?(healthStore: HKHealthStore) {
+        super.init(healthStore: healthStore, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -reflectionDataInterval))
+    }
+    
     /**
      Add a new glucose value to HealthKit.
      
@@ -358,7 +358,8 @@ public final class GlucoseStore: HealthKitSampleStore {
             "* reflectionDataInterval: \(reflectionDataInterval)",
             "* momentumDataInterval: \(momentumDataInterval)",
             "* sampleDataCache: \(sampleDataCache)",
-            "* authorizationRequired: \(authorizationRequired)"
+            "* authorizationRequired: \(authorizationRequired)",
+            super.debugDescription
         ]
 
         completionHandler(report.joined(separator: "\n"))

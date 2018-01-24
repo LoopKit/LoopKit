@@ -6,16 +6,16 @@
 //
 
 import CoreData
-import UIKit
 
 
-class PersistenceController {
+/// Provides a Core Data persistence stack for the LoopKit data model
+public final class PersistenceController {
 
-    enum PersistenceControllerError: Error, LocalizedError {
+    public enum PersistenceControllerError: Error, LocalizedError {
         case configurationError(String)
         case coreDataError(NSError)
 
-        var errorDescription: String? {
+        public var errorDescription: String? {
             switch self {
             case .configurationError(let description):
                 return description
@@ -24,7 +24,7 @@ class PersistenceController {
             }
         }
 
-        var recoverySuggestion: String? {
+        public var recoverySuggestion: String? {
             switch self {
             case .configurationError:
                 return "Unrecoverable Error"
@@ -34,13 +34,40 @@ class PersistenceController {
         }
     }
 
-    let managedObjectContext: NSManagedObjectContext
+    private enum ReadyState {
+        case waiting
+        case ready
+        case error(PersistenceControllerError)
+    }
 
-    init(databasePath: String, readyCallback: @escaping (_ error: PersistenceControllerError?) -> Void) {
+    public typealias ReadyCallback = (_ error: PersistenceControllerError?) -> Void
+
+    internal let managedObjectContext: NSManagedObjectContext
+
+    public init(directoryURL: URL) {
         managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
 
-        initializeStack(atPath: databasePath, readyCallback)
+        initializeStack(inDirectory: directoryURL)
+    }
+
+    private var readyCallbacks: [ReadyCallback] = []
+
+    private var readyState: ReadyState = .waiting
+
+    private var queue = DispatchQueue(label: "com.loopkit.PersistenceController")
+
+    func onReady(_ callback: @escaping ReadyCallback) {
+        queue.async {
+            switch self.readyState {
+            case .waiting:
+                self.readyCallbacks.append(callback)
+            case .ready:
+                callback(nil)
+            case .error(let error):
+                callback(error)
+            }
+        }
     }
 
     func save(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) {
@@ -59,47 +86,54 @@ class PersistenceController {
 
     // MARK: - 
 
-    private func initializeStack(atPath path: String, _ readyCallback: @escaping (_ error: PersistenceControllerError?) -> Void) {
+    private func initializeStack(inDirectory directoryURL: URL) {
         managedObjectContext.perform {
             var error: PersistenceControllerError?
 
             let modelURL = Bundle(for: type(of: self)).url(forResource: "Model", withExtension: "momd")!
-            let model: NSManagedObjectModel? = NSManagedObjectModel(contentsOf: modelURL)
+            let model = NSManagedObjectModel(contentsOf: modelURL)
             let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model!)
 
             self.managedObjectContext.persistentStoreCoordinator = coordinator
 
-            if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(path, isDirectory: true)
-            {
-                if !FileManager.default.fileExists(atPath: documentsURL.absoluteString) {
-                    do {
-                        try FileManager.default.createDirectory(at: documentsURL, withIntermediateDirectories: true, attributes: nil)
-                    } catch {
-                        // Ignore errors here, let Core Data explain the problem
-                    }
-                }
-
-                let storeURL = documentsURL.appendingPathComponent("Model.sqlite")
-
+            if !FileManager.default.fileExists(atPath: directoryURL.absoluteString) {
                 do {
-                    try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
-                        configurationName: nil,
-                        at: storeURL,
-                        options: [
-                            NSMigratePersistentStoresAutomaticallyOption: true,
-                            NSInferMappingModelAutomaticallyOption: true,
-                            // Data should be available on reboot before first unlock
-                            NSPersistentStoreFileProtectionKey: FileProtectionType.none
-                        ]
-                    )
-                } catch let storeError as NSError {
-                    error = .coreDataError(storeError)
+                    try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
+                } catch {
+                    // Ignore errors here, let Core Data explain the problem
                 }
-            } else {
-                error = .configurationError("Cannot configure persistent store for path: \(path) in directory: \(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))")
             }
 
-            readyCallback(error)
+            let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
+
+            do {
+                try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
+                    configurationName: nil,
+                    at: storeURL,
+                    options: [
+                        NSMigratePersistentStoresAutomaticallyOption: true,
+                        NSInferMappingModelAutomaticallyOption: true,
+                        // Data should be available on reboot before first unlock
+                        NSPersistentStoreFileProtectionKey: FileProtectionType.none
+                    ]
+                )
+            } catch let storeError as NSError {
+                error = .coreDataError(storeError)
+            }
+
+            self.queue.async {
+                if let error = error {
+                    self.readyState = .error(error)
+                } else {
+                    self.readyState = .ready
+                }
+
+                for callback in self.readyCallbacks {
+                    callback(error)
+                }
+
+                self.readyCallbacks = []
+            }
         }
     }
 }

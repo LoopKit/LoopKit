@@ -56,6 +56,10 @@
 		432762741D60505F0083215A /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432762731D60505F0083215A /* HKQuantitySample.swift */; };
 		4333931F1F32E31C009466DC /* doses_overlay_basal_profile_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 4333931E1F32E31C009466DC /* doses_overlay_basal_profile_output.json */; };
 		433D705E1EFB29700004EB9F /* FoodTypeShortcutCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433D705D1EFB29700004EB9F /* FoodTypeShortcutCell.swift */; };
+		434570441FE605E30089C4DC /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434570431FE605E30089C4DC /* OSLog.swift */; };
+		434570451FE708810089C4DC /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434570431FE605E30089C4DC /* OSLog.swift */; };
+		434570461FE708A20089C4DC /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434570431FE605E30089C4DC /* OSLog.swift */; };
+		434570471FE708A30089C4DC /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434570431FE605E30089C4DC /* OSLog.swift */; };
 		4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
 		4348727B1CB6256500E55D75 /* reconcile_history_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872781CB6256500E55D75 /* reconcile_history_input.json */; };
 		4348727D1CB626E500E55D75 /* reconcile_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 4348727C1CB626E500E55D75 /* reconcile_history_output.json */; };
@@ -380,6 +384,7 @@
 		432762731D60505F0083215A /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
 		4333931E1F32E31C009466DC /* doses_overlay_basal_profile_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = doses_overlay_basal_profile_output.json; sourceTree = "<group>"; };
 		433D705D1EFB29700004EB9F /* FoodTypeShortcutCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodTypeShortcutCell.swift; sourceTree = "<group>"; };
+		434570431FE605E30089C4DC /* OSLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLog.swift; sourceTree = "<group>"; };
 		4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		434872781CB6256500E55D75 /* reconcile_history_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_input.json; sourceTree = "<group>"; };
 		4348727C1CB626E500E55D75 /* reconcile_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_output.json; sourceTree = "<group>"; };
@@ -700,6 +705,7 @@
 				43177D0D1D3737420006E908 /* NibLoadable.swift */,
 				43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */,
 				43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */,
+				434570431FE605E30089C4DC /* OSLog.swift */,
 				4303C4901E2D664200ADEDC8 /* TimeZone.swift */,
 				434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */,
 			);
@@ -1632,6 +1638,7 @@
 				434FB64A1D712158007B9C70 /* CommandResponseViewController.swift in Sources */,
 				43D8FE151C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift in Sources */,
 				43D8FDFC1C7290350073BE78 /* HealthKitSampleStore.swift in Sources */,
+				434570441FE605E30089C4DC /* OSLog.swift in Sources */,
 				43D8FDF71C7290350073BE78 /* DailyValueSchedule.swift in Sources */,
 				43177D0C1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift in Sources */,
 				43D8FE121C7290530073BE78 /* GlucoseRangeTableViewCell.swift in Sources */,
@@ -1702,6 +1709,7 @@
 				43D8FE531C7291BD0073BE78 /* StoredCarbEntry.swift in Sources */,
 				43D8FE621C7291D80073BE78 /* DecimalTextFieldTableViewCell.swift in Sources */,
 				43D8FE501C7291BD0073BE78 /* CarbMath.swift in Sources */,
+				434570451FE708810089C4DC /* OSLog.swift in Sources */,
 				43F137291EDF9B310048468C /* CarbAbsorptionInputCell.swift in Sources */,
 				43D8FE5F1C7291D80073BE78 /* CarbEntryTableViewController.swift in Sources */,
 				43D8FE631C7291D80073BE78 /* NewCarbEntry.swift in Sources */,
@@ -1733,6 +1741,7 @@
 				43FADDFB1C89679200DDE013 /* HKQuantitySample.swift in Sources */,
 				439A1E8C1EC6B58A00662F2B /* HKUnit.swift in Sources */,
 				43D8FE891C72934C0073BE78 /* GlucoseStore.swift in Sources */,
+				434570461FE708A20089C4DC /* OSLog.swift in Sources */,
 				4300591F1CCDC67900C861EA /* NSTimeInterval.swift in Sources */,
 				43D8FE881C72934C0073BE78 /* GlucoseMath.swift in Sources */,
 			);
@@ -1780,6 +1789,7 @@
 				43DFE27E1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift in Sources */,
 				4302F4ED1D5068CE00F0FCAF /* PersistedPumpEvent.swift in Sources */,
 				43D8FEE51C7294D50073BE78 /* DoseEntry.swift in Sources */,
+				434570471FE708A30089C4DC /* OSLog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

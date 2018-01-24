@@ -11,7 +11,7 @@ import XCTest
 class DoseStoreTests: XCTestCase {
 
     func testPumpEventTypeDoseMigration() {
-        let controller = PersistenceController(databasePath: NSTemporaryDirectory()) { (error) in }
+        let controller = PersistenceController(directoryURL: URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true))
 
         controller.managedObjectContext.performAndWait {
             let event = PumpEvent(entity: PumpEvent.entity(), insertInto: controller.managedObjectContext)

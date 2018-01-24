@@ -340,11 +340,12 @@ public final class CarbEntryTableViewController: UITableViewController {
 
     @IBAction func authorizeHealth(_ sender: Any) {
         if case .authorizationRequired = state, let carbStore = carbStore {
-            carbStore.authorize { (success, error) in
+            carbStore.authorize { (result) in
                 DispatchQueue.main.async {
-                    if success {
+                    switch result {
+                    case .success:
                         self.state = .display
-                    } else if let error = error {
+                    case .failure(let error):
                         self.presentAlertController(with: error)
                     }
                 }
