@@ -115,6 +115,10 @@ public final class DoseStore {
                     self.pumpEventQueryAfterDate = max(self.pumpEventQueryAfterDate, recentValuesStartDate)
                 }
             }
+
+            if let effectDuration = insulinModel?.effectDuration {
+                _insulinDeliveryStore?.observationStart = Date(timeIntervalSinceNow: -effectDuration)
+            }
         }
     }
 
@@ -135,14 +139,29 @@ public final class DoseStore {
         return _insulinDeliveryStore as? InsulinDeliveryStore
     }
 
+    /// The HealthKit sample type managed by this store
+    public var sampleType: HKSampleType? {
+        guard let store = _insulinDeliveryStore else {
+            return nil
+        }
+
+        return store.sampleType
+    }
+
     /// All the sample types we need permission to read
+    @available(*, deprecated, message: "Use DoseStore.getter:sampleType instead")
     open var readTypes: Set<HKSampleType> {
-        return _insulinDeliveryStore?.readTypes ?? Set()
+        guard let store = _insulinDeliveryStore else {
+            return Set()
+        }
+
+        return Set([store.sampleType])
     }
 
     /// All the sample types we need permission to share
+    @available(*, deprecated, message: "Use DoseStore.getter:sampleType instead")
     open var shareTypes: Set<HKSampleType> {
-        return _insulinDeliveryStore?.shareTypes ?? Set()
+        return readTypes
     }
 
     /// True if the store requires authorization
@@ -182,7 +201,7 @@ public final class DoseStore {
     ///   - basalProfile: The daily schedule of basal insulin rates
     ///   - insulinSensitivitySchedule: The daily schedule of insulin sensitivity (also known as ISF)
     @available(*, deprecated, message: "Use init(healthStore:insulinModel:basalProfile:insulinSensitivitySchedule:databasePath:) instead")
-    convenience public init(insulinActionDuration: TimeInterval?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?, databasePath: String = "com.loudnate.InsulinKit") {
+    public convenience init(insulinActionDuration: TimeInterval?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?, databasePath: String = "com.loudnate.InsulinKit") {
         
         var insulinModel: InsulinModel? = nil
         
@@ -193,9 +212,17 @@ public final class DoseStore {
         self.init(healthStore: HKHealthStore(), insulinModel: insulinModel, basalProfile: basalProfile, insulinSensitivitySchedule: insulinSensitivitySchedule)
     }
 
-    public init(healthStore: HKHealthStore, insulinModel: InsulinModel?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?, databasePath: String = "com.loudnate.InsulinKit") {
+    @available(*, deprecated, message: "Use init(healthStore:cacheStore:insulinModel:basalProfile:insulinSensitivitySchedule:) instead")
+    public convenience init(healthStore: HKHealthStore, insulinModel: InsulinModel?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?, databasePath: String = "com.loudnate.InsulinKit") {
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(databasePath, isDirectory: true)
+        let cacheStore = PersistenceController(directoryURL: documentsURL)
+
+        self.init(healthStore: healthStore, cacheStore: cacheStore, insulinModel: insulinModel, basalProfile: basalProfile, insulinSensitivitySchedule: insulinSensitivitySchedule)
+    }
+
+    public init(healthStore: HKHealthStore, cacheStore: PersistenceController, insulinModel: InsulinModel?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?) {
         if #available(iOS 11.0, *) {
-            _insulinDeliveryStore = InsulinDeliveryStore(healthStore: healthStore)
+            _insulinDeliveryStore = InsulinDeliveryStore(healthStore: healthStore, effectDuration: insulinModel?.effectDuration ?? .hours(6))
         }
         self.insulinModel = insulinModel
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
@@ -204,7 +231,8 @@ public final class DoseStore {
 
         self.pumpEventQueryAfterDate = recentValuesStartDate ?? Date.distantPast
 
-        persistenceController = PersistenceController(databasePath: databasePath, readyCallback: { [unowned self] (error) -> Void in
+        persistenceController = cacheStore
+        persistenceController.onReady { [unowned self] (error) -> Void in
             if let error = error {
                 self.readyState = .failed(.initializationError(description: error.localizedDescription, recoverySuggestion: error.recoverySuggestion))
             } else {
@@ -235,7 +263,7 @@ public final class DoseStore {
                     self.readyState = .ready
                 }
             }
-        })
+        }
     }
 
     /// Clears all pump data from the on-disk store.

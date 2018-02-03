@@ -9,6 +9,7 @@
 import Foundation
 import HealthKit
 import LoopKit
+import os.log
 
 
 public enum CarbStoreResult<T> {
@@ -95,16 +96,6 @@ public final class CarbStore: HealthKitSampleStore {
 
     private let carbType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!
 
-    /// All the sample types we need permission to read.
-    /// Eventually, we may want to consider fat, protein, and other factors to estimate carb absorption.
-    public override var readTypes: Set<HKSampleType> {
-        return Set(arrayLiteral: carbType)
-    }
-
-    public override var shareTypes: Set<HKSampleType> {
-        return Set(arrayLiteral: carbType)
-    }
-
     /// The preferred unit. iOS currently only supports grams for dietary carbohydrates.
     public let preferredUnit = HKUnit.gram()
 
@@ -114,10 +105,7 @@ public final class CarbStore: HealthKitSampleStore {
     /// A trio of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
     public var defaultAbsorptionTimes: DefaultAbsorptionTimes {
         didSet {
-            // If maximumAbsorptionTimeInterval increases, reset our anchored queries
-            if defaultAbsorptionTimes.slow > oldValue.slow {
-                createQueries()
-            }
+            observationStart = Date(timeIntervalSinceNow: -maximumAbsorptionTimeInterval)
         }
     }
 
@@ -156,6 +144,7 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
 
+    private let log = OSLog(category: "CarbStore")
 
     /**
      Initializes a new instance of the store.
@@ -172,150 +161,22 @@ public final class CarbStore: HealthKitSampleStore {
         self.modifiedCarbEntries = Set(UserDefaults.standard.modifiedCarbEntries ?? [])
         self.deletedCarbEntryIDs = Set(UserDefaults.standard.deletedCarbEntryIds ?? [])
 
-        super.init(healthStore: healthStore)
-
-        if !authorizationRequired {
-            createQueries()
-        }
-    }
-
-    public override func authorize(_ completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
-        super.authorize { (success: Bool, error: Error?) -> Void in
-            if success {
-                self.createQueries()
-            }
-
-            completion(success, error)
-        }
+        super.init(healthStore: healthStore, type: carbType, observationStart: Date(timeIntervalSinceNow: -defaultAbsorptionTimes.slow * 2))
     }
 
     // MARK: - Query
 
-    /// All active observer queries
-    private var observerQueries: [HKObserverQuery] = []
-
-    /// The last-retreived anchor for each anchored object query, by sample type
-    private var queryAnchors: [HKObjectType: HKQueryAnchor] = [:]
-
-    private func createQueries() {
-        // Clear and reset query state
-        for query in observerQueries {
-            healthStore.stop(query)
-        }
-
-        observerQueries = []
-        queryAnchors = [:]
-
-        let predicate = HKQuery.predicateForSamples(withStart: Date(timeIntervalSinceNow: -maximumAbsorptionTimeInterval), end: nil)
-        for type in readTypes {
-            let observerQuery = HKObserverQuery(sampleType: type, predicate: predicate) { [unowned self] (query, completionHandler, error) -> Void in
-
-                if let error = error {
-                    self.delegate?.carbStore(self, didError: .healthStoreError(error))
-                } else {
-                    self.dataAccessQueue.async {
-                        let anchoredObjectQuery = HKAnchoredObjectQuery(
-                            type: type,
-                            predicate: predicate,
-                            anchor: self.queryAnchors[type],
-                            limit: HKObjectQueryNoLimit,
-                            resultsHandler: self.processResultsFromAnchoredQuery
-                        )
-
-                        self.healthStore.execute(anchoredObjectQuery)
-                    }
-                }
-
-                completionHandler()
-            }
-
-            healthStore.execute(observerQuery)
-            observerQueries.append(observerQuery)
+    public override func observeUpdates(to query: HKObserverQuery, error: Error?) {
+        if let error = error {
+            self.delegate?.carbStore(self, didError: .healthStoreError(error))
+        } else {
+            super.observeUpdates(to: query, error: error)
         }
     }
-
-    deinit {
-        for query in observerQueries {
-            healthStore.stop(query)
-        }
-    }
-
-    // MARK: - Background management
-
-    /// Whether background delivery of new data is enabled
-    public private(set) var isBackgroundDeliveryEnabled = false
-
-    /**
-     Enables the background delivery of updates to carbohydrate data from the Health database.
-     
-     This is only necessary if carbohydrate data is used in a long-running task (like automated dosing) and new entries are expected from other apps or input sources.
-
-     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-
-     - parameter enabled:    Whether to enable or disable background delivery
-     - parameter completion: A closure called after the background delivery preference is changed. The closure takes two arguments:
-        - success: Whether the background delivery preference was successfully updated
-        - error:   An error object explaining why the preference failed to update
-     */
-    public func setBackgroundDeliveryEnabled(_ enabled: Bool, completion: @escaping (_ success: Bool, _ error: CarbStoreError?) -> Void) {
-        self.dataAccessQueue.async { () -> Void in
-            let oldValue = self.isBackgroundDeliveryEnabled
-            self.isBackgroundDeliveryEnabled = enabled
-
-            switch (oldValue, enabled) {
-            case (false, true):
-                let group = DispatchGroup()
-                var lastError: CarbStoreError?
-
-                for type in self.readTypes {
-                    group.enter()
-                    self.healthStore.enableBackgroundDelivery(for: type, frequency: .immediate, withCompletion: { [unowned self] (enabled, error) -> Void in
-                        if !enabled {
-                            self.isBackgroundDeliveryEnabled = oldValue
-
-                            if let error = error {
-                                lastError = .healthStoreError(error)
-                            }
-                        }
-
-                        group.leave()
-                    })
-                }
-
-                _ = group.wait(timeout: .distantFuture)
-                completion(enabled == self.isBackgroundDeliveryEnabled, lastError)
-            case (true, false):
-                let group = DispatchGroup()
-                var lastError: CarbStoreError?
-
-                for type in self.readTypes {
-                    group.enter()
-                    self.healthStore.disableBackgroundDelivery(for: type, withCompletion: { [unowned self] (disabled, error) -> Void in
-                        if !disabled {
-                            self.isBackgroundDeliveryEnabled = oldValue
-
-                            if let error = error {
-                                lastError = .healthStoreError(error)
-                            }
-                        }
-
-                        group.leave()
-                    })
-                }
-
-                _ = group.wait(timeout: .distantFuture)
-                completion(enabled == self.isBackgroundDeliveryEnabled, lastError)
-            default:
-                completion(true, nil)
-            }
-        }
-    }
-
 
     // MARK: - Data fetching
 
-    private func processResultsFromAnchoredQuery(_ query: HKAnchoredObjectQuery, newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, anchor: HKQueryAnchor?, error: Error?) {
-
+    public override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {
         if let error = error {
             self.delegate?.carbStore(self, didError: .healthStoreError(error))
             return
@@ -326,7 +187,7 @@ public final class CarbStore: HealthKitSampleStore {
             var notificationRequired = false
 
             // Append the new samples
-            if let samples = newSamples as? [HKQuantitySample] {
+            if let samples = added as? [HKQuantitySample] {
                 for sample in samples {
                     let entry = StoredCarbEntry(sample: sample)
 
@@ -338,7 +199,7 @@ public final class CarbStore: HealthKitSampleStore {
             }
 
             // Remove deleted samples
-            for sample in deletedSamples ?? [] {
+            for sample in deleted {
                 if let index = self.carbEntryCache.index(where: { $0.sampleUUID == sample.uuid }) {
                     self.carbEntryCache.remove(at: index)
                     notificationRequired = true
@@ -347,9 +208,6 @@ public final class CarbStore: HealthKitSampleStore {
 
             // Filter old samples
             self.carbEntryCache = Set(self.carbEntryCache.filter { $0.startDate >= cutoffDate })
-
-            // Update the anchor
-            self.queryAnchors[query.objectType!] = anchor
 
             // Notify listeners only if a meaningful change was made
             if notificationRequired {
@@ -870,8 +728,7 @@ public final class CarbStore: HealthKitSampleStore {
             "* defaultAbsorptionTimes: \(defaultAbsorptionTimes)",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
             "* delay: \(delay)",
-            "* authorizationRequired: \(authorizationRequired)",
-            "* isBackgroundDeliveryEnabled: \(isBackgroundDeliveryEnabled)",
+            super.debugDescription,
             "",
             "### carbEntryCache"
         ]

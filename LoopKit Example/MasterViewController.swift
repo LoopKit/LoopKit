@@ -120,16 +120,17 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
 
                     show(scheduleVC, sender: sender)
                 } else {
-                    dataManager.glucoseStore.preferredUnit({ (unit, error) -> Void in
+                    dataManager.glucoseStore.preferredUnit { (result) -> Void in
                         DispatchQueue.main.async {
-                            if let error = error {
+                            switch result {
+                            case .failure(let error):
                                 self.presentAlertController(with: error)
-                            } else if let unit = unit {
+                            case .success(let unit):
                                 scheduleVC.unit = unit
                                 self.show(scheduleVC, sender: sender)
                             }
                         }
-                    })
+                    }
                 }
             case .pumpID:
                 let textFieldVC = TextFieldTableViewController()

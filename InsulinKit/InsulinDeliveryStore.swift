@@ -27,8 +27,8 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
     // Should only be accessed on dataAccessQueue
     fileprivate var lastBasalEndDate: LoadableDate = .none
 
-    public override var shareTypes: Set<HKSampleType> {
-        return Set(arrayLiteral: insulinType)
+    public init?(healthStore: HKHealthStore, effectDuration: TimeInterval) {
+        super.init(healthStore: healthStore, type: insulinType, observationStart: Date(timeIntervalSinceNow: -effectDuration))
     }
 
     func addReconciledDoses(_ doses: [DoseEntry], from device: HKDevice?, completion: @escaping (_ result: InsulinDeliveryStoreResult<Bool>) -> Void) {
@@ -143,6 +143,7 @@ extension InsulinDeliveryStore {
         getLastBasalEndDate { (result) in
             var report: [String] = [
                 "### InsulinDeliveryStore",
+                super.debugDescription,
                 ""
             ]
 
