@@ -13,24 +13,44 @@ enum InsulinDeliveryStoreResult<T> {
     case failure(Error)
 }
 
-@available(iOS 11.0, *)
+
+/// Manages insulin dose data from HealthKit
+///
+/// Scheduled doses (e.g. a bolus or temporary basal) shouldn't be written to HealthKit until they've
+/// been delivered into the patient, which means its common for the HealthKit data to slightly lag
+/// behind the dose data used for algorithmic calculation.
+///
+/// HealthKit data isn't a substitute for an insulin pump's diagnostic event history, but doses fetched
+/// from HealthKit can reduce the amount of repeated communication with an insulin pump.
 public class InsulinDeliveryStore: HealthKitSampleStore {
-    fileprivate let insulinType = HKQuantityType.quantityType(forIdentifier: .insulinDelivery)!
+    private let insulinType = HKQuantityType.quantityType(forIdentifier: .insulinDelivery)!
 
-    fileprivate let dataAccessQueue = DispatchQueue(label: "com.loopkit.InsulinKit.InsulinDeliveryStoreQueue")
+    private let dataAccessQueue = DispatchQueue(label: "com.loopkit.InsulinKit.InsulinDeliveryStoreQueue", qos: .utility)
 
-    fileprivate enum LoadableDate {
+    private enum LoadableDate {
         case none
         case loading
         case some(Date)
     }
-    // Should only be accessed on dataAccessQueue
-    fileprivate var lastBasalEndDate: LoadableDate = .none
+
+    /// The most-recent end date for a basal sample written by LoopKit
+    /// Should only be accessed on dataAccessQueue
+    private var lastBasalEndDate: LoadableDate = .none
 
     public init?(healthStore: HKHealthStore, effectDuration: TimeInterval) {
         super.init(healthStore: healthStore, type: insulinType, observationStart: Date(timeIntervalSinceNow: -effectDuration))
     }
 
+    public override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {
+        // New data not written by LoopKit (see `MetadataKeyHasLoopKitOrigin`) should be assumed external to what could be fetched as PumpEvent data.
+        // That external data could be factored into dose computation with some modification:
+        // An example might be supplemental injections in cases of extended exercise periods without a pump
+    }
+}
+
+
+// MARK: - Adding data
+extension InsulinDeliveryStore {
     func addReconciledDoses(_ doses: [DoseEntry], from device: HKDevice?, completion: @escaping (_ result: InsulinDeliveryStoreResult<Bool>) -> Void) {
         var latestBasalEndDate: Date?
         let unit = HKUnit.internationalUnit()
@@ -71,7 +91,6 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
 
 
 // MARK: - lastBasalEndDate management
-@available(iOS 11.0, *)
 extension InsulinDeliveryStore {
     /// Returns the end date of the most recent basal sample
     ///
@@ -114,7 +133,9 @@ extension InsulinDeliveryStore {
     }
 
     private func getLastBasalEndDateFromHealthKit(_ completion: @escaping (_ result: InsulinDeliveryStoreResult<Date>) -> Void) {
-        let predicate = HKQuery.predicateForObjects(withMetadataKey: HKMetadataKeyInsulinDeliveryReason, operatorType: .equalTo, value: HKInsulinDeliveryReason.basal.rawValue)
+        let basalPredicate = HKQuery.predicateForObjects(withMetadataKey: HKMetadataKeyInsulinDeliveryReason, operatorType: .equalTo, value: HKInsulinDeliveryReason.basal.rawValue)
+        let sourcePredicate = HKQuery.predicateForObjects(withMetadataKey: MetadataKeyHasLoopKitOrigin, operatorType: .equalTo, value: true)
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [basalPredicate, sourcePredicate])
         let sort = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
 
         let query = HKSampleQuery(sampleType: insulinType, predicate: predicate, limit: 1, sortDescriptors: [sort]) { (query, samples, error) in
@@ -132,7 +153,40 @@ extension InsulinDeliveryStore {
 }
 
 
-@available(iOS 11.0, *)
+extension InsulinDeliveryStore {
+    private func getDoses(since start: Date, _ completion: @escaping (_ result: InsulinDeliveryStoreResult<[DoseEntry]>) -> Void) {
+        getSamples(since: start) { (result) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success(let samples):
+                completion(.success(samples.flatMap { $0.dose }))
+            }
+        }
+    }
+
+    private func getSamples(since start: Date, _ completion: @escaping (_ result: InsulinDeliveryStoreResult<[HKQuantitySample]>) -> Void) {
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: nil, options: [])
+        getSamples(matching: predicate, chronological: true, completion)
+    }
+
+    private func getSamples(matching predicate: NSPredicate, chronological: Bool, _ completion: @escaping (_ result: InsulinDeliveryStoreResult<[HKQuantitySample]>) -> Void) {
+        let sort = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: chronological)
+        let query = HKSampleQuery(sampleType: insulinType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [sort]) { (query, samples, error) in
+            if let error = error {
+                completion(.failure(error))
+            } else if let samples = samples as? [HKQuantitySample] {
+                completion(.success(samples))
+            } else {
+                assertionFailure("Unknown return configuration from query \(query)")
+            }
+        }
+
+        healthStore.execute(query)
+    }
+}
+
+
 extension InsulinDeliveryStore {
     /// Generates a diagnostic report about the current state
     ///

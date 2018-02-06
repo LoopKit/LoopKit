@@ -61,7 +61,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     /// Glucose sample cache, used for calculations when HKHealthStore is unavailable
     private var sampleDataCache: [HKQuantitySample] = []
 
-    private var dataAccessQueue: DispatchQueue = DispatchQueue(label: "com.loudnate.GlucoseKit.dataAccessQueue")
+    private var dataAccessQueue: DispatchQueue = DispatchQueue(label: "com.loudnate.GlucoseKit.dataAccessQueue", qos: .utility)
 
     /// The most-recent glucose value. Reading this value is thread-safe as `GlucoseValue` is immutable.
     public private(set) var latestGlucose: GlucoseValue?

@@ -17,6 +17,17 @@ struct NewReservoirValue: ReservoirValue {
     let unitVolume: Double
 }
 
+extension DoseUnit {
+    var unit: HKUnit {
+        switch self {
+        case .units:
+            return .internationalUnit()
+        case .unitsPerHour:
+            return HKUnit(from: "IU/hr")
+        }
+    }
+}
+
 
 class InsulinMathTests: XCTestCase {
     
@@ -50,6 +61,10 @@ class InsulinMathTests: XCTestCase {
                     obj["raw"] = syncIdentifier
                 }
 
+                if let scheduledBasalRate = value.scheduledBasalRate {
+                    obj["scheduled"] = scheduledBasalRate.doubleValue(for: HKUnit(from: "IU/hr"))
+                }
+
                 return obj
             }),
             options: .prettyPrinted), encoding: .utf8)!)
@@ -78,7 +93,7 @@ class InsulinMathTests: XCTestCase {
                 return nil
             }
 
-            return DoseEntry(
+            var dose = DoseEntry(
                 type: type,
                 startDate: dateFormatter.date(from: $0["start_at"] as! String)!,
                 endDate: dateFormatter.date(from: $0["end_at"] as! String)!,
@@ -88,6 +103,12 @@ class InsulinMathTests: XCTestCase {
                 syncIdentifier: $0["raw"] as? String,
                 managedObjectID: nil
             )
+
+            if let scheduled = $0["scheduled"] as? Double {
+                dose.scheduledBasalRate = HKQuantity(unit: unit.unit, doubleValue: scheduled)
+            }
+
+            return dose
         }
     }
 
@@ -195,14 +216,14 @@ class InsulinMathTests: XCTestCase {
             XCTAssertEqual(expected.unit, calculated.unit)
         }
 
-        let normalized = reconciled.normalize(against: basals)
+        let normalized = reconciled.annotated(with: basals)
 
         XCTAssertEqual(normalizedOutput.count, normalized.count)
 
         for (expected, calculated) in zip(normalizedOutput, normalized) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqual(expected.endDate, calculated.endDate)
-            XCTAssertEqual(expected.value, calculated.value, accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.value, calculated.netBasalUnitsPerHour, accuracy: Double(Float.ulpOfOne))
             XCTAssertEqual(expected.unit, calculated.unit)
         }
 
@@ -327,7 +348,7 @@ class InsulinMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, iob) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqual(expected.value, calculated.value, accuracy: 0.3)
+            XCTAssertEqual(expected.value, calculated.value, accuracy: 0.4)
         }
     }
 
@@ -337,10 +358,10 @@ class InsulinMathTests: XCTestCase {
         let basals = loadBasalRateScheduleFixture("basal")
 
         measure {
-            _ = input.normalize(against: basals)
+            _ = input.annotated(with: basals)
         }
 
-        let doses = input.normalize(against: basals)
+        let doses = input.annotated(with: basals)
 
         XCTAssertEqual(output.count, doses.count)
 
@@ -349,6 +370,7 @@ class InsulinMathTests: XCTestCase {
             XCTAssertEqual(expected.endDate, calculated.endDate)
             XCTAssertEqual(expected.value, calculated.value, accuracy: Double(Float.ulpOfOne))
             XCTAssertEqual(expected.unit, calculated.unit)
+            XCTAssertEqual(expected.scheduledBasalRate, calculated.scheduledBasalRate)
         }
     }
 
@@ -358,17 +380,17 @@ class InsulinMathTests: XCTestCase {
         let basals = loadBasalRateScheduleFixture("basal")
 
         measure {
-            _ = input.normalize(against: basals)
+            _ = input.annotated(with: basals)
         }
 
-        let doses = input.normalize(against: basals)
+        let doses = input.annotated(with: basals)
 
         XCTAssertEqual(output.count, doses.count)
 
         for (expected, calculated) in zip(output, doses) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqual(expected.endDate, calculated.endDate)
-            XCTAssertEqual(expected.value, calculated.value)
+            XCTAssertEqual(expected.value, calculated.unit == .units ? calculated.netBasalUnits : calculated.netBasalUnitsPerHour)
             XCTAssertEqual(expected.unit, calculated.unit)
         }
     }
@@ -486,7 +508,7 @@ class InsulinMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: 1.0)
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: 3.0)
         }
     }
 
@@ -519,14 +541,13 @@ class InsulinMathTests: XCTestCase {
         XCTAssertEqual(input.count, trimmed.count)
     }
 
-    @available(iOS 11.0, *)
     func testDosesOverlayBasalProfile() {
         let dateFormatter = ISO8601DateFormatter.localTimeDate()
         let input = loadDoseFixture("reconcile_history_output").sorted { $0.startDate < $1.startDate }
         let output = loadDoseFixture("doses_overlay_basal_profile_output")
         let basals = loadBasalRateScheduleFixture("basal")
 
-        let doses = input.overlayBasalSchedule(
+        let doses = input.annotated(with: basals).overlayBasalSchedule(
             basals,
             // A start date before the first entry should generate a basal
             startingAt: dateFormatter.date(from: "2016-02-15T14:01:04")!,
@@ -543,10 +564,14 @@ class InsulinMathTests: XCTestCase {
             XCTAssertEqual(expected.endDate, calculated.endDate)
             XCTAssertEqual(expected.value, calculated.value)
             XCTAssertEqual(expected.unit, calculated.unit)
+
+            if let syncID = expected.syncIdentifier {
+                XCTAssertEqual(syncID, calculated.syncIdentifier!)
+            }
         }
 
         // Test trimming end
-        let dosesTrimmedEnd = input[0..<input.count - 11].overlayBasalSchedule(
+        let dosesTrimmedEnd = input[0..<input.count - 11].annotated(with: basals).overlayBasalSchedule(
             basals,
             startingAt: dateFormatter.date(from: "2016-02-15T14:01:04")!,
             // An end date before some input entries should omit them
@@ -568,6 +593,6 @@ class InsulinMathTests: XCTestCase {
 
         // The inserted entries aren't included
         XCTAssertEqual(output.count - 2, dosesMatchingStart.count)
-        XCTAssertEqual(dosesMatchingStart.first!.startDate, dateFormatter.date(from: "2016-02-15T15:06:05")!)
+        XCTAssertEqual(dosesMatchingStart.first!.startDate, dateFormatter.date(from: "2016-02-15T14:58:02")!)
     }
 }

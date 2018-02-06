@@ -60,6 +60,7 @@
 		434570451FE708810089C4DC /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434570431FE605E30089C4DC /* OSLog.swift */; };
 		434570461FE708A20089C4DC /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434570431FE605E30089C4DC /* OSLog.swift */; };
 		434570471FE708A30089C4DC /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434570431FE605E30089C4DC /* OSLog.swift */; };
+		43460F822002E1360030C0E3 /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43460F812002E1360030C0E3 /* UIAlertController.swift */; };
 		4346D1FC1C79481E00ABAFE3 /* NSUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */; };
 		4348727B1CB6256500E55D75 /* reconcile_history_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 434872781CB6256500E55D75 /* reconcile_history_input.json */; };
 		4348727D1CB626E500E55D75 /* reconcile_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 4348727C1CB626E500E55D75 /* reconcile_history_output.json */; };
@@ -385,6 +386,7 @@
 		4333931E1F32E31C009466DC /* doses_overlay_basal_profile_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = doses_overlay_basal_profile_output.json; sourceTree = "<group>"; };
 		433D705D1EFB29700004EB9F /* FoodTypeShortcutCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoodTypeShortcutCell.swift; sourceTree = "<group>"; };
 		434570431FE605E30089C4DC /* OSLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLog.swift; sourceTree = "<group>"; };
+		43460F812002E1360030C0E3 /* UIAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertController.swift; sourceTree = "<group>"; };
 		4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaults.swift; sourceTree = "<group>"; };
 		434872781CB6256500E55D75 /* reconcile_history_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_input.json; sourceTree = "<group>"; };
 		4348727C1CB626E500E55D75 /* reconcile_history_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reconcile_history_output.json; sourceTree = "<group>"; };
@@ -1085,6 +1087,7 @@
 				43D8FEEF1C7294E90073BE78 /* ErrorBackgroundView.swift */,
 				4302F4DC1D4DCED000F0FCAF /* InsulinDeliveryTableViewController.swift */,
 				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
+				43460F812002E1360030C0E3 /* UIAlertController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1787,6 +1790,7 @@
 				43D8FEEC1C7294D50073BE78 /* Reservoir+CoreDataProperties.swift in Sources */,
 				43D8FEE61C7294D50073BE78 /* DoseStore.swift in Sources */,
 				43DFE27E1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift in Sources */,
+				43460F822002E1360030C0E3 /* UIAlertController.swift in Sources */,
 				4302F4ED1D5068CE00F0FCAF /* PersistedPumpEvent.swift in Sources */,
 				43D8FEE51C7294D50073BE78 /* DoseEntry.swift in Sources */,
 				434570471FE708A30089C4DC /* OSLog.swift in Sources */,
@@ -2128,7 +2132,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -2180,7 +2184,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

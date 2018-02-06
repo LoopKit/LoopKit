@@ -221,7 +221,7 @@ public final class CarbStore: HealthKitSampleStore {
 
     private var carbEntryCache: Set<StoredCarbEntry>
 
-    private var dataAccessQueue: DispatchQueue = DispatchQueue(label: "com.loudnate.CarbKit.dataAccessQueue")
+    private var dataAccessQueue: DispatchQueue = DispatchQueue(label: "com.loudnate.CarbKit.dataAccessQueue", qos: .utility)
 
     /// Fetches samples from HealthKit
     ///
@@ -364,6 +364,10 @@ public final class CarbStore: HealthKitSampleStore {
         if let foodType = entry.foodType {
             metadata[HKMetadataKeyFoodType] = foodType
         }
+
+        // Add a sync identifier to allow for atomic modification if needed
+        metadata[HKMetadataKeySyncVersion] = 1
+        metadata[HKMetadataKeySyncIdentifier] = UUID().uuidString
 
         metadata[HKMetadataKeyExternalUUID] = entry.externalID
 

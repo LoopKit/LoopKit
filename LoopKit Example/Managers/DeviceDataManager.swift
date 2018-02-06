@@ -74,7 +74,9 @@ class DeviceDataManager : CarbStoreDelegate {
         didSet {
             UserDefaults.standard.insulinActionDuration = insulinActionDuration
 
-            doseStore.insulinActionDuration = insulinActionDuration
+            if let duration = insulinActionDuration {
+                doseStore.insulinModel = WalshInsulinModel(actionDuration: duration)
+            }
         }
     }
 

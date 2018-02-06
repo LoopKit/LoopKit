@@ -117,6 +117,22 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
         doseStoreObserver = nil
     }
 
+    public override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+
+        if editing {
+            let item = UIBarButtonItem(
+                title: NSLocalizedString("Delete All", comment: "Button title to delete all objects"),
+                style: .plain,
+                target: self,
+                action: #selector(confirmDeletion(_:))
+            )
+            navigationItem.setLeftBarButton(item, animated: true)
+        } else {
+            navigationItem.setLeftBarButton(nil, animated: true)
+        }
+    }
+
     // MARK: - Data
 
     private enum State {
@@ -261,8 +277,9 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
             doseStore?.getTotalUnitsDelivered(since: midnight) { (result) in
                 DispatchQueue.main.async {
                     switch result {
-                    case .failure(let error):
-                        self.state = .unavailable(error)
+                    case .failure:
+                        self.totalValueLabel.text = "…"
+                        self.totalDateLabel.text = nil
                     case .success(let result):
                         self.totalValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: result.value), number: .none)
 
@@ -283,6 +300,50 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
     @IBAction func selectedSegmentChanged(_ sender: Any) {
         reloadData()
+    }
+
+    @IBAction func confirmDeletion(_ sender: Any) {
+        guard !deletionPending else {
+            return
+        }
+
+        let confirmMessage: String
+
+        switch DataSourceSegment(rawValue: dataSourceSegmentedControl.selectedSegmentIndex)! {
+        case .reservoir:
+            confirmMessage = NSLocalizedString("Are you sure you want to delete all reservoir values?", comment: "Action sheet confirmation message for reservoir deletion")
+        case .history:
+            confirmMessage = NSLocalizedString("Are you sure you want to delete all history entries?", comment: "Action sheet confirmation message for pump history deletion")
+        }
+
+        let sheet = UIAlertController(deleteAllConfirmationMessage: confirmMessage) {
+            self.deleteAllObjects()
+        }
+        presentViewControllerOnActiveViewController(sheet, animated: true, completion: nil)
+    }
+
+    private var deletionPending = false
+
+    private func deleteAllObjects() {
+        guard !deletionPending else {
+            return
+        }
+
+        deletionPending = true
+
+        let completion = { (_: DoseStore.DoseStoreError?) -> Void in
+            DispatchQueue.main.async {
+                self.deletionPending = false
+                self.setEditing(false, animated: true)
+            }
+        }
+
+        switch DataSourceSegment(rawValue: dataSourceSegmentedControl.selectedSegmentIndex)! {
+        case .reservoir:
+            doseStore?.deleteAllReservoirValues(completion)
+        case .history:
+            doseStore?.deleteAllPumpEvents(completion)
+        }
     }
 
     // MARK: - Table view data source

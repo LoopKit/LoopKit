@@ -31,14 +31,3 @@ class Reservoir: NSManagedObject {
         createdAt = Date()
     }
 }
-
-
-extension Reservoir: ReservoirValue {
-    var startDate: Date {
-        return date
-    }
-
-    var unitVolume: Double {
-        return volume
-    }
-}

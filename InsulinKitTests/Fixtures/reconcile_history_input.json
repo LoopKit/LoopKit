@@ -10,6 +10,15 @@
     {
         "amount": 3.5,
         "description": "TempBasal: 3.5U/hour over 30min",
+        "end_at": "2016-02-15T15:28:02",
+        "start_at": "2016-02-15T14:58:02",
+        "type": "TempBasal",
+        "unit": "U/hour",
+        "raw" : "TB0"
+    },
+    {
+        "amount": 3.5,
+        "description": "TempBasal: 3.5U/hour over 30min",
         "end_at": "2016-02-15T15:36:05",
         "start_at": "2016-02-15T15:06:05",
         "type": "TempBasal",

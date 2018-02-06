@@ -162,5 +162,3 @@ extension PumpEvent {
 }
 
 
-extension PumpEvent: PersistedPumpEvent {
-}
