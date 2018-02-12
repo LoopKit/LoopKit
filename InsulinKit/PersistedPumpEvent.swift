@@ -10,19 +10,35 @@ import CoreData
 import Foundation
 
 
-public protocol PersistedPumpEvent {
+public struct PersistedPumpEvent {
     /// The date of the event
-    var date: Date! { get }
+    public let date: Date
     /// The insulin dose described by the event, if applicable
-    var dose: DoseEntry? { get }
+    public let dose: DoseEntry?
     /// Whether the event has been successfully uploaded
-    var isUploaded: Bool { get }
+    public let isUploaded: Bool
     /// The internal identifier of the event used by the store
-    var objectID: NSManagedObjectID { get }
+    /// TODO: This should be just the URI representation
+    public let objectID: NSManagedObjectID
     /// The opaque raw data representing the event
-    var raw: Data? { get }
+    public let raw: Data?
     /// A human-readable short description of the event
-    var title: String? { get }
+    public let title: String?
     /// The type of pump event
-    var type: PumpEventType? { get }
+    public let type: PumpEventType?
+}
+
+
+extension PumpEvent {
+    var persistedPumpEvent: PersistedPumpEvent {
+        return PersistedPumpEvent(
+            date: date,
+            dose: dose,
+            isUploaded: isUploaded,
+            objectID: objectID,
+            raw: raw,
+            title: title,
+            type: type
+        )
+    }
 }

@@ -159,6 +159,10 @@ open class HealthKitSampleStore {
             ) { (query, newSamples, deletedSamples, anchor, error) in
                 self.log.debug("%@: anchor: %@", #function, String(describing: anchor))
 
+                if let error = error {
+                    self.log.error("%@: error executing anchoredObjectQuery: %@", String(describing: type(of: self)), error.localizedDescription)
+                }
+
                 self.processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], error: error)
                 self.queryAnchor = anchor
             }

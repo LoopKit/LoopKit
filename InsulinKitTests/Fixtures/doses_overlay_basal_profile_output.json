@@ -1,24 +1,34 @@
 [
   {
     "start_at" : "2016-02-15T14:01:04",
-    "end_at" : "2016-02-15T15:00:00",
+    "end_at" : "2016-02-15T14:58:02",
     "type" : "BasalProfileStart",
     "amount" : 0.75,
     "unit" : "U\/hour"
   },
   {
+    "start_at" : "2016-02-15T14:58:02",
+    "end_at" : "2016-02-15T15:00:00",
+    "type" : "TempBasal",
+    "amount" : 3.5,
+    "unit" : "U\/hour",
+    "raw" : "TB0 1/2"
+  },
+  {
     "start_at" : "2016-02-15T15:00:00",
     "end_at" : "2016-02-15T15:06:05",
-    "type" : "BasalProfileStart",
-    "amount" : 0.80000000000000004,
-    "unit" : "U\/hour"
+    "type" : "TempBasal",
+    "amount" : 3.5,
+    "unit" : "U\/hour",
+    "raw" : "TB0 2/2"
   },
   {
     "start_at" : "2016-02-15T15:06:05",
     "end_at" : "2016-02-15T15:21:06",
     "type" : "TempBasal",
     "amount" : 3.5,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "raw" : "TB1"
   },
   {
     "start_at" : "2016-02-15T15:18:56",

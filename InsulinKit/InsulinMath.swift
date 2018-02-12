@@ -42,9 +42,9 @@ extension DoseEntry {
 
         // Consider doses within the delta time window as momentary
         if endDate.timeIntervalSince(startDate) <= 1.05 * delta {
-            return units * model.percentEffectRemaining(at: time - delay)
+            return netBasalUnits * model.percentEffectRemaining(at: time - delay)
         } else {
-            return units * continuousDeliveryInsulinOnBoard(at: date, model: model, delay: delay, delta: delta)
+            return netBasalUnits * continuousDeliveryInsulinOnBoard(at: date, model: model, delay: delay, delta: delta)
         }
     }
 
@@ -79,9 +79,9 @@ extension DoseEntry {
 
         // Consider doses within the delta time window as momentary
         if endDate.timeIntervalSince(startDate) <= 1.05 * delta {
-            return units * -insulinSensitivity * (1.0 - model.percentEffectRemaining(at: time - delay))
+            return netBasalUnits * -insulinSensitivity * (1.0 - model.percentEffectRemaining(at: time - delay))
         } else {
-            return units * -insulinSensitivity * continuousDeliveryGlucoseEffect(at: date, model: model, delay: delay, delta: delta)
+            return netBasalUnits * -insulinSensitivity * continuousDeliveryGlucoseEffect(at: date, model: model, delay: delay, delta: delta)
         }
     }
 
@@ -210,14 +210,36 @@ extension Collection where Element: ReservoirValue {
 
 
 extension DoseEntry {
-    fileprivate func normalize(against basalSchedule: BasalRateSchedule) -> [DoseEntry] {
-        var normalizedDoses: [DoseEntry] = []
+    /// Annotates a dose with the context of the scheduled basal rate
+    ///
+    /// If the dose crosses a schedule boundary, it will be split into multiple doses so each dose has a
+    /// single scheduled basal rate.
+    ///
+    /// - Parameter basalSchedule: The basal rate schedule to apply
+    /// - Returns: An array of annotated doses
+    fileprivate func annotated(with basalSchedule: BasalRateSchedule) -> [DoseEntry] {
+        switch type {
+        case .tempBasal, .suspend, .resume:
+            guard scheduledBasalRate == nil else {
+                return [self]
+            }
+            break
+        case .basal, .bolus:
+            return [self]
+        }
+
+        var doses: [DoseEntry] = []
         let basalItems = basalSchedule.between(start: startDate, end: endDate)
 
         for (index, basalItem) in basalItems.enumerated() {
-            let unitsPerHour = self.unitsPerHour - basalItem.value
             let startDate: Date
             let endDate: Date
+
+            // If we're splitting into multiple entries, keep the syncIdentifier unique
+            var syncIdentifier = self.syncIdentifier
+            if syncIdentifier != nil, basalItems.count > 1 {
+                syncIdentifier! += " \(index + 1)/\(basalItems.count)"
+            }
 
             if index == 0 {
                 startDate = self.startDate
@@ -231,22 +253,22 @@ extension DoseEntry {
                 endDate = basalItems[index + 1].startDate
             }
 
-            // Ignore net-zero basals
-            guard abs(unitsPerHour) > .ulpOfOne else {
-                continue
-            }
-
-            normalizedDoses.append(DoseEntry(
+            var dose = DoseEntry(
                 type: type,
                 startDate: startDate,
                 endDate: endDate,
                 value: unitsPerHour,
                 unit: .unitsPerHour,
-                description: description
-            ))
+                description: description,
+                syncIdentifier: syncIdentifier,
+                managedObjectID: nil
+            )
+            dose.scheduledBasalRate = HKQuantity(unit: HKUnit.internationalUnit().unitDivided(by: .hour()), doubleValue: basalItem.value)
+
+            doses.append(dose)
         }
 
-        return normalizedDoses
+        return doses
     }
 }
 
@@ -353,30 +375,20 @@ extension Collection where Iterator.Element == DoseEntry {
         return reconciled
     }
 
-    /**
-     Normalizes a sequence of dose entries against a basal rate schedule to a new sequence where each TempBasal value is relative to the scheduled basal value during that time period.
-
-     Doses which cross boundaries in the basal rate schedule are split into multiple entries.
-
-     - parameter basalSchedule: The basal rate schedule to normalize against
-
-     - returns: An array of normalized dose entries
-     */
-    func normalize(against basalSchedule: BasalRateSchedule) -> [DoseEntry] {
-        var normalizedDoses: [DoseEntry] = []
+    /// Annotates a sequence of dose entries with the configured basal rate schedule.
+    ///
+    /// Doses which cross time boundaries in the basal rate schedule are split into multiple entries.
+    ///
+    /// - Parameter basalSchedule: The basal rate schedule
+    /// - Returns: An array of annotated dose entries
+    func annotated(with basalSchedule: BasalRateSchedule) -> [DoseEntry] {
+        var annotatedDoses: [DoseEntry] = []
 
         for dose in self {
-            switch dose.type {
-            case .tempBasal, .suspend, .resume:
-                normalizedDoses += dose.normalize(against: basalSchedule)
-            case .bolus:
-                normalizedDoses.append(dose)
-            case .basal:
-                break
-            }
+            annotatedDoses += dose.annotated(with: basalSchedule)
         }
 
-        return normalizedDoses
+        return annotatedDoses
     }
 
     /**
@@ -386,7 +398,7 @@ extension Collection where Iterator.Element == DoseEntry {
      */
     var totalDelivery: Double {
         return reduce(0) { (total, dose) -> Double in
-            return total + dose.units
+            return total + dose.unitsRoundedToMinimedIncrements
         }
     }
 
@@ -475,10 +487,8 @@ extension Collection where Iterator.Element == DoseEntry {
     ///   - end: The latest date to include. Doses must end before this time to be included.
     ///   - insertingBasalEntries: Whether basal doses should be created from the schedule. Pass true only for pump models that do not report their basal rates in event history.
     /// - Returns: An array of doses, 
-    @available(iOS 11.0, *)
     func overlayBasalSchedule(_ basalSchedule: BasalRateSchedule, startingAt start: Date, endingAt end: Date, insertingBasalEntries: Bool) -> [DoseEntry] {
         let dateFormatter = ISO8601DateFormatter()  // GMT-based ISO formatting
-        let perHour = HKUnit.internationalUnit().unitDivided(by: .hour())
         var newEntries = [DoseEntry]()
         var lastBasal: DoseEntry?
 
@@ -524,14 +534,7 @@ extension Collection where Iterator.Element == DoseEntry {
                     }
                 }
 
-                if case .basal = dose.type {
-                    lastBasal = dose
-                } else {
-                    // Associate the scheduled rate to temp basal and suspend windows
-                    var tempBasal = dose
-                    tempBasal.scheduledBasalRate = HKQuantity(unit: perHour, doubleValue: basalSchedule.value(at: dose.startDate))
-                    lastBasal = tempBasal
-                }
+                lastBasal = dose
 
                 // Only include the last basal entry if has ended by our end date
                 if let lastBasal = lastBasal {

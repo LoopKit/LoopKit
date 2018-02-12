@@ -6,12 +6,15 @@
 //
 
 import HealthKit
+import CoreData
 
 
 /// Defines the scheduled basal insulin rate during the time of the basal delivery sample
 let MetadataKeyScheduledBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduledBasalRate"
 
-@available(iOS 11.0, *)
+/// A crude determination of whether a sample was written by LoopKit, in the case of multiple LoopKit-enabled app versions on the same phone.
+let MetadataKeyHasLoopKitOrigin = "HasLoopKitOrigin"
+
 extension HKQuantitySample {
     convenience init?(type: HKQuantityType, unit: HKUnit, dose: DoseEntry, device: HKDevice?) {
         let units = dose.unitsRoundedToMinimedIncrements
@@ -22,7 +25,8 @@ extension HKQuantitySample {
 
         var metadata: [String: Any] = [
             HKMetadataKeySyncVersion: 1,
-            HKMetadataKeySyncIdentifier: syncIdentifier
+            HKMetadataKeySyncIdentifier: syncIdentifier,
+            MetadataKeyHasLoopKitOrigin: true
         ]
 
         switch dose.type {
@@ -64,5 +68,42 @@ extension HKQuantitySample {
         }
 
         return HKInsulinDeliveryReason(rawValue: reason)
+    }
+
+    /// Returns a DoseEntry representation of the sample.
+    /// Doses are not normalized, nor should they be assumed reconciled.
+    var dose: DoseEntry? {
+        guard let reason = insulinDeliveryReason else {
+            return nil
+        }
+
+        let type: DoseType
+        let scheduledBasalRate = metadata?[MetadataKeyScheduledBasalRate] as? HKQuantity
+
+        switch reason {
+        case .basal:
+            if scheduledBasalRate == nil {
+                type = .basal
+            } else {
+                type = .tempBasal
+            }
+        case .bolus:
+            type = .bolus
+        }
+
+        var entry = DoseEntry(
+            type: type,
+            startDate: startDate,
+            endDate: endDate,
+            value: quantity.doubleValue(for: .internationalUnit()),
+            unit: .units,
+            description: nil,
+            syncIdentifier: metadata?[HKMetadataKeySyncIdentifier] as? String,
+            managedObjectID: nil
+        )
+
+        entry.scheduledBasalRate = scheduledBasalRate
+
+        return entry
     }
 }

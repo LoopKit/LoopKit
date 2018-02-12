@@ -51,19 +51,23 @@ public struct DoseEntry: TimelineValue {
 
 
 extension DoseEntry {
+    private var hours: Double {
+        return endDate.timeIntervalSince(startDate).hours
+    }
+
     public var units: Double {
         switch unit {
         case .units:
             return value
         case .unitsPerHour:
-            return value * endDate.timeIntervalSince(startDate).hours
+            return value * hours
         }
     }
 
     public var unitsPerHour: Double {
         switch unit {
         case .units:
-            let hours = endDate.timeIntervalSince(startDate).hours
+            let hours = self.hours
             guard hours != 0 else {
                 return 0
             }
@@ -74,19 +78,41 @@ extension DoseEntry {
         }
     }
 
+    /// The number of units delivered, net the basal rate scheduled during that time, which can be used to compute insulin on-board and glucose effects
+    public var netBasalUnits: Double {
+        switch type {
+        case .bolus:
+            return self.units
+        case .basal, .resume, .suspend, .tempBasal:
+            break
+        }
+
+        guard hours > 0 else {
+            return 0
+        }
+
+        let units = netBasalUnitsPerHour * hours
+        return round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
+    }
+
+    /// The rate of delivery, net the basal rate scheduled during that time, which can be used to compute insulin on-board and glucose effects
+    public var netBasalUnitsPerHour: Double {
+        guard let basalRate = scheduledBasalRate else {
+            return 0
+        }
+
+        let unitsPerHour = self.unitsPerHour - basalRate.doubleValue(for: HKUnit.internationalUnit().unitDivided(by: .hour()))
+
+        guard abs(unitsPerHour) > .ulpOfOne else {
+            return 0
+        }
+
+        return unitsPerHour
+    }
+
     /// The smallest increment per unit of hourly basal delivery
     /// TODO: Is this 40 for x23 models?
     internal static let minimumMinimedIncrementPerUnit: Double = 20
-
-    /// Rounds down a given entry to the smallest increment of hourly delivery
-    internal var unitsFlooredToMinimedIncrements: Double {
-        guard case .unitsPerHour = unit else {
-            return self.units
-        }
-        let units = self.units
-
-        return floor(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
-    }
 
     /// Rounds a given entry to the smallest increment of hourly delivery
     internal var unitsRoundedToMinimedIncrements: Double {

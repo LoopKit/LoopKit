@@ -55,7 +55,7 @@ public final class PersistenceController {
 
     private var readyState: ReadyState = .waiting
 
-    private var queue = DispatchQueue(label: "com.loopkit.PersistenceController")
+    private var queue = DispatchQueue(label: "com.loopkit.PersistenceController", qos: .utility)
 
     func onReady(_ callback: @escaping ReadyCallback) {
         queue.async {

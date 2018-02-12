@@ -33,8 +33,9 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
         case carbs = 0
         case reservoir
         case diagnostic
+        case generate
 
-        static let count = 3
+        static let count = 4
     }
 
     private enum ConfigurationRow: Int {
@@ -81,6 +82,8 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 cell.textLabel?.text = NSLocalizedString("Reservoir", comment: "The title for the cell navigating to the reservoir screen")
             case .diagnostic:
                 cell.textLabel?.text = NSLocalizedString("Diagnostic", comment: "The title for the cell displaying diagnostic data")
+            case .generate:
+                cell.textLabel?.text = NSLocalizedString("Generate Data", comment: "The title for the cell displaying data generation")
             }
         }
 
@@ -90,9 +93,10 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let sender = tableView.cellForRow(at: indexPath)
+
         switch Section(rawValue: indexPath.section)! {
         case .configuration:
-            let sender = tableView.cellForRow(at: indexPath)
             let row = ConfigurationRow(rawValue: indexPath.row)!
             switch row {
             case .basalRate:
@@ -147,9 +151,9 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
         case .data:
             switch DataRow(rawValue: indexPath.row)! {
             case .carbs:
-                performSegue(withIdentifier: CarbEntryTableViewController.className, sender: indexPath)
+                performSegue(withIdentifier: CarbEntryTableViewController.className, sender: sender)
             case .reservoir:
-                performSegue(withIdentifier: InsulinDeliveryTableViewController.className, sender: indexPath)
+                performSegue(withIdentifier: InsulinDeliveryTableViewController.className, sender: sender)
             case .diagnostic:
                 let vc = CommandResponseViewController(command: { (completionHandler) -> String in
                     let group = DispatchGroup()
@@ -185,11 +189,39 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                         ].joined(separator: "\n\n"))
                     }
 
-                    return "..."
+                    return "…"
                 })
                 vc.title = "Diagnostic"
 
-                show(vc, sender: indexPath)
+                show(vc, sender: sender)
+            case .generate:
+                let vc = CommandResponseViewController(command: { (completionHandler) -> String in
+                    let group = DispatchGroup()
+
+                    var unitVolume = 150.0
+
+                    reservoir: for index in sequence(first: TimeInterval(hours: -6), next: { $0 + .minutes(5) }) {
+                        guard index < 0 else {
+                            break reservoir
+                        }
+
+                        unitVolume -= (drand48() * 2.0)
+
+                        group.enter()
+                        self.dataManager.doseStore.addReservoirValue(unitVolume, at: Date(timeIntervalSinceNow: index)) { (_, _, _, error) in
+                            group.leave()
+                        }
+                    }
+
+                    group.notify(queue: .main) {
+                        completionHandler("Completed")
+                    }
+
+                    return "Generating…"
+                })
+                vc.title = sender?.textLabel?.text
+
+                show(vc, sender: sender)
             }
         }
     }
