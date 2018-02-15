@@ -1,0 +1,9 @@
+/* (No Comment) */
+"CFBundleName" = "$(PRODUCT_NAME)";
+
+/* (No Comment) */
+"NSHealthShareUsageDescription" = "Для определения воздействия на гликемию используются данные о еде из базы данных Здоровье";
+
+/* (No Comment) */
+"NSHealthUpdateUsageDescription" = "Данные об углеводах вносимые в приложение хранятся в базе данных Здоровье";
+

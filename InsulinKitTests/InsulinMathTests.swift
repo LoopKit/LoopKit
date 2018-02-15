@@ -513,7 +513,7 @@ class InsulinMathTests: XCTestCase {
 
         // Last temp ends at 2015-10-15T18:14:35
         let endDate = dateFormatter.date(from: "2015-10-15T18:00:00")!
-        let trimmed = input.trim(to: endDate)
+        let trimmed = input.map { $0.trim(to: endDate) }
 
         XCTAssertEqual(endDate, trimmed.last!.endDate)
         XCTAssertEqual(input.count, trimmed.count)

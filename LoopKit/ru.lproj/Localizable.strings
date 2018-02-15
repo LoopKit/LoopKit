@@ -1,0 +1,15 @@
+/* The section title of glucose overrides */
+"Overrides" = "Отменяет";
+
+/* Title for the pre-meal override range */
+"Pre-Meal" = "До еды";
+
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "Хронометраж %1$@%2$@%3$@";
+
+/* Title for the workout override range */
+"Workout" = "Физическая нагрузка";
+
+/* The unit display string for millimoles of glucose per liter */
+"mmol/L" = "ммоль/л";
+

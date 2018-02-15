@@ -33,6 +33,10 @@ public class CommandResponseViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+        if #available(iOS 11.0, *) {
+            textView.contentInsetAdjustmentBehavior = .always
+        }
+
         let font = UIFont(name: "Menlo-Regular", size: 14)
         if #available(iOS 11.0, *), let font = font {
             let metrics = UIFontMetrics(forTextStyle: .body)

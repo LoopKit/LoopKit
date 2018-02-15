@@ -411,7 +411,9 @@ public final class DoseStore {
 
             self.lastReservoirObject = reservoir
             // Reset our mutable pump events, since they are considered in addition to reservoir in dosing
-            self.mutablePumpEventDoses = []
+            if self.areReservoirValuesValid {
+                self.mutablePumpEventDoses = self.mutablePumpEventDoses.filterDateRange(Date(), nil)
+            }
 
             try? self.purgeReservoirObjects(matching: self.purgeableValuesPredicate)
 
@@ -642,7 +644,13 @@ public final class DoseStore {
                 }
             }
 
-            self.mutablePumpEventDoses = mutablePumpEventDoses
+            // This is a hack to prevent doubling up mutable doses on a MM x23+ model pump.
+            // Assume it's safe to override any pre-reported pending doses if a new history read found mutable doses.
+            if mutablePumpEventDoses.count > 0 {
+                self.mutablePumpEventDoses = mutablePumpEventDoses
+            } else {
+                self.mutablePumpEventDoses = self.mutablePumpEventDoses.filterDateRange(self.lastAddedPumpEvents, nil)
+            }
 
             if let mutableDate = firstMutableDate {
                 self.pumpEventQueryAfterDate = mutableDate
@@ -740,17 +748,19 @@ public final class DoseStore {
     /// - Parameter start: The date at which
     @available(iOS 11.0, *)
     private func savePumpEventsToHealthStore(after start: Date) {
-        guard let doses = try? getPumpEventDoseObjects(since: start),
-            doses.count > 0,
-            let basalSchedule = self.basalProfile
-        else {
-            return
-        }
+        self.persistenceController.managedObjectContext.perform {
+            guard let doses = try? self.getPumpEventDoseObjects(since: start),
+                doses.count > 0,
+                let basalSchedule = self.basalProfile
+                else {
+                    return
+            }
 
-        let reconciledDoses = doses.reconcile().overlayBasalSchedule(basalSchedule, startingAt: start, endingAt: lastAddedPumpEvents, insertingBasalEntries: !pumpRecordsBasalProfileStartEvents)
-        insulinDeliveryStore?.addReconciledDoses(reconciledDoses, from: device) { (result) in
-            if case .failure(let error) = result {
-                NSLog("%@", String(describing: error))
+            let reconciledDoses = doses.reconcile().overlayBasalSchedule(basalSchedule, startingAt: start, endingAt: self.lastAddedPumpEvents, insertingBasalEntries: !self.pumpRecordsBasalProfileStartEvents)
+            self.insulinDeliveryStore?.addReconciledDoses(reconciledDoses, from: self.device) { (result) in
+                if case .failure(let error) = result {
+                    NSLog("%@", String(describing: error))
+                }
             }
         }
     }
@@ -1109,7 +1119,7 @@ public final class DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-                let trimmedDoses = doses.trim(to: basalDosingEnd)
+                let trimmedDoses = doses.map { $0.trim(to: basalDosingEnd) }
                 let insulinOnBoard = trimmedDoses.insulinOnBoard(model: insulinModel)
                 completion(.success(insulinOnBoard.filterDateRange(start, end)))
             }
@@ -1164,7 +1174,7 @@ public final class DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-            let trimmedDoses = doses.trim(to: basalDosingEnd)
+                let trimmedDoses = doses.map { $0.trim(to: basalDosingEnd) }
                 let glucoseEffects = trimmedDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             }
