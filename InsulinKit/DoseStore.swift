@@ -113,7 +113,7 @@ public final class DoseStore {
             }
 
             if let effectDuration = insulinModel?.effectDuration {
-                insulinDeliveryStore?.observationStart = Date(timeIntervalSinceNow: -effectDuration)
+                insulinDeliveryStore.observationStart = Date(timeIntervalSinceNow: -effectDuration)
             }
         }
     }
@@ -131,21 +131,21 @@ public final class DoseStore {
     public var insulinSensitivitySchedule: InsulinSensitivitySchedule?
 
     /// TODO: Isolate to queue
-    public var insulinDeliveryStore: InsulinDeliveryStore?
+    public var insulinDeliveryStore: InsulinDeliveryStore
 
     /// The HealthKit sample type managed by this store
     public var sampleType: HKSampleType? {
-        return insulinDeliveryStore?.sampleType
+        return insulinDeliveryStore.sampleType
     }
 
     /// True if the store requires authorization
     public var authorizationRequired: Bool {
-        return insulinDeliveryStore?.authorizationRequired ?? false
+        return insulinDeliveryStore.authorizationRequired
     }
 
     /// True if the user has explicitly denied access to any required share types
     public var sharingDenied: Bool {
-        return insulinDeliveryStore?.sharingDenied ?? false
+        return insulinDeliveryStore.sharingDenied
     }
 
     /// *Access should be isolated to a managed object context block*
@@ -210,7 +210,7 @@ public final class DoseStore {
                     self.validateReservoirContinuity()
 
                     // Warm the state of insulin delivery samples
-                    self.insulinDeliveryStore?.getLastBasalEndDate { (_) in }
+                    self.insulinDeliveryStore.getLastBasalEndDate { (_) in }
 
                     self.readyState = .ready
                 }
@@ -799,11 +799,7 @@ extension DoseStore {
     /// Attempts to store doses from pump events to Health
     /// *This method should only be called from within a managed object context block*
     private func syncPumpEventsToHealthStore() {
-        guard let store = insulinDeliveryStore else {
-            return
-        }
-
-        store.getLastBasalEndDate { (result) in
+        insulinDeliveryStore.getLastBasalEndDate { (result) in
             switch result {
             case .success(let date):
                 // Limit the query behavior to 24 hours
@@ -829,7 +825,7 @@ extension DoseStore {
             }
 
             let reconciledDoses = doses.overlayBasalSchedule(basalSchedule, startingAt: start, endingAt: self.lastAddedPumpEvents, insertingBasalEntries: !self.pumpRecordsBasalProfileStartEvents)
-            self.insulinDeliveryStore?.addReconciledDoses(reconciledDoses, from: self.device) { (result) in
+            self.insulinDeliveryStore.addReconciledDoses(reconciledDoses, from: self.device) { (result) in
                 if case .failure(let error) = result {
                     self.log.error("Error adding doses: %{public}@", String(describing: error))
                 }
@@ -1208,15 +1204,10 @@ extension DoseStore {
                         }
                     }
 
-                    if let store = self.insulinDeliveryStore {
-                        store.generateDiagnosticReport { (result) in
-                            report.append("")
-                            report.append(result)
+                    self.insulinDeliveryStore.generateDiagnosticReport { (result) in
+                        report.append("")
+                        report.append(result)
 
-                            report.append("")
-                            completion(report.joined(separator: "\n"))
-                        }
-                    } else {
                         report.append("")
                         completion(report.joined(separator: "\n"))
                     }

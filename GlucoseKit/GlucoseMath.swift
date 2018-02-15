@@ -11,14 +11,7 @@ import HealthKit
 import LoopKit
 
 
-/// To determine if we have a contiguous set of values, we require readings to be an average of 5 minutes apart
-private let ContinuousGlucoseInterval = TimeInterval(minutes: 5)
-
-/// The unit to use during calculation
-private let CalculationUnit = HKUnit.milligramsPerDeciliter()
-
-
-struct GlucoseMath {
+fileprivate extension Collection where Element == (x: Double, y: Double), IndexDistance == Int {
     /**
      Calculates slope and intercept using linear regression
      
@@ -28,15 +21,15 @@ struct GlucoseMath {
 
      - returns: A tuple of slope and intercept values
      */
-    private static func linearRegression(_ points: [(x: Double, y: Double)]) -> (slope: Double, intercept: Double) {
+    func linearRegression() -> (slope: Double, intercept: Double) {
         var sumX = 0.0
         var sumY = 0.0
         var sumXY = 0.0
         var sumX² = 0.0
         var sumY² = 0.0
-        let count = Double(points.count)
+        let count = Double(self.count)
 
-        for point in points  {
+        for point in self {
             sumX += point.x
             sumY += point.y
             sumXY += (point.x * point.y)
@@ -49,26 +42,22 @@ struct GlucoseMath {
 
         return (slope: slope, intercept: intercept)
     }
+}
 
-    /**
-     Determines whether a collection of glucose samples contain no calibration entries.
-     
-     - parameter samples: The sequence of glucose
-     
-     - returns: True if the samples do not contain calibration entries
-     */
-    static func isCalibrated<T: BidirectionalCollection>(_ samples: T) -> Bool where T.Iterator.Element: GlucoseSampleValue, T.Index == Int {
-        return samples.filter({ $0.isDisplayOnly }).count == 0
+
+extension BidirectionalCollection where Element: GlucoseSampleValue, Index == Int, IndexDistance == Int {
+
+    /// Whether the collection contains no calibration entries
+    /// Runtime: O(n)
+    var isCalibrated: Bool {
+        return filter({ $0.isDisplayOnly }).count == 0
     }
 
     /// Filters a timeline of glucose samples to only include those after the last calibration.
-    ///
-    /// - Parameter samples: The timeline of glucose samples, in chronological order
-    /// - Returns: A filtered timeline
-    static func filterAfterCalibration<T: BidirectionalCollection>(_ samples: T) -> [T.Iterator.Element] where T.Iterator.Element: GlucoseSampleValue, T.Index == Int {
+    func filterAfterCalibration() -> [Element] {
         var postCalibration = true
 
-        return samples.reversed().filter({ (sample) in
+        return reversed().filter({ (sample) in
             if sample.isDisplayOnly {
                 postCalibration = false
             }
@@ -77,18 +66,16 @@ struct GlucoseMath {
         }).reversed()
     }
 
-    /**
-     Determines whether a collection of glucose samples can be considered continuous.
-     
-     - parameter samples: The sequence of glucose, in chronological order
-     
-     - returns: True if the samples are continuous
-     */
-    static func isContinuous<T: BidirectionalCollection>(_ samples: T) -> Bool where T.Iterator.Element: GlucoseSampleValue, T.IndexDistance == Int {
-        if  let first = samples.first,
-            let last = samples.last,
+    /// Whether the collection can be considered continuous
+    ///
+    /// - Parameters:
+    ///   - interval: The interval between readings, on average, used to determine if we have a contiguous set of values
+    /// - Returns: True if the samples are continuous
+    func isContinuous(within interval: TimeInterval = TimeInterval(minutes: 5)) -> Bool {
+        if  let first = first,
+            let last = last,
             // Ensure that the entries are contiguous
-            abs(first.startDate.timeIntervalSince(last.startDate)) < ContinuousGlucoseInterval * TimeInterval(samples.count)
+            abs(first.startDate.timeIntervalSince(last.startDate)) < interval * TimeInterval(count)
         {
             return true
         }
@@ -96,52 +83,33 @@ struct GlucoseMath {
         return false
     }
 
-    /// Determines whether a collection of glucose samples is all from the same source.
+    /// Calculates the short-term predicted momentum effect using linear regression
     ///
-    /// - Parameter samples: The sequence of glucose
-    /// - Returns: True if the samples all have the same source
-    static func hasSingleProvenance<T: Collection>(_ samples: T) -> Bool where T.Iterator.Element: GlucoseSampleValue {
-        let firstProvenance = samples.first?.provenanceIdentifier
-
-        for sample in samples {
-            if sample.provenanceIdentifier != firstProvenance {
-                return false
-            }
-        }
-
-        return true
-    }
-
-    /**
-     Calculates the short-term predicted trend of a sequence of glucose values using linear regression
-
-     - parameter samples:  The sequence of glucose, in chronological order
-     - parameter duration: The trend duration to return
-     - parameter delta:    The time differential for the returned values
-
-     - returns: An array of glucose effects
-     */
-    static func linearMomentumEffectForGlucoseEntries<T: BidirectionalCollection>(
-        _ samples: T,
+    /// - Parameters:
+    ///   - duration: The duration of the effects
+    ///   - delta: The time differential for the returned values
+    /// - Returns: An array of glucose effects
+    func linearMomentumEffect(
         duration: TimeInterval = TimeInterval(minutes: 30),
         delta: TimeInterval = TimeInterval(minutes: 5)
-    ) -> [GlucoseEffect] where T.Iterator.Element: GlucoseSampleValue, T.Index == Int, T.IndexDistance == Int {
+    ) -> [GlucoseEffect] {
         guard
-            samples.count > 2,  // Linear regression isn't much use without 3 or more entries.
-            isContinuous(samples) && isCalibrated(samples) && hasSingleProvenance(samples),
-            let firstSample = samples.first,
-            let lastSample = samples.last,
+            self.count > 2,  // Linear regression isn't much use without 3 or more entries.
+            isContinuous() && isCalibrated && hasSingleProvenance,
+            let firstSample = self.first,
+            let lastSample = self.last,
             let (startDate, endDate) = LoopMath.simulationDateRangeForSamples([lastSample], duration: duration, delta: delta)
         else {
             return []
         }
 
-        let xy = samples.map { (
-            x: $0.startDate.timeIntervalSince(firstSample.startDate),
-            y: $0.quantity.doubleValue(for: CalculationUnit)
-        ) }
+        /// Choose a unit to use during raw value calculation
+        let unit = HKUnit.milligramsPerDeciliter()
 
-        let (slope: slope, intercept: _) = linearRegression(xy)
+        let (slope: slope, intercept: _) = self.map { (
+            x: $0.startDate.timeIntervalSince(firstSample.startDate),
+            y: $0.quantity.doubleValue(for: unit)
+        ) }.linearRegression()
 
         guard slope.isFinite else {
             return []
@@ -151,30 +119,45 @@ struct GlucoseMath {
         var values = [GlucoseEffect]()
 
         repeat {
-            let value = max(0, date.timeIntervalSince(lastSample.startDate)) * slope
+            let value = Swift.max(0, date.timeIntervalSince(lastSample.startDate)) * slope
 
-            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: CalculationUnit, doubleValue: value)))
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
             date = date.addingTimeInterval(delta)
         } while date <= endDate
 
         return values
     }
+}
+
+
+extension Collection where Element: GlucoseSampleValue, Index == Int {
+    /// Whether the collection is all from the same source.
+    /// Runtime: O(n)
+    var hasSingleProvenance: Bool {
+        let firstProvenance = self.first?.provenanceIdentifier
+
+        for sample in self {
+            if sample.provenanceIdentifier != firstProvenance {
+                return false
+            }
+        }
+
+        return true
+    }
 
     /// Calculates a timeline of effect velocity (glucose/time) observed in glucose readings that counteract the specified effects.
     ///
-    /// - Parameters:
-    ///   - glucoseSamples: Glucose samples in chronological order
-    ///   - effects: Glucose effects to be countered, in chronological order
+    /// - Parameter effects: Glucose effects to be countered, in chronological order
     /// - Returns: An array of velocities describing the change in glucose samples compared to the specified effects
-    public static func counteractionEffects(of glucoseSamples: [GlucoseSampleValue], to effects: [GlucoseEffect]) -> [GlucoseEffectVelocity] {
+    func counteractionEffects(to effects: [GlucoseEffect]) -> [GlucoseEffectVelocity] {
         let mgdL = HKUnit.milligramsPerDeciliter()
         let velocityUnit = mgdL.unitDivided(by: .second())
         var velocities = [GlucoseEffectVelocity]()
         var effectIndex = 0
 
-        for (index, endGlucose) in glucoseSamples.dropFirst().enumerated() {
+        for (index, endGlucose) in self.dropFirst().enumerated() {
             // Find a valid change in glucose, requiring identical provenance and no calibration
-            let startGlucose = glucoseSamples[index]
+            let startGlucose = self[index]
 
             guard startGlucose.provenanceIdentifier == endGlucose.provenanceIdentifier,
                 !startGlucose.isDisplayOnly, !endGlucose.isDisplayOnly
@@ -213,10 +196,10 @@ struct GlucoseMath {
             let discrepancy = glucoseChange - effectChange
             let averageVelocity = HKQuantity(unit: velocityUnit, doubleValue: discrepancy / endGlucose.startDate.timeIntervalSince(startGlucose.startDate))
             let effect = GlucoseEffectVelocity(startDate: startGlucose.startDate, endDate: endGlucose.startDate, quantity: averageVelocity)
-            
+
             velocities.append(effect)
         }
-        
+
         return velocities
     }
 }

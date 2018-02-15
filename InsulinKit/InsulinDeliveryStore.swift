@@ -37,7 +37,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
     /// Should only be accessed on dataAccessQueue
     private var lastBasalEndDate: LoadableDate = .none
 
-    public init?(healthStore: HKHealthStore, effectDuration: TimeInterval) {
+    public init(healthStore: HKHealthStore, effectDuration: TimeInterval) {
         super.init(healthStore: healthStore, type: insulinType, observationStart: Date(timeIntervalSinceNow: -effectDuration))
     }
 

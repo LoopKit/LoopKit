@@ -56,7 +56,7 @@ class GlucoseMathTests: XCTestCase {
         let input = loadInputFixture("momentum_effect_bouncing_glucose_input")
         let output = loadOutputFixture("momentum_effect_bouncing_glucose_output")
 
-        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+        let effects = input.linearMomentumEffect()
         let unit = HKUnit.milligramsPerDeciliter()
 
         XCTAssertEqual(output.count, effects.count)
@@ -71,7 +71,7 @@ class GlucoseMathTests: XCTestCase {
         let input = loadInputFixture("momentum_effect_rising_glucose_input")
         let output = loadOutputFixture("momentum_effect_rising_glucose_output")
 
-        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+        let effects = input.linearMomentumEffect()
         let unit = HKUnit.milligramsPerDeciliter()
 
         XCTAssertEqual(output.count, effects.count)
@@ -86,7 +86,7 @@ class GlucoseMathTests: XCTestCase {
         let input = loadInputFixture("momentum_effect_falling_glucose_input")
         let output = loadOutputFixture("momentum_effect_falling_glucose_output")
 
-        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+        let effects = input.linearMomentumEffect()
         let unit = HKUnit.milligramsPerDeciliter()
 
         XCTAssertEqual(output.count, effects.count)
@@ -101,7 +101,7 @@ class GlucoseMathTests: XCTestCase {
         let input = loadInputFixture("momentum_effect_stable_glucose_input")
         let output = loadOutputFixture("momentum_effect_stable_glucose_output")
 
-        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+        let effects = input.linearMomentumEffect()
         let unit = HKUnit.milligramsPerDeciliter()
 
         XCTAssertEqual(output.count, effects.count)
@@ -114,45 +114,44 @@ class GlucoseMathTests: XCTestCase {
 
     func testMomentumEffectForDuplicateGlucose() {
         let input = loadInputFixture("momentum_effect_duplicate_glucose_input")
-        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+        let effects = input.linearMomentumEffect()
 
         XCTAssertEqual(0, effects.count)
     }
 
     func testMomentumEffectForEmptyGlucose() {
         let input = [GlucoseFixtureValue]()
-        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+        let effects = input.linearMomentumEffect()
 
         XCTAssertEqual(0, effects.count)
     }
 
     func testMomentumEffectForSpacedOutGlucose() {
         let input = loadInputFixture("momentum_effect_incomplete_glucose_input")
-        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+        let effects = input.linearMomentumEffect()
 
         XCTAssertEqual(0, effects.count)
     }
 
     func testMomentumEffectForTooFewGlucose() {
         let input = loadInputFixture("momentum_effect_bouncing_glucose_input")[0...1]
-        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+        let effects = input.linearMomentumEffect()
 
         XCTAssertEqual(0, effects.count)
     }
 
     func testMomentumEffectForDisplayOnlyGlucose() {
         let input = loadInputFixture("momentum_effect_display_only_glucose_input")
-        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+        let effects = input.linearMomentumEffect()
 
         XCTAssertEqual(0, effects.count)
     }
 
     func testMomentumEffectForMixedProvenanceGlucose() {
         let input = loadInputFixture("momentum_effect_mixed_provenance_glucose_input")
-        let effects = GlucoseMath.linearMomentumEffectForGlucoseEntries(input)
+        let effects = input.linearMomentumEffect()
 
         XCTAssertEqual(0, effects.count)
     }
-
 
 }
