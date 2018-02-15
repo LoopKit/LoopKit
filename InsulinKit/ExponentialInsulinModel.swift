@@ -11,7 +11,6 @@ import Foundation
 public struct ExponentialInsulinModel {
     public let actionDuration: TimeInterval
     public let peakActivityTime: TimeInterval
-    public let initialDelay: TimeInterval
     
     // Precomputed terms
     fileprivate let τ: Double
@@ -23,10 +22,9 @@ public struct ExponentialInsulinModel {
     /// - Parameters:
     ///   - actionDuration: The total duration on insulin activity
     ///   - peakActivityTime: The time of the peak of insulin activity from dose.
-    public init(actionDuration: TimeInterval, peakActivityTime: TimeInterval, initialDelay:TimeInterval) {
+    public init(actionDuration: TimeInterval, peakActivityTime: TimeInterval) {
         self.actionDuration = actionDuration
         self.peakActivityTime = peakActivityTime
-        self.initialDelay = initialDelay
         
         self.τ = peakActivityTime * (1 - peakActivityTime / actionDuration) / (1 - 2 * peakActivityTime / actionDuration)
         self.a = 2 * τ / actionDuration
@@ -52,20 +50,20 @@ extension ExponentialInsulinModel: InsulinModel {
 
     public func percentEffectRemaining(at time: TimeInterval) -> Double {
         switch time {
-        case let t where t <= initialDelay:
+        case let t where t <= 0:
             return 1
         case let t where t >= actionDuration:
             return 0
         default:
             return 1 - S * (1 - a) *
-                ((pow(time, 2) / (τ * actionDuration * (1 - a)) - (time - initialDelay) / τ - 1) * exp(-(time - initialDelay) / τ) + 1)
+                ((pow(time, 2) / (τ * actionDuration * (1 - a)) - time / τ - 1) * exp(-time / τ) + 1)
         }
     }
 }
 
 extension ExponentialInsulinModel: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "ExponentialInsulinModel(actionDuration: \(actionDuration), peakActivityTime: \(peakActivityTime), initialDelay: \(initialDelay)"
+        return "ExponentialInsulinModel(actionDuration: \(actionDuration), peakActivityTime: \(peakActivityTime)"
     }
 }
 
@@ -74,23 +72,20 @@ extension ExponentialInsulinModel: Decodable {
     enum CodingKeys: String, CodingKey {
         case actionDuration = "actionDuration"
         case peakActivityTime = "peakActivityTime"
-        case initialDelay = "initialDelay"
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let actionDuration: Double = try container.decode(Double.self, forKey: .actionDuration)
         let peakActivityTime: Double = try container.decode(Double.self, forKey: .peakActivityTime)
-        let initialDelay: Double = try container.decode(Double.self, forKey: .initialDelay)
 
-        self.init(actionDuration: actionDuration, peakActivityTime: peakActivityTime, initialDelay: initialDelay)
+        self.init(actionDuration: actionDuration, peakActivityTime: peakActivityTime)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(actionDuration, forKey: .actionDuration)
         try container.encode(peakActivityTime, forKey: .peakActivityTime)
-        try container.encode(initialDelay, forKey: .initialDelay)
     }
 }
 #endif
