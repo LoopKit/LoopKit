@@ -48,11 +48,7 @@ open class HealthKitSampleStore {
 
     private let log = OSLog(category: "HealthKitSampleStore")
 
-    public init?(healthStore: HKHealthStore, type: HKSampleType, observationStart: Date) {
-        guard HKHealthStore.isHealthDataAvailable() else {
-            return nil
-        }
-
+    public init(healthStore: HKHealthStore, type: HKSampleType, observationStart: Date) {
         self.healthStore = healthStore
         self.sampleType = type
         self.observationStart = observationStart

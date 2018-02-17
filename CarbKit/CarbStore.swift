@@ -153,7 +153,7 @@ public final class CarbStore: HealthKitSampleStore {
 
      - returns: A new instance of the store
      */
-    public init?(healthStore: HKHealthStore = HKHealthStore(), defaultAbsorptionTimes: DefaultAbsorptionTimes = defaultAbsorptionTimes, carbRatioSchedule: CarbRatioSchedule? = nil, insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil) {
+    public init(healthStore: HKHealthStore = HKHealthStore(), defaultAbsorptionTimes: DefaultAbsorptionTimes = defaultAbsorptionTimes, carbRatioSchedule: CarbRatioSchedule? = nil, insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil) {
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
         self.carbRatioSchedule = carbRatioSchedule
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
