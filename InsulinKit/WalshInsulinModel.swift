@@ -31,7 +31,6 @@ extension WalshInsulinModel: InsulinModel {
     /// - Parameter time: The interval after insulin delivery
     /// - Returns: The percentage of total insulin effect remaining
     public func percentEffectRemaining(at time: TimeInterval) -> Double {
-
         switch time {
         case let t where t <= 0:
             return 1
