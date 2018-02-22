@@ -22,7 +22,7 @@ public enum HealthKitSampleStoreResult<T> {
 }
 
 
-open class HealthKitSampleStore {
+public class HealthKitSampleStore {
     public enum StoreError: Error {
         case authorizationDenied
         case healthKitError(HKError)
@@ -210,15 +210,17 @@ extension HealthKitSampleStore {
     /// - Parameter completion: A closure called after the request is completed
     /// - Parameter result: A boolean indicating the new background delivery state
     private func enableBackgroundDelivery(_ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
-        healthStore.enableBackgroundDelivery(for: sampleType, frequency: .immediate) { (enabled, error) in
-            if let error = error {
-                completion(.failure(.healthKitError(HKError(_nsError: error as NSError))))
-            } else if enabled {
-                completion(.success(true))
-            } else {
-                assertionFailure()
+        #if os(iOS)
+            healthStore.enableBackgroundDelivery(for: sampleType, frequency: .immediate) { (enabled, error) in
+                if let error = error {
+                    completion(.failure(.healthKitError(HKError(_nsError: error as NSError))))
+                } else if enabled {
+                    completion(.success(true))
+                } else {
+                    assertionFailure()
+                }
             }
-        }
+        #endif
     }
 
     /// Disables the immediate background delivery of updates to samples from HealthKit.
@@ -228,15 +230,17 @@ extension HealthKitSampleStore {
     /// - Parameter completion: A closure called after the request is completed
     /// - Parameter result: A boolean indicating the new background delivery state
     private func disableBackgroundDelivery(_ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
-        healthStore.disableBackgroundDelivery(for: sampleType) { (disabled, error) in
-            if let error = error {
-                completion(.failure(.healthKitError(HKError(_nsError: error as NSError))))
-            } else if disabled {
-                completion(.success(false))
-            } else {
-                assertionFailure()
+        #if os(iOS)
+            healthStore.disableBackgroundDelivery(for: sampleType) { (disabled, error) in
+                if let error = error {
+                    completion(.failure(.healthKitError(HKError(_nsError: error as NSError))))
+                } else if disabled {
+                    completion(.success(false))
+                } else {
+                    assertionFailure()
+                }
             }
-        }
+        #endif
     }
 }
 
