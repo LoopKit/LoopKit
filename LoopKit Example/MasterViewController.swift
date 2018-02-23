@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import CarbKit
 import LoopKit
-import InsulinKit
+import LoopKitUI
 
 
 class MasterViewController: UITableViewController, DailyValueScheduleTableViewControllerDelegate {

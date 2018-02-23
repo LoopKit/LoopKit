@@ -4,11 +4,7 @@ osx_image: xcode9.2
 #xcode_project: LoopKit.xcodeproj
 xcode_scheme:
     - LoopKit
-    - CarbKit
-    - InsulinKit
-    - GlucoseKit
+    - LoopKitUI
 script:
    - xcodebuild -project LoopKit.xcodeproj -scheme LoopKit build -destination 'name=iPhone SE' test
-   - xcodebuild -project LoopKit.xcodeproj -scheme CarbKit  build -destination 'name=iPhone SE' test
-   - xcodebuild -project LoopKit.xcodeproj -scheme InsulinKit build -destination 'name=iPhone SE' test
-   - xcodebuild -project LoopKit.xcodeproj -scheme GlucoseKit build -destination 'name=iPhone SE' test
+   - xcodebuild -project LoopKit.xcodeproj -scheme LoopKitUI  build -destination 'name=iPhone SE'

@@ -8,7 +8,7 @@
 
 import XCTest
 import HealthKit
-@testable import CarbKit
+@testable import LoopKit
 
 /// These tests have been disabled until they can be properly rewritten as actual UI tests
 class CarbEntryEditViewControllerTests: XCTestCase {
