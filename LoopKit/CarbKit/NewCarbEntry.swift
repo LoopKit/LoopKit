@@ -11,9 +11,9 @@ import HealthKit
 
 
 public struct NewCarbEntry: CarbEntry {
-    public var quantity: HKQuantity
-    public var startDate: Date
-    public var foodType: String?
+    public let quantity: HKQuantity
+    public let startDate: Date
+    public let foodType: String?
     public var absorptionTime: TimeInterval?
     public let createdByCurrentApp = true
     public let externalID: String?
@@ -39,5 +39,39 @@ extension NewCarbEntry: Equatable {
         lhs.createdByCurrentApp == rhs.createdByCurrentApp &&
         lhs.externalID == rhs.externalID &&
         lhs.isUploaded == rhs.isUploaded
+    }
+}
+
+
+extension NewCarbEntry {
+    func createSample(from oldEntry: StoredCarbEntry? = nil) -> HKQuantitySample {
+        var metadata = [String: Any]()
+
+        if let absorptionTime = absorptionTime {
+            metadata[MetadataKeyAbsorptionTimeMinutes] = absorptionTime
+        }
+
+        if let foodType = foodType {
+            metadata[HKMetadataKeyFoodType] = foodType
+        }
+
+        if let oldEntry = oldEntry, let syncIdentifier = oldEntry.syncIdentifier {
+            metadata[HKMetadataKeySyncVersion] = oldEntry.syncVersion + 1
+            metadata[HKMetadataKeySyncIdentifier] = syncIdentifier
+        } else {
+            // Add a sync identifier to allow for atomic modification if needed
+            metadata[HKMetadataKeySyncVersion] = 1
+            metadata[HKMetadataKeySyncIdentifier] = UUID().uuidString
+        }
+
+        metadata[HKMetadataKeyExternalUUID] = externalID
+
+        return HKQuantitySample(
+            type: HKObjectType.quantityType(forIdentifier: .dietaryCarbohydrates)!,
+            quantity: quantity,
+            start: startDate,
+            end: endDate,
+            metadata: metadata
+        )
     }
 }

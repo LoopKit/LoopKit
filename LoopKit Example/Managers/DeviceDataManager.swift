@@ -21,6 +21,7 @@ class DeviceDataManager : CarbStoreDelegate {
 
         carbStore = CarbStore(
             healthStore: healthStore,
+            cacheStore: cacheStore,
             carbRatioSchedule: carbRatioSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )

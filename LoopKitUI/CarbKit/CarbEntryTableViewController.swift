@@ -111,7 +111,7 @@ public final class CarbEntryTableViewController: UITableViewController {
 
     // MARK: - Data
 
-    private var carbEntries: [CarbEntry] = []
+    private var carbEntries: [StoredCarbEntry] = []
 
     private enum State {
         case unknown
@@ -260,19 +260,18 @@ public final class CarbEntryTableViewController: UITableViewController {
     public override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete, case .display = state, let carbStore = carbStore {
             let entry = carbEntries.remove(at: indexPath.row)
-            carbStore.deleteCarbEntry(entry, resultHandler: { (success, error) -> Void in
+            carbStore.deleteCarbEntry(entry) { (result) -> Void in
                 DispatchQueue.main.async {
-                    if success {
+                    switch result {
+                    case .failure(let error):
+                        self.presentAlertController(with: error)
+                    case .success:
                         tableView.deleteRows(at: [indexPath], with: .automatic)
                         self.updateTimelyStats(nil)
                         self.updateTotal()
-
-                        NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
-                    } else if let error = error {
-                        self.presentAlertController(with: error)
                     }
                 }
-            })
+            }
         }
     }
 
@@ -295,26 +294,24 @@ public final class CarbEntryTableViewController: UITableViewController {
                 let updatedEntry = editVC.updatedCarbEntry
         {
             if let originalEntry = editVC.originalCarbEntry {
-                carbStore?.replaceCarbEntry(originalEntry, withEntry: updatedEntry) { (_, _, error) -> Void in
+                carbStore?.replaceCarbEntry(originalEntry, withEntry: updatedEntry) { (result) -> Void in
                     DispatchQueue.main.async {
-                        if let error = error {
+                        switch result {
+                        case .failure(let error):
                             self.presentAlertController(with: error)
-                        } else {
+                        case .success:
                             self.reloadData()
-
-                            NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
                         }
                     }
                 }
             } else {
-                carbStore?.addCarbEntry(updatedEntry) { (_, _, error) -> Void in
+                carbStore?.addCarbEntry(updatedEntry) { (result) -> Void in
                     DispatchQueue.main.async {
-                        if let error = error {
+                        switch result {
+                        case .failure(let error):
                             self.presentAlertController(with: error)
-                        } else {
+                        case .success:
                             self.reloadData()
-
-                            NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
                         }
                     }
                 }

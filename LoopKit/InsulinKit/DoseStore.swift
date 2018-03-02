@@ -192,7 +192,6 @@ public final class DoseStore {
 
         persistenceController.onReady { [unowned self] (error) -> Void in
             if let error = error {
-                self.log.error("Failed to initialize persistenceController: %{public}@", error.errorDescription ?? error.localizedDescription)
                 self.readyState = .failed(.initializationError(description: error.localizedDescription, recoverySuggestion: error.recoverySuggestion))
             } else {
                 self.persistenceController.managedObjectContext.perform {
@@ -411,7 +410,7 @@ extension DoseStore {
                 }
             }
 
-            let reservoir = Reservoir(entity: Reservoir.entity(), insertInto: self.persistenceController.managedObjectContext)
+            let reservoir = Reservoir(context: self.persistenceController.managedObjectContext)
 
             reservoir.volume = unitVolume
             reservoir.date = date
@@ -682,7 +681,7 @@ extension DoseStore {
                 } else {
                     lastFinalDate = max(event.date, lastFinalDate ?? event.date)
 
-                    let object = PumpEvent(entity: PumpEvent.entity(), insertInto: self.persistenceController.managedObjectContext)
+                    let object = PumpEvent(context: self.persistenceController.managedObjectContext)
 
                     object.date = event.date
                     object.raw = event.raw

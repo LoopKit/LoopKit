@@ -36,7 +36,7 @@ public final class CarbEntryEditViewController: UITableViewController {
 
     public var maximumDateFutureInterval = TimeInterval(hours: 4)
 
-    public var originalCarbEntry: CarbEntry? {
+    public var originalCarbEntry: StoredCarbEntry? {
         didSet {
             if let entry = originalCarbEntry {
                 quantity = entry.quantity
@@ -62,7 +62,7 @@ public final class CarbEntryEditViewController: UITableViewController {
 
     fileprivate var usesCustomFoodType = false
 
-    public var updatedCarbEntry: CarbEntry? {
+    public var updatedCarbEntry: NewCarbEntry? {
         if  let quantity = quantity,
             let absorptionTime = absorptionTime ?? defaultAbsorptionTimes?.medium
         {

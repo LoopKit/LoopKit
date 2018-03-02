@@ -16,17 +16,10 @@ extension UserDefaults {
         case DeletedCarbEntryIds = "com.loudnate.CarbKit.DeletedCarbEntryIds"
     }
 
-    var carbEntryCache: [StoredCarbEntry]? {
-        get {
-            if let rawValue = array(forKey: Key.CarbEntryCache.rawValue) as? [StoredCarbEntry.RawValue] {
-                return rawValue.flatMap { StoredCarbEntry(rawValue: $0) }
-            } else {
-                return nil
-            }
-        }
-        set {
-            set(newValue?.map { $0.rawValue }, forKey: Key.CarbEntryCache.rawValue)
-        }
+    func purgeLegacyCarbEntryKeys() {
+        removeObject(forKey: Key.CarbEntryCache.rawValue)
+        removeObject(forKey: Key.ModifiedCarbEntries.rawValue)
+        removeObject(forKey: Key.DeletedCarbEntryIds.rawValue)
     }
 
     var modifiedCarbEntries: [StoredCarbEntry]? {
@@ -37,20 +30,11 @@ extension UserDefaults {
                 return nil
             }
         }
-        set {
-            set(newValue?.map { $0.rawValue }, forKey: Key.ModifiedCarbEntries.rawValue)
-        }
     }
 
     var deletedCarbEntryIds: [String]? {
         get {
             return array(forKey: Key.DeletedCarbEntryIds.rawValue) as? [String]
         }
-
-        set {
-            set(newValue, forKey: Key.DeletedCarbEntryIds.rawValue)
-        }
     }
-
-
 }

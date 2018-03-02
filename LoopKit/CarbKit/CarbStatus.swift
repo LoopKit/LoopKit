@@ -9,9 +9,9 @@ import Foundation
 import HealthKit
 
 
-public struct CarbStatus {
+public struct CarbStatus<T: CarbEntry> {
     /// Details entered by the user
-    public let entry: CarbEntry
+    public let entry: T
 
     /// The last-computed absorption of the carbs
     public let absorption: AbsorbedCarbValue?
@@ -34,24 +34,8 @@ extension CarbStatus: SampleValue {
 
 
 extension CarbStatus: CarbEntry {
-    public var foodType: String? {
-        return entry.foodType
-    }
-
     public var absorptionTime: TimeInterval? {
         return absorption?.estimatedDate.duration ?? entry.absorptionTime
-    }
-
-    public var createdByCurrentApp: Bool {
-        return entry.createdByCurrentApp
-    }
-
-    public var isUploaded: Bool {
-        return entry.isUploaded
-    }
-
-    public var externalID: String? {
-        return entry.externalID
     }
 }
 
