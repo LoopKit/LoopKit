@@ -20,10 +20,22 @@ public struct RepeatingScheduleValue<T: RawRepresentable> where T.RawValue: Any 
     }
 }
 
+extension RepeatingScheduleValue where T: Equatable {
+    public static func ==(lhs: RepeatingScheduleValue<T>, rhs: RepeatingScheduleValue<T>) -> Bool {
+        return abs(lhs.startTime - rhs.startTime) < .ulpOfOne && lhs.value == rhs.value
+    }
+}
+
 public struct AbsoluteScheduleValue<T>: TimelineValue {
     public let startDate: Date
     public let endDate: Date
     public let value: T
+}
+
+extension AbsoluteScheduleValue where T: Equatable {
+    public static func ==(lhs: AbsoluteScheduleValue<T>, rhs: AbsoluteScheduleValue<T>) -> Bool {
+        return lhs.startDate == rhs.startDate && lhs.endDate == rhs.endDate && lhs.value == rhs.value
+    }
 }
 
 extension RepeatingScheduleValue: RawRepresentable {
@@ -181,5 +193,26 @@ public struct DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomD
                 value: item.value
             )
         }
+    }
+}
+
+
+extension DailyValueSchedule where T: Equatable {
+    public static func ==(lhs: DailyValueSchedule<T>, rhs: DailyValueSchedule<T>) -> Bool {
+        guard lhs.items.count == rhs.items.count else {
+            return false
+        }
+
+        guard lhs.timeZone == rhs.timeZone else {
+            return false
+        }
+
+        for (a, b) in zip(lhs.items, rhs.items) {
+            guard a == b else {
+                return false
+            }
+        }
+
+        return true
     }
 }

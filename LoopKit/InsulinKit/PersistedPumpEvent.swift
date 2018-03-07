@@ -6,7 +6,6 @@
 //  Copyright © 2016 Nathan Racklyeft. All rights reserved.
 //
 
-import CoreData
 import Foundation
 
 
@@ -17,9 +16,8 @@ public struct PersistedPumpEvent {
     public let dose: DoseEntry?
     /// Whether the event has been successfully uploaded
     public let isUploaded: Bool
-    /// The internal identifier of the event used by the store
-    /// TODO: This should be just the URI representation
-    public let objectID: NSManagedObjectID
+    /// The NSManagedObject identifier of the event used by the store
+    public let objectIDURL: URL
     /// The opaque raw data representing the event
     public let raw: Data?
     /// A human-readable short description of the event
@@ -35,7 +33,7 @@ extension PumpEvent {
             date: date,
             dose: dose,
             isUploaded: isUploaded,
-            objectID: objectID,
+            objectIDURL: objectID.uriRepresentation(),
             raw: raw,
             title: title,
             type: type

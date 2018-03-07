@@ -45,28 +45,46 @@ public final class GlucoseStore: HealthKitSampleStore {
     private let maxPurgeInterval: TimeInterval = TimeInterval(hours: 24) * 7
 
     /// The interval before which glucose values should be purged from HealthKit. If nil, glucose values are not purged.
-    public var managedDataInterval: TimeInterval? = TimeInterval(hours: 3)
-
-    /// The interval of glucose data to keep in cache
-    public var reflectionDataInterval: TimeInterval = TimeInterval(minutes: 30) {
-        didSet {
-            observationStart = Date(timeIntervalSinceNow: -reflectionDataInterval)
+    public var managedDataInterval: TimeInterval? {
+        get {
+            return lockedManagedDataInterval.value
+        }
+        set {
+            lockedManagedDataInterval.value = newValue
         }
     }
+    private let lockedManagedDataInterval = Locked<TimeInterval?>(.hours(3))
+
+    /// The interval of glucose data to keep in cache
+    public let reflectionDataInterval: TimeInterval = TimeInterval(minutes: 30)
 
     /// The interval of glucose data to use for momentum calculation
-    public var momentumDataInterval: TimeInterval = TimeInterval(minutes: 15)
+    public let momentumDataInterval: TimeInterval = TimeInterval(minutes: 15)
 
     /// Glucose sample cache, used for calculations when HKHealthStore is unavailable
     private var sampleDataCache: [HKQuantitySample] = []
 
-    private var dataAccessQueue: DispatchQueue = DispatchQueue(label: "com.loudnate.GlucoseKit.dataAccessQueue", qos: .utility)
+    private let dataAccessQueue = DispatchQueue(label: "com.loudnate.GlucoseKit.dataAccessQueue", qos: .utility)
 
-    /// The most-recent glucose value. Reading this value is thread-safe as `GlucoseValue` is immutable.
-    public private(set) var latestGlucose: GlucoseValue?
+    /// The most-recent glucose value.
+    public private(set) var latestGlucose: GlucoseValue? {
+        get {
+            return lockedLatestGlucose.value
+        }
+        set {
+            lockedLatestGlucose.value = newValue
+        }
+    }
+    private let lockedLatestGlucose = Locked<GlucoseValue?>(nil)
 
     public init(healthStore: HKHealthStore) {
         super.init(healthStore: healthStore, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -reflectionDataInterval))
+    }
+
+    // MARK: - HealthKitSampleStore
+
+    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {
+        // TODO
     }
 }
 
@@ -133,8 +151,9 @@ extension GlucoseStore {
                     self.unionSampleDataCache(with: glucose)
                     self.purgeOldGlucoseSamples()
 
-                    if let latestGlucose = self.sampleDataCache.last, self.latestGlucose == nil || self.latestGlucose!.startDate < latestGlucose.startDate {
-                        self.latestGlucose = latestGlucose
+                    let latestGlucose = self.latestGlucose
+                    if let lastCacheValue = self.sampleDataCache.last, latestGlucose == nil || latestGlucose!.startDate < lastCacheValue.startDate {
+                        self.latestGlucose = lastCacheValue
                     }
 
                     completion(completed, glucose, error)
@@ -187,7 +206,8 @@ extension GlucoseStore {
             self.dataAccessQueue.async {
                 let samples = samples as? [HKQuantitySample] ?? []
 
-                if let lastGlucose = samples.last, self.latestGlucose == nil || self.latestGlucose!.startDate < lastGlucose.startDate {
+                let latestGlucose = self.latestGlucose
+                if let lastGlucose = samples.last, latestGlucose == nil || latestGlucose!.startDate < lastGlucose.startDate {
                     self.latestGlucose = lastGlucose
                 }
 
