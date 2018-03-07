@@ -307,14 +307,14 @@ extension Collection where Iterator.Element: CarbEntry {
 
 
 // MARK: - Dyanamic absorption overrides
-extension Collection where Iterator.Element == CarbStatus {
-    func dynamicCarbsOnBoard(
+extension Collection {
+    func dynamicCarbsOnBoard<T>(
         from start: Date? = nil,
         to end: Date? = nil,
         defaultAbsorptionTime: TimeInterval,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
-    ) -> [CarbValue] {
+    ) -> [CarbValue] where Element == CarbStatus<T> {
         guard let (startDate, endDate) = simulationDateRange(from: start, to: end, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, delta: delta) else {
             return []
         }
@@ -339,7 +339,7 @@ extension Collection where Iterator.Element == CarbStatus {
         return values
     }
 
-    func dynamicGlucoseEffects(
+    func dynamicGlucoseEffects<T>(
         from start: Date? = nil,
         to end: Date? = nil,
         carbRatios: CarbRatioSchedule,
@@ -347,7 +347,7 @@ extension Collection where Iterator.Element == CarbStatus {
         defaultAbsorptionTime: TimeInterval,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
-    ) -> [GlucoseEffect] {
+    ) -> [GlucoseEffect] where Element == CarbStatus<T> {
         guard let (startDate, endDate) = simulationDateRange(from: start, to: end, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, delta: delta) else {
             return []
         }
@@ -377,7 +377,7 @@ extension Collection where Iterator.Element == CarbStatus {
     }
 
     /// The quantity of carbs expected to still absorb at the last date of absorption
-    public var clampedCarbsOnBoard: CarbValue? {
+    public func getClampedCarbsOnBoard<T>() -> CarbValue? where Element == CarbStatus<T> {
         guard let firstAbsorption = first?.absorption else {
             return nil
         }
@@ -406,12 +406,12 @@ extension Collection where Iterator.Element == CarbStatus {
 ///   - The entry data as reported by the user
 ///   - The observed data as calculated from glucose changes relative to insulin curves
 ///   - The minimum/maximum amounts of absorption used to clamp our observation data within reasonable bounds
-fileprivate class CarbStatusBuilder {
+fileprivate class CarbStatusBuilder<T: CarbEntry> {
 
     // MARK: User-entered data
 
     /// The carb entry input
-    let entry: CarbEntry
+    let entry: T
 
     /// The unit used for carb values
     let carbUnit: HKUnit
@@ -513,7 +513,7 @@ fileprivate class CarbStatusBuilder {
     ///   - delay: An amount of time to wait after the entry date before minimum absorption is assumed to begin
     ///   - lastEffectDate: The last recorded date of effect observation, used to initialize minimum absorption
     ///   - initialObservedEffect: The initial amount of observed effect, in glucose units. Defaults to 0.
-    init(entry: CarbEntry, carbUnit: HKUnit, carbohydrateSensitivityFactor: Double, maxAbsorptionTime: TimeInterval, delay: TimeInterval, lastEffectDate: Date?, initialObservedEffect: Double = 0) {
+    init(entry: T, carbUnit: HKUnit, carbohydrateSensitivityFactor: Double, maxAbsorptionTime: TimeInterval, delay: TimeInterval, lastEffectDate: Date?, initialObservedEffect: Double = 0) {
         self.entry = entry
         self.carbUnit = carbUnit
         self.carbohydrateSensitivityFactor = carbohydrateSensitivityFactor
@@ -564,7 +564,7 @@ fileprivate class CarbStatusBuilder {
     }
 
     /// The resulting CarbStatus value
-    var result: CarbStatus {
+    var result: CarbStatus<T> {
         let absorption = AbsorbedCarbValue(
             observed: HKQuantity(unit: carbUnit, doubleValue: observedGrams),
             clamped: HKQuantity(unit: carbUnit, doubleValue: clampedGrams),
@@ -584,7 +584,7 @@ fileprivate class CarbStatusBuilder {
 
 
 // MARK: - Sorted collections of CarbEntries
-extension Collection where Iterator.Element: CarbEntry, Index == Int, IndexDistance == Int {
+extension Collection where Element: CarbEntry, Index == Int, IndexDistance == Int {
     /// Maps a sorted timeline of carb entries to the observed absorbed carbohydrates for each, from a timeline of glucose effect velocities.
     ///
     /// This makes some important assumptions:
@@ -606,7 +606,7 @@ extension Collection where Iterator.Element: CarbEntry, Index == Int, IndexDista
         absorptionTimeOverrun: Double,
         defaultAbsorptionTime: TimeInterval,
         delay: TimeInterval
-    ) -> [CarbStatus] {
+    ) -> [CarbStatus<Element>] {
         guard count > 0 else {
             return []
         }
@@ -621,7 +621,7 @@ extension Collection where Iterator.Element: CarbEntry, Index == Int, IndexDista
         let glucoseUnit = HKUnit.milligramsPerDeciliter()
         let carbUnit = HKUnit.gram()
 
-        let builders: [CarbStatusBuilder] = map { (entry) in
+        let builders: [CarbStatusBuilder<Element>] = map { (entry) in
             let carbRatio = carbRatios.quantity(at: entry.startDate)
             let insulinSensitivity = insulinSensitivities.quantity(at: entry.startDate)
 

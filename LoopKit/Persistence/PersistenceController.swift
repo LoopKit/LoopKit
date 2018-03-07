@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import os.log
 
 
 /// Provides a Core Data persistence stack for the LoopKit data model
@@ -118,6 +119,7 @@ public final class PersistenceController {
                     ]
                 )
             } catch let storeError as NSError {
+                OSLog(category: "PersistenceController").error("Failed to initialize persistenceController: %{public}@", storeError)
                 error = .coreDataError(storeError)
             }
 

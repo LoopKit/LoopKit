@@ -30,16 +30,6 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     public var scheduleItems: [RepeatingScheduleValue<DoubleRange>] = []
 
-    @available(*, deprecated, message: "Use `overrideRanges` instead")
-    public var workoutRange: DoubleRange? {
-        get {
-            return overrideRanges[.workout]
-        }
-        set {
-            overrideRanges[.workout] = newValue
-        }
-    }
-
     public let overrideContexts: [GlucoseRangeSchedule.Override.Context] = [.preMeal, .workout]
 
     public var overrideRanges: [GlucoseRangeSchedule.Override.Context: DoubleRange] = [:]
