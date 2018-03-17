@@ -20,7 +20,7 @@ public struct DoubleRange {
     }
 
     public var isZero: Bool {
-        return abs(minValue) < Double.ulpOfOne && abs(maxValue) < Double.ulpOfOne
+        return abs(minValue) < .ulpOfOne && abs(maxValue) < .ulpOfOne
     }
 }
 
@@ -39,6 +39,14 @@ extension DoubleRange: RawRepresentable {
 
     public var rawValue: RawValue {
         return [minValue, maxValue]
+    }
+}
+
+
+extension DoubleRange: Equatable {
+    public static func ==(lhs: DoubleRange, rhs: DoubleRange) -> Bool {
+        return abs(lhs.minValue - rhs.minValue) < .ulpOfOne &&
+               abs(lhs.maxValue - rhs.maxValue) < .ulpOfOne
     }
 }
 
@@ -233,5 +241,24 @@ extension GlucoseRangeSchedule.Override: RawRepresentable {
         raw["end"] = end
 
         return raw
+    }
+}
+
+
+extension GlucoseRangeSchedule.Override: Equatable {
+    public static func ==(lhs: GlucoseRangeSchedule.Override, rhs: GlucoseRangeSchedule.Override) -> Bool {
+        return lhs.context == rhs.context &&
+            lhs.start == rhs.start &&
+            lhs.end == rhs.end &&
+            lhs.value == rhs.value
+    }
+}
+
+
+extension GlucoseRangeSchedule: Equatable {
+    public static func ==(lhs: GlucoseRangeSchedule, rhs: GlucoseRangeSchedule) -> Bool {
+        return lhs.rangeSchedule == rhs.rangeSchedule &&
+            lhs.overrideRanges == rhs.overrideRanges &&
+            lhs.override == rhs.override
     }
 }

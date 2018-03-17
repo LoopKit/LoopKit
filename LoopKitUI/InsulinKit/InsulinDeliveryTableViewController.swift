@@ -36,15 +36,6 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                         if self?.isViewLoaded == true {
                             self?.reloadData()
                         }
-                    case Notification.Name.DoseStoreReadyStateDidChange:
-                        switch doseStore.readyState {
-                        case .ready:
-                            self?.state = .display
-                        case .failed(let error):
-                            self?.state = .unavailable(error)
-                        default:
-                            self?.state = .unavailable(nil)
-                        }
                     default:
                         break
                     }
@@ -66,14 +57,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        switch doseStore?.readyState {
-        case .ready?:
-            state = .display
-        case .failed(let error)?:
-            state = .unavailable(error)
-        default:
-            state = .unavailable(nil)
-        }
+        state = .display
     }
 
     public override func viewWillAppear(_ animated: Bool) {

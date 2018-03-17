@@ -96,26 +96,38 @@ public final class CarbStore: HealthKitSampleStore {
     public let preferredUnit = HKUnit.gram()
 
     /// Carbohydrate-to-insulin ratio
-    public var carbRatioSchedule: CarbRatioSchedule?
-
-    /// A trio of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
-    public var defaultAbsorptionTimes: DefaultAbsorptionTimes {
-        didSet {
-            observationStart = earliestCacheDate
+    public var carbRatioSchedule: CarbRatioSchedule? {
+        get {
+            return lockedCarbRatioSchedule.value
+        }
+        set {
+            lockedCarbRatioSchedule.value = newValue
         }
     }
+    private let lockedCarbRatioSchedule: Locked<CarbRatioSchedule?>
+
+    /// A trio of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
+    public let defaultAbsorptionTimes: DefaultAbsorptionTimes
 
     /// Insulin-to-glucose sensitivity
-    public var insulinSensitivitySchedule: InsulinSensitivitySchedule?
+    public var insulinSensitivitySchedule: InsulinSensitivitySchedule? {
+        get {
+            return lockedInsulinSensitivitySchedule.value
+        }
+        set {
+            lockedInsulinSensitivitySchedule.value = newValue
+        }
+    }
+    private let lockedInsulinSensitivitySchedule:  Locked<InsulinSensitivitySchedule?>
 
     /// The expected delay in the appearance of glucose effects, accounting for both digestion and sensor lag
-    public var delay: TimeInterval = TimeInterval(minutes: 10)
+    public let delay: TimeInterval
 
     /// The interval between effect values to use for the calculated timelines.
-    private(set) public var delta: TimeInterval = TimeInterval(minutes: 5)
+    public let delta: TimeInterval
 
     /// The factor by which the entered absorption time can be extended to accomodate slower-than-expected absorption
-    public var absorptionTimeOverrun: Double = 1.5
+    public let absorptionTimeOverrun: Double
 
     /// The longest expected absorption time interval for carbohydrates. Defaults to 8 hours.
     public var maximumAbsorptionTimeInterval: TimeInterval {
@@ -128,7 +140,7 @@ public final class CarbStore: HealthKitSampleStore {
 
     public weak var syncDelegate: CarbStoreSyncDelegate?
 
-    private var queue: DispatchQueue = DispatchQueue(label: "com.loudnate.CarbKit.dataAccessQueue", qos: .utility)
+    private let queue = DispatchQueue(label: "com.loudnate.CarbKit.dataAccessQueue", qos: .utility)
 
     private let log = OSLog(category: "CarbStore")
 
@@ -142,12 +154,18 @@ public final class CarbStore: HealthKitSampleStore {
         cacheStore: PersistenceController,
         defaultAbsorptionTimes: DefaultAbsorptionTimes = defaultAbsorptionTimes,
         carbRatioSchedule: CarbRatioSchedule? = nil,
-        insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil
+        insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
+        absorptionTimeOverrun: Double = 1.5,
+        calculationDelta: TimeInterval = 5 /* minutes */ * 60,
+        effectDelay: TimeInterval = 10 /* minutes */ * 60
     ) {
         self.cacheStore = cacheStore
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
-        self.carbRatioSchedule = carbRatioSchedule
-        self.insulinSensitivitySchedule = insulinSensitivitySchedule
+        self.lockedCarbRatioSchedule = Locked(carbRatioSchedule)
+        self.lockedInsulinSensitivitySchedule = Locked(insulinSensitivitySchedule)
+        self.absorptionTimeOverrun = absorptionTimeOverrun
+        self.delta = calculationDelta
+        self.delay = effectDelay
 
         super.init(healthStore: healthStore, type: carbType, observationStart: Date(timeIntervalSinceNow: -defaultAbsorptionTimes.slow * 2))
 
