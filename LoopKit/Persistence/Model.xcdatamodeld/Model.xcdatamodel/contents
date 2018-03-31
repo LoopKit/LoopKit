@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17D47" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17D102" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CachedCarbObject" representedClassName=".CachedCarbObject" syncable="YES">
         <attribute name="absorptionTime" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="createdByCurrentApp" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
@@ -14,6 +14,25 @@
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="uuid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CachedGlucoseObject" representedClassName=".CachedGlucoseObject" syncable="YES">
+        <attribute name="isDisplayOnly" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="provenanceIdentifier" attributeType="String" syncable="YES"/>
+        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="syncIdentifier" attributeType="String" syncable="YES"/>
+        <attribute name="syncVersion" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="unitString" attributeType="String" syncable="YES"/>
+        <attribute name="uploadState" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="value" attributeType="Double" usesScalarValueType="YES" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="uuid"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="syncIdentifier"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
@@ -61,6 +80,7 @@
     </entity>
     <elements>
         <element name="CachedCarbObject" positionX="-63" positionY="72" width="128" height="195"/>
+        <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="180"/>
         <element name="DeletedCarbObject" positionX="-63" positionY="90" width="128" height="90"/>
         <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="195"/>
         <element name="Reservoir" positionX="-63" positionY="-18" width="128" height="105"/>

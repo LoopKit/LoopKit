@@ -103,7 +103,7 @@ extension BidirectionalCollection where Element: GlucoseSampleValue, Index == In
         }
 
         /// Choose a unit to use during raw value calculation
-        let unit = HKUnit.milligramsPerDeciliter()
+        let unit = HKUnit.milligramsPerDeciliter
 
         let (slope: slope, intercept: _) = self.map { (
             x: $0.startDate.timeIntervalSince(firstSample.startDate),
@@ -149,22 +149,31 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
     /// - Parameter effects: Glucose effects to be countered, in chronological order
     /// - Returns: An array of velocities describing the change in glucose samples compared to the specified effects
     func counteractionEffects(to effects: [GlucoseEffect]) -> [GlucoseEffectVelocity] {
-        let mgdL = HKUnit.milligramsPerDeciliter()
-        let velocityUnit = mgdL.unitDivided(by: .second())
+        let mgdL = HKUnit.milligramsPerDeciliter
+        let velocityUnit = GlucoseEffectVelocity.perSecondUnit
         var velocities = [GlucoseEffectVelocity]()
-        var effectIndex = 0
 
-        for (index, endGlucose) in self.dropFirst().enumerated() {
+        var effectIndex = 0
+        var startGlucose: Element! = self.first
+
+        for endGlucose in self.dropFirst() {
             // Find a valid change in glucose, requiring identical provenance and no calibration
-            let startGlucose = self[index]
+            let glucoseChange = endGlucose.quantity.doubleValue(for: mgdL) - startGlucose.quantity.doubleValue(for: mgdL)
+            let timeInterval = endGlucose.startDate.timeIntervalSince(startGlucose.startDate)
+
+            guard timeInterval > .minutes(4) else {
+                continue
+            }
+
+            defer {
+                startGlucose = endGlucose
+            }
 
             guard startGlucose.provenanceIdentifier == endGlucose.provenanceIdentifier,
                 !startGlucose.isDisplayOnly, !endGlucose.isDisplayOnly
             else {
                 continue
             }
-
-            let glucoseChange = endGlucose.quantity.doubleValue(for: mgdL) - startGlucose.quantity.doubleValue(for: mgdL)
 
             // Compare that to a change in insulin effects
             guard effects.count > effectIndex else {
@@ -193,7 +202,8 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
 
             let effectChange = endEffectValue - startEffectValue
             let discrepancy = glucoseChange - effectChange
-            let averageVelocity = HKQuantity(unit: velocityUnit, doubleValue: discrepancy / endGlucose.startDate.timeIntervalSince(startGlucose.startDate))
+
+            let averageVelocity = HKQuantity(unit: velocityUnit, doubleValue: discrepancy / timeInterval)
             let effect = GlucoseEffectVelocity(startDate: startGlucose.startDate, endDate: endGlucose.startDate, quantity: averageVelocity)
 
             velocities.append(effect)

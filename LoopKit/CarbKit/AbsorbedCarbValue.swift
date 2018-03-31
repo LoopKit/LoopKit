@@ -38,7 +38,7 @@ public struct AbsorbedCarbValue: SampleValue {
     public var observedProgress: HKQuantity {
         let gram = HKUnit.gram()
         let totalGrams = total.doubleValue(for: gram)
-        let percent = gram.unitDivided(by: gram)
+        let percent = HKUnit.percent()
 
         guard totalGrams > 0 else {
             return HKQuantity(unit: percent, doubleValue: 0)
@@ -53,7 +53,7 @@ public struct AbsorbedCarbValue: SampleValue {
     public var clampedProgress: HKQuantity {
         let gram = HKUnit.gram()
         let totalGrams = total.doubleValue(for: gram)
-        let percent = gram.unitDivided(by: gram)
+        let percent = HKUnit.percent()
 
         guard totalGrams > 0 else {
             return HKQuantity(unit: percent, doubleValue: 0)

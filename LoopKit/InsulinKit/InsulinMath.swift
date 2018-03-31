@@ -262,7 +262,7 @@ extension DoseEntry {
                 syncIdentifier: syncIdentifier,
                 managedObjectID: nil
             )
-            dose.scheduledBasalRate = HKQuantity(unit: HKUnit.internationalUnit().unitDivided(by: .hour()), doubleValue: basalItem.value)
+            dose.scheduledBasalRate = HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: basalItem.value)
 
             doses.append(dose)
         }
@@ -462,7 +462,7 @@ extension Collection where Iterator.Element == DoseEntry {
 
         var date = start
         var values = [GlucoseEffect]()
-        let unit = HKUnit.milligramsPerDeciliter()
+        let unit = HKUnit.milligramsPerDeciliter
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in

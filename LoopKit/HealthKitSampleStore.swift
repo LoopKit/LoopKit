@@ -23,6 +23,9 @@ public enum HealthKitSampleStoreResult<T> {
 
 
 public class HealthKitSampleStore {
+    /// Describes the source of an update notification. Value is of type `UpdateSource.RawValue`
+    public static let notificationUpdateSourceKey = "com.loopkit.UpdateSource"
+
     public enum StoreError: Error {
         case authorizationDenied
         case healthKitError(HKError)
@@ -37,12 +40,14 @@ public class HealthKitSampleStore {
     /// For unit testing only.
     internal var testQueryStore: HKSampleQueryTestable?
 
-    private let log = OSLog(category: "HealthKitSampleStore")
+    private let log: OSLog
 
     public init(healthStore: HKHealthStore, type: HKSampleType, observationStart: Date) {
         self.healthStore = healthStore
         self.sampleType = type
         self.observationStart = observationStart
+
+        self.log = OSLog(category: String(describing: Swift.type(of: self)))
 
         if !authorizationRequired {
             createQuery()
@@ -123,7 +128,7 @@ public class HealthKitSampleStore {
                 anchor: self.queryAnchor,
                 limit: HKObjectQueryNoLimit
             ) { (query, newSamples, deletedSamples, anchor, error) in
-                self.log.debug("%@: anchor: %@", #function, String(describing: anchor))
+                self.log.debug("%@: new: %d deleted: %d anchor: %@ error: %@", #function, newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor), String(describing: error))
 
                 if let error = error {
                     self.log.error("%@: error executing anchoredObjectQuery: %@", String(describing: type(of: self)), error.localizedDescription)
@@ -172,7 +177,7 @@ extension HealthKitSampleStore: HKSampleQueryTestable {
 // MARK: - Observation
 extension HealthKitSampleStore {
     private func createQuery() {
-        log.debug("%@: %@", String(describing: type(of: self)), #function)
+        log.debug("%@", #function)
         let predicate = HKQuery.predicateForSamples(withStart: observationStart, end: nil)
 
         observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { [unowned self] (query, completionHandler, error) in

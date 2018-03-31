@@ -13,7 +13,7 @@ import LoopKit
 
 public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableViewController, RepeatingScheduleValueTableViewCellDelegate {
 
-    public var unit: HKUnit = HKUnit.milligramsPerDeciliter() {
+    public var unit: HKUnit = HKUnit.milligramsPerDeciliter {
         didSet {
             unitDisplayString = unit.glucoseUnitDisplayString
         }
