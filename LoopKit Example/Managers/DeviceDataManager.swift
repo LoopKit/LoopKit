@@ -38,7 +38,7 @@ class DeviceDataManager : CarbStoreDelegate {
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )
-        glucoseStore = GlucoseStore(healthStore: healthStore)
+        glucoseStore = GlucoseStore(healthStore: healthStore, cacheStore: cacheStore)
         carbStore?.delegate = self
     }
 

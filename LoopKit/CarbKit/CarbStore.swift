@@ -48,7 +48,7 @@ public protocol CarbStoreSyncDelegate: class {
 }
 
 extension NSNotification.Name {
-    /// Notification posted when carb entries were changed by an external source
+    /// Notification posted when carb entries were changed, either via add/replace/delete methods or from HealthKit
     public static let CarbEntriesDidUpdate = NSNotification.Name(rawValue: "com.loudnate.CarbKit.CarbEntriesDidUpdateNotification")
 }
 
@@ -56,14 +56,9 @@ extension NSNotification.Name {
 /**
  Manages storage, retrieval, and calculation of carbohydrate data.
 
- There are three tiers of storage:
+ There are two tiers of storage:
 
- * In-memory cache, used for COB and glucose effect calculation
- ```
- 0    [2 ✕ DefaultAbsorptionTimes.slow]
- |––––––––––––|
- ```
- * Short-term persistant cache, stored in Core Data, used to re-populate the in-memory cache if the app is suspended and re-launched while the Health database is protected
+ * Short-term persistant cache, stored in Core Data, used to ensure access if the app is suspended and re-launched while the Health database is protected
  ```
  0    [2 ✕ DefaultAbsorptionTimes.slow]
  |––––––––––––|
@@ -234,7 +229,7 @@ public final class CarbStore: HealthKitSampleStore {
                 try? self.cacheStore.managedObjectContext.save()
                 self.syncExternalDB()
 
-                NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
+                NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
             }
         }
     }
@@ -345,12 +340,12 @@ extension CarbStore {
         let sample = entry.createSample()
         let stored = StoredCarbEntry(sample: sample, createdByCurrentApp: true)
 
-        self.healthStore.save(sample) { (completed, error) -> Void in
+        healthStore.save(sample) { (completed, error) -> Void in
             self.queue.async {
                 if completed {
                     self.addCachedObject(for: stored)
                     completion(.success(stored))
-                    NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
+                    NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
                     self.syncExternalDB()
                 } else if let error = error {
                     completion(.failure(.healthStoreError(error)))
@@ -370,12 +365,12 @@ extension CarbStore {
         let sample = newEntry.createSample(from: oldEntry)
         let stored = StoredCarbEntry(sample: sample, createdByCurrentApp: true)
 
-        self.healthStore.save(sample) { (completed, error) -> Void in
+        healthStore.save(sample) { (completed, error) -> Void in
             self.queue.async {
                 if completed {
                     self.replaceCachedObject(for: oldEntry, with: stored)
                     completion(.success(stored))
-                    NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
+                    NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
                     self.syncExternalDB()
                 } else if let error = error {
                     completion(.failure(.healthStoreError(error)))
@@ -398,7 +393,7 @@ extension CarbStore {
                 if success {
                     self.deleteCachedObject(for: entry)
                     completion(.success(true))
-                    NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self)
+                    NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
                     self.syncExternalDB()
                 } else if let error = error {
                     completion(.failure(.healthStoreError(error)))

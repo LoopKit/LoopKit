@@ -154,7 +154,7 @@ extension CarbEntry {
         defaultAbsorptionTime: TimeInterval,
         delay: TimeInterval
     ) -> Double {
-        return insulinSensitivity.doubleValue(for: HKUnit.milligramsPerDeciliter()) / carbRatio.doubleValue(for: .gram()) * absorbedCarbs(at: date, absorptionTime: absorptionTime ?? defaultAbsorptionTime, delay: delay)
+        return insulinSensitivity.doubleValue(for: HKUnit.milligramsPerDeciliter) / carbRatio.doubleValue(for: .gram()) * absorbedCarbs(at: date, absorptionTime: absorptionTime ?? defaultAbsorptionTime, delay: delay)
     }
 
     fileprivate func estimatedAbsorptionTime(forAbsorbedCarbs carbs: Double, at date: Date) -> TimeInterval {
@@ -264,7 +264,7 @@ extension Collection where Iterator.Element: CarbEntry {
 
         var date = startDate
         var values = [GlucoseEffect]()
-        let unit = HKUnit.milligramsPerDeciliter()
+        let unit = HKUnit.milligramsPerDeciliter
 
         repeat {
             let value = reduce(0.0) { (value, entry) -> Double in
@@ -354,7 +354,7 @@ extension Collection {
 
         var date = startDate
         var values = [GlucoseEffect]()
-        let mgdL = HKUnit.milligramsPerDeciliter()
+        let mgdL = HKUnit.milligramsPerDeciliter
         let gram = HKUnit.gram()
 
         repeat {
@@ -618,7 +618,7 @@ extension Collection where Element: CarbEntry, Index == Int, IndexDistance == In
         }
 
         // for computation
-        let glucoseUnit = HKUnit.milligramsPerDeciliter()
+        let glucoseUnit = HKUnit.milligramsPerDeciliter
         let carbUnit = HKUnit.gram()
 
         let builders: [CarbStatusBuilder<Element>] = map { (entry) in

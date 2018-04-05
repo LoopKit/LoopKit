@@ -37,6 +37,8 @@ extension OSLog {
             os_log(message, log: self, type: type, args[0], args[1], args[2])
         case 4:
             os_log(message, log: self, type: type, args[0], args[1], args[2], args[3])
+        case 5:
+            os_log(message, log: self, type: type, args[0], args[1], args[2], args[3], args[4])
         default:
             os_log(message, log: self, type: type, args)
         }

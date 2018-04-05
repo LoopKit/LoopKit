@@ -39,7 +39,7 @@ class CarbMathTests: XCTestCase {
 
         return (
             CarbRatioSchedule(unit: HKUnit.gram(), dailyItems: items)!,
-            InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliter(), dailyItems: [RepeatingScheduleValue(startTime: 0.0, value: 40.0)])!
+            InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue(startTime: 0.0, value: 40.0)])!
         )
     }
 
@@ -94,7 +94,7 @@ class CarbMathTests: XCTestCase {
         let fixture: [JSONDictionary] = loadFixture(name)
         let dateFormatter = ISO8601DateFormatter.localTimeDate()
         
-        let unit = HKUnit.milligramsPerDeciliter().unitDivided(by: .minute())
+        let unit = HKUnit.milligramsPerDeciliter.unitDivided(by: .minute())
         
         return fixture.map {
             let quantity = HKQuantity(unit: unit, doubleValue: $0["velocity"] as! Double)
@@ -146,7 +146,7 @@ class CarbMathTests: XCTestCase {
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
-            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter()), accuracy: Double(Float.ulpOfOne))
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), accuracy: Double(Float.ulpOfOne))
         }
     }
 

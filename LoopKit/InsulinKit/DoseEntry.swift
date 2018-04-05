@@ -50,6 +50,8 @@ public struct DoseEntry: TimelineValue {
 
 
 extension DoseEntry {
+    static let unitsPerHour = HKUnit.internationalUnit().unitDivided(by: .hour())
+
     private var hours: Double {
         return endDate.timeIntervalSince(startDate).hours
     }
@@ -100,7 +102,7 @@ extension DoseEntry {
             return 0
         }
 
-        let unitsPerHour = self.unitsPerHour - basalRate.doubleValue(for: HKUnit.internationalUnit().unitDivided(by: .hour()))
+        let unitsPerHour = self.unitsPerHour - basalRate.doubleValue(for: DoseEntry.unitsPerHour)
 
         guard abs(unitsPerHour) > .ulpOfOne else {
             return 0

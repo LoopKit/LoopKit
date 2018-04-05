@@ -19,6 +19,30 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        let sampleTypes = Set([
+            dataManager.glucoseStore.sampleType,
+            dataManager.carbStore.sampleType,
+            dataManager.doseStore.sampleType,
+        ].flatMap { $0 })
+
+        if dataManager.glucoseStore.authorizationRequired ||
+            dataManager.carbStore.authorizationRequired ||
+            dataManager.doseStore.authorizationRequired
+        {
+            dataManager.carbStore.healthStore.requestAuthorization(toShare: sampleTypes, read: sampleTypes) { (success, error) in
+                if success {
+                    // Call the individual authorization methods to trigger query creation
+                    self.dataManager.carbStore.authorize({ _ in })
+                    self.dataManager.doseStore.insulinDeliveryStore.authorize({ _ in })
+                    self.dataManager.glucoseStore.authorize({ _ in })
+                }
+            }
+        }
+    }
+
     // MARK: - Data Source
 
     private enum Section: Int {

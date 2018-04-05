@@ -11,7 +11,7 @@ import HealthKit
 extension HKUnit {
     /// A formatting helper for determining the preferred decimal style for a given unit
     var preferredFractionDigits: Int {
-        if self == HKUnit.milligramsPerDeciliter() {
+        if self == HKUnit.milligramsPerDeciliter {
             return 0
         } else {
             return 1
@@ -20,7 +20,7 @@ extension HKUnit {
 
     /// A presentation helper for the localized unit string
     var glucoseUnitDisplayString: String {
-        if self == HKUnit.millimolesPerLiter() {
+        if self == HKUnit.millimolesPerLiter {
             return NSLocalizedString("mmol/L", comment: "The unit display string for millimoles of glucose per liter")
         } else {
             return String(describing: self)
