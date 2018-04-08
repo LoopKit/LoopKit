@@ -116,7 +116,7 @@ public struct DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomD
             timeZone = TimeZone(secondsFromGMT: offset)
         }
 
-        self.init(dailyItems: rawItems.flatMap { RepeatingScheduleValue(rawValue: $0) }, timeZone: timeZone)
+        self.init(dailyItems: rawItems.compactMap { RepeatingScheduleValue(rawValue: $0) }, timeZone: timeZone)
     }
 
     public var rawValue: RawValue {

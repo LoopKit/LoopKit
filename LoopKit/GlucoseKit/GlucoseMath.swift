@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 
 
-fileprivate extension Collection where Element == (x: Double, y: Double), IndexDistance == Int {
+fileprivate extension Collection where Element == (x: Double, y: Double) {
     /**
      Calculates slope and intercept using linear regression
      
@@ -44,7 +44,7 @@ fileprivate extension Collection where Element == (x: Double, y: Double), IndexD
 }
 
 
-extension BidirectionalCollection where Element: GlucoseSampleValue, Index == Int, IndexDistance == Int {
+extension BidirectionalCollection where Element: GlucoseSampleValue, Index == Int {
 
     /// Whether the collection contains no calibration entries
     /// Runtime: O(n)

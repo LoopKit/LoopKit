@@ -279,7 +279,7 @@ extension HealthKitSampleStore {
     /// - Parameter completion: A closure called after the query is completed
     /// - Parameter result: The query result
     public func preferredUnit(_ completion: @escaping (_ result: HealthKitSampleStoreResult<HKUnit>) -> Void) {
-        let quantityTypes = [self.sampleType].flatMap { (sampleType) -> HKQuantityType? in
+        let quantityTypes = [self.sampleType].compactMap { (sampleType) -> HKQuantityType? in
             return sampleType as? HKQuantityType
         }
 

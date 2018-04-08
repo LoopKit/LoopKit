@@ -96,7 +96,7 @@ public final class GlucoseStore: HealthKitSampleStore {
         self.momentumDataInterval = momentumDataInterval
         self.cacheLength = max(cacheLength, momentumDataInterval)
 
-        super.init(healthStore: healthStore, type: glucoseType, observationStart: earliestCacheDate)
+        super.init(healthStore: healthStore, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -cacheLength))
 
         cacheStore.onReady { [unowned self] (error) in
             self.dataAccessQueue.async {

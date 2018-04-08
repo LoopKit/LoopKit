@@ -21,3 +21,13 @@ extension ISO8601DateFormatter {
         return formatter
     }
 }
+
+
+extension DateFormatter {
+    static var descriptionFormatter: DateFormatter {
+        let formatter = self.init()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ssZZZZZ"
+
+        return formatter
+    }
+}

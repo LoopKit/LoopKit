@@ -25,7 +25,7 @@ extension UserDefaults {
     var modifiedCarbEntries: [StoredCarbEntry]? {
         get {
             if let rawValue = array(forKey: Key.ModifiedCarbEntries.rawValue) as? [StoredCarbEntry.RawValue] {
-                return rawValue.flatMap { StoredCarbEntry(rawValue: $0) }
+                return rawValue.compactMap { StoredCarbEntry(rawValue: $0) }
             } else {
                 return nil
             }
