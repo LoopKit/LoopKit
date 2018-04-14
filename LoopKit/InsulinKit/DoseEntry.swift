@@ -11,7 +11,7 @@ import CoreData
 import HealthKit
 
 
-public struct DoseEntry: TimelineValue {
+public struct DoseEntry: TimelineValue, Equatable {
     public let type: DoseType
     public let startDate: Date
     public let endDate: Date
@@ -36,7 +36,7 @@ public struct DoseEntry: TimelineValue {
         self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units)
     }
 
-    init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil, syncIdentifier: String?, managedObjectID: NSManagedObjectID?) {
+    init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil, syncIdentifier: String?, managedObjectID: NSManagedObjectID? = nil, scheduledBasalRate: HKQuantity? = nil) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
@@ -45,6 +45,7 @@ public struct DoseEntry: TimelineValue {
         self.description = description
         self.syncIdentifier = syncIdentifier
         self.managedObjectID = managedObjectID
+        self.scheduledBasalRate = scheduledBasalRate
     }
 }
 

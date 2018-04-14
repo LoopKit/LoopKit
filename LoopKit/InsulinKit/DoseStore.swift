@@ -949,8 +949,8 @@ extension DoseStore {
         let doses = try getPumpEventObjects(
             matching: NSPredicate(format: "date >= %@ && type != nil", start as NSDate),
             chronological: true
-        ).flatMap({ $0.dose })
-        let normalizedDoses = doses.reconcile().annotated(with: basalProfile)
+        ).compactMap({ $0.dose })
+        let normalizedDoses = doses.reconciled().annotated(with: basalProfile)
 
         return normalizedDoses.filterDateRange(start, end)
     }

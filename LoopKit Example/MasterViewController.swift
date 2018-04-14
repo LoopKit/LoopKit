@@ -26,7 +26,7 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
             dataManager.glucoseStore.sampleType,
             dataManager.carbStore.sampleType,
             dataManager.doseStore.sampleType,
-        ].flatMap { $0 })
+        ].compactMap { $0 })
 
         if dataManager.glucoseStore.authorizationRequired ||
             dataManager.carbStore.authorizationRequired ||

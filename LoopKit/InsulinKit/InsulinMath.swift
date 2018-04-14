@@ -278,7 +278,7 @@ extension Collection where Iterator.Element == DoseEntry {
 
      - returns: An array of reconciled insulin delivery history, as TempBasal and Bolus records
      */
-    func reconcile() -> [DoseEntry] {
+    func reconciled() -> [DoseEntry] {
 
         var reconciled: [DoseEntry] = []
 
@@ -290,7 +290,7 @@ extension Collection where Iterator.Element == DoseEntry {
             case .bolus:
                 reconciled.append(dose)
             case .basal, .tempBasal:
-                if let last = lastBasal {
+                if lastSuspend == nil, let last = lastBasal {
                     let endDate = Swift.min(last.endDate, dose.startDate)
 
                     // Ignore 0-duration doses

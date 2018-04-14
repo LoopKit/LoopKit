@@ -584,7 +584,7 @@ fileprivate class CarbStatusBuilder<T: CarbEntry> {
 
 
 // MARK: - Sorted collections of CarbEntries
-extension Collection where Element: CarbEntry, Index == Int, IndexDistance == Int {
+extension Collection where Element: CarbEntry {
     /// Maps a sorted timeline of carb entries to the observed absorbed carbohydrates for each, from a timeline of glucose effect velocities.
     ///
     /// This makes some important assumptions:

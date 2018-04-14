@@ -518,7 +518,7 @@ extension CarbStore {
                 return
             }
             
-            entries = objects.flatMap { DeletedCarbEntry(managedObject: $0) }
+            entries = objects.compactMap { DeletedCarbEntry(managedObject: $0) }
         }
         
         return entries
@@ -577,7 +577,7 @@ extension CarbStore {
             deletedRequest.predicate = notUploaded
 
             if let objectsToDelete = try? self.cacheStore.managedObjectContext.fetch(deletedRequest) {
-                entriesToDelete = objectsToDelete.flatMap { DeletedCarbEntry(managedObject: $0) }
+                entriesToDelete = objectsToDelete.compactMap { DeletedCarbEntry(managedObject: $0) }
                 objectsToDelete.forEach { $0.uploadState = .uploading }
             }
 
