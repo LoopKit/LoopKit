@@ -332,6 +332,7 @@ public final class CarbStore: HealthKitSampleStore {
 
                     if !self.carbEntryCache.contains(entry) {
                         notificationRequired = true
+                        NSLog("Inserting sample %@ into carbEntryCache from HKAnchoredObjectQuery", entry.sampleUUID.uuidString)
                         self.carbEntryCache.insert(entry)
                     }
                 }
@@ -340,6 +341,7 @@ public final class CarbStore: HealthKitSampleStore {
             // Remove deleted samples
             for sample in deletedSamples ?? [] {
                 if let index = self.carbEntryCache.index(where: { $0.sampleUUID == sample.uuid }) {
+                    NSLog("Removing sample %@ from carbEntryCache from HKAnchoredObjectQuery", sample.uuid.uuidString)
                     self.carbEntryCache.remove(at: index)
                     notificationRequired = true
                 }
@@ -380,7 +382,12 @@ public final class CarbStore: HealthKitSampleStore {
             if let error = error {
                 completion(.failure(.healthStoreError(error)))
             } else {
-                completion(.success((samples as? [HKQuantitySample] ?? []).map { StoredCarbEntry(sample: $0) }))
+                completion(.success((samples as? [HKQuantitySample] ?? []).map {
+                    // Return all entries as uploaded as a short-term fix for Loop to not display the uploading indicator
+                    var entry = StoredCarbEntry(sample: $0)
+                    entry.isUploaded = true
+                    return entry
+                }))
             }
         }
 
@@ -518,6 +525,10 @@ public final class CarbStore: HealthKitSampleStore {
             self.healthStore.save(carbs, withCompletion: { (completed, error) -> Void in
                 self.dataAccessQueue.async {
                     if !completed {
+                        if let error = error {
+                            NSLog("Error saving entry %@: %@", carbs.uuid.uuidString, String(describing: error))
+                        }
+                        NSLog("Removing %@ from carbEntryCache", storedObject.sampleUUID.uuidString)
                         self.carbEntryCache.remove(storedObject)
                     } else {
                         self.persistCarbEntryCache()
@@ -545,7 +556,7 @@ public final class CarbStore: HealthKitSampleStore {
 
     private func replaceCarbEntryInternal(_ oldEntry: CarbEntry, withEntry newEntry: CarbEntry, resultHandler: @escaping (_ success: Bool, _ entry: StoredCarbEntry?, _ error: CarbStoreError?) -> Void) {
         deleteCarbEntryInternal(oldEntry) { (completed, error) -> Void in
-            if let error = error {
+            if !completed {
                 resultHandler(false, nil, error)
             } else {
                 self.addCarbEntryInternal(newEntry, resultHandler: resultHandler)
@@ -569,14 +580,29 @@ public final class CarbStore: HealthKitSampleStore {
                 let predicate = HKQuery.predicateForObjects(with: [entry.sampleUUID])
                 let query = HKSampleQuery(sampleType: carbType, predicate: predicate, limit: 1, sortDescriptors: nil, resultsHandler: { (_, objects, error) -> Void in
                     if let error = error {
+                        NSLog("Error querying sample %@ for deletion: %@", entry.sampleUUID.uuidString, String(describing: error))
                         resultHandler(false, .healthStoreError(error))
                     } else if let objects = objects {
                         self.dataAccessQueue.async {
-                            self.carbEntryCache.remove(entry)
+                            guard objects.count > 0 else {
+                                NSLog("Query for sample %@ returned no results", entry.sampleUUID.uuidString)
+                                resultHandler(false, nil)
+                                return
+                            }
+
+                            if self.carbEntryCache.contains(entry) {
+                                self.carbEntryCache.remove(entry)
+                            } else {
+                                NSLog("Sample %@ not present in carbEntryCache, skipping removal", entry.sampleUUID.uuidString)
+                            }
 
                             self.healthStore.delete(objects, withCompletion: { (success, error) in
                                 self.dataAccessQueue.async {
                                     if !success {
+                                        if let error = error {
+                                            NSLog("Error deleting objects %@: %@", objects.map { $0.uuid.uuidString }, String(describing: error))
+                                        }
+                                        NSLog("Re-inserting %@ into carbEntryCache", entry.sampleUUID.uuidString)
                                         self.carbEntryCache.insert(entry)
                                     } else {
                                         self.persistCarbEntryCache()
@@ -860,7 +886,7 @@ public final class CarbStore: HealthKitSampleStore {
     /// - parameter completionHandler: A closure called once the report has been generated. The closure takes a single argument of the report string.
     public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
         func entryReport(_ entry: CarbEntry) -> String {
-            return "* \(entry.startDate), \(entry.quantity), \(entry.absorptionTime ?? self.defaultAbsorptionTimes.medium), \(entry.createdByCurrentApp ? "" : "External")"
+            return "* \(entry.startDate), \(entry.quantity), \(entry.absorptionTime ?? self.defaultAbsorptionTimes.medium), \(entry.createdByCurrentApp ? "" : "External"), isUploaded: \(entry.isUploaded)"
         }
 
         var report: [String] = [
@@ -883,33 +909,44 @@ public final class CarbStore: HealthKitSampleStore {
         completionHandler(report.joined(separator: "\n"))
     }
 
+    // Confined to dataAccessQueue
+    private var entryUploadInProgress = false
+
     private func syncExternalDB() {
         dataAccessQueue.async {
-            let entriesToUpload: [CarbEntry] = self.carbEntryCache.filter { !$0.isUploaded }
-            if entriesToUpload.count > 0 {
-                self.syncDelegate?.carbStore(self, hasEntriesNeedingUpload: entriesToUpload) { (externalIDs) in
-                    if externalIDs.count == entriesToUpload.count {
-                        for (entry, id) in zip(entriesToUpload, externalIDs) {
-                            let newEntry = NewCarbEntry(
-                                quantity: entry.quantity,
-                                startDate: entry.startDate,
-                                foodType: entry.foodType,
-                                absorptionTime: entry.absorptionTime,
-                                isUploaded: true,
-                                externalID: id
-                            )
-                            self.replaceCarbEntryInternal(entry, withEntry: newEntry) { (replaced, entry, error) in
-                                if let error = error {
-                                    self.delegate?.carbStore(self, didError: .healthStoreError(error))
+            guard let syncDelegate = self.syncDelegate else {
+                return
+            }
+
+            let entriesToUpload: [StoredCarbEntry] = self.carbEntryCache.filter { !$0.isUploaded }
+            if !self.entryUploadInProgress, entriesToUpload.count > 0 {
+                self.entryUploadInProgress = true
+                NSLog("Uploading %@", entriesToUpload.map { $0.sampleUUID.uuidString })
+                syncDelegate.carbStore(self, hasEntriesNeedingUpload: entriesToUpload) { (externalIDs) in
+                    self.dataAccessQueue.async {
+                        if externalIDs.count == entriesToUpload.count {
+                            for (entry, id) in zip(entriesToUpload, externalIDs) {
+                                if var uploadedEntry = self.carbEntryCache.remove(entry) {
+                                    NSLog("Marking entry %@ as uploaded", uploadedEntry.sampleUUID.uuidString)
+                                    uploadedEntry.isUploaded = true
+                                    uploadedEntry.externalID = id
+                                    self.carbEntryCache.insert(uploadedEntry)
+                                    self.persistCarbEntryCache()
+                                } else {
+                                    NSLog("Uploaded entry %@ not present in carbEntryCache, skipping modification", entry.sampleUUID.uuidString)
                                 }
                             }
+                        } else {
+                            NSLog("Upload failed with mismatch: %@", externalIDs)
                         }
+
+                        self.entryUploadInProgress = false
                     }
                 }
             }
 
             if self.modifiedCarbEntries.count > 0 {
-                self.syncDelegate?.carbStore(self, hasModifiedEntries: Array<StoredCarbEntry>(self.modifiedCarbEntries)) { (uploadedEntries) in
+                syncDelegate.carbStore(self, hasModifiedEntries: Array<StoredCarbEntry>(self.modifiedCarbEntries)) { (uploadedEntries) in
                     if uploadedEntries.count == self.modifiedCarbEntries.count {
                         self.modifiedCarbEntries = []
                     }
@@ -917,7 +954,7 @@ public final class CarbStore: HealthKitSampleStore {
             }
 
             if self.deletedCarbEntryIDs.count > 0 {
-                self.syncDelegate?.carbStore(self, hasDeletedEntries: Array<String>(self.deletedCarbEntryIDs)) { (ids) in
+                syncDelegate.carbStore(self, hasDeletedEntries: Array<String>(self.deletedCarbEntryIDs)) { (ids) in
                     if ids.count == self.deletedCarbEntryIDs.count {
                         self.deletedCarbEntryIDs = []
                     }
