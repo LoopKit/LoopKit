@@ -52,6 +52,7 @@ public struct GlucoseRangeSchedule: DailySchedule {
         public enum Context: String {
             case workout
             case preMeal
+            case remoteTempTarget
         }
 
         public let context: Context
