@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import os.log
 
 
 public class CommandResponseViewController: UIViewController {
@@ -21,6 +22,10 @@ public class CommandResponseViewController: UIViewController {
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    public var fileName: String?
+
+    private let uuid = UUID()
 
     private let command: Command
 
@@ -52,22 +57,55 @@ public class CommandResponseViewController: UIViewController {
     }
 
     @objc func shareText(_: Any?) {
-        let activityVC = UIActivityViewController(activityItems: [self], applicationActivities: nil)
+        let title = fileName ?? "\(self.title ?? uuid.uuidString).txt"
+
+        guard let item = SharedResponse(text: textView.text, title: title) else {
+            return
+        }
+
+        let activityVC = UIActivityViewController(activityItems: [item], applicationActivities: nil)
 
         present(activityVC, animated: true, completion: nil)
     }
 }
 
-extension CommandResponseViewController: UIActivityItemSource {
+
+private class SharedResponse: NSObject, UIActivityItemSource {
+
+    let title: String
+    let fileURL: URL
+
+    init?(text: String, title: String) {
+        self.title = title
+
+        var url = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+        url.appendPathComponent(title, isDirectory: false)
+
+        do {
+            try text.write(to: url, atomically: true, encoding: .utf8)
+        } catch let error {
+            os_log("Failed to write to file %{public}@: %{public}@", log: .default, type: .error, title, String(describing: error))
+            return nil
+        }
+
+        fileURL = url
+
+        super.init()
+    }
+
     public func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return title ?? textView.text ?? ""
+        return fileURL
     }
 
     public func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType?) -> Any? {
-        return textView.attributedText ?? ""
+        return fileURL
     }
 
     public func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivityType?) -> String {
-        return title ?? textView.text
+        return title
+    }
+
+    public func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivityType?) -> String {
+        return "public.utf8-plain-text"
     }
 }

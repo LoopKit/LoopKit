@@ -12,6 +12,8 @@ import Foundation
 public struct PersistedPumpEvent {
     /// The date of the event
     public let date: Date
+    /// The date the event was persisted
+    public let persistedDate: Date
     /// The insulin dose described by the event, if applicable
     public let dose: DoseEntry?
     /// Whether the event has been successfully uploaded
@@ -31,6 +33,7 @@ extension PumpEvent {
     var persistedPumpEvent: PersistedPumpEvent {
         return PersistedPumpEvent(
             date: date,
+            persistedDate: createdAt,
             dose: dose,
             isUploaded: isUploaded,
             objectIDURL: objectID.uriRepresentation(),

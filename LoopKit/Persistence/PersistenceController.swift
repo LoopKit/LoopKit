@@ -9,6 +9,21 @@ import CoreData
 import os.log
 
 
+public protocol PersistenceControllerDelegate: class {
+    /// Informs the delegate that a save operation will start, so it can start a background task on its behalf
+    ///
+    /// - Parameter controller: The persistence controller
+    func persistenceControllerWillSave(_ controller: PersistenceController)
+
+    /// Informs the delegate that a save operation did end
+    ///
+    /// - Parameters:
+    ///   - controller: The persistence controller
+    ///   - error: An error describing why the save failed
+    func persistenceControllerDidSave(_ controller: PersistenceController, error: PersistenceController.PersistenceControllerError?)
+}
+
+
 /// Provides a Core Data persistence stack for the LoopKit data model
 public final class PersistenceController {
 
@@ -45,11 +60,33 @@ public final class PersistenceController {
 
     internal let managedObjectContext: NSManagedObjectContext
 
-    public init(directoryURL: URL) {
+    public let isReadOnly: Bool
+
+    public let directoryURL: URL
+
+    public weak var delegate: PersistenceControllerDelegate?
+
+    private let log = OSLog(category: "PersistenceController")
+
+    /// Initializes a new persistence controller in the specified directory
+    ///
+    /// - Parameters:
+    ///   - directoryURL: The directory where the SQLlite database is stored. Will be created with no file protection if it doesn't exist.
+    ///   - model: The managed object model definition
+    ///   - isReadOnly: Whether the persistent store is intended to be read-only. Read-only stores will observe cross-process notifications and reload all contexts when data changes. Writable stores will post these notifications.
+    public init(
+        directoryURL: URL,
+        model: NSManagedObjectModel = NSManagedObjectModel(contentsOf: Bundle(for: PersistenceController.self).url(forResource: "Model", withExtension: "momd")!)!,
+        isReadOnly: Bool = false
+    ) {
         managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
+        managedObjectContext.automaticallyMergesChangesFromParent = true
 
-        initializeStack(inDirectory: directoryURL)
+        self.directoryURL = directoryURL
+        self.isReadOnly = isReadOnly
+
+        initializeStack(inDirectory: directoryURL, model: model)
     }
 
     private var readyCallbacks: [ReadyCallback] = []
@@ -72,14 +109,20 @@ public final class PersistenceController {
     }
 
     func save(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) {
-        self.managedObjectContext.perform { [unowned self] in
-            do {
-                if self.managedObjectContext.hasChanges {
-                    try self.managedObjectContext.save()
-                }
+        self.managedObjectContext.performAndWait {
+            guard !self.isReadOnly && self.managedObjectContext.hasChanges else {
+                completion?(nil)
+                return
+            }
 
+            do {
+                delegate?.persistenceControllerWillSave(self)
+                try self.managedObjectContext.save()
+                delegate?.persistenceControllerDidSave(self, error: nil)
                 completion?(nil)
             } catch let saveError as NSError {
+                self.log.error("Error while saving context: %{public}", saveError)
+                delegate?.persistenceControllerDidSave(self, error: .coreDataError(saveError))
                 completion?(.coreDataError(saveError))
             }
         }
@@ -87,19 +130,17 @@ public final class PersistenceController {
 
     // MARK: - 
 
-    private func initializeStack(inDirectory directoryURL: URL) {
+    private func initializeStack(inDirectory directoryURL: URL, model: NSManagedObjectModel) {
         managedObjectContext.perform {
             var error: PersistenceControllerError?
 
-            let modelURL = Bundle(for: type(of: self)).url(forResource: "Model", withExtension: "momd")!
-            let model = NSManagedObjectModel(contentsOf: modelURL)
-            let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model!)
+            let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
 
             self.managedObjectContext.persistentStoreCoordinator = coordinator
 
             if !FileManager.default.fileExists(atPath: directoryURL.absoluteString) {
                 do {
-                    try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
+                    try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: [FileAttributeKey.protectionKey: FileProtectionType.none])
                 } catch {
                     // Ignore errors here, let Core Data explain the problem
                 }
@@ -119,7 +160,7 @@ public final class PersistenceController {
                     ]
                 )
             } catch let storeError as NSError {
-                OSLog(category: "PersistenceController").error("Failed to initialize persistenceController: %{public}@", storeError)
+                self.log.error("Failed to initialize persistenceController: %{public}@", storeError)
                 error = .coreDataError(storeError)
             }
 
@@ -137,5 +178,17 @@ public final class PersistenceController {
                 self.readyCallbacks = []
             }
         }
+    }
+}
+
+
+extension PersistenceController: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return [
+            "## PersistenceController",
+            "* isReadOnly: \(isReadOnly)",
+            "* directoryURL: \(directoryURL)",
+            "* persistenceStoreCoordinator: \(String(describing: managedObjectContext.persistentStoreCoordinator))",
+        ].joined(separator: "\n")
     }
 }

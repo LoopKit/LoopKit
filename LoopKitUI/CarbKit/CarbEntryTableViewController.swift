@@ -46,6 +46,8 @@ public final class CarbEntryTableViewController: UITableViewController {
                         }
                     }
                 )
+            } else {
+                carbStoreObserver = nil
             }
         }
     }
@@ -106,7 +108,9 @@ public final class CarbEntryTableViewController: UITableViewController {
     }
 
     deinit {
-        carbStoreObserver = nil
+        if let observer = carbStoreObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
 
     // MARK: - Data

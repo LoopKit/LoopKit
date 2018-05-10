@@ -170,11 +170,19 @@ public final class DoseStore {
     /// - Parameters:
     ///   - healthStore: The HealthKit store for reading & writing insulin delivery
     ///   - cacheStore: The cache store for reading & writing short-term intermediate data
+    ///   - observationEnabled: Whether the store should observe changes from HealthKit
     ///   - insulinModel: The model of insulin effect over time
     ///   - basalProfile: The daily schedule of basal insulin rates
     ///   - insulinSensitivitySchedule: The daily schedule of insulin sensitivity (ISF)
-    public init(healthStore: HKHealthStore, cacheStore: PersistenceController, insulinModel: InsulinModel?, basalProfile: BasalRateSchedule?, insulinSensitivitySchedule: InsulinSensitivitySchedule?) {
-        self.insulinDeliveryStore = InsulinDeliveryStore(healthStore: healthStore, effectDuration: insulinModel?.effectDuration ?? .hours(6))
+    public init(
+        healthStore: HKHealthStore,
+        cacheStore: PersistenceController,
+        observationEnabled: Bool = true,
+        insulinModel: InsulinModel?,
+        basalProfile: BasalRateSchedule?,
+        insulinSensitivitySchedule: InsulinSensitivitySchedule?
+    ) {
+        self.insulinDeliveryStore = InsulinDeliveryStore(healthStore: healthStore, effectDuration: insulinModel?.effectDuration ?? .hours(6), observationEnabled: observationEnabled)
         self.lockedInsulinModel = Locked(insulinModel)
         self.lockedInsulinSensitivitySchedule = Locked(insulinSensitivitySchedule)
         self.lockedBasalProfile = Locked(basalProfile)
@@ -182,7 +190,11 @@ public final class DoseStore {
 
         self.pumpEventQueryAfterDate = recentValuesStartDate
 
-        persistenceController.onReady { [unowned self] (error) -> Void in
+        persistenceController.onReady { (error) -> Void in
+            guard error == nil else {
+                return
+            }
+
             self.persistenceController.managedObjectContext.perform {
                 // Find the newest PumpEvent date we have
                 let request: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
@@ -398,7 +410,7 @@ extension DoseStore {
         - error:                    An error object explaining why the value could not be saved
      */
     public func addReservoirValue(_ unitVolume: Double, at date: Date, completion: @escaping (_ value: ReservoirValue?, _ previousValue: ReservoirValue?, _ areStoredValuesContinuous: Bool, _ error: DoseStoreError?) -> Void) {
-        persistenceController.managedObjectContext.perform { [unowned self] in
+        persistenceController.managedObjectContext.perform {
             // Perform some sanity checking of the new value against the most recent value.
             if let previousValue = self.lastReservoirValue {
                 let isOutOfOrder = previousValue.endDate > date
@@ -559,7 +571,7 @@ extension DoseStore {
      - parameter error:         An error object explaining why the value could not be deleted
      */
     public func deleteReservoirValue(_ value: ReservoirValue, completion: @escaping (_ deletedValues: [ReservoirValue], _ error: DoseStoreError?) -> Void) {
-        persistenceController.managedObjectContext.perform { [unowned self] in
+        persistenceController.managedObjectContext.perform {
             var deletedObjects = [ReservoirValue]()
             if  let storedValue = value as? StoredReservoirValue,
                 let objectID = self.persistenceController.managedObjectContext.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: storedValue.objectIDURL),
@@ -654,7 +666,7 @@ extension DoseStore {
             return
         }
 
-        persistenceController.managedObjectContext.perform { [unowned self] in
+        persistenceController.managedObjectContext.perform {
             var lastFinalDate: Date?
             var firstMutableDate: Date?
             var primeValueAdded = false
@@ -705,7 +717,7 @@ extension DoseStore {
                 self.validateReservoirContinuity()
             }
 
-            self.persistenceController.save { [unowned self] (error) -> Void in
+            self.persistenceController.save { (error) -> Void in
                 completion(DoseStoreError(error: error))
                 NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
                 self.uploadPumpEventsIfNeeded()
@@ -725,7 +737,7 @@ extension DoseStore {
     ///   - event: The event to append
     ///   - completion: A closure called when the add has completed
     public func addPendingPumpEvent(_ event: NewPumpEvent, completion: @escaping () -> Void) {
-        persistenceController.managedObjectContext.perform { [unowned self] in
+        persistenceController.managedObjectContext.perform {
             if let dose = event.dose {
                 self.mutablePumpEventDoses.append(dose)
             }
@@ -735,7 +747,7 @@ extension DoseStore {
     }
 
     public func deletePumpEvent(_ event: PersistedPumpEvent, completion: @escaping (_ error: DoseStoreError?) -> Void) {
-        persistenceController.managedObjectContext.perform { [unowned self] in
+        persistenceController.managedObjectContext.perform {
 
             if  let objectID = self.persistenceController.managedObjectContext.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: event.objectIDURL),
                 let object = try? self.persistenceController.managedObjectContext.existingObject(with: objectID)
@@ -847,7 +859,7 @@ extension DoseStore {
         isUploadRequestPending = true
 
         delegate.doseStore(self, hasEventsNeedingUpload: events) { (uploadedObjectIDURLs) in
-            self.persistenceController.managedObjectContext.perform { [unowned self] in
+            self.persistenceController.managedObjectContext.perform {
                 for url in uploadedObjectIDURLs {
                     guard
                         let id = self.persistenceController.managedObjectContext.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url),
@@ -1155,7 +1167,7 @@ extension DoseStore {
             "* mutablePumpEventDoses: \(mutablePumpEventDoses)",
             "* pumpEventQueryAfterDate: \(pumpEventQueryAfterDate)",
             "* totalDeliveryCache: \(String(describing: totalDeliveryCache))",
-            "* lastPrimeEventDate: \(String(describing: lastRecordedPrimeEventDate))",
+            "* lastRecordedPrimeEventDate: \(String(describing: lastRecordedPrimeEventDate))",
             "* pumpRecordsBasalProfileStartEvents: \(pumpRecordsBasalProfileStartEvents)",
             "* device: \(String(describing: device))",
         ]
@@ -1179,6 +1191,7 @@ extension DoseStore {
                     report.append("Error: \(error)")
                 case .success(let values):
                     report.append("")
+                    report.append("* Reservoir(startDate, unitVolume)")
                     for value in values {
                         report.append("* \(value.startDate), \(value.unitVolume)")
                     }

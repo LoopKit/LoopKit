@@ -37,15 +37,19 @@ public class HealthKitSampleStore {
     /// The health store used for underlying queries
     public let healthStore: HKHealthStore
 
+    /// Whether the store is observing changes to types
+    public let observationEnabled: Bool
+
     /// For unit testing only.
     internal var testQueryStore: HKSampleQueryTestable?
 
     private let log: OSLog
 
-    public init(healthStore: HKHealthStore, type: HKSampleType, observationStart: Date) {
+    public init(healthStore: HKHealthStore, type: HKSampleType, observationStart: Date, observationEnabled: Bool) {
         self.healthStore = healthStore
         self.sampleType = type
         self.observationStart = observationStart
+        self.observationEnabled = observationEnabled
 
         self.log = OSLog(category: String(describing: Swift.type(of: self)))
 
@@ -55,6 +59,9 @@ public class HealthKitSampleStore {
     }
 
     deinit {
+        if let query = observerQuery {
+            healthStore.stop(query)
+        }
         observerQuery = nil
     }
 
@@ -177,12 +184,19 @@ extension HealthKitSampleStore: HKSampleQueryTestable {
 // MARK: - Observation
 extension HealthKitSampleStore {
     private func createQuery() {
-        log.debug("%@", #function)
+        log.debug("%@ [observationEnabled: %d]", #function, observationEnabled)
+
+        guard observationEnabled else {
+            return
+        }
+
         let predicate = HKQuery.predicateForSamples(withStart: observationStart, end: nil)
 
-        observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { [unowned self] (query, completionHandler, error) in
-            self.log.debug("%@ notified with changes for %@", query, self.sampleType)
-            self.observeUpdates(to: query, error: error)
+        observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { [weak self] (query, completionHandler, error) in
+            if let strongSelf = self {
+                strongSelf.log.debug("%@ notified with changes for %@", query, strongSelf.sampleType)
+                strongSelf.observeUpdates(to: query, error: error)
+            }
 
             completionHandler()
         }
@@ -301,6 +315,7 @@ extension HealthKitSampleStore: CustomDebugStringConvertible {
         return """
         * observerQuery: \(String(describing: observerQuery))
         * observationStart: \(observationStart)
+        * observationEnabled: \(observationEnabled)
         * authorizationRequired: \(authorizationRequired)
         """
     }

@@ -13,8 +13,6 @@ import LoopKit
 
 class DeviceDataManager : CarbStoreDelegate {
 
-    static let shared = DeviceDataManager()
-
     init() {
         let healthStore = HKHealthStore()
         let cacheStore = PersistenceController(directoryURL: FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!)
