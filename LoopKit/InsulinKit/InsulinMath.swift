@@ -259,8 +259,7 @@ extension DoseEntry {
                 value: unitsPerHour,
                 unit: .unitsPerHour,
                 description: description,
-                syncIdentifier: syncIdentifier,
-                managedObjectID: nil
+                syncIdentifier: syncIdentifier
             )
             dose.scheduledBasalRate = HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: basalItem.value)
 
@@ -302,8 +301,7 @@ extension Collection where Iterator.Element == DoseEntry {
                             value: last.value,
                             unit: last.unit,
                             description: last.description,
-                            syncIdentifier: last.syncIdentifier,
-                            managedObjectID: nil
+                            syncIdentifier: last.syncIdentifier
                         ))
                     }
                 }
@@ -318,8 +316,7 @@ extension Collection where Iterator.Element == DoseEntry {
                         value: suspend.value,
                         unit: suspend.unit,
                         description: suspend.description ?? dose.description,
-                        syncIdentifier: suspend.syncIdentifier,
-                        managedObjectID: nil
+                        syncIdentifier: suspend.syncIdentifier
                     ))
 
                     lastSuspend = nil
@@ -336,8 +333,7 @@ extension Collection where Iterator.Element == DoseEntry {
                             unit: last.unit,
                             description: last.description,
                             // We intentionally use the resume's identifier as the basal entry has already been entered
-                            syncIdentifier: dose.syncIdentifier,
-                            managedObjectID: nil
+                            syncIdentifier: dose.syncIdentifier
                         )
                     } else {
                         lastBasal = nil
@@ -352,8 +348,7 @@ extension Collection where Iterator.Element == DoseEntry {
                         value: last.value,
                         unit: last.unit,
                         description: last.description,
-                        syncIdentifier: last.syncIdentifier,
-                        managedObjectID: nil
+                        syncIdentifier: last.syncIdentifier
                     ))
 
                     if last.endDate <= dose.startDate {
@@ -526,8 +521,7 @@ extension Collection where Iterator.Element == DoseEntry {
                                 endDate: end,
                                 value: scheduled.value,
                                 unit: .unitsPerHour,
-                                syncIdentifier: syncIdentifier,
-                                managedObjectID: nil
+                                syncIdentifier: syncIdentifier
                             ))
                         }
                     }

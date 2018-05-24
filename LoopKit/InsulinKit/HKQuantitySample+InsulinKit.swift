@@ -6,7 +6,6 @@
 //
 
 import HealthKit
-import CoreData
 
 
 /// Defines the scheduled basal insulin rate during the time of the basal delivery sample
@@ -98,8 +97,7 @@ extension HKQuantitySample {
             value: quantity.doubleValue(for: .internationalUnit()),
             unit: .units,
             description: nil,
-            syncIdentifier: metadata?[HKMetadataKeySyncIdentifier] as? String,
-            managedObjectID: nil
+            syncIdentifier: metadata?[HKMetadataKeySyncIdentifier] as? String
         )
 
         entry.scheduledBasalRate = scheduledBasalRate

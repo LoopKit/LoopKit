@@ -99,8 +99,7 @@ class InsulinMathTests: XCTestCase {
                 value: $0["amount"] as! Double,
                 unit: unit,
                 description: $0["description"] as? String,
-                syncIdentifier: $0["raw"] as? String,
-                managedObjectID: nil
+                syncIdentifier: $0["raw"] as? String
             )
 
             if let scheduled = $0["scheduled"] as? Double {

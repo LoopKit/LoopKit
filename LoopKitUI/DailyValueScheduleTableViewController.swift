@@ -71,7 +71,10 @@ public class DailyValueScheduleTableViewController: UITableViewController {
 
         tableView.keyboardDismissMode = .onDrag
 
-        keyboardWillShowNotificationObserver = NotificationCenter.default.addObserver(forName: .UIKeyboardWillShow, object: nil, queue: OperationQueue.main, using: { [unowned self] (note) -> Void in
+        keyboardWillShowNotificationObserver = NotificationCenter.default.addObserver(forName: .UIKeyboardWillShow, object: nil, queue: OperationQueue.main, using: { [weak self] (note) -> Void in
+            guard let strongSelf = self else {
+                return
+            }
 
             guard note.userInfo?[UIKeyboardIsLocalUserInfoKey] as? Bool == true else {
                 return
@@ -79,10 +82,10 @@ public class DailyValueScheduleTableViewController: UITableViewController {
 
             let animated = note.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Double ?? 0 > 0
 
-            if let indexPath = self.tableView.indexPathForSelectedRow {
-                self.tableView.beginUpdates()
-                self.tableView.deselectRow(at: indexPath, animated: animated)
-                self.tableView.endUpdates()
+            if let indexPath = strongSelf.tableView.indexPathForSelectedRow {
+                strongSelf.tableView.beginUpdates()
+                strongSelf.tableView.deselectRow(at: indexPath, animated: animated)
+                strongSelf.tableView.endUpdates()
             }
         })
     }

@@ -36,8 +36,8 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
     /// Should only be accessed on dataAccessQueue
     private var lastBasalEndDate: LoadableDate = .none
 
-    public init(healthStore: HKHealthStore, effectDuration: TimeInterval) {
-        super.init(healthStore: healthStore, type: insulinType, observationStart: Date(timeIntervalSinceNow: -effectDuration))
+    public init(healthStore: HKHealthStore, effectDuration: TimeInterval, observationEnabled: Bool) {
+        super.init(healthStore: healthStore, type: insulinType, observationStart: Date(timeIntervalSinceNow: -effectDuration), observationEnabled: observationEnabled)
     }
 
     public override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {

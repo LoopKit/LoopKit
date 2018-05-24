@@ -13,14 +13,14 @@ import LoopKitUI
 
 class MasterViewController: UITableViewController, DailyValueScheduleTableViewControllerDelegate {
 
-    private var dataManager: DeviceDataManager {
-        get {
-            return DeviceDataManager.shared
-        }
-    }
+    private var dataManager: DeviceDataManager? = DeviceDataManager()
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        guard let dataManager = dataManager else {
+            return
+        }
 
         let sampleTypes = Set([
             dataManager.glucoseStore.sampleType,
@@ -35,9 +35,9 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
             dataManager.carbStore.healthStore.requestAuthorization(toShare: sampleTypes, read: sampleTypes) { (success, error) in
                 if success {
                     // Call the individual authorization methods to trigger query creation
-                    self.dataManager.carbStore.authorize({ _ in })
-                    self.dataManager.doseStore.insulinDeliveryStore.authorize({ _ in })
-                    self.dataManager.glucoseStore.authorize({ _ in })
+                    dataManager.carbStore.authorize({ _ in })
+                    dataManager.doseStore.insulinDeliveryStore.authorize({ _ in })
+                    dataManager.glucoseStore.authorize({ _ in })
                 }
             }
         }
@@ -57,8 +57,9 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
         case reservoir
         case diagnostic
         case generate
+        case reset
 
-        static let count = 4
+        static let count = 5
     }
 
     private enum ConfigurationRow: Int {
@@ -107,6 +108,8 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 cell.textLabel?.text = NSLocalizedString("Diagnostic", comment: "The title for the cell displaying diagnostic data")
             case .generate:
                 cell.textLabel?.text = NSLocalizedString("Generate Data", comment: "The title for the cell displaying data generation")
+            case .reset:
+                cell.textLabel?.text = NSLocalizedString("Reset", comment: "Title for the cell resetting the data manager")
             }
         }
 
@@ -123,9 +126,9 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
             let row = ConfigurationRow(rawValue: indexPath.row)!
             switch row {
             case .basalRate:
-                let scheduleVC = SingleValueScheduleTableViewController()
+                let scheduleVC = SingleValueScheduleTableViewController(style: .grouped)
 
-                if let profile = dataManager.basalRateSchedule {
+                if let profile = dataManager?.basalRateSchedule {
                     scheduleVC.timeZone = profile.timeZone
                     scheduleVC.scheduleItems = profile.items
                 }
@@ -139,14 +142,14 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 scheduleVC.delegate = self
                 scheduleVC.title = sender?.textLabel?.text
 
-                if let schedule = dataManager.glucoseTargetRangeSchedule {
+                if let schedule = dataManager?.glucoseTargetRangeSchedule {
                     scheduleVC.timeZone = schedule.timeZone
                     scheduleVC.scheduleItems = schedule.items
                     scheduleVC.unit = schedule.unit
                     scheduleVC.overrideRanges = schedule.overrideRanges
 
                     show(scheduleVC, sender: sender)
-                } else {
+                } else if let dataManager = dataManager {
                     dataManager.glucoseStore.preferredUnit { (result) -> Void in
                         DispatchQueue.main.async {
                             switch result {
@@ -165,7 +168,7 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
 //                textFieldVC.delegate = self
                 textFieldVC.title = sender?.textLabel?.text
                 textFieldVC.placeholder = NSLocalizedString("Enter the 6-digit pump ID", comment: "The placeholder text instructing users how to enter a pump ID")
-                textFieldVC.value = dataManager.pumpID
+                textFieldVC.value = dataManager?.pumpID
                 textFieldVC.keyboardType = .numberPad
                 textFieldVC.contextHelp = NSLocalizedString("The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).", comment: "Instructions on where to find the pump ID on a Minimed pump")
 
@@ -178,18 +181,23 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
             case .reservoir:
                 performSegue(withIdentifier: InsulinDeliveryTableViewController.className, sender: sender)
             case .diagnostic:
-                let vc = CommandResponseViewController(command: { (completionHandler) -> String in
+                let vc = CommandResponseViewController(command: { [weak self] (completionHandler) -> String in
                     let group = DispatchGroup()
+
+                    guard let dataManager = self?.dataManager else {
+                        completionHandler("")
+                        return "nil"
+                    }
 
                     var doseStoreResponse = ""
                     group.enter()
-                    self.dataManager.doseStore.generateDiagnosticReport { (report) in
+                    dataManager.doseStore.generateDiagnosticReport { (report) in
                         doseStoreResponse = report
                         group.leave()
                     }
 
                     var carbStoreResponse = ""
-                    if let carbStore = self.dataManager.carbStore {
+                    if let carbStore = dataManager.carbStore {
                         group.enter()
                         carbStore.generateDiagnosticReport { (report) in
                             carbStoreResponse = report
@@ -199,7 +207,7 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
 
                     var glucoseStoreResponse = ""
                     group.enter()
-                    self.dataManager.glucoseStore.generateDiagnosticReport { (report) in
+                    dataManager.glucoseStore.generateDiagnosticReport { (report) in
                         glucoseStoreResponse = report
                         group.leave()
                     }
@@ -218,7 +226,7 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
 
                 show(vc, sender: sender)
             case .generate:
-                let vc = CommandResponseViewController(command: { (completionHandler) -> String in
+                let vc = CommandResponseViewController(command: { [weak self] (completionHandler) -> String in
                     let group = DispatchGroup()
 
                     var unitVolume = 150.0
@@ -231,7 +239,7 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                         unitVolume -= (drand48() * 2.0)
 
                         group.enter()
-                        self.dataManager.doseStore.addReservoirValue(unitVolume, at: Date(timeIntervalSinceNow: index)) { (_, _, _, error) in
+                        self?.dataManager?.doseStore.addReservoirValue(unitVolume, at: Date(timeIntervalSinceNow: index)) { (_, _, _, error) in
                             group.leave()
                         }
                     }
@@ -245,6 +253,9 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 vc.title = sender?.textLabel?.text
 
                 show(vc, sender: sender)
+            case .reset:
+                dataManager = nil
+                tableView.reloadData()
             }
         }
     }
@@ -262,14 +273,14 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
 
         switch targetViewController {
         case let vc as CarbEntryTableViewController:
-            vc.carbStore = dataManager.carbStore
+            vc.carbStore = dataManager?.carbStore
         case let vc as CarbEntryEditViewController:
-            if let carbStore = dataManager.carbStore {
+            if let carbStore = dataManager?.carbStore {
                 vc.defaultAbsorptionTimes = carbStore.defaultAbsorptionTimes
                 vc.preferredUnit = carbStore.preferredUnit
             }
         case let vc as InsulinDeliveryTableViewController:
-            vc.doseStore = dataManager.doseStore
+            vc.doseStore = dataManager?.doseStore
         default:
             break
         }
@@ -284,11 +295,11 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 switch ConfigurationRow(rawValue: indexPath.row)! {
                 case .basalRate:
                     if let controller = controller as? SingleValueScheduleTableViewController {
-                        dataManager.basalRateSchedule = BasalRateSchedule(dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
+                        dataManager?.basalRateSchedule = BasalRateSchedule(dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
                     }
                 case .glucoseTargetRange:
                     if let controller = controller as? GlucoseRangeScheduleTableViewController {
-                        dataManager.glucoseTargetRangeSchedule = GlucoseRangeSchedule(unit: controller.unit, dailyItems: controller.scheduleItems, timeZone: controller.timeZone, overrideRanges: controller.overrideRanges)
+                        dataManager?.glucoseTargetRangeSchedule = GlucoseRangeSchedule(unit: controller.unit, dailyItems: controller.scheduleItems, timeZone: controller.timeZone, overrideRanges: controller.overrideRanges)
                     }
                 /*case let row:
                     if let controller = controller as? DailyQuantityScheduleTableViewController {

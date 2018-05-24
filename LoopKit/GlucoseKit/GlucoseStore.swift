@@ -61,7 +61,7 @@ public final class GlucoseStore: HealthKitSampleStore {
             lockedManagedDataInterval.value = newValue
         }
     }
-    private let lockedManagedDataInterval = Locked<TimeInterval?>(.hours(3))
+    private let lockedManagedDataInterval = Locked<TimeInterval?>(nil)
 
     /// The interval of glucose data to keep in cache
     public let cacheLength: TimeInterval
@@ -89,6 +89,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     public init(
         healthStore: HKHealthStore,
         cacheStore: PersistenceController,
+        observationEnabled: Bool = true,
         cacheLength: TimeInterval = 60 /* minutes */ * 60 /* seconds */,
         momentumDataInterval: TimeInterval = 15 /* minutes */ * 60 /* seconds */
     ) {
@@ -96,9 +97,9 @@ public final class GlucoseStore: HealthKitSampleStore {
         self.momentumDataInterval = momentumDataInterval
         self.cacheLength = max(cacheLength, momentumDataInterval)
 
-        super.init(healthStore: healthStore, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -cacheLength))
+        super.init(healthStore: healthStore, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -cacheLength), observationEnabled: observationEnabled)
 
-        cacheStore.onReady { [unowned self] (error) in
+        cacheStore.onReady { (error) in
             self.dataAccessQueue.async {
                 self.updateLatestGlucose()
             }
@@ -337,11 +338,7 @@ extension GlucoseStore {
             }
 
             if created {
-                do {
-                    try self.cacheStore.managedObjectContext.save()
-                } catch let error {
-                    self.log.error("Unable to save new cached objects: %@", String(describing: error))
-                }
+                self.cacheStore.save()
             }
         }
 
@@ -405,11 +402,7 @@ extension GlucoseStore {
             }
 
             if deleted {
-                do {
-                    try self.cacheStore.managedObjectContext.save()
-                } catch let error {
-                    self.log.error("Unable to save deleted CachedGlucoseObjects: %@", String(describing: error))
-                }
+                self.cacheStore.save()
             }
         }
 

@@ -98,7 +98,9 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
     }
 
     deinit {
-        doseStoreObserver = nil
+        if let observer = doseStoreObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
 
     public override func setEditing(_ editing: Bool, animated: Bool) {

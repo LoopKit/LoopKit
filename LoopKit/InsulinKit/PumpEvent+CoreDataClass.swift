@@ -134,8 +134,7 @@ extension PumpEvent {
                 endDate: endDate,
                 value: value,
                 unit: unit,
-                syncIdentifier: syncIdentifier,
-                managedObjectID: objectID
+                syncIdentifier: syncIdentifier
             )
         }
         set {
