@@ -622,4 +622,37 @@ class InsulinMathTests: XCTestCase {
 
         XCTAssertEqual(reconciled, doses.reversed().reconciled())
     }
+
+    func testReconcileMultipleResumes() {
+        let formatter = DateFormatter.descriptionFormatter
+        let f = { (input) in
+            return formatter.date(from: input)!
+        }
+
+        let doses = [
+            DoseEntry(type: .basal, startDate: f("2018-05-15 14:42:36 +0000"), endDate: f("2018-05-16 14:42:36 +0000"), value: 0.84999999999999998, unit: .unitsPerHour, syncIdentifier: "7b02646a070f120e2200", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:42:36 +0000"), endDate: f("2018-05-15 14:42:36 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "1600646a074f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:32:51 +0000"), endDate: f("2018-05-15 15:02:51 +0000"), value: 1.8999999999999999, unit: .unitsPerHour, syncIdentifier: "16017360074f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:32:49 +0000"), endDate: f("2018-05-15 15:02:49 +0000"), value: 1.8999999999999999, unit: .unitsPerHour, syncIdentifier: "16017160074f12", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-05-15 14:25:42 +0000"), endDate: f("2018-05-16 14:25:42 +0000"), value: 0.84999999999999998, unit: .unitsPerHour, syncIdentifier: "7b026a59070f120e2200", scheduledBasalRate: nil),
+            DoseEntry(type: .resume, startDate: f("2018-05-15 14:24:04 +0000"), endDate: f("2018-05-15 14:24:04 +0000"), value: 0, unit: .units, syncIdentifier: "prime2", scheduledBasalRate: nil),
+            DoseEntry(type: .resume, startDate: f("2018-05-15 14:22:28 +0000"), endDate: f("2018-05-15 14:22:28 +0000"), value: 0, unit: .units, syncIdentifier: "prime1", scheduledBasalRate: nil),
+            DoseEntry(type: .suspend, startDate: f("2018-05-15 14:21:33 +0000"), endDate: f("2018-05-15 14:21:33 +0000"), value: 0.0, unit: .units, syncIdentifier: "21006155070f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:10:29 +0000"), endDate: f("2018-05-15 14:10:29 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16005d4a074f12", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-05-15 14:10:29 +0000"), endDate: f("2018-05-16 14:10:29 +0000"), value: 0.84999999999999998, unit: .unitsPerHour, syncIdentifier: "7b025d4a070f120e2200", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:05:29 +0000"), endDate: f("2018-05-15 14:35:29 +0000"), value: 2.9249999999999998, unit: .unitsPerHour, syncIdentifier: "16015d45074f12", scheduledBasalRate: nil),
+        ]
+
+        let reconciled = [
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:05:29 +0000"), endDate: f("2018-05-15 14:10:29 +0000"), value: 2.9249999999999998, unit: .unitsPerHour, description: nil, syncIdentifier: "16015d45074f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:10:29 +0000"), endDate: f("2018-05-15 14:10:29 +0000"), value: 0.0, unit: .unitsPerHour, description: nil, syncIdentifier: "16005d4a074f12", scheduledBasalRate: nil),
+            DoseEntry(type: .suspend, startDate: f("2018-05-15 14:21:33 +0000"), endDate: f("2018-05-15 14:22:28 +0000"), value: 0.0, unit: .units, description: nil, syncIdentifier: "21006155070f12", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-05-15 14:25:42 +0000"), endDate: f("2018-05-15 14:32:49 +0000"), value: 0.84999999999999998, unit: .unitsPerHour, description: nil, syncIdentifier: "7b026a59070f120e2200", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:32:49 +0000"), endDate: f("2018-05-15 14:32:51 +0000"), value: 1.8999999999999999, unit: .unitsPerHour, description: nil, syncIdentifier: "16017160074f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:32:51 +0000"), endDate: f("2018-05-15 14:42:36 +0000"), value: 1.8999999999999999, unit: .unitsPerHour, description: nil, syncIdentifier: "16017360074f12", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-05-15 14:42:36 +0000"), endDate: f("2018-05-16 14:42:36 +0000"), value: 0.84999999999999998, unit: .unitsPerHour, description: nil, syncIdentifier: "7b02646a070f120e2200", scheduledBasalRate: nil)
+        ]
+
+        XCTAssertEqual(reconciled, doses.reversed().reconciled())
+    }
 }
