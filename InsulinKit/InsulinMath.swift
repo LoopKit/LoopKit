@@ -302,24 +302,23 @@ extension Collection where Iterator.Element == DoseEntry {
                     ))
 
                     lastSuspend = nil
-                }
-
-                // Continue temp basals that may have started before suspending
-                if let last = lastBasal, last.type == .tempBasal {
-                    if last.endDate > dose.endDate {
-                        lastBasal = DoseEntry(
-                            type: last.type,
-                            startDate: dose.endDate,
-                            endDate: last.endDate,
-                            value: last.value,
-                            unit: last.unit,
-                            description: last.description,
-                            // We intentionally use the resume's identifier as the basal entry has already been entered
-                            syncIdentifier: dose.syncIdentifier,
-                            managedObjectID: nil
-                        )
-                    } else {
-                        lastBasal = nil
+                    // Continue temp basals that may have started before suspending
+                    if let last = lastBasal, last.type == .tempBasal {
+                        if last.endDate > dose.endDate {
+                            lastBasal = DoseEntry(
+                                type: last.type,
+                                startDate: dose.endDate,
+                                endDate: last.endDate,
+                                value: last.value,
+                                unit: last.unit,
+                                description: last.description,
+                                // We intentionally use the resume's identifier as the basal entry has already been entered
+                                syncIdentifier: dose.syncIdentifier,
+                                managedObjectID: nil
+                            )
+                        } else {
+                            lastBasal = nil
+                        }
                     }
                 }
             case .suspend:
