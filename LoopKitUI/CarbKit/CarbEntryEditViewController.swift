@@ -91,7 +91,7 @@ public final class CarbEntryEditViewController: UITableViewController {
 
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 44
-        tableView.register(DatePickerTableViewCell.nib(), forCellReuseIdentifier: DatePickerTableViewCell.className)
+        tableView.register(DateAndDurationTableViewCell.nib(), forCellReuseIdentifier: DateAndDurationTableViewCell.className)
 
         if originalCarbEntry != nil {
             title = NSLocalizedString("carb-entry-title-edit", value: "Edit Carb Entry", comment: "The title of the view controller to edit an existing carb entry")
@@ -142,7 +142,7 @@ public final class CarbEntryEditViewController: UITableViewController {
 
             return cell
         case .date:
-            let cell = tableView.dequeueReusableCell(withIdentifier: DatePickerTableViewCell.className) as! DatePickerTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className) as! DateAndDurationTableViewCell
 
             cell.titleLabel.text = NSLocalizedString("Date", comment: "Title of the carb entry date picker cell")
             cell.datePicker.isEnabled = isSampleEditable
@@ -186,7 +186,7 @@ public final class CarbEntryEditViewController: UITableViewController {
                 return cell
             }
         case .absorptionTime:
-            let cell = tableView.dequeueReusableCell(withIdentifier: DatePickerTableViewCell.className) as! DatePickerTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className) as! DateAndDurationTableViewCell
 
             cell.titleLabel.text = NSLocalizedString("Absorption Time", comment: "Title of the carb entry absorption time cell")
             cell.datePicker.isEnabled = isSampleEditable
@@ -260,14 +260,14 @@ public final class CarbEntryEditViewController: UITableViewController {
 
 
 extension CarbEntryEditViewController: TextFieldTableViewCellDelegate {
-    func textFieldTableViewCellDidBeginEditing(_ cell: TextFieldTableViewCell) {
+    public func textFieldTableViewCellDidBeginEditing(_ cell: TextFieldTableViewCell) {
         // Collapse any date picker cells to save space
         tableView.beginUpdates()
         hideDatePickerCells()
         tableView.endUpdates()
     }
 
-    func textFieldTableViewCellDidEndEditing(_ cell: TextFieldTableViewCell) {
+    public func textFieldTableViewCellDidEndEditing(_ cell: TextFieldTableViewCell) {
         guard let row = tableView.indexPath(for: cell)?.row else { return }
 
         switch Row(rawValue: row) {
@@ -324,7 +324,7 @@ extension CarbEntryEditViewController: FoodTypeShortcutCellDelegate {
         if let absorptionTime = absorptionTime {
             self.absorptionTime = absorptionTime
 
-            if let cell = tableView.cellForRow(at: IndexPath(row: Row.absorptionTime.rawValue, section: 0)) as? DatePickerTableViewCell {
+            if let cell = tableView.cellForRow(at: IndexPath(row: Row.absorptionTime.rawValue, section: 0)) as? DateAndDurationTableViewCell {
                 cell.duration = absorptionTime
             }
         }
@@ -351,7 +351,7 @@ extension CarbEntryEditViewController: CarbAbsorptionInputControllerDelegate {
         let lastAbsorptionTime = self.absorptionTime
         self.absorptionTime = orderedAbsorptionTimes[section]
 
-        if let cell = tableView.cellForRow(at: IndexPath(row: Row.absorptionTime.rawValue, section: 0)) as? DatePickerTableViewCell {
+        if let cell = tableView.cellForRow(at: IndexPath(row: Row.absorptionTime.rawValue, section: 0)) as? DateAndDurationTableViewCell {
             cell.duration = max(lastAbsorptionTime ?? 0, orderedAbsorptionTimes[section])
         }
     }

@@ -268,7 +268,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     // MARK: - RepeatingScheduleValueTableViewCellDelegate
 
-    override func repeatingScheduleValueTableViewCellDidUpdateDate(_ cell: RepeatingScheduleValueTableViewCell) {
+    override func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
         if let indexPath = tableView.indexPath(for: cell) {
             let currentItem = scheduleItems[indexPath.row]
 
@@ -278,7 +278,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
             )
         }
 
-        super.repeatingScheduleValueTableViewCellDidUpdateDate(cell)
+        super.datePickerTableViewCellDidUpdateDate(cell)
     }
 
     func repeatingScheduleValueTableViewCellDidUpdateValue(_ cell: RepeatingScheduleValueTableViewCell) {

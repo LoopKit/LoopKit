@@ -9,9 +9,10 @@
 import UIKit
 import LoopKit
 import LoopKitUI
+import HealthKit
 
 
-class MasterViewController: UITableViewController, DailyValueScheduleTableViewControllerDelegate {
+class MasterViewController: UITableViewController {
 
     private var dataManager: DeviceDataManager? = DeviceDataManager()
 
@@ -134,6 +135,7 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 }
                 scheduleVC.delegate = self
                 scheduleVC.title = sender?.textLabel?.text
+                scheduleVC.syncSource = self
 
                 show(scheduleVC, sender: sender)
             case .glucoseTargetRange:
@@ -227,6 +229,11 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 show(vc, sender: sender)
             case .generate:
                 let vc = CommandResponseViewController(command: { [weak self] (completionHandler) -> String in
+                    guard let dataManager = self?.dataManager else {
+                        completionHandler("")
+                        return "dataManager is nil"
+                    }
+
                     let group = DispatchGroup()
 
                     var unitVolume = 150.0
@@ -239,10 +246,15 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                         unitVolume -= (drand48() * 2.0)
 
                         group.enter()
-                        self?.dataManager?.doseStore.addReservoirValue(unitVolume, at: Date(timeIntervalSinceNow: index)) { (_, _, _, error) in
+                        dataManager.doseStore.addReservoirValue(unitVolume, at: Date(timeIntervalSinceNow: index)) { (_, _, _, error) in
                             group.leave()
                         }
                     }
+
+                    group.enter()
+                    dataManager.glucoseStore.addGlucose(NewGlucoseSample(date: Date(), quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 101), isDisplayOnly: false, syncIdentifier: UUID().uuidString), completion: { (result) in
+                        group.leave()
+                    })
 
                     group.notify(queue: .main) {
                         completionHandler("Completed")
@@ -285,9 +297,10 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
             break
         }
     }
+}
 
-    // MARK: - DailyValueScheduleTableViewControllerDelegate
 
+extension MasterViewController: DailyValueScheduleTableViewControllerDelegate {
     func dailyValueScheduleTableViewControllerWillFinishUpdating(_ controller: DailyValueScheduleTableViewController) {
         if let indexPath = tableView.indexPathForSelectedRow {
             switch Section(rawValue: indexPath.section)! {
@@ -321,6 +334,23 @@ class MasterViewController: UITableViewController, DailyValueScheduleTableViewCo
                 break
             }
         }
+    }
+}
+
+
+extension MasterViewController: SingleValueScheduleTableViewControllerSyncSource {
+    func syncButtonDetailText(for viewController: SingleValueScheduleTableViewController) -> String? {
+        return nil
+    }
+
+    func syncScheduleValues(for viewController: SingleValueScheduleTableViewController, completion: @escaping (RepeatingScheduleValueResult<Double>) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+            completion(.success(scheduleItems: [], timeZone: .current))
+        }
+    }
+
+    func syncButtonTitle(for viewController: SingleValueScheduleTableViewController) -> String {
+        return NSLocalizedString("Sync With Pump", comment: "Title of button to sync basal profile from pump")
     }
 }
 

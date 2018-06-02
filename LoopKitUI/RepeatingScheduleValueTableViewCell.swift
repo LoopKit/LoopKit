@@ -9,14 +9,12 @@
 import UIKit
 
 
-protocol RepeatingScheduleValueTableViewCellDelegate: class {
-    func repeatingScheduleValueTableViewCellDidUpdateDate(_ cell: RepeatingScheduleValueTableViewCell)
-
+protocol RepeatingScheduleValueTableViewCellDelegate: DatePickerTableViewCellDelegate {
     func repeatingScheduleValueTableViewCellDidUpdateValue(_ cell: RepeatingScheduleValueTableViewCell)
 }
 
 
-class RepeatingScheduleValueTableViewCell: UITableViewCell, UITextFieldDelegate {
+class RepeatingScheduleValueTableViewCell: DatePickerTableViewCell, UITextFieldDelegate {
 
     weak var delegate: RepeatingScheduleValueTableViewCellDelegate?
 
@@ -35,14 +33,14 @@ class RepeatingScheduleValueTableViewCell: UITableViewCell, UITextFieldDelegate 
         return dateFormatter
     }()
 
-    var date: Date = Date() {
-        didSet {
-            dateLabel.text = dateFormatter.string(from: date)
+    override func updateDateLabel() {
+        dateLabel.text = dateFormatter.string(from: date)
+    }
 
-            if datePicker.date != date {
-                datePicker.date = date
-            }
-        }
+    override func dateChanged(_ sender: UIDatePicker) {
+        super.dateChanged(sender)
+
+        delegate?.datePickerTableViewCellDidUpdateDate(self)
     }
 
     var value: Double = 0 {
@@ -53,6 +51,14 @@ class RepeatingScheduleValueTableViewCell: UITableViewCell, UITextFieldDelegate 
 
     var datePickerInterval: TimeInterval {
         return TimeInterval(minutes: Double(datePicker.minuteInterval))
+    }
+
+    var isReadOnly = false {
+        didSet {
+            if isReadOnly, textField.isFirstResponder {
+                textField.resignFirstResponder()
+            }
+        }
     }
 
     lazy var valueNumberFormatter: NumberFormatter = {
@@ -69,25 +75,6 @@ class RepeatingScheduleValueTableViewCell: UITableViewCell, UITextFieldDelegate 
 
     @IBOutlet weak var textField: UITextField!
 
-    @IBOutlet weak var datePicker: UIDatePicker!
-
-    @IBOutlet weak var datePickerHeightConstraint: NSLayoutConstraint!
-
-    private var datePickerExpandedHeight: CGFloat = 0
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-
-        datePickerExpandedHeight = datePickerHeightConstraint.constant
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        datePicker.isHidden = !selected
-        datePickerHeightConstraint.constant = selected ? datePickerExpandedHeight : 0
-    }
-
     var unitString: String? {
         get {
             return unitLabel.text
@@ -97,13 +84,11 @@ class RepeatingScheduleValueTableViewCell: UITableViewCell, UITextFieldDelegate 
         }
     }
 
-    @IBAction func dateChanged(_ sender: UIDatePicker) {
-        date = sender.date
-
-        delegate?.repeatingScheduleValueTableViewCellDidUpdateDate(self)
-    }
-
     // MARK: - UITextFieldDelegate
+
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return !isReadOnly
+    }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
         DispatchQueue.main.async {

@@ -9,12 +9,29 @@
 import UIKit
 import LoopKit
 
-public class SingleValueScheduleTableViewController: DailyValueScheduleTableViewController, RepeatingScheduleValueTableViewCellDelegate {
 
-    public override func viewDidLoad() {
+public enum RepeatingScheduleValueResult<T: RawRepresentable> {
+    case success(scheduleItems: [RepeatingScheduleValue<T>], timeZone: TimeZone)
+    case failure(Error)
+}
+
+
+public protocol SingleValueScheduleTableViewControllerSyncSource: class {
+    func syncScheduleValues(for viewController: SingleValueScheduleTableViewController, completion: @escaping (_ result: RepeatingScheduleValueResult<Double>) -> Void)
+
+    func syncButtonTitle(for viewController: SingleValueScheduleTableViewController) -> String
+
+    func syncButtonDetailText(for viewController: SingleValueScheduleTableViewController) -> String?
+}
+
+
+open class SingleValueScheduleTableViewController: DailyValueScheduleTableViewController, RepeatingScheduleValueTableViewCellDelegate {
+
+    open override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.register(RepeatingScheduleValueTableViewCell.nib(), forCellReuseIdentifier: RepeatingScheduleValueTableViewCell.className)
+        tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
     }
 
     // MARK: - State
@@ -22,6 +39,10 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
     public var scheduleItems: [RepeatingScheduleValue<Double>] = []
 
     override func addScheduleItem(_ sender: Any?) {
+        guard !isReadOnly && !isSyncInProgress else {
+            return
+        }
+
         tableView.endEditing(false)
 
         var startTime = TimeInterval(0)
@@ -57,46 +78,114 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
         return 1
     }
 
+    public weak var syncSource: SingleValueScheduleTableViewControllerSyncSource? {
+        didSet {
+            if isViewLoaded {
+                tableView.reloadData()
+            }
+        }
+    }
+
+    private var isSyncInProgress = false {
+        didSet {
+            for cell in tableView.visibleCells {
+                switch cell {
+                case let cell as TextButtonTableViewCell:
+                    cell.isEnabled = !isSyncInProgress
+                    cell.isLoading = isSyncInProgress
+                case let cell as RepeatingScheduleValueTableViewCell:
+                    cell.isReadOnly = isReadOnly || isSyncInProgress
+                default:
+                    break
+                }
+            }
+
+            for item in navigationItem.rightBarButtonItems ?? [] {
+                item.isEnabled = !isSyncInProgress
+            }
+
+            navigationItem.hidesBackButton = isSyncInProgress
+        }
+    }
+
     // MARK: - UITableViewDataSource
 
-    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return scheduleItems.count
+    private enum Section: Int {
+        case schedule
+        case sync
     }
 
-    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: RepeatingScheduleValueTableViewCell.className, for: indexPath) as! RepeatingScheduleValueTableViewCell
-
-        let item = scheduleItems[indexPath.row]
-        let interval = cell.datePickerInterval
-
-        cell.timeZone = timeZone
-        cell.date = midnight.addingTimeInterval(item.startTime)
-
-        cell.valueNumberFormatter.minimumFractionDigits = preferredValueFractionDigits()
-
-        cell.value = item.value
-        cell.unitString = unitDisplayString
-        cell.delegate = self
-
-        if indexPath.row > 0 {
-            let lastItem = scheduleItems[indexPath.row - 1]
-
-            cell.datePicker.minimumDate = midnight.addingTimeInterval(lastItem.startTime).addingTimeInterval(interval)
+    open override func numberOfSections(in tableView: UITableView) -> Int {
+        if syncSource != nil {
+            return 2
         }
 
-        if indexPath.row < scheduleItems.endIndex - 1 {
-            let nextItem = scheduleItems[indexPath.row + 1]
-
-            cell.datePicker.maximumDate = midnight.addingTimeInterval(nextItem.startTime).addingTimeInterval(-interval)
-        } else {
-            cell.datePicker.maximumDate = midnight.addingTimeInterval(TimeInterval(hours: 24) - interval)
-            
-        }
-        
-        return cell
+        return 1
     }
 
-    public override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    open override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch Section(rawValue: section)! {
+        case .schedule:
+            return scheduleItems.count
+        case .sync:
+            return 1
+        }
+    }
+
+    open override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch Section(rawValue: indexPath.section)! {
+        case .schedule:
+            let cell = tableView.dequeueReusableCell(withIdentifier: RepeatingScheduleValueTableViewCell.className, for: indexPath) as! RepeatingScheduleValueTableViewCell
+
+            let item = scheduleItems[indexPath.row]
+            let interval = cell.datePickerInterval
+
+            cell.timeZone = timeZone
+            cell.date = midnight.addingTimeInterval(item.startTime)
+
+            cell.valueNumberFormatter.minimumFractionDigits = preferredValueFractionDigits()
+
+            cell.value = item.value
+            cell.unitString = unitDisplayString
+            cell.isReadOnly = isReadOnly || isSyncInProgress
+            cell.delegate = self
+
+            if indexPath.row > 0 {
+                let lastItem = scheduleItems[indexPath.row - 1]
+
+                cell.datePicker.minimumDate = midnight.addingTimeInterval(lastItem.startTime).addingTimeInterval(interval)
+            }
+
+            if indexPath.row < scheduleItems.endIndex - 1 {
+                let nextItem = scheduleItems[indexPath.row + 1]
+
+                cell.datePicker.maximumDate = midnight.addingTimeInterval(nextItem.startTime).addingTimeInterval(-interval)
+            } else {
+                cell.datePicker.maximumDate = midnight.addingTimeInterval(TimeInterval(hours: 24) - interval)
+            }
+
+            return cell
+        case .sync:
+            let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
+
+            cell.textLabel?.text = syncSource?.syncButtonTitle(for: self)
+            cell.isEnabled = !isSyncInProgress
+            cell.isLoading = isSyncInProgress
+
+            return cell
+        }
+    }
+
+    open override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        switch Section(rawValue: section)! {
+        case .schedule:
+            return nil
+        case .sync:
+            return syncSource?.syncButtonDetailText(for: self)
+        }
+    }
+
+    open override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             scheduleItems.remove(at: indexPath.row)
 
@@ -104,8 +193,7 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
         }
     }
 
-    public override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-
+    open override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if sourceIndexPath != destinationIndexPath {
             let item = scheduleItems.remove(at: sourceIndexPath.row)
             scheduleItems.insert(item, at: destinationIndexPath.row)
@@ -128,7 +216,39 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
 
     // MARK: - UITableViewDelegate
 
-    public override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+    open override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return super.tableView(tableView, canEditRowAt: indexPath) && !isSyncInProgress
+    }
+
+    open override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        super.tableView(tableView, didSelectRowAt: indexPath)
+
+        switch Section(rawValue: indexPath.section)! {
+        case .schedule:
+            break
+        case .sync:
+            if let syncSource = syncSource, !isSyncInProgress {
+                isSyncInProgress = true
+                syncSource.syncScheduleValues(for: self) { (result) in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(let items, let timeZone):
+                            self.scheduleItems = items
+                            self.timeZone = timeZone
+                            self.tableView.reloadSections([Section.schedule.rawValue], with: .fade)
+                            self.isSyncInProgress = false
+                        case .failure(let error):
+                            self.presentAlertController(with: error, animated: true, completion: {
+                                self.isSyncInProgress = false
+                            })
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    open override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
 
         guard sourceIndexPath != proposedDestinationIndexPath, let cell = tableView.cellForRow(at: sourceIndexPath) as? RepeatingScheduleValueTableViewCell else {
             return proposedDestinationIndexPath
@@ -154,7 +274,7 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
 
     // MARK: - RepeatingScheduleValueTableViewCellDelegate
 
-    override func repeatingScheduleValueTableViewCellDidUpdateDate(_ cell: RepeatingScheduleValueTableViewCell) {
+    override func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
         if let indexPath = tableView.indexPath(for: cell) {
             let currentItem = scheduleItems[indexPath.row]
 
@@ -164,7 +284,7 @@ public class SingleValueScheduleTableViewController: DailyValueScheduleTableView
             )
         }
 
-        super.repeatingScheduleValueTableViewCellDidUpdateDate(cell)
+        super.datePickerTableViewCellDidUpdateDate(cell)
     }
 
     func repeatingScheduleValueTableViewCellDidUpdateValue(_ cell: RepeatingScheduleValueTableViewCell) {
