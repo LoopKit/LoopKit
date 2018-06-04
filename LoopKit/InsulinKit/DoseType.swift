@@ -37,7 +37,7 @@ extension DoseType {
         }
     }
 
-    var pumpEventType: PumpEventType? {
+    public var pumpEventType: PumpEventType? {
         switch self {
         case .basal:
             return .basal

@@ -45,6 +45,10 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
         // That external data could be factored into dose computation with some modification:
         // An example might be supplemental injections in cases of extended exercise periods without a pump
     }
+
+    public override var preferredUnit: HKUnit! {
+        return super.preferredUnit
+    }
 }
 
 

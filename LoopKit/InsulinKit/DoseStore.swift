@@ -222,12 +222,10 @@ public final class DoseStore {
     public func resetPumpData(completion: ((_ error: DoseStoreError?) -> Void)? = nil) {
         log.info("Resetting all cached pump data")
         deleteAllPumpEvents { (error) in
-            if let error = error {
+            // TODO: Backfill pump events from HealthKit
+
+            self.deleteAllReservoirValues { (error) in
                 completion?(error)
-            } else {
-                self.deleteAllReservoirValues { (error) in
-                    completion?(error)
-                }
             }
         }
     }
@@ -722,7 +720,7 @@ extension DoseStore {
                 NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
                 self.uploadPumpEventsIfNeeded()
 
-                self.syncPumpEventsToHealthStore()
+                self.syncPumpEventsToHealthStore() { _ in }
             }
         }
     }
@@ -783,39 +781,44 @@ extension DoseStore {
     /// - Parameter completion: A closure called after all the events are deleted. This closure takes a single argument:
     /// - Parameter error: An error explaining why the deletion failed
     public func deleteAllPumpEvents(_ completion: @escaping (_ error: DoseStoreError?) -> Void) {
-        persistenceController.managedObjectContext.perform {
-            do {
-                self.log.info("Deleting all pump events")
-                try self.purgePumpEventObjects()
+        syncPumpEventsToHealthStore { (error) in
+            if let error = error {
+                self.log.error("Error performing final HealthKit sync before deleteAllPumpEvents: %{public}@", String(describing: error))
+            }
 
-                self.persistenceController.save { (error) in
-                    self.pumpEventQueryAfterDate = self.recentValuesStartDate
-                    self.lastAddedPumpEvents = .distantPast
-                    self.lastRecordedPrimeEventDate = nil
+            self.persistenceController.managedObjectContext.perform {
+                do {
+                    self.log.info("Deleting all pump events")
+                    try self.purgePumpEventObjects()
 
+                    self.persistenceController.save { (error) in
+                        self.pumpEventQueryAfterDate = self.recentValuesStartDate
+                        self.lastAddedPumpEvents = .distantPast
+                        self.lastRecordedPrimeEventDate = nil
+
+                        completion(DoseStoreError(error: error))
+                        NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
+                    }
+                } catch let error as PersistenceController.PersistenceControllerError {
                     completion(DoseStoreError(error: error))
-                    NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
+                } catch {
+                    assertionFailure()
                 }
-            } catch let error as PersistenceController.PersistenceControllerError {
-                completion(DoseStoreError(error: error))
-            } catch {
-                assertionFailure()
             }
         }
     }
 
     /// Attempts to store doses from pump events to Health
-    /// *This method should only be called from within a managed object context block*
-    private func syncPumpEventsToHealthStore() {
+    private func syncPumpEventsToHealthStore(completion: @escaping (_ error: Error?) -> Void) {
         insulinDeliveryStore.getLastBasalEndDate { (result) in
             switch result {
             case .success(let date):
                 // Limit the query behavior to 24 hours
                 let date = max(date, self.cacheStartDate)
-                self.savePumpEventsToHealthStore(after: date)
-            case .failure:
+                self.savePumpEventsToHealthStore(after: date, completion: completion)
+            case .failure(let error):
                 // Failures are expected when the health database is protected
-                break
+                completion(error)
             }
         }
     }
@@ -823,19 +826,30 @@ extension DoseStore {
     /// Processes and saves dose events on or after the given date to Health
     ///
     /// - Parameter start: The date at which
-    private func savePumpEventsToHealthStore(after start: Date) {
+    private func savePumpEventsToHealthStore(after start: Date, completion: @escaping (_ error: Error?) -> Void) {
         self.persistenceController.managedObjectContext.perform {
             guard let doses = try? self.getNormalizedPumpEventDoseEntries(start: start),
-                doses.count > 0,
-                let basalSchedule = self.basalProfile
+                doses.count > 0
             else {
+                self.log.debug("No new pump events to save to HealthKit")
+                completion(nil)
+                return
+            }
+
+            guard let basalSchedule = self.basalProfile else {
+                self.log.error("Can't save %d doses to HealthKit because no basal profile is configured", doses.count)
+                completion(DoseStoreError.configurationError)
                 return
             }
 
             let reconciledDoses = doses.overlayBasalSchedule(basalSchedule, startingAt: start, endingAt: self.lastAddedPumpEvents, insertingBasalEntries: !self.pumpRecordsBasalProfileStartEvents)
             self.insulinDeliveryStore.addReconciledDoses(reconciledDoses, from: self.device) { (result) in
-                if case .failure(let error) = result {
+                switch result {
+                case .success:
+                    completion(nil)
+                case .failure(let error):
                     self.log.error("Error adding doses: %{public}@", String(describing: error))
+                    completion(error)
                 }
             }
         }

@@ -128,25 +128,28 @@ public class HealthKitSampleStore {
     ///   - query: The query which triggered the update
     ///   - error: An error during the update, if one occurred
     internal func observeUpdates(to query: HKObserverQuery, error: Error?) {
-        if error == nil {
-            let anchoredObjectQuery = HKAnchoredObjectQuery(
-                type: self.sampleType,
-                predicate: query.predicate,
-                anchor: self.queryAnchor,
-                limit: HKObjectQueryNoLimit
-            ) { (query, newSamples, deletedSamples, anchor, error) in
-                self.log.debug("%@: new: %d deleted: %d anchor: %@ error: %@", #function, newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor), String(describing: error))
+        guard error == nil else {
+            log.error("%@ notified with changes with error: %{public}@", query, String(describing: error))
+            return
+        }
 
-                if let error = error {
-                    self.log.error("%@: error executing anchoredObjectQuery: %@", String(describing: type(of: self)), error.localizedDescription)
-                }
+        let anchoredObjectQuery = HKAnchoredObjectQuery(
+            type: self.sampleType,
+            predicate: query.predicate,
+            anchor: self.queryAnchor,
+            limit: HKObjectQueryNoLimit
+        ) { (query, newSamples, deletedSamples, anchor, error) in
+            self.log.debug("%@: new: %d deleted: %d anchor: %@ error: %@", #function, newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor), String(describing: error))
 
-                self.processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], error: error)
-                self.queryAnchor = anchor
+            if let error = error {
+                self.log.error("%@: error executing anchoredObjectQuery: %@", String(describing: type(of: self)), error.localizedDescription)
             }
 
-            healthStore.execute(anchoredObjectQuery)
+            self.processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], error: error)
+            self.queryAnchor = anchor
         }
+
+        healthStore.execute(anchoredObjectQuery)
     }
 
     /// Called in response to new results from an anchored object query
@@ -158,6 +161,14 @@ public class HealthKitSampleStore {
     ///   - error: An error from the query, if one occurred
     internal func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {
         // To be overridden
+    }
+
+    /// The preferred unit for the sample type
+    ///
+    /// The unit may be nil if the health store times out while fetching or the sample type is unsupported
+    public var preferredUnit: HKUnit? {
+        let identifier = HKQuantityTypeIdentifier(rawValue: sampleType.identifier)
+        return HealthStoreUnitCache.unitCache(for: healthStore).preferredUnit(for: identifier)
     }
 }
 
@@ -193,10 +204,7 @@ extension HealthKitSampleStore {
         let predicate = HKQuery.predicateForSamples(withStart: observationStart, end: nil)
 
         observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { [weak self] (query, completionHandler, error) in
-            if let strongSelf = self {
-                strongSelf.log.debug("%@ notified with changes for %@", query, strongSelf.sampleType)
-                strongSelf.observeUpdates(to: query, error: error)
-            }
+            self?.observeUpdates(to: query, error: error)
 
             completionHandler()
         }
@@ -274,7 +282,7 @@ extension HealthKitSampleStore {
         - unit:  The retrieved unit
         - error: An error object explaining why the retrieval was unsuccessful
      */
-    @available(*, deprecated, message: "Use HealthKitSampleStore.preferredUnit(_:) instead")
+    @available(*, deprecated, message: "Use HealthKitSampleStore.getter:preferredUnit instead")
     public func preferredUnit(_ completion: @escaping (_ unit: HKUnit?, _ error: Error?) -> Void) {
         preferredUnit { result in
             switch result {
@@ -292,7 +300,8 @@ extension HealthKitSampleStore {
     ///
     /// - Parameter completion: A closure called after the query is completed
     /// - Parameter result: The query result
-    public func preferredUnit(_ completion: @escaping (_ result: HealthKitSampleStoreResult<HKUnit>) -> Void) {
+    @available(*, deprecated, message: "Use HealthKitSampleStore.getter:preferredUnit instead")
+    private func preferredUnit(_ completion: @escaping (_ result: HealthKitSampleStoreResult<HKUnit>) -> Void) {
         let quantityTypes = [self.sampleType].compactMap { (sampleType) -> HKQuantityType? in
             return sampleType as? HKQuantityType
         }
