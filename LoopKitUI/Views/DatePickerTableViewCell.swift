@@ -15,8 +15,6 @@ protocol DatePickerTableViewCellDelegate: class {
 
 class DatePickerTableViewCell: UITableViewCell {
 
-    weak var delegate: DatePickerTableViewCellDelegate?
-
     var date: Date {
         get {
             return datePicker.date
@@ -44,19 +42,6 @@ class DatePickerTableViewCell: UITableViewCell {
             }
         }
     }
-
-    private lazy var durationFormatter: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-
-        formatter.allowedUnits = [.hour, .minute]
-        formatter.unitsStyle = .short
-
-        return formatter
-    }()
-
-    @IBOutlet weak var titleLabel: UILabel!
-
-    @IBOutlet weak var dateLabel: UILabel!
 
     @IBOutlet weak var datePicker: UIDatePicker!
 
@@ -101,20 +86,7 @@ class DatePickerTableViewCell: UITableViewCell {
         }
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        contentView.layoutMargins.left = separatorInset.left
-        contentView.layoutMargins.right = separatorInset.left
-    }
-
-    private func updateDateLabel() {
-        switch datePicker.datePickerMode {
-        case .countDownTimer:
-            dateLabel.text = durationFormatter.string(from: duration)
-        case .date, .dateAndTime, .time:
-            dateLabel.text = DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .short)
-        }
+    func updateDateLabel() {
     }
 
     @IBAction func dateChanged(_ sender: UIDatePicker) {
@@ -123,8 +95,6 @@ class DatePickerTableViewCell: UITableViewCell {
         } else {
             updateDateLabel()
         }
-
-        delegate?.datePickerTableViewCellDidUpdateDate(self)
     }
 }
 

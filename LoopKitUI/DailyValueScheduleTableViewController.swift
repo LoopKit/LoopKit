@@ -37,36 +37,22 @@ func insertableIndices<T>(for scheduleItems: [RepeatingScheduleValue<T>], removi
 }
 
 
-public class DailyValueScheduleTableViewController: UITableViewController {
+open class DailyValueScheduleTableViewController: UITableViewController, DatePickerTableViewCellDelegate {
 
     private var keyboardWillShowNotificationObserver: Any?
 
-    public init() {
-        super.init(style: .plain)
+    public convenience init() {
+        self.init(style: .plain)
     }
 
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.rightBarButtonItems = [insertButtonItem(), editButtonItem]
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 44
 
-        let localTimeZone = TimeZone.current
-        let timeZoneDiff = TimeInterval(timeZone.secondsFromGMT() - localTimeZone.secondsFromGMT())
-
-        if timeZoneDiff != 0 {
-            let localTimeZoneName = localTimeZone.abbreviation() ?? localTimeZone.identifier
-            let formatter = DateComponentsFormatter()
-            formatter.allowedUnits = [.hour, .minute]
-            let diffString = formatter.string(from: abs(timeZoneDiff)) ?? String(abs(timeZoneDiff))
-
-            navigationItem.prompt = String(
-                format: NSLocalizedString("Times in %1$@%2$@%3$@", comment: "The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval)"),
-                localTimeZoneName, timeZoneDiff < 0 ? "-" : "+", diffString
-            )
+        if !isReadOnly {
+            navigationItem.rightBarButtonItems = [insertButtonItem(), editButtonItem]
         }
 
         tableView.keyboardDismissMode = .onDrag
@@ -90,7 +76,7 @@ public class DailyValueScheduleTableViewController: UITableViewController {
         })
     }
 
-    public override func setEditing(_ editing: Bool, animated: Bool) {
+    open override func setEditing(_ editing: Bool, animated: Bool) {
         if let indexPath = tableView.indexPathForSelectedRow {
             tableView.beginUpdates()
             tableView.deselectRow(at: indexPath, animated: animated)
@@ -110,7 +96,7 @@ public class DailyValueScheduleTableViewController: UITableViewController {
         }
     }
 
-    public override func viewWillDisappear(_ animated: Bool) {
+    open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         tableView.endEditing(true)
@@ -129,10 +115,37 @@ public class DailyValueScheduleTableViewController: UITableViewController {
     public var timeZone = TimeZone.currentFixed {
         didSet {
             calendar.timeZone = timeZone
+
+            let localTimeZone = TimeZone.current
+            let timeZoneDiff = TimeInterval(timeZone.secondsFromGMT() - localTimeZone.secondsFromGMT())
+
+            if timeZoneDiff != 0 {
+                let localTimeZoneName = localTimeZone.abbreviation() ?? localTimeZone.identifier
+                let formatter = DateComponentsFormatter()
+                formatter.allowedUnits = [.hour, .minute]
+                let diffString = formatter.string(from: abs(timeZoneDiff)) ?? String(abs(timeZoneDiff))
+
+                navigationItem.prompt = String(
+                    format: NSLocalizedString("Times in %1$@%2$@%3$@", comment: "The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval)"),
+                    localTimeZoneName, timeZoneDiff < 0 ? "-" : "+", diffString
+                )
+            }
         }
     }
 
     public var unitDisplayString: String = "U/hour"
+
+    public var isReadOnly: Bool = false {
+        didSet {
+            if isReadOnly {
+                isEditing = false
+            }
+
+            if isViewLoaded {
+                navigationItem.setRightBarButtonItems(isReadOnly ? [] : [insertButtonItem(), editButtonItem], animated: true)
+            }
+        }
+    }
 
     private var calendar = Calendar.current
 
@@ -141,38 +154,41 @@ public class DailyValueScheduleTableViewController: UITableViewController {
     }
 
     @objc func addScheduleItem(_ sender: Any?) {
+        guard !isReadOnly else {
+            return
+        }
         // Updates the table view state. Subclasses should update their data model before calling super
 
         tableView.insertRows(at: [IndexPath(row: tableView.numberOfRows(inSection: 0), section: 0)], with: .automatic)
     }
 
     func insertableIndiciesByRemovingRow(_ row: Int, withInterval timeInterval: TimeInterval) -> [Bool] {
-        fatalError("Subclasses must override __FUNCTION__")
+        fatalError("Subclasses must override \(#function)")
     }
 
     // MARK: - UITableViewDataSource
 
-    public override func numberOfSections(in tableView: UITableView) -> Int {
+    open override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        fatalError("Subclasses must override __FUNCTION__")
+    open override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        fatalError("Subclasses must override \(#function)")
     }
 
-    public override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+    open override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return !isReadOnly && indexPath.section == 0 && indexPath.row > 0
     }
 
-    public override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.row > 0
+    open override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return self.tableView(tableView, canEditRowAt: indexPath)
     }
 
-    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        fatalError("Subclasses must override __FUNCTION__")
+    open override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        fatalError("Subclasses must override \(#function)")
     }
 
-    public override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    open override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Updates the table view state. Subclasses should update their data model before calling super
 
@@ -182,40 +198,37 @@ public class DailyValueScheduleTableViewController: UITableViewController {
 
     // MARK: - UITableViewDelegate
 
-    public override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return tableView.indexPathForSelectedRow == indexPath ? 196 : 44
+    open override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        guard indexPath.section == 0 else {
+            return true
+        }
+
+        return !isReadOnly && indexPath.row > 0
     }
 
-    public override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.row > 0
-    }
-
-    public override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if indexPath == tableView.indexPathForSelectedRow {
-            tableView.beginUpdates()
-            tableView.deselectRow(at: indexPath, animated: false)
-            tableView.endUpdates()
-
-            return nil
-        } else if indexPath.row == 0 {
+    open override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        guard self.tableView(tableView, shouldHighlightRowAt: indexPath) else {
             return nil
         }
 
+        tableView.endEditing(false)
+        tableView.beginUpdates()
+        hideDatePickerCells(excluding: indexPath)
         return indexPath
     }
 
-    public override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    open override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         tableView.beginUpdates()
         tableView.endUpdates()
     }
 
-    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    open override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.endEditing(false)
-        tableView.beginUpdates()
         tableView.endUpdates()
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    public override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+    open override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
 
         guard sourceIndexPath.section == proposedDestinationIndexPath.section else {
             return sourceIndexPath
@@ -243,9 +256,9 @@ public class DailyValueScheduleTableViewController: UITableViewController {
         }
     }
 
-    // MARK: - RepeatingScheduleValueTableViewCellDelegate
+    // MARK: - DatePickerTableViewCellDelegate
 
-    func repeatingScheduleValueTableViewCellDidUpdateDate(_ cell: RepeatingScheduleValueTableViewCell) {
+    func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
 
         // Updates the TableView state. Subclasses should update their data model
         if let indexPath = tableView.indexPath(for: cell) {

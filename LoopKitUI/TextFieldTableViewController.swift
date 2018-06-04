@@ -79,6 +79,18 @@ open class TextFieldTableViewController: UITableViewController, UITextFieldDeleg
         return contextHelp
     }
 
+    open override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath == IndexPath(row: 0, section: 0), let textField = textField {
+            if textField.isFirstResponder {
+                textField.resignFirstResponder()
+            } else {
+                textField.becomeFirstResponder()
+            }
+        }
+
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
     // MARK: - UITextFieldDelegate
 
     open func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
