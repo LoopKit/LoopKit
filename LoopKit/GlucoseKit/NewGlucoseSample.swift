@@ -29,3 +29,23 @@ public struct NewGlucoseSample {
         self.device = device
     }
 }
+
+
+extension NewGlucoseSample {
+    public var quantitySample: HKQuantitySample {
+        let metadata: [String: Any] = [
+            MetadataKeyGlucoseIsDisplayOnly: isDisplayOnly,
+            HKMetadataKeySyncIdentifier: syncIdentifier,
+            HKMetadataKeySyncVersion: 1,
+        ]
+
+        return HKQuantitySample(
+            type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!,
+            quantity: quantity,
+            start: date,
+            end: date,
+            device: device,
+            metadata: metadata
+        )
+    }
+}

@@ -190,22 +190,7 @@ extension GlucoseStore {
             return
         }
 
-        let glucose = values.map { value -> HKQuantitySample in
-            let metadata: [String: Any] = [
-                MetadataKeyGlucoseIsDisplayOnly: value.isDisplayOnly,
-                HKMetadataKeySyncIdentifier: value.syncIdentifier,
-                HKMetadataKeySyncVersion: 1,
-            ]
-
-            return HKQuantitySample(
-                type: glucoseType,
-                quantity: value.quantity,
-                start: value.date,
-                end: value.date,
-                device: value.device,
-                metadata: metadata
-            )
-        }
+        let glucose = values.map { $0.quantitySample }
 
         healthStore.save(glucose) { (completed, error) in
             self.dataAccessQueue.async {

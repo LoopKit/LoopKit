@@ -151,18 +151,9 @@ class MasterViewController: UITableViewController {
                     scheduleVC.overrideRanges = schedule.overrideRanges
 
                     show(scheduleVC, sender: sender)
-                } else if let dataManager = dataManager {
-                    dataManager.glucoseStore.preferredUnit { (result) -> Void in
-                        DispatchQueue.main.async {
-                            switch result {
-                            case .failure(let error):
-                                self.presentAlertController(with: error)
-                            case .success(let unit):
-                                scheduleVC.unit = unit
-                                self.show(scheduleVC, sender: sender)
-                            }
-                        }
-                    }
+                } else if let unit = dataManager?.glucoseStore.preferredUnit {
+                    scheduleVC.unit = unit
+                    self.show(scheduleVC, sender: sender)
                 }
             case .pumpID:
                 let textFieldVC = TextFieldTableViewController()
