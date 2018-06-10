@@ -80,6 +80,8 @@ open class SingleValueScheduleTableViewController: DailyValueScheduleTableViewCo
 
     public weak var syncSource: SingleValueScheduleTableViewControllerSyncSource? {
         didSet {
+            isReadOnly = (syncSource != nil)
+
             if isViewLoaded {
                 tableView.reloadData()
             }
