@@ -1174,7 +1174,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "LoopKit Authors";
 				TargetAttributes = {
 					430157F61C7EC03B00B64B63 = {
