@@ -75,22 +75,3 @@ public extension Sequence where Iterator.Element: TimelineValue {
         }
     }
 }
-
-
-public extension BidirectionalCollection where Iterator.Element: TimelineValue {
-
-    /**
-     Determines whether the sequence contains boundary elements which span the specified time interval.
-
-     The sequence is assumed to be sorted chronologically.
-
-     TODO: Is this an effective measure to determine if there's enough reservoir entries to be trustworthy?
-
-     - returns: True if the time interval is matched
-     */
-    func spanTimeInterval(_ timeInterval: TimeInterval, within errorInterval: TimeInterval = 5 * 60) -> Bool {
-        guard let lastValue = last, let firstValue = first else { return false }
-
-        return abs(lastValue.startDate.timeIntervalSince(firstValue.startDate) - timeInterval) <= errorInterval / 2
-    }
-}

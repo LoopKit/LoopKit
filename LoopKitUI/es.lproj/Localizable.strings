@@ -1,0 +1,88 @@
+/* The section title of glucose overrides */
+"Overrides" = "Anulas";
+
+/* Title for the pre-meal override range */
+"Pre-Meal" = "Pre-Comida";
+
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "Horario in %1$@%2$@%3$@";
+
+/* Title for the workout override range */
+"Workout" = "Ejercicio";
+
+/* The unit display string for millimoles of glucose per liter */
+"mmol/L" = "mmol/L";
+
+/* The title of the screen displaying a pump event */
+"Pump Event" = "Evento de microinfusadora";
+
+/* The default title to use when an entry has none */
+"Unknown" = "Desconocido";
+
+/* Title of the carb entry absorption time cell */
+"Absorption Time" = "Tiempo de absorción";
+
+/* Carb entry section footer text explaining absorption time */
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Elija un tiempo de absorción más largo para comidas más grandes, o aquellas que contienen grasas y proteínas. Esta es solo una guía para el algoritmo y no necesita ser exacta.";
+
+/* Title of the carb entry date picker cell */
+"Date" = "Fecha";
+
+/* Section title for fast absorbing food */
+"Fast" = "Rápido";
+
+/* Section title for medium absorbing food */
+"Medium" = "Medio";
+
+/* Section title for no-carb food */
+"Other" = "Otro";
+
+/* Section title for slow absorbing food */
+"Slow" = "Lento";
+
+/* Alert body displayed absorption time greater than max (1: maximum absorption time) */
+"The maximum absorption time is %@" = "El tiempo máximo de absorción es %@";
+
+/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
+"The maximum allowed amount is %@ grams" = "La cantidad máxima permitida es %@ gramos";
+
+/* Title of an alert containing a validation warning */
+"Warning" = "Aviso";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* The error description describing when Health sharing was denied */
+"com.loudnate.LoopKit.sharingDeniedErrorDescription" = "Autorización denegada";
+
+/* The error recovery suggestion when Health sharing was denied */
+"com.loudnate.LoopKit.sharingDeniedErrorRecoverySuggestion" = "Por favor, vuelva a habilitar compartir en Salud";
+
+/* The title of the view controller to create a new carb entry */
+"carb-entry-title-add" = "Agregar entrada de carbohidratos";
+
+/* The title of the view controller to edit an existing carb entry */
+"carb-entry-title-edit" = "Editar entrada de carbohidratos";
+
+/* The format string describing the date of a COB value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.COBDateLabel" = "a %1$@";
+
+/* The description of an error returned when attempting to delete a non-HealthKit sample */
+"com.loudnate.CarbKit.deleteCarbEntryInvalid" = "Entrada no válida";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorización Denegada";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.totalDateLabel" = "hace %1$@";
+
+/* The error recovery suggestion when attempting to delete a non-HealthKit sample
+ The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Esta muestra se puede eliminar de la aplicación Salud";
+
+/* The format string describing the date of an IOB value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.IOBDateLabel" = "a %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.totalDateLabel" = "hace %1$@";
+

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="jTy-fY-56C" userLabel="Glucose Range Table View Cell" customClass="GlucoseRangeTableViewCell" customModule="LoopKitUI" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="450" height="196"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jTy-fY-56C" id="MnU-jN-qVh">
+                <rect key="frame" x="0.0" y="0.0" width="450" height="195.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <datePicker clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="30" translatesAutoresizingMaskIntoConstraints="NO" id="s1x-uP-9eP">
+                        <rect key="frame" x="20" y="47" width="410" height="150"/>
+                        <constraints>
+                            <constraint firstAttribute="height" priority="750" constant="150" id="doQ-Ho-H5v"/>
+                        </constraints>
+                        <date key="date" timeIntervalSinceReferenceDate="476509177.72020698">
+                            <!--2016-02-07 03:39:37 +0000-->
+                        </date>
+                        <connections>
+                            <action selector="dateChanged:" destination="jTy-fY-56C" eventType="valueChanged" id="pvK-ae-tov"/>
+                        </connections>
+                    </datePicker>
+                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Twz-7y-UUx">
+                        <rect key="frame" x="27" y="11" width="396" height="28"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="248" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8CT-w7-vKA">
+                                <rect key="frame" x="0.0" y="0.0" width="254.5" height="28"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" alignment="center" spacing="3" baselineRelativeArrangement="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OlF-DK-Tvf">
+                                <rect key="frame" x="254.5" y="0.0" width="141.5" height="28"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="min" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZFq-4F-l9E" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="3.5" width="36" height="21"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="jTy-fY-56C" id="hXw-Ke-fqt"/>
+                                        </connections>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="–" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uqw-Z2-iOD">
+                                        <rect key="frame" x="39" y="4" width="8.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="max" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dw2-da-mzO" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
+                                        <rect key="frame" x="50.5" y="3.5" width="36" height="21"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="jTy-fY-56C" id="MgH-S2-sp2"/>
+                                        </connections>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="U/hour" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kZs-Yo-cQX">
+                                        <rect key="frame" x="89.5" y="4" width="52" height="20.5"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <color key="textColor" red="0.56000000238418579" green="0.56000000238418579" blue="0.56000000238418579" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="ZFq-4F-l9E" firstAttribute="width" secondItem="Dw2-da-mzO" secondAttribute="width" id="qK8-aB-wYy"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="28" id="43t-kd-KwW"/>
+                        </constraints>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Twz-7y-UUx" firstAttribute="top" secondItem="MnU-jN-qVh" secondAttribute="topMargin" id="8OC-8V-ccI"/>
+                    <constraint firstItem="s1x-uP-9eP" firstAttribute="top" secondItem="Twz-7y-UUx" secondAttribute="bottom" constant="8" id="RSE-1c-ijp"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Twz-7y-UUx" secondAttribute="trailing" constant="7" id="acT-zp-tJ3"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="s1x-uP-9eP" secondAttribute="bottom" priority="750" constant="-8.5" id="bkv-m8-Gr7"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="s1x-uP-9eP" secondAttribute="trailing" id="oqC-H6-J9c"/>
+                    <constraint firstItem="Twz-7y-UUx" firstAttribute="leading" secondItem="MnU-jN-qVh" secondAttribute="leadingMargin" constant="7" id="sEN-yU-tin"/>
+                    <constraint firstItem="s1x-uP-9eP" firstAttribute="leading" secondItem="MnU-jN-qVh" secondAttribute="leadingMargin" id="slK-f7-QQa"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="dateLabel" destination="8CT-w7-vKA" id="O0e-53-vP0"/>
+                <outlet property="datePicker" destination="s1x-uP-9eP" id="knl-4h-ibG"/>
+                <outlet property="datePickerHeightConstraint" destination="doQ-Ho-H5v" id="EuZ-sq-UpZ"/>
+                <outlet property="minValueTextField" destination="ZFq-4F-l9E" id="r4S-Rk-agd"/>
+                <outlet property="textField" destination="Dw2-da-mzO" id="AGF-p5-4Sh"/>
+                <outlet property="unitLabel" destination="kZs-Yo-cQX" id="l7c-rs-AB1"/>
+            </connections>
+            <point key="canvasLocation" x="314" y="292"/>
+        </tableViewCell>
+    </objects>
+</document>

@@ -19,3 +19,14 @@ public struct GlucoseEffect: GlucoseValue {
         self.quantity = quantity
     }
 }
+
+
+extension GlucoseEffect: Comparable {
+    public static func <(lhs: GlucoseEffect, rhs: GlucoseEffect) -> Bool {
+        return lhs.startDate < rhs.startDate
+    }
+
+    public static func ==(lhs: GlucoseEffect, rhs: GlucoseEffect) -> Bool {
+        return lhs.startDate == rhs.startDate && lhs.quantity == rhs.quantity
+    }
+}
