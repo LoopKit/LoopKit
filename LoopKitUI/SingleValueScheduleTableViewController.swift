@@ -22,6 +22,8 @@ public protocol SingleValueScheduleTableViewControllerSyncSource: class {
     func syncButtonTitle(for viewController: SingleValueScheduleTableViewController) -> String
 
     func syncButtonDetailText(for viewController: SingleValueScheduleTableViewController) -> String?
+
+    func singleValueScheduleTableViewControllerIsReadOnly(_ viewController: SingleValueScheduleTableViewController) -> Bool
 }
 
 
@@ -32,6 +34,14 @@ open class SingleValueScheduleTableViewController: DailyValueScheduleTableViewCo
 
         tableView.register(RepeatingScheduleValueTableViewCell.nib(), forCellReuseIdentifier: RepeatingScheduleValueTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
+    }
+
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        if syncSource == nil {
+            delegate?.dailyValueScheduleTableViewControllerWillFinishUpdating(self)
+        }
     }
 
     // MARK: - State
@@ -80,7 +90,7 @@ open class SingleValueScheduleTableViewController: DailyValueScheduleTableViewCo
 
     public weak var syncSource: SingleValueScheduleTableViewControllerSyncSource? {
         didSet {
-            isReadOnly = (syncSource != nil)
+            isReadOnly = syncSource?.singleValueScheduleTableViewControllerIsReadOnly(self) ?? false
 
             if isViewLoaded {
                 tableView.reloadData()
@@ -239,6 +249,7 @@ open class SingleValueScheduleTableViewController: DailyValueScheduleTableViewCo
                             self.timeZone = timeZone
                             self.tableView.reloadSections([Section.schedule.rawValue], with: .fade)
                             self.isSyncInProgress = false
+                            self.delegate?.dailyValueScheduleTableViewControllerWillFinishUpdating(self)
                         case .failure(let error):
                             self.presentAlertController(with: error, animated: true, completion: {
                                 self.isSyncInProgress = false

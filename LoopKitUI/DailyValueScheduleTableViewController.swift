@@ -100,8 +100,6 @@ open class DailyValueScheduleTableViewController: UITableViewController, DatePic
         super.viewWillDisappear(animated)
 
         tableView.endEditing(true)
-
-        delegate?.dailyValueScheduleTableViewControllerWillFinishUpdating(self)
     }
 
     public weak var delegate: DailyValueScheduleTableViewControllerDelegate?

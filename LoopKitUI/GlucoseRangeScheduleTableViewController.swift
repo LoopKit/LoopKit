@@ -26,6 +26,12 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         tableView.register(GlucoseRangeOverrideTableViewCell.nib(), forCellReuseIdentifier: GlucoseRangeOverrideTableViewCell.className)
     }
 
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        delegate?.dailyValueScheduleTableViewControllerWillFinishUpdating(self)
+    }
+
     // MARK: - State
 
     public var scheduleItems: [RepeatingScheduleValue<DoubleRange>] = []
