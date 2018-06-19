@@ -20,7 +20,7 @@ public struct RepeatingScheduleValue<T: RawRepresentable> where T.RawValue: Any 
     }
 }
 
-extension RepeatingScheduleValue where T: Equatable {
+extension RepeatingScheduleValue: Equatable where T: Equatable {
     public static func ==(lhs: RepeatingScheduleValue<T>, rhs: RepeatingScheduleValue<T>) -> Bool {
         return abs(lhs.startTime - rhs.startTime) < .ulpOfOne && lhs.value == rhs.value
     }
