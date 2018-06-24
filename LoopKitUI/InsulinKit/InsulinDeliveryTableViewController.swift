@@ -248,7 +248,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                         self.iobValueLabel.text = "…"
                         self.iobDateLabel.text = nil
                     case .success(let iob):
-                        self.iobValueLabel.text = self.iobNumberFormatter.string(from: NSNumber(value: iob.value))
+                        self.iobValueLabel.text = self.iobNumberFormatter.string(from: iob.value)
                         self.iobDateLabel.text = String(format: NSLocalizedString("com.loudnate.InsulinKit.IOBDateLabel", value: "at %1$@", comment: "The format string describing the date of an IOB value. The first format argument is the localized date."), self.timeFormatter.string(from: iob.startDate))
                     }
                 }

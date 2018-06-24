@@ -13,7 +13,7 @@ class GlucoseRangeTableViewCell: RepeatingScheduleValueTableViewCell {
 
     var minValue: Double = 0 {
         didSet {
-            minValueTextField.text = valueNumberFormatter.string(from: NSNumber(value: minValue))
+            minValueTextField.text = valueNumberFormatter.string(from: minValue)
         }
     }
 

@@ -45,7 +45,7 @@ class RepeatingScheduleValueTableViewCell: DatePickerTableViewCell, UITextFieldD
 
     var value: Double = 0 {
         didSet {
-            textField.text = valueNumberFormatter.string(from: NSNumber(value: value))
+            textField.text = valueNumberFormatter.string(from: value)
         }
     }
 
