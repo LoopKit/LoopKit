@@ -1,0 +1,10 @@
+[
+    {
+        "type": "TempBasal",
+        "start_at": "2015-07-13T12:01:32",
+        "end_at": "2015-07-13T12:06:32",
+        "amount": 18.0,
+        "unit": "U/hour",
+        "scheduled": 0.0
+    }
+]

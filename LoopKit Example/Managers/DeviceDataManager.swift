@@ -7,26 +7,36 @@
 //
 
 import Foundation
-import CarbKit
-import GlucoseKit
-import InsulinKit
+import HealthKit
 import LoopKit
 
 
 class DeviceDataManager : CarbStoreDelegate {
 
-    static let shared = DeviceDataManager()
-
     init() {
+        let healthStore = HKHealthStore()
+        let cacheStore = PersistenceController(directoryURL: FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!)
+
         carbStore = CarbStore(
+            healthStore: healthStore,
+            cacheStore: cacheStore,
             carbRatioSchedule: carbRatioSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )
+        let insulinModel: WalshInsulinModel?
+        if let actionDuration = insulinActionDuration {
+            insulinModel = WalshInsulinModel(actionDuration: actionDuration)
+        } else {
+            insulinModel = nil
+        }
         doseStore = DoseStore(
-            insulinActionDuration: insulinActionDuration,
+            healthStore: healthStore,
+            cacheStore: cacheStore,
+            insulinModel: insulinModel,
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )
+        glucoseStore = GlucoseStore(healthStore: healthStore, cacheStore: cacheStore)
         carbStore?.delegate = self
     }
 
@@ -36,7 +46,7 @@ class DeviceDataManager : CarbStoreDelegate {
 
     let doseStore: DoseStore
 
-    let glucoseStore = GlucoseStore()!
+    let glucoseStore: GlucoseStore!
 
     // Settings
 
@@ -60,7 +70,9 @@ class DeviceDataManager : CarbStoreDelegate {
         didSet {
             UserDefaults.standard.insulinActionDuration = insulinActionDuration
 
-            doseStore.insulinActionDuration = insulinActionDuration
+            if let duration = insulinActionDuration {
+                doseStore.insulinModel = WalshInsulinModel(actionDuration: duration)
+            }
         }
     }
 

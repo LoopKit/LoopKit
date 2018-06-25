@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="bgs-bY-Joo" customClass="GlucoseRangeOverrideTableViewCell" customModule="LoopKitUI" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bgs-bY-Joo" id="4Li-Xy-eDu">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JLS-MP-4l4">
+                        <rect key="frame" x="16" y="0.0" width="59" height="43.5"/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="248" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="Workout" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vj3-UD-z09">
+                        <rect key="frame" x="83" y="11" width="64.5" height="22"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="min" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="e6a-FR-F1s" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
+                        <rect key="frame" x="155" y="11" width="36" height="22.5"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="size" keyPath="textInset">
+                                <size key="value" width="0.0" height="4"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <outlet property="delegate" destination="bgs-bY-Joo" id="yND-yP-YTl"/>
+                        </connections>
+                    </textField>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="–" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pXd-Eo-nXg">
+                        <rect key="frame" x="194" y="11" width="9" height="21.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="max" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yNd-og-d4r" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
+                        <rect key="frame" x="206" y="11" width="36" height="22"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="size" keyPath="textInset">
+                                <size key="value" width="0.0" height="4"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                        <connections>
+                            <outlet property="delegate" destination="bgs-bY-Joo" id="a1k-Mx-ZuX"/>
+                        </connections>
+                    </textField>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="U/hour" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xmj-pp-6GS">
+                        <rect key="frame" x="245" y="11" width="52" height="21.5"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                        <color key="textColor" red="0.56000000238418579" green="0.56000000238418579" blue="0.56000000238418579" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottomMargin" secondItem="xmj-pp-6GS" secondAttribute="bottom" constant="0.5" id="4wd-8k-6zz"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="yNd-og-d4r" secondAttribute="bottom" id="9gf-G7-SWZ"/>
+                    <constraint firstItem="pXd-Eo-nXg" firstAttribute="top" secondItem="4Li-Xy-eDu" secondAttribute="topMargin" id="B3y-Gw-6uj"/>
+                    <constraint firstItem="Vj3-UD-z09" firstAttribute="leading" secondItem="JLS-MP-4l4" secondAttribute="trailing" constant="8" symbolic="YES" id="FPs-Yz-623"/>
+                    <constraint firstItem="e6a-FR-F1s" firstAttribute="top" secondItem="4Li-Xy-eDu" secondAttribute="topMargin" id="KBz-ho-Rjg"/>
+                    <constraint firstItem="yNd-og-d4r" firstAttribute="top" secondItem="4Li-Xy-eDu" secondAttribute="topMargin" id="L7Q-Ut-9PT"/>
+                    <constraint firstItem="pXd-Eo-nXg" firstAttribute="leading" secondItem="e6a-FR-F1s" secondAttribute="trailing" constant="3" id="NXG-pr-GPB"/>
+                    <constraint firstAttribute="bottom" secondItem="JLS-MP-4l4" secondAttribute="bottom" id="O4j-px-PoA"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="xmj-pp-6GS" secondAttribute="trailing" constant="7" id="R8G-wC-BWu"/>
+                    <constraint firstItem="e6a-FR-F1s" firstAttribute="width" secondItem="yNd-og-d4r" secondAttribute="width" id="Sxx-j3-4G5"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Vj3-UD-z09" secondAttribute="bottom" priority="750" id="ULf-XT-Z6y"/>
+                    <constraint firstItem="xmj-pp-6GS" firstAttribute="top" secondItem="4Li-Xy-eDu" secondAttribute="topMargin" id="ZQO-Oo-BYm"/>
+                    <constraint firstItem="yNd-og-d4r" firstAttribute="leading" secondItem="pXd-Eo-nXg" secondAttribute="trailing" constant="3" id="bDQ-zJ-4Fa"/>
+                    <constraint firstItem="e6a-FR-F1s" firstAttribute="leading" secondItem="Vj3-UD-z09" secondAttribute="trailing" constant="8" symbolic="YES" id="dCh-mh-SiN"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="pXd-Eo-nXg" secondAttribute="bottom" constant="0.5" id="eNT-Be-QBt"/>
+                    <constraint firstItem="JLS-MP-4l4" firstAttribute="leading" secondItem="4Li-Xy-eDu" secondAttribute="leadingMargin" id="gez-zj-hyA"/>
+                    <constraint firstItem="xmj-pp-6GS" firstAttribute="leading" secondItem="yNd-og-d4r" secondAttribute="trailing" constant="3" id="iuC-0k-haO"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="e6a-FR-F1s" secondAttribute="bottom" constant="-0.5" id="lZa-ib-xMf"/>
+                    <constraint firstItem="Vj3-UD-z09" firstAttribute="top" secondItem="4Li-Xy-eDu" secondAttribute="topMargin" id="pxv-s0-my6"/>
+                    <constraint firstItem="JLS-MP-4l4" firstAttribute="top" secondItem="4Li-Xy-eDu" secondAttribute="top" id="tEI-6F-huj"/>
+                </constraints>
+            </tableViewCellContentView>
+            <inset key="separatorInset" minX="46" minY="0.0" maxX="0.0" maxY="0.0"/>
+            <connections>
+                <outlet property="iconImageView" destination="JLS-MP-4l4" id="pwY-w2-2DY"/>
+                <outlet property="maxValueTextField" destination="yNd-og-d4r" id="oDh-BK-wc1"/>
+                <outlet property="minValueTextField" destination="e6a-FR-F1s" id="3mz-H2-Myd"/>
+                <outlet property="titleLabel" destination="Vj3-UD-z09" id="bgA-UF-Pl7"/>
+                <outlet property="unitLabel" destination="xmj-pp-6GS" id="ZLi-y6-fFR"/>
+            </connections>
+            <point key="canvasLocation" x="227" y="181"/>
+        </tableViewCell>
+    </objects>
+</document>

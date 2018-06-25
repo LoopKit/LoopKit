@@ -10,29 +10,27 @@ import HealthKit
 
 
 extension HKUnit {
-    static func milligramsPerDeciliter() -> HKUnit {
+    static let milligramsPerDeciliter: HKUnit = {
         return HKUnit.gramUnit(with: .milli).unitDivided(by: .literUnit(with: .deci))
-    }
+    }()
 
-    static func millimolesPerLiter() -> HKUnit {
+    static let millimolesPerLiter: HKUnit = {
         return HKUnit.moleUnit(with: .milli, molarMass: HKUnitMolarMassBloodGlucose).unitDivided(by: .liter())
-    }
+    }()
 
-    /// A formatting helper for determining the preferred decimal style for a given unit
-    var preferredFractionDigits: Int {
-        if self == HKUnit.milligramsPerDeciliter() {
-            return 0
-        } else {
-            return 1
+    var foundationUnit: Unit? {
+        if self == HKUnit.milligramsPerDeciliter {
+            return UnitConcentrationMass.milligramsPerDeciliter
         }
-    }
 
-    /// A presentation helper for the localized unit string
-    var glucoseUnitDisplayString: String {
-        if self == HKUnit.millimolesPerLiter() {
-            return NSLocalizedString("mmol/L", comment: "The unit display string for millimoles of glucose per liter")
-        } else {
-            return String(describing: self)
+        if self == HKUnit.millimolesPerLiter {
+            return UnitConcentrationMass.millimolesPerLiter(withGramsPerMole: HKUnitMolarMassBloodGlucose)
         }
+
+        if self == HKUnit.gram() {
+            return UnitMass.grams
+        }
+
+        return nil
     }
 }
