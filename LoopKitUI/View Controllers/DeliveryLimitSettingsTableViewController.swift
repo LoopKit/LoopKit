@@ -50,7 +50,7 @@ public class DeliveryLimitSettingsTableViewController: UITableViewController {
         didSet {
             if isViewLoaded, let cell = tableView.cellForRow(at: IndexPath(row: 0, section: Section.basalRate.rawValue)) as? TextFieldTableViewCell {
                 if let maximumBasalRatePerHour = maximumBasalRatePerHour {
-                    cell.textField.text = valueNumberFormatter.string(from: NSNumber(value: maximumBasalRatePerHour))
+                    cell.textField.text = valueNumberFormatter.string(from:  maximumBasalRatePerHour)
                 } else {
                     cell.textField.text = nil
                 }
@@ -62,7 +62,7 @@ public class DeliveryLimitSettingsTableViewController: UITableViewController {
         didSet {
             if isViewLoaded, let cell = tableView.cellForRow(at: IndexPath(row: 0, section: Section.bolus.rawValue)) as? TextFieldTableViewCell {
                 if let maximumBolus = maximumBolus {
-                    cell.textField.text = valueNumberFormatter.string(from: NSNumber(value: maximumBolus))
+                    cell.textField.text = valueNumberFormatter.string(from: maximumBolus)
                 } else {
                     cell.textField.text = nil
                 }
@@ -134,7 +134,7 @@ public class DeliveryLimitSettingsTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: TextFieldTableViewCell.className, for: indexPath) as! TextFieldTableViewCell
 
             if let maximumBasalRatePerHour = maximumBasalRatePerHour {
-                cell.textField.text = valueNumberFormatter.string(from: NSNumber(value: maximumBasalRatePerHour))
+                cell.textField.text = valueNumberFormatter.string(from: maximumBasalRatePerHour)
             } else {
                 cell.textField.text = nil
             }
@@ -150,7 +150,7 @@ public class DeliveryLimitSettingsTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: TextFieldTableViewCell.className, for: indexPath) as! TextFieldTableViewCell
 
             if let maximumBolus = maximumBolus {
-                cell.textField.text = valueNumberFormatter.string(from: NSNumber(value: maximumBolus))
+                cell.textField.text = valueNumberFormatter.string(from: maximumBolus)
             } else {
                 cell.textField.text = nil
             }

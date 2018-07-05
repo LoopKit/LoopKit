@@ -20,13 +20,13 @@ class GlucoseRangeOverrideTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     var minValue: Double = 0 {
         didSet {
-            minValueTextField.text = valueNumberFormatter.string(from: NSNumber(value: minValue))
+            minValueTextField.text = valueNumberFormatter.string(from: minValue)
         }
     }
 
     var maxValue: Double = 0 {
         didSet {
-            maxValueTextField.text = valueNumberFormatter.string(from: NSNumber(value: maxValue))
+            maxValueTextField.text = valueNumberFormatter.string(from: maxValue)
         }
     }
 

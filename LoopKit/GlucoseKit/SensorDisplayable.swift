@@ -22,3 +22,14 @@ public protocol SensorDisplayable {
     /// Returns whether the data is from a locally-connected device
     var isLocal: Bool { get }
 }
+
+
+extension SensorDisplayable {
+    public var stateDescription: String {
+        if isStateValid {
+            return NSLocalizedString("OK", comment: "Sensor state description for the valid state")
+        } else {
+            return NSLocalizedString("Needs Attention", comment: "Sensor state description for the non-valid state")
+        }
+    }
+}
