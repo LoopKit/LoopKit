@@ -76,12 +76,12 @@ public protocol PumpManager: class, CustomDebugStringConvertible {
     // Pump info
     var pumpBatteryChargeRemaining: Double? { get }
 
-    var pumpRecordsBasalProfileStartEvents: Bool? { get }
+    var pumpRecordsBasalProfileStartEvents: Bool { get }
 
-    var pumpReservoirCapacity: Double? { get }
+    var pumpReservoirCapacity: Double { get }
 
     /// Only used by settings
-    var pumpTimeZone: TimeZone? { get }
+    var pumpTimeZone: TimeZone { get }
 
     /// If the pump data (reservoir/events) is out of date, it will be fetched, and if successful, trigger a loop
     func assertCurrentPumpData()
