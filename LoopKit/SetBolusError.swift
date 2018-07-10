@@ -40,9 +40,9 @@ extension SetBolusError: LocalizedError {
     public var recoverySuggestion: String? {
         switch self {
         case .certain:
-            return NSLocalizedString("It is safe to retry.", comment: "Recovery instruction for a certain bolus failure")
+            return NSLocalizedString("It is safe to retry", comment: "Recovery instruction for a certain bolus failure")
         case .uncertain:
-            return NSLocalizedString("Check your pump before retrying.", comment: "Recovery instruction for an uncertain bolus failure")
+            return NSLocalizedString("Check your pump before retrying", comment: "Recovery instruction for an uncertain bolus failure")
         }
     }
 }
