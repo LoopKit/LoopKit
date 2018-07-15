@@ -322,7 +322,7 @@ extension Collection where Iterator.Element == DoseEntry {
                     lastSuspend = nil
 
                     // Continue temp basals that may have started before suspending
-                    if let last = lastBasal, last.type == .tempBasal {
+                    if let last = lastBasal {
                         if last.endDate > dose.endDate {
                             lastBasal = DoseEntry(
                                 type: last.type,
