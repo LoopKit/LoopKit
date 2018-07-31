@@ -58,7 +58,7 @@ extension UIViewController {
         let castedError = error as NSError
 
         presentAlertController(
-            withTitle: error.localizedDescription,
+            withTitle: error.localizedDescription.localizedCapitalized,
             message: castedError.localizedRecoverySuggestion ?? String(describing: error),
             animated: animated,
             completion: completion
@@ -87,7 +87,7 @@ extension UIViewController {
         }
 
         presentAlertController(
-            withTitle: error.errorDescription ?? error.localizedDescription,
+            withTitle: (error.errorDescription ?? error.localizedDescription).localizedCapitalized,
             message: message.isEmpty ? String(describing: error) : message,
             animated: animated,
             actions: actions,
