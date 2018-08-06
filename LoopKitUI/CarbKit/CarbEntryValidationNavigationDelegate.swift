@@ -9,7 +9,7 @@
 import Foundation
 
 class CarbEntryNavigationDelegate {
-    lazy var validationTitle = NSLocalizedString("Warning", comment: "Title of an alert containing a validation warning")
+    lazy var validationTitle = LocalizedString("Warning", comment: "Title of an alert containing a validation warning")
 
     func showAbsorptionTimeValidationWarning(for viewController: UIViewController, maxAbsorptionTime: TimeInterval) {
         let formatter = DateComponentsFormatter()
@@ -19,7 +19,7 @@ class CarbEntryNavigationDelegate {
         viewController.presentAlertController(
             withTitle: validationTitle,
             message: String(
-                format: NSLocalizedString("The maximum absorption time is %@", comment: "Alert body displayed absorption time greater than max (1: maximum absorption time)"),
+                format: LocalizedString("The maximum absorption time is %@", comment: "Alert body displayed absorption time greater than max (1: maximum absorption time)"),
                 formatter.string(from: maxAbsorptionTime) ?? String(describing: maxAbsorptionTime)
             )
         )
@@ -29,7 +29,7 @@ class CarbEntryNavigationDelegate {
         viewController.presentAlertController(
             withTitle: validationTitle,
             message: String(
-                format: NSLocalizedString("The maximum allowed amount is %@ grams", comment: "Alert body displayed for quantity greater than max (1: maximum quantity in grams)"),
+                format: LocalizedString("The maximum allowed amount is %@ grams", comment: "Alert body displayed for quantity greater than max (1: maximum quantity in grams)"),
                 NumberFormatter.localizedString(from: NSNumber(value: maxQuantityGrams), number: .none)
             )
         )

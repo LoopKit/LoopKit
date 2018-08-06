@@ -40,19 +40,19 @@ public enum GlucoseTrend: Int {
     public var localizedDescription: String {
         switch self {
         case .upUpUp:
-            return NSLocalizedString("Rising very fast", comment: "Glucose trend up-up-up")
+            return LocalizedString("Rising very fast", comment: "Glucose trend up-up-up")
         case .upUp:
-            return NSLocalizedString("Rising fast", comment: "Glucose trend up-up")
+            return LocalizedString("Rising fast", comment: "Glucose trend up-up")
         case .up:
-            return NSLocalizedString("Rising", comment: "Glucose trend up")
+            return LocalizedString("Rising", comment: "Glucose trend up")
         case .flat:
-            return NSLocalizedString("Flat", comment: "Glucose trend flat")
+            return LocalizedString("Flat", comment: "Glucose trend flat")
         case .down:
-            return NSLocalizedString("Falling", comment: "Glucose trend down")
+            return LocalizedString("Falling", comment: "Glucose trend down")
         case .downDown:
-            return NSLocalizedString("Falling fast", comment: "Glucose trend down-down")
+            return LocalizedString("Falling fast", comment: "Glucose trend down-down")
         case .downDownDown:
-            return NSLocalizedString("Falling very fast", comment: "Glucose trend down-down-down")
+            return LocalizedString("Falling very fast", comment: "Glucose trend down-down-down")
         }
     }
 }

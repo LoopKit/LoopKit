@@ -25,13 +25,13 @@ extension PumpManagerError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .communication(let error):
-            return error?.errorDescription ?? NSLocalizedString("Communication Failure", comment: "Generic pump error description")
+            return error?.errorDescription ?? LocalizedString("Communication Failure", comment: "Generic pump error description")
         case .configuration(let error):
-            return error?.errorDescription ?? NSLocalizedString("Invalid Configuration", comment: "Generic pump error description")
+            return error?.errorDescription ?? LocalizedString("Invalid Configuration", comment: "Generic pump error description")
         case .connection(let error):
-            return error?.errorDescription ?? NSLocalizedString("Connection Failure", comment: "Generic pump error description")
+            return error?.errorDescription ?? LocalizedString("Connection Failure", comment: "Generic pump error description")
         case .deviceState(let error):
-            return error?.errorDescription ?? NSLocalizedString("Device Refused", comment: "Generic pump error description")
+            return error?.errorDescription ?? LocalizedString("Device Refused", comment: "Generic pump error description")
         }
     }
 

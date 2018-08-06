@@ -124,7 +124,7 @@ open class DailyValueScheduleTableViewController: UITableViewController, DatePic
                 let diffString = formatter.string(from: abs(timeZoneDiff)) ?? String(abs(timeZoneDiff))
 
                 navigationItem.prompt = String(
-                    format: NSLocalizedString("Times in %1$@%2$@%3$@", comment: "The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval)"),
+                    format: LocalizedString("Times in %1$@%2$@%3$@", comment: "The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval)"),
                     localTimeZoneName, timeZoneDiff < 0 ? "-" : "+", diffString
                 )
             }

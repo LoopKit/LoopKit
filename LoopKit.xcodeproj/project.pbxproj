@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F5DAB1D2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
+		1F5DAB1E2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
+		1F5DAB1F2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
+		1F5DAB202118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
+		1F5DAB212118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
+		1F5DAB242118CE9300048054 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB222118CE9300048054 /* InfoPlist.strings */; };
+		1F5DAB272118CE9300048054 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB252118CE9300048054 /* InfoPlist.strings */; };
+		1F5DAB2A2118CE9300048054 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB282118CE9300048054 /* InfoPlist.strings */; };
+		1F5DAB2D2118CE9300048054 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB2B2118CE9300048054 /* Localizable.strings */; };
 		430059241CCDD08C00C861EA /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */; };
 		430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430157F91C7EC03B00B64B63 /* AppDelegate.swift */; };
 		430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430157FB1C7EC03B00B64B63 /* MasterViewController.swift */; };
@@ -326,6 +335,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1F5DAB1C2118C95700048054 /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
+		1F5DAB232118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB262118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB292118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB2C2118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB2E2118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/CarbKit.strings; sourceTree = "<group>"; };
 		2FBCE30E1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryEditViewControllerTests.swift; sourceTree = "<group>"; };
 		2FD1A6AF1E4A76CC0042EF39 /* CarbEntryValidationNavigationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryValidationNavigationDelegate.swift; sourceTree = "<group>"; };
 		430157F71C7EC03B00B64B63 /* LoopKit Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LoopKit Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -647,6 +662,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1F5DAB1B2118C91C00048054 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				1F5DAB1C2118C95700048054 /* LocalizedString.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		430059211CCDC7A200C861EA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -688,6 +711,7 @@
 				430158101C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift */,
 				2FBCE30E1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift */,
 				430158121C7EC03B00B64B63 /* Info.plist */,
+				1F5DAB222118CE9300048054 /* InfoPlist.strings */,
 			);
 			path = "LoopKit ExampleUITests";
 			sourceTree = "<group>";
@@ -798,6 +822,7 @@
 				43D8FE0E1C7290530073BE78 /* UIViewController.swift */,
 				43BA7156201E484D0058961E /* LoopKitUI.h */,
 				43BA7157201E484D0058961E /* Info.plist */,
+				1F5DAB282118CE9300048054 /* InfoPlist.strings */,
 			);
 			path = LoopKitUI;
 			sourceTree = "<group>";
@@ -843,6 +868,7 @@
 		43D8FDC11C728FDF0073BE78 = {
 			isa = PBXGroup;
 			children = (
+				1F5DAB1B2118C91C00048054 /* Common */,
 				430059211CCDC7A200C861EA /* Extensions */,
 				43D8FDCD1C728FDF0073BE78 /* LoopKit */,
 				430157F81C7EC03B00B64B63 /* LoopKit Example */,
@@ -877,6 +903,7 @@
 				7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */,
 				43D8FDCE1C728FDF0073BE78 /* LoopKit.h */,
 				43D8FDD01C728FDF0073BE78 /* Info.plist */,
+				1F5DAB2B2118CE9300048054 /* Localizable.strings */,
 				43D8FDE51C7290340073BE78 /* BasalRateSchedule.swift */,
 				43D8FDE61C7290350073BE78 /* CarbRatioSchedule.swift */,
 				4352A73B20DECF0600CAC200 /* CGMManager.swift */,
@@ -907,6 +934,7 @@
 				437AFF1B203A45CF008C4892 /* Extensions */,
 				43D988911C87FEFF00DA4467 /* Fixtures */,
 				43D8FDDC1C728FDF0073BE78 /* Info.plist */,
+				1F5DAB252118CE9300048054 /* InfoPlist.strings */,
 				43D8FE1A1C72906E0073BE78 /* BasalRateScheduleTests.swift */,
 				43D8FE411C7291900073BE78 /* CarbMathTests.swift */,
 				437AFF192039F149008C4892 /* CarbStoreTests.swift */,
@@ -1266,6 +1294,7 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = 43D8FDC11C728FDF0073BE78;
 			productRefGroup = 43D8FDCC1C728FDF0073BE78 /* Products */;
@@ -1299,6 +1328,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5DAB242118CE9300048054 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1313,6 +1343,7 @@
 				43BA7195202039B00058961E /* GlucoseRangeOverrideTableViewCell.xib in Resources */,
 				43BA7193202039A30058961E /* TextFieldTableViewCell.xib in Resources */,
 				43BA719620203C750058961E /* Assets.xcassets in Resources */,
+				1F5DAB2A2118CE9300048054 /* InfoPlist.strings in Resources */,
 				43BA7192202039950058961E /* RepeatingScheduleValueTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1322,6 +1353,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D68A9C21FE0A3D200522C49 /* InfoPlist.strings in Resources */,
+				1F5DAB2D2118CE9300048054 /* Localizable.strings in Resources */,
 				7D68A9E11FE0A3D300522C49 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1369,6 +1401,7 @@
 				43DC87BC1C8AD0ED005BC30D /* glucose_from_effects_non_zero_carb_input.json in Resources */,
 				4322B79A202FA3CC0002837D /* ice_1_hour_input.json in Resources */,
 				437874C8202FDD2D00A3D8B9 /* normalize_edge_case_doses_input.json in Resources */,
+				1F5DAB272118CE9300048054 /* InfoPlist.strings in Resources */,
 				437874B7202FDD2D00A3D8B9 /* basal_dose.json in Resources */,
 				4322B799202FA3CC0002837D /* grouped_by_overlapping_absorption_times_output.json in Resources */,
 				435D292D205F48750026F401 /* counteraction_effect_falling_glucose_insulin.json in Resources */,
@@ -1428,6 +1461,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5DAB1D2118C95700048054 /* LocalizedString.swift in Sources */,
 				4302F4DF1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */,
 				43177D041D372A7F0006E908 /* CarbEntryTableViewController.swift in Sources */,
 				43B17C81208BFA6600AC27E9 /* HKUnit.swift in Sources */,
@@ -1444,6 +1478,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5DAB1E2118C95700048054 /* LocalizedString.swift in Sources */,
 				430158111C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1464,6 +1499,7 @@
 				4369F08F208859E6000E3E45 /* PaddedTextField.swift in Sources */,
 				432CF86920D76B320066B889 /* SetupButton.swift in Sources */,
 				432CF87420D774520066B889 /* NumberFormatter.swift in Sources */,
+				1F5DAB212118C95700048054 /* LocalizedString.swift in Sources */,
 				43FB60E520DCBA02002B996B /* SetupTableViewController.swift in Sources */,
 				43BA7180201EE7090058961E /* SingleValueScheduleTableViewController.swift in Sources */,
 				43BA717E201EE7090058961E /* CommandResponseViewController.swift in Sources */,
@@ -1549,6 +1585,7 @@
 				4322B77E202FA2AF0002837D /* PersistedPumpEvent.swift in Sources */,
 				437AFEEE2036A156008C4892 /* CachedCarbObject+CoreDataProperties.swift in Sources */,
 				4322B772202FA2790002837D /* AbsorbedCarbValue.swift in Sources */,
+				1F5DAB1F2118C95700048054 /* LocalizedString.swift in Sources */,
 				4322B77B202FA2790002837D /* StoredCarbEntry.swift in Sources */,
 				4322B790202FA2B30002837D /* InsulinValue.swift in Sources */,
 				434C5F9E209938CD00B2FD1A /* NumberFormatter.swift in Sources */,
@@ -1592,6 +1629,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5DAB202118C95700048054 /* LocalizedString.swift in Sources */,
 				437874B6202FDD1500A3D8B9 /* InsulinMathTests.swift in Sources */,
 				437AFF21203AA740008C4892 /* NSManagedObjectContext.swift in Sources */,
 				434C5FA1209AC4EE00B2FD1A /* HKUnit.swift in Sources */,
@@ -1639,6 +1677,38 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		1F5DAB222118CE9300048054 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1F5DAB232118CE9300048054 /* es */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1F5DAB252118CE9300048054 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1F5DAB262118CE9300048054 /* es */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1F5DAB282118CE9300048054 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1F5DAB292118CE9300048054 /* es */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1F5DAB2B2118CE9300048054 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1F5DAB2C2118CE9300048054 /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		430157FF1C7EC03B00B64B63 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1663,6 +1733,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				43BA719820203EF30058961E /* Base */,
+				1F5DAB2E2118CE9300048054 /* es */,
 			);
 			name = CarbKit.storyboard;
 			sourceTree = "<group>";
@@ -1880,6 +1951,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LOCALIZED_STRING_MACRO_NAMES = (
+					NSLocalizedString,
+					CFLocalizedString,
+					LocalizedString,
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1934,6 +2010,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LOCALIZED_STRING_MACRO_NAMES = (
+					NSLocalizedString,
+					CFLocalizedString,
+					LocalizedString,
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

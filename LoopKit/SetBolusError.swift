@@ -20,9 +20,9 @@ extension SetBolusError: LocalizedError {
 
         switch self {
         case .certain:
-            format = NSLocalizedString("%1$@ U bolus failed", comment: "Describes a certain bolus failure (1: size of the bolus in units)")
+            format = LocalizedString("%1$@ U bolus failed", comment: "Describes a certain bolus failure (1: size of the bolus in units)")
         case .uncertain:
-            format = NSLocalizedString("%1$@ U bolus may not have succeeded", comment: "Describes an uncertain bolus failure (1: size of the bolus in units)")
+            format = LocalizedString("%1$@ U bolus may not have succeeded", comment: "Describes an uncertain bolus failure (1: size of the bolus in units)")
         }
 
         return String(format: format, NumberFormatter.localizedString(from: NSNumber(value: units), number: .decimal))
@@ -40,9 +40,9 @@ extension SetBolusError: LocalizedError {
     public var recoverySuggestion: String? {
         switch self {
         case .certain:
-            return NSLocalizedString("It is safe to retry", comment: "Recovery instruction for a certain bolus failure")
+            return LocalizedString("It is safe to retry", comment: "Recovery instruction for a certain bolus failure")
         case .uncertain:
-            return NSLocalizedString("Check your pump before retrying", comment: "Recovery instruction for an uncertain bolus failure")
+            return LocalizedString("Check your pump before retrying", comment: "Recovery instruction for an uncertain bolus failure")
         }
     }
 }

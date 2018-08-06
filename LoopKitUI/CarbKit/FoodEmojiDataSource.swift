@@ -64,19 +64,19 @@ class FoodEmojiDataSource {
         sections = [
             FoodEmojiSection(
                 items: type(of: self).fast,
-                title: NSLocalizedString("Fast", comment: "Section title for fast absorbing food")
+                title: LocalizedString("Fast", comment: "Section title for fast absorbing food")
             ),
             FoodEmojiSection(
                 items: type(of: self).medium,
-                title: NSLocalizedString("Medium", comment: "Section title for medium absorbing food")
+                title: LocalizedString("Medium", comment: "Section title for medium absorbing food")
             ),
             FoodEmojiSection(
                 items: type(of: self).slow,
-                title: NSLocalizedString("Slow", comment: "Section title for slow absorbing food")
+                title: LocalizedString("Slow", comment: "Section title for slow absorbing food")
             ),
             FoodEmojiSection(
                 items: type(of: self).other,
-                title: NSLocalizedString("Other", comment: "Section title for no-carb food")
+                title: LocalizedString("Other", comment: "Section title for no-carb food")
             )
         ]
     }

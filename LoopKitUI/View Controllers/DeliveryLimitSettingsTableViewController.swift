@@ -139,9 +139,9 @@ public class DeliveryLimitSettingsTableViewController: UITableViewController {
                 cell.textField.text = nil
             }
             cell.textField.keyboardType = .decimalPad
-            cell.textField.placeholder = isReadOnly ? NSLocalizedString("Enter a rate in units per hour", comment: "The placeholder text instructing users how to enter a maximum basal rate") : nil
+            cell.textField.placeholder = isReadOnly ? LocalizedString("Enter a rate in units per hour", comment: "The placeholder text instructing users how to enter a maximum basal rate") : nil
             cell.textField.isEnabled = !isReadOnly && !isSyncInProgress
-            cell.unitLabel?.text = NSLocalizedString("U/hour", comment: "The unit string for units per hour")
+            cell.unitLabel?.text = LocalizedString("U/hour", comment: "The unit string for units per hour")
 
             cell.delegate = self
 
@@ -155,9 +155,9 @@ public class DeliveryLimitSettingsTableViewController: UITableViewController {
                 cell.textField.text = nil
             }
             cell.textField.keyboardType = .decimalPad
-            cell.textField.placeholder = isReadOnly ? NSLocalizedString("Enter a number of units", comment: "The placeholder text instructing users how to enter a maximum bolus") : nil
+            cell.textField.placeholder = isReadOnly ? LocalizedString("Enter a number of units", comment: "The placeholder text instructing users how to enter a maximum bolus") : nil
             cell.textField.isEnabled = !isReadOnly && !isSyncInProgress
-            cell.unitLabel?.text = NSLocalizedString("Units", comment: "The unit string for units")
+            cell.unitLabel?.text = LocalizedString("Units", comment: "The unit string for units")
 
             cell.delegate = self
 
@@ -176,9 +176,9 @@ public class DeliveryLimitSettingsTableViewController: UITableViewController {
     public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
         case .basalRate:
-            return NSLocalizedString("Maximum Basal Rate", comment: "The title text for the maximum basal rate value")
+            return LocalizedString("Maximum Basal Rate", comment: "The title text for the maximum basal rate value")
         case .bolus:
-            return NSLocalizedString("Maximum Bolus", comment: "The title text for the maximum bolus value")
+            return LocalizedString("Maximum Bolus", comment: "The title text for the maximum bolus value")
         case .sync:
             return nil
         }

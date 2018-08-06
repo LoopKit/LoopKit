@@ -23,13 +23,13 @@ extension NumberFormatter {
         let format: String
         switch style {
         case .long, .medium:
-            format = NSLocalizedString(
+            format = LocalizedString(
                 "quantity-and-unit-space",
                 value: "%1$@ %2$@",
                 comment: "Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit)"
             )
         case .short:
-            format = NSLocalizedString(
+            format = LocalizedString(
                 "quantity-and-unit-tight",
                 value: "%1$@%2$@",
                 comment: "Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit)"
