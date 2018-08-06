@@ -346,6 +346,19 @@
 		1F5DAB312118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB322118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB332118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		1F5DAB342118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1F5DAB352118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
+		1F5DAB362118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		1F5DAB372118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		1F5DAB382118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB392118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB3A2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB3B2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB3C2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB3D2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB3E2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB3F2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB402118D5D500048054 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2FBCE30E1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryEditViewControllerTests.swift; sourceTree = "<group>"; };
 		2FD1A6AF1E4A76CC0042EF39 /* CarbEntryValidationNavigationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryValidationNavigationDelegate.swift; sourceTree = "<group>"; };
 		430157F71C7EC03B00B64B63 /* LoopKit Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LoopKit Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1300,6 +1313,7 @@
 				en,
 				Base,
 				es,
+				de,
 			);
 			mainGroup = 43D8FDC11C728FDF0073BE78;
 			productRefGroup = 43D8FDCC1C728FDF0073BE78 /* Products */;
@@ -1687,6 +1701,7 @@
 			children = (
 				1F5DAB232118CE9300048054 /* es */,
 				1F5DAB2F2118D2A700048054 /* ru */,
+				1F5DAB3C2118D5A300048054 /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1696,6 +1711,7 @@
 			children = (
 				1F5DAB262118CE9300048054 /* es */,
 				1F5DAB302118D2A700048054 /* ru */,
+				1F5DAB3D2118D5A300048054 /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1705,6 +1721,7 @@
 			children = (
 				1F5DAB292118CE9300048054 /* es */,
 				1F5DAB312118D2A700048054 /* ru */,
+				1F5DAB3F2118D5A300048054 /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1714,6 +1731,7 @@
 			children = (
 				1F5DAB2C2118CE9300048054 /* es */,
 				1F5DAB322118D2A700048054 /* ru */,
+				1F5DAB392118D5A200048054 /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1724,6 +1742,7 @@
 				430158001C7EC03B00B64B63 /* Base */,
 				7D68A9EE1FE0A3D400522C49 /* es */,
 				7D68AABB1FE31A2800522C49 /* ru */,
+				1F5DAB352118D5A200048054 /* de */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -1734,6 +1753,7 @@
 				430158051C7EC03B00B64B63 /* Base */,
 				7D68A9EF1FE0A3D400522C49 /* es */,
 				7D68AABA1FE31A2800522C49 /* ru */,
+				1F5DAB342118D5A200048054 /* de */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1744,6 +1764,7 @@
 				43BA719820203EF30058961E /* Base */,
 				1F5DAB2E2118CE9300048054 /* es */,
 				1F5DAB332118D2A700048054 /* ru */,
+				1F5DAB362118D5A200048054 /* de */,
 			);
 			name = CarbKit.storyboard;
 			sourceTree = "<group>";
@@ -1754,6 +1775,7 @@
 				43D8FEEE1C7294E90073BE78 /* Base */,
 				7D68A9CA1FE0A3D200522C49 /* es */,
 				7D68AAB91FE31A2800522C49 /* ru */,
+				1F5DAB372118D5A200048054 /* de */,
 			);
 			name = InsulinKit.storyboard;
 			sourceTree = "<group>";
@@ -1763,6 +1785,8 @@
 			children = (
 				7D68A9AF1FE0A3D000522C49 /* es */,
 				7D68AABC1FE31BE700522C49 /* ru */,
+				1F5DAB3B2118D5A300048054 /* de */,
+				1F5DAB402118D5D500048054 /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1772,6 +1796,7 @@
 			children = (
 				7D68A9B91FE0A3D100522C49 /* es */,
 				7D68AABE1FE31BE700522C49 /* ru */,
+				1F5DAB3A2118D5A300048054 /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1781,6 +1806,7 @@
 			children = (
 				7D68A9C31FE0A3D200522C49 /* es */,
 				7D68AAC01FE31BE800522C49 /* ru */,
+				1F5DAB382118D5A200048054 /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1790,6 +1816,7 @@
 			children = (
 				7D68A9E21FE0A3D300522C49 /* es */,
 				7D68AAC61FE31BE900522C49 /* ru */,
+				1F5DAB3E2118D5A300048054 /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
