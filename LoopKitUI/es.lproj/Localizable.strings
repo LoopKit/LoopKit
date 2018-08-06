@@ -82,6 +82,12 @@
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Evento de microinfusadora";
 
+/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
+"quantity-and-unit-space" = "%1$@ %2$@";
+
+/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
+"quantity-and-unit-tight" = "%1$@%2$@";
+
 /* Section title for slow absorbing food */
 "Slow" = "Lento";
 

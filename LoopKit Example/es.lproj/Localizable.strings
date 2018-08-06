@@ -16,6 +16,9 @@
 /* The title text for the glucose target range schedule */
 "Glucose Target Range" = "Rango Objetivo de Glucosa";
 
+/* The title text for the pump ID */
+"Pump ID" = "ID de microinfusora";
+
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "Reservorio";
 
