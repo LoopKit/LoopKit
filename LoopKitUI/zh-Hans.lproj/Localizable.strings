@@ -95,10 +95,10 @@
 "Tap to set" = "Tap to set";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
-"The maximum absorption time is %@" = "The maximum absorption time is es %@";
+"The maximum absorption time is %@" = "The maximum absorption time is %@";
 
 /* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
-"The maximum allowed amount is %@ grams" = "The maximum allowed amount is %@ gramos";
+"The maximum allowed amount is %@ grams" = "The maximum allowed amount is %@ grams";
 
 /* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
 "Times in %1$@%2$@%3$@" = "Times in %1$@%2$@%3$@";
