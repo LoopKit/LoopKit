@@ -11,7 +11,7 @@
 "Enter the 6-digit pump ID" = "Ingrese ID de 6 dígitios de la microinfusora";
 
 /* The title for the cell displaying data generation */
-"Generate Data" = "Generate Data";
+"Generate Data" = "Generar Datos";
 
 /* The title text for the glucose target range schedule */
 "Glucose Target Range" = "Rango Objetivo de Glucosa";
@@ -23,10 +23,10 @@
 "Reservoir" = "Reservorio";
 
 /* Title for the cell resetting the data manager */
-"Reset" = "Reset";
+"Reset" = "Reiniciar";
 
 /* Title of button to sync basal profile from pump */
-"Sync With Pump" = "Sync With Pump";
+"Sync With Pump" = "Sincronizar con la Microinfusora";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
 "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "El ID de microinfusora puede encontrarse en la parte trasera o cerca de la parte inferior de la pantalla STATUS/Esc. Es la parte estrictamente numérica del número de serie mostrado como SN o S/N";

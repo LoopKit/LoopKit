@@ -8,7 +8,7 @@
 "9jm-X6-3QA.text" = "Detalle";
 
 /* Class = "UILabel"; text = "U IOB"; ObjectID = "dZi-Ta-IHm"; */
-"dZi-Ta-IHm.text" = "U IOB";
+"dZi-Ta-IHm.text" = "U IaB";
 
 /* Class = "UILabel"; text = "No pump configured"; ObjectID = "jSc-64-2tZ"; */
 "jSc-64-2tZ.text" = "No hay microinfusadora configurada";
@@ -23,8 +23,8 @@
 "TyZ-xm-mVN.segmentTitles[0]" = "Reservorio";
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[1] = "Event History"; ObjectID = "TyZ-xm-mVN"; */
-"TyZ-xm-mVN.segmentTitles[1]" = "Historia de eventos";
+"TyZ-xm-mVN.segmentTitles[1]" = "Historia de Eventos";
 
 /* Class = "UINavigationItem"; title = "Insulin Delivery"; ObjectID = "vls-EW-uwI"; */
-"vls-EW-uwI.title" = "Administración de insulina";
+"vls-EW-uwI.title" = "Administración de Insulina";
 
