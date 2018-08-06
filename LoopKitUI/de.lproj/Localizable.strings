@@ -11,25 +11,25 @@
 "Cancel" = "Cancel";
 
 /* The title of the view controller to create a new carb entry */
-"carb-entry-title-add" = "Agregar entrada de carbohidratos";
+"carb-entry-title-add" = "Add Carb Entry";
 
 /* The title of the view controller to edit an existing carb entry */
-"carb-entry-title-edit" = "Editar entrada de carbohidratos";
+"carb-entry-title-edit" = "Edit Carb Entry";
 
 /* Carb entry section footer text explaining absorption time */
-"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Elija un tiempo de absorción más largo para comidas más grandes, o aquellas que contienen grasas y proteínas. Esta es solo una guía para el algoritmo y no necesita ser exacta.";
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact.";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.COBDateLabel" = "a %1$@";
+"com.loudnate.CarbKit.COBDateLabel" = "at %1$@";
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.totalDateLabel" = "hace %1$@";
+"com.loudnate.CarbKit.totalDateLabel" = "since %1$@";
 
 /* The format string describing the date of an IOB value. The first format argument is the localized date. */
-"com.loudnate.InsulinKit.IOBDateLabel" = "a %1$@";
+"com.loudnate.InsulinKit.IOBDateLabel" = "at %1$@";
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.InsulinKit.totalDateLabel" = "hace %1$@";
+"com.loudnate.InsulinKit.totalDateLabel" = "since %1$@";
 
 /* The title of the action used to dismiss an error alert */
 "com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
@@ -38,7 +38,7 @@
 "Continue" = "Continue";
 
 /* Title of the carb entry date picker cell */
-"Date" = "Fecha";
+"Date" = "Date";
 
 /* Button title to delete all objects */
 "Delete All" = "Delete All";
@@ -53,7 +53,7 @@
 "Enter a rate in units per hour" = "Enter a rate in units per hour";
 
 /* Section title for fast absorbing food */
-"Fast" = "Rápido";
+"Fast" = "Fast";
 
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Maximum Basal Rate";
@@ -62,7 +62,7 @@
 "Maximum Bolus" = "Maximum Bolus";
 
 /* Section title for medium absorbing food */
-"Medium" = "Medio";
+"Medium" = "Medium";
 
 /* The unit display string for millimoles of glucose per liter */
 "mmol/L" = "mmol/L";
@@ -71,16 +71,16 @@
 "More Info" = "More Info";
 
 /* Section title for no-carb food */
-"Other" = "Otro";
+"Other" = "Other";
 
 /* The section title of glucose overrides */
-"Overrides" = "Anulas";
+"Overrides" = "Overrides";
 
 /* Title for the pre-meal override range */
-"Pre-Meal" = "Pre-Comida";
+"Pre-Meal" = "Pre-Meal";
 
 /* The title of the screen displaying a pump event */
-"Pump Event" = "Evento de microinfusadora";
+"Pump Event" = "Pump Event";
 
 /* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
 "quantity-and-unit-space" = "%1$@ %2$@";
@@ -89,7 +89,7 @@
 "quantity-and-unit-tight" = "%1$@%2$@";
 
 /* Section title for slow absorbing food */
-"Slow" = "Lento";
+"Slow" = "Slow";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Tap to set";
@@ -101,7 +101,7 @@
 "The maximum allowed amount is %@ grams" = "The maximum allowed amount is %@ grams";
 
 /* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
-"Times in %1$@%2$@%3$@" = "Horario in %1$@%2$@%3$@";
+"Times in %1$@%2$@%3$@" = "Times in %1$@%2$@%3$@";
 
 /* The unit string for units per hour */
 "U/hour" = "U/hour";
@@ -110,11 +110,11 @@
 "Units" = "Units";
 
 /* The default title to use when an entry has none */
-"Unknown" = "Desconocido";
+"Unknown" = "Unknown";
 
 /* Title of an alert containing a validation warning */
-"Warning" = "Aviso";
+"Warning" = "Warning";
 
 /* Title for the workout override range */
-"Workout" = "Ejercicio";
+"Workout" = "Workout";
 
