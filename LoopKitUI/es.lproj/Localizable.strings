@@ -1,5 +1,5 @@
 /* Title of the carb entry absorption time cell */
-"Absorption Time" = "Tiempo de absorción";
+"Absorption Time" = "Tiempo de Absorción";
 
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Are you sure you want to delete all history entries?";
@@ -8,7 +8,7 @@
 "Are you sure you want to delete all reservoir values?" = "Are you sure you want to delete all reservoir values?";
 
 /* The title of the cancel action in an action sheet */
-"Cancel" = "Cancel";
+"Cancel" = "Cancelar";
 
 /* The title of the view controller to create a new carb entry */
 "carb-entry-title-add" = "Agregar entrada de carbohidratos";
@@ -56,10 +56,10 @@
 "Fast" = "Rápido";
 
 /* The title text for the maximum basal rate value */
-"Maximum Basal Rate" = "Maximum Basal Rate";
+"Maximum Basal Rate" = "Perfil Basal Máximo";
 
 /* The title text for the maximum bolus value */
-"Maximum Bolus" = "Maximum Bolus";
+"Maximum Bolus" = "Bolo Máximo";
 
 /* Section title for medium absorbing food */
 "Medium" = "Medio";
@@ -68,7 +68,7 @@
 "mmol/L" = "mmol/L";
 
 /* Alert action title to open error help */
-"More Info" = "More Info";
+"More Info" = "Mas Info";
 
 /* Section title for no-carb food */
 "Other" = "Otro";

@@ -1,5 +1,5 @@
 /* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ U bolus failed";
+"%1$@ U bolus failed" = "%1$@ U bolo falló";
 
 /* Describes an uncertain bolus failure (1: size of the bolus in units) */
 "%1$@ U bolus may not have succeeded" = "%1$@ U bolus may not have succeeded";
@@ -23,22 +23,22 @@
 "Connection Failure" = "Connection Failure";
 
 /* Generic pump error description */
-"Device Refused" = "Device Refused";
+"Device Refused" = "Dispositivo Rechazado";
 
 /* Recovery suggestion for a no data error */
 "Ensure carb data exists for the specified date" = "Ensure carb data exists for the specified date";
 
 /* Glucose trend down */
-"Falling" = "Falling";
+"Falling" = "Descendiendo";
 
 /* Glucose trend down-down */
-"Falling fast" = "Falling fast";
+"Falling fast" = "Descendiendo rápido";
 
 /* Glucose trend down-down-down */
-"Falling very fast" = "Falling very fast";
+"Falling very fast" = "Descendiendo muy rápido";
 
 /* Glucose trend flat */
-"Flat" = "Flat";
+"Flat" = "Estable";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Invalid Configuration";
@@ -50,7 +50,7 @@
 "mmol/L" = "mmol/L";
 
 /* Sensor state description for the non-valid state */
-"Needs Attention" = "Needs Attention";
+"Needs Attention" = "Necesita atención";
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "No values found";
@@ -68,17 +68,17 @@
 "quantity-and-unit-tight" = "%1$@%2$@";
 
 /* Glucose trend up */
-"Rising" = "Rising";
+"Rising" = "Ascendiendo";
 
 /* Glucose trend up-up */
-"Rising fast" = "Rising fast";
+"Rising fast" = "Ascendiendo rápido";
 
 /* Glucose trend up-up-up */
-"Rising very fast" = "Rising very fast";
+"Rising very fast" = "Ascendiendo muy rápido";
 
 /* The short unit display string for international units of insulin */
 "U" = "U";
 
 /* The long unit display string for international units of insulin */
-"Units" = "Units";
+"Units" = "Unidades";
 
