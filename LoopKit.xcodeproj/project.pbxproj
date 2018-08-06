@@ -341,6 +341,11 @@
 		1F5DAB292118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB2C2118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB2E2118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		1F5DAB2F2118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB302118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB312118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB322118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB332118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/CarbKit.strings; sourceTree = "<group>"; };
 		2FBCE30E1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryEditViewControllerTests.swift; sourceTree = "<group>"; };
 		2FD1A6AF1E4A76CC0042EF39 /* CarbEntryValidationNavigationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryValidationNavigationDelegate.swift; sourceTree = "<group>"; };
 		430157F71C7EC03B00B64B63 /* LoopKit Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LoopKit Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1681,6 +1686,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				1F5DAB232118CE9300048054 /* es */,
+				1F5DAB2F2118D2A700048054 /* ru */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1689,6 +1695,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				1F5DAB262118CE9300048054 /* es */,
+				1F5DAB302118D2A700048054 /* ru */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1697,6 +1704,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				1F5DAB292118CE9300048054 /* es */,
+				1F5DAB312118D2A700048054 /* ru */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1705,6 +1713,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				1F5DAB2C2118CE9300048054 /* es */,
+				1F5DAB322118D2A700048054 /* ru */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1734,6 +1743,7 @@
 			children = (
 				43BA719820203EF30058961E /* Base */,
 				1F5DAB2E2118CE9300048054 /* es */,
+				1F5DAB332118D2A700048054 /* ru */,
 			);
 			name = CarbKit.storyboard;
 			sourceTree = "<group>";
