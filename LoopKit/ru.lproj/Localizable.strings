@@ -1,8 +1,8 @@
 /* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ U bolus failed";
+"%1$@ U bolus failed" = "%1$@ ед Болюс не состоялся ";
 
 /* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ U bolus may not have succeeded";
+"%1$@ U bolus may not have succeeded" = "%1$@ ед bolus may not have succeeded";
 
 /* The error description describing when Health sharing was denied */
 "Authorization Denied" = "Authorization Denied";
@@ -29,16 +29,16 @@
 "Ensure carb data exists for the specified date" = "Ensure carb data exists for the specified date";
 
 /* Glucose trend down */
-"Falling" = "Falling";
+"Falling" = "Падение";
 
 /* Glucose trend down-down */
-"Falling fast" = "Falling fast";
+"Falling fast" = "Быстрое падение";
 
 /* Glucose trend down-down-down */
-"Falling very fast" = "Falling very fast";
+"Falling very fast" = "Очень быстрое падение";
 
 /* Glucose trend flat */
-"Flat" = "Flat";
+"Flat" = "Стабильно";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Invalid Configuration";
@@ -47,7 +47,7 @@
 "It is safe to retry" = "It is safe to retry";
 
 /* The short unit display string for millimoles of glucose per liter */
-"mmol/L" = "mmol/L";
+"mmol/L" = "ммоль/л";
 
 /* Sensor state description for the non-valid state */
 "Needs Attention" = "Needs Attention";
@@ -68,17 +68,17 @@
 "quantity-and-unit-tight" = "%1$@%2$@";
 
 /* Glucose trend up */
-"Rising" = "Rising";
+"Rising" = "Повышение";
 
 /* Glucose trend up-up */
-"Rising fast" = "Rising fast";
+"Rising fast" = "Быстрое повышение";
 
 /* Glucose trend up-up-up */
-"Rising very fast" = "Rising very fast";
+"Rising very fast" = "Очень быстрое повышение";
 
 /* The short unit display string for international units of insulin */
-"U" = "U";
+"U" = "ед";
 
 /* The long unit display string for international units of insulin */
-"Units" = "Units";
+"Units" = "Единицы";
 
