@@ -2,10 +2,10 @@
 "Absorption Time" = "Длительность усвоения";
 
 /* Action sheet confirmation message for pump history deletion */
-"Are you sure you want to delete all history entries?" = "Are you sure you want to delete all history entries?";
+"Are you sure you want to delete all history entries?" = "Подтвердите удаление всех записей истории?";
 
 /* Action sheet confirmation message for reservoir deletion */
-"Are you sure you want to delete all reservoir values?" = "Are you sure you want to delete all reservoir values?";
+"Are you sure you want to delete all reservoir values?" = "Подтвердите удаление всех записей резервуара?";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Отмена";
@@ -35,31 +35,31 @@
 "com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
 
 /* Title of the setup button to continue */
-"Continue" = "Continue";
+"Continue" = "Продолжить";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Дата";
 
 /* Button title to delete all objects */
-"Delete All" = "Delete All";
+"Delete All" = "Стереть все";
 
 /* The detail text describing an enabled setting */
-"Enabled" = "Enabled";
+"Enabled" = "Активировано";
 
 /* The placeholder text instructing users how to enter a maximum bolus */
-"Enter a number of units" = "Enter a number of units";
+"Enter a number of units" = "Введите кол-во единиц";
 
 /* The placeholder text instructing users how to enter a maximum basal rate */
-"Enter a rate in units per hour" = "Enter a rate in units per hour";
+"Enter a rate in units per hour" = "Введите скорость в ед/час";
 
 /* Section title for fast absorbing food */
 "Fast" = "Быстрая";
 
 /* The title text for the maximum basal rate value */
-"Maximum Basal Rate" = "Maximum Basal Rate";
+"Maximum Basal Rate" = "Макс скорость базала";
 
 /* The title text for the maximum bolus value */
-"Maximum Bolus" = "Maximum Bolus";
+"Maximum Bolus" = "Макс Болюс";
 
 /* Section title for medium absorbing food */
 "Medium" = "Средняя";
@@ -68,7 +68,7 @@
 "mmol/L" = "ммоль/л";
 
 /* Alert action title to open error help */
-"More Info" = "More Info";
+"More Info" = "Доп. инфо";
 
 /* Section title for no-carb food */
 "Other" = "Другая";

@@ -1,23 +1,23 @@
 /* Class = "UILabel"; text = "Authorize access to Health to continue"; ObjectID = "7xi-Om-Y53"; */
-"7xi-Om-Y53.text" = "Authorize access to Health to continue";
+"7xi-Om-Y53.text" = "Разрешите доступ к панели Здоровье чтобы продолжить";
 
 /* Class = "UIButton"; normalTitle = "Authorize"; ObjectID = "8sx-XB-DRV"; */
-"8sx-XB-DRV.normalTitle" = "Authorize";
+"8sx-XB-DRV.normalTitle" = "Разрешить";
 
 /* Class = "UIButton"; normalTitle = "abc"; ObjectID = "act-DJ-aXh"; */
 "act-DJ-aXh.normalTitle" = "abc";
 
 /* Class = "UILabel"; text = "Food Type"; ObjectID = "bdP-2A-DB8"; */
-"bdP-2A-DB8.text" = "Food Type";
+"bdP-2A-DB8.text" = "Тип пищи";
 
 /* Class = "UILabel"; text = "🌮"; ObjectID = "blb-Re-Esx"; */
 "blb-Re-Esx.text" = "🌮";
 
 /* Class = "UINavigationItem"; title = "Add/Edit Carb Entry"; ObjectID = "bM2-yI-YmX"; */
-"bM2-yI-YmX.title" = "Add/Edit Carb Entry";
+"bM2-yI-YmX.title" = "Добавить/изменить введенные углеводы";
 
 /* Class = "UILabel"; text = "g"; ObjectID = "D2S-2h-yH6"; */
-"D2S-2h-yH6.text" = "g";
+"D2S-2h-yH6.text" = "г";
 
 /* Class = "UILabel"; text = "🍇"; ObjectID = "dug-Vc-f5B"; */
 "dug-Vc-f5B.text" = "🍇";
@@ -29,7 +29,7 @@
 "ez9-lR-yD7.text" = " 🍭 ";
 
 /* Class = "UILabel"; text = "Amount Consumed"; ObjectID = "K0S-my-3qL"; */
-"K0S-my-3qL.text" = "Amount Consumed";
+"K0S-my-3qL.text" = "Количество потребленного";
 
 /* Class = "UILabel"; text = "..."; ObjectID = "lbE-wQ-pFK"; */
 "lbE-wQ-pFK.text" = "...";
@@ -47,25 +47,25 @@
 "nBf-1A-P2k.text" = "⋯ ";
 
 /* Class = "UILabel"; text = "Food Type"; ObjectID = "NRZ-dT-iqj"; */
-"NRZ-dT-iqj.text" = "Food Type";
+"NRZ-dT-iqj.text" = "Тип пищи";
 
 /* Class = "UILabel"; text = "HealthKit is not available on this device"; ObjectID = "nXh-BM-MuC"; */
-"nXh-BM-MuC.text" = "HealthKit is not available on this device";
+"nXh-BM-MuC.text" = "HealthKit недоступен на этом устройстве";
 
 /* Class = "UILabel"; text = "g Total"; ObjectID = "pHI-f4-pJp"; */
 "pHI-f4-pJp.text" = "всего грамм";
 
 /* Class = "UINavigationItem"; title = "Carbohydrates"; ObjectID = "Qgq-n1-hm4"; */
-"Qgq-n1-hm4.title" = "Carbohydrates";
+"Qgq-n1-hm4.title" = "Углеводы";
 
 /* Class = "UILabel"; text = "MEDIUM"; ObjectID = "qMe-TA-UCA"; */
-"qMe-TA-UCA.text" = "MEDIUM";
+"qMe-TA-UCA.text" = "Средний";
 
 /* Class = "UITextField"; placeholder = "0"; ObjectID = "qU9-hG-hMu"; */
 "qU9-hG-hMu.placeholder" = "0";
 
 /* Class = "UILabel"; text = "g COB"; ObjectID = "QZb-e1-xwb"; */
-"QZb-e1-xwb.text" = "g COB";
+"QZb-e1-xwb.text" = "грамм углеводов COB";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "vM9-H7-t3C"; */
 "vM9-H7-t3C.text" = "Название";
