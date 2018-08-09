@@ -1,5 +1,5 @@
 /* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ U bolus failed";
+"%1$@ U bolus failed" = "%1$@ U bolo fallito";
 
 /* Describes an uncertain bolus failure (1: size of the bolus in units) */
 "%1$@ U bolus may not have succeeded" = "%1$@ U bolus may not have succeeded";
@@ -8,7 +8,7 @@
 "Authorization Denied" = "Authorization Denied";
 
 /* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Check your pump before retrying";
+"Check your pump before retrying" = "Revisar su microinfusadora antes de intentarlo de nuevo";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Authorization Denied";
@@ -29,16 +29,16 @@
 "Ensure carb data exists for the specified date" = "Ensure carb data exists for the specified date";
 
 /* Glucose trend down */
-"Falling" = "Falling";
+"Falling" = "Abbassamento";
 
 /* Glucose trend down-down */
-"Falling fast" = "Falling fast";
+"Falling fast" = "Abbassamento veloc";
 
 /* Glucose trend down-down-down */
-"Falling very fast" = "Falling very fast";
+"Falling very fast" = "Abbassamento molto veloce";
 
 /* Glucose trend flat */
-"Flat" = "Flat";
+"Flat" = "Piatto";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Invalid Configuration";
@@ -50,7 +50,7 @@
 "mmol/L" = "mmol/L";
 
 /* Sensor state description for the non-valid state */
-"Needs Attention" = "Needs Attention";
+"Needs Attention" = "Esige Attenzione";
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "No values found";
@@ -68,17 +68,17 @@
 "quantity-and-unit-tight" = "%1$@%2$@";
 
 /* Glucose trend up */
-"Rising" = "Rising";
+"Rising" = "Crescente";
 
 /* Glucose trend up-up */
-"Rising fast" = "Rising fast";
+"Rising fast" = "Crescente veloce";
 
 /* Glucose trend up-up-up */
-"Rising very fast" = "Rising very fast";
+"Rising very fast" = "Crescente molto veloce";
 
 /* The short unit display string for international units of insulin */
 "U" = "U";
 
 /* The long unit display string for international units of insulin */
-"Units" = "Units";
+"Units" = "Unità";
 

@@ -24,7 +24,7 @@
 "QZb-e1-xwb.text" = "g COB";
 
 /* Class = "UINavigationItem"; title = "Carbohydrates"; ObjectID = "Qgq-n1-hm4"; */
-"Qgq-n1-hm4.title" = "Carbohydrates";
+"Qgq-n1-hm4.title" = "Carboidrati";
 
 /* Class = "UILabel"; text = "..."; ObjectID = "WZV-l9-Ek1"; */
 "WZV-l9-Ek1.text" = "...";
@@ -60,7 +60,7 @@
 "lbE-wQ-pFK.text" = "...";
 
 /* Class = "UILabel"; text = "Detail"; ObjectID = "m95-PG-bTq"; */
-"m95-PG-bTq.text" = "Detail";
+"m95-PG-bTq.text" = "Dettaglio";
 
 /* Class = "UILabel"; text = "⋯ "; ObjectID = "nBf-1A-P2k"; */
 "nBf-1A-P2k.text" = "⋯ ";
@@ -78,4 +78,4 @@
 "qU9-hG-hMu.placeholder" = "0";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "vM9-H7-t3C"; */
-"vM9-H7-t3C.text" = "Title";
+"vM9-H7-t3C.text" = "Titolo";
