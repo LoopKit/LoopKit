@@ -1,65 +1,65 @@
 /* Title of the carb entry absorption time cell */
-"Absorption Time" = "Absorption Time";
+"Absorption Time" = "Absorbsjonstid";
 
 /* Action sheet confirmation message for pump history deletion */
-"Are you sure you want to delete all history entries?" = "Are you sure you want to delete all history entries?";
+"Are you sure you want to delete all history entries?" = "Er du sikker på at du vil slette alle historiske innslag?";
 
 /* Action sheet confirmation message for reservoir deletion */
-"Are you sure you want to delete all reservoir values?" = "Are you sure you want to delete all reservoir values?";
+"Are you sure you want to delete all reservoir values?" = "Er du sikker på at du vil slette alle reservoarverdier?";
 
 /* The title of the cancel action in an action sheet */
-"Cancel" = "Cancel";
+"Cancel" = "Avbryt";
 
 /* The title of the view controller to create a new carb entry */
-"carb-entry-title-add" = "Add Carb Entry";
+"carb-entry-title-add" = "Legg til Karbohydrater";
 
 /* The title of the view controller to edit an existing carb entry */
-"carb-entry-title-edit" = "Edit Carb Entry";
+"carb-entry-title-edit" = "Rediger Karbohydrater";
 
 /* Carb entry section footer text explaining absorption time */
-"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact.";
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Velg en lengre absorpsjonstid for større måltider, eller de som inneholder fett og proteiner. Dette er bare veiledning til algoritmen og trenger ikke å være nøyaktig.";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.COBDateLabel" = "at %1$@";
+"com.loudnate.CarbKit.COBDateLabel" = "kl. %1$@";
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.totalDateLabel" = "since %1$@";
+"com.loudnate.CarbKit.totalDateLabel" = "siden %1$@";
 
 /* The format string describing the date of an IOB value. The first format argument is the localized date. */
-"com.loudnate.InsulinKit.IOBDateLabel" = "at %1$@";
+"com.loudnate.InsulinKit.IOBDateLabel" = "kl. %1$@";
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.InsulinKit.totalDateLabel" = "since %1$@";
+"com.loudnate.InsulinKit.totalDateLabel" = "siden %1$@";
 
 /* The title of the action used to dismiss an error alert */
 "com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
 
 /* Title of the setup button to continue */
-"Continue" = "Continue";
+"Continue" = "Fortsett";
 
 /* Title of the carb entry date picker cell */
-"Date" = "Date";
+"Date" = "Dato";
 
 /* Button title to delete all objects */
-"Delete All" = "Delete All";
+"Delete All" = "Slett Alle";
 
 /* The detail text describing an enabled setting */
-"Enabled" = "Enabled";
+"Enabled" = "Aktivert";
 
 /* The placeholder text instructing users how to enter a maximum bolus */
-"Enter a number of units" = "Enter a number of units";
+"Enter a number of units" = "Skriv inn antall enheter";
 
 /* The placeholder text instructing users how to enter a maximum basal rate */
-"Enter a rate in units per hour" = "Enter a rate in units per hour";
+"Enter a rate in units per hour" = "Velg en grense for maks enheter per time";
 
 /* Section title for fast absorbing food */
-"Fast" = "Fast";
+"Fast" = "Rask";
 
 /* The title text for the maximum basal rate value */
-"Maximum Basal Rate" = "Maximum Basal Rate";
+"Maximum Basal Rate" = "Maks basalgrense";
 
 /* The title text for the maximum bolus value */
-"Maximum Bolus" = "Maximum Bolus";
+"Maximum Bolus" = "Maks bolus";
 
 /* Section title for medium absorbing food */
 "Medium" = "Medium";
@@ -68,19 +68,19 @@
 "mmol/L" = "mmol/L";
 
 /* Alert action title to open error help */
-"More Info" = "More Info";
+"More Info" = "Mer Info";
 
 /* Section title for no-carb food */
-"Other" = "Other";
+"Other" = "Annet";
 
 /* The section title of glucose overrides */
-"Overrides" = "Overrides";
+"Overrides" = "Overstyrer";
 
 /* Title for the pre-meal override range */
-"Pre-Meal" = "Pre-Meal";
+"Pre-Meal" = "Pre-måltid";
 
 /* The title of the screen displaying a pump event */
-"Pump Event" = "Pump Event";
+"Pump Event" = "Pumpehendelse";
 
 /* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
 "quantity-and-unit-space" = "%1$@ %2$@";
@@ -89,32 +89,32 @@
 "quantity-and-unit-tight" = "%1$@%2$@";
 
 /* Section title for slow absorbing food */
-"Slow" = "Slow";
+"Slow" = "Langsom";
 
 /* The empty-state text for a configuration value */
-"Tap to set" = "Tap to set";
+"Tap to set" = "Trykk for å angi";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
-"The maximum absorption time is %@" = "The maximum absorption time is %@";
+"The maximum absorption time is %@" = "Maks absorbsjonstid er %@";
 
 /* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
-"The maximum allowed amount is %@ grams" = "The maximum allowed amount is %@ grams";
+"The maximum allowed amount is %@ grams" = "Maks tillatt mengde er %@ gram";
 
 /* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
-"Times in %1$@%2$@%3$@" = "Times in %1$@%2$@%3$@";
+"Times in %1$@%2$@%3$@" = "Tider i %1$@%2$@%3$@";
 
 /* The unit string for units per hour */
-"U/hour" = "U/hour";
+"U/hour" = "E/timen";
 
 /* The unit string for units */
-"Units" = "Units";
+"Units" = "Enheter";
 
 /* The default title to use when an entry has none */
-"Unknown" = "Unknown";
+"Unknown" = "Ukjent";
 
 /* Title of an alert containing a validation warning */
-"Warning" = "Warning";
+"Warning" = "Advarsel";
 
 /* Title for the workout override range */
-"Workout" = "Workout";
+"Workout" = "Trening";
 
