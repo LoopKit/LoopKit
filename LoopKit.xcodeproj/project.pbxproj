@@ -372,7 +372,6 @@
 		1F5DAB4B2118F14700048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB4C2118F14700048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB4D2118F18E00048054 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		1F5DAB502118F21700048054 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/CarbKit.strings; sourceTree = "<group>"; };
 		1F5DAB512118F2C600048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		1F5DAB522118F2C600048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		1F5DAB532118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CarbKit.strings"; sourceTree = "<group>"; };
@@ -1886,7 +1885,6 @@
 				1F5DAB332118D2A700048054 /* ru */,
 				1F5DAB362118D5A200048054 /* de */,
 				1F5DAB432118F14600048054 /* fr */,
-				1F5DAB502118F21700048054 /* en */,
 				1F5DAB532118F2C700048054 /* zh-Hans */,
 				1F5DAB5F2118F33000048054 /* it */,
 				1F5DAB6B2118F3C200048054 /* nl */,
