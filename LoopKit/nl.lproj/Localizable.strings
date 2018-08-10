@@ -14,7 +14,7 @@
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorisatie geweigerd";
 
 /* The error recovery suggestion when attempting to delete a sample not shared by the current app */
-"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Dit voorbeeld kan verwijderd worden uit de Health app";
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Dit voorbeeld kan verwijderd worden uit de Gezondheid";
 
 /* Generic pump error description */
 "Communication Failure" = "Communicatiefout";
@@ -59,7 +59,7 @@
 "OK" = "OK";
 
 /* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "Stel sharing opnieuw in bij Health, alstublieft";
+"Please re-enable sharing in Health" = "Stel sharing opnieuw in bij Gezondheid, alstublieft";
 
 /* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
 "quantity-and-unit-space" = "%1$@ %2$@";
