@@ -2,31 +2,31 @@
 "%1$@ U bolus failed" = "%1$@ U bolo fallito";
 
 /* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ U bolus may not have succeeded";
+"%1$@ U bolus may not have succeeded" = "%1$@ U bolo potrebbe non aver avuto successo";
 
 /* The error description describing when Health sharing was denied */
-"Authorization Denied" = "Authorization Denied";
+"Authorization Denied" = "Autorizzazione negata";
 
 /* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Revisar su microinfusadora antes de intentarlo de nuevo";
+"Check your pump before retrying" = "Controlla il tuo microinfusore prima di riprovare";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
-"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Authorization Denied";
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorizzazione negata";
 
 /* The error recovery suggestion when attempting to delete a sample not shared by the current app */
-"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "This sample can be deleted from the Health app";
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Questo campione puo essere cancellato dall’ app Salute";
 
 /* Generic pump error description */
-"Communication Failure" = "Communication Failure";
+"Communication Failure" = "Errore di comunicazione";
 
 /* Generic pump error description */
-"Connection Failure" = "Connection Failure";
+"Connection Failure" = "Errore di connessione";
 
 /* Generic pump error description */
-"Device Refused" = "Device Refused";
+"Device Refused" = "il dispositivo e stato rifiutato";
 
 /* Recovery suggestion for a no data error */
-"Ensure carb data exists for the specified date" = "Ensure carb data exists for the specified date";
+"Ensure carb data exists for the specified date" = "Assicurare che i dati carbo esistano per la data specificata";
 
 /* Glucose trend down */
 "Falling" = "Abbassamento";
@@ -41,10 +41,10 @@
 "Flat" = "Piatto";
 
 /* Generic pump error description */
-"Invalid Configuration" = "Invalid Configuration";
+"Invalid Configuration" = "Configurazione non valida";
 
 /* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "It is safe to retry";
+"It is safe to retry" = "E sicuro riprovare";
 
 /* The short unit display string for millimoles of glucose per liter */
 "mmol/L" = "mmol/L";
@@ -53,13 +53,13 @@
 "Needs Attention" = "Esige Attenzione";
 
 /* Describes an error for no data found in a CarbStore request */
-"No values found" = "No values found";
+"No values found" = "Nessun valore trovato";
 
 /* Sensor state description for the valid state */
 "OK" = "OK";
 
 /* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "Please re-enable sharing in Health";
+"Please re-enable sharing in Health" = "Per favore, riattiva la condivisione in Salute";
 
 /* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
 "quantity-and-unit-space" = "%1$@ %2$@";
