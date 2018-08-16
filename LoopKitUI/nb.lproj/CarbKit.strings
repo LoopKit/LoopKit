@@ -39,7 +39,7 @@
 "act-DJ-aXh.normalTitle" = "abc";
 
 /* Class = "UINavigationItem"; title = "Add/Edit Carb Entry"; ObjectID = "bM2-yI-YmX"; */
-"bM2-yI-YmX.title" = "Legg til/endre karbohydratoppføring";
+"bM2-yI-YmX.title" = "Legg til/endre Karbohydratoppføring";
 
 /* Class = "UILabel"; text = "Food Type"; ObjectID = "bdP-2A-DB8"; */
 "bdP-2A-DB8.text" = "Mattype";
