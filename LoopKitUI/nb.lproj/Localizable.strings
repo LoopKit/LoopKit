@@ -11,10 +11,10 @@
 "Cancel" = "Avbryt";
 
 /* The title of the view controller to create a new carb entry */
-"carb-entry-title-add" = "Legg til Karbohydrater";
+"carb-entry-title-add" = "Legg til karbohydrater";
 
 /* The title of the view controller to edit an existing carb entry */
-"carb-entry-title-edit" = "Rediger Karbohydrater";
+"carb-entry-title-edit" = "Rediger karbohydrater";
 
 /* Carb entry section footer text explaining absorption time */
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Velg en lengre absorpsjonstid for større måltider, eller de som inneholder fett og proteiner. Dette er bare veiledning til algoritmen og trenger ikke å være nøyaktig.";
@@ -41,7 +41,7 @@
 "Date" = "Dato";
 
 /* Button title to delete all objects */
-"Delete All" = "Slett Alle";
+"Delete All" = "Slett alle";
 
 /* The detail text describing an enabled setting */
 "Enabled" = "Aktivert";
@@ -68,7 +68,7 @@
 "mmol/L" = "mmol/L";
 
 /* Alert action title to open error help */
-"More Info" = "Mer Info";
+"More Info" = "Mer info";
 
 /* Section title for no-carb food */
 "Other" = "Annet";

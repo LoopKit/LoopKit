@@ -2,7 +2,7 @@
 "7xi-Om-Y53.text" = "Autorizza l’accesso a Salute";
 
 /* Class = "UIButton"; normalTitle = "Authorize"; ObjectID = "8sx-XB-DRV"; */
-"8sx-XB-DRV.normalTitle" = "Authorize";
+"8sx-XB-DRV.normalTitle" = "Autorizzare";
 
 /* Class = "UIButton"; normalTitle = "abc"; ObjectID = "act-DJ-aXh"; */
 "act-DJ-aXh.normalTitle" = "abc";
@@ -14,7 +14,7 @@
 "blb-Re-Esx.text" = "🌮";
 
 /* Class = "UINavigationItem"; title = "Add/Edit Carb Entry"; ObjectID = "bM2-yI-YmX"; */
-"bM2-yI-YmX.title" = "Add/Edit Carb Entry";
+"bM2-yI-YmX.title" = "Aggiungi/Modifica carboidrati assunti";
 
 /* Class = "UILabel"; text = "g"; ObjectID = "D2S-2h-yH6"; */
 "D2S-2h-yH6.text" = "g";

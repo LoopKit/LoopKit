@@ -1,65 +1,65 @@
 /* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ U bolus failed";
+"%1$@ U bolus failed" = "%1$@ U大剂量未成功输注";
 
 /* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ U bolus may not have succeeded";
+"%1$@ U bolus may not have succeeded" = "%1$@ U大剂量可能未成功输注";
 
 /* The error description describing when Health sharing was denied */
-"Authorization Denied" = "Authorization Denied";
+"Authorization Denied" = "没有权限";
 
 /* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Check your pump before retrying";
+"Check your pump before retrying" = "请先检查胰岛素泵，然后再重试";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
-"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Authorization Denied";
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "没有权限";
 
 /* The error recovery suggestion when attempting to delete a sample not shared by the current app */
-"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "This sample can be deleted from the Health app";
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "该样本可以从HealthKit中删除";
 
 /* Generic pump error description */
-"Communication Failure" = "Communication Failure";
+"Communication Failure" = "通信失败";
 
 /* Generic pump error description */
-"Connection Failure" = "Connection Failure";
+"Connection Failure" = "连接失败";
 
 /* Generic pump error description */
-"Device Refused" = "Device Refused";
+"Device Refused" = "设备拒绝连接";
 
 /* Recovery suggestion for a no data error */
-"Ensure carb data exists for the specified date" = "Ensure carb data exists for the specified date";
+"Ensure carb data exists for the specified date" = "确认当天存在碳水化合物记录";
 
 /* Glucose trend down */
-"Falling" = "Falling";
+"Falling" = "下降";
 
 /* Glucose trend down-down */
-"Falling fast" = "Falling fast";
+"Falling fast" = "快速下降";
 
 /* Glucose trend down-down-down */
-"Falling very fast" = "Falling very fast";
+"Falling very fast" = "非常快速下降";
 
 /* Glucose trend flat */
-"Flat" = "Flat";
+"Flat" = "平稳";
 
 /* Generic pump error description */
-"Invalid Configuration" = "Invalid Configuration";
+"Invalid Configuration" = "无效配置";
 
 /* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "It is safe to retry";
+"It is safe to retry" = "重试";
 
 /* The short unit display string for millimoles of glucose per liter */
 "mmol/L" = "mmol/L";
 
 /* Sensor state description for the non-valid state */
-"Needs Attention" = "Needs Attention";
+"Needs Attention" = "请注意";
 
 /* Describes an error for no data found in a CarbStore request */
-"No values found" = "No values found";
+"No values found" = "未发现数据";
 
 /* Sensor state description for the valid state */
-"OK" = "OK";
+"OK" = "好";
 
 /* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "Please re-enable sharing in Health";
+"Please re-enable sharing in Health" = "请先在Health Kit中允许Loop读写数据";
 
 /* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
 "quantity-and-unit-space" = "%1$@ %2$@";
@@ -68,17 +68,17 @@
 "quantity-and-unit-tight" = "%1$@%2$@";
 
 /* Glucose trend up */
-"Rising" = "Rising";
+"Rising" = "上升";
 
 /* Glucose trend up-up */
-"Rising fast" = "Rising fast";
+"Rising fast" = "快速上升";
 
 /* Glucose trend up-up-up */
-"Rising very fast" = "Rising very fast";
+"Rising very fast" = "非常快速上升";
 
 /* The short unit display string for international units of insulin */
-"U" = "U";
+"U" = "单位";
 
 /* The long unit display string for international units of insulin */
-"Units" = "Units";
+"Units" = "单位";
 
