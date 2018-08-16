@@ -26,7 +26,7 @@ extension UIViewController {
         )
 
         let action = UIAlertAction(
-            title: NSLocalizedString("com.loudnate.LoopKit.errorAlertActionTitle", value: "OK", comment: "The title of the action used to dismiss an error alert"),
+            title: LocalizedString("com.loudnate.LoopKit.errorAlertActionTitle", value: "OK", comment: "The title of the action used to dismiss an error alert"),
             style: .default,
             handler: nil
         )
@@ -78,7 +78,7 @@ extension UIViewController {
 
         if let helpAnchor = error.helpAnchor, let url = URL(string: helpAnchor) {
             actions.append(UIAlertAction(
-                title: NSLocalizedString("More Info", comment: "Alert action title to open error help"),
+                title: LocalizedString("More Info", comment: "Alert action title to open error help"),
                 style: .default,
                 handler: { (action) in
                     UIApplication.shared.open(url)

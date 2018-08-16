@@ -1,0 +1,120 @@
+/* Title of the carb entry absorption time cell */
+"Absorption Time" = "Durée d’absorption";
+
+/* Action sheet confirmation message for pump history deletion */
+"Are you sure you want to delete all history entries?" = "Êtes-vous sûr de vouloir supprimer toutes les entrées d’historique?";
+
+/* Action sheet confirmation message for reservoir deletion */
+"Are you sure you want to delete all reservoir values?" = "Êtes-vous sûr de vouloir supprimer toutes les valeurs de réservoir?";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Annuler";
+
+/* The title of the view controller to create a new carb entry */
+"carb-entry-title-add" = "Ajouter des glucides";
+
+/* The title of the view controller to edit an existing carb entry */
+"carb-entry-title-edit" = "Modifier l’entrée des glucides";
+
+/* Carb entry section footer text explaining absorption time */
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Choisissez un temps d’absorption plus long pour les gros repas ou ceux contenant des graisses et des protéines. Ceci est seulement un guide pour l'algorithme et n'a pas besoin d'être exact.";
+
+/* The format string describing the date of a COB value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.COBDateLabel" = "à %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.totalDateLabel" = "depuis %1$@";
+
+/* The format string describing the date of an IOB value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.IOBDateLabel" = "à %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.totalDateLabel" = "depuis %1$@";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* Title of the setup button to continue */
+"Continue" = "Continuer";
+
+/* Title of the carb entry date picker cell */
+"Date" = "Date";
+
+/* Button title to delete all objects */
+"Delete All" = "Supprimer tout";
+
+/* The detail text describing an enabled setting */
+"Enabled" = "Activée";
+
+/* The placeholder text instructing users how to enter a maximum bolus */
+"Enter a number of units" = "Entrez un nombre d'unités";
+
+/* The placeholder text instructing users how to enter a maximum basal rate */
+"Enter a rate in units per hour" = "Entrez un taux en unités par heure";
+
+/* Section title for fast absorbing food */
+"Fast" = "Rapide";
+
+/* The title text for the maximum basal rate value */
+"Maximum Basal Rate" = "Taux Basal Maximum";
+
+/* The title text for the maximum bolus value */
+"Maximum Bolus" = "Bolus Maximum";
+
+/* Section title for medium absorbing food */
+"Medium" = "Moyen";
+
+/* The unit display string for millimoles of glucose per liter */
+"mmol/L" = "mmol/L";
+
+/* Alert action title to open error help */
+"More Info" = "Plus d'informations";
+
+/* Section title for no-carb food */
+"Other" = "Autre";
+
+/* The section title of glucose overrides */
+"Overrides" = "Contournements";
+
+/* Title for the pre-meal override range */
+"Pre-Meal" = "Pré-Repas";
+
+/* The title of the screen displaying a pump event */
+"Pump Event" = "Événement de pompe";
+
+/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
+"quantity-and-unit-space" = "%1$@ %2$@";
+
+/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
+"quantity-and-unit-tight" = "%1$@%2$@";
+
+/* Section title for slow absorbing food */
+"Slow" = "Lent";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Appuyez pour définir";
+
+/* Alert body displayed absorption time greater than max (1: maximum absorption time) */
+"The maximum absorption time is %@" = "Le temps d'absorption maximum est de %@";
+
+/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
+"The maximum allowed amount is %@ grams" = "La quantité maximèm est de %@ grammes";
+
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "Temps dans %1$@%2$@%3$@";
+
+/* The unit string for units per hour */
+"U/hour" = "U/heure";
+
+/* The unit string for units */
+"Units" = "Unités";
+
+/* The default title to use when an entry has none */
+"Unknown" = "Inconnu";
+
+/* Title of an alert containing a validation warning */
+"Warning" = "Attention";
+
+/* Title for the workout override range */
+"Workout" = "Entraînement";
+

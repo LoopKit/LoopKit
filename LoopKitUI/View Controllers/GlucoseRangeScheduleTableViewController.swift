@@ -239,7 +239,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         case .schedule:
             return nil
         case .override:
-            return NSLocalizedString("Overrides", comment: "The section title of glucose overrides")
+            return LocalizedString("Overrides", comment: "The section title of glucose overrides")
         }
     }
 

@@ -1,44 +1,98 @@
+/* Title of the carb entry absorption time cell */
+"Absorption Time" = "Tiempo de Absorción";
+
+/* Action sheet confirmation message for pump history deletion */
+"Are you sure you want to delete all history entries?" = "¿Estás seguro de querer eliminar todos las entradas históricas?";
+
+/* Action sheet confirmation message for reservoir deletion */
+"Are you sure you want to delete all reservoir values?" = "¿Estás seguro de querer eliminar todos los datos del reservorio?";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Cancelar";
+
+/* The title of the view controller to create a new carb entry */
+"carb-entry-title-add" = "Agregar Entrada de Carb";
+
+/* The title of the view controller to edit an existing carb entry */
+"carb-entry-title-edit" = "Editar Entrada de Carb";
+
+/* Carb entry section footer text explaining absorption time */
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Elija un tiempo de absorción más largo para comidas más grandes, o aquellas que contienen grasas y proteínas. Esta es solo una guía para el algoritmo y no necesita ser exacta.";
+
+/* The format string describing the date of a COB value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.COBDateLabel" = "a %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.totalDateLabel" = "hace %1$@";
+
+/* The format string describing the date of an IOB value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.IOBDateLabel" = "a %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.totalDateLabel" = "hace %1$@";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* Title of the setup button to continue */
+"Continue" = "Continuar";
+
+/* Title of the carb entry date picker cell */
+"Date" = "Fecha";
+
+/* Button title to delete all objects */
+"Delete All" = "Eliminar Todos";
+
+/* The detail text describing an enabled setting */
+"Enabled" = "Habilitado";
+
+/* The placeholder text instructing users how to enter a maximum bolus */
+"Enter a number of units" = "Ingrese una cantidad de unidades";
+
+/* The placeholder text instructing users how to enter a maximum basal rate */
+"Enter a rate in units per hour" = "Ingrese una tasa de unidade por hora";
+
+/* Section title for fast absorbing food */
+"Fast" = "Rápido";
+
+/* The title text for the maximum basal rate value */
+"Maximum Basal Rate" = "Perfil Basal Máximo";
+
+/* The title text for the maximum bolus value */
+"Maximum Bolus" = "Bolo Máximo";
+
+/* Section title for medium absorbing food */
+"Medium" = "Medio";
+
+/* The unit display string for millimoles of glucose per liter */
+"mmol/L" = "mmol/L";
+
+/* Alert action title to open error help */
+"More Info" = "Más Info";
+
+/* Section title for no-carb food */
+"Other" = "Otro";
+
 /* The section title of glucose overrides */
 "Overrides" = "Anulas";
 
 /* Title for the pre-meal override range */
 "Pre-Meal" = "Pre-Comida";
 
-/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
-"Times in %1$@%2$@%3$@" = "Horario in %1$@%2$@%3$@";
-
-/* Title for the workout override range */
-"Workout" = "Ejercicio";
-
-/* The unit display string for millimoles of glucose per liter */
-"mmol/L" = "mmol/L";
-
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Evento de microinfusadora";
 
-/* The default title to use when an entry has none */
-"Unknown" = "Desconocido";
+/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
+"quantity-and-unit-space" = "%1$@ %2$@";
 
-/* Title of the carb entry absorption time cell */
-"Absorption Time" = "Tiempo de absorción";
-
-/* Carb entry section footer text explaining absorption time */
-"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Elija un tiempo de absorción más largo para comidas más grandes, o aquellas que contienen grasas y proteínas. Esta es solo una guía para el algoritmo y no necesita ser exacta.";
-
-/* Title of the carb entry date picker cell */
-"Date" = "Fecha";
-
-/* Section title for fast absorbing food */
-"Fast" = "Rápido";
-
-/* Section title for medium absorbing food */
-"Medium" = "Medio";
-
-/* Section title for no-carb food */
-"Other" = "Otro";
+/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
+"quantity-and-unit-tight" = "%1$@%2$@";
 
 /* Section title for slow absorbing food */
 "Slow" = "Lento";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Toca para definir";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "El tiempo máximo de absorción es %@";
@@ -46,43 +100,21 @@
 /* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
 "The maximum allowed amount is %@ grams" = "La cantidad máxima permitida es %@ gramos";
 
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "Horario in %1$@%2$@%3$@";
+
+/* The unit string for units per hour */
+"U/hour" = "U/hora";
+
+/* The unit string for units */
+"Units" = "Unidades";
+
+/* The default title to use when an entry has none */
+"Unknown" = "Desconocido";
+
 /* Title of an alert containing a validation warning */
 "Warning" = "Aviso";
 
-/* The title of the action used to dismiss an error alert */
-"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
-
-/* The error description describing when Health sharing was denied */
-"com.loudnate.LoopKit.sharingDeniedErrorDescription" = "Autorización denegada";
-
-/* The error recovery suggestion when Health sharing was denied */
-"com.loudnate.LoopKit.sharingDeniedErrorRecoverySuggestion" = "Por favor, vuelva a habilitar compartir en Salud";
-
-/* The title of the view controller to create a new carb entry */
-"carb-entry-title-add" = "Agregar entrada de carbohidratos";
-
-/* The title of the view controller to edit an existing carb entry */
-"carb-entry-title-edit" = "Editar entrada de carbohidratos";
-
-/* The format string describing the date of a COB value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.COBDateLabel" = "a %1$@";
-
-/* The description of an error returned when attempting to delete a non-HealthKit sample */
-"com.loudnate.CarbKit.deleteCarbEntryInvalid" = "Entrada no válida";
-
-/* The description of an error returned when attempting to delete a sample not shared by the current app */
-"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorización Denegada";
-
-/* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.totalDateLabel" = "hace %1$@";
-
-/* The error recovery suggestion when attempting to delete a non-HealthKit sample
- The error recovery suggestion when attempting to delete a sample not shared by the current app */
-"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Esta muestra se puede eliminar de la aplicación Salud";
-
-/* The format string describing the date of an IOB value. The first format argument is the localized date. */
-"com.loudnate.InsulinKit.IOBDateLabel" = "a %1$@";
-
-/* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.InsulinKit.totalDateLabel" = "hace %1$@";
+/* Title for the workout override range */
+"Workout" = "Ejercicio";
 

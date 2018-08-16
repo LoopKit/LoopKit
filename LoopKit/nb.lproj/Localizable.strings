@@ -1,0 +1,84 @@
+/* Describes a certain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus failed" = "%1$@ E bolus feilet";
+
+/* Describes an uncertain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus may not have succeeded" = "%1$@ E bolus kan ha feilet";
+
+/* The error description describing when Health sharing was denied */
+"Authorization Denied" = "Autorisasjon avslått";
+
+/* Recovery instruction for an uncertain bolus failure */
+"Check your pump before retrying" = "Sjekk pumpa før du fortsetter";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorisasjon avslått";
+
+/* The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Denne testen kan slettes fra Health-appen";
+
+/* Generic pump error description */
+"Communication Failure" = "Kommunikasjonsfeil";
+
+/* Generic pump error description */
+"Connection Failure" = "Tilkoblingsfeil";
+
+/* Generic pump error description */
+"Device Refused" = "Enheten nektet";
+
+/* Recovery suggestion for a no data error */
+"Ensure carb data exists for the specified date" = "Verifiser at karbohydratoppføring eksisterer for den valgte datoen";
+
+/* Glucose trend down */
+"Falling" = "Faller";
+
+/* Glucose trend down-down */
+"Falling fast" = "Faller raskt";
+
+/* Glucose trend down-down-down */
+"Falling very fast" = "Faller veldig raskt";
+
+/* Glucose trend flat */
+"Flat" = "Flatt";
+
+/* Generic pump error description */
+"Invalid Configuration" = "Ugyldig Konfigurasjon";
+
+/* Recovery instruction for a certain bolus failure */
+"It is safe to retry" = "Det er trygt å prøve igjen";
+
+/* The short unit display string for millimoles of glucose per liter */
+"mmol/L" = "mmol/L";
+
+/* Sensor state description for the non-valid state */
+"Needs Attention" = "Trenger Tilsyn";
+
+/* Describes an error for no data found in a CarbStore request */
+"No values found" = "Ingen verdier funnet";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
+
+/* The error recovery suggestion when Health sharing was denied */
+"Please re-enable sharing in Health" = "Vennligst aktiver deling i Health på nytt";
+
+/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
+"quantity-and-unit-space" = "%1$@ %2$@";
+
+/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
+"quantity-and-unit-tight" = "%1$@%2$@";
+
+/* Glucose trend up */
+"Rising" = "Stiger";
+
+/* Glucose trend up-up */
+"Rising fast" = "Stiger fort";
+
+/* Glucose trend up-up-up */
+"Rising very fast" = "Stiger veldig fort";
+
+/* The short unit display string for international units of insulin */
+"U" = "E";
+
+/* The long unit display string for international units of insulin */
+"Units" = "Enheter";
+

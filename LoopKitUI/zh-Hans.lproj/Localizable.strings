@@ -1,0 +1,120 @@
+/* Title of the carb entry absorption time cell */
+"Absorption Time" = "吸收时间";
+
+/* Action sheet confirmation message for pump history deletion */
+"Are you sure you want to delete all history entries?" = "确定要删除所有输入的历史数据吗？";
+
+/* Action sheet confirmation message for reservoir deletion */
+"Are you sure you want to delete all reservoir values?" = "确定要删除所有的储药器数据吗？";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "取消";
+
+/* The title of the view controller to create a new carb entry */
+"carb-entry-title-add" = "添加碳水";
+
+/* The title of the view controller to edit an existing carb entry */
+"carb-entry-title-edit" = "编辑碳水";
+
+/* Carb entry section footer text explaining absorption time */
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "如果吃大餐请选择比较长的吸收时间，或者是以脂肪和蛋白为主的食物。该设置仅为算法的一般原则，具体请根据自身情况调整";
+
+/* The format string describing the date of a COB value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.COBDateLabel" = "在 %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.totalDateLabel" = "自从 %1$@";
+
+/* The format string describing the date of an IOB value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.IOBDateLabel" = "在 %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.totalDateLabel" = "自从 %1$@";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "好";
+
+/* Title of the setup button to continue */
+"Continue" = "继续";
+
+/* Title of the carb entry date picker cell */
+"Date" = "日期";
+
+/* Button title to delete all objects */
+"Delete All" = "删除所有";
+
+/* The detail text describing an enabled setting */
+"Enabled" = "已启用";
+
+/* The placeholder text instructing users how to enter a maximum bolus */
+"Enter a number of units" = "输入单位量";
+
+/* The placeholder text instructing users how to enter a maximum basal rate */
+"Enter a rate in units per hour" = "输入每小时基础率";
+
+/* Section title for fast absorbing food */
+"Fast" = "快速";
+
+/* The title text for the maximum basal rate value */
+"Maximum Basal Rate" = "最大基础率限制";
+
+/* The title text for the maximum bolus value */
+"Maximum Bolus" = "最大大剂量限制";
+
+/* Section title for medium absorbing food */
+"Medium" = "中等";
+
+/* The unit display string for millimoles of glucose per liter */
+"mmol/L" = "mmol/L";
+
+/* Alert action title to open error help */
+"More Info" = "更多信息";
+
+/* Section title for no-carb food */
+"Other" = "其他";
+
+/* The section title of glucose overrides */
+"Overrides" = "覆盖";
+
+/* Title for the pre-meal override range */
+"Pre-Meal" = "餐前模式";
+
+/* The title of the screen displaying a pump event */
+"Pump Event" = "胰岛素泵事件";
+
+/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
+"quantity-and-unit-space" = "%1$@ %2$@";
+
+/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
+"quantity-and-unit-tight" = "%1$@%2$@";
+
+/* Section title for slow absorbing food */
+"Slow" = "慢";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "点击设置";
+
+/* Alert body displayed absorption time greater than max (1: maximum absorption time) */
+"The maximum absorption time is %@" = "最大吸收时间为  %@";
+
+/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
+"The maximum allowed amount is %@ grams" = "允许的最大量为 %@ g";
+
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "时间 %1$@%2$@%3$@";
+
+/* The unit string for units per hour */
+"U/hour" = "单位/小时";
+
+/* The unit string for units */
+"Units" = "单位";
+
+/* The default title to use when an entry has none */
+"Unknown" = "未知";
+
+/* Title of an alert containing a validation warning */
+"Warning" = "警告";
+
+/* Title for the workout override range */
+"Workout" = "锻炼/运动模式";
+

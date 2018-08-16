@@ -16,7 +16,7 @@ extension UIAlertController {
         )
 
         addAction(UIAlertAction(
-            title: NSLocalizedString("Delete All", comment: "Button title to delete all objects"),
+            title: LocalizedString("Delete All", comment: "Button title to delete all objects"),
             style: .destructive,
             handler: { (_) in
                 handler()
@@ -24,7 +24,7 @@ extension UIAlertController {
         ))
 
         addAction(UIAlertAction(
-            title: NSLocalizedString("Cancel", comment: "The title of the cancel action in an action sheet"),
+            title: LocalizedString("Cancel", comment: "The title of the cancel action in an action sheet"),
             style: .cancel,
             handler: nil
         ))

@@ -1,0 +1,84 @@
+/* Describes a certain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus failed" = "%1$@ E bolus fehlgeschlagen";
+
+/* Describes an uncertain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus may not have succeeded" = "%1$@ E bolus wurde wohl nicht abgegeben";
+
+/* The error description describing when Health sharing was denied */
+"Authorization Denied" = "Autorisierung verweigert";
+
+/* Recovery instruction for an uncertain bolus failure */
+"Check your pump before retrying" = "Prüfe deine Pumpe, bevor du es erneut versuchsts";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorisierung verweigert";
+
+/* The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Dieses Beispiel kann in der Healt-App gelöscht werden.";
+
+/* Generic pump error description */
+"Communication Failure" = "Kommunikationsfehler";
+
+/* Generic pump error description */
+"Connection Failure" = "Verbindungsfehler";
+
+/* Generic pump error description */
+"Device Refused" = "Device verweigert";
+
+/* Recovery suggestion for a no data error */
+"Ensure carb data exists for the specified date" = "Stelle sicher, das die Kohlenhydrate für den ausgewählten Zeitraum eingegeben wurden";
+
+/* Glucose trend down */
+"Falling" = "Fällt";
+
+/* Glucose trend down-down */
+"Falling fast" = "Fällt schnell";
+
+/* Glucose trend down-down-down */
+"Falling very fast" = "Fällt sehr schnell";
+
+/* Glucose trend flat */
+"Flat" = "Gleichbleibend";
+
+/* Generic pump error description */
+"Invalid Configuration" = "Fehlerhafte Konfiguration";
+
+/* Recovery instruction for a certain bolus failure */
+"It is safe to retry" = "Es ist sicher um es noch mal zu versuchen";
+
+/* The short unit display string for millimoles of glucose per liter */
+"mmol/L" = "mmol/L";
+
+/* Sensor state description for the non-valid state */
+"Needs Attention" = "Erfordert Aufmerksamkeit";
+
+/* Describes an error for no data found in a CarbStore request */
+"No values found" = "Keine Einträge gefunden";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
+
+/* The error recovery suggestion when Health sharing was denied */
+"Please re-enable sharing in Health" = "Bitte aktiviere das sharing in Healt erneut";
+
+/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
+"quantity-and-unit-space" = "%1$@ %2$@";
+
+/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
+"quantity-and-unit-tight" = "%1$@%2$@";
+
+/* Glucose trend up */
+"Rising" = "Steigt";
+
+/* Glucose trend up-up */
+"Rising fast" = "Steigt schnell";
+
+/* Glucose trend up-up-up */
+"Rising very fast" = "Steigt sehr schnell";
+
+/* The short unit display string for international units of insulin */
+"U" = "E";
+
+/* The long unit display string for international units of insulin */
+"Units" = "Einheiten";
+
