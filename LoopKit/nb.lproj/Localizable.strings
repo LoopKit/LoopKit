@@ -41,7 +41,7 @@
 "Flat" = "Flatt";
 
 /* Generic pump error description */
-"Invalid Configuration" = "Ugyldig Konfigurasjon";
+"Invalid Configuration" = "Ugyldig konfigurasjon";
 
 /* Recovery instruction for a certain bolus failure */
 "It is safe to retry" = "Det er trygt å prøve igjen";
@@ -50,13 +50,13 @@
 "mmol/L" = "mmol/L";
 
 /* Sensor state description for the non-valid state */
-"Needs Attention" = "Trenger Tilsyn";
+"Needs Attention" = "Trenger tilsyn";
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "Ingen verdier funnet";
 
 /* Sensor state description for the valid state */
-"OK" = "OK";
+"OK" = "Ok";
 
 /* The error recovery suggestion when Health sharing was denied */
 "Please re-enable sharing in Health" = "Vennligst aktiver deling i Health på nytt";
