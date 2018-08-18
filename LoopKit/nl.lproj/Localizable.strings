@@ -56,7 +56,7 @@
 "No values found" = "Geen waardes gevonden";
 
 /* Sensor state description for the valid state */
-"OK" = "OK";
+"OK" = "Ok";
 
 /* The error recovery suggestion when Health sharing was denied */
 "Please re-enable sharing in Health" = "Stel sharing opnieuw in bij Gezondheid, alstublieft";
