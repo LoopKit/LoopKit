@@ -39,7 +39,7 @@
 "act-DJ-aXh.normalTitle" = "abc";
 
 /* Class = "UINavigationItem"; title = "Add/Edit Carb Entry"; ObjectID = "bM2-yI-YmX"; */
-"bM2-yI-YmX.title" = "Legg til/endre Karbohydratoppføring";
+"bM2-yI-YmX.title" = "Legg til/endre karbohydratoppføring";
 
 /* Class = "UILabel"; text = "Food Type"; ObjectID = "bdP-2A-DB8"; */
 "bdP-2A-DB8.text" = "Mattype";
@@ -69,7 +69,7 @@
 "nXh-BM-MuC.text" = "HealthKit er ikke tilgjengelig på denne enheten";
 
 /* Class = "UILabel"; text = "g Total"; ObjectID = "pHI-f4-pJp"; */
-"pHI-f4-pJp.text" = "g Totalt";
+"pHI-f4-pJp.text" = "g totalt";
 
 /* Class = "UILabel"; text = "MEDIUM"; ObjectID = "qMe-TA-UCA"; */
 "qMe-TA-UCA.text" = "MEDIUM";

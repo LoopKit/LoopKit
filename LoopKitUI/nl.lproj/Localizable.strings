@@ -32,7 +32,7 @@
 "com.loudnate.InsulinKit.totalDateLabel" = "sinds %1$@";
 
 /* The title of the action used to dismiss an error alert */
-"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+"com.loudnate.LoopKit.errorAlertActionTitle" = "Ok";
 
 /* Title of the setup button to continue */
 "Continue" = "Ga verder";

@@ -47,7 +47,7 @@
 "It is safe to retry" = "重试";
 
 /* The short unit display string for millimoles of glucose per liter */
-"mmol/L" = "mmol/L";
+"mmol/L" = "毫摩尔/升";
 
 /* Sensor state description for the non-valid state */
 "Needs Attention" = "请注意";

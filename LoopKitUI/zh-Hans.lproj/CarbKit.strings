@@ -6,7 +6,7 @@
 "8sx-XB-DRV.normalTitle" = "授权";
 
 /* Class = "UILabel"; text = "g"; ObjectID = "D2S-2h-yH6"; */
-"D2S-2h-yH6.text" = "g";
+"D2S-2h-yH6.text" = "克";
 
 /* Class = "UILabel"; text = "Amount Consumed"; ObjectID = "K0S-my-3qL"; */
 "K0S-my-3qL.text" = "已消耗部分";
@@ -21,7 +21,7 @@
 "NRZ-dT-iqj.text" = "食物类型";
 
 /* Class = "UILabel"; text = "g COB"; ObjectID = "QZb-e1-xwb"; */
-"QZb-e1-xwb.text" = "g 活性碳水化合物";
+"QZb-e1-xwb.text" = "克 活性碳水化合物";
 
 /* Class = "UINavigationItem"; title = "Carbohydrates"; ObjectID = "Qgq-n1-hm4"; */
 "Qgq-n1-hm4.title" = "碳水化合物";
@@ -69,7 +69,7 @@
 "nXh-BM-MuC.text" = "健康应用不支持该设备";
 
 /* Class = "UILabel"; text = "g Total"; ObjectID = "pHI-f4-pJp"; */
-"pHI-f4-pJp.text" = "g 总计";
+"pHI-f4-pJp.text" = "克 总计";
 
 /* Class = "UILabel"; text = "MEDIUM"; ObjectID = "qMe-TA-UCA"; */
 "qMe-TA-UCA.text" = "中等";

@@ -65,7 +65,7 @@
 "Medium" = "中等";
 
 /* The unit display string for millimoles of glucose per liter */
-"mmol/L" = "mmol/L";
+"mmol/L" = "毫摩尔/升";
 
 /* Alert action title to open error help */
 "More Info" = "更多信息";
