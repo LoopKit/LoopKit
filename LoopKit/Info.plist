@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0</string>
+	<string>2.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -23,10 +23,8 @@
 	<key>NSPrincipalClass</key>
 	<string></string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Meal data from the Health database is used to determine glucose effects.
-Glucose data is retrieved from HealthKit for graphing and analysis.</string>
+	<string>Meal data from the Health database is used to determine glucose effects. Glucose data is retrieved from HealthKit for graphing and analysis.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>Carbhydrate meal data entered in the app is stored in the Health database.
-Glucose data is stored securely in HealthKit.</string>
+	<string>Carbhydrate meal data entered in the app is stored in the Health database. Glucose data is stored securely in HealthKit.</string>
 </dict>
 </plist>

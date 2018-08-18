@@ -10,15 +10,15 @@ import UIKit
 
 
 extension UIViewController {
-    /**
-     Convenience method to present an alert controller on the active view controller
-
-     - parameter title:      The title of the alert
-     - parameter message:    The message of the alert
-     - parameter animated:   Whether to animate the alert
-     - parameter completion: An optional closure to execute after the presentation finishes
-     */
-    public func presentAlertController(withTitle title: String?, message: String, animated: Bool = true, completion: (() -> Void)? = nil) {
+    /// Convenience method to present an alert controller on the active view controller
+    ///
+    /// - Parameters:
+    ///   - title: The title of the alert
+    ///   - message: The message of the alert
+    ///   - animated: Whether to animate the alert
+    ///   - actions: Additional, non-preferred actions to display to the user
+    ///   - completion: An optional closure to execute after the presentation finishes
+    public func presentAlertController(withTitle title: String?, message: String, animated: Bool = true, actions: [UIAlertAction] = [], completion: (() -> Void)? = nil) {
         let alert = UIAlertController(
             title: title,
             message: message,
@@ -26,7 +26,7 @@ extension UIViewController {
         )
 
         let action = UIAlertAction(
-            title: NSLocalizedString("com.loudnate.LoopKit.errorAlertActionTitle", value: "OK", comment: "The title of the action used to dismiss an error alert"),
+            title: LocalizedString("com.loudnate.LoopKit.errorAlertActionTitle", value: "OK", comment: "The title of the action used to dismiss an error alert"),
             style: .default,
             handler: nil
         )
@@ -34,26 +34,63 @@ extension UIViewController {
         alert.addAction(action)
         alert.preferredAction = action
 
+        for action in actions {
+            alert.addAction(action)
+        }
+
         presentViewControllerOnActiveViewController(alert, animated: animated, completion: completion)
     }
 
-    /**
-     Convenience method to display an error object in an alert controller
-
-     - parameter error:      The error to display
-     - parameter animated:   Whether to animate the alert
-     - parameter completion: An optional closure to execute after the presentation finishes
-     */
+    /// Convenience method to display an error object in an alert controller
+    ///
+    /// - Parameters:
+    ///   - error: The error to display
+    ///   - animated: Whether to animate the alert
+    ///   - completion: An optional closure to execute after the presentation finishes
     public func presentAlertController(with error: Error, animated: Bool = true, completion: (() -> Void)? = nil) {
+        if let error = error as? LocalizedError {
+            presentAlertController(configuredWith: error, animated: animated, completion: completion)
+            return
+        }
 
         // See: https://forums.developer.apple.com/thread/17431
         // The compiler automatically emits the code necessary to translate between any ErrorType and NSError.
         let castedError = error as NSError
 
         presentAlertController(
-            withTitle: error.localizedDescription,
+            withTitle: error.localizedDescription.localizedCapitalized,
             message: castedError.localizedRecoverySuggestion ?? String(describing: error),
             animated: animated,
+            completion: completion
+        )
+    }
+
+    /// Convenience method to display a localized error object in an alert controller
+    ///
+    /// - Parameters:
+    ///   - error: The error to display
+    ///   - animated: Whether to animate the alert
+    ///   - completion: An optional closure to execute after the presentation finishes
+    func presentAlertController(configuredWith error: LocalizedError, animated: Bool = true, completion: (() -> Void)? = nil) {
+        let message = [error.failureReason, error.recoverySuggestion].compactMap({ $0 }).joined(separator: ".\n")
+
+        var actions: [UIAlertAction] = []
+
+        if let helpAnchor = error.helpAnchor, let url = URL(string: helpAnchor) {
+            actions.append(UIAlertAction(
+                title: LocalizedString("More Info", comment: "Alert action title to open error help"),
+                style: .default,
+                handler: { (action) in
+                    UIApplication.shared.open(url)
+                }
+            ))
+        }
+
+        presentAlertController(
+            withTitle: (error.errorDescription ?? error.localizedDescription).localizedCapitalized,
+            message: message.isEmpty ? String(describing: error) : message,
+            animated: animated,
+            actions: actions,
             completion: completion
         )
     }

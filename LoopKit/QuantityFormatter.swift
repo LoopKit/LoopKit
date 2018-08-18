@@ -150,16 +150,16 @@ private extension HKUnit {
         if self == .internationalUnit() {
             switch style {
             case .short, .medium:
-                return NSLocalizedString("U", comment: "The short unit display string for international units of insulin")
+                return LocalizedString("U", comment: "The short unit display string for international units of insulin")
             case .long:
-                return NSLocalizedString("Units", comment: "The long unit display string for international units of insulin")
+                return LocalizedString("Units", comment: "The long unit display string for international units of insulin")
             }
         }
 
         if self == HKUnit.millimolesPerLiter {
             switch style {
             case .short, .medium:
-                return NSLocalizedString("mmol/L", comment: "The short unit display string for millimoles of glucose per liter")
+                return LocalizedString("mmol/L", comment: "The short unit display string for millimoles of glucose per liter")
             case .long:
                 break  // Fallback to the MeasurementFormatter localization
             }

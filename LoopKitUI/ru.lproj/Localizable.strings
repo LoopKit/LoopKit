@@ -1,62 +1,14 @@
-/* The section title of glucose overrides */
-"Overrides" = "Отменяет";
-
-/* Title for the pre-meal override range */
-"Pre-Meal" = "До еды";
-
-/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
-"Times in %1$@%2$@%3$@" = "Хронометраж %1$@%2$@%3$@";
-
-/* Title for the workout override range */
-"Workout" = "Физическая нагрузка";
-
-/* The unit display string for millimoles of glucose per liter */
-"mmol/L" = "ммоль/л";
-
-/* The title of the screen displaying a pump event */
-"Pump Event" = "Событие помпы";
-
-/* The default title to use when an entry has none */
-"Unknown" = "Неизвестно";
-
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Длительность усвоения";
 
-/* Carb entry section footer text explaining absorption time */
-"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Выберите более высокую длительность усвоения для обильной пищи или для пищи с белками и протеинами. Это единственное указание для алгоритма не нуждается в дополнительных уточнениях.";
+/* Action sheet confirmation message for pump history deletion */
+"Are you sure you want to delete all history entries?" = "Подтвердите удаление всех записей истории?";
 
-/* Title of the carb entry date picker cell */
-"Date" = "Дата";
+/* Action sheet confirmation message for reservoir deletion */
+"Are you sure you want to delete all reservoir values?" = "Подтвердите удаление всех записей резервуара?";
 
-/* Section title for fast absorbing food */
-"Fast" = "Быстрая";
-
-/* Section title for medium absorbing food */
-"Medium" = "Средняя";
-
-/* Section title for no-carb food */
-"Other" = "Другая";
-
-/* Section title for slow absorbing food */
-"Slow" = "Медленная";
-
-/* Alert body displayed absorption time greater than max (1: maximum absorption time) */
-"The maximum absorption time is %@" = "Максимальная длительность усвоения %@";
-
-/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
-"The maximum allowed amount is %@ grams" = "Максимальное допустимое количество %@ грамм";
-
-/* Title of an alert containing a validation warning */
-"Warning" = "Предостережение";
-
-/* The title of the action used to dismiss an error alert */
-"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
-
-/* The error description describing when Health sharing was denied */
-"com.loudnate.LoopKit.sharingDeniedErrorDescription" = "Отказ авторизации";
-
-/* The error recovery suggestion when Health sharing was denied */
-"com.loudnate.LoopKit.sharingDeniedErrorRecoverySuggestion" = "Пожалуйста повторно активируйте совместный доступ в базе данных Здоровье";
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Отмена";
 
 /* The title of the view controller to create a new carb entry */
 "carb-entry-title-add" = "Добавить запись углеводов";
@@ -64,24 +16,105 @@
 /* The title of the view controller to edit an existing carb entry */
 "carb-entry-title-edit" = "Редактировать запись углеводов";
 
+/* Carb entry section footer text explaining absorption time */
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Выберите более высокую длительность усвоения для обильной пищи или для пищи с белками и протеинами. Это единственное указание для алгоритма не нуждается в дополнительных уточнениях.";
+
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
 "com.loudnate.CarbKit.COBDateLabel" = "В %1$@";
 
-/* The description of an error returned when attempting to delete a non-HealthKit sample */
-"com.loudnate.CarbKit.deleteCarbEntryInvalid" = "Неверная запись";
-
-/* The description of an error returned when attempting to delete a sample not shared by the current app */
-"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Отказ авторизации";
-
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
 "com.loudnate.CarbKit.totalDateLabel" = "после %1$@";
-
-/* The error recovery suggestion when attempting to delete a non-HealthKit sample
- The error recovery suggestion when attempting to delete a sample not shared by the current app */
-"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Этот образец может быть удален из приложения Здоровье";
 
 /* The format string describing the date of an IOB value. The first format argument is the localized date. */
 "com.loudnate.InsulinKit.IOBDateLabel" = "В %1$@";
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
 "com.loudnate.InsulinKit.totalDateLabel" = "после %1$@";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* Title of the setup button to continue */
+"Continue" = "Продолжить";
+
+/* Title of the carb entry date picker cell */
+"Date" = "Дата";
+
+/* Button title to delete all objects */
+"Delete All" = "Стереть все";
+
+/* The detail text describing an enabled setting */
+"Enabled" = "Активировано";
+
+/* The placeholder text instructing users how to enter a maximum bolus */
+"Enter a number of units" = "Введите кол-во единиц";
+
+/* The placeholder text instructing users how to enter a maximum basal rate */
+"Enter a rate in units per hour" = "Введите скорость в ед/час";
+
+/* Section title for fast absorbing food */
+"Fast" = "Быстрая";
+
+/* The title text for the maximum basal rate value */
+"Maximum Basal Rate" = "Макс скорость базала";
+
+/* The title text for the maximum bolus value */
+"Maximum Bolus" = "Макс Болюс";
+
+/* Section title for medium absorbing food */
+"Medium" = "Средняя";
+
+/* The unit display string for millimoles of glucose per liter */
+"mmol/L" = "ммоль/л";
+
+/* Alert action title to open error help */
+"More Info" = "Доп. инфо";
+
+/* Section title for no-carb food */
+"Other" = "Другая";
+
+/* The section title of glucose overrides */
+"Overrides" = "Отменяет";
+
+/* Title for the pre-meal override range */
+"Pre-Meal" = "До еды";
+
+/* The title of the screen displaying a pump event */
+"Pump Event" = "Событие помпы";
+
+/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
+"quantity-and-unit-space" = "%1$@ %2$@";
+
+/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
+"quantity-and-unit-tight" = "%1$@%2$@";
+
+/* Section title for slow absorbing food */
+"Slow" = "Медленная";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Щелкнуть для ввода";
+
+/* Alert body displayed absorption time greater than max (1: maximum absorption time) */
+"The maximum absorption time is %@" = "Максимальная длительность усвоения %@";
+
+/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
+"The maximum allowed amount is %@ grams" = "Максимальное допустимое количество %@ грамм";
+
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "Хронометраж %1$@%2$@%3$@";
+
+/* The unit string for units per hour */
+"U/hour" = "ед/ч";
+
+/* The unit string for units */
+"Units" = "Единицы";
+
+/* The default title to use when an entry has none */
+"Unknown" = "Неизвестно";
+
+/* Title of an alert containing a validation warning */
+"Warning" = "Предостережение";
+
+/* Title for the workout override range */
+"Workout" = "Физическая нагрузка";
+

@@ -94,9 +94,9 @@ public final class CarbEntryEditViewController: UITableViewController {
         tableView.register(DateAndDurationTableViewCell.nib(), forCellReuseIdentifier: DateAndDurationTableViewCell.className)
 
         if originalCarbEntry != nil {
-            title = NSLocalizedString("carb-entry-title-edit", value: "Edit Carb Entry", comment: "The title of the view controller to edit an existing carb entry")
+            title = LocalizedString("carb-entry-title-edit", value: "Edit Carb Entry", comment: "The title of the view controller to edit an existing carb entry")
         } else {
-            title = NSLocalizedString("carb-entry-title-add", value: "Add Carb Entry", comment: "The title of the view controller to create a new carb entry")
+            title = LocalizedString("carb-entry-title-add", value: "Add Carb Entry", comment: "The title of the view controller to create a new carb entry")
         }
     }
 
@@ -144,7 +144,7 @@ public final class CarbEntryEditViewController: UITableViewController {
         case .date:
             let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className) as! DateAndDurationTableViewCell
 
-            cell.titleLabel.text = NSLocalizedString("Date", comment: "Title of the carb entry date picker cell")
+            cell.titleLabel.text = LocalizedString("Date", comment: "Title of the carb entry date picker cell")
             cell.datePicker.isEnabled = isSampleEditable
             cell.datePicker.datePickerMode = .dateAndTime
             cell.datePicker.maximumDate = Date() + maximumDateFutureInterval
@@ -188,7 +188,7 @@ public final class CarbEntryEditViewController: UITableViewController {
         case .absorptionTime:
             let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className) as! DateAndDurationTableViewCell
 
-            cell.titleLabel.text = NSLocalizedString("Absorption Time", comment: "Title of the carb entry absorption time cell")
+            cell.titleLabel.text = LocalizedString("Absorption Time", comment: "Title of the carb entry absorption time cell")
             cell.datePicker.isEnabled = isSampleEditable
             cell.datePicker.datePickerMode = .countDownTimer
             cell.datePicker.minuteInterval = Int(absorptionTimePickerInterval.minutes)
@@ -205,7 +205,7 @@ public final class CarbEntryEditViewController: UITableViewController {
     }
 
     public override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return NSLocalizedString("Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact.", comment: "Carb entry section footer text explaining absorption time")
+        return LocalizedString("Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact.", comment: "Carb entry section footer text explaining absorption time")
     }
 
     // MARK: - UITableViewDelegate

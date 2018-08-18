@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F5DAB1D2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
+		1F5DAB1E2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
+		1F5DAB1F2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
+		1F5DAB202118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
+		1F5DAB212118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
+		1F5DAB242118CE9300048054 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB222118CE9300048054 /* InfoPlist.strings */; };
+		1F5DAB272118CE9300048054 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB252118CE9300048054 /* InfoPlist.strings */; };
+		1F5DAB2A2118CE9300048054 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB282118CE9300048054 /* InfoPlist.strings */; };
+		1F5DAB2D2118CE9300048054 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB2B2118CE9300048054 /* Localizable.strings */; };
+		1FE58796211D12CE004F24ED /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9E31FE0A3D300522C49 /* Localizable.strings */; };
 		430059241CCDD08C00C861EA /* NSDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */; };
 		430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430157F91C7EC03B00B64B63 /* AppDelegate.swift */; };
 		430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430157FB1C7EC03B00B64B63 /* MasterViewController.swift */; };
@@ -92,6 +102,15 @@
 		4322B7AB202FA3D20002837D /* momentum_effect_stable_glucose_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEA21C7293FA0073BE78 /* momentum_effect_stable_glucose_input.json */; };
 		4322B7AC202FA3D20002837D /* momentum_effect_stable_glucose_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEA31C7293FA0073BE78 /* momentum_effect_stable_glucose_output.json */; };
 		432762741D60505F0083215A /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432762731D60505F0083215A /* HKQuantitySample.swift */; };
+		432CF86520D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86420D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift */; };
+		432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */; };
+		432CF86920D76B320066B889 /* SetupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86820D76B320066B889 /* SetupButton.swift */; };
+		432CF86B20D76B9C0066B889 /* SetupIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */; };
+		432CF86D20D76C470066B889 /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86C20D76C470066B889 /* SwitchTableViewCell.swift */; };
+		432CF86F20D76CCF0066B889 /* GlucoseTrend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86E20D76CCF0066B889 /* GlucoseTrend.swift */; };
+		432CF87120D76D5A0066B889 /* SensorDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF87020D76D5A0066B889 /* SensorDisplayable.swift */; };
+		432CF87320D774220066B889 /* PumpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF87220D774220066B889 /* PumpManager.swift */; };
+		432CF87420D774520066B889 /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434C5F9D209938CD00B2FD1A /* NumberFormatter.swift */; };
 		433BC7A720523DB7000B1200 /* NewGlucoseSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433BC7A620523DB7000B1200 /* NewGlucoseSample.swift */; };
 		433BC7AA20538D4C000B1200 /* CachedGlucoseObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433BC7A820538D4C000B1200 /* CachedGlucoseObject+CoreDataClass.swift */; };
 		433BC7AB20538D4C000B1200 /* CachedGlucoseObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433BC7A920538D4C000B1200 /* CachedGlucoseObject+CoreDataProperties.swift */; };
@@ -104,6 +123,7 @@
 		434C5F9E209938CD00B2FD1A /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434C5F9D209938CD00B2FD1A /* NumberFormatter.swift */; };
 		434C5FA0209ABD4700B2FD1A /* QuantityFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434C5F9F209ABD4700B2FD1A /* QuantityFormatterTests.swift */; };
 		434C5FA1209AC4EE00B2FD1A /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
+		4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4352A73B20DECF0600CAC200 /* CGMManager.swift */; };
 		4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4353D16E203D104F007B4ECD /* CarbStoreError.swift */; };
 		4353D170203D3E5C007B4ECD /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
 		4353D171203D3E71007B4ECD /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
@@ -257,6 +277,12 @@
 		43DC87BB1C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87B91C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json */; };
 		43DC87BC1C8AD0ED005BC30D /* glucose_from_effects_non_zero_carb_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87BA1C8AD0ED005BC30D /* glucose_from_effects_non_zero_carb_input.json */; };
 		43DC87BE1C8AD41D005BC30D /* glucose_from_effects_non_zero_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43DC87BD1C8AD41D005BC30D /* glucose_from_effects_non_zero_output.json */; };
+		43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */; };
+		43FB60E520DCBA02002B996B /* SetupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E420DCBA02002B996B /* SetupTableViewController.swift */; };
+		43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E620DCBC55002B996B /* RadioSelectionTableViewController.swift */; };
+		43FB60E920DCBE64002B996B /* PumpManagerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E820DCBE64002B996B /* PumpManagerStatus.swift */; };
+		43FB60EB20DDC868002B996B /* SetBolusError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60EA20DDC868002B996B /* SetBolusError.swift */; };
+		43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB610620DDF19B002B996B /* PumpManagerError.swift */; };
 		7D68A9AE1FE0A3D000522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9B01FE0A3D000522C49 /* Localizable.strings */; };
 		7D68A9B81FE0A3D100522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9BA1FE0A3D100522C49 /* InfoPlist.strings */; };
 		7D68A9C21FE0A3D200522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */; };
@@ -310,6 +336,93 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1F5DAB1C2118C95700048054 /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
+		1F5DAB232118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB262118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB292118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB2C2118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB2E2118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		1F5DAB2F2118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB302118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB312118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB322118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB332118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		1F5DAB342118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1F5DAB352118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
+		1F5DAB362118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		1F5DAB372118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		1F5DAB382118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB392118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB3A2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB3B2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB3C2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB3D2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB3E2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB3F2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB402118D5D500048054 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB412118F14600048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1F5DAB422118F14600048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
+		1F5DAB432118F14600048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		1F5DAB442118F14600048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		1F5DAB452118F14600048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB462118F14600048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB472118F14600048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB482118F14700048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB492118F14700048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB4A2118F14700048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB4B2118F14700048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB4C2118F14700048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB4D2118F18E00048054 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB512118F2C600048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		1F5DAB522118F2C600048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		1F5DAB532118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/CarbKit.strings"; sourceTree = "<group>"; };
+		1F5DAB542118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InsulinKit.strings"; sourceTree = "<group>"; };
+		1F5DAB552118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		1F5DAB562118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		1F5DAB572118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		1F5DAB582118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		1F5DAB592118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		1F5DAB5A2118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		1F5DAB5B2118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		1F5DAB5C2118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		1F5DAB5D2118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1F5DAB5E2118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Main.strings; sourceTree = "<group>"; };
+		1F5DAB5F2118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		1F5DAB602118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		1F5DAB612118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB622118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB632118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB642118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB652118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB662118F33100048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB672118F33100048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB682118F33100048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB692118F3C200048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1F5DAB6A2118F3C200048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Main.strings; sourceTree = "<group>"; };
+		1F5DAB6B2118F3C200048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		1F5DAB6C2118F3C200048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		1F5DAB6D2118F3C200048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB6E2118F3C200048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB6F2118F3C200048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB702118F3C200048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB712118F3C300048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB722118F3C300048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB732118F3C300048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB742118F3C300048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB752118F3FB00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		1F5DAB762118F3FB00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Main.strings; sourceTree = "<group>"; };
+		1F5DAB772118F3FB00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		1F5DAB782118F3FB00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		1F5DAB792118F3FB00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB7A2118F3FB00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB7B2118F3FB00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB7C2118F3FC00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB7D2118F3FC00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB7E2118F3FC00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1F5DAB7F2118F3FC00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1F5DAB802118F3FC00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1FE58790211CFBB7004F24ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1FE58794211D0967004F24ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2FBCE30E1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryEditViewControllerTests.swift; sourceTree = "<group>"; };
 		2FD1A6AF1E4A76CC0042EF39 /* CarbEntryValidationNavigationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryValidationNavigationDelegate.swift; sourceTree = "<group>"; };
 		430157F71C7EC03B00B64B63 /* LoopKit Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LoopKit Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -340,6 +453,14 @@
 		432711351EDE7C8700171F6A /* CarbAbsorptionInputController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbAbsorptionInputController.swift; sourceTree = "<group>"; };
 		432711371EDE826A00171F6A /* CustomInputTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInputTextField.swift; sourceTree = "<group>"; };
 		432762731D60505F0083215A /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
+		432CF86420D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimitSettingsTableViewController.swift; sourceTree = "<group>"; };
+		432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
+		432CF86820D76B320066B889 /* SetupButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupButton.swift; sourceTree = "<group>"; };
+		432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIndicatorView.swift; sourceTree = "<group>"; };
+		432CF86C20D76C470066B889 /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
+		432CF86E20D76CCF0066B889 /* GlucoseTrend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseTrend.swift; sourceTree = "<group>"; };
+		432CF87020D76D5A0066B889 /* SensorDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorDisplayable.swift; sourceTree = "<group>"; };
+		432CF87220D774220066B889 /* PumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManager.swift; sourceTree = "<group>"; };
 		4333931E1F32E31C009466DC /* doses_overlay_basal_profile_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = doses_overlay_basal_profile_output.json; sourceTree = "<group>"; };
 		433BC7A620523DB7000B1200 /* NewGlucoseSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGlucoseSample.swift; sourceTree = "<group>"; };
 		433BC7A820538D4C000B1200 /* CachedGlucoseObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CachedGlucoseObject+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -366,6 +487,7 @@
 		434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextFieldTableViewCell.xib; sourceTree = "<group>"; };
 		434FF1F01CF29451000DB779 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewController.swift; sourceTree = "<group>"; };
+		4352A73B20DECF0600CAC200 /* CGMManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGMManager.swift; sourceTree = "<group>"; };
 		4353D16E203D104F007B4ECD /* CarbStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbStoreError.swift; sourceTree = "<group>"; };
 		4353D172203D3E7E007B4ECD /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4353D179203E7840007B4ECD /* Locked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locked.swift; sourceTree = "<group>"; };
@@ -544,6 +666,12 @@
 		43F137281EDF9B310048468C /* CarbAbsorptionInputCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbAbsorptionInputCell.swift; sourceTree = "<group>"; };
 		43F1372A1EDF9B500048468C /* CarbAbsorptionInputHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbAbsorptionInputHeaderView.swift; sourceTree = "<group>"; };
 		43FADDFA1C89679200DDE013 /* HKQuantitySample+GlucoseKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HKQuantitySample+GlucoseKit.swift"; sourceTree = "<group>"; };
+		43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpManagerUI.swift; sourceTree = "<group>"; };
+		43FB60E420DCBA02002B996B /* SetupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupTableViewController.swift; sourceTree = "<group>"; };
+		43FB60E620DCBC55002B996B /* RadioSelectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioSelectionTableViewController.swift; sourceTree = "<group>"; };
+		43FB60E820DCBE64002B996B /* PumpManagerStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerStatus.swift; sourceTree = "<group>"; };
+		43FB60EA20DDC868002B996B /* SetBolusError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBolusError.swift; sourceTree = "<group>"; };
+		43FB610620DDF19B002B996B /* PumpManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerError.swift; sourceTree = "<group>"; };
 		7D68A9AF1FE0A3D000522C49 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D68A9B91FE0A3D100522C49 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D68A9C31FE0A3D200522C49 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -616,6 +744,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1F5DAB1B2118C91C00048054 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				1F5DAB1C2118C95700048054 /* LocalizedString.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		430059211CCDC7A200C861EA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -625,6 +761,7 @@
 				434FB64B1D712449007B9C70 /* NSData.swift */,
 				43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */,
 				43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */,
+				434C5F9D209938CD00B2FD1A /* NumberFormatter.swift */,
 				434570431FE605E30089C4DC /* OSLog.swift */,
 				4303C4901E2D664200ADEDC8 /* TimeZone.swift */,
 				434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */,
@@ -656,8 +793,25 @@
 				430158101C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift */,
 				2FBCE30E1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift */,
 				430158121C7EC03B00B64B63 /* Info.plist */,
+				1F5DAB222118CE9300048054 /* InfoPlist.strings */,
 			);
 			path = "LoopKit ExampleUITests";
+			sourceTree = "<group>";
+		};
+		432CF86320D769070066B889 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				434FB6491D712158007B9C70 /* CommandResponseViewController.swift */,
+				43D8FE041C7290530073BE78 /* DailyQuantityScheduleTableViewController.swift */,
+				43D8FE051C7290530073BE78 /* DailyValueScheduleTableViewController.swift */,
+				432CF86420D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift */,
+				43D8FE061C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift */,
+				43FB60E620DCBC55002B996B /* RadioSelectionTableViewController.swift */,
+				43FB60E420DCBA02002B996B /* SetupTableViewController.swift */,
+				43D8FE0C1C7290530073BE78 /* SingleValueScheduleTableViewController.swift */,
+				434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */,
+			);
+			path = "View Controllers";
 			sourceTree = "<group>";
 		};
 		435F355C1C9CD14E00C204D2 /* Extensions */ = {
@@ -682,7 +836,20 @@
 			isa = PBXGroup;
 			children = (
 				43D8FE591C7291D80073BE78 /* DatePickerTableViewCell.swift */,
+				43D8FE071C7290530073BE78 /* GlucoseRangeTableViewCell.swift */,
+				43D8FE081C7290530073BE78 /* GlucoseRangeTableViewCell.xib */,
+				43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */,
+				43177D071D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib */,
+				4369F08E208859E6000E3E45 /* PaddedTextField.swift */,
+				43D8FE0A1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift */,
+				43D8FE0B1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib */,
+				432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */,
+				432CF86820D76B320066B889 /* SetupButton.swift */,
+				432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */,
+				432CF86C20D76C470066B889 /* SwitchTableViewCell.swift */,
 				4369F093208BA001000E3E45 /* TextButtonTableViewCell.swift */,
+				434FF1F01CF29451000DB779 /* TextFieldTableViewCell.swift */,
+				434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -725,31 +892,19 @@
 			children = (
 				43BA7160201E48910058961E /* CarbKit */,
 				43BA7161201E48EB0058961E /* InsulinKit */,
+				432CF86320D769070066B889 /* View Controllers */,
 				4369F090208B0D68000E3E45 /* Views */,
 				43177D091D3732C70006E908 /* Assets.xcassets */,
 				43BA719920203EF30058961E /* CarbKit.storyboard */,
 				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
 				7D68A9E31FE0A3D300522C49 /* Localizable.strings */,
-				434FB6491D712158007B9C70 /* CommandResponseViewController.swift */,
-				43D8FE041C7290530073BE78 /* DailyQuantityScheduleTableViewController.swift */,
-				43D8FE051C7290530073BE78 /* DailyValueScheduleTableViewController.swift */,
-				43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */,
-				43177D071D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib */,
 				43A275171F1C6E4000EAFEBD /* GlucoseRangeSchedule+UI.swift */,
-				43D8FE061C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift */,
-				43D8FE071C7290530073BE78 /* GlucoseRangeTableViewCell.swift */,
-				43D8FE081C7290530073BE78 /* GlucoseRangeTableViewCell.xib */,
 				4322B76A202F9E4B0002837D /* HKUnit+LoopKitUI.swift */,
-				4369F08E208859E6000E3E45 /* PaddedTextField.swift */,
-				43D8FE0A1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift */,
-				43D8FE0B1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib */,
-				43D8FE0C1C7290530073BE78 /* SingleValueScheduleTableViewController.swift */,
-				434FF1F01CF29451000DB779 /* TextFieldTableViewCell.swift */,
-				434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */,
-				434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */,
+				43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */,
 				43D8FE0E1C7290530073BE78 /* UIViewController.swift */,
 				43BA7156201E484D0058961E /* LoopKitUI.h */,
 				43BA7157201E484D0058961E /* Info.plist */,
+				1F5DAB282118CE9300048054 /* InfoPlist.strings */,
 			);
 			path = LoopKitUI;
 			sourceTree = "<group>";
@@ -795,6 +950,7 @@
 		43D8FDC11C728FDF0073BE78 = {
 			isa = PBXGroup;
 			children = (
+				1F5DAB1B2118C91C00048054 /* Common */,
 				430059211CCDC7A200C861EA /* Extensions */,
 				43D8FDCD1C728FDF0073BE78 /* LoopKit */,
 				430157F81C7EC03B00B64B63 /* LoopKit Example */,
@@ -829,8 +985,10 @@
 				7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */,
 				43D8FDCE1C728FDF0073BE78 /* LoopKit.h */,
 				43D8FDD01C728FDF0073BE78 /* Info.plist */,
+				1F5DAB2B2118CE9300048054 /* Localizable.strings */,
 				43D8FDE51C7290340073BE78 /* BasalRateSchedule.swift */,
 				43D8FDE61C7290350073BE78 /* CarbRatioSchedule.swift */,
+				4352A73B20DECF0600CAC200 /* CGMManager.swift */,
 				43D8FDE71C7290350073BE78 /* DailyQuantitySchedule.swift */,
 				43D8FDE81C7290350073BE78 /* DailyValueSchedule.swift */,
 				43D8FDEA1C7290350073BE78 /* GlucoseEffect.swift */,
@@ -842,9 +1000,12 @@
 				43B17C88208EEC0B00AC27E9 /* HealthStoreUnitCache.swift */,
 				4353D179203E7840007B4ECD /* Locked.swift */,
 				43D8FDEF1C7290350073BE78 /* LoopMath.swift */,
-				434C5F9D209938CD00B2FD1A /* NumberFormatter.swift */,
+				432CF87220D774220066B889 /* PumpManager.swift */,
+				43FB610620DDF19B002B996B /* PumpManagerError.swift */,
+				43FB60E820DCBE64002B996B /* PumpManagerStatus.swift */,
 				434C5F9B2098352500B2FD1A /* QuantityFormatter.swift */,
 				43D8FDF31C7290350073BE78 /* SampleValue.swift */,
+				43FB60EA20DDC868002B996B /* SetBolusError.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -855,6 +1016,7 @@
 				437AFF1B203A45CF008C4892 /* Extensions */,
 				43D988911C87FEFF00DA4467 /* Fixtures */,
 				43D8FDDC1C728FDF0073BE78 /* Info.plist */,
+				1F5DAB252118CE9300048054 /* InfoPlist.strings */,
 				43D8FE1A1C72906E0073BE78 /* BasalRateScheduleTests.swift */,
 				43D8FE411C7291900073BE78 /* CarbMathTests.swift */,
 				437AFF192039F149008C4892 /* CarbStoreTests.swift */,
@@ -923,8 +1085,10 @@
 				43D8FE861C72934C0073BE78 /* GlucoseMath.swift */,
 				43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */,
 				43D8FE871C72934C0073BE78 /* GlucoseStore.swift */,
+				432CF86E20D76CCF0066B889 /* GlucoseTrend.swift */,
 				43FADDFA1C89679200DDE013 /* HKQuantitySample+GlucoseKit.swift */,
 				433BC7A620523DB7000B1200 /* NewGlucoseSample.swift */,
+				432CF87020D76D5A0066B889 /* SensorDisplayable.swift */,
 				433BC7AC20538FCA000B1200 /* StoredGlucoseSample.swift */,
 			);
 			path = GlucoseKit;
@@ -1212,6 +1376,13 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
+				de,
+				fr,
+				"zh-Hans",
+				it,
+				nl,
+				nb,
 			);
 			mainGroup = 43D8FDC11C728FDF0073BE78;
 			productRefGroup = 43D8FDCC1C728FDF0073BE78 /* Products */;
@@ -1245,6 +1416,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5DAB242118CE9300048054 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1257,8 +1429,10 @@
 				43BA7173201E492E0058961E /* DateAndDurationTableViewCell.xib in Resources */,
 				43BA7164201E49130058961E /* InsulinKit.storyboard in Resources */,
 				43BA7195202039B00058961E /* GlucoseRangeOverrideTableViewCell.xib in Resources */,
+				1FE58796211D12CE004F24ED /* Localizable.strings in Resources */,
 				43BA7193202039A30058961E /* TextFieldTableViewCell.xib in Resources */,
 				43BA719620203C750058961E /* Assets.xcassets in Resources */,
+				1F5DAB2A2118CE9300048054 /* InfoPlist.strings in Resources */,
 				43BA7192202039950058961E /* RepeatingScheduleValueTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1268,6 +1442,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D68A9C21FE0A3D200522C49 /* InfoPlist.strings in Resources */,
+				1F5DAB2D2118CE9300048054 /* Localizable.strings in Resources */,
 				7D68A9E11FE0A3D300522C49 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1315,6 +1490,7 @@
 				43DC87BC1C8AD0ED005BC30D /* glucose_from_effects_non_zero_carb_input.json in Resources */,
 				4322B79A202FA3CC0002837D /* ice_1_hour_input.json in Resources */,
 				437874C8202FDD2D00A3D8B9 /* normalize_edge_case_doses_input.json in Resources */,
+				1F5DAB272118CE9300048054 /* InfoPlist.strings in Resources */,
 				437874B7202FDD2D00A3D8B9 /* basal_dose.json in Resources */,
 				4322B799202FA3CC0002837D /* grouped_by_overlapping_absorption_times_output.json in Resources */,
 				435D292D205F48750026F401 /* counteraction_effect_falling_glucose_insulin.json in Resources */,
@@ -1374,6 +1550,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5DAB1D2118C95700048054 /* LocalizedString.swift in Sources */,
 				4302F4DF1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */,
 				43177D041D372A7F0006E908 /* CarbEntryTableViewController.swift in Sources */,
 				43B17C81208BFA6600AC27E9 /* HKUnit.swift in Sources */,
@@ -1390,6 +1567,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5DAB1E2118C95700048054 /* LocalizedString.swift in Sources */,
 				430158111C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1398,13 +1576,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */,
 				43BA7182201EE7090058961E /* TextFieldTableViewCell.swift in Sources */,
 				43BA718C201EEE5A0058961E /* NSData.swift in Sources */,
 				43BA7163201E490D0058961E /* InsulinDeliveryTableViewController.swift in Sources */,
 				43BA7186201EE7090058961E /* UIViewController.swift in Sources */,
 				43BA718A201EE8CF0058961E /* NSTimeInterval.swift in Sources */,
+				432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */,
 				43BA7170201E49220058961E /* FoodTypeShortcutCell.swift in Sources */,
+				432CF86520D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift in Sources */,
 				4369F08F208859E6000E3E45 /* PaddedTextField.swift in Sources */,
+				432CF86920D76B320066B889 /* SetupButton.swift in Sources */,
+				432CF87420D774520066B889 /* NumberFormatter.swift in Sources */,
+				1F5DAB212118C95700048054 /* LocalizedString.swift in Sources */,
+				43FB60E520DCBA02002B996B /* SetupTableViewController.swift in Sources */,
 				43BA7180201EE7090058961E /* SingleValueScheduleTableViewController.swift in Sources */,
 				43BA717E201EE7090058961E /* CommandResponseViewController.swift in Sources */,
 				43BA717A201E4F1D0058961E /* IdentifiableClass.swift in Sources */,
@@ -1413,10 +1598,12 @@
 				4322B76B202F9E4B0002837D /* HKUnit+LoopKitUI.swift in Sources */,
 				43BA7183201EE7090058961E /* DailyQuantityScheduleTableViewController.swift in Sources */,
 				43BA7167201E49220058961E /* CarbAbsorptionInputController.swift in Sources */,
+				432CF86B20D76B9C0066B889 /* SetupIndicatorView.swift in Sources */,
 				43BA716D201E49220058961E /* DatePickerTableViewCell.swift in Sources */,
 				4369F094208BA001000E3E45 /* TextButtonTableViewCell.swift in Sources */,
 				43BA716C201E49220058961E /* CustomInputTextField.swift in Sources */,
 				43BA716F201E49220058961E /* FoodEmojiDataSource.swift in Sources */,
+				432CF86D20D76C470066B889 /* SwitchTableViewCell.swift in Sources */,
 				43BA7188201EE85B0058961E /* HKUnit.swift in Sources */,
 				4369F092208B0DFF000E3E45 /* DateAndDurationTableViewCell.swift in Sources */,
 				43BA7189201EE8980058961E /* UITableViewCell.swift in Sources */,
@@ -1425,6 +1612,7 @@
 				43BA716E201E49220058961E /* DecimalTextFieldTableViewCell.swift in Sources */,
 				43BA718B201EE93C0058961E /* TimeZone.swift in Sources */,
 				43BA717B201EE6A40058961E /* NibLoadable.swift in Sources */,
+				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
 				43BA717F201EE7090058961E /* GlucoseRangeOverrideTableViewCell.swift in Sources */,
 				43BA7169201E49220058961E /* CarbEntryEditViewController.swift in Sources */,
 				43BA717D201EE7090058961E /* GlucoseRangeTableViewCell.swift in Sources */,
@@ -1454,17 +1642,21 @@
 				437AFEED2036A156008C4892 /* CachedCarbObject+CoreDataClass.swift in Sources */,
 				43D8FDF71C7290350073BE78 /* DailyValueSchedule.swift in Sources */,
 				4322B77D202FA2AF0002837D /* NewPumpEvent.swift in Sources */,
+				432CF86F20D76CCF0066B889 /* GlucoseTrend.swift in Sources */,
+				43FB60E920DCBE64002B996B /* PumpManagerStatus.swift in Sources */,
 				4322B774202FA2790002837D /* CarbMath.swift in Sources */,
 				4322B78B202FA2B30002837D /* ExponentialInsulinModel.swift in Sources */,
 				43D8FE011C7290350073BE78 /* NSTimeInterval.swift in Sources */,
 				43D8FDF61C7290350073BE78 /* DailyQuantitySchedule.swift in Sources */,
 				43D8FDF51C7290350073BE78 /* CarbRatioSchedule.swift in Sources */,
 				4322B76F202FA26F0002837D /* GlucoseSampleValue.swift in Sources */,
+				432CF87120D76D5A0066B889 /* SensorDisplayable.swift in Sources */,
 				4322B77F202FA2AF0002837D /* PersistenceController.swift in Sources */,
 				4322B78D202FA2B30002837D /* InsulinDeliveryStore.swift in Sources */,
 				4322B78A202FA2B30002837D /* DoseUnit.swift in Sources */,
 				432762741D60505F0083215A /* HKQuantitySample.swift in Sources */,
 				43D8FDF81C7290350073BE78 /* Double.swift in Sources */,
+				432CF87320D774220066B889 /* PumpManager.swift in Sources */,
 				43D8FE021C7290350073BE78 /* SampleValue.swift in Sources */,
 				43D9888B1C87E47800DA4467 /* GlucoseValue.swift in Sources */,
 				43D8FDF41C7290350073BE78 /* BasalRateSchedule.swift in Sources */,
@@ -1482,6 +1674,7 @@
 				4322B77E202FA2AF0002837D /* PersistedPumpEvent.swift in Sources */,
 				437AFEEE2036A156008C4892 /* CachedCarbObject+CoreDataProperties.swift in Sources */,
 				4322B772202FA2790002837D /* AbsorbedCarbValue.swift in Sources */,
+				1F5DAB1F2118C95700048054 /* LocalizedString.swift in Sources */,
 				4322B77B202FA2790002837D /* StoredCarbEntry.swift in Sources */,
 				4322B790202FA2B30002837D /* InsulinValue.swift in Sources */,
 				434C5F9E209938CD00B2FD1A /* NumberFormatter.swift in Sources */,
@@ -1511,8 +1704,11 @@
 				4322B778202FA2790002837D /* HKQuantitySample+CarbKit.swift in Sources */,
 				4322B771202FA26F0002837D /* HKQuantitySample+GlucoseKit.swift in Sources */,
 				433BC7AB20538D4C000B1200 /* CachedGlucoseObject+CoreDataProperties.swift in Sources */,
+				43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */,
+				43FB60EB20DDC868002B996B /* SetBolusError.swift in Sources */,
 				4353D17A203E7840007B4ECD /* Locked.swift in Sources */,
 				4322B770202FA26F0002837D /* GlucoseStore.swift in Sources */,
+				4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */,
 				4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */,
 				43AF1FB21C926CDD00EA2F3D /* HKQuantity.swift in Sources */,
 			);
@@ -1522,6 +1718,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F5DAB202118C95700048054 /* LocalizedString.swift in Sources */,
 				437874B6202FDD1500A3D8B9 /* InsulinMathTests.swift in Sources */,
 				437AFF21203AA740008C4892 /* NSManagedObjectContext.swift in Sources */,
 				434C5FA1209AC4EE00B2FD1A /* HKUnit.swift in Sources */,
@@ -1569,12 +1766,80 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		1F5DAB222118CE9300048054 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1F5DAB232118CE9300048054 /* es */,
+				1F5DAB2F2118D2A700048054 /* ru */,
+				1F5DAB3C2118D5A300048054 /* de */,
+				1F5DAB492118F14700048054 /* fr */,
+				1F5DAB592118F2C700048054 /* zh-Hans */,
+				1F5DAB652118F33000048054 /* it */,
+				1F5DAB712118F3C300048054 /* nl */,
+				1F5DAB7D2118F3FC00048054 /* nb */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1F5DAB252118CE9300048054 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1F5DAB262118CE9300048054 /* es */,
+				1F5DAB302118D2A700048054 /* ru */,
+				1F5DAB3D2118D5A300048054 /* de */,
+				1F5DAB4A2118F14700048054 /* fr */,
+				1F5DAB5A2118F2C700048054 /* zh-Hans */,
+				1F5DAB662118F33100048054 /* it */,
+				1F5DAB722118F3C300048054 /* nl */,
+				1F5DAB7E2118F3FC00048054 /* nb */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1F5DAB282118CE9300048054 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1F5DAB292118CE9300048054 /* es */,
+				1F5DAB312118D2A700048054 /* ru */,
+				1F5DAB3F2118D5A300048054 /* de */,
+				1F5DAB4C2118F14700048054 /* fr */,
+				1F5DAB5C2118F2C700048054 /* zh-Hans */,
+				1F5DAB682118F33100048054 /* it */,
+				1F5DAB742118F3C300048054 /* nl */,
+				1F5DAB802118F3FC00048054 /* nb */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1F5DAB2B2118CE9300048054 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1F5DAB2C2118CE9300048054 /* es */,
+				1F5DAB322118D2A700048054 /* ru */,
+				1F5DAB392118D5A200048054 /* de */,
+				1F5DAB462118F14600048054 /* fr */,
+				1F5DAB4D2118F18E00048054 /* en */,
+				1F5DAB562118F2C700048054 /* zh-Hans */,
+				1F5DAB622118F33000048054 /* it */,
+				1F5DAB6E2118F3C200048054 /* nl */,
+				1F5DAB7A2118F3FB00048054 /* nb */,
+				1FE58794211D0967004F24ED /* Base */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		430157FF1C7EC03B00B64B63 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				430158001C7EC03B00B64B63 /* Base */,
 				7D68A9EE1FE0A3D400522C49 /* es */,
 				7D68AABB1FE31A2800522C49 /* ru */,
+				1F5DAB352118D5A200048054 /* de */,
+				1F5DAB422118F14600048054 /* fr */,
+				1F5DAB522118F2C600048054 /* zh-Hans */,
+				1F5DAB5E2118F33000048054 /* it */,
+				1F5DAB6A2118F3C200048054 /* nl */,
+				1F5DAB762118F3FB00048054 /* nb */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -1585,6 +1850,12 @@
 				430158051C7EC03B00B64B63 /* Base */,
 				7D68A9EF1FE0A3D400522C49 /* es */,
 				7D68AABA1FE31A2800522C49 /* ru */,
+				1F5DAB342118D5A200048054 /* de */,
+				1F5DAB412118F14600048054 /* fr */,
+				1F5DAB512118F2C600048054 /* zh-Hans */,
+				1F5DAB5D2118F33000048054 /* it */,
+				1F5DAB692118F3C200048054 /* nl */,
+				1F5DAB752118F3FB00048054 /* nb */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1593,6 +1864,14 @@
 			isa = PBXVariantGroup;
 			children = (
 				43BA719820203EF30058961E /* Base */,
+				1F5DAB2E2118CE9300048054 /* es */,
+				1F5DAB332118D2A700048054 /* ru */,
+				1F5DAB362118D5A200048054 /* de */,
+				1F5DAB432118F14600048054 /* fr */,
+				1F5DAB532118F2C700048054 /* zh-Hans */,
+				1F5DAB5F2118F33000048054 /* it */,
+				1F5DAB6B2118F3C200048054 /* nl */,
+				1F5DAB772118F3FB00048054 /* nb */,
 			);
 			name = CarbKit.storyboard;
 			sourceTree = "<group>";
@@ -1603,6 +1882,12 @@
 				43D8FEEE1C7294E90073BE78 /* Base */,
 				7D68A9CA1FE0A3D200522C49 /* es */,
 				7D68AAB91FE31A2800522C49 /* ru */,
+				1F5DAB372118D5A200048054 /* de */,
+				1F5DAB442118F14600048054 /* fr */,
+				1F5DAB542118F2C700048054 /* zh-Hans */,
+				1F5DAB602118F33000048054 /* it */,
+				1F5DAB6C2118F3C200048054 /* nl */,
+				1F5DAB782118F3FB00048054 /* nb */,
 			);
 			name = InsulinKit.storyboard;
 			sourceTree = "<group>";
@@ -1612,6 +1897,13 @@
 			children = (
 				7D68A9AF1FE0A3D000522C49 /* es */,
 				7D68AABC1FE31BE700522C49 /* ru */,
+				1F5DAB3B2118D5A300048054 /* de */,
+				1F5DAB402118D5D500048054 /* en */,
+				1F5DAB482118F14700048054 /* fr */,
+				1F5DAB582118F2C700048054 /* zh-Hans */,
+				1F5DAB642118F33000048054 /* it */,
+				1F5DAB702118F3C200048054 /* nl */,
+				1F5DAB7C2118F3FC00048054 /* nb */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1621,6 +1913,12 @@
 			children = (
 				7D68A9B91FE0A3D100522C49 /* es */,
 				7D68AABE1FE31BE700522C49 /* ru */,
+				1F5DAB3A2118D5A300048054 /* de */,
+				1F5DAB472118F14600048054 /* fr */,
+				1F5DAB572118F2C700048054 /* zh-Hans */,
+				1F5DAB632118F33000048054 /* it */,
+				1F5DAB6F2118F3C200048054 /* nl */,
+				1F5DAB7B2118F3FB00048054 /* nb */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1630,6 +1928,12 @@
 			children = (
 				7D68A9C31FE0A3D200522C49 /* es */,
 				7D68AAC01FE31BE800522C49 /* ru */,
+				1F5DAB382118D5A200048054 /* de */,
+				1F5DAB452118F14600048054 /* fr */,
+				1F5DAB552118F2C700048054 /* zh-Hans */,
+				1F5DAB612118F33000048054 /* it */,
+				1F5DAB6D2118F3C200048054 /* nl */,
+				1F5DAB792118F3FB00048054 /* nb */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1639,6 +1943,13 @@
 			children = (
 				7D68A9E21FE0A3D300522C49 /* es */,
 				7D68AAC61FE31BE900522C49 /* ru */,
+				1F5DAB3E2118D5A300048054 /* de */,
+				1F5DAB4B2118F14700048054 /* fr */,
+				1F5DAB5B2118F2C700048054 /* zh-Hans */,
+				1F5DAB672118F33100048054 /* it */,
+				1F5DAB732118F3C300048054 /* nl */,
+				1F5DAB7F2118F3FC00048054 /* nb */,
+				1FE58790211CFBB7004F24ED /* Base */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1715,11 +2026,11 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 33;
+				DYLIB_CURRENT_VERSION = 34;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LoopKitUI/Info.plist;
@@ -1744,11 +2055,11 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 33;
+				DYLIB_CURRENT_VERSION = 34;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LoopKitUI/Info.plist;
@@ -1791,7 +2102,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1810,6 +2121,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LOCALIZED_STRING_MACRO_NAMES = (
+					NSLocalizedString,
+					CFLocalizedString,
+					LocalizedString,
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1851,7 +2167,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1864,6 +2180,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LOCALIZED_STRING_MACRO_NAMES = (
+					NSLocalizedString,
+					CFLocalizedString,
+					LocalizedString,
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1883,7 +2204,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 33;
+				DYLIB_CURRENT_VERSION = 34;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1904,7 +2225,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 33;
+				DYLIB_CURRENT_VERSION = 34;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

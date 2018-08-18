@@ -21,6 +21,10 @@ extension OSLog {
         log(message, type: .info, args)
     }
 
+    func `default`(_ message: StaticString, _ args: CVarArg...) {
+        log(message, type: .default, args)
+    }
+
     func error(_ message: StaticString, _ args: CVarArg...) {
         log(message, type: .error, args)
     }

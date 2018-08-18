@@ -10,6 +10,9 @@
 /* The placeholder text instructing users how to enter a pump ID */
 "Enter the 6-digit pump ID" = "Введите инд номер помпы (6 цифр)";
 
+/* The title for the cell displaying data generation */
+"Generate Data" = "Генерировать данные";
+
 /* The title text for the glucose target range schedule */
 "Glucose Target Range" = "Целевой диапазон гликемии";
 
@@ -18,6 +21,12 @@
 
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "Резервуар";
+
+/* Title for the cell resetting the data manager */
+"Reset" = "Сброс";
+
+/* Title of button to sync basal profile from pump */
+"Sync With Pump" = "Синхронизация с Помпа";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
 "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Регион помпы находится на ее задней стенке как часть номера модели (REF), например MMT-551NAB или MMT-515LWWS. Если номер модели содержит  \"NA\" or \"CA\", то регион- Северная Америка. Если это \"WW\", тогда регион - остальной мир.";

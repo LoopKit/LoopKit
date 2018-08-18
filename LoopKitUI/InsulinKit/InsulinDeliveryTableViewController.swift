@@ -108,7 +108,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
         if editing {
             let item = UIBarButtonItem(
-                title: NSLocalizedString("Delete All", comment: "Button title to delete all objects"),
+                title: LocalizedString("Delete All", comment: "Button title to delete all objects"),
                 style: .plain,
                 target: self,
                 action: #selector(confirmDeletion(_:))
@@ -248,8 +248,8 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                         self.iobValueLabel.text = "…"
                         self.iobDateLabel.text = nil
                     case .success(let iob):
-                        self.iobValueLabel.text = self.iobNumberFormatter.string(from: NSNumber(value: iob.value))
-                        self.iobDateLabel.text = String(format: NSLocalizedString("com.loudnate.InsulinKit.IOBDateLabel", value: "at %1$@", comment: "The format string describing the date of an IOB value. The first format argument is the localized date."), self.timeFormatter.string(from: iob.startDate))
+                        self.iobValueLabel.text = self.iobNumberFormatter.string(from: iob.value)
+                        self.iobDateLabel.text = String(format: LocalizedString("com.loudnate.InsulinKit.IOBDateLabel", value: "at %1$@", comment: "The format string describing the date of an IOB value. The first format argument is the localized date."), self.timeFormatter.string(from: iob.startDate))
                     }
                 }
             }
@@ -269,7 +269,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                     case .success(let result):
                         self.totalValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: result.value), number: .none)
 
-                        self.totalDateLabel.text = String(format: NSLocalizedString("com.loudnate.InsulinKit.totalDateLabel", value: "since %1$@", comment: "The format string describing the starting date of a total value. The first format argument is the localized date."), DateFormatter.localizedString(from: result.startDate, dateStyle: .none, timeStyle: .short))
+                        self.totalDateLabel.text = String(format: LocalizedString("com.loudnate.InsulinKit.totalDateLabel", value: "since %1$@", comment: "The format string describing the starting date of a total value. The first format argument is the localized date."), DateFormatter.localizedString(from: result.startDate, dateStyle: .none, timeStyle: .short))
                     }
                 }
             }
@@ -297,9 +297,9 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
         switch DataSourceSegment(rawValue: dataSourceSegmentedControl.selectedSegmentIndex)! {
         case .reservoir:
-            confirmMessage = NSLocalizedString("Are you sure you want to delete all reservoir values?", comment: "Action sheet confirmation message for reservoir deletion")
+            confirmMessage = LocalizedString("Are you sure you want to delete all reservoir values?", comment: "Action sheet confirmation message for reservoir deletion")
         case .history:
-            confirmMessage = NSLocalizedString("Are you sure you want to delete all history entries?", comment: "Action sheet confirmation message for pump history deletion")
+            confirmMessage = LocalizedString("Are you sure you want to delete all history entries?", comment: "Action sheet confirmation message for pump history deletion")
         }
 
         let sheet = UIAlertController(deleteAllConfirmationMessage: confirmMessage) {
@@ -370,7 +370,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 let entry = values[indexPath.row]
                 let time = timeFormatter.string(from: entry.date)
 
-                cell.textLabel?.text = entry.title ?? NSLocalizedString("Unknown", comment: "The default title to use when an entry has none")
+                cell.textLabel?.text = entry.title ?? LocalizedString("Unknown", comment: "The default title to use when an entry has none")
                 cell.detailTextLabel?.text = time
                 cell.accessoryType = entry.isUploaded ? .checkmark : .none
                 cell.selectionStyle = .default
@@ -445,7 +445,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 return description.joined(separator: "\n\n")
             })
 
-            vc.title = NSLocalizedString("Pump Event", comment: "The title of the screen displaying a pump event")
+            vc.title = LocalizedString("Pump Event", comment: "The title of the screen displaying a pump event")
 
             show(vc, sender: indexPath)
         }
