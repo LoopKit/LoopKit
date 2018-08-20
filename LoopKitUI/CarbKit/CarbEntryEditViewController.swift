@@ -162,7 +162,7 @@ public final class CarbEntryEditViewController: UITableViewController {
 
                 if let textField = cell.textField as? CustomInputTextField {
                     if foodKeyboard == nil {
-                        foodKeyboard = storyboard?.instantiateViewController(withIdentifier: CarbAbsorptionInputController.className) as! CarbAbsorptionInputController
+                        foodKeyboard = storyboard?.instantiateViewController(withIdentifier: CarbAbsorptionInputController.className) as? CarbAbsorptionInputController
                         foodKeyboard.delegate = self
                     }
 

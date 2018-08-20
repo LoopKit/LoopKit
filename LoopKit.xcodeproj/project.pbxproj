@@ -286,7 +286,6 @@
 		7D68A9AE1FE0A3D000522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9B01FE0A3D000522C49 /* Localizable.strings */; };
 		7D68A9B81FE0A3D100522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9BA1FE0A3D100522C49 /* InfoPlist.strings */; };
 		7D68A9C21FE0A3D200522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */; };
-		7D68A9E11FE0A3D300522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9E31FE0A3D300522C49 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1443,7 +1442,6 @@
 			files = (
 				7D68A9C21FE0A3D200522C49 /* InfoPlist.strings in Resources */,
 				1F5DAB2D2118CE9300048054 /* Localizable.strings in Resources */,
-				7D68A9E11FE0A3D300522C49 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
