@@ -235,7 +235,7 @@ public final class CarbEntryTableViewController: UITableViewController {
             let entry = carbEntries[indexPath.row]
             let value = NumberFormatter.localizedString(from: NSNumber(value: entry.quantity.doubleValue(for: carbStore.preferredUnit)), number: .none)
 
-            var titleText = "\(value) \(carbStore.preferredUnit)"
+            var titleText = "\(value) \(carbStore.preferredUnit!)"
 
             if let foodType = entry.foodType {
                 titleText += ": \(foodType)"
