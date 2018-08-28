@@ -61,12 +61,24 @@ extension HKQuantitySample {
         )
     }
 
+    var hasLoopKitOrigin: Bool {
+        guard let hasLoopKitOrigin = metadata?[MetadataKeyHasLoopKitOrigin] as? Bool else {
+            return false
+        }
+
+        return hasLoopKitOrigin
+    }
+
     var insulinDeliveryReason: HKInsulinDeliveryReason? {
         guard let reason = metadata?[HKMetadataKeyInsulinDeliveryReason] as? HKInsulinDeliveryReason.RawValue else {
             return nil
         }
 
         return HKInsulinDeliveryReason(rawValue: reason)
+    }
+
+    var scheduledBasalRate: HKQuantity? {
+        return metadata?[MetadataKeyScheduledBasalRate] as? HKQuantity
     }
 
     /// Returns a DoseEntry representation of the sample.
@@ -77,7 +89,7 @@ extension HKQuantitySample {
         }
 
         let type: DoseType
-        let scheduledBasalRate = metadata?[MetadataKeyScheduledBasalRate] as? HKQuantity
+        let scheduledBasalRate = self.scheduledBasalRate
 
         switch reason {
         case .basal:
@@ -86,22 +98,24 @@ extension HKQuantitySample {
             } else {
                 type = .tempBasal
             }
+
+            // We can't properly trust non-LoopKit-provided basal insulin
+            guard hasLoopKitOrigin else {
+                return nil
+            }
         case .bolus:
             type = .bolus
         }
 
-        var entry = DoseEntry(
+        return DoseEntry(
             type: type,
             startDate: startDate,
             endDate: endDate,
             value: quantity.doubleValue(for: .internationalUnit()),
             unit: .units,
             description: nil,
-            syncIdentifier: metadata?[HKMetadataKeySyncIdentifier] as? String
+            syncIdentifier: metadata?[HKMetadataKeySyncIdentifier] as? String,
+            scheduledBasalRate: scheduledBasalRate
         )
-
-        entry.scheduledBasalRate = scheduledBasalRate
-
-        return entry
     }
 }

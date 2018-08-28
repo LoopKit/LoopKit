@@ -529,11 +529,14 @@ class InsulinMathTests: XCTestCase {
 
     func testTrimContinuingDoses() {
         let dateFormatter = ISO8601DateFormatter.localTimeDate()
-        let input = loadDoseFixture("normalized_doses")
+        let input = loadDoseFixture("normalized_doses").reversed()
 
-        // Last temp ends at 2015-10-15T18:14:35
-        let endDate = dateFormatter.date(from: "2015-10-15T18:00:00")!
+        // Last temp ends at 2015-10-15T22:29:50
+        let endDate = dateFormatter.date(from: "2015-10-15T22:25:50")!
         let trimmed = input.map { $0.trim(to: endDate) }
+
+        print(input, "\n\n\n")
+        print(trimmed)
 
         XCTAssertEqual(endDate, trimmed.last!.endDate)
         XCTAssertEqual(input.count, trimmed.count)
@@ -709,5 +712,347 @@ class InsulinMathTests: XCTestCase {
         let basalSchedule = BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: 0, value: 1.2)])
 
         XCTAssertEqual(reconciledWithBasal, reconciled.overlayBasalSchedule(basalSchedule!, startingAt: f("2018-07-11 04:00:00 +0000"), endingAt: f("2018-07-11 05:32:15 +0000"), insertingBasalEntries: true))
+    }
+
+    func testAppendedUnionOfPumpEvents() {
+        let formatter = DateFormatter.descriptionFormatter
+        let f = { (input) in
+            return formatter.date(from: input)!
+        }
+        let unit = DoseEntry.unitsPerHour
+
+        let normalizedDoseEntries = [
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 03:34:29 +0000"), endDate: f("2018-07-15 03:54:29 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16015de2144e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 03:54:29 +0000"), endDate: f("2018-07-15 04:14:31 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16015df6144e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 04:14:31 +0000"), endDate: f("2018-07-15 04:29:28 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16015fce154e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 04:29:28 +0000"), endDate: f("2018-07-15 04:44:28 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "7b055cdd150e122a3000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 04:44:28 +0000"), endDate: f("2018-07-15 04:49:29 +0000"), value: 3.6499999999999999, unit: .unitsPerHour, syncIdentifier: "16015cec154e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 04:49:29 +0000"), endDate: f("2018-07-15 04:54:28 +0000"), value: 3.8500000000000001, unit: .unitsPerHour, syncIdentifier: "16015df1154e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 04:54:28 +0000"), endDate: f("2018-07-15 04:59:28 +0000"), value: 3.5750000000000002, unit: .unitsPerHour, syncIdentifier: "16015cf6154e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-15 05:00:01 +0000"), endDate: f("2018-07-15 05:00:01 +0000"), value: 3.0, unit: .units, syncIdentifier: "0100780078004c0041c0364e12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 04:59:28 +0000"), endDate: f("2018-07-15 05:04:29 +0000"), value: 3.1000000000000001, unit: .unitsPerHour, syncIdentifier: "16015cfb154e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 05:04:29 +0000"), endDate: f("2018-07-15 05:24:29 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16015dc4164e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 05:24:29 +0000"), endDate: f("2018-07-15 05:44:29 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16015dd8164e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 05:44:29 +0000"), endDate: f("2018-07-15 05:59:29 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16015dec164e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 05:59:29 +0000"), endDate: f("2018-07-15 06:04:29 +0000"), value: 0.625, unit: .unitsPerHour, syncIdentifier: "16015dfb164e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:04:29 +0000"), endDate: f("2018-07-15 06:09:29 +0000"), value: 0.17499999999999999, unit: .unitsPerHour, syncIdentifier: "16015dc4174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:09:29 +0000"), endDate: f("2018-07-15 06:14:29 +0000"), value: 1.95, unit: .unitsPerHour, syncIdentifier: "16015dc9174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:14:29 +0000"), endDate: f("2018-07-15 06:19:29 +0000"), value: 0.59999999999999998, unit: .unitsPerHour, syncIdentifier: "16015dce174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:19:29 +0000"), endDate: f("2018-07-15 06:24:29 +0000"), value: 1.8999999999999999, unit: .unitsPerHour, syncIdentifier: "16015dd3174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:24:29 +0000"), endDate: f("2018-07-15 06:29:29 +0000"), value: 3.9750000000000001, unit: .unitsPerHour, syncIdentifier: "16015dd8174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:29:29 +0000"), endDate: f("2018-07-15 06:34:28 +0000"), value: 4.0499999999999998, unit: .unitsPerHour, syncIdentifier: "16015ddd174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:34:28 +0000"), endDate: f("2018-07-15 06:39:28 +0000"), value: 3.0499999999999998, unit: .unitsPerHour, syncIdentifier: "16015ce2174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:39:28 +0000"), endDate: f("2018-07-15 06:44:29 +0000"), value: 3.625, unit: .unitsPerHour, syncIdentifier: "16015ce7174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:44:29 +0000"), endDate: f("2018-07-15 06:49:31 +0000"), value: 2.7999999999999998, unit: .unitsPerHour, syncIdentifier: "16015dec174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:49:31 +0000"), endDate: f("2018-07-15 06:54:30 +0000"), value: 1.9750000000000001, unit: .unitsPerHour, syncIdentifier: "16015ff1174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 06:54:30 +0000"), endDate: f("2018-07-15 07:00:00 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "7b055ef6170e122a3000", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 07:00:00 +0000"), endDate: f("2018-07-15 07:09:28 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "7b0040c0000f12003000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:09:28 +0000"), endDate: f("2018-07-15 07:14:28 +0000"), value: 0.45000000000000001, unit: .unitsPerHour, syncIdentifier: "16015cc9004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:14:28 +0000"), endDate: f("2018-07-15 07:19:29 +0000"), value: 0.5, unit: .unitsPerHour, syncIdentifier: "16015cce004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 07:19:29 +0000"), endDate: f("2018-07-15 07:24:29 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "7b005dd3000f12003000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:24:29 +0000"), endDate: f("2018-07-15 07:29:28 +0000"), value: 2.1499999999999999, unit: .unitsPerHour, syncIdentifier: "16015dd8004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 07:29:29 +0000"), endDate: f("2018-07-15 07:34:29 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "7b005ddd000f12003000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:34:29 +0000"), endDate: f("2018-07-15 07:39:29 +0000"), value: 1.825, unit: .unitsPerHour, syncIdentifier: "16015de2004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:39:29 +0000"), endDate: f("2018-07-15 07:44:28 +0000"), value: 2.5249999999999999, unit: .unitsPerHour, syncIdentifier: "16015de7004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:44:28 +0000"), endDate: f("2018-07-15 07:49:28 +0000"), value: 2.5499999999999998, unit: .unitsPerHour, syncIdentifier: "16015cec004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:49:28 +0000"), endDate: f("2018-07-15 07:54:28 +0000"), value: 2.6000000000000001, unit: .unitsPerHour, syncIdentifier: "16015cf1004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:54:28 +0000"), endDate: f("2018-07-15 07:59:31 +0000"), value: 2.625, unit: .unitsPerHour, syncIdentifier: "16015cf6004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:59:31 +0000"), endDate: f("2018-07-15 08:04:30 +0000"), value: 2.2250000000000001, unit: .unitsPerHour, syncIdentifier: "16015ffb004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:04:30 +0000"), endDate: f("2018-07-15 08:09:28 +0000"), value: 2.3500000000000001, unit: .unitsPerHour, syncIdentifier: "16015ec4014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:09:28 +0000"), endDate: f("2018-07-15 08:14:28 +0000"), value: 2.3250000000000002, unit: .unitsPerHour, syncIdentifier: "16015cc9014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:14:28 +0000"), endDate: f("2018-07-15 08:19:28 +0000"), value: 1.925, unit: .unitsPerHour, syncIdentifier: "16015cce014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 08:19:29 +0000"), endDate: f("2018-07-15 08:24:29 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "7b005dd3010f12003000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:24:29 +0000"), endDate: f("2018-07-15 08:29:29 +0000"), value: 1.8500000000000001, unit: .unitsPerHour, syncIdentifier: "16015dd8014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:29:29 +0000"), endDate: f("2018-07-15 08:34:15 +0000"), value: 2.2250000000000001, unit: .unitsPerHour, syncIdentifier: "16015ddd014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 08:34:15 +0000"), endDate: f("2018-07-15 08:49:14 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "7b004fe2010f12003000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:49:14 +0000"), endDate: f("2018-07-15 08:54:14 +0000"), value: 2.5, unit: .unitsPerHour, syncIdentifier: "16014ef1014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:54:14 +0000"), endDate: f("2018-07-15 08:59:15 +0000"), value: 3.4500000000000002, unit: .unitsPerHour, syncIdentifier: "16014ef6014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:59:15 +0000"), endDate: f("2018-07-15 09:04:14 +0000"), value: 3.5750000000000002, unit: .unitsPerHour, syncIdentifier: "16014ffb014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 09:04:14 +0000"), endDate: f("2018-07-15 09:09:15 +0000"), value: 2.875, unit: .unitsPerHour, syncIdentifier: "16014ec4024f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 09:09:15 +0000"), endDate: f("2018-07-15 10:00:00 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "7b004fc9020f12003000", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 10:00:00 +0000"), endDate: f("2018-07-15 11:09:15 +0000"), value: 1.0, unit: .unitsPerHour, syncIdentifier: "7b0140c0030f12062800", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 11:09:15 +0000"), endDate: f("2018-07-15 11:14:14 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16014fc9044f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 11:14:15 +0000"), endDate: f("2018-07-15 11:39:14 +0000"), value: 1.0, unit: .unitsPerHour, syncIdentifier: "7b014fce040f12062800", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 11:39:14 +0000"), endDate: f("2018-07-15 11:44:14 +0000"), value: 2.4750000000000001, unit: .unitsPerHour, syncIdentifier: "16014ee7044f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 11:44:14 +0000"), endDate: f("2018-07-15 11:49:15 +0000"), value: 2.3999999999999999, unit: .unitsPerHour, syncIdentifier: "16014eec044f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 11:49:15 +0000"), endDate: f("2018-07-15 11:54:14 +0000"), value: 2.3250000000000002, unit: .unitsPerHour, syncIdentifier: "16014ff1044f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 11:54:14 +0000"), endDate: f("2018-07-15 11:59:15 +0000"), value: 2.0499999999999998, unit: .unitsPerHour, syncIdentifier: "16014ef6044f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 11:59:15 +0000"), endDate: f("2018-07-15 14:00:00 +0000"), value: 1.0, unit: .unitsPerHour, syncIdentifier: "7b014ffb040f12062800", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 14:00:00 +0000"), endDate: f("2018-07-15 14:09:48 +0000"), value: 0.90000000000000002, unit: .unitsPerHour, syncIdentifier: "7b0240c0070f120e2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 14:09:48 +0000"), endDate: f("2018-07-15 14:14:15 +0000"), value: 2.0499999999999998, unit: .unitsPerHour, syncIdentifier: "160170c9074f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 14:14:15 +0000"), endDate: f("2018-07-15 15:29:15 +0000"), value: 0.90000000000000002, unit: .unitsPerHour, syncIdentifier: "7b024fce070f120e2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 15:29:15 +0000"), endDate: f("2018-07-15 15:34:14 +0000"), value: 1.8999999999999999, unit: .unitsPerHour, syncIdentifier: "16014fdd084f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 15:34:15 +0000"), endDate: f("2018-07-15 15:39:14 +0000"), value: 0.90000000000000002, unit: .unitsPerHour, syncIdentifier: "7b024fe2080f120e2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 15:39:14 +0000"), endDate: f("2018-07-15 15:44:14 +0000"), value: 1.95, unit: .unitsPerHour, syncIdentifier: "16014ee7084f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 15:44:14 +0000"), endDate: f("2018-07-15 15:49:14 +0000"), value: 2.1499999999999999, unit: .unitsPerHour, syncIdentifier: "16014eec084f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-15 15:49:33 +0000"), endDate: f("2018-07-15 15:49:33 +0000"), value: 2.4500000000000002, unit: .units, syncIdentifier: "010062006200000061f1284f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 15:49:14 +0000"), endDate: f("2018-07-15 15:54:16 +0000"), value: 1.95, unit: .unitsPerHour, syncIdentifier: "16014ef1084f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 15:54:16 +0000"), endDate: f("2018-07-15 16:14:15 +0000"), value: 0.90000000000000002, unit: .unitsPerHour, syncIdentifier: "7b0250f6080f120e2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 16:14:15 +0000"), endDate: f("2018-07-15 16:34:15 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16014fce094f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 16:34:15 +0000"), endDate: f("2018-07-15 16:44:14 +0000"), value: 0.90000000000000002, unit: .unitsPerHour, syncIdentifier: "7b024fe2090f120e2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 16:44:14 +0000"), endDate: f("2018-07-15 17:14:14 +0000"), value: 4.6500000000000004, unit: .unitsPerHour, syncIdentifier: "16014eec094f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-15 17:55:12 +0000"), endDate: f("2018-07-15 17:55:12 +0000"), value: 2.5499999999999998, unit: .units, syncIdentifier: "01006600660029004cf72a4f12", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 17:14:15 +0000"), endDate: f("2018-07-15 18:30:00 +0000"), value: 0.90000000000000002, unit: .unitsPerHour, syncIdentifier: "7b024fce0a0f120e2400", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 18:30:00 +0000"), endDate: f("2018-07-15 18:59:15 +0000"), value: 0.80000000000000004, unit: .unitsPerHour, syncIdentifier: "7b0340de0b0f12172000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 18:59:15 +0000"), endDate: f("2018-07-15 19:04:15 +0000"), value: 4.6500000000000004, unit: .unitsPerHour, syncIdentifier: "16014ffb0b4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 19:04:15 +0000"), endDate: f("2018-07-15 19:09:14 +0000"), value: 3.9750000000000001, unit: .unitsPerHour, syncIdentifier: "16014fc40c4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 19:09:14 +0000"), endDate: f("2018-07-15 19:19:15 +0000"), value: 4.6500000000000004, unit: .unitsPerHour, syncIdentifier: "16014ec90c4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 19:19:15 +0000"), endDate: f("2018-07-15 19:24:15 +0000"), value: 0.80000000000000004, unit: .unitsPerHour, syncIdentifier: "7b034fd30c0f12172000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 19:24:15 +0000"), endDate: f("2018-07-15 19:29:14 +0000"), value: 2.7749999999999999, unit: .unitsPerHour, syncIdentifier: "16014fd80c4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 19:29:14 +0000"), endDate: f("2018-07-15 19:34:14 +0000"), value: 4.6500000000000004, unit: .unitsPerHour, syncIdentifier: "16014edd0c4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 19:34:14 +0000"), endDate: f("2018-07-15 19:39:14 +0000"), value: 4.625, unit: .unitsPerHour, syncIdentifier: "16014ee20c4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 19:39:14 +0000"), endDate: f("2018-07-15 19:44:15 +0000"), value: 2.6000000000000001, unit: .unitsPerHour, syncIdentifier: "16014ee70c4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 19:44:15 +0000"), endDate: f("2018-07-15 20:04:15 +0000"), value: 0.80000000000000004, unit: .unitsPerHour, syncIdentifier: "7b034fec0c0f12172000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 20:04:15 +0000"), endDate: f("2018-07-15 20:23:00 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16014fc40d4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 20:23:00 +0000"), endDate: f("2018-07-15 20:29:15 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "160140d70d4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 20:29:15 +0000"), endDate: f("2018-07-15 20:49:14 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16014fdd0d4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 20:49:14 +0000"), endDate: f("2018-07-15 21:09:14 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16014ef10d4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 21:09:14 +0000"), endDate: f("2018-07-15 21:29:30 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16014ec90e4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 21:29:31 +0000"), endDate: f("2018-07-15 21:30:00 +0000"), value: 0.80000000000000004, unit: .unitsPerHour, syncIdentifier: "7b035fdd0e0f12172000", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 21:30:00 +0000"), endDate: f("2018-07-15 21:49:29 +0000"), value: 0.90000000000000002, unit: .unitsPerHour, syncIdentifier: "7b0440de0e0f121d2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 21:49:29 +0000"), endDate: f("2018-07-15 21:54:32 +0000"), value: 2.75, unit: .unitsPerHour, syncIdentifier: "16015df10e4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 21:54:32 +0000"), endDate: f("2018-07-15 21:59:29 +0000"), value: 3.0499999999999998, unit: .unitsPerHour, syncIdentifier: "160160f60e4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 21:59:29 +0000"), endDate: f("2018-07-15 22:04:31 +0000"), value: 3.2250000000000001, unit: .unitsPerHour, syncIdentifier: "16015dfb0e4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:04:31 +0000"), endDate: f("2018-07-15 22:09:31 +0000"), value: 4.5999999999999996, unit: .unitsPerHour, syncIdentifier: "16015fc40f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:09:31 +0000"), endDate: f("2018-07-15 22:14:32 +0000"), value: 4.3250000000000002, unit: .unitsPerHour, syncIdentifier: "16015fc90f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:14:32 +0000"), endDate: f("2018-07-15 22:19:30 +0000"), value: 3.875, unit: .unitsPerHour, syncIdentifier: "160160ce0f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:19:30 +0000"), endDate: f("2018-07-15 22:24:29 +0000"), value: 3.5249999999999999, unit: .unitsPerHour, syncIdentifier: "16015ed30f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:24:29 +0000"), endDate: f("2018-07-15 22:29:46 +0000"), value: 3.2000000000000002, unit: .unitsPerHour, syncIdentifier: "16015dd80f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:29:46 +0000"), endDate: f("2018-07-15 22:34:45 +0000"), value: 2.1499999999999999, unit: .unitsPerHour, syncIdentifier: "16016edd0f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 22:34:45 +0000"), endDate: f("2018-07-15 22:39:29 +0000"), value: 0.90000000000000002, unit: .unitsPerHour, syncIdentifier: "7b046de20f0f121d2400", scheduledBasalRate: nil),
+            DoseEntry(type: .bolus, startDate: f("2018-07-15 22:54:39 +0000"), endDate: f("2018-07-15 22:54:39 +0000"), value: 2.8500000000000001, unit: .units, syncIdentifier: "010072007200000067f62f4f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:39:29 +0000"), endDate: f("2018-07-15 23:01:42 +0000"), value: 0.40000000000000002, unit: .unitsPerHour, syncIdentifier: "16015de70f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 23:01:42 +0000"), endDate: f("2018-07-15 23:24:29 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16016ac1104f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 23:24:29 +0000"), endDate: f("2018-07-15 23:29:44 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16015dd8104f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 23:29:44 +0000"), endDate: f("2018-07-15 23:34:28 +0000"), value: 1.55, unit: .unitsPerHour, syncIdentifier: "16016cdd104f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 23:34:28 +0000"), endDate: f("2018-07-15 23:39:29 +0000"), value: 1.625, unit: .unitsPerHour, syncIdentifier: "16015ce2104f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-15 23:43:57 +0000"), endDate: f("2018-07-15 23:43:57 +0000"), value: 1.5, unit: .units, syncIdentifier: "01003c003c00620079eb304f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 23:39:29 +0000"), endDate: f("2018-07-15 23:49:29 +0000"), value: 1.55, unit: .unitsPerHour, syncIdentifier: "16015de7104f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-16 00:02:37 +0000"), endDate: f("2018-07-16 00:02:37 +0000"), value: 2.6000000000000001, unit: .units, syncIdentifier: "010068006800910065c2314f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 23:49:29 +0000"), endDate: f("2018-07-16 00:04:42 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16015df1104f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 00:04:42 +0000"), endDate: f("2018-07-16 00:09:29 +0000"), value: 0.025000000000000001, unit: .unitsPerHour, syncIdentifier: "16016ac4114f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-16 00:20:20 +0000"), endDate: f("2018-07-16 00:20:20 +0000"), value: 1.1499999999999999, unit: .units, syncIdentifier: "01002e002e00e70054d4314f12", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-16 00:09:29 +0000"), endDate: f("2018-07-16 00:24:32 +0000"), value: 0.90000000000000002, unit: .unitsPerHour, syncIdentifier: "7b045dc9110f121d2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 00:24:32 +0000"), endDate: f("2018-07-16 00:44:28 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "160160d8114f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 00:44:28 +0000"), endDate: f("2018-07-16 01:04:29 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16015cec114f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 01:04:29 +0000"), endDate: f("2018-07-16 01:27:16 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16015dc4124f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 01:27:16 +0000"), endDate: f("2018-07-16 01:49:29 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "160150db124f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-16 01:58:53 +0000"), endDate: f("2018-07-16 01:58:53 +0000"), value: 3.6499999999999999, unit: .units, syncIdentifier: "010092009200730075fa324f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 01:49:29 +0000"), endDate: f("2018-07-16 02:04:30 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "16015df1124f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 02:04:30 +0000"), endDate: f("2018-07-16 02:33:36 +0000"), value: 1.7250000000000001, unit: .unitsPerHour, syncIdentifier: "16015ec4134f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .suspend, startDate: f("2018-07-16 02:33:36 +0000"), endDate: f("2018-07-16 02:33:36 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "1e0164e1130f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+        ]
+
+        let cachedDoseEntries = [
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 03:34:29 +0000"), endDate: f("2018-07-15 03:54:29 +0000"), value: 0.0, unit: .units, syncIdentifier: "16015de2144e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 03:54:29 +0000"), endDate: f("2018-07-15 04:14:31 +0000"), value: 0.0, unit: .units, syncIdentifier: "16015df6144e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 04:14:31 +0000"), endDate: f("2018-07-15 04:29:28 +0000"), value: 0.0, unit: .units, syncIdentifier: "16015fce154e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 04:29:28 +0000"), endDate: f("2018-07-15 04:44:28 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "7b055cdd150e122a3000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 04:44:28 +0000"), endDate: f("2018-07-15 04:49:29 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "16015cec154e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 04:49:29 +0000"), endDate: f("2018-07-15 04:54:28 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "16015df1154e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 04:54:28 +0000"), endDate: f("2018-07-15 04:59:28 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "16015cf6154e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 04:59:28 +0000"), endDate: f("2018-07-15 05:04:29 +0000"), value: 0.25, unit: .units, syncIdentifier: "16015cfb154e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-15 05:00:01 +0000"), endDate: f("2018-07-15 05:00:01 +0000"), value: 3.0, unit: .units, syncIdentifier: "0100780078004c0041c0364e12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 05:04:29 +0000"), endDate: f("2018-07-15 05:24:29 +0000"), value: 0.0, unit: .units, syncIdentifier: "16015dc4164e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 05:24:29 +0000"), endDate: f("2018-07-15 05:44:29 +0000"), value: 0.0, unit: .units, syncIdentifier: "16015dd8164e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 05:44:29 +0000"), endDate: f("2018-07-15 05:59:29 +0000"), value: 0.0, unit: .units, syncIdentifier: "16015dec164e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 05:59:29 +0000"), endDate: f("2018-07-15 06:04:29 +0000"), value: 0.050000000000000003, unit: .units, syncIdentifier: "16015dfb164e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:04:29 +0000"), endDate: f("2018-07-15 06:09:29 +0000"), value: 0.0, unit: .units, syncIdentifier: "16015dc4174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:09:29 +0000"), endDate: f("2018-07-15 06:14:29 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16015dc9174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:14:29 +0000"), endDate: f("2018-07-15 06:19:29 +0000"), value: 0.050000000000000003, unit: .units, syncIdentifier: "16015dce174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:19:29 +0000"), endDate: f("2018-07-15 06:24:29 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16015dd3174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:24:29 +0000"), endDate: f("2018-07-15 06:29:29 +0000"), value: 0.34999999999999998, unit: .units, syncIdentifier: "16015dd8174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:29:29 +0000"), endDate: f("2018-07-15 06:34:28 +0000"), value: 0.34999999999999998, unit: .units, syncIdentifier: "16015ddd174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:34:28 +0000"), endDate: f("2018-07-15 06:39:28 +0000"), value: 0.25, unit: .units, syncIdentifier: "16015ce2174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:39:28 +0000"), endDate: f("2018-07-15 06:44:29 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "16015ce7174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:44:29 +0000"), endDate: f("2018-07-15 06:49:31 +0000"), value: 0.25, unit: .units, syncIdentifier: "16015dec174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 06:49:31 +0000"), endDate: f("2018-07-15 06:54:30 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16015ff1174e12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 06:54:30 +0000"), endDate: f("2018-07-15 07:00:00 +0000"), value: 0.10000000000000001, unit: .units, syncIdentifier: "7b055ef6170e122a3000", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 07:00:00 +0000"), endDate: f("2018-07-15 07:09:28 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "7b0040c0000f12003000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:09:28 +0000"), endDate: f("2018-07-15 07:14:28 +0000"), value: 0.050000000000000003, unit: .units, syncIdentifier: "16015cc9004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:14:28 +0000"), endDate: f("2018-07-15 07:19:29 +0000"), value: 0.050000000000000003, unit: .units, syncIdentifier: "16015cce004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 07:19:29 +0000"), endDate: f("2018-07-15 07:24:29 +0000"), value: 0.10000000000000001, unit: .units, syncIdentifier: "7b005dd3000f12003000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:24:29 +0000"), endDate: f("2018-07-15 07:29:28 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16015dd8004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 07:29:29 +0000"), endDate: f("2018-07-15 07:34:29 +0000"), value: 0.10000000000000001, unit: .units, syncIdentifier: "7b005ddd000f12003000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:34:29 +0000"), endDate: f("2018-07-15 07:39:29 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16015de2004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:39:29 +0000"), endDate: f("2018-07-15 07:44:28 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16015de7004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:44:28 +0000"), endDate: f("2018-07-15 07:49:28 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16015cec004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:49:28 +0000"), endDate: f("2018-07-15 07:54:28 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16015cf1004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:54:28 +0000"), endDate: f("2018-07-15 07:59:31 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16015cf6004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 07:59:31 +0000"), endDate: f("2018-07-15 08:04:30 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16015ffb004f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:04:30 +0000"), endDate: f("2018-07-15 08:09:28 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16015ec4014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:09:28 +0000"), endDate: f("2018-07-15 08:14:28 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16015cc9014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:14:28 +0000"), endDate: f("2018-07-15 08:19:28 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16015cce014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 08:19:29 +0000"), endDate: f("2018-07-15 08:24:29 +0000"), value: 0.10000000000000001, unit: .units, syncIdentifier: "7b005dd3010f12003000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:24:29 +0000"), endDate: f("2018-07-15 08:29:29 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16015dd8014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:29:29 +0000"), endDate: f("2018-07-15 08:34:15 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16015ddd014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 08:34:15 +0000"), endDate: f("2018-07-15 08:49:14 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "7b004fe2010f12003000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:49:14 +0000"), endDate: f("2018-07-15 08:54:14 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16014ef1014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:54:14 +0000"), endDate: f("2018-07-15 08:59:15 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "16014ef6014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 08:59:15 +0000"), endDate: f("2018-07-15 09:04:14 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "16014ffb014f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 09:04:14 +0000"), endDate: f("2018-07-15 09:09:15 +0000"), value: 0.25, unit: .units, syncIdentifier: "16014ec4024f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 09:09:15 +0000"), endDate: f("2018-07-15 10:00:00 +0000"), value: 1.0, unit: .units, syncIdentifier: "7b004fc9020f12003000", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 10:00:00 +0000"), endDate: f("2018-07-15 11:09:15 +0000"), value: 1.1499999999999999, unit: .units, syncIdentifier: "7b0140c0030f12062800", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 11:09:15 +0000"), endDate: f("2018-07-15 11:14:14 +0000"), value: 0.0, unit: .units, syncIdentifier: "16014fc9044f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 11:14:15 +0000"), endDate: f("2018-07-15 11:39:14 +0000"), value: 0.40000000000000002, unit: .units, syncIdentifier: "7b014fce040f12062800", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 11:39:14 +0000"), endDate: f("2018-07-15 11:44:14 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16014ee7044f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 11:44:14 +0000"), endDate: f("2018-07-15 11:49:15 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16014eec044f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 11:49:15 +0000"), endDate: f("2018-07-15 11:54:14 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16014ff1044f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 11:54:14 +0000"), endDate: f("2018-07-15 11:59:15 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16014ef6044f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 11:59:15 +0000"), endDate: f("2018-07-15 14:00:00 +0000"), value: 2.0, unit: .units, syncIdentifier: "7b014ffb040f12062800", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 14:00:00 +0000"), endDate: f("2018-07-15 14:09:48 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "7b0240c0070f120e2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 14:09:48 +0000"), endDate: f("2018-07-15 14:14:15 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "160170c9074f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 14:14:15 +0000"), endDate: f("2018-07-15 15:29:15 +0000"), value: 1.1499999999999999, unit: .units, syncIdentifier: "7b024fce070f120e2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 15:29:15 +0000"), endDate: f("2018-07-15 15:34:14 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16014fdd084f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 15:34:15 +0000"), endDate: f("2018-07-15 15:39:14 +0000"), value: 0.050000000000000003, unit: .units, syncIdentifier: "7b024fe2080f120e2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 15:39:14 +0000"), endDate: f("2018-07-15 15:44:14 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16014ee7084f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 15:44:14 +0000"), endDate: f("2018-07-15 15:49:14 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16014eec084f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 15:49:14 +0000"), endDate: f("2018-07-15 15:54:16 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16014ef1084f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-15 15:49:33 +0000"), endDate: f("2018-07-15 15:49:33 +0000"), value: 2.4500000000000002, unit: .units, syncIdentifier: "010062006200000061f1284f12", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 15:54:16 +0000"), endDate: f("2018-07-15 16:14:15 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "7b0250f6080f120e2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 16:14:15 +0000"), endDate: f("2018-07-15 16:34:15 +0000"), value: 0.0, unit: .units, syncIdentifier: "16014fce094f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 16:34:15 +0000"), endDate: f("2018-07-15 16:44:14 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "7b024fe2090f120e2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 16:44:14 +0000"), endDate: f("2018-07-15 17:14:14 +0000"), value: 2.3500000000000001, unit: .units, syncIdentifier: "16014eec094f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 17:14:15 +0000"), endDate: f("2018-07-15 18:30:00 +0000"), value: 1.1499999999999999, unit: .units, syncIdentifier: "7b024fce0a0f120e2400", scheduledBasalRate: nil),
+            DoseEntry(type: .bolus, startDate: f("2018-07-15 17:55:12 +0000"), endDate: f("2018-07-15 17:55:12 +0000"), value: 2.5499999999999998, unit: .units, syncIdentifier: "01006600660029004cf72a4f12", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 18:30:00 +0000"), endDate: f("2018-07-15 18:59:15 +0000"), value: 0.40000000000000002, unit: .units, syncIdentifier: "7b0340de0b0f12172000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 18:59:15 +0000"), endDate: f("2018-07-15 19:04:15 +0000"), value: 0.40000000000000002, unit: .units, syncIdentifier: "16014ffb0b4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 19:04:15 +0000"), endDate: f("2018-07-15 19:09:14 +0000"), value: 0.34999999999999998, unit: .units, syncIdentifier: "16014fc40c4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 19:09:14 +0000"), endDate: f("2018-07-15 19:19:15 +0000"), value: 0.80000000000000004, unit: .units, syncIdentifier: "16014ec90c4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 19:19:15 +0000"), endDate: f("2018-07-15 19:24:15 +0000"), value: 0.050000000000000003, unit: .units, syncIdentifier: "7b034fd30c0f12172000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 19:24:15 +0000"), endDate: f("2018-07-15 19:29:14 +0000"), value: 0.25, unit: .units, syncIdentifier: "16014fd80c4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 19:29:14 +0000"), endDate: f("2018-07-15 19:34:14 +0000"), value: 0.40000000000000002, unit: .units, syncIdentifier: "16014edd0c4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 19:34:14 +0000"), endDate: f("2018-07-15 19:39:14 +0000"), value: 0.40000000000000002, unit: .units, syncIdentifier: "16014ee20c4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 19:39:14 +0000"), endDate: f("2018-07-15 19:44:15 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16014ee70c4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 19:44:15 +0000"), endDate: f("2018-07-15 20:04:15 +0000"), value: 0.25, unit: .units, syncIdentifier: "7b034fec0c0f12172000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 20:04:15 +0000"), endDate: f("2018-07-15 20:23:00 +0000"), value: 0.0, unit: .units, syncIdentifier: "16014fc40d4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 20:23:00 +0000"), endDate: f("2018-07-15 20:29:15 +0000"), value: 0.0, unit: .units, syncIdentifier: "160140d70d4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 20:29:15 +0000"), endDate: f("2018-07-15 20:49:14 +0000"), value: 0.0, unit: .units, syncIdentifier: "16014fdd0d4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 20:49:14 +0000"), endDate: f("2018-07-15 21:09:14 +0000"), value: 0.0, unit: .units, syncIdentifier: "16014ef10d4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 21:09:14 +0000"), endDate: f("2018-07-15 21:29:30 +0000"), value: 0.0, unit: .units, syncIdentifier: "16014ec90e4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.8)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 21:29:31 +0000"), endDate: f("2018-07-15 21:30:00 +0000"), value: 0.0, unit: .units, syncIdentifier: "7b035fdd0e0f12172000", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 21:30:00 +0000"), endDate: f("2018-07-15 21:49:29 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "7b0440de0e0f121d2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 21:49:29 +0000"), endDate: f("2018-07-15 21:54:32 +0000"), value: 0.25, unit: .units, syncIdentifier: "16015df10e4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 21:54:32 +0000"), endDate: f("2018-07-15 21:59:29 +0000"), value: 0.25, unit: .units, syncIdentifier: "160160f60e4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 21:59:29 +0000"), endDate: f("2018-07-15 22:04:31 +0000"), value: 0.25, unit: .units, syncIdentifier: "16015dfb0e4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:04:31 +0000"), endDate: f("2018-07-15 22:09:31 +0000"), value: 0.40000000000000002, unit: .units, syncIdentifier: "16015fc40f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:09:31 +0000"), endDate: f("2018-07-15 22:14:32 +0000"), value: 0.34999999999999998, unit: .units, syncIdentifier: "16015fc90f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:14:32 +0000"), endDate: f("2018-07-15 22:19:30 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "160160ce0f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:19:30 +0000"), endDate: f("2018-07-15 22:24:29 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "16015ed30f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:24:29 +0000"), endDate: f("2018-07-15 22:29:46 +0000"), value: 0.29999999999999999, unit: .units, syncIdentifier: "16015dd80f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:29:46 +0000"), endDate: f("2018-07-15 22:34:45 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16016edd0f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .basal, startDate: f("2018-07-15 22:34:45 +0000"), endDate: f("2018-07-15 22:39:29 +0000"), value: 0.050000000000000003, unit: .units, syncIdentifier: "7b046de20f0f121d2400", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 22:39:29 +0000"), endDate: f("2018-07-15 23:01:42 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16015de70f4f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-15 22:54:39 +0000"), endDate: f("2018-07-15 22:54:39 +0000"), value: 2.8500000000000001, unit: .units, syncIdentifier: "010072007200000067f62f4f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 23:01:42 +0000"), endDate: f("2018-07-15 23:24:29 +0000"), value: 0.0, unit: .units, syncIdentifier: "16016ac1104f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 23:24:29 +0000"), endDate: f("2018-07-15 23:29:44 +0000"), value: 0.0, unit: .units, syncIdentifier: "16015dd8104f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 23:29:44 +0000"), endDate: f("2018-07-15 23:34:28 +0000"), value: 0.10000000000000001, unit: .units, syncIdentifier: "16016cdd104f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 23:34:28 +0000"), endDate: f("2018-07-15 23:39:29 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16015ce2104f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 23:39:29 +0000"), endDate: f("2018-07-15 23:49:29 +0000"), value: 0.25, unit: .units, syncIdentifier: "16015de7104f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-15 23:43:57 +0000"), endDate: f("2018-07-15 23:43:57 +0000"), value: 1.5, unit: .units, syncIdentifier: "01003c003c00620079eb304f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-15 23:49:29 +0000"), endDate: f("2018-07-16 00:04:42 +0000"), value: 0.0, unit: .units, syncIdentifier: "16015df1104f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-16 00:02:37 +0000"), endDate: f("2018-07-16 00:02:37 +0000"), value: 2.6000000000000001, unit: .units, syncIdentifier: "010068006800910065c2314f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 00:04:42 +0000"), endDate: f("2018-07-16 00:09:29 +0000"), value: 0.0, unit: .units, syncIdentifier: "16016ac4114f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .basal, startDate: f("2018-07-16 00:09:29 +0000"), endDate: f("2018-07-16 00:24:32 +0000"), value: 0.25, unit: .units, syncIdentifier: "7b045dc9110f121d2400", scheduledBasalRate: nil),
+            DoseEntry(type: .bolus, startDate: f("2018-07-16 00:20:20 +0000"), endDate: f("2018-07-16 00:20:20 +0000"), value: 1.1499999999999999, unit: .units, syncIdentifier: "01002e002e00e70054d4314f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 00:24:32 +0000"), endDate: f("2018-07-16 00:44:28 +0000"), value: 0.0, unit: .units, syncIdentifier: "160160d8114f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 00:44:28 +0000"), endDate: f("2018-07-16 01:04:29 +0000"), value: 0.0, unit: .units, syncIdentifier: "16015cec114f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 01:04:29 +0000"), endDate: f("2018-07-16 01:27:16 +0000"), value: 0.0, unit: .units, syncIdentifier: "16015dc4124f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 01:27:16 +0000"), endDate: f("2018-07-16 01:49:29 +0000"), value: 0.0, unit: .units, syncIdentifier: "160150db124f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 01:49:29 +0000"), endDate: f("2018-07-16 02:04:30 +0000"), value: 0.0, unit: .units, syncIdentifier: "16015df1124f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 0.9)),
+            DoseEntry(type: .bolus, startDate: f("2018-07-16 01:58:53 +0000"), endDate: f("2018-07-16 01:58:53 +0000"), value: 3.6499999999999999, unit: .units, syncIdentifier: "010092009200730075fa324f12", scheduledBasalRate: nil),
+        ]
+
+        XCTAssertEqual(f("2018-07-16 02:04:30 +0000"), cachedDoseEntries.lastBasalEndDate!)
+
+        let appended = cachedDoseEntries.appendedUnion(with: normalizedDoseEntries)
+        XCTAssertEqual(appended.count, normalizedDoseEntries.count)
+        XCTAssertEqual(
+            appended,
+            cachedDoseEntries.appendedUnion(with: normalizedDoseEntries.filterDateRange(cachedDoseEntries.lastBasalEndDate, nil)),
+            "Filtering has the same outcome"
+        )
+
+        let insulinModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75))
+        let date = f("2018-07-16 03:40:00 +0000")
+
+        XCTAssertEqual(
+            normalizedDoseEntries.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
+            appended.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
+            accuracy: 1.0/40
+        )
+
+        let emptyCacheAppended = ([DoseEntry]()).appendedUnion(with: normalizedDoseEntries)
+
+        XCTAssertEqual(
+            normalizedDoseEntries.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
+            emptyCacheAppended.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
+            accuracy: 1.0/40,
+            "Empty cache doesn't affect outcome"
+        )
+
+        let fullCache = cachedDoseEntries.appendedUnion(with: [])
+
+        XCTAssertEqual(
+            cachedDoseEntries.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
+            fullCache.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
+            accuracy: 1.0/40,
+            "Only cache doesn't affect outcome"
+        )
+    }
+
+    func testAppendedUnionOfReservoirEvents() {
+        let formatter = DateFormatter.descriptionFormatter
+        let f = { (input) in
+            return formatter.date(from: input)!
+        }
+        let unit = DoseEntry.unitsPerHour
+
+        let normalizedReservoirDoseEntries = [
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 03:59:00 +0000"), endDate: f("2018-07-16 04:04:00 +0000"), value: 2.4000000000000341, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:04:00 +0000"), endDate: f("2018-07-16 04:09:00 +0000"), value: 2.3999999999998636, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:09:00 +0000"), endDate: f("2018-07-16 04:14:00 +0000"), value: 1.2000000000001023, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:14:00 +0000"), endDate: f("2018-07-16 04:19:00 +0000"), value: 2.4000000000000341, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:19:00 +0000"), endDate: f("2018-07-16 04:24:00 +0000"), value: 2.3999999999998636, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:24:00 +0000"), endDate: f("2018-07-16 04:29:00 +0000"), value: 1.2000000000001023, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:29:00 +0000"), endDate: f("2018-07-16 04:34:00 +0000"), value: 0.0, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:34:00 +0000"), endDate: f("2018-07-16 04:39:00 +0000"), value: 0.0, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:39:00 +0000"), endDate: f("2018-07-16 04:44:00 +0000"), value: 0.0, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:44:00 +0000"), endDate: f("2018-07-16 04:49:00 +0000"), value: 0.0, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:49:00 +0000"), endDate: f("2018-07-16 04:54:00 +0000"), value: 0.0, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:54:00 +0000"), endDate: f("2018-07-16 04:59:00 +0000"), value: 0.0, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:59:00 +0000"), endDate: f("2018-07-16 05:04:00 +0000"), value: 0.0, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 05:04:00 +0000"), endDate: f("2018-07-16 05:09:00 +0000"), value: 0.0, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 05:09:00 +0000"), endDate: f("2018-07-16 05:14:00 +0000"), value: 0.0, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 05:14:00 +0000"), endDate: f("2018-07-16 05:19:00 +0000"), value: 1.1999999999999318, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 05:19:00 +0000"), endDate: f("2018-07-16 05:24:00 +0000"), value: 1.2000000000001023, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 05:24:00 +0000"), endDate: f("2018-07-16 05:29:00 +0000"), value: 1.1999999999999318, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+        ]
+
+        let cachedDoseEntries = [
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 03:59:15 +0000"), endDate: f("2018-07-16 04:04:14 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16014ffb144f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:04:14 +0000"), endDate: f("2018-07-16 04:09:15 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16014ec4154f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:09:15 +0000"), endDate: f("2018-07-16 04:14:14 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16014fc9154f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:14:14 +0000"), endDate: f("2018-07-16 04:19:14 +0000"), value: 0.20000000000000001, unit: .units, syncIdentifier: "16014ece154f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:19:14 +0000"), endDate: f("2018-07-16 04:24:15 +0000"), value: 0.14999999999999999, unit: .units, syncIdentifier: "16014ed3154f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .basal, startDate: f("2018-07-16 04:24:15 +0000"), endDate: f("2018-07-16 04:29:14 +0000"), value: 0.10000000000000001, unit: .units, syncIdentifier: "7b054fd8150f122a3000", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:29:14 +0000"), endDate: f("2018-07-16 04:49:15 +0000"), value: 0.0, unit: .units, syncIdentifier: "16014edd154f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 04:49:15 +0000"), endDate: f("2018-07-16 05:09:15 +0000"), value: 0.0, unit: .units, syncIdentifier: "16014ff1154f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-16 05:09:15 +0000"), endDate: f("2018-07-16 05:14:15 +0000"), value: 0.0, unit: .units, syncIdentifier: "16014fc9164f12", scheduledBasalRate: HKQuantity(unit: unit, doubleValue: 1.2)),
+        ]
+
+        XCTAssertEqual(f("2018-07-16 05:14:15 +0000"), cachedDoseEntries.lastBasalEndDate!)
+
+        let appended = cachedDoseEntries + normalizedReservoirDoseEntries.filterDateRange(cachedDoseEntries.lastBasalEndDate!, nil).map({ $0.trim(from: cachedDoseEntries.lastBasalEndDate!) })
+        XCTAssertEqual(appended.count, cachedDoseEntries.count + 3, "The last 4 reservoir doses should be appended")
+
+        let insulinModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75))
+        let date = f("2018-07-16 05:30:00 +0000")
+
+        XCTAssertEqual(
+            normalizedReservoirDoseEntries.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
+            appended.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
+            accuracy: 1.0/40
+        )
     }
 }

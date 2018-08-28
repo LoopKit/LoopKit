@@ -45,4 +45,13 @@ extension SetBolusError: LocalizedError {
             return LocalizedString("Check your pump before retrying", comment: "Recovery instruction for an uncertain bolus failure")
         }
     }
+
+    public var helpAnchor: String? {
+        switch self {
+        case .certain(let error):
+            return error.helpAnchor
+        case .uncertain(let error):
+            return error.helpAnchor
+        }
+    }
 }

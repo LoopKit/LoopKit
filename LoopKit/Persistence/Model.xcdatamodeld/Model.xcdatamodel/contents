@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17D102" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CachedCarbObject" representedClassName=".CachedCarbObject" syncable="YES">
         <attribute name="absorptionTime" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="createdByCurrentApp" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
@@ -15,6 +15,9 @@
             <uniquenessConstraint>
                 <constraint value="uuid"/>
             </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="syncIdentifier"/>
+            </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
     <entity name="CachedGlucoseObject" representedClassName=".CachedGlucoseObject" syncable="YES">
@@ -27,6 +30,48 @@
         <attribute name="uploadState" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="value" attributeType="Double" usesScalarValueType="YES" syncable="YES"/>
+        <fetchIndex name="byUUIDIndex">
+            <fetchIndexElement property="uuid" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byStartDateDescendingIndex">
+            <fetchIndexElement property="startDate" type="Binary" order="descending"/>
+        </fetchIndex>
+        <fetchIndex name="byStartDateAscendingIndex">
+            <fetchIndexElement property="startDate" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySyncIdentifierIndex">
+            <fetchIndexElement property="syncIdentifier" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="uuid"/>
+            </uniquenessConstraint>
+            <uniquenessConstraint>
+                <constraint value="syncIdentifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CachedInsulinDeliveryObject" representedClassName=".CachedInsulinDeliveryObject" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="endDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="hasLoopKitOrigin" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="provenanceIdentifier" attributeType="String" syncable="YES"/>
+        <attribute name="reason" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="scheduledBasalRate" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="syncIdentifier" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="value" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <fetchIndex name="byUUIDIndex">
+            <fetchIndexElement property="uuid" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byStartDateAscendingIndex">
+            <fetchIndexElement property="startDate" type="Binary" order="ascending"/>
+            <fetchIndexElement property="endDate" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="bySyncIdentifierIndex">
+            <fetchIndexElement property="syncIdentifier" type="Binary" order="ascending"/>
+        </fetchIndex>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="uuid"/>
@@ -57,11 +102,14 @@
         <attribute name="unit" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uploaded" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="value" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
-        <fetchIndex name="byCreatedAtIndex">
-            <fetchIndexElement property="createdAt" type="Binary" order="ascending"/>
-        </fetchIndex>
         <fetchIndex name="byDateIndex">
             <fetchIndexElement property="date" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byTypeIndex">
+            <fetchIndexElement property="type" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byUploadedIndex">
+            <fetchIndexElement property="uploaded" type="Binary" order="ascending"/>
         </fetchIndex>
         <uniquenessConstraints>
             <uniquenessConstraint>
@@ -75,12 +123,13 @@
         <attribute name="raw" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="volume" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <fetchIndex name="byDateIndex">
-            <fetchIndexElement property="date" type="Binary" order="ascending"/>
+            <fetchIndexElement property="date" type="Binary" order="descending"/>
         </fetchIndex>
     </entity>
     <elements>
         <element name="CachedCarbObject" positionX="-63" positionY="72" width="128" height="195"/>
         <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="180"/>
+        <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="195"/>
         <element name="DeletedCarbObject" positionX="-63" positionY="90" width="128" height="90"/>
         <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="195"/>
         <element name="Reservoir" positionX="-63" positionY="-18" width="128" height="105"/>

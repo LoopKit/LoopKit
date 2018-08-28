@@ -265,6 +265,14 @@ extension CarbStore {
     ///   - completion: A closure called once the samples have been retrieved
     ///   - samples: An array of samples, in chronological order by startDate
     public func getCachedCarbSamples(start: Date, end: Date? = nil, completion: @escaping (_ samples: [StoredCarbEntry]) -> Void) {
+        // If we're within our cache duration, skip the HealthKit query
+        guard start <= earliestCacheDate else {
+            self.queue.async {
+                completion(self.getCachedCarbEntries().filterDateRange(start, end))
+            }
+            return
+        }
+
         getCarbSamples(start: start, end: end) { (result) in
             switch result {
             case .success(let samples):

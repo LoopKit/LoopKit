@@ -20,7 +20,7 @@ class PumpEvent: NSManagedObject {
         }
         set {
             willChangeValue(forKey: "doseType")
-            defer { willChangeValue(forKey: "doseType") }
+            defer { didChangeValue(forKey: "doseType") }
             primitiveDoseType = newValue?.rawValue
         }
     }
