@@ -1,6 +1,9 @@
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Absorptie tijd";
 
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Voeg account toe";
+
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Weet je zeker dat je de gehele pompgeschiedenis wilt verwijderen?";
 
@@ -39,6 +42,9 @@
 
 /* Title of the carb entry date picker cell */
 "Date" = "Datum";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Verwijder account";
 
 /* Button title to delete all objects */
 "Delete All" = "Verwijder alles";
@@ -88,6 +94,9 @@
 /* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
 "quantity-and-unit-tight" = "%1$@%2$@";
 
+/* The default placeholder string for a credential */
+"Required" = "Vereist";
+
 /* Section title for slow absorbing food */
 "Slow" = "Langzaam";
 
@@ -111,6 +120,9 @@
 
 /* The default title to use when an entry has none */
 "Unknown" = "Onbekend";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Verifiëren";
 
 /* Title of an alert containing a validation warning */
 "Warning" = "Waarschuwing";

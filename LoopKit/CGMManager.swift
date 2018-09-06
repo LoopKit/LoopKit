@@ -33,11 +33,18 @@ public protocol CGMManagerDelegate: class {
     ///   - manager: The manager instance
     ///   - result: The result of the update
     func cgmManager(_ manager: CGMManager, didUpdateWith result: CGMResult) -> Void
+
+    /// Informs the delegate that the manager is deactivating and should be deleted
+    ///
+    /// - Parameter manager: The manager instance
+    func cgmManagerWantsDeletion(_ manager: CGMManager)
 }
 
 
-public protocol CGMManager: CustomDebugStringConvertible {
+public protocol CGMManager: DeviceManager {
     var cgmManagerDelegate: CGMManagerDelegate? { get set }
+
+    var appURL: URL? { get }
 
     /// Whether the device is capable of waking the app
     var providesBLEHeartbeat: Bool { get }
@@ -57,4 +64,11 @@ public protocol CGMManager: CustomDebugStringConvertible {
     /// - Parameters:
     ///   - completion: A closure called when operation has completed
     func fetchNewDataIfNeeded(_ completion: @escaping (CGMResult) -> Void) -> Void
+}
+
+
+public extension CGMManager {
+    var appURL: URL? {
+        return nil
+    }
 }

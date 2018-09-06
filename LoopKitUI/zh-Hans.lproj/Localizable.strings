@@ -1,6 +1,9 @@
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "吸收时间";
 
+/* The title of the button to add the credentials for a service */
+"Add Account" = "添加账户";
+
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "确定要删除所有输入的历史数据吗？";
 
@@ -39,6 +42,9 @@
 
 /* Title of the carb entry date picker cell */
 "Date" = "日期";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "删除账户";
 
 /* Button title to delete all objects */
 "Delete All" = "删除所有";
@@ -88,6 +94,9 @@
 /* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
 "quantity-and-unit-tight" = "%1$@%2$@";
 
+/* The default placeholder string for a credential */
+"Required" = "需要";
+
 /* Section title for slow absorbing food */
 "Slow" = "慢";
 
@@ -111,6 +120,9 @@
 
 /* The default title to use when an entry has none */
 "Unknown" = "未知";
+
+/* Label indicating validation is occurring */
+"Verifying" = "验证";
 
 /* Title of an alert containing a validation warning */
 "Warning" = "警告";
