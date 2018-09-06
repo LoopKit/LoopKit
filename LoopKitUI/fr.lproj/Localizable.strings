@@ -1,6 +1,9 @@
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Durée d’absorption";
 
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Ajouter un compte";
+
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Êtes-vous sûr de vouloir supprimer toutes les entrées d’historique?";
 
@@ -39,6 +42,9 @@
 
 /* Title of the carb entry date picker cell */
 "Date" = "Date";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Supprimer le compte";
 
 /* Button title to delete all objects */
 "Delete All" = "Supprimer tout";
@@ -88,6 +94,9 @@
 /* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
 "quantity-and-unit-tight" = "%1$@%2$@";
 
+/* The default placeholder string for a credential */
+"Required" = "Nécessaire";
+
 /* Section title for slow absorbing food */
 "Slow" = "Lent";
 
@@ -111,6 +120,9 @@
 
 /* The default title to use when an entry has none */
 "Unknown" = "Inconnu";
+
+/* Label indicating validation is occurring */
+"Verifying" = "En train de vérifier";
 
 /* Title of an alert containing a validation warning */
 "Warning" = "Attention";
