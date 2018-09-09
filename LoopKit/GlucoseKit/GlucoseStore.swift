@@ -254,6 +254,7 @@ extension GlucoseStore {
     ///   - completion: A closure called once the values have been retrieved
     ///   - samples: An array of glucose values, in chronological order by startDate
     public func getCachedGlucoseSamples(start: Date, end: Date? = nil, completion: @escaping (_ samples: [StoredGlucoseSample]) -> Void) {
+        #if os(iOS)
         // If we're within our cache duration, skip the HealthKit query
         guard start <= earliestCacheDate else {
             self.dataAccessQueue.async {
@@ -261,6 +262,7 @@ extension GlucoseStore {
             }
             return
         }
+        #endif
 
         getGlucoseSamples(start: start, end: end) { (result) in
             switch result {

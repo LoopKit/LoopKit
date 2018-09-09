@@ -15,7 +15,7 @@ let MetadataKeyScheduledBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduled
 let MetadataKeyHasLoopKitOrigin = "HasLoopKitOrigin"
 
 extension HKQuantitySample {
-    convenience init?(type: HKQuantityType, unit: HKUnit, dose: DoseEntry, device: HKDevice?) {
+    convenience init?(type: HKQuantityType, unit: HKUnit, dose: DoseEntry, device: HKDevice?, syncVersion: Int = 1) {
         let units = dose.unitsRoundedToMinimedIncrements
 
         guard let syncIdentifier = dose.syncIdentifier else {
@@ -23,7 +23,7 @@ extension HKQuantitySample {
         }
 
         var metadata: [String: Any] = [
-            HKMetadataKeySyncVersion: 1,
+            HKMetadataKeySyncVersion: syncVersion,
             HKMetadataKeySyncIdentifier: syncIdentifier,
             MetadataKeyHasLoopKitOrigin: true
         ]

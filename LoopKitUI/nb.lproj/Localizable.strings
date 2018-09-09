@@ -10,6 +10,12 @@
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Er du sikker på at du vil slette alle reservoarverdier?";
 
+/* The title of the button to add the credentials for a service */
+"authentication-button-add" = "Legg Til Konto";
+
+/* The title of the button to remove the credentials for a service */
+"authentication-button-delete" = "Slett Konto";
+
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Avbryt";
 
@@ -102,6 +108,9 @@
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Trykk for å angi";
+
+/* The default placeholder string for a credential */
+"text-placeholder-required" = "Påkrevd";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Maks absorbsjonstid er %@";
