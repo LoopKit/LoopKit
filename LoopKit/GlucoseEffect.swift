@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 
 
-public struct GlucoseEffect: GlucoseValue {
+public struct GlucoseEffect: GlucoseValue, Equatable {
     public let startDate: Date
     public let quantity: HKQuantity
 
@@ -24,9 +24,5 @@ public struct GlucoseEffect: GlucoseValue {
 extension GlucoseEffect: Comparable {
     public static func <(lhs: GlucoseEffect, rhs: GlucoseEffect) -> Bool {
         return lhs.startDate < rhs.startDate
-    }
-
-    public static func ==(lhs: GlucoseEffect, rhs: GlucoseEffect) -> Bool {
-        return lhs.startDate == rhs.startDate && lhs.quantity == rhs.quantity
     }
 }

@@ -102,7 +102,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
 
 // MARK: - Adding data
 extension InsulinDeliveryStore {
-    func addReconciledDoses(_ doses: [DoseEntry], from device: HKDevice?, completion: @escaping (_ result: InsulinDeliveryStoreResult<Bool>) -> Void) {
+    func addReconciledDoses(_ doses: [DoseEntry], from device: HKDevice?, syncVersion: Int, completion: @escaping (_ result: InsulinDeliveryStoreResult<Bool>) -> Void) {
         let unit = HKUnit.internationalUnit()
         var samples: [HKQuantitySample] = []
 
@@ -122,7 +122,8 @@ extension InsulinDeliveryStore {
                     type: insulinType,
                     unit: unit,
                     dose: dose,
-                    device: device
+                    device: device,
+                    syncVersion: syncVersion
                 )
             }
         }

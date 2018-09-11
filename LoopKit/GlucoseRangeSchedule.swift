@@ -64,7 +64,7 @@ public struct GlucoseRangeSchedule: DailySchedule {
 
         public let context: Context
         public let start: Date
-        public let end: Date?
+        public let end: Date
         public let value: DoubleRange
 
         /// Initializes a new override
@@ -77,12 +77,12 @@ public struct GlucoseRangeSchedule: DailySchedule {
         public init(context: Context, start: Date, end: Date?, value: DoubleRange) {
             self.context = context
             self.start = start
-            self.end = end
+            self.end = end ?? .distantFuture
             self.value = value
         }
 
         public var activeDates: DateInterval {
-            return DateInterval(start: start, end: end ?? .distantFuture)
+            return DateInterval(start: start, end: end)
         }
 
         public func isActive(at date: Date = Date()) -> Bool {
@@ -171,6 +171,23 @@ public struct GlucoseRangeSchedule: DailySchedule {
         return rangeSchedule.between(start: startDate, end: endDate)
     }
 
+    public func quantityBetween(start: Date, end: Date) -> [AbsoluteScheduleValue<Range<HKQuantity>>] {
+        var quantitySchedule = [AbsoluteScheduleValue<Range<HKQuantity>>]()
+
+        for schedule in between(start: start, end: end) {
+            let lowerBound = HKQuantity(unit: unit, doubleValue: schedule.value.minValue)
+            let upperBound = HKQuantity(unit: unit, doubleValue: schedule.value.maxValue)
+
+            quantitySchedule.append(AbsoluteScheduleValue(
+                startDate: schedule.startDate,
+                endDate: schedule.endDate,
+                value: lowerBound..<upperBound
+            ))
+        }
+
+        return quantitySchedule
+    }
+
     public func value(at time: Date) -> DoubleRange {
         if let override = override, override.isActive() {
             return override.value
@@ -225,22 +242,16 @@ extension GlucoseRangeSchedule.Override: RawRepresentable {
             return nil
         }
 
-        self.context = context
-        self.start = start
-        self.end = rawValue["end"] as? Date
-        self.value = value
+        self.init(context: context, start: start, end: rawValue["end"] as? Date, value: value)
     }
 
     public var rawValue: RawValue {
-        var raw: RawValue = [
+        return [
             "context": context.rawValue,
             "start": start,
+            "end": end,
             "value": value.rawValue
         ]
-
-        raw["end"] = end
-
-        return raw
     }
 }
 

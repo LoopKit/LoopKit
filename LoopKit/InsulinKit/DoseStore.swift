@@ -163,6 +163,10 @@ public final class DoseStore {
     /// Whether the pump generates events indicating the start of a scheduled basal rate after it had been interrupted.
     public var pumpRecordsBasalProfileStartEvents: Bool = false
 
+    /// The sync version used for new samples written to HealthKit
+    /// Choose a lower or higher sync version if the same sample might be written twice (e.g. from an extension and from an app) for deterministic conflict resolution
+    public let syncVersion: Int
+
     // MARK: -
 
     /// Initializes and configures a new store
@@ -174,13 +178,15 @@ public final class DoseStore {
     ///   - insulinModel: The model of insulin effect over time
     ///   - basalProfile: The daily schedule of basal insulin rates
     ///   - insulinSensitivitySchedule: The daily schedule of insulin sensitivity (ISF)
+    ///   - syncVersion: A version number for determining resolution in de-duplication
     public init(
         healthStore: HKHealthStore,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
         insulinModel: InsulinModel?,
         basalProfile: BasalRateSchedule?,
-        insulinSensitivitySchedule: InsulinSensitivitySchedule?
+        insulinSensitivitySchedule: InsulinSensitivitySchedule?,
+        syncVersion: Int = 1
     ) {
         self.insulinDeliveryStore = InsulinDeliveryStore(
             healthStore: healthStore,
@@ -191,6 +197,7 @@ public final class DoseStore {
         self.lockedInsulinSensitivitySchedule = Locked(insulinSensitivitySchedule)
         self.lockedBasalProfile = Locked(basalProfile)
         self.persistenceController = cacheStore
+        self.syncVersion = syncVersion
 
         self.pumpEventQueryAfterDate = cacheStartDate
 
@@ -837,7 +844,7 @@ extension DoseStore {
                     return
                 }
 
-                self.insulinDeliveryStore.addReconciledDoses(doses, from: self.device) { (result) in
+                self.insulinDeliveryStore.addReconciledDoses(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
                     switch result {
                     case .success:
                         completion(nil)
