@@ -28,7 +28,7 @@ public protocol SampleValue: TimelineValue {
 }
 
 
-public extension Sequence where Iterator.Element: TimelineValue {
+public extension Sequence where Element: TimelineValue {
     /**
      Returns the closest element in the sorted sequence prior to the specified date
 

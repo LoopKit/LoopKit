@@ -274,7 +274,7 @@ extension DoseEntry {
     }
 }
 
-extension Collection where Iterator.Element == DoseEntry {
+extension Collection where Element == DoseEntry {
 
     /**
      Maps a timeline of dose entries with overlapping start and end dates to a timeline of doses that represents actual insulin delivery.
