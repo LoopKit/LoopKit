@@ -24,8 +24,7 @@ public protocol PumpManagerDelegate: class {
     // Can this be rolled into another update message?
     func pumpManager(_ pumpManager: PumpManager, didUpdateStatus status: PumpManagerStatus)
 
-    /// Basically, the pumpID is now gone, we have nothing left to do
-    /// Could we make the Pump ID required but keep the interface generic?
+    /// Informs the delegate that the manager is deactivating and should be deleted
     func pumpManagerWillDeactivate(_ pumpManager: PumpManager)
 
     /// Triggered when pump model changes. With a more formalized setup flow (which requires a successful model fetch),
@@ -53,25 +52,8 @@ public protocol PumpManagerDelegate: class {
 }
 
 
-public protocol PumpManager: class, CustomDebugStringConvertible {
-    typealias RawStateValue = [String: Any]
-
-    /// The identifier of the manager. This should be unique
-    static var managerIdentifier: String { get }
-
-    /// Initializes the pump manager with its previously-saved state
-    ///
-    /// Return nil if the saved state is invalid to prevent restoration
-    ///
-    /// - Parameter rawState: The last state
-    init?(rawState: RawStateValue)
-
-    /// The current, serializable state of the manager
-    var rawState: RawStateValue { get }
-
+public protocol PumpManager: DeviceManager {
     var pumpManagerDelegate: PumpManagerDelegate? { get set }
-
-    var localizedTitle: String { get }
 
     // Pump info
     var pumpBatteryChargeRemaining: Double? { get }

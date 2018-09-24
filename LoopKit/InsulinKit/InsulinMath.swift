@@ -84,19 +84,23 @@ extension DoseEntry {
         }
     }
 
-    func trim(to end: Date?) -> DoseEntry {
-        if let end = end, unit == .unitsPerHour, endDate > end {
-            return DoseEntry(
-                type: type,
-                startDate: startDate,
-                endDate: end,
-                value: value,
-                unit: unit,
-                description: description
-            )
-        } else {
+    func trim(from start: Date? = nil, to end: Date? = nil) -> DoseEntry {
+        guard unit == .unitsPerHour else {
             return self
         }
+
+        let startDate = max(start ?? .distantPast, self.startDate)
+
+        return DoseEntry(
+            type: type,
+            startDate: startDate,
+            endDate: max(startDate, min(end ?? .distantFuture, self.endDate)),
+            value: value,
+            unit: unit,
+            description: description,
+            syncIdentifier: nil,
+            scheduledBasalRate: scheduledBasalRate
+        )
     }
 }
 
@@ -270,7 +274,7 @@ extension DoseEntry {
     }
 }
 
-extension Collection where Iterator.Element == DoseEntry {
+extension Collection where Element == DoseEntry {
 
     /**
      Maps a timeline of dose entries with overlapping start and end dates to a timeline of doses that represents actual insulin delivery.
@@ -541,5 +545,41 @@ extension Collection where Iterator.Element == DoseEntry {
         }
 
         return newEntries
+    }
+
+    /// Creates an array of DoseEntry values by unioning another array, de-duplicating by syncIdentifier
+    ///
+    /// - Parameter otherDoses: An array of doses to union
+    /// - Returns: A new array of doses
+    func appendedUnion(with otherDoses: [DoseEntry]) -> [DoseEntry] {
+        var union: [DoseEntry] = []
+        var syncIdentifiers: Set<String> = []
+
+        for dose in (self + otherDoses) {
+            if let syncIdentifier = dose.syncIdentifier {
+                let (inserted, _) = syncIdentifiers.insert(syncIdentifier)
+                if !inserted {
+                    continue
+                }
+            }
+
+            union.append(dose)
+        }
+
+        return union
+    }
+}
+
+
+extension BidirectionalCollection where Element == DoseEntry {
+    /// The endDate of the last basal dose in the collection
+    var lastBasalEndDate: Date? {
+        for dose in self.reversed() {
+            if dose.type == .basal || dose.type == .tempBasal || dose.type == .resume {
+                return dose.endDate
+            }
+        }
+
+        return nil
     }
 }

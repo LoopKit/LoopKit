@@ -1,11 +1,18 @@
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Durée d’absorption";
 
+
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Êtes-vous sûr de vouloir supprimer toutes les entrées d’historique?";
 
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Êtes-vous sûr de vouloir supprimer toutes les valeurs de réservoir?";
+
+/* The title of the button to add the credentials for a service */
+"authentication-button-add" = "Ajouter un compte";
+
+/* The title of the button to remove the credentials for a service */
+"authentication-button-delete" = "Supprimer le compte";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Annuler";
@@ -94,6 +101,9 @@
 /* The empty-state text for a configuration value */
 "Tap to set" = "Appuyez pour définir";
 
+/* The default placeholder string for a credential */
+"text-placeholder-required" = "Nécessaire";
+
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Le temps d'absorption maximum est de %@";
 
@@ -111,6 +121,9 @@
 
 /* The default title to use when an entry has none */
 "Unknown" = "Inconnu";
+
+/* Label indicating validation is occurring */
+"Verifying" = "En train de vérifier";
 
 /* Title of an alert containing a validation warning */
 "Warning" = "Attention";

@@ -10,6 +10,7 @@ import UIKit
 
 public class SettingsTableViewCell: UITableViewCell {
     public static let EnabledString = LocalizedString("Enabled", comment: "The detail text describing an enabled setting")
+    public static let NoValueString = LocalizedString("—", comment: "The detail text representing no value")
     public static let TapToSetString = LocalizedString("Tap to set", comment: "The empty-state text for a configuration value")
 
     public override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
