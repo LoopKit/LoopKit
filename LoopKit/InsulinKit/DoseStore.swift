@@ -1240,17 +1240,24 @@ extension DoseStore {
                     report.append("")
                     report.append("### getPumpEventValues")
 
+                    var firstPumpEventDate = self.cacheStartDate
+
                     switch result {
                     case .failure(let error):
                         report.append("Error: \(error)")
                     case .success(let values):
                         report.append("")
+
+                        if let firstEvent = values.last {
+                            firstPumpEventDate = firstEvent.date
+                        }
+
                         for value in values {
                             report.append("* \(value)")
                         }
                     }
 
-                    self.getNormalizedDoseEntries(start: Date.distantPast) { (result) in
+                    self.getNormalizedDoseEntries(start: firstPumpEventDate) { (result) in
                         report.append("")
                         report.append("### getNormalizedDoseEntries")
 
