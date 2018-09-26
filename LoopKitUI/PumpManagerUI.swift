@@ -22,11 +22,11 @@ public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewContro
 public protocol PumpManagerSetupViewController {
     var setupDelegate: PumpManagerSetupViewControllerDelegate? { get set }
 
-    var maxBasalRateUnitsPerHour: Double? { get }
+    var maxBasalRateUnitsPerHour: Double? { get set }
 
-    var maxBolusUnits: Double? { get }
+    var maxBolusUnits: Double? { get set }
 
-    var basalSchedule: BasalRateSchedule? { get }
+    var basalSchedule: BasalRateSchedule? { get set }
 }
 
 
