@@ -49,6 +49,8 @@ public protocol PumpManagerDelegate: class {
     func startDateToFilterNewPumpEvents(for manager: PumpManager) -> Date
 
     func startDateToFilterNewReservoirEvents(for manager: PumpManager) -> Date
+    
+    func pumpManager(_ pumpManager: PumpManager, didUpdateSuspendState suspendState: Bool)
 }
 
 
