@@ -61,6 +61,8 @@ public protocol PumpManager: DeviceManager {
     var pumpRecordsBasalProfileStartEvents: Bool { get }
 
     var pumpReservoirCapacity: Double { get }
+    
+    var isDeliverySuspended: Bool { get }
 
     /// Only used by settings
     var pumpTimeZone: TimeZone { get }
@@ -83,4 +85,8 @@ public protocol PumpManager: DeviceManager {
     func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (_ result: PumpManagerResult<DoseEntry>) -> Void)
 
     func updateBLEHeartbeatPreference()
+    
+    func suspendDelivery(completion: @escaping (_ result: PumpManagerResult<Bool>) -> Void)
+    
+    func resumeDelivery(completion: @escaping (_ result: PumpManagerResult<Bool>) -> Void)
 }

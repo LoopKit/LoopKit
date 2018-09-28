@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class TextButtonTableViewCell: UITableViewCell {
+open class TextButtonTableViewCell: UITableViewCell {
 
     override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -39,13 +39,13 @@ public class TextButtonTableViewCell: UITableViewCell {
         }
     }
 
-    public override func tintColorDidChange() {
+    open override func tintColorDidChange() {
         super.tintColorDidChange()
 
         textLabel?.textColor = tintColor
     }
 
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
         textLabel?.textColor = tintColor
