@@ -146,6 +146,7 @@ public final class AuthenticationViewController<T: ServiceAuthenticationUI>: UIT
             if let options = credential.field.options {
                 let picker = CredentialOptionPicker(options: options)
                 picker.value = credential.value
+                authentication.credentialValues[indexPath.row] = credential.value ?? options.first?.value
 
                 cell.credentialOptionPicker = picker
             }
