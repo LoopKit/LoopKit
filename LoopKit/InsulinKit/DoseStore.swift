@@ -1285,7 +1285,7 @@ extension DoseStore {
                             }
                         }
 
-                        self.getNormalizedPumpEventDoseEntriesOverlaidWithBasalEntries(after: Date.distantPast, completion: { (result) in
+                        self.getNormalizedPumpEventDoseEntriesOverlaidWithBasalEntries(after: firstPumpEventDate, completion: { (result) in
 
                             report.append("")
                             report.append("### getNormalizedPumpEventDoseEntriesOverlaidWithBasalEntries")
