@@ -20,8 +20,6 @@ public protocol PumpManagerDelegate: class {
 
     func pumpManagerShouldProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool
 
-    // Strictly for Nightscout uploading
-    // Can this be rolled into another update message?
     func pumpManager(_ pumpManager: PumpManager, didUpdateStatus status: PumpManagerStatus)
 
     /// Informs the delegate that the manager is deactivating and should be deleted
@@ -40,8 +38,6 @@ public protocol PumpManagerDelegate: class {
 
     func pumpManager(_ pumpManager: PumpManager, didAdjustPumpClockBy adjustment: TimeInterval)
 
-    func pumpManagerDidUpdatePumpBatteryChargeRemaining(_ pumpManager: PumpManager, oldValue: Double?)
-
     func pumpManagerDidUpdateState(_ pumpManager: PumpManager)
 
     func pumpManagerRecommendsLoop(_ pumpManager: PumpManager)
@@ -49,26 +45,18 @@ public protocol PumpManagerDelegate: class {
     func startDateToFilterNewPumpEvents(for manager: PumpManager) -> Date
 
     func startDateToFilterNewReservoirEvents(for manager: PumpManager) -> Date
-    
-    func pumpManager(_ pumpManager: PumpManager, didUpdateSuspendState suspendState: Bool)
 }
 
 
 public protocol PumpManager: DeviceManager {
     var pumpManagerDelegate: PumpManagerDelegate? { get set }
 
-    // Pump info
-    var pumpBatteryChargeRemaining: Double? { get }
-
     var pumpRecordsBasalProfileStartEvents: Bool { get }
 
     var pumpReservoirCapacity: Double { get }
     
-    var isDeliverySuspended: Bool { get }
-
-    /// Only used by settings
-    var pumpTimeZone: TimeZone { get }
-
+    var status: PumpManagerStatus { get }
+    
     /// If the pump data (reservoir/events) is out of date, it will be fetched, and if successful, trigger a loop
     func assertCurrentPumpData()
 
