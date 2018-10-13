@@ -295,7 +295,7 @@ public final class CarbEntryTableViewController: UITableViewController {
 
     @IBAction func unwindFromEditing(_ segue: UIStoryboardSegue) {
         if let  editVC = segue.source as? CarbEntryEditViewController,
-                let updatedEntry = editVC.updatedCarbEntry
+            let updatedEntry = editVC.updatedCarbEntry
         {
             if let originalEntry = editVC.originalCarbEntry {
                 carbStore?.replaceCarbEntry(originalEntry, withEntry: updatedEntry) { (result) -> Void in
@@ -321,6 +321,35 @@ public final class CarbEntryTableViewController: UITableViewController {
                 }
             }
         }
+        
+        if let editFPUVC = segue.source as? CarbEntryEditViewController,
+            let updatedFPUEntry = editFPUVC.updatedFPCarbEntry
+        {
+            if let originalEntry = editFPUVC.originalCarbEntry {
+                carbStore?.replaceCarbEntry(originalEntry, withEntry: updatedFPUEntry) { (result) -> Void in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .failure(let error):
+                            self.presentAlertController(with: error)
+                        case .success:
+                            self.reloadData()
+                        }
+                    }
+                }
+            } else {
+                carbStore?.addCarbEntry(updatedFPUEntry) { (result) -> Void in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .failure(let error):
+                            self.presentAlertController(with: error)
+                        case .success:
+                            self.reloadData()
+                        }
+                    }
+                }
+            }
+        }
+        
     }
 
     public override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -26,7 +26,7 @@
 "carb-entry-title-edit" = "Rediger karbohydrater";
 
 /* Carb entry section footer text explaining absorption time */
-"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Velg en lengre absorpsjonstid for større måltider, eller de som inneholder fett og proteiner. Dette er bare veiledning til algoritmen og trenger ikke å være nøyaktig.";
+"Optional Fat and protein entry will result in additional dosing over an extended duration for fat and protein calories, and will override manual entry of duration of absorption." = "Valgfri Fett- og proteininngang vil resultere i ytterligere dosering over lengre tid for fett- og proteinkalorier, og vil overstyre manuell opptak av varigheten av absorpsjon.";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
 "com.loudnate.CarbKit.COBDateLabel" = "kl. %1$@";

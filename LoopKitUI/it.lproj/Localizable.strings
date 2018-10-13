@@ -26,7 +26,7 @@
 "carb-entry-title-edit" = "Modifica carboidrati Assunti";
 
 /* Carb entry section footer text explaining absorption time */
-"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Scegli un tempo di assorbimento piu lungo per i pasti piu grandi o quelli contenenti grassi e proteine. Questa e solo una guida all’algoritmo e non e necessario che sia esatta.";
+"Optional Fat and protein entry will result in additional dosing over an extended duration for fat and protein calories, and will override manual entry of duration of absorption." = "L'ingresso facoltativo di grasso e proteine ​​si tradurrà in un dosaggio aggiuntivo per un periodo prolungato di calorie per grassi e proteine ​​e sostituirà l'immissione manuale della durata dell'assorbimento.";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
 "com.loudnate.CarbKit.COBDateLabel" = "a %1$@";

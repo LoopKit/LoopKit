@@ -19,3 +19,4 @@ func LocalizedString(_ key: String, tableName: String? = nil, value: String? = n
         return NSLocalizedString(key, tableName: tableName, bundle: FrameworkBundle.main, comment: comment)
     }
 }
+// This is a useless comment as a carthage test.
