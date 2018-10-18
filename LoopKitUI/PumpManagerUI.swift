@@ -8,14 +8,29 @@
 import UIKit
 import LoopKit
 
+public enum HUDTapAction {
+    case presentViewController(viewController: UIViewController)
+    case openAppURL(appURL: URL)
+}
 
 public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, SingleValueScheduleTableViewControllerSyncSource {
+    typealias PumpManagerHUDViewsRawState = [String: Any]
+    
     static func setupViewController() -> (UIViewController & PumpManagerSetupViewController)
 
     func settingsViewController() -> UIViewController
+    
+    func hudViews() -> [BaseHUDView]
+    
+    func hudTapAction(identifier: HUDViewIdentifier) -> HUDTapAction?
 
     // An image representing the pump configuration
     var smallImage: UIImage? { get }
+    
+    /// The current, serializable state of the status views
+    var hudViewsRawState: PumpManagerHUDViewsRawState { get }
+    
+    static func instantiateHUDViews(rawValue: PumpManagerHUDViewsRawState) -> [BaseHUDView]
 }
 
 
