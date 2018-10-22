@@ -8,11 +8,11 @@
 
 import UIKit
 
-public class LevelHUDView: BaseHUDView {
+open class LevelHUDView: BaseHUDView {
 
     @IBOutlet private weak var levelMaskView: LevelMaskView!
 
-    override public func awakeFromNib() {
+    override open func awakeFromNib() {
         super.awakeFromNib()
 
         updateColor()
@@ -42,7 +42,7 @@ public class LevelHUDView: BaseHUDView {
         }
     }
 
-    internal var level: Double? {
+    public var level: Double? {
         didSet {
             levelMaskView.value = level ?? 1.0
             updateColor()
