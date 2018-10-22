@@ -10,8 +10,6 @@ import HealthKit
 
 public struct PumpManagerStatus: Equatable {
     
-    typealias RawValue = [String: Any]
-
     public let timeZone: TimeZone
     public let device: HKDevice
     public var pumpBatteryChargeRemaining: Double?

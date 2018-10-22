@@ -9,8 +9,8 @@ import UIKit
 import LoopKit
 
 public enum HUDTapAction {
-    case presentViewController(viewController: UIViewController)
-    case openAppURL(appURL: URL)
+    case showViewController(_ viewController: UIViewController)
+    case openAppURL(_ appURL: URL)
 }
 
 public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, SingleValueScheduleTableViewControllerSyncSource {
@@ -20,17 +20,21 @@ public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewContro
 
     func settingsViewController() -> UIViewController
     
-    func hudViews() -> [BaseHUDView]
-    
-    func hudTapAction(identifier: HUDViewIdentifier) -> HUDTapAction?
-
     // An image representing the pump configuration
     var smallImage: UIImage? { get }
     
-    /// The current, serializable state of the status views
+    // Views to be shown in Loop HUD. Implementor should create new instances each time this function is called. Loop will retain strong references
+    // to them for as long as they are in the view hierarchy.  If references to these views are kept, they should be weak, to avoid retain cycles.
+    func createHUDViews() -> [BaseHUDView]
+    
+    // Returns the action that should be taken when the view identified by identifier is tapped
+    func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction?
+    
+    // The current, serializable state of the status views
     var hudViewsRawState: PumpManagerHUDViewsRawState { get }
     
-    static func instantiateHUDViews(rawValue: PumpManagerHUDViewsRawState) -> [BaseHUDView]
+    // Instantiates HUD views from the raw state returned by hudViewsRawState
+    static func createHUDViews(rawValue: PumpManagerHUDViewsRawState) -> [BaseHUDView]
 }
 
 
