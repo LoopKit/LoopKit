@@ -8,8 +8,6 @@
 
 import UIKit
 
-public typealias HUDViewIdentifier = Int
-
 @objc open class BaseHUDView: UIView {
 
     @IBOutlet weak public var caption: UILabel! {
@@ -18,5 +16,12 @@ public typealias HUDViewIdentifier = Int
         }
     }
     
-    public let hudViewIdentifier = 0
+    public var stateColors: StateColorPalette? {
+        didSet {
+            stateColorsDidUpdate()
+        }
+    }
+    
+    open func stateColorsDidUpdate() {
+    }
 }

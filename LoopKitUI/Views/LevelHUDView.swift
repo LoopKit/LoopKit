@@ -20,12 +20,11 @@ open class LevelHUDView: BaseHUDView {
         accessibilityValue = LocalizedString("Unknown", comment: "Accessibility value for an unknown value")
     }
 
-    public var stateColors: StateColorPalette? {
-        didSet {
-            updateColor()
-        }
+    override open func stateColorsDidUpdate() {
+        super.stateColorsDidUpdate()
+        updateColor()
     }
-
+        
     private func updateColor() {
         levelMaskView.tintColor = nil
 
