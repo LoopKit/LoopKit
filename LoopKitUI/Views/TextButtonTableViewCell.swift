@@ -7,7 +7,7 @@
 
 import UIKit
 
-open class TextButtonTableViewCell: UITableViewCell {
+open class TextButtonTableViewCell: LoadingTableViewCell {
 
     override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -24,18 +24,6 @@ open class TextButtonTableViewCell: UITableViewCell {
         didSet {
             tintAdjustmentMode = isEnabled ? .normal : .dimmed
             selectionStyle = isEnabled ? .default : .none
-        }
-    }
-
-    public var isLoading = false {
-        didSet {
-            if isLoading {
-                let indicator = UIActivityIndicatorView(style: .gray)
-                accessoryView = indicator
-                indicator.startAnimating()
-            } else {
-                accessoryView = nil
-            }
         }
     }
 
