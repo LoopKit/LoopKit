@@ -13,8 +13,28 @@ public enum HUDTapAction {
     case openAppURL(_ appURL: URL)
 }
 
+public protocol HUDProviderDelegate: class {
+    func newHUDViewsAvailable(_ views: [BaseHUDView])
+}
+
+public protocol HUDProvider {
+    var managerIdentifier: String { get }
+    
+    var delegate: HUDProviderDelegate? { set get }
+    
+    typealias HUDViewsRawState = [String: Any]
+
+    // Creates the initial views to be shown in Loop HUD.
+    func createHUDViews() -> [BaseHUDView]
+    
+    // Returns the action that should be taken when the view is tapped
+    func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction?
+    
+    // The current, serializable state of the HUD views
+    var hudViewsRawState: HUDViewsRawState { get }
+}
+
 public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, SingleValueScheduleTableViewControllerSyncSource {
-    typealias PumpManagerHUDViewsRawState = [String: Any]
     
     static func setupViewController() -> (UIViewController & PumpManagerSetupViewController)
 
@@ -23,18 +43,11 @@ public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewContro
     // An image representing the pump configuration
     var smallImage: UIImage? { get }
     
-    // Views to be shown in Loop HUD. Implementor should create new instances each time this function is called. Loop will retain strong references
-    // to them for as long as they are in the view hierarchy.  If references to these views are kept, they should be weak, to avoid retain cycles.
-    func createHUDViews() -> [BaseHUDView]
-    
-    // Returns the action that should be taken when the view identified by identifier is tapped
-    func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction?
-    
-    // The current, serializable state of the status views
-    var hudViewsRawState: PumpManagerHUDViewsRawState { get }
+    // Returns a class that can provide HUD views
+    func hudProvider() -> HUDProvider?
     
     // Instantiates HUD views from the raw state returned by hudViewsRawState
-    static func createHUDViews(rawValue: PumpManagerHUDViewsRawState) -> [BaseHUDView]
+    static func createHUDViews(rawValue: HUDProvider.HUDViewsRawState) -> [BaseHUDView]
 }
 
 

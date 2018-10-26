@@ -9,6 +9,10 @@
 import UIKit
 
 public final class ReservoirVolumeHUDView: LevelHUDView, NibLoadable {
+    
+    override public var orderPriority: HUDViewOrderPriority {
+        return 4
+    }
 
     @IBOutlet private weak var volumeLabel: UILabel!
     

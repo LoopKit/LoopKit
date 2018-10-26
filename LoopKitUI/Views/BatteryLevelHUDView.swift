@@ -10,7 +10,11 @@ import UIKit
 
 
 public final class BatteryLevelHUDView: LevelHUDView, NibLoadable {
-    
+
+    override public var orderPriority: HUDViewOrderPriority {
+        return 5
+    }
+
     public class func instantiate() -> BatteryLevelHUDView {
         return nib().instantiate(withOwner: nil, options: nil)[0] as! BatteryLevelHUDView
     }

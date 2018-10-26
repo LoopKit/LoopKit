@@ -8,6 +8,8 @@
 
 import UIKit
 
+public typealias HUDViewOrderPriority = Int
+
 @objc open class BaseHUDView: UIView {
 
     @IBOutlet weak public var caption: UILabel! {
@@ -23,5 +25,11 @@ import UIKit
     }
     
     open func stateColorsDidUpdate() {
+    }
+    
+    open var orderPriority: HUDViewOrderPriority {
+        get {
+            return 10
+        }
     }
 }
