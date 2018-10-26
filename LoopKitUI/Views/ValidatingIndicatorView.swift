@@ -13,13 +13,13 @@ private let Margin: CGFloat = 8
 
 final class ValidatingIndicatorView: UIView {
 
-    let indicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    let indicatorView = UIActivityIndicatorView(style: .gray)
 
     let label = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        label.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.headline)
+        label.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)
         label.text = LocalizedString("Verifying", comment: "Label indicating validation is occurring")
         label.sizeToFit()
 

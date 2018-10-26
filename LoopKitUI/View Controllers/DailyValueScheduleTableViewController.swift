@@ -48,7 +48,7 @@ open class DailyValueScheduleTableViewController: UITableViewController, DatePic
     open override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
 
         if !isReadOnly {
@@ -57,16 +57,16 @@ open class DailyValueScheduleTableViewController: UITableViewController, DatePic
 
         tableView.keyboardDismissMode = .onDrag
 
-        keyboardWillShowNotificationObserver = NotificationCenter.default.addObserver(forName: .UIKeyboardWillShow, object: nil, queue: OperationQueue.main, using: { [weak self] (note) -> Void in
+        keyboardWillShowNotificationObserver = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: OperationQueue.main, using: { [weak self] (note) -> Void in
             guard let strongSelf = self else {
                 return
             }
 
-            guard note.userInfo?[UIKeyboardIsLocalUserInfoKey] as? Bool == true else {
+            guard note.userInfo?[UIResponder.keyboardIsLocalUserInfoKey] as? Bool == true else {
                 return
             }
 
-            let animated = note.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Double ?? 0 > 0
+            let animated = note.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double ?? 0 > 0
 
             if let indexPath = strongSelf.tableView.indexPathForSelectedRow {
                 strongSelf.tableView.beginUpdates()
@@ -186,7 +186,7 @@ open class DailyValueScheduleTableViewController: UITableViewController, DatePic
         fatalError("Subclasses must override \(#function)")
     }
 
-    open override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    open override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Updates the table view state. Subclasses should update their data model before calling super
 

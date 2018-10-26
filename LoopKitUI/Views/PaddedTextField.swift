@@ -21,15 +21,15 @@ class PaddedTextField: UITextField {
     }
 
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, textInsets)
+        return bounds.inset(by: textInsets)
     }
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, textInsets)
+        return bounds.inset(by: textInsets)
     }
 
     override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, textInsets)
+        return bounds.inset(by: textInsets)
     }
 
 }
