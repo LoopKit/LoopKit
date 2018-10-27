@@ -9,7 +9,7 @@ import UIKit
 
 public class TextButtonTableViewCell: UITableViewCell {
 
-    override public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
 
         textLabel?.tintAdjustmentMode = .automatic
@@ -30,7 +30,7 @@ public class TextButtonTableViewCell: UITableViewCell {
     public var isLoading = false {
         didSet {
             if isLoading {
-                let indicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+                let indicator = UIActivityIndicatorView(style: .gray)
                 accessoryView = indicator
                 indicator.startAnimating()
             } else {

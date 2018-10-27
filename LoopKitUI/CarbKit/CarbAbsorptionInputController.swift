@@ -65,7 +65,7 @@ class CarbAbsorptionInputController: UIInputViewController, UICollectionViewData
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: kind == UICollectionElementKindSectionHeader ? CarbAbsorptionInputHeaderView.className : "Footer", for: indexPath)
+        let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: kind == UICollectionView.elementKindSectionHeader ? CarbAbsorptionInputHeaderView.className : "Footer", for: indexPath)
 
         if let cell = cell as? CarbAbsorptionInputHeaderView {
             cell.titleLabel.text = food.sections[indexPath.section].title.localizedUppercase

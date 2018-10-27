@@ -98,7 +98,7 @@ public final class CarbEntryTableViewController: UITableViewController {
         )
         updateTimer = timer
 
-        RunLoop.current.add(timer, forMode: RunLoopMode.defaultRunLoopMode)
+        RunLoop.current.add(timer, forMode: RunLoop.Mode.default)
     }
 
     public override func viewWillDisappear(_ animated: Bool) {
@@ -261,7 +261,7 @@ public final class CarbEntryTableViewController: UITableViewController {
         return carbEntries[indexPath.row].createdByCurrentApp
     }
 
-    public override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    public override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete, case .display = state, let carbStore = carbStore {
             let entry = carbEntries.remove(at: indexPath.row)
             carbStore.deleteCarbEntry(entry) { (result) -> Void in
