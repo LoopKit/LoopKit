@@ -92,6 +92,13 @@ extension DoseEntry {
 
     /// The rate of delivery, net the basal rate scheduled during that time, which can be used to compute insulin on-board and glucose effects
     public var netBasalUnitsPerHour: Double {
+        switch type {
+        case .bolus:
+            return self.unitsPerHour
+        default:
+            break;
+        }
+        
         guard let basalRate = scheduledBasalRate else {
             return 0
         }
