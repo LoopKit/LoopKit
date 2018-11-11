@@ -14,7 +14,6 @@ public enum PumpManagerResult<T> {
     case failure(Error)
 }
 
-
 public protocol PumpManagerDelegate: class {
     func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager)
 
@@ -49,6 +48,9 @@ public protocol PumpManagerDelegate: class {
 
 
 public protocol PumpManager: DeviceManager {
+    // Rounds units to the nearest delivery increment
+    static func roundToDeliveryIncrement(_ units: Double) -> Double
+    
     var pumpManagerDelegate: PumpManagerDelegate? { get set }
 
     var pumpRecordsBasalProfileStartEvents: Bool { get }

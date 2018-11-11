@@ -859,7 +859,7 @@ extension DoseStore {
         }
     }
 
-    /// Fetches a timeline of doses, filling in gaps between delivery changes with the scheduled basal delivery
+    /// Fetches a ` of doses, filling in gaps between delivery changes with the scheduled basal delivery
     /// if the pump doesn't already handle this
     ///
     /// - Parameters:
