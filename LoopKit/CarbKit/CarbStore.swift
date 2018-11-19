@@ -60,7 +60,7 @@ extension NSNotification.Name {
 
  * Short-term persistant cache, stored in Core Data, used to ensure access if the app is suspended and re-launched while the Health database is protected
  ```
- 0    [2 ✕ DefaultAbsorptionTimes.slow]
+ 0       [cacheLength]
  |––––––––––––|
  ```
  * HealthKit data, managed by the current application and persisted indefinitely
@@ -126,12 +126,14 @@ public final class CarbStore: HealthKitSampleStore {
     /// The factor by which the entered absorption time can be extended to accomodate slower-than-expected absorption
     public let absorptionTimeOverrun: Double
 
-    /// The longest expected absorption time interval for carbohydrates. Defaults to 8 hours.
-    public var maximumAbsorptionTimeInterval: TimeInterval {
-        return defaultAbsorptionTimes.slow * 2
-    }
+    /// The interval of carb data to keep in cache
+    public let cacheLength: TimeInterval
 
     public let cacheStore: PersistenceController
+
+    /// The sync version used for new samples written to HealthKit
+    /// Choose a lower or higher sync version if the same sample might be written twice (e.g. from an extension and from an app) for deterministic conflict resolution
+    public let syncVersion: Int
 
     public weak var delegate: CarbStoreDelegate?
 
@@ -150,9 +152,11 @@ public final class CarbStore: HealthKitSampleStore {
         healthStore: HKHealthStore,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
+        cacheLength: TimeInterval = defaultAbsorptionTimes.slow * 2,
         defaultAbsorptionTimes: DefaultAbsorptionTimes = defaultAbsorptionTimes,
         carbRatioSchedule: CarbRatioSchedule? = nil,
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
+        syncVersion: Int = 1,
         absorptionTimeOverrun: Double = 1.5,
         calculationDelta: TimeInterval = 5 /* minutes */ * 60,
         effectDelay: TimeInterval = 10 /* minutes */ * 60
@@ -161,11 +165,13 @@ public final class CarbStore: HealthKitSampleStore {
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
         self.lockedCarbRatioSchedule = Locked(carbRatioSchedule)
         self.lockedInsulinSensitivitySchedule = Locked(insulinSensitivitySchedule)
+        self.syncVersion = syncVersion
         self.absorptionTimeOverrun = absorptionTimeOverrun
         self.delta = calculationDelta
         self.delay = effectDelay
+        self.cacheLength = max(cacheLength, defaultAbsorptionTimes.slow * 2)
 
-        super.init(healthStore: healthStore, type: carbType, observationStart: Date(timeIntervalSinceNow: -defaultAbsorptionTimes.slow * 2), observationEnabled: observationEnabled)
+        super.init(healthStore: healthStore, type: carbType, observationStart: Date(timeIntervalSinceNow: -cacheLength), observationEnabled: observationEnabled)
 
         cacheStore.onReady { (error) in
             guard error == nil else { return }
@@ -265,6 +271,16 @@ extension CarbStore {
     ///   - completion: A closure called once the samples have been retrieved
     ///   - samples: An array of samples, in chronological order by startDate
     public func getCachedCarbSamples(start: Date, end: Date? = nil, completion: @escaping (_ samples: [StoredCarbEntry]) -> Void) {
+        #if os(iOS)
+        // If we're within our cache duration, skip the HealthKit query
+        guard start <= earliestCacheDate else {
+            self.queue.async {
+                completion(self.getCachedCarbEntries().filterDateRange(start, end))
+            }
+            return
+        }
+        #endif
+
         getCarbSamples(start: start, end: end) { (result) in
             switch result {
             case .success(let samples):
@@ -334,7 +350,7 @@ extension CarbStore {
 // MARK: - Modification
 extension CarbStore {
     public func addCarbEntry(_ entry: NewCarbEntry, completion: @escaping (_ result: CarbStoreResult<StoredCarbEntry>) -> Void) {
-        let sample = entry.createSample()
+        let sample = entry.createSample(from: nil, syncVersion: syncVersion)
         let stored = StoredCarbEntry(sample: sample, createdByCurrentApp: true)
 
         healthStore.save(sample) { (completed, error) -> Void in
@@ -360,7 +376,7 @@ extension CarbStore {
             return
         }
 
-        let sample = newEntry.createSample(from: oldEntry)
+        let sample = newEntry.createSample(from: oldEntry, syncVersion: syncVersion)
         let stored = StoredCarbEntry(sample: sample, createdByCurrentApp: true)
 
         healthStore.save(sample) { (completed, error) -> Void in
@@ -435,6 +451,10 @@ extension NSManagedObjectContext {
 
 // MARK: - Cache management
 extension CarbStore {
+    private var earliestCacheDate: Date {
+        return Date(timeIntervalSinceNow: -cacheLength)
+    }
+
     @discardableResult
     private func addCachedObject(for sample: HKQuantitySample) -> Bool {
         return addCachedObject(for: StoredCarbEntry(sample: sample))
@@ -674,8 +694,9 @@ extension CarbStore {
 
 // MARK: - Math
 extension CarbStore {
-    private var earliestCacheDate: Date {
-        return Date(timeIntervalSinceNow: -maximumAbsorptionTimeInterval)
+    /// The longest expected absorption time interval for carbohydrates. Defaults to 8 hours.
+    public var maximumAbsorptionTimeInterval: TimeInterval {
+        return defaultAbsorptionTimes.slow * 2
     }
 
     /// Retrieves the single carbs on-board value occuring just prior or equal to the specified date

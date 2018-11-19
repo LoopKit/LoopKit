@@ -164,7 +164,7 @@ extension CarbEntry {
     }
 }
 
-extension Collection where Iterator.Element: CarbEntry {
+extension Collection where Element: CarbEntry {
     fileprivate func simulationDateRange(
         from start: Date? = nil,
         to end: Date? = nil,
@@ -608,6 +608,7 @@ extension Collection where Element: CarbEntry {
         delay: TimeInterval
     ) -> [CarbStatus<Element>] {
         guard count > 0 else {
+            // TODO: Apply unmatched effects to meal prediction
             return []
         }
 
@@ -641,23 +642,18 @@ extension Collection where Element: CarbEntry {
                 continue
             }
 
-            // Only consider effects on or after the carb entry starts (ignore delay)
-            guard dxEffect.startDate >= builders.first!.entry.startDate else {
-                continue
-            }
-
             // Apply effect to all active entries
-
-            // Ignore velocities < 0 when estimating carb absorption.
-            // These are most likely the result of insulin absorption increases such as
-            // during activity
-            var effectValue = Swift.max(0, dxEffect.effect.quantity.doubleValue(for: glucoseUnit))
 
             // Select only the entries whose dates overlap the current date interval.
             // These are not necessarily contiguous as maxEndDate varies between entries
             let activeBuilders = builders.filter { (builder) -> Bool in
                 return dxEffect.startDate < builder.maxEndDate && dxEffect.startDate >= builder.entry.startDate
             }
+
+            // Ignore velocities < 0 when estimating carb absorption.
+            // These are most likely the result of insulin absorption increases such as
+            // during activity
+            var effectValue = Swift.max(0, dxEffect.effect.quantity.doubleValue(for: glucoseUnit))
 
             // Sum the minimum absorption rates of each active entry to determine how to split the active effects
             var totalRate = activeBuilders.reduce(0) { (totalRate, builder) -> Double in
@@ -676,6 +672,11 @@ extension Collection where Element: CarbEntry {
                 if effectValue > Double(Float.ulpOfOne) && builder === activeBuilders.last! {
                     builder.addNextEffect(effectValue, start: dxEffect.startDate, end: dxEffect.endDate)
                 }
+            }
+
+            // We have remaining effect and no activeBuilders (otherwise we would have applied the effect to the last one)
+            if effectValue > Double(Float.ulpOfOne) {
+                // TODO: Track "phantom meals"
             }
         }
 

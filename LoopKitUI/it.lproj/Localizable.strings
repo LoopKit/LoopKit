@@ -1,11 +1,20 @@
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Tempo di assorbimento";
 
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Aggiungi Account";
+
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Sei sicuro di voler eliminare tutti gli inserimenti storiche?";
 
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Sei sicuro di voler eliminare tutti  i valori del serbato?";
+
+/* The title of the button to add the credentials for a service */
+"authentication-button-add" = "Aggiungi Account";
+
+/* The title of the button to remove the credentials for a service */
+"authentication-button-delete" = "Cancella Account";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Cancella";
@@ -39,6 +48,9 @@
 
 /* Title of the carb entry date picker cell */
 "Date" = "Data";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Cancella Account";
 
 /* Button title to delete all objects */
 "Delete All" = "Elimina tutto";
@@ -88,11 +100,17 @@
 /* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
 "quantity-and-unit-tight" = "%1$@%2$@";
 
+/* The default placeholder string for a credential */
+"Required" = "Necessario";
+
 /* Section title for slow absorbing food */
 "Slow" = "Lento";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Imposta";
+
+/* The default placeholder string for a credential */
+"text-placeholder-required" = "Necessario";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Il tempo di assorbimento massimo e %@";
@@ -111,6 +129,9 @@
 
 /* The default title to use when an entry has none */
 "Unknown" = "Sconosciuto";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Sto verificando";
 
 /* Title of an alert containing a validation warning */
 "Warning" = "Avvertimento";

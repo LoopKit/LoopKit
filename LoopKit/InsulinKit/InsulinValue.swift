@@ -9,7 +9,7 @@
 import Foundation
 
 
-public struct InsulinValue: TimelineValue {
+public struct InsulinValue: TimelineValue, Equatable {
     public let startDate: Date
     public let value: Double
 

@@ -1,11 +1,20 @@
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Absorptie tijd";
 
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Voeg account toe";
+
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Weet je zeker dat je de gehele pompgeschiedenis wilt verwijderen?";
 
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Weet je zeker dat je alle waardes van het reservoir wilt verwijderen?";
+
+/* The title of the button to add the credentials for a service */
+"authentication-button-add" = "Voeg account toe";
+
+/* The title of the button to remove the credentials for a service */
+"authentication-button-delete" = "Verwijder account";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Annuleer";
@@ -39,6 +48,9 @@
 
 /* Title of the carb entry date picker cell */
 "Date" = "Datum";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Verwijder account";
 
 /* Button title to delete all objects */
 "Delete All" = "Verwijder alles";
@@ -88,11 +100,17 @@
 /* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
 "quantity-and-unit-tight" = "%1$@%2$@";
 
+/* The default placeholder string for a credential */
+"Required" = "Vereist";
+
 /* Section title for slow absorbing food */
 "Slow" = "Langzaam";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Instellen…";
+
+/* The default placeholder string for a credential */
+"text-placeholder-required" = "Vereist";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "De maximum absorptietijd is %@";
@@ -111,6 +129,9 @@
 
 /* The default title to use when an entry has none */
 "Unknown" = "Onbekend";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Verifiëren";
 
 /* Title of an alert containing a validation warning */
 "Warning" = "Waarschuwing";

@@ -190,7 +190,18 @@ extension GlucoseStore {
             return
         }
 
-        let glucose = values.map { $0.quantitySample }
+        var glucose: [HKQuantitySample] = []
+
+        cacheStore.managedObjectContext.performAndWait {
+            glucose = values.compactMap {
+                guard self.cacheStore.managedObjectContext.cachedGlucoseObjectsWithSyncIdentifier($0.syncIdentifier, fetchLimit: 1).count == 0 else {
+                    log.default("Skipping adding dose due to existing cached syncIdentifier: %{public}@", $0.syncIdentifier)
+                    return nil
+                }
+
+                return $0.quantitySample
+            }
+        }
 
         healthStore.save(glucose) { (completed, error) in
             self.dataAccessQueue.async {
@@ -241,15 +252,26 @@ extension GlucoseStore {
     ///   - start: The earliest date of values to retrieve
     ///   - end: The latest date of values to retrieve, if provided
     ///   - completion: A closure called once the values have been retrieved
-    ///   - values: An array of glucose values, in chronological order by startDate
+    ///   - samples: An array of glucose values, in chronological order by startDate
     public func getCachedGlucoseSamples(start: Date, end: Date? = nil, completion: @escaping (_ samples: [StoredGlucoseSample]) -> Void) {
+        #if os(iOS)
+        // If we're within our cache duration, skip the HealthKit query
+        guard start <= earliestCacheDate else {
+            self.dataAccessQueue.async {
+                completion(self.getCachedGlucoseObjects(start: start, end: end))
+            }
+            return
+        }
+        #endif
+
         getGlucoseSamples(start: start, end: end) { (result) in
             switch result {
             case .success(let samples):
                 completion(samples)
             case .failure:
+                // Expected when database is inaccessible
                 self.dataAccessQueue.async {
-                    completion(self.getCachedGlucoseSamples().filterDateRange(start, end))
+                    completion(self.getCachedGlucoseObjects(start: start, end: end))
                 }
             }
         }
@@ -281,18 +303,6 @@ extension GlucoseStore {
 
 
 // MARK: - Core Data
-extension NSManagedObjectContext {
-    fileprivate func cachedGlucoseObjectsWithUUID(_ uuid: UUID, fetchLimit: Int? = nil) -> [CachedGlucoseObject] {
-        let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
-        if let limit = fetchLimit {
-            request.fetchLimit = limit
-        }
-        request.predicate = NSPredicate(format: "uuid == %@", uuid as NSUUID)
-
-        return (try? fetch(request)) ?? []
-    }
-}
-
 extension GlucoseStore {
     @discardableResult
     private func addCachedObjects(for samples: [HKQuantitySample]) -> Bool {
@@ -308,7 +318,6 @@ extension GlucoseStore {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
 
         var created = false
-
         cacheStore.managedObjectContext.performAndWait {
             for sample in samples {
                 guard
@@ -331,18 +340,32 @@ extension GlucoseStore {
         return created
     }
 
+    private func getCachedGlucoseObjects(start: Date, end: Date? = nil) -> [StoredGlucoseSample] {
+        let predicate: NSPredicate
+
+        if let end = end {
+            predicate = NSPredicate(format: "startDate >= %@ AND startDate <= %@", start as NSDate, end as NSDate)
+        } else {
+            predicate = NSPredicate(format: "startDate >= %@", start as NSDate)
+        }
+
+        return getCachedGlucoseObjects(matching: predicate)
+    }
+
     /// Fetches glucose samples from the cache that match the given predicate
     ///
-    /// - Parameter predicate: The predicate to apply to the objects
-    /// - Returns: An array of glucose samples, in chronological order by startDate
-    private func getCachedGlucoseSamples(matching predicate: NSPredicate? = nil) -> [StoredGlucoseSample] {
+    /// - Parameters:
+    ///   - predicate: The predicate to apply to the objects
+    ///   - isChronological: The sort order of the objects by startDate
+    /// - Returns: An array of glucose samples, in order by startDate
+    private func getCachedGlucoseObjects(matching predicate: NSPredicate? = nil, isChronological: Bool = true) -> [StoredGlucoseSample] {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
         var samples: [StoredGlucoseSample] = []
 
         cacheStore.managedObjectContext.performAndWait {
             let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
             request.predicate = predicate
-            request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+            request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: isChronological)]
 
             do {
                 let objects = try self.cacheStore.managedObjectContext.fetch(request)
@@ -403,25 +426,9 @@ extension GlucoseStore {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
 
         cacheStore.managedObjectContext.performAndWait {
-            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = CachedGlucoseObject.fetchRequest()
-            fetchRequest.predicate = predicate
-
-            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-            deleteRequest.resultType = .resultTypeObjectIDs
-
             do {
-                let result = try cacheStore.managedObjectContext.execute(deleteRequest)
-                if  let deleteResult = result as? NSBatchDeleteResult,
-                    let objectIDs = deleteResult.result as? [NSManagedObjectID]
-                {
-                    self.log.info("Deleted %d CachedGlucoseObjects", objectIDs.count)
-
-                    if objectIDs.count > 0 {
-                        let changes = [NSDeletedObjectsKey: objectIDs]
-                        NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [cacheStore.managedObjectContext])
-                        cacheStore.managedObjectContext.refreshAllObjects()
-                    }
-                }
+                let count = try cacheStore.managedObjectContext.purgeObjects(of: CachedGlucoseObject.self, matching: predicate)
+                self.log.default("Deleted %d CachedGlucoseObjects", count)
             } catch let error {
                 self.log.error("Unable to purge CachedGlucoseObjects: %@", String(describing: error))
             }
@@ -523,7 +530,7 @@ extension GlucoseStore {
                 "### cachedGlucoseSamples",
             ]
 
-            for sample in self.getCachedGlucoseSamples() {
+            for sample in self.getCachedGlucoseObjects() {
                 report.append(String(describing: sample))
             }
 

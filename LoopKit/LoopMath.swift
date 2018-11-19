@@ -18,7 +18,7 @@ public enum LoopMath {
         duration: TimeInterval,
         delay: TimeInterval = 0,
         delta: TimeInterval
-    ) -> (start: Date, end: Date)? where T.Iterator.Element: TimelineValue {
+    ) -> (start: Date, end: Date)? where T.Element: TimelineValue {
         guard samples.count > 0 else {
             return nil
         }
@@ -176,5 +176,103 @@ extension GlucoseValue {
         } while date < endDate
 
         return values
+    }
+}
+
+
+extension BidirectionalCollection where Element == GlucoseEffect {
+
+    /// Sums adjacent glucose effects into buckets of the specified duration.
+    ///
+    /// Requires the receiver to be sorted chronologically by endDate
+    ///
+    /// - Parameter duration: The duration of each resulting summed element
+    /// - Returns: An array of summed effects
+    public func combinedSums(of duration: TimeInterval) -> [GlucoseChange] {
+        var sums = [GlucoseChange]()
+        sums.reserveCapacity(self.count)
+        var lastValidIndex = sums.startIndex
+
+        for effect in reversed() {
+            sums.append(GlucoseChange(startDate: effect.startDate, endDate: effect.endDate, quantity: effect.quantity))
+
+            for sumsIndex in lastValidIndex..<(sums.endIndex - 1) {
+                guard sums[sumsIndex].endDate <= effect.endDate.addingTimeInterval(duration) else {
+                    lastValidIndex += 1
+                    continue
+                }
+
+                sums[sumsIndex].append(effect)
+            }
+        }
+
+        return sums.reversed()
+    }
+}
+
+
+extension BidirectionalCollection where Element == GlucoseEffectVelocity {
+
+    /// Subtracts an array of glucose effects with uniform intervals and no gaps from the collection of effect changes, which may not have uniform intervals.
+    ///
+    /// - Parameters:
+    ///   - otherEffects: The array of glucose effects to subtract
+    ///   - effectInterval: The time interval between elements in the otherEffects array
+    /// - Returns: A resulting array of glucose effects
+    public func subtracting(_ otherEffects: [GlucoseEffect], withUniformInterval effectInterval: TimeInterval) -> [GlucoseEffect] {
+        // Trim both collections to match
+        let otherEffects = otherEffects.filterDateRange(self.first?.endDate, nil)
+        let effects = self.filterDateRange(otherEffects.first?.startDate, nil)
+
+        var subtracted: [GlucoseEffect] = []
+
+        var previousOtherEffectValue = otherEffects.first?.quantity.doubleValue(for: .milligramsPerDeciliter) ?? 0 // mg/dL
+        var effectIndex = effects.startIndex
+
+        for otherEffect in otherEffects.dropFirst() {
+            guard effectIndex < effects.endIndex else {
+                break
+            }
+
+            let otherEffectValue = otherEffect.quantity.doubleValue(for: .milligramsPerDeciliter)
+            let otherEffectChange = otherEffectValue - previousOtherEffectValue
+            previousOtherEffectValue = otherEffectValue
+
+            let effect = effects[effectIndex]
+
+            // Our effect array may have gaps, or have longer segments than 5 minutes.
+            guard effect.endDate <= otherEffect.endDate else {
+                continue  // Move on to the next other effect
+            }
+
+            effectIndex += 1
+
+            let effectValue = effect.quantity.doubleValue(for: GlucoseEffectVelocity.perSecondUnit) // mg/dL/s
+            let effectValueMatchingOtherEffectInterval = effectValue * effectInterval // mg/dL
+
+            subtracted.append(GlucoseEffect(
+                startDate: effect.endDate,
+                quantity: HKQuantity(
+                    unit: .milligramsPerDeciliter,
+                    doubleValue: effectValueMatchingOtherEffectInterval - otherEffectChange
+                )
+            ))
+        }
+
+        // If we have run out of otherEffect items, we assume the otherEffectChange remains zero
+        for effect in effects[effectIndex..<effects.endIndex] {
+            let effectValue = effect.quantity.doubleValue(for: GlucoseEffectVelocity.perSecondUnit) // mg/dL/s
+            let effectValueMatchingOtherEffectInterval = effectValue * effectInterval // mg/dL
+
+            subtracted.append(GlucoseEffect(
+                startDate: effect.endDate,
+                quantity: HKQuantity(
+                    unit: .milligramsPerDeciliter,
+                    doubleValue: effectValueMatchingOtherEffectInterval
+                )
+            ))
+        }
+
+        return subtracted
     }
 }

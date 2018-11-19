@@ -1,11 +1,20 @@
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Absorption Time";
 
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Добавить пользователя";
+
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Are you sure you want to delete all history entries?";
 
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Are you sure you want to delete all reservoir values?";
+
+/* The title of the button to add the credentials for a service */
+"authentication-button-add" = "Add Account";
+
+/* The title of the button to remove the credentials for a service */
+"authentication-button-delete" = "Delete Account";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Cancel";
@@ -39,6 +48,9 @@
 
 /* Title of the carb entry date picker cell */
 "Date" = "Date";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Delete Account";
 
 /* Button title to delete all objects */
 "Delete All" = "Delete All";
@@ -88,11 +100,17 @@
 /* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
 "quantity-and-unit-tight" = "%1$@%2$@";
 
+/* The default placeholder string for a credential */
+"Required" = "Required";
+
 /* Section title for slow absorbing food */
 "Slow" = "Slow";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Tap to set";
+
+/* The default placeholder string for a credential */
+"text-placeholder-required" = "Required";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "The maximum absorption time is %@";
@@ -111,6 +129,9 @@
 
 /* The default title to use when an entry has none */
 "Unknown" = "Unknown";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Verifying";
 
 /* Title of an alert containing a validation warning */
 "Warning" = "Warning";

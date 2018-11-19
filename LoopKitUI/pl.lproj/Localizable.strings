@@ -7,6 +7,12 @@
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Czy jesteś pewien, że chcesz usunąć wszystkie wartości zbiornika?";
 
+/* The title of the button to add the credentials for a service */
+"authentication-button-add" = "Dodaj konto";
+
+/* The title of the button to remove the credentials for a service */
+"authentication-button-delete" = "Usuń konto";
+
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Anuluj";
 
@@ -88,11 +94,15 @@
 /* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
 "quantity-and-unit-tight" = "%1$@%2$@";
 
+
 /* Section title for slow absorbing food */
 "Slow" = "Wolna";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Kliknij, aby ustawić";
+
+/* The default placeholder string for a credential */
+"text-placeholder-required" = "Wymagane";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Maksymalny czas absorpcji wynosi %@";
@@ -111,6 +121,9 @@
 
 /* The default title to use when an entry has none */
 "Unknown" = "Nieznany";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Weryfikuję";
 
 /* Title of an alert containing a validation warning */
 "Warning" = "Ostrzeżenie";
