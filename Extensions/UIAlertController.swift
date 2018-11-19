@@ -1,14 +1,14 @@
 //
-//  LocalizedErrorAlertController.swift
-//  LoopKitUI
+//  UIAlertController.swift
+//  LoopKit Example
 //
-//  Created by Pete Schwamb on 11/16/18.
+//  Created by Pete Schwamb on 11/19/18.
 //  Copyright © 2018 LoopKit Authors. All rights reserved.
 //
 
 import UIKit
 
-public class LocalizedErrorAlertController: UIAlertController {
+public extension UIAlertController {
     public convenience init(title: String, error: Error) {
         
         let message: String
