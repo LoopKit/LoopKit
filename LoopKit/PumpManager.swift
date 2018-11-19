@@ -14,12 +14,14 @@ public enum PumpManagerResult<T> {
     case failure(Error)
 }
 
-public protocol PumpManagerDelegate: class {
+public protocol PumpManagerStatusObserver: class {
+    func pumpManager(_ pumpManager: PumpManager, didUpdateStatus status: PumpManagerStatus)
+}
+
+public protocol PumpManagerDelegate: PumpManagerStatusObserver {
     func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager)
 
     func pumpManagerShouldProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool
-
-    func pumpManager(_ pumpManager: PumpManager, didUpdateStatus status: PumpManagerStatus)
 
     /// Informs the delegate that the manager is deactivating and should be deleted
     func pumpManagerWillDeactivate(_ pumpManager: PumpManager)
@@ -58,6 +60,10 @@ public protocol PumpManager: DeviceManager {
     var pumpReservoirCapacity: Double { get }
     
     var status: PumpManagerStatus { get }
+    
+    func addStatusObserver(_ observer: PumpManagerStatusObserver)
+    
+    func removeStatusObserver(_ observer: PumpManagerStatusObserver)
     
     /// If the pump data (reservoir/events) is out of date, it will be fetched, and if successful, trigger a loop
     func assertCurrentPumpData()

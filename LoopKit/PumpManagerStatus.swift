@@ -10,23 +10,37 @@ import HealthKit
 
 public struct PumpManagerStatus: Equatable {
     
+    public enum SuspendState: Equatable {
+        case none
+        case suspending
+        case suspended
+        case resuming
+    }
+    
+    public enum BolusState: Equatable {
+        case none
+        case initiatingBolus
+        case bolusing(progress: Float?)
+        case cancelingBolus
+    }
+    
     public let timeZone: TimeZone
     public let device: HKDevice
     public var pumpBatteryChargeRemaining: Double?
-    public var isSuspended: Bool
-    public var isBolusing: Bool
+    public var suspendState: SuspendState
+    public var bolusState: BolusState
 
     public init(
         timeZone: TimeZone,
         device: HKDevice,
         pumpBatteryChargeRemaining: Double?,
-        isSuspended: Bool,
-        isBolusing: Bool
+        suspendState: SuspendState,
+        bolusState: BolusState
     ) {
         self.timeZone = timeZone
         self.device = device
         self.pumpBatteryChargeRemaining = pumpBatteryChargeRemaining
-        self.isSuspended = isSuspended
-        self.isBolusing = isBolusing
+        self.suspendState = suspendState
+        self.bolusState = bolusState
     }
 }
