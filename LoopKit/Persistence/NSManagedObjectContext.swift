@@ -18,7 +18,7 @@ extension NSManagedObjectContext {
     ///   - predicate: The predicate to match
     /// - Returns: The number of deleted objects
     /// - Throws: NSBatchDeleteRequest exeuction errors
-    internal func purgeObjects<T: NSManagedObject>(of type: T.Type, matching predicate: NSPredicate) throws -> Int {
+    internal func purgeObjects<T: NSManagedObject>(of type: T.Type, matching predicate: NSPredicate? = nil) throws -> Int {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = T.fetchRequest()
         fetchRequest.predicate = predicate
 
