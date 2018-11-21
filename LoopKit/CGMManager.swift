@@ -27,6 +27,12 @@ public protocol CGMManagerDelegate: class {
     /// - Returns: The date data occuring on or after which should be kept
     func startDateToFilterNewData(for manager: CGMManager) -> Date?
 
+    /// Asks the delegate for the CGM data store
+    ///
+    /// - Parameter manager: The manager instance
+    /// - Returns: The CGM data store for the manager
+    func dataStore(for manager: CGMManager) -> CGMDataStore
+
     /// Informs the delegate that the device has updated with a new result
     ///
     /// - Parameters:
@@ -38,6 +44,12 @@ public protocol CGMManagerDelegate: class {
     ///
     /// - Parameter manager: The manager instance
     func cgmManagerWantsDeletion(_ manager: CGMManager)
+
+
+    /// Informs the delegate that the manager has updated its state and should be persisted.
+    ///
+    /// - Parameter manager: The manager instance
+    func cgmManagerDidUpdateState(_ manager: CGMManager)
 }
 
 

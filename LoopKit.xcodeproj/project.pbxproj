@@ -311,6 +311,29 @@
 		7D68A9AE1FE0A3D000522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9B01FE0A3D000522C49 /* Localizable.strings */; };
 		7D68A9B81FE0A3D100522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9BA1FE0A3D100522C49 /* InfoPlist.strings */; };
 		7D68A9C21FE0A3D200522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */; };
+		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
+		8907E35B21A9D1B200335852 /* SineCurveParametersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */; };
+		892F481B21AB2964004D313D /* RandomOutlierTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892F481A21AB2964004D313D /* RandomOutlierTableViewController.swift */; };
+		893A83DA21B64AEB00FAE2C4 /* PumpDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A83D921B64AEB00FAE2C4 /* PumpDataStore.swift */; };
+		895695F621AA413B00828067 /* DateAndDurationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */; };
+		89AB9EC721A4774500351324 /* MockPumpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9EC621A4774500351324 /* MockPumpManager.swift */; };
+		89AB9EC921A4BC2400351324 /* MockCGMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9EC821A4BC2400351324 /* MockCGMManager.swift */; };
+		89AB9ECB21A4C36200351324 /* MockPumpManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */; };
+		89AB9ECD21A4C8A500351324 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECC21A4C8A500351324 /* Comparable.swift */; };
+		89AB9ECE21A4C8BD00351324 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECC21A4C8A500351324 /* Comparable.swift */; };
+		89AB9ED021A4D2E500351324 /* MockPumpManagerSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */; };
+		89AB9ED221A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */; };
+		89AB9ED421A4D8F000351324 /* MockPumpManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */; };
+		89AB9ED621A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */; };
+		89CCD4F221A87D340068C3FB /* MockCGMDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */; };
+		89CCD4F421A8A2B30068C3FB /* MockCGMManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */; };
+		89CCD4F621A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */; };
+		89CCD4F821A8D5500068C3FB /* MockGlucoseProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F721A8D5500068C3FB /* MockGlucoseProvider.swift */; };
+		89CCD4FA21A911510068C3FB /* PercentageTextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F921A911510068C3FB /* PercentageTextFieldTableViewController.swift */; };
+		89D2046C21C83C3F001238CC /* GlucoseTrendTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D2046B21C83C3F001238CC /* GlucoseTrendTableViewController.swift */; };
+		89DC540B21B6FFA7005A1CE0 /* CGMDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DC540A21B6FFA7005A1CE0 /* CGMDataStore.swift */; };
+		89DC540D21B75AE7005A1CE0 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DC540C21B75AE7005A1CE0 /* Collection.swift */; };
+		89E72DE021BDDD6C00F0985C /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89E72DDF21BDDD6C00F0985C /* SwitchTableViewCell.xib */; };
 		C11166B02180FA5C000EEAAB /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AF2180FA5C000EEAAB /* LoadingTableViewCell.swift */; };
 		C16C3D3F21A3101700401105 /* WeakObserverSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133FD1621A2A845009B2D20 /* WeakObserverSet.swift */; };
 		C16C3D4221A381FA00401105 /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16C3D4021A381BC00401105 /* UIAlertController.swift */; };
@@ -760,6 +783,28 @@
 		7D68AABE1FE31BE700522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D68AAC01FE31BE800522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D68AAC61FE31BE900522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEntryTableViewController.swift; sourceTree = "<group>"; };
+		8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineCurveParametersTableViewController.swift; sourceTree = "<group>"; };
+		892F481A21AB2964004D313D /* RandomOutlierTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomOutlierTableViewController.swift; sourceTree = "<group>"; };
+		893A83D921B64AEB00FAE2C4 /* PumpDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpDataStore.swift; sourceTree = "<group>"; };
+		895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateAndDurationTableViewController.swift; sourceTree = "<group>"; };
+		89AB9EC621A4774500351324 /* MockPumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManager.swift; sourceTree = "<group>"; };
+		89AB9EC821A4BC2400351324 /* MockCGMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManager.swift; sourceTree = "<group>"; };
+		89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockPumpManager+UI.swift"; sourceTree = "<group>"; };
+		89AB9ECC21A4C8A500351324 /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
+		89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSetupViewController.swift; sourceTree = "<group>"; };
+		89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsSetupViewController.swift; sourceTree = "<group>"; };
+		89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MockPumpManager.storyboard; sourceTree = "<group>"; };
+		89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsViewController.swift; sourceTree = "<group>"; };
+		89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMDataSource.swift; sourceTree = "<group>"; };
+		89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockCGMManager+UI.swift"; sourceTree = "<group>"; };
+		89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManagerSettingsViewController.swift; sourceTree = "<group>"; };
+		89CCD4F721A8D5500068C3FB /* MockGlucoseProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGlucoseProvider.swift; sourceTree = "<group>"; };
+		89CCD4F921A911510068C3FB /* PercentageTextFieldTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentageTextFieldTableViewController.swift; sourceTree = "<group>"; };
+		89D2046B21C83C3F001238CC /* GlucoseTrendTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseTrendTableViewController.swift; sourceTree = "<group>"; };
+		89DC540A21B6FFA7005A1CE0 /* CGMDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGMDataStore.swift; sourceTree = "<group>"; };
+		89DC540C21B75AE7005A1CE0 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		89E72DDF21BDDD6C00F0985C /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
 		C1110E981EE98CF5009BB852 /* ice_35_min_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_input.json; sourceTree = "<group>"; };
 		C11166AF2180FA5C000EEAAB /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
@@ -843,6 +888,7 @@
 		430059211CCDC7A200C861EA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				89AB9ECC21A4C8A500351324 /* Comparable.swift */,
 				43D8FDEE1C7290350073BE78 /* HKUnit.swift */,
 				434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */,
 				43177D0D1D3737420006E908 /* NibLoadable.swift */,
@@ -900,6 +946,17 @@
 				43FB60E420DCBA02002B996B /* SetupTableViewController.swift */,
 				43D8FE0C1C7290530073BE78 /* SingleValueScheduleTableViewController.swift */,
 				434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */,
+				89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */,
+				89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */,
+				89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */,
+				89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */,
+				89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */,
+				89CCD4F921A911510068C3FB /* PercentageTextFieldTableViewController.swift */,
+				8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */,
+				8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */,
+				895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */,
+				892F481A21AB2964004D313D /* RandomOutlierTableViewController.swift */,
+				89D2046B21C83C3F001238CC /* GlucoseTrendTableViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -966,6 +1023,7 @@
 				434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */,
 				43F5034E210599DF009FA89A /* ValidatingIndicatorView.swift */,
 				C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */,
+				89E72DDF21BDDD6C00F0985C /* SwitchTableViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -995,6 +1053,7 @@
 		437AFF22203BE382008C4892 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				89DC540C21B75AE7005A1CE0 /* Collection.swift */,
 				43D8FDF01C7290350073BE78 /* Date.swift */,
 				43D8FDE91C7290350073BE78 /* Double.swift */,
 				437AFF23203BE402008C4892 /* HKHealthStore.swift */,
@@ -1028,6 +1087,8 @@
 				43BA7156201E484D0058961E /* LoopKitUI.h */,
 				43BA7157201E484D0058961E /* Info.plist */,
 				1F5DAB282118CE9300048054 /* InfoPlist.strings */,
+				89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */,
+				89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */,
 			);
 			path = LoopKitUI;
 			sourceTree = "<group>";
@@ -1099,15 +1160,9 @@
 		43D8FDCD1C728FDF0073BE78 /* LoopKit */ = {
 			isa = PBXGroup;
 			children = (
-				43D8FE2B1C72914D0073BE78 /* CarbKit */,
-				437AFF22203BE382008C4892 /* Extensions */,
-				43D8FE701C7293070073BE78 /* GlucoseKit */,
-				43D8FEB21C7294520073BE78 /* InsulinKit */,
-				437874B4202FDC8300A3D8B9 /* Persistence */,
-				7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */,
+				89933E8E21B5C8F500770B56 /* Mock */,
 				43D8FDCE1C728FDF0073BE78 /* LoopKit.h */,
 				43D8FDD01C728FDF0073BE78 /* Info.plist */,
-				1F5DAB2B2118CE9300048054 /* Localizable.strings */,
 				43D8FDE51C7290340073BE78 /* BasalRateSchedule.swift */,
 				43D8FDE61C7290350073BE78 /* CarbRatioSchedule.swift */,
 				4352A73B20DECF0600CAC200 /* CGMManager.swift */,
@@ -1132,6 +1187,15 @@
 				43D8FDF31C7290350073BE78 /* SampleValue.swift */,
 				43F5035421059A8A009FA89A /* ServiceAuthentication.swift */,
 				43FB60EA20DDC868002B996B /* SetBolusError.swift */,
+				43D8FE2B1C72914D0073BE78 /* CarbKit */,
+				437AFF22203BE382008C4892 /* Extensions */,
+				43D8FE701C7293070073BE78 /* GlucoseKit */,
+				7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */,
+				43D8FEB21C7294520073BE78 /* InsulinKit */,
+				1F5DAB2B2118CE9300048054 /* Localizable.strings */,
+				437874B4202FDC8300A3D8B9 /* Persistence */,
+				893A83D921B64AEB00FAE2C4 /* PumpDataStore.swift */,
+				89DC540A21B6FFA7005A1CE0 /* CGMDataStore.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -1350,6 +1414,17 @@
 			path = Fixtures;
 			sourceTree = "<group>";
 		};
+		89933E8E21B5C8F500770B56 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */,
+				89AB9EC821A4BC2400351324 /* MockCGMManager.swift */,
+				89CCD4F721A8D5500068C3FB /* MockGlucoseProvider.swift */,
+				89AB9EC621A4774500351324 /* MockPumpManager.swift */,
+			);
+			path = Mock;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1565,12 +1640,14 @@
 				43BA7173201E492E0058961E /* DateAndDurationTableViewCell.xib in Resources */,
 				43BA7164201E49130058961E /* InsulinKit.storyboard in Resources */,
 				43BA7195202039B00058961E /* GlucoseRangeOverrideTableViewCell.xib in Resources */,
+				89AB9ED421A4D8F000351324 /* MockPumpManager.storyboard in Resources */,
 				1FE58796211D12CE004F24ED /* Localizable.strings in Resources */,
 				43BA7193202039A30058961E /* TextFieldTableViewCell.xib in Resources */,
 				C1FB427D217551F200FAB378 /* HUDAssets.xcassets in Resources */,
 				43BA719620203C750058961E /* Assets.xcassets in Resources */,
 				1F5DAB2A2118CE9300048054 /* InfoPlist.strings in Resources */,
 				C1FB427F2175570C00FAB378 /* BatteryLevelHUDView.xib in Resources */,
+				89E72DE021BDDD6C00F0985C /* SwitchTableViewCell.xib in Resources */,
 				43BA7192202039950058961E /* RepeatingScheduleValueTableViewCell.xib in Resources */,
 				43F5035B21059AF7009FA89A /* AuthenticationTableViewCell.xib in Resources */,
 			);
@@ -1716,13 +1793,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89AB9ECB21A4C36200351324 /* MockPumpManager+UI.swift in Sources */,
 				43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */,
 				43BA7182201EE7090058961E /* TextFieldTableViewCell.swift in Sources */,
+				8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */,
 				43F5034D210599CC009FA89A /* AuthenticationViewController.swift in Sources */,
 				43F5034F210599DF009FA89A /* ValidatingIndicatorView.swift in Sources */,
 				43BA718C201EEE5A0058961E /* NSData.swift in Sources */,
 				43F5035A21059AF7009FA89A /* AuthenticationTableViewCell.swift in Sources */,
 				43BA7163201E490D0058961E /* InsulinDeliveryTableViewController.swift in Sources */,
+				8907E35B21A9D1B200335852 /* SineCurveParametersTableViewController.swift in Sources */,
 				43BA7186201EE7090058961E /* UIViewController.swift in Sources */,
 				43BA718A201EE8CF0058961E /* NSTimeInterval.swift in Sources */,
 				432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */,
@@ -1732,22 +1812,27 @@
 				432CF86920D76B320066B889 /* SetupButton.swift in Sources */,
 				432CF87420D774520066B889 /* NumberFormatter.swift in Sources */,
 				1F5DAB212118C95700048054 /* LocalizedString.swift in Sources */,
+				89CCD4F621A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift in Sources */,
 				43FB60E520DCBA02002B996B /* SetupTableViewController.swift in Sources */,
 				43BA7180201EE7090058961E /* SingleValueScheduleTableViewController.swift in Sources */,
 				43F5035D21059B56009FA89A /* UIColor.swift in Sources */,
 				43BA717E201EE7090058961E /* CommandResponseViewController.swift in Sources */,
 				43BA717A201E4F1D0058961E /* IdentifiableClass.swift in Sources */,
+				89D2046C21C83C3F001238CC /* GlucoseTrendTableViewController.swift in Sources */,
 				43BA7187201EE7090058961E /* GlucoseRangeScheduleTableViewController.swift in Sources */,
 				43BA7168201E49220058961E /* CarbAbsorptionInputHeaderView.swift in Sources */,
 				4322B76B202F9E4B0002837D /* HKUnit+LoopKitUI.swift in Sources */,
 				43BA7183201EE7090058961E /* DailyQuantityScheduleTableViewController.swift in Sources */,
 				C1FB428721755B8C00FAB378 /* StateColorPalette.swift in Sources */,
 				C184FECB219F2E0100CD2722 /* SuspendResumeTableViewCell.swift in Sources */,
+				892F481B21AB2964004D313D /* RandomOutlierTableViewController.swift in Sources */,
 				43BA7167201E49220058961E /* CarbAbsorptionInputController.swift in Sources */,
 				43F503632106C761009FA89A /* ServiceAuthenticationUI.swift in Sources */,
 				432CF86B20D76B9C0066B889 /* SetupIndicatorView.swift in Sources */,
 				43BA716D201E49220058961E /* DatePickerTableViewCell.swift in Sources */,
 				4369F094208BA001000E3E45 /* TextButtonTableViewCell.swift in Sources */,
+				89AB9ECE21A4C8BD00351324 /* Comparable.swift in Sources */,
+				89AB9ED021A4D2E500351324 /* MockPumpManagerSetupViewController.swift in Sources */,
 				43BA716C201E49220058961E /* CustomInputTextField.swift in Sources */,
 				C1FB428321755A9B00FAB378 /* BaseHUDView.swift in Sources */,
 				43BA716F201E49220058961E /* FoodEmojiDataSource.swift in Sources */,
@@ -1755,7 +1840,9 @@
 				432CF86D20D76C470066B889 /* SwitchTableViewCell.swift in Sources */,
 				43BA7188201EE85B0058961E /* HKUnit.swift in Sources */,
 				C11166B02180FA5C000EEAAB /* LoadingTableViewCell.swift in Sources */,
+				895695F621AA413B00828067 /* DateAndDurationTableViewController.swift in Sources */,
 				4369F092208B0DFF000E3E45 /* DateAndDurationTableViewCell.swift in Sources */,
+				89AB9ED621A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift in Sources */,
 				43BA7189201EE8980058961E /* UITableViewCell.swift in Sources */,
 				43BA7181201EE7090058961E /* RepeatingScheduleValueTableViewCell.swift in Sources */,
 				43BA717C201EE7090058961E /* GlucoseRangeSchedule+UI.swift in Sources */,
@@ -1763,6 +1850,7 @@
 				43BA716E201E49220058961E /* DecimalTextFieldTableViewCell.swift in Sources */,
 				43A8EC3C210CEEA500A81379 /* CGMManagerUI.swift in Sources */,
 				C1FB427B2175503B00FAB378 /* LevelHUDView.swift in Sources */,
+				89CCD4F421A8A2B30068C3FB /* MockCGMManager+UI.swift in Sources */,
 				43BA718B201EE93C0058961E /* TimeZone.swift in Sources */,
 				43BA717B201EE6A40058961E /* NibLoadable.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
@@ -1771,7 +1859,9 @@
 				43BA7169201E49220058961E /* CarbEntryEditViewController.swift in Sources */,
 				43BA717D201EE7090058961E /* GlucoseRangeTableViewCell.swift in Sources */,
 				43BA7166201E49220058961E /* CarbAbsorptionInputCell.swift in Sources */,
+				89CCD4FA21A911510068C3FB /* PercentageTextFieldTableViewController.swift in Sources */,
 				C1FB42812175572A00FAB378 /* BatteryLevelHUDView.swift in Sources */,
+				89AB9ED221A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift in Sources */,
 				43BA7184201EE7090058961E /* TextFieldTableViewController.swift in Sources */,
 				43BA716A201E49220058961E /* CarbEntryTableViewController.swift in Sources */,
 				43BA716B201E49220058961E /* CarbEntryValidationNavigationDelegate.swift in Sources */,
@@ -1798,12 +1888,14 @@
 				43D8FDF71C7290350073BE78 /* DailyValueSchedule.swift in Sources */,
 				4322B77D202FA2AF0002837D /* NewPumpEvent.swift in Sources */,
 				434113AA20F171CB00D05747 /* CachedInsulinDeliveryObject+CoreDataClass.swift in Sources */,
+				89AB9ECD21A4C8A500351324 /* Comparable.swift in Sources */,
 				432CF86F20D76CCF0066B889 /* GlucoseTrend.swift in Sources */,
 				43FB60E920DCBE64002B996B /* PumpManagerStatus.swift in Sources */,
 				4322B774202FA2790002837D /* CarbMath.swift in Sources */,
 				434113B120F2888100D05747 /* NSManagedObjectContext+CachedGlucoseObject.swift in Sources */,
 				4322B78B202FA2B30002837D /* ExponentialInsulinModel.swift in Sources */,
 				43D8FE011C7290350073BE78 /* NSTimeInterval.swift in Sources */,
+				89DC540B21B6FFA7005A1CE0 /* CGMDataStore.swift in Sources */,
 				43D8FDF61C7290350073BE78 /* DailyQuantitySchedule.swift in Sources */,
 				43D8FDF51C7290350073BE78 /* CarbRatioSchedule.swift in Sources */,
 				4322B76F202FA26F0002837D /* GlucoseSampleValue.swift in Sources */,
@@ -1818,9 +1910,12 @@
 				43F5034B21051FCE009FA89A /* KeychainManager.swift in Sources */,
 				432CF87320D774220066B889 /* PumpManager.swift in Sources */,
 				43D8FE021C7290350073BE78 /* SampleValue.swift in Sources */,
+				89AB9EC921A4BC2400351324 /* MockCGMManager.swift in Sources */,
 				43D9888B1C87E47800DA4467 /* GlucoseValue.swift in Sources */,
 				43D8FDF41C7290350073BE78 /* BasalRateSchedule.swift in Sources */,
+				89DC540D21B75AE7005A1CE0 /* Collection.swift in Sources */,
 				4322B788202FA2B30002837D /* DoseStore.swift in Sources */,
+				89CCD4F821A8D5500068C3FB /* MockGlucoseProvider.swift in Sources */,
 				4303C4921E2D665000ADEDC8 /* TimeZone.swift in Sources */,
 				4322B781202FA2AF0002837D /* PumpEvent+CoreDataProperties.swift in Sources */,
 				4322B785202FA2AF0002837D /* ReservoirValue.swift in Sources */,
@@ -1840,10 +1935,12 @@
 				C16C3D3F21A3101700401105 /* WeakObserverSet.swift in Sources */,
 				4322B790202FA2B30002837D /* InsulinValue.swift in Sources */,
 				434C5F9E209938CD00B2FD1A /* NumberFormatter.swift in Sources */,
+				89AB9EC721A4774500351324 /* MockPumpManager.swift in Sources */,
 				437AFEEF2036A156008C4892 /* DeletedCarbObject+CoreDataClass.swift in Sources */,
 				4322B78C202FA2B30002837D /* HKQuantitySample+InsulinKit.swift in Sources */,
 				4322B78F202FA2B30002837D /* InsulinModel.swift in Sources */,
 				434C5F9C2098352500B2FD1A /* QuantityFormatter.swift in Sources */,
+				89CCD4F221A87D340068C3FB /* MockCGMDataSource.swift in Sources */,
 				43F503642106C78C009FA89A /* ServiceAuthentication.swift in Sources */,
 				433BC7A720523DB7000B1200 /* NewGlucoseSample.swift in Sources */,
 				4322B78E202FA2B30002837D /* InsulinMath.swift in Sources */,
@@ -1873,6 +1970,7 @@
 				43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */,
 				43FB60EB20DDC868002B996B /* SetBolusError.swift in Sources */,
 				4353D17A203E7840007B4ECD /* Locked.swift in Sources */,
+				893A83DA21B64AEB00FAE2C4 /* PumpDataStore.swift in Sources */,
 				4322B770202FA26F0002837D /* GlucoseStore.swift in Sources */,
 				4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */,
 				4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */,
