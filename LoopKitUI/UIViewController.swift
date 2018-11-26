@@ -9,7 +9,7 @@
 import UIKit
 
 
-extension UIViewController {
+public extension UIViewController {
     /// Convenience method to present an alert controller on the active view controller
     ///
     /// - Parameters:
@@ -47,9 +47,9 @@ extension UIViewController {
     ///   - error: The error to display
     ///   - animated: Whether to animate the alert
     ///   - completion: An optional closure to execute after the presentation finishes
-    public func presentAlertController(with error: Error, animated: Bool = true, completion: (() -> Void)? = nil) {
+    public func presentAlertController(with error: Error, title: String? = nil, animated: Bool = true, completion: (() -> Void)? = nil) {
         if let error = error as? LocalizedError {
-            presentAlertController(configuredWith: error, animated: animated, completion: completion)
+            presentAlertController(configuredWith: error, title: title, animated: animated, completion: completion)
             return
         }
 
@@ -71,8 +71,11 @@ extension UIViewController {
     ///   - error: The error to display
     ///   - animated: Whether to animate the alert
     ///   - completion: An optional closure to execute after the presentation finishes
-    func presentAlertController(configuredWith error: LocalizedError, animated: Bool = true, completion: (() -> Void)? = nil) {
-        let message = [error.failureReason, error.recoverySuggestion].compactMap({ $0 }).joined(separator: ".\n")
+    func presentAlertController(configuredWith error: LocalizedError, title: String? = nil, animated: Bool = true, completion: (() -> Void)? = nil) {
+        let sentenceFormat = LocalizedString("%@.", comment: "Appends a full-stop to a statement")
+        let message = [error.failureReason, error.recoverySuggestion].compactMap({ $0 }).map({
+            String(format: sentenceFormat, $0)
+        }).joined(separator: "\n")
 
         var actions: [UIAlertAction] = []
 
@@ -87,7 +90,7 @@ extension UIViewController {
         }
 
         presentAlertController(
-            withTitle: (error.errorDescription ?? error.localizedDescription).localizedCapitalized,
+            withTitle: title ?? (error.errorDescription ?? error.localizedDescription).localizedCapitalized,
             message: message.isEmpty ? String(describing: error) : message,
             animated: animated,
             actions: actions,
