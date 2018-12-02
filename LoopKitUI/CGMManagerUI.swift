@@ -21,7 +21,7 @@ public protocol CGMManagerUI: CGMManager {
 }
 
 
-public protocol CGMManagerSetupViewController {
+public protocol CGMManagerSetupViewController: SetupNavigationController {
     var setupDelegate: CGMManagerSetupViewControllerDelegate? { get set }
 }
 
@@ -33,8 +33,8 @@ public protocol CGMManagerSetupViewControllerDelegate: class {
 }
 
 
-public extension CGMManagerSetupViewController {
-    func cancelSetup() {
+extension CGMManagerSetupViewController {
+    public func cancelSetup() {
         setupDelegate?.cgmManagerSetupViewControllerDidCancel(self)
     }
 }

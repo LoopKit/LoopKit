@@ -16,6 +16,10 @@ open class SetupTableViewController: UITableViewController {
     open var cgmSetupViewController: CGMManagerSetupViewController? {
         return navigationController as? CGMManagerSetupViewController
     }
+    
+    var setupNavigationController: SetupNavigationController? {
+        return navigationController as? SetupNavigationController
+    }
 
     private(set) open lazy var footerView = SetupTableFooterView(frame: .zero)
 
@@ -48,8 +52,7 @@ open class SetupTableViewController: UITableViewController {
     }
 
     @IBAction open func cancelButtonPressed(_: Any) {
-        setupViewController?.cancelSetup()
-        cgmSetupViewController?.cancelSetup()
+        setupNavigationController?.cancelSetup()
     }
 
     @IBAction open func continueButtonPressed(_ sender: Any) {

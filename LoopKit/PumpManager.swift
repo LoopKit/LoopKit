@@ -84,7 +84,7 @@ public protocol PumpManager: DeviceManager {
 
     func updateBLEHeartbeatPreference()
     
-    func suspendDelivery(completion: @escaping (_ result: PumpManagerResult<Bool>) -> Void)
+    func suspendDelivery(completion: @escaping (_ error: Error?) -> Void)
     
-    func resumeDelivery(completion: @escaping (_ result: PumpManagerResult<Bool>) -> Void)
+    func resumeDelivery(completion: @escaping (_ error: Error?) -> Void)
 }

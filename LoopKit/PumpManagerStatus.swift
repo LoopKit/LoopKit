@@ -19,9 +19,9 @@ public struct PumpManagerStatus: Equatable {
     
     public enum BolusState: Equatable {
         case none
-        case initiatingBolus
-        case bolusing(progress: Float?)
-        case cancelingBolus
+        case initiating
+        case inProgress(_ progress: Float?)
+        case canceling
     }
     
     public let timeZone: TimeZone
