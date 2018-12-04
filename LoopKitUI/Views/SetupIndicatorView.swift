@@ -18,7 +18,6 @@ public class SetupIndicatorView: UIView {
 
     public var state: State = .hidden {
         didSet {
-            print("State set to \(state)")
             switch (oldValue, state) {
             case (.hidden, .hidden), (.loading, .loading), (.completed, .completed):
                 break
