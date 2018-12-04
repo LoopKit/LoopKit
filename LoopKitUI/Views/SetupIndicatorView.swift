@@ -18,6 +18,7 @@ public class SetupIndicatorView: UIView {
 
     public var state: State = .hidden {
         didSet {
+            print("State set to \(state)")
             switch (oldValue, state) {
             case (.hidden, .hidden), (.loading, .loading), (.completed, .completed):
                 break
@@ -46,20 +47,20 @@ public class SetupIndicatorView: UIView {
             return
         }
 
+        let isActivityIndicatorViewRunning = (newState == .loading)
+        let isCompletionHidden = (newState != .completed)
+        let wasHidden = (oldState == .hidden)
+        
         if let animator = self.animator, animator.isRunning {
             switch oldState {
             case .hidden:
                 break
             case .loading, .completed:
-                completionImageView.alpha = 1
+                completionImageView.alpha = isCompletionHidden ? 0 : 1
                 animator.isReversed = !animator.isReversed
                 return
             }
         }
-
-        let isActivityIndicatorViewRunning = (newState == .loading)
-        let isCompletionHidden = (newState != .completed)
-        let wasHidden = (oldState == .hidden)
 
         completionImageView.alpha = wasHidden && isCompletionHidden ? 0 : 1
 
