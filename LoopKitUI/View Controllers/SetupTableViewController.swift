@@ -17,7 +17,7 @@ open class SetupTableViewController: UITableViewController {
         return navigationController as? CGMManagerSetupViewController
     }
     
-    var setupNavigationController: SetupNavigationController? {
+    open var setupNavigationController: SetupNavigationController? {
         return navigationController as? SetupNavigationController
     }
 
