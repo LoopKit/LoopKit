@@ -274,6 +274,38 @@ extension DoseEntry {
     }
 }
 
+extension DoseEntry {
+    /// Calculates the timeline of glucose effects for a temp basal dose
+    /// Use case: predict glucose effects of zero temping
+    ///
+    /// - Parameters:
+    ///   - insulinModel: The model of insulin activity over time
+    ///   - insulinSensitivity: The schedule of glucose effect per unit of insulin
+    ///   - basalRateSchedule: The schedule of basal rates
+    /// - Returns: An array of glucose effects for the duration of the temp basal dose plus the duration of insulin action
+    public func tempBasalGlucoseEffects(
+        insulinModel: InsulinModel,
+        insulinSensitivity: InsulinSensitivitySchedule,
+        basalRateSchedule: BasalRateSchedule
+        ) -> [GlucoseEffect] {
+        
+        var values = [GlucoseEffect]()
+        
+        switch type {
+        case .tempBasal:
+            break
+        case .basal, .bolus, .resume, .suspend:
+            return values
+        }
+        
+        let netTempBasalDoses = self.annotated(with: basalRateSchedule)
+        values = netTempBasalDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivity)
+        
+        return values
+    }
+    
+}
+
 extension Collection where Element == DoseEntry {
 
     /**
