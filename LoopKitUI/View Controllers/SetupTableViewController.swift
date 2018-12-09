@@ -44,7 +44,9 @@ open class SetupTableViewController: UITableViewController {
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        if tableView.frame.height < tableView.contentSize.height {
+        let visibleHeight = tableView.bounds.size.height - (tableView.adjustedContentInset.top + tableView.adjustedContentInset.bottom)
+        
+        if visibleHeight < tableView.contentSize.height {
             compactMode = true
         }
 
@@ -54,7 +56,6 @@ open class SetupTableViewController: UITableViewController {
             tableView.tableFooterView = nil
 
             var footerSize = footerView.systemLayoutSizeFitting(CGSize(width: tableView.frame.size.width, height: UIView.layoutFittingCompressedSize.height))
-            let visibleHeight = tableView.bounds.size.height - (tableView.adjustedContentInset.top + tableView.adjustedContentInset.bottom)
             let footerPadding = max(footerSize.height, visibleHeight - tableView.contentSize.height)
 
             footerSize.height = footerPadding
