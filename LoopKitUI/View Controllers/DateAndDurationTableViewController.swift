@@ -15,11 +15,11 @@ protocol DateAndDurationTableViewControllerDelegate: class {
 
 class DateAndDurationTableViewController: UITableViewController {
     enum InputMode {
-        case date(Date)
+        case date(Date, mode: UIDatePicker.Mode)
         case duration(TimeInterval)
     }
 
-    var inputMode: InputMode = .date(Date()) {
+    var inputMode: InputMode = .date(Date(), mode: .dateAndTime) {
         didSet {
             delegate?.dateAndDurationTableViewControllerDidChangeDate(self)
         }
@@ -43,6 +43,19 @@ class DateAndDurationTableViewController: UITableViewController {
         tableView.register(DateAndDurationTableViewCell.nib(), forCellReuseIdentifier: DateAndDurationTableViewCell.className)
     }
 
+    private var completion: ((InputMode) -> Void)?
+
+    func onSave(_ completion: @escaping (InputMode) -> Void) {
+        let saveBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(save))
+        navigationItem.rightBarButtonItem = saveBarButtonItem
+        self.completion = completion
+    }
+
+    @objc private func save() {
+        completion?(inputMode)
+        dismiss(animated: true)
+    }
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -54,14 +67,16 @@ class DateAndDurationTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
         switch inputMode {
-        case .date(let date):
+        case .date(let date, mode: let mode):
+            cell.datePicker.datePickerMode = mode
             cell.date = date
-            cell.datePicker.datePickerMode = .date
         case .duration(let duration):
-            cell.duration = duration
             cell.datePicker.datePickerMode = .countDownTimer
+            cell.maximumDuration = .hours(24)
+            cell.duration = duration
         }
         cell.titleLabel.text = titleText
+        cell.isDatePickerHidden = false
         cell.selectionStyle = .none
         cell.delegate = self
         return cell
@@ -75,8 +90,8 @@ class DateAndDurationTableViewController: UITableViewController {
 extension DateAndDurationTableViewController: DatePickerTableViewCellDelegate {
     func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
         switch inputMode {
-        case .date(_):
-            inputMode = .date(cell.date)
+        case .date(_, mode: let mode):
+            inputMode = .date(cell.date, mode: mode)
         case .duration(_):
             inputMode = .duration(cell.duration)
         }

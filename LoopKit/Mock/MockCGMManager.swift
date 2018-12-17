@@ -23,7 +23,11 @@ public final class MockCGMManager: CGMManager {
     public static let managerIdentifier = "MockCGMManager"
     public static let localizedTitle = "Simulator"
 
-    public var mockSensorState: MockCGMState? = MockCGMState(isStateValid: true, trendType: nil)
+    public var mockSensorState: MockCGMState {
+        didSet {
+            cgmManagerDelegate?.cgmManagerDidUpdateState(self)
+        }
+    }
 
     public var sensorState: SensorDisplayable? {
         return mockSensorState
@@ -35,14 +39,39 @@ public final class MockCGMManager: CGMManager {
 
     public var cgmManagerDelegate: CGMManagerDelegate?
 
-    public var dataSource = MockCGMDataSource(model: .noData)
+    public var dataSource: MockCGMDataSource {
+        didSet {
+            cgmManagerDelegate?.cgmManagerDidUpdateState(self)
+        }
+    }
+
+    private var glucoseUpdateTimer: Timer?
 
     public init?(rawState: RawStateValue) {
-        // nothing to do here
+        if let mockSensorState = (rawState["mockSensorState"] as? MockCGMState.RawValue).flatMap(MockCGMState.init(rawValue:)) {
+            self.mockSensorState = mockSensorState
+        } else {
+            self.mockSensorState = MockCGMState(isStateValid: true, trendType: nil)
+        }
+
+        if let dataSource = (rawState["dataSource"] as? MockCGMDataSource.RawValue).flatMap(MockCGMDataSource.init(rawValue:)) {
+            self.dataSource = dataSource
+        } else {
+            self.dataSource = MockCGMDataSource(model: .noData)
+        }
+
+        setupGlucoseUpdateTimer()
+    }
+
+    deinit {
+        glucoseUpdateTimer?.invalidate()
     }
 
     public var rawState: RawStateValue {
-        return [:]
+        return [
+            "mockSensorState": mockSensorState.rawValue,
+            "dataSource": dataSource.rawValue
+        ]
     }
 
     public var appURL: URL? {
@@ -54,7 +83,6 @@ public final class MockCGMManager: CGMManager {
     }
 
     public var managedDataInterval: TimeInterval? {
-        // TODO: Is a short duration here preferable to remove values from HK?
         return nil
     }
 
@@ -66,14 +94,71 @@ public final class MockCGMManager: CGMManager {
         dataSource.fetchNewData(completion)
     }
 
+    public func backfillData(datingBack duration: TimeInterval) {
+        let now = Date()
+        dataSource.backfillData(from: DateInterval(start: now.addingTimeInterval(-duration), end: now)) { result in
+            self.cgmManagerDelegate?.cgmManager(self, didUpdateWith: result)
+        }
+    }
+
     public func deleteCGMData() {
         cgmManagerDelegate?.dataStore(for: self).deleteGlucoseSamples(fromDevice: MockCGMDataSource.device)
+    }
+
+    private func setupGlucoseUpdateTimer() {
+        glucoseUpdateTimer = Timer.scheduledTimer(withTimeInterval: .minutes(5), repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            self.dataSource.fetchNewData { result in
+                self.cgmManagerDelegate?.cgmManager(self, didUpdateWith: result)
+            }
+        }
     }
 }
 
 extension MockCGMManager {
     public var debugDescription: String {
-        // TODO:
-        return ""
+        return """
+        ## MockCGMManager
+        state: \(mockSensorState)
+        dataSource: \(dataSource)
+        """
+    }
+}
+
+extension MockCGMState: RawRepresentable {
+    public typealias RawValue = [String: Any]
+
+    public init?(rawValue: RawValue) {
+        guard let isStateValid = rawValue["isStateValid"] as? Bool else {
+            return nil
+        }
+
+        self.isStateValid = isStateValid
+
+        if let trendTypeRawValue = rawValue["trendType"] as? GlucoseTrend.RawValue {
+            self.trendType = GlucoseTrend(rawValue: trendTypeRawValue)
+        }
+    }
+
+    public var rawValue: RawValue {
+        var rawValue: RawValue = [
+            "isStateValid": isStateValid,
+        ]
+
+        if let trendType = trendType {
+            rawValue["trendType"] = trendType.rawValue
+        }
+
+        return rawValue
+    }
+}
+
+extension MockCGMState: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return """
+        ## MockCGMState
+        * isStateValid: \(isStateValid)
+        * trendType: \(trendType.map(String.init(describing:)) ?? "nil")
+        """
     }
 }

@@ -28,7 +28,7 @@ public final class CGMDataStore {
 
     private func deleteGlucoseSamples(matching predicate: NSPredicate) {
         glucoseStore.purgeGlucoseSamples(matchingCachePredicate: nil, healthKitPredicate: predicate) { success, count, error in
-            // TODO: something with success/error
+            // result already logged through the store, so ignore the error here
         }
     }
 }

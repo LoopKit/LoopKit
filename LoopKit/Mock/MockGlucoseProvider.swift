@@ -39,30 +39,27 @@ struct MockGlucoseProvider {
         }
     }
 
-    /// Given a date, asynchronously spit out the CGMResult at that date.
+    /// Given a date, asynchronously produce the CGMResult at that date.
     private let fetchDataAt: (_ date: Date, _ completion: @escaping (CGMResult) -> Void) -> Void
 
-    func fetchData(
-        at date: Date,
-        backfill: BackfillRequest? = nil,
-        completion: @escaping (CGMResult) -> Void
-    ) {
-        if let backfill = backfill {
-            let dataPointDates = (0...backfill.dataPointCount)
-                .map { offset in date.addingTimeInterval(-backfill.dataPointFrequency * Double(offset)) }
-                .reversed()
-            dataPointDates.asyncMap(fetchDataAt) { allResults in
-                let allSamples = allResults.flatMap { result -> [NewGlucoseSample] in
-                    guard case .newData(let samples) = result else {
-                        return []
-                    }
+    func fetchData(at date: Date, completion: @escaping (CGMResult) -> Void) {
+        fetchDataAt(date, completion)
+    }
+
+    func backfill(_ backfill: BackfillRequest, endingAt date: Date, completion: @escaping (CGMResult) -> Void) {
+        let dataPointDates = (0...backfill.dataPointCount).map { offset in
+            return date.addingTimeInterval(-backfill.dataPointFrequency * Double(offset))
+        }
+        dataPointDates.asyncMap(fetchDataAt) { allResults in
+            let allSamples = allResults.flatMap { result -> [NewGlucoseSample] in
+                if case .newData(let samples) = result {
                     return samples
+                } else {
+                    return []
                 }
-                let result: CGMResult = allSamples.isEmpty ? .noData : .newData(allSamples)
-                completion(result)
             }
-        } else {
-            fetchDataAt(date, completion)
+            let result: CGMResult = allSamples.isEmpty ? .noData : .newData(allSamples)
+            completion(result)
         }
     }
 }
@@ -124,14 +121,6 @@ extension MockGlucoseProvider {
 private struct MockGlucoseProviderError: Error { }
 
 extension MockGlucoseProvider {
-    fileprivate func delayingCompletion(by delay: TimeInterval, completingOn queue: DispatchQueue = .global()) -> MockGlucoseProvider {
-        return MockGlucoseProvider { date, completion in
-            queue.asyncAfter(deadline: .now() + delay) {
-                self.fetchData(at: date, completion: completion)
-            }
-        }
-    }
-
     fileprivate func withRandomNoise(upTo magnitude: HKQuantity) -> MockGlucoseProvider {
         let unit = HKUnit.milligramsPerDeciliter
         precondition(magnitude.is(compatibleWith: unit))
@@ -226,7 +215,6 @@ private extension MockCGMDataSource.Effects {
     var transformations: [(MockGlucoseProvider) -> MockGlucoseProvider] {
         // Each effect maps to a transformation on a MockGlucoseProvider
         return [
-            delay.map { delay in { $0.delayingCompletion(by: delay) } },
             glucoseNoise.map { maximumDeltaMagnitude in { $0.withRandomNoise(upTo: maximumDeltaMagnitude) } },
             randomLowOutlier.map { chance, delta in { $0.randomlyProducingLowOutlier(withChance: chance, outlierDelta: delta) } },
             randomHighOutlier.map { chance, delta in { $0.randomlyProducingHighOutlier(withChance: chance, outlierDelta: delta) } },

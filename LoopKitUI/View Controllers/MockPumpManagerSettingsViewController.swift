@@ -32,6 +32,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         return cell
     }()
 
+    private let quantityFormatter = QuantityFormatter()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -44,7 +46,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         tableView.estimatedSectionHeaderHeight = 55
 
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
-        tableView.register(SwitchTableViewCell.self, forCellReuseIdentifier: SwitchTableViewCell.className)
+        tableView.register(SwitchTableViewCell.nib(), forCellReuseIdentifier: SwitchTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
     }
 
@@ -110,13 +112,17 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             case .reservoirRemaining:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = "Reservoir Remaining"
-                cell.detailTextLabel?.text = pumpManager.reservoirUnitsRemaining.map { "\(String(format: "%.1f", $0)) U" }
+                cell.detailTextLabel?.text = quantityFormatter.string(from: HKQuantity(unit: .internationalUnit(), doubleValue: pumpManager.state.reservoirUnitsRemaining), for: .internationalUnit())
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .batteryRemaining:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = "Battery Remaining"
-                cell.detailTextLabel?.text = pumpManager.status.pumpBatteryChargeRemaining.map { String(Int(round($0))) + "%" } ?? "-"
+                if let remainingCharge = pumpManager.status.pumpBatteryChargeRemaining {
+                    cell.detailTextLabel?.text = "\(Int(round(remainingCharge * 100)))%"
+                } else {
+                    cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
+                }
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .tempBasalErrorToggle:
@@ -145,12 +151,12 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         }
     }
 
-    private func switchTableViewCell(for indexPath: IndexPath, titled title: String, boundTo keyPath: ReferenceWritableKeyPath<MockPumpManager, Bool>) -> SwitchTableViewCell {
+    private func switchTableViewCell(for indexPath: IndexPath, titled title: String, boundTo keyPath: WritableKeyPath<MockPumpManagerState, Bool>) -> SwitchTableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SwitchTableViewCell.className, for: indexPath) as! SwitchTableViewCell
         cell.titleLabel?.text = title
-        cell.switch?.isOn = pumpManager[keyPath: keyPath]
+        cell.switch?.isOn = pumpManager.state[keyPath: keyPath]
         cell.onToggle = { [unowned pumpManager] isOn in
-            pumpManager[keyPath: keyPath] = isOn
+            pumpManager.state[keyPath: keyPath] = isOn
         }
         return cell
     }
@@ -169,7 +175,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             switch SettingsRow(rawValue: indexPath.row)! {
             case .reservoirRemaining:
                 let vc = TextFieldTableViewController()
-                vc.value = pumpManager.reservoirUnitsRemaining.map { String(format: "%.1f", $0) }
+                vc.value = String(format: "%.1f", pumpManager.state.reservoirUnitsRemaining)
                 vc.unit = "U"
                 vc.keyboardType = .decimalPad
                 vc.indexPath = indexPath
@@ -185,12 +191,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 break
             }
         case .deleteHealthData:
-            let confirmVC = UIAlertController(healthDataDeletionHandler: {
-                self.pumpManager.deletePumpData { error in
-                    // TODO: something with this error?
-                }
-            })
-
+            let confirmVC = UIAlertController(healthDataDeletionHandler: pumpManager.deletePumpData)
             present(confirmVC, animated: true) {
                 tableView.deselectRow(at: indexPath, animated: true)
             }
@@ -243,7 +244,9 @@ extension MockPumpManagerSettingsViewController: TextFieldTableViewControllerDel
     private func update(from controller: TextFieldTableViewController) {
         guard let indexPath = controller.indexPath else { assertionFailure(); return }
         assert(indexPath == [Section.settings.rawValue, SettingsRow.reservoirRemaining.rawValue])
-        pumpManager.reservoirUnitsRemaining = controller.value.flatMap(Double.init)
+        if let value = controller.value.flatMap(Double.init) {
+            pumpManager.state.reservoirUnitsRemaining = value
+        }
         tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
@@ -252,7 +255,7 @@ extension MockPumpManagerSettingsViewController: PercentageTextFieldTableViewCon
     func percentageTextFieldTableViewControllerDidChangePercentage(_ controller: PercentageTextFieldTableViewController) {
         guard let indexPath = controller.indexPath else { assertionFailure(); return }
         assert(indexPath == [Section.settings.rawValue, SettingsRow.batteryRemaining.rawValue])
-        pumpManager.status.pumpBatteryChargeRemaining = controller.percentage.map { $0.clamped(to: 0...100) }
+        pumpManager.status.pumpBatteryChargeRemaining = controller.percentage.map { $0.clamped(to: 0...1) }
         tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }

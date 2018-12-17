@@ -10,7 +10,7 @@ import Foundation
 import LoopKit
 
 
-final class MockHUDProvider: HUDProvider {
+final class MockHUDProvider: NSObject, HUDProvider {
     var managerIdentifier: String {
         return MockPumpManager.managerIdentifier
     }
@@ -28,6 +28,7 @@ final class MockHUDProvider: HUDProvider {
     init(pumpManager: MockPumpManager) {
         self.pumpManager = pumpManager
         self.lastPumpManagerStatus = pumpManager.status
+        super.init()
         pumpManager.addStateObserver(self)
     }
 
@@ -40,9 +41,7 @@ final class MockHUDProvider: HUDProvider {
             rawValue["pumpBatteryChargeRemaining"] = pumpBatteryChargeRemaining
         }
 
-        if let reservoirUnitsRemaining = pumpManager.reservoirUnitsRemaining {
-            rawValue["reservoirUnitsRemaining"] = reservoirUnitsRemaining
-        }
+        rawValue["reservoirUnitsRemaining"] = pumpManager.state.reservoirUnitsRemaining
 
         return rawValue
     }
@@ -81,11 +80,10 @@ final class MockHUDProvider: HUDProvider {
     }
 
     private func updateReservoirView() {
-        if let reservoirVolume = pumpManager.reservoirUnitsRemaining {
-            let reservoirLevel = (reservoirVolume / pumpManager.pumpReservoirCapacity).clamped(to: 0...1)
-            reservoirView?.reservoirLevel = reservoirLevel
-            reservoirView?.setReservoirVolume(volume: reservoirVolume, at: Date())
-        }
+        let reservoirVolume = pumpManager.state.reservoirUnitsRemaining
+        let reservoirLevel = (reservoirVolume / pumpManager.pumpReservoirCapacity).clamped(to: 0...1)
+        reservoirView?.reservoirLevel = reservoirLevel
+        reservoirView?.setReservoirVolume(volume: reservoirVolume, at: Date())
     }
 
     private func updateBatteryView() {
@@ -94,11 +92,11 @@ final class MockHUDProvider: HUDProvider {
 }
 
 extension MockHUDProvider: MockPumpManagerStateObserver {
-    func mockPumpManager(_ manager: MockPumpManager, didUpdateReservoirUnitsRemaining units: Double) {
+    func mockPumpManager(_ manager: MockPumpManager, didUpdateState state: MockPumpManagerState) {
         updateReservoirView()
     }
 
-    func pumpManager(_ pumpManager: PumpManager, didUpdateStatus status: PumpManagerStatus) {
+    func mockPumpManager(_ manager: MockPumpManager, didUpdateStatus status: PumpManagerStatus) {
         lastPumpManagerStatus = status
         updateBatteryView()
     }

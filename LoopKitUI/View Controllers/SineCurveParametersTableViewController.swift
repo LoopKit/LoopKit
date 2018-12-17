@@ -34,10 +34,13 @@ final class SineCurveParametersTableViewController: UITableViewController {
         set {
             baseGlucose = newValue?.baseGlucose
             amplitude = newValue?.amplitude
-            period = newValue?.period
-            referenceDate = newValue?.referenceDate
+            period = newValue?.period ?? defaultPeriod
+            referenceDate = newValue?.referenceDate ?? defaultReferenceDate
         }
     }
+
+    var defaultPeriod: TimeInterval = .hours(6)
+    var defaultReferenceDate = Date()
 
     private var baseGlucose: HKQuantity? {
         didSet {
@@ -63,6 +66,8 @@ final class SineCurveParametersTableViewController: UITableViewController {
         }
     }
 
+    var contextHelp: String?
+
     weak var delegate: SineCurveParametersTableViewControllerDelegate?
 
     private lazy var glucoseFormatter = QuantityFormatter()
@@ -70,14 +75,14 @@ final class SineCurveParametersTableViewController: UITableViewController {
     private lazy var durationFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute]
-        formatter.unitsStyle = .abbreviated
+        formatter.unitsStyle = .short
         return formatter
     }()
 
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
-        formatter.timeStyle = .none
+        formatter.timeStyle = .short
         return formatter
     }()
 
@@ -170,10 +175,14 @@ final class SineCurveParametersTableViewController: UITableViewController {
         case .amplitude:
             presentGlucoseEntryViewController(for: amplitude, contextHelp: "The amplitude represents the magnitude of the oscillation of the glucose curve.")
         case .period:
-            presentDateAndDurationViewController(for: .duration(period ?? .hours(6)), contextHelp: "The period describes the duration of one complete glucose cycle.")
+            presentDateAndDurationViewController(for: .duration(period ?? defaultPeriod), contextHelp: "The period describes the duration of one complete glucose cycle.")
         case .referenceDate:
-            presentDateAndDurationViewController(for: .date(referenceDate ?? Date()), contextHelp: "The reference date describes the origin of the sine curve with respect to time. Changing the reference date applies a phase shift to the curve.")
+            presentDateAndDurationViewController(for: .date(referenceDate ?? defaultReferenceDate, mode: .dateAndTime), contextHelp: "The reference date describes the origin of the sine curve with respect to time. Changing the reference date applies a phase shift to the curve.")
         }
+    }
+
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return contextHelp
     }
 }
 
@@ -212,7 +221,7 @@ extension SineCurveParametersTableViewController: DateAndDurationTableViewContro
             }
             period = duration
         case .referenceDate:
-            guard case .date(let date) = controller.inputMode else {
+            guard case .date(let date, mode: _) = controller.inputMode else {
                 assertionFailure()
                 return
             }

@@ -19,7 +19,11 @@ class GlucoseEntryTableViewController: TextFieldTableViewController {
 
     let glucoseUnit: HKUnit
 
-    private lazy var quantityFormatter = QuantityFormatter()
+    private lazy var glucoseFormatter: NumberFormatter = {
+        let quantityFormatter = QuantityFormatter()
+        quantityFormatter.setPreferredNumberFormatter(for: glucoseUnit)
+        return quantityFormatter.numberFormatter
+    }()
 
     var glucose: HKQuantity? {
         get {
@@ -29,7 +33,11 @@ class GlucoseEntryTableViewController: TextFieldTableViewController {
             return HKQuantity(unit: glucoseUnit, doubleValue: doubleValue)
         }
         set {
-            value = glucose.flatMap { quantityFormatter.string(from: $0, for: glucoseUnit) }
+            if let newValue = newValue {
+                value = glucoseFormatter.string(from: newValue.doubleValue(for: glucoseUnit))
+            } else {
+                value = nil
+            }
         }
     }
 

@@ -57,6 +57,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         // TODO: trend config?
         case model = 0
         case effects
+        case history
         case deleteHealthData
         case deleteCGM
     }
@@ -68,11 +69,15 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
     }
 
     private enum EffectsRow: Int, CaseIterable {
-        case delay = 0
-        case noise
+        case noise = 0
         case lowOutlier
         case highOutlier
         case error
+    }
+
+    private enum HistoryRow: Int, CaseIterable {
+        case trend = 0
+        case backfill
     }
 
     // MARK: - UITableViewDataSource
@@ -87,6 +92,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return ModelRow.allCases.count
         case .effects:
             return EffectsRow.allCases.count
+        case .history:
+            return HistoryRow.allCases.count
         case .deleteHealthData, .deleteCGM:
             return 1
         }
@@ -98,17 +105,12 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return "Model"
         case .effects:
             return "Effects"
+        case .history:
+            return "History"
         case .deleteHealthData, .deleteCGM:
             return " " // Use an empty string for more dramatic spacing
         }
     }
-
-    private lazy var durationFormatter: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.minute]
-        formatter.unitsStyle = .brief
-        return formatter
-    }()
 
     private lazy var quantityFormatter = QuantityFormatter()
 
@@ -135,7 +137,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .sineCurve:
                 cell.textLabel?.text = "Sine Curve"
                 if case .sineCurve(parameters: (baseGlucose: let baseGlucose, amplitude: let amplitude, period: _, referenceDate: _)) = model {
-                    if let baseGlucoseText = quantityFormatter.string(from: baseGlucose, for: glucoseUnit),
+                    if let baseGlucoseText = quantityFormatter.numberFormatter.string(from: baseGlucose.doubleValue(for: glucoseUnit)),
                         let amplitudeText = quantityFormatter.string(from: amplitude, for: glucoseUnit) {
                         cell.detailTextLabel?.text = "\(baseGlucoseText) ± \(amplitudeText)"
                     }
@@ -153,13 +155,6 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case .effects:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
             switch EffectsRow(rawValue: indexPath.row)! {
-            case .delay:
-                cell.textLabel?.text = "Data Delay"
-                if let delay = effects.delay {
-                    cell.detailTextLabel?.text = durationFormatter.string(from: delay)
-                } else {
-                    cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
-                }
             case .noise:
                 cell.textLabel?.text = "Glucose Noise"
                 if let maximumDeltaMagnitude = effects.glucoseNoise {
@@ -169,28 +164,26 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 }
             case .lowOutlier:
                 cell.textLabel?.text = "Random Low Outlier"
-                if let (chance: chance, delta: delta) = effects.randomLowOutlier,
-                    let percentageString = percentageFormatter.string(from: chance),
-                    let quantityString = quantityFormatter.string(from: delta, for: glucoseUnit)
+                if let chance = effects.randomLowOutlier?.chance,
+                    let percentageString = percentageFormatter.string(from: chance * 100)
                 {
-                    cell.detailTextLabel?.text = "\(percentageString)% chance of -\(quantityString)"
+                    cell.detailTextLabel?.text = "\(percentageString)% chance"
                 } else {
                     cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
                 }
             case .highOutlier:
                 cell.textLabel?.text = "Random High Outlier"
-                if let (chance: chance, delta: delta) = effects.randomHighOutlier,
-                    let percentageString = percentageFormatter.string(from: chance),
-                    let quantityString = quantityFormatter.string(from: delta, for: glucoseUnit)
+                if let chance = effects.randomHighOutlier?.chance,
+                    let percentageString = percentageFormatter.string(from: chance * 100)
                 {
-                    cell.detailTextLabel?.text = "\(percentageString)% chance of +\(quantityString)"
+                    cell.detailTextLabel?.text = "\(percentageString)% chance"
                 } else {
                     cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
                 }
             case .error:
                 cell.textLabel?.text = "Random Error"
                 if let chance = effects.randomErrorChance,
-                    let percentageString = percentageFormatter.string(from: chance)
+                    let percentageString = percentageFormatter.string(from: chance * 100)
                 {
                     cell.detailTextLabel?.text = "\(percentageString)% chance"
                 } else {
@@ -198,6 +191,17 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 }
             }
 
+            cell.accessoryType = .disclosureIndicator
+            return cell
+        case .history:
+            let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+            switch HistoryRow(rawValue: indexPath.row)! {
+            case .trend:
+                cell.textLabel?.text = "Trend"
+                cell.detailTextLabel?.text = cgmManager.mockSensorState.trendType?.symbol
+            case .backfill:
+                cell.textLabel?.text = "Backfill Glucose"
+            }
             cell.accessoryType = .disclosureIndicator
             return cell
         case .deleteHealthData:
@@ -236,7 +240,10 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 let vc = SineCurveParametersTableViewController(glucoseUnit: glucoseUnit)
                 if case .sineCurve(parameters: let parameters) = model {
                     vc.parameters = parameters
+                } else {
+                    vc.parameters = nil
                 }
+                vc.contextHelp = "The sine curve parameters describe a mathematical model for glucose value production."
                 vc.delegate = self
                 show(vc, sender: sender)
             case .noData:
@@ -245,13 +252,6 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             }
         case .effects:
             switch EffectsRow(rawValue: indexPath.row)! {
-            case .delay:
-                let vc = DateAndDurationTableViewController()
-                vc.inputMode = .duration(effects.delay ?? .minutes(1)) // sensible default
-                vc.title = "Data Delay"
-                vc.contextHelp = "The delay applies to the time after a CGM value is requested."
-                vc.indexPath = indexPath
-                show(vc, sender: sender)
             case .noise:
                 let vc = GlucoseEntryTableViewController(glucoseUnit: glucoseUnit)
                 if let maximumDeltaMagnitude = effects.glucoseNoise {
@@ -266,6 +266,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 let vc = RandomOutlierTableViewController(glucoseUnit: glucoseUnit)
                 vc.title = "Low Outlier"
                 vc.randomOutlier = effects.randomLowOutlier
+                vc.contextHelp = "Produced glucose values will have a chance of being decreased by the delta quantity."
                 vc.indexPath = indexPath
                 vc.delegate = self
                 show(vc, sender: sender)
@@ -273,6 +274,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 let vc = RandomOutlierTableViewController(glucoseUnit: glucoseUnit)
                 vc.title = "High Outlier"
                 vc.randomOutlier = effects.randomHighOutlier
+                vc.contextHelp = "Produced glucose values will have a chance of being increased by the delta quantity."
                 vc.indexPath = indexPath
                 vc.delegate = self
                 show(vc, sender: sender)
@@ -285,6 +287,29 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 vc.contextHelp = "The percentage determines the chance with which the CGM will error when a glucose value is requested."
                 vc.indexPath = indexPath
                 vc.percentageDelegate = self
+                show(vc, sender: sender)
+            }
+        case .history:
+            switch HistoryRow(rawValue: indexPath.row)! {
+            case .trend:
+                let vc = GlucoseTrendTableViewController()
+                vc.glucoseTrend = cgmManager.mockSensorState.trendType
+                vc.title = "Glucose Trend"
+                vc.glucoseTrendDelegate = self
+                show(vc, sender: sender)
+            case .backfill:
+                let vc = DateAndDurationTableViewController()
+                vc.inputMode = .duration(.hours(3))
+                vc.title = "Backfill"
+                vc.contextHelp = "Performing a backfill will not delete existing prior glucose values."
+                vc.indexPath = indexPath
+                vc.onSave { inputMode in
+                    guard case .duration(let duration) = inputMode else {
+                        assertionFailure()
+                        return
+                    }
+                    self.cgmManager.backfillData(datingBack: duration)
+                }
                 show(vc, sender: sender)
             }
         case .deleteHealthData:
@@ -312,25 +337,9 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         rows _: Row.Type
     ) -> [IndexPath] where Row.RawValue == Int {
         let rows = Row.allCases
-        return zip(rows, repeatElement(section, count: rows.count))
-            .map { row, section in IndexPath(row: row.rawValue, section: section.rawValue) }
-    }
-}
-
-extension MockCGMManagerSettingsViewController: DateAndDurationTableViewControllerDelegate {
-    func dateAndDurationTableViewControllerDidChangeDate(_ controller: DateAndDurationTableViewController) {
-        guard let indexPath = controller.indexPath else {
-            assertionFailure()
-            return
+        return zip(rows, repeatElement(section, count: rows.count)).map { row, section in
+            return IndexPath(row: row.rawValue, section: section.rawValue)
         }
-
-        assert(indexPath == [Section.effects.rawValue, EffectsRow.delay.rawValue])
-        guard case .duration(let duration) = controller.inputMode else {
-            assertionFailure()
-            return
-        }
-        // TODO: how to describe no delay?
-        effects.delay = duration
     }
 }
 
@@ -383,6 +392,8 @@ extension MockCGMManagerSettingsViewController: RandomOutlierTableViewController
         default:
             assertionFailure()
         }
+
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
 
@@ -402,6 +413,13 @@ extension MockCGMManagerSettingsViewController: PercentageTextFieldTableViewCont
         default:
             assertionFailure()
         }
+    }
+}
+
+extension MockCGMManagerSettingsViewController: GlucoseTrendTableViewControllerDelegate {
+    func glucoseTrendTableViewControllerDidChangeTrend(_ controller: GlucoseTrendTableViewController) {
+        cgmManager.mockSensorState.trendType = controller.glucoseTrend
+        tableView.reloadRows(at: [[Section.history.rawValue, HistoryRow.trend.rawValue]], with: .automatic)
     }
 }
 

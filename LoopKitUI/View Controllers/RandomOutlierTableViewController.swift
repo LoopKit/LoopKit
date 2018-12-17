@@ -32,6 +32,8 @@ final class RandomOutlierTableViewController: UITableViewController {
         }
     }
 
+    var contextHelp: String?
+
     var indexPath: IndexPath?
 
     weak var delegate: RandomOutlierTableViewControllerDelegate?
@@ -93,10 +95,19 @@ final class RandomOutlierTableViewController: UITableViewController {
         switch Row(rawValue: indexPath.row)! {
         case .chance:
             cell.textLabel?.text = "Chance"
-            cell.detailTextLabel?.text = chance.flatMap(percentageFormatter.string(from:)) ?? SettingsTableViewCell.NoValueString
+            if let chance = chance,
+                let percentageText = percentageFormatter.string(from: chance * 100) {
+                cell.detailTextLabel?.text = "\(percentageText)%"
+            } else {
+                cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
+            }
         case .delta:
             cell.textLabel?.text = "Delta"
-            cell.detailTextLabel?.text = delta.flatMap { glucoseFormatter.string(from: $0, for: glucoseUnit) } ?? SettingsTableViewCell.NoValueString
+            if let delta = delta {
+                cell.detailTextLabel?.text = glucoseFormatter.string(from: delta, for: glucoseUnit)
+            } else {
+                cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
+            }
         }
 
         cell.accessoryType = .disclosureIndicator
@@ -125,16 +136,22 @@ final class RandomOutlierTableViewController: UITableViewController {
             show(vc, sender: sender)
         }
     }
+
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        return contextHelp
+    }
 }
 
 extension RandomOutlierTableViewController: PercentageTextFieldTableViewControllerDelegate {
     func percentageTextFieldTableViewControllerDidChangePercentage(_ controller: PercentageTextFieldTableViewController) {
         chance = controller.percentage?.clamped(to: 0...100)
+        tableView.reloadRows(at: [[0, Row.chance.rawValue]], with: .automatic)
     }
 }
 
 extension RandomOutlierTableViewController: GlucoseEntryTableViewControllerDelegate {
     func glucoseEntryTableViewControllerDidChangeGlucose(_ controller: GlucoseEntryTableViewController) {
         delta = controller.glucose
+        tableView.reloadRows(at: [[0, Row.delta.rawValue]], with: .automatic)
     }
 }

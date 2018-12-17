@@ -17,10 +17,18 @@ class PercentageTextFieldTableViewController: TextFieldTableViewController {
 
     var percentage: Double? {
         get {
-            return value.flatMap(Double.init)
+            if let doubleValue = value.flatMap(Double.init) {
+                return doubleValue / 100
+            } else {
+                return nil
+            }
         }
         set {
-            value = percentage.flatMap(percentageFormatter.string(from:))
+            if let percentage = newValue {
+                value = percentageFormatter.string(from: percentage * 100)
+            } else {
+                value = nil
+            }
         }
     }
 
