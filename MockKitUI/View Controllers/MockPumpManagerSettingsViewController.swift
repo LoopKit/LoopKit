@@ -7,8 +7,10 @@
 //
 
 import UIKit
-import LoopKit
 import HealthKit
+import LoopKit
+import LoopKitUI
+import MockKit
 
 
 final class MockPumpManagerSettingsViewController: UITableViewController {

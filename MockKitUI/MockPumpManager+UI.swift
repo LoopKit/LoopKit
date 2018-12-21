@@ -8,6 +8,8 @@
 
 import Foundation
 import LoopKit
+import LoopKitUI
+import MockKit
 
 
 final class MockHUDProvider: NSObject, HUDProvider {

@@ -8,6 +8,7 @@
 
 import UIKit
 import LoopKit
+import LoopKitUI
 
 
 protocol GlucoseTrendTableViewControllerDelegate: class {

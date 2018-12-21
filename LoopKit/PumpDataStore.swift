@@ -26,7 +26,7 @@ public final class PumpDataStore {
     /// - Parameters:
     ///   - device: The device whose dose data should be deleted from HealthKit.
     ///   - completion: The completion handler.
-    func deleteInsulinDoses(fromDevice device: HKDevice, completion: @escaping (Error?) -> Void) {
+    public func deleteInsulinDoses(fromDevice device: HKDevice, completion: @escaping (Error?) -> Void) {
         let devicePredicate = HKQuery.predicateForObjects(from: [device])
         deleteInsulinDoses(matching: devicePredicate, completion: completion)
     }

@@ -9,6 +9,8 @@
 import UIKit
 import HealthKit
 import LoopKit
+import LoopKitUI
+import MockKit
 
 
 final class MockPumpManagerSettingsSetupViewController: SetupTableViewController {
@@ -62,7 +64,7 @@ final class MockPumpManagerSettingsSetupViewController: SetupTableViewController
 
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .basalRates:
-                cell.textLabel?.text = LocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
+                cell.textLabel?.text = "Basal Rates"
 
                 if let basalRateSchedule = setupViewController?.basalSchedule {
                     let unit = HKUnit.internationalUnit()
@@ -72,7 +74,7 @@ final class MockPumpManagerSettingsSetupViewController: SetupTableViewController
                     cell.detailTextLabel?.text = SettingsTableViewCell.TapToSetString
                 }
             case .deliveryLimits:
-                cell.textLabel?.text = LocalizedString("Delivery Limits", comment: "Title text for delivery limits")
+                cell.textLabel?.text = "Delivery Limits"
 
                 if setupViewController?.maxBolusUnits == nil || setupViewController?.maxBasalRateUnitsPerHour == nil {
                     cell.detailTextLabel?.text = SettingsTableViewCell.TapToSetString

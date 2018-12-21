@@ -8,6 +8,8 @@
 
 import UIKit
 import LoopKit
+import LoopKitUI
+import MockKit
 
 
 final class MockPumpManagerSetupViewController: UINavigationController, PumpManagerSetupViewController {

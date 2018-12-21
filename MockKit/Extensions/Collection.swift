@@ -15,6 +15,7 @@ extension Collection {
             _ element: Element,
             _ completion: @escaping (NewElement) -> Void
         ) -> Void,
+        notifyingOn queue: DispatchQueue = .global(),
         completion: @escaping ([NewElement]) -> Void
     ) {
         let result = Locked(Array<NewElement?>(repeating: nil, count: count))
@@ -28,7 +29,7 @@ extension Collection {
             }
         }
 
-        group.notify(queue: .global()) {
+        group.notify(queue: queue) {
             let transformed = result.value.map { $0! }
             completion(transformed)
         }

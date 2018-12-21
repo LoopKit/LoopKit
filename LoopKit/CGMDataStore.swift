@@ -21,7 +21,7 @@ public final class CGMDataStore {
         return glucoseStore.healthStore
     }
 
-    func deleteGlucoseSamples(fromDevice device: HKDevice) {
+    public func deleteGlucoseSamples(fromDevice device: HKDevice) {
         let predicate = HKQuery.predicateForObjects(from: [device])
         deleteGlucoseSamples(matching: predicate)
     }

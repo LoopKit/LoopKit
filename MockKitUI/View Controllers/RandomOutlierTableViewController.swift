@@ -9,6 +9,8 @@
 import UIKit
 import HealthKit
 import LoopKit
+import LoopKitUI
+import MockKit
 
 
 protocol RandomOutlierTableViewControllerDelegate: class {

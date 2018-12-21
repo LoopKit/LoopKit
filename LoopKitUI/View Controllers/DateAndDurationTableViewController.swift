@@ -9,35 +9,35 @@
 import UIKit
 
 
-protocol DateAndDurationTableViewControllerDelegate: class {
+public protocol DateAndDurationTableViewControllerDelegate: class {
     func dateAndDurationTableViewControllerDidChangeDate(_ controller: DateAndDurationTableViewController)
 }
 
-class DateAndDurationTableViewController: UITableViewController {
-    enum InputMode {
+public class DateAndDurationTableViewController: UITableViewController {
+    public enum InputMode {
         case date(Date, mode: UIDatePicker.Mode)
         case duration(TimeInterval)
     }
 
-    var inputMode: InputMode = .date(Date(), mode: .dateAndTime) {
+    public var inputMode: InputMode = .date(Date(), mode: .dateAndTime) {
         didSet {
             delegate?.dateAndDurationTableViewControllerDidChangeDate(self)
         }
     }
 
-    var titleText: String?
+    public var titleText: String?
 
-    var contextHelp: String?
+    public var contextHelp: String?
 
-    var indexPath: IndexPath?
+    public var indexPath: IndexPath?
 
-    weak var delegate: DateAndDurationTableViewControllerDelegate?
+    public weak var delegate: DateAndDurationTableViewControllerDelegate?
 
-    convenience init() {
+    public convenience init() {
         self.init(style: .grouped)
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.register(DateAndDurationTableViewCell.nib(), forCellReuseIdentifier: DateAndDurationTableViewCell.className)
@@ -45,7 +45,7 @@ class DateAndDurationTableViewController: UITableViewController {
 
     private var completion: ((InputMode) -> Void)?
 
-    func onSave(_ completion: @escaping (InputMode) -> Void) {
+    public func onSave(_ completion: @escaping (InputMode) -> Void) {
         let saveBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(save))
         navigationItem.rightBarButtonItem = saveBarButtonItem
         self.completion = completion
@@ -56,15 +56,15 @@ class DateAndDurationTableViewController: UITableViewController {
         dismiss(animated: true)
     }
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    public override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
         switch inputMode {
         case .date(let date, mode: let mode):
@@ -82,7 +82,7 @@ class DateAndDurationTableViewController: UITableViewController {
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+    public override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return contextHelp
     }
 }

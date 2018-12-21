@@ -7,6 +7,7 @@
 //
 
 import HealthKit
+import LoopKit
 
 
 public struct MockCGMState: SensorDisplayable {

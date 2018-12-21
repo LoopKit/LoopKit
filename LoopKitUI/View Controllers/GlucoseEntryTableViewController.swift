@@ -11,11 +11,11 @@ import HealthKit
 import LoopKit
 
 
-protocol GlucoseEntryTableViewControllerDelegate: class {
+public protocol GlucoseEntryTableViewControllerDelegate: class {
     func glucoseEntryTableViewControllerDidChangeGlucose(_ controller: GlucoseEntryTableViewController)
 }
 
-class GlucoseEntryTableViewController: TextFieldTableViewController {
+public class GlucoseEntryTableViewController: TextFieldTableViewController {
 
     let glucoseUnit: HKUnit
 
@@ -25,7 +25,7 @@ class GlucoseEntryTableViewController: TextFieldTableViewController {
         return quantityFormatter.numberFormatter
     }()
 
-    var glucose: HKQuantity? {
+    public var glucose: HKQuantity? {
         get {
             guard let doubleValue = value.flatMap(Double.init) else {
                 return nil
@@ -41,9 +41,9 @@ class GlucoseEntryTableViewController: TextFieldTableViewController {
         }
     }
 
-    weak var glucoseEntryDelegate: GlucoseEntryTableViewControllerDelegate?
+    public weak var glucoseEntryDelegate: GlucoseEntryTableViewControllerDelegate?
 
-    init(glucoseUnit: HKUnit) {
+    public init(glucoseUnit: HKUnit) {
         self.glucoseUnit = glucoseUnit
         super.init(style: .grouped)
         unit = glucoseUnit.glucoseUnitDisplayString
@@ -58,11 +58,11 @@ class GlucoseEntryTableViewController: TextFieldTableViewController {
 }
 
 extension GlucoseEntryTableViewController: TextFieldTableViewControllerDelegate {
-    func textFieldTableViewControllerDidEndEditing(_ controller: TextFieldTableViewController) {
+    public func textFieldTableViewControllerDidEndEditing(_ controller: TextFieldTableViewController) {
         glucoseEntryDelegate?.glucoseEntryTableViewControllerDidChangeGlucose(self)
     }
 
-    func textFieldTableViewControllerDidReturn(_ controller: TextFieldTableViewController) {
+    public func textFieldTableViewControllerDidReturn(_ controller: TextFieldTableViewController) {
         glucoseEntryDelegate?.glucoseEntryTableViewControllerDidChangeGlucose(self)
     }
 }

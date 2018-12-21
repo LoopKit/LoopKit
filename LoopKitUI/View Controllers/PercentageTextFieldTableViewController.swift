@@ -9,13 +9,13 @@
 import UIKit
 
 
-protocol PercentageTextFieldTableViewControllerDelegate: class {
+public protocol PercentageTextFieldTableViewControllerDelegate: class {
     func percentageTextFieldTableViewControllerDidChangePercentage(_ controller: PercentageTextFieldTableViewController)
 }
 
-class PercentageTextFieldTableViewController: TextFieldTableViewController {
+public class PercentageTextFieldTableViewController: TextFieldTableViewController {
 
-    var percentage: Double? {
+    public var percentage: Double? {
         get {
             if let doubleValue = value.flatMap(Double.init) {
                 return doubleValue / 100
@@ -32,7 +32,7 @@ class PercentageTextFieldTableViewController: TextFieldTableViewController {
         }
     }
 
-    weak var percentageDelegate: PercentageTextFieldTableViewControllerDelegate?
+    public weak var percentageDelegate: PercentageTextFieldTableViewControllerDelegate?
 
     var maximumFractionDigits: Int = 1 {
         didSet {
@@ -47,7 +47,7 @@ class PercentageTextFieldTableViewController: TextFieldTableViewController {
         return formatter
     }()
 
-    convenience init() {
+    public convenience init() {
         self.init(style: .grouped)
         unit = "%"
         keyboardType = .decimalPad
@@ -57,11 +57,11 @@ class PercentageTextFieldTableViewController: TextFieldTableViewController {
 }
 
 extension PercentageTextFieldTableViewController: TextFieldTableViewControllerDelegate {
-    func textFieldTableViewControllerDidEndEditing(_ controller: TextFieldTableViewController) {
+    public func textFieldTableViewControllerDidEndEditing(_ controller: TextFieldTableViewController) {
         percentageDelegate?.percentageTextFieldTableViewControllerDidChangePercentage(self)
     }
 
-    func textFieldTableViewControllerDidReturn(_ controller: TextFieldTableViewController) {
+    public func textFieldTableViewControllerDidReturn(_ controller: TextFieldTableViewController) {
         percentageDelegate?.percentageTextFieldTableViewControllerDidChangePercentage(self)
     }
 }

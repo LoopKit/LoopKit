@@ -7,6 +7,7 @@
 //
 
 import HealthKit
+import LoopKit
 
 
 /// Returns a value based on the result of a random coin flip.

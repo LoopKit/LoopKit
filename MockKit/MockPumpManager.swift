@@ -6,8 +6,8 @@
 //  Copyright © 2018 LoopKit Authors. All rights reserved.
 //
 
-import Foundation
 import HealthKit
+import LoopKit
 
 
 public protocol MockPumpManagerStateObserver {
