@@ -15,11 +15,14 @@ class HKHealthStoreMock: HKHealthStore {
     var deleteError: Error?
     var queryResults: (samples: [HKSample]?, error: Error?)?
 
+    var saveHandler: ((_ objects: [HKObject], _ success: Bool, _ error: Error?) -> Void)?
+
     let queue = DispatchQueue(label: "HKHealthStoreMock")
 
     override func save(_ objects: [HKObject], withCompletion completion: @escaping (Bool, Error?) -> Void) {
         queue.async {
             completion(self.saveError == nil, self.saveError)
+            self.saveHandler?(objects, self.saveError == nil, self.saveError)
         }
     }
 

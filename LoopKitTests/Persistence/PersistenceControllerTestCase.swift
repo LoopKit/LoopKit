@@ -15,7 +15,7 @@ class PersistenceControllerTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        cacheStore = PersistenceController(directoryURL: URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true))
+        cacheStore = PersistenceController(directoryURL: URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent(UUID().uuidString, isDirectory: true))
     }
 
     override func tearDown() {
