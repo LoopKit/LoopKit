@@ -729,11 +729,12 @@ extension DoseStore {
             }
 
             self.persistenceController.save { (error) -> Void in
-                completion(DoseStoreError(error: error))
-                NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
                 self.uploadPumpEventsIfNeeded()
 
-                self.syncPumpEventsToHealthStore() { _ in }
+                self.syncPumpEventsToHealthStore() { _ in
+                    completion(DoseStoreError(error: error))
+                    NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
+                }
             }
         }
     }

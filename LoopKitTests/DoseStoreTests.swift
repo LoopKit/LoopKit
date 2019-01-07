@@ -230,6 +230,9 @@ class DoseStoreTests: PersistenceControllerTestCase {
         }
         waitForExpectations(timeout: 3)
 
+        XCTAssertEqual(f("2018-11-29 10:54:28 +0000"), doseStore.insulinDeliveryStore.test_lastBasalEndDate)
+        XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), doseStore.pumpEventQueryAfterDate)
+
         // Add the next set of pump events, including the last temp basal change.
         // The previous, completed basal entries should be saved to Health
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-11-29 11:14:28 +0000")
