@@ -15,7 +15,7 @@ class HKHealthStoreMock: HKHealthStore {
     var deleteError: Error?
     var queryResults: (samples: [HKSample]?, error: Error?)?
 
-    var saveHandler: ((_ objects: [HKObject], _ success: Bool, _ error: Error?) -> Void)?
+    private var saveHandler: ((_ objects: [HKObject], _ success: Bool, _ error: Error?) -> Void)?
 
     let queue = DispatchQueue(label: "HKHealthStoreMock")
 
@@ -29,6 +29,12 @@ class HKHealthStoreMock: HKHealthStore {
     override func delete(_ objects: [HKObject], withCompletion completion: @escaping (Bool, Error?) -> Void) {
         queue.async {
             completion(self.deleteError == nil, self.deleteError)
+        }
+    }
+
+    func setSaveHandler(_ saveHandler: ((_ objects: [HKObject], _ success: Bool, _ error: Error?) -> Void)?) {
+        queue.sync {
+            self.saveHandler = saveHandler
         }
     }
 }

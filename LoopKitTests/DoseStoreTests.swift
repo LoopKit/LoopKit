@@ -62,7 +62,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             return formatter.date(from: input)!
         }
 
-        // Create a DoseStore
+        // 1. Create a DoseStore
         let healthStore = HKHealthStoreMock()
 
         let doseStore = DoseStore(
@@ -79,7 +79,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         )
 
 
-        // Add a temp basal which has already ended. It should be saved to Health
+        // 2. Add a temp basal which has already ended. It should be saved to Health
         let pumpEvents1 = [
             NewPumpEvent(date: f("2018-12-12 17:35:58 +0000"), dose: nil, isMutable: false, raw: UUID().data, title: "TempBasalPumpEvent(length: 8, rawData: 8 bytes, rateType: MinimedKit.TempBasalPumpEvent.RateType.Absolute, rate: 2.125, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 9 minute: 35 second: 58 isLeapMonth: false )", type: nil),
             NewPumpEvent(date: f("2018-12-12 17:35:58 +0000"), dose: DoseEntry(type: .tempBasal, startDate: f("2018-12-12 17:35:58 +0000"), endDate: f("2018-12-12 18:05:58 +0000"), value: 2.125, unit: .unitsPerHour), isMutable: false, raw: Data(hexadecimalString: "1601fa23094c12")!, title: "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2018 month: 12 day: 12 hour: 9 minute: 35 second: 58 isLeapMonth: false )", type: .tempBasal)
@@ -89,25 +89,27 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         let addPumpEvents1 = expectation(description: "add pumpEvents1")
         addPumpEvents1.expectedFulfillmentCount = 3
-        healthStore.saveHandler = { (objects, success, error) in
+        healthStore.setSaveHandler({ (objects, success, error) in
             XCTAssertEqual(1, objects.count)
             let sample = objects.first as! HKQuantitySample
             XCTAssertEqual(HKInsulinDeliveryReason.basal, sample.insulinDeliveryReason)
             XCTAssertNil(error)
+            addPumpEvents1.fulfill()
+        })
+        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             addPumpEvents1.fulfill()
         }
         doseStore.addPumpEvents(pumpEvents1) { (error) in
             XCTAssertNil(error)
             addPumpEvents1.fulfill()
         }
-        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
-            addPumpEvents1.fulfill()
-        }
         waitForExpectations(timeout: 3)
 
         XCTAssertEqual(f("2018-12-12 18:05:58 +0000"), doseStore.insulinDeliveryStore.test_lastBasalEndDate)
 
-        // Add a bolus a little later, which started before the last temp basal, but wasn't written to pump history until it completed (x22 pump behavior)
+
+        // 3. Add a bolus a little later, which started before the last temp basal ends, but wasn't written to pump history until it completed (x22 pump behavior)
+        // Even though it is before lastBasalEndDate, it should be saved to HealthKit.
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-12-12 18:16:23 +0000")
 
         let pumpEvents2 = [
@@ -115,24 +117,29 @@ class DoseStoreTests: PersistenceControllerTestCase {
         ]
 
         let addPumpEvents2 = expectation(description: "add pumpEvents2")
-        addPumpEvents2.expectedFulfillmentCount = 1  // This should be 3
-        healthStore.saveHandler = { (objects, success, error) in
+        addPumpEvents2.expectedFulfillmentCount = 3
+        healthStore.setSaveHandler({ (objects, success, error) in
             XCTAssertEqual(1, objects.count)
             let sample = objects.first as! HKQuantitySample
             XCTAssertEqual(HKInsulinDeliveryReason.bolus, sample.insulinDeliveryReason)
+            XCTAssertEqual(5.0, sample.quantity.doubleValue(for: .internationalUnit()))
+            XCTAssertEqual(f("2018-12-12 18:05:14 +0000"), sample.startDate)
             XCTAssertNil(error)
+            addPumpEvents2.fulfill()
+        })
+        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             addPumpEvents2.fulfill()
         }
         doseStore.addPumpEvents(pumpEvents2) { (error) in
             XCTAssertNil(error)
             addPumpEvents2.fulfill()
         }
-        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
-            addPumpEvents2.fulfill()
-        }
         waitForExpectations(timeout: 3)
 
-        // Add the next set of pump events, passing by the bolus which wasn't saved to HealthKit
+        XCTAssertEqual(f("2018-12-12 18:05:58 +0000"), doseStore.insulinDeliveryStore.test_lastBasalEndDate)
+
+
+        // Add the next set of pump events, which haven't completed and shouldn't be saved to HealthKit
         doseStore.insulinDeliveryStore.test_currentDate = f("2018-12-12 18:21:22 +0000")
 
         let pumpEvents3 = [
@@ -141,18 +148,12 @@ class DoseStoreTests: PersistenceControllerTestCase {
         ]
 
         let addPumpEvents3 = expectation(description: "add pumpEvents3")
-        addPumpEvents3.expectedFulfillmentCount = 3
-        healthStore.saveHandler = { (objects, success, error) in
-            XCTAssertEqual(1, objects.count)
-            let sample = objects.first as! HKQuantitySample
-            XCTAssertEqual(HKInsulinDeliveryReason.bolus, sample.insulinDeliveryReason)
-            XCTAssertEqual(5.0, sample.quantity.doubleValue(for: .internationalUnit()))
-            XCTAssertEqual(f("2018-12-12 18:05:14 +0000"), sample.startDate)
-            XCTAssertNil(error)
-            addPumpEvents3.fulfill()
-        }
+        addPumpEvents3.expectedFulfillmentCount = 1
+        healthStore.setSaveHandler({ (objects, success, error) in
+            XCTFail()
+        })
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
-            addPumpEvents3.fulfill()
+            XCTFail()
         }
         doseStore.addPumpEvents(pumpEvents3) { (error) in
             XCTAssertNil(error)
@@ -197,15 +198,15 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         let addPumpEvents1 = expectation(description: "add pumpEvents1")
         addPumpEvents1.expectedFulfillmentCount = 1
-        healthStore.saveHandler = { (objects, success, error) in
+        healthStore.setSaveHandler({ (objects, success, error) in
+            XCTFail()
+        })
+        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             XCTFail()
         }
         doseStore.addPumpEvents(pumpEvents1) { (error) in
             XCTAssertNil(error)
             addPumpEvents1.fulfill()
-        }
-        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
-            XCTFail()
         }
         waitForExpectations(timeout: 3)
 
@@ -217,15 +218,15 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         let addPumpEvents2 = expectation(description: "add pumpEvents2")
         addPumpEvents2.expectedFulfillmentCount = 1
-        healthStore.saveHandler = { (objects, success, error) in
+        healthStore.setSaveHandler({ (objects, success, error) in
+            XCTFail()
+        })
+        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             XCTFail()
         }
         doseStore.addPumpEvents(pumpEvents1) { (error) in
             XCTAssertNil(error)
             addPumpEvents2.fulfill()
-        }
-        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
-            XCTFail()
         }
         waitForExpectations(timeout: 3)
 
@@ -240,7 +241,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         let addPumpEvents3 = expectation(description: "add pumpEvents3")
         addPumpEvents3.expectedFulfillmentCount = 3
-        healthStore.saveHandler = { (objects, success, error) in
+        healthStore.setSaveHandler({ (objects, success, error) in
             XCTAssertEqual(3, objects.count)
             let basal = objects[0] as! HKQuantitySample
             XCTAssertEqual(HKInsulinDeliveryReason.basal, basal.insulinDeliveryReason)
@@ -261,12 +262,12 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertEqual(0.05, temp2.quantity.doubleValue(for: .internationalUnit()), accuracy: .ulpOfOne)
             XCTAssertNil(error)
             addPumpEvents3.fulfill()
+        })
+        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
+            addPumpEvents3.fulfill()
         }
         doseStore.addPumpEvents(pumpEvents3) { (error) in
             XCTAssertNil(error)
-            addPumpEvents3.fulfill()
-        }
-        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             addPumpEvents3.fulfill()
         }
         waitForExpectations(timeout: 3)
@@ -284,7 +285,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         let addPumpEvents4 = expectation(description: "add pumpEvents4")
         addPumpEvents4.expectedFulfillmentCount = 3
-        healthStore.saveHandler = { (objects, success, error) in
+        healthStore.setSaveHandler({ (objects, success, error) in
             XCTAssertEqual(1, objects.count)
             let temp = objects[0] as! HKQuantitySample
             XCTAssertEqual(HKInsulinDeliveryReason.basal, temp.insulinDeliveryReason)
@@ -294,12 +295,12 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertEqual(0.05, temp.quantity.doubleValue(for: .internationalUnit()), accuracy: .ulpOfOne)
             XCTAssertNil(error)
             addPumpEvents4.fulfill()
+        })
+        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
+            addPumpEvents4.fulfill()
         }
         doseStore.addPumpEvents(pumpEvents4) { (error) in
             XCTAssertNil(error)
-            addPumpEvents4.fulfill()
-        }
-        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             addPumpEvents4.fulfill()
         }
         waitForExpectations(timeout: 3)
