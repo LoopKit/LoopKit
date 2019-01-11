@@ -1096,9 +1096,11 @@ extension DoseStore {
                     let doses: [DoseEntry]
                     // Reservoir data is used only if its continuous and we haven't seen pump events since the last reservoir reading
                     if self.areReservoirValuesValid &&
-                        self.lastAddedPumpEvents.timeIntervalSince(self.lastStoredReservoirValue?.startDate ?? .distantPast) < 0 {
+                        self.lastAddedPumpEvents.timeIntervalSince(self.lastStoredReservoirValue?.startDate ?? .distantPast) < 0
+                    {
                         let reservoirDoses = try self.getNormalizedReservoirDoseEntries(start: filteredStart, end: end)
-                        doses = insulinDeliveryDoses + reservoirDoses.map({ $0.trim(from: filteredStart) })
+                        let dosesBeforeReservoirAccounting = insulinDeliveryDoses.filter { $0.endDate < filteredStart }
+                        doses = dosesBeforeReservoirAccounting + reservoirDoses.map({ $0.trim(from: filteredStart) })
                     } else {
                         doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
                     }
