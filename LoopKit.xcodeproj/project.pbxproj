@@ -834,7 +834,6 @@
 		1F5DAB1B2118C91C00048054 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				C133FD1621A2A845009B2D20 /* WeakObserverSet.swift */,
 				1F5DAB1C2118C95700048054 /* LocalizedString.swift */,
 			);
 			path = Common;
@@ -1132,6 +1131,7 @@
 				43D8FDF31C7290350073BE78 /* SampleValue.swift */,
 				43F5035421059A8A009FA89A /* ServiceAuthentication.swift */,
 				43FB60EA20DDC868002B996B /* SetBolusError.swift */,
+				C133FD1621A2A845009B2D20 /* WeakObserverSet.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
