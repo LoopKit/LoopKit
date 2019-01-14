@@ -51,8 +51,8 @@ extension PumpManagerStatus: CustomDebugStringConvertible {
         ## PumpManagerStatus
         * timeZone: \(timeZone)
         * device: \(device)
-        * pumpBatteryChargeRemaining: \(pumpBatteryChargeRemaining.map(String.init(describing:)) ?? "nil")
-        * suspendState: \(suspendState)
+        * pumpBatteryChargeRemaining: \(pumpBatteryChargeRemaining as Any)
+        * suspendState: \(basalDeliveryState)
         * bolusState: \(bolusState)
         """
     }

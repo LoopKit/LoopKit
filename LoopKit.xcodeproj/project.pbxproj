@@ -313,6 +313,10 @@
 		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
 		893A83DA21B64AEB00FAE2C4 /* PumpDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893A83D921B64AEB00FAE2C4 /* PumpDataStore.swift */; };
 		895695F621AA413B00828067 /* DateAndDurationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */; };
+		8992425F21EC113100EA512B /* WeakObserverSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8992425D21EC112700EA512B /* WeakObserverSet.swift */; };
+		8992426021EC113C00EA512B /* WeakObserverSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8992425D21EC112700EA512B /* WeakObserverSet.swift */; };
+		8992426221EC11FD00EA512B /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8992426121EC11FD00EA512B /* UIColor.swift */; };
+		8992426521EC138000EA512B /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8992426421EC138000EA512B /* UIColor.swift */; };
 		89AB9ECD21A4C8A500351324 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECC21A4C8A500351324 /* Comparable.swift */; };
 		89AB9ECE21A4C8BD00351324 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECC21A4C8A500351324 /* Comparable.swift */; };
 		89CCD4FA21A911510068C3FB /* PercentageTextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F921A911510068C3FB /* PercentageTextFieldTableViewController.swift */; };
@@ -349,8 +353,6 @@
 		89D204C421CC803C001238CC /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
 		89D204C521CC815E001238CC /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		89D204C621CC8165001238CC /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */; };
-		89D204C921CC820B001238CC /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F5035C21059B56009FA89A /* UIColor.swift */; };
-		89D204CA21CC820C001238CC /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F5035C21059B56009FA89A /* UIColor.swift */; };
 		89D204CB21CC8228001238CC /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434C5F9D209938CD00B2FD1A /* NumberFormatter.swift */; };
 		89D204CC21CC8236001238CC /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
 		89D204D221CC837A001238CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89D204D121CC837A001238CC /* Assets.xcassets */; };
@@ -358,7 +360,6 @@
 		89E72DE021BDDD6C00F0985C /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89E72DDF21BDDD6C00F0985C /* SwitchTableViewCell.xib */; };
 		C11166B02180FA5C000EEAAB /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AF2180FA5C000EEAAB /* LoadingTableViewCell.swift */; };
 		C168C40421B08EC900ADE90E /* SetupNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C168C40321B08EC900ADE90E /* SetupNavigationController.swift */; };
-		C16C3D3F21A3101700401105 /* WeakObserverSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133FD1621A2A845009B2D20 /* WeakObserverSet.swift */; };
 		C184FECB219F2E0100CD2722 /* SuspendResumeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */; };
 		C1FB427721754EBB00FAB378 /* ReservoirVolumeHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1FB427621754EBB00FAB378 /* ReservoirVolumeHUDView.xib */; };
 		C1FB427921754FC900FAB378 /* ReservoirVolumeHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FB427821754FC800FAB378 /* ReservoirVolumeHUDView.swift */; };
@@ -796,7 +797,6 @@
 		43F5035521059A8A009FA89A /* ServiceCredential.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceCredential.swift; sourceTree = "<group>"; };
 		43F5035821059AF7009FA89A /* AuthenticationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTableViewCell.swift; sourceTree = "<group>"; };
 		43F5035921059AF7009FA89A /* AuthenticationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthenticationTableViewCell.xib; sourceTree = "<group>"; };
-		43F5035C21059B56009FA89A /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAuthenticationUI.swift; sourceTree = "<group>"; };
 		43FADDFA1C89679200DDE013 /* HKQuantitySample+GlucoseKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HKQuantitySample+GlucoseKit.swift"; sourceTree = "<group>"; };
 		43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpManagerUI.swift; sourceTree = "<group>"; };
@@ -824,6 +824,9 @@
 		892F481A21AB2964004D313D /* RandomOutlierTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomOutlierTableViewController.swift; sourceTree = "<group>"; };
 		893A83D921B64AEB00FAE2C4 /* PumpDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpDataStore.swift; sourceTree = "<group>"; };
 		895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateAndDurationTableViewController.swift; sourceTree = "<group>"; };
+		8992425D21EC112700EA512B /* WeakObserverSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeakObserverSet.swift; path = LoopKit/WeakObserverSet.swift; sourceTree = SOURCE_ROOT; };
+		8992426121EC11FD00EA512B /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		8992426421EC138000EA512B /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		89AB9EC621A4774500351324 /* MockPumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManager.swift; sourceTree = "<group>"; };
 		89AB9EC821A4BC2400351324 /* MockCGMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManager.swift; sourceTree = "<group>"; };
 		89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockPumpManager+UI.swift"; sourceTree = "<group>"; };
@@ -857,7 +860,6 @@
 		C1110E981EE98CF5009BB852 /* ice_35_min_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_input.json; sourceTree = "<group>"; };
 		C11166AF2180FA5C000EEAAB /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
-		C133FD1621A2A845009B2D20 /* WeakObserverSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakObserverSet.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
 		C168C40321B08EC900ADE90E /* SetupNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupNavigationController.swift; sourceTree = "<group>"; };
 		C17F4CB21EE9B6DF005079B1 /* carb_entry_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = carb_entry_input.json; sourceTree = "<group>"; };
@@ -962,7 +964,7 @@
 		1F5DAB1B2118C91C00048054 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				C133FD1621A2A845009B2D20 /* WeakObserverSet.swift */,
+				8992425D21EC112700EA512B /* WeakObserverSet.swift */,
 				1F5DAB1C2118C95700048054 /* LocalizedString.swift */,
 				4353D179203E7840007B4ECD /* Locked.swift */,
 			);
@@ -1032,7 +1034,7 @@
 				89CCD4F921A911510068C3FB /* PercentageTextFieldTableViewController.swift */,
 				8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */,
 				895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */,
-                C168C40321B08EC900ADE90E /* SetupNavigationController.swift */,
+				C168C40321B08EC900ADE90E /* SetupNavigationController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -1157,11 +1159,11 @@
 				43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */,
 				43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */,
 				43F5035521059A8A009FA89A /* ServiceCredential.swift */,
-				43F5035C21059B56009FA89A /* UIColor.swift */,
 				43D8FE0E1C7290530073BE78 /* UIViewController.swift */,
 				43BA7156201E484D0058961E /* LoopKitUI.h */,
 				43BA7157201E484D0058961E /* Info.plist */,
 				1F5DAB282118CE9300048054 /* InfoPlist.strings */,
+				8992426121EC11FD00EA512B /* UIColor.swift */,
 			);
 			path = LoopKitUI;
 			sourceTree = "<group>";
@@ -1493,6 +1495,14 @@
 			path = Fixtures;
 			sourceTree = "<group>";
 		};
+		8992426321EC137900EA512B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8992426421EC138000EA512B /* UIColor.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		89D2047321CC7BD7001238CC /* MockKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -1519,6 +1529,7 @@
 		89D2049021CC7C13001238CC /* MockKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				8992426321EC137900EA512B /* Extensions */,
 				89D204B621CC7E77001238CC /* View Controllers */,
 				89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */,
 				89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */,
@@ -2073,7 +2084,7 @@
 				43F5034F210599DF009FA89A /* ValidatingIndicatorView.swift in Sources */,
 				43BA718C201EEE5A0058961E /* NSData.swift in Sources */,
 				43F5035A21059AF7009FA89A /* AuthenticationTableViewCell.swift in Sources */,
-				89D204C921CC820B001238CC /* UIColor.swift in Sources */,
+				8992426221EC11FD00EA512B /* UIColor.swift in Sources */,
 				43BA7163201E490D0058961E /* InsulinDeliveryTableViewController.swift in Sources */,
 				43BA7186201EE7090058961E /* UIViewController.swift in Sources */,
 				43BA718A201EE8CF0058961E /* NSTimeInterval.swift in Sources */,
@@ -2193,7 +2204,6 @@
 				1F5DAB1F2118C95700048054 /* LocalizedString.swift in Sources */,
 				434113AD20F287DC00D05747 /* NSManagedObjectContext.swift in Sources */,
 				4322B77B202FA2790002837D /* StoredCarbEntry.swift in Sources */,
-				C16C3D3F21A3101700401105 /* WeakObserverSet.swift in Sources */,
 				4322B790202FA2B30002837D /* InsulinValue.swift in Sources */,
 				434C5F9E209938CD00B2FD1A /* NumberFormatter.swift in Sources */,
 				437AFEEF2036A156008C4892 /* DeletedCarbObject+CoreDataClass.swift in Sources */,
@@ -2224,6 +2234,7 @@
 				433BC7B120562705000B1200 /* UpdateSource.swift in Sources */,
 				4322B784202FA2AF0002837D /* Reservoir+CoreDataProperties.swift in Sources */,
 				4322B778202FA2790002837D /* HKQuantitySample+CarbKit.swift in Sources */,
+				8992426021EC113C00EA512B /* WeakObserverSet.swift in Sources */,
 				4322B771202FA26F0002837D /* HKQuantitySample+GlucoseKit.swift in Sources */,
 				433BC7AB20538D4C000B1200 /* CachedGlucoseObject+CoreDataProperties.swift in Sources */,
 				43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */,
@@ -2281,6 +2292,7 @@
 				89D204AB21CC7C8F001238CC /* MockCGMDataSource.swift in Sources */,
 				89D204B221CC7D93001238CC /* Collection.swift in Sources */,
 				89D204AC21CC7C8F001238CC /* MockCGMManager.swift in Sources */,
+				8992425F21EC113100EA512B /* WeakObserverSet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2300,9 +2312,9 @@
 				89D204B421CC7E74001238CC /* MockCGMManager+UI.swift in Sources */,
 				89D204B521CC7E74001238CC /* MockPumpManager+UI.swift in Sources */,
 				89D204C121CC8005001238CC /* NibLoadable.swift in Sources */,
-				89D204CA21CC820C001238CC /* UIColor.swift in Sources */,
 				89D204BE21CC7F34001238CC /* GlucoseTrendTableViewController.swift in Sources */,
 				89D204C621CC8165001238CC /* UITableViewCell.swift in Sources */,
+				8992426521EC138000EA512B /* UIColor.swift in Sources */,
 				89D204BA21CC7F34001238CC /* MockPumpManagerSettingsViewController.swift in Sources */,
 				89D204BC21CC7F34001238CC /* SineCurveParametersTableViewController.swift in Sources */,
 				89D204BD21CC7F34001238CC /* RandomOutlierTableViewController.swift in Sources */,
