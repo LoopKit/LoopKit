@@ -34,6 +34,10 @@ final class MockHUDProvider: NSObject, HUDProvider {
         pumpManager.addStateObserver(self)
     }
 
+    func hudDidAppear() {
+        // nothing to do here
+    }
+
     var hudViewsRawState: HUDViewsRawState {
         var rawValue: HUDViewsRawState = [
             "pumpReservoirCapacity": pumpManager.pumpReservoirCapacity

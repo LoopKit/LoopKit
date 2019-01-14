@@ -16,14 +16,26 @@ open class SetupTableViewController: UITableViewController {
     open var cgmSetupViewController: CGMManagerSetupViewController? {
         return navigationController as? CGMManagerSetupViewController
     }
+    
+    open var setupNavigationController: SetupNavigationController? {
+        return navigationController as? SetupNavigationController
+    }
 
     private(set) open lazy var footerView = SetupTableFooterView(frame: .zero)
 
     private var lastContentHeight: CGFloat = 0
+    
+    private var compactMode: Bool = false {
+        didSet {
+            if oldValue != compactMode {
+                tableView.reloadData()
+            }
+        }
+    }
 
     open override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed(_:)))
 
         footerView.primaryButton.addTarget(self, action: #selector(continueButtonPressed(_:)), for: .touchUpInside)
@@ -31,6 +43,12 @@ open class SetupTableViewController: UITableViewController {
 
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        let visibleHeight = tableView.bounds.size.height - (tableView.adjustedContentInset.top + tableView.adjustedContentInset.bottom)
+        
+        if visibleHeight < tableView.contentSize.height {
+            compactMode = true
+        }
 
         // Reposition footer view if necessary
         if tableView.contentSize.height != lastContentHeight {
@@ -38,7 +56,6 @@ open class SetupTableViewController: UITableViewController {
             tableView.tableFooterView = nil
 
             var footerSize = footerView.systemLayoutSizeFitting(CGSize(width: tableView.frame.size.width, height: UIView.layoutFittingCompressedSize.height))
-            let visibleHeight = tableView.bounds.size.height - (tableView.adjustedContentInset.top + tableView.adjustedContentInset.bottom)
             let footerPadding = max(footerSize.height, visibleHeight - tableView.contentSize.height)
 
             footerSize.height = footerPadding
@@ -48,8 +65,7 @@ open class SetupTableViewController: UITableViewController {
     }
 
     @IBAction open func cancelButtonPressed(_: Any) {
-        setupViewController?.cancelSetup()
-        cgmSetupViewController?.cancelSetup()
+        setupNavigationController?.cancelSetup()
     }
 
     @IBAction open func continueButtonPressed(_ sender: Any) {
@@ -67,7 +83,14 @@ open class SetupTableViewController: UITableViewController {
     open override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-
+    
+    open override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if compactMode {
+            return 5
+        } else {
+            return UITableView.automaticDimension
+        }
+    }
 }
 
 

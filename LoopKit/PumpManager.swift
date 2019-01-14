@@ -15,7 +15,7 @@ public enum PumpManagerResult<T> {
 }
 
 public protocol PumpManagerStatusObserver: class {
-    func pumpManager(_ pumpManager: PumpManager, didUpdateStatus status: PumpManagerStatus)
+    func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus)
 }
 
 public protocol PumpManagerDelegate: PumpManagerStatusObserver {
@@ -53,7 +53,7 @@ public protocol PumpManagerDelegate: PumpManagerStatusObserver {
 
 public protocol PumpManager: DeviceManager {
     // Rounds units to the nearest delivery increment
-    static func roundToDeliveryIncrement(_ units: Double) -> Double
+    func roundToDeliveryIncrement(units: Double) -> Double
     
     var pumpManagerDelegate: PumpManagerDelegate? { get set }
 
@@ -86,7 +86,7 @@ public protocol PumpManager: DeviceManager {
 
     func updateBLEHeartbeatPreference()
     
-    func suspendDelivery(completion: @escaping (_ result: PumpManagerResult<Bool>) -> Void)
+    func suspendDelivery(completion: @escaping (_ error: Error?) -> Void)
     
-    func resumeDelivery(completion: @escaping (_ result: PumpManagerResult<Bool>) -> Void)
+    func resumeDelivery(completion: @escaping (_ error: Error?) -> Void)
 }

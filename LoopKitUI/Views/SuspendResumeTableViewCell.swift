@@ -31,9 +31,9 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
         }
     }
     
-    public var suspendState: PumpManagerStatus.SuspendState = .none {
+    public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState = .none {
         didSet {
-            switch self.suspendState {
+            switch self.basalDeliveryState {
             case .none:
                 self.isEnabled = true
                 self.action = .suspend
@@ -67,9 +67,9 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
 }
 
 extension SuspendResumeTableViewCell: PumpManagerStatusObserver {
-    public func pumpManager(_ pumpManager: PumpManager, didUpdateStatus status: PumpManagerStatus) {
+    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
         DispatchQueue.main.async {
-            self.suspendState = status.suspendState
+            self.basalDeliveryState = status.basalDeliveryState
         }
     }
 }

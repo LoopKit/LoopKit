@@ -29,7 +29,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
     private lazy var suspendResumeTableViewCell: SuspendResumeTableViewCell = { [unowned self] in
         let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
         cell.delegate = self
-        cell.suspendState = pumpManager.status.suspendState
+        cell.basalDeliveryState = pumpManager.status.basalDeliveryState
         pumpManager.addStatusObserver(cell)
         return cell
     }()
@@ -212,8 +212,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
 
 extension MockPumpManagerSettingsViewController: SuspendResumeTableViewCellDelegate {
     func suspendTapped() {
-        pumpManager.suspendDelivery { result in
-            if case .failure(let error) = result {
+        pumpManager.suspendDelivery { error in
+            if let error = error {
                 DispatchQueue.main.async {
                     let alert = UIAlertController(title: "Error Suspending", error: error)
                     self.present(alert, animated: true, completion: nil)
@@ -223,8 +223,8 @@ extension MockPumpManagerSettingsViewController: SuspendResumeTableViewCellDeleg
     }
 
     func resumeTapped() {
-        pumpManager.resumeDelivery { result in
-            if case .failure(let error) = result {
+        pumpManager.resumeDelivery { error in
+            if let error = error {
                 DispatchQueue.main.async {
                     let alert = UIAlertController(title: "Error Resuming", error: error)
                     self.present(alert, animated: true, completion: nil)
@@ -293,5 +293,31 @@ private extension UIAlertController {
         ))
 
         addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+    }
+
+    convenience init(title: String, error: Error) {
+
+        let message: String
+
+        if let localizedError = error as? LocalizedError {
+            let sentenceFormat = NSLocalizedString("%@.", comment: "Appends a full-stop to a statement")
+            message = [localizedError.failureReason, localizedError.recoverySuggestion].compactMap({ $0 }).map({
+                String(format: sentenceFormat, $0)
+            }).joined(separator: "\n")
+        } else {
+            message = String(describing: error)
+        }
+
+        self.init(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+
+        addAction(UIAlertAction(
+            title: NSLocalizedString("OK", comment: "Button title to acknowledge error"),
+            style: .default,
+            handler: nil
+        ))
     }
 }

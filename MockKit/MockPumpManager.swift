@@ -61,9 +61,9 @@ public final class MockPumpManager: PumpManager {
 
     public var status: PumpManagerStatus {
         didSet {
-            statusObservers.forEach { $0.pumpManager(self, didUpdateStatus: status) }
+            statusObservers.forEach { $0.pumpManager(self, didUpdate: status) }
             stateObservers.forEach { $0.mockPumpManager(self, didUpdateStatus: status) }
-            pumpManagerDelegate?.pumpManager(self, didUpdateStatus: status)
+            pumpManagerDelegate?.pumpManager(self, didUpdate: status)
             pumpManagerDelegate?.pumpManagerDidUpdateState(self)
         }
     }
@@ -90,7 +90,7 @@ public final class MockPumpManager: PumpManager {
     private var pendingPumpEvents: [NewPumpEvent] = []
 
     public init() {
-        status = PumpManagerStatus(timeZone: .current, device: MockPumpManager.device, pumpBatteryChargeRemaining: 1, suspendState: .none, bolusState: .none)
+        status = PumpManagerStatus(timeZone: .current, device: MockPumpManager.device, pumpBatteryChargeRemaining: 1, basalDeliveryState: .none, bolusState: .none)
         state = MockPumpManagerState(reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity, tempBasalEnactmentShouldError: false, bolusEnactmentShouldError: false, deliverySuspensionShouldError: false, deliveryResumptionShouldError: false)
     }
 
@@ -100,7 +100,7 @@ public final class MockPumpManager: PumpManager {
         }
         let pumpBatteryChargeRemaining = rawState["pumpBatteryChargeRemaining"] as? Double ?? 1
 
-        self.status = PumpManagerStatus(timeZone: .current, device: MockPumpManager.device, pumpBatteryChargeRemaining: pumpBatteryChargeRemaining, suspendState: .none, bolusState: .none)
+        self.status = PumpManagerStatus(timeZone: .current, device: MockPumpManager.device, pumpBatteryChargeRemaining: pumpBatteryChargeRemaining, basalDeliveryState: .none, bolusState: .none)
         self.state = state
     }
 
@@ -161,7 +161,7 @@ public final class MockPumpManager: PumpManager {
         if state.bolusEnactmentShouldError {
             completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
         } else {
-            guard status.suspendState != .suspended else {
+            guard status.basalDeliveryState != .suspended else {
                 completion(PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended))
                 return
             }
@@ -172,33 +172,33 @@ public final class MockPumpManager: PumpManager {
         }
     }
 
-    public static func roundToDeliveryIncrement(_ units: Double) -> Double {
-        return round(units * pulsesPerUnit) / pulsesPerUnit
+    public func roundToDeliveryIncrement(units: Double) -> Double {
+        return round(units * MockPumpManager.pulsesPerUnit) / MockPumpManager.pulsesPerUnit
     }
 
     public func updateBLEHeartbeatPreference() {
         // nothing to do here
     }
 
-    public func suspendDelivery(completion: @escaping (PumpManagerResult<Bool>) -> Void) {
+    public func suspendDelivery(completion: @escaping (Error?) -> Void) {
         if state.deliverySuspensionShouldError {
-            completion(.failure(PumpManagerError.communication(MockPumpManagerError.communicationFailure)))
+            completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
         } else {
             let suspend = NewPumpEvent.suspend(at: Date())
             pendingPumpEvents.append(suspend)
-            status.suspendState = .suspended
-            completion(.success(true))
+            status.basalDeliveryState = .suspended
+            completion(nil)
         }
     }
 
-    public func resumeDelivery(completion: @escaping (PumpManagerResult<Bool>) -> Void) {
+    public func resumeDelivery(completion: @escaping (Error?) -> Void) {
         if state.deliveryResumptionShouldError {
-            completion(.failure(PumpManagerError.communication(MockPumpManagerError.communicationFailure)))
+            completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
         } else {
             let resume = NewPumpEvent.resume(at: Date())
             pendingPumpEvents.append(resume)
-            status.suspendState = .none
-            completion(.success(true))
+            status.basalDeliveryState = .none
+            completion(nil)
         }
     }
 
