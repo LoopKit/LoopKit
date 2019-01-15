@@ -104,7 +104,10 @@ extension MockCGMDataSource.Model: RawRepresentable {
     private static let unit = HKUnit.milligramsPerDeciliter
 
     public init?(rawValue: RawValue) {
-        guard let kind = (rawValue["kind"] as? Kind.RawValue).flatMap(Kind.init(rawValue:)) else {
+        guard
+            let kindRawValue = rawValue["kind"] as? Kind.RawValue,
+            let kind = Kind(rawValue: kindRawValue)
+        else {
             return nil
         }
 
@@ -127,10 +130,12 @@ extension MockCGMDataSource.Model: RawRepresentable {
                 let baseGlucose = glucose(forKey: "baseGlucose"),
                 let amplitude = glucose(forKey: "amplitude"),
                 let period = rawValue["period"] as? TimeInterval,
-                let referenceDate = (rawValue["referenceDate"] as? TimeInterval).flatMap(Date.init(timeIntervalSince1970:))
+                let referenceDateSeconds = rawValue["referenceDate"] as? TimeInterval
             else {
                 return nil
             }
+
+            let referenceDate = Date(timeIntervalSince1970: referenceDateSeconds)
             self = .sineCurve(parameters: (baseGlucose: baseGlucose, amplitude: amplitude, period: period, referenceDate: referenceDate))
         case .noData:
             self = .noData

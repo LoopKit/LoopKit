@@ -84,6 +84,11 @@ public final class MockPumpManager: PumpManager {
     public var maximumBolus: Double = 25
 
     public var pumpManagerDelegate: PumpManagerDelegate?
+
+    private var testingPumpManagerDelegate: TestingPumpManagerDelegate? {
+        return pumpManagerDelegate as? TestingPumpManagerDelegate
+    }
+
     private var statusObservers = WeakObserverSet<PumpManagerStatusObserver>()
     private var stateObservers = WeakObserverSet<MockPumpManagerStateObserver>()
 
@@ -203,7 +208,7 @@ public final class MockPumpManager: PumpManager {
     }
 
     public func deletePumpData() {
-        pumpManagerDelegate?.dataStore(for: self).deleteInsulinDoses(fromDevice: status.device) { error in
+        testingPumpManagerDelegate?.doseStore(for: self).deleteInsulinDoses(fromDevice: status.device) { error in
             // error is already logged through the store, so we'll ignore it here
         }
     }

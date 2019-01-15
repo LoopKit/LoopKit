@@ -1,16 +1,22 @@
 //
-//  PumpDataStore.swift
+//  TestingPumpManagerDelegate.swift
 //  LoopKit
 //
-//  Created by Michael Pangburn on 12/3/18.
-//  Copyright © 2018 LoopKit Authors. All rights reserved.
+//  Created by Michael Pangburn on 1/14/19.
+//  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
 import HealthKit
 
 
-/// Defines the DoseStore operations made accessible to a PumpManager.
-public final class PumpDataStore {
+/// Describes a pump manager delegate that provides special privileges to testing-only pump managers.
+public protocol TestingPumpManagerDelegate: PumpManagerDelegate {
+    func doseStore(for manager: PumpManager) -> TestingPumpDoseStore
+}
+
+
+/// Defines the DoseStore operations made accessible to a testing-only PumpManager.
+public final class TestingPumpDoseStore {
     private let doseStore: DoseStore
 
     public init(doseStore: DoseStore) {

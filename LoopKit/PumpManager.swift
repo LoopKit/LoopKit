@@ -46,8 +46,6 @@ public protocol PumpManagerDelegate: PumpManagerStatusObserver {
     func startDateToFilterNewPumpEvents(for manager: PumpManager) -> Date
 
     func startDateToFilterNewReservoirEvents(for manager: PumpManager) -> Date
-
-    func dataStore(for manager: PumpManager) -> PumpDataStore
 }
 
 

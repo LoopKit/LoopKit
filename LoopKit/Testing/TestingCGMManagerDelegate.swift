@@ -1,16 +1,22 @@
 //
-//  CGMDataStore.swift
+//  TestingCGMManagerDelegate.swift
 //  LoopKit
 //
-//  Created by Michael Pangburn on 12/4/18.
-//  Copyright © 2018 LoopKit Authors. All rights reserved.
+//  Created by Michael Pangburn on 1/14/19.
+//  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
 import HealthKit
 
 
-/// Defines the GlucoseStore operations accessible to a CGMManager.
-public final class CGMDataStore {
+/// Describes a CGM manager delegate that provides special privileges to testing-only pump managers.
+public protocol TestingCGMManagerDelegate: CGMManagerDelegate {
+    func glucoseStore(for manager: CGMManager) -> TestingCGMGlucoseStore
+}
+
+
+/// Defines the GlucoseStore operations accessible to a testing-only CGMManager.
+public final class TestingCGMGlucoseStore {
     private let glucoseStore: GlucoseStore
 
     public init(glucoseStore: GlucoseStore) {

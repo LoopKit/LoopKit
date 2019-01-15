@@ -39,6 +39,9 @@ public final class MockCGMManager: CGMManager {
     }
 
     public var cgmManagerDelegate: CGMManagerDelegate?
+    private var testingCGMManagerDelegate: TestingCGMManagerDelegate? {
+        return cgmManagerDelegate as? TestingCGMManagerDelegate
+    }
 
     public var dataSource: MockCGMDataSource {
         didSet {
@@ -49,13 +52,15 @@ public final class MockCGMManager: CGMManager {
     private var glucoseUpdateTimer: Timer?
 
     public init?(rawState: RawStateValue) {
-        if let mockSensorState = (rawState["mockSensorState"] as? MockCGMState.RawValue).flatMap(MockCGMState.init(rawValue:)) {
+        if let mockSensorStateRawValue = rawState["mockSensorState"] as? MockCGMState.RawValue,
+            let mockSensorState = MockCGMState(rawValue: mockSensorStateRawValue) {
             self.mockSensorState = mockSensorState
         } else {
             self.mockSensorState = MockCGMState(isStateValid: true, trendType: nil)
         }
 
-        if let dataSource = (rawState["dataSource"] as? MockCGMDataSource.RawValue).flatMap(MockCGMDataSource.init(rawValue:)) {
+        if let dataSourceRawValue = rawState["dataSource"] as? MockCGMDataSource.RawValue,
+            let dataSource = MockCGMDataSource(rawValue: dataSourceRawValue) {
             self.dataSource = dataSource
         } else {
             self.dataSource = MockCGMDataSource(model: .noData)
@@ -103,7 +108,7 @@ public final class MockCGMManager: CGMManager {
     }
 
     public func deleteCGMData() {
-        cgmManagerDelegate?.dataStore(for: self).deleteGlucoseSamples(fromDevice: MockCGMDataSource.device)
+        testingCGMManagerDelegate?.glucoseStore(for: self).deleteGlucoseSamples(fromDevice: MockCGMDataSource.device)
     }
 
     private func setupGlucoseUpdateTimer() {
@@ -159,7 +164,7 @@ extension MockCGMState: CustomDebugStringConvertible {
         return """
         ## MockCGMState
         * isStateValid: \(isStateValid)
-        * trendType: \(trendType.map(String.init(describing:)) ?? "nil")
+        * trendType: \(trendType as Any)
         """
     }
 }
