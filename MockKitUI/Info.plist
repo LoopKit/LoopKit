@@ -18,5 +18,9 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>PumpManagerUI</key>
+	<string>MockPumpManager</string>
+	<key>CGMManagerUI</key>
+	<string>MockCGMManager</string>
 </dict>
 </plist>
