@@ -908,7 +908,7 @@ extension DoseStore {
             return
         }
 
-        guard let objects = try? getPumpEventObjects(matching: NSPredicate(format: "uploaded = false"), chronological: true), objects.count > 0 else {
+        guard let objects = try? getPumpEventObjects(matching: NSPredicate(format: "uploaded = false"), chronological: true, limit: 5000), objects.count > 0 else {
             return
         }
 
@@ -981,10 +981,14 @@ extension DoseStore {
     ///   - chronological: Whether to return the objects in chronological or reverse-chronological order
     /// - Returns: An array of pump events in the specified order by date
     /// - Throws: An error describing the failure to fetch objects
-    private func getPumpEventObjects(matching predicate: NSPredicate, chronological: Bool) throws -> [PumpEvent] {
+    private func getPumpEventObjects(matching predicate: NSPredicate, chronological: Bool, limit: Int? = nil) throws -> [PumpEvent] {
         let request: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
         request.predicate = predicate
         request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: chronological)]
+
+        if let limit = limit {
+            request.fetchLimit = limit
+        }
 
         do {
             return try persistenceController.managedObjectContext.fetch(request).sorted(by: { (lhs, rhs) -> Bool in
