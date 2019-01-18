@@ -25,14 +25,6 @@ open class SetupTableViewController: UITableViewController {
 
     private var lastContentHeight: CGFloat = 0
     
-    private var compactMode: Bool = false {
-        didSet {
-            if oldValue != compactMode {
-                tableView.reloadData()
-            }
-        }
-    }
-
     open override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,10 +38,6 @@ open class SetupTableViewController: UITableViewController {
         
         let visibleHeight = tableView.bounds.size.height - (tableView.adjustedContentInset.top + tableView.adjustedContentInset.bottom)
         
-        if visibleHeight < tableView.contentSize.height {
-            compactMode = true
-        }
-
         // Reposition footer view if necessary
         if tableView.contentSize.height != lastContentHeight {
             lastContentHeight = tableView.contentSize.height
@@ -85,11 +73,7 @@ open class SetupTableViewController: UITableViewController {
     }
     
     open override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if compactMode {
-            return 5
-        } else {
-            return UITableView.automaticDimension
-        }
+        return UITableView.automaticDimension
     }
 }
 
