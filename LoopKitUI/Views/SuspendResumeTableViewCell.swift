@@ -9,13 +9,12 @@
 import LoopKit
 
 public protocol SuspendResumeTableViewCellDelegate: class {
-    func suspendTapped()
-    func resumeTapped()
+    func suspendResumeTableViewCell(_ cell: SuspendResumeTableViewCell, actionTapped: SuspendResumeTableViewCell.Action)
 }
 
 public class SuspendResumeTableViewCell: TextButtonTableViewCell {
     
-    enum Action {
+    public enum Action {
         case suspend
         case resume
     }
@@ -31,10 +30,10 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
         }
     }
     
-    public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState = .none {
+    public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState = .active {
         didSet {
             switch self.basalDeliveryState {
-            case .none:
+            case .active:
                 self.isEnabled = true
                 self.action = .suspend
                 self.isLoading = false
@@ -57,19 +56,7 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
     public weak var delegate: SuspendResumeTableViewCellDelegate?
     
     public func toggle() {
-        switch action {
-        case .resume:
-            delegate?.resumeTapped()
-        case .suspend:
-            delegate?.suspendTapped()
-        }
+        delegate?.suspendResumeTableViewCell(self, actionTapped: action)
     }
 }
 
-extension SuspendResumeTableViewCell: PumpManagerStatusObserver {
-    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
-        DispatchQueue.main.async {
-            self.basalDeliveryState = status.basalDeliveryState
-        }
-    }
-}

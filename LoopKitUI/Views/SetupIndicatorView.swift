@@ -13,7 +13,7 @@ public class SetupIndicatorView: UIView {
     public enum State: Equatable {
         case hidden
         case loading
-        case timedProgress(finishTime: Date)
+        case timedProgress(finishTime: CFTimeInterval)
         case completed
     }
 
@@ -22,7 +22,7 @@ public class SetupIndicatorView: UIView {
             animate(from: oldValue, to: state)
             
             if case let .timedProgress(finishTime) = state {
-                let duration = finishTime.timeIntervalSinceNow
+                let duration = finishTime - CACurrentMediaTime()
                 progressView.progress = 0
                 if duration > 0 {
                     UIView.animate(withDuration: duration, delay: 0, options: [.curveLinear], animations: {

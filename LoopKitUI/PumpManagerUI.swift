@@ -15,8 +15,9 @@ public enum HUDTapAction {
 }
 
 public protocol HUDProviderDelegate: class {
-    func hudProvider(_ provider: HUDProvider, didAddHudViews views: [BaseHUDView])
-    func hudProvider(_ provider: HUDProvider, didRemoveHudViews views: [BaseHUDView])
+    func hudProvider(_ provider: HUDProvider, didAddViews views: [BaseHUDView])
+    func hudProvider(_ provider: HUDProvider, didRemoveViews views: [BaseHUDView])
+    func hudProvider(_ provider: HUDProvider, didReplaceViews views: [BaseHUDView])
 }
 
 public protocol HUDProvider {
@@ -30,7 +31,7 @@ public protocol HUDProvider {
     func createHUDViews() -> [BaseHUDView]
     
     // Returns the action that should be taken when the view is tapped
-    func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction?
+    func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction?
     
     // The current, serializable state of the HUD views
     var hudViewsRawState: HUDViewsRawState { get }
@@ -55,7 +56,7 @@ public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewContro
 }
 
 
-public protocol PumpManagerSetupViewController: SetupNavigationController {
+public protocol PumpManagerSetupViewController {
     var setupDelegate: PumpManagerSetupViewControllerDelegate? { get set }
 
     var maxBasalRateUnitsPerHour: Double? { get set }
@@ -70,11 +71,4 @@ public protocol PumpManagerSetupViewControllerDelegate: class {
     func pumpManagerSetupViewController(_ pumpManagerSetupViewController: PumpManagerSetupViewController, didSetUpPumpManager pumpManager: PumpManagerUI)
 
     func pumpManagerSetupViewControllerDidCancel(_ pumpManagerSetupViewController: PumpManagerSetupViewController)
-}
-
-
-public extension PumpManagerSetupViewController {
-    func cancelSetup() {
-        setupDelegate?.pumpManagerSetupViewControllerDidCancel(self)
-    }
 }

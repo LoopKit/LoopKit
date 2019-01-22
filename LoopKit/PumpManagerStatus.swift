@@ -11,7 +11,7 @@ import HealthKit
 public struct PumpManagerStatus: Equatable {
     
     public enum BasalDeliveryState: Equatable {
-        case none
+        case active
         case suspending
         case suspended
         case resuming

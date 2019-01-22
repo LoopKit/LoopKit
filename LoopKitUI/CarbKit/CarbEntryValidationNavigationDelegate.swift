@@ -16,22 +16,19 @@ class CarbEntryNavigationDelegate {
         formatter.allowedUnits = [.minute]
         formatter.unitsStyle = .full
 
-        viewController.presentAlertController(
-            withTitle: validationTitle,
-            message: String(
-                format: LocalizedString("The maximum absorption time is %@", comment: "Alert body displayed absorption time greater than max (1: maximum absorption time)"),
-                formatter.string(from: maxAbsorptionTime) ?? String(describing: maxAbsorptionTime)
-            )
-        )
+        let message = String(
+            format: LocalizedString("The maximum absorption time is %@", comment: "Alert body displayed absorption time greater than max (1: maximum absorption time)"),
+            formatter.string(from: maxAbsorptionTime) ?? String(describing: maxAbsorptionTime))
+        let alert = UIAlertController(title: validationTitle, message: message, preferredStyle: .alert)
+        viewController.present(alert, animated: true)
     }
 
     func showMaxQuantityValidationWarning(for viewController: UIViewController, maxQuantityGrams: Double) {
-        viewController.presentAlertController(
-            withTitle: validationTitle,
-            message: String(
-                format: LocalizedString("The maximum allowed amount is %@ grams", comment: "Alert body displayed for quantity greater than max (1: maximum quantity in grams)"),
-                NumberFormatter.localizedString(from: NSNumber(value: maxQuantityGrams), number: .none)
-            )
+        let message = String(
+            format: LocalizedString("The maximum allowed amount is %@ grams", comment: "Alert body displayed for quantity greater than max (1: maximum quantity in grams)"),
+            NumberFormatter.localizedString(from: NSNumber(value: maxQuantityGrams), number: .none)
         )
+        let alert = UIAlertController(title: validationTitle, message: message, preferredStyle: .alert)
+        viewController.present(alert, animated: true)
     }
 }
