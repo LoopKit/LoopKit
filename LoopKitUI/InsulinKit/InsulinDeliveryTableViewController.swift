@@ -453,7 +453,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
 }
 
-extension UIAlertController {
+fileprivate extension UIAlertController {
     convenience init(deleteAllConfirmationMessage: String, confirmationHandler handler: @escaping () -> Void) {
         self.init(
             title: nil,

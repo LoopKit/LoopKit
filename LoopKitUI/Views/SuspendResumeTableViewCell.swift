@@ -8,10 +8,6 @@
 
 import LoopKit
 
-public protocol SuspendResumeTableViewCellDelegate: class {
-    func suspendResumeTableViewCell(_ cell: SuspendResumeTableViewCell, actionTapped: SuspendResumeTableViewCell.Action)
-}
-
 public class SuspendResumeTableViewCell: TextButtonTableViewCell {
     
     public enum Action {
@@ -19,9 +15,9 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
         case resume
     }
     
-    var action: Action = .suspend {
+    public var shownAction: Action = .suspend {
         didSet {
-            switch action {
+            switch shownAction {
             case .suspend:
                 textLabel?.text = LocalizedString("Suspend Delivery", comment: "Title text for button to suspend insulin delivery")
             case .resume:
@@ -35,7 +31,7 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
             switch self.basalDeliveryState {
             case .active:
                 self.isEnabled = true
-                self.action = .suspend
+                self.shownAction = .suspend
                 self.isLoading = false
             case .suspending:
                 self.isEnabled = false
@@ -43,7 +39,7 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
                 self.isLoading = true
             case .suspended:
                 self.isEnabled = true
-                self.action = .resume
+                self.shownAction = .resume
                 self.isLoading = false
             case .resuming:
                 self.isEnabled = false
@@ -51,12 +47,6 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
                 self.isLoading = true
             }
         }
-    }
-    
-    public weak var delegate: SuspendResumeTableViewCellDelegate?
-    
-    public func toggle() {
-        delegate?.suspendResumeTableViewCell(self, actionTapped: action)
     }
 }
 
