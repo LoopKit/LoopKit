@@ -15,7 +15,7 @@ public protocol CGMManagerUI: CGMManager {
     /// If this method returns nil, it's expected that `init?(rawState: [:])` creates a non-nil manager
     static func setupViewController() -> (UIViewController & CGMManagerSetupViewController)?
 
-    func settingsViewController(for glucoseUnit: HKUnit) -> UIViewController
+    func settingsViewController(for glucoseUnit: HKUnit) -> (UIViewController & CompletionNotifying)
 
     var smallImage: UIImage? { get }
 }

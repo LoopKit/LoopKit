@@ -315,6 +315,7 @@
 		C16C3D3F21A3101700401105 /* WeakObserverSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133FD1621A2A845009B2D20 /* WeakObserverSet.swift */; };
 		C184FECB219F2E0100CD2722 /* SuspendResumeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */; };
 		C1D7366421F78A4D00048CDD /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D7366321F78A4D00048CDD /* UIAlertController.swift */; };
+		C1E31F1222008AA300E88C00 /* SettingsNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E31F1122008AA300E88C00 /* SettingsNavigationViewController.swift */; };
 		C1FB427721754EBB00FAB378 /* ReservoirVolumeHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1FB427621754EBB00FAB378 /* ReservoirVolumeHUDView.xib */; };
 		C1FB427921754FC900FAB378 /* ReservoirVolumeHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FB427821754FC800FAB378 /* ReservoirVolumeHUDView.swift */; };
 		C1FB427B2175503B00FAB378 /* LevelHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FB427A2175503A00FAB378 /* LevelHUDView.swift */; };
@@ -773,6 +774,7 @@
 		C1DB55B21F2E964400C483A2 /* ExponentialInsulinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModel.swift; sourceTree = "<group>"; };
 		C1DB55B41F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_doses_exponential_output.json; sourceTree = "<group>"; };
 		C1DB55B61F2EACD500C483A2 /* iob_from_bolus_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_bolus_exponential_output.json; sourceTree = "<group>"; };
+		C1E31F1122008AA300E88C00 /* SettingsNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationViewController.swift; sourceTree = "<group>"; };
 		C1FB427621754EBB00FAB378 /* ReservoirVolumeHUDView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReservoirVolumeHUDView.xib; sourceTree = "<group>"; };
 		C1FB427821754FC800FAB378 /* ReservoirVolumeHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirVolumeHUDView.swift; sourceTree = "<group>"; };
 		C1FB427A2175503A00FAB378 /* LevelHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelHUDView.swift; sourceTree = "<group>"; };
@@ -899,6 +901,7 @@
 				43FB60E420DCBA02002B996B /* SetupTableViewController.swift */,
 				43D8FE0C1C7290530073BE78 /* SingleValueScheduleTableViewController.swift */,
 				434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */,
+				C1E31F1122008AA300E88C00 /* SettingsNavigationViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -1719,6 +1722,7 @@
 				43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */,
 				43BA7182201EE7090058961E /* TextFieldTableViewCell.swift in Sources */,
 				43F5034D210599CC009FA89A /* AuthenticationViewController.swift in Sources */,
+				C1E31F1222008AA300E88C00 /* SettingsNavigationViewController.swift in Sources */,
 				43F5034F210599DF009FA89A /* ValidatingIndicatorView.swift in Sources */,
 				43BA718C201EEE5A0058961E /* NSData.swift in Sources */,
 				43F5035A21059AF7009FA89A /* AuthenticationTableViewCell.swift in Sources */,

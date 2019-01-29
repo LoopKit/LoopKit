@@ -8,8 +8,16 @@
 import UIKit
 import LoopKit
 
+public protocol CompletionDelegate: class {
+    func didComplete(viewController: UIViewController)
+}
+
+public protocol CompletionNotifying {
+    var completionDelegate: CompletionDelegate? { set get }
+}
+
 public enum HUDTapAction {
-    case presentViewController(UIViewController)
+    case presentViewController(UIViewController & CompletionNotifying)
     case openAppURL(URL)
 }
 
@@ -42,7 +50,7 @@ public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewContro
     
     static func setupViewController() -> (UIViewController & PumpManagerSetupViewController)
 
-    func settingsViewController() -> UIViewController
+    func settingsViewController() -> (UIViewController & CompletionNotifying)
     
     // An image representing the pump configuration
     var smallImage: UIImage? { get }
