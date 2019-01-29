@@ -9,7 +9,6 @@ import UIKit
 import LoopKit
 
 public enum HUDTapAction {
-    case showViewController(UIViewController)
     case presentViewController(UIViewController)
     case openAppURL(URL)
 }
