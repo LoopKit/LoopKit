@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class SettingsNavigationViewController: UINavigationController, CompletionNotifying {
+open class SettingsNavigationViewController: UINavigationController, CompletionNotifying {
 
-    public weak var completionDelegate: CompletionDelegate?
+    open weak var completionDelegate: CompletionDelegate?
 
-    public func notifyComplete() {
-        completionDelegate?.didComplete(viewController: self)
+    open func notifyComplete() {
+        completionDelegate?.completionNotifyingDidComplete(self)
     }
 
 }

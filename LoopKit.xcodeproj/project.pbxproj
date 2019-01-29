@@ -316,6 +316,8 @@
 		C184FECB219F2E0100CD2722 /* SuspendResumeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */; };
 		C1D7366421F78A4D00048CDD /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D7366321F78A4D00048CDD /* UIAlertController.swift */; };
 		C1E31F1222008AA300E88C00 /* SettingsNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E31F1122008AA300E88C00 /* SettingsNavigationViewController.swift */; };
+		C1E31F142200E7D500E88C00 /* HUDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E31F132200E7D500E88C00 /* HUDProvider.swift */; };
+		C1E31F162200E85F00E88C00 /* CompletionNotifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E31F152200E85F00E88C00 /* CompletionNotifying.swift */; };
 		C1FB427721754EBB00FAB378 /* ReservoirVolumeHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1FB427621754EBB00FAB378 /* ReservoirVolumeHUDView.xib */; };
 		C1FB427921754FC900FAB378 /* ReservoirVolumeHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FB427821754FC800FAB378 /* ReservoirVolumeHUDView.swift */; };
 		C1FB427B2175503B00FAB378 /* LevelHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FB427A2175503A00FAB378 /* LevelHUDView.swift */; };
@@ -775,6 +777,8 @@
 		C1DB55B41F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_doses_exponential_output.json; sourceTree = "<group>"; };
 		C1DB55B61F2EACD500C483A2 /* iob_from_bolus_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_bolus_exponential_output.json; sourceTree = "<group>"; };
 		C1E31F1122008AA300E88C00 /* SettingsNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationViewController.swift; sourceTree = "<group>"; };
+		C1E31F132200E7D500E88C00 /* HUDProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDProvider.swift; sourceTree = "<group>"; };
+		C1E31F152200E85F00E88C00 /* CompletionNotifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionNotifying.swift; sourceTree = "<group>"; };
 		C1FB427621754EBB00FAB378 /* ReservoirVolumeHUDView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReservoirVolumeHUDView.xib; sourceTree = "<group>"; };
 		C1FB427821754FC800FAB378 /* ReservoirVolumeHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirVolumeHUDView.swift; sourceTree = "<group>"; };
 		C1FB427A2175503A00FAB378 /* LevelHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelHUDView.swift; sourceTree = "<group>"; };
@@ -1010,26 +1014,28 @@
 		43BA7155201E484D0058961E /* LoopKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				43177D091D3732C70006E908 /* Assets.xcassets */,
 				43BA7160201E48910058961E /* CarbKit */,
 				43BA7161201E48EB0058961E /* InsulinKit */,
 				432CF86320D769070066B889 /* View Controllers */,
 				4369F090208B0D68000E3E45 /* Views */,
-				43177D091D3732C70006E908 /* Assets.xcassets */,
 				43BA719920203EF30058961E /* CarbKit.storyboard */,
-				C1FB428621755B8B00FAB378 /* StateColorPalette.swift */,
-				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
-				7D68A9E31FE0A3D300522C49 /* Localizable.strings */,
 				43A8EC3B210CEEA500A81379 /* CGMManagerUI.swift */,
+				C1E31F152200E85F00E88C00 /* CompletionNotifying.swift */,
 				43A275171F1C6E4000EAFEBD /* GlucoseRangeSchedule+UI.swift */,
 				4322B76A202F9E4B0002837D /* HKUnit+LoopKitUI.swift */,
+				C1E31F132200E7D500E88C00 /* HUDProvider.swift */,
+				43BA7157201E484D0058961E /* Info.plist */,
+				1F5DAB282118CE9300048054 /* InfoPlist.strings */,
+				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
+				7D68A9E31FE0A3D300522C49 /* Localizable.strings */,
+				43BA7156201E484D0058961E /* LoopKitUI.h */,
 				43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */,
 				43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */,
 				43F5035521059A8A009FA89A /* ServiceCredential.swift */,
-				43F5035C21059B56009FA89A /* UIColor.swift */,
-				43BA7156201E484D0058961E /* LoopKitUI.h */,
-				43BA7157201E484D0058961E /* Info.plist */,
-				1F5DAB282118CE9300048054 /* InfoPlist.strings */,
+				C1FB428621755B8B00FAB378 /* StateColorPalette.swift */,
 				C1D7366321F78A4D00048CDD /* UIAlertController.swift */,
+				43F5035C21059B56009FA89A /* UIColor.swift */,
 			);
 			path = LoopKitUI;
 			sourceTree = "<group>";
@@ -1724,6 +1730,7 @@
 				43F5034D210599CC009FA89A /* AuthenticationViewController.swift in Sources */,
 				C1E31F1222008AA300E88C00 /* SettingsNavigationViewController.swift in Sources */,
 				43F5034F210599DF009FA89A /* ValidatingIndicatorView.swift in Sources */,
+				C1E31F162200E85F00E88C00 /* CompletionNotifying.swift in Sources */,
 				43BA718C201EEE5A0058961E /* NSData.swift in Sources */,
 				43F5035A21059AF7009FA89A /* AuthenticationTableViewCell.swift in Sources */,
 				43BA7163201E490D0058961E /* InsulinDeliveryTableViewController.swift in Sources */,
@@ -1772,6 +1779,7 @@
 				43BA717F201EE7090058961E /* GlucoseRangeOverrideTableViewCell.swift in Sources */,
 				43F5035721059A8A009FA89A /* ServiceCredential.swift in Sources */,
 				43BA7169201E49220058961E /* CarbEntryEditViewController.swift in Sources */,
+				C1E31F142200E7D500E88C00 /* HUDProvider.swift in Sources */,
 				43BA717D201EE7090058961E /* GlucoseRangeTableViewCell.swift in Sources */,
 				43BA7166201E49220058961E /* CarbAbsorptionInputCell.swift in Sources */,
 				C1FB42812175572A00FAB378 /* BatteryLevelHUDView.swift in Sources */,
