@@ -13,6 +13,14 @@ public protocol TextFieldTableViewCellDelegate: class {
     func textFieldTableViewCellDidBeginEditing(_ cell: TextFieldTableViewCell)
     
     func textFieldTableViewCellDidEndEditing(_ cell: TextFieldTableViewCell)
+
+    func textFieldTableViewCellDidChangeEditing(_ cell: TextFieldTableViewCell)
+}
+
+// MARK: - Default Implementations
+
+extension TextFieldTableViewCellDelegate {
+    public func textFieldTableViewCellDidChangeEditing(_ cell: TextFieldTableViewCell) { }
 }
 
 
@@ -23,6 +31,7 @@ public class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
     @IBOutlet public weak var textField: UITextField! {
         didSet {
             textField.delegate = self
+            textField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
         }
     }
 
@@ -34,6 +43,10 @@ public class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
     }
     
     public weak var delegate: TextFieldTableViewCellDelegate?
+
+    @objc private func textFieldEditingChanged() {
+        delegate?.textFieldTableViewCellDidChangeEditing(self)
+    }
     
     // MARK: - UITextFieldDelegate
     

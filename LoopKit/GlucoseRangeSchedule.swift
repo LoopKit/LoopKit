@@ -96,7 +96,8 @@ public struct GlucoseRangeSchedule: DailySchedule {
     public var overrideRanges: [Override.Context: DoubleRange]
 
     /// The last-configured override of the range schedule
-    public private(set) var override: Override?
+    @available(*, deprecated, message: "Use the `TemporaryScheduleOverride` API instead")
+    public internal(set) var override: Override?
 
     /// Enables the predefined override value to be active during a specified system date range
     ///
@@ -105,6 +106,7 @@ public struct GlucoseRangeSchedule: DailySchedule {
     ///   - start: The date the override should start
     ///   - end: The date the override should end
     /// - Returns: Whether the override was successfully enabled
+    @available(*, deprecated, message: "Use the `TemporaryScheduleOverride` API instead")
     public mutating func setOverride(_ context: Override.Context, from start: Date = Date(), until end: Date) -> Bool {
         guard let value = overrideRanges[context], end > start, !value.isZero else {
             return false
@@ -117,6 +119,7 @@ public struct GlucoseRangeSchedule: DailySchedule {
     /// Removes the specified range override
     ///
     /// - Parameter matching: The context to remove. If nil, all contexts are removed.
+    @available(*, deprecated, message: "Use the `TemporaryScheduleOverride` API instead")
     public mutating func clearOverride(matching context: Override.Context? = nil) {
         guard let override = override, context == nil || context! == override.context else {
             return

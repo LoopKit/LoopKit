@@ -100,7 +100,7 @@ public final class CarbEntryEditViewController: UITableViewController {
         }
     }
 
-    private var foodKeyboard: CarbAbsorptionInputController!
+    private var foodKeyboard: EmojiInputController!
 
     @IBOutlet weak var saveButtonItem: UIBarButtonItem!
 
@@ -162,7 +162,7 @@ public final class CarbEntryEditViewController: UITableViewController {
 
                 if let textField = cell.textField as? CustomInputTextField {
                     if foodKeyboard == nil {
-                        foodKeyboard = storyboard?.instantiateViewController(withIdentifier: CarbAbsorptionInputController.className) as? CarbAbsorptionInputController
+                        foodKeyboard = CarbAbsorptionInputController()
                         foodKeyboard.delegate = self
                     }
 
@@ -349,8 +349,8 @@ extension CarbEntryEditViewController: FoodTypeShortcutCellDelegate {
 }
 
 
-extension CarbEntryEditViewController: CarbAbsorptionInputControllerDelegate {
-    func carbAbsorptionInputControllerDidAdvanceToStandardInputMode(_ controller: CarbAbsorptionInputController) {
+extension CarbEntryEditViewController: EmojiInputControllerDelegate {
+    func emojiInputControllerDidAdvanceToStandardInputMode(_ controller: EmojiInputController) {
         if let cell = tableView.cellForRow(at: IndexPath(row: Row.foodType.rawValue, section: 0)) as? TextFieldTableViewCell, let textField = cell.textField as? CustomInputTextField, textField.customInput != nil {
             let customInput = textField.customInput
             textField.customInput = nil
@@ -360,7 +360,7 @@ extension CarbEntryEditViewController: CarbAbsorptionInputControllerDelegate {
         }
     }
 
-    func carbAbsorptionInputControllerDidSelectItemInSection(_ section: Int) {
+    func emojiInputControllerDidSelectItemInSection(_ section: Int) {
         guard !absorptionTimeWasEdited, section < orderedAbsorptionTimes.count else {
             return
         }

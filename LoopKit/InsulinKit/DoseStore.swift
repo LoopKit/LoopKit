@@ -108,6 +108,9 @@ public final class DoseStore {
     }
     private let lockedInsulinModel: Locked<InsulinModel?>
 
+    /// The most recently applied schedule override.
+    public var scheduleOverride: TemporaryScheduleOverride?
+
     public var basalProfile: BasalRateSchedule? {
         get {
             return lockedBasalProfile.value
@@ -122,6 +125,15 @@ public final class DoseStore {
     }
     private let lockedBasalProfile: Locked<BasalRateSchedule?>
 
+    /// The basal profile, applying the most recently enabled override if active.
+    public var basalProfileApplyingOverrideIfActive: BasalRateSchedule? {
+        if let override = scheduleOverride, override.isActive() {
+            return basalProfile?.applyingBasalRateMultiplier(from: override)
+        } else {
+            return basalProfile
+        }
+    }
+
     public var insulinSensitivitySchedule: InsulinSensitivitySchedule? {
         get {
             return lockedInsulinSensitivitySchedule.value
@@ -131,6 +143,15 @@ public final class DoseStore {
         }
     }
     private let lockedInsulinSensitivitySchedule: Locked<InsulinSensitivitySchedule?>
+
+    /// The insulin sensitivity schedule, applying the most recently enabled override if active.
+    public var insulinSensitivityScheduleApplyingOverrideIfActive: InsulinSensitivitySchedule? {
+        if let override = scheduleOverride, override.isActive() {
+            return insulinSensitivitySchedule?.applyingSensitivityMultiplier(from: override)
+        } else {
+            return insulinSensitivitySchedule
+        }
+    }
 
     public let insulinDeliveryStore: InsulinDeliveryStore
 
@@ -449,7 +470,7 @@ extension DoseStore {
             reservoir.date = date
 
             let previousValue = self.lastStoredReservoirValue
-            if let basalProfile = self.basalProfile {
+            if let basalProfile = self.basalProfileApplyingOverrideIfActive {
                 var newValues: [StoredReservoirValue] = []
 
                 if let previousValue = previousValue {
@@ -561,7 +582,7 @@ extension DoseStore {
         if let normalizedDoses = self.recentReservoirNormalizedDoseEntriesCache, let firstDoseDate = normalizedDoses.first?.startDate, firstDoseDate <= start {
             return normalizedDoses.filterDateRange(start, end)
         } else {
-            guard let basalProfile = self.basalProfile else {
+            guard let basalProfile = self.basalProfileApplyingOverrideIfActive else {
                 throw DoseStoreError.configurationError
             }
 
@@ -884,7 +905,7 @@ extension DoseStore {
                 return
             }
 
-            guard let basalSchedule = self.basalProfile else {
+            guard let basalSchedule = self.basalProfileApplyingOverrideIfActive else {
                 self.log.error("Can't save %d doses to HealthKit because no basal profile is configured", doses.count)
                 completion(.failure(DoseStoreError.configurationError))
                 return
@@ -1015,7 +1036,7 @@ extension DoseStore {
     /// - Returns: An array of doses from pump events
     /// - Throws: An error describing the failure to fetch objects
     private func getNormalizedPumpEventDoseEntries(start: Date, end: Date? = nil) throws -> [DoseEntry] {
-        guard let basalProfile = self.basalProfile else {
+        guard let basalProfile = self.basalProfileApplyingOverrideIfActive else {
             throw DoseStoreError.configurationError
         }
 
@@ -1182,7 +1203,7 @@ extension DoseStore {
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completion: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
         guard let insulinModel = self.insulinModel,
-              let insulinSensitivitySchedule = self.insulinSensitivitySchedule
+              let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideIfActive
         else {
             completion(.failure(.configurationError))
             return

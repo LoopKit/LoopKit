@@ -88,7 +88,7 @@ public extension DailySchedule {
 public struct DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomDebugStringConvertible, DailySchedule where T.RawValue: Any {
     public typealias RawValue = [String: Any]
 
-    private let referenceTimeInterval: TimeInterval
+    let referenceTimeInterval: TimeInterval
     let repeatInterval = TimeInterval(hours: 24)
 
     public let items: [RepeatingScheduleValue<T>]
@@ -137,7 +137,7 @@ public struct DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomD
 
      - parameter date: The date to convert
      */
-    private func scheduleOffset(for date: Date) -> TimeInterval {
+    func scheduleOffset(for date: Date) -> TimeInterval {
         // The time interval since a reference date in the specified time zone
         let interval = date.timeIntervalSinceReferenceDate + TimeInterval(timeZone.secondsFromGMT(for: date))
 
@@ -197,22 +197,4 @@ public struct DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomD
 }
 
 
-extension DailyValueSchedule where T: Equatable {
-    public static func ==(lhs: DailyValueSchedule<T>, rhs: DailyValueSchedule<T>) -> Bool {
-        guard lhs.items.count == rhs.items.count else {
-            return false
-        }
-
-        guard lhs.timeZone == rhs.timeZone else {
-            return false
-        }
-
-        for (a, b) in zip(lhs.items, rhs.items) {
-            guard a == b else {
-                return false
-            }
-        }
-
-        return true
-    }
-}
+extension DailyValueSchedule: Equatable where T: Equatable { }

@@ -92,6 +92,9 @@ public final class CarbStore: HealthKitSampleStore {
         return super.preferredUnit
     }
 
+    /// The most recently applied schedule override.
+    public var scheduleOverride: TemporaryScheduleOverride?
+
     /// Carbohydrate-to-insulin ratio
     public var carbRatioSchedule: CarbRatioSchedule? {
         get {
@@ -102,6 +105,15 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
     private let lockedCarbRatioSchedule: Locked<CarbRatioSchedule?>
+
+    /// The carb ratio schedule, applying the most recently enabled override if active.
+    public var carbRatioScheduleApplyingOverrideIfActive: CarbRatioSchedule? {
+        if let override = scheduleOverride, override.isActive() {
+            return carbRatioSchedule?.applyingCarbRatioMultiplier(from: override)
+        } else {
+            return carbRatioSchedule
+        }
+    }
 
     /// A trio of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
     public let defaultAbsorptionTimes: DefaultAbsorptionTimes
@@ -116,6 +128,15 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
     private let lockedInsulinSensitivitySchedule:  Locked<InsulinSensitivitySchedule?>
+
+    /// The insulin sensitivity schedule, applying the most recently enabled override if active.
+    public var insulinSensitivityScheduleApplyingOverrideIfActive: InsulinSensitivitySchedule? {
+        if let override = scheduleOverride, override.isActive() {
+            return insulinSensitivitySchedule?.applyingSensitivityMultiplier(from: override)
+        } else {
+            return insulinSensitivitySchedule
+        }
+    }
 
     /// The expected delay in the appearance of glucose effects, accounting for both digestion and sensor lag
     public let delay: TimeInterval
@@ -331,8 +352,8 @@ extension CarbStore {
             case .success(let samples):
                 let status = samples.map(
                     to: effectVelocities ?? [],
-                    carbRatio: self.carbRatioSchedule,
-                    insulinSensitivity: self.insulinSensitivitySchedule,
+                    carbRatio: self.carbRatioScheduleApplyingOverrideIfActive,
+                    insulinSensitivity: self.insulinSensitivityScheduleApplyingOverrideIfActive,
                     absorptionTimeOverrun: self.absorptionTimeOverrun,
                     defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
                     delay: self.delay
@@ -734,7 +755,7 @@ extension CarbStore {
         getCachedCarbSamples(start: foodStart, end: end) { (samples) in
             let carbsOnBoard: [CarbValue]
 
-            if let velocities = effectVelocities, let carbRatioSchedule = self.carbRatioSchedule, let insulinSensitivitySchedule = self.insulinSensitivitySchedule {
+            if let velocities = effectVelocities, let carbRatioSchedule = self.carbRatioScheduleApplyingOverrideIfActive, let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideIfActive {
                 carbsOnBoard = samples.map(
                     to: velocities,
                     carbRatio: carbRatioSchedule,
@@ -775,7 +796,7 @@ extension CarbStore {
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping(_ result: CarbStoreResult<[GlucoseEffect]>) -> Void) {
         queue.async {
-            guard let carbRatioSchedule = self.carbRatioSchedule, let insulinSensitivitySchedule = self.insulinSensitivitySchedule else {
+            guard let carbRatioSchedule = self.carbRatioScheduleApplyingOverrideIfActive, let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideIfActive else {
                 completion(.failure(.notConfigured))
                 return
             }
