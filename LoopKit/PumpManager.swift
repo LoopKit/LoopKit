@@ -78,9 +78,9 @@ public protocol PumpManager: DeviceManager {
     ///   - date: The date the request was made
     ///   - completion: A closure called after the command is complete
     ///   - error: An error describing why the command failed
-    func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (_ error: Error?) -> Void)
+    func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void)
 
-    func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (_ result: PumpManagerResult<DoseEntry>) -> Void)
+    func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void)
 
     func updateBLEHeartbeatPreference()
     
