@@ -104,8 +104,8 @@ public extension DailyQuantitySchedule where T == Double {
 }
 
 
-extension DailyQuantitySchedule where T: Equatable {
-    public static func ==(lhs: DailyQuantitySchedule<T>, rhs: DailyQuantitySchedule<T>) -> Bool {
+extension DailyQuantitySchedule: Equatable where T: Equatable {
+    public static func == (lhs: DailyQuantitySchedule<T>, rhs: DailyQuantitySchedule<T>) -> Bool {
         return lhs.valueSchedule == rhs.valueSchedule && lhs.unit.unitString == rhs.unit.unitString
     }
 }

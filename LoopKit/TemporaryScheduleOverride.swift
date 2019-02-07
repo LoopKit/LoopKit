@@ -378,8 +378,6 @@ extension TemporaryScheduleOverride.Duration: RawRepresentable {
 private extension GlucoseRangeSchedule {
     init(rangeSchedule: DailyQuantitySchedule<DoubleRange>) {
         self.rangeSchedule = rangeSchedule
-        self.overrideRanges = [:]
-        self.override = nil
     }
 }
 

@@ -52,90 +52,17 @@ extension DoubleRange: Equatable {
 
 
 /// Defines a daily schedule of glucose ranges
-public struct GlucoseRangeSchedule: DailySchedule {
+public struct GlucoseRangeSchedule: DailySchedule, Equatable {
     public typealias RawValue = [String: Any]
-
-    /// A time-based value overriding the rangeSchedule
-    public struct Override {
-        public enum Context: String {
-            case workout
-            case preMeal
-        }
-
-        public let context: Context
-        public let start: Date
-        public let end: Date
-        public let value: DoubleRange
-
-        /// Initializes a new override
-        ///
-        /// - Parameters:
-        ///   - context: The context type of the override
-        ///   - start: The date at which the override starts
-        ///   - end: The date at which the override ends, or nil for an indefinite override
-        ///   - value: The value to return when active
-        public init(context: Context, start: Date, end: Date?, value: DoubleRange) {
-            self.context = context
-            self.start = start
-            self.end = end ?? .distantFuture
-            self.value = value
-        }
-
-        public var activeDates: DateInterval {
-            return DateInterval(start: start, end: end)
-        }
-
-        public func isActive(at date: Date = Date()) -> Bool {
-            return activeDates.contains(date) && !value.isZero
-        }
-    }
 
     var rangeSchedule: DailyQuantitySchedule<DoubleRange>
 
-    /// Default override values per context type
-    public var overrideRanges: [Override.Context: DoubleRange]
-
-    /// The last-configured override of the range schedule
-    @available(*, deprecated, message: "Use the `TemporaryScheduleOverride` API instead")
-    public internal(set) var override: Override?
-
-    /// Enables the predefined override value to be active during a specified system date range
-    ///
-    /// - Parameters:
-    ///   - context: The context type to use for value selection
-    ///   - start: The date the override should start
-    ///   - end: The date the override should end
-    /// - Returns: Whether the override was successfully enabled
-    @available(*, deprecated, message: "Use the `TemporaryScheduleOverride` API instead")
-    public mutating func setOverride(_ context: Override.Context, from start: Date = Date(), until end: Date) -> Bool {
-        guard let value = overrideRanges[context], end > start, !value.isZero else {
-            return false
-        }
-
-        override = Override(context: context, start: start, end: end, value: value)
-        return true
-    }
-
-    /// Removes the specified range override
-    ///
-    /// - Parameter matching: The context to remove. If nil, all contexts are removed.
-    @available(*, deprecated, message: "Use the `TemporaryScheduleOverride` API instead")
-    public mutating func clearOverride(matching context: Override.Context? = nil) {
-        guard let override = override, context == nil || context! == override.context else {
-            return
-        }
-
-        self.override = nil
-    }
-
-    public init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<DoubleRange>], timeZone: TimeZone? = nil, overrideRanges: [Override.Context: DoubleRange], override: Override? = nil) {
+    public init?(unit: HKUnit, dailyItems: [RepeatingScheduleValue<DoubleRange>], timeZone: TimeZone? = nil) {
         guard let rangeSchedule = DailyQuantitySchedule<DoubleRange>(unit: unit, dailyItems: dailyItems, timeZone: timeZone) else {
             return nil
         }
 
         self.rangeSchedule = rangeSchedule
-        self.overrideRanges = overrideRanges
-        self.override = override
     }
 
     public init?(rawValue: RawValue) {
@@ -144,30 +71,6 @@ public struct GlucoseRangeSchedule: DailySchedule {
         }
 
         self.rangeSchedule = rangeSchedule
-
-        var overrideRanges: [Override.Context: DoubleRange] = [:]
-
-        if let workoutRangeRawValue = rawValue["workoutRange"] as? DoubleRange.RawValue {
-            overrideRanges[.workout] = DoubleRange(rawValue: workoutRangeRawValue)
-        }
-
-        if let overrideRangesRawValue = rawValue["overrideRanges"] as? [String: DoubleRange.RawValue] {
-            for (key, value) in overrideRangesRawValue {
-                guard let context = Override.Context(rawValue: key),
-                    let range = DoubleRange(rawValue: value), !range.isZero
-                else {
-                    continue
-                }
-
-                overrideRanges[context] = range
-            }
-        }
-
-        self.overrideRanges = overrideRanges
-
-        if let overrideRawValue = rawValue["override"] as? Override.RawValue {
-            self.override = Override(rawValue: overrideRawValue)
-        }
     }
 
     public func between(start startDate: Date, end endDate: Date) -> [AbsoluteScheduleValue<DoubleRange>] {
@@ -192,10 +95,6 @@ public struct GlucoseRangeSchedule: DailySchedule {
     }
 
     public func value(at time: Date) -> DoubleRange {
-        if let override = override, override.isActive() {
-            return override.value
-        }
-
         return rangeSchedule.value(at: time)
     }
 
@@ -217,62 +116,6 @@ public struct GlucoseRangeSchedule: DailySchedule {
     }
 
     public var rawValue: RawValue {
-        var rawValue = rangeSchedule.rawValue
-
-        var overrideRangesRawValue: [String: DoubleRange.RawValue] = [:]
-        for (key, value) in overrideRanges {
-            overrideRangesRawValue[key.rawValue] = value.rawValue
-        }
-
-        rawValue["overrideRanges"] = overrideRangesRawValue
-        rawValue["override"] = override?.rawValue
-
-        return rawValue
-    }
-}
-
-
-extension GlucoseRangeSchedule.Override: RawRepresentable {
-    public typealias RawValue = [String: Any]
-
-    public init?(rawValue: RawValue) {
-        guard let contextRaw = rawValue["context"] as? Context.RawValue,
-            let context = Context(rawValue: contextRaw),
-            let valueRaw = rawValue["value"] as? DoubleRange.RawValue,
-            let value = DoubleRange(rawValue: valueRaw),
-            let start = rawValue["start"] as? Date
-        else {
-            return nil
-        }
-
-        self.init(context: context, start: start, end: rawValue["end"] as? Date, value: value)
-    }
-
-    public var rawValue: RawValue {
-        return [
-            "context": context.rawValue,
-            "start": start,
-            "end": end,
-            "value": value.rawValue
-        ]
-    }
-}
-
-
-extension GlucoseRangeSchedule.Override: Equatable {
-    public static func ==(lhs: GlucoseRangeSchedule.Override, rhs: GlucoseRangeSchedule.Override) -> Bool {
-        return lhs.context == rhs.context &&
-            lhs.start == rhs.start &&
-            lhs.end == rhs.end &&
-            lhs.value == rhs.value
-    }
-}
-
-
-extension GlucoseRangeSchedule: Equatable {
-    public static func ==(lhs: GlucoseRangeSchedule, rhs: GlucoseRangeSchedule) -> Bool {
-        return lhs.rangeSchedule == rhs.rangeSchedule &&
-            lhs.overrideRanges == rhs.overrideRanges &&
-            lhs.override == rhs.override
+        return rangeSchedule.rawValue
     }
 }

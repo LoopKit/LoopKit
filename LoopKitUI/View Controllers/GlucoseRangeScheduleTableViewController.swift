@@ -36,9 +36,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     public var scheduleItems: [RepeatingScheduleValue<DoubleRange>] = []
 
-    public let overrideContexts: [GlucoseRangeSchedule.Override.Context] = [.preMeal]
-
-    public var overrideRanges: [GlucoseRangeSchedule.Override.Context: DoubleRange] = [:]
+    public var preMealRange: DoubleRange?
 
     override func addScheduleItem(_ sender: Any?) {
         var startTime = TimeInterval(0)
@@ -70,7 +68,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         tableView.insertRows(at: [IndexPath(row: scheduleItems.count - 1, section: Section.schedule.rawValue)], with: .automatic)
 
         if scheduleItems.count == 1 {
-            tableView.insertSections(IndexSet(integer: Section.override.rawValue), with: .automatic)
+            tableView.insertSections(IndexSet(integer: Section.preMealTarget.rawValue), with: .automatic)
         }
 
         tableView.endUpdates()
@@ -84,7 +82,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     private enum Section: Int {
         case schedule = 0
-        case override
+        case preMealTarget
 
         static let count = 2
     }
@@ -101,8 +99,8 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         switch Section(rawValue: section)! {
         case .schedule:
             return scheduleItems.count
-        case .override:
-            return overrideContexts.count
+        case .preMealTarget:
+            return 1
         }
     }
 
@@ -140,32 +138,21 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
             }
 
             return cell
-        case .override:
+        case .preMealTarget:
             let cell = tableView.dequeueReusableCell(withIdentifier: GlucoseRangeOverrideTableViewCell.className, for: indexPath) as! GlucoseRangeOverrideTableViewCell
 
             cell.valueNumberFormatter.minimumFractionDigits = unit.preferredFractionDigits
             cell.valueNumberFormatter.maximumFractionDigits = unit.preferredFractionDigits
 
-            let context = overrideContexts[indexPath.row]
-
-            if let range = overrideRanges[context], !range.isZero {
+            if let range = preMealRange, !range.isZero {
                 cell.minValue = range.minValue
                 cell.maxValue = range.maxValue
             }
 
-            cell.titleLabel.text = context.title
+            cell.titleLabel.text = LocalizedString("Pre-Meal", comment: "Title for the pre-meal override range")
 
             let bundle = Bundle(for: type(of: self))
-            let image: UIImage?
-
-            switch context {
-            case .workout:
-                image = UIImage(named: "workout", in: bundle, compatibleWith: traitCollection)
-            case .preMeal:
-                image = UIImage(named: "Pre-Meal", in: bundle, compatibleWith: traitCollection)
-            }
-
-            cell.iconImageView.image = image
+            cell.iconImageView.image = UIImage(named: "Pre-Meal", in: bundle, compatibleWith: traitCollection)
 
             cell.unitString = unitDisplayString
             cell.delegate = self
@@ -183,7 +170,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
             tableView.deleteRows(at: [indexPath], with: .automatic)
 
             if scheduleItems.count == 0 {
-                tableView.deleteSections(IndexSet(integer: Section.override.rawValue), with: .automatic)
+                tableView.deleteSections(IndexSet(integer: Section.preMealTarget.rawValue), with: .automatic)
             }
 
             tableView.endUpdates()
@@ -210,7 +197,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
                 DispatchQueue.main.async {
                     tableView.reloadData()
                 }
-            case .override:
+            case .preMealTarget:
                 break
             }
         }
@@ -220,7 +207,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         switch Section(rawValue: indexPath.section)! {
         case .schedule:
             return true
-        case .override:
+        case .preMealTarget:
             return false
         }
     }
@@ -229,7 +216,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         switch Section(rawValue: indexPath.section)! {
         case .schedule:
             return true
-        case .override:
+        case .preMealTarget:
             return false
         }
     }
@@ -238,7 +225,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         switch Section(rawValue: section)! {
         case .schedule:
             return nil
-        case .override:
+        case .preMealTarget:
             return LocalizedString("Overrides", comment: "The section title of glucose overrides")
         }
     }
@@ -249,7 +236,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         switch Section(rawValue: indexPath.section)! {
         case .schedule:
             return super.tableView(tableView, shouldHighlightRowAt: indexPath)
-        case .override:
+        case .preMealTarget:
             return false
         }
     }
@@ -258,7 +245,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         switch Section(rawValue: indexPath.section)! {
         case .schedule:
             return super.tableView(tableView, willSelectRowAt: indexPath)
-        case .override:
+        case .preMealTarget:
             return nil
         }
     }
@@ -267,7 +254,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
         switch Section(rawValue: indexPath.section)! {
         case .schedule:
             super.tableView(tableView, didSelectRowAt: indexPath)
-        case .override:
+        case .preMealTarget:
             break
         }
     }
@@ -304,7 +291,7 @@ extension GlucoseRangeScheduleTableViewController: GlucoseRangeOverrideTableView
             return
         }
 
-        let context = overrideContexts[indexPath.row]
-        overrideRanges[context] = DoubleRange(minValue: cell.minValue, maxValue: cell.maxValue)
+        assert(indexPath == [Section.preMealTarget.rawValue, 0])
+        preMealRange = DoubleRange(minValue: cell.minValue, maxValue: cell.maxValue)
     }
 }

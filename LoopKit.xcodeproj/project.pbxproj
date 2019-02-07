@@ -221,7 +221,6 @@
 		43BA7173201E492E0058961E /* DateAndDurationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 434A01CF1F019D9100938125 /* DateAndDurationTableViewCell.xib */; };
 		43BA717A201E4F1D0058961E /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */; };
 		43BA717B201EE6A40058961E /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D0D1D3737420006E908 /* NibLoadable.swift */; };
-		43BA717C201EE7090058961E /* GlucoseRangeSchedule+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A275171F1C6E4000EAFEBD /* GlucoseRangeSchedule+UI.swift */; };
 		43BA717D201EE7090058961E /* GlucoseRangeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE071C7290530073BE78 /* GlucoseRangeTableViewCell.swift */; };
 		43BA717E201EE7090058961E /* CommandResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FB6491D712158007B9C70 /* CommandResponseViewController.swift */; };
 		43BA717F201EE7090058961E /* GlucoseRangeOverrideTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */; };
@@ -602,7 +601,6 @@
 		439BCD911EEDD33F00100EAA /* ice_slow_absorption_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption_output.json; sourceTree = "<group>"; };
 		43A0670E1F23CAC700E9E90F /* DoseType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseType.swift; sourceTree = "<group>"; };
 		43A067121F245A2F00E9E90F /* DoseStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseStoreTests.swift; sourceTree = "<group>"; };
-		43A275171F1C6E4000EAFEBD /* GlucoseRangeSchedule+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GlucoseRangeSchedule+UI.swift"; sourceTree = "<group>"; };
 		43A8EC3B210CEEA500A81379 /* CGMManagerUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGMManagerUI.swift; sourceTree = "<group>"; };
 		43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantity.swift; sourceTree = "<group>"; };
 		43B17C88208EEC0B00AC27E9 /* HealthStoreUnitCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStoreUnitCache.swift; sourceTree = "<group>"; };
@@ -1047,7 +1045,6 @@
 				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
 				7D68A9E31FE0A3D300522C49 /* Localizable.strings */,
 				43A8EC3B210CEEA500A81379 /* CGMManagerUI.swift */,
-				43A275171F1C6E4000EAFEBD /* GlucoseRangeSchedule+UI.swift */,
 				4322B76A202F9E4B0002837D /* HKUnit+LoopKitUI.swift */,
 				43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */,
 				43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */,
@@ -1793,7 +1790,6 @@
 				4369F092208B0DFF000E3E45 /* DateAndDurationTableViewCell.swift in Sources */,
 				43BA7189201EE8980058961E /* UITableViewCell.swift in Sources */,
 				43BA7181201EE7090058961E /* RepeatingScheduleValueTableViewCell.swift in Sources */,
-				43BA717C201EE7090058961E /* GlucoseRangeSchedule+UI.swift in Sources */,
 				43BA716E201E49220058961E /* DecimalTextFieldTableViewCell.swift in Sources */,
 				895FE08722011F0C00FCF18A /* EmojiInputCell.swift in Sources */,
 				43A8EC3C210CEEA500A81379 /* CGMManagerUI.swift in Sources */,
@@ -2253,7 +2249,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 41;
@@ -2433,8 +2429,10 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2455,8 +2453,10 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";

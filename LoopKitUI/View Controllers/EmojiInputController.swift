@@ -118,6 +118,11 @@ protocol EmojiInputControllerDelegate: class {
     func emojiInputControllerDidSelectItemInSection(_ section: Int)
 }
 
+// MARK: - Default Implementations
+extension EmojiInputControllerDelegate {
+    func emojiInputControllerDidSelectItemInSection(_ section: Int) { }
+}
+
 extension UIInputView: UIInputViewAudioFeedback {
     public var enableInputClicksWhenVisible: Bool { return true }
 

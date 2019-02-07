@@ -234,7 +234,11 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         return cell
     }()
 
-    private lazy var overrideSymbolKeyboard = OverrideSymbolInputController()
+    private lazy var overrideSymbolKeyboard: EmojiInputController = {
+        let keyboard = OverrideSymbolInputController()
+        keyboard.delegate = self
+        return keyboard
+    }()
 
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch Section(rawValue: indexPath.section)! {
@@ -569,6 +573,24 @@ extension AddEditOverrideTableViewController: TextFieldTableViewCellDelegate {
         default:
             assertionFailure()
         }
+    }
+}
+
+extension AddEditOverrideTableViewController: EmojiInputControllerDelegate {
+    func emojiInputControllerDidAdvanceToStandardInputMode(_ controller: EmojiInputController) {
+        guard
+            let indexPath = indexPath(for: .symbol),
+            let cell = tableView.cellForRow(at: indexPath) as? LabeledTextFieldTableViewCell,
+            let textField = cell.textField as? CustomInputTextField
+        else {
+            return
+        }
+
+        let customInput = textField.customInput
+        textField.customInput = nil
+        textField.resignFirstResponder()
+        textField.becomeFirstResponder()
+        textField.customInput = customInput
     }
 }
 
