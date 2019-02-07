@@ -10,7 +10,7 @@ import LoopKit
 
 public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, SingleValueScheduleTableViewControllerSyncSource {
     
-    static func setupViewController() -> (UIViewController & PumpManagerSetupViewController)
+    static func setupViewController() -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying)
 
     func settingsViewController() -> (UIViewController & CompletionNotifying)
     
@@ -38,6 +38,4 @@ public protocol PumpManagerSetupViewController {
 
 public protocol PumpManagerSetupViewControllerDelegate: class {
     func pumpManagerSetupViewController(_ pumpManagerSetupViewController: PumpManagerSetupViewController, didSetUpPumpManager pumpManager: PumpManagerUI)
-
-    func pumpManagerSetupViewControllerDidCancel(_ pumpManagerSetupViewController: PumpManagerSetupViewController)
 }

@@ -13,16 +13,8 @@ public enum HUDTapAction {
     case openAppURL(URL)
 }
 
-public protocol HUDProviderDelegate: class {
-    func hudProvider(_ provider: HUDProvider, didAddViews views: [BaseHUDView])
-    func hudProvider(_ provider: HUDProvider, didRemoveViews views: [BaseHUDView])
-    func hudProvider(_ provider: HUDProvider, didReplaceViews views: [BaseHUDView])
-}
-
 public protocol HUDProvider {
     var managerIdentifier: String { get }
-
-    var delegate: HUDProviderDelegate? { set get }
 
     typealias HUDViewsRawState = [String: Any]
 
