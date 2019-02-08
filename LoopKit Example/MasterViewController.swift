@@ -148,7 +148,6 @@ class MasterViewController: UITableViewController {
                     scheduleVC.timeZone = schedule.timeZone
                     scheduleVC.scheduleItems = schedule.items
                     scheduleVC.unit = schedule.unit
-                    scheduleVC.overrideRanges = schedule.overrideRanges
 
                     show(scheduleVC, sender: sender)
                 } else if let unit = dataManager?.glucoseStore.preferredUnit {
@@ -303,7 +302,7 @@ extension MasterViewController: DailyValueScheduleTableViewControllerDelegate {
                     }
                 case .glucoseTargetRange:
                     if let controller = controller as? GlucoseRangeScheduleTableViewController {
-                        dataManager?.glucoseTargetRangeSchedule = GlucoseRangeSchedule(unit: controller.unit, dailyItems: controller.scheduleItems, timeZone: controller.timeZone, overrideRanges: controller.overrideRanges)
+                        dataManager?.glucoseTargetRangeSchedule = GlucoseRangeSchedule(unit: controller.unit, dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
                     }
                 /*case let row:
                     if let controller = controller as? DailyQuantityScheduleTableViewController {
