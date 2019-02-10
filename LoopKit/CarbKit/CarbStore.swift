@@ -824,6 +824,67 @@ extension CarbStore {
         }
     }
 
+    /// Retrieves a timeline of effect on blood glucose from carbohydrates entered after start date
+    ///
+    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+    ///
+    /// - Parameters:
+    ///   - start: The earliest date of effects to retrieve
+    ///   - end: The latest date of effects to retrieve, if provided
+    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
+    ///   - completion: A closure called once the effects have been retrieved
+    ///   - result: An array of effects, in chronological order
+    public func getGlucoseEffectsFutureFood(start: Date, end: Date? = nil, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping(_ result: CarbStoreResult<[GlucoseEffect]>) -> Void) {
+        queue.async {
+            guard let carbRatioSchedule = self.carbRatioSchedule, let insulinSensitivitySchedule = self.insulinSensitivitySchedule else {
+                completion(.failure(.notConfigured))
+                return
+            }
+            
+            // Fetch only food samples after start date
+            let foodStart = start
+            let defaultAbsorptionTimes = self.defaultAbsorptionTimes
+            let absorptionTimeOverrun = self.absorptionTimeOverrun
+            let delay = self.delay
+            let delta = self.delta
+            
+            self.getCachedCarbSamples(start: foodStart, end: end) { (samples) in
+                let effects: [GlucoseEffect]
+                
+                if let effectVelocities = effectVelocities {
+                    effects = samples.map(
+                        to: effectVelocities,
+                        carbRatio: carbRatioSchedule,
+                        insulinSensitivity: insulinSensitivitySchedule,
+                        absorptionTimeOverrun: absorptionTimeOverrun,
+                        defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                        delay: delay
+                        ).dynamicGlucoseEffects(
+                            from: start,
+                            to: end,
+                            carbRatios: carbRatioSchedule,
+                            insulinSensitivities: insulinSensitivitySchedule,
+                            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                            delay: delay,
+                            delta: delta
+                    )
+                } else {
+                    effects = samples.glucoseEffects(
+                        from: start,
+                        to: end,
+                        carbRatios: carbRatioSchedule,
+                        insulinSensitivities: insulinSensitivitySchedule,
+                        defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                        delay: delay,
+                        delta: delta
+                    )
+                }
+                
+                completion(.success(effects))
+            }
+        }
+    }
+    
     /// Retrieves the total number of recorded carbohydrates for the specified period.
     ///
     /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
