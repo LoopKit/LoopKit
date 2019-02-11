@@ -74,13 +74,18 @@ public protocol PumpManager: DeviceManager {
     ///   - units: The number of units to deliver
     ///   - startDate: The date the bolus command was originally set
     ///   - willRequest: A closure called just before the pump command is sent, if all preconditions are met
-    ///   - units: The number of units requested
-    ///   - date: The date the request was made
     ///   - completion: A closure called after the command is complete
-    ///   - error: An error describing why the command failed
-    func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void)
+    ///   - result: A DoseEntry or an error describing why the command failed
+    func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (_ result: PumpManagerResult<DoseEntry>) -> Void)
 
-    func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void)
+    /// Send a temporary basal rate command and handle the result
+    ///
+    /// - Parameters:
+    ///   - unitsPerHour: The temporary basal rate to set
+    ///   - duration: The duration of the temporary basal rate.
+    ///   - completion: A closure called after the command is complete
+    ///   - result: A DoseEntry or an error describing why the command failed
+    func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (_ result: PumpManagerResult<DoseEntry>) -> Void)
 
     func updateBLEHeartbeatPreference()
     
