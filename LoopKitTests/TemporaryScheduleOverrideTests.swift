@@ -46,9 +46,9 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         )
     }
 
-    private func applyingActiveBasalOverride(from start: String, to end: String, on schedule: BasalRateSchedule) -> BasalRateSchedule {
+    private func applyingActiveBasalOverride(from start: String, to end: String, on schedule: BasalRateSchedule, referenceDate: Date? = nil) -> BasalRateSchedule {
         let override = basalUpOverride(start: start, end: end)
-        let referenceDate = override.activeInterval.midpoint
+        let referenceDate = referenceDate ?? override.activeInterval.midpoint
         return schedule.applyingBasalRateMultiplier(from: override, relativeTo: referenceDate)
     }
 
@@ -156,6 +156,33 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         ])!
 
         XCTAssert(overrideBasalSchedule.equals(expected, accuracy: epsilon))
+    }
+
+    func testSameDayFinishedOverride() {
+        let overridden = applyingActiveBasalOverride(from: "02:00", to: "04:00", on: basalRateSchedule, referenceDate: date(at: "12:00"))
+        let expected = BasalRateSchedule(dailyItems: [
+            RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
+            RepeatingScheduleValue(startTime: .hours(2), value: 1.8),
+            RepeatingScheduleValue(startTime: .hours(4), value: 1.2),
+            RepeatingScheduleValue(startTime: .hours(6), value: 1.4),
+            RepeatingScheduleValue(startTime: .hours(20), value: 1.0)
+        ])!
+
+        XCTAssert(overridden.equals(expected, accuracy: epsilon))
+    }
+
+    func testPreviousDayFinishedOverride() {
+        let overridden = applyingActiveBasalOverride(from: "02:00", to: "04:00", on: basalRateSchedule, referenceDate: date(at: "12:00") + .hours(-24))
+        let expected = basalRateSchedule
+
+        XCTAssert(overridden.equals(expected, accuracy: epsilon))
+    }
+
+    func testNextDayNotYetStartedOverride() {
+        let overridden = applyingActiveBasalOverride(from: "02:00", to: "04:00", on: basalRateSchedule, referenceDate: date(at: "12:00") + .hours(24))
+        let expected = basalRateSchedule
+
+        XCTAssert(overridden.equals(expected, accuracy: epsilon))
     }
 }
 

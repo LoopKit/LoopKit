@@ -164,12 +164,11 @@ extension DailyValueSchedule {
         calendar: Calendar,
         updatingOverridenValuesWith update: (T) -> T
     ) -> DailyValueSchedule {
-        guard activeInterval.contains(date) else {
-            // Override inactive
+        guard let activeInterval = clamping(activeInterval, to: date, calendar: calendar) else {
+            // Active interval does not fall within this date; schedule is unchanged
             return self
         }
 
-        let activeInterval = clamping(activeInterval, to: date, calendar: calendar)
         let overrideStartOffset = scheduleOffset(for: activeInterval.start)
         let overrideEndOffset = scheduleOffset(for: activeInterval.end)
 
@@ -239,7 +238,7 @@ extension DailyValueSchedule {
         )!
     }
 
-    func clamping(_ interval: DateInterval, to date: Date, calendar: Calendar) -> DateInterval {
+    func clamping(_ interval: DateInterval, to date: Date, calendar: Calendar) -> DateInterval? {
         let (startHour, startMinute) = referenceTimeInterval.hourAndMinuteComponents
         let (endHour, endMinute) = maxTimeInterval.hourAndMinuteComponents
         guard
@@ -252,6 +251,12 @@ extension DailyValueSchedule {
 
         if endOfDateRelativeToSchedule <= startOfDateRelativeToSchedule {
             endOfDateRelativeToSchedule += repeatInterval
+        }
+
+        let scheduleInterval = DateInterval(start: startOfDateRelativeToSchedule, end: endOfDateRelativeToSchedule)
+        guard scheduleInterval.intersects(interval) else {
+            // Interval falls on a different day
+            return nil
         }
 
         let startDate = max(interval.start, startOfDateRelativeToSchedule)
