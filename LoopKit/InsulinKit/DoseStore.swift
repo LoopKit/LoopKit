@@ -127,7 +127,7 @@ public final class DoseStore {
 
     /// The basal profile, applying the most recently enabled override if active.
     public var basalProfileApplyingOverrideIfActive: BasalRateSchedule? {
-        if let override = scheduleOverride, override.isActive() {
+        if let override = scheduleOverride {
             return basalProfile?.applyingBasalRateMultiplier(from: override)
         } else {
             return basalProfile
@@ -146,7 +146,7 @@ public final class DoseStore {
 
     /// The insulin sensitivity schedule, applying the most recently enabled override if active.
     public var insulinSensitivityScheduleApplyingOverrideIfActive: InsulinSensitivitySchedule? {
-        if let override = scheduleOverride, override.isActive() {
+        if let override = scheduleOverride {
             return insulinSensitivitySchedule?.applyingSensitivityMultiplier(from: override)
         } else {
             return insulinSensitivitySchedule

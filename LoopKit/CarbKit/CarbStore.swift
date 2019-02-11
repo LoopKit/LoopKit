@@ -108,7 +108,7 @@ public final class CarbStore: HealthKitSampleStore {
 
     /// The carb ratio schedule, applying the most recently enabled override if active.
     public var carbRatioScheduleApplyingOverrideIfActive: CarbRatioSchedule? {
-        if let override = scheduleOverride, override.isActive() {
+        if let override = scheduleOverride {
             return carbRatioSchedule?.applyingCarbRatioMultiplier(from: override)
         } else {
             return carbRatioSchedule
@@ -131,7 +131,7 @@ public final class CarbStore: HealthKitSampleStore {
 
     /// The insulin sensitivity schedule, applying the most recently enabled override if active.
     public var insulinSensitivityScheduleApplyingOverrideIfActive: InsulinSensitivitySchedule? {
-        if let override = scheduleOverride, override.isActive() {
+        if let override = scheduleOverride {
             return insulinSensitivitySchedule?.applyingSensitivityMultiplier(from: override)
         } else {
             return insulinSensitivitySchedule
