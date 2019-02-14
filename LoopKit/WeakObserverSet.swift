@@ -10,7 +10,7 @@ import Foundation
 
 public class WeakObserverSet<Observer>: Sequence {
 
-    public struct Iterator<Observer>: IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         let enumerator: NSEnumerator
 
         init(_ enumerator: NSEnumerator) {
@@ -42,7 +42,7 @@ public class WeakObserverSet<Observer>: Sequence {
         observers.remove(observerObject)
     }
 
-    public func makeIterator() -> Iterator<Observer> {
+    public func makeIterator() -> Iterator {
         return Iterator(observers.objectEnumerator())
     }
 }
