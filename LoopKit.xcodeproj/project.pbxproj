@@ -312,7 +312,7 @@
 		7D68A9B81FE0A3D100522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9BA1FE0A3D100522C49 /* InfoPlist.strings */; };
 		7D68A9C21FE0A3D200522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */; };
 		C11166B02180FA5C000EEAAB /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AF2180FA5C000EEAAB /* LoadingTableViewCell.swift */; };
-		C16C3D3F21A3101700401105 /* WeakObserverSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133FD1621A2A845009B2D20 /* WeakObserverSet.swift */; };
+		C16C3D3F21A3101700401105 /* WeakSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133FD1621A2A845009B2D20 /* WeakSet.swift */; };
 		C184FECB219F2E0100CD2722 /* SuspendResumeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */; };
 		C1D7366421F78A4D00048CDD /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D7366321F78A4D00048CDD /* UIAlertController.swift */; };
 		C1E31F1222008AA300E88C00 /* SettingsNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E31F1122008AA300E88C00 /* SettingsNavigationViewController.swift */; };
@@ -766,7 +766,7 @@
 		C1110E981EE98CF5009BB852 /* ice_35_min_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_input.json; sourceTree = "<group>"; };
 		C11166AF2180FA5C000EEAAB /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
-		C133FD1621A2A845009B2D20 /* WeakObserverSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakObserverSet.swift; sourceTree = "<group>"; };
+		C133FD1621A2A845009B2D20 /* WeakSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakSet.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
 		C17F4CB21EE9B6DF005079B1 /* carb_entry_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = carb_entry_input.json; sourceTree = "<group>"; };
 		C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendResumeTableViewCell.swift; sourceTree = "<group>"; };
@@ -1140,7 +1140,7 @@
 				43D8FDF31C7290350073BE78 /* SampleValue.swift */,
 				43F5035421059A8A009FA89A /* ServiceAuthentication.swift */,
 				43FB60EA20DDC868002B996B /* SetBolusError.swift */,
-				C133FD1621A2A845009B2D20 /* WeakObserverSet.swift */,
+				C133FD1621A2A845009B2D20 /* WeakSet.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -1848,7 +1848,7 @@
 				1F5DAB1F2118C95700048054 /* LocalizedString.swift in Sources */,
 				434113AD20F287DC00D05747 /* NSManagedObjectContext.swift in Sources */,
 				4322B77B202FA2790002837D /* StoredCarbEntry.swift in Sources */,
-				C16C3D3F21A3101700401105 /* WeakObserverSet.swift in Sources */,
+				C16C3D3F21A3101700401105 /* WeakSet.swift in Sources */,
 				4322B790202FA2B30002837D /* InsulinValue.swift in Sources */,
 				434C5F9E209938CD00B2FD1A /* NumberFormatter.swift in Sources */,
 				437AFEEF2036A156008C4892 /* DeletedCarbObject+CoreDataClass.swift in Sources */,
