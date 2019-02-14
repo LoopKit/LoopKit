@@ -464,15 +464,12 @@ fileprivate extension UIAlertController {
         addAction(UIAlertAction(
             title: LocalizedString("Delete All", comment: "Button title to delete all objects"),
             style: .destructive,
-            handler: { (_) in
-                handler()
-        }
+            handler: { (_) in handler() }
         ))
-        
+
         addAction(UIAlertAction(
             title: LocalizedString("Cancel", comment: "The title of the cancel action in an action sheet"),
-            style: .cancel,
-            handler: nil
+            style: .cancel
         ))
     }
 }
