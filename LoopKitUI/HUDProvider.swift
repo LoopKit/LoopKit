@@ -27,6 +27,13 @@ public protocol HUDProvider {
     // The current, serializable state of the HUD views
     var hudViewsRawState: HUDViewsRawState { get }
 
+    // This notifies the HUDProvider that hud views are now visible.
     func hudDidAppear()
+
+    // This notifies the HUDProvider that views are offscreen or backgrounded
+    // and updates should be deferred to better inform the user when they are
+    // returning to the views. Showing changed state via animations might be
+    // appropriate. Saving cpu resources while backgrounded is a priority.
+    func hudWillDisappear()
 }
 
