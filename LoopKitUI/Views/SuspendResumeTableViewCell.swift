@@ -15,37 +15,44 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
         case resume
     }
     
-    public var shownAction: Action = .suspend {
-        didSet {
-            switch shownAction {
-            case .suspend:
-                textLabel?.text = LocalizedString("Suspend Delivery", comment: "Title text for button to suspend insulin delivery")
-            case .resume:
-                textLabel?.text = LocalizedString("Resume Delivery", comment: "Title text for button to resume insulin delivery")
-            }
+    public var shownAction: Action {
+        switch basalDeliveryState {
+        case .active, .suspending:
+            return .suspend
+        case .suspended, .resuming:
+            return .resume
         }
+    }
+
+    private func updateTextLabel() {
+        switch self.basalDeliveryState {
+        case .active:
+            textLabel?.text = LocalizedString("Suspend Delivery", comment: "Title text for button to suspend insulin delivery")
+        case .suspending:
+            self.textLabel?.text = LocalizedString("Suspending", comment: "Title text for button when insulin delivery is in the process of being stopped")
+        case .suspended:
+            textLabel?.text = LocalizedString("Resume Delivery", comment: "Title text for button to resume insulin delivery")
+        case .resuming:
+            self.textLabel?.text = LocalizedString("Resuming", comment: "Title text for button when insulin delivery is in the process of being resumed")
+        }
+    }
+
+    private func updateLoadingState() {
+        self.isLoading = {
+            switch self.basalDeliveryState {
+            case .suspending, .resuming:
+                return true
+            default:
+                return false
+            }
+        }()
+        self.isEnabled = !self.isLoading
     }
     
     public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState = .active {
         didSet {
-            switch self.basalDeliveryState {
-            case .active:
-                self.isEnabled = true
-                self.shownAction = .suspend
-                self.isLoading = false
-            case .suspending:
-                self.isEnabled = false
-                self.textLabel?.text = LocalizedString("Suspending", comment: "Title text for button when insulin delivery is in the process of being stopped")
-                self.isLoading = true
-            case .suspended:
-                self.isEnabled = true
-                self.shownAction = .resume
-                self.isLoading = false
-            case .resuming:
-                self.isEnabled = false
-                self.textLabel?.text = LocalizedString("Resuming", comment: "Title text for button when insulin delivery is in the process of being resumed")
-                self.isLoading = true
-            }
+            updateTextLabel()
+            updateLoadingState()
         }
     }
 }

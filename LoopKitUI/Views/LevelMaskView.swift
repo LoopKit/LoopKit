@@ -16,6 +16,9 @@ public class LevelMaskView: UIView {
 
     var value: Double = 1.0 {
         didSet {
+            if value < 0 || value > 1.0 {
+                assertionFailure("Level mask value outside of interval [0,1]")
+            }
             animateFill(duration: firstDataUpdate ? 0 : 1.25)
             firstDataUpdate = false
         }
@@ -27,7 +30,12 @@ public class LevelMaskView: UIView {
             mask?.removeFromSuperview()
             maskImageView?.removeFromSuperview()
 
-            guard let maskImage = maskImage else { return }
+            guard let maskImage = maskImage else {
+                fillView = nil
+                mask = nil
+                maskImageView = nil
+                return
+            }
 
             mask = UIView()
             maskImageView = UIImageView(image: maskImage)
@@ -82,4 +90,5 @@ public class LevelMaskView: UIView {
         fillViewFrame.size.height = -CGFloat(value) * maskViewFrame.height
         fillView?.frame = fillViewFrame
     }
+
 }

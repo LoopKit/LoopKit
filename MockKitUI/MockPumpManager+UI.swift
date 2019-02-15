@@ -33,9 +33,7 @@ final class MockHUDProvider: NSObject, HUDProvider {
         pumpManager.addStateObserver(self)
     }
 
-    func hudDidAppear() {
-        // nothing to do here
-    }
+    var active: Bool = false
 
     var hudViewsRawState: HUDViewsRawState {
         var rawValue: HUDViewsRawState = [
@@ -69,7 +67,7 @@ final class MockHUDProvider: NSObject, HUDProvider {
         let reservoirVolumeHUDView = ReservoirVolumeHUDView.instantiate()
         if let reservoirUnitsRemaining = rawValue["reservoirUnitsRemaining"] as? Double {
             let reservoirLevel = (reservoirUnitsRemaining / pumpReservoirCapacity).clamped(to: 0...1)
-            reservoirVolumeHUDView.reservoirLevel = reservoirLevel
+            reservoirVolumeHUDView.level = reservoirLevel
             reservoirVolumeHUDView.setReservoirVolume(volume: reservoirUnitsRemaining, at: Date())
         }
 
@@ -87,7 +85,7 @@ final class MockHUDProvider: NSObject, HUDProvider {
     private func updateReservoirView() {
         let reservoirVolume = pumpManager.state.reservoirUnitsRemaining
         let reservoirLevel = (reservoirVolume / pumpManager.pumpReservoirCapacity).clamped(to: 0...1)
-        reservoirView?.reservoirLevel = reservoirLevel
+        reservoirView?.level = reservoirLevel
         reservoirView?.setReservoirVolume(volume: reservoirVolume, at: Date())
     }
 

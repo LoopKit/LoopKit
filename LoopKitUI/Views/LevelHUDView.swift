@@ -44,8 +44,11 @@ open class LevelHUDView: BaseHUDView {
     public var level: Double? {
         didSet {
             levelMaskView.value = level ?? 1.0
-            updateColor()
+            levelDidChange()
         }
     }
 
+    open func levelDidChange() {
+        updateColor()
+    }
 }

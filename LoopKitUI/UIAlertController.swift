@@ -38,9 +38,7 @@ extension UIAlertController {
                 actions.append(UIAlertAction(
                     title: LocalizedString("More Info", comment: "Alert action title to open error help"),
                     style: .default,
-                    handler: { (action) in
-                        UIApplication.shared.open(url)
-                }
+                    handler: { (action) in UIApplication.shared.open(url) }
                 ))
             }
 

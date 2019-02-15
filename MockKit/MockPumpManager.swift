@@ -89,8 +89,8 @@ public final class MockPumpManager: PumpManager {
         return pumpManagerDelegate as? TestingPumpManagerDelegate
     }
 
-    private var statusObservers = WeakObserverSet<PumpManagerStatusObserver>()
-    private var stateObservers = WeakObserverSet<MockPumpManagerStateObserver>()
+    private var statusObservers = WeakSet<PumpManagerStatusObserver>()
+    private var stateObservers = WeakSet<MockPumpManagerStateObserver>()
 
     private var pendingPumpEvents: [NewPumpEvent] = []
 
@@ -122,11 +122,11 @@ public final class MockPumpManager: PumpManager {
     }
 
     public func addStatusObserver(_ observer: PumpManagerStatusObserver) {
-        statusObservers.add(observer)
+        statusObservers.insert(observer)
     }
 
     public func addStateObserver(_ observer: MockPumpManagerStateObserver) {
-        stateObservers.add(observer)
+        stateObservers.insert(observer)
     }
 
     public func removeStatusObserver(_ observer: PumpManagerStatusObserver) {
