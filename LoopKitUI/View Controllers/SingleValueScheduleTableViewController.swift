@@ -251,9 +251,9 @@ open class SingleValueScheduleTableViewController: DailyValueScheduleTableViewCo
                             self.isSyncInProgress = false
                             self.delegate?.dailyValueScheduleTableViewControllerWillFinishUpdating(self)
                         case .failure(let error):
-                            self.presentAlertController(with: error, animated: true, completion: {
+                            self.present(UIAlertController(with: error), animated: true) {
                                 self.isSyncInProgress = false
-                            })
+                            }
                         }
                     }
                 }

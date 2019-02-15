@@ -95,7 +95,7 @@ public final class MockPumpManager: PumpManager {
     private var pendingPumpEvents: [NewPumpEvent] = []
 
     public init() {
-        status = PumpManagerStatus(timeZone: .current, device: MockPumpManager.device, pumpBatteryChargeRemaining: 1, basalDeliveryState: .none, bolusState: .none)
+        status = PumpManagerStatus(timeZone: .current, device: MockPumpManager.device, pumpBatteryChargeRemaining: 1, basalDeliveryState: .active, bolusState: .none)
         state = MockPumpManagerState(reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity, tempBasalEnactmentShouldError: false, bolusEnactmentShouldError: false, deliverySuspensionShouldError: false, deliveryResumptionShouldError: false)
     }
 
@@ -105,7 +105,7 @@ public final class MockPumpManager: PumpManager {
         }
         let pumpBatteryChargeRemaining = rawState["pumpBatteryChargeRemaining"] as? Double ?? 1
 
-        self.status = PumpManagerStatus(timeZone: .current, device: MockPumpManager.device, pumpBatteryChargeRemaining: pumpBatteryChargeRemaining, basalDeliveryState: .none, bolusState: .none)
+        self.status = PumpManagerStatus(timeZone: .current, device: MockPumpManager.device, pumpBatteryChargeRemaining: pumpBatteryChargeRemaining, basalDeliveryState: .active, bolusState: .none)
         self.state = state
     }
 
@@ -162,18 +162,19 @@ public final class MockPumpManager: PumpManager {
         }
     }
 
-    public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (DoseEntry) -> Void, completion: @escaping (Error?) -> Void) {
+    public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (DoseEntry) -> Void, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
+
         if state.bolusEnactmentShouldError {
-            completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
+            completion(.failure(SetBolusError.certain(PumpManagerError.communication(MockPumpManagerError.communicationFailure))))
         } else {
             guard status.basalDeliveryState != .suspended else {
-                completion(PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended))
+                completion(.failure(SetBolusError.certain(PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended))))
                 return
             }
             let bolus = NewPumpEvent.bolus(at: Date(), units: units, deliveryUnitsPerMinute: type(of: self).deliveryUnitsPerMinute)
             pendingPumpEvents.append(bolus)
             willRequest(bolus.dose!)
-            completion(nil)
+            completion(.success(bolus.dose!))
         }
     }
 
@@ -186,24 +187,36 @@ public final class MockPumpManager: PumpManager {
     }
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
-        if state.deliverySuspensionShouldError {
-            completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
-        } else {
-            let suspend = NewPumpEvent.suspend(at: Date())
-            pendingPumpEvents.append(suspend)
-            status.basalDeliveryState = .suspended
-            completion(nil)
+        let previousState = status.basalDeliveryState
+        status.basalDeliveryState = .suspending
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            if self.state.deliverySuspensionShouldError {
+                self.status.basalDeliveryState = previousState
+                completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
+            } else {
+                let suspend = NewPumpEvent.suspend(at: Date())
+                self.pendingPumpEvents.append(suspend)
+                self.status.basalDeliveryState = .suspended
+                completion(nil)
+            }
         }
     }
 
     public func resumeDelivery(completion: @escaping (Error?) -> Void) {
-        if state.deliveryResumptionShouldError {
-            completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
-        } else {
-            let resume = NewPumpEvent.resume(at: Date())
-            pendingPumpEvents.append(resume)
-            status.basalDeliveryState = .none
-            completion(nil)
+        let previousState = status.basalDeliveryState
+        status.basalDeliveryState = .resuming
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            if self.state.deliveryResumptionShouldError {
+                self.status.basalDeliveryState = previousState
+                completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
+            } else {
+                let resume = NewPumpEvent.resume(at: Date())
+                self.pendingPumpEvents.append(resume)
+                self.status.basalDeliveryState = .active
+                completion(nil)
+            }
         }
     }
 

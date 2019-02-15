@@ -13,11 +13,10 @@ import MockKit
 
 
 final class MockHUDProvider: NSObject, HUDProvider {
+
     var managerIdentifier: String {
         return MockPumpManager.managerIdentifier
     }
-
-    var delegate: HUDProviderDelegate?
 
     private var pumpManager: MockPumpManager
 
@@ -81,7 +80,7 @@ final class MockHUDProvider: NSObject, HUDProvider {
         return [reservoirVolumeHUDView, batteryLevelHUDView]
     }
 
-    func didTapOnHudView(_ view: BaseHUDView) -> HUDTapAction? {
+    func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
         return nil
     }
 
@@ -109,12 +108,14 @@ extension MockHUDProvider: MockPumpManagerStateObserver {
 }
 
 extension MockPumpManager: PumpManagerUI {
-    public static func setupViewController() -> (UIViewController & PumpManagerSetupViewController) {
+    public static func setupViewController() -> (UIViewController & CompletionNotifying & PumpManagerSetupViewController) {
         return MockPumpManagerSetupViewController.instantiateFromStoryboard()
     }
 
-    public func settingsViewController() -> UIViewController {
-        return MockPumpManagerSettingsViewController(pumpManager: self)
+    public func settingsViewController() -> (UIViewController & CompletionNotifying) {
+        let settings = MockPumpManagerSettingsViewController(pumpManager: self)
+        let nav = SettingsNavigationViewController(rootViewController: settings)
+        return nav
     }
 
     public var smallImage: UIImage? {

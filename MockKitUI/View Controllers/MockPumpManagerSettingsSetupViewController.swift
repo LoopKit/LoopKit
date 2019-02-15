@@ -18,7 +18,7 @@ final class MockPumpManagerSettingsSetupViewController: SetupTableViewController
     var pumpManager: MockPumpManager?
 
     private var pumpManagerSetupViewController: MockPumpManagerSetupViewController? {
-        return setupViewController as? MockPumpManagerSetupViewController
+        return navigationController as? MockPumpManagerSetupViewController
     }
 
     override func viewDidLoad() {
@@ -66,7 +66,7 @@ final class MockPumpManagerSettingsSetupViewController: SetupTableViewController
             case .basalRates:
                 cell.textLabel?.text = "Basal Rates"
 
-                if let basalRateSchedule = setupViewController?.basalSchedule {
+                if let basalRateSchedule = pumpManagerSetupViewController?.basalSchedule {
                     let unit = HKUnit.internationalUnit()
                     let total = HKQuantity(unit: unit, doubleValue: basalRateSchedule.total())
                     cell.detailTextLabel?.text = quantityFormatter.string(from: total, for: unit)
@@ -76,7 +76,7 @@ final class MockPumpManagerSettingsSetupViewController: SetupTableViewController
             case .deliveryLimits:
                 cell.textLabel?.text = "Delivery Limits"
 
-                if setupViewController?.maxBolusUnits == nil || setupViewController?.maxBasalRateUnitsPerHour == nil {
+                if pumpManagerSetupViewController?.maxBolusUnits == nil || pumpManagerSetupViewController?.maxBasalRateUnitsPerHour == nil {
                     cell.detailTextLabel?.text = SettingsTableViewCell.TapToSetString
                 } else {
                     cell.detailTextLabel?.text = SettingsTableViewCell.EnabledString
@@ -98,7 +98,7 @@ final class MockPumpManagerSettingsSetupViewController: SetupTableViewController
             case .basalRates:
                 let vc = SingleValueScheduleTableViewController(style: .grouped)
 
-                if let profile = setupViewController?.basalSchedule {
+                if let profile = pumpManagerSetupViewController?.basalSchedule {
                     vc.scheduleItems = profile.items
                     vc.timeZone = profile.timeZone
                 }
@@ -111,8 +111,8 @@ final class MockPumpManagerSettingsSetupViewController: SetupTableViewController
             case .deliveryLimits:
                 let vc = DeliveryLimitSettingsTableViewController(style: .grouped)
 
-                vc.maximumBasalRatePerHour = setupViewController?.maxBasalRateUnitsPerHour
-                vc.maximumBolus = setupViewController?.maxBolusUnits
+                vc.maximumBasalRatePerHour = pumpManagerSetupViewController?.maxBasalRateUnitsPerHour
+                vc.maximumBolus = pumpManagerSetupViewController?.maxBolusUnits
 
                 vc.title = sender?.textLabel?.text
                 vc.delegate = self
@@ -124,9 +124,7 @@ final class MockPumpManagerSettingsSetupViewController: SetupTableViewController
     }
 
     override func continueButtonPressed(_ sender: Any) {
-        if let setupViewController = setupViewController as? MockPumpManagerSetupViewController {
-            setupViewController.completeSetup()
-        }
+        pumpManagerSetupViewController?.completeSetup()
     }
 }
 

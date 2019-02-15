@@ -8,20 +8,20 @@
 
 import Foundation
 
-public struct WeakObserverSetIterator<Observer>: IteratorProtocol {
-    let enumerator: NSEnumerator
-    
-    init(_ enumerator: NSEnumerator) {
-        self.enumerator = enumerator
-    }
-    
-    public mutating func next() -> Observer? {
-        return enumerator.nextObject() as? Observer
-    }
-}
-
 public class WeakObserverSet<Observer>: Sequence {
-    
+
+    public struct Iterator<Observer>: IteratorProtocol {
+        let enumerator: NSEnumerator
+
+        init(_ enumerator: NSEnumerator) {
+            self.enumerator = enumerator
+        }
+
+        public mutating func next() -> Observer? {
+            return enumerator.nextObject() as? Observer
+        }
+    }
+
     private var observers: NSHashTable<NSObject>
 
     public init() {
@@ -42,7 +42,7 @@ public class WeakObserverSet<Observer>: Sequence {
         observers.remove(observerObject)
     }
     
-    public func makeIterator() -> WeakObserverSetIterator<Observer> {
-        return WeakObserverSetIterator<Observer>(observers.objectEnumerator())
+    public func makeIterator() -> Iterator<Observer> {
+        return Iterator(observers.objectEnumerator())
     }
 }

@@ -8,21 +8,16 @@
 
 import LoopKit
 
-public protocol SuspendResumeTableViewCellDelegate: class {
-    func suspendTapped()
-    func resumeTapped()
-}
-
 public class SuspendResumeTableViewCell: TextButtonTableViewCell {
     
-    enum Action {
+    public enum Action {
         case suspend
         case resume
     }
     
-    var action: Action = .suspend {
+    public var shownAction: Action = .suspend {
         didSet {
-            switch action {
+            switch shownAction {
             case .suspend:
                 textLabel?.text = LocalizedString("Suspend Delivery", comment: "Title text for button to suspend insulin delivery")
             case .resume:
@@ -31,12 +26,12 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
         }
     }
     
-    public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState = .none {
+    public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState = .active {
         didSet {
             switch self.basalDeliveryState {
-            case .none:
+            case .active:
                 self.isEnabled = true
-                self.action = .suspend
+                self.shownAction = .suspend
                 self.isLoading = false
             case .suspending:
                 self.isEnabled = false
@@ -44,7 +39,7 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
                 self.isLoading = true
             case .suspended:
                 self.isEnabled = true
-                self.action = .resume
+                self.shownAction = .resume
                 self.isLoading = false
             case .resuming:
                 self.isEnabled = false
@@ -53,23 +48,5 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
             }
         }
     }
-    
-    public weak var delegate: SuspendResumeTableViewCellDelegate?
-    
-    public func toggle() {
-        switch action {
-        case .resume:
-            delegate?.resumeTapped()
-        case .suspend:
-            delegate?.suspendTapped()
-        }
-    }
 }
 
-extension SuspendResumeTableViewCell: PumpManagerStatusObserver {
-    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
-        DispatchQueue.main.async {
-            self.basalDeliveryState = status.basalDeliveryState
-        }
-    }
-}

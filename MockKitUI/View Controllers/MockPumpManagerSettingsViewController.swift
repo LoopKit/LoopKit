@@ -26,14 +26,6 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private lazy var suspendResumeTableViewCell: SuspendResumeTableViewCell = { [unowned self] in
-        let cell = SuspendResumeTableViewCell(style: .default, reuseIdentifier: nil)
-        cell.delegate = self
-        cell.basalDeliveryState = pumpManager.status.basalDeliveryState
-        pumpManager.addStatusObserver(cell)
-        return cell
-    }()
-
     private let quantityFormatter = QuantityFormatter()
 
     override func viewDidLoad() {
@@ -50,6 +42,25 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
         tableView.register(SwitchTableViewCell.nib(), forCellReuseIdentifier: SwitchTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
+        tableView.register(SuspendResumeTableViewCell.self, forCellReuseIdentifier: SuspendResumeTableViewCell.className)
+
+        pumpManager.addStatusObserver(self)
+
+        let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
+        self.navigationItem.setRightBarButton(button, animated: false)
+    }
+
+    @objc func doneTapped(_ sender: Any) {
+        done()
+    }
+
+    private func done() {
+        if let nav = navigationController as? SettingsNavigationViewController {
+            nav.notifyComplete()
+        }
+        if let nav = navigationController as? MockPumpManagerSetupViewController {
+            nav.finishedSettingsDisplay()
+        }
     }
 
     // MARK: - Data Source
@@ -107,7 +118,9 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         case .actions:
             switch ActionRow(rawValue: indexPath.row)! {
             case .suspendResume:
-                return suspendResumeTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: SuspendResumeTableViewCell.className, for: indexPath) as! SuspendResumeTableViewCell
+                cell.basalDeliveryState = pumpManager.status.basalDeliveryState
+                return cell
             }
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
@@ -170,7 +183,9 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         case .actions:
             switch ActionRow(rawValue: indexPath.row)! {
             case .suspendResume:
-                suspendResumeTableViewCell.toggle()
+                if let suspendResumeCell = sender as? SuspendResumeTableViewCell {
+                    suspendResumeCellTapped(suspendResumeCell)
+                }
                 tableView.deselectRow(at: indexPath, animated: true)
             }
         case .settings:
@@ -200,7 +215,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         case .deletePump:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
                 self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
-                self.navigationController?.popViewController(animated: true)
+                self.done()
             })
 
             present(confirmVC, animated: true) {
@@ -208,27 +223,37 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             }
         }
     }
-}
 
-extension MockPumpManagerSettingsViewController: SuspendResumeTableViewCellDelegate {
-    func suspendTapped() {
-        pumpManager.suspendDelivery { error in
-            if let error = error {
-                DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Error Suspending", error: error)
-                    self.present(alert, animated: true, completion: nil)
+    private func suspendResumeCellTapped(_ cell: SuspendResumeTableViewCell) {
+        switch cell.shownAction {
+        case .resume:
+            pumpManager.resumeDelivery { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error Resuming", comment: "The alert title for a resume error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
+                }
+            }
+        case .suspend:
+            pumpManager.suspendDelivery { (error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        let title = LocalizedString("Error Suspending", comment: "The alert title for a suspend error")
+                        self.present(UIAlertController(with: error, title: title), animated: true)
+                    }
                 }
             }
         }
     }
+}
 
-    func resumeTapped() {
-        pumpManager.resumeDelivery { error in
-            if let error = error {
-                DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Error Resuming", error: error)
-                    self.present(alert, animated: true, completion: nil)
-                }
+extension MockPumpManagerSettingsViewController: PumpManagerStatusObserver {
+    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
+        DispatchQueue.main.async {
+            if let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionRow.suspendResume.rawValue, section: Section.actions.rawValue)) as? SuspendResumeTableViewCell
+            {
+                suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
             }
         }
     }

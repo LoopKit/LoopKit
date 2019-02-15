@@ -32,7 +32,13 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
 
     /// The most-recent end date for a basal sample written by LoopKit
     /// Should only be accessed on dataAccessQueue
-    private var lastBasalEndDate: Date?
+    private var lastBasalEndDate: Date? {
+        didSet {
+            test_lastBasalEndDateDidSet?()
+        }
+    }
+
+    internal var test_lastBasalEndDateDidSet: (() -> Void)?
 
     /// The interval of insulin delivery data to keep in cache
     public let cacheLength: TimeInterval
@@ -43,7 +49,8 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
         healthStore: HKHealthStore,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
-        cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */
+        cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
+        test_currentDate: Date? = nil
     ) {
         self.cacheStore = cacheStore
         self.cacheLength = cacheLength
@@ -51,8 +58,9 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
         super.init(
             healthStore: healthStore,
             type: insulinType,
-            observationStart: Date(timeIntervalSinceNow: -cacheLength),
-            observationEnabled: observationEnabled
+            observationStart: (test_currentDate ?? Date()).addingTimeInterval(-cacheLength),
+            observationEnabled: observationEnabled,
+            test_currentDate: test_currentDate
         )
 
         cacheStore.onReady { (error) in
@@ -242,7 +250,7 @@ extension InsulinDeliveryStore {
 // MARK: - Core Data
 extension InsulinDeliveryStore {
     private var earliestCacheDate: Date {
-        return Date(timeIntervalSinceNow: -cacheLength)
+        return currentDate(timeIntervalSinceNow: -cacheLength)
     }
 
     /// Creates new cached insulin delivery objects from samples if they're not already cached and within the date interval
@@ -258,7 +266,7 @@ extension InsulinDeliveryStore {
         cacheStore.managedObjectContext.performAndWait {
             for sample in samples {
                 guard
-                    sample.startDate.timeIntervalSinceNow > -self.cacheLength,
+                    sample.startDate.timeIntervalSince(currentDate()) > -self.cacheLength,
                     self.cacheStore.managedObjectContext.cachedInsulinDeliveryObjectsWithUUID(sample.uuid, fetchLimit: 1).count == 0
                 else {
                     continue
@@ -298,7 +306,7 @@ extension InsulinDeliveryStore {
 
                 endDate = objects.first?.endDate
             } catch let error {
-                self.log.error("Unable to fetch latest glucose object: %@", String(describing: error))
+                self.log.error("Unable to fetch latest insulin delivery objects: %@", String(describing: error))
             }
         }
 
@@ -418,6 +426,25 @@ extension InsulinDeliveryStore {
 
             report.append("")
             completion(report.joined(separator: "\n"))
+        }
+    }
+}
+
+
+// MARK: - Unit Testing
+extension InsulinDeliveryStore {
+    internal var test_lastBasalEndDate: Date? {
+        get {
+            var date: Date?
+            queue.sync {
+                date = self.lastBasalEndDate
+            }
+            return date
+        }
+        set {
+            queue.sync {
+                self.lastBasalEndDate = newValue
+            }
         }
     }
 }

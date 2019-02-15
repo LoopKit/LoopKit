@@ -28,8 +28,6 @@ public typealias HUDViewOrderPriority = Int
     }
     
     open var orderPriority: HUDViewOrderPriority {
-        get {
-            return 10
-        }
+        return 10
     }
 }
