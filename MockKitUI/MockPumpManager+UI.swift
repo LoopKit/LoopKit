@@ -33,7 +33,7 @@ final class MockHUDProvider: NSObject, HUDProvider {
         pumpManager.addStateObserver(self)
     }
 
-    var active: Bool = false
+    var visible: Bool = false
 
     var hudViewsRawState: HUDViewsRawState {
         var rawValue: HUDViewsRawState = [
