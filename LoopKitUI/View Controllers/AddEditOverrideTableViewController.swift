@@ -224,7 +224,11 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         }
     }
 
-    private lazy var quantityFormatter = QuantityFormatter()
+    private lazy var quantityFormatter: QuantityFormatter = {
+        let formatter = QuantityFormatter()
+        formatter.setPreferredNumberFormatter(for: glucoseUnit)
+        return formatter
+    }()
 
     // Hold the reference to the multiplier cell to simplify updates
     private lazy var multiplierDetailCell: OverrideMultiplierTableViewCell = {
@@ -261,6 +265,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 return cell
             case .targetRange:
                 let cell = tableView.dequeueReusableCell(withIdentifier: DoubleRangeTableViewCell.className, for: indexPath) as! DoubleRangeTableViewCell
+                cell.numberFormatter = quantityFormatter.numberFormatter
                 cell.titleLabel.text = NSLocalizedString("Target Range", comment: "The text for the override target range setting")
                 cell.range = targetRange
                 cell.unitLabel.text = quantityFormatter.string(from: glucoseUnit)
