@@ -21,13 +21,22 @@ public class LevelMaskView: UIView {
         }
     }
 
+    private var boundedValue: Double {
+        return max(0.0, min(1.0, value))
+    }
+
     @IBInspectable var maskImage: UIImage? {
         didSet {
             fillView?.removeFromSuperview()
             mask?.removeFromSuperview()
             maskImageView?.removeFromSuperview()
 
-            guard let maskImage = maskImage else { return }
+            guard let maskImage = maskImage else {
+                fillView = nil
+                mask = nil
+                maskImageView = nil
+                return
+            }
 
             mask = UIView()
             maskImageView = UIImageView(image: maskImage)
@@ -79,7 +88,8 @@ public class LevelMaskView: UIView {
 
         var fillViewFrame = maskViewFrame
         fillViewFrame.origin.y = maskViewFrame.maxY
-        fillViewFrame.size.height = -CGFloat(value) * maskViewFrame.height
+        fillViewFrame.size.height = -CGFloat(boundedValue) * maskViewFrame.height
         fillView?.frame = fillViewFrame
     }
+
 }

@@ -12,7 +12,7 @@ import LoopKitUI
 import MockKit
 
 
-final class MockPumpManagerSetupViewController: UINavigationController, PumpManagerSetupViewController {
+final class MockPumpManagerSetupViewController: UINavigationController, PumpManagerSetupViewController, CompletionNotifying {
 
     static func instantiateFromStoryboard() -> MockPumpManagerSetupViewController {
         return UIStoryboard(name: "MockPumpManager", bundle: Bundle(for: MockPumpManagerSetupViewController.self)).instantiateInitialViewController() as! MockPumpManagerSetupViewController
@@ -28,6 +28,8 @@ final class MockPumpManagerSetupViewController: UINavigationController, PumpMana
 
     weak var setupDelegate: PumpManagerSetupViewControllerDelegate?
 
+    weak var completionDelegate: CompletionDelegate?
+
     override public func viewDidLoad() {
         super.viewDidLoad()
 
@@ -39,6 +41,11 @@ final class MockPumpManagerSetupViewController: UINavigationController, PumpMana
 
     func completeSetup() {
         setupDelegate?.pumpManagerSetupViewController(self, didSetUpPumpManager: pumpManager)
+        completionDelegate?.completionNotifyingDidComplete(self)
+    }
+
+    public func finishedSettingsDisplay() {
+        completionDelegate?.completionNotifyingDidComplete(self)
     }
 }
 

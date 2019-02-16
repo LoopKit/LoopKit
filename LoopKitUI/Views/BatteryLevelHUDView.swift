@@ -33,6 +33,7 @@ public final class BatteryLevelHUDView: LevelHUDView, NibLoadable {
                 accessibilityValue = level
             } else {
                 caption.text = nil
+                accessibilityValue = nil
             }
 
             level = batteryLevel

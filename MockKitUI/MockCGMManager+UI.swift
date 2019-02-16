@@ -14,12 +14,14 @@ import MockKit
 
 
 extension MockCGMManager: CGMManagerUI {
-    public static func setupViewController() -> (UIViewController & CGMManagerSetupViewController)? {
+    public static func setupViewController() -> (UIViewController & CGMManagerSetupViewController & CompletionNotifying)? {
         return nil
     }
 
-    public func settingsViewController(for glucoseUnit: HKUnit) -> UIViewController {
-        return MockCGMManagerSettingsViewController(cgmManager: self, glucoseUnit: glucoseUnit)
+    public func settingsViewController(for glucoseUnit: HKUnit) -> (UIViewController & CompletionNotifying) {
+        let settings = MockCGMManagerSettingsViewController(cgmManager: self, glucoseUnit: glucoseUnit)
+        let nav = SettingsNavigationViewController(rootViewController: settings)
+        return nav
     }
 
     public var smallImage: UIImage? {

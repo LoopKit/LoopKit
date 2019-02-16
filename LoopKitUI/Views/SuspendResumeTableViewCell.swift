@@ -8,68 +8,52 @@
 
 import LoopKit
 
-public protocol SuspendResumeTableViewCellDelegate: class {
-    func suspendTapped()
-    func resumeTapped()
-}
-
 public class SuspendResumeTableViewCell: TextButtonTableViewCell {
     
-    enum Action {
+    public enum Action {
         case suspend
         case resume
     }
     
-    var action: Action = .suspend {
-        didSet {
-            switch action {
-            case .suspend:
-                textLabel?.text = LocalizedString("Suspend Delivery", comment: "Title text for button to suspend insulin delivery")
-            case .resume:
-                textLabel?.text = LocalizedString("Resume Delivery", comment: "Title text for button to resume insulin delivery")
-            }
+    public var shownAction: Action {
+        switch basalDeliveryState {
+        case .active, .suspending:
+            return .suspend
+        case .suspended, .resuming:
+            return .resume
         }
     }
-    
-    public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState = .none {
-        didSet {
+
+    private func updateTextLabel() {
+        switch self.basalDeliveryState {
+        case .active:
+            textLabel?.text = LocalizedString("Suspend Delivery", comment: "Title text for button to suspend insulin delivery")
+        case .suspending:
+            self.textLabel?.text = LocalizedString("Suspending", comment: "Title text for button when insulin delivery is in the process of being stopped")
+        case .suspended:
+            textLabel?.text = LocalizedString("Resume Delivery", comment: "Title text for button to resume insulin delivery")
+        case .resuming:
+            self.textLabel?.text = LocalizedString("Resuming", comment: "Title text for button when insulin delivery is in the process of being resumed")
+        }
+    }
+
+    private func updateLoadingState() {
+        self.isLoading = {
             switch self.basalDeliveryState {
-            case .none:
-                self.isEnabled = true
-                self.action = .suspend
-                self.isLoading = false
-            case .suspending:
-                self.isEnabled = false
-                self.textLabel?.text = LocalizedString("Suspending", comment: "Title text for button when insulin delivery is in the process of being stopped")
-                self.isLoading = true
-            case .suspended:
-                self.isEnabled = true
-                self.action = .resume
-                self.isLoading = false
-            case .resuming:
-                self.isEnabled = false
-                self.textLabel?.text = LocalizedString("Resuming", comment: "Title text for button when insulin delivery is in the process of being resumed")
-                self.isLoading = true
+            case .suspending, .resuming:
+                return true
+            default:
+                return false
             }
-        }
+        }()
+        self.isEnabled = !self.isLoading
     }
     
-    public weak var delegate: SuspendResumeTableViewCellDelegate?
-    
-    public func toggle() {
-        switch action {
-        case .resume:
-            delegate?.resumeTapped()
-        case .suspend:
-            delegate?.suspendTapped()
+    public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState = .active {
+        didSet {
+            updateTextLabel()
+            updateLoadingState()
         }
     }
 }
 
-extension SuspendResumeTableViewCell: PumpManagerStatusObserver {
-    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
-        DispatchQueue.main.async {
-            self.basalDeliveryState = status.basalDeliveryState
-        }
-    }
-}

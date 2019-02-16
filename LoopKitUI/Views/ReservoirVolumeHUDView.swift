@@ -26,22 +26,20 @@ public final class ReservoirVolumeHUDView: LevelHUDView, NibLoadable {
         volumeLabel.isHidden = true
     }
 
-    public var reservoirLevel: Double? {
-        didSet {
-            level = reservoirLevel
+    override public func levelDidChange() {
+        super.levelDidChange()
 
-            switch reservoirLevel {
-            case .none:
-                volumeLabel.isHidden = true
-            case let x? where x > 0.25:
-                volumeLabel.isHidden = true
-            case let x? where x > 0.10:
-                volumeLabel.textColor = tintColor
-                volumeLabel.isHidden = false
-            default:
-                volumeLabel.textColor = tintColor
-                volumeLabel.isHidden = false
-            }
+        switch level {
+        case .none:
+            volumeLabel.isHidden = true
+        case let x? where x > 0.25:
+            volumeLabel.isHidden = true
+        case let x? where x > 0.10:
+            volumeLabel.textColor = tintColor
+            volumeLabel.isHidden = false
+        default:
+            volumeLabel.textColor = tintColor
+            volumeLabel.isHidden = false
         }
     }
 

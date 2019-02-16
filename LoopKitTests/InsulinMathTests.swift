@@ -426,8 +426,6 @@ class InsulinMathTests: XCTestCase {
             XCTAssertEqual(expected.unit, calculated.unit)
             XCTAssertEqual(expected.syncIdentifier, calculated.syncIdentifier)
         }
-
-        printDoses(doses)
     }
 
     func testGlucoseEffectFromBolus() {
