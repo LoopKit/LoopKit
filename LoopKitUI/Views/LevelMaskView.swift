@@ -16,12 +16,13 @@ public class LevelMaskView: UIView {
 
     var value: Double = 1.0 {
         didSet {
-            if value < 0 || value > 1.0 {
-                assertionFailure("Level mask value outside of interval [0,1]")
-            }
             animateFill(duration: firstDataUpdate ? 0 : 1.25)
             firstDataUpdate = false
         }
+    }
+
+    private var boundedValue: Double {
+        return max(0.0, min(1.0, value))
     }
 
     @IBInspectable var maskImage: UIImage? {
@@ -87,7 +88,7 @@ public class LevelMaskView: UIView {
 
         var fillViewFrame = maskViewFrame
         fillViewFrame.origin.y = maskViewFrame.maxY
-        fillViewFrame.size.height = -CGFloat(value) * maskViewFrame.height
+        fillViewFrame.size.height = -CGFloat(boundedValue) * maskViewFrame.height
         fillView?.frame = fillViewFrame
     }
 
