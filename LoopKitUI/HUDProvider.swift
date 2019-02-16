@@ -28,11 +28,11 @@ public protocol HUDProvider {
     var hudViewsRawState: HUDViewsRawState { get }
 
     // This notifies the HUDProvider whether hud views are offscreen or
-    // backgrounded. When not active, updates should be deferred to better
+    // backgrounded. When not visible, updates should be deferred to better
     // inform the user when they are returning to the views. Showing
     // changed state via animations might be appropriate when becoming
-    // active. When inactive, the HUDProvider should limit work done to
+    // visible. When not visible, the HUDProvider should limit work done to
     // save cpu resources while backgrounded.
-    var active: Bool { get set }
+    var visible: Bool { get set }
 }
 
