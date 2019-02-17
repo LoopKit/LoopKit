@@ -312,6 +312,8 @@
 		7D68A9B81FE0A3D100522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9BA1FE0A3D100522C49 /* InfoPlist.strings */; };
 		7D68A9C21FE0A3D200522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */; };
 		C11166B02180FA5C000EEAAB /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AF2180FA5C000EEAAB /* LoadingTableViewCell.swift */; };
+		C145BF9B2219F1CB00A977CB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C145BF992219F10400A977CB /* Comparable.swift */; };
+		C145BF9C2219F1CC00A977CB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C145BF992219F10400A977CB /* Comparable.swift */; };
 		C16C3D3F21A3101700401105 /* WeakSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133FD1621A2A845009B2D20 /* WeakSet.swift */; };
 		C184FECB219F2E0100CD2722 /* SuspendResumeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */; };
 		C1D7366421F78A4D00048CDD /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D7366321F78A4D00048CDD /* UIAlertController.swift */; };
@@ -768,6 +770,7 @@
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
 		C133FD1621A2A845009B2D20 /* WeakSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakSet.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
+		C145BF992219F10400A977CB /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
 		C17F4CB21EE9B6DF005079B1 /* carb_entry_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = carb_entry_input.json; sourceTree = "<group>"; };
 		C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendResumeTableViewCell.swift; sourceTree = "<group>"; };
 		C1CBF61B1EEA2A1E001E4851 /* ice_1_hour_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_1_hour_input.json; sourceTree = "<group>"; };
@@ -859,6 +862,7 @@
 				4303C4901E2D664200ADEDC8 /* TimeZone.swift */,
 				434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */,
 				43260F6D21C4BF7A00DD6837 /* UUID.swift */,
+				C145BF992219F10400A977CB /* Comparable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1738,6 +1742,7 @@
 				432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */,
 				43BA7170201E49220058961E /* FoodTypeShortcutCell.swift in Sources */,
 				432CF86520D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift in Sources */,
+				C145BF9C2219F1CC00A977CB /* Comparable.swift in Sources */,
 				4369F08F208859E6000E3E45 /* PaddedTextField.swift in Sources */,
 				432CF86920D76B320066B889 /* SetupButton.swift in Sources */,
 				432CF87420D774520066B889 /* NumberFormatter.swift in Sources */,
@@ -1859,6 +1864,7 @@
 				433BC7A720523DB7000B1200 /* NewGlucoseSample.swift in Sources */,
 				4322B78E202FA2B30002837D /* InsulinMath.swift in Sources */,
 				43B17C89208EEC0B00AC27E9 /* HealthStoreUnitCache.swift in Sources */,
+				C145BF9B2219F1CB00A977CB /* Comparable.swift in Sources */,
 				4322B775202FA2790002837D /* CarbStatus.swift in Sources */,
 				4322B787202FA2B30002837D /* DoseEntry.swift in Sources */,
 				43CB51B2211EB1A400DB9B4A /* NSUserActivity+CarbKit.swift in Sources */,
