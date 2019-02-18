@@ -63,20 +63,15 @@ final class OverrideMultiplierTableViewCell: UITableViewCell {
             return spacerView
         }))
 
-        for view in separatedMultiplierViews {
-            NSLayoutConstraint.activate([
-                view.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
-                view.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor)
-            ])
-        }
-
-        for (left, right) in separatedMultiplierViews.adjacentPairs() {
-            left.rightAnchor.constraint(equalTo: right.leftAnchor).isActive = true
-        }
+        let stackView = UIStackView(arrangedSubviews: separatedMultiplierViews)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            separatedMultiplierViews.first!.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor),
-            separatedMultiplierViews.last!.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor)
+            stackView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor),
+            stackView.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor),
+            stackView.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor)
         ])
     }
 
@@ -148,12 +143,6 @@ private extension Sequence {
                 }
             }
         }
-    }
-}
-
-private extension Collection {
-    func adjacentPairs() -> Zip2Sequence<Self, SubSequence> {
-        return zip(self, dropFirst())
     }
 }
 

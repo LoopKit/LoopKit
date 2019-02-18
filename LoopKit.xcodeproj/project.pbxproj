@@ -334,6 +334,8 @@
 		895FE09322011F4800FCF18A /* EmojiInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895FE08F22011F4800FCF18A /* EmojiInputController.swift */; };
 		895FE0972201250700FCF18A /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 895FE0962201250700FCF18A /* SwitchTableViewCell.xib */; };
 		8974AFC022120D7A0043F01B /* TemporaryScheduleOverrideTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */; };
+		8974B0682215FE460043F01B /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974B0672215FE460043F01B /* Collection.swift */; };
+		8974B0692215FE460043F01B /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974B0672215FE460043F01B /* Collection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -793,6 +795,7 @@
 		895FE08F22011F4800FCF18A /* EmojiInputController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmojiInputController.swift; sourceTree = "<group>"; };
 		895FE0962201250700FCF18A /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
 		8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideTests.swift; sourceTree = "<group>"; };
+		8974B0672215FE460043F01B /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		C1110E981EE98CF5009BB852 /* ice_35_min_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_input.json; sourceTree = "<group>"; };
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
@@ -862,6 +865,7 @@
 		430059211CCDC7A200C861EA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				8974B0672215FE460043F01B /* Collection.swift */,
 				43D8FDEE1C7290350073BE78 /* HKUnit.swift */,
 				434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */,
 				43177D0D1D3737420006E908 /* NibLoadable.swift */,
@@ -1800,6 +1804,7 @@
 				43BA717B201EE6A40058961E /* NibLoadable.swift in Sources */,
 				895FE08122011F0C00FCF18A /* OverridePresetCollectionViewCell.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
+				8974B0692215FE460043F01B /* Collection.swift in Sources */,
 				43BA717F201EE7090058961E /* GlucoseRangeOverrideTableViewCell.swift in Sources */,
 				895FE09022011F4800FCF18A /* OverrideSelectionViewController.swift in Sources */,
 				43F5035721059A8A009FA89A /* ServiceCredential.swift in Sources */,
@@ -1847,6 +1852,7 @@
 				432CF87120D76D5A0066B889 /* SensorDisplayable.swift in Sources */,
 				4322B77F202FA2AF0002837D /* PersistenceController.swift in Sources */,
 				4322B78D202FA2B30002837D /* InsulinDeliveryStore.swift in Sources */,
+				8974B0682215FE460043F01B /* Collection.swift in Sources */,
 				4379CFE321102A4100AADC79 /* DeviceManager.swift in Sources */,
 				4322B78A202FA2B30002837D /* DoseUnit.swift in Sources */,
 				434113AF20F2885300D05747 /* NSManagedObjectContext+CachedInsulinDeliveryObject.swift in Sources */,

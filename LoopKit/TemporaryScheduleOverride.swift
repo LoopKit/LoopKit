@@ -393,12 +393,6 @@ private extension DailyQuantitySchedule {
     }
 }
 
-private extension Collection {
-    func adjacentPairs() -> Zip2Sequence<Self, SubSequence> {
-        return zip(self, dropFirst())
-    }
-}
-
 private extension TimeInterval {
     var hourAndMinuteComponents: (hour: Int, minute: Int) {
         let base = self.truncatingRemainder(dividingBy: .hours(24))

@@ -11,21 +11,22 @@ import UIKit
 
 final class OverrideMultiplierView: UIView {
 
-    private(set) lazy var titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .body)
+        label.font = .preferredFont(forTextStyle: .callout)
         label.textAlignment = .center
         return label
     }()
 
-    private(set) lazy var multiplierLabel: UILabel = {
+    let multiplierLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .title2)
+        label.font = .preferredFont(forTextStyle: .title3)
+        label.textColor = .deemphasizedGray
         label.textAlignment = .center
         return label
     }()
 
-    private(set) lazy var descriptionLabel: UILabel = {
+    let descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .caption2)
         label.textAlignment = .center
@@ -44,16 +45,20 @@ final class OverrideMultiplierView: UIView {
 
     private func setup() {
         let stackView = UIStackView(arrangedSubviews: [titleLabel, multiplierLabel, descriptionLabel])
-        stackView.spacing = 4
+        stackView.spacing = 2
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
-            stackView.leftAnchor.constraint(equalTo: layoutMarginsGuide.leftAnchor),
-            stackView.rightAnchor.constraint(equalTo: layoutMarginsGuide.rightAnchor)
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            stackView.leftAnchor.constraint(equalTo: leftAnchor),
+            stackView.rightAnchor.constraint(equalTo: rightAnchor)
         ])
     }
+}
+
+private extension UIColor {
+    static let deemphasizedGray = UIColor(white: 143 / 255, alpha: 1.0)
 }
