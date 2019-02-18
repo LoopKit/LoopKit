@@ -82,13 +82,16 @@ extension DailyQuantitySchedule where T == DoubleRange {
         relativeTo date: Date,
         calendar: Calendar
     ) -> DailyQuantitySchedule {
+        guard let targetRange = override.settings.targetRange else {
+            return self
+        }
         return DailyQuantitySchedule(
             unit: unit,
             valueSchedule: valueSchedule.applyingOverride(
                 during: override.activeInterval,
                 relativeTo: date,
                 calendar: calendar,
-                updatingOverridenValuesWith: { _ in override.settings.targetRange }
+                updatingOverridenValuesWith: { _ in targetRange }
             )
         )
     }

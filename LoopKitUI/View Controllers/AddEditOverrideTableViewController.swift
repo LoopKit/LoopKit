@@ -60,7 +60,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 symbol = nil
                 name = nil
                 targetRange = nil
-                overallInsulinNeedsMultiplier = 1.0
+                insulinNeedsScaleFactor = 1.0
                 duration = .finite(.defaultOverrideDuration)
             case .editPreset(let preset), .customizePresetOverride(let preset):
                 symbol = preset.symbol
@@ -71,7 +71,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 symbol = nil
                 name = nil
                 targetRange = nil
-                overallInsulinNeedsMultiplier = 1.0
+                insulinNeedsScaleFactor = 1.0
                 startDate = Date()
                 duration = .finite(.defaultOverrideDuration)
             case .editOverride(let override):
@@ -103,29 +103,17 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
     private var targetRange: DoubleRange? { didSet { updateSaveButtonEnabled() } }
 
-    private var overallInsulinNeedsMultiplier = 1.0 {
+    private var insulinNeedsScaleFactor = 1.0 {
         didSet {
-            guard let insulinNeeds = indexPath(for: .insulinNeeds) else {
-                assertionFailure("Insulin needs cell should always be present in property rows")
-                return
-            }
-            guard let insulinNeedsCell = tableView.cellForRow(at: insulinNeeds) as? InsulinNeedsTableViewCell else {
+            guard
+                let insulinNeedsCell = insulinNeedsCell,
+                let multiplierDetailCell = insulinNeedsCell.cells.bottom
+            else {
                 return
             }
 
-            let multiplierDetailCell = insulinNeedsCell.cells.bottom
-            multiplierDetailCell?.setMultipliers(
-                basalRate: overallInsulinNeedsMultiplier,
-                insulinSensitivity: 1 / overallInsulinNeedsMultiplier,
-                carbRatio: 1 / overallInsulinNeedsMultiplier
-            )
+            setMultipliers(multiplierDetailCell)
         }
-    }
-
-    private var multipliers: (basalRate: Double, insulinSensitivity: Double, carbRatio: Double) {
-        return (basalRate: overallInsulinNeedsMultiplier,
-                insulinSensitivity: 1 / overallInsulinNeedsMultiplier,
-                carbRatio: 1 / overallInsulinNeedsMultiplier)
     }
 
     private var startDate = Date()
@@ -143,7 +131,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
     private func configure(with settings: TemporaryScheduleOverrideSettings) {
         targetRange = settings.targetRange
-        overallInsulinNeedsMultiplier = settings.basalRateMultiplier ?? 1.0
+        insulinNeedsScaleFactor = settings.effectiveInsulinNeedsScaleFactor
     }
 
     // MARK: - Initialization & view life cycle
@@ -277,7 +265,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                     cell.textField.placeholder = String(100)
                     cell.numberFormatter.maximumFractionDigits = 0
                     cell.numberFormatter.minimumIntegerDigits = 1
-                    cell.number = overallInsulinNeedsMultiplier * 100 as NSNumber
+                    cell.number = insulinNeedsScaleFactor * 100 as NSNumber
                     cell.unitLabel?.text = "%"
                     cell.delegate = self
                     cell.selectionStyle = .none
@@ -286,8 +274,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
                 let overrideMultiplierCell: OverrideMultiplierTableViewCell = {
                     let cell = tableView.dequeueReusableCell(withIdentifier: OverrideMultiplierTableViewCell.className, for: indexPath) as! OverrideMultiplierTableViewCell
-                    let (basalRate, insulinSensitivity, carbRatio) = multipliers
-                    cell.setMultipliers(basalRate: basalRate, insulinSensitivity: insulinSensitivity, carbRatio: carbRatio)
+                    setMultipliers(cell)
                     return cell
                 }()
 
@@ -337,6 +324,25 @@ public final class AddEditOverrideTableViewController: UITableViewController {
             cell.tintColor = .defaultButtonTextColor
             return cell
         }
+    }
+
+    private var insulinNeedsCell: InsulinNeedsTableViewCell? {
+        guard let insulinNeedsIndexPath = indexPath(for: .insulinNeeds) else {
+            assertionFailure("Insulin needs cell should always be present in property rows")
+            return nil
+        }
+
+        return tableView.cellForRow(at: insulinNeedsIndexPath) as? InsulinNeedsTableViewCell
+    }
+
+    private func setMultipliers(_ cell: OverrideMultiplierTableViewCell) {
+        // Let the 'settings' type handle the proportional relationship between the multipliers
+        let settingsWithInsulinScaleFactor = TemporaryScheduleOverrideSettings(targetRange: nil, insulinNeedsScaleFactor: insulinNeedsScaleFactor)
+        cell.setMultipliers(
+            basalRate: settingsWithInsulinScaleFactor.basalRateMultiplier!,
+            insulinSensitivity: settingsWithInsulinScaleFactor.insulinSensitivityMultiplier!,
+            carbRatio: settingsWithInsulinScaleFactor.carbRatioMultiplier!
+        )
     }
 
     @objc private func durationFinitenessChanged(_ sender: UISwitch) {
@@ -459,11 +465,13 @@ extension AddEditOverrideTableViewController {
     }
 
     private var configuredSettings: TemporaryScheduleOverrideSettings? {
-        guard let targetRange = targetRange, targetRange.maxValue >= targetRange.minValue else {
-            return nil
+        if let targetRange = targetRange {
+            guard targetRange.maxValue >= targetRange.minValue else {
+                return nil
+            }
         }
 
-        return TemporaryScheduleOverrideSettings(targetRange: targetRange, basalRateMultiplier: multipliers.basalRate, insulinSensitivityMultiplier: multipliers.insulinSensitivity, carbRatioMultiplier: multipliers.carbRatio)
+        return TemporaryScheduleOverrideSettings(targetRange: targetRange, insulinNeedsScaleFactor: insulinNeedsScaleFactor)
     }
 
     private var configuredPreset: TemporaryScheduleOverridePreset? {
@@ -589,8 +597,7 @@ extension AddEditOverrideTableViewController: TextFieldTableViewCellDelegate {
             }
         } else {
             guard
-                let insulinNeedsIndexPath = indexPath(for: .insulinNeeds),
-                let insulinNeedsCell = tableView.cellForRow(at: insulinNeedsIndexPath) as? InsulinNeedsTableViewCell,
+                let insulinNeedsCell = insulinNeedsCell,
                 let cell = cell as? DecimalTextFieldTableViewCell,
                 cell === insulinNeedsCell.cells.top
             else {
@@ -599,9 +606,9 @@ extension AddEditOverrideTableViewController: TextFieldTableViewCellDelegate {
             }
 
             if let scaleFactorPercentage = cell.number?.doubleValue {
-                overallInsulinNeedsMultiplier = (scaleFactorPercentage / 100).clamped(to: .validInsulinNeedsFactorRange)
+                insulinNeedsScaleFactor = (scaleFactorPercentage / 100).clamped(to: .validInsulinNeedsFactorRange)
             } else {
-                overallInsulinNeedsMultiplier = 1.0
+                insulinNeedsScaleFactor = 1.0
             }
         }
     }

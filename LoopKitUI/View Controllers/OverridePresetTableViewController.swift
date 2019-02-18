@@ -88,7 +88,7 @@ public final class OverridePresetTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath) as! SettingsTableViewCell
         let preset = presets[indexPath.row]
         cell.textLabel?.text = String(format: NSLocalizedString("%1$@ %2$@", comment: "The format for an override preset cell. (1: symbol)(2: name)"), preset.symbol, preset.name)
-        let percentage = (preset.settings.basalRateMultiplier ?? 1.0) * 100
+        let percentage = preset.settings.effectiveInsulinNeedsScaleFactor * 100
         if let percentageString = percentageFormatter.string(from: percentage) {
             cell.detailTextLabel?.text = String(format: NSLocalizedString("%@%% of normal insulin", comment: "The format for an insulin needs percentage"), percentageString)
         }
