@@ -28,14 +28,6 @@ public final class OverridePresetTableViewController: UITableViewController {
 
     public weak var delegate: OverridePresetTableViewControllerDelegate?
 
-    private lazy var quantityFormatter: QuantityFormatter = {
-        let quantityFormatter = QuantityFormatter()
-        quantityFormatter.setPreferredNumberFormatter(for: glucoseUnit)
-        return quantityFormatter
-    }()
-
-    private lazy var glucoseNumberFormatter = quantityFormatter.numberFormatter
-
     public init(glucoseUnit: HKUnit, presets: [TemporaryScheduleOverridePreset]) {
         self.glucoseUnit = glucoseUnit
         self.presets = presets
@@ -85,15 +77,20 @@ public final class OverridePresetTableViewController: UITableViewController {
         return presets.count
     }
 
+    private let percentageFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.minimumIntegerDigits = 1
+        formatter.maximumFractionDigits = 0
+        return formatter
+    }()
+
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath) as! SettingsTableViewCell
         let preset = presets[indexPath.row]
         cell.textLabel?.text = String(format: NSLocalizedString("%1$@ %2$@", comment: "The format for an override preset cell. (1: symbol)(2: name)"), preset.symbol, preset.name)
-
-        if let minTarget = glucoseNumberFormatter.string(from: preset.settings.targetRange.minValue),
-            let maxTarget = glucoseNumberFormatter.string(from: preset.settings.targetRange.maxValue)
-        {
-            cell.detailTextLabel?.text = String(format: NSLocalizedString("%1$@ – %2$@ %3$@", comment: "The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit)"), minTarget, maxTarget, quantityFormatter.string(from: glucoseUnit))
+        let percentage = (preset.settings.basalRateMultiplier ?? 1.0) * 100
+        if let percentageString = percentageFormatter.string(from: percentage) {
+            cell.detailTextLabel?.text = String(format: NSLocalizedString("%@%% of normal insulin", comment: "The format for an insulin needs percentage"), percentageString)
         }
 
         return cell

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -42,7 +42,7 @@
                     <constraint firstAttribute="bottomMargin" secondItem="JkG-6D-XPS" secondAttribute="bottom" priority="750" constant="4" id="7qU-1E-jJB"/>
                     <constraint firstItem="r5J-AK-AL7" firstAttribute="leading" secondItem="JkG-6D-XPS" secondAttribute="trailing" constant="2" id="9Pr-A9-ygv"/>
                     <constraint firstItem="JkG-6D-XPS" firstAttribute="centerY" secondItem="O8y-eg-zyE" secondAttribute="centerY" id="9a8-PB-RVq"/>
-                    <constraint firstItem="Mk9-MM-in6" firstAttribute="leading" secondItem="O8y-eg-zyE" secondAttribute="leadingMargin" id="LlZ-hl-V9r"/>
+                    <constraint firstItem="Mk9-MM-in6" firstAttribute="leading" secondItem="O8y-eg-zyE" secondAttribute="leadingMargin" priority="999" id="LlZ-hl-V9r"/>
                     <constraint firstAttribute="trailingMargin" secondItem="r5J-AK-AL7" secondAttribute="trailing" id="MKf-UR-f7D"/>
                     <constraint firstItem="JkG-6D-XPS" firstAttribute="leading" secondItem="Mk9-MM-in6" secondAttribute="trailing" constant="8" symbolic="YES" id="Zf9-HV-T7V"/>
                     <constraint firstItem="JkG-6D-XPS" firstAttribute="top" secondItem="O8y-eg-zyE" secondAttribute="topMargin" constant="4" id="oGr-Fd-sKz"/>

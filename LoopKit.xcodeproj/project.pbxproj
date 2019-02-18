@@ -309,6 +309,7 @@
 		7D68A9AE1FE0A3D000522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9B01FE0A3D000522C49 /* Localizable.strings */; };
 		7D68A9B81FE0A3D100522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9BA1FE0A3D100522C49 /* InfoPlist.strings */; };
 		7D68A9C21FE0A3D200522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */; };
+		891444E2221A4E01007E96CB /* CombinedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891444E1221A4E01007E96CB /* CombinedTableViewCell.swift */; };
 		895FE06922011E5900FCF18A /* TemporaryScheduleOverrideSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895FE06622011E5800FCF18A /* TemporaryScheduleOverrideSettings.swift */; };
 		895FE06A22011E5900FCF18A /* TemporaryScheduleOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895FE06722011E5800FCF18A /* TemporaryScheduleOverride.swift */; };
 		895FE06B22011E5900FCF18A /* TemporaryScheduleOverridePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895FE06822011E5900FCF18A /* TemporaryScheduleOverridePreset.swift */; };
@@ -770,6 +771,7 @@
 		7D68AABE1FE31BE700522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D68AAC01FE31BE800522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D68AAC61FE31BE900522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		891444E1221A4E01007E96CB /* CombinedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombinedTableViewCell.swift; sourceTree = "<group>"; };
 		895FE06622011E5800FCF18A /* TemporaryScheduleOverrideSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideSettings.swift; sourceTree = "<group>"; };
 		895FE06722011E5800FCF18A /* TemporaryScheduleOverride.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverride.swift; sourceTree = "<group>"; };
 		895FE06822011E5900FCF18A /* TemporaryScheduleOverridePreset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverridePreset.swift; sourceTree = "<group>"; };
@@ -997,6 +999,7 @@
 				434FF1F01CF29451000DB779 /* TextFieldTableViewCell.swift */,
 				434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */,
 				43F5034E210599DF009FA89A /* ValidatingIndicatorView.swift */,
+				891444E1221A4E01007E96CB /* CombinedTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1765,6 +1768,7 @@
 				895FE09222011F4800FCF18A /* OverridePresetTableViewController.swift in Sources */,
 				43BA718A201EE8CF0058961E /* NSTimeInterval.swift in Sources */,
 				432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */,
+				891444E2221A4E01007E96CB /* CombinedTableViewCell.swift in Sources */,
 				895FE08B22011F0C00FCF18A /* EmojiInputHeaderView.swift in Sources */,
 				43BA7170201E49220058961E /* FoodTypeShortcutCell.swift in Sources */,
 				432CF86520D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift in Sources */,

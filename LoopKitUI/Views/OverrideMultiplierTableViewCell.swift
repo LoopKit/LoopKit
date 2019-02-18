@@ -67,10 +67,12 @@ final class OverrideMultiplierTableViewCell: UITableViewCell {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(stackView)
 
+        let leftConstraint = stackView.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor)
+        leftConstraint.priority = .defaultHigh // Ensures constraint compliance when width == 0 in transition
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
             stackView.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor),
-            stackView.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor),
+            leftConstraint,
             stackView.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor)
         ])
     }
