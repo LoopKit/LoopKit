@@ -103,6 +103,13 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
     private var overallInsulinNeedsMultiplier = 1.0 {
         didSet {
+            guard let multiplierDetailIndexPath = indexPath(for: .multiplierDetail) else {
+                assertionFailure("Multiplier detail cell should always be present in property rows")
+                return
+            }
+            guard let multiplierDetailCell = tableView.cellForRow(at: multiplierDetailIndexPath) as? OverrideMultiplierTableViewCell else {
+                return
+            }
             multiplierDetailCell.setMultipliers(
                 basalRate: overallInsulinNeedsMultiplier,
                 insulinSensitivity: 1 / overallInsulinNeedsMultiplier,
@@ -155,6 +162,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         tableView.register(LabeledTextFieldTableViewCell.nib(), forCellReuseIdentifier: LabeledTextFieldTableViewCell.className)
         tableView.register(DoubleRangeTableViewCell.nib(), forCellReuseIdentifier: DoubleRangeTableViewCell.className)
         tableView.register(DecimalTextFieldTableViewCell.nib(), forCellReuseIdentifier: DecimalTextFieldTableViewCell.className)
+        tableView.register(OverrideMultiplierTableViewCell.self, forCellReuseIdentifier: OverrideMultiplierTableViewCell.className)
         tableView.register(DateAndDurationTableViewCell.nib(), forCellReuseIdentifier: DateAndDurationTableViewCell.className)
         tableView.register(SwitchTableViewCell.nib(), forCellReuseIdentifier: SwitchTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
@@ -230,14 +238,6 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         return formatter
     }()
 
-    // Hold the reference to the multiplier cell to simplify updates
-    private lazy var multiplierDetailCell: OverrideMultiplierTableViewCell = {
-        let cell = OverrideMultiplierTableViewCell(frame: .zero)
-        let (basalRate, insulinSensitivity, carbRatio) = multipliers
-        cell.setMultipliers(basalRate: basalRate, insulinSensitivity: insulinSensitivity, carbRatio: carbRatio)
-        return cell
-    }()
-
     private lazy var overrideSymbolKeyboard: EmojiInputController = {
         let keyboard = OverrideSymbolInputController()
         keyboard.delegate = self
@@ -283,7 +283,10 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 cell.delegate = self
                 return cell
             case .multiplierDetail:
-                return multiplierDetailCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: OverrideMultiplierTableViewCell.className, for: indexPath) as! OverrideMultiplierTableViewCell
+                let (basalRate, insulinSensitivity, carbRatio) = multipliers
+                cell.setMultipliers(basalRate: basalRate, insulinSensitivity: insulinSensitivity, carbRatio: carbRatio)
+                return cell
             case .startDate:
                 let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
                 cell.titleLabel.text = NSLocalizedString("Start Time", comment: "The text for the override start time")
