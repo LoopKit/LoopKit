@@ -471,7 +471,10 @@ extension AddEditOverrideTableViewController {
             }
         }
 
-        return TemporaryScheduleOverrideSettings(targetRange: targetRange, insulinNeedsScaleFactor: insulinNeedsScaleFactor)
+        return TemporaryScheduleOverrideSettings(
+            targetRange: targetRange,
+            insulinNeedsScaleFactor: insulinNeedsScaleFactor == 1.0 ? nil : insulinNeedsScaleFactor
+        )
     }
 
     private var configuredPreset: TemporaryScheduleOverridePreset? {
