@@ -39,7 +39,8 @@ public final class AuthenticationViewController<T: ServiceAuthenticationUI>: UIT
                         }) 
 
                         if let error = error {
-                            self.presentAlertController(with: error)
+                            let alert = UIAlertController(with: error)
+                            self.present(alert, animated: true)
                         }
 
                         if success {

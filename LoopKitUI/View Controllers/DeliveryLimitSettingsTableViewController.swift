@@ -229,9 +229,10 @@ public class DeliveryLimitSettingsTableViewController: UITableViewController {
 
                         self.isSyncInProgress = false
                     case .failure(let error):
-                        self.presentAlertController(with: error, animated: true, completion: {
+                        let alert = UIAlertController(with: error)
+                        self.present(alert, animated: true) {
                             self.isSyncInProgress = false
-                        })
+                        }
                     }
                 }
             }

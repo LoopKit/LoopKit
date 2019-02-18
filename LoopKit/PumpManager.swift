@@ -14,15 +14,14 @@ public enum PumpManagerResult<T> {
     case failure(Error)
 }
 
+public protocol PumpManagerStatusObserver: class {
+    func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus)
+}
 
-public protocol PumpManagerDelegate: class {
+public protocol PumpManagerDelegate: PumpManagerStatusObserver {
     func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager)
 
     func pumpManagerShouldProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool
-
-    // Strictly for Nightscout uploading
-    // Can this be rolled into another update message?
-    func pumpManager(_ pumpManager: PumpManager, didUpdateStatus status: PumpManagerStatus)
 
     /// Informs the delegate that the manager is deactivating and should be deleted
     func pumpManagerWillDeactivate(_ pumpManager: PumpManager)
@@ -40,8 +39,6 @@ public protocol PumpManagerDelegate: class {
 
     func pumpManager(_ pumpManager: PumpManager, didAdjustPumpClockBy adjustment: TimeInterval)
 
-    func pumpManagerDidUpdatePumpBatteryChargeRemaining(_ pumpManager: PumpManager, oldValue: Double?)
-
     func pumpManagerDidUpdateState(_ pumpManager: PumpManager)
 
     func pumpManagerRecommendsLoop(_ pumpManager: PumpManager)
@@ -53,18 +50,21 @@ public protocol PumpManagerDelegate: class {
 
 
 public protocol PumpManager: DeviceManager {
+    // Rounds units to the nearest delivery increment
+    func roundToDeliveryIncrement(units: Double) -> Double
+    
     var pumpManagerDelegate: PumpManagerDelegate? { get set }
-
-    // Pump info
-    var pumpBatteryChargeRemaining: Double? { get }
 
     var pumpRecordsBasalProfileStartEvents: Bool { get }
 
     var pumpReservoirCapacity: Double { get }
-
-    /// Only used by settings
-    var pumpTimeZone: TimeZone { get }
-
+    
+    var status: PumpManagerStatus { get }
+    
+    func addStatusObserver(_ observer: PumpManagerStatusObserver)
+    
+    func removeStatusObserver(_ observer: PumpManagerStatusObserver)
+    
     /// If the pump data (reservoir/events) is out of date, it will be fetched, and if successful, trigger a loop
     func assertCurrentPumpData()
 
@@ -74,13 +74,22 @@ public protocol PumpManager: DeviceManager {
     ///   - units: The number of units to deliver
     ///   - startDate: The date the bolus command was originally set
     ///   - willRequest: A closure called just before the pump command is sent, if all preconditions are met
-    ///   - units: The number of units requested
-    ///   - date: The date the request was made
     ///   - completion: A closure called after the command is complete
-    ///   - error: An error describing why the command failed
-    func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ units: Double, _ date: Date) -> Void, completion: @escaping (_ error: Error?) -> Void)
+    ///   - result: A DoseEntry or an error describing why the command failed
+    func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (_ result: PumpManagerResult<DoseEntry>) -> Void)
 
+    /// Send a temporary basal rate command and handle the result
+    ///
+    /// - Parameters:
+    ///   - unitsPerHour: The temporary basal rate to set
+    ///   - duration: The duration of the temporary basal rate.
+    ///   - completion: A closure called after the command is complete
+    ///   - result: A DoseEntry or an error describing why the command failed
     func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (_ result: PumpManagerResult<DoseEntry>) -> Void)
 
     func updateBLEHeartbeatPreference()
+    
+    func suspendDelivery(completion: @escaping (_ error: Error?) -> Void)
+    
+    func resumeDelivery(completion: @escaping (_ error: Error?) -> Void)
 }
