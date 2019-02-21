@@ -21,8 +21,8 @@ public class LevelMaskView: UIView {
         }
     }
 
-    private var boundedValue: Double {
-        return max(0.0, min(1.0, value))
+    private var clampedValue: Double {
+        return value.clamped(to: 0...1.0)
     }
 
     @IBInspectable var maskImage: UIImage? {
@@ -88,7 +88,7 @@ public class LevelMaskView: UIView {
 
         var fillViewFrame = maskViewFrame
         fillViewFrame.origin.y = maskViewFrame.maxY
-        fillViewFrame.size.height = -CGFloat(boundedValue) * maskViewFrame.height
+        fillViewFrame.size.height = -CGFloat(clampedValue) * maskViewFrame.height
         fillView?.frame = fillViewFrame
     }
 
