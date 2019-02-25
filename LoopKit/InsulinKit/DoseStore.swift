@@ -1057,7 +1057,7 @@ extension DoseStore {
     /// - Returns: An array of doses from pump events
     /// - Throws: An error describing the failure to fetch objects
     private func getNormalizedPumpEventDoseEntriesForSavingToHealthStore(basalStart: Date, end: Date) throws -> [DoseEntry] {
-        guard let basalProfile = self.basalProfile else {
+        guard let basalProfile = self.basalProfileApplyingOverrideIfActive else {
             throw DoseStoreError.configurationError
         }
 
@@ -1271,7 +1271,10 @@ extension DoseStore {
             "",
             "* insulinModel: \(String(reflecting: insulinModel))",
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
+            "* basalProfileApplyingOverrideIfActive \(basalProfileApplyingOverrideIfActive?.debugDescription ?? "nil")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
+            "* insulinSensitivityScheduleApplyingOverrideIfActive \(insulinSensitivityScheduleApplyingOverrideIfActive?.debugDescription ?? "nil")",
+            "* scheduleOverride: \(scheduleOverride.map(String.init(describing:)) ?? "nil")",
             "* areReservoirValuesValid: \(areReservoirValuesValid)",
             "* isUploadRequestPending: \(isUploadRequestPending)",
             "* lastAddedPumpEvents: \(lastAddedPumpEvents)",
