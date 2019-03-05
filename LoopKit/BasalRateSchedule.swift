@@ -11,6 +11,11 @@ import Foundation
 
 public typealias BasalRateSchedule = DailyValueSchedule<Double>
 
+public struct BasalScheduleValidationResult {
+    let scheduleError: Error?
+    let itemErrors: [(index: Int, error: Error)]
+}
+
 
 public extension DailyValueSchedule where T == Double {
     /**

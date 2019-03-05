@@ -7,16 +7,17 @@
 
 import UIKit
 
+private class FrameworkBundle {
+    static let main = Bundle(for: FrameworkBundle.self)
+}
+
+private func BundleColor(_ name: String, compatibleWith traitCollection: UITraitCollection? = nil) -> UIColor? {
+    return UIColor(named: name, in: FrameworkBundle.main, compatibleWith: traitCollection)
+}
 
 extension UIColor {
-    static let delete = UIColor.higRed()
+    static let delete = BundleColor("Delete")
+    static let invalid = BundleColor("Invalid")
 }
 
 
-// MARK: - HIG colors
-// See: https://developer.apple.com/ios/human-interface-guidelines/visual-design/color/
-extension UIColor {
-    private static func higRed() -> UIColor {
-        return UIColor(red: 1, green: 59 / 255, blue: 48 / 255, alpha: 1)
-    }
-}
