@@ -44,3 +44,16 @@ public struct PumpManagerStatus: Equatable {
         self.bolusState = bolusState
     }
 }
+
+extension PumpManagerStatus: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return """
+        ## PumpManagerStatus
+        * timeZone: \(timeZone)
+        * device: \(device)
+        * pumpBatteryChargeRemaining: \(pumpBatteryChargeRemaining as Any)
+        * suspendState: \(basalDeliveryState)
+        * bolusState: \(bolusState)
+        """
+    }
+}

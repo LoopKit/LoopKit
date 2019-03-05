@@ -17,11 +17,15 @@ public final class SwitchTableViewCell: UITableViewCell {
 
     public var `switch`: UISwitch?
 
+    public var onToggle: ((_ isOn: Bool) -> Void)?
+
     override public func awakeFromNib() {
         super.awakeFromNib()
 
         `switch` = UISwitch(frame: .zero)
         accessoryView = `switch`
+
+        `switch`?.addTarget(self, action: #selector(respondToToggle), for: .valueChanged)
     }
 
     override public func layoutSubviews() {
@@ -34,7 +38,14 @@ public final class SwitchTableViewCell: UITableViewCell {
     override public func prepareForReuse() {
         super.prepareForReuse()
 
+        onToggle = nil
         self.switch?.removeTarget(nil, action: nil, for: .valueChanged)
+        `switch`?.addTarget(self, action: #selector(respondToToggle), for: .valueChanged)
     }
 
+    @objc private func respondToToggle() {
+        if let `switch` = `switch`, let onToggle = onToggle {
+            onToggle(`switch`.isOn)
+        }
+    }
 }
