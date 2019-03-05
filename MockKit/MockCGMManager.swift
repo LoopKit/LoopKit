@@ -110,7 +110,7 @@ public final class MockCGMManager: TestingCGMManager {
     }
     
     private func setupGlucoseUpdateTimer() {
-        glucoseUpdateTimer = Timer.scheduledTimer(withTimeInterval: .minutes(5), repeats: true) { [weak self] _ in
+        glucoseUpdateTimer = Timer.scheduledTimer(withTimeInterval: dataSource.dataPointFrequency, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             self.dataSource.fetchNewData { result in
                 self.cgmManagerDelegate?.cgmManager(self, didUpdateWith: result)

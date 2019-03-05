@@ -34,7 +34,7 @@ struct MockGlucoseProvider {
             return Int(duration / dataPointFrequency)
         }
 
-        init(datingBack duration: TimeInterval, dataPointFrequency: TimeInterval = .minutes(5)) {
+        init(datingBack duration: TimeInterval, dataPointFrequency: TimeInterval) {
             self.duration = duration
             self.dataPointFrequency = dataPointFrequency
         }

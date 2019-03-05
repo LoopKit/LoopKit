@@ -17,23 +17,9 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
     let cgmManager: MockCGMManager
     let glucoseUnit: HKUnit
 
-    private var model: MockCGMDataSource.Model {
-        didSet {
-            cgmManager.dataSource = MockCGMDataSource(model: model, effects: effects)
-        }
-    }
-
-    private var effects: MockCGMDataSource.Effects {
-        didSet {
-            cgmManager.dataSource = MockCGMDataSource(model: model, effects: effects)
-        }
-    }
-
     init(cgmManager: MockCGMManager, glucoseUnit: HKUnit) {
         self.cgmManager = cgmManager
         self.glucoseUnit = glucoseUnit
-        self.model = cgmManager.dataSource.model
-        self.effects = cgmManager.dataSource.effects
         super.init(style: .grouped)
     }
 
@@ -144,7 +130,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             switch ModelRow(rawValue: indexPath.row)! {
             case .constant:
                 cell.textLabel?.text = "Constant"
-                if case .constant(let glucose) = model {
+                if case .constant(let glucose) = cgmManager.dataSource.model {
                     cell.detailTextLabel?.text = quantityFormatter.string(from: glucose, for: glucoseUnit)
                     cell.accessoryType = .checkmark
                 } else {
@@ -152,7 +138,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 }
             case .sineCurve:
                 cell.textLabel?.text = "Sine Curve"
-                if case .sineCurve(parameters: (baseGlucose: let baseGlucose, amplitude: let amplitude, period: _, referenceDate: _)) = model {
+                if case .sineCurve(parameters: (baseGlucose: let baseGlucose, amplitude: let amplitude, period: _, referenceDate: _)) = cgmManager.dataSource.model {
                     if let baseGlucoseText = quantityFormatter.numberFormatter.string(from: baseGlucose.doubleValue(for: glucoseUnit)),
                         let amplitudeText = quantityFormatter.string(from: amplitude, for: glucoseUnit) {
                         cell.detailTextLabel?.text = "\(baseGlucoseText) ± \(amplitudeText)"
@@ -163,7 +149,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 }
             case .noData:
                 cell.textLabel?.text = "No Data"
-                if case .noData = model {
+                if case .noData = cgmManager.dataSource.model {
                     cell.accessoryType = .checkmark
                 }
             }
@@ -173,14 +159,14 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             switch EffectsRow(rawValue: indexPath.row)! {
             case .noise:
                 cell.textLabel?.text = "Glucose Noise"
-                if let maximumDeltaMagnitude = effects.glucoseNoise {
+                if let maximumDeltaMagnitude = cgmManager.dataSource.effects.glucoseNoise {
                     cell.detailTextLabel?.text = quantityFormatter.string(from: maximumDeltaMagnitude, for: glucoseUnit)
                 } else {
                     cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
                 }
             case .lowOutlier:
                 cell.textLabel?.text = "Random Low Outlier"
-                if let chance = effects.randomLowOutlier?.chance,
+                if let chance = cgmManager.dataSource.effects.randomLowOutlier?.chance,
                     let percentageString = percentageFormatter.string(from: chance * 100)
                 {
                     cell.detailTextLabel?.text = "\(percentageString)% chance"
@@ -189,7 +175,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 }
             case .highOutlier:
                 cell.textLabel?.text = "Random High Outlier"
-                if let chance = effects.randomHighOutlier?.chance,
+                if let chance = cgmManager.dataSource.effects.randomHighOutlier?.chance,
                     let percentageString = percentageFormatter.string(from: chance * 100)
                 {
                     cell.detailTextLabel?.text = "\(percentageString)% chance"
@@ -198,7 +184,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 }
             case .error:
                 cell.textLabel?.text = "Random Error"
-                if let chance = effects.randomErrorChance,
+                if let chance = cgmManager.dataSource.effects.randomErrorChance,
                     let percentageString = percentageFormatter.string(from: chance * 100)
                 {
                     cell.detailTextLabel?.text = "\(percentageString)% chance"
@@ -247,7 +233,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 show(vc, sender: sender)
             case .sineCurve:
                 let vc = SineCurveParametersTableViewController(glucoseUnit: glucoseUnit)
-                if case .sineCurve(parameters: let parameters) = model {
+                if case .sineCurve(parameters: let parameters) = cgmManager.dataSource.model {
                     vc.parameters = parameters
                 } else {
                     vc.parameters = nil
@@ -256,14 +242,14 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 vc.delegate = self
                 show(vc, sender: sender)
             case .noData:
-                model = .noData
+                cgmManager.dataSource.model = .noData
                 tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
             }
         case .effects:
             switch EffectsRow(rawValue: indexPath.row)! {
             case .noise:
                 let vc = GlucoseEntryTableViewController(glucoseUnit: glucoseUnit)
-                if let maximumDeltaMagnitude = effects.glucoseNoise {
+                if let maximumDeltaMagnitude = cgmManager.dataSource.effects.glucoseNoise {
                     vc.glucose = maximumDeltaMagnitude
                 }
                 vc.title = "Glucose Noise"
@@ -274,7 +260,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .lowOutlier:
                 let vc = RandomOutlierTableViewController(glucoseUnit: glucoseUnit)
                 vc.title = "Low Outlier"
-                vc.randomOutlier = effects.randomLowOutlier
+                vc.randomOutlier = cgmManager.dataSource.effects.randomLowOutlier
                 vc.contextHelp = "Produced glucose values will have a chance of being decreased by the delta quantity."
                 vc.indexPath = indexPath
                 vc.delegate = self
@@ -282,14 +268,14 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .highOutlier:
                 let vc = RandomOutlierTableViewController(glucoseUnit: glucoseUnit)
                 vc.title = "High Outlier"
-                vc.randomOutlier = effects.randomHighOutlier
+                vc.randomOutlier = cgmManager.dataSource.effects.randomHighOutlier
                 vc.contextHelp = "Produced glucose values will have a chance of being increased by the delta quantity."
                 vc.indexPath = indexPath
                 vc.delegate = self
                 show(vc, sender: sender)
             case .error:
                 let vc = PercentageTextFieldTableViewController()
-                if let chance = effects.randomErrorChance {
+                if let chance = cgmManager.dataSource.effects.randomErrorChance {
                     vc.percentage = chance
                 }
                 vc.title = "Random Error"
@@ -355,12 +341,12 @@ extension MockCGMManagerSettingsViewController: GlucoseEntryTableViewControllerD
         switch indexPath {
         case [Section.model.rawValue, ModelRow.constant.rawValue]:
             if let glucose = controller.glucose {
-                model = .constant(glucose)
+                cgmManager.dataSource.model = .constant(glucose)
                 tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
             }
         case [Section.effects.rawValue, EffectsRow.noise.rawValue]:
             if let glucose = controller.glucose {
-                effects.glucoseNoise = glucose
+                cgmManager.dataSource.effects.glucoseNoise = glucose
             }
             tableView.reloadRows(at: [indexPath], with: .automatic)
         default:
@@ -372,7 +358,7 @@ extension MockCGMManagerSettingsViewController: GlucoseEntryTableViewControllerD
 extension MockCGMManagerSettingsViewController: SineCurveParametersTableViewControllerDelegate {
     func sineCurveParametersTableViewControllerDidUpdateParameters(_ controller: SineCurveParametersTableViewController) {
         if let parameters = controller.parameters {
-            model = .sineCurve(parameters: parameters)
+            cgmManager.dataSource.model = .sineCurve(parameters: parameters)
             tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
         }
     }
@@ -387,9 +373,9 @@ extension MockCGMManagerSettingsViewController: RandomOutlierTableViewController
 
         switch indexPath {
         case [Section.effects.rawValue, EffectsRow.lowOutlier.rawValue]:
-            effects.randomLowOutlier = controller.randomOutlier
+            cgmManager.dataSource.effects.randomLowOutlier = controller.randomOutlier
         case [Section.effects.rawValue, EffectsRow.highOutlier.rawValue]:
-            effects.randomHighOutlier = controller.randomOutlier
+            cgmManager.dataSource.effects.randomHighOutlier = controller.randomOutlier
         default:
             assertionFailure()
         }
@@ -408,7 +394,7 @@ extension MockCGMManagerSettingsViewController: PercentageTextFieldTableViewCont
         switch indexPath {
         case [Section.effects.rawValue, EffectsRow.error.rawValue]:
             if let chance = controller.percentage {
-                effects.randomErrorChance = chance.clamped(to: 0...100)
+                cgmManager.dataSource.effects.randomErrorChance = chance.clamped(to: 0...100)
             }
             tableView.reloadRows(at: [indexPath], with: .automatic)
         default:

@@ -51,22 +51,52 @@ public struct MockCGMDataSource {
         udiDeviceIdentifier: nil
     )
 
-    public let model: Model
-    public let effects: Effects
-    private let glucoseProvider: MockGlucoseProvider
+    public var model: Model {
+        didSet {
+            glucoseProvider = MockGlucoseProvider(model: model, effects: effects)
+        }
+    }
 
-    public init(model: Model, effects: Effects = .init()) {
+    public var effects: Effects {
+        didSet {
+            glucoseProvider = MockGlucoseProvider(model: model, effects: effects)
+        }
+    }
+
+    private var glucoseProvider: MockGlucoseProvider
+
+    private var lastFetchedData = Locked(Date.distantPast)
+
+    let dataPointFrequency: TimeInterval
+
+    public init(
+        model: Model,
+        effects: Effects = .init(),
+        dataPointFrequency: TimeInterval = /* minutes */ 5 * 60
+    ) {
         self.model = model
         self.effects = effects
         self.glucoseProvider = MockGlucoseProvider(model: model, effects: effects)
+        self.dataPointFrequency = dataPointFrequency
     }
 
     func fetchNewData(_ completion: @escaping (CGMResult) -> Void) {
-        glucoseProvider.fetchData(at: Date(), completion: completion)
+        let now = Date()
+        // Give 5% wiggle room for producing data points
+        let bufferedFrequency = dataPointFrequency - 0.05 * dataPointFrequency
+        if now.timeIntervalSince(lastFetchedData.value) < bufferedFrequency {
+            completion(.noData)
+            return
+        }
+
+        lastFetchedData.value = now
+        glucoseProvider.fetchData(at: now, completion: completion)
     }
 
     func backfillData(from interval: DateInterval, completion: @escaping (CGMResult) -> Void) {
-        glucoseProvider.backfill(.init(datingBack: interval.duration), endingAt: interval.end, completion: completion)
+        lastFetchedData.value = interval.end
+        let request = MockGlucoseProvider.BackfillRequest(datingBack: interval.duration, dataPointFrequency: dataPointFrequency)
+        glucoseProvider.backfill(request, endingAt: interval.end, completion: completion)
     }
 }
 
