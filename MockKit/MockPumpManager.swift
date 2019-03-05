@@ -247,7 +247,7 @@ private extension NewPumpEvent {
             value: units,
             unit: .units
         )
-        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: Data(), title: "Bolus", type: .bolus)
+        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: newDataIdentifier(), title: "Bolus", type: .bolus)
     }
 
     static func tempBasal(at date: Date, for duration: TimeInterval, unitsPerHour: Double) -> NewPumpEvent {
@@ -258,17 +258,21 @@ private extension NewPumpEvent {
             value: unitsPerHour,
             unit: .unitsPerHour
         )
-        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: Data(), title: "Temp Basal", type: .tempBasal)
+        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: newDataIdentifier(), title: "Temp Basal", type: .tempBasal)
     }
 
     static func suspend(at date: Date) -> NewPumpEvent {
         let dose = DoseEntry(suspendDate: date)
-        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: Data(), title: "Suspend", type: .suspend)
+        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: newDataIdentifier(), title: "Suspend", type: .suspend)
     }
 
     static func resume(at date: Date) -> NewPumpEvent {
         let dose = DoseEntry(resumeDate: date)
-        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: Data(), title: "Resume", type: .resume)
+        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: newDataIdentifier(), title: "Resume", type: .resume)
+    }
+
+    private static func newDataIdentifier() -> Data {
+        return UUID().uuidString.data(using: .utf8)!
     }
 }
 
