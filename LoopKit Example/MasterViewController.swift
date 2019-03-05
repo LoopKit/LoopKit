@@ -127,10 +127,23 @@ class MasterViewController: UITableViewController {
             let row = ConfigurationRow(rawValue: indexPath.row)!
             switch row {
             case .basalRate:
-                let scheduleVC = SingleValueScheduleTableViewController(style: .grouped)
+
+                // x22 with max basal rate of 5U/hr
+                let pulsesPerUnit = 20
+                let basalRates = (1...100).map { Double($0) / Double(pulsesPerUnit) }
+
+                // full x23 rates
+//                let rateGroup1 = ((1...39).map { Double($0) / Double(40) })
+//                let rateGroup2 = ((20...199).map { Double($0) / Double(20) })
+//                let rateGroup3 = ((100...350).map { Double($0) / Double(10) })
+//                let basalRates = rateGroup1 + rateGroup2 + rateGroup3
+
+                let scheduleVC = BasalScheduleTableViewController(allowedBasalRates: basalRates, maximumScheduleItemCount: 5, minimumTimeInterval: .minutes(30))
 
                 if let profile = dataManager?.basalRateSchedule {
                     scheduleVC.timeZone = profile.timeZone
+
+
                     scheduleVC.scheduleItems = profile.items
                 }
                 scheduleVC.delegate = self
@@ -298,7 +311,7 @@ extension MasterViewController: DailyValueScheduleTableViewControllerDelegate {
             case .configuration:
                 switch ConfigurationRow(rawValue: indexPath.row)! {
                 case .basalRate:
-                    if let controller = controller as? SingleValueScheduleTableViewController {
+                    if let controller = controller as? BasalScheduleTableViewController {
                         dataManager?.basalRateSchedule = BasalRateSchedule(dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
                     }
                 case .glucoseTargetRange:
@@ -329,22 +342,26 @@ extension MasterViewController: DailyValueScheduleTableViewControllerDelegate {
 }
 
 
-extension MasterViewController: SingleValueScheduleTableViewControllerSyncSource {
-    func singleValueScheduleTableViewControllerIsReadOnly(_ viewController: SingleValueScheduleTableViewController) -> Bool {
+extension MasterViewController: BasalScheduleTableViewControllerSyncSource {
+    func basalScheduleTableViewControllerIsReadOnly(_ viewController: BasalScheduleTableViewController) -> Bool {
         return false
     }
 
-    func syncButtonDetailText(for viewController: SingleValueScheduleTableViewController) -> String? {
+    func syncButtonDetailText(for viewController: BasalScheduleTableViewController) -> String? {
         return nil
     }
 
-    func syncScheduleValues(for viewController: SingleValueScheduleTableViewController, completion: @escaping (RepeatingScheduleValueResult<Double>) -> Void) {
+    func syncScheduleValues(for viewController: BasalScheduleTableViewController, completion: @escaping (SyncBasalScheduleResult<Double>) -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-            completion(.success(scheduleItems: [], timeZone: .current))
+            let scheduleItems = viewController.scheduleItems
+            let timezone = self.dataManager?.basalRateSchedule?.timeZone ?? .current
+            let schedule = BasalRateSchedule(dailyItems: scheduleItems, timeZone: timezone)
+            self.dataManager?.basalRateSchedule = schedule
+            completion(.success(scheduleItems: scheduleItems, timeZone: .current))
         }
     }
 
-    func syncButtonTitle(for viewController: SingleValueScheduleTableViewController) -> String {
+    func syncButtonTitle(for viewController: BasalScheduleTableViewController) -> String {
         return LocalizedString("Sync With Pump", comment: "Title of button to sync basal profile from pump")
     }
 }

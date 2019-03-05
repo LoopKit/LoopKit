@@ -8,7 +8,7 @@
 import UIKit
 import LoopKit
 
-public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, SingleValueScheduleTableViewControllerSyncSource {
+public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
     
     static func setupViewController() -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying)
 
