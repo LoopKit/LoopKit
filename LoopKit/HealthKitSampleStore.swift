@@ -86,10 +86,12 @@ public class HealthKitSampleStore {
     ///
     /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
     ///
-    /// - Parameter completion: A closure called after the authorization is completed
-    /// - Parameter result: The authorization result
-    public func authorize(_ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
-        healthStore.requestAuthorization(toShare: [sampleType], read: [sampleType]) { (completed, error) -> Void in
+    /// - Parameters:
+    ///   - toShare: Whether to request write authorization. Defaults to true.
+    ///   - completion: A closure called after the authorization is completed
+    ///   - result: The authorization result
+    public func authorize(toShare: Bool = true, _ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
+        healthStore.requestAuthorization(toShare: toShare ? [sampleType] : [], read: [sampleType]) { (completed, error) -> Void in
             if completed && !self.sharingDenied {
                 self.createQuery()
                 completion(.success(true))
