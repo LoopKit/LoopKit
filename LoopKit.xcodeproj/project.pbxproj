@@ -322,8 +322,6 @@
 		89D2048021CC7BD8001238CC /* MockKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D2047F21CC7BD8001238CC /* MockKitTests.swift */; };
 		89D2048221CC7BD8001238CC /* MockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 89D2047421CC7BD7001238CC /* MockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		89D2048921CC7BF7001238CC /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
-		89D2049821CC7C13001238CC /* MockKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D2048F21CC7C12001238CC /* MockKitUI.framework */; };
-		89D2049D21CC7C13001238CC /* MockKitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D2049C21CC7C13001238CC /* MockKitUITests.swift */; };
 		89D2049F21CC7C13001238CC /* MockKitUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 89D2049121CC7C13001238CC /* MockKitUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		89D204A621CC7C55001238CC /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		89D204A721CC7C5C001238CC /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BA7154201E484D0058961E /* LoopKitUI.framework */; };
@@ -410,13 +408,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 89D2047121CC7BD7001238CC;
 			remoteInfo = MockKit;
-		};
-		89D2049921CC7C13001238CC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 89D2048E21CC7C12001238CC;
-			remoteInfo = MockKitUI;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -852,9 +843,6 @@
 		89D2048F21CC7C12001238CC /* MockKitUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MockKitUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		89D2049121CC7C13001238CC /* MockKitUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MockKitUI.h; sourceTree = "<group>"; };
 		89D2049221CC7C13001238CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		89D2049721CC7C13001238CC /* MockKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MockKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		89D2049C21CC7C13001238CC /* MockKitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKitUITests.swift; sourceTree = "<group>"; };
-		89D2049E21CC7C13001238CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89D204D121CC837A001238CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89DC540C21B75AE7005A1CE0 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		89E72DDF21BDDD6C00F0985C /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
@@ -954,14 +942,6 @@
 			files = (
 				89D204A821CC7C60001238CC /* MockKit.framework in Frameworks */,
 				89D204A721CC7C5C001238CC /* LoopKitUI.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		89D2049421CC7C13001238CC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				89D2049821CC7C13001238CC /* MockKitUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1227,7 +1207,6 @@
 				89D2047321CC7BD7001238CC /* MockKit */,
 				89D2047E21CC7BD8001238CC /* MockKitTests */,
 				89D2049021CC7C13001238CC /* MockKitUI */,
-				89D2049B21CC7C13001238CC /* MockKitUITests */,
 				43D8FDCC1C728FDF0073BE78 /* Products */,
 				43BA718D202020140058961E /* Frameworks */,
 			);
@@ -1244,7 +1223,6 @@
 				89D2047221CC7BD7001238CC /* MockKit.framework */,
 				89D2047A21CC7BD8001238CC /* MockKitTests.xctest */,
 				89D2048F21CC7C12001238CC /* MockKitUI.framework */,
-				89D2049721CC7C13001238CC /* MockKitUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1559,15 +1537,6 @@
 			path = MockKitUI;
 			sourceTree = "<group>";
 		};
-		89D2049B21CC7C13001238CC /* MockKitUITests */ = {
-			isa = PBXGroup;
-			children = (
-				89D2049C21CC7C13001238CC /* MockKitUITests.swift */,
-				89D2049E21CC7C13001238CC /* Info.plist */,
-			);
-			path = MockKitUITests;
-			sourceTree = "<group>";
-		};
 		89D204AD21CC7D2B001238CC /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1775,24 +1744,6 @@
 			productReference = 89D2048F21CC7C12001238CC /* MockKitUI.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		89D2049621CC7C13001238CC /* MockKitUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 89D204A321CC7C13001238CC /* Build configuration list for PBXNativeTarget "MockKitUITests" */;
-			buildPhases = (
-				89D2049321CC7C13001238CC /* Sources */,
-				89D2049421CC7C13001238CC /* Frameworks */,
-				89D2049521CC7C13001238CC /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				89D2049A21CC7C13001238CC /* PBXTargetDependency */,
-			);
-			name = MockKitUITests;
-			productName = MockKitUITests;
-			productReference = 89D2049721CC7C13001238CC /* MockKitUITests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1842,10 +1793,6 @@
 						CreatedOnToolsVersion = 10.0;
 						ProvisioningStyle = Automatic;
 					};
-					89D2049621CC7C13001238CC = {
-						CreatedOnToolsVersion = 10.0;
-						ProvisioningStyle = Automatic;
-					};
 				};
 			};
 			buildConfigurationList = 43D8FDC51C728FDF0073BE78 /* Build configuration list for PBXProject "LoopKit" */;
@@ -1877,7 +1824,6 @@
 				89D2047121CC7BD7001238CC /* MockKit */,
 				89D2047921CC7BD8001238CC /* MockKitTests */,
 				89D2048E21CC7C12001238CC /* MockKitUI */,
-				89D2049621CC7C13001238CC /* MockKitUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -2053,13 +1999,6 @@
 			files = (
 				89D204D221CC837A001238CC /* Assets.xcassets in Resources */,
 				89D204B921CC7F34001238CC /* MockPumpManager.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		89D2049521CC7C13001238CC /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2350,14 +2289,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		89D2049321CC7C13001238CC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				89D2049D21CC7C13001238CC /* MockKitUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -2385,11 +2316,6 @@
 			isa = PBXTargetDependency;
 			target = 89D2047121CC7BD7001238CC /* MockKit */;
 			targetProxy = 89D2047C21CC7BD8001238CC /* PBXContainerItemProxy */;
-		};
-		89D2049A21CC7C13001238CC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 89D2048E21CC7C12001238CC /* MockKitUI */;
-			targetProxy = 89D2049921CC7C13001238CC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3086,56 +3012,6 @@
 			};
 			name = Release;
 		};
-		89D204A421CC7C13001238CC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = MockKitUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKitUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		89D204A521CC7C13001238CC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = MockKitUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKitUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3216,15 +3092,6 @@
 			buildConfigurations = (
 				89D204A121CC7C13001238CC /* Debug */,
 				89D204A221CC7C13001238CC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		89D204A321CC7C13001238CC /* Build configuration list for PBXNativeTarget "MockKitUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				89D204A421CC7C13001238CC /* Debug */,
-				89D204A521CC7C13001238CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
