@@ -8,6 +8,7 @@
 
 import HealthKit
 import LoopKit
+import LoopTestingKit
 
 
 public protocol MockPumpManagerStateObserver {
@@ -37,7 +38,7 @@ private enum MockPumpManagerError: LocalizedError {
     }
 }
 
-public final class MockPumpManager: PumpManager {
+public final class MockPumpManager: TestingPumpManager {
     public static let managerIdentifier = "MockPumpManager"
     public static let localizedTitle = "Simulator"
     private static let device = HKDevice(
@@ -57,6 +58,10 @@ public final class MockPumpManager: PumpManager {
 
     public var pumpReservoirCapacity: Double {
         return MockPumpManager.pumpReservoirCapacity
+    }
+
+    public var testingDevice: HKDevice {
+        return type(of: self).device
     }
 
     public var status: PumpManagerStatus {
@@ -84,10 +89,6 @@ public final class MockPumpManager: PumpManager {
     public var maximumBolus: Double = 25
 
     public var pumpManagerDelegate: PumpManagerDelegate?
-
-    private var testingPumpManagerDelegate: TestingPumpManagerDelegate? {
-        return pumpManagerDelegate as? TestingPumpManagerDelegate
-    }
 
     private var statusObservers = WeakSet<PumpManagerStatusObserver>()
     private var stateObservers = WeakSet<MockPumpManagerStateObserver>()
@@ -217,12 +218,6 @@ public final class MockPumpManager: PumpManager {
                 self.status.basalDeliveryState = .active
                 completion(nil)
             }
-        }
-    }
-
-    public func deletePumpData() {
-        testingPumpManagerDelegate?.doseStore(for: self).deleteInsulinDoses(fromDevice: status.device) { error in
-            // error is already logged through the store, so we'll ignore it here
         }
     }
 }

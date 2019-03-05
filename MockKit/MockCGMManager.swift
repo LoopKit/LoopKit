@@ -8,6 +8,7 @@
 
 import HealthKit
 import LoopKit
+import LoopTestingKit
 
 
 public struct MockCGMState: SensorDisplayable {
@@ -20,7 +21,7 @@ public struct MockCGMState: SensorDisplayable {
     }
 }
 
-public final class MockCGMManager: CGMManager {
+public final class MockCGMManager: TestingCGMManager {
     public static let managerIdentifier = "MockCGMManager"
     public static let localizedTitle = "Simulator"
 
@@ -34,14 +35,15 @@ public final class MockCGMManager: CGMManager {
         return mockSensorState
     }
 
-    public var device: HKDevice? {
+    public var testingDevice: HKDevice {
         return MockCGMDataSource.device
     }
 
-    public var cgmManagerDelegate: CGMManagerDelegate?
-    private var testingCGMManagerDelegate: TestingCGMManagerDelegate? {
-        return cgmManagerDelegate as? TestingCGMManagerDelegate
+    public var device: HKDevice? {
+        return testingDevice
     }
+
+    public var cgmManagerDelegate: CGMManagerDelegate?
 
     public var dataSource: MockCGMDataSource {
         didSet {
@@ -106,11 +108,7 @@ public final class MockCGMManager: CGMManager {
             self.cgmManagerDelegate?.cgmManager(self, didUpdateWith: result)
         }
     }
-
-    public func deleteCGMData() {
-        testingCGMManagerDelegate?.glucoseStore(for: self).deleteGlucoseSamples(fromDevice: MockCGMDataSource.device)
-    }
-
+    
     private func setupGlucoseUpdateTimer() {
         glucoseUpdateTimer = Timer.scheduledTimer(withTimeInterval: .minutes(5), repeats: true) { [weak self] _ in
             guard let self = self else { return }

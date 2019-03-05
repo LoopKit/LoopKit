@@ -75,7 +75,6 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case model = 0
         case effects
         case history
-        case deleteHealthData
         case deleteCGM
     }
 
@@ -111,7 +110,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return EffectsRow.allCases.count
         case .history:
             return HistoryRow.allCases.count
-        case .deleteHealthData, .deleteCGM:
+        case .deleteCGM:
             return 1
         }
     }
@@ -124,7 +123,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return "Effects"
         case .history:
             return "History"
-        case .deleteHealthData, .deleteCGM:
+        case .deleteCGM:
             return " " // Use an empty string for more dramatic spacing
         }
     }
@@ -220,13 +219,6 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 cell.textLabel?.text = "Backfill Glucose"
             }
             cell.accessoryType = .disclosureIndicator
-            return cell
-        case .deleteHealthData:
-            let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
-            cell.textLabel?.text = "Delete Health Data"
-            cell.textLabel?.textAlignment = .center
-            cell.tintColor = .delete
-            cell.isEnabled = true
             return cell
         case .deleteCGM:
             let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
@@ -328,14 +320,6 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                     self.cgmManager.backfillData(datingBack: duration)
                 }
                 show(vc, sender: sender)
-            }
-        case .deleteHealthData:
-            let confirmVC = UIAlertController(healthDataDeletionHandler: {
-                self.cgmManager.deleteCGMData()
-            })
-
-            present(confirmVC, animated: true) {
-                tableView.deselectRow(at: indexPath, animated: true)
             }
         case .deleteCGM:
             let confirmVC = UIAlertController(cgmDeletionHandler: {
@@ -441,22 +425,6 @@ extension MockCGMManagerSettingsViewController: GlucoseTrendTableViewControllerD
 }
 
 private extension UIAlertController {
-    convenience init(healthDataDeletionHandler handler: @escaping () -> Void) {
-        self.init(
-            title: nil,
-            message: "Are you sure you want to delete mock CGM health data?",
-            preferredStyle: .actionSheet
-        )
-
-        addAction(UIAlertAction(
-            title: "Delete Health Data",
-            style: .destructive,
-            handler: { _ in handler() }
-        ))
-
-        addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-    }
-
     convenience init(cgmDeletionHandler handler: @escaping () -> Void) {
         self.init(
             title: nil,

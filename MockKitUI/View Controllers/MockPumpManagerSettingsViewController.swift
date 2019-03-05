@@ -68,7 +68,6 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
     private enum Section: Int, CaseIterable {
         case actions = 0
         case settings
-        case deleteHealthData
         case deletePump
     }
 
@@ -97,7 +96,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             return ActionRow.allCases.count
         case .settings:
             return SettingsRow.allCases.count
-        case .deleteHealthData, .deletePump:
+        case .deletePump:
             return 1
         }
     }
@@ -108,7 +107,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             return nil
         case .settings:
             return "Configuration"
-        case .deleteHealthData, .deletePump:
+        case .deletePump:
             return " "  // Use an empty string for more dramatic spacing
         }
     }
@@ -149,13 +148,6 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             case .resumeErrorToggle:
                 return switchTableViewCell(for: indexPath, titled: "Error on Resume", boundTo: \.deliveryResumptionShouldError)
             }
-        case .deleteHealthData:
-            let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
-            cell.textLabel?.text = "Delete Health Data"
-            cell.textLabel?.textAlignment = .center
-            cell.tintColor = .delete
-            cell.isEnabled = true
-            return cell
         case .deletePump:
             let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
             cell.textLabel?.text = "Delete Pump"
@@ -206,11 +198,6 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 show(vc, sender: sender)
             case .tempBasalErrorToggle, .bolusErrorToggle, .suspendErrorToggle, .resumeErrorToggle:
                 break
-            }
-        case .deleteHealthData:
-            let confirmVC = UIAlertController(healthDataDeletionHandler: pumpManager.deletePumpData)
-            present(confirmVC, animated: true) {
-                tableView.deselectRow(at: indexPath, animated: true)
             }
         case .deletePump:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
@@ -288,22 +275,6 @@ extension MockPumpManagerSettingsViewController: PercentageTextFieldTableViewCon
 }
 
 private extension UIAlertController {
-    convenience init(healthDataDeletionHandler handler: @escaping () -> Void) {
-        self.init(
-            title: nil,
-            message: "Are you sure you want to delete mock pump health data?",
-            preferredStyle: .actionSheet
-        )
-
-        addAction(UIAlertAction(
-            title: "Delete Health Data",
-            style: .destructive,
-            handler: { _ in handler() }
-        ))
-
-        addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-    }
-
     convenience init(pumpDeletionHandler handler: @escaping () -> Void) {
         self.init(
             title: nil,

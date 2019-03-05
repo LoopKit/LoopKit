@@ -313,10 +313,18 @@
 		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
 		892A5D28222EF567008961AB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C145BF992219F10400A977CB /* Comparable.swift */; };
 		892A5D2E222EF69A008961AB /* MockHUDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D2D222EF69A008961AB /* MockHUDProvider.swift */; };
+		892A5D3D222F03CB008961AB /* LoopTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */; };
+		892A5D44222F03CB008961AB /* LoopTestingKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D43222F03CB008961AB /* LoopTestingKitTests.swift */; };
+		892A5D46222F03CB008961AB /* LoopTestingKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 892A5D36222F03CB008961AB /* LoopTestingKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		892A5D49222F03CC008961AB /* LoopTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */; };
+		892A5D4A222F03CC008961AB /* LoopTestingKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		892A5D52222F03DB008961AB /* TestingDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D51222F03DB008961AB /* TestingDeviceManager.swift */; };
+		892A5D54222F03F9008961AB /* TestingPumpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D53222F03F9008961AB /* TestingPumpManager.swift */; };
+		892A5D56222F0414008961AB /* TestingCGMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D55222F0414008961AB /* TestingCGMManager.swift */; };
+		892A5D57222F04E2008961AB /* LoopTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */; };
+		892A5D5C222F1210008961AB /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		895695F621AA413B00828067 /* DateAndDurationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */; };
 		8992426521EC138000EA512B /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8992426421EC138000EA512B /* UIColor.swift */; };
-		8996363A21ED932100361918 /* TestingPumpManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8996363921ED932100361918 /* TestingPumpManagerDelegate.swift */; };
-		8996363C21ED938700361918 /* TestingCGMManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8996363B21ED938700361918 /* TestingCGMManagerDelegate.swift */; };
 		89CCD4FA21A911510068C3FB /* PercentageTextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F921A911510068C3FB /* PercentageTextFieldTableViewController.swift */; };
 		89D2047B21CC7BD8001238CC /* MockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D2047221CC7BD7001238CC /* MockKit.framework */; };
 		89D2048021CC7BD8001238CC /* MockKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D2047F21CC7BD8001238CC /* MockKitTests.swift */; };
@@ -402,6 +410,27 @@
 			remoteGlobalIDString = 43D8FDCA1C728FDF0073BE78;
 			remoteInfo = LoopKit;
 		};
+		892A5D3E222F03CB008961AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 892A5D33222F03CB008961AB;
+			remoteInfo = LoopTestingKit;
+		};
+		892A5D40222F03CB008961AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430157F61C7EC03B00B64B63;
+			remoteInfo = "LoopKit Example";
+		};
+		892A5D47222F03CB008961AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 892A5D33222F03CB008961AB;
+			remoteInfo = LoopTestingKit;
+		};
 		89D2047C21CC7BD8001238CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
@@ -418,6 +447,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				892A5D4A222F03CC008961AB /* LoopTestingKit.framework in Embed Frameworks */,
 				4301581A1C7ECB5E00B64B63 /* LoopKit.framework in Embed Frameworks */,
 				43BA715C201E484D0058961E /* LoopKitUI.framework in Embed Frameworks */,
 			);
@@ -816,11 +846,18 @@
 		8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEntryTableViewController.swift; sourceTree = "<group>"; };
 		8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineCurveParametersTableViewController.swift; sourceTree = "<group>"; };
 		892A5D2D222EF69A008961AB /* MockHUDProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHUDProvider.swift; sourceTree = "<group>"; };
+		892A5D34222F03CB008961AB /* LoopTestingKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoopTestingKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		892A5D36222F03CB008961AB /* LoopTestingKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoopTestingKit.h; sourceTree = "<group>"; };
+		892A5D37222F03CB008961AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		892A5D3C222F03CB008961AB /* LoopTestingKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoopTestingKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		892A5D43222F03CB008961AB /* LoopTestingKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopTestingKitTests.swift; sourceTree = "<group>"; };
+		892A5D45222F03CB008961AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		892A5D51222F03DB008961AB /* TestingDeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingDeviceManager.swift; sourceTree = "<group>"; };
+		892A5D53222F03F9008961AB /* TestingPumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingPumpManager.swift; sourceTree = "<group>"; };
+		892A5D55222F0414008961AB /* TestingCGMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingCGMManager.swift; sourceTree = "<group>"; };
 		892F481A21AB2964004D313D /* RandomOutlierTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomOutlierTableViewController.swift; sourceTree = "<group>"; };
 		895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateAndDurationTableViewController.swift; sourceTree = "<group>"; };
 		8992426421EC138000EA512B /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
-		8996363921ED932100361918 /* TestingPumpManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingPumpManagerDelegate.swift; sourceTree = "<group>"; };
-		8996363B21ED938700361918 /* TestingCGMManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingCGMManagerDelegate.swift; sourceTree = "<group>"; };
 		89AB9EC621A4774500351324 /* MockPumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManager.swift; sourceTree = "<group>"; };
 		89AB9EC821A4BC2400351324 /* MockCGMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManager.swift; sourceTree = "<group>"; };
 		89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockPumpManager+UI.swift"; sourceTree = "<group>"; };
@@ -880,6 +917,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				892A5D49222F03CC008961AB /* LoopTestingKit.framework in Frameworks */,
 				4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */,
 				430158191C7ECB5E00B64B63 /* LoopKit.framework in Frameworks */,
 				43BA715B201E484D0058961E /* LoopKitUI.framework in Frameworks */,
@@ -919,10 +957,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		892A5D31222F03CB008961AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				892A5D5C222F1210008961AB /* LoopKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		892A5D39222F03CB008961AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				892A5D3D222F03CB008961AB /* LoopTestingKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		89D2046F21CC7BD7001238CC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				892A5D57222F04E2008961AB /* LoopTestingKit.framework in Frameworks */,
 				89D204A621CC7C55001238CC /* LoopKit.framework in Frameworks */,
 				89D2048921CC7BF7001238CC /* HealthKit.framework in Frameworks */,
 			);
@@ -1207,6 +1262,8 @@
 				89D2047321CC7BD7001238CC /* MockKit */,
 				89D2047E21CC7BD8001238CC /* MockKitTests */,
 				89D2049021CC7C13001238CC /* MockKitUI */,
+				892A5D35222F03CB008961AB /* LoopTestingKit */,
+				892A5D42222F03CB008961AB /* LoopTestingKitTests */,
 				43D8FDCC1C728FDF0073BE78 /* Products */,
 				43BA718D202020140058961E /* Frameworks */,
 			);
@@ -1223,6 +1280,8 @@
 				89D2047221CC7BD7001238CC /* MockKit.framework */,
 				89D2047A21CC7BD8001238CC /* MockKitTests.xctest */,
 				89D2048F21CC7C12001238CC /* MockKitUI.framework */,
+				892A5D34222F03CB008961AB /* LoopTestingKit.framework */,
+				892A5D3C222F03CB008961AB /* LoopTestingKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1230,7 +1289,6 @@
 		43D8FDCD1C728FDF0073BE78 /* LoopKit */ = {
 			isa = PBXGroup;
 			children = (
-				8996363821ED92F100361918 /* Testing */,
 				43D8FDCE1C728FDF0073BE78 /* LoopKit.h */,
 				43D8FDD01C728FDF0073BE78 /* Info.plist */,
 				43D8FDE51C7290340073BE78 /* BasalRateSchedule.swift */,
@@ -1482,21 +1540,33 @@
 			path = Fixtures;
 			sourceTree = "<group>";
 		};
+		892A5D35222F03CB008961AB /* LoopTestingKit */ = {
+			isa = PBXGroup;
+			children = (
+				892A5D36222F03CB008961AB /* LoopTestingKit.h */,
+				892A5D37222F03CB008961AB /* Info.plist */,
+				892A5D51222F03DB008961AB /* TestingDeviceManager.swift */,
+				892A5D53222F03F9008961AB /* TestingPumpManager.swift */,
+				892A5D55222F0414008961AB /* TestingCGMManager.swift */,
+			);
+			path = LoopTestingKit;
+			sourceTree = "<group>";
+		};
+		892A5D42222F03CB008961AB /* LoopTestingKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				892A5D43222F03CB008961AB /* LoopTestingKitTests.swift */,
+				892A5D45222F03CB008961AB /* Info.plist */,
+			);
+			path = LoopTestingKitTests;
+			sourceTree = "<group>";
+		};
 		8992426321EC137900EA512B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				8992426421EC138000EA512B /* UIColor.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		8996363821ED92F100361918 /* Testing */ = {
-			isa = PBXGroup;
-			children = (
-				8996363921ED932100361918 /* TestingPumpManagerDelegate.swift */,
-				8996363B21ED938700361918 /* TestingCGMManagerDelegate.swift */,
-			);
-			path = Testing;
 			sourceTree = "<group>";
 		};
 		89D2047321CC7BD7001238CC /* MockKit */ = {
@@ -1579,6 +1649,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		892A5D2F222F03CB008961AB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				892A5D46222F03CB008961AB /* LoopTestingKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		89D2046D21CC7BD7001238CC /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1612,6 +1690,7 @@
 			dependencies = (
 				4301581C1C7ECB5E00B64B63 /* PBXTargetDependency */,
 				43BA715A201E484D0058961E /* PBXTargetDependency */,
+				892A5D48222F03CB008961AB /* PBXTargetDependency */,
 			);
 			name = "LoopKit Example";
 			productName = "LoopKit Example";
@@ -1690,6 +1769,43 @@
 			productReference = 43D8FDD51C728FDF0073BE78 /* LoopKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		892A5D33222F03CB008961AB /* LoopTestingKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 892A5D4B222F03CC008961AB /* Build configuration list for PBXNativeTarget "LoopTestingKit" */;
+			buildPhases = (
+				892A5D2F222F03CB008961AB /* Headers */,
+				892A5D30222F03CB008961AB /* Sources */,
+				892A5D31222F03CB008961AB /* Frameworks */,
+				892A5D32222F03CB008961AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LoopTestingKit;
+			productName = LoopTestingKit;
+			productReference = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		892A5D3B222F03CB008961AB /* LoopTestingKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 892A5D4E222F03CC008961AB /* Build configuration list for PBXNativeTarget "LoopTestingKitTests" */;
+			buildPhases = (
+				892A5D38222F03CB008961AB /* Sources */,
+				892A5D39222F03CB008961AB /* Frameworks */,
+				892A5D3A222F03CB008961AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				892A5D3F222F03CB008961AB /* PBXTargetDependency */,
+				892A5D41222F03CB008961AB /* PBXTargetDependency */,
+			);
+			name = LoopTestingKitTests;
+			productName = LoopTestingKitTests;
+			productReference = 892A5D3C222F03CB008961AB /* LoopTestingKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		89D2047121CC7BD7001238CC /* MockKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 89D2048721CC7BD8001238CC /* Build configuration list for PBXNativeTarget "MockKit" */;
@@ -1750,7 +1866,7 @@
 		43D8FDC21C728FDF0073BE78 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1000;
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "LoopKit Authors";
 				TargetAttributes = {
@@ -1780,6 +1896,16 @@
 					43D8FDD41C728FDF0073BE78 = {
 						CreatedOnToolsVersion = 7.2.1;
 						LastSwiftMigration = 1000;
+					};
+					892A5D33222F03CB008961AB = {
+						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
+						ProvisioningStyle = Automatic;
+					};
+					892A5D3B222F03CB008961AB = {
+						CreatedOnToolsVersion = 10.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 430157F61C7EC03B00B64B63;
 					};
 					89D2047121CC7BD7001238CC = {
 						CreatedOnToolsVersion = 10.0;
@@ -1824,6 +1950,8 @@
 				89D2047121CC7BD7001238CC /* MockKit */,
 				89D2047921CC7BD8001238CC /* MockKitTests */,
 				89D2048E21CC7C12001238CC /* MockKitUI */,
+				892A5D33222F03CB008961AB /* LoopTestingKit */,
+				892A5D3B222F03CB008961AB /* LoopTestingKitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1979,6 +2107,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		892A5D32222F03CB008961AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		892A5D3A222F03CB008961AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		89D2047021CC7BD7001238CC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2123,7 +2265,6 @@
 				43D8FDF71C7290350073BE78 /* DailyValueSchedule.swift in Sources */,
 				4322B77D202FA2AF0002837D /* NewPumpEvent.swift in Sources */,
 				434113AA20F171CB00D05747 /* CachedInsulinDeliveryObject+CoreDataClass.swift in Sources */,
-				8996363A21ED932100361918 /* TestingPumpManagerDelegate.swift in Sources */,
 				432CF86F20D76CCF0066B889 /* GlucoseTrend.swift in Sources */,
 				43FB60E920DCBE64002B996B /* PumpManagerStatus.swift in Sources */,
 				4322B774202FA2790002837D /* CarbMath.swift in Sources */,
@@ -2194,7 +2335,6 @@
 				4322B780202FA2AF0002837D /* PumpEvent+CoreDataClass.swift in Sources */,
 				433BC7B120562705000B1200 /* UpdateSource.swift in Sources */,
 				4322B784202FA2AF0002837D /* Reservoir+CoreDataProperties.swift in Sources */,
-				8996363C21ED938700361918 /* TestingCGMManagerDelegate.swift in Sources */,
 				4322B778202FA2790002837D /* HKQuantitySample+CarbKit.swift in Sources */,
 				4322B771202FA26F0002837D /* HKQuantitySample+GlucoseKit.swift in Sources */,
 				433BC7AB20538D4C000B1200 /* CachedGlucoseObject+CoreDataProperties.swift in Sources */,
@@ -2238,6 +2378,24 @@
 				437AFF1D203A45DB008C4892 /* CacheStore.swift in Sources */,
 				434113BC20F2C56100D05747 /* CachedGlucoseObjectTests.swift in Sources */,
 				430059241CCDD08C00C861EA /* NSDateFormatter.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		892A5D30222F03CB008961AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				892A5D54222F03F9008961AB /* TestingPumpManager.swift in Sources */,
+				892A5D52222F03DB008961AB /* TestingDeviceManager.swift in Sources */,
+				892A5D56222F0414008961AB /* TestingCGMManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		892A5D38222F03CB008961AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				892A5D44222F03CB008961AB /* LoopTestingKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2311,6 +2469,21 @@
 			isa = PBXTargetDependency;
 			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
 			targetProxy = 43D8FDD71C728FDF0073BE78 /* PBXContainerItemProxy */;
+		};
+		892A5D3F222F03CB008961AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 892A5D33222F03CB008961AB /* LoopTestingKit */;
+			targetProxy = 892A5D3E222F03CB008961AB /* PBXContainerItemProxy */;
+		};
+		892A5D41222F03CB008961AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430157F61C7EC03B00B64B63 /* LoopKit Example */;
+			targetProxy = 892A5D40222F03CB008961AB /* PBXContainerItemProxy */;
+		};
+		892A5D48222F03CB008961AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 892A5D33222F03CB008961AB /* LoopTestingKit */;
+			targetProxy = 892A5D47222F03CB008961AB /* PBXContainerItemProxy */;
 		};
 		89D2047D21CC7BD8001238CC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2838,6 +3011,127 @@
 			};
 			name = Release;
 		};
+		892A5D4C222F03CC008961AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = LoopTestingKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		892A5D4D222F03CC008961AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = LoopTestingKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		892A5D4F222F03CC008961AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = LoopTestingKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoopKit Example.app/LoopKit Example";
+			};
+			name = Debug;
+		};
+		892A5D50222F03CC008961AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = LoopTestingKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoopKit Example.app/LoopKit Example";
+			};
+			name = Release;
+		};
 		89D2048321CC7BD8001238CC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3065,6 +3359,24 @@
 			buildConfigurations = (
 				43D8FDE31C728FDF0073BE78 /* Debug */,
 				43D8FDE41C728FDF0073BE78 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		892A5D4B222F03CC008961AB /* Build configuration list for PBXNativeTarget "LoopTestingKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				892A5D4C222F03CC008961AB /* Debug */,
+				892A5D4D222F03CC008961AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		892A5D4E222F03CC008961AB /* Build configuration list for PBXNativeTarget "LoopTestingKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				892A5D4F222F03CC008961AB /* Debug */,
+				892A5D50222F03CC008961AB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
