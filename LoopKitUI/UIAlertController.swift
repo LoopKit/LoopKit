@@ -14,8 +14,9 @@ extension UIAlertController {
     /// - Parameters:
     ///   - error: The error to display
     ///   - title: The title of the alert. If nil, the error description will be used.
-    public convenience init(with error: Error, title: String? = nil) {
-
+    ///   - helpAnchorHandler: An optional closure to be executed when a user taps to open the error's `helpAnchor`
+    ///   - url: A URL created from the error's helpAnchor property
+    public convenience init(with error: Error, title: String? = nil, helpAnchorHandler: ((_ url: URL) -> Void)? = nil) {
         var actions: [UIAlertAction] = []
         let errorTitle: String
         let message: String
@@ -33,12 +34,11 @@ extension UIAlertController {
                 message = messageWithRecovery
             }
 
-
-            if let helpAnchor = error.helpAnchor, let url = URL(string: helpAnchor) {
+            if let helpAnchor = error.helpAnchor, let url = URL(string: helpAnchor), let helpAnchorHandler = helpAnchorHandler {
                 actions.append(UIAlertAction(
                     title: LocalizedString("More Info", comment: "Alert action title to open error help"),
                     style: .default,
-                    handler: { (action) in UIApplication.shared.open(url) }
+                    handler: { (_) in helpAnchorHandler(url) }
                 ))
             }
 
