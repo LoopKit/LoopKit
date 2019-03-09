@@ -304,7 +304,7 @@ extension CarbEntryEditViewController: TextFieldTableViewCellDelegate {
 
 
 extension CarbEntryEditViewController: DatePickerTableViewCellDelegate {
-    func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
+    public func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
         guard let row = tableView.indexPath(for: cell)?.row else { return }
 
         switch Row(rawValue: row) {

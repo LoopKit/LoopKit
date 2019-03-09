@@ -287,7 +287,7 @@ open class SingleValueScheduleTableViewController: DailyValueScheduleTableViewCo
 
     // MARK: - RepeatingScheduleValueTableViewCellDelegate
 
-    override func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
+    override public func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
         if let indexPath = tableView.indexPath(for: cell) {
             let currentItem = scheduleItems[indexPath.row]
 
