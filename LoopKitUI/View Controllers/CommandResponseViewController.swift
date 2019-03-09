@@ -49,7 +49,10 @@ public class CommandResponseViewController: UIViewController {
         }
 
         textView.text = command { [weak self] (responseText) -> Void in
-            self?.textView.text = responseText
+            var newText = self?.textView.text ?? ""
+            newText += "\n\n"
+            newText += responseText
+            self?.textView.text = newText
         }
         textView.isEditable = false
 
