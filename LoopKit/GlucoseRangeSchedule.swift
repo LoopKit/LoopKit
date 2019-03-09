@@ -65,6 +65,7 @@ public struct GlucoseRangeSchedule: DailySchedule {
         public let context: Context
         public let start: Date
         public let end: Date
+        public let unit: HKUnit
         public let value: DoubleRange
 
         /// Initializes a new override
@@ -73,11 +74,13 @@ public struct GlucoseRangeSchedule: DailySchedule {
         ///   - context: The context type of the override
         ///   - start: The date at which the override starts
         ///   - end: The date at which the override ends, or nil for an indefinite override
+        ///   - unit: The unit of the value range
         ///   - value: The value to return when active
-        public init(context: Context, start: Date, end: Date?, value: DoubleRange) {
+        public init(context: Context, start: Date, end: Date?, unit: HKUnit, value: DoubleRange) {
             self.context = context
             self.start = start
             self.end = end ?? .distantFuture
+            self.unit = unit
             self.value = value
         }
 
@@ -87,6 +90,10 @@ public struct GlucoseRangeSchedule: DailySchedule {
 
         public func isActive(at date: Date = Date()) -> Bool {
             return activeDates.contains(date) && !value.isZero
+        }
+
+        public var quantityRange: Range<HKQuantity> {
+            return value.quantityRange(for: unit)
         }
     }
 
@@ -110,7 +117,7 @@ public struct GlucoseRangeSchedule: DailySchedule {
             return false
         }
 
-        override = Override(context: context, start: start, end: end, value: value)
+        override = Override(context: context, start: start, end: end, unit: unit, value: value)
         return true
     }
 
@@ -163,7 +170,7 @@ public struct GlucoseRangeSchedule: DailySchedule {
         self.overrideRanges = overrideRanges
 
         if let overrideRawValue = rawValue["override"] as? Override.RawValue {
-            self.override = Override(rawValue: overrideRawValue)
+            self.override = Override(rawValue: overrideRawValue, unit: rangeSchedule.unit)
         }
     }
 
@@ -175,25 +182,28 @@ public struct GlucoseRangeSchedule: DailySchedule {
         var quantitySchedule = [AbsoluteScheduleValue<Range<HKQuantity>>]()
 
         for schedule in between(start: start, end: end) {
-            let lowerBound = HKQuantity(unit: unit, doubleValue: schedule.value.minValue)
-            let upperBound = HKQuantity(unit: unit, doubleValue: schedule.value.maxValue)
-
             quantitySchedule.append(AbsoluteScheduleValue(
                 startDate: schedule.startDate,
                 endDate: schedule.endDate,
-                value: lowerBound..<upperBound
+                value: schedule.value.quantityRange(for: unit)
             ))
         }
 
         return quantitySchedule
     }
 
+    /// Returns the underlying values in `unit`
+    /// Consider using quantity(at:) instead
     public func value(at time: Date) -> DoubleRange {
         if let override = override, override.isActive() {
             return override.value
         }
 
         return rangeSchedule.value(at: time)
+    }
+
+    public func quantityRange(at time: Date) -> Range<HKQuantity> {
+        return value(at: time).quantityRange(for: unit)
     }
 
     public var items: [RepeatingScheduleValue<DoubleRange>] {
@@ -229,10 +239,10 @@ public struct GlucoseRangeSchedule: DailySchedule {
 }
 
 
-extension GlucoseRangeSchedule.Override: RawRepresentable {
+extension GlucoseRangeSchedule.Override {
     public typealias RawValue = [String: Any]
 
-    public init?(rawValue: RawValue) {
+    public init?(rawValue: RawValue, unit: HKUnit) {
         guard let contextRaw = rawValue["context"] as? Context.RawValue,
             let context = Context(rawValue: contextRaw),
             let valueRaw = rawValue["value"] as? DoubleRange.RawValue,
@@ -242,7 +252,7 @@ extension GlucoseRangeSchedule.Override: RawRepresentable {
             return nil
         }
 
-        self.init(context: context, start: start, end: rawValue["end"] as? Date, value: value)
+        self.init(context: context, start: start, end: rawValue["end"] as? Date, unit: unit, value: value)
     }
 
     public var rawValue: RawValue {
@@ -271,5 +281,14 @@ extension GlucoseRangeSchedule: Equatable {
         return lhs.rangeSchedule == rhs.rangeSchedule &&
             lhs.overrideRanges == rhs.overrideRanges &&
             lhs.override == rhs.override
+    }
+}
+
+
+fileprivate extension DoubleRange {
+    func quantityRange(for unit: HKUnit) -> Range<HKQuantity> {
+        let lowerBound = HKQuantity(unit: unit, doubleValue: minValue)
+        let upperBound = HKQuantity(unit: unit, doubleValue: maxValue)
+        return lowerBound..<upperBound
     }
 }
