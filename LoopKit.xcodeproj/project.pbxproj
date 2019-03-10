@@ -316,6 +316,7 @@
 		C145BF9C2219F1CC00A977CB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C145BF992219F10400A977CB /* Comparable.swift */; };
 		C16C3D3F21A3101700401105 /* WeakSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133FD1621A2A845009B2D20 /* WeakSet.swift */; };
 		C184FECB219F2E0100CD2722 /* SuspendResumeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */; };
+		C1983058223555ED00681079 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
 		C1D7366421F78A4D00048CDD /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D7366321F78A4D00048CDD /* UIAlertController.swift */; };
 		C1E31F1222008AA300E88C00 /* SettingsNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E31F1122008AA300E88C00 /* SettingsNavigationViewController.swift */; };
 		C1E31F142200E7D500E88C00 /* HUDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E31F132200E7D500E88C00 /* HUDProvider.swift */; };
@@ -1717,6 +1718,7 @@
 				4302F4DF1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */,
 				43177D041D372A7F0006E908 /* CarbEntryTableViewController.swift in Sources */,
 				43B17C81208BFA6600AC27E9 /* HKUnit.swift in Sources */,
+				C1983058223555ED00681079 /* TimeZone.swift in Sources */,
 				430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */,
 				430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */,
 				43177D021D3729E60006E908 /* IdentifiableClass.swift in Sources */,

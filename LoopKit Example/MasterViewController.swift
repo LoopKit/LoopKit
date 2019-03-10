@@ -354,10 +354,10 @@ extension MasterViewController: BasalScheduleTableViewControllerSyncSource {
     func syncScheduleValues(for viewController: BasalScheduleTableViewController, completion: @escaping (SyncBasalScheduleResult<Double>) -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
             let scheduleItems = viewController.scheduleItems
-            let timezone = self.dataManager?.basalRateSchedule?.timeZone ?? .current
+            let timezone = self.dataManager?.basalRateSchedule?.timeZone ?? .currentFixed
             let schedule = BasalRateSchedule(dailyItems: scheduleItems, timeZone: timezone)
             self.dataManager?.basalRateSchedule = schedule
-            completion(.success(scheduleItems: scheduleItems, timeZone: .current))
+            completion(.success(scheduleItems: scheduleItems, timeZone: .currentFixed))
         }
     }
 

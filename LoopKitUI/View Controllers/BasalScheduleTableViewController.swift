@@ -263,6 +263,7 @@ open class BasalScheduleTableViewController : DailyValueScheduleTableViewControl
             cell.isReadOnly = isCellReadOnly
             cell.isPickerHidden = true
             cell.delegate = self
+            cell.timeZone = timeZone
 
             if indexPath.row > 0 {
                 let lastItem = scheduleItems[indexPath.row - 1]
