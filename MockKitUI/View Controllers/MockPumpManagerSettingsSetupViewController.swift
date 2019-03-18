@@ -108,7 +108,6 @@ final class MockPumpManagerSettingsSetupViewController: SetupTableViewController
 
                 vc.title = sender?.textLabel?.text
                 vc.delegate = self
-                vc.syncSource = pumpManager
 
                 show(vc, sender: sender)
             case .deliveryLimits:
@@ -119,7 +118,6 @@ final class MockPumpManagerSettingsSetupViewController: SetupTableViewController
 
                 vc.title = sender?.textLabel?.text
                 vc.delegate = self
-                vc.syncSource = pumpManager
 
                 show(vc, sender: sender)
             }
@@ -133,7 +131,7 @@ final class MockPumpManagerSettingsSetupViewController: SetupTableViewController
 
 extension MockPumpManagerSettingsSetupViewController: DailyValueScheduleTableViewControllerDelegate {
     func dailyValueScheduleTableViewControllerWillFinishUpdating(_ controller: DailyValueScheduleTableViewController) {
-        if let controller = controller as? SingleValueScheduleTableViewController {
+        if let controller = controller as? BasalScheduleTableViewController {
             pumpManagerSetupViewController?.basalSchedule = BasalRateSchedule(dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
         }
 

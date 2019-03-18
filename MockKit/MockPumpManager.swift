@@ -22,6 +22,8 @@ public struct MockPumpManagerState {
     public var bolusEnactmentShouldError: Bool
     public var deliverySuspensionShouldError: Bool
     public var deliveryResumptionShouldError: Bool
+    public var maximumBolus: Double
+    public var maximumBasalRatePerHour: Double
 }
 
 private enum MockPumpManagerError: LocalizedError {
@@ -39,6 +41,7 @@ private enum MockPumpManagerError: LocalizedError {
 }
 
 public final class MockPumpManager: TestingPumpManager {
+
     public static let managerIdentifier = "MockPumpManager"
     public static let localizedTitle = "Simulator"
     private static let device = HKDevice(
@@ -58,6 +61,19 @@ public final class MockPumpManager: TestingPumpManager {
 
     public var pumpReservoirCapacity: Double {
         return MockPumpManager.pumpReservoirCapacity
+    }
+
+
+    public func roundToSupportedBasalRate(unitsPerHour: Double) -> Double {
+        return supportedBasalRates.filter({$0 <= unitsPerHour}).max() ?? 0
+    }
+
+    public func roundToSupportedBolusVolume(units: Double) -> Double {
+        return supportedBolusVolumes.filter({$0 <= units}).max() ?? 0
+    }
+
+    public var supportedBolusVolumes: [Double] {
+        return supportedBasalRates
     }
 
     public var supportedBasalRates: [Double] {
@@ -97,9 +113,6 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
 
-    public var maximumBasalRatePerHour: Double = 5
-    public var maximumBolus: Double = 25
-
     public var pumpManagerDelegate: PumpManagerDelegate?
 
     private var statusObservers = WeakSet<PumpManagerStatusObserver>()
@@ -109,7 +122,7 @@ public final class MockPumpManager: TestingPumpManager {
 
     public init() {
         status = PumpManagerStatus(timeZone: .current, device: MockPumpManager.device, pumpBatteryChargeRemaining: 1, basalDeliveryState: .active, bolusState: .none)
-        state = MockPumpManagerState(reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity, tempBasalEnactmentShouldError: false, bolusEnactmentShouldError: false, deliverySuspensionShouldError: false, deliveryResumptionShouldError: false)
+        state = MockPumpManagerState(reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity, tempBasalEnactmentShouldError: false, bolusEnactmentShouldError: false, deliverySuspensionShouldError: false, deliveryResumptionShouldError: false, maximumBolus: 25.0, maximumBasalRatePerHour: 5.0)
     }
 
     public init?(rawState: RawStateValue) {
@@ -296,6 +309,8 @@ extension MockPumpManagerState: RawRepresentable {
         self.bolusEnactmentShouldError = rawValue["bolusEnactmentShouldError"] as? Bool ?? false
         self.deliverySuspensionShouldError = rawValue["deliverySuspensionShouldError"] as? Bool ?? false
         self.deliveryResumptionShouldError = rawValue["deliveryResumptionShouldError"] as? Bool ?? false
+        self.maximumBolus = rawValue["maximumBolus"] as? Double ?? 25.0
+        self.maximumBasalRatePerHour = rawValue["maximumBasalRatePerHour"] as? Double ?? 5.0
     }
 
     public var rawValue: RawValue {
@@ -319,6 +334,9 @@ extension MockPumpManagerState: RawRepresentable {
             raw["deliveryResumptionShouldError"] = true
         }
 
+        raw["maximumBolus"] = maximumBolus
+        raw["maximumBasalRatePerHour"] = maximumBasalRatePerHour
+
         return raw
     }
 }
@@ -332,6 +350,8 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
         * bolusEnactmentShouldError: \(bolusEnactmentShouldError)
         * deliverySuspensionShouldError: \(deliverySuspensionShouldError)
         * deliveryResumptionShouldError: \(deliveryResumptionShouldError)
+        * maximumBolus: \(maximumBolus)
+        * maximumBasalRatePerHour: \(maximumBasalRatePerHour)
         """
     }
 }

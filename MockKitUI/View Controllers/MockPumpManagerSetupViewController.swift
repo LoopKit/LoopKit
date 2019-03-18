@@ -59,7 +59,8 @@ extension MockPumpManagerSetupViewController: UINavigationControllerDelegate {
         }
 
         // Adjust the appearance for the main setup view controllers only
-        if viewController is SetupTableViewController {
+        if let setupViewController = viewController as? SetupTableViewController {
+            setupViewController.delegate = self
             navigationBar.isTranslucent = false
             navigationBar.shadowImage = UIImage()
         } else {
@@ -68,3 +69,10 @@ extension MockPumpManagerSetupViewController: UINavigationControllerDelegate {
         }
     }
 }
+
+extension MockPumpManagerSetupViewController: SetupTableViewControllerDelegate {
+    public func setupTableViewControllerCancelButtonPressed(_ viewController: SetupTableViewController) {
+        completionDelegate?.completionNotifyingDidComplete(self)
+    }
+}
+

@@ -39,11 +39,11 @@ extension MockPumpManager: PumpManagerUI {
 // MARK: - DeliveryLimitSettingsTableViewControllerSyncSource
 extension MockPumpManager {
     public func syncDeliveryLimitSettings(for viewController: DeliveryLimitSettingsTableViewController, completion: @escaping (DeliveryLimitSettingsResult) -> Void) {
-        completion(.success(maximumBasalRatePerHour: maximumBasalRatePerHour, maximumBolus: maximumBolus))
+        completion(.success(maximumBasalRatePerHour: viewController.maximumBasalRatePerHour ?? 5.0, maximumBolus: viewController.maximumBolus ?? 25.0))
     }
 
     public func syncButtonTitle(for viewController: DeliveryLimitSettingsTableViewController) -> String {
-        return "Continue"
+        return "Save to simulator"
     }
 
     public func syncButtonDetailText(for viewController: DeliveryLimitSettingsTableViewController) -> String? {
@@ -58,11 +58,11 @@ extension MockPumpManager {
 // MARK: - BasalScheduleTableViewControllerSyncSource
 extension MockPumpManager {
     public func syncScheduleValues(for viewController: BasalScheduleTableViewController, completion: @escaping (SyncBasalScheduleResult<Double>) -> Void) {
-        completion(.success(scheduleItems: [RepeatingScheduleValue(startTime: 0, value: 1.0)], timeZone: .current))
+        completion(.success(scheduleItems: viewController.scheduleItems, timeZone: .currentFixed))
     }
 
     public func syncButtonTitle(for viewController: BasalScheduleTableViewController) -> String {
-        return "Continue"
+        return "Save to simulator"
     }
 
     public func syncButtonDetailText(for viewController: BasalScheduleTableViewController) -> String? {
