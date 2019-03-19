@@ -88,7 +88,7 @@ public class DateAndDurationTableViewController: UITableViewController {
 }
 
 extension DateAndDurationTableViewController: DatePickerTableViewCellDelegate {
-    public func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
+    func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
         switch inputMode {
         case .date(_, mode: let mode):
             inputMode = .date(cell.date, mode: mode)
