@@ -38,6 +38,12 @@ public protocol CGMManagerDelegate: class {
     ///
     /// - Parameter manager: The manager instance
     func cgmManagerWantsDeletion(_ manager: CGMManager)
+
+
+    /// Informs the delegate that the manager has updated its state and should be persisted.
+    ///
+    /// - Parameter manager: The manager instance
+    func cgmManagerDidUpdateState(_ manager: CGMManager)
 }
 
 

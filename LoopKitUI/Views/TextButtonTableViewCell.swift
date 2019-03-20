@@ -38,4 +38,12 @@ open class TextButtonTableViewCell: LoadingTableViewCell {
 
         textLabel?.textColor = tintColor
     }
+
+    open override func prepareForReuse() {
+        super.prepareForReuse()
+
+        textLabel?.textAlignment = .natural
+        tintColor = nil
+        isEnabled = true
+    }
 }

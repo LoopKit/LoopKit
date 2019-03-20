@@ -221,6 +221,20 @@ extension GlucoseStore {
         }
     }
 
+
+    /// Deletes glucose samples from both the CoreData cache and from HealthKit.
+    ///
+    /// - Parameters:
+    ///   - cachePredicate: The predicate to use in matching CoreData glucose objects, or `nil` to match all.
+    ///   - healthKitPredicate: The predicate to use in matching HealthKit glucose objects.
+    ///   - completion: The completion handler for the result of the HealthKit object deletion.
+    public func purgeGlucoseSamples(matchingCachePredicate cachePredicate: NSPredicate?, healthKitPredicate: NSPredicate, completion: @escaping (_ success: Bool, _ count: Int, _ error: Error?) -> Void) {
+        dataAccessQueue.async {
+            self.purgeCachedGlucoseObjects(matching: cachePredicate)
+            self.healthStore.deleteObjects(of: self.glucoseType, predicate: healthKitPredicate, withCompletion: completion)
+        }
+    }
+
     /**
      Cleans the in-memory and managed HealthKit caches.
      
@@ -422,7 +436,7 @@ extension GlucoseStore {
         return Date(timeIntervalSinceNow: -cacheLength)
     }
 
-    private func purgeCachedGlucoseObjects(matching predicate: NSPredicate) {
+    private func purgeCachedGlucoseObjects(matching predicate: NSPredicate?) {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
 
         cacheStore.managedObjectContext.performAndWait {

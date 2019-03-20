@@ -299,7 +299,6 @@
 		43F5035721059A8A009FA89A /* ServiceCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F5035521059A8A009FA89A /* ServiceCredential.swift */; };
 		43F5035A21059AF7009FA89A /* AuthenticationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F5035821059AF7009FA89A /* AuthenticationTableViewCell.swift */; };
 		43F5035B21059AF7009FA89A /* AuthenticationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43F5035921059AF7009FA89A /* AuthenticationTableViewCell.xib */; };
-		43F5035D21059B56009FA89A /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F5035C21059B56009FA89A /* UIColor.swift */; };
 		43F503632106C761009FA89A /* ServiceAuthenticationUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */; };
 		43F503642106C78C009FA89A /* ServiceAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F5035421059A8A009FA89A /* ServiceAuthentication.swift */; };
 		43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */; };
@@ -311,6 +310,59 @@
 		7D68A9AE1FE0A3D000522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9B01FE0A3D000522C49 /* Localizable.strings */; };
 		7D68A9B81FE0A3D100522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9BA1FE0A3D100522C49 /* InfoPlist.strings */; };
 		7D68A9C21FE0A3D200522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */; };
+		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
+		892A5D28222EF567008961AB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C145BF992219F10400A977CB /* Comparable.swift */; };
+		892A5D2E222EF69A008961AB /* MockHUDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D2D222EF69A008961AB /* MockHUDProvider.swift */; };
+		892A5D3D222F03CB008961AB /* LoopTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */; };
+		892A5D44222F03CB008961AB /* LoopTestingKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D43222F03CB008961AB /* LoopTestingKitTests.swift */; };
+		892A5D46222F03CB008961AB /* LoopTestingKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 892A5D36222F03CB008961AB /* LoopTestingKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		892A5D49222F03CC008961AB /* LoopTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */; };
+		892A5D4A222F03CC008961AB /* LoopTestingKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		892A5D52222F03DB008961AB /* TestingDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D51222F03DB008961AB /* TestingDeviceManager.swift */; };
+		892A5D54222F03F9008961AB /* TestingPumpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D53222F03F9008961AB /* TestingPumpManager.swift */; };
+		892A5D56222F0414008961AB /* TestingCGMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D55222F0414008961AB /* TestingCGMManager.swift */; };
+		892A5D57222F04E2008961AB /* LoopTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */; };
+		892A5D5C222F1210008961AB /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
+		892A5D61222F6AF4008961AB /* BasalScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D60222F6AF3008961AB /* BasalScheduleTableViewController.swift */; };
+		892A5D64222F6B13008961AB /* BasalScheduleEntryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 892A5D62222F6B13008961AB /* BasalScheduleEntryTableViewCell.xib */; };
+		892A5D65222F6B13008961AB /* BasalScheduleEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D63222F6B13008961AB /* BasalScheduleEntryTableViewCell.swift */; };
+		895695F621AA413B00828067 /* DateAndDurationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */; };
+		8992426521EC138000EA512B /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8992426421EC138000EA512B /* UIColor.swift */; };
+		89CCD4FA21A911510068C3FB /* PercentageTextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F921A911510068C3FB /* PercentageTextFieldTableViewController.swift */; };
+		89D2047B21CC7BD8001238CC /* MockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D2047221CC7BD7001238CC /* MockKit.framework */; };
+		89D2048021CC7BD8001238CC /* MockKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D2047F21CC7BD8001238CC /* MockKitTests.swift */; };
+		89D2048221CC7BD8001238CC /* MockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 89D2047421CC7BD7001238CC /* MockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		89D2048921CC7BF7001238CC /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
+		89D2049F21CC7C13001238CC /* MockKitUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 89D2049121CC7C13001238CC /* MockKitUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		89D204A621CC7C55001238CC /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
+		89D204A721CC7C5C001238CC /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BA7154201E484D0058961E /* LoopKitUI.framework */; };
+		89D204A821CC7C60001238CC /* MockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D2047221CC7BD7001238CC /* MockKit.framework */; };
+		89D204A921CC7C8F001238CC /* MockPumpManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9EC621A4774500351324 /* MockPumpManager.swift */; };
+		89D204AA21CC7C8F001238CC /* MockGlucoseProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F721A8D5500068C3FB /* MockGlucoseProvider.swift */; };
+		89D204AB21CC7C8F001238CC /* MockCGMDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */; };
+		89D204AC21CC7C8F001238CC /* MockCGMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9EC821A4BC2400351324 /* MockCGMManager.swift */; };
+		89D204B221CC7D93001238CC /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DC540C21B75AE7005A1CE0 /* Collection.swift */; };
+		89D204B321CC7DC7001238CC /* Locked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4353D179203E7840007B4ECD /* Locked.swift */; };
+		89D204B421CC7E74001238CC /* MockCGMManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */; };
+		89D204B521CC7E74001238CC /* MockPumpManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */; };
+		89D204B721CC7F34001238CC /* MockPumpManagerSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */; };
+		89D204B821CC7F34001238CC /* MockPumpManagerSettingsSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */; };
+		89D204B921CC7F34001238CC /* MockPumpManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */; };
+		89D204BA21CC7F34001238CC /* MockPumpManagerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */; };
+		89D204BB21CC7F34001238CC /* MockCGMManagerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */; };
+		89D204BC21CC7F34001238CC /* SineCurveParametersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */; };
+		89D204BD21CC7F34001238CC /* RandomOutlierTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892F481A21AB2964004D313D /* RandomOutlierTableViewController.swift */; };
+		89D204BE21CC7F34001238CC /* GlucoseTrendTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D2046B21C83C3F001238CC /* GlucoseTrendTableViewController.swift */; };
+		89D204BF21CC7FFB001238CC /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
+		89D204C121CC8005001238CC /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D0D1D3737420006E908 /* NibLoadable.swift */; };
+		89D204C221CC8008001238CC /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */; };
+		89D204C421CC803C001238CC /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
+		89D204C521CC815E001238CC /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
+		89D204C621CC8165001238CC /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */; };
+		89D204CB21CC8228001238CC /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434C5F9D209938CD00B2FD1A /* NumberFormatter.swift */; };
+		89D204CC21CC8236001238CC /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
+		89D204D221CC837A001238CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89D204D121CC837A001238CC /* Assets.xcassets */; };
+		89E72DE021BDDD6C00F0985C /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89E72DDF21BDDD6C00F0985C /* SwitchTableViewCell.xib */; };
 		C11166B02180FA5C000EEAAB /* LoadingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11166AF2180FA5C000EEAAB /* LoadingTableViewCell.swift */; };
 		C145BF9B2219F1CB00A977CB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C145BF992219F10400A977CB /* Comparable.swift */; };
 		C145BF9C2219F1CC00A977CB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C145BF992219F10400A977CB /* Comparable.swift */; };
@@ -321,9 +373,8 @@
 		C1E31F1222008AA300E88C00 /* SettingsNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E31F1122008AA300E88C00 /* SettingsNavigationViewController.swift */; };
 		C1E31F142200E7D500E88C00 /* HUDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E31F132200E7D500E88C00 /* HUDProvider.swift */; };
 		C1E31F162200E85F00E88C00 /* CompletionNotifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E31F152200E85F00E88C00 /* CompletionNotifying.swift */; };
-		C1EE8F422221DB34001B12A9 /* BasalScheduleEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EE8F412221DB34001B12A9 /* BasalScheduleEntryTableViewCell.swift */; };
-		C1EE8F442221DE11001B12A9 /* BasalScheduleEntryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1EE8F432221DE11001B12A9 /* BasalScheduleEntryTableViewCell.xib */; };
-		C1EE8F462221E761001B12A9 /* BasalScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EE8F452221E761001B12A9 /* BasalScheduleTableViewController.swift */; };
+		C1EE3C20221F4E1A0081AA37 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1EE3C1F221F4E1A0081AA37 /* UIColor.swift */; };
+		C1F8B1E2223C3CC000DD66CF /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
 		C1FB427721754EBB00FAB378 /* ReservoirVolumeHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1FB427621754EBB00FAB378 /* ReservoirVolumeHUDView.xib */; };
 		C1FB427921754FC900FAB378 /* ReservoirVolumeHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FB427821754FC800FAB378 /* ReservoirVolumeHUDView.swift */; };
 		C1FB427B2175503B00FAB378 /* LevelHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FB427A2175503A00FAB378 /* LevelHUDView.swift */; };
@@ -364,6 +415,34 @@
 			remoteGlobalIDString = 43D8FDCA1C728FDF0073BE78;
 			remoteInfo = LoopKit;
 		};
+		892A5D3E222F03CB008961AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 892A5D33222F03CB008961AB;
+			remoteInfo = LoopTestingKit;
+		};
+		892A5D40222F03CB008961AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 430157F61C7EC03B00B64B63;
+			remoteInfo = "LoopKit Example";
+		};
+		892A5D47222F03CB008961AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 892A5D33222F03CB008961AB;
+			remoteInfo = LoopTestingKit;
+		};
+		89D2047C21CC7BD8001238CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 89D2047121CC7BD7001238CC;
+			remoteInfo = MockKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -373,6 +452,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				892A5D4A222F03CC008961AB /* LoopTestingKit.framework in Embed Frameworks */,
 				4301581A1C7ECB5E00B64B63 /* LoopKit.framework in Embed Frameworks */,
 				43BA715C201E484D0058961E /* LoopKitUI.framework in Embed Frameworks */,
 			);
@@ -746,7 +826,6 @@
 		43F5035521059A8A009FA89A /* ServiceCredential.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceCredential.swift; sourceTree = "<group>"; };
 		43F5035821059AF7009FA89A /* AuthenticationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTableViewCell.swift; sourceTree = "<group>"; };
 		43F5035921059AF7009FA89A /* AuthenticationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthenticationTableViewCell.xib; sourceTree = "<group>"; };
-		43F5035C21059B56009FA89A /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAuthenticationUI.swift; sourceTree = "<group>"; };
 		43FADDFA1C89679200DDE013 /* HKQuantitySample+GlucoseKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HKQuantitySample+GlucoseKit.swift"; sourceTree = "<group>"; };
 		43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpManagerUI.swift; sourceTree = "<group>"; };
@@ -769,6 +848,49 @@
 		7D68AABE1FE31BE700522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D68AAC01FE31BE800522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D68AAC61FE31BE900522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEntryTableViewController.swift; sourceTree = "<group>"; };
+		8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineCurveParametersTableViewController.swift; sourceTree = "<group>"; };
+		892A5D2D222EF69A008961AB /* MockHUDProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHUDProvider.swift; sourceTree = "<group>"; };
+		892A5D34222F03CB008961AB /* LoopTestingKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoopTestingKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		892A5D36222F03CB008961AB /* LoopTestingKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoopTestingKit.h; sourceTree = "<group>"; };
+		892A5D37222F03CB008961AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		892A5D3C222F03CB008961AB /* LoopTestingKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoopTestingKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		892A5D43222F03CB008961AB /* LoopTestingKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopTestingKitTests.swift; sourceTree = "<group>"; };
+		892A5D45222F03CB008961AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		892A5D51222F03DB008961AB /* TestingDeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingDeviceManager.swift; sourceTree = "<group>"; };
+		892A5D53222F03F9008961AB /* TestingPumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingPumpManager.swift; sourceTree = "<group>"; };
+		892A5D55222F0414008961AB /* TestingCGMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingCGMManager.swift; sourceTree = "<group>"; };
+		892A5D60222F6AF3008961AB /* BasalScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalScheduleTableViewController.swift; sourceTree = "<group>"; };
+		892A5D62222F6B13008961AB /* BasalScheduleEntryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BasalScheduleEntryTableViewCell.xib; sourceTree = "<group>"; };
+		892A5D63222F6B13008961AB /* BasalScheduleEntryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalScheduleEntryTableViewCell.swift; sourceTree = "<group>"; };
+		892F481A21AB2964004D313D /* RandomOutlierTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomOutlierTableViewController.swift; sourceTree = "<group>"; };
+		895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateAndDurationTableViewController.swift; sourceTree = "<group>"; };
+		8992426421EC138000EA512B /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		89AB9EC621A4774500351324 /* MockPumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManager.swift; sourceTree = "<group>"; };
+		89AB9EC821A4BC2400351324 /* MockCGMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManager.swift; sourceTree = "<group>"; };
+		89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockPumpManager+UI.swift"; sourceTree = "<group>"; };
+		89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSetupViewController.swift; sourceTree = "<group>"; };
+		89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsSetupViewController.swift; sourceTree = "<group>"; };
+		89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MockPumpManager.storyboard; sourceTree = "<group>"; };
+		89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsViewController.swift; sourceTree = "<group>"; };
+		89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMDataSource.swift; sourceTree = "<group>"; };
+		89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockCGMManager+UI.swift"; sourceTree = "<group>"; };
+		89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManagerSettingsViewController.swift; sourceTree = "<group>"; };
+		89CCD4F721A8D5500068C3FB /* MockGlucoseProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockGlucoseProvider.swift; sourceTree = "<group>"; };
+		89CCD4F921A911510068C3FB /* PercentageTextFieldTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentageTextFieldTableViewController.swift; sourceTree = "<group>"; };
+		89D2046B21C83C3F001238CC /* GlucoseTrendTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseTrendTableViewController.swift; sourceTree = "<group>"; };
+		89D2047221CC7BD7001238CC /* MockKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MockKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		89D2047421CC7BD7001238CC /* MockKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MockKit.h; sourceTree = "<group>"; };
+		89D2047521CC7BD7001238CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89D2047A21CC7BD8001238CC /* MockKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MockKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		89D2047F21CC7BD8001238CC /* MockKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKitTests.swift; sourceTree = "<group>"; };
+		89D2048121CC7BD8001238CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89D2048F21CC7C12001238CC /* MockKitUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MockKitUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		89D2049121CC7C13001238CC /* MockKitUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MockKitUI.h; sourceTree = "<group>"; };
+		89D2049221CC7C13001238CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89D204D121CC837A001238CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		89DC540C21B75AE7005A1CE0 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		89E72DDF21BDDD6C00F0985C /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
 		C1110E981EE98CF5009BB852 /* ice_35_min_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_input.json; sourceTree = "<group>"; };
 		C11166AF2180FA5C000EEAAB /* LoadingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingTableViewCell.swift; sourceTree = "<group>"; };
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
@@ -786,9 +908,7 @@
 		C1E31F1122008AA300E88C00 /* SettingsNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNavigationViewController.swift; sourceTree = "<group>"; };
 		C1E31F132200E7D500E88C00 /* HUDProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDProvider.swift; sourceTree = "<group>"; };
 		C1E31F152200E85F00E88C00 /* CompletionNotifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionNotifying.swift; sourceTree = "<group>"; };
-		C1EE8F412221DB34001B12A9 /* BasalScheduleEntryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalScheduleEntryTableViewCell.swift; sourceTree = "<group>"; };
-		C1EE8F432221DE11001B12A9 /* BasalScheduleEntryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BasalScheduleEntryTableViewCell.xib; sourceTree = "<group>"; };
-		C1EE8F452221E761001B12A9 /* BasalScheduleTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalScheduleTableViewController.swift; sourceTree = "<group>"; };
+		C1EE3C1F221F4E1A0081AA37 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		C1FB427621754EBB00FAB378 /* ReservoirVolumeHUDView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReservoirVolumeHUDView.xib; sourceTree = "<group>"; };
 		C1FB427821754FC800FAB378 /* ReservoirVolumeHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirVolumeHUDView.swift; sourceTree = "<group>"; };
 		C1FB427A2175503A00FAB378 /* LevelHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelHUDView.swift; sourceTree = "<group>"; };
@@ -805,6 +925,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				892A5D49222F03CC008961AB /* LoopTestingKit.framework in Frameworks */,
 				4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */,
 				430158191C7ECB5E00B64B63 /* LoopKit.framework in Frameworks */,
 				43BA715B201E484D0058961E /* LoopKitUI.framework in Frameworks */,
@@ -844,6 +965,49 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		892A5D31222F03CB008961AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				892A5D5C222F1210008961AB /* LoopKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		892A5D39222F03CB008961AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				892A5D3D222F03CB008961AB /* LoopTestingKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89D2046F21CC7BD7001238CC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				892A5D57222F04E2008961AB /* LoopTestingKit.framework in Frameworks */,
+				89D204A621CC7C55001238CC /* LoopKit.framework in Frameworks */,
+				89D2048921CC7BF7001238CC /* HealthKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89D2047721CC7BD8001238CC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89D2047B21CC7BD8001238CC /* MockKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89D2048C21CC7C12001238CC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89D204A821CC7C60001238CC /* MockKit.framework in Frameworks */,
+				89D204A721CC7C5C001238CC /* LoopKitUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -851,6 +1015,7 @@
 			isa = PBXGroup;
 			children = (
 				1F5DAB1C2118C95700048054 /* LocalizedString.swift */,
+				4353D179203E7840007B4ECD /* Locked.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -858,6 +1023,7 @@
 		430059211CCDC7A200C861EA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C145BF992219F10400A977CB /* Comparable.swift */,
 				43D8FDEE1C7290350073BE78 /* HKUnit.swift */,
 				434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */,
 				43177D0D1D3737420006E908 /* NibLoadable.swift */,
@@ -869,7 +1035,6 @@
 				4303C4901E2D664200ADEDC8 /* TimeZone.swift */,
 				434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */,
 				43260F6D21C4BF7A00DD6837 /* UUID.swift */,
-				C145BF992219F10400A977CB /* Comparable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -907,7 +1072,7 @@
 			isa = PBXGroup;
 			children = (
 				43F5034C210599CC009FA89A /* AuthenticationViewController.swift */,
-				C1EE8F452221E761001B12A9 /* BasalScheduleTableViewController.swift */,
+				892A5D60222F6AF3008961AB /* BasalScheduleTableViewController.swift */,
 				434FB6491D712158007B9C70 /* CommandResponseViewController.swift */,
 				43D8FE041C7290530073BE78 /* DailyQuantityScheduleTableViewController.swift */,
 				43D8FE051C7290530073BE78 /* DailyValueScheduleTableViewController.swift */,
@@ -917,6 +1082,9 @@
 				43FB60E420DCBA02002B996B /* SetupTableViewController.swift */,
 				43D8FE0C1C7290530073BE78 /* SingleValueScheduleTableViewController.swift */,
 				434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */,
+				89CCD4F921A911510068C3FB /* PercentageTextFieldTableViewController.swift */,
+				8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */,
+				895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */,
 				C1E31F1122008AA300E88C00 /* SettingsNavigationViewController.swift */,
 			);
 			path = "View Controllers";
@@ -958,8 +1126,8 @@
 			children = (
 				43F5035821059AF7009FA89A /* AuthenticationTableViewCell.swift */,
 				43F5035921059AF7009FA89A /* AuthenticationTableViewCell.xib */,
-				C1EE8F412221DB34001B12A9 /* BasalScheduleEntryTableViewCell.swift */,
-				C1EE8F432221DE11001B12A9 /* BasalScheduleEntryTableViewCell.xib */,
+				892A5D63222F6B13008961AB /* BasalScheduleEntryTableViewCell.swift */,
+				892A5D62222F6B13008961AB /* BasalScheduleEntryTableViewCell.xib */,
 				C1FB428221755A9A00FAB378 /* BaseHUDView.swift */,
 				C1FB42802175572A00FAB378 /* BatteryLevelHUDView.swift */,
 				C1FB427E2175570C00FAB378 /* BatteryLevelHUDView.xib */,
@@ -980,12 +1148,13 @@
 				432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */,
 				432CF86820D76B320066B889 /* SetupButton.swift */,
 				432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */,
-				C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */,
 				432CF86C20D76C470066B889 /* SwitchTableViewCell.swift */,
 				4369F093208BA001000E3E45 /* TextButtonTableViewCell.swift */,
 				434FF1F01CF29451000DB779 /* TextFieldTableViewCell.swift */,
 				434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */,
 				43F5034E210599DF009FA89A /* ValidatingIndicatorView.swift */,
+				C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */,
+				89E72DDF21BDDD6C00F0985C /* SwitchTableViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1028,6 +1197,7 @@
 		43BA7155201E484D0058961E /* LoopKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				C1EE3C1F221F4E1A0081AA37 /* UIColor.swift */,
 				43177D091D3732C70006E908 /* Assets.xcassets */,
 				43BA7160201E48910058961E /* CarbKit */,
 				43BA7161201E48EB0058961E /* InsulinKit */,
@@ -1049,7 +1219,6 @@
 				43F5035521059A8A009FA89A /* ServiceCredential.swift */,
 				C1FB428621755B8B00FAB378 /* StateColorPalette.swift */,
 				C1D7366321F78A4D00048CDD /* UIAlertController.swift */,
-				43F5035C21059B56009FA89A /* UIColor.swift */,
 			);
 			path = LoopKitUI;
 			sourceTree = "<group>";
@@ -1101,6 +1270,11 @@
 				4301580F1C7EC03B00B64B63 /* LoopKit ExampleUITests */,
 				43D8FDD91C728FDF0073BE78 /* LoopKitTests */,
 				43BA7155201E484D0058961E /* LoopKitUI */,
+				89D2047321CC7BD7001238CC /* MockKit */,
+				89D2047E21CC7BD8001238CC /* MockKitTests */,
+				89D2049021CC7C13001238CC /* MockKitUI */,
+				892A5D35222F03CB008961AB /* LoopTestingKit */,
+				892A5D42222F03CB008961AB /* LoopTestingKitTests */,
 				43D8FDCC1C728FDF0073BE78 /* Products */,
 				43BA718D202020140058961E /* Frameworks */,
 			);
@@ -1114,6 +1288,11 @@
 				430157F71C7EC03B00B64B63 /* LoopKit Example.app */,
 				4301580C1C7EC03B00B64B63 /* LoopKit ExampleUITests.xctest */,
 				43BA7154201E484D0058961E /* LoopKitUI.framework */,
+				89D2047221CC7BD7001238CC /* MockKit.framework */,
+				89D2047A21CC7BD8001238CC /* MockKitTests.xctest */,
+				89D2048F21CC7C12001238CC /* MockKitUI.framework */,
+				892A5D34222F03CB008961AB /* LoopTestingKit.framework */,
+				892A5D3C222F03CB008961AB /* LoopTestingKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1121,15 +1300,8 @@
 		43D8FDCD1C728FDF0073BE78 /* LoopKit */ = {
 			isa = PBXGroup;
 			children = (
-				43D8FE2B1C72914D0073BE78 /* CarbKit */,
-				437AFF22203BE382008C4892 /* Extensions */,
-				43D8FE701C7293070073BE78 /* GlucoseKit */,
-				43D8FEB21C7294520073BE78 /* InsulinKit */,
-				437874B4202FDC8300A3D8B9 /* Persistence */,
-				7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */,
 				43D8FDCE1C728FDF0073BE78 /* LoopKit.h */,
 				43D8FDD01C728FDF0073BE78 /* Info.plist */,
-				1F5DAB2B2118CE9300048054 /* Localizable.strings */,
 				43D8FDE51C7290340073BE78 /* BasalRateSchedule.swift */,
 				43D8FDE61C7290350073BE78 /* CarbRatioSchedule.swift */,
 				4352A73B20DECF0600CAC200 /* CGMManager.swift */,
@@ -1145,7 +1317,6 @@
 				43D8FDED1C7290350073BE78 /* HealthKitSampleStore.swift */,
 				43B17C88208EEC0B00AC27E9 /* HealthStoreUnitCache.swift */,
 				43F5034A21051FCD009FA89A /* KeychainManager.swift */,
-				4353D179203E7840007B4ECD /* Locked.swift */,
 				43D8FDEF1C7290350073BE78 /* LoopMath.swift */,
 				432CF87220D774220066B889 /* PumpManager.swift */,
 				43FB610620DDF19B002B996B /* PumpManagerError.swift */,
@@ -1154,6 +1325,13 @@
 				43D8FDF31C7290350073BE78 /* SampleValue.swift */,
 				43F5035421059A8A009FA89A /* ServiceAuthentication.swift */,
 				43FB60EA20DDC868002B996B /* SetBolusError.swift */,
+				43D8FE2B1C72914D0073BE78 /* CarbKit */,
+				437AFF22203BE382008C4892 /* Extensions */,
+				43D8FE701C7293070073BE78 /* GlucoseKit */,
+				7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */,
+				43D8FEB21C7294520073BE78 /* InsulinKit */,
+				1F5DAB2B2118CE9300048054 /* Localizable.strings */,
+				437874B4202FDC8300A3D8B9 /* Persistence */,
 				C133FD1621A2A845009B2D20 /* WeakSet.swift */,
 			);
 			path = LoopKit;
@@ -1373,6 +1551,96 @@
 			path = Fixtures;
 			sourceTree = "<group>";
 		};
+		892A5D35222F03CB008961AB /* LoopTestingKit */ = {
+			isa = PBXGroup;
+			children = (
+				892A5D36222F03CB008961AB /* LoopTestingKit.h */,
+				892A5D37222F03CB008961AB /* Info.plist */,
+				892A5D51222F03DB008961AB /* TestingDeviceManager.swift */,
+				892A5D53222F03F9008961AB /* TestingPumpManager.swift */,
+				892A5D55222F0414008961AB /* TestingCGMManager.swift */,
+			);
+			path = LoopTestingKit;
+			sourceTree = "<group>";
+		};
+		892A5D42222F03CB008961AB /* LoopTestingKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				892A5D43222F03CB008961AB /* LoopTestingKitTests.swift */,
+				892A5D45222F03CB008961AB /* Info.plist */,
+			);
+			path = LoopTestingKitTests;
+			sourceTree = "<group>";
+		};
+		8992426321EC137900EA512B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8992426421EC138000EA512B /* UIColor.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		89D2047321CC7BD7001238CC /* MockKit */ = {
+			isa = PBXGroup;
+			children = (
+				89D204AD21CC7D2B001238CC /* Extensions */,
+				89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */,
+				89AB9EC821A4BC2400351324 /* MockCGMManager.swift */,
+				89CCD4F721A8D5500068C3FB /* MockGlucoseProvider.swift */,
+				89AB9EC621A4774500351324 /* MockPumpManager.swift */,
+				89D2047421CC7BD7001238CC /* MockKit.h */,
+				89D2047521CC7BD7001238CC /* Info.plist */,
+			);
+			path = MockKit;
+			sourceTree = "<group>";
+		};
+		89D2047E21CC7BD8001238CC /* MockKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				89D2047F21CC7BD8001238CC /* MockKitTests.swift */,
+				89D2048121CC7BD8001238CC /* Info.plist */,
+			);
+			path = MockKitTests;
+			sourceTree = "<group>";
+		};
+		89D2049021CC7C13001238CC /* MockKitUI */ = {
+			isa = PBXGroup;
+			children = (
+				8992426321EC137900EA512B /* Extensions */,
+				89D204B621CC7E77001238CC /* View Controllers */,
+				89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */,
+				89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */,
+				892A5D2D222EF69A008961AB /* MockHUDProvider.swift */,
+				89D2049121CC7C13001238CC /* MockKitUI.h */,
+				89D2049221CC7C13001238CC /* Info.plist */,
+				89D204D121CC837A001238CC /* Assets.xcassets */,
+			);
+			path = MockKitUI;
+			sourceTree = "<group>";
+		};
+		89D204AD21CC7D2B001238CC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				89DC540C21B75AE7005A1CE0 /* Collection.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		89D204B621CC7E77001238CC /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */,
+				89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */,
+				89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */,
+				89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */,
+				89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */,
+				8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */,
+				892F481A21AB2964004D313D /* RandomOutlierTableViewController.swift */,
+				89D2046B21C83C3F001238CC /* GlucoseTrendTableViewController.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1389,6 +1657,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D8FDCF1C728FDF0073BE78 /* LoopKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		892A5D2F222F03CB008961AB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				892A5D46222F03CB008961AB /* LoopTestingKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89D2046D21CC7BD7001238CC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89D2048221CC7BD8001238CC /* MockKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89D2048A21CC7C12001238CC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89D2049F21CC7C13001238CC /* MockKitUI.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1409,6 +1701,7 @@
 			dependencies = (
 				4301581C1C7ECB5E00B64B63 /* PBXTargetDependency */,
 				43BA715A201E484D0058961E /* PBXTargetDependency */,
+				892A5D48222F03CB008961AB /* PBXTargetDependency */,
 			);
 			name = "LoopKit Example";
 			productName = "LoopKit Example";
@@ -1487,13 +1780,104 @@
 			productReference = 43D8FDD51C728FDF0073BE78 /* LoopKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		892A5D33222F03CB008961AB /* LoopTestingKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 892A5D4B222F03CC008961AB /* Build configuration list for PBXNativeTarget "LoopTestingKit" */;
+			buildPhases = (
+				892A5D2F222F03CB008961AB /* Headers */,
+				892A5D30222F03CB008961AB /* Sources */,
+				892A5D31222F03CB008961AB /* Frameworks */,
+				892A5D32222F03CB008961AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LoopTestingKit;
+			productName = LoopTestingKit;
+			productReference = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		892A5D3B222F03CB008961AB /* LoopTestingKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 892A5D4E222F03CC008961AB /* Build configuration list for PBXNativeTarget "LoopTestingKitTests" */;
+			buildPhases = (
+				892A5D38222F03CB008961AB /* Sources */,
+				892A5D39222F03CB008961AB /* Frameworks */,
+				892A5D3A222F03CB008961AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				892A5D3F222F03CB008961AB /* PBXTargetDependency */,
+				892A5D41222F03CB008961AB /* PBXTargetDependency */,
+			);
+			name = LoopTestingKitTests;
+			productName = LoopTestingKitTests;
+			productReference = 892A5D3C222F03CB008961AB /* LoopTestingKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		89D2047121CC7BD7001238CC /* MockKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89D2048721CC7BD8001238CC /* Build configuration list for PBXNativeTarget "MockKit" */;
+			buildPhases = (
+				89D2046D21CC7BD7001238CC /* Headers */,
+				89D2046E21CC7BD7001238CC /* Sources */,
+				89D2046F21CC7BD7001238CC /* Frameworks */,
+				89D2047021CC7BD7001238CC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MockKit;
+			productName = MockKit;
+			productReference = 89D2047221CC7BD7001238CC /* MockKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		89D2047921CC7BD8001238CC /* MockKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89D2048821CC7BD8001238CC /* Build configuration list for PBXNativeTarget "MockKitTests" */;
+			buildPhases = (
+				89D2047621CC7BD8001238CC /* Sources */,
+				89D2047721CC7BD8001238CC /* Frameworks */,
+				89D2047821CC7BD8001238CC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				89D2047D21CC7BD8001238CC /* PBXTargetDependency */,
+			);
+			name = MockKitTests;
+			productName = MockKitTests;
+			productReference = 89D2047A21CC7BD8001238CC /* MockKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		89D2048E21CC7C12001238CC /* MockKitUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89D204A021CC7C13001238CC /* Build configuration list for PBXNativeTarget "MockKitUI" */;
+			buildPhases = (
+				89D2048A21CC7C12001238CC /* Headers */,
+				89D2048B21CC7C12001238CC /* Sources */,
+				89D2048C21CC7C12001238CC /* Frameworks */,
+				89D2048D21CC7C12001238CC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MockKitUI;
+			productName = MockKitUI;
+			productReference = 89D2048F21CC7C12001238CC /* MockKitUI.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		43D8FDC21C728FDF0073BE78 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "LoopKit Authors";
 				TargetAttributes = {
@@ -1524,6 +1908,28 @@
 						CreatedOnToolsVersion = 7.2.1;
 						LastSwiftMigration = 1000;
 					};
+					892A5D33222F03CB008961AB = {
+						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
+						ProvisioningStyle = Automatic;
+					};
+					892A5D3B222F03CB008961AB = {
+						CreatedOnToolsVersion = 10.1;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 430157F61C7EC03B00B64B63;
+					};
+					89D2047121CC7BD7001238CC = {
+						CreatedOnToolsVersion = 10.0;
+						ProvisioningStyle = Automatic;
+					};
+					89D2047921CC7BD8001238CC = {
+						CreatedOnToolsVersion = 10.0;
+						ProvisioningStyle = Automatic;
+					};
+					89D2048E21CC7C12001238CC = {
+						CreatedOnToolsVersion = 10.0;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 43D8FDC51C728FDF0073BE78 /* Build configuration list for PBXProject "LoopKit" */;
@@ -1552,6 +1958,11 @@
 				43D8FDCA1C728FDF0073BE78 /* LoopKit */,
 				43D8FDD41C728FDF0073BE78 /* LoopKitTests */,
 				43BA7153201E484D0058961E /* LoopKitUI */,
+				89D2047121CC7BD7001238CC /* MockKit */,
+				89D2047921CC7BD8001238CC /* MockKitTests */,
+				89D2048E21CC7C12001238CC /* MockKitUI */,
+				892A5D33222F03CB008961AB /* LoopTestingKit */,
+				892A5D3B222F03CB008961AB /* LoopTestingKitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1583,18 +1994,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				43BA7194202039A90058961E /* GlucoseRangeTableViewCell.xib in Resources */,
+				892A5D64222F6B13008961AB /* BasalScheduleEntryTableViewCell.xib in Resources */,
 				43BA719720203EF30058961E /* CarbKit.storyboard in Resources */,
 				C1FB427721754EBB00FAB378 /* ReservoirVolumeHUDView.xib in Resources */,
 				43BA7173201E492E0058961E /* DateAndDurationTableViewCell.xib in Resources */,
 				43BA7164201E49130058961E /* InsulinKit.storyboard in Resources */,
 				43BA7195202039B00058961E /* GlucoseRangeOverrideTableViewCell.xib in Resources */,
-				C1EE8F442221DE11001B12A9 /* BasalScheduleEntryTableViewCell.xib in Resources */,
 				1FE58796211D12CE004F24ED /* Localizable.strings in Resources */,
 				43BA7193202039A30058961E /* TextFieldTableViewCell.xib in Resources */,
 				C1FB427D217551F200FAB378 /* HUDAssets.xcassets in Resources */,
 				43BA719620203C750058961E /* Assets.xcassets in Resources */,
 				1F5DAB2A2118CE9300048054 /* InfoPlist.strings in Resources */,
 				C1FB427F2175570C00FAB378 /* BatteryLevelHUDView.xib in Resources */,
+				89E72DE021BDDD6C00F0985C /* SwitchTableViewCell.xib in Resources */,
 				43BA7192202039950058961E /* RepeatingScheduleValueTableViewCell.xib in Resources */,
 				43F5035B21059AF7009FA89A /* AuthenticationTableViewCell.xib in Resources */,
 			);
@@ -1707,6 +2119,43 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		892A5D32222F03CB008961AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		892A5D3A222F03CB008961AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89D2047021CC7BD7001238CC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89D2047821CC7BD8001238CC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89D2048D21CC7C12001238CC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89D204D221CC837A001238CC /* Assets.xcassets in Resources */,
+				89D204B921CC7F34001238CC /* MockPumpManager.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1743,13 +2192,16 @@
 			files = (
 				43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */,
 				43BA7182201EE7090058961E /* TextFieldTableViewCell.swift in Sources */,
+				8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */,
 				43F5034D210599CC009FA89A /* AuthenticationViewController.swift in Sources */,
 				C1E31F1222008AA300E88C00 /* SettingsNavigationViewController.swift in Sources */,
 				43F5034F210599DF009FA89A /* ValidatingIndicatorView.swift in Sources */,
 				C1E31F162200E85F00E88C00 /* CompletionNotifying.swift in Sources */,
+				892A5D61222F6AF4008961AB /* BasalScheduleTableViewController.swift in Sources */,
 				43BA718C201EEE5A0058961E /* NSData.swift in Sources */,
 				43F5035A21059AF7009FA89A /* AuthenticationTableViewCell.swift in Sources */,
 				43BA7163201E490D0058961E /* InsulinDeliveryTableViewController.swift in Sources */,
+				C1EE3C20221F4E1A0081AA37 /* UIColor.swift in Sources */,
 				43BA718A201EE8CF0058961E /* NSTimeInterval.swift in Sources */,
 				432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */,
 				43BA7170201E49220058961E /* FoodTypeShortcutCell.swift in Sources */,
@@ -1761,7 +2213,6 @@
 				1F5DAB212118C95700048054 /* LocalizedString.swift in Sources */,
 				43FB60E520DCBA02002B996B /* SetupTableViewController.swift in Sources */,
 				43BA7180201EE7090058961E /* SingleValueScheduleTableViewController.swift in Sources */,
-				43F5035D21059B56009FA89A /* UIColor.swift in Sources */,
 				43BA717E201EE7090058961E /* CommandResponseViewController.swift in Sources */,
 				43BA717A201E4F1D0058961E /* IdentifiableClass.swift in Sources */,
 				43BA7187201EE7090058961E /* GlucoseRangeScheduleTableViewController.swift in Sources */,
@@ -1781,16 +2232,16 @@
 				43BA716F201E49220058961E /* FoodEmojiDataSource.swift in Sources */,
 				C1FB427921754FC900FAB378 /* ReservoirVolumeHUDView.swift in Sources */,
 				432CF86D20D76C470066B889 /* SwitchTableViewCell.swift in Sources */,
-				C1EE8F422221DB34001B12A9 /* BasalScheduleEntryTableViewCell.swift in Sources */,
 				43BA7188201EE85B0058961E /* HKUnit.swift in Sources */,
 				C11166B02180FA5C000EEAAB /* LoadingTableViewCell.swift in Sources */,
-				C1EE8F462221E761001B12A9 /* BasalScheduleTableViewController.swift in Sources */,
+				895695F621AA413B00828067 /* DateAndDurationTableViewController.swift in Sources */,
 				4369F092208B0DFF000E3E45 /* DateAndDurationTableViewCell.swift in Sources */,
 				43BA7189201EE8980058961E /* UITableViewCell.swift in Sources */,
 				43BA7181201EE7090058961E /* RepeatingScheduleValueTableViewCell.swift in Sources */,
 				43BA717C201EE7090058961E /* GlucoseRangeSchedule+UI.swift in Sources */,
 				43BA716E201E49220058961E /* DecimalTextFieldTableViewCell.swift in Sources */,
 				43A8EC3C210CEEA500A81379 /* CGMManagerUI.swift in Sources */,
+				892A5D65222F6B13008961AB /* BasalScheduleEntryTableViewCell.swift in Sources */,
 				C1FB427B2175503B00FAB378 /* LevelHUDView.swift in Sources */,
 				43BA718B201EE93C0058961E /* TimeZone.swift in Sources */,
 				43BA717B201EE6A40058961E /* NibLoadable.swift in Sources */,
@@ -1801,6 +2252,7 @@
 				C1E31F142200E7D500E88C00 /* HUDProvider.swift in Sources */,
 				43BA717D201EE7090058961E /* GlucoseRangeTableViewCell.swift in Sources */,
 				43BA7166201E49220058961E /* CarbAbsorptionInputCell.swift in Sources */,
+				89CCD4FA21A911510068C3FB /* PercentageTextFieldTableViewController.swift in Sources */,
 				C1FB42812175572A00FAB378 /* BatteryLevelHUDView.swift in Sources */,
 				43BA7184201EE7090058961E /* TextFieldTableViewController.swift in Sources */,
 				43BA716A201E49220058961E /* CarbEntryTableViewController.swift in Sources */,
@@ -1944,6 +2396,73 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		892A5D30222F03CB008961AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				892A5D54222F03F9008961AB /* TestingPumpManager.swift in Sources */,
+				892A5D52222F03DB008961AB /* TestingDeviceManager.swift in Sources */,
+				892A5D56222F0414008961AB /* TestingCGMManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		892A5D38222F03CB008961AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				892A5D44222F03CB008961AB /* LoopTestingKitTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89D2046E21CC7BD7001238CC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89D204BF21CC7FFB001238CC /* NSTimeInterval.swift in Sources */,
+				89D204C421CC803C001238CC /* HKUnit.swift in Sources */,
+				89D204B321CC7DC7001238CC /* Locked.swift in Sources */,
+				89D204A921CC7C8F001238CC /* MockPumpManager.swift in Sources */,
+				89D204AA21CC7C8F001238CC /* MockGlucoseProvider.swift in Sources */,
+				89D204AB21CC7C8F001238CC /* MockCGMDataSource.swift in Sources */,
+				89D204B221CC7D93001238CC /* Collection.swift in Sources */,
+				89D204AC21CC7C8F001238CC /* MockCGMManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89D2047621CC7BD8001238CC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89D2048021CC7BD8001238CC /* MockKitTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89D2048B21CC7C12001238CC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				892A5D2E222EF69A008961AB /* MockHUDProvider.swift in Sources */,
+				89D204B721CC7F34001238CC /* MockPumpManagerSetupViewController.swift in Sources */,
+				89D204B421CC7E74001238CC /* MockCGMManager+UI.swift in Sources */,
+				89D204B521CC7E74001238CC /* MockPumpManager+UI.swift in Sources */,
+				89D204C121CC8005001238CC /* NibLoadable.swift in Sources */,
+				89D204BE21CC7F34001238CC /* GlucoseTrendTableViewController.swift in Sources */,
+				89D204C621CC8165001238CC /* UITableViewCell.swift in Sources */,
+				8992426521EC138000EA512B /* UIColor.swift in Sources */,
+				89D204BA21CC7F34001238CC /* MockPumpManagerSettingsViewController.swift in Sources */,
+				89D204BC21CC7F34001238CC /* SineCurveParametersTableViewController.swift in Sources */,
+				C1F8B1E2223C3CC000DD66CF /* TimeZone.swift in Sources */,
+				89D204BD21CC7F34001238CC /* RandomOutlierTableViewController.swift in Sources */,
+				89D204B821CC7F34001238CC /* MockPumpManagerSettingsSetupViewController.swift in Sources */,
+				892A5D28222EF567008961AB /* Comparable.swift in Sources */,
+				89D204C221CC8008001238CC /* IdentifiableClass.swift in Sources */,
+				89D204CB21CC8228001238CC /* NumberFormatter.swift in Sources */,
+				89D204BB21CC7F34001238CC /* MockCGMManagerSettingsViewController.swift in Sources */,
+				89D204C521CC815E001238CC /* NSTimeInterval.swift in Sources */,
+				89D204CC21CC8236001238CC /* LocalizedString.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1966,6 +2485,26 @@
 			isa = PBXTargetDependency;
 			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
 			targetProxy = 43D8FDD71C728FDF0073BE78 /* PBXContainerItemProxy */;
+		};
+		892A5D3F222F03CB008961AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 892A5D33222F03CB008961AB /* LoopTestingKit */;
+			targetProxy = 892A5D3E222F03CB008961AB /* PBXContainerItemProxy */;
+		};
+		892A5D41222F03CB008961AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 430157F61C7EC03B00B64B63 /* LoopKit Example */;
+			targetProxy = 892A5D40222F03CB008961AB /* PBXContainerItemProxy */;
+		};
+		892A5D48222F03CB008961AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 892A5D33222F03CB008961AB /* LoopTestingKit */;
+			targetProxy = 892A5D47222F03CB008961AB /* PBXContainerItemProxy */;
+		};
+		89D2047D21CC7BD8001238CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 89D2047121CC7BD7001238CC /* MockKit */;
+			targetProxy = 89D2047C21CC7BD8001238CC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2480,6 +3019,301 @@
 			};
 			name = Release;
 		};
+		892A5D4C222F03CC008961AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = LoopTestingKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		892A5D4D222F03CC008961AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = LoopTestingKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		892A5D4F222F03CC008961AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = LoopTestingKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoopKit Example.app/LoopKit Example";
+			};
+			name = Debug;
+		};
+		892A5D50222F03CC008961AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = LoopTestingKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoopKit Example.app/LoopKit Example";
+			};
+			name = Release;
+		};
+		89D2048321CC7BD8001238CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = MockKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		89D2048421CC7BD8001238CC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = MockKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		89D2048521CC7BD8001238CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = MockKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		89D2048621CC7BD8001238CC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = MockKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		89D204A121CC7C13001238CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = MockKitUI/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKitUI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		89D204A221CC7C13001238CC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = MockKitUI/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKitUI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2533,6 +3367,51 @@
 			buildConfigurations = (
 				43D8FDE31C728FDF0073BE78 /* Debug */,
 				43D8FDE41C728FDF0073BE78 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		892A5D4B222F03CC008961AB /* Build configuration list for PBXNativeTarget "LoopTestingKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				892A5D4C222F03CC008961AB /* Debug */,
+				892A5D4D222F03CC008961AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		892A5D4E222F03CC008961AB /* Build configuration list for PBXNativeTarget "LoopTestingKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				892A5D4F222F03CC008961AB /* Debug */,
+				892A5D50222F03CC008961AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		89D2048721CC7BD8001238CC /* Build configuration list for PBXNativeTarget "MockKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89D2048321CC7BD8001238CC /* Debug */,
+				89D2048421CC7BD8001238CC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		89D2048821CC7BD8001238CC /* Build configuration list for PBXNativeTarget "MockKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89D2048521CC7BD8001238CC /* Debug */,
+				89D2048621CC7BD8001238CC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		89D204A021CC7C13001238CC /* Build configuration list for PBXNativeTarget "MockKitUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89D204A121CC7C13001238CC /* Debug */,
+				89D204A221CC7C13001238CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
