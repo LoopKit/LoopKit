@@ -20,7 +20,7 @@ public struct PumpManagerStatus: Equatable {
     public enum BolusState: Equatable {
         case none
         case initiating
-        case inProgress(_ progress: Float?)
+        case inProgress(_ dose: DoseEntry)
         case canceling
     }
     

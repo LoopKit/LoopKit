@@ -7,6 +7,7 @@
 //
 
 import Dispatch
+import LoopKit
 
 
 extension Collection {

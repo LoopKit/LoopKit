@@ -89,6 +89,9 @@ public protocol PumpManager: DeviceManager {
     /// If the pump data (reservoir/events) is out of date, it will be fetched, and if successful, trigger a loop
     func assertCurrentPumpData()
 
+    /// Returns a dose estimator for the current bolus, if one is in progress
+    func createBolusProgressReporter(reportingOn dispatchQueue: DispatchQueue) -> DoseProgressReporter?
+
     /// Send a bolus command and handle the result
     ///
     /// - Parameters:
@@ -98,6 +101,13 @@ public protocol PumpManager: DeviceManager {
     ///   - completion: A closure called after the command is complete
     ///   - result: A DoseEntry or an error describing why the command failed
     func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (_ result: PumpManagerResult<DoseEntry>) -> Void)
+
+    /// Cancels the current, in progress, bolus.
+    ///
+    /// - Parameters:
+    ///   - completion: A closure called after the command is complete
+    ///   - result: A DoseEntry containing the actual delivery amount of the canceled bolus, nil if canceled bolus information is not available, or an error describing why the command failed.
+    func cancelBolus(completion: @escaping (_ result: PumpManagerResult<DoseEntry?>) -> Void)
 
     /// Send a temporary basal rate command and handle the result
     ///

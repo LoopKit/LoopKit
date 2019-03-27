@@ -195,7 +195,7 @@ extension GlucoseStore {
         cacheStore.managedObjectContext.performAndWait {
             glucose = values.compactMap {
                 guard self.cacheStore.managedObjectContext.cachedGlucoseObjectsWithSyncIdentifier($0.syncIdentifier, fetchLimit: 1).count == 0 else {
-                    log.default("Skipping adding dose due to existing cached syncIdentifier: %{public}@", $0.syncIdentifier)
+                    log.default("Skipping adding glucose value due to existing cached syncIdentifier: %{public}@", $0.syncIdentifier)
                     return nil
                 }
 
