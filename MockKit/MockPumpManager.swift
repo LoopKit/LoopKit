@@ -143,6 +143,13 @@ public final class MockPumpManager: TestingPumpManager {
         return raw
     }
 
+    public func createBolusProgressReporter(reportingOn dispatchQueue: DispatchQueue) -> DoseProgressReporter? {
+        if case .inProgress(let dose) = status.bolusState {
+            return MockDoseProgressEstimator(reportingQueue: dispatchQueue, dose: dose)
+        }
+        return nil
+    }
+
     public var pumpRecordsBasalProfileStartEvents: Bool {
         return false
     }
@@ -200,7 +207,22 @@ public final class MockPumpManager: TestingPumpManager {
             let bolus = NewPumpEvent.bolus(at: Date(), units: units, deliveryUnitsPerMinute: type(of: self).deliveryUnitsPerMinute)
             pendingPumpEvents.append(bolus)
             willRequest(bolus.dose!)
+            self.status.bolusState = .inProgress(bolus.dose!)
             completion(.success(bolus.dose!))
+        }
+    }
+
+    public func cancelBolus(completion: @escaping (PumpManagerResult<DoseEntry?>) -> Void) {
+        let oldState = self.status.bolusState
+        self.status.bolusState = .canceling
+        suspendDelivery { (error) in
+            if let error = error {
+                self.status.bolusState = oldState
+                completion(.failure(error))
+            } else {
+                self.status.bolusState = .none
+                completion(.success(nil))
+            }
         }
     }
 
