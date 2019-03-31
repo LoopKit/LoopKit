@@ -67,8 +67,8 @@ extension StoredGlucoseSample: Equatable, Hashable, Comparable {
         return lhs.sampleUUID == rhs.sampleUUID
     }
 
-    public var hashValue: Int {
-        return sampleUUID.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(sampleUUID)
     }
 }
 
