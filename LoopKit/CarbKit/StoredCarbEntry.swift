@@ -81,8 +81,8 @@ public struct StoredCarbEntry: CarbEntry {
 
 
 extension StoredCarbEntry: Hashable {
-    public var hashValue: Int {
-        return sampleUUID.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(sampleUUID)
     }
 }
 

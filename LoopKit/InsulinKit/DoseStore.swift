@@ -28,7 +28,7 @@ public protocol DoseStoreDelegate: class {
 
 public extension NSNotification.Name {
     /// Notification posted when data was modifed.
-    public static let DoseStoreValuesDidChange = NSNotification.Name(rawValue: "com.loopkit.DoseStore.ValuesDidChangeNotification")
+    static let DoseStoreValuesDidChange = NSNotification.Name(rawValue: "com.loopkit.DoseStore.ValuesDidChangeNotification")
 }
 
 

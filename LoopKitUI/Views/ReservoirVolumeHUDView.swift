@@ -68,4 +68,10 @@ public final class ReservoirVolumeHUDView: LevelHUDView, NibLoadable {
             accessibilityValue = String(format: LocalizedString("%1$@ units remaining at %2$@", comment: "Accessibility format string for (1: localized volume)(2: time)"), units, time)
         }
     }
+
+    public override func tintColorDidChange() {
+        super.tintColorDidChange()
+
+        volumeLabel.tintColor = tintColor
+    }
 }

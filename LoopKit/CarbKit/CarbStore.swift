@@ -873,7 +873,9 @@ extension CarbStore {
                 "\tStoredCarbEntry(sampleUUID, syncIdentifier, syncVersion, startDate, quantity, foodType, absorptionTime, createdByCurrentApp, externalID, isUploaded)"
             ]
 
-            report.append(self.getCachedCarbEntries().map({(entry: StoredCarbEntry) -> String in
+            let carbEntries = self.getCachedCarbEntries()
+
+            report.append(carbEntries.map({ (entry) -> String in
                 return [
                     "\t",
                     String(describing: entry.sampleUUID),
