@@ -323,9 +323,36 @@ extension Collection where Element == DoseEntry {
         for dose in self {
             switch dose.type {
             case .bolus:
+                // Resume an unterminated suspend
+                if let suspend = lastSuspend {
+                    reconciled.append(DoseEntry(
+                        type: suspend.type,
+                        startDate: suspend.startDate,
+                        endDate: dose.startDate,
+                        value: suspend.value,
+                        unit: suspend.unit,
+                        description: suspend.description ?? dose.description,
+                        syncIdentifier: suspend.syncIdentifier
+                    ))
+                    lastSuspend = nil
+                }
                 reconciled.append(dose)
             case .basal, .tempBasal:
-                if lastSuspend == nil, let last = lastBasal {
+                // Resume an unterminated suspend
+                if let suspend = lastSuspend {
+                    reconciled.append(DoseEntry(
+                        type: suspend.type,
+                        startDate: suspend.startDate,
+                        endDate: dose.startDate,
+                        value: suspend.value,
+                        unit: suspend.unit,
+                        description: suspend.description ?? dose.description,
+                        syncIdentifier: suspend.syncIdentifier
+                    ))
+                    lastSuspend = nil
+                }
+
+                if let last = lastBasal {
                     let endDate = Swift.min(last.endDate, dose.startDate)
 
                     // Ignore 0-duration doses
