@@ -52,7 +52,7 @@ extension PumpManagerStatus: CustomDebugStringConvertible {
         * timeZone: \(timeZone)
         * device: \(device)
         * pumpBatteryChargeRemaining: \(pumpBatteryChargeRemaining as Any)
-        * suspendState: \(basalDeliveryState)
+        * basalDeliveryState: \(basalDeliveryState)
         * bolusState: \(bolusState)
         """
     }
