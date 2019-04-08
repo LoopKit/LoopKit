@@ -288,20 +288,13 @@ extension DoseEntry {
         insulinSensitivity: InsulinSensitivitySchedule,
         basalRateSchedule: BasalRateSchedule
         ) -> [GlucoseEffect] {
-        
-        var values = [GlucoseEffect]()
-        
-        switch type {
-        case .tempBasal:
-            break
-        case .basal, .bolus, .resume, .suspend:
-            return values
+
+        guard case .tempBasal = type else {
+            return []
         }
         
         let netTempBasalDoses = self.annotated(with: basalRateSchedule)
-        values = netTempBasalDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivity)
-        
-        return values
+        return netTempBasalDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivity)
     }
     
 }

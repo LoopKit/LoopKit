@@ -65,10 +65,7 @@ class BasalScheduleEntryTableViewCell: UITableViewCell {
         }
     }
 
-    private lazy var startOfDay: Date = {
-        return Calendar.current.startOfDay(for: Date())
-    }()
-
+    private lazy var startOfDay = Calendar.current.startOfDay(for: Date())
 
     var startTime: TimeInterval = 0 {
         didSet {
