@@ -56,6 +56,17 @@ class BasalScheduleEntryTableViewCell: UITableViewCell {
         }
     }
 
+    public var timeZone: TimeZone! {
+        didSet {
+            dateFormatter.timeZone = timeZone
+            var calendar = Calendar.current
+            calendar.timeZone = timeZone
+            startOfDay = calendar.startOfDay(for: Date())
+        }
+    }
+
+    private lazy var startOfDay = Calendar.current.startOfDay(for: Date())
+
     var startTime: TimeInterval = 0 {
         didSet {
             updateStartTimeSelection()
@@ -88,10 +99,6 @@ class BasalScheduleEntryTableViewCell: UITableViewCell {
             }
         }
     }
-
-    private lazy var startOfDay: Date = {
-        return Calendar.current.startOfDay(for: Date())
-    }()
 
     var isReadOnly = false
 

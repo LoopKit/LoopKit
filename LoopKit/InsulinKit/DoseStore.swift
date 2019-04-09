@@ -28,7 +28,7 @@ public protocol DoseStoreDelegate: class {
 
 public extension NSNotification.Name {
     /// Notification posted when data was modifed.
-    public static let DoseStoreValuesDidChange = NSNotification.Name(rawValue: "com.loopkit.DoseStore.ValuesDidChangeNotification")
+    static let DoseStoreValuesDidChange = NSNotification.Name(rawValue: "com.loopkit.DoseStore.ValuesDidChangeNotification")
 }
 
 
@@ -1217,22 +1217,22 @@ extension DoseStore {
                 return
             }
 
-            do {
-                let doses = try self.getNormalizedReservoirDoseEntries(start: startDate)
-                let result = InsulinValue(
-                    startDate: doses.first?.startDate ?? self.currentDate(),
-                    value: doses.totalDelivery
-                )
+            self.getNormalizedDoseEntries(start: startDate) { (result) in
+                switch result {
+                case .success(let doses):
+                    let result = InsulinValue(
+                        startDate: doses.first?.startDate ?? self.currentDate(),
+                        value: doses.totalDelivery
+                    )
 
-                if doses.count > 0 {
-                    self.totalDeliveryCache = result
+                    if doses.count > 0 {
+                        self.totalDeliveryCache = result
+                    }
+
+                    completion(.success(result))
+                case .failure(let error):
+                    completion(.failure(error))
                 }
-
-                completion(.success(result))
-            } catch let error as DoseStoreError {
-                completion(.failure(error))
-            } catch {
-                assertionFailure()
             }
         }
     }

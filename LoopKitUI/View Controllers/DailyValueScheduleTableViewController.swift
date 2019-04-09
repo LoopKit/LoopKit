@@ -256,7 +256,7 @@ open class DailyValueScheduleTableViewController: UITableViewController, DatePic
 
     // MARK: - DatePickerTableViewCellDelegate
 
-    func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
+    public func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
 
         // Updates the TableView state. Subclasses should update their data model
         if let indexPath = tableView.indexPath(for: cell) {

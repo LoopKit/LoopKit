@@ -7,13 +7,13 @@
 
 import UIKit
 
-class DateAndDurationTableViewCell: DatePickerTableViewCell {
+public class DateAndDurationTableViewCell: DatePickerTableViewCell {
 
-    weak var delegate: DatePickerTableViewCellDelegate?
+    public weak var delegate: DatePickerTableViewCellDelegate?
 
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet public weak var titleLabel: UILabel!
 
-    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet public weak var dateLabel: UILabel!
 
     private lazy var durationFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
@@ -24,16 +24,20 @@ class DateAndDurationTableViewCell: DatePickerTableViewCell {
         return formatter
     }()
 
-    override func updateDateLabel() {
+    public override func updateDateLabel() {
         switch datePicker.datePickerMode {
         case .countDownTimer:
             dateLabel.text = durationFormatter.string(from: duration)
-        case .date, .dateAndTime, .time:
+        case .date:
+            dateLabel.text = DateFormatter.localizedString(from: date, dateStyle: .medium, timeStyle: .none)
+        case .dateAndTime:
             dateLabel.text = DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .short)
+        case .time:
+            dateLabel.text = DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .medium)
         }
     }
 
-    override func dateChanged(_ sender: UIDatePicker) {
+    public override func dateChanged(_ sender: UIDatePicker) {
         super.dateChanged(sender)
 
         delegate?.datePickerTableViewCellDidUpdateDate(self)
