@@ -6,7 +6,16 @@
 //
 
 import Foundation
+import UserNotifications
 
+public protocol DeviceManagerDelegate {
+    func scheduleNotification(for manager: DeviceManager,
+                              identifier: String,
+                              content: UNNotificationContent,
+                              trigger: UNNotificationTrigger?)
+
+    func clearNotification(for manager: DeviceManager, identifier: String)
+}
 
 public protocol DeviceManager: class, CustomDebugStringConvertible {
     typealias RawStateValue = [String: Any]

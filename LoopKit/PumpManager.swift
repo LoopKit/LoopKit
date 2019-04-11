@@ -18,7 +18,7 @@ public protocol PumpManagerStatusObserver: class {
     func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus)
 }
 
-public protocol PumpManagerDelegate: PumpManagerStatusObserver {
+public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObserver {
     func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager)
 
     func pumpManagerShouldProvideBLEHeartbeat(_ pumpManager: PumpManager) -> Bool
