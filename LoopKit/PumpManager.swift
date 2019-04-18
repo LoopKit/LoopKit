@@ -18,7 +18,7 @@ public protocol PumpManagerStatusObserver: class {
     func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus)
 }
 
-public protocol PumpManagerDelegate: PumpManagerStatusObserver {
+public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObserver {
     func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager)
 
     /// Queries the delegate as to whether Loop requires the pump to provide its own periodic scheduling

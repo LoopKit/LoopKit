@@ -363,6 +363,7 @@
 		C145BF9B2219F1CB00A977CB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C145BF992219F10400A977CB /* Comparable.swift */; };
 		C145BF9C2219F1CC00A977CB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C145BF992219F10400A977CB /* Comparable.swift */; };
 		C16C3D3F21A3101700401105 /* WeakSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133FD1621A2A845009B2D20 /* WeakSet.swift */; };
+		C1814B84225B9ED5008D2D8E /* LoopNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */; };
 		C1814B8C226371DF008D2D8E /* WeakSynchronizedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */; };
 		C184FECB219F2E0100CD2722 /* SuspendResumeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */; };
 		C1983058223555ED00681079 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
@@ -908,6 +909,7 @@
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
 		C145BF992219F10400A977CB /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
 		C17F4CB21EE9B6DF005079B1 /* carb_entry_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = carb_entry_input.json; sourceTree = "<group>"; };
+		C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopNotificationCategory.swift; sourceTree = "<group>"; };
 		C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakSynchronizedDelegate.swift; sourceTree = "<group>"; };
 		C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendResumeTableViewCell.swift; sourceTree = "<group>"; };
 		C1ABE38D2245CFCD00570E82 /* UnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
@@ -1333,6 +1335,8 @@
 				43D8FEB21C7294520073BE78 /* InsulinKit */,
 				1F5DAB2B2118CE9300048054 /* Localizable.strings */,
 				437874B4202FDC8300A3D8B9 /* Persistence */,
+				C133FD1621A2A845009B2D20 /* WeakSet.swift */,
+				C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -2195,6 +2199,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1814B84225B9ED5008D2D8E /* LoopNotificationCategory.swift in Sources */,
 				43D8FDFD1C7290350073BE78 /* HKUnit.swift in Sources */,
 				4322B779202FA2790002837D /* NewCarbEntry.swift in Sources */,
 				4322B76E202FA26B0002837D /* GlucoseMath.swift in Sources */,
