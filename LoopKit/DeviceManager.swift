@@ -20,6 +20,10 @@ public protocol DeviceManager: class, CustomDebugStringConvertible {
     /// A title describing this manager
     var localizedTitle: String { get }
 
+    /// The queue on which delegate methods are called
+    /// Setting to nil resets to a default provided by the manager
+    var delegateQueue: DispatchQueue! { get set }
+
     /// Initializes the manager with its previously-saved state
     ///
     /// Return nil if the saved state is invalid to prevent restoration

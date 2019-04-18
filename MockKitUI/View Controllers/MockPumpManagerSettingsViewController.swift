@@ -44,7 +44,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
         tableView.register(SuspendResumeTableViewCell.self, forCellReuseIdentifier: SuspendResumeTableViewCell.className)
 
-        pumpManager.addStatusObserver(self)
+        pumpManager.addStatusObserver(self, queue: .main)
 
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
         self.navigationItem.setRightBarButton(button, animated: false)
@@ -201,8 +201,11 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             }
         case .deletePump:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
-                self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
-                self.done()
+                self.pumpManager.notifyDelegateOfDeactivation {
+                    DispatchQueue.main.async {
+                        self.done()
+                    }
+                }
             })
 
             present(confirmVC, animated: true) {
@@ -236,12 +239,12 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
 }
 
 extension MockPumpManagerSettingsViewController: PumpManagerStatusObserver {
-    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
-        DispatchQueue.main.async {
-            if let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionRow.suspendResume.rawValue, section: Section.actions.rawValue)) as? SuspendResumeTableViewCell
-            {
-                suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
-            }
+    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus) {
+        dispatchPrecondition(condition: .onQueue(.main))
+
+        if let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionRow.suspendResume.rawValue, section: Section.actions.rawValue)) as? SuspendResumeTableViewCell
+        {
+            suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
         }
     }
 }
