@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/LoopKit/LoopKit.svg?branch=master)](https://travis-ci.org/LoopKit/LoopKit)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Join the chat at https://gitter.im/LoopKit/LoopKit](https://badges.gitter.im/LoopKit/Loop.svg)](https://gitter.im/LoopKit/Loop?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![project chat](https://img.shields.io/badge/zulip-join_chat-brightgreen.svg)](https://loop.zulipchat.com)
 
 LoopKit is a set of tools to speed up development of your own closed-loop insulin delivery app. It is agnostic to treatment decisions and input sources.
 
