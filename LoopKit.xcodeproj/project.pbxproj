@@ -248,6 +248,7 @@
 		43BA719720203EF30058961E /* CarbKit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43BA719920203EF30058961E /* CarbKit.storyboard */; };
 		43C9805A212BDEE4003B5D17 /* ice_minus_carb_effect_with_gaps_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43C98059212BDEE4003B5D17 /* ice_minus_carb_effect_with_gaps_output.json */; };
 		43C9805C212D216A003B5D17 /* GlucoseChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C9805B212D216A003B5D17 /* GlucoseChange.swift */; };
+		43CACE0E2247F89100F90AF5 /* WeakSynchronizedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CACE0D2247F89100F90AF5 /* WeakSynchronizedSet.swift */; };
 		43CB51B2211EB1A400DB9B4A /* NSUserActivity+CarbKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CB51B0211EB16C00DB9B4A /* NSUserActivity+CarbKit.swift */; };
 		43CF0B3F2030FD0D002A66DE /* UploadState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CF0B3E2030FD0D002A66DE /* UploadState.swift */; };
 		43D8FDCF1C728FDF0073BE78 /* LoopKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 43D8FDCE1C728FDF0073BE78 /* LoopKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -313,8 +314,6 @@
 		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
 		892A5D28222EF567008961AB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C145BF992219F10400A977CB /* Comparable.swift */; };
 		892A5D2E222EF69A008961AB /* MockHUDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D2D222EF69A008961AB /* MockHUDProvider.swift */; };
-		892A5D3D222F03CB008961AB /* LoopTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */; };
-		892A5D44222F03CB008961AB /* LoopTestingKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D43222F03CB008961AB /* LoopTestingKitTests.swift */; };
 		892A5D46222F03CB008961AB /* LoopTestingKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 892A5D36222F03CB008961AB /* LoopTestingKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		892A5D49222F03CC008961AB /* LoopTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */; };
 		892A5D4A222F03CC008961AB /* LoopTestingKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -329,8 +328,6 @@
 		895695F621AA413B00828067 /* DateAndDurationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */; };
 		8992426521EC138000EA512B /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8992426421EC138000EA512B /* UIColor.swift */; };
 		89CCD4FA21A911510068C3FB /* PercentageTextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F921A911510068C3FB /* PercentageTextFieldTableViewController.swift */; };
-		89D2047B21CC7BD8001238CC /* MockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D2047221CC7BD7001238CC /* MockKit.framework */; };
-		89D2048021CC7BD8001238CC /* MockKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D2047F21CC7BD8001238CC /* MockKitTests.swift */; };
 		89D2048221CC7BD8001238CC /* MockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 89D2047421CC7BD7001238CC /* MockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		89D2048921CC7BF7001238CC /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
 		89D2049F21CC7C13001238CC /* MockKitUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 89D2049121CC7C13001238CC /* MockKitUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -366,6 +363,8 @@
 		C145BF9B2219F1CB00A977CB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C145BF992219F10400A977CB /* Comparable.swift */; };
 		C145BF9C2219F1CC00A977CB /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C145BF992219F10400A977CB /* Comparable.swift */; };
 		C16C3D3F21A3101700401105 /* WeakSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C133FD1621A2A845009B2D20 /* WeakSet.swift */; };
+		C1814B84225B9ED5008D2D8E /* LoopNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */; };
+		C1814B8C226371DF008D2D8E /* WeakSynchronizedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */; };
 		C184FECB219F2E0100CD2722 /* SuspendResumeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */; };
 		C1983058223555ED00681079 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
 		C1ABE39322465D7300570E82 /* UnfairLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1ABE38D2245CFCD00570E82 /* UnfairLock.swift */; };
@@ -411,6 +410,41 @@
 			remoteGlobalIDString = 43BA7153201E484D0058961E;
 			remoteInfo = LoopKitUI;
 		};
+		43CACE0F22483AC500F90AF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 89D2047121CC7BD7001238CC;
+			remoteInfo = MockKit;
+		};
+		43CACE1122483AC500F90AF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 89D2048E21CC7C12001238CC;
+			remoteInfo = MockKitUI;
+		};
+		43CACE1322483B6100F90AF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D8FDCA1C728FDF0073BE78;
+			remoteInfo = LoopKit;
+		};
+		43CACE1522483B6100F90AF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 892A5D33222F03CB008961AB;
+			remoteInfo = LoopTestingKit;
+		};
+		43CACE1722483B7200F90AF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D8FDCA1C728FDF0073BE78;
+			remoteInfo = LoopKit;
+		};
 		43D8FDD71C728FDF0073BE78 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
@@ -418,33 +452,12 @@
 			remoteGlobalIDString = 43D8FDCA1C728FDF0073BE78;
 			remoteInfo = LoopKit;
 		};
-		892A5D3E222F03CB008961AB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 892A5D33222F03CB008961AB;
-			remoteInfo = LoopTestingKit;
-		};
-		892A5D40222F03CB008961AB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 430157F61C7EC03B00B64B63;
-			remoteInfo = "LoopKit Example";
-		};
 		892A5D47222F03CB008961AB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 892A5D33222F03CB008961AB;
 			remoteInfo = LoopTestingKit;
-		};
-		89D2047C21CC7BD8001238CC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 89D2047121CC7BD7001238CC;
-			remoteInfo = MockKit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -705,6 +718,7 @@
 		43C27D921E3C4E7D00613CE1 /* momentum_effect_mixed_provenance_glucose_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = momentum_effect_mixed_provenance_glucose_input.json; sourceTree = "<group>"; };
 		43C98059212BDEE4003B5D17 /* ice_minus_carb_effect_with_gaps_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_minus_carb_effect_with_gaps_output.json; sourceTree = "<group>"; };
 		43C9805B212D216A003B5D17 /* GlucoseChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseChange.swift; sourceTree = "<group>"; };
+		43CACE0D2247F89100F90AF5 /* WeakSynchronizedSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakSynchronizedSet.swift; sourceTree = "<group>"; };
 		43CB51B0211EB16C00DB9B4A /* NSUserActivity+CarbKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSUserActivity+CarbKit.swift"; sourceTree = "<group>"; };
 		43CE7CDF1CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_240min_output.json; sourceTree = "<group>"; };
 		43CE7CE11CA9EA1A003CC1B0 /* iob_from_bolus_120min_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_bolus_120min_output.json; sourceTree = "<group>"; };
@@ -857,9 +871,6 @@
 		892A5D34222F03CB008961AB /* LoopTestingKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoopTestingKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		892A5D36222F03CB008961AB /* LoopTestingKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoopTestingKit.h; sourceTree = "<group>"; };
 		892A5D37222F03CB008961AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		892A5D3C222F03CB008961AB /* LoopTestingKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoopTestingKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		892A5D43222F03CB008961AB /* LoopTestingKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopTestingKitTests.swift; sourceTree = "<group>"; };
-		892A5D45222F03CB008961AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		892A5D51222F03DB008961AB /* TestingDeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingDeviceManager.swift; sourceTree = "<group>"; };
 		892A5D53222F03F9008961AB /* TestingPumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingPumpManager.swift; sourceTree = "<group>"; };
 		892A5D55222F0414008961AB /* TestingCGMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingCGMManager.swift; sourceTree = "<group>"; };
@@ -885,9 +896,6 @@
 		89D2047221CC7BD7001238CC /* MockKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MockKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		89D2047421CC7BD7001238CC /* MockKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MockKit.h; sourceTree = "<group>"; };
 		89D2047521CC7BD7001238CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		89D2047A21CC7BD8001238CC /* MockKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MockKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		89D2047F21CC7BD8001238CC /* MockKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockKitTests.swift; sourceTree = "<group>"; };
-		89D2048121CC7BD8001238CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89D2048F21CC7C12001238CC /* MockKitUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MockKitUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		89D2049121CC7C13001238CC /* MockKitUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MockKitUI.h; sourceTree = "<group>"; };
 		89D2049221CC7C13001238CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -901,6 +909,8 @@
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
 		C145BF992219F10400A977CB /* Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comparable.swift; sourceTree = "<group>"; };
 		C17F4CB21EE9B6DF005079B1 /* carb_entry_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = carb_entry_input.json; sourceTree = "<group>"; };
+		C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopNotificationCategory.swift; sourceTree = "<group>"; };
+		C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakSynchronizedDelegate.swift; sourceTree = "<group>"; };
 		C184FECA219F2E0100CD2722 /* SuspendResumeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendResumeTableViewCell.swift; sourceTree = "<group>"; };
 		C1ABE38D2245CFCD00570E82 /* UnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
 		C1ABE39422465FA100570E82 /* DoseProgressTimerEstimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseProgressTimerEstimator.swift; sourceTree = "<group>"; };
@@ -980,14 +990,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		892A5D39222F03CB008961AB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				892A5D3D222F03CB008961AB /* LoopTestingKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		89D2046F21CC7BD7001238CC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -995,14 +997,6 @@
 				892A5D57222F04E2008961AB /* LoopTestingKit.framework in Frameworks */,
 				89D204A621CC7C55001238CC /* LoopKit.framework in Frameworks */,
 				89D2048921CC7BF7001238CC /* HealthKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		89D2047721CC7BD8001238CC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				89D2047B21CC7BD8001238CC /* MockKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1277,10 +1271,8 @@
 				43D8FDD91C728FDF0073BE78 /* LoopKitTests */,
 				43BA7155201E484D0058961E /* LoopKitUI */,
 				89D2047321CC7BD7001238CC /* MockKit */,
-				89D2047E21CC7BD8001238CC /* MockKitTests */,
 				89D2049021CC7C13001238CC /* MockKitUI */,
 				892A5D35222F03CB008961AB /* LoopTestingKit */,
-				892A5D42222F03CB008961AB /* LoopTestingKitTests */,
 				43D8FDCC1C728FDF0073BE78 /* Products */,
 				43BA718D202020140058961E /* Frameworks */,
 			);
@@ -1295,10 +1287,8 @@
 				4301580C1C7EC03B00B64B63 /* LoopKit ExampleUITests.xctest */,
 				43BA7154201E484D0058961E /* LoopKitUI.framework */,
 				89D2047221CC7BD7001238CC /* MockKit.framework */,
-				89D2047A21CC7BD8001238CC /* MockKitTests.xctest */,
 				89D2048F21CC7C12001238CC /* MockKitUI.framework */,
 				892A5D34222F03CB008961AB /* LoopTestingKit.framework */,
-				892A5D3C222F03CB008961AB /* LoopTestingKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1335,6 +1325,9 @@
 				43F5035421059A8A009FA89A /* ServiceAuthentication.swift */,
 				43FB60EA20DDC868002B996B /* SetBolusError.swift */,
 				C1ABE38D2245CFCD00570E82 /* UnfairLock.swift */,
+				43CACE0D2247F89100F90AF5 /* WeakSynchronizedSet.swift */,
+				C133FD1621A2A845009B2D20 /* WeakSet.swift */,
+				C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */,
 				43D8FE2B1C72914D0073BE78 /* CarbKit */,
 				437AFF22203BE382008C4892 /* Extensions */,
 				43D8FE701C7293070073BE78 /* GlucoseKit */,
@@ -1343,6 +1336,7 @@
 				1F5DAB2B2118CE9300048054 /* Localizable.strings */,
 				437874B4202FDC8300A3D8B9 /* Persistence */,
 				C133FD1621A2A845009B2D20 /* WeakSet.swift */,
+				C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -1573,15 +1567,6 @@
 			path = LoopTestingKit;
 			sourceTree = "<group>";
 		};
-		892A5D42222F03CB008961AB /* LoopTestingKitTests */ = {
-			isa = PBXGroup;
-			children = (
-				892A5D43222F03CB008961AB /* LoopTestingKitTests.swift */,
-				892A5D45222F03CB008961AB /* Info.plist */,
-			);
-			path = LoopTestingKitTests;
-			sourceTree = "<group>";
-		};
 		8992426321EC137900EA512B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1603,15 +1588,6 @@
 				C1F8B1E7223E6D4900DD66CF /* MockDoseProgressEstimator.swift */,
 			);
 			path = MockKit;
-			sourceTree = "<group>";
-		};
-		89D2047E21CC7BD8001238CC /* MockKitTests */ = {
-			isa = PBXGroup;
-			children = (
-				89D2047F21CC7BD8001238CC /* MockKitTests.swift */,
-				89D2048121CC7BD8001238CC /* Info.plist */,
-			);
-			path = MockKitTests;
 			sourceTree = "<group>";
 		};
 		89D2049021CC7C13001238CC /* MockKitUI */ = {
@@ -1713,6 +1689,8 @@
 				4301581C1C7ECB5E00B64B63 /* PBXTargetDependency */,
 				43BA715A201E484D0058961E /* PBXTargetDependency */,
 				892A5D48222F03CB008961AB /* PBXTargetDependency */,
+				43CACE1022483AC500F90AF5 /* PBXTargetDependency */,
+				43CACE1222483AC500F90AF5 /* PBXTargetDependency */,
 			);
 			name = "LoopKit Example";
 			productName = "LoopKit Example";
@@ -1803,30 +1781,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				43CACE1822483B7200F90AF5 /* PBXTargetDependency */,
 			);
 			name = LoopTestingKit;
 			productName = LoopTestingKit;
 			productReference = 892A5D34222F03CB008961AB /* LoopTestingKit.framework */;
 			productType = "com.apple.product-type.framework";
-		};
-		892A5D3B222F03CB008961AB /* LoopTestingKitTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 892A5D4E222F03CC008961AB /* Build configuration list for PBXNativeTarget "LoopTestingKitTests" */;
-			buildPhases = (
-				892A5D38222F03CB008961AB /* Sources */,
-				892A5D39222F03CB008961AB /* Frameworks */,
-				892A5D3A222F03CB008961AB /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				892A5D3F222F03CB008961AB /* PBXTargetDependency */,
-				892A5D41222F03CB008961AB /* PBXTargetDependency */,
-			);
-			name = LoopTestingKitTests;
-			productName = LoopTestingKitTests;
-			productReference = 892A5D3C222F03CB008961AB /* LoopTestingKitTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		89D2047121CC7BD7001238CC /* MockKit */ = {
 			isa = PBXNativeTarget;
@@ -1840,29 +1800,13 @@
 			buildRules = (
 			);
 			dependencies = (
+				43CACE1422483B6100F90AF5 /* PBXTargetDependency */,
+				43CACE1622483B6100F90AF5 /* PBXTargetDependency */,
 			);
 			name = MockKit;
 			productName = MockKit;
 			productReference = 89D2047221CC7BD7001238CC /* MockKit.framework */;
 			productType = "com.apple.product-type.framework";
-		};
-		89D2047921CC7BD8001238CC /* MockKitTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 89D2048821CC7BD8001238CC /* Build configuration list for PBXNativeTarget "MockKitTests" */;
-			buildPhases = (
-				89D2047621CC7BD8001238CC /* Sources */,
-				89D2047721CC7BD8001238CC /* Frameworks */,
-				89D2047821CC7BD8001238CC /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				89D2047D21CC7BD8001238CC /* PBXTargetDependency */,
-			);
-			name = MockKitTests;
-			productName = MockKitTests;
-			productReference = 89D2047A21CC7BD8001238CC /* MockKitTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		89D2048E21CC7C12001238CC /* MockKitUI */ = {
 			isa = PBXNativeTarget;
@@ -1924,16 +1868,7 @@
 						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 					};
-					892A5D3B222F03CB008961AB = {
-						CreatedOnToolsVersion = 10.1;
-						ProvisioningStyle = Automatic;
-						TestTargetID = 430157F61C7EC03B00B64B63;
-					};
 					89D2047121CC7BD7001238CC = {
-						CreatedOnToolsVersion = 10.0;
-						ProvisioningStyle = Automatic;
-					};
-					89D2047921CC7BD8001238CC = {
 						CreatedOnToolsVersion = 10.0;
 						ProvisioningStyle = Automatic;
 					};
@@ -1972,10 +1907,8 @@
 				43D8FDD41C728FDF0073BE78 /* LoopKitTests */,
 				43BA7153201E484D0058961E /* LoopKitUI */,
 				89D2047121CC7BD7001238CC /* MockKit */,
-				89D2047921CC7BD8001238CC /* MockKitTests */,
 				89D2048E21CC7C12001238CC /* MockKitUI */,
 				892A5D33222F03CB008961AB /* LoopTestingKit */,
-				892A5D3B222F03CB008961AB /* LoopTestingKitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -2139,21 +2072,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		892A5D3A222F03CB008961AB /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		89D2047021CC7BD7001238CC /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		89D2047821CC7BD8001238CC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2280,6 +2199,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1814B84225B9ED5008D2D8E /* LoopNotificationCategory.swift in Sources */,
 				43D8FDFD1C7290350073BE78 /* HKUnit.swift in Sources */,
 				4322B779202FA2790002837D /* NewCarbEntry.swift in Sources */,
 				4322B76E202FA26B0002837D /* GlucoseMath.swift in Sources */,
@@ -2354,6 +2274,7 @@
 				43CF0B3F2030FD0D002A66DE /* UploadState.swift in Sources */,
 				433BC7AD20538FCA000B1200 /* StoredGlucoseSample.swift in Sources */,
 				43D8FDF91C7290350073BE78 /* GlucoseEffect.swift in Sources */,
+				43CACE0E2247F89100F90AF5 /* WeakSynchronizedSet.swift in Sources */,
 				43D8FDFE1C7290350073BE78 /* LoopMath.swift in Sources */,
 				43D8FDFF1C7290350073BE78 /* Date.swift in Sources */,
 				43C9805C212D216A003B5D17 /* GlucoseChange.swift in Sources */,
@@ -2373,6 +2294,7 @@
 				43FB60EB20DDC868002B996B /* SetBolusError.swift in Sources */,
 				4353D17A203E7840007B4ECD /* Locked.swift in Sources */,
 				4322B770202FA26F0002837D /* GlucoseStore.swift in Sources */,
+				C1814B8C226371DF008D2D8E /* WeakSynchronizedDelegate.swift in Sources */,
 				4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */,
 				4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */,
 				43AF1FB21C926CDD00EA2F3D /* HKQuantity.swift in Sources */,
@@ -2422,14 +2344,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		892A5D38222F03CB008961AB /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				892A5D44222F03CB008961AB /* LoopTestingKitTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		89D2046E21CC7BD7001238CC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2442,14 +2356,6 @@
 				89D204AB21CC7C8F001238CC /* MockCGMDataSource.swift in Sources */,
 				89D204B221CC7D93001238CC /* Collection.swift in Sources */,
 				89D204AC21CC7C8F001238CC /* MockCGMManager.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		89D2047621CC7BD8001238CC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				89D2048021CC7BD8001238CC /* MockKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2497,30 +2403,40 @@
 			target = 43BA7153201E484D0058961E /* LoopKitUI */;
 			targetProxy = 43BA7159201E484D0058961E /* PBXContainerItemProxy */;
 		};
+		43CACE1022483AC500F90AF5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 89D2047121CC7BD7001238CC /* MockKit */;
+			targetProxy = 43CACE0F22483AC500F90AF5 /* PBXContainerItemProxy */;
+		};
+		43CACE1222483AC500F90AF5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 89D2048E21CC7C12001238CC /* MockKitUI */;
+			targetProxy = 43CACE1122483AC500F90AF5 /* PBXContainerItemProxy */;
+		};
+		43CACE1422483B6100F90AF5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
+			targetProxy = 43CACE1322483B6100F90AF5 /* PBXContainerItemProxy */;
+		};
+		43CACE1622483B6100F90AF5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 892A5D33222F03CB008961AB /* LoopTestingKit */;
+			targetProxy = 43CACE1522483B6100F90AF5 /* PBXContainerItemProxy */;
+		};
+		43CACE1822483B7200F90AF5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
+			targetProxy = 43CACE1722483B7200F90AF5 /* PBXContainerItemProxy */;
+		};
 		43D8FDD81C728FDF0073BE78 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
 			targetProxy = 43D8FDD71C728FDF0073BE78 /* PBXContainerItemProxy */;
 		};
-		892A5D3F222F03CB008961AB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 892A5D33222F03CB008961AB /* LoopTestingKit */;
-			targetProxy = 892A5D3E222F03CB008961AB /* PBXContainerItemProxy */;
-		};
-		892A5D41222F03CB008961AB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 430157F61C7EC03B00B64B63 /* LoopKit Example */;
-			targetProxy = 892A5D40222F03CB008961AB /* PBXContainerItemProxy */;
-		};
 		892A5D48222F03CB008961AB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 892A5D33222F03CB008961AB /* LoopTestingKit */;
 			targetProxy = 892A5D47222F03CB008961AB /* PBXContainerItemProxy */;
-		};
-		89D2047D21CC7BD8001238CC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 89D2047121CC7BD7001238CC /* MockKit */;
-			targetProxy = 89D2047C21CC7BD8001238CC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3106,58 +3022,6 @@
 			};
 			name = Release;
 		};
-		892A5D4F222F03CC008961AB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = LoopTestingKitTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKitTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoopKit Example.app/LoopKit Example";
-			};
-			name = Debug;
-		};
-		892A5D50222F03CC008961AB /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = LoopTestingKitTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKitTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoopKit Example.app/LoopKit Example";
-			};
-			name = Release;
-		};
 		89D2048321CC7BD8001238CC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3217,56 +3081,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKit;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		89D2048521CC7BD8001238CC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = MockKitTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKitTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		89D2048621CC7BD8001238CC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = MockKitTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKitTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3402,29 +3216,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		892A5D4E222F03CC008961AB /* Build configuration list for PBXNativeTarget "LoopTestingKitTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				892A5D4F222F03CC008961AB /* Debug */,
-				892A5D50222F03CC008961AB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		89D2048721CC7BD8001238CC /* Build configuration list for PBXNativeTarget "MockKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				89D2048321CC7BD8001238CC /* Debug */,
 				89D2048421CC7BD8001238CC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		89D2048821CC7BD8001238CC /* Build configuration list for PBXNativeTarget "MockKitTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				89D2048521CC7BD8001238CC /* Debug */,
-				89D2048621CC7BD8001238CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

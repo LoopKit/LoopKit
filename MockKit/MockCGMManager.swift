@@ -27,7 +27,9 @@ public final class MockCGMManager: TestingCGMManager {
 
     public var mockSensorState: MockCGMState {
         didSet {
-            cgmManagerDelegate?.cgmManagerDidUpdateState(self)
+            delegate.notify { (delegate) in
+                delegate?.cgmManagerDidUpdateState(self)
+            }
         }
     }
 
@@ -43,11 +45,31 @@ public final class MockCGMManager: TestingCGMManager {
         return testingDevice
     }
 
-    public var cgmManagerDelegate: CGMManagerDelegate?
+    public weak var cgmManagerDelegate: CGMManagerDelegate? {
+        get {
+            return delegate.delegate
+        }
+        set {
+            delegate.delegate = newValue
+        }
+    }
+
+    public var delegateQueue: DispatchQueue! {
+        get {
+            return delegate.queue
+        }
+        set {
+            delegate.queue = newValue
+        }
+    }
+
+    private let delegate = WeakSynchronizedDelegate<CGMManagerDelegate>()
 
     public var dataSource: MockCGMDataSource {
         didSet {
-            cgmManagerDelegate?.cgmManagerDidUpdateState(self)
+            delegate.notify { (delegate) in
+                delegate?.cgmManagerDidUpdateState(self)
+            }
         }
     }
 
@@ -97,7 +119,9 @@ public final class MockCGMManager: TestingCGMManager {
     public func backfillData(datingBack duration: TimeInterval) {
         let now = Date()
         dataSource.backfillData(from: DateInterval(start: now.addingTimeInterval(-duration), end: now)) { result in
-            self.cgmManagerDelegate?.cgmManager(self, didUpdateWith: result)
+            self.delegate.notify { delegate in
+                delegate?.cgmManager(self, didUpdateWith: result)
+            }
         }
     }
     
@@ -105,7 +129,9 @@ public final class MockCGMManager: TestingCGMManager {
         glucoseUpdateTimer = Timer.scheduledTimer(withTimeInterval: dataSource.dataPointFrequency, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             self.dataSource.fetchNewData { result in
-                self.cgmManagerDelegate?.cgmManager(self, didUpdateWith: result)
+                self.delegate.notify { delegate in
+                    delegate?.cgmManager(self, didUpdateWith: result)
+                }
             }
         }
     }
