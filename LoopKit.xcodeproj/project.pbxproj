@@ -459,6 +459,27 @@
 			remoteGlobalIDString = 892A5D33222F03CB008961AB;
 			remoteInfo = LoopTestingKit;
 		};
+		A9E6757A22713C3F00E25293 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43BA7153201E484D0058961E;
+			remoteInfo = LoopKitUI;
+		};
+		A9E6757C22713C3F00E25293 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 89D2047121CC7BD7001238CC;
+			remoteInfo = MockKit;
+		};
+		A9E6757E22713C5300E25293 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D8FDCA1C728FDF0073BE78;
+			remoteInfo = LoopKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1727,6 +1748,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A9E6757F22713C5300E25293 /* PBXTargetDependency */,
 			);
 			name = LoopKitUI;
 			productName = LoopKitUI;
@@ -1820,6 +1842,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				A9E6757D22713C3F00E25293 /* PBXTargetDependency */,
+				A9E6757B22713C3F00E25293 /* PBXTargetDependency */,
 			);
 			name = MockKitUI;
 			productName = MockKitUI;
@@ -2437,6 +2461,21 @@
 			isa = PBXTargetDependency;
 			target = 892A5D33222F03CB008961AB /* LoopTestingKit */;
 			targetProxy = 892A5D47222F03CB008961AB /* PBXContainerItemProxy */;
+		};
+		A9E6757B22713C3F00E25293 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43BA7153201E484D0058961E /* LoopKitUI */;
+			targetProxy = A9E6757A22713C3F00E25293 /* PBXContainerItemProxy */;
+		};
+		A9E6757D22713C3F00E25293 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 89D2047121CC7BD7001238CC /* MockKit */;
+			targetProxy = A9E6757C22713C3F00E25293 /* PBXContainerItemProxy */;
+		};
+		A9E6757F22713C5300E25293 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
+			targetProxy = A9E6757E22713C5300E25293 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
