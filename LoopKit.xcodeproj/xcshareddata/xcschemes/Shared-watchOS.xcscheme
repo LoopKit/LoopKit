@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A9E6758022713F4700E25293"
                BuildableName = "LoopKit.framework"
-               BlueprintName = "LoopKit watchOS"
+               BlueprintName = "LoopKit-watchOS"
                ReferencedContainer = "container:LoopKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,7 +47,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A9E6758022713F4700E25293"
             BuildableName = "LoopKit.framework"
-            BlueprintName = "LoopKit watchOS"
+            BlueprintName = "LoopKit-watchOS"
             ReferencedContainer = "container:LoopKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -65,7 +65,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A9E6758022713F4700E25293"
             BuildableName = "LoopKit.framework"
-            BlueprintName = "LoopKit watchOS"
+            BlueprintName = "LoopKit-watchOS"
             ReferencedContainer = "container:LoopKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

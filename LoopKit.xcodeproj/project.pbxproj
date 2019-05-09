@@ -1976,9 +1976,9 @@
 			productReference = 89D2048F21CC7C12001238CC /* MockKitUI.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		A9E6758022713F4700E25293 /* LoopKit watchOS */ = {
+		A9E6758022713F4700E25293 /* LoopKit-watchOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A9E675ED22713F4700E25293 /* Build configuration list for PBXNativeTarget "LoopKit watchOS" */;
+			buildConfigurationList = A9E675ED22713F4700E25293 /* Build configuration list for PBXNativeTarget "LoopKit-watchOS" */;
 			buildPhases = (
 				A9E6758122713F4700E25293 /* Sources */,
 				A9E675E522713F4700E25293 /* Frameworks */,
@@ -1989,7 +1989,7 @@
 			);
 			dependencies = (
 			);
-			name = "LoopKit watchOS";
+			name = "LoopKit-watchOS";
 			productName = LoopKit;
 			productReference = A9E675F022713F4700E25293 /* LoopKit.framework */;
 			productType = "com.apple.product-type.framework";
@@ -2072,7 +2072,7 @@
 				430157F61C7EC03B00B64B63 /* LoopKit Example */,
 				4301580B1C7EC03B00B64B63 /* LoopKit ExampleUITests */,
 				43D8FDCA1C728FDF0073BE78 /* LoopKit */,
-				A9E6758022713F4700E25293 /* LoopKit watchOS */,
+				A9E6758022713F4700E25293 /* LoopKit-watchOS */,
 				43D8FDD41C728FDF0073BE78 /* LoopKitTests */,
 				43BA7153201E484D0058961E /* LoopKitUI */,
 				89D2047121CC7BD7001238CC /* MockKit */,
@@ -3575,7 +3575,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A9E675ED22713F4700E25293 /* Build configuration list for PBXNativeTarget "LoopKit watchOS" */ = {
+		A9E675ED22713F4700E25293 /* Build configuration list for PBXNativeTarget "LoopKit-watchOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A9E675EE22713F4700E25293 /* Debug */,
