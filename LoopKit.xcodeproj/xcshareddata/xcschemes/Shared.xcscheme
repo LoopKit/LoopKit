@@ -84,6 +84,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "43D8FDD41C728FDF0073BE78"
+               BuildableName = "LoopKitTests.xctest"
+               BlueprintName = "LoopKitTests"
+               ReferencedContainer = "container:LoopKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4301580B1C7EC03B00B64B63"
+               BuildableName = "LoopKit ExampleUITests.xctest"
+               BlueprintName = "LoopKit ExampleUITests"
+               ReferencedContainer = "container:LoopKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
