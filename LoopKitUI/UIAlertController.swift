@@ -56,17 +56,12 @@ extension UIAlertController {
         self.init(title: title ?? errorTitle, message: message, preferredStyle: .alert)
 
         let action = UIAlertAction(
-            title: LocalizedString("com.loudnate.LoopKit.errorAlertActionTitle", value: "OK", comment: "The title of the action used to dismiss an error alert"),
-            style: .default,
-            handler: nil
-        )
-
+            title: LocalizedString("com.loudnate.LoopKit.errorAlertActionTitle", value: "OK", comment: "The title of the action used to dismiss an error alert"), style: .default)
         addAction(action)
         self.preferredAction = action
 
         for action in actions {
             addAction(action)
         }
-
     }
 }
