@@ -710,7 +710,7 @@ extension CarbStore {
     ///   - result: The carbs on-board value
     public func carbsOnBoard(at date: Date, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping (_ result: CarbStoreResult<CarbValue>) -> Void) {
         getCarbsOnBoardValues(start: date.addingTimeInterval(-delta), end: date, effectVelocities: effectVelocities) { (values) in
-            guard let value = values.closestPriorToDate(date) else {
+            guard let value = values.closestPrior(to: date) else {
                 completion(.failure(.noData))
                 return
             }

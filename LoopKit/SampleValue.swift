@@ -36,18 +36,39 @@ public extension Sequence where Element: TimelineValue {
 
      - returns: The closest element, if any exist before the specified date
      */
-    func closestPriorToDate(_ date: Date) -> Iterator.Element? {
-        var closestElement: Iterator.Element?
+    func closestPrior(to date: Date) -> Iterator.Element? {
+        return elementsAdjacent(to: date).before
+    }
+
+    /// Returns the elements immediately before and after the specified date
+    ///
+    /// - Parameter date: The date to use in the search
+    /// - Returns: The closest elements, if found
+    func elementsAdjacent(to date: Date) -> (before: Iterator.Element?, after: Iterator.Element?) {
+        var before: Iterator.Element?
+        var after: Iterator.Element?
 
         for value in self {
             if value.startDate <= date {
-                closestElement = value
+                before = value
             } else {
+                after = value
                 break
             }
         }
 
-        return closestElement
+        return (before, after)
+    }
+
+    /// Returns all elements inmmediately adjacent to the specified date
+    ///
+    /// Use Sequence.elementsAdjacent(to:) if specific before/after references are necessary
+    ///
+    /// - Parameter date: The date to use in the search
+    /// - Returns: The closest elements, if found
+    func allElementsAdjacent(to date: Date) -> [Iterator.Element] {
+        let (before, after) = elementsAdjacent(to: date)
+        return [before, after].compactMap({ $0 })
     }
 
     /**

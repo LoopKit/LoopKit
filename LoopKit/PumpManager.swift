@@ -165,11 +165,11 @@ public protocol PumpManager: DeviceManager {
 
 public extension PumpManager {
     func roundToSupportedBasalRate(unitsPerHour: Double) -> Double {
-        return supportedBasalRates.filter({$0 <= unitsPerHour}).max()!
+        return supportedBasalRates.filter({$0 <= unitsPerHour}).max() ?? 0
     }
 
     func roundToSupportedBolusVolume(units: Double) -> Double {
-        return supportedBolusVolumes.filter({$0 <= units}).max()!
+        return supportedBolusVolumes.filter({$0 <= units}).max() ?? 0
     }
 
     /// Convenience wrapper for notifying the delegate of deactivation on the delegate queue

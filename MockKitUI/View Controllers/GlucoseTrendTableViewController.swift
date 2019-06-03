@@ -27,7 +27,7 @@ final class GlucoseTrendTableViewController: RadioSelectionTableViewController {
         }
         set {
             if let newValue = newValue {
-                selectedIndex = GlucoseTrend.allCases.index(of: newValue)
+                selectedIndex = GlucoseTrend.allCases.firstIndex(of: newValue)
             } else {
                 selectedIndex = nil
             }

@@ -34,6 +34,8 @@ public class DateAndDurationTableViewCell: DatePickerTableViewCell {
             dateLabel.text = DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .short)
         case .time:
             dateLabel.text = DateFormatter.localizedString(from: date, dateStyle: .none, timeStyle: .medium)
+        @unknown default:
+            break // Do nothing
         }
     }
 

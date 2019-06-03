@@ -399,6 +399,7 @@ extension DoseStore {
         }
 
         self.areReservoirValuesValid = false
+        self.lastStoredReservoirValue = nil
         return []
     }
 
@@ -1126,16 +1127,21 @@ extension DoseStore {
     ///   - completion: A closure called once the value has been retrieved
     ///   - result: The insulin on-board value
     public func insulinOnBoard(at date: Date, completion: @escaping (_ result: DoseStoreResult<InsulinValue>) -> Void) {
-        getInsulinOnBoardValues(start: date.addingTimeInterval(TimeInterval(minutes: -5)), end: date) { (result) -> Void in
+        getInsulinOnBoardValues(start: date.addingTimeInterval(.minutes(-5)), end: date.addingTimeInterval(.minutes(5))) { (result) -> Void in
             switch result {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let values):
-                guard let value = values.closestPriorToDate(date) else {
+                let closest = values.allElementsAdjacent(to: date)
+
+                // Return the larger of the two bounding values, for the scenario when a bolus
+                // was scheduled between the two values; we want to return the later, larger value
+                guard let maxValue = closest.max(by: { return $0.value < $1.value }) else {
                     completion(.failure(.fetchError(description: "No values found", recoverySuggestion: "Ensure insulin data exists for the specified date")))
                     return
                 }
-                completion(.success(value))
+
+                completion(.success(maxValue))
             }
         }
     }
