@@ -1118,7 +1118,7 @@ extension DoseStore {
         }
     }
 
-    /// Retrieves the single insulin on-board value occuring just prior to the specified date
+    /// Retrieves the maximum insulin on-board value from the two timeline values nearest to the specified date
     ///
     /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
     ///
