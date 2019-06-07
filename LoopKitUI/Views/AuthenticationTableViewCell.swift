@@ -90,7 +90,7 @@ class CredentialOptionPicker: NSObject, UIPickerViewDataSource, UIPickerViewDele
         set {
             let index: Int
 
-            if let value = newValue, let optionIndex = options.index(where: { $0.value == value }) {
+            if let value = newValue, let optionIndex = options.firstIndex(where: { $0.value == value }) {
                 index = optionIndex
             } else {
                 index = 0

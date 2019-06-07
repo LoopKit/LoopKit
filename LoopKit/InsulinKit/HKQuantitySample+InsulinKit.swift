@@ -105,6 +105,8 @@ extension HKQuantitySample {
             }
         case .bolus:
             type = .bolus
+        @unknown default:
+            return nil
         }
 
         return DoseEntry(

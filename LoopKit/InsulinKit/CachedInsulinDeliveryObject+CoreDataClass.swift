@@ -86,6 +86,8 @@ extension CachedInsulinDeliveryObject {
             }
         case .bolus:
             type = .bolus
+        @unknown default:
+            fatalError("CachedInsulinDeliveryObject has unexpected reason value: \(String(describing: reason))")
         }
 
         return DoseEntry(
