@@ -327,6 +327,18 @@
 		892A5D65222F6B13008961AB /* BasalScheduleEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D63222F6B13008961AB /* BasalScheduleEntryTableViewCell.swift */; };
 		895695F621AA413B00828067 /* DateAndDurationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895695F521AA413B00828067 /* DateAndDurationTableViewController.swift */; };
 		8992426521EC138000EA512B /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8992426421EC138000EA512B /* UIColor.swift */; };
+		89ADE129226BDB280067222B /* TestingScenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE128226BDB280067222B /* TestingScenario.swift */; };
+		89ADE12B226BDB730067222B /* DateRelativeCarbEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE12A226BDB730067222B /* DateRelativeCarbEntry.swift */; };
+		89ADE12D226BDD190067222B /* DateRelativeBasalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE12C226BDD190067222B /* DateRelativeBasalEntry.swift */; };
+		89ADE12F226BDED40067222B /* DateRelativeBolusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE12E226BDED40067222B /* DateRelativeBolusEntry.swift */; };
+		89ADE132226BE0590067222B /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
+		89ADE134226BF0490067222B /* TestingScenarioInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE133226BF0490067222B /* TestingScenarioInstance.swift */; };
+		89ADE136226BF0BE0067222B /* DateRelativeGlucoseSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE135226BF0BE0067222B /* DateRelativeGlucoseSample.swift */; };
+		89ADE138226BF51D0067222B /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FB64B1D712449007B9C70 /* NSData.swift */; };
+		89ADE139226BF51E0067222B /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FB64B1D712449007B9C70 /* NSData.swift */; };
+		89CA2B35226D1624004D9350 /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B33226D15E0004D9350 /* MutableCollection.swift */; };
+		89CA2B36226D1627004D9350 /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B33226D15E0004D9350 /* MutableCollection.swift */; };
+		89CA2B38226D4456004D9350 /* DateRelativeQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B37226D4456004D9350 /* DateRelativeQuantity.swift */; };
 		89CCD4FA21A911510068C3FB /* PercentageTextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F921A911510068C3FB /* PercentageTextFieldTableViewController.swift */; };
 		89D2048221CC7BD8001238CC /* MockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 89D2047421CC7BD7001238CC /* MockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		89D2048921CC7BF7001238CC /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
@@ -1012,6 +1024,14 @@
 		89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsSetupViewController.swift; sourceTree = "<group>"; };
 		89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MockPumpManager.storyboard; sourceTree = "<group>"; };
 		89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsViewController.swift; sourceTree = "<group>"; };
+		89ADE128226BDB280067222B /* TestingScenario.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingScenario.swift; sourceTree = "<group>"; };
+		89ADE12A226BDB730067222B /* DateRelativeCarbEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelativeCarbEntry.swift; sourceTree = "<group>"; };
+		89ADE12C226BDD190067222B /* DateRelativeBasalEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelativeBasalEntry.swift; sourceTree = "<group>"; };
+		89ADE12E226BDED40067222B /* DateRelativeBolusEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelativeBolusEntry.swift; sourceTree = "<group>"; };
+		89ADE133226BF0490067222B /* TestingScenarioInstance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingScenarioInstance.swift; sourceTree = "<group>"; };
+		89ADE135226BF0BE0067222B /* DateRelativeGlucoseSample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateRelativeGlucoseSample.swift; sourceTree = "<group>"; };
+		89CA2B33226D15E0004D9350 /* MutableCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableCollection.swift; sourceTree = "<group>"; };
+		89CA2B37226D4456004D9350 /* DateRelativeQuantity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelativeQuantity.swift; sourceTree = "<group>"; };
 		89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMDataSource.swift; sourceTree = "<group>"; };
 		89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockCGMManager+UI.swift"; sourceTree = "<group>"; };
 		89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManagerSettingsViewController.swift; sourceTree = "<group>"; };
@@ -1163,6 +1183,7 @@
 				C145BF992219F10400A977CB /* Comparable.swift */,
 				43D8FDEE1C7290350073BE78 /* HKUnit.swift */,
 				434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */,
+				89CA2B33226D15E0004D9350 /* MutableCollection.swift */,
 				43177D0D1D3737420006E908 /* NibLoadable.swift */,
 				434FB64B1D712449007B9C70 /* NSData.swift */,
 				43D8FDF11C7290350073BE78 /* NSDateFormatter.swift */,
@@ -1697,11 +1718,18 @@
 		892A5D35222F03CB008961AB /* LoopTestingKit */ = {
 			isa = PBXGroup;
 			children = (
-				892A5D36222F03CB008961AB /* LoopTestingKit.h */,
+				89ADE12C226BDD190067222B /* DateRelativeBasalEntry.swift */,
+				89ADE12E226BDED40067222B /* DateRelativeBolusEntry.swift */,
+				89ADE12A226BDB730067222B /* DateRelativeCarbEntry.swift */,
+				89ADE135226BF0BE0067222B /* DateRelativeGlucoseSample.swift */,
+				89CA2B37226D4456004D9350 /* DateRelativeQuantity.swift */,
 				892A5D37222F03CB008961AB /* Info.plist */,
+				892A5D36222F03CB008961AB /* LoopTestingKit.h */,
+				892A5D55222F0414008961AB /* TestingCGMManager.swift */,
 				892A5D51222F03DB008961AB /* TestingDeviceManager.swift */,
 				892A5D53222F03F9008961AB /* TestingPumpManager.swift */,
-				892A5D55222F0414008961AB /* TestingCGMManager.swift */,
+				89ADE128226BDB280067222B /* TestingScenario.swift */,
+				89ADE133226BF0490067222B /* TestingScenarioInstance.swift */,
 			);
 			path = LoopTestingKit;
 			sourceTree = "<group>";
@@ -2517,7 +2545,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				892A5D54222F03F9008961AB /* TestingPumpManager.swift in Sources */,
+				89ADE12F226BDED40067222B /* DateRelativeBolusEntry.swift in Sources */,
+				89ADE132226BE0590067222B /* HKUnit.swift in Sources */,
+				89CA2B38226D4456004D9350 /* DateRelativeQuantity.swift in Sources */,
+				89ADE12D226BDD190067222B /* DateRelativeBasalEntry.swift in Sources */,
+				89ADE134226BF0490067222B /* TestingScenarioInstance.swift in Sources */,
 				892A5D52222F03DB008961AB /* TestingDeviceManager.swift in Sources */,
+				89ADE129226BDB280067222B /* TestingScenario.swift in Sources */,
+				89ADE12B226BDB730067222B /* DateRelativeCarbEntry.swift in Sources */,
+				89CA2B36226D1627004D9350 /* MutableCollection.swift in Sources */,
+				89ADE136226BF0BE0067222B /* DateRelativeGlucoseSample.swift in Sources */,
+				89ADE139226BF51E0067222B /* NSData.swift in Sources */,
 				892A5D56222F0414008961AB /* TestingCGMManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2526,10 +2564,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89CA2B35226D1624004D9350 /* MutableCollection.swift in Sources */,
 				C1F8B1E8223E6D4900DD66CF /* MockDoseProgressEstimator.swift in Sources */,
 				89D204BF21CC7FFB001238CC /* NSTimeInterval.swift in Sources */,
 				89D204C421CC803C001238CC /* HKUnit.swift in Sources */,
 				89D204A921CC7C8F001238CC /* MockPumpManager.swift in Sources */,
+				89ADE138226BF51D0067222B /* NSData.swift in Sources */,
 				89D204AA21CC7C8F001238CC /* MockGlucoseProvider.swift in Sources */,
 				89D204AB21CC7C8F001238CC /* MockCGMDataSource.swift in Sources */,
 				89D204B221CC7D93001238CC /* Collection.swift in Sources */,

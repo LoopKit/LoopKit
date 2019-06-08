@@ -48,3 +48,9 @@ extension Data {
         return map { String(format: "%02hhx", $0) }.joined()
     }
 }
+
+extension Data {
+    static func newPumpEventIdentifier() -> Data {
+        return Data(UUID().uuidString.utf8)
+    }
+}

@@ -433,7 +433,7 @@ extension InsulinDeliveryStore {
 
 // MARK: - Unit Testing
 extension InsulinDeliveryStore {
-    internal var test_lastBasalEndDate: Date? {
+    public var test_lastBasalEndDate: Date? {
         get {
             var date: Date?
             queue.sync {
