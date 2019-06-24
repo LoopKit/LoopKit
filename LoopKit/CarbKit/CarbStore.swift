@@ -74,6 +74,11 @@ public final class CarbStore: HealthKitSampleStore {
 
     public static let defaultAbsorptionTimes: DefaultAbsorptionTimes = (fast: TimeInterval(hours: 2), medium: TimeInterval(hours: 3), slow: TimeInterval(hours: 4))
 
+    /// The default longest expected absorption time interval for carbohydrates: 8 hours.
+    public static var defaultMaximumAbsorptionTimeInterval: TimeInterval {
+        return defaultAbsorptionTimes.slow * 2
+    }
+
     public enum CarbStoreError: Error {
         // The store isn't correctly configured for the requested operation
         case notConfigured
@@ -92,6 +97,9 @@ public final class CarbStore: HealthKitSampleStore {
         return super.preferredUnit
     }
 
+    /// A history of recently applied schedule overrides.
+    private let overrideHistory: TemporaryScheduleOverrideHistory?
+
     /// Carbohydrate-to-insulin ratio
     public var carbRatioSchedule: CarbRatioSchedule? {
         get {
@@ -102,6 +110,15 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
     private let lockedCarbRatioSchedule: Locked<CarbRatioSchedule?>
+
+    /// The carb ratio schedule, applying recent overrides relative to the current moment in time.
+    public var carbRatioScheduleApplyingOverrideHistory: CarbRatioSchedule? {
+        if let carbRatioSchedule = carbRatioSchedule {
+            return overrideHistory?.resolvingRecentCarbRatioSchedule(carbRatioSchedule)
+        } else {
+            return nil
+        }
+    }
 
     /// A trio of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
     public let defaultAbsorptionTimes: DefaultAbsorptionTimes
@@ -116,6 +133,23 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
     private let lockedInsulinSensitivitySchedule:  Locked<InsulinSensitivitySchedule?>
+
+    /// The insulin sensitivity schedule, applying recent overrides relative to the current moment in time.
+    public var insulinSensitivityScheduleApplyingOverrideHistory: InsulinSensitivitySchedule? {
+        if let insulinSensitivitySchedule = insulinSensitivitySchedule {
+            return overrideHistory?.resolvingRecentInsulinSensitivitySchedule(insulinSensitivitySchedule)
+        } else {
+            return nil
+        }
+    }
+
+    /// The computed carbohydrate sensitivity schedule based on the insulin sensitivity and carb ratio schedules.
+    public var carbSensitivitySchedule: CarbSensitivitySchedule? {
+        guard let insulinSensitivitySchedule = insulinSensitivitySchedule, let carbRatioSchedule = carbRatioSchedule else {
+            return nil
+        }
+        return .carbSensitivitySchedule(insulinSensitivitySchedule: insulinSensitivitySchedule, carbRatioSchedule: carbRatioSchedule)
+    }
 
     /// The expected delay in the appearance of glucose effects, accounting for both digestion and sensor lag
     public let delay: TimeInterval
@@ -156,6 +190,7 @@ public final class CarbStore: HealthKitSampleStore {
         defaultAbsorptionTimes: DefaultAbsorptionTimes = defaultAbsorptionTimes,
         carbRatioSchedule: CarbRatioSchedule? = nil,
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
+        overrideHistory: TemporaryScheduleOverrideHistory? = nil,
         syncVersion: Int = 1,
         absorptionTimeOverrun: Double = 1.5,
         calculationDelta: TimeInterval = 5 /* minutes */ * 60,
@@ -165,6 +200,7 @@ public final class CarbStore: HealthKitSampleStore {
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
         self.lockedCarbRatioSchedule = Locked(carbRatioSchedule)
         self.lockedInsulinSensitivitySchedule = Locked(insulinSensitivitySchedule)
+        self.overrideHistory = overrideHistory
         self.syncVersion = syncVersion
         self.absorptionTimeOverrun = absorptionTimeOverrun
         self.delta = calculationDelta
@@ -331,8 +367,8 @@ extension CarbStore {
             case .success(let samples):
                 let status = samples.map(
                     to: effectVelocities ?? [],
-                    carbRatio: self.carbRatioSchedule,
-                    insulinSensitivity: self.insulinSensitivitySchedule,
+                    carbRatio: self.carbRatioScheduleApplyingOverrideHistory,
+                    insulinSensitivity: self.insulinSensitivityScheduleApplyingOverrideHistory,
                     absorptionTimeOverrun: self.absorptionTimeOverrun,
                     defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
                     delay: self.delay
@@ -734,7 +770,7 @@ extension CarbStore {
         getCachedCarbSamples(start: foodStart, end: end) { (samples) in
             let carbsOnBoard: [CarbValue]
 
-            if let velocities = effectVelocities, let carbRatioSchedule = self.carbRatioSchedule, let insulinSensitivitySchedule = self.insulinSensitivitySchedule {
+            if let velocities = effectVelocities, let carbRatioSchedule = self.carbRatioScheduleApplyingOverrideHistory, let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory {
                 carbsOnBoard = samples.map(
                     to: velocities,
                     carbRatio: carbRatioSchedule,
@@ -775,7 +811,7 @@ extension CarbStore {
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping(_ result: CarbStoreResult<[GlucoseEffect]>) -> Void) {
         queue.async {
-            guard let carbRatioSchedule = self.carbRatioSchedule, let insulinSensitivitySchedule = self.insulinSensitivitySchedule else {
+            guard let carbRatioSchedule = self.carbRatioScheduleApplyingOverrideHistory, let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory else {
                 completion(.failure(.notConfigured))
                 return
             }
@@ -862,8 +898,12 @@ extension CarbStore {
                 "## CarbStore",
                 "",
                 "* carbRatioSchedule: \(self.carbRatioSchedule?.debugDescription ?? "")",
+                "* carbRatioScheduleApplyingOverrideHistory: \(self.carbRatioScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
                 "* defaultAbsorptionTimes: \(self.defaultAbsorptionTimes)",
                 "* insulinSensitivitySchedule: \(self.insulinSensitivitySchedule?.debugDescription ?? "")",
+                "* insulinSensitivityScheduleApplyingOverrideHistory: \(self.insulinSensitivityScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
+                "* overrideHistory: \(self.overrideHistory.map(String.init(describing:)) ?? "nil")",
+                "* carbSensitivitySchedule: \(self.carbSensitivitySchedule?.debugDescription ?? "nil")",
                 "* delay: \(self.delay)",
                 "* delta: \(self.delta)",
                 "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",

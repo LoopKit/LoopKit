@@ -1,5 +1,5 @@
 //
-//  CarbAbsorptionInputCell.swift
+//  EmojiInputCell.swift
 //  LoopKit
 //
 //  Copyright © 2017 LoopKit Authors. All rights reserved.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CarbAbsorptionInputCell: UICollectionViewCell, IdentifiableClass {
+class EmojiInputCell: UICollectionViewCell, IdentifiableClass {
     @IBOutlet var label: UILabel!
 
     override var isSelected: Bool {

@@ -36,9 +36,9 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     public var scheduleItems: [RepeatingScheduleValue<DoubleRange>] = []
 
-    public let overrideContexts: [GlucoseRangeSchedule.Override.Context] = [.preMeal, .workout]
+    public var overrideContexts: [TemporaryScheduleOverride.Context] = [.preMeal, .legacyWorkout]
 
-    public var overrideRanges: [GlucoseRangeSchedule.Override.Context: DoubleRange] = [:]
+    public var overrideRanges: [TemporaryScheduleOverride.Context: DoubleRange] = [:]
 
     override func addScheduleItem(_ sender: Any?) {
         var startTime = TimeInterval(0)
@@ -153,18 +153,22 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
                 cell.maxValue = range.maxValue
             }
 
-            cell.titleLabel.text = context.title
-
             let bundle = Bundle(for: type(of: self))
+            let titleText: String
             let image: UIImage?
 
             switch context {
-            case .workout:
+            case .legacyWorkout:
+                titleText = LocalizedString("Workout", comment: "Title for the workout override range")
                 image = UIImage(named: "workout", in: bundle, compatibleWith: traitCollection)
             case .preMeal:
+                titleText = LocalizedString("Pre-Meal", comment: "Title for the pre-meal override range")
                 image = UIImage(named: "Pre-Meal", in: bundle, compatibleWith: traitCollection)
+            default:
+                preconditionFailure("Unexpected override context \(context)")
             }
 
+            cell.titleLabel.text = titleText
             cell.iconImageView.image = image
 
             cell.unitString = unitDisplayString
