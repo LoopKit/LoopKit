@@ -1,5 +1,5 @@
 //
-//  CarbAbsorptionInputHeaderView.swift
+//  EmojiInputHeaderView.swift
 //  LoopKit
 //
 //  Copyright © 2017 LoopKit Authors. All rights reserved.
@@ -7,6 +7,6 @@
 
 import UIKit
 
-class CarbAbsorptionInputHeaderView: UICollectionReusableView, IdentifiableClass {
+class EmojiInputHeaderView: UICollectionReusableView, IdentifiableClass {
     @IBOutlet var titleLabel: UILabel!
 }

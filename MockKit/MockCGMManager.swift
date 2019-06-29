@@ -135,6 +135,16 @@ public final class MockCGMManager: TestingCGMManager {
             }
         }
     }
+
+    public func injectGlucoseSamples(_ samples: [NewGlucoseSample]) {
+        guard !samples.isEmpty else { return }
+        var samples = samples
+        samples.mutateEach { $0.device = device }
+        let result = CGMResult.newData(samples)
+        delegate.notify { delegate in
+            delegate?.cgmManager(self, didUpdateWith: result)
+        }
+    }
 }
 
 extension MockCGMManager {
