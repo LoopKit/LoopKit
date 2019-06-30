@@ -9,4 +9,6 @@
 import LoopKit
 
 
-public protocol TestingCGMManager: CGMManager, TestingDeviceManager {}
+public protocol TestingCGMManager: CGMManager, TestingDeviceManager {
+    func injectGlucoseSamples(_ samples: [NewGlucoseSample])
+}

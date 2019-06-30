@@ -63,6 +63,15 @@ public final class MockPumpManager: TestingPumpManager {
         return MockPumpManager.pumpReservoirCapacity
     }
 
+    public var reservoirFillFraction: Double {
+        get {
+            return state.reservoirUnitsRemaining / pumpReservoirCapacity
+        }
+        set {
+            state.reservoirUnitsRemaining = newValue * pumpReservoirCapacity
+        }
+    }
+
     public var supportedBolusVolumes: [Double] {
         return supportedBasalRates
     }
@@ -283,6 +292,11 @@ public final class MockPumpManager: TestingPumpManager {
             }
         }
     }
+
+    public func injectPumpEvents(_ pumpEvents: [NewPumpEvent]) {
+        pendingPumpEvents += pumpEvents
+        pendingPumpEvents.sort(by: { $0.date < $1.date })
+    }
 }
 
 extension MockPumpManager {
@@ -307,32 +321,28 @@ private extension NewPumpEvent {
             value: units,
             unit: .units
         )
-        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: newDataIdentifier(), title: "Bolus", type: .bolus)
+        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: .newPumpEventIdentifier(), title: "Bolus", type: .bolus)
     }
 
     static func tempBasal(at date: Date, for duration: TimeInterval, unitsPerHour: Double) -> NewPumpEvent {
         let dose = DoseEntry(
-            type: .basal,
+            type: .tempBasal,
             startDate: date,
             endDate: date.addingTimeInterval(duration),
             value: unitsPerHour,
             unit: .unitsPerHour
         )
-        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: newDataIdentifier(), title: "Temp Basal", type: .tempBasal)
+        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: .newPumpEventIdentifier(), title: "Temp Basal", type: .tempBasal)
     }
 
     static func suspend(at date: Date) -> NewPumpEvent {
         let dose = DoseEntry(suspendDate: date)
-        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: newDataIdentifier(), title: "Suspend", type: .suspend)
+        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: .newPumpEventIdentifier(), title: "Suspend", type: .suspend)
     }
 
     static func resume(at date: Date) -> NewPumpEvent {
         let dose = DoseEntry(resumeDate: date)
-        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: newDataIdentifier(), title: "Resume", type: .resume)
-    }
-
-    private static func newDataIdentifier() -> Data {
-        return UUID().uuidString.data(using: .utf8)!
+        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: .newPumpEventIdentifier(), title: "Resume", type: .resume)
     }
 }
 

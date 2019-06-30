@@ -24,6 +24,11 @@ public struct DailyQuantitySchedule<T: RawRepresentable>: DailySchedule {
         self.valueSchedule = valueSchedule
     }
 
+    init(unit: HKUnit, valueSchedule: DailyValueSchedule<T>) {
+        self.unit = unit
+        self.valueSchedule = valueSchedule
+    }
+
     public init?(rawValue: RawValue) {
         guard let rawUnit = rawValue["unit"] as? String,
             let valueSchedule = DailyValueSchedule<T>(rawValue: rawValue)
@@ -104,8 +109,24 @@ public extension DailyQuantitySchedule where T == Double {
 }
 
 
-extension DailyQuantitySchedule where T: Equatable {
-    public static func ==(lhs: DailyQuantitySchedule<T>, rhs: DailyQuantitySchedule<T>) -> Bool {
+extension DailyQuantitySchedule: Equatable where T: Equatable {
+    public static func == (lhs: DailyQuantitySchedule<T>, rhs: DailyQuantitySchedule<T>) -> Bool {
         return lhs.valueSchedule == rhs.valueSchedule && lhs.unit.unitString == rhs.unit.unitString
+    }
+}
+
+extension DailyQuantitySchedule where T: Numeric {
+    public static func * (lhs: DailyQuantitySchedule, rhs: DailyQuantitySchedule) -> DailyQuantitySchedule {
+        let unit = lhs.unit.unitMultiplied(by: rhs.unit)
+        let schedule = DailyValueSchedule.zip(lhs.valueSchedule, rhs.valueSchedule).map(*)
+        return DailyQuantitySchedule(unit: unit, valueSchedule: schedule)
+    }
+}
+
+extension DailyQuantitySchedule where T: FloatingPoint {
+    public static func / (lhs: DailyQuantitySchedule, rhs: DailyQuantitySchedule) -> DailyQuantitySchedule {
+        let unit = lhs.unit.unitDivided(by: rhs.unit)
+        let schedule = DailyValueSchedule.zip(lhs.valueSchedule, rhs.valueSchedule).map(/)
+        return DailyQuantitySchedule(unit: unit, valueSchedule: schedule)
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 
 
-public struct RepeatingScheduleValue<T: RawRepresentable> where T.RawValue: Any {
+public struct RepeatingScheduleValue<T> {
     public let startTime: TimeInterval
     public let value: T
 
@@ -18,10 +18,14 @@ public struct RepeatingScheduleValue<T: RawRepresentable> where T.RawValue: Any 
         self.startTime = startTime
         self.value = value
     }
+
+    public func map<U>(_ transform: (T) -> U) -> RepeatingScheduleValue<U> {
+        return RepeatingScheduleValue<U>(startTime: startTime, value: transform(value))
+    }
 }
 
 extension RepeatingScheduleValue: Equatable where T: Equatable {
-    public static func ==(lhs: RepeatingScheduleValue<T>, rhs: RepeatingScheduleValue<T>) -> Bool {
+    public static func == (lhs: RepeatingScheduleValue, rhs: RepeatingScheduleValue) -> Bool {
         return abs(lhs.startTime - rhs.startTime) < .ulpOfOne && lhs.value == rhs.value
     }
 }
@@ -32,13 +36,9 @@ public struct AbsoluteScheduleValue<T>: TimelineValue {
     public let value: T
 }
 
-extension AbsoluteScheduleValue where T: Equatable {
-    public static func ==(lhs: AbsoluteScheduleValue<T>, rhs: AbsoluteScheduleValue<T>) -> Bool {
-        return lhs.startDate == rhs.startDate && lhs.endDate == rhs.endDate && lhs.value == rhs.value
-    }
-}
+extension AbsoluteScheduleValue: Equatable where T: Equatable {}
 
-extension RepeatingScheduleValue: RawRepresentable {
+extension RepeatingScheduleValue: RawRepresentable where T: RawRepresentable {
     public typealias RawValue = [String: Any]
 
     public init?(rawValue: RawValue) {
@@ -61,8 +61,8 @@ extension RepeatingScheduleValue: RawRepresentable {
 }
 
 
-public protocol DailySchedule: RawRepresentable, CustomDebugStringConvertible {
-    associatedtype T: RawRepresentable
+public protocol DailySchedule {
+    associatedtype T
 
     var items: [RepeatingScheduleValue<T>] { get }
 
@@ -78,17 +78,11 @@ public extension DailySchedule {
     func value(at time: Date) -> T {
         return between(start: time, end: time).first!.value
     }
-
-    var debugDescription: String {
-        return String(reflecting: rawValue)
-    }
 }
 
 
-public struct DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomDebugStringConvertible, DailySchedule where T.RawValue: Any {
-    public typealias RawValue = [String: Any]
-
-    private let referenceTimeInterval: TimeInterval
+public struct DailyValueSchedule<T>: DailySchedule {
+    let referenceTimeInterval: TimeInterval
     let repeatInterval = TimeInterval(hours: 24)
 
     public let items: [RepeatingScheduleValue<T>]
@@ -105,29 +99,6 @@ public struct DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomD
         referenceTimeInterval = firstItem.startTime
     }
 
-    public init?(rawValue: RawValue) {
-        guard let rawItems = rawValue["items"] as? [RepeatingScheduleValue<T>.RawValue] else {
-            return nil
-        }
-
-        var timeZone: TimeZone?
-
-        if let offset = rawValue["timeZone"] as? Int {
-            timeZone = TimeZone(secondsFromGMT: offset)
-        }
-
-        self.init(dailyItems: rawItems.compactMap { RepeatingScheduleValue(rawValue: $0) }, timeZone: timeZone)
-    }
-
-    public var rawValue: RawValue {
-        let rawItems = items.map { $0.rawValue }
-
-        return [
-            "timeZone": timeZone.secondsFromGMT(),
-            "items": rawItems
-        ]
-    }
-
     var maxTimeInterval: TimeInterval {
         return referenceTimeInterval + repeatInterval
     }
@@ -137,7 +108,7 @@ public struct DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomD
 
      - parameter date: The date to convert
      */
-    private func scheduleOffset(for date: Date) -> TimeInterval {
+    func scheduleOffset(for date: Date) -> TimeInterval {
         // The time interval since a reference date in the specified time zone
         let interval = date.timeIntervalSinceReferenceDate + TimeInterval(timeZone.secondsFromGMT(for: date))
 
@@ -194,25 +165,101 @@ public struct DailyValueSchedule<T: RawRepresentable>: RawRepresentable, CustomD
             )
         }
     }
+
+    public func map<U>(_ transform: (T) -> U) -> DailyValueSchedule<U> {
+        return DailyValueSchedule<U>(
+            dailyItems: items.map { $0.map(transform) },
+            timeZone: timeZone
+        )!
+    }
+
+    public static func zip<L, R>(_ lhs: DailyValueSchedule<L>, _ rhs: DailyValueSchedule<R>) -> DailyValueSchedule where T == (L, R) {
+        precondition(lhs.timeZone == rhs.timeZone)
+
+        var (leftCursor, rightCursor) = (lhs.items.startIndex, rhs.items.startIndex)
+        var alignedItems: [RepeatingScheduleValue<(L, R)>] = []
+        repeat {
+            let (leftItem, rightItem) = (lhs.items[leftCursor], rhs.items[rightCursor])
+            let alignedItem = RepeatingScheduleValue(
+                startTime: max(leftItem.startTime, rightItem.startTime),
+                value: (leftItem.value, rightItem.value)
+            )
+            alignedItems.append(alignedItem)
+
+            let nextLeftStartTime = leftCursor == lhs.items.endIndex - 1 ? nil : lhs.items[leftCursor + 1].startTime
+            let nextRightStartTime = rightCursor == rhs.items.endIndex - 1 ? nil : rhs.items[rightCursor + 1].startTime
+            switch (nextLeftStartTime, nextRightStartTime) {
+            case (.some(let leftStart), .some(let rightStart)):
+                if leftStart < rightStart {
+                    leftCursor += 1
+                } else if rightStart < leftStart {
+                    rightCursor += 1
+                } else {
+                    leftCursor += 1
+                    rightCursor += 1
+                }
+            case (.some, .none):
+                leftCursor += 1
+            case (.none, .some):
+                rightCursor += 1
+            case (.none, .none):
+                leftCursor += 1
+                rightCursor += 1
+            }
+        } while leftCursor < lhs.items.endIndex && rightCursor < rhs.items.endIndex
+
+        return DailyValueSchedule(dailyItems: alignedItems, timeZone: lhs.timeZone)!
+    }
 }
 
 
-extension DailyValueSchedule where T: Equatable {
-    public static func ==(lhs: DailyValueSchedule<T>, rhs: DailyValueSchedule<T>) -> Bool {
-        guard lhs.items.count == rhs.items.count else {
-            return false
+extension DailyValueSchedule: RawRepresentable, CustomDebugStringConvertible where T: RawRepresentable {
+    public typealias RawValue = [String: Any]
+    public init?(rawValue: RawValue) {
+        guard let rawItems = rawValue["items"] as? [RepeatingScheduleValue<T>.RawValue] else {
+            return nil
         }
 
-        guard lhs.timeZone == rhs.timeZone else {
-            return false
+        var timeZone: TimeZone?
+
+        if let offset = rawValue["timeZone"] as? Int {
+            timeZone = TimeZone(secondsFromGMT: offset)
         }
 
-        for (a, b) in zip(lhs.items, rhs.items) {
-            guard a == b else {
-                return false
-            }
+        let validScheduleItems = rawItems.compactMap(RepeatingScheduleValue<T>.init(rawValue:))
+        guard validScheduleItems.count == rawItems.count else {
+            return nil
         }
+        self.init(dailyItems: validScheduleItems, timeZone: timeZone)
+    }
 
-        return true
+    public var rawValue: RawValue {
+        let rawItems = items.map { $0.rawValue }
+
+        return [
+            "timeZone": timeZone.secondsFromGMT(),
+            "items": rawItems
+        ]
+    }
+
+    public var debugDescription: String {
+        return String(reflecting: rawValue)
+    }
+}
+
+
+extension DailyValueSchedule: Equatable where T: Equatable {}
+
+extension RepeatingScheduleValue {
+    public static func == <L: Equatable, R: Equatable> (lhs: RepeatingScheduleValue, rhs: RepeatingScheduleValue) -> Bool where T == (L, R) {
+        return lhs.startTime == rhs.startTime && lhs.value == rhs.value
+    }
+}
+
+extension DailyValueSchedule {
+    public static func == <L: Equatable, R: Equatable> (lhs: DailyValueSchedule, rhs: DailyValueSchedule) -> Bool where T == (L, R) {
+        return lhs.timeZone == rhs.timeZone
+            && lhs.items.count == rhs.items.count
+            && Swift.zip(lhs.items, rhs.items).allSatisfy(==)
     }
 }
