@@ -48,6 +48,10 @@ open class SingleValueScheduleTableViewController: DailyValueScheduleTableViewCo
 
     public var scheduleItems: [RepeatingScheduleValue<Double>] = []
 
+    // Temporary: eventual redesign of value schedule input will likely obviate need for popup warning alerts
+    public var lowThresholdWarningValue: Double?
+    public var lowThresholdWarningMessage: String?
+
     override func addScheduleItem(_ sender: Any?) {
         guard !isReadOnly && !isSyncInProgress else {
             return
@@ -304,8 +308,25 @@ open class SingleValueScheduleTableViewController: DailyValueScheduleTableViewCo
         if let indexPath = tableView.indexPath(for: cell) {
             let currentItem = scheduleItems[indexPath.row]
 
+            if let threshold = lowThresholdWarningValue, let message = lowThresholdWarningMessage, cell.value <= threshold {
+                let alert = UIAlertController(title: "Low Value Warning", message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
             scheduleItems[indexPath.row] = RepeatingScheduleValue(startTime: currentItem.startTime, value: cell.value)
         }
     }
 
+}
+
+
+private extension UIAlertController {
+    convenience init(thresholdWarningHandler handler: @escaping () -> Void, warningMessage: String) {
+        self.init(
+            title: nil,
+            message: warningMessage,
+            preferredStyle: .actionSheet
+        )
+        addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: nil))
+    }
 }
