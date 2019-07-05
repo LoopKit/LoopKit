@@ -182,6 +182,24 @@ private extension HKUnit {
             }
         }
 
+        if self == HKUnit.milligramsPerDeciliter.unitDivided(by: HKUnit.internationalUnit()) {
+            switch style {
+            case .short, .medium:
+                return LocalizedString("mg/dL/U", comment: "The short unit display string for milligrams per deciliter per U")
+            case .long:
+                break  // Fallback to the MeasurementFormatter localization
+            }
+        }
+
+        if self == HKUnit.millimolesPerLiter.unitDivided(by: HKUnit.internationalUnit()) {
+            switch style {
+            case .short, .medium:
+                return LocalizedString("mmol/L/U", comment: "The short unit display string for millimoles per liter per U")
+            case .long:
+                break  // Fallback to the MeasurementFormatter localization
+            }
+        }
+
         return nil
     }
 }

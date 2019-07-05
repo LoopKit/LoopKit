@@ -46,11 +46,29 @@ open class SingleValueScheduleTableViewController: DailyValueScheduleTableViewCo
 
     // MARK: - State
 
-    public var scheduleItems: [RepeatingScheduleValue<Double>] = []
+    public var scheduleItems: [RepeatingScheduleValue<Double>] = [] {
+        didSet {
+            isScheduleModified = true
+        }
+    }
 
     // Temporary: eventual redesign of value schedule input will likely obviate need for popup warning alerts
     public var lowThresholdWarningValue: Double?
     public var lowThresholdWarningMessage: String?
+
+    private var isScheduleModified = false {
+        didSet {
+            if isScheduleModified && syncSource != nil {
+                self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel(_:)))
+            } else {
+                self.navigationItem.leftBarButtonItem = nil
+            }
+        }
+    }
+
+    @objc private func cancel(_ sender: Any?) {
+        self.navigationController?.popViewController(animated: true)
+    }
 
     override func addScheduleItem(_ sender: Any?) {
         guard !isReadOnly && !isSyncInProgress else {
@@ -147,6 +165,7 @@ open class SingleValueScheduleTableViewController: DailyValueScheduleTableViewCo
             return 1
         }
     }
+    
 
     open override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch Section(rawValue: indexPath.section)! {
@@ -304,15 +323,20 @@ open class SingleValueScheduleTableViewController: DailyValueScheduleTableViewCo
         super.datePickerTableViewCellDidUpdateDate(cell)
     }
 
+    @discardableResult private func validate(value: Double) -> Bool {
+        if let threshold = lowThresholdWarningValue, let message = lowThresholdWarningMessage, value <= threshold {
+            let alert = UIAlertController(title: NSLocalizedString("Low Value Warning", comment: "Title of warning alert for low thresholds in schedules"), message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return false
+        }
+        return true
+    }
+
     func repeatingScheduleValueTableViewCellDidUpdateValue(_ cell: RepeatingScheduleValueTableViewCell) {
         if let indexPath = tableView.indexPath(for: cell) {
             let currentItem = scheduleItems[indexPath.row]
-
-            if let threshold = lowThresholdWarningValue, let message = lowThresholdWarningMessage, cell.value <= threshold {
-                let alert = UIAlertController(title: "Low Value Warning", message: message, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-            }
+            validate(value: cell.value)
             scheduleItems[indexPath.row] = RepeatingScheduleValue(startTime: currentItem.startTime, value: cell.value)
         }
     }
