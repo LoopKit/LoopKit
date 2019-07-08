@@ -342,6 +342,8 @@ class InsulinMathTests: XCTestCase {
 
         let iob = input.insulinOnBoard(model: insulinModel)
 
+        printInsulinValues(iob)
+
         XCTAssertEqual(output.count, iob.count)
 
         for (expected, calculated) in zip(output, iob) {
@@ -1052,5 +1054,25 @@ class InsulinMathTests: XCTestCase {
             appended.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
             accuracy: 1.0/40
         )
+    }
+
+    func testNetBasalUnits() {
+        let formatter = DateFormatter.descriptionFormatter
+        let f = { (input) in
+            return formatter.date(from: input)!
+        }
+
+        let startDate = f("2018-07-16 03:49:00 +0000")
+        let duration = TimeInterval(minutes: 5)
+        let endDate = startDate.addingTimeInterval(duration)
+
+        let scheduledRate = 0.15 // Scheduled amount = 0.15 U/hr = 3 pulses per hour, actual expected 522 delivery over 5m = 0 pulses = 0 U
+        let tempBasalRate = 0.4 // Temp rate = 0.4 U/hr = 8 pulses per hour, actual expected 522 delivery over 5m = 1 pulses = 0.05 U
+        let netRate = tempBasalRate - scheduledRate
+
+        let dose = DoseEntry(type: .tempBasal, startDate: startDate, endDate: endDate, value: tempBasalRate, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: scheduledRate))
+
+        XCTAssertEqual(netRate, dose.netBasalUnitsPerHour, accuracy: .ulpOfOne)
+        XCTAssertEqual(0.05, dose.netBasalUnits, accuracy: .ulpOfOne)
     }
 }
