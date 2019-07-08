@@ -342,8 +342,6 @@ class InsulinMathTests: XCTestCase {
 
         let iob = input.insulinOnBoard(model: insulinModel)
 
-        printInsulinValues(iob)
-
         XCTAssertEqual(output.count, iob.count)
 
         for (expected, calculated) in zip(output, iob) {
