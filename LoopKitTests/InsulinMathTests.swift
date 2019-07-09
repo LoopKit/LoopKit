@@ -1050,7 +1050,7 @@ class InsulinMathTests: XCTestCase {
         XCTAssertEqual(
             normalizedReservoirDoseEntries.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
             appended.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
-            accuracy: 1.0/40
+            accuracy: 0.1
         )
     }
 
