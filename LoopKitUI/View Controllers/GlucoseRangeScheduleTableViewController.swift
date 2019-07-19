@@ -15,7 +15,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
     public var unit: HKUnit = HKUnit.milligramsPerDeciliter {
         didSet {
-            unitDisplayString = unit.glucoseUnitDisplayString
+            unitDisplayString = unit.localizedUnitString(in: .short)!
         }
     }
 
@@ -122,7 +122,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
 
             cell.minValue = item.value.minValue
             cell.value = item.value.maxValue
-            cell.unitString = unitDisplayString
+            cell.unitString = unit.localizedUnitString(in: .short)
             cell.delegate = self
 
             if indexPath.row > 0 {
@@ -171,7 +171,7 @@ public class GlucoseRangeScheduleTableViewController: DailyValueScheduleTableVie
             cell.titleLabel.text = titleText
             cell.iconImageView.image = image
 
-            cell.unitString = unitDisplayString
+            cell.unitString = unit.localizedUnitString(in: .short)
             cell.delegate = self
 
             return cell

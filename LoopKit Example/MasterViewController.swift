@@ -46,43 +46,38 @@ class MasterViewController: UITableViewController {
 
     // MARK: - Data Source
 
-    private enum Section: Int {
+    private enum Section: Int, CaseIterable {
         case data
         case configuration
-
-        static let count = 2
     }
 
-    private enum DataRow: Int {
+    private enum DataRow: Int, CaseIterable {
         case carbs = 0
         case reservoir
         case diagnostic
         case generate
         case reset
-
-        static let count = 5
     }
 
-    private enum ConfigurationRow: Int {
+    private enum ConfigurationRow: Int, CaseIterable {
         case basalRate
         case glucoseTargetRange
+        case insulinSensitivity
         case pumpID
-
-        static let count = 3
     }
 
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.count
+        return Section.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
         case .configuration:
-            return ConfigurationRow.count
+            return ConfigurationRow.allCases.count
         case .data:
-            return DataRow.count
+            return DataRow.allCases.count
         }
     }
 
@@ -96,6 +91,8 @@ class MasterViewController: UITableViewController {
                 cell.textLabel?.text = LocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
             case .glucoseTargetRange:
                 cell.textLabel?.text = LocalizedString("Glucose Target Range", comment: "The title text for the glucose target range schedule")
+            case .insulinSensitivity:
+                cell.textLabel?.text = LocalizedString("Insulin Sensitivity", comment: "The title text for the insulin sensitivity schedule")
             case .pumpID:
                 cell.textLabel?.text = LocalizedString("Pump ID", comment: "The title text for the pump ID")
             }
@@ -167,6 +164,17 @@ class MasterViewController: UITableViewController {
                     scheduleVC.unit = unit
                     self.show(scheduleVC, sender: sender)
                 }
+            case .insulinSensitivity:
+                let unit = dataManager?.insulinSensitivitySchedule?.unit ?? dataManager?.glucoseStore.preferredUnit ?? HKUnit.milligramsPerDeciliter
+                let scheduleVC = InsulinSensitivityScheduleViewController(allowedValues: unit.allowedSensitivityValues, unit: unit)
+
+                scheduleVC.unit = unit
+                scheduleVC.delegate = self
+                scheduleVC.insulinSensitivityScheduleStorageDelegate = self
+                scheduleVC.schedule = dataManager?.insulinSensitivitySchedule
+                scheduleVC.title = NSLocalizedString("Insulin Sensitivity", comment: "The title of the insulin sensitivity schedule screen")
+                show(scheduleVC, sender: sender)
+
             case .pumpID:
                 let textFieldVC = TextFieldTableViewController()
 
@@ -317,17 +325,6 @@ extension MasterViewController: DailyValueScheduleTableViewControllerDelegate {
                     if let controller = controller as? GlucoseRangeScheduleTableViewController {
                         dataManager?.glucoseTargetRangeSchedule = GlucoseRangeSchedule(unit: controller.unit, dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
                     }
-                /*case let row:
-                    if let controller = controller as? DailyQuantityScheduleTableViewController {
-                        switch row {
-                        case .CarbRatio:
-                            dataManager.carbRatioSchedule = CarbRatioSchedule(unit: controller.unit, dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
-                        case .InsulinSensitivity:
-                            dataManager.insulinSensitivitySchedule = InsulinSensitivitySchedule(unit: controller.unit, dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
-                        default:
-                            break
-                        }
-                    }*/
                 default:
                     break
                 }
@@ -365,3 +362,23 @@ extension MasterViewController: BasalScheduleTableViewControllerSyncSource {
     }
 }
 
+extension MasterViewController: InsulinSensitivityScheduleStorageDelegate {
+    func saveSchedule(_ schedule: InsulinSensitivitySchedule, for viewController: InsulinSensitivityScheduleViewController, completion: @escaping (SaveInsulinSensitivityScheduleResult) -> Void) {
+        self.dataManager?.insulinSensitivitySchedule = schedule
+        completion(.success)
+    }
+}
+
+private extension HKUnit {
+    var allowedSensitivityValues: [Double] {
+        if self == HKUnit.milligramsPerDeciliter {
+            return (10...500).map { Double($0) }
+        }
+
+        if self == HKUnit.millimolesPerLiter {
+            return (6...270).map { Double($0) / 10.0 }
+        }
+
+        return []
+    }
+}
