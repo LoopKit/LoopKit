@@ -86,8 +86,16 @@ extension DoseEntry {
             return 0
         }
 
-        let units = netBasalUnitsPerHour * hours
-        return round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
+        let scheduledUnitsPerHour: Double
+        if let basalRate = scheduledBasalRate {
+            scheduledUnitsPerHour = basalRate.doubleValue(for: DoseEntry.unitsPerHour)
+        } else {
+            scheduledUnitsPerHour = 0
+        }
+
+        let scheduledUnits = round(scheduledUnitsPerHour * hours * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
+        let deliveredUnits = round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
+        return deliveredUnits - scheduledUnits
     }
 
     /// The rate of delivery, net the basal rate scheduled during that time, which can be used to compute insulin on-board and glucose effects
