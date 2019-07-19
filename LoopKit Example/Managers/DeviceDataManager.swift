@@ -91,6 +91,18 @@ class DeviceDataManager : CarbStoreDelegate {
         }
     }
 
+    public var preMealTargetRange: DoubleRange? = UserDefaults.standard.preMealTargetRange {
+        didSet {
+            UserDefaults.standard.preMealTargetRange = preMealTargetRange
+        }
+    }
+
+    public var legacyWorkoutTargetRange: DoubleRange? = UserDefaults.standard.legacyWorkoutTargetRange {
+        didSet {
+            UserDefaults.standard.legacyWorkoutTargetRange = legacyWorkoutTargetRange
+        }
+    }
+
     var pumpID = UserDefaults.standard.pumpID {
         didSet {
             UserDefaults.standard.pumpID = pumpID

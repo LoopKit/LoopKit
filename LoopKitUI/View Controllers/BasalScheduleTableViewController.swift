@@ -43,7 +43,7 @@ open class BasalScheduleTableViewController : DailyValueScheduleTableViewControl
     open override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(BasalScheduleEntryTableViewCell.nib(), forCellReuseIdentifier: BasalScheduleEntryTableViewCell.className)
+        tableView.register(SetConstrainedScheduleEntryTableViewCell.nib(), forCellReuseIdentifier: SetConstrainedScheduleEntryTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
         updateEditButton()
     }
@@ -158,7 +158,7 @@ open class BasalScheduleTableViewController : DailyValueScheduleTableViewControl
 
     open override func setEditing(_ editing: Bool, animated: Bool) {
         tableView.beginUpdates()
-        hideBasalScheduleEntryCells()
+        hideSetConstrainedScheduleEntryCells()
         tableView.endUpdates()
 
         super.setEditing(editing, animated: animated)
@@ -183,7 +183,7 @@ open class BasalScheduleTableViewController : DailyValueScheduleTableViewControl
                 case let cell as TextButtonTableViewCell:
                     cell.isEnabled = !isSyncInProgress
                     cell.isLoading = isSyncInProgress
-                case let cell as BasalScheduleEntryTableViewCell:
+                case let cell as SetConstrainedScheduleEntryTableViewCell:
                     cell.isReadOnly = isCellReadOnly
                 default:
                     break
@@ -209,7 +209,7 @@ open class BasalScheduleTableViewController : DailyValueScheduleTableViewControl
             return
         }
         let indexPath = IndexPath(row: index, section: Section.schedule.rawValue)
-        if let cell = tableView.cellForRow(at: indexPath) as? BasalScheduleEntryTableViewCell {
+        if let cell = tableView.cellForRow(at: indexPath) as? SetConstrainedScheduleEntryTableViewCell {
             if index+1 < scheduleItems.endIndex {
                 cell.maximumStartTime = scheduleItems[index+1].startTime - minimumTimeInterval
             } else {
@@ -254,11 +254,13 @@ open class BasalScheduleTableViewController : DailyValueScheduleTableViewControl
     open override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch Section(rawValue: indexPath.section)! {
         case .schedule:
-            let cell = tableView.dequeueReusableCell(withIdentifier: BasalScheduleEntryTableViewCell.className, for: indexPath) as! BasalScheduleEntryTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: SetConstrainedScheduleEntryTableViewCell.className, for: indexPath) as! SetConstrainedScheduleEntryTableViewCell
+
+            cell.unit = HKUnit.internationalUnitsPerHour
 
             let item = scheduleItems[indexPath.row]
 
-            cell.basalRates = allowedBasalRates
+            cell.allowedValues = allowedBasalRates
             cell.minimumTimeInterval = minimumTimeInterval
             cell.isReadOnly = isCellReadOnly
             cell.isPickerHidden = true
@@ -330,7 +332,7 @@ open class BasalScheduleTableViewController : DailyValueScheduleTableViewControl
             scheduleItems.insert(item, at: destinationIndexPath.row)
             isScheduleModified = true
 
-            guard destinationIndexPath.row > 0, let cell = tableView.cellForRow(at: destinationIndexPath) as? BasalScheduleEntryTableViewCell else {
+            guard destinationIndexPath.row > 0, let cell = tableView.cellForRow(at: destinationIndexPath) as? SetConstrainedScheduleEntryTableViewCell else {
                 return
             }
 
@@ -358,7 +360,7 @@ open class BasalScheduleTableViewController : DailyValueScheduleTableViewControl
 
     open override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         tableView.beginUpdates()
-        hideBasalScheduleEntryCells(excluding: indexPath)
+        hideSetConstrainedScheduleEntryCells(excluding: indexPath)
         tableView.endUpdates()
         return super.tableView(tableView, willSelectRowAt: indexPath)
     }
@@ -400,39 +402,20 @@ open class BasalScheduleTableViewController : DailyValueScheduleTableViewControl
 
     open override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
 
-        guard sourceIndexPath != proposedDestinationIndexPath, let cell = tableView.cellForRow(at: sourceIndexPath) as? BasalScheduleEntryTableViewCell else {
+        guard sourceIndexPath != proposedDestinationIndexPath, let cell = tableView.cellForRow(at: sourceIndexPath) as? SetConstrainedScheduleEntryTableViewCell else {
             return proposedDestinationIndexPath
         }
 
         let interval = cell.minimumTimeInterval
         let indices = insertableIndices(for: scheduleItems, removing: sourceIndexPath.row, with: interval)
 
-        if indices[proposedDestinationIndexPath.row] {
-            return proposedDestinationIndexPath
-        }
-
-        var closestRow = sourceIndexPath.row
-
-        for (index, valid) in indices.enumerated() where valid {
-            if abs(proposedDestinationIndexPath.row - index) < closestRow {
-                closestRow = index
-            }
-        }
-
-        return IndexPath(row: closestRow, section: proposedDestinationIndexPath.section)
+        let closestDestinationRow = indices.insertableIndex(closestTo: proposedDestinationIndexPath.row, from: sourceIndexPath.row)
+        return IndexPath(row: closestDestinationRow, section: proposedDestinationIndexPath.section)
     }
 }
 
-extension BasalScheduleTableViewController: BasalScheduleEntryTableViewCellDelegate {
-
-    func isBasalScheduleEntryTableViewCellValid(_ cell: BasalScheduleEntryTableViewCell) -> Bool {
-        guard let value = cell.value else {
-            return false
-        }
-        return isBasalRateValid(value)
-    }
-
-    func basalScheduleEntryTableViewCellDidUpdate(_ cell: BasalScheduleEntryTableViewCell) {
+extension BasalScheduleTableViewController: SetConstrainedScheduleEntryTableViewCellDelegate {
+    func setConstrainedScheduleEntryTableViewCellDidUpdate(_ cell: SetConstrainedScheduleEntryTableViewCell) {
         guard let value = cell.value else {
             return
         }
