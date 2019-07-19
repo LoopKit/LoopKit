@@ -237,7 +237,7 @@ extension OverrideSelectionViewController: AddEditOverrideTableViewControllerDel
 
 private extension Array where Element: Equatable {
     mutating func remove(_ element: Element) {
-        if let index = self.index(of: element) {
+        if let index = self.firstIndex(of: element) {
             remove(at: index)
         }
     }
