@@ -54,7 +54,7 @@ final class InsulinSensitivityScalingTableViewCell: UITableViewCell {
             scaleFactorPickerHeightConstraint.constant = newValue ? 0 : pickerExpandedHeight
 
             if !newValue {
-                guard let selectedRow = allScaleFactorPercentages.index(of: selectedPercentage) else {
+                guard let selectedRow = allScaleFactorPercentages.firstIndex(of: selectedPercentage) else {
                     fatalError("selectedPercentage should always be validated against all possible scale factors")
                 }
                 scaleFactorPicker.selectRow(selectedRow, inComponent: 0, animated: false)
