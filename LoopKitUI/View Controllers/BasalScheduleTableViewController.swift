@@ -409,19 +409,8 @@ open class BasalScheduleTableViewController : DailyValueScheduleTableViewControl
         let interval = cell.minimumTimeInterval
         let indices = insertableIndices(for: scheduleItems, removing: sourceIndexPath.row, with: interval)
 
-        if indices[proposedDestinationIndexPath.row] {
-            return proposedDestinationIndexPath
-        }
-
-        var closestRow = sourceIndexPath.row
-
-        for (index, valid) in indices.enumerated() where valid {
-            if abs(proposedDestinationIndexPath.row - index) < closestRow {
-                closestRow = index
-            }
-        }
-
-        return IndexPath(row: closestRow, section: proposedDestinationIndexPath.section)
+        let closestDestinationRow = indices.insertableIndex(closestTo: proposedDestinationIndexPath.row, from: sourceIndexPath.row)
+        return IndexPath(row: closestDestinationRow, section: proposedDestinationIndexPath.section)
     }
 }
 

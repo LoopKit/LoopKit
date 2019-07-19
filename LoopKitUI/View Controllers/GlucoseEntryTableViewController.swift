@@ -46,7 +46,7 @@ public class GlucoseEntryTableViewController: TextFieldTableViewController {
     public init(glucoseUnit: HKUnit) {
         self.glucoseUnit = glucoseUnit
         super.init(style: .grouped)
-        unit = glucoseUnit.localizedUnitString(in: .short)
+        unit = glucoseUnit.shortLocalizedUnitString()
         keyboardType = .decimalPad
         placeholder = "Enter glucose value"
         delegate = self

@@ -43,7 +43,6 @@ class SetConstrainedScheduleEntryTableViewCell: UITableViewCell {
         }
     }
 
-
     @IBOutlet private weak var picker: UIPickerView!
 
     @IBOutlet private weak var pickerHeightConstraint: NSLayoutConstraint!

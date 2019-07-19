@@ -61,7 +61,7 @@ class MasterViewController: UITableViewController {
 
     private enum ConfigurationRow: Int, CaseIterable {
         case basalRate
-        case glucoseTargetRange
+        case correctionRange
         case insulinSensitivity
         case pumpID
     }
@@ -89,8 +89,8 @@ class MasterViewController: UITableViewController {
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .basalRate:
                 cell.textLabel?.text = LocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
-            case .glucoseTargetRange:
-                cell.textLabel?.text = LocalizedString("Glucose Target Range", comment: "The title text for the glucose target range schedule")
+            case .correctionRange:
+                cell.textLabel?.text = LocalizedString("Correction Range", comment: "The title text for the glucose correction range schedule")
             case .insulinSensitivity:
                 cell.textLabel?.text = LocalizedString("Insulin Sensitivity", comment: "The title text for the insulin sensitivity schedule")
             case .pumpID:
@@ -148,22 +148,23 @@ class MasterViewController: UITableViewController {
                 scheduleVC.syncSource = self
 
                 show(scheduleVC, sender: sender)
-            case .glucoseTargetRange:
-                let scheduleVC = GlucoseRangeScheduleTableViewController()
+            case .correctionRange:
+
+                let unit = dataManager?.glucoseTargetRangeSchedule?.unit ?? dataManager?.glucoseStore.preferredUnit ?? HKUnit.milligramsPerDeciliter
+
+                let scheduleVC = GlucoseRangeScheduleTableViewController(allowedValues: unit.allowedCorrectionRangeValues, unit: unit)
 
                 scheduleVC.delegate = self
                 scheduleVC.title = sender?.textLabel?.text
 
                 if let schedule = dataManager?.glucoseTargetRangeSchedule {
-                    scheduleVC.timeZone = schedule.timeZone
-                    scheduleVC.scheduleItems = schedule.items
-                    scheduleVC.unit = schedule.unit
-
-                    show(scheduleVC, sender: sender)
-                } else if let unit = dataManager?.glucoseStore.preferredUnit {
-                    scheduleVC.unit = unit
-                    self.show(scheduleVC, sender: sender)
+                    var overrides: [TemporaryScheduleOverride.Context: DoubleRange] = [:]
+                    overrides[.preMeal] = dataManager?.preMealTargetRange
+                    overrides[.legacyWorkout] = dataManager?.legacyWorkoutTargetRange
+                    scheduleVC.setSchedule(schedule, withOverrideRanges: overrides)
                 }
+
+                show(scheduleVC, sender: sender)
             case .insulinSensitivity:
                 let unit = dataManager?.insulinSensitivitySchedule?.unit ?? dataManager?.glucoseStore.preferredUnit ?? HKUnit.milligramsPerDeciliter
                 let scheduleVC = InsulinSensitivityScheduleViewController(allowedValues: unit.allowedSensitivityValues, unit: unit)
@@ -321,10 +322,6 @@ extension MasterViewController: DailyValueScheduleTableViewControllerDelegate {
                     if let controller = controller as? BasalScheduleTableViewController {
                         dataManager?.basalRateSchedule = BasalRateSchedule(dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
                     }
-                case .glucoseTargetRange:
-                    if let controller = controller as? GlucoseRangeScheduleTableViewController {
-                        dataManager?.glucoseTargetRangeSchedule = GlucoseRangeSchedule(unit: controller.unit, dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
-                    }
                 default:
                     break
                 }
@@ -369,6 +366,23 @@ extension MasterViewController: InsulinSensitivityScheduleStorageDelegate {
     }
 }
 
+extension MasterViewController: GlucoseRangeScheduleStorageDelegate {
+    func saveSchedule(for viewController: GlucoseRangeScheduleTableViewController, completion: @escaping (SaveGlucoseRangeScheduleResult) -> Void) {
+        self.dataManager?.glucoseTargetRangeSchedule = viewController.schedule
+        for (context, range) in viewController.overrideRanges {
+            switch context {
+            case .preMeal:
+                self.dataManager?.preMealTargetRange = range
+            case .legacyWorkout:
+                self.dataManager?.legacyWorkoutTargetRange = range
+            default:
+                break
+            }
+        }
+        completion(.success)
+    }
+}
+
 private extension HKUnit {
     var allowedSensitivityValues: [Double] {
         if self == HKUnit.milligramsPerDeciliter {
@@ -377,6 +391,18 @@ private extension HKUnit {
 
         if self == HKUnit.millimolesPerLiter {
             return (6...270).map { Double($0) / 10.0 }
+        }
+
+        return []
+    }
+
+    var allowedCorrectionRangeValues: [Double] {
+        if self == HKUnit.milligramsPerDeciliter {
+            return (60...180).map { Double($0) }
+        }
+
+        if self == HKUnit.millimolesPerLiter {
+            return (33...100).map { Double($0) / 10.0 }
         }
 
         return []

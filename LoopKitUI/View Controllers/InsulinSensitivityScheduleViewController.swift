@@ -301,7 +301,7 @@ public class InsulinSensitivityScheduleViewController : DailyValueScheduleTableV
             updateEditButton()
             updateTimeLimitsFor(itemAt: indexPath.row-1)
             updateTimeLimitsFor(itemAt: indexPath.row)
-
+            updateSaveButton()
         }
     }
 
@@ -369,19 +369,8 @@ public class InsulinSensitivityScheduleViewController : DailyValueScheduleTableV
         let interval = cell.minimumTimeInterval
         let indices = insertableIndices(for: internalItems, removing: sourceIndexPath.row, with: interval)
 
-        if indices[proposedDestinationIndexPath.row] {
-            return proposedDestinationIndexPath
-        }
-
-        var closestRow = sourceIndexPath.row
-
-        for (index, valid) in indices.enumerated() where valid {
-            if abs(proposedDestinationIndexPath.row - index) < closestRow {
-                closestRow = index
-            }
-        }
-
-        return IndexPath(row: closestRow, section: proposedDestinationIndexPath.section)
+        let closestDestinationRow = indices.insertableIndex(closestTo: proposedDestinationIndexPath.row, from: sourceIndexPath.row)
+        return IndexPath(row: closestDestinationRow, section: proposedDestinationIndexPath.section)
     }
 }
 

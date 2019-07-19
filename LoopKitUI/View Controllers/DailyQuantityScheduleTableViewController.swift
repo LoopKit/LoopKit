@@ -14,7 +14,7 @@ public class DailyQuantityScheduleTableViewController: SingleValueScheduleTableV
 
     public var unit: HKUnit = HKUnit.gram() {
         didSet {
-            unitDisplayString = "\(String(describing: unit.localizedUnitString(in: .short)))/U"
+            unitDisplayString = unit.unitDivided(by: .internationalUnit()).shortLocalizedUnitString()
         }
     }
 
