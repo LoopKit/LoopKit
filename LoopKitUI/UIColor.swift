@@ -17,6 +17,7 @@ private func BundleColor(_ name: String, compatibleWith traitCollection: UITrait
 extension UIColor {
     static let delete = BundleColor("Delete")
     static let invalid = BundleColor("Invalid")
+    static let warning = BundleColor("Warning")
     static let lightenedInsulin = BundleColor("Lightened Insulin")
     static let darkenedInsulin = BundleColor("Darkened Insulin")
 }

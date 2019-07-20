@@ -1,104 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="bgs-bY-Joo" customClass="GlucoseRangeOverrideTableViewCell" customModule="LoopKitUI" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="B0K-zw-qnR" userLabel="Glucose Range Table View Cell" customClass="GlucoseRangeOverrideTableViewCell" customModule="LoopKitUI" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="450" height="196"/>
             <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bgs-bY-Joo" id="4Li-Xy-eDu">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B0K-zw-qnR" id="xCh-kv-jUm">
+                <rect key="frame" x="0.0" y="0.0" width="450" height="195.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JLS-MP-4l4">
-                        <rect key="frame" x="16" y="0.0" width="59" height="43.5"/>
-                    </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="248" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="Workout" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vj3-UD-z09">
-                        <rect key="frame" x="83" y="11" width="64.5" height="22"/>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="min" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="e6a-FR-F1s" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
-                        <rect key="frame" x="155" y="11" width="36" height="22.5"/>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="size" keyPath="textInset">
-                                <size key="value" width="0.0" height="4"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
+                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xT0-b4-34Q">
+                        <rect key="frame" x="0.0" y="47" width="450" height="150"/>
+                        <constraints>
+                            <constraint firstAttribute="height" priority="750" constant="150" id="Alo-Sg-Dzz" userLabel="Picker Height Constraint"/>
+                        </constraints>
                         <connections>
-                            <outlet property="delegate" destination="bgs-bY-Joo" id="yND-yP-YTl"/>
+                            <outlet property="dataSource" destination="B0K-zw-qnR" id="G4T-Vq-igI"/>
+                            <outlet property="delegate" destination="B0K-zw-qnR" id="08u-nB-udg"/>
                         </connections>
-                    </textField>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="–" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pXd-Eo-nXg">
-                        <rect key="frame" x="194" y="11" width="9" height="21.5"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="max" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yNd-og-d4r" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
-                        <rect key="frame" x="206" y="11" width="36" height="22"/>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="size" keyPath="textInset">
-                                <size key="value" width="0.0" height="4"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                        <connections>
-                            <outlet property="delegate" destination="bgs-bY-Joo" id="a1k-Mx-ZuX"/>
-                        </connections>
-                    </textField>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="U/hour" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xmj-pp-6GS">
-                        <rect key="frame" x="245" y="11" width="52" height="21.5"/>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                        <color key="textColor" red="0.56000000238418579" green="0.56000000238418579" blue="0.56000000238418579" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    </pickerView>
+                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w9O-wO-q9k">
+                        <rect key="frame" x="27" y="11" width="396" height="28"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" horizontalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="mDT-CN-Hzg">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="28"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="252" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZvM-YR-Icc">
+                                        <rect key="frame" x="0.0" y="0.0" width="48" height="28"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="ZvM-YR-Icc" secondAttribute="bottom" id="7gE-ZG-wWr"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="ZvM-YR-Icc" secondAttribute="trailing" id="BIh-a7-PFJ"/>
+                                    <constraint firstItem="ZvM-YR-Icc" firstAttribute="top" secondItem="mDT-CN-Hzg" secondAttribute="top" id="WLM-C7-17h"/>
+                                    <constraint firstItem="ZvM-YR-Icc" firstAttribute="leading" secondItem="mDT-CN-Hzg" secondAttribute="leading" id="k0L-1w-IV5"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="752" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jb9-TS-nlB">
+                                <rect key="frame" x="50" y="0.0" width="204.5" height="28"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" alignment="center" spacing="3" baselineRelativeArrangement="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MnN-OY-uoz">
+                                <rect key="frame" x="254.5" y="0.0" width="141.5" height="28"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="min" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="81A-bv-slg" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="3.5" width="36" height="21"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="B0K-zw-qnR" id="dqk-tS-56b"/>
+                                        </connections>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="–" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DKc-Ml-KME">
+                                        <rect key="frame" x="39" y="4" width="8.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="max" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="I0A-u4-Mat" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
+                                        <rect key="frame" x="50.5" y="3.5" width="36" height="21"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="B0K-zw-qnR" id="JjZ-kA-BP6"/>
+                                        </connections>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="U/hour" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xcd-JZ-RKV">
+                                        <rect key="frame" x="89.5" y="4" width="52" height="20.5"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <color key="textColor" red="0.56000000240000003" green="0.56000000240000003" blue="0.56000000240000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="81A-bv-slg" firstAttribute="width" secondItem="I0A-u4-Mat" secondAttribute="width" id="3QU-Jm-sWr"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="28" id="baa-FL-yCB"/>
+                        </constraints>
+                    </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottomMargin" secondItem="xmj-pp-6GS" secondAttribute="bottom" constant="0.5" id="4wd-8k-6zz"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="yNd-og-d4r" secondAttribute="bottom" id="9gf-G7-SWZ"/>
-                    <constraint firstItem="pXd-Eo-nXg" firstAttribute="top" secondItem="4Li-Xy-eDu" secondAttribute="topMargin" id="B3y-Gw-6uj"/>
-                    <constraint firstItem="Vj3-UD-z09" firstAttribute="leading" secondItem="JLS-MP-4l4" secondAttribute="trailing" constant="8" symbolic="YES" id="FPs-Yz-623"/>
-                    <constraint firstItem="e6a-FR-F1s" firstAttribute="top" secondItem="4Li-Xy-eDu" secondAttribute="topMargin" id="KBz-ho-Rjg"/>
-                    <constraint firstItem="yNd-og-d4r" firstAttribute="top" secondItem="4Li-Xy-eDu" secondAttribute="topMargin" id="L7Q-Ut-9PT"/>
-                    <constraint firstItem="pXd-Eo-nXg" firstAttribute="leading" secondItem="e6a-FR-F1s" secondAttribute="trailing" constant="3" id="NXG-pr-GPB"/>
-                    <constraint firstAttribute="bottom" secondItem="JLS-MP-4l4" secondAttribute="bottom" id="O4j-px-PoA"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="xmj-pp-6GS" secondAttribute="trailing" constant="7" id="R8G-wC-BWu"/>
-                    <constraint firstItem="e6a-FR-F1s" firstAttribute="width" secondItem="yNd-og-d4r" secondAttribute="width" id="Sxx-j3-4G5"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="Vj3-UD-z09" secondAttribute="bottom" priority="750" id="ULf-XT-Z6y"/>
-                    <constraint firstItem="xmj-pp-6GS" firstAttribute="top" secondItem="4Li-Xy-eDu" secondAttribute="topMargin" id="ZQO-Oo-BYm"/>
-                    <constraint firstItem="yNd-og-d4r" firstAttribute="leading" secondItem="pXd-Eo-nXg" secondAttribute="trailing" constant="3" id="bDQ-zJ-4Fa"/>
-                    <constraint firstItem="e6a-FR-F1s" firstAttribute="leading" secondItem="Vj3-UD-z09" secondAttribute="trailing" constant="8" symbolic="YES" id="dCh-mh-SiN"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="pXd-Eo-nXg" secondAttribute="bottom" constant="0.5" id="eNT-Be-QBt"/>
-                    <constraint firstItem="JLS-MP-4l4" firstAttribute="leading" secondItem="4Li-Xy-eDu" secondAttribute="leadingMargin" id="gez-zj-hyA"/>
-                    <constraint firstItem="xmj-pp-6GS" firstAttribute="leading" secondItem="yNd-og-d4r" secondAttribute="trailing" constant="3" id="iuC-0k-haO"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="e6a-FR-F1s" secondAttribute="bottom" constant="-0.5" id="lZa-ib-xMf"/>
-                    <constraint firstItem="Vj3-UD-z09" firstAttribute="top" secondItem="4Li-Xy-eDu" secondAttribute="topMargin" id="pxv-s0-my6"/>
-                    <constraint firstItem="JLS-MP-4l4" firstAttribute="top" secondItem="4Li-Xy-eDu" secondAttribute="top" id="tEI-6F-huj"/>
+                    <constraint firstAttribute="trailing" secondItem="xT0-b4-34Q" secondAttribute="trailing" id="1wp-bE-ecb"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="xT0-b4-34Q" secondAttribute="bottom" priority="750" constant="-8.5" id="6CX-Z9-Ek0"/>
+                    <constraint firstItem="w9O-wO-q9k" firstAttribute="top" secondItem="xCh-kv-jUm" secondAttribute="topMargin" id="6Zv-42-OwQ"/>
+                    <constraint firstItem="w9O-wO-q9k" firstAttribute="leading" secondItem="xCh-kv-jUm" secondAttribute="leadingMargin" constant="7" id="6kf-lT-bqE"/>
+                    <constraint firstItem="xT0-b4-34Q" firstAttribute="leading" secondItem="xCh-kv-jUm" secondAttribute="leading" id="YW5-8x-rI2"/>
+                    <constraint firstItem="xT0-b4-34Q" firstAttribute="top" secondItem="w9O-wO-q9k" secondAttribute="bottom" constant="8" id="Zlm-71-jKc"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="w9O-wO-q9k" secondAttribute="trailing" constant="7" id="m0E-5F-XaB"/>
                 </constraints>
             </tableViewCellContentView>
-            <inset key="separatorInset" minX="46" minY="0.0" maxX="0.0" maxY="0.0"/>
             <connections>
-                <outlet property="iconImageView" destination="JLS-MP-4l4" id="pwY-w2-2DY"/>
-                <outlet property="maxValueTextField" destination="yNd-og-d4r" id="oDh-BK-wc1"/>
-                <outlet property="minValueTextField" destination="e6a-FR-F1s" id="3mz-H2-Myd"/>
-                <outlet property="titleLabel" destination="Vj3-UD-z09" id="bgA-UF-Pl7"/>
-                <outlet property="unitLabel" destination="xmj-pp-6GS" id="ZLi-y6-fFR"/>
+                <outlet property="dateLabel" destination="Jb9-TS-nlB" id="MbE-DY-nSW"/>
+                <outlet property="iconImageView" destination="ZvM-YR-Icc" id="prU-wu-fYJ"/>
+                <outlet property="maxValueTextField" destination="I0A-u4-Mat" id="ijz-Wc-2XW"/>
+                <outlet property="minValueTextField" destination="81A-bv-slg" id="fA3-O8-F19"/>
+                <outlet property="picker" destination="xT0-b4-34Q" id="eRB-dD-rlE"/>
+                <outlet property="pickerHeightConstraint" destination="Alo-Sg-Dzz" id="qpb-Cz-myj"/>
+                <outlet property="unitLabel" destination="Xcd-JZ-RKV" id="X2c-dD-Upp"/>
             </connections>
-            <point key="canvasLocation" x="227" y="181"/>
+            <point key="canvasLocation" x="460.80000000000001" y="165.51724137931035"/>
         </tableViewCell>
     </objects>
 </document>

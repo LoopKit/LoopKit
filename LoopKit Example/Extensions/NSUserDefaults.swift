@@ -17,6 +17,8 @@ extension UserDefaults {
         case InsulinActionDuration = "com.LoopKitExample.InsulinActionDuration"
         case InsulinSensitivitySchedule = "com.LoopKitExample.InsulinSensitivitySchedule"
         case GlucoseTargetRangeSchedule = "com.LoopKitExample.GlucoseTargetRangeSchedule"
+        case PreMealTargetRange = "com.LoopKitExample.PreMealTargetRange"
+        case LegacyWorkoutTargetRange = "com.LoopKitExample.LegacyWorkoutTargetRange"
         case MaximumBasalRatePerHour = "com.LoopKitExample.MaximumBasalRatePerHour"
         case MaximumBolus = "com.LoopKitExample.MaximumBolus"
         case PumpID = "com.LoopKitExample.PumpID"
@@ -89,6 +91,35 @@ extension UserDefaults {
         }
         set {
             set(newValue?.rawValue, forKey: Key.GlucoseTargetRangeSchedule.rawValue)
+        }
+    }
+
+    var preMealTargetRange: DoubleRange? {
+        get {
+            if let rawValue = array(forKey: Key.PreMealTargetRange.rawValue) as? DoubleRange.RawValue {
+                return DoubleRange(rawValue: rawValue)
+            } else {
+                return nil
+            }
+        }
+
+        set {
+            set(newValue?.rawValue, forKey: Key.PreMealTargetRange.rawValue)
+        }
+    }
+
+
+    var legacyWorkoutTargetRange: DoubleRange? {
+        get {
+            if let rawValue = array(forKey: Key.LegacyWorkoutTargetRange.rawValue) as? DoubleRange.RawValue {
+                return DoubleRange(rawValue: rawValue)
+            } else {
+                return nil
+            }
+        }
+
+        set {
+            set(newValue?.rawValue, forKey: Key.LegacyWorkoutTargetRange.rawValue)
         }
     }
 
