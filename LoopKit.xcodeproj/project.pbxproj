@@ -134,7 +134,6 @@
 		434C5F9C2098352500B2FD1A /* QuantityFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434C5F9B2098352500B2FD1A /* QuantityFormatter.swift */; };
 		434C5F9E209938CD00B2FD1A /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434C5F9D209938CD00B2FD1A /* NumberFormatter.swift */; };
 		434C5FA0209ABD4700B2FD1A /* QuantityFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434C5F9F209ABD4700B2FD1A /* QuantityFormatterTests.swift */; };
-		434C5FA1209AC4EE00B2FD1A /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
 		4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4352A73B20DECF0600CAC200 /* CGMManager.swift */; };
 		4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4353D16E203D104F007B4ECD /* CarbStoreError.swift */; };
 		4353D170203D3E5C007B4ECD /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
@@ -228,7 +227,6 @@
 		43BA7184201EE7090058961E /* TextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1F31CF294A9000DB779 /* TextFieldTableViewController.swift */; };
 		43BA7185201EE7090058961E /* DailyValueScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE051C7290530073BE78 /* DailyValueScheduleTableViewController.swift */; };
 		43BA7187201EE7090058961E /* GlucoseRangeScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE061C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift */; };
-		43BA7188201EE85B0058961E /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
 		43BA7189201EE8980058961E /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */; };
 		43BA718A201EE8CF0058961E /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		43BA718B201EE93C0058961E /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
@@ -376,7 +374,6 @@
 		89ADE12B226BDB730067222B /* DateRelativeCarbEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE12A226BDB730067222B /* DateRelativeCarbEntry.swift */; };
 		89ADE12D226BDD190067222B /* DateRelativeBasalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE12C226BDD190067222B /* DateRelativeBasalEntry.swift */; };
 		89ADE12F226BDED40067222B /* DateRelativeBolusEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE12E226BDED40067222B /* DateRelativeBolusEntry.swift */; };
-		89ADE132226BE0590067222B /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
 		89ADE134226BF0490067222B /* TestingScenarioInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE133226BF0490067222B /* TestingScenarioInstance.swift */; };
 		89ADE136226BF0BE0067222B /* DateRelativeGlucoseSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE135226BF0BE0067222B /* DateRelativeGlucoseSample.swift */; };
 		89ADE138226BF51D0067222B /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FB64B1D712449007B9C70 /* NSData.swift */; };
@@ -432,7 +429,6 @@
 		89D204BF21CC7FFB001238CC /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		89D204C121CC8005001238CC /* NibLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43177D0D1D3737420006E908 /* NibLoadable.swift */; };
 		89D204C221CC8008001238CC /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */; };
-		89D204C421CC803C001238CC /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
 		89D204C521CC815E001238CC /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		89D204C621CC8165001238CC /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */; };
 		89D204CB21CC8228001238CC /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434C5F9D209938CD00B2FD1A /* NumberFormatter.swift */; };
@@ -2502,7 +2498,6 @@
 				43BA716C201E49220058961E /* CustomInputTextField.swift in Sources */,
 				43BA716F201E49220058961E /* FoodEmojiDataSource.swift in Sources */,
 				432CF86D20D76C470066B889 /* SwitchTableViewCell.swift in Sources */,
-				43BA7188201EE85B0058961E /* HKUnit.swift in Sources */,
 				4369F092208B0DFF000E3E45 /* DateAndDurationTableViewCell.swift in Sources */,
 				43BA7189201EE8980058961E /* UITableViewCell.swift in Sources */,
 				892A5D9C2231E118008961AB /* UIAlertController.swift in Sources */,
@@ -2658,7 +2653,6 @@
 				434113B820F2BDE800D05747 /* PersistenceControllerTestCase.swift in Sources */,
 				437874B6202FDD1500A3D8B9 /* InsulinMathTests.swift in Sources */,
 				437AFF21203AA740008C4892 /* NSManagedObjectContext.swift in Sources */,
-				434C5FA1209AC4EE00B2FD1A /* HKUnit.swift in Sources */,
 				437AFF1F203A763F008C4892 /* HKHealthStoreMock.swift in Sources */,
 				891A3FD32249990900378B27 /* DailyValueSchedule.swift in Sources */,
 				434C5FA0209ABD4700B2FD1A /* QuantityFormatterTests.swift in Sources */,
@@ -2693,7 +2687,6 @@
 			files = (
 				892A5D54222F03F9008961AB /* TestingPumpManager.swift in Sources */,
 				89ADE12F226BDED40067222B /* DateRelativeBolusEntry.swift in Sources */,
-				89ADE132226BE0590067222B /* HKUnit.swift in Sources */,
 				89CA2B38226D4456004D9350 /* DateRelativeQuantity.swift in Sources */,
 				89ADE12D226BDD190067222B /* DateRelativeBasalEntry.swift in Sources */,
 				89ADE134226BF0490067222B /* TestingScenarioInstance.swift in Sources */,
@@ -2713,7 +2706,6 @@
 			files = (
 				89CA2B35226D1624004D9350 /* MutableCollection.swift in Sources */,
 				89D204BF21CC7FFB001238CC /* NSTimeInterval.swift in Sources */,
-				89D204C421CC803C001238CC /* HKUnit.swift in Sources */,
 				89D204A921CC7C8F001238CC /* MockPumpManager.swift in Sources */,
 				89ADE138226BF51D0067222B /* NSData.swift in Sources */,
 				89D204AA21CC7C8F001238CC /* MockGlucoseProvider.swift in Sources */,

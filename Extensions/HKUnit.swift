@@ -9,7 +9,7 @@
 import HealthKit
 
 
-extension HKUnit {
+public extension HKUnit {
     static let milligramsPerDeciliter: HKUnit = {
         return HKUnit.gramUnit(with: .milli).unitDivided(by: .literUnit(with: .deci))
     }()
