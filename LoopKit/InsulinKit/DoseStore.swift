@@ -738,6 +738,7 @@ extension DoseStore {
                     object.title = event.title
                     object.type = event.type
                     object.dose = event.dose
+                    print("HK: CDObject = \(object)")
                 }
             }
 

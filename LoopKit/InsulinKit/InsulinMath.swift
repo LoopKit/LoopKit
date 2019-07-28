@@ -84,21 +84,31 @@ extension DoseEntry {
         }
     }
 
-    func trim(from start: Date? = nil, to end: Date? = nil) -> DoseEntry {
+    func trim(from start: Date? = nil, to end: Date? = nil, syncIdentifier: String? = nil) -> DoseEntry {
         guard unit == .unitsPerHour else {
             return self
         }
 
+        let originalDuration = endDate.timeIntervalSince(startDate)
+
         let startDate = max(start ?? .distantPast, self.startDate)
+        let endDate = max(startDate, min(end ?? .distantFuture, self.endDate))
+
+        var trimmedDeliveredUnits: Double? = deliveredUnits
+
+        if let deliveredUnits = deliveredUnits, originalDuration > 0 {
+            trimmedDeliveredUnits = deliveredUnits * (endDate.timeIntervalSince(startDate) / originalDuration)
+        }
 
         return DoseEntry(
             type: type,
             startDate: startDate,
-            endDate: max(startDate, min(end ?? .distantFuture, self.endDate)),
+            endDate: endDate,
             value: value,
             unit: unit,
+            deliveredUnits: trimmedDeliveredUnits,
             description: description,
-            syncIdentifier: nil,
+            syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate
         )
     }
@@ -256,15 +266,8 @@ extension DoseEntry {
                 endDate = basalItems[index + 1].startDate
             }
 
-            var dose = DoseEntry(
-                type: type,
-                startDate: startDate,
-                endDate: endDate,
-                value: unitsPerHour,
-                unit: .unitsPerHour,
-                description: description,
-                syncIdentifier: syncIdentifier
-            )
+            var dose = trim(from: startDate, to: endDate, syncIdentifier: syncIdentifier)
+
             dose.scheduledBasalRate = HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: basalItem.value)
 
             doses.append(dose)
@@ -323,15 +326,7 @@ extension Collection where Element == DoseEntry {
 
                     // Ignore 0-duration doses
                     if endDate > last.startDate {
-                        reconciled.append(DoseEntry(
-                            type: last.type,
-                            startDate: last.startDate,
-                            endDate: endDate,
-                            value: last.value,
-                            unit: last.unit,
-                            description: last.description,
-                            syncIdentifier: last.syncIdentifier
-                        ))
+                        reconciled.append(last.trim(from: nil, to: endDate, syncIdentifier: last.syncIdentifier))
                     }
                 }
 
@@ -421,7 +416,7 @@ extension Collection where Element == DoseEntry {
      */
     var totalDelivery: Double {
         return reduce(0) { (total, dose) -> Double in
-            return total + dose.unitsRoundedToMinimedIncrements
+            return total + dose.unitsInDeliverableIncrements
         }
     }
 

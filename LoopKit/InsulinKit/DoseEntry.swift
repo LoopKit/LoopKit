@@ -16,6 +16,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     public let endDate: Date
     internal let value: Double
     public let unit: DoseUnit
+    public let deliveredUnits: Double?
     public let description: String?
     internal(set) public var syncIdentifier: String?
 
@@ -30,7 +31,7 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units)
     }
 
-    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil) {
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
@@ -39,6 +40,7 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.description = description
         self.syncIdentifier = syncIdentifier
         self.scheduledBasalRate = scheduledBasalRate
+        self.deliveredUnits = deliveredUnits
     }
 }
 
@@ -93,8 +95,8 @@ extension DoseEntry {
             scheduledUnitsPerHour = 0
         }
 
-        let scheduledUnits = round(scheduledUnitsPerHour * hours * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
-        let deliveredUnits = round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
+        let scheduledUnits = scheduledUnitsPerHour * hours
+        let deliveredUnits = self.deliveredUnits ?? round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
         return deliveredUnits - scheduledUnits
     }
 
@@ -121,16 +123,16 @@ extension DoseEntry {
     }
 
     /// The smallest increment per unit of hourly basal delivery
-    /// TODO: Is this 40 for x23 models?
-    internal static let minimumMinimedIncrementPerUnit: Double = 20
+    /// TODO: Is this 40 for x23 models? (yes - PS 7/26/2019)
+    /// MinimedPumpmanager will be updated to report deliveredUnits, so this will end up not being used.
+    private static let minimumMinimedIncrementPerUnit: Double = 20
 
-    /// Rounds a given entry to the smallest increment of hourly delivery
-    internal var unitsRoundedToMinimedIncrements: Double {
+    /// Returns the delivered units, or rounds to nearest deliverable (mdt) increment
+    internal var unitsInDeliverableIncrements: Double {
         guard case .unitsPerHour = unit else {
             return self.units
         }
-        let units = self.units
 
-        return round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
+        return self.deliveredUnits ?? round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
     }
 }
