@@ -85,6 +85,30 @@ class CachedInsulinDeliveryObject: NSManagedObject {
         }
     }
 
+    var scheduledNonOverriddenBasalRate: HKQuantity? {
+        get {
+            willAccessValue(forKey: "scheduledNonOverriddenBasalRate")
+            defer { didAccessValue(forKey: "scheduledNonOverriddenBasalRate") }
+
+            guard let rate = primitiveScheduledNonOverriddenBasalRate else {
+                return nil
+            }
+
+            return HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: rate.doubleValue)
+        }
+        set {
+            willChangeValue(forKey: "scheduledNonOverriddenBasalRate")
+            defer { didChangeValue(forKey: "scheduledNonOverriddenBasalRate") }
+
+            guard let rate = newValue?.doubleValue(for: DoseEntry.unitsPerHour) else {
+                primitiveScheduledNonOverriddenBasalRate = nil
+                return
+            }
+
+            primitiveScheduledNonOverriddenBasalRate = NSNumber(value: rate)
+        }
+    }
+
 
     override func awakeFromInsert() {
         super.awakeFromInsert()
@@ -119,8 +143,8 @@ extension CachedInsulinDeliveryObject {
         let unit: DoseUnit
         let deliveredUnits: Double?
 
-        if let scheduledTempBasalRate = scheduledTempBasalRate {
-            doseValue = scheduledTempBasalRate.doubleValue(for: .internationalUnitsPerHour)
+        if let scheduledRate = scheduledTempBasalRate ?? scheduledNonOverriddenBasalRate {
+            doseValue = scheduledRate.doubleValue(for: .internationalUnitsPerHour)
             unit = .unitsPerHour
             deliveredUnits = value
         } else {
@@ -151,6 +175,7 @@ extension CachedInsulinDeliveryObject {
         syncIdentifier = sample.metadata?[HKMetadataKeySyncIdentifier] as? String ?? sample.uuid.uuidString
         scheduledBasalRate = sample.scheduledBasalRate
         scheduledTempBasalRate = sample.scheduledTempBasalRate
+        scheduledNonOverriddenBasalRate = sample.scheduledNonOverriddenBasalRate
         hasLoopKitOrigin = sample.hasLoopKitOrigin
         value = sample.quantity.doubleValue(for: .internationalUnit())
         provenanceIdentifier = sample.provenanceIdentifier
