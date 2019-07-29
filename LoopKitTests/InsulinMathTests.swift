@@ -222,7 +222,6 @@ class InsulinMathTests: XCTestCase {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqual(expected.endDate, calculated.endDate)
             XCTAssertEqual(expected.value, calculated.netBasalUnitsPerHour, accuracy: Double(Float.ulpOfOne))
-            XCTAssertEqual(expected.unit, calculated.unit)
         }
 
         let iob = normalized.insulinOnBoard(model: insulinModel)
@@ -366,8 +365,7 @@ class InsulinMathTests: XCTestCase {
         for (expected, calculated) in zip(output, doses) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqual(expected.endDate, calculated.endDate)
-            XCTAssertEqual(expected.value, calculated.value, accuracy: Double(Float.ulpOfOne))
-            XCTAssertEqual(expected.unit, calculated.unit)
+            XCTAssertEqual(expected.value, calculated.unitsPerHour, accuracy: Double(Float.ulpOfOne))
             XCTAssertEqual(expected.scheduledBasalRate, calculated.scheduledBasalRate)
         }
     }
@@ -1071,6 +1069,6 @@ class InsulinMathTests: XCTestCase {
         let dose = DoseEntry(type: .tempBasal, startDate: startDate, endDate: endDate, value: tempBasalRate, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: scheduledRate))
 
         XCTAssertEqual(netRate, dose.netBasalUnitsPerHour, accuracy: .ulpOfOne)
-        XCTAssertEqual(0.05, dose.netBasalUnits, accuracy: .ulpOfOne)
+        XCTAssertEqual(0.0375, dose.netBasalUnits, accuracy: .ulpOfOne)
     }
 }
