@@ -8,12 +8,11 @@
 import HealthKit
 
 
-/// Defines the scheduled temporary basal insulin rate during the time of a temp basal delivery sample
-let MetadataKeyScheduledTempBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduledTempBasalRate"
-
 /// Defines the scheduled basal insulin rate during the time of the basal delivery sample
 let MetadataKeyScheduledBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduledBasalRate"
 
+/// Defines the scheduled temporary basal insulin rate during the time of a temp basal delivery sample
+let MetadataKeyScheduledTempBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduledTempBasalRate"
 
 /// A crude determination of whether a sample was written by LoopKit, in the case of multiple LoopKit-enabled app versions on the same phone.
 let MetadataKeyHasLoopKitOrigin = "HasLoopKitOrigin"
@@ -91,6 +90,11 @@ extension HKQuantitySample {
         return metadata?[MetadataKeyScheduledBasalRate] as? HKQuantity
     }
 
+    var scheduledTempBasalRate: HKQuantity? {
+        return metadata?[MetadataKeyScheduledTempBasalRate] as? HKQuantity
+    }
+
+
     /// Returns a DoseEntry representation of the sample.
     /// Doses are not normalized, nor should they be assumed reconciled.
     var dose: DoseEntry? {
@@ -119,12 +123,27 @@ extension HKQuantitySample {
             return nil
         }
 
+        let value: Double
+        let unit: DoseUnit
+        let deliveredUnits: Double?
+
+        if let scheduledTempBasalRate = scheduledTempBasalRate {
+            value = scheduledTempBasalRate.doubleValue(for: .internationalUnitsPerHour)
+            unit = .unitsPerHour
+            deliveredUnits = quantity.doubleValue(for: .internationalUnit())
+        } else {
+            value = quantity.doubleValue(for: .internationalUnit())
+            unit = .units
+            deliveredUnits = nil
+        }
+
         return DoseEntry(
             type: type,
             startDate: startDate,
             endDate: endDate,
-            value: quantity.doubleValue(for: .internationalUnit()),
-            unit: .units,
+            value: value,
+            unit: unit,
+            deliveredUnits: deliveredUnits,
             description: nil,
             syncIdentifier: metadata?[HKMetadataKeySyncIdentifier] as? String,
             scheduledBasalRate: scheduledBasalRate

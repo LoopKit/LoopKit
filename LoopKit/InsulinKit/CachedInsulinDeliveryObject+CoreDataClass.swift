@@ -61,6 +61,31 @@ class CachedInsulinDeliveryObject: NSManagedObject {
         }
     }
 
+    var scheduledTempBasalRate: HKQuantity? {
+        get {
+            willAccessValue(forKey: "scheduledTempBasalRate")
+            defer { didAccessValue(forKey: "scheduledTempBasalRate") }
+
+            guard let rate = primitiveScheduledTempBasalRate else {
+                return nil
+            }
+
+            return HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: rate.doubleValue)
+        }
+        set {
+            willChangeValue(forKey: "scheduledTempBasalRate")
+            defer { didChangeValue(forKey: "scheduledTempBasalRate") }
+
+            guard let rate = newValue?.doubleValue(for: DoseEntry.unitsPerHour) else {
+                primitiveScheduledTempBasalRate = nil
+                return
+            }
+
+            primitiveScheduledTempBasalRate = NSNumber(value: rate)
+        }
+    }
+
+
     override func awakeFromInsert() {
         super.awakeFromInsert()
 
@@ -90,12 +115,27 @@ extension CachedInsulinDeliveryObject {
             fatalError("CachedInsulinDeliveryObject has unexpected reason value: \(String(describing: reason))")
         }
 
+        let doseValue: Double
+        let unit: DoseUnit
+        let deliveredUnits: Double?
+
+        if let scheduledTempBasalRate = scheduledTempBasalRate {
+            doseValue = scheduledTempBasalRate.doubleValue(for: .internationalUnitsPerHour)
+            unit = .unitsPerHour
+            deliveredUnits = value
+        } else {
+            doseValue = value
+            unit = .units
+            deliveredUnits = nil
+        }
+
         return DoseEntry(
             type: type,
             startDate: startDate,
             endDate: endDate,
-            value: value,
-            unit: .units,
+            value: doseValue,
+            unit: unit,
+            deliveredUnits: deliveredUnits,
             description: nil,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate
@@ -110,6 +150,7 @@ extension CachedInsulinDeliveryObject {
         // External doses might not have a syncIdentifier, so use the UUID
         syncIdentifier = sample.metadata?[HKMetadataKeySyncIdentifier] as? String ?? sample.uuid.uuidString
         scheduledBasalRate = sample.scheduledBasalRate
+        scheduledTempBasalRate = sample.scheduledTempBasalRate
         hasLoopKitOrigin = sample.hasLoopKitOrigin
         value = sample.quantity.doubleValue(for: .internationalUnit())
         provenanceIdentifier = sample.provenanceIdentifier
