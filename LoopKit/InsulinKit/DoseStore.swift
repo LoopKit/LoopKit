@@ -742,13 +742,7 @@ extension DoseStore {
                 }
             }
 
-            // This is a hack to prevent doubling up mutable doses on a MM x23+ model pump.
-            // Assume it's safe to override any pre-reported pending doses if a new history read found mutable doses.
-            if mutablePumpEventDoses.count > 0 {
-                self.mutablePumpEventDoses = mutablePumpEventDoses
-            } else {
-                self.mutablePumpEventDoses = self.mutablePumpEventDoses.filterDateRange(self.lastAddedPumpEvents, nil)
-            }
+            self.mutablePumpEventDoses = mutablePumpEventDoses
 
             if let mutableDate = firstMutableDate {
                 self.pumpEventQueryAfterDate = mutableDate

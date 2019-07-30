@@ -45,8 +45,6 @@ extension HKQuantitySample {
             }
 
             if dose.type == .tempBasal {
-                print("HK store temp basal dose rate: \(dose.unitsPerHour)")
-                print("HK store temp basal dose: \(dose)")
                 metadata[MetadataKeyScheduledTempBasalRate] = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: dose.unitsPerHour)
             }
         case .bolus:
