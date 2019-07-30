@@ -1064,6 +1064,19 @@ extension DoseStore {
 
     /// *This method should only be called from within a managed object context block.*
     ///
+    /// - Returns: An array of doses from pump events that were marked mutable
+    /// - Throws: An error describing the failure to fetch objects
+    private func normalizedMutablePumpEventDoseEntries() throws -> [DoseEntry] {
+        guard let basalProfile = self.basalProfileApplyingOverrideHistory else {
+            throw DoseStoreError.configurationError
+        }
+
+        return mutablePumpEventDoses.reconciled().annotated(with: basalProfile)
+    }
+
+
+    /// *This method should only be called from within a managed object context block.*
+    ///
     /// - Parameters:
     ///   - basalStart: The earliest basal dose start date to include
     ///   - end: The latest dose end date to include
@@ -1141,7 +1154,8 @@ extension DoseStore {
                         doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
                     }
 
-                    completion(.success(doses + self.mutablePumpEventDoses))
+                    let mutableDoses = try self.normalizedMutablePumpEventDoseEntries()
+                    completion(.success(doses + mutableDoses))
                 } catch let error as DoseStoreError {
                     completion(.failure(error))
                 } catch {

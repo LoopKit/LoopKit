@@ -25,7 +25,6 @@ extension CachedInsulinDeliveryObject {
     @NSManaged public var value: Double
     @NSManaged public var primitiveScheduledBasalRate: NSNumber?
     @NSManaged public var primitiveScheduledTempBasalRate: NSNumber?
-    @NSManaged public var primitiveScheduledNonOverriddenBasalRate: NSNumber?
     @NSManaged public var primitiveReason: NSNumber?
     @NSManaged public var createdAt: Date?
 

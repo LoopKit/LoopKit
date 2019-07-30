@@ -12,6 +12,9 @@ public struct PumpManagerStatus: Equatable {
     
     public enum BasalDeliveryState: Equatable {
         case active
+        case initiatingTempBasal
+        case tempBasal(_ dose: DoseEntry)
+        case cancelingTempBasal
         case suspending
         case suspended
         case resuming

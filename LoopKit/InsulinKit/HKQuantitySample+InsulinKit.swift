@@ -14,10 +14,6 @@ let MetadataKeyScheduledBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduled
 /// Defines the scheduled temporary basal insulin rate during the time of a temp basal delivery sample
 let MetadataKeyScheduledTempBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduledTempBasalRate"
 
-/// Defines the normally scheduled basal insulin rate when no temp basal is running
-let MetadataKeyScheduledNonOverriddenBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduledNonOverriddenBasalRate"
-
-
 /// A crude determination of whether a sample was written by LoopKit, in the case of multiple LoopKit-enabled app versions on the same phone.
 let MetadataKeyHasLoopKitOrigin = "HasLoopKitOrigin"
 
@@ -52,8 +48,6 @@ extension HKQuantitySample {
                 print("HK store temp basal dose rate: \(dose.unitsPerHour)")
                 print("HK store temp basal dose: \(dose)")
                 metadata[MetadataKeyScheduledTempBasalRate] = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: dose.unitsPerHour)
-            } else if dose.type == .basal {
-                metadata[MetadataKeyScheduledNonOverriddenBasalRate] = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: dose.unitsPerHour)
             }
         case .bolus:
             // Ignore 0-unit bolus entries
@@ -100,10 +94,6 @@ extension HKQuantitySample {
         return metadata?[MetadataKeyScheduledTempBasalRate] as? HKQuantity
     }
 
-    var scheduledNonOverriddenBasalRate: HKQuantity? {
-        return metadata?[MetadataKeyScheduledNonOverriddenBasalRate] as? HKQuantity
-    }
-
     /// Returns a DoseEntry representation of the sample.
     /// Doses are not normalized, nor should they be assumed reconciled.
     var dose: DoseEntry? {
@@ -136,7 +126,7 @@ extension HKQuantitySample {
         let unit: DoseUnit
         let deliveredUnits: Double?
 
-        if let scheduledRate = scheduledTempBasalRate ?? scheduledNonOverriddenBasalRate {
+        if let scheduledRate = scheduledTempBasalRate {
             value = scheduledRate.doubleValue(for: .internationalUnitsPerHour)
             unit = .unitsPerHour
             deliveredUnits = quantity.doubleValue(for: .internationalUnit())
