@@ -98,6 +98,7 @@
         <attribute name="deliveredUnits" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="doseType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="duration" attributeType="Double" minValueString="0" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="mutable" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="raw" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
@@ -112,6 +113,9 @@
         </fetchIndex>
         <fetchIndex name="byUploadedIndex">
             <fetchIndexElement property="uploaded" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byMutable">
+            <fetchIndexElement property="mutable" type="Binary" order="ascending"/>
         </fetchIndex>
         <uniquenessConstraints>
             <uniquenessConstraint>
@@ -133,7 +137,7 @@
         <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="180"/>
         <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="210"/>
         <element name="DeletedCarbObject" positionX="-63" positionY="90" width="128" height="90"/>
-        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="210"/>
+        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="225"/>
         <element name="Reservoir" positionX="-63" positionY="-18" width="128" height="105"/>
     </elements>
 </model>

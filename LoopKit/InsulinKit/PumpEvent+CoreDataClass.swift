@@ -172,6 +172,10 @@ extension PumpEvent {
     var isUploaded: Bool {
         return uploaded
     }
+
+    var isMutable: Bool {
+        return mutable
+    }
 }
 
 
