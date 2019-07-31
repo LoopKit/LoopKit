@@ -10,25 +10,15 @@ import HealthKit
 import LoopKit
 import LoopTestingKit
 
-
 public protocol MockPumpManagerStateObserver {
     func mockPumpManager(_ manager: MockPumpManager, didUpdate state: MockPumpManagerState)
     func mockPumpManager(_ manager: MockPumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus)
 }
 
-public struct MockPumpManagerState {
-    public var reservoirUnitsRemaining: Double
-    public var tempBasalEnactmentShouldError: Bool
-    public var bolusEnactmentShouldError: Bool
-    public var deliverySuspensionShouldError: Bool
-    public var deliveryResumptionShouldError: Bool
-    public var maximumBolus: Double
-    public var maximumBasalRatePerHour: Double
-}
-
 private enum MockPumpManagerError: LocalizedError {
     case pumpSuspended
     case communicationFailure
+    case bolusInProgress
 
     var failureReason: String? {
         switch self {
@@ -36,6 +26,8 @@ private enum MockPumpManagerError: LocalizedError {
             return "Pump is suspended"
         case .communicationFailure:
             return "Unable to communicate with pump"
+        case .bolusInProgress:
+            return "Bolus in progress"
         }
     }
 }
@@ -92,25 +84,66 @@ public final class MockPumpManager: TestingPumpManager {
         return type(of: self).device
     }
 
-    public var status: PumpManagerStatus {
-        didSet {
-            let newValue = self.status
-            statusObservers.forEach { $0.pumpManager(self, didUpdate: newValue, oldStatus: oldValue) }
-            stateObservers.forEach { $0.mockPumpManager(self, didUpdate: newValue, oldStatus: oldValue) }
-            delegate.notify {
-                $0?.pumpManager(self, didUpdate: newValue, oldStatus: oldValue)
-                $0?.pumpManagerDidUpdateState(self)
-            }
+    private func basalDeliveryState(for state: MockPumpManagerState) -> PumpManagerStatus.BasalDeliveryState {
+        if state.suspended {
+            return .suspended
         }
+        if let temp = state.unfinalizedTempBasal, !temp.finished {
+            return .tempBasal(DoseEntry(temp))
+        }
+        return .active
+    }
+
+    private func bolusState(for state: MockPumpManagerState) -> PumpManagerStatus.BolusState {
+        if let bolus = state.unfinalizedBolus, !bolus.finished {
+            return .inProgress(DoseEntry(bolus))
+        } else {
+            return .none
+        }
+    }
+
+    private func status(for state: MockPumpManagerState) -> PumpManagerStatus {
+        return PumpManagerStatus(
+            timeZone: .current,
+            device: MockPumpManager.device,
+            pumpBatteryChargeRemaining: state.pumpBatteryChargeRemaining,
+            basalDeliveryState: basalDeliveryState(for: state),
+            bolusState: .none)
+    }
+
+    public var pumpBatteryChargeRemaining: Double? {
+        get {
+            return state.pumpBatteryChargeRemaining
+        }
+        set {
+            state.pumpBatteryChargeRemaining = newValue
+        }
+    }
+
+    public var status: PumpManagerStatus {
+        get {
+            return status(for: self.state)
+        }
+    }
+
+    private func notifyObservers() {
     }
 
     public var state: MockPumpManagerState {
         didSet {
-            let reservoirChanged = state.reservoirUnitsRemaining != oldValue.reservoirUnitsRemaining
+            let newValue = state
+
+            let oldStatus = status(for: oldValue)
+            let newStatus = status(for: newValue)
+
+            if oldStatus != newStatus {
+                statusObservers.forEach { $0.pumpManager(self, didUpdate: newStatus, oldStatus: oldStatus) }
+            }
 
             stateObservers.forEach { $0.mockPumpManager(self, didUpdate: self.state) }
+
             delegate.notify { (delegate) in
-                if reservoirChanged {
+                if newValue.reservoirUnitsRemaining != oldValue.reservoirUnitsRemaining {
                     delegate?.pumpManager(self, didReadReservoirValue: self.state.reservoirUnitsRemaining, at: Date()) { result in
                         // nothing to do here
                     }
@@ -143,29 +176,31 @@ public final class MockPumpManager: TestingPumpManager {
     private var statusObservers = WeakSynchronizedSet<PumpManagerStatusObserver>()
     private var stateObservers = WeakSynchronizedSet<MockPumpManagerStateObserver>()
 
-    private var pendingPumpEvents: [NewPumpEvent] = []
-
     public init() {
-        status = PumpManagerStatus(timeZone: .current, device: MockPumpManager.device, pumpBatteryChargeRemaining: 1, basalDeliveryState: .active, bolusState: .none)
-        state = MockPumpManagerState(reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity, tempBasalEnactmentShouldError: false, bolusEnactmentShouldError: false, deliverySuspensionShouldError: false, deliveryResumptionShouldError: false, maximumBolus: 25.0, maximumBasalRatePerHour: 5.0)
+        state = MockPumpManagerState(
+            reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity,
+            tempBasalEnactmentShouldError: false,
+            bolusEnactmentShouldError: false,
+            deliverySuspensionShouldError: false,
+            deliveryResumptionShouldError: false,
+            maximumBolus: 25.0,
+            maximumBasalRatePerHour: 5.0,
+            suspended: false,
+            pumpBatteryChargeRemaining: 1,
+            unfinalizedBolus: nil,
+            unfinalizedTempBasal: nil,
+            finalizedDoses: [])
     }
 
     public init?(rawState: RawStateValue) {
         guard let state = (rawState["state"] as? MockPumpManagerState.RawValue).flatMap(MockPumpManagerState.init(rawValue:)) else {
             return nil
         }
-        let pumpBatteryChargeRemaining = rawState["pumpBatteryChargeRemaining"] as? Double ?? 1
-
-        self.status = PumpManagerStatus(timeZone: .current, device: MockPumpManager.device, pumpBatteryChargeRemaining: pumpBatteryChargeRemaining, basalDeliveryState: .active, bolusState: .none)
         self.state = state
     }
 
     public var rawState: RawStateValue {
-        var raw: RawStateValue = ["state": state.rawValue]
-        if let pumpBatteryChargeRemaining = status.pumpBatteryChargeRemaining {
-            raw["pumpBatteryChargeRemaining"] = pumpBatteryChargeRemaining
-        }
-        return raw
+        return ["state": state.rawValue]
     }
 
     public func createBolusProgressReporter(reportingOn dispatchQueue: DispatchQueue) -> DoseProgressReporter? {
@@ -192,35 +227,62 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     public func assertCurrentPumpData() {
-        let pendingPumpEvents = self.pendingPumpEvents
+
+        state.finalizeFinishedDoses()
+
+        storeDoses { (error) in
+            self.delegate.notify { (delegate) in
+                delegate?.pumpManagerRecommendsLoop(self)
+            }
+
+            guard error == nil else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                let totalInsulinUsage = self.state.finalizedDoses.reduce(into: 0 as Double) { total, dose in
+                    total += dose.units
+                }
+
+                self.state.finalizedDoses = []
+                self.state.reservoirUnitsRemaining -= totalInsulinUsage
+            }
+        }
+    }
+
+    private func storeDoses(completion: @escaping (_ error: Error?) -> Void) {
+        state.finalizeFinishedDoses()
+        let pendingPumpEvents = state.dosesToStore.map { NewPumpEvent($0) }
         delegate.notify { (delegate) in
             delegate?.pumpManager(self, didReadPumpEvents: pendingPumpEvents) { error in
-                self.delegate.notify { (delegate) in
-                    delegate?.pumpManagerRecommendsLoop(self)
-                }
+                completion(error)
             }
         }
-
-        let totalInsulinUsage = pendingPumpEvents.reduce(into: 0 as Double) { total, event in
-            if let units = event.dose?.units {
-                total += units
-            }
-        }
-
-        DispatchQueue.main.async {
-            self.state.reservoirUnitsRemaining -= totalInsulinUsage
-        }
-
-        self.pendingPumpEvents.removeAll()
     }
 
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         if state.tempBasalEnactmentShouldError {
             completion(.failure(PumpManagerError.communication(MockPumpManagerError.communicationFailure)))
         } else {
-            let temp = NewPumpEvent.tempBasal(at: Date(), for: duration, unitsPerHour: unitsPerHour)
-            pendingPumpEvents.append(temp)
-            completion(.success(temp.dose!))
+            let now = Date()
+            if let temp = state.unfinalizedTempBasal, temp.finishTime.compare(now) == .orderedDescending {
+                state.unfinalizedTempBasal?.cancel(at: now)
+            }
+            state.finalizeFinishedDoses()
+
+            if duration < .ulpOfOne {
+                // Cancel temp basal
+                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration)
+                storeDoses { (error) in
+                    completion(.success(DoseEntry(temp)))
+                }
+            } else {
+                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration)
+                state.unfinalizedTempBasal = temp
+                storeDoses { (error) in
+                    completion(.success(DoseEntry(temp)))
+                }
+            }
         }
     }
 
@@ -229,27 +291,35 @@ public final class MockPumpManager: TestingPumpManager {
         if state.bolusEnactmentShouldError {
             completion(.failure(SetBolusError.certain(PumpManagerError.communication(MockPumpManagerError.communicationFailure))))
         } else {
+
+            state.finalizeFinishedDoses()
+
+            if let _ = state.unfinalizedBolus {
+                completion(.failure(SetBolusError.certain(PumpManagerError.deviceState(MockPumpManagerError.bolusInProgress))))
+                return
+            }
+
             guard status.basalDeliveryState != .suspended else {
                 completion(.failure(SetBolusError.certain(PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended))))
                 return
             }
-            let bolus = NewPumpEvent.bolus(at: Date(), units: units, deliveryUnitsPerMinute: type(of: self).deliveryUnitsPerMinute)
-            pendingPumpEvents.append(bolus)
-            willRequest(bolus.dose!)
-            self.status.bolusState = .inProgress(bolus.dose!)
-            completion(.success(bolus.dose!))
+            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute))
+            let dose = DoseEntry(bolus)
+            willRequest(dose)
+            state.unfinalizedBolus = bolus
+            storeDoses { (error) in
+                completion(.success(dose))
+            }
         }
     }
 
     public func cancelBolus(completion: @escaping (PumpManagerResult<DoseEntry?>) -> Void) {
-        let oldState = self.status.bolusState
-        self.status.bolusState = .canceling
-        suspendDelivery { (error) in
-            if let error = error {
-                self.status.bolusState = oldState
-                completion(.failure(error))
-            } else {
-                self.status.bolusState = .none
+
+        state.unfinalizedBolus?.cancel(at: Date())
+
+        storeDoses { (_) in
+            DispatchQueue.main.async {
+                self.state.finalizeFinishedDoses()
                 completion(.success(nil))
             }
         }
@@ -260,42 +330,37 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
-        let previousState = status.basalDeliveryState
-        status.basalDeliveryState = .suspending
+        if self.state.deliverySuspensionShouldError {
+            completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
+        } else {
+            let now = Date()
+            state.unfinalizedTempBasal?.cancel(at: now)
+            state.unfinalizedBolus?.cancel(at: now)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            if self.state.deliverySuspensionShouldError {
-                self.status.basalDeliveryState = previousState
-                completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
-            } else {
-                let suspend = NewPumpEvent.suspend(at: Date())
-                self.pendingPumpEvents.append(suspend)
-                self.status.basalDeliveryState = .suspended
-                completion(nil)
+            let suspend = UnfinalizedDose(suspendStartTime: Date())
+            self.state.finalizedDoses.append(suspend)
+            self.state.suspended = true
+            storeDoses { (error) in
+                completion(error)
             }
         }
     }
 
     public func resumeDelivery(completion: @escaping (Error?) -> Void) {
-        let previousState = status.basalDeliveryState
-        status.basalDeliveryState = .resuming
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            if self.state.deliveryResumptionShouldError {
-                self.status.basalDeliveryState = previousState
-                completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
-            } else {
-                let resume = NewPumpEvent.resume(at: Date())
-                self.pendingPumpEvents.append(resume)
-                self.status.basalDeliveryState = .active
-                completion(nil)
+        if self.state.deliveryResumptionShouldError {
+            completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
+        } else {
+            let resume = UnfinalizedDose(resumeStartTime: Date())
+            self.state.finalizedDoses.append(resume)
+            self.state.suspended = false
+            storeDoses { (error) in
+                completion(error)
             }
         }
     }
 
     public func injectPumpEvents(_ pumpEvents: [NewPumpEvent]) {
-        pendingPumpEvents += pumpEvents
-        pendingPumpEvents.sort(by: { $0.date < $1.date })
+        state.finalizedDoses += pumpEvents.compactMap { $0.unfinalizedDose }
     }
 }
 
@@ -304,104 +369,9 @@ extension MockPumpManager {
         return """
         ## MockPumpManager
         status: \(status)
-        state: \(status)
-        pendingPumpEvents: \(pendingPumpEvents)
+        state: \(state)
         stateObservers.count: \(stateObservers.cleanupDeallocatedElements().count)
         statusObservers.count: \(statusObservers.cleanupDeallocatedElements().count)
-        """
-    }
-}
-
-private extension NewPumpEvent {
-    static func bolus(at date: Date, units: Double, deliveryUnitsPerMinute: Double) -> NewPumpEvent {
-        let dose = DoseEntry(
-            type: .bolus,
-            startDate: date,
-            endDate: date.addingTimeInterval(.minutes(units / deliveryUnitsPerMinute)),
-            value: units,
-            unit: .units
-        )
-        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: .newPumpEventIdentifier(), title: "Bolus", type: .bolus)
-    }
-
-    static func tempBasal(at date: Date, for duration: TimeInterval, unitsPerHour: Double) -> NewPumpEvent {
-        let dose = DoseEntry(
-            type: .tempBasal,
-            startDate: date,
-            endDate: date.addingTimeInterval(duration),
-            value: unitsPerHour,
-            unit: .unitsPerHour
-        )
-        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: .newPumpEventIdentifier(), title: "Temp Basal", type: .tempBasal)
-    }
-
-    static func suspend(at date: Date) -> NewPumpEvent {
-        let dose = DoseEntry(suspendDate: date)
-        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: .newPumpEventIdentifier(), title: "Suspend", type: .suspend)
-    }
-
-    static func resume(at date: Date) -> NewPumpEvent {
-        let dose = DoseEntry(resumeDate: date)
-        return NewPumpEvent(date: date, dose: dose, isMutable: false, raw: .newPumpEventIdentifier(), title: "Resume", type: .resume)
-    }
-}
-
-extension MockPumpManagerState: RawRepresentable {
-    public typealias RawValue = [String: Any]
-
-    public init?(rawValue: RawValue) {
-        guard let reservoirUnitsRemaining = rawValue["reservoirUnitsRemaining"] as? Double else {
-            return nil
-        }
-
-        self.reservoirUnitsRemaining = reservoirUnitsRemaining
-        self.tempBasalEnactmentShouldError = rawValue["tempBasalEnactmentShouldError"] as? Bool ?? false
-        self.bolusEnactmentShouldError = rawValue["bolusEnactmentShouldError"] as? Bool ?? false
-        self.deliverySuspensionShouldError = rawValue["deliverySuspensionShouldError"] as? Bool ?? false
-        self.deliveryResumptionShouldError = rawValue["deliveryResumptionShouldError"] as? Bool ?? false
-        self.maximumBolus = rawValue["maximumBolus"] as? Double ?? 25.0
-        self.maximumBasalRatePerHour = rawValue["maximumBasalRatePerHour"] as? Double ?? 5.0
-    }
-
-    public var rawValue: RawValue {
-        var raw: RawValue = [
-            "reservoirUnitsRemaining": reservoirUnitsRemaining
-        ]
-
-        if tempBasalEnactmentShouldError {
-            raw["tempBasalEnactmentShouldError"] = true
-        }
-
-        if bolusEnactmentShouldError {
-            raw["bolusEnactmentShouldError"] = true
-        }
-
-        if deliverySuspensionShouldError {
-            raw["deliverySuspensionShouldError"] = true
-        }
-
-        if deliveryResumptionShouldError {
-            raw["deliveryResumptionShouldError"] = true
-        }
-
-        raw["maximumBolus"] = maximumBolus
-        raw["maximumBasalRatePerHour"] = maximumBasalRatePerHour
-
-        return raw
-    }
-}
-
-extension MockPumpManagerState: CustomDebugStringConvertible {
-    public var debugDescription: String {
-        return """
-        ## MockPumpManagerState
-        * reservoirUnitsRemaining: \(reservoirUnitsRemaining)
-        * tempBasalEnactmentShouldError: \(tempBasalEnactmentShouldError)
-        * bolusEnactmentShouldError: \(bolusEnactmentShouldError)
-        * deliverySuspensionShouldError: \(deliverySuspensionShouldError)
-        * deliveryResumptionShouldError: \(deliveryResumptionShouldError)
-        * maximumBolus: \(maximumBolus)
-        * maximumBasalRatePerHour: \(maximumBasalRatePerHour)
         """
     }
 }

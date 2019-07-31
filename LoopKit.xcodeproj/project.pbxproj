@@ -539,6 +539,8 @@
 		A9E675EC22713F4700E25293 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB2B2118CE9300048054 /* Localizable.strings */; };
 		A9E675F3227140D800E25293 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E675F2227140D800E25293 /* CoreData.framework */; };
 		A9E675F5227140DD00E25293 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E675F4227140DD00E25293 /* HealthKit.framework */; };
+		C164A56022F14C73000E3FA5 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A55F22F14C73000E3FA5 /* UnfinalizedDose.swift */; };
+		C164A56422F21081000E3FA5 /* MockPumpManagerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */; };
 		C1814B84225B9ED5008D2D8E /* LoopNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */; };
 		C1814B8C226371DF008D2D8E /* WeakSynchronizedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */; };
 		C188B83422CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C188B83322CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift */; };
@@ -1148,6 +1150,8 @@
 		C1110E981EE98CF5009BB852 /* ice_35_min_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_input.json; sourceTree = "<group>"; };
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
+		C164A55F22F14C73000E3FA5 /* UnfinalizedDose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinalizedDose.swift; sourceTree = "<group>"; };
+		C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerState.swift; sourceTree = "<group>"; };
 		C17F4CB21EE9B6DF005079B1 /* carb_entry_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = carb_entry_input.json; sourceTree = "<group>"; };
 		C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopNotificationCategory.swift; sourceTree = "<group>"; };
 		C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakSynchronizedDelegate.swift; sourceTree = "<group>"; };
@@ -1855,13 +1859,15 @@
 			isa = PBXGroup;
 			children = (
 				89D204AD21CC7D2B001238CC /* Extensions */,
+				89D2047521CC7BD7001238CC /* Info.plist */,
 				89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */,
 				89AB9EC821A4BC2400351324 /* MockCGMManager.swift */,
 				89AC7934224C783500B8E9BA /* MockDoseProgressEstimator.swift */,
 				89CCD4F721A8D5500068C3FB /* MockGlucoseProvider.swift */,
-				89AB9EC621A4774500351324 /* MockPumpManager.swift */,
 				89D2047421CC7BD7001238CC /* MockKit.h */,
-				89D2047521CC7BD7001238CC /* Info.plist */,
+				89AB9EC621A4774500351324 /* MockPumpManager.swift */,
+				C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */,
+				C164A55F22F14C73000E3FA5 /* UnfinalizedDose.swift */,
 			);
 			path = MockKit;
 			sourceTree = "<group>";
@@ -2712,7 +2718,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				89CA2B35226D1624004D9350 /* MutableCollection.swift in Sources */,
+				C164A56422F21081000E3FA5 /* MockPumpManagerState.swift in Sources */,
 				89D204BF21CC7FFB001238CC /* NSTimeInterval.swift in Sources */,
+				C164A56022F14C73000E3FA5 /* UnfinalizedDose.swift in Sources */,
 				89D204C421CC803C001238CC /* HKUnit.swift in Sources */,
 				89D204A921CC7C8F001238CC /* MockPumpManager.swift in Sources */,
 				89ADE138226BF51D0067222B /* NSData.swift in Sources */,

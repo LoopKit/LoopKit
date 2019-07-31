@@ -272,7 +272,7 @@ extension MockPumpManagerSettingsViewController: PercentageTextFieldTableViewCon
     func percentageTextFieldTableViewControllerDidChangePercentage(_ controller: PercentageTextFieldTableViewController) {
         guard let indexPath = controller.indexPath else { assertionFailure(); return }
         assert(indexPath == [Section.settings.rawValue, SettingsRow.batteryRemaining.rawValue])
-        pumpManager.status.pumpBatteryChargeRemaining = controller.percentage.map { $0.clamped(to: 0...1) }
+        pumpManager.pumpBatteryChargeRemaining = controller.percentage.map { $0.clamped(to: 0...1) }
         tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
