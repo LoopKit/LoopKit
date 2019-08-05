@@ -1021,8 +1021,13 @@ extension DoseStore {
             throw DoseStoreError.configurationError
         }
 
+        // Need to retrieve historical doses that might be used to reconcile current events
+        let reconciliationWindow = TimeInterval(hours: -24)
+
+        let queryStart = start.addingTimeInterval(reconciliationWindow)
+
         let doses = try getPumpEventObjects(
-            matching: NSPredicate(format: "date >= %@ && doseType != nil", start as NSDate),
+            matching: NSPredicate(format: "date >= %@ && doseType != nil", queryStart as NSDate),
             chronological: true
         ).compactMap({ $0.dose })
         let normalizedDoses = doses.reconciled().annotated(with: basalProfile)
