@@ -196,6 +196,9 @@ public final class DoseStore {
     /// Choose a lower or higher sync version if the same sample might be written twice (e.g. from an extension and from an app) for deterministic conflict resolution
     public let syncVersion: Int
 
+    /// Window for retrieving historical doses that might be used to reconcile current events
+    private let pumpEventReconciliationWindow = TimeInterval(hours: 24)
+
     // MARK: -
 
     /// Initializes and configures a new store
@@ -1021,10 +1024,7 @@ extension DoseStore {
             throw DoseStoreError.configurationError
         }
 
-        // Need to retrieve historical doses that might be used to reconcile current events
-        let reconciliationWindow = TimeInterval(hours: -24)
-
-        let queryStart = start.addingTimeInterval(reconciliationWindow)
+        let queryStart = start.addingTimeInterval(-pumpEventReconciliationWindow)
 
         let doses = try getPumpEventObjects(
             matching: NSPredicate(format: "date >= %@ && doseType != nil", queryStart as NSDate),
@@ -1065,7 +1065,9 @@ extension DoseStore {
             throw DoseStoreError.configurationError
         }
 
-        let afterBasalStart = NSPredicate(format: "date >= %@ && doseType != nil && mutable == false", basalStart as NSDate)
+        let queryStart = basalStart.addingTimeInterval(-pumpEventReconciliationWindow)
+
+        let afterBasalStart = NSPredicate(format: "date >= %@ && doseType != nil && mutable == false", queryStart as NSDate)
         let allBoluses = NSPredicate(format: "doseType == %@ && mutable == false", DoseType.bolus.rawValue)
 
         let doses = try getPumpEventObjects(
@@ -1073,7 +1075,7 @@ extension DoseStore {
             chronological: true
         ).compactMap({ $0.dose })
         // Ignore any doses which have not yet ended by the specified date
-        let normalizedDoses = doses.reconciled().filter({ $0.endDate <= end }).annotated(with: basalProfile)
+        let normalizedDoses = doses.reconciled().filter({ $0.endDate <= end }).annotated(with: basalProfile).filter({ $0.startDate >= basalStart })
 
         return normalizedDoses
     }
