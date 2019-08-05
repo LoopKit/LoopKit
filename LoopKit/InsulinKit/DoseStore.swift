@@ -343,7 +343,6 @@ public final class DoseStore {
             return lockedPumpEventQueryAfterDate.value
         }
         set {
-            log.debug("Updating pumpEventQueryAfterDate to %{public}@", String(describing: newValue))
             lockedPumpEventQueryAfterDate.value = newValue
         }
     }
@@ -706,16 +705,14 @@ extension DoseStore {
         lastPumpEventsReconciliation = lastReconciliation
 
         guard events.count > 0 else {
-            self.log.error("addPumpEvents - no events")
             completion(nil)
             return
         }
 
         for event in events {
             if let dose = event.dose {
-                self.log.debug("Add %{public}@, isMutable=%{public}@", String(describing: dose), String(describing: event.isMutable))
+                self.log.default("Add %{public}@, isMutable=%{public}@", String(describing: dose), String(describing: event.isMutable))
             }
-            log.debug("End of adds")
         }
 
         persistenceController.managedObjectContext.perform {
@@ -847,13 +844,12 @@ extension DoseStore {
             switch result {
             case .success(let doses):
                 guard doses.count > 0 else {
-                    self.log.debug("No new pump events to save to HealthKit (query after = %{public}@)", String(describing: start))
                     completion(nil)
                     return
                 }
 
                 for dose in doses {
-                    self.log.error("Adding dose to HealthKit: %{public}@", String(describing: dose))
+                    self.log.default("Adding dose to HealthKit: %{public}@", String(describing: dose))
                 }
 
                 self.insulinDeliveryStore.addReconciledDoses(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
@@ -1128,13 +1124,11 @@ extension DoseStore {
 
                     // Reservoir data is used only if it's continuous and the pumpmanager hasn't reconciled since the last reservoir reading
                     if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {
-                        self.log.debug("normalizedDoseEntries: using reservoir %{public}@", String(describing: reservoirEndDate))
                         let reservoirDoses = try self.getNormalizedReservoirDoseEntries(start: filteredStart, end: end)
                         let endOfReservoirData = self.lastStoredReservoirValue?.endDate ?? .distantPast
                         let mutableDoses = try self.normalizedMutablePumpEventDoseEntries(start: endOfReservoirData)
                         doses = insulinDeliveryDoses + reservoirDoses.map({ $0.trim(from: filteredStart) }) + mutableDoses
                     } else {
-                        self.log.debug("normalizedDoseEntries: using event data")
                         // Includes mutable doses now.
                         doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
                     }
