@@ -99,7 +99,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             addPumpEvents1.fulfill()
         }
-        doseStore.addPumpEvents(pumpEvents1) { (error) in
+        doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents1.fulfill()
         }
@@ -130,7 +130,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             addPumpEvents2.fulfill()
         }
-        doseStore.addPumpEvents(pumpEvents2) { (error) in
+        doseStore.addPumpEvents(pumpEvents2, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents2.fulfill()
         }
@@ -155,7 +155,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             XCTFail()
         }
-        doseStore.addPumpEvents(pumpEvents3) { (error) in
+        doseStore.addPumpEvents(pumpEvents3, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents3.fulfill()
         }
@@ -204,7 +204,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             XCTFail()
         }
-        doseStore.addPumpEvents(pumpEvents1) { (error) in
+        doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents1.fulfill()
         }
@@ -224,7 +224,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             XCTFail()
         }
-        doseStore.addPumpEvents(pumpEvents1) { (error) in
+        doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents2.fulfill()
         }
@@ -269,7 +269,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             addPumpEvents3.fulfill()
         }
-        doseStore.addPumpEvents(pumpEvents3) { (error) in
+        doseStore.addPumpEvents(pumpEvents3, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents3.fulfill()
         }
@@ -302,7 +302,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             addPumpEvents4.fulfill()
         }
-        doseStore.addPumpEvents(pumpEvents4) { (error) in
+        doseStore.addPumpEvents(pumpEvents4, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents4.fulfill()
         }
