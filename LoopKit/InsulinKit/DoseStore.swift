@@ -208,6 +208,7 @@ public final class DoseStore {
     ///   - basalProfile: The daily schedule of basal insulin rates
     ///   - insulinSensitivitySchedule: The daily schedule of insulin sensitivity (ISF)
     ///   - syncVersion: A version number for determining resolution in de-duplication
+    ///   - lastPumpEventsReconciliation: The date the PumpManger last reconciled with the pump
     public init(
         healthStore: HKHealthStore,
         cacheStore: PersistenceController,
@@ -217,6 +218,7 @@ public final class DoseStore {
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
         overrideHistory: TemporaryScheduleOverrideHistory? = nil,
         syncVersion: Int = 1,
+        lastPumpEventsReconciliation: Date? = nil,
         test_currentDate: Date? = nil
     ) {
         self.insulinDeliveryStore = InsulinDeliveryStore(
@@ -231,6 +233,7 @@ public final class DoseStore {
         self.overrideHistory = overrideHistory
         self.persistenceController = cacheStore
         self.syncVersion = syncVersion
+        self.lockedLastPumpEventsReconciliation = Locked(lastPumpEventsReconciliation)
 
         self.pumpEventQueryAfterDate = cacheStartDate
 
@@ -243,6 +246,7 @@ public final class DoseStore {
                 // Find the newest PumpEvent date we have
                 let request: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
                 request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+                request.predicate = NSPredicate(format: "mutable != true")
                 request.fetchLimit = 1
 
                 if let events = try? self.persistenceController.managedObjectContext.fetch(request), let lastEvent = events.first {
@@ -336,21 +340,26 @@ public final class DoseStore {
             return lockedPumpEventQueryAfterDate.value
         }
         set {
+            log.debug("Updating pumpEventQueryAfterDate to %{public}@", String(describing: newValue))
             lockedPumpEventQueryAfterDate.value = newValue
         }
     }
     private let lockedPumpEventQueryAfterDate = Locked<Date>(.distantPast)
 
-    /// The last time `addPumpEvents` was called, used to estimate recency of data.
-    public private(set) var lastAddedPumpEvents: Date {
+    /// The last time the PumpManager reconciled events with the pump.
+    public private(set) var lastPumpEventsReconciliation: Date? {
         get {
-            return lockedLastAddedPumpEvents.value
+            return lockedLastPumpEventsReconciliation.value
         }
         set {
-            lockedLastAddedPumpEvents.value = newValue
+            lockedLastPumpEventsReconciliation.value = newValue
         }
     }
-    private let lockedLastAddedPumpEvents = Locked<Date>(.distantPast)
+    private let lockedLastPumpEventsReconciliation: Locked<Date?>
+
+    public var lastAddedPumpData: Date {
+        return [lastReservoirValue?.startDate, lastPumpEventsReconciliation].compactMap { $0 }.max() ?? .distantPast
+    }
 
     /// The date of the most recent pump prime event, if known.
     ///
@@ -690,22 +699,28 @@ extension DoseStore {
      - parameter completion: A closure called after the events are saved. The closure takes a single argument:
      - parameter error: An error object explaining why the events could not be saved.
      */
-    public func addPumpEvents(_ events: [NewPumpEvent], completion: @escaping (_ error: DoseStoreError?) -> Void) {
-        // Consider an empty events array as a successful add
-        lastAddedPumpEvents = currentDate()
+    public func addPumpEvents(_ events: [NewPumpEvent], lastReconciliation: Date?, completion: @escaping (_ error: DoseStoreError?) -> Void) {
+        lastPumpEventsReconciliation = lastReconciliation
 
         guard events.count > 0 else {
+            self.log.error("addPumpEvents - no events")
             completion(nil)
             return
         }
 
+        for event in events {
+            if let dose = event.dose {
+                self.log.debug("Add %{public}@, isMutable=%{public}@", String(describing: dose), String(describing: event.isMutable))
+            }
+            log.debug("End of adds")
+        }
+
         persistenceController.managedObjectContext.perform {
             var lastFinalDate: Date?
-            var firstMutableDoseDate: Date?
             var primeValueAdded = false
 
             // Remove old mutable pumpEvents; any that are still valid should be included in events
-            let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "mutable = true")])
+            let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "mutable == true")])
             try? self.purgePumpEventObjects(matching: predicate)
 
             // There is no guarantee of event ordering, so we must search the entire array to find key date boundaries.
@@ -714,11 +729,9 @@ extension DoseStore {
                     primeValueAdded = true
                 }
                 
-                if event.isMutable {
-                    firstMutableDoseDate = min(event.date, firstMutableDoseDate ?? event.date)
+                if !event.isMutable {
+                    lastFinalDate = max(event.date, lastFinalDate ?? event.date)
                 }
-
-                lastFinalDate = max(event.date, lastFinalDate ?? event.date)
 
                 let object = PumpEvent(context: self.persistenceController.managedObjectContext)
 
@@ -730,9 +743,7 @@ extension DoseStore {
                 object.dose = event.dose
             }
 
-            if let mutableDate = firstMutableDoseDate {
-                self.pumpEventQueryAfterDate = mutableDate
-            } else if let finalDate = lastFinalDate {
+            if let finalDate = lastFinalDate {
                 self.pumpEventQueryAfterDate = finalDate
             }
 
@@ -761,18 +772,7 @@ extension DoseStore {
                 self.persistenceController.managedObjectContext.delete(object)
             }
 
-            // Reset the latest query date to the newest PumpEvent
-            let request: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-            request.fetchLimit = 1
-
-            if let events = try? self.persistenceController.managedObjectContext.fetch(request),
-                let lastEvent = events.first
-            {
-                self.pumpEventQueryAfterDate = lastEvent.date
-            } else {
-                self.pumpEventQueryAfterDate = self.cacheStartDate
-            }
+            self.pumpEventQueryAfterDate = self.cacheStartDate
 
             self.persistenceController.save { (error) in
                 completion(DoseStoreError(error: error))
@@ -801,7 +801,7 @@ extension DoseStore {
 
                     self.persistenceController.save { (error) in
                         self.pumpEventQueryAfterDate = self.cacheStartDate
-                        self.lastAddedPumpEvents = .distantPast
+                        self.lastPumpEventsReconciliation = nil
                         self.lastRecordedPrimeEventDate = nil
 
                         completion(DoseStoreError(error: error))
@@ -844,9 +844,13 @@ extension DoseStore {
             switch result {
             case .success(let doses):
                 guard doses.count > 0 else {
-                    self.log.debug("No new pump events to save to HealthKit")
+                    self.log.debug("No new pump events to save to HealthKit (query after = %{public}@)", String(describing: start))
                     completion(nil)
                     return
+                }
+
+                for dose in doses {
+                    self.log.error("Adding dose to HealthKit: %{public}@", String(describing: dose))
                 }
 
                 self.insulinDeliveryStore.addReconciledDoses(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
@@ -888,7 +892,8 @@ extension DoseStore {
             }
 
             // If we haven't recorded a lastAddedPumpEvents date, use the current date.
-            let endingAt = lastBasalEndDate <= self.lastAddedPumpEvents ? self.lastAddedPumpEvents : self.currentDate()
+            let lastReconciliation = self.lastPumpEventsReconciliation ?? .distantPast
+            let endingAt = lastBasalEndDate <= lastReconciliation ? lastReconciliation : self.currentDate()
 
             let reconciledDoses = doses.overlayBasalSchedule(basalSchedule, startingAt: lastBasalEndDate, endingAt: endingAt, insertingBasalEntries: !self.pumpRecordsBasalProfileStartEvents)
             completion(.success(reconciledDoses))
@@ -1035,7 +1040,7 @@ extension DoseStore {
         }
 
         let doses = try getPumpEventObjects(
-            matching: NSPredicate(format: "mutable = true && doseType != nil"),
+            matching: NSPredicate(format: "mutable == true && doseType != nil"),
             chronological: true
             ).compactMap({ $0.dose })
         let normalizedDoses = doses.filterDateRange(start, nil).reconciled().annotated(with: basalProfile)
@@ -1055,8 +1060,8 @@ extension DoseStore {
             throw DoseStoreError.configurationError
         }
 
-        let afterBasalStart = NSPredicate(format: "date >= %@ && doseType != nil", basalStart as NSDate)
-        let allBoluses = NSPredicate(format: "doseType == %@", DoseType.bolus.rawValue)
+        let afterBasalStart = NSPredicate(format: "date >= %@ && doseType != nil && mutable == false", basalStart as NSDate)
+        let allBoluses = NSPredicate(format: "doseType == %@ && mutable == false", DoseType.bolus.rawValue)
 
         let doses = try getPumpEventObjects(
             matching: NSCompoundPredicate(orPredicateWithSubpredicates: [afterBasalStart, allBoluses]),
@@ -1113,14 +1118,16 @@ extension DoseStore {
             self.persistenceController.managedObjectContext.perform {
                 do {
                     let doses: [DoseEntry]
-                    // Reservoir data is used only if its continuous and we haven't seen pump events since the last reservoir reading
-                    if self.areReservoirValuesValid &&
-                        self.lastAddedPumpEvents.timeIntervalSince(self.lastStoredReservoirValue?.startDate ?? .distantPast) < 0 {
+
+                    // Reservoir data is used only if it's continuous and the pumpmanager hasn't reconciled since the last reservoir reading
+                    if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {
+                        self.log.debug("normalizedDoseEntries: using reservoir %{public}@", String(describing: reservoirEndDate))
                         let reservoirDoses = try self.getNormalizedReservoirDoseEntries(start: filteredStart, end: end)
                         let endOfReservoirData = self.lastStoredReservoirValue?.endDate ?? .distantPast
                         let mutableDoses = try self.normalizedMutablePumpEventDoseEntries(start: endOfReservoirData)
                         doses = insulinDeliveryDoses + reservoirDoses.map({ $0.trim(from: filteredStart) }) + mutableDoses
                     } else {
+                        self.log.debug("normalizedDoseEntries: using event data")
                         // Includes mutable doses now.
                         doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
                     }
@@ -1279,7 +1286,7 @@ extension DoseStore {
             "* egpSchedule: \(egpSchedule?.debugDescription ?? "nil")",
             "* areReservoirValuesValid: \(areReservoirValuesValid)",
             "* isUploadRequestPending: \(isUploadRequestPending)",
-            "* lastAddedPumpEvents: \(lastAddedPumpEvents)",
+            "* lastPumpEventsReconciliation: \(String(describing: lastPumpEventsReconciliation))",
             "* lastStoredReservoirValue: \(String(describing: lastStoredReservoirValue))",
             "* pumpEventQueryAfterDate: \(pumpEventQueryAfterDate)",
             "* totalDeliveryCache: \(String(describing: totalDeliveryCache))",

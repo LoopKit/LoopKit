@@ -84,6 +84,10 @@ public final class MockPumpManager: TestingPumpManager {
         return type(of: self).device
     }
 
+    public var lastReconciliation: Date? {
+        return Date()
+    }
+
     private func basalDeliveryState(for state: MockPumpManagerState) -> PumpManagerStatus.BasalDeliveryState {
         if state.suspended {
             return .suspended
@@ -254,7 +258,7 @@ public final class MockPumpManager: TestingPumpManager {
         state.finalizeFinishedDoses()
         let pendingPumpEvents = state.dosesToStore.map { NewPumpEvent($0) }
         delegate.notify { (delegate) in
-            delegate?.pumpManager(self, didReadPumpEvents: pendingPumpEvents) { error in
+            delegate?.pumpManager(self, hasNewPumpEvents: pendingPumpEvents, lastReconciliation: self.lastReconciliation) { error in
                 completion(error)
             }
         }

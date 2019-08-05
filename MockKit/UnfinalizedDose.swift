@@ -52,6 +52,9 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
 
     // Units per hour
     public var rate: Double {
+        guard duration.hours > 0 else {
+            return 0
+        }
         return units / duration.hours
     }
 

@@ -80,7 +80,9 @@ extension DoseEntry {
         switch type {
         case .bolus:
             return self.units
-        case .basal, .resume, .suspend, .tempBasal:
+        case .basal:
+            return 0
+        case .resume, .suspend, .tempBasal:
             break
         }
 
