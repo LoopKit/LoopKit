@@ -1071,7 +1071,7 @@ extension DoseStore {
             chronological: true
         ).compactMap({ $0.dose })
         // Ignore any doses which have not yet ended by the specified date
-        let normalizedDoses = doses.reconciled().filter({ $0.endDate <= end }).annotated(with: basalProfile).filter({ $0.startDate >= basalStart })
+        let normalizedDoses = doses.reconciled().filter({ $0.endDate <= end }).annotated(with: basalProfile).filter({ $0.startDate >= basalStart || $0.type == .bolus })
 
         return normalizedDoses
     }
