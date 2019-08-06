@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 public struct MockPumpManagerState {
     public var reservoirUnitsRemaining: Double
     public var tempBasalEnactmentShouldError: Bool
@@ -17,7 +16,7 @@ public struct MockPumpManagerState {
     public var deliveryResumptionShouldError: Bool
     public var maximumBolus: Double
     public var maximumBasalRatePerHour: Double
-    public var suspended: Bool
+    public var suspendState: SuspendState
     public var pumpBatteryChargeRemaining: Double?
 
     public var unfinalizedBolus: UnfinalizedDose?
@@ -52,7 +51,6 @@ extension MockPumpManagerState: RawRepresentable {
         }
 
         self.reservoirUnitsRemaining = reservoirUnitsRemaining
-        self.suspended = rawValue["suspended"] as? Bool ?? false
         self.tempBasalEnactmentShouldError = rawValue["tempBasalEnactmentShouldError"] as? Bool ?? false
         self.bolusEnactmentShouldError = rawValue["bolusEnactmentShouldError"] as? Bool ?? false
         self.deliverySuspensionShouldError = rawValue["deliverySuspensionShouldError"] as? Bool ?? false
@@ -77,15 +75,20 @@ extension MockPumpManagerState: RawRepresentable {
             self.finalizedDoses = []
         }
 
-
+        if let rawSuspendState = rawValue["suspendState"] as? SuspendState.RawValue, let suspendState = SuspendState(rawValue: rawSuspendState) {
+            self.suspendState = suspendState
+        } else {
+            self.suspendState = .resumed(Date())
+        }
     }
 
     public var rawValue: RawValue {
 
         var raw: RawValue = [
             "reservoirUnitsRemaining": reservoirUnitsRemaining,
-            "suspended": suspended
         ]
+
+        raw["suspendState"] = suspendState.rawValue
 
         if tempBasalEnactmentShouldError {
             raw["tempBasalEnactmentShouldError"] = true
@@ -129,6 +132,7 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
         * maximumBolus: \(maximumBolus)
         * maximumBasalRatePerHour: \(maximumBasalRatePerHour)
         * pumpBatteryChargeRemaining: \(String(describing: pumpBatteryChargeRemaining))
+        * suspendState: \(suspendState)
         * unfinalizedBolus: \(String(describing: unfinalizedBolus))
         * unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))
         * finalizedDoses: \(finalizedDoses)
@@ -136,3 +140,52 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
     }
 }
 
+public enum SuspendState: Equatable, RawRepresentable {
+    public typealias RawValue = [String: Any]
+
+    private enum SuspendStateType: Int {
+        case suspend, resume
+    }
+
+    case suspended(Date)
+    case resumed(Date)
+
+    private var identifier: Int {
+        switch self {
+        case .suspended:
+            return 1
+        case .resumed:
+            return 2
+        }
+    }
+
+    public init?(rawValue: RawValue) {
+        guard let suspendStateType = rawValue["case"] as? SuspendStateType.RawValue,
+            let date = rawValue["date"] as? Date else {
+                return nil
+        }
+        switch SuspendStateType(rawValue: suspendStateType) {
+        case .suspend?:
+            self = .suspended(date)
+        case .resume?:
+            self = .resumed(date)
+        default:
+            return nil
+        }
+    }
+
+    public var rawValue: RawValue {
+        switch self {
+        case .suspended(let date):
+            return [
+                "case": SuspendStateType.suspend.rawValue,
+                "date": date
+            ]
+        case .resumed(let date):
+            return [
+                "case": SuspendStateType.resume.rawValue,
+                "date": date
+            ]
+        }
+    }
+}

@@ -53,7 +53,7 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
         self.isEnabled = !self.isLoading
     }
     
-    public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState = .active {
+    public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState = .active(Date()) {
         didSet {
             updateTextLabel()
             updateLoadingState()

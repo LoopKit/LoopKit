@@ -89,13 +89,17 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     private func basalDeliveryState(for state: MockPumpManagerState) -> PumpManagerStatus.BasalDeliveryState {
-        if state.suspended {
-            return .suspended
+        if case .suspended(let date) = state.suspendState {
+            return .suspended(date)
         }
         if let temp = state.unfinalizedTempBasal, !temp.finished {
             return .tempBasal(DoseEntry(temp))
         }
-        return .active
+        if case .resumed(let date) = state.suspendState {
+            return .active(date)
+        } else {
+            return .active(Date())
+        }
     }
 
     private func bolusState(for state: MockPumpManagerState) -> PumpManagerStatus.BolusState {
@@ -189,7 +193,7 @@ public final class MockPumpManager: TestingPumpManager {
             deliveryResumptionShouldError: false,
             maximumBolus: 25.0,
             maximumBasalRatePerHour: 5.0,
-            suspended: false,
+            suspendState: .resumed(Date()),
             pumpBatteryChargeRemaining: 1,
             unfinalizedBolus: nil,
             unfinalizedTempBasal: nil,
@@ -303,7 +307,7 @@ public final class MockPumpManager: TestingPumpManager {
                 return
             }
 
-            guard status.basalDeliveryState != .suspended else {
+            if case .suspended = status.basalDeliveryState {
                 completion(.failure(SetBolusError.certain(PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended))))
                 return
             }
@@ -341,9 +345,10 @@ public final class MockPumpManager: TestingPumpManager {
             state.unfinalizedTempBasal?.cancel(at: now)
             state.unfinalizedBolus?.cancel(at: now)
 
-            let suspend = UnfinalizedDose(suspendStartTime: Date())
+            let suspendDate = Date()
+            let suspend = UnfinalizedDose(suspendStartTime: suspendDate)
             self.state.finalizedDoses.append(suspend)
-            self.state.suspended = true
+            self.state.suspendState = .suspended(suspendDate)
             storeDoses { (error) in
                 completion(error)
             }
@@ -354,9 +359,10 @@ public final class MockPumpManager: TestingPumpManager {
         if self.state.deliveryResumptionShouldError {
             completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
         } else {
-            let resume = UnfinalizedDose(resumeStartTime: Date())
+            let resumeDate = Date()
+            let resume = UnfinalizedDose(resumeStartTime: resumeDate)
             self.state.finalizedDoses.append(resume)
-            self.state.suspended = false
+            self.state.suspendState = .resumed(resumeDate)
             storeDoses { (error) in
                 completion(error)
             }
