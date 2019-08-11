@@ -735,7 +735,7 @@ extension DoseStore {
                     primeValueAdded = true
                 }
 
-                if !event.isMutable {
+                if event.isMutable {
                     firstMutableDate = min(event.date, firstMutableDate ?? event.date)
                 } else {
                     lastFinalDate = max(event.date, lastFinalDate ?? event.date)
