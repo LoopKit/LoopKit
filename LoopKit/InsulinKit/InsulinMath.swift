@@ -85,9 +85,6 @@ extension DoseEntry {
     }
 
     func trimmed(from start: Date? = nil, to end: Date? = nil, syncIdentifier: String? = nil) -> DoseEntry {
-        guard unit == .unitsPerHour else {
-            return self
-        }
 
         let originalDuration = endDate.timeIntervalSince(startDate)
 
@@ -95,17 +92,22 @@ extension DoseEntry {
         let endDate = max(startDate, min(end ?? .distantFuture, self.endDate))
 
         var trimmedDeliveredUnits: Double? = deliveredUnits
+        var trimmedValue: Double = value
 
         // If we're changing times on this dose, then make sure to update deliveredUnits
         if originalDuration > .ulpOfOne && (startDate != self.startDate || endDate != self.endDate) {
-            trimmedDeliveredUnits = unitsInDeliverableIncrements * (endDate.timeIntervalSince(startDate) / originalDuration)
+            let updatedActualDelivery = unitsInDeliverableIncrements * (endDate.timeIntervalSince(startDate) / originalDuration)
+            trimmedDeliveredUnits = updatedActualDelivery
+            if case .units = unit {
+                trimmedValue = updatedActualDelivery
+            }
         }
 
         return DoseEntry(
             type: type,
             startDate: startDate,
             endDate: endDate,
-            value: value,
+            value: trimmedValue,
             unit: unit,
             deliveredUnits: trimmedDeliveredUnits,
             description: description,
