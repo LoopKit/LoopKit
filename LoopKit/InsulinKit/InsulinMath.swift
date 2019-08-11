@@ -96,7 +96,8 @@ extension DoseEntry {
 
         var trimmedDeliveredUnits: Double? = deliveredUnits
 
-        if originalDuration > .ulpOfOne {
+        // If we're changing times on this dose, then make sure to update deliveredUnits
+        if originalDuration > .ulpOfOne && (startDate != self.startDate || endDate != self.endDate) {
             trimmedDeliveredUnits = unitsInDeliverableIncrements * (endDate.timeIntervalSince(startDate) / originalDuration)
         }
 
