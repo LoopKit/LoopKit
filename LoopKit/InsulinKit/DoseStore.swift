@@ -711,7 +711,7 @@ extension DoseStore {
 
         for event in events {
             if let dose = event.dose {
-                self.log.default("Add %{public}@, isMutable=%{public}@", String(describing: dose), String(describing: event.isMutable))
+                self.log.debug("Add %{public}@, isMutable=%{public}@", String(describing: dose), String(describing: event.isMutable))
             }
         }
 
