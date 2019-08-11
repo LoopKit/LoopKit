@@ -19,7 +19,7 @@ public struct PumpManagerStatus: Equatable {
         case suspended(_ at: Date)
         case resuming
 
-        public var suspended: Bool {
+        public var isSuspended: Bool {
             if case .suspended = self {
                 return true
             }

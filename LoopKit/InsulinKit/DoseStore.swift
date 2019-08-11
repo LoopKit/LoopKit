@@ -697,7 +697,7 @@ extension DoseStore {
      
      Events are deduplicated by a unique constraint on `NewPumpEvent.getter:raw`.
 
-     - parameter events:     An array of new pump events
+     - parameter events:     An array of new pump events. Pump events should have end times reflective of when delivery is actually expected to be finished, as doses that end prior to a reservoir reading are ignored when reservoir data is being used.
      - parameter completion: A closure called after the events are saved. The closure takes a single argument:
      - parameter error: An error object explaining why the events could not be saved.
      */
@@ -717,19 +717,27 @@ extension DoseStore {
 
         persistenceController.managedObjectContext.perform {
             var lastFinalDate: Date?
+            var firstMutableDate: Date?
             var primeValueAdded = false
 
             // Remove old mutable pumpEvents; any that are still valid should be included in events
             let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "mutable == true")])
-            try? self.purgePumpEventObjects(matching: predicate)
+            do {
+                try self.purgePumpEventObjects(matching: predicate)
+            } catch let error {
+                completion(DoseStoreError(error: error as? PersistenceController.PersistenceControllerError))
+                return
+            }
 
             // There is no guarantee of event ordering, so we must search the entire array to find key date boundaries.
             for event in events {
                 if case .prime? = event.type {
                     primeValueAdded = true
                 }
-                
+
                 if !event.isMutable {
+                    firstMutableDate = min(event.date, firstMutableDate ?? event.date)
+                } else {
                     lastFinalDate = max(event.date, lastFinalDate ?? event.date)
                 }
 
@@ -744,7 +752,11 @@ extension DoseStore {
             }
 
             if let finalDate = lastFinalDate {
-                self.pumpEventQueryAfterDate = finalDate
+                if let mutableDate = firstMutableDate {
+                    self.pumpEventQueryAfterDate = mutableDate
+                } else {
+                    self.pumpEventQueryAfterDate = finalDate
+                }
             }
 
             if primeValueAdded {
@@ -772,7 +784,19 @@ extension DoseStore {
                 self.persistenceController.managedObjectContext.delete(object)
             }
 
-            self.pumpEventQueryAfterDate = self.cacheStartDate
+            // Reset the latest query date to the newest PumpEvent                self.pumpEventQueryAfterDate = self.cacheStartDate
+            let request: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+            request.predicate = NSPredicate(format: "mutable != true")
+            request.fetchLimit = 1
+
+            if let events = try? self.persistenceController.managedObjectContext.fetch(request),
+                let lastEvent = events.first
+            {
+                self.pumpEventQueryAfterDate = lastEvent.date
+            } else {
+                self.pumpEventQueryAfterDate = self.cacheStartDate
+            }
 
             self.persistenceController.save { (error) in
                 completion(DoseStoreError(error: error))
@@ -849,7 +873,7 @@ extension DoseStore {
                 }
 
                 for dose in doses {
-                    self.log.default("Adding dose to HealthKit: %{public}@", String(describing: dose))
+                    self.log.debug("Adding dose to HealthKit: %{public}@", String(describing: dose))
                 }
 
                 self.insulinDeliveryStore.addReconciledDoses(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
@@ -1035,7 +1059,7 @@ extension DoseStore {
     ///
     /// - Returns: An array of doses from pump events that were marked mutable
     /// - Throws: An error describing the failure to fetch objects
-    private func normalizedMutablePumpEventDoseEntries(start: Date) throws -> [DoseEntry] {
+    private func getNormalizedMutablePumpEventDoseEntries(start: Date) throws -> [DoseEntry] {
         guard let basalProfile = self.basalProfileApplyingOverrideHistory else {
             throw DoseStoreError.configurationError
         }
@@ -1045,7 +1069,7 @@ extension DoseStore {
             chronological: true
             ).compactMap({ $0.dose })
         let normalizedDoses = doses.filterDateRange(start, nil).reconciled().annotated(with: basalProfile)
-        return normalizedDoses.map { $0.trim(from: start) }
+        return normalizedDoses.map { $0.trimmed(from: start) }
     }
 
 
@@ -1061,6 +1085,8 @@ extension DoseStore {
             throw DoseStoreError.configurationError
         }
 
+        // Make sure we look far back enough to have prior temp basal records to reconcile
+        // resumption of temp basal after suspend/resume.
         let queryStart = basalStart.addingTimeInterval(-pumpEventReconciliationWindow)
 
         let afterBasalStart = NSPredicate(format: "date >= %@ && doseType != nil && mutable == false", queryStart as NSDate)
@@ -1070,7 +1096,9 @@ extension DoseStore {
             matching: NSCompoundPredicate(orPredicateWithSubpredicates: [afterBasalStart, allBoluses]),
             chronological: true
         ).compactMap({ $0.dose })
-        // Ignore any doses which have not yet ended by the specified date
+        // Ignore any doses which have not yet ended by the specified date.
+        // Also, since we are retrieving dosing history older than basalStart for
+        // reconciliation purposes, we need to filter that out after reconciliation.
         let normalizedDoses = doses.reconciled().filter({ $0.endDate <= end }).annotated(with: basalProfile).filter({ $0.startDate >= basalStart || $0.type == .bolus })
 
         return normalizedDoses
@@ -1126,8 +1154,8 @@ extension DoseStore {
                     if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {
                         let reservoirDoses = try self.getNormalizedReservoirDoseEntries(start: filteredStart, end: end)
                         let endOfReservoirData = self.lastStoredReservoirValue?.endDate ?? .distantPast
-                        let mutableDoses = try self.normalizedMutablePumpEventDoseEntries(start: endOfReservoirData)
-                        doses = insulinDeliveryDoses + reservoirDoses.map({ $0.trim(from: filteredStart) }) + mutableDoses
+                        let mutableDoses = try self.getNormalizedMutablePumpEventDoseEntries(start: endOfReservoirData)
+                        doses = insulinDeliveryDoses + reservoirDoses.map({ $0.trimmed(from: filteredStart) }) + mutableDoses
                     } else {
                         // Includes mutable doses now.
                         doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
@@ -1193,7 +1221,7 @@ extension DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-                let trimmedDoses = doses.map { $0.trim(to: basalDosingEnd) }
+                let trimmedDoses = doses.map { $0.trimmed(to: basalDosingEnd) }
                 let insulinOnBoard = trimmedDoses.insulinOnBoard(model: insulinModel)
                 completion(.success(insulinOnBoard.filterDateRange(start, end)))
             }
@@ -1225,7 +1253,7 @@ extension DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-                let trimmedDoses = doses.map { $0.trim(to: basalDosingEnd) }
+                let trimmedDoses = doses.map { $0.trimmed(to: basalDosingEnd) }
                 let glucoseEffects = trimmedDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             }

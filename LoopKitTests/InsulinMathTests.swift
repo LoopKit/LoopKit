@@ -529,7 +529,7 @@ class InsulinMathTests: XCTestCase {
 
         // Last temp ends at 2015-10-15T22:29:50
         let endDate = dateFormatter.date(from: "2015-10-15T22:25:50")!
-        let trimmed = input.map { $0.trim(to: endDate) }
+        let trimmed = input.map { $0.trimmed(to: endDate) }
 
         print(input, "\n\n\n")
         print(trimmed)
@@ -1039,7 +1039,7 @@ class InsulinMathTests: XCTestCase {
 
         XCTAssertEqual(f("2018-07-16 05:14:15 +0000"), cachedDoseEntries.lastBasalEndDate!)
 
-        let appended = cachedDoseEntries + normalizedReservoirDoseEntries.filterDateRange(cachedDoseEntries.lastBasalEndDate!, nil).map({ $0.trim(from: cachedDoseEntries.lastBasalEndDate!) })
+        let appended = cachedDoseEntries + normalizedReservoirDoseEntries.filterDateRange(cachedDoseEntries.lastBasalEndDate!, nil).map({ $0.trimmed(from: cachedDoseEntries.lastBasalEndDate!) })
         XCTAssertEqual(appended.count, cachedDoseEntries.count + 3, "The last 4 reservoir doses should be appended")
 
         let insulinModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75))

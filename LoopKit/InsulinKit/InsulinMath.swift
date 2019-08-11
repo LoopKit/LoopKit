@@ -84,7 +84,7 @@ extension DoseEntry {
         }
     }
 
-    func trim(from start: Date? = nil, to end: Date? = nil, syncIdentifier: String? = nil) -> DoseEntry {
+    func trimmed(from start: Date? = nil, to end: Date? = nil, syncIdentifier: String? = nil) -> DoseEntry {
         guard unit == .unitsPerHour else {
             return self
         }
@@ -266,7 +266,7 @@ extension DoseEntry {
                 endDate = basalItems[index + 1].startDate
             }
 
-            var dose = trim(from: startDate, to: endDate, syncIdentifier: syncIdentifier)
+            var dose = trimmed(from: startDate, to: endDate, syncIdentifier: syncIdentifier)
 
             dose.scheduledBasalRate = HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: basalItem.value)
 
@@ -326,7 +326,7 @@ extension Collection where Element == DoseEntry {
 
                     // Ignore 0-duration doses
                     if endDate > last.startDate {
-                        reconciled.append(last.trim(from: nil, to: endDate, syncIdentifier: last.syncIdentifier))
+                        reconciled.append(last.trimmed(from: nil, to: endDate, syncIdentifier: last.syncIdentifier))
                     }
                 }
 
