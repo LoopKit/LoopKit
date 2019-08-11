@@ -98,8 +98,7 @@ extension DoseEntry {
         }
 
         let scheduledUnits = scheduledUnitsPerHour * hours
-        let deliveredUnits = self.deliveredUnits ?? round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
-        return deliveredUnits - scheduledUnits
+        return unitsInDeliverableIncrements - scheduledUnits
     }
 
     /// The rate of delivery, net the basal rate scheduled during that time, which can be used to compute insulin on-board and glucose effects
@@ -130,7 +129,7 @@ extension DoseEntry {
     private static let minimumMinimedIncrementPerUnit: Double = 20
 
     /// Returns the delivered units, or rounds to nearest deliverable (mdt) increment
-    internal var unitsInDeliverableIncrements: Double {
+    public var unitsInDeliverableIncrements: Double {
         guard case .unitsPerHour = unit else {
             return self.units
         }

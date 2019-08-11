@@ -29,6 +29,13 @@ extension DoseUnit {
 
 
 class InsulinMathTests: XCTestCase {
+
+    let fixtureDateformatter = DateFormatter.descriptionFormatter
+
+    private func fixtureDate(_ input: String) -> Date {
+        return fixtureDateformatter.date(from: input)!
+    }
+
     
     private func printInsulinValues(_ insulinValues: [InsulinValue]) {
         print("\n\n")
@@ -361,6 +368,12 @@ class InsulinMathTests: XCTestCase {
         let doses = input.annotated(with: basals)
 
         XCTAssertEqual(output.count, doses.count)
+
+        // Total delivery on split doses should add up to delivery from original doses
+        XCTAssertEqual(
+            input.map {$0.unitsInDeliverableIncrements}.reduce(0,+),
+            doses.map {$0.unitsInDeliverableIncrements}.reduce(0,+),
+            accuracy: Double(Float.ulpOfOne))
 
         for (expected, calculated) in zip(output, doses) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
@@ -1053,14 +1066,8 @@ class InsulinMathTests: XCTestCase {
     }
 
     func testNetBasalUnits() {
-        let formatter = DateFormatter.descriptionFormatter
-        let f = { (input) in
-            return formatter.date(from: input)!
-        }
-
-        let startDate = f("2018-07-16 03:49:00 +0000")
-        let duration = TimeInterval(minutes: 5)
-        let endDate = startDate.addingTimeInterval(duration)
+        let startDate = fixtureDate("2018-07-16 03:49:00 +0000")
+        let endDate = startDate.addingTimeInterval(TimeInterval(minutes: 5))
 
         let scheduledRate = 0.15 // Scheduled amount = 0.15 U/hr = 3 pulses per hour, actual expected 522 delivery over 5m = 0 pulses = 0 U
         let tempBasalRate = 0.4 // Temp rate = 0.4 U/hr = 8 pulses per hour, actual expected 522 delivery over 5m = 1 pulses = 0.05 U
@@ -1071,4 +1078,81 @@ class InsulinMathTests: XCTestCase {
         XCTAssertEqual(netRate, dose.netBasalUnitsPerHour, accuracy: .ulpOfOne)
         XCTAssertEqual(0.0375, dose.netBasalUnits, accuracy: .ulpOfOne)
     }
+
+    func testDoseEntryUnitsInDeliverableIncrements() {
+
+        let makeDose = { (deliveredUnits: Double?) -> DoseEntry in
+            let startDate = self.fixtureDate("2018-07-16 03:49:00 +0000")
+            let endDate = startDate.addingTimeInterval(TimeInterval(minutes: 5))
+
+            let tempBasalRate = 1.0
+
+            return DoseEntry(
+                type: .tempBasal,
+                startDate: startDate,
+                endDate: endDate,
+                value: tempBasalRate,
+                unit: .unitsPerHour,
+                deliveredUnits: deliveredUnits)
+        }
+
+        XCTAssertEqual(0.1, makeDose(nil).unitsInDeliverableIncrements, accuracy: .ulpOfOne)
+        XCTAssertEqual(0.05, makeDose(0.05).unitsInDeliverableIncrements, accuracy: .ulpOfOne)
+    }
+
+    func testDoseEntryAnnotateShouldSplitDosesProportionally() {
+        let startDate = self.fixtureDate("2018-07-16 11:59:00 +0000")
+        let endDate = startDate.addingTimeInterval(TimeInterval(minutes: 5))
+
+        let tempBasalRate = 1.0
+
+        let dose = DoseEntry(
+            type: .tempBasal,
+            startDate: startDate,
+            endDate: endDate,
+            value: tempBasalRate,
+            unit: .unitsPerHour,
+            deliveredUnits: 0.1
+        )
+
+        let delivery = dose.unitsInDeliverableIncrements
+
+        let basals = loadBasalRateScheduleFixture("basal")
+
+        let splitDoses = [dose].annotated(with: basals)
+
+        XCTAssertEqual(2, splitDoses.count)
+
+        // A 5 minute dose starting one minute before midnight, split at midnight, means split should be 1/5, 4/5
+        XCTAssertEqual(delivery * 1.0/5.0, splitDoses[0].unitsInDeliverableIncrements, accuracy: .ulpOfOne)
+        XCTAssertEqual(delivery * 4.0/5.0, splitDoses[1].unitsInDeliverableIncrements, accuracy: .ulpOfOne)
+    }
+
+    func testDoseEntryWithoutDeliveredUnitsShouldSplitDosesProportionally() {
+        let startDate = self.fixtureDate("2018-07-16 11:59:00 +0000")
+        let endDate = startDate.addingTimeInterval(TimeInterval(minutes: 5))
+
+        let tempBasalRate = 1.0
+
+        let dose = DoseEntry(
+            type: .tempBasal,
+            startDate: startDate,
+            endDate: endDate,
+            value: tempBasalRate,
+            unit: .unitsPerHour
+        )
+
+        let delivery = dose.unitsInDeliverableIncrements
+
+        let basals = loadBasalRateScheduleFixture("basal")
+
+        let splitDoses = [dose].annotated(with: basals)
+
+        XCTAssertEqual(2, splitDoses.count)
+
+        // A 5 minute dose starting one minute before midnight, split at midnight, means split should be 1/5, 4/5
+        XCTAssertEqual(delivery * 1.0/5.0, splitDoses[0].unitsInDeliverableIncrements, accuracy: .ulpOfOne)
+        XCTAssertEqual(delivery * 4.0/5.0, splitDoses[1].unitsInDeliverableIncrements, accuracy: .ulpOfOne)
+    }
+
 }

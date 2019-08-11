@@ -96,8 +96,8 @@ extension DoseEntry {
 
         var trimmedDeliveredUnits: Double? = deliveredUnits
 
-        if let deliveredUnits = deliveredUnits, originalDuration > 0 {
-            trimmedDeliveredUnits = deliveredUnits * (endDate.timeIntervalSince(startDate) / originalDuration)
+        if originalDuration > .ulpOfOne {
+            trimmedDeliveredUnits = unitsInDeliverableIncrements * (endDate.timeIntervalSince(startDate) / originalDuration)
         }
 
         return DoseEntry(
