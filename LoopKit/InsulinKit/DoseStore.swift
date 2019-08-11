@@ -933,7 +933,7 @@ extension DoseStore {
             return
         }
 
-        guard let objects = try? getPumpEventObjects(matching: NSPredicate(format: "uploaded = false"), chronological: true, limit: 5000), objects.count > 0 else {
+        guard let objects = try? getPumpEventObjects(matching: NSPredicate(format: "uploaded = false && mutable = false"), chronological: true, limit: 5000), objects.count > 0 else {
             return
         }
 
