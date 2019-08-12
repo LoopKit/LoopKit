@@ -711,7 +711,7 @@ extension DoseStore {
 
         for event in events {
             if let dose = event.dose {
-                self.log.debug("Add %{public}@, isMutable=%{public}@", String(describing: dose), String(describing: event.isMutable))
+                self.log.debug("Add %@, isMutable=%@", String(describing: dose), String(describing: event.isMutable))
             }
         }
 
@@ -725,7 +725,7 @@ extension DoseStore {
             do {
                 try self.purgePumpEventObjects(matching: predicate)
             } catch let error {
-                completion(DoseStoreError(error: error as? PersistenceController.PersistenceControllerError))
+                completion(DoseStoreError(error: .coreDataError(error as NSError)))
                 return
             }
 
@@ -751,6 +751,7 @@ extension DoseStore {
                 object.dose = event.dose
             }
 
+            // Only change pumpEventQueryAfterDate if we received new finalized records.
             if let finalDate = lastFinalDate {
                 if let mutableDate = firstMutableDate {
                     self.pumpEventQueryAfterDate = mutableDate
@@ -784,7 +785,7 @@ extension DoseStore {
                 self.persistenceController.managedObjectContext.delete(object)
             }
 
-            // Reset the latest query date to the newest PumpEvent                self.pumpEventQueryAfterDate = self.cacheStartDate
+            // Reset the latest query date to the newest PumpEvent
             let request: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
             request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
             request.predicate = NSPredicate(format: "mutable != true")
@@ -873,7 +874,7 @@ extension DoseStore {
                 }
 
                 for dose in doses {
-                    self.log.debug("Adding dose to HealthKit: %{public}@", String(describing: dose))
+                    self.log.debug("Adding dose to HealthKit: %@", String(describing: dose))
                 }
 
                 self.insulinDeliveryStore.addReconciledDoses(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
@@ -1153,11 +1154,18 @@ extension DoseStore {
                     // Reservoir data is used only if it's continuous and the pumpmanager hasn't reconciled since the last reservoir reading
                     if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {
                         let reservoirDoses = try self.getNormalizedReservoirDoseEntries(start: filteredStart, end: end)
+                        // There may be boluses in the cache *after* reservoir start. Filter them out to avoid double counting.
+                        let cachedDoses: [DoseEntry]
+                        if let reservoirStart = reservoirDoses.first?.startDate {
+                            cachedDoses = insulinDeliveryDoses.filter { $0.startDate < reservoirStart }
+                        } else {
+                            cachedDoses = insulinDeliveryDoses
+                        }
                         let endOfReservoirData = self.lastStoredReservoirValue?.endDate ?? .distantPast
                         let mutableDoses = try self.getNormalizedMutablePumpEventDoseEntries(start: endOfReservoirData)
-                        doses = insulinDeliveryDoses + reservoirDoses.map({ $0.trimmed(from: filteredStart) }) + mutableDoses
+                        doses = cachedDoses + reservoirDoses.map({ $0.trimmed(from: filteredStart) }) + mutableDoses
                     } else {
-                        // Includes mutable doses now.
+                        // Includes mutable doses.
                         doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
                     }
                     completion(.success(doses))

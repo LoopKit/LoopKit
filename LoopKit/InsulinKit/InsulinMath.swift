@@ -94,11 +94,12 @@ extension DoseEntry {
         var trimmedDeliveredUnits: Double? = deliveredUnits
         var trimmedValue: Double = value
 
-        // If we're changing times on this dose, then make sure to update deliveredUnits
-        if originalDuration > .ulpOfOne && (startDate != self.startDate || endDate != self.endDate) {
+        if originalDuration > .ulpOfOne && (startDate > self.startDate || endDate < self.endDate) {
             let updatedActualDelivery = unitsInDeliverableIncrements * (endDate.timeIntervalSince(startDate) / originalDuration)
-            trimmedDeliveredUnits = updatedActualDelivery
-            if case .units = unit {
+            if deliveredUnits != nil {
+                trimmedDeliveredUnits = updatedActualDelivery
+            }
+            if case .units = unit  {
                 trimmedValue = updatedActualDelivery
             }
         }
@@ -302,7 +303,28 @@ extension DoseEntry {
         let netTempBasalDoses = self.annotated(with: basalRateSchedule)
         return netTempBasalDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivity)
     }
-    
+
+    fileprivate var resolvingDelivery: DoseEntry {
+        guard deliveredUnits == nil else {
+            return self
+        }
+
+        let resolvedUnits: Double
+
+        if case .units = unit {
+            resolvedUnits = value
+        } else {
+            switch type {
+            case .tempBasal:
+                resolvedUnits = unitsInDeliverableIncrements
+            case .basal:
+                resolvedUnits = units
+            default:
+                return self
+            }
+        }
+        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate)
+    }
 }
 
 extension Collection where Element == DoseEntry {
@@ -393,7 +415,7 @@ extension Collection where Element == DoseEntry {
             reconciled.append(last)
         }
 
-        return reconciled
+        return reconciled.map { $0.resolvingDelivery }
     }
 
     /// Annotates a sequence of dose entries with the configured basal rate schedule.
