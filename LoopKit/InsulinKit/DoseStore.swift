@@ -1154,16 +1154,9 @@ extension DoseStore {
                     // Reservoir data is used only if it's continuous and the pumpmanager hasn't reconciled since the last reservoir reading
                     if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {
                         let reservoirDoses = try self.getNormalizedReservoirDoseEntries(start: filteredStart, end: end)
-                        // There may be boluses in the cache *after* reservoir start. Filter them out to avoid double counting.
-                        let cachedDoses: [DoseEntry]
-                        if let reservoirStart = reservoirDoses.first?.startDate {
-                            cachedDoses = insulinDeliveryDoses.filter { $0.startDate < reservoirStart }
-                        } else {
-                            cachedDoses = insulinDeliveryDoses
-                        }
                         let endOfReservoirData = self.lastStoredReservoirValue?.endDate ?? .distantPast
                         let mutableDoses = try self.getNormalizedMutablePumpEventDoseEntries(start: endOfReservoirData)
-                        doses = cachedDoses + reservoirDoses.map({ $0.trimmed(from: filteredStart) }) + mutableDoses
+                        doses = insulinDeliveryDoses + reservoirDoses.map({ $0.trimmed(from: filteredStart) }) + mutableDoses
                     } else {
                         // Includes mutable doses.
                         doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
