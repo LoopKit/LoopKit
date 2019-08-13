@@ -318,7 +318,7 @@ extension DoseEntry {
             case .tempBasal:
                 resolvedUnits = unitsInDeliverableIncrements
             case .basal:
-                resolvedUnits = units
+                resolvedUnits = programmedUnits
             default:
                 return self
             }

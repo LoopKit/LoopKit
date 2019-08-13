@@ -195,7 +195,12 @@ extension NewPumpEvent {
             case .basal:
                 return nil
             case .bolus:
-                return UnfinalizedDose(bolusAmount: dose.units, startTime: dose.startDate, duration: duration)
+                var newDose = UnfinalizedDose(bolusAmount: dose.programmedUnits, startTime: dose.startDate, duration: duration)
+                if let delivered = dose.deliveredUnits {
+                    newDose.scheduledUnits = dose.programmedUnits
+                    newDose.units = delivered
+                }
+                return newDose
             case .resume:
                 return UnfinalizedDose(resumeStartTime: dose.startDate)
             case .suspend:

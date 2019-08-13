@@ -52,7 +52,7 @@ extension DoseEntry {
         return endDate.timeIntervalSince(startDate).hours
     }
 
-    public var units: Double {
+    public var programmedUnits: Double {
         switch unit {
         case .units:
             return value
@@ -79,7 +79,7 @@ extension DoseEntry {
     public var netBasalUnits: Double {
         switch type {
         case .bolus:
-            return self.units
+            return deliveredUnits ?? programmedUnits
         case .basal:
             return 0
         case .resume, .suspend, .tempBasal:
@@ -131,9 +131,9 @@ extension DoseEntry {
     /// Returns the delivered units, or rounds to nearest deliverable (mdt) increment
     public var unitsInDeliverableIncrements: Double {
         guard case .unitsPerHour = unit else {
-            return self.units
+            return deliveredUnits ?? programmedUnits
         }
 
-        return self.deliveredUnits ?? round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
+        return deliveredUnits ?? round(programmedUnits * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
     }
 }
