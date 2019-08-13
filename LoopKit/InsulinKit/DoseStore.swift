@@ -1254,7 +1254,12 @@ extension DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-                let trimmedDoses = doses.map { $0.trimmed(to: basalDosingEnd) }
+                let trimmedDoses = doses.map { (dose) -> DoseEntry in
+                    guard dose.type != .bolus else {
+                        return dose
+                    }
+                    return dose.trimmed(to: basalDosingEnd)
+                }
                 let glucoseEffects = trimmedDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             }
