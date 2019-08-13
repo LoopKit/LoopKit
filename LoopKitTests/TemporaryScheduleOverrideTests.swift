@@ -205,7 +205,7 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         let annotated = [dose].annotated(with: schedule)
 
         XCTAssertEqual(3, annotated.count)
-        XCTAssertEqual(dose.units, annotated.map { $0.unitsInDeliverableIncrements }.reduce(0, +))
+        XCTAssertEqual(dose.programmedUnits, annotated.map { $0.unitsInDeliverableIncrements }.reduce(0, +))
     }
 }
 
