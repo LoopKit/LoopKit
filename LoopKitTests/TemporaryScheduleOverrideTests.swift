@@ -176,6 +176,37 @@ class TemporaryScheduleOverrideTests: XCTestCase {
 
         XCTAssert(overridden.equals(expected, accuracy: epsilon))
     }
+
+    func testOverrideScheduleAnnotatingReservoirSplitsDose() {
+        let schedule = BasalRateSchedule(dailyItems: [
+            RepeatingScheduleValue(startTime: 0, value: 0.225),
+            RepeatingScheduleValue(startTime: 3600.0, value: 0.18000000000000002),
+            RepeatingScheduleValue(startTime: 10800.0, value: 0.135),
+            RepeatingScheduleValue(startTime: 12689.855275034904, value: 0.15),
+            RepeatingScheduleValue(startTime: 21600.0, value: 0.2),
+            RepeatingScheduleValue(startTime: 32400.0, value: 0.2),
+            RepeatingScheduleValue(startTime: 50400.0, value: 0.2),
+            RepeatingScheduleValue(startTime: 52403.79680299759, value: 0.16000000000000003),
+            RepeatingScheduleValue(startTime: 63743.58014559746, value: 0.2),
+            RepeatingScheduleValue(startTime: 63743.58014583588, value: 0.16000000000000003),
+            RepeatingScheduleValue(startTime: 69968.05249071121, value: 0.2),
+            RepeatingScheduleValue(startTime: 69968.05249094963, value: 0.18000000000000002),
+            RepeatingScheduleValue(startTime: 79200.0, value: 0.225),
+            ])!
+
+        let dose = DoseEntry(
+            type: .tempBasal,
+            startDate: date(at: "19:25"),
+            endDate: date(at: "19:30"),
+            value: 0.8,
+            unit: .units
+        )
+
+        let annotated = [dose].annotated(with: schedule)
+
+        XCTAssertEqual(3, annotated.count)
+        XCTAssertEqual(dose.programmedUnits, annotated.map { $0.unitsInDeliverableIncrements }.reduce(0, +))
+    }
 }
 
 private extension TemporaryScheduleOverride.Duration {

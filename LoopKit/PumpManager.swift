@@ -36,7 +36,7 @@ public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObs
     /// Reports an error that should be surfaced to the user
     func pumpManager(_ pumpManager: PumpManager, didError error: PumpManagerError)
 
-    func pumpManager(_ pumpManager: PumpManager, didReadPumpEvents events: [NewPumpEvent], completion: @escaping (_ error: Error?) -> Void)
+    func pumpManager(_ pumpManager: PumpManager, hasNewPumpEvents events: [NewPumpEvent], lastReconciliation: Date?, completion: @escaping (_ error: Error?) -> Void)
 
     func pumpManager(_ pumpManager: PumpManager, didReadReservoirValue units: Double, at date: Date, completion: @escaping (_ result: PumpManagerResult<(newValue: ReservoirValue, lastValue: ReservoirValue?, areStoredValuesContinuous: Bool)>) -> Void)
 
@@ -89,6 +89,9 @@ public protocol PumpManager: DeviceManager {
 
     /// The maximum reservoir volume of the pump
     var pumpReservoirCapacity: Double { get }
+
+    /// The time of the last reconciliation with the pump's event history
+    var lastReconciliation: Date? { get }
     
     /// The most-recent status
     var status: PumpManagerStatus { get }

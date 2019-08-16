@@ -90,6 +90,19 @@ class PumpEvent: NSManagedObject {
         }
     }
 
+    var deliveredUnits: Double? {
+        get {
+            willAccessValue(forKey: "deliveredUnits")
+            defer { didAccessValue(forKey: "deliveredUnits") }
+            return primitiveDeliveredUnits?.doubleValue
+        }
+        set {
+            willChangeValue(forKey: "deliveredUnits")
+            defer { didChangeValue(forKey: "deliveredUnits") }
+            primitiveDeliveredUnits = newValue != nil ? NSNumber(value: newValue!) : nil
+        }
+    }
+
     override func awakeFromInsert() {
         super.awakeFromInsert()
 
@@ -134,6 +147,7 @@ extension PumpEvent {
                 endDate: endDate,
                 value: value,
                 unit: unit,
+                deliveredUnits: deliveredUnits,
                 syncIdentifier: syncIdentifier
             )
         }
@@ -147,6 +161,7 @@ extension PumpEvent {
             endDate = entry.endDate
             value = entry.value
             unit = entry.unit
+            deliveredUnits = entry.deliveredUnits
         }
     }
 
@@ -156,6 +171,10 @@ extension PumpEvent {
 
     var isUploaded: Bool {
         return uploaded
+    }
+
+    var isMutable: Bool {
+        return mutable
     }
 }
 

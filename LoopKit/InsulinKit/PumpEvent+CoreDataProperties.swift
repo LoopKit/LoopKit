@@ -24,6 +24,8 @@ extension PumpEvent {
     @NSManaged var primitiveUnit: String?
     @NSManaged var primitiveUploaded: NSNumber?
     @NSManaged var primitiveValue: NSNumber?
+    @NSManaged var primitiveDeliveredUnits: NSNumber?
+    @NSManaged var mutable: Bool
     @NSManaged var raw: Data?
     @NSManaged var title: String?
 
