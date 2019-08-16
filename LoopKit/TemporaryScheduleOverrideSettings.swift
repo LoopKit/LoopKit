@@ -6,12 +6,16 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
-import Foundation
+import HealthKit
 
 
 public struct TemporaryScheduleOverrideSettings: Hashable {
-    public var targetRange: DoubleRange?
+    private var targetRangeInMgdl: DoubleRange?
     public var insulinNeedsScaleFactor: Double?
+
+    public var targetRange: ClosedRange<HKQuantity>? {
+        return targetRangeInMgdl.map { $0.quantityRange(for: .milligramsPerDeciliter) }
+    }
 
     public var basalRateMultiplier: Double? {
         return insulinNeedsScaleFactor
@@ -29,8 +33,8 @@ public struct TemporaryScheduleOverrideSettings: Hashable {
         return insulinNeedsScaleFactor ?? 1.0
     }
 
-    public init(targetRange: DoubleRange?, insulinNeedsScaleFactor: Double? = nil) {
-        self.targetRange = targetRange
+    public init(unit: HKUnit, targetRange: DoubleRange?, insulinNeedsScaleFactor: Double? = nil) {
+        self.targetRangeInMgdl = targetRange?.quantityRange(for: unit).doubleRange(for: .milligramsPerDeciliter)
         self.insulinNeedsScaleFactor = insulinNeedsScaleFactor
     }
 }
@@ -46,7 +50,7 @@ extension TemporaryScheduleOverrideSettings: RawRepresentable {
     public init?(rawValue: RawValue) {
         if let targetRangeRawValue = rawValue[Key.targetRange] as? DoubleRange.RawValue,
             let targetRange = DoubleRange(rawValue: targetRangeRawValue) {
-            self.targetRange = targetRange
+            self.targetRangeInMgdl = targetRange
         }
 
         self.insulinNeedsScaleFactor = rawValue[Key.insulinNeedsScaleFactor] as? Double
@@ -55,7 +59,7 @@ extension TemporaryScheduleOverrideSettings: RawRepresentable {
     public var rawValue: RawValue {
         var raw: RawValue = [:]
 
-        if let targetRange = targetRange {
+        if let targetRange = targetRangeInMgdl {
             raw[Key.targetRange] = targetRange.rawValue
         }
 

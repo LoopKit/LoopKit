@@ -17,10 +17,11 @@ extension GlucoseRangeSchedule {
         guard let targetRange = override.settings.targetRange else {
             return self
         }
-
+        
         // Project target range changes indefinitely into the future
+        let doubleRange = targetRange.doubleRange(for: unit)
         let affectedInterval = DateInterval(start: override.startDate, end: .distantFuture)
-        let rangeSchedule = self.rangeSchedule.overridingTargetRange(with: targetRange, during: affectedInterval, relativeTo: date)
+        let rangeSchedule = self.rangeSchedule.overridingTargetRange(with: doubleRange, during: affectedInterval, relativeTo: date)
         return GlucoseRangeSchedule(rangeSchedule: rangeSchedule)
     }
 }
