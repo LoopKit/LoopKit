@@ -29,6 +29,7 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         return TemporaryScheduleOverride(
             context: .custom,
             settings: TemporaryScheduleOverrideSettings(
+                unit: .milligramsPerDeciliter,
                 targetRange: nil,
                 insulinNeedsScaleFactor: 1.5
             ),
