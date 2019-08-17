@@ -67,7 +67,6 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         /// Initializes a new override
         ///
         /// - Parameters:
-        ///   - context: The context type of the override
         ///   - start: The date at which the override starts
         ///   - end: The date at which the override ends, or nil for an indefinite override
         ///   - value: The value to return when active
