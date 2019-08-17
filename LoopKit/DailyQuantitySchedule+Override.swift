@@ -10,36 +10,14 @@ import HealthKit
 
 
 extension GlucoseRangeSchedule {
-    public func applyingOverride(
-        _ override: TemporaryScheduleOverride,
-        relativeTo date: Date = Date()
-    ) -> GlucoseRangeSchedule {
+    public func applyingOverride(_ override: TemporaryScheduleOverride) -> GlucoseRangeSchedule {
         guard let targetRange = override.settings.targetRange else {
             return self
         }
-        
-        // Project target range changes indefinitely into the future
-        let doubleRange = targetRange.doubleRange(for: unit)
-        let affectedInterval = DateInterval(start: override.startDate, end: .distantFuture)
-        let rangeSchedule = self.rangeSchedule.overridingTargetRange(with: doubleRange, during: affectedInterval, relativeTo: date)
-        return GlucoseRangeSchedule(rangeSchedule: rangeSchedule)
-    }
-}
 
-extension DailyQuantitySchedule where T == DoubleRange {
-    fileprivate func overridingTargetRange(
-        with range: DoubleRange,
-        during interval: DateInterval,
-        relativeTo date: Date
-    ) -> DailyQuantitySchedule {
-        return DailyQuantitySchedule(
-            unit: unit,
-            valueSchedule: valueSchedule.applyingOverride(
-                during: interval,
-                relativeTo: date,
-                updatingOverridenValuesWith: { _ in range }
-            )
-        )
+        let doubleRange = targetRange.doubleRange(for: unit)
+        let rangeOverride = GlucoseRangeSchedule.Override(start: override.startDate, end: override.endDate, value: doubleRange)
+        return GlucoseRangeSchedule(rangeSchedule: rangeSchedule, override: rangeOverride)
     }
 }
 
@@ -200,8 +178,3 @@ extension DailyValueSchedule {
     }
 }
 
-private extension GlucoseRangeSchedule {
-    init(rangeSchedule: DailyQuantitySchedule<DoubleRange>) {
-        self.rangeSchedule = rangeSchedule
-    }
-}

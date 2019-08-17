@@ -45,12 +45,19 @@ extension TemporaryScheduleOverrideSettings: RawRepresentable {
     private enum Key {
         static let targetRange = "targetRange"
         static let insulinNeedsScaleFactor = "insulinNeedsScaleFactor"
+        static let version = "version"
     }
 
     public init?(rawValue: RawValue) {
         if let targetRangeRawValue = rawValue[Key.targetRange] as? DoubleRange.RawValue,
             let targetRange = DoubleRange(rawValue: targetRangeRawValue) {
             self.targetRangeInMgdl = targetRange
+        }
+        let version = rawValue[Key.version] as? Int ?? 0
+
+        // Do not allow target ranges from versions < 1, as there was no unit convention at that point.
+        if version < 1 && targetRange != nil {
+            return nil
         }
 
         self.insulinNeedsScaleFactor = rawValue[Key.insulinNeedsScaleFactor] as? Double
@@ -66,6 +73,8 @@ extension TemporaryScheduleOverrideSettings: RawRepresentable {
         if let insulinNeedsScaleFactor = insulinNeedsScaleFactor {
             raw[Key.insulinNeedsScaleFactor] = insulinNeedsScaleFactor
         }
+
+        raw[Key.version] = 1
 
         return raw
     }
