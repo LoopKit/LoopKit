@@ -539,6 +539,8 @@
 		A9E675EC22713F4700E25293 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB2B2118CE9300048054 /* Localizable.strings */; };
 		A9E675F3227140D800E25293 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E675F2227140D800E25293 /* CoreData.framework */; };
 		A9E675F5227140DD00E25293 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E675F4227140DD00E25293 /* HealthKit.framework */; };
+		C16DA83F22E8D88F008624C2 /* LoopPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16DA83E22E8D88F008624C2 /* LoopPlugin.swift */; };
+		C16DA84522E9330A008624C2 /* LoopUIPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */; };
 		C1814B84225B9ED5008D2D8E /* LoopNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */; };
 		C1814B8C226371DF008D2D8E /* WeakSynchronizedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */; };
 		C188B83422CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C188B83322CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift */; };
@@ -1148,6 +1150,8 @@
 		C1110E981EE98CF5009BB852 /* ice_35_min_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_input.json; sourceTree = "<group>"; };
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
+		C16DA83E22E8D88F008624C2 /* LoopPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopPlugin.swift; sourceTree = "<group>"; };
+		C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopUIPlugin.swift; sourceTree = "<group>"; };
 		C17F4CB21EE9B6DF005079B1 /* carb_entry_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = carb_entry_input.json; sourceTree = "<group>"; };
 		C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopNotificationCategory.swift; sourceTree = "<group>"; };
 		C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakSynchronizedDelegate.swift; sourceTree = "<group>"; };
@@ -1463,6 +1467,7 @@
 				43A8EC3B210CEEA500A81379 /* CGMManagerUI.swift */,
 				892A5D9F2231E12F008961AB /* CompletionNotifying.swift */,
 				892A5DA12231E136008961AB /* HUDProvider.swift */,
+				C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */,
 				895FE06C22011E9900FCF18A /* OverrideEmojiDataSource.swift */,
 				43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */,
 				43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */,
@@ -1603,6 +1608,7 @@
 				1F5DAB2B2118CE9300048054 /* Localizable.strings */,
 				437874B4202FDC8300A3D8B9 /* Persistence */,
 				C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */,
+				C16DA83E22E8D88F008624C2 /* LoopPlugin.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -2520,6 +2526,7 @@
 				43BA717D201EE7090058961E /* GlucoseRangeTableViewCell.swift in Sources */,
 				43BA7184201EE7090058961E /* TextFieldTableViewController.swift in Sources */,
 				895FE09122011F4800FCF18A /* AddEditOverrideTableViewController.swift in Sources */,
+				C16DA84522E9330A008624C2 /* LoopUIPlugin.swift in Sources */,
 				895FE06E22011E9A00FCF18A /* OverrideEmojiDataSource.swift in Sources */,
 				43BA716A201E49220058961E /* CarbEntryTableViewController.swift in Sources */,
 				43BA716B201E49220058961E /* CarbEntryValidationNavigationDelegate.swift in Sources */,
@@ -2614,6 +2621,7 @@
 				43CB51B2211EB1A400DB9B4A /* NSUserActivity+CarbKit.swift in Sources */,
 				434113AB20F171CB00D05747 /* CachedInsulinDeliveryObject+CoreDataProperties.swift in Sources */,
 				43CF0B3F2030FD0D002A66DE /* UploadState.swift in Sources */,
+				C16DA83F22E8D88F008624C2 /* LoopPlugin.swift in Sources */,
 				433BC7AD20538FCA000B1200 /* StoredGlucoseSample.swift in Sources */,
 				43D8FDF91C7290350073BE78 /* GlucoseEffect.swift in Sources */,
 				43CACE0E2247F89100F90AF5 /* WeakSynchronizedSet.swift in Sources */,
