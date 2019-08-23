@@ -41,7 +41,6 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.description = description
         self.syncIdentifier = syncIdentifier
         self.scheduledBasalRate = scheduledBasalRate
-        self.deliveredUnits = deliveredUnits
     }
 }
 
