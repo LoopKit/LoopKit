@@ -21,7 +21,7 @@ public class HealthStoreUnitCache {
 
     private var unitCache = Locked([HKQuantityTypeIdentifier: HKUnit]())
 
-    private var userPreferencesChangeObserver: Any!
+    private var userPreferencesChangeObserver: Any?
 
     private init(healthStore: HKHealthStore) {
         self.healthStore = healthStore
@@ -79,7 +79,9 @@ public class HealthStoreUnitCache {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(userPreferencesChangeObserver)
+        if let observer = userPreferencesChangeObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
 }
 

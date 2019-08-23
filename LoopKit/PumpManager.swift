@@ -36,7 +36,7 @@ public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObs
     /// Reports an error that should be surfaced to the user
     func pumpManager(_ pumpManager: PumpManager, didError error: PumpManagerError)
 
-    func pumpManager(_ pumpManager: PumpManager, didReadPumpEvents events: [NewPumpEvent], completion: @escaping (_ error: Error?) -> Void)
+    func pumpManager(_ pumpManager: PumpManager, hasNewPumpEvents events: [NewPumpEvent], lastReconciliation: Date?, completion: @escaping (_ error: Error?) -> Void)
 
     func pumpManager(_ pumpManager: PumpManager, didReadReservoirValue units: Double, at date: Date, completion: @escaping (_ result: PumpManagerResult<(newValue: ReservoirValue, lastValue: ReservoirValue?, areStoredValuesContinuous: Bool)>) -> Void)
 
@@ -89,6 +89,9 @@ public protocol PumpManager: DeviceManager {
 
     /// The maximum reservoir volume of the pump
     var pumpReservoirCapacity: Double { get }
+
+    /// The time of the last reconciliation with the pump's event history
+    var lastReconciliation: Date? { get }
     
     /// The most-recent status
     var status: PumpManagerStatus { get }
@@ -165,11 +168,11 @@ public protocol PumpManager: DeviceManager {
 
 public extension PumpManager {
     func roundToSupportedBasalRate(unitsPerHour: Double) -> Double {
-        return supportedBasalRates.filter({$0 <= unitsPerHour}).max()!
+        return supportedBasalRates.filter({$0 <= unitsPerHour}).max() ?? 0
     }
 
     func roundToSupportedBolusVolume(units: Double) -> Double {
-        return supportedBolusVolumes.filter({$0 <= units}).max()!
+        return supportedBolusVolumes.filter({$0 <= units}).max() ?? 0
     }
 
     /// Convenience wrapper for notifying the delegate of deactivation on the delegate queue

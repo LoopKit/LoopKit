@@ -99,7 +99,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             addPumpEvents1.fulfill()
         }
-        doseStore.addPumpEvents(pumpEvents1) { (error) in
+        doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents1.fulfill()
         }
@@ -130,7 +130,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             addPumpEvents2.fulfill()
         }
-        doseStore.addPumpEvents(pumpEvents2) { (error) in
+        doseStore.addPumpEvents(pumpEvents2, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents2.fulfill()
         }
@@ -155,7 +155,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             XCTFail()
         }
-        doseStore.addPumpEvents(pumpEvents3) { (error) in
+        doseStore.addPumpEvents(pumpEvents3, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents3.fulfill()
         }
@@ -204,7 +204,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             XCTFail()
         }
-        doseStore.addPumpEvents(pumpEvents1) { (error) in
+        doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents1.fulfill()
         }
@@ -224,7 +224,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             XCTFail()
         }
-        doseStore.addPumpEvents(pumpEvents1) { (error) in
+        doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents2.fulfill()
         }
@@ -256,20 +256,20 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), temp1.startDate)
             XCTAssertEqual(f("2018-11-29 11:00:00 +0000"), temp1.endDate)
             XCTAssertEqual("5bffc7cace53e48e87f7cfcb 1/2", temp1.metadata![HKMetadataKeySyncIdentifier] as! String)
-            XCTAssertEqual(0.0, temp1.quantity.doubleValue(for: .internationalUnit()), accuracy: .ulpOfOne)
+            XCTAssertEqual(0.003, temp1.quantity.doubleValue(for: .internationalUnit()), accuracy: 0.01)
             let temp2 = objects[2] as! HKQuantitySample
             XCTAssertEqual(HKInsulinDeliveryReason.basal, temp2.insulinDeliveryReason)
             XCTAssertEqual(f("2018-11-29 11:00:00 +0000"), temp2.startDate)
             XCTAssertEqual(f("2018-11-29 11:09:27 +0000"), temp2.endDate)
             XCTAssertEqual("5bffc7cace53e48e87f7cfcb 2/2", temp2.metadata![HKMetadataKeySyncIdentifier] as! String)
-            XCTAssertEqual(0.05, temp2.quantity.doubleValue(for: .internationalUnit()), accuracy: .ulpOfOne)
+            XCTAssertEqual(0.047, temp2.quantity.doubleValue(for: .internationalUnit()), accuracy: 0.01)
             XCTAssertNil(error)
             addPumpEvents3.fulfill()
         })
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             addPumpEvents3.fulfill()
         }
-        doseStore.addPumpEvents(pumpEvents3) { (error) in
+        doseStore.addPumpEvents(pumpEvents3, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents3.fulfill()
         }
@@ -295,14 +295,14 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertEqual(f("2018-11-29 11:09:27 +0000"), temp.startDate)
             XCTAssertEqual(f("2018-11-29 11:14:28 +0000"), temp.endDate)
             XCTAssertEqual("5bffca22ce53e48e87f7d624", temp.metadata![HKMetadataKeySyncIdentifier] as! String)
-            XCTAssertEqual(0.05, temp.quantity.doubleValue(for: .internationalUnit()), accuracy: .ulpOfOne)
+            XCTAssertEqual(0.05, temp.quantity.doubleValue(for: .internationalUnit()), accuracy: 0.01)
             XCTAssertNil(error)
             addPumpEvents4.fulfill()
         })
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
             addPumpEvents4.fulfill()
         }
-        doseStore.addPumpEvents(pumpEvents4) { (error) in
+        doseStore.addPumpEvents(pumpEvents4, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents4.fulfill()
         }

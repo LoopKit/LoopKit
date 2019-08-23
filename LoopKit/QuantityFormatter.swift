@@ -157,6 +157,8 @@ public extension HKUnit {
             case .short, .medium:
                 return LocalizedString("U", comment: "The short unit display string for international units of insulin")
             case .long:
+                fallthrough
+            @unknown default:
                 if singular {
                     return LocalizedString("Unit", comment: "The long unit display string for a singular international unit of insulin")
                 } else {
@@ -170,6 +172,8 @@ public extension HKUnit {
             case .short, .medium:
                 return LocalizedString("U/hr", comment: "The short unit display string for international units of insulin per hour")
             case .long:
+                fallthrough
+            @unknown default:
                 if singular {
                     return LocalizedString("Unit/hour", comment: "The long unit display string for a singular international unit of insulin per hour")
                 } else {
@@ -210,6 +214,8 @@ public extension HKUnit {
             case .short, .medium:
                 return LocalizedString("g/U", comment: "The short unit display string for grams per U")
             case .long:
+                fallthrough
+            @unknown default:
                 break  // Fallback to the MeasurementFormatter localization
             }
         }

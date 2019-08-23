@@ -181,7 +181,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
     }
 
     private func indexPath(for row: PropertyRow) -> IndexPath? {
-        guard let rowIndex = propertyRows.index(of: row) else {
+        guard let rowIndex = propertyRows.firstIndex(of: row) else {
             return nil
         }
         return IndexPath(row: rowIndex, section: 0)

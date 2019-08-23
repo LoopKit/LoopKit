@@ -135,7 +135,9 @@ public final class CarbEntryEditViewController: UITableViewController {
             cell.unitLabel?.text = String(describing: preferredUnit)
 
             if originalCarbEntry == nil {
-                cell.textField.becomeFirstResponder()
+                DispatchQueue.main.async {
+                    cell.textField.becomeFirstResponder()
+                }
             }
 
             cell.delegate = self
@@ -170,7 +172,9 @@ public final class CarbEntryEditViewController: UITableViewController {
                 }
 
                 if originalCarbEntry == nil {
-                    cell.textField.becomeFirstResponder()
+                    DispatchQueue.main.async {
+                        cell.textField.becomeFirstResponder()
+                    }
                 }
 
                 return cell

@@ -9,7 +9,8 @@
 import Foundation
 
 class CarbEntryNavigationDelegate {
-    lazy var validationTitle = LocalizedString("Warning", comment: "Title of an alert containing a validation warning")
+    private lazy var validationTitle = LocalizedString("Warning", comment: "Title of an alert containing a validation warning")
+    private lazy var dismissActionTitle = LocalizedString("com.loudnate.LoopKit.errorAlertActionTitle", value: "OK", comment: "The title of the action used to dismiss an error alert")
 
     func showAbsorptionTimeValidationWarning(for viewController: UIViewController, maxAbsorptionTime: TimeInterval) {
         let formatter = DateComponentsFormatter()
@@ -20,6 +21,11 @@ class CarbEntryNavigationDelegate {
             format: LocalizedString("The maximum absorption time is %@", comment: "Alert body displayed absorption time greater than max (1: maximum absorption time)"),
             formatter.string(from: maxAbsorptionTime) ?? String(describing: maxAbsorptionTime))
         let alert = UIAlertController(title: validationTitle, message: message, preferredStyle: .alert)
+
+        let action = UIAlertAction(title: dismissActionTitle, style: .default)
+        alert.addAction(action)
+        alert.preferredAction = action
+
         viewController.present(alert, animated: true)
     }
 
@@ -29,6 +35,11 @@ class CarbEntryNavigationDelegate {
             NumberFormatter.localizedString(from: NSNumber(value: maxQuantityGrams), number: .none)
         )
         let alert = UIAlertController(title: validationTitle, message: message, preferredStyle: .alert)
+
+        let action = UIAlertAction(title: dismissActionTitle, style: .default)
+        alert.addAction(action)
+        alert.preferredAction = action
+
         viewController.present(alert, animated: true)
     }
 }

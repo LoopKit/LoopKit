@@ -84,21 +84,35 @@ extension DoseEntry {
         }
     }
 
-    func trim(from start: Date? = nil, to end: Date? = nil) -> DoseEntry {
-        guard unit == .unitsPerHour else {
-            return self
-        }
+    func trimmed(from start: Date? = nil, to end: Date? = nil, syncIdentifier: String? = nil) -> DoseEntry {
+
+        let originalDuration = endDate.timeIntervalSince(startDate)
 
         let startDate = max(start ?? .distantPast, self.startDate)
+        let endDate = max(startDate, min(end ?? .distantFuture, self.endDate))
+
+        var trimmedDeliveredUnits: Double? = deliveredUnits
+        var trimmedValue: Double = value
+
+        if originalDuration > .ulpOfOne && (startDate > self.startDate || endDate < self.endDate) {
+            let updatedActualDelivery = unitsInDeliverableIncrements * (endDate.timeIntervalSince(startDate) / originalDuration)
+            if deliveredUnits != nil {
+                trimmedDeliveredUnits = updatedActualDelivery
+            }
+            if case .units = unit  {
+                trimmedValue = updatedActualDelivery
+            }
+        }
 
         return DoseEntry(
             type: type,
             startDate: startDate,
-            endDate: max(startDate, min(end ?? .distantFuture, self.endDate)),
-            value: value,
+            endDate: endDate,
+            value: trimmedValue,
             unit: unit,
+            deliveredUnits: trimmedDeliveredUnits,
             description: description,
-            syncIdentifier: nil,
+            syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate
         )
     }
@@ -256,15 +270,8 @@ extension DoseEntry {
                 endDate = basalItems[index + 1].startDate
             }
 
-            var dose = DoseEntry(
-                type: type,
-                startDate: startDate,
-                endDate: endDate,
-                value: unitsPerHour,
-                unit: .unitsPerHour,
-                description: description,
-                syncIdentifier: syncIdentifier
-            )
+            var dose = trimmed(from: startDate, to: endDate, syncIdentifier: syncIdentifier)
+
             dose.scheduledBasalRate = HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: basalItem.value)
 
             doses.append(dose)
@@ -296,7 +303,28 @@ extension DoseEntry {
         let netTempBasalDoses = self.annotated(with: basalRateSchedule)
         return netTempBasalDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivity)
     }
-    
+
+    fileprivate var resolvingDelivery: DoseEntry {
+        guard deliveredUnits == nil else {
+            return self
+        }
+
+        let resolvedUnits: Double
+
+        if case .units = unit {
+            resolvedUnits = value
+        } else {
+            switch type {
+            case .tempBasal:
+                resolvedUnits = unitsInDeliverableIncrements
+            case .basal:
+                resolvedUnits = programmedUnits
+            default:
+                return self
+            }
+        }
+        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate)
+    }
 }
 
 extension Collection where Element == DoseEntry {
@@ -323,15 +351,7 @@ extension Collection where Element == DoseEntry {
 
                     // Ignore 0-duration doses
                     if endDate > last.startDate {
-                        reconciled.append(DoseEntry(
-                            type: last.type,
-                            startDate: last.startDate,
-                            endDate: endDate,
-                            value: last.value,
-                            unit: last.unit,
-                            description: last.description,
-                            syncIdentifier: last.syncIdentifier
-                        ))
+                        reconciled.append(last.trimmed(from: nil, to: endDate, syncIdentifier: last.syncIdentifier))
                     }
                 }
 
@@ -395,7 +415,7 @@ extension Collection where Element == DoseEntry {
             reconciled.append(last)
         }
 
-        return reconciled
+        return reconciled.map { $0.resolvingDelivery }
     }
 
     /// Annotates a sequence of dose entries with the configured basal rate schedule.
@@ -421,7 +441,7 @@ extension Collection where Element == DoseEntry {
      */
     var totalDelivery: Double {
         return reduce(0) { (total, dose) -> Double in
-            return total + dose.unitsRoundedToMinimedIncrements
+            return total + dose.unitsInDeliverableIncrements
         }
     }
 

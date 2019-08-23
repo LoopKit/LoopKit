@@ -257,6 +257,7 @@ open class BasalScheduleTableViewController : DailyValueScheduleTableViewControl
             let cell = tableView.dequeueReusableCell(withIdentifier: SetConstrainedScheduleEntryTableViewCell.className, for: indexPath) as! SetConstrainedScheduleEntryTableViewCell
 
             cell.unit = HKUnit.internationalUnitsPerHour
+            cell.valueQuantityFormatter.numberFormatter.maximumFractionDigits = 3
 
             let item = scheduleItems[indexPath.row]
 

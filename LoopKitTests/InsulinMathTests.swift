@@ -29,6 +29,13 @@ extension DoseUnit {
 
 
 class InsulinMathTests: XCTestCase {
+
+    let fixtureDateformatter = DateFormatter.descriptionFormatter
+
+    private func fixtureDate(_ input: String) -> Date {
+        return fixtureDateformatter.date(from: input)!
+    }
+
     
     private func printInsulinValues(_ insulinValues: [InsulinValue]) {
         print("\n\n")
@@ -222,7 +229,6 @@ class InsulinMathTests: XCTestCase {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqual(expected.endDate, calculated.endDate)
             XCTAssertEqual(expected.value, calculated.netBasalUnitsPerHour, accuracy: Double(Float.ulpOfOne))
-            XCTAssertEqual(expected.unit, calculated.unit)
         }
 
         let iob = normalized.insulinOnBoard(model: insulinModel)
@@ -363,11 +369,16 @@ class InsulinMathTests: XCTestCase {
 
         XCTAssertEqual(output.count, doses.count)
 
+        // Total delivery on split doses should add up to delivery from original doses
+        XCTAssertEqual(
+            input.map {$0.unitsInDeliverableIncrements}.reduce(0,+),
+            doses.map {$0.unitsInDeliverableIncrements}.reduce(0,+),
+            accuracy: Double(Float.ulpOfOne))
+
         for (expected, calculated) in zip(output, doses) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqual(expected.endDate, calculated.endDate)
-            XCTAssertEqual(expected.value, calculated.value, accuracy: Double(Float.ulpOfOne))
-            XCTAssertEqual(expected.unit, calculated.unit)
+            XCTAssertEqual(expected.value, calculated.unitsPerHour, accuracy: Double(Float.ulpOfOne))
             XCTAssertEqual(expected.scheduledBasalRate, calculated.scheduledBasalRate)
         }
     }
@@ -531,7 +542,7 @@ class InsulinMathTests: XCTestCase {
 
         // Last temp ends at 2015-10-15T22:29:50
         let endDate = dateFormatter.date(from: "2015-10-15T22:25:50")!
-        let trimmed = input.map { $0.trim(to: endDate) }
+        let trimmed = input.map { $0.trimmed(to: endDate) }
 
         print(input, "\n\n\n")
         print(trimmed)
@@ -613,14 +624,13 @@ class InsulinMathTests: XCTestCase {
         ]
 
         let reconciled = [
-            DoseEntry(type: .bolus,     startDate: f("2018-04-04 04:34:46 +0000"), endDate: f("2018-04-04 04:34:46 +0000"), value: 1.85, unit: .units, syncIdentifier: "01004a004a006d006e22354312", scheduledBasalRate: nil),
-            DoseEntry(type: .tempBasal, startDate: f("2018-04-04 04:34:15 +0000"), endDate: f("2018-04-04 04:39:15 +0000"), value: 1.85, unit: .unitsPerHour, syncIdentifier: "16014f22154312", scheduledBasalRate: nil),
-            DoseEntry(type: .tempBasal, startDate: f("2018-04-04 04:39:15 +0000"), endDate: f("2018-04-04 04:40:06 +0000"), value: 4.5, unit: .unitsPerHour, syncIdentifier: "16014f27154312", scheduledBasalRate: nil),
-            DoseEntry(type: .suspend,   startDate: f("2018-04-04 04:40:06 +0000"), endDate: f("2018-04-04 05:11:02 +0000"), value: 0.0, unit: .units, syncIdentifier: "1e014628150312", scheduledBasalRate: nil),
-            DoseEntry(type: .basal,     startDate: f("2018-04-04 05:11:02 +0000"), endDate: f("2018-04-04 05:14:15 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "1f20420b160312", scheduledBasalRate: nil),
-            DoseEntry(type: .tempBasal, startDate: f("2018-04-04 05:14:15 +0000"), endDate: f("2018-04-04 05:44:15 +0000"), value: 1.9, unit: .unitsPerHour, syncIdentifier: "16014f0e164312", scheduledBasalRate: nil),
+            DoseEntry(type: .bolus,     startDate: f("2018-04-04 04:34:46 +0000"), endDate: f("2018-04-04 04:34:46 +0000"), value: 1.85, unit: .units, deliveredUnits: 1.85, syncIdentifier: "01004a004a006d006e22354312", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-04-04 04:34:15 +0000"), endDate: f("2018-04-04 04:39:15 +0000"), value: 1.85, unit: .unitsPerHour, deliveredUnits: 0.15, syncIdentifier: "16014f22154312", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-04-04 04:39:15 +0000"), endDate: f("2018-04-04 04:40:06 +0000"), value: 4.5, unit: .unitsPerHour, deliveredUnits: 0.05, syncIdentifier: "16014f27154312", scheduledBasalRate: nil),
+            DoseEntry(type: .suspend,   startDate: f("2018-04-04 04:40:06 +0000"), endDate: f("2018-04-04 05:11:02 +0000"), value: 0.0, unit: .units, deliveredUnits: 0.0, syncIdentifier: "1e014628150312", scheduledBasalRate: nil),
+            DoseEntry(type: .basal,     startDate: f("2018-04-04 05:11:02 +0000"), endDate: f("2018-04-04 05:14:15 +0000"), value: 1.2, unit: .unitsPerHour, deliveredUnits: 0.06433333333333334, syncIdentifier: "1f20420b160312", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-04-04 05:14:15 +0000"), endDate: f("2018-04-04 05:44:15 +0000"), value: 1.9, unit: .unitsPerHour, deliveredUnits: 0.95, syncIdentifier: "16014f0e164312", scheduledBasalRate: nil),
         ]
-
         XCTAssertEqual(reconciled, doses.reversed().reconciled())
     }
 
@@ -645,15 +655,14 @@ class InsulinMathTests: XCTestCase {
         ]
 
         let reconciled = [
-            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:05:29 +0000"), endDate: f("2018-05-15 14:10:29 +0000"), value: 2.9249999999999998, unit: .unitsPerHour, description: nil, syncIdentifier: "16015d45074f12", scheduledBasalRate: nil),
-            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:10:29 +0000"), endDate: f("2018-05-15 14:10:29 +0000"), value: 0.0, unit: .unitsPerHour, description: nil, syncIdentifier: "16005d4a074f12", scheduledBasalRate: nil),
-            DoseEntry(type: .suspend, startDate: f("2018-05-15 14:21:33 +0000"), endDate: f("2018-05-15 14:22:28 +0000"), value: 0.0, unit: .units, description: nil, syncIdentifier: "21006155070f12", scheduledBasalRate: nil),
-            DoseEntry(type: .basal, startDate: f("2018-05-15 14:25:42 +0000"), endDate: f("2018-05-15 14:32:49 +0000"), value: 0.84999999999999998, unit: .unitsPerHour, description: nil, syncIdentifier: "7b026a59070f120e2200", scheduledBasalRate: nil),
-            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:32:49 +0000"), endDate: f("2018-05-15 14:32:51 +0000"), value: 1.8999999999999999, unit: .unitsPerHour, description: nil, syncIdentifier: "16017160074f12", scheduledBasalRate: nil),
-            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:32:51 +0000"), endDate: f("2018-05-15 14:42:36 +0000"), value: 1.8999999999999999, unit: .unitsPerHour, description: nil, syncIdentifier: "16017360074f12", scheduledBasalRate: nil),
-            DoseEntry(type: .basal, startDate: f("2018-05-15 14:42:36 +0000"), endDate: f("2018-05-16 14:42:36 +0000"), value: 0.84999999999999998, unit: .unitsPerHour, description: nil, syncIdentifier: "7b02646a070f120e2200", scheduledBasalRate: nil)
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:05:29 +0000"), endDate: f("2018-05-15 14:10:29 +0000"), value: 2.9249999999999998, unit: .unitsPerHour, deliveredUnits: 0.25, description: nil, syncIdentifier: "16015d45074f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:10:29 +0000"), endDate: f("2018-05-15 14:10:29 +0000"), value: 0.0, unit: .unitsPerHour, deliveredUnits: 0.0, description: nil, syncIdentifier: "16005d4a074f12", scheduledBasalRate: nil),
+            DoseEntry(type: .suspend, startDate: f("2018-05-15 14:21:33 +0000"), endDate: f("2018-05-15 14:22:28 +0000"), value: 0.0, unit: .units, deliveredUnits: 0.0, description: nil, syncIdentifier: "21006155070f12", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-05-15 14:25:42 +0000"), endDate: f("2018-05-15 14:32:49 +0000"), value: 0.84999999999999998, unit: .unitsPerHour, deliveredUnits: 0.10081944444444443,description: nil, syncIdentifier: "7b026a59070f120e2200", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:32:49 +0000"), endDate: f("2018-05-15 14:32:51 +0000"), value: 1.8999999999999999, unit: .unitsPerHour, deliveredUnits: 0.0, description: nil, syncIdentifier: "16017160074f12", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:32:51 +0000"), endDate: f("2018-05-15 14:42:36 +0000"), value: 1.8999999999999999, unit: .unitsPerHour, deliveredUnits: 0.3, description: nil, syncIdentifier: "16017360074f12", scheduledBasalRate: nil),
+            DoseEntry(type: .basal, startDate: f("2018-05-15 14:42:36 +0000"), endDate: f("2018-05-16 14:42:36 +0000"), value: 0.84999999999999998, unit: .unitsPerHour, deliveredUnits: 20.4, description: nil, syncIdentifier: "7b02646a070f120e2200", scheduledBasalRate: nil)
         ]
-
         XCTAssertEqual(reconciled, doses.reversed().reconciled())
     }
 
@@ -670,19 +679,18 @@ class InsulinMathTests: XCTestCase {
             DoseEntry(type: .suspend,   startDate: f("2018-07-11 04:31:55 +0000"), endDate: f("2018-07-11 04:31:55 +0000"), value: 0.0, unit: .units),
             DoseEntry(type: .basal,     startDate: f("2018-07-11 04:12:15 +0000"), endDate: f("2018-07-12 04:12:15 +0000"), value: 1.2, unit: .unitsPerHour),
             DoseEntry(type: .tempBasal, startDate: f("2018-07-11 04:12:15 +0000"), endDate: f("2018-07-11 04:12:15 +0000"), value: 0.0, unit: .unitsPerHour),
-            DoseEntry(type: .tempBasal, startDate: f("2018-07-11 04:07:15 +0000"), endDate: f("2018-07-11 04:37:15 +0000"), value: 0.67500000000000004, unit: .unitsPerHour),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-11 04:07:15 +0000"), endDate: f("2018-07-11 04:37:15 +0000"), value: 0.675, unit: .unitsPerHour),
             DoseEntry(type: .basal,     startDate: f("2018-07-11 04:00:00 +0000"), endDate: f("2018-07-12 04:00:00 +0000"), value: 1.2, unit: .unitsPerHour),
         ]
 
         let reconciled = [
-            DoseEntry(type: .basal,     startDate: f("2018-07-11 04:00:00 +0000"), endDate: f("2018-07-11 04:07:15 +0000"), value: 1.2,   unit: .unitsPerHour),
-            DoseEntry(type: .tempBasal, startDate: f("2018-07-11 04:07:15 +0000"), endDate: f("2018-07-11 04:12:15 +0000"), value: 0.67500000000000004, unit: .unitsPerHour),
-            DoseEntry(type: .basal,     startDate: f("2018-07-11 04:12:15 +0000"), endDate: f("2018-07-11 04:31:55 +0000"), value: 1.2,   unit: .unitsPerHour),
-            DoseEntry(type: .suspend,   startDate: f("2018-07-11 04:31:55 +0000"), endDate: f("2018-07-11 05:01:14 +0000"), value: 0.0,   unit: .units),
-            DoseEntry(type: .basal,     startDate: f("2018-07-11 05:01:14 +0000"), endDate: f("2018-07-11 05:02:15 +0000"), value: 1.2,   unit: .unitsPerHour),
-            DoseEntry(type: .tempBasal, startDate: f("2018-07-11 05:02:15 +0000"), endDate: f("2018-07-11 05:32:15 +0000"), value: 0.0, unit: .unitsPerHour)
+            DoseEntry(type: .basal,     startDate: f("2018-07-11 04:00:00 +0000"), endDate: f("2018-07-11 04:07:15 +0000"), value: 1.2,   unit: .unitsPerHour, deliveredUnits: 0.145),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-11 04:07:15 +0000"), endDate: f("2018-07-11 04:12:15 +0000"), value: 0.675, unit: .unitsPerHour, deliveredUnits: 0.05),
+            DoseEntry(type: .basal,     startDate: f("2018-07-11 04:12:15 +0000"), endDate: f("2018-07-11 04:31:55 +0000"), value: 1.2,   unit: .unitsPerHour, deliveredUnits: 0.3933333333333333),
+            DoseEntry(type: .suspend,   startDate: f("2018-07-11 04:31:55 +0000"), endDate: f("2018-07-11 05:01:14 +0000"), value: 0.0,   unit: .units,        deliveredUnits: 0.0),
+            DoseEntry(type: .basal,     startDate: f("2018-07-11 05:01:14 +0000"), endDate: f("2018-07-11 05:02:15 +0000"), value: 1.2,   unit: .unitsPerHour, deliveredUnits: 0.02033333333333333),
+            DoseEntry(type: .tempBasal, startDate: f("2018-07-11 05:02:15 +0000"), endDate: f("2018-07-11 05:32:15 +0000"), value: 0.0,   unit: .unitsPerHour, deliveredUnits: 0.0)
         ]
-
         XCTAssertEqual(reconciled, doses.reversed().reconciled())
     }
 
@@ -1041,7 +1049,7 @@ class InsulinMathTests: XCTestCase {
 
         XCTAssertEqual(f("2018-07-16 05:14:15 +0000"), cachedDoseEntries.lastBasalEndDate!)
 
-        let appended = cachedDoseEntries + normalizedReservoirDoseEntries.filterDateRange(cachedDoseEntries.lastBasalEndDate!, nil).map({ $0.trim(from: cachedDoseEntries.lastBasalEndDate!) })
+        let appended = cachedDoseEntries + normalizedReservoirDoseEntries.filterDateRange(cachedDoseEntries.lastBasalEndDate!, nil).map({ $0.trimmed(from: cachedDoseEntries.lastBasalEndDate!) })
         XCTAssertEqual(appended.count, cachedDoseEntries.count + 3, "The last 4 reservoir doses should be appended")
 
         let insulinModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75))
@@ -1050,7 +1058,99 @@ class InsulinMathTests: XCTestCase {
         XCTAssertEqual(
             normalizedReservoirDoseEntries.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
             appended.insulinOnBoard(model: insulinModel, from: date, to: date).first!.value,
-            accuracy: 1.0/40
+            accuracy: 0.1
         )
     }
+
+    func testNetBasalUnits() {
+        let startDate = fixtureDate("2018-07-16 03:49:00 +0000")
+        let endDate = startDate.addingTimeInterval(TimeInterval(minutes: 5))
+
+        let scheduledRate = 0.15 // Scheduled amount = 0.15 U/hr = 3 pulses per hour, actual expected 522 delivery over 5m = 0 pulses = 0 U
+        let tempBasalRate = 0.4 // Temp rate = 0.4 U/hr = 8 pulses per hour, actual expected 522 delivery over 5m = 1 pulses = 0.05 U
+        let netRate = tempBasalRate - scheduledRate
+
+        let dose = DoseEntry(type: .tempBasal, startDate: startDate, endDate: endDate, value: tempBasalRate, unit: .unitsPerHour, scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: scheduledRate))
+
+        XCTAssertEqual(netRate, dose.netBasalUnitsPerHour, accuracy: .ulpOfOne)
+        XCTAssertEqual(0.0375, dose.netBasalUnits, accuracy: .ulpOfOne)
+    }
+
+    func testDoseEntryUnitsInDeliverableIncrements() {
+
+        let makeDose = { (deliveredUnits: Double?) -> DoseEntry in
+            let startDate = self.fixtureDate("2018-07-16 03:49:00 +0000")
+            let endDate = startDate.addingTimeInterval(TimeInterval(minutes: 5))
+
+            let tempBasalRate = 1.0
+
+            return DoseEntry(
+                type: .tempBasal,
+                startDate: startDate,
+                endDate: endDate,
+                value: tempBasalRate,
+                unit: .unitsPerHour,
+                deliveredUnits: deliveredUnits)
+        }
+
+        XCTAssertEqual(0.1, makeDose(nil).unitsInDeliverableIncrements, accuracy: .ulpOfOne)
+        XCTAssertEqual(0.05, makeDose(0.05).unitsInDeliverableIncrements, accuracy: .ulpOfOne)
+    }
+
+    func testDoseEntryAnnotateShouldSplitDosesProportionally() {
+        let startDate = self.fixtureDate("2018-07-16 11:59:00 +0000")
+        let endDate = startDate.addingTimeInterval(TimeInterval(minutes: 5))
+
+        let tempBasalRate = 1.0
+
+        let dose = DoseEntry(
+            type: .tempBasal,
+            startDate: startDate,
+            endDate: endDate,
+            value: tempBasalRate,
+            unit: .unitsPerHour,
+            deliveredUnits: 0.1
+        )
+
+        let delivery = dose.unitsInDeliverableIncrements
+
+        let basals = loadBasalRateScheduleFixture("basal")
+
+        let splitDoses = [dose].annotated(with: basals)
+
+        XCTAssertEqual(2, splitDoses.count)
+
+        // A 5 minute dose starting one minute before midnight, split at midnight, means split should be 1/5, 4/5
+        XCTAssertEqual(delivery * 1.0/5.0, splitDoses[0].unitsInDeliverableIncrements, accuracy: .ulpOfOne)
+        XCTAssertEqual(delivery * 4.0/5.0, splitDoses[1].unitsInDeliverableIncrements, accuracy: .ulpOfOne)
+    }
+
+    func testDoseEntryWithoutDeliveredUnitsShouldSplitDosesProportionally() {
+        let startDate = self.fixtureDate("2018-07-16 11:59:00 +0000")
+        let endDate = startDate.addingTimeInterval(TimeInterval(minutes: 5))
+
+        let tempBasalRate = 1.0
+
+        let dose = DoseEntry(
+            type: .tempBasal,
+            startDate: startDate,
+            endDate: endDate,
+            value: tempBasalRate,
+            unit: .unitsPerHour,
+            deliveredUnits: 0.05
+        )
+
+        let delivery = dose.unitsInDeliverableIncrements
+
+        let basals = loadBasalRateScheduleFixture("basal")
+
+        let splitDoses = [dose].annotated(with: basals)
+
+        XCTAssertEqual(2, splitDoses.count)
+
+        // A 5 minute dose starting one minute before midnight, split at midnight, means split should be 1/5, 4/5
+        XCTAssertEqual(delivery * 1.0/5.0, splitDoses[0].unitsInDeliverableIncrements, accuracy: .ulpOfOne)
+        XCTAssertEqual(delivery * 4.0/5.0, splitDoses[1].unitsInDeliverableIncrements, accuracy: .ulpOfOne)
+    }
+
 }
