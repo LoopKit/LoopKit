@@ -11,8 +11,8 @@ import HealthKit
 /// Defines the scheduled basal insulin rate during the time of the basal delivery sample
 let MetadataKeyScheduledBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduledBasalRate"
 
-/// Defines the scheduled temporary basal insulin rate during the time of a temp basal delivery sample
-let MetadataKeyScheduledTempBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduledTempBasalRate"
+/// Defines the programmed rate for a temporary basal dose
+let MetadataKeyProgrammedTempBasalRate = "com.loopkit.InsulinKit.MetadataKeyProgrammedTempBasalRate"
 
 /// A crude determination of whether a sample was written by LoopKit, in the case of multiple LoopKit-enabled app versions on the same phone.
 let MetadataKeyHasLoopKitOrigin = "HasLoopKitOrigin"
@@ -45,7 +45,7 @@ extension HKQuantitySample {
             }
 
             if dose.type == .tempBasal {
-                metadata[MetadataKeyScheduledTempBasalRate] = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: dose.unitsPerHour)
+                metadata[MetadataKeyProgrammedTempBasalRate] = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: dose.unitsPerHour)
             }
         case .bolus:
             // Ignore 0-unit bolus entries
@@ -88,8 +88,8 @@ extension HKQuantitySample {
         return metadata?[MetadataKeyScheduledBasalRate] as? HKQuantity
     }
 
-    var scheduledTempBasalRate: HKQuantity? {
-        return metadata?[MetadataKeyScheduledTempBasalRate] as? HKQuantity
+    var programmedTempBasalRate: HKQuantity? {
+        return metadata?[MetadataKeyProgrammedTempBasalRate] as? HKQuantity
     }
 
     /// Returns a DoseEntry representation of the sample.
@@ -124,8 +124,8 @@ extension HKQuantitySample {
         let unit: DoseUnit
         let deliveredUnits: Double?
 
-        if let scheduledRate = scheduledTempBasalRate {
-            value = scheduledRate.doubleValue(for: .internationalUnitsPerHour)
+        if let programmedRate = programmedTempBasalRate {
+            value = programmedRate.doubleValue(for: .internationalUnitsPerHour)
             unit = .unitsPerHour
             deliveredUnits = quantity.doubleValue(for: .internationalUnit())
         } else {
