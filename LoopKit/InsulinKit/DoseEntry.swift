@@ -37,10 +37,10 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.endDate = endDate ?? startDate
         self.value = value
         self.unit = unit
+        self.deliveredUnits = deliveredUnits
         self.description = description
         self.syncIdentifier = syncIdentifier
         self.scheduledBasalRate = scheduledBasalRate
-        self.deliveredUnits = deliveredUnits
     }
 }
 

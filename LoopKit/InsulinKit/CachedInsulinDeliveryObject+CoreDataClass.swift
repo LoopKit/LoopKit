@@ -61,27 +61,27 @@ class CachedInsulinDeliveryObject: NSManagedObject {
         }
     }
 
-    var scheduledTempBasalRate: HKQuantity? {
+    var programmedTempBasalRate: HKQuantity? {
         get {
-            willAccessValue(forKey: "scheduledTempBasalRate")
-            defer { didAccessValue(forKey: "scheduledTempBasalRate") }
+            willAccessValue(forKey: "programmedTempBasalRate")
+            defer { didAccessValue(forKey: "programmedTempBasalRate") }
 
-            guard let rate = primitiveScheduledTempBasalRate else {
+            guard let rate = primitiveProgrammedTempBasalRate else {
                 return nil
             }
 
             return HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: rate.doubleValue)
         }
         set {
-            willChangeValue(forKey: "scheduledTempBasalRate")
-            defer { didChangeValue(forKey: "scheduledTempBasalRate") }
+            willChangeValue(forKey: "programmedTempBasalRate")
+            defer { didChangeValue(forKey: "programmedTempBasalRate") }
 
             guard let rate = newValue?.doubleValue(for: DoseEntry.unitsPerHour) else {
-                primitiveScheduledTempBasalRate = nil
+                primitiveProgrammedTempBasalRate = nil
                 return
             }
 
-            primitiveScheduledTempBasalRate = NSNumber(value: rate)
+            primitiveProgrammedTempBasalRate = NSNumber(value: rate)
         }
     }
 
@@ -118,8 +118,8 @@ extension CachedInsulinDeliveryObject {
         let unit: DoseUnit
         let deliveredUnits: Double?
 
-        if let scheduledRate = scheduledTempBasalRate {
-            doseValue = scheduledRate.doubleValue(for: .internationalUnitsPerHour)
+        if let programmedRate = programmedTempBasalRate {
+            doseValue = programmedRate.doubleValue(for: .internationalUnitsPerHour)
             unit = .unitsPerHour
             deliveredUnits = value
         } else {
@@ -149,7 +149,7 @@ extension CachedInsulinDeliveryObject {
         // External doses might not have a syncIdentifier, so use the UUID
         syncIdentifier = sample.metadata?[HKMetadataKeySyncIdentifier] as? String ?? sample.uuid.uuidString
         scheduledBasalRate = sample.scheduledBasalRate
-        scheduledTempBasalRate = sample.scheduledTempBasalRate
+        programmedTempBasalRate = sample.programmedTempBasalRate
         hasLoopKitOrigin = sample.hasLoopKitOrigin
         value = sample.quantity.doubleValue(for: .internationalUnit())
         provenanceIdentifier = sample.provenanceIdentifier

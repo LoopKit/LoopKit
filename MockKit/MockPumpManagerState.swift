@@ -25,7 +25,7 @@ public struct MockPumpManagerState {
     var finalizedDoses: [UnfinalizedDose]
 
     public var dosesToStore: [UnfinalizedDose] {
-        return  finalizedDoses + [unfinalizedTempBasal, unfinalizedBolus].compactMap {$0}
+        return finalizedDoses + [unfinalizedTempBasal, unfinalizedBolus].compactMap {$0}
     }
 
     public mutating func finalizeFinishedDoses() {
@@ -59,13 +59,11 @@ extension MockPumpManagerState: RawRepresentable {
         self.maximumBasalRatePerHour = rawValue["maximumBasalRatePerHour"] as? Double ?? 5.0
         self.pumpBatteryChargeRemaining = rawValue["pumpBatteryChargeRemaining"] as? Double ?? nil
 
-        if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue
-        {
+        if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue {
             self.unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
         }
 
-        if let rawUnfinalizedTempBasal = rawValue["unfinalizedTempBasal"] as? UnfinalizedDose.RawValue
-        {
+        if let rawUnfinalizedTempBasal = rawValue["unfinalizedTempBasal"] as? UnfinalizedDose.RawValue {
             self.unfinalizedTempBasal = UnfinalizedDose(rawValue: rawUnfinalizedTempBasal)
         }
 
@@ -150,17 +148,8 @@ public enum SuspendState: Equatable, RawRepresentable {
     case suspended(Date)
     case resumed(Date)
 
-    private var identifier: Int {
-        switch self {
-        case .suspended:
-            return 1
-        case .resumed:
-            return 2
-        }
-    }
-
     public init?(rawValue: RawValue) {
-        guard let suspendStateType = rawValue["case"] as? SuspendStateType.RawValue,
+        guard let suspendStateType = rawValue["suspendStateType"] as? SuspendStateType.RawValue,
             let date = rawValue["date"] as? Date else {
                 return nil
         }
@@ -178,12 +167,12 @@ public enum SuspendState: Equatable, RawRepresentable {
         switch self {
         case .suspended(let date):
             return [
-                "case": SuspendStateType.suspend.rawValue,
+                "suspendStateType": SuspendStateType.suspend.rawValue,
                 "date": date
             ]
         case .resumed(let date):
             return [
-                "case": SuspendStateType.resume.rawValue,
+                "suspendStateType": SuspendStateType.resume.rawValue,
                 "date": date
             ]
         }
