@@ -116,7 +116,7 @@ public class SetupIndicatorView: UIView {
 
     private var animator: UIViewPropertyAnimator?
 
-    private let activityIndicatorView = UIActivityIndicatorView(style: .gray)
+    private let activityIndicatorView = UIActivityIndicatorView(style: .default)
 
     private let progressView = UIProgressView(progressViewStyle: .default)
 

@@ -102,6 +102,9 @@ open class DatePickerTableViewCell: UITableViewCell {
 /// UITableViewController extensions to aid working with DatePickerTableViewCell
 extension DatePickerTableViewCellDelegate where Self: UITableViewController {
     public func hideDatePickerCells(excluding indexPath: IndexPath? = nil) {
+        guard isViewLoaded else {
+            return
+        }
         for case let cell as DatePickerTableViewCell in tableView.visibleCells where tableView.indexPath(for: cell) != indexPath && cell.isDatePickerHidden == false {
             cell.isDatePickerHidden = true
         }

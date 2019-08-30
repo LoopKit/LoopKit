@@ -8,11 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		1F5DAB1D2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
-		1F5DAB1E2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
 		1F5DAB1F2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
 		1F5DAB202118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
 		1F5DAB212118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
-		1F5DAB242118CE9300048054 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB222118CE9300048054 /* InfoPlist.strings */; };
 		1F5DAB272118CE9300048054 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB252118CE9300048054 /* InfoPlist.strings */; };
 		1F5DAB2A2118CE9300048054 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB282118CE9300048054 /* InfoPlist.strings */; };
 		1F5DAB2D2118CE9300048054 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB2B2118CE9300048054 /* Localizable.strings */; };
@@ -23,7 +21,6 @@
 		430158011C7EC03B00B64B63 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 430157FF1C7EC03B00B64B63 /* Main.storyboard */; };
 		430158031C7EC03B00B64B63 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 430158021C7EC03B00B64B63 /* Assets.xcassets */; };
 		430158061C7EC03B00B64B63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 430158041C7EC03B00B64B63 /* LaunchScreen.storyboard */; };
-		430158111C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430158101C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift */; };
 		430158191C7ECB5E00B64B63 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		4301581A1C7ECB5E00B64B63 /* LoopKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4301582B1C7ECCEF00B64B63 /* LoopKitExample.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */; };
@@ -197,6 +194,7 @@
 		437AFF1F203A763F008C4892 /* HKHealthStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437AFF1E203A763F008C4892 /* HKHealthStoreMock.swift */; };
 		437AFF21203AA740008C4892 /* NSManagedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437AFF20203AA740008C4892 /* NSManagedObjectContext.swift */; };
 		437AFF24203BE402008C4892 /* HKHealthStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437AFF23203BE402008C4892 /* HKHealthStore.swift */; };
+		439706E922D2E94800C81566 /* BoundSwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439706E822D2E94800C81566 /* BoundSwitchTableViewCell.swift */; };
 		43A8EC3C210CEEA500A81379 /* CGMManagerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A8EC3B210CEEA500A81379 /* CGMManagerUI.swift */; };
 		43AF1FB21C926CDD00EA2F3D /* HKQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */; };
 		43B17C81208BFA6600AC27E9 /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
@@ -296,6 +294,7 @@
 		43F5035B21059AF7009FA89A /* AuthenticationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43F5035921059AF7009FA89A /* AuthenticationTableViewCell.xib */; };
 		43F503632106C761009FA89A /* ServiceAuthenticationUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */; };
 		43F503642106C78C009FA89A /* ServiceAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F5035421059A8A009FA89A /* ServiceAuthentication.swift */; };
+		43F89C9F22BDFB10006BB54E /* UIActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F89C9E22BDFB10006BB54E /* UIActivityIndicatorView.swift */; };
 		43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */; };
 		43FB60E520DCBA02002B996B /* SetupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E420DCBA02002B996B /* SetupTableViewController.swift */; };
 		43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E620DCBC55002B996B /* RadioSelectionTableViewController.swift */; };
@@ -357,7 +356,6 @@
 		895FE09122011F4800FCF18A /* AddEditOverrideTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895FE08D22011F4800FCF18A /* AddEditOverrideTableViewController.swift */; };
 		895FE09222011F4800FCF18A /* OverridePresetTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895FE08E22011F4800FCF18A /* OverridePresetTableViewController.swift */; };
 		895FE09322011F4800FCF18A /* EmojiInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895FE08F22011F4800FCF18A /* EmojiInputController.swift */; };
-		895FE0972201250700FCF18A /* SwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 895FE0962201250700FCF18A /* SwitchTableViewCell.xib */; };
 		8974AFC022120D7A0043F01B /* TemporaryScheduleOverrideTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */; };
 		8974B0682215FE460043F01B /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974B0672215FE460043F01B /* Collection.swift */; };
 		8974B0692215FE460043F01B /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974B0672215FE460043F01B /* Collection.swift */; };
@@ -550,13 +548,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		4301580D1C7EC03B00B64B63 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 430157F61C7EC03B00B64B63;
-			remoteInfo = "LoopKit Example";
-		};
 		4301581B1C7ECB5E00B64B63 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
@@ -668,17 +659,14 @@
 		1F50C324212B20D300C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F50C325212B20D400C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F50C326212B20D400C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
-		1F50C327212B20D400C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F50C328212B20D400C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F50C329212B20D400C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F50C32A212B20D400C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB1C2118C95700048054 /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
-		1F5DAB232118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB262118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB292118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB2C2118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB2E2118CE9300048054 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/CarbKit.strings; sourceTree = "<group>"; };
-		1F5DAB2F2118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB302118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB312118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB322118D2A700048054 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -691,7 +679,6 @@
 		1F5DAB392118D5A200048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB3A2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB3B2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
-		1F5DAB3C2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB3D2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB3E2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB3F2118D5A300048054 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -704,7 +691,6 @@
 		1F5DAB462118F14600048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB472118F14600048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB482118F14700048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
-		1F5DAB492118F14700048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB4A2118F14700048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB4B2118F14700048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB4C2118F14700048054 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -717,7 +703,6 @@
 		1F5DAB562118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		1F5DAB572118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		1F5DAB582118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		1F5DAB592118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		1F5DAB5A2118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		1F5DAB5B2118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		1F5DAB5C2118F2C700048054 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -729,7 +714,6 @@
 		1F5DAB622118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB632118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB642118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
-		1F5DAB652118F33000048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB662118F33100048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB672118F33100048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB682118F33100048054 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -741,7 +725,6 @@
 		1F5DAB6E2118F3C200048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB6F2118F3C200048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB702118F3C200048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
-		1F5DAB712118F3C300048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB722118F3C300048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB732118F3C300048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB742118F3C300048054 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -753,13 +736,11 @@
 		1F5DAB7A2118F3FB00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB7B2118F3FB00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB7C2118F3FC00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
-		1F5DAB7D2118F3FC00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB7E2118F3FC00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1F5DAB7F2118F3FC00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F5DAB802118F3FC00048054 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1FE58790211CFBB7004F24ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1FE58794211D0967004F24ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
-		2FBCE30E1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryEditViewControllerTests.swift; sourceTree = "<group>"; };
 		2FD1A6AF1E4A76CC0042EF39 /* CarbEntryValidationNavigationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbEntryValidationNavigationDelegate.swift; sourceTree = "<group>"; };
 		430157F71C7EC03B00B64B63 /* LoopKit Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LoopKit Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		430157F91C7EC03B00B64B63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -768,9 +749,6 @@
 		430158021C7EC03B00B64B63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		430158051C7EC03B00B64B63 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		430158071C7EC03B00B64B63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4301580C1C7EC03B00B64B63 /* LoopKit ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LoopKit ExampleUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		430158101C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopKit_ExampleUITests.swift; sourceTree = "<group>"; };
-		430158121C7EC03B00B64B63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoopKitExample.entitlements; sourceTree = "<group>"; };
 		4301582C1C7ECD7A00B64B63 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		43026D632132404900A332E2 /* ice_minus_flat_carb_effect_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_minus_flat_carb_effect_output.json; sourceTree = "<group>"; };
@@ -869,6 +847,7 @@
 		437AFF23203BE402008C4892 /* HKHealthStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKHealthStore.swift; sourceTree = "<group>"; };
 		437B064D1F2EB35800D95237 /* HKQuantitySample+InsulinKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HKQuantitySample+InsulinKit.swift"; sourceTree = "<group>"; };
 		438207701F2AE9A300886C13 /* InsulinDeliveryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinDeliveryStore.swift; sourceTree = "<group>"; };
+		439706E822D2E94800C81566 /* BoundSwitchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundSwitchTableViewCell.swift; sourceTree = "<group>"; };
 		43971A3F1C8CABFF0013154F /* GlucoseSampleValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseSampleValue.swift; sourceTree = "<group>"; };
 		43971A411C8CAEF20013154F /* momentum_effect_display_only_glucose_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = momentum_effect_display_only_glucose_input.json; sourceTree = "<group>"; };
 		439BCD8D1EEDD22900100EAA /* ice_35_min_none_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_none_output.json; sourceTree = "<group>"; };
@@ -1020,6 +999,7 @@
 		43F5035821059AF7009FA89A /* AuthenticationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTableViewCell.swift; sourceTree = "<group>"; };
 		43F5035921059AF7009FA89A /* AuthenticationTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AuthenticationTableViewCell.xib; sourceTree = "<group>"; };
 		43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAuthenticationUI.swift; sourceTree = "<group>"; };
+		43F89C9E22BDFB10006BB54E /* UIActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIActivityIndicatorView.swift; sourceTree = "<group>"; };
 		43FADDFA1C89679200DDE013 /* HKQuantitySample+GlucoseKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HKQuantitySample+GlucoseKit.swift"; sourceTree = "<group>"; };
 		43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PumpManagerUI.swift; sourceTree = "<group>"; };
 		43FB60E420DCBA02002B996B /* SetupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupTableViewController.swift; sourceTree = "<group>"; };
@@ -1096,7 +1076,6 @@
 		895FE08D22011F4800FCF18A /* AddEditOverrideTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditOverrideTableViewController.swift; sourceTree = "<group>"; };
 		895FE08E22011F4800FCF18A /* OverridePresetTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverridePresetTableViewController.swift; sourceTree = "<group>"; };
 		895FE08F22011F4800FCF18A /* EmojiInputController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmojiInputController.swift; sourceTree = "<group>"; };
-		895FE0962201250700FCF18A /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
 		8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideTests.swift; sourceTree = "<group>"; };
 		8974B0672215FE460043F01B /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		898E6E64224179300019E459 /* BaseHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseHUDView.swift; sourceTree = "<group>"; };
@@ -1145,7 +1124,6 @@
 		89D2049221CC7C13001238CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89D204D121CC837A001238CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89DC540C21B75AE7005A1CE0 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
-		89E72DDF21BDDD6C00F0985C /* SwitchTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchTableViewCell.xib; sourceTree = "<group>"; };
 		A9E675F022713F4700E25293 /* LoopKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoopKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9E675F2227140D800E25293 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		A9E675F4227140DD00E25293 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -1177,13 +1155,6 @@
 				4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */,
 				430158191C7ECB5E00B64B63 /* LoopKit.framework in Frameworks */,
 				43BA715B201E484D0058961E /* LoopKitUI.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		430158091C7EC03B00B64B63 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1300,17 +1271,6 @@
 			path = "LoopKit Example";
 			sourceTree = "<group>";
 		};
-		4301580F1C7EC03B00B64B63 /* LoopKit ExampleUITests */ = {
-			isa = PBXGroup;
-			children = (
-				430158101C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift */,
-				2FBCE30E1E4A4B8A008AF09C /* CarbEntryEditViewControllerTests.swift */,
-				430158121C7EC03B00B64B63 /* Info.plist */,
-				1F5DAB222118CE9300048054 /* InfoPlist.strings */,
-			);
-			path = "LoopKit ExampleUITests";
-			sourceTree = "<group>";
-		};
 		432CF86320D769070066B889 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1411,12 +1371,10 @@
 				432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */,
 				898E6E6D2241ED9F0019E459 /* SuspendResumeTableViewCell.swift */,
 				432CF86C20D76C470066B889 /* SwitchTableViewCell.swift */,
-				895FE0962201250700FCF18A /* SwitchTableViewCell.xib */,
 				4369F093208BA001000E3E45 /* TextButtonTableViewCell.swift */,
 				434FF1F01CF29451000DB779 /* TextFieldTableViewCell.swift */,
 				434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */,
 				43F5034E210599DF009FA89A /* ValidatingIndicatorView.swift */,
-				89E72DDF21BDDD6C00F0985C /* SwitchTableViewCell.xib */,
 				892155122245C516009112BC /* SegmentedGaugeBarView.swift */,
 				892155142245C57E009112BC /* SegmentedGaugeBarLayer.swift */,
 				892155162245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.swift */,
@@ -1461,31 +1419,40 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		439706E722D2E8EE00C81566 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				439706E822D2E94800C81566 /* BoundSwitchTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		43BA7155201E484D0058961E /* LoopKitUI */ = {
 			isa = PBXGroup;
 			children = (
-				43BA7156201E484D0058961E /* LoopKitUI.h */,
-				43BA7157201E484D0058961E /* Info.plist */,
-				895FE07022011EDD00FCF18A /* EmojiInputController.storyboard */,
-				895FE06D22011E9A00FCF18A /* OverrideSelectionViewController.storyboard */,
-				43A8EC3B210CEEA500A81379 /* CGMManagerUI.swift */,
-				892A5D9F2231E12F008961AB /* CompletionNotifying.swift */,
-				892A5DA12231E136008961AB /* HUDProvider.swift */,
-				C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */,
-				895FE06C22011E9900FCF18A /* OverrideEmojiDataSource.swift */,
-				43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */,
-				43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */,
-				43F5035521059A8A009FA89A /* ServiceCredential.swift */,
-				892A5D9D2231E122008961AB /* StateColorPalette.swift */,
-				892A5D9B2231E118008961AB /* UIAlertController.swift */,
-				898E6E6B224194050019E459 /* UIColor.swift */,
 				43177D091D3732C70006E908 /* Assets.xcassets */,
 				43BA7160201E48910058961E /* CarbKit */,
 				43BA719920203EF30058961E /* CarbKit.storyboard */,
+				43A8EC3B210CEEA500A81379 /* CGMManagerUI.swift */,
+				892A5D9F2231E12F008961AB /* CompletionNotifying.swift */,
+				895FE07022011EDD00FCF18A /* EmojiInputController.storyboard */,
+				892A5DA12231E136008961AB /* HUDProvider.swift */,
+				43BA7157201E484D0058961E /* Info.plist */,
 				1F5DAB282118CE9300048054 /* InfoPlist.strings */,
 				43BA7161201E48EB0058961E /* InsulinKit */,
 				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
 				7D68A9E31FE0A3D300522C49 /* Localizable.strings */,
+				43BA7156201E484D0058961E /* LoopKitUI.h */,
+				C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */,
+				895FE06C22011E9900FCF18A /* OverrideEmojiDataSource.swift */,
+				895FE06D22011E9A00FCF18A /* OverrideSelectionViewController.storyboard */,
+				43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */,
+				43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */,
+				43F5035521059A8A009FA89A /* ServiceCredential.swift */,
+				892A5D9D2231E122008961AB /* StateColorPalette.swift */,
+				43F89C9E22BDFB10006BB54E /* UIActivityIndicatorView.swift */,
+				892A5D9B2231E118008961AB /* UIAlertController.swift */,
+				898E6E6B224194050019E459 /* UIColor.swift */,
 				432CF86320D769070066B889 /* View Controllers */,
 				4369F090208B0D68000E3E45 /* Views */,
 			);
@@ -1535,7 +1502,6 @@
 				430059211CCDC7A200C861EA /* Extensions */,
 				43D8FDCD1C728FDF0073BE78 /* LoopKit */,
 				430157F81C7EC03B00B64B63 /* LoopKit Example */,
-				4301580F1C7EC03B00B64B63 /* LoopKit ExampleUITests */,
 				43D8FDD91C728FDF0073BE78 /* LoopKitTests */,
 				43BA7155201E484D0058961E /* LoopKitUI */,
 				89D2047321CC7BD7001238CC /* MockKit */,
@@ -1552,7 +1518,6 @@
 				43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */,
 				43D8FDD51C728FDF0073BE78 /* LoopKitTests.xctest */,
 				430157F71C7EC03B00B64B63 /* LoopKit Example.app */,
-				4301580C1C7EC03B00B64B63 /* LoopKit ExampleUITests.xctest */,
 				43BA7154201E484D0058961E /* LoopKitUI.framework */,
 				89D2047221CC7BD7001238CC /* MockKit.framework */,
 				89D2048F21CC7C12001238CC /* MockKitUI.framework */,
@@ -1883,6 +1848,7 @@
 			children = (
 				8992426321EC137900EA512B /* Extensions */,
 				89D204B621CC7E77001238CC /* View Controllers */,
+				439706E722D2E8EE00C81566 /* Views */,
 				89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */,
 				89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */,
 				892A5D2D222EF69A008961AB /* MockHUDProvider.swift */,
@@ -1992,24 +1958,6 @@
 			productName = "LoopKit Example";
 			productReference = 430157F71C7EC03B00B64B63 /* LoopKit Example.app */;
 			productType = "com.apple.product-type.application";
-		};
-		4301580B1C7EC03B00B64B63 /* LoopKit ExampleUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 430158181C7EC03B00B64B63 /* Build configuration list for PBXNativeTarget "LoopKit ExampleUITests" */;
-			buildPhases = (
-				430158081C7EC03B00B64B63 /* Sources */,
-				430158091C7EC03B00B64B63 /* Frameworks */,
-				4301580A1C7EC03B00B64B63 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4301580E1C7EC03B00B64B63 /* PBXTargetDependency */,
-			);
-			name = "LoopKit ExampleUITests";
-			productName = "LoopKit ExampleUITests";
-			productReference = 4301580C1C7EC03B00B64B63 /* LoopKit ExampleUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		43BA7153201E484D0058961E /* LoopKitUI */ = {
 			isa = PBXNativeTarget;
@@ -2162,11 +2110,6 @@
 							};
 						};
 					};
-					4301580B1C7EC03B00B64B63 = {
-						CreatedOnToolsVersion = 7.2.1;
-						LastSwiftMigration = 1020;
-						TestTargetID = 430157F61C7EC03B00B64B63;
-					};
 					43BA7153201E484D0058961E = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1020;
@@ -2225,7 +2168,6 @@
 			projectRoot = "";
 			targets = (
 				430157F61C7EC03B00B64B63 /* LoopKit Example */,
-				4301580B1C7EC03B00B64B63 /* LoopKit ExampleUITests */,
 				43D8FDCA1C728FDF0073BE78 /* LoopKit */,
 				A9E6758022713F4700E25293 /* LoopKit-watchOS */,
 				43D8FDD41C728FDF0073BE78 /* LoopKitTests */,
@@ -2251,14 +2193,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4301580A1C7EC03B00B64B63 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1F5DAB242118CE9300048054 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		43BA7152201E484D0058961E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2269,7 +2203,6 @@
 				43BA719720203EF30058961E /* CarbKit.storyboard in Resources */,
 				43BA7173201E492E0058961E /* DateAndDurationTableViewCell.xib in Resources */,
 				43BA7164201E49130058961E /* InsulinKit.storyboard in Resources */,
-				895FE0972201250700FCF18A /* SwitchTableViewCell.xib in Resources */,
 				895FE08A22011F0C00FCF18A /* LabeledTextFieldTableViewCell.xib in Resources */,
 				892155192245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.xib in Resources */,
 				43BA7195202039B00058961E /* GlucoseRangeOverrideTableViewCell.xib in Resources */,
@@ -2448,15 +2381,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		430158081C7EC03B00B64B63 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1F5DAB1E2118C95700048054 /* LocalizedString.swift in Sources */,
-				430158111C7EC03B00B64B63 /* LoopKit_ExampleUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		43BA714F201E484D0058961E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2513,6 +2437,7 @@
 				892A5DB82231E1A0008961AB /* ReservoirVolumeHUDView.swift in Sources */,
 				43BA716C201E49220058961E /* CustomInputTextField.swift in Sources */,
 				43BA716F201E49220058961E /* FoodEmojiDataSource.swift in Sources */,
+				43F89C9F22BDFB10006BB54E /* UIActivityIndicatorView.swift in Sources */,
 				432CF86D20D76C470066B889 /* SwitchTableViewCell.swift in Sources */,
 				43BA7188201EE85B0058961E /* HKUnit.swift in Sources */,
 				4369F092208B0DFF000E3E45 /* DateAndDurationTableViewCell.swift in Sources */,
@@ -2746,6 +2671,7 @@
 			files = (
 				892A5D2E222EF69A008961AB /* MockHUDProvider.swift in Sources */,
 				89D204B721CC7F34001238CC /* MockPumpManagerSetupViewController.swift in Sources */,
+				439706E922D2E94800C81566 /* BoundSwitchTableViewCell.swift in Sources */,
 				89D204B421CC7E74001238CC /* MockCGMManager+UI.swift in Sources */,
 				89D204B521CC7E74001238CC /* MockPumpManager+UI.swift in Sources */,
 				89D204C121CC8005001238CC /* NibLoadable.swift in Sources */,
@@ -2884,11 +2810,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		4301580E1C7EC03B00B64B63 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 430157F61C7EC03B00B64B63 /* LoopKit Example */;
-			targetProxy = 4301580D1C7EC03B00B64B63 /* PBXContainerItemProxy */;
-		};
 		4301581C1C7ECB5E00B64B63 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
@@ -2952,22 +2873,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		1F5DAB222118CE9300048054 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1F5DAB232118CE9300048054 /* es */,
-				1F5DAB2F2118D2A700048054 /* ru */,
-				1F5DAB3C2118D5A300048054 /* de */,
-				1F5DAB492118F14700048054 /* fr */,
-				1F5DAB592118F2C700048054 /* zh-Hans */,
-				1F5DAB652118F33000048054 /* it */,
-				1F5DAB712118F3C300048054 /* nl */,
-				1F5DAB7D2118F3FC00048054 /* nb */,
-				1F50C327212B20D400C18FAB /* pl */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		1F5DAB252118CE9300048054 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -3186,32 +3091,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.LoopKitExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-			};
-			name = Release;
-		};
-		430158151C7EC03B00B64B63 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = "LoopKit ExampleUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.loopkit.LoopKit-ExampleUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = "LoopKit Example";
-				USES_XCTRUNNER = YES;
-			};
-			name = Debug;
-		};
-		430158161C7EC03B00B64B63 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = "LoopKit ExampleUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.loopkit.LoopKit-ExampleUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_TARGET_NAME = "LoopKit Example";
-				USES_XCTRUNNER = YES;
 			};
 			name = Release;
 		};
@@ -3638,15 +3517,6 @@
 			buildConfigurations = (
 				430158131C7EC03B00B64B63 /* Debug */,
 				430158141C7EC03B00B64B63 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		430158181C7EC03B00B64B63 /* Build configuration list for PBXNativeTarget "LoopKit ExampleUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				430158151C7EC03B00B64B63 /* Debug */,
-				430158161C7EC03B00B64B63 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

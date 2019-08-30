@@ -142,7 +142,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         tableView.register(DecimalTextFieldTableViewCell.nib(), forCellReuseIdentifier: DecimalTextFieldTableViewCell.className)
         tableView.register(InsulinSensitivityScalingTableViewCell.nib(), forCellReuseIdentifier: InsulinSensitivityScalingTableViewCell.className)
         tableView.register(DateAndDurationTableViewCell.nib(), forCellReuseIdentifier: DateAndDurationTableViewCell.className)
-        tableView.register(SwitchTableViewCell.nib(), forCellReuseIdentifier: SwitchTableViewCell.className)
+        tableView.register(SwitchTableViewCell.self, forCellReuseIdentifier: SwitchTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
     }
 
@@ -264,7 +264,8 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 return cell
             case .durationFiniteness:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SwitchTableViewCell.className, for: indexPath) as! SwitchTableViewCell
-                cell.titleLabel?.text = NSLocalizedString("Enable Indefinitely", comment: "The text for the indefinite override duration setting")
+                cell.selectionStyle = .none
+                cell.textLabel?.text = NSLocalizedString("Enable Indefinitely", comment: "The text for the indefinite override duration setting")
                 cell.switch?.isOn = !duration.isFinite
                 cell.switch?.addTarget(self, action: #selector(durationFinitenessChanged), for: .valueChanged)
                 return cell
@@ -377,6 +378,10 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         case .properties:
             tableView.endUpdates()
             tableView.deselectRow(at: indexPath, animated: true)
+
+            if let cell = tableView.cellForRow(at: indexPath) as? LabeledTextFieldTableViewCell, !cell.isFirstResponder {
+                cell.textField.becomeFirstResponder()
+            }
         case .cancel:
             guard case .editOverride(let override) = inputMode else {
                 assertionFailure("Only an already-set override can be canceled")

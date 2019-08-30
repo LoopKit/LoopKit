@@ -40,7 +40,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         tableView.estimatedSectionHeaderHeight = 55
 
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
-        tableView.register(SwitchTableViewCell.nib(), forCellReuseIdentifier: SwitchTableViewCell.className)
+        tableView.register(BoundSwitchTableViewCell.self, forCellReuseIdentifier: BoundSwitchTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
         tableView.register(SuspendResumeTableViewCell.self, forCellReuseIdentifier: SuspendResumeTableViewCell.className)
 
@@ -159,8 +159,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
     }
 
     private func switchTableViewCell(for indexPath: IndexPath, titled title: String, boundTo keyPath: WritableKeyPath<MockPumpManagerState, Bool>) -> SwitchTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SwitchTableViewCell.className, for: indexPath) as! SwitchTableViewCell
-        cell.titleLabel?.text = title
+        let cell = tableView.dequeueReusableCell(withIdentifier: BoundSwitchTableViewCell.className, for: indexPath) as! BoundSwitchTableViewCell
+        cell.textLabel?.text = title
         cell.switch?.isOn = pumpManager.state[keyPath: keyPath]
         cell.onToggle = { [unowned pumpManager] isOn in
             pumpManager.state[keyPath: keyPath] = isOn

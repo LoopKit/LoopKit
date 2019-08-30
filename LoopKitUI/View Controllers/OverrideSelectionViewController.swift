@@ -29,7 +29,6 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationController?.navigationBar.prefersLargeTitles = true
         title = NSLocalizedString("Temporary Override", comment: "The title for the override selection screen")
         collectionView?.backgroundColor = .groupTableViewBackground
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
