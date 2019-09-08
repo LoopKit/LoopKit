@@ -41,6 +41,11 @@ extension CarbStatus: CarbEntry {
 
 
 extension CarbStatus {
+    
+    var absorptionModel: CarbAbsorptionComputable {
+      return CarbAbsorptionModel.settings.absorptionModel
+    }
+    
     func dynamicCarbsOnBoard(at date: Date, defaultAbsorptionTime: TimeInterval, delay: TimeInterval, delta: TimeInterval) -> Double {
         guard date >= startDate - delta,
             let absorption = absorption
@@ -51,22 +56,22 @@ extension CarbStatus {
 
         let unit = HKUnit.gram()
 
-        guard let observedTimeline = observedTimeline else {
-            // Less than minimum observed; calc based on min absorption rate
+        guard let observedTimeline = observedTimeline, let observationEnd = observedTimeline.last?.endDate else {
+            // Less than minimum observed or observation not yet started; calc based on modeled absorption rate
             let total = absorption.total.doubleValue(for: unit)
             let time = date.timeIntervalSince(startDate) - delay
             let absorptionTime = absorption.estimatedDate.duration
-
-            return LinearAbsorption.unabsorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
+            return absorptionModel.unabsorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
         }
 
-        guard let end = observedTimeline.last?.endDate, date <= end else {
+        guard date <= observationEnd else {
             // Predicted absorption for remaining carbs, post-observation
-            let total = absorption.remaining.doubleValue(for: unit)
-            let time = date.timeIntervalSince(absorption.observedDate.end)
-            let absorptionTime = absorption.estimatedTimeRemaining
-
-            return LinearAbsorption.unabsorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
+            let effectiveTime = date.timeIntervalSince(observationEnd) + absorption.timeToAbsorbObservedCarbs
+            let effectiveAbsorptionTime = absorption.timeToAbsorbObservedCarbs + absorption.estimatedTimeRemaining
+            let total = absorption.total.doubleValue(for: unit)
+            let unabsorbedAtEffectiveTime = absorptionModel.unabsorbedCarbs(of: total, atTime: effectiveTime, absorptionTime: effectiveAbsorptionTime)
+            let unabsorbedCarbs = max(unabsorbedAtEffectiveTime, 0.0)
+            return unabsorbedCarbs
         }
 
         // Observed absorption
@@ -87,22 +92,22 @@ extension CarbStatus {
 
         let unit = HKUnit.gram()
 
-        guard let observedTimeline = observedTimeline else {
-            // Less than minimum observed; calc based on min absorption rate
+        guard let observedTimeline = observedTimeline, let observationEnd = observedTimeline.last?.endDate else {
+            // Less than minimum observed or observation not yet started; calc based on modeled absorption rate
             let total = absorption.total.doubleValue(for: unit)
             let time = date.timeIntervalSince(startDate) - delay
             let absorptionTime = absorption.estimatedDate.duration
-
-            return LinearAbsorption.absorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
+            return absorptionModel.absorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
         }
 
-        guard let end = observedTimeline.last?.endDate, date <= end else {
+        guard date <= observationEnd else {
             // Predicted absorption for remaining carbs, post-observation
-            let total = absorption.remaining.doubleValue(for: unit)
-            let time = date.timeIntervalSince(absorption.observedDate.end)
-            let absorptionTime = absorption.estimatedTimeRemaining
-
-            return absorption.clamped.doubleValue(for: unit) + LinearAbsorption.absorbedCarbs(of: total, atTime: time, absorptionTime: absorptionTime)
+            let effectiveTime = date.timeIntervalSince(observationEnd) + absorption.timeToAbsorbObservedCarbs
+            let effectiveAbsorptionTime = absorption.timeToAbsorbObservedCarbs + absorption.estimatedTimeRemaining
+            let total = absorption.total.doubleValue(for: unit)
+            let absorbedAtEffectiveTime = absorptionModel.absorbedCarbs(of: total, atTime: effectiveTime, absorptionTime: effectiveAbsorptionTime)
+            let absorbedCarbs = min(absorbedAtEffectiveTime, total)
+            return absorbedCarbs
         }
 
         // Observed absorption
