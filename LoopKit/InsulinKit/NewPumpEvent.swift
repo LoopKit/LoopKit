@@ -14,7 +14,7 @@ public struct NewPumpEvent {
     public let date: Date
     /// The insulin dose described by the event, if applicable
     public let dose: DoseEntry?
-    /// Whether the dose value is expected to change. It will be used for calculation purposes but not persisted.
+    /// Whether the dose value is expected to change.
     public let isMutable: Bool
     /// The opaque raw data representing the event
     public let raw: Data
