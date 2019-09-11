@@ -28,7 +28,7 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
         insulinNeedsScaleFactor scaleFactor: Double,
         recordedAt enableDateOffset: TimeInterval? = nil
     ) {
-        let settings = TemporaryScheduleOverrideSettings(targetRange: nil, insulinNeedsScaleFactor: scaleFactor)
+        let settings = TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter, targetRange: nil, insulinNeedsScaleFactor: scaleFactor)
         let override = TemporaryScheduleOverride(context: .custom, settings: settings, startDate: referenceDate + offset, duration: duration)
         let enableDate: Date
         if let enableDateOffset = enableDateOffset {
@@ -224,6 +224,23 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
         ])!
 
         print(expected)
+
+        XCTAssert(historyResolves(to: expected, referenceDateOffset: .hours(6)))
+    }
+
+    func testCancelSequence() {
+        recordOverride(beginningAt: .hours(2), duration: .finite(.hours(8)), insulinNeedsScaleFactor: 1.5)
+        recordOverrideDisable(at: .hours(4))
+        recordOverride(beginningAt: .hours(7), duration: .finite(.hours(1)), insulinNeedsScaleFactor: 1.5)
+        let expected = BasalRateSchedule(dailyItems: [
+            RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
+            RepeatingScheduleValue(startTime: .hours(2), value: 1.8),
+            RepeatingScheduleValue(startTime: .hours(4), value: 1.2),
+            RepeatingScheduleValue(startTime: .hours(6), value: 1.4),
+            RepeatingScheduleValue(startTime: .hours(7), value: 2.1),
+            RepeatingScheduleValue(startTime: .hours(8), value: 1.4),
+            RepeatingScheduleValue(startTime: .hours(20), value: 1.0)
+        ])!
 
         XCTAssert(historyResolves(to: expected, referenceDateOffset: .hours(6)))
     }

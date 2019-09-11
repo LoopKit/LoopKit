@@ -112,7 +112,11 @@ public final class AddEditOverrideTableViewController: UITableViewController {
     }
 
     private func configure(with settings: TemporaryScheduleOverrideSettings) {
-        targetRange = settings.targetRange
+        if let targetRange = settings.targetRange {
+            self.targetRange = DoubleRange(minValue: targetRange.lowerBound.doubleValue(for: glucoseUnit), maxValue: targetRange.upperBound.doubleValue(for: glucoseUnit))
+        } else {
+            self.targetRange = nil
+        }
         insulinNeedsScaleFactor = settings.effectiveInsulinNeedsScaleFactor
     }
 
@@ -436,6 +440,7 @@ extension AddEditOverrideTableViewController {
         }
 
         return TemporaryScheduleOverrideSettings(
+            unit: glucoseUnit,
             targetRange: targetRange,
             insulinNeedsScaleFactor: insulinNeedsScaleFactor == 1.0 ? nil : insulinNeedsScaleFactor
         )

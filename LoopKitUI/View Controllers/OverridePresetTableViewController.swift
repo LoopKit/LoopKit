@@ -114,8 +114,8 @@ public final class OverridePresetTableViewController: UITableViewController {
             let percentageString = percentageFormatter.string(from: insulinNeedsScaleFactor * 100) {
             cell.detailTextLabel?.text = String(format: NSLocalizedString("%@%% of normal insulin", comment: "The format for an insulin needs percentage."), percentageString)
         } else if let targetRange = preset.settings.targetRange,
-            let minTarget = glucoseNumberFormatter.string(from: targetRange.minValue),
-            let maxTarget = glucoseNumberFormatter.string(from: targetRange.maxValue) {
+            let minTarget = glucoseNumberFormatter.string(from: targetRange.lowerBound.doubleValue(for: glucoseUnit)),
+            let maxTarget = glucoseNumberFormatter.string(from: targetRange.upperBound.doubleValue(for: glucoseUnit)) {
             cell.detailTextLabel?.text = String(format: NSLocalizedString("%1$@ – %2$@ %3$@", comment: "The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit)"), minTarget, maxTarget, quantityFormatter.string(from: glucoseUnit))
         }
 

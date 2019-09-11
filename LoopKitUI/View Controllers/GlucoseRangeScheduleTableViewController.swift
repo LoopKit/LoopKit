@@ -377,10 +377,14 @@ public class GlucoseRangeScheduleTableViewController: UITableViewController {
             tableView.performBatchUpdates({
                 tableView.deleteRows(at: [indexPath], with: .automatic)
 
-                if editableItems.count == 0 {
+                if editableItems.isEmpty {
                     tableView.deleteSections(IndexSet(integer: overrideSectionIndex), with: .automatic)
                 }
             }, completion: nil)
+
+            if editableItems.count == 1 {
+                setEditing(false, animated: true)
+            }
 
             updateSaveButton()
         }
