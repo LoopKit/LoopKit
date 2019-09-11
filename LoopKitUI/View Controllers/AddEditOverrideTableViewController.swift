@@ -115,7 +115,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         if let targetRange = settings.targetRange {
             self.targetRange = DoubleRange(minValue: targetRange.lowerBound.doubleValue(for: glucoseUnit), maxValue: targetRange.upperBound.doubleValue(for: glucoseUnit))
         } else {
-            targetRange = nil
+            self.targetRange = nil
         }
         insulinNeedsScaleFactor = settings.effectiveInsulinNeedsScaleFactor
     }
