@@ -43,6 +43,12 @@ public protocol CGMManagerDelegate: class, DeviceManagerDelegate {
     ///
     /// - Parameter manager: The manager instance
     func cgmManagerDidUpdateState(_ manager: CGMManager)
+    
+    /// Asks the delegate for credential store prefix to avoid namespace conflicts
+    ///
+    /// - Parameter manager: The manager instance
+    /// - Returns: The unique prefix for the credential store
+    func credentialStoragePrefix(for manager: CGMManager) -> String
 }
 
 
