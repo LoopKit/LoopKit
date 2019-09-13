@@ -186,7 +186,7 @@ class SetConstrainedScheduleEntryTableViewCell: UITableViewCell {
 
     func validate() {
         if let value = value, allowedValues.contains(value) {
-            valueLabel.textColor = .darkText
+            valueLabel.textColor = nil  // Default color
         } else {
             valueLabel.textColor = .invalid
         }

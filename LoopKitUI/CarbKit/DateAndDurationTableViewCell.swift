@@ -13,7 +13,14 @@ public class DateAndDurationTableViewCell: DatePickerTableViewCell {
 
     @IBOutlet public weak var titleLabel: UILabel!
 
-    @IBOutlet public weak var dateLabel: UILabel!
+    @IBOutlet public weak var dateLabel: UILabel! {
+        didSet {
+            // Setting this color in code because the nib isn't being applied correctly
+            if #available(iOSApplicationExtension 13.0, *) {
+                dateLabel.textColor = .secondaryLabel
+            }
+        }
+    }
 
     private lazy var durationFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()

@@ -26,12 +26,24 @@ extension TextFieldTableViewCellDelegate {
 
 public class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
 
-    @IBOutlet public weak var unitLabel: UILabel?
+    @IBOutlet public weak var unitLabel: UILabel? {
+        didSet {
+            // Setting this color in code because the nib isn't being applied correctly
+            if #available(iOSApplicationExtension 13.0, *) {
+                unitLabel?.textColor = .secondaryLabel
+            }
+        }
+    }
 
     @IBOutlet public weak var textField: UITextField! {
         didSet {
             textField.delegate = self
             textField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+
+            // Setting this color in code because the nib isn't being applied correctly
+            if #available(iOSApplicationExtension 13.0, *) {
+                textField.textColor = .label
+            }
         }
     }
 

@@ -36,9 +36,38 @@ class GlucoseRangeTableViewCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet open weak var picker: UIPickerView!
     @IBOutlet open weak var pickerHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var minValueTextField: UITextField!
-    @IBOutlet weak var maxValueTextField: UITextField!
-    @IBOutlet weak var unitLabel: UILabel!
+    @IBOutlet weak var minValueTextField: UITextField! {
+        didSet {
+            // Setting this color in code because the nib isn't being applied correctly
+            if #available(iOSApplicationExtension 13.0, *) {
+                minValueTextField.textColor = .label
+            }
+        }
+    }
+    @IBOutlet weak var separatorLabel: UILabel! {
+        didSet {
+            // Setting this color in code because the nib isn't being applied correctly
+            if #available(iOSApplicationExtension 13.0, *) {
+                separatorLabel.textColor = .secondaryLabel
+            }
+        }
+    }
+    @IBOutlet weak var maxValueTextField: UITextField! {
+        didSet {
+            // Setting this color in code because the nib isn't being applied correctly
+            if #available(iOSApplicationExtension 13.0, *) {
+                maxValueTextField.textColor = .label
+            }
+        }
+    }
+    @IBOutlet weak var unitLabel: UILabel! {
+        didSet {
+            // Setting this color in code because the nib isn't being applied correctly
+            if #available(iOSApplicationExtension 13.0, *) {
+                unitLabel.textColor = .secondaryLabel
+            }
+        }
+    }
 
     private var pickerExpandedHeight: CGFloat = 0
 

@@ -188,6 +188,8 @@ public extension HKUnit {
                 return LocalizedString("mmol/L", comment: "The short unit display string for millimoles per liter")
             case .long:
                 break  // Fallback to the MeasurementFormatter localization
+            @unknown default:
+                break
             }
         }
 
@@ -197,6 +199,8 @@ public extension HKUnit {
                 return LocalizedString("mg/dL/U", comment: "The short unit display string for milligrams per deciliter per U")
             case .long:
                 break  // Fallback to the MeasurementFormatter localization
+            @unknown default:
+                break
             }
         }
 
@@ -206,6 +210,8 @@ public extension HKUnit {
                 return LocalizedString("mmol/L/U", comment: "The short unit display string for millimoles per liter per U")
             case .long:
                 break  // Fallback to the MeasurementFormatter localization
+            @unknown default:
+                break
             }
         }
 

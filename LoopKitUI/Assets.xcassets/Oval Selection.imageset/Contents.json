@@ -6,7 +6,31 @@
       "resizing" : {
         "mode" : "9-part",
         "center" : {
-          "mode" : "stretch",
+          "mode" : "tile",
+          "width" : 1,
+          "height" : 1
+        },
+        "cap-insets" : {
+          "bottom" : 10,
+          "top" : 10,
+          "right" : 10,
+          "left" : 10
+        }
+      }
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "Oval Selection Dark.pdf",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "resizing" : {
+        "mode" : "9-part",
+        "center" : {
+          "mode" : "tile",
           "width" : 1,
           "height" : 1
         },
