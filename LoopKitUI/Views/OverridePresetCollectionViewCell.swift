@@ -14,30 +14,23 @@ final class OverridePresetCollectionViewCell: UICollectionViewCell, Identifiable
     @IBOutlet weak var startTimeLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
 
-    override var isSelected: Bool {
-        didSet {
-            updateSelectionState()
-        }
-    }
-
-    override var isHighlighted: Bool {
-        didSet {
-            updateSelectionState()
-        }
-    }
-
-    private func updateSelectionState() {
-        if isSelected || isHighlighted {
-            backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
-        } else {
-            backgroundColor = .white
-        }
-    }
-
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        backgroundColor = .white
+        let selectedBackgroundView = UIView()
+        self.selectedBackgroundView = selectedBackgroundView
+
+        if #available(iOSApplicationExtension 13.0, iOS 13.0, *) {
+            selectedBackgroundView.backgroundColor = .tertiarySystemFill
+
+            backgroundColor = .secondarySystemGroupedBackground
+            layer.cornerCurve = .continuous
+        } else {
+            selectedBackgroundView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
+
+            backgroundColor = .white
+        }
+
         layer.cornerRadius = 16
     }
 }

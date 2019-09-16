@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1Vl-XQ-Scp">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14854.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1Vl-XQ-Scp">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14806.4"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,7 +18,7 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" layoutMarginsFollowReadableWidth="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="CGs-B7-uPl">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="220"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="220" id="gWv-wN-yvY"/>
                                 </constraints>
@@ -63,9 +61,8 @@
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MEDIUM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ezy-3D-Zg4">
                                             <rect key="frame" x="10" y="4" width="50.5" height="14.5"/>
-                                            <color key="backgroundColor" red="0.92156862750000001" green="0.92941176469999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
-                                            <color key="textColor" red="0.6588235294" green="0.66274509800000003" blue="0.6705882353" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -94,7 +91,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="30" height="33"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <state key="normal" title="abc">
-                                            <color key="titleColor" red="0.2901960784" green="0.3294117647" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                         </state>
                                         <connections>
                                             <action selector="switchKeyboard:" destination="1Vl-XQ-Scp" eventType="touchUpInside" id="VdO-GT-DIN"/>
@@ -135,10 +132,9 @@
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Swx-bi-ftk">
                                         <rect key="frame" x="332" y="0.0" width="23" height="33"/>
-                                        <color key="tintColor" red="0.30980392159999998" green="0.33333333329999998" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" image="Delete">
-                                            <color key="titleColor" red="0.30980392159999998" green="0.33333333329999998" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <state key="normal" image="Delete-Left"/>
                                         <connections>
                                             <action selector="deleteBackward:" destination="1Vl-XQ-Scp" eventType="touchUpInside" id="gAx-Bz-D8X"/>
                                         </connections>
@@ -146,7 +142,7 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" red="0.92156862750000001" green="0.92941176469999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="q2E-1p-KUC" firstAttribute="trailing" secondItem="5xF-hj-xbW" secondAttribute="trailing" constant="10" id="Eda-a0-BUb"/>
                             <constraint firstItem="CGs-B7-uPl" firstAttribute="leading" secondItem="q2E-1p-KUC" secondAttribute="leading" id="RIH-QB-I4e"/>
@@ -166,6 +162,7 @@
                     <size key="freeformSize" width="375" height="253"/>
                     <connections>
                         <outlet property="collectionView" destination="CGs-B7-uPl" id="epQ-Uc-AYB"/>
+                        <outlet property="deleteButton" destination="Swx-bi-ftk" id="4tE-k2-d33"/>
                         <outlet property="sectionIndex" destination="Ag8-1E-ewa" id="Yf1-6z-OIu"/>
                     </connections>
                 </viewController>
@@ -180,6 +177,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Delete" width="23" height="17"/>
+        <image name="Delete-Left" width="23" height="17"/>
     </resources>
 </document>

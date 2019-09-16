@@ -9,43 +9,37 @@
 import UIKit
 
 
-public final class SwitchTableViewCell: UITableViewCell {
-
-    @IBOutlet public weak var titleLabel: UILabel?
-
-    @IBOutlet public weak var subtitleLabel: UILabel?
+open class SwitchTableViewCell: UITableViewCell {
 
     public var `switch`: UISwitch?
 
-    public var onToggle: ((_ isOn: Bool) -> Void)?
+    public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .value1, reuseIdentifier: Self.className)
 
-    override public func awakeFromNib() {
-        super.awakeFromNib()
-
-        `switch` = UISwitch(frame: .zero)
-        accessoryView = `switch`
-
-        `switch`?.addTarget(self, action: #selector(respondToToggle), for: .valueChanged)
+        setUp()
     }
 
-    override public func layoutSubviews() {
+    required public init?(coder: NSCoder) {
+        super.init(coder: coder)
+
+        setUp()
+    }
+
+    private func setUp() {
+        `switch` = UISwitch(frame: .zero)
+        accessoryView = `switch`
+    }
+
+    override open func layoutSubviews() {
         super.layoutSubviews()
 
         contentView.layoutMargins.left = separatorInset.left
         contentView.layoutMargins.right = separatorInset.left
     }
 
-    override public func prepareForReuse() {
+    override open func prepareForReuse() {
         super.prepareForReuse()
 
-        onToggle = nil
         self.switch?.removeTarget(nil, action: nil, for: .valueChanged)
-        `switch`?.addTarget(self, action: #selector(respondToToggle), for: .valueChanged)
-    }
-
-    @objc private func respondToToggle() {
-        if let `switch` = `switch`, let onToggle = onToggle {
-            onToggle(`switch`.isOn)
-        }
     }
 }

@@ -13,7 +13,7 @@ private let Margin: CGFloat = 8
 
 final class ValidatingIndicatorView: UIView {
 
-    let indicatorView = UIActivityIndicatorView(style: .gray)
+    let indicatorView = UIActivityIndicatorView(style: .default)
 
     let label = UILabel()
 

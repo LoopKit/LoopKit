@@ -24,7 +24,11 @@ final class InsulinSensitivityScalingTableViewCell: UITableViewCell {
 
     @IBOutlet weak var gaugeBar: SegmentedGaugeBarView! {
         didSet {
-            gaugeBar.backgroundColor = .white
+            if #available(iOSApplicationExtension 13.0, *) {
+                gaugeBar.backgroundColor = .systemGray6
+            } else {
+                gaugeBar.backgroundColor = .white
+            }
         }
     }
 
@@ -44,6 +48,13 @@ final class InsulinSensitivityScalingTableViewCell: UITableViewCell {
     private var pickerExpandedHeight: CGFloat = 0
     
     @IBOutlet private weak var footerLabel: UILabel!
+
+    private lazy var percentFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .percent
+        formatter.maximumFractionDigits = 0
+        return formatter
+    }()
 
     var isPickerHidden: Bool {
         get {
@@ -145,8 +156,8 @@ final class InsulinSensitivityScalingTableViewCell: UITableViewCell {
         footerLabel.text = footerText
     }
 
-    private func percentageString(from percentage: Int) -> String {
-        return String(format: NSLocalizedString("%@%%", comment: "Format string for percentage value"), String(percentage))
+    private func percentageString(from percentage: Int) -> String? {
+        return percentFormatter.string(from: Double(percentage) / 100)
     }
 }
 
