@@ -61,6 +61,7 @@ class MasterViewController: UITableViewController {
 
     private enum ConfigurationRow: Int, CaseIterable {
         case basalRate
+        case carbRatio
         case correctionRange
         case insulinSensitivity
         case pumpID
@@ -89,6 +90,8 @@ class MasterViewController: UITableViewController {
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .basalRate:
                 cell.textLabel?.text = LocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
+            case .carbRatio:
+                cell.textLabel?.text = LocalizedString("Carb Ratios", comment: "The title of the carb ratios schedule screen")
             case .correctionRange:
                 cell.textLabel?.text = LocalizedString("Correction Range", comment: "The title text for the glucose correction range schedule")
             case .insulinSensitivity:
@@ -146,6 +149,20 @@ class MasterViewController: UITableViewController {
                 scheduleVC.delegate = self
                 scheduleVC.title = sender?.textLabel?.text
                 scheduleVC.syncSource = self
+
+                show(scheduleVC, sender: sender)
+            case .carbRatio:
+                let scheduleVC = DailyQuantityScheduleTableViewController()
+
+                scheduleVC.delegate = self
+                scheduleVC.title = NSLocalizedString("Carb Ratios", comment: "The title of the carb ratios schedule screen")
+                scheduleVC.unit = .gram()
+
+                if let schedule = dataManager?.carbRatioSchedule {
+                    scheduleVC.timeZone = schedule.timeZone
+                    scheduleVC.scheduleItems = schedule.items
+                    scheduleVC.unit = schedule.unit
+                }
 
                 show(scheduleVC, sender: sender)
             case .correctionRange:
