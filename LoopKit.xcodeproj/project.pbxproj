@@ -301,6 +301,7 @@
 		43FB60E920DCBE64002B996B /* PumpManagerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E820DCBE64002B996B /* PumpManagerStatus.swift */; };
 		43FB60EB20DDC868002B996B /* SetBolusError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60EA20DDC868002B996B /* SetBolusError.swift */; };
 		43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB610620DDF19B002B996B /* PumpManagerError.swift */; };
+		7D4C911B2331E236003F5248 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D4C91192331E236003F5248 /* Localizable.strings */; };
 		7D68A9AE1FE0A3D000522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9B01FE0A3D000522C49 /* Localizable.strings */; };
 		7D68A9B81FE0A3D100522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9BA1FE0A3D100522C49 /* InfoPlist.strings */; };
 		7D68A9C21FE0A3D200522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */; };
@@ -1007,6 +1008,18 @@
 		43FB60E820DCBE64002B996B /* PumpManagerStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerStatus.swift; sourceTree = "<group>"; };
 		43FB60EA20DDC868002B996B /* SetBolusError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBolusError.swift; sourceTree = "<group>"; };
 		43FB610620DDF19B002B996B /* PumpManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerError.swift; sourceTree = "<group>"; };
+		7D4C910E2331E20A003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		7D4C910F2331E20A003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
+		7D4C91102331E20A003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		7D4C91112331E20A003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		7D4C91122331E20B003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D4C91132331E20B003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D4C91142331E20B003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D4C91152331E20B003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D4C91162331E20B003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D4C91172331E20C003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7D4C91182331E20C003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D4C911A2331E236003F5248 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D68A9AF1FE0A3D000522C49 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D68A9B91FE0A3D100522C49 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7D68A9C31FE0A3D200522C49 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1831,6 +1844,7 @@
 			children = (
 				89D204AD21CC7D2B001238CC /* Extensions */,
 				89D2047521CC7BD7001238CC /* Info.plist */,
+				7D4C91192331E236003F5248 /* Localizable.strings */,
 				89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */,
 				89AB9EC821A4BC2400351324 /* MockCGMManager.swift */,
 				89AC7934224C783500B8E9BA /* MockDoseProgressEstimator.swift */,
@@ -2161,6 +2175,7 @@
 				nb,
 				pl,
 				ru,
+				sv,
 			);
 			mainGroup = 43D8FDC11C728FDF0073BE78;
 			productRefGroup = 43D8FDCC1C728FDF0073BE78 /* Products */;
@@ -2347,6 +2362,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89D204D221CC837A001238CC /* Assets.xcassets in Resources */,
+				7D4C911B2331E236003F5248 /* Localizable.strings in Resources */,
 				89D204B921CC7F34001238CC /* MockPumpManager.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2885,6 +2901,7 @@
 				1F5DAB722118F3C300048054 /* nl */,
 				1F5DAB7E2118F3FC00048054 /* nb */,
 				1F50C328212B20D400C18FAB /* pl */,
+				7D4C91162331E20B003F5248 /* sv */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2901,6 +2918,7 @@
 				1F5DAB742118F3C300048054 /* nl */,
 				1F5DAB802118F3FC00048054 /* nb */,
 				1F50C32A212B20D400C18FAB /* pl */,
+				7D4C91172331E20C003F5248 /* sv */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2919,6 +2937,7 @@
 				1F5DAB7A2118F3FB00048054 /* nb */,
 				1FE58794211D0967004F24ED /* Base */,
 				1F50C324212B20D300C18FAB /* pl */,
+				7D4C91132331E20B003F5248 /* sv */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2936,6 +2955,7 @@
 				1F5DAB6A2118F3C200048054 /* nl */,
 				1F5DAB762118F3FB00048054 /* nb */,
 				1F50C320212B20D300C18FAB /* pl */,
+				7D4C910F2331E20A003F5248 /* sv */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -2953,6 +2973,7 @@
 				1F5DAB692118F3C200048054 /* nl */,
 				1F5DAB752118F3FB00048054 /* nb */,
 				1F50C31F212B20D300C18FAB /* pl */,
+				7D4C910E2331E20A003F5248 /* sv */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -2970,6 +2991,7 @@
 				1F5DAB6B2118F3C200048054 /* nl */,
 				1F5DAB772118F3FB00048054 /* nb */,
 				1F50C321212B20D300C18FAB /* pl */,
+				7D4C91102331E20A003F5248 /* sv */,
 			);
 			name = CarbKit.storyboard;
 			sourceTree = "<group>";
@@ -2987,8 +3009,17 @@
 				1F5DAB6C2118F3C200048054 /* nl */,
 				1F5DAB782118F3FB00048054 /* nb */,
 				1F50C322212B20D300C18FAB /* pl */,
+				7D4C91112331E20A003F5248 /* sv */,
 			);
 			name = InsulinKit.storyboard;
+			sourceTree = "<group>";
+		};
+		7D4C91192331E236003F5248 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D4C911A2331E236003F5248 /* sv */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		7D68A9B01FE0A3D000522C49 /* Localizable.strings */ = {
@@ -3004,6 +3035,7 @@
 				1F5DAB702118F3C200048054 /* nl */,
 				1F5DAB7C2118F3FC00048054 /* nb */,
 				1F50C326212B20D400C18FAB /* pl */,
+				7D4C91152331E20B003F5248 /* sv */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -3020,6 +3052,7 @@
 				1F5DAB6F2118F3C200048054 /* nl */,
 				1F5DAB7B2118F3FB00048054 /* nb */,
 				1F50C325212B20D400C18FAB /* pl */,
+				7D4C91142331E20B003F5248 /* sv */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -3036,6 +3069,7 @@
 				1F5DAB6D2118F3C200048054 /* nl */,
 				1F5DAB792118F3FB00048054 /* nb */,
 				1F50C323212B20D300C18FAB /* pl */,
+				7D4C91122331E20B003F5248 /* sv */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -3053,6 +3087,7 @@
 				1F5DAB7F2118F3FC00048054 /* nb */,
 				1FE58790211CFBB7004F24ED /* Base */,
 				1F50C329212B20D400C18FAB /* pl */,
+				7D4C91182331E20C003F5248 /* sv */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

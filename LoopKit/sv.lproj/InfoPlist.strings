@@ -1,0 +1,9 @@
+/* Bundle name */
+"CFBundleName" = "$(PRODUCT_NAME)";
+
+/* Privacy - Health Share Usage Description */
+"NSHealthShareUsageDescription" = "Måltidsdata från Hälsodatabasen används för att avgöra effekter på blodglukos. Blodglukosvärden hämtade från Hälsodatabasen används i diagram och för analys";
+
+/* Privacy - Health Update Usage Description */
+"NSHealthUpdateUsageDescription" = "Kolhydrater inmatade i appen lagras i Hälsodatabasen, och lagras krypterat i HealtKit";
+
