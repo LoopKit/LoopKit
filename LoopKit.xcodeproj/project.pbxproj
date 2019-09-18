@@ -652,6 +652,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		02DD46FF23329FA8006FB374 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		1F50C31F212B20D300C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		1F50C320212B20D300C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Main.strings; sourceTree = "<group>"; };
 		1F50C321212B20D300C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/CarbKit.strings; sourceTree = "<group>"; };
@@ -3039,6 +3040,7 @@
 			children = (
 				7D4C911A2331E236003F5248 /* sv */,
 				7D4C913C2331ECCF003F5248 /* vi */,
+				02DD46FF23329FA8006FB374 /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

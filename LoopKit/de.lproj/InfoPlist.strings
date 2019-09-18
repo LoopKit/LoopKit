@@ -2,8 +2,8 @@
 "CFBundleName" = "$(PRODUCT_NAME)";
 
 /* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "Meal data from the Health database is used to determine glucose effects. Glucose data is retrieved from HealthKit for graphing and analysis.";
+"NSHealthShareUsageDescription" = "Die Daten der Mahlzeiten aus der Health Datenbank werden verwendet um die Auswirkungen auf den Blutzucker zu berechnen.";
 
 /* Privacy - Health Update Usage Description */
-"NSHealthUpdateUsageDescription" = "Carbhydrate meal data entered in the app is stored in the Health database. Glucose data is stored securely in HealthKit.";
+"NSHealthUpdateUsageDescription" = "Daten der Kohlenhydrate im Essen, die in die App eingeben werden, werden in der Health Datenbank gespeichert. Blutzuckerdaten werden sicher in HealthKit gespeichert.";
 
