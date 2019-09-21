@@ -3,13 +3,13 @@
 "%1$@ %2$@" = "%1$@ %2$@";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ units remaining at %2$@";
+"%1$@ units remaining at %2$@" = "%1$@ yksikköä jäljellä klo %2$@";
 
 /* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
 "%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
 
 /* The format for an insulin needs percentage. */
-"%@%% of normal insulin" = "%@%% of normal insulin";
+"%@%% of normal insulin" = "%@%% norm. insuliinista";
 
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
@@ -18,235 +18,235 @@
 "%@U" = "%@U";
 
 /* Title of the carb entry absorption time cell */
-"Absorption Time" = "Absorption Time";
+"Absorption Time" = "Imeytymisaika";
 
 /* The title for the override emoji activity section */
-"Activity" = "Activity";
+"Activity" = "Liikunta";
 
 /* Action sheet confirmation message for pump history deletion */
-"Are you sure you want to delete all history entries?" = "Are you sure you want to delete all history entries?";
+"Are you sure you want to delete all history entries?" = "Haluatko varmasti poistaa kaikki historiatiedot?";
 
 /* Action sheet confirmation message for reservoir deletion */
-"Are you sure you want to delete all reservoir values?" = "Are you sure you want to delete all reservoir values?";
+"Are you sure you want to delete all reservoir values?" = "Haluatko varmasti poistaa kaikki säiliön arvot?";
 
 /* The title of the button to add the credentials for a service */
-"authentication-button-add" = "authentication-button-add";
+"authentication-button-add" = "Lisää tili";
 
 /* The title of the button to remove the credentials for a service */
-"authentication-button-delete" = "authentication-button-delete";
+"authentication-button-delete" = "Poista tili";
 
 /* Describes a percentage decrease in overall insulin needs */
-"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Basal, bolus, and correction insulin dose amounts are decreased by %@%%.";
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Basaalin, boluksen ja korjaavan insuliiniannoksen määriä vähennetään %@%%.";
 
 /* Describes a percentage increase in overall insulin needs */
-"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Basal, bolus, and correction insulin dose amounts are increased by %@%%.";
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Basaalin, boluksen ja korjaavan insuliiniannoksen määriä lisätään %@%%.";
 
 /* Describes a lack of change in overall insulin needs */
-"Basal, bolus, and correction insulin dose amounts are unaffected." = "Basal, bolus, and correction insulin dose amounts are unaffected.";
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "Basaalin, boluksen ja korjaavan insuliiniannoksen määrät pysyvät ennallaan.";
 
 /* The title of the cancel action in an action sheet */
-"Cancel" = "Cancel";
+"Cancel" = "Kumoa";
 
 /* The text for the override cancellation button */
-"Cancel Override" = "Cancel Override";
+"Cancel Override" = "Kumoa Tilapäisas.";
 
 /* Title text for suspend resume button when temp basal canceling */
-"Canceling Temp Basal" = "Canceling Temp Basal";
+"Canceling Temp Basal" = "Kumotaan tilapäinen basaali";
 
 /* The title of the view controller to create a new carb entry */
-"carb-entry-title-add" = "Add Carb Entry";
+"carb-entry-title-add" = "Lisää hiilihydraatteja";
 
 /* The title of the view controller to edit an existing carb entry */
-"carb-entry-title-edit" = "Edit Carb Entry";
+"carb-entry-title-edit" = "Muokkaa hiilihydraatteja";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
-"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Changes will only apply this time you enable the override. The default settings of %@ will not be affected.";
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Muutokset otetaan käyttöön vain tällä kertaa, kun otat tilapäisasetuksen käyttöön. Alkuperäiset %@-asetukset pysyvät ennallaan.";
 
 /* Carb entry section footer text explaining absorption time */
-"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact.";
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Valitse pidempi imeytymisaika isommille aterioille tai aterioille, jotka sisältävät paljon rasvaa ja proteiineja. Tämä on vain ohje algoritmille, eikä sen tarvitse olla tarkka.";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.COBDateLabel" = "at %1$@";
+"com.loudnate.CarbKit.COBDateLabel" = "klo %1$@";
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.totalDateLabel" = "since %1$@";
+"com.loudnate.CarbKit.totalDateLabel" = "%1$@ jälkeen";
 
 /* The format string describing the date of an IOB value. The first format argument is the localized date. */
-"com.loudnate.InsulinKit.IOBDateLabel" = "at %1$@";
+"com.loudnate.InsulinKit.IOBDateLabel" = "klo %1$@";
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.InsulinKit.totalDateLabel" = "since %1$@";
+"com.loudnate.InsulinKit.totalDateLabel" = "%1$@ jälkeen";
 
 /* The title of the action used to dismiss an error alert */
 "com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
 
 /* The title for the override emoji condition section */
-"Condition" = "Condition";
+"Condition" = "Vointi";
 
 /* Title of the setup button to continue */
-"Continue" = "Continue";
+"Continue" = "Jatka";
 
 /* The section footer of correction range schedule */
-"Correction range is the blood glucose range that you would like Loop to correct to." = "Correction range is the blood glucose range that you would like Loop to correct to.";
+"Correction range is the blood glucose range that you would like Loop to correct to." = "Korjausalue on glukoositavoitealue, johon haluat Loopin korjaavan.";
 
 /* The text for a custom override */
-"Custom" = "Custom";
+"Custom" = "Mukautettu";
 
 /* The title for the custom override entry screen */
-"Custom Override" = "Custom Override";
+"Custom Override" = "Muk. tilapäisasetus";
 
 /* Title of the carb entry date picker cell */
-"Date" = "Date";
+"Date" = "Aika";
 
 /* Button title to delete all objects */
-"Delete All" = "Delete All";
+"Delete All" = "Poista kaikki";
 
 /* The text for the override duration setting */
-"Duration" = "Duration";
+"Duration" = "Kesto";
 
 /* The title for the override editing screen */
-"Edit Override" = "Edit Override";
+"Edit Override" = "Muokkaa tilapäisasetusta";
 
 /* Footer text for editing an active override (1: preset name) */
-"Editing affects only the active override. The default settings of %@ will not be affected." = "Editing affects only the active override. The default settings of %@ will not be affected.";
+"Editing affects only the active override. The default settings of %@ will not be affected." = "Muokkaus vaikuttaa vain aktiiviseen tilapäisasetukseen. Alkuperäiset %@-asetukset säilyvät ennallaan.";
 
 /* The text for the indefinite override duration setting */
-"Enable Indefinitely" = "Enable Indefinitely";
+"Enable Indefinitely" = "Ota käyttöön ilman aikarajaa";
 
 /* The detail text describing an enabled setting */
-"Enabled" = "Enabled";
+"Enabled" = "Käytössä";
 
 /* The placeholder text instructing users how to enter a maximum bolus */
-"Enter a number of units" = "Enter a number of units";
+"Enter a number of units" = "Syötä yksikkömäärä";
 
 /* The placeholder text instructing users how to enter a maximum basal rate */
-"Enter a rate in units per hour" = "Enter a rate in units per hour";
+"Enter a rate in units per hour" = "Syötä nopeus yksiköinä tunnissa";
 
 /* Section title for fast absorbing food */
-"Fast" = "Fast";
+"Fast" = "Nopea";
 
 /* The description shown on the insulin sensitivity schedule interface. */
-"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose.";
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insuliiniherkkyys kuvaa sitä, kuinka paljon verensokerisi laskee yhdellä insuliiniyksiköllä. Liian pienet arvot voivat johtaa vaarallisen matalaan verensokeriin.";
 
 /* Placeholder for maximum value in glucose range */
-"max" = "max";
+"max" = "maks.";
 
 /* The title text for the maximum basal rate value */
-"Maximum Basal Rate" = "Maximum Basal Rate";
+"Maximum Basal Rate" = "Suurin sallittu basaalitaso";
 
 /* The title text for the maximum bolus value */
-"Maximum Bolus" = "Maximum Bolus";
+"Maximum Bolus" = "Suurin sallittu bolus";
 
 /* Section title for medium absorbing food */
-"Medium" = "Medium";
+"Medium" = "Keskiverto";
 
 /* Placeholder for minimum value in glucose range */
-"min" = "min";
+"min" = "min.";
 
 /* Alert action title to open error help */
-"More Info" = "More Info";
+"More Info" = "Lisätietoa";
 
 /* The text for the override preset name setting */
-"Name" = "Name";
+"Name" = "Nimi";
 
 /* The title for the new override preset entry screen */
-"New Preset" = "New Preset";
+"New Preset" = "Uusi tilapäisasetus";
 
 /* Section title for no-carb food
    The title for override emoji miscellaneous section */
-"Other" = "Other";
+"Other" = "Muu";
 
 /* The title text for the insulin sensitivity scaling setting */
-"Overall Insulin Needs" = "Overall Insulin Needs";
+"Overall Insulin Needs" = "Kokonaisinsuliinitarve";
 
 /* The title text for the override presets screen */
-"Override Presets" = "Override Presets";
+"Override Presets" = "Tilapäisasetukset";
 
 /* Text directing the user to configure override presets */
-"Override presets can be set up under the 'Configuration' section of the settings screen." = "Override presets can be set up under the 'Configuration' section of the settings screen.";
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Tilapäisasetuksia voidaan luoda Asetukset-näkymän Kokoonpano-osiossa.";
 
 /* The section title of glucose overrides */
-"Overrides" = "Overrides";
+"Overrides" = "Tilapäisasetukset";
 
 /* Title for the pre-meal override range */
-"Pre-Meal" = "Pre-Meal";
+"Pre-Meal" = "Ennen ateriaa";
 
 /* The section header text override presets */
-"PRESETS" = "PRESETS";
+"PRESETS" = "ESIASETUKSET";
 
 /* The title of the screen displaying a pump event */
-"Pump Event" = "Pump Event";
+"Pump Event" = "Pumpputapahtuma";
 
 /* Title text for button to resume insulin delivery */
-"Resume Delivery" = "Resume Delivery";
+"Resume Delivery" = "Jatka annostelua";
 
 /* Title text for button when insulin delivery is in the process of being resumed */
-"Resuming" = "Resuming";
+"Resuming" = "Jatketaan";
 
 /* The text for the override preset name field placeholder */
-"Running" = "Running";
+"Running" = "Juoksu";
 
 /* Button text for saving glucose correction range schedule
    Button text for saving insulin sensitivity schedule */
-"Save" = "Save";
+"Save" = "Tallenna";
 
 /* The section header text for a scheduled override */
-"SCHEDULED OVERRIDE" = "SCHEDULED OVERRIDE";
+"SCHEDULED OVERRIDE" = "SUUNNITELTU TILAPÄISASETUS";
 
 /* Section title for slow absorbing food */
-"Slow" = "Slow";
+"Slow" = "Hidas";
 
 /* The text for the override start time */
-"Start Time" = "Start Time";
+"Start Time" = "Alkaa";
 
 /* Title text for suspend resume button when temp basal starting */
-"Starting Temp Basal" = "Starting Temp Basal";
+"Starting Temp Basal" = "Aloitetaan tilapäinen basaali";
 
 /* Title text for button to suspend insulin delivery */
-"Suspend Delivery" = "Suspend Delivery";
+"Suspend Delivery" = "Pysäytä annostelu";
 
 /* Title text for button when insulin delivery is in the process of being stopped */
-"Suspending" = "Suspending";
+"Suspending" = "Pysäytetään";
 
 /* The text for the override preset symbol setting */
-"Symbol" = "Symbol";
+"Symbol" = "Symboli";
 
 /* The empty-state text for a configuration value */
-"Tap to set" = "Tap to set";
+"Tap to set" = "Napauta asettaaksesi";
 
 /* The text for the override target range setting */
-"Target Range" = "Target Range";
+"Target Range" = "Tavoitealue";
 
 /* The title for the override selection screen */
-"Temporary Override" = "Temporary Override";
+"Temporary Override" = "Tilapäisasetus";
 
 /* The default placeholder string for a credential */
-"text-placeholder-required" = "text-placeholder-required";
+"text-placeholder-required" = "Pakollinen";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
-"The maximum absorption time is %@" = "The maximum absorption time is %@";
+"The maximum absorption time is %@" = "Pisin sallittu imeytymisaika on %@";
 
 /* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
-"The maximum allowed amount is %@ grams" = "The maximum allowed amount is %@ grams";
+"The maximum allowed amount is %@ grams" = "Suurin sallittu määrä on %@ grammaa";
 
 /* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
-"Times in %1$@%2$@%3$@" = "Times in %1$@%2$@%3$@";
+"Times in %1$@%2$@%3$@" = "Aika %1$@%2$@%3$@";
 
 /* The unit string for units per hour */
-"U/hour" = "U/hour";
+"U/hour" = "U/tunti";
 
 /* The unit string for units */
-"Units" = "Units";
+"Units" = "Yksikköä";
 
 /* Accessibility value for an unknown value
    The default title to use when an entry has none */
-"Unknown" = "Unknown";
+"Unknown" = "Tuntematon";
 
 /* Label indicating validation is occurring */
-"Verifying" = "Verifying";
+"Verifying" = "Tarkistetaan";
 
 /* Title of an alert containing a validation warning */
-"Warning" = "Warning";
+"Warning" = "Varoitus";
 
 /* Title for the workout override range */
-"Workout" = "Workout";
+"Workout" = "Liikunta";

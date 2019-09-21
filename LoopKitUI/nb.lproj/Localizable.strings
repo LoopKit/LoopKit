@@ -17,9 +17,6 @@
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@U";
 
-/* Separator between min and max glucose values */
-"-" = "-";
-
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Absorbsjonstid";
 
