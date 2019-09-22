@@ -994,6 +994,11 @@
 		7D9BF08A2336CD90005DCFD6 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D9BF08B2336CD90005DCFD6 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D9BF08E2336D494005DCFD6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		7D9BF1482337133E005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		7D9BF1492337133E005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		7D9BF14A2337133E005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D9BF14B2337133E005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D9BF14C2337133E005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEntryTableViewController.swift; sourceTree = "<group>"; };
 		8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineCurveParametersTableViewController.swift; sourceTree = "<group>"; };
 		891A3FC62247268F00378B27 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
@@ -2136,6 +2141,7 @@
 				fi,
 				vi,
 				da,
+				ro,
 			);
 			mainGroup = 43D8FDC11C728FDF0073BE78;
 			productRefGroup = 43D8FDCC1C728FDF0073BE78 /* Products */;
@@ -2863,6 +2869,7 @@
 				7D9BF07B2336CD81005DCFD6 /* fi */,
 				7D9BF0822336CD88005DCFD6 /* vi */,
 				7D9BF0892336CD90005DCFD6 /* da */,
+				7D9BF14A2337133E005DCFD6 /* ro */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2903,6 +2910,7 @@
 				7D9BF0802336CD88005DCFD6 /* vi */,
 				7D9BF0872336CD8F005DCFD6 /* da */,
 				7D9BF08E2336D494005DCFD6 /* en */,
+				7D9BF1482337133E005DCFD6 /* ro */,
 			);
 			name = CarbKit.storyboard;
 			sourceTree = "<group>";
@@ -2927,6 +2935,7 @@
 				7D9BF07A2336CD81005DCFD6 /* fi */,
 				7D9BF0812336CD88005DCFD6 /* vi */,
 				7D9BF0882336CD90005DCFD6 /* da */,
+				7D9BF1492337133E005DCFD6 /* ro */,
 			);
 			name = InsulinKit.storyboard;
 			sourceTree = "<group>";
@@ -2950,6 +2959,7 @@
 				7D9BF07C2336CD81005DCFD6 /* fi */,
 				7D9BF0832336CD88005DCFD6 /* vi */,
 				7D9BF08A2336CD90005DCFD6 /* da */,
+				7D9BF14B2337133E005DCFD6 /* ro */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2973,6 +2983,7 @@
 				7D9BF07D2336CD81005DCFD6 /* fi */,
 				7D9BF0842336CD89005DCFD6 /* vi */,
 				7D9BF08B2336CD90005DCFD6 /* da */,
+				7D9BF14C2337133E005DCFD6 /* ro */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
