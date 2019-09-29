@@ -244,4 +244,38 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
 
         XCTAssert(historyResolves(to: expected, referenceDateOffset: .hours(6)))
     }
+    
+    func testQuery() {
+        var (overrides, deletedOverrides, newAnchor) = history.queryByAnchor(nil)
+        
+        XCTAssertEqual(0, overrides.count)
+        XCTAssertEqual(0, deletedOverrides.count)
+        
+        recordOverride(beginningAt: .hours(2), duration: .finite(.hours(8)), insulinNeedsScaleFactor: 1.5)
+        recordOverrideDisable(at: .hours(4))
+        recordOverride(beginningAt: .hours(7), duration: .finite(.hours(1)), insulinNeedsScaleFactor: 1.5)
+        
+        (overrides, deletedOverrides, newAnchor) = history.queryByAnchor(newAnchor)
+        
+        XCTAssertEqual(0, deletedOverrides.count)
+        XCTAssertEqual(2, overrides.count)
+        
+        XCTAssertEqual(TimeInterval(hours: 2), overrides[0].duration.timeInterval, accuracy: 1)
+    }
+
+    func testQueryOfDeletedOverrides() {
+        var (overrides, deletedOverrides, newAnchor) = history.queryByAnchor(nil)
+        
+        XCTAssertEqual(0, overrides.count)
+        XCTAssertEqual(0, deletedOverrides.count)
+        
+        recordOverride(beginningAt: .hours(2), duration: .finite(.hours(8)), insulinNeedsScaleFactor: 1.5)
+        recordOverrideDisable(at: .hours(1))
+        
+        (overrides, deletedOverrides, newAnchor) = history.queryByAnchor(newAnchor)
+        
+        XCTAssertEqual(0, overrides.count)
+        XCTAssertEqual(1, deletedOverrides.count)
+    }
+
 }

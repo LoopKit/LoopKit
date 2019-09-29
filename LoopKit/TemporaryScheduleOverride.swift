@@ -43,6 +43,7 @@ public struct TemporaryScheduleOverride: Hashable {
     public var context: Context
     public var settings: TemporaryScheduleOverrideSettings
     public var startDate: Date
+    public let syncIdentifier: UUID
 
     public var duration: Duration {
         didSet {
@@ -78,14 +79,15 @@ public struct TemporaryScheduleOverride: Hashable {
         return date > endDate
     }
 
-    public init(context: Context, settings: TemporaryScheduleOverrideSettings, startDate: Date, duration: Duration) {
+    public init(context: Context, settings: TemporaryScheduleOverrideSettings, startDate: Date, duration: Duration, syncIdentifier: UUID? = nil) {
         precondition(duration.timeInterval > 0)
         self.context = context
         self.settings = settings
         self.startDate = startDate
         self.duration = duration
+        self.syncIdentifier = syncIdentifier ?? UUID()
     }
-
+    
     public func isActive(at date: Date = Date()) -> Bool {
         return activeInterval.contains(date)
     }
@@ -106,9 +108,18 @@ extension TemporaryScheduleOverride: RawRepresentable {
         else {
             return nil
         }
-
+        
         let startDate = Date(timeIntervalSince1970: startDateSeconds)
-        self.init(context: context, settings: settings, startDate: startDate, duration: duration)
+
+        let syncIdentifier: UUID
+        if let syncIdentifierRaw = rawValue["syncIdentifier"] as? String,
+            let storedSyncIdentifier = UUID(uuidString: syncIdentifierRaw) {
+            syncIdentifier = storedSyncIdentifier
+        } else {
+            syncIdentifier = UUID()
+        }
+        
+        self.init(context: context, settings: settings, startDate: startDate, duration: duration, syncIdentifier: syncIdentifier)
     }
 
     public var rawValue: RawValue {
@@ -116,7 +127,8 @@ extension TemporaryScheduleOverride: RawRepresentable {
             "context": context.rawValue,
             "settings": settings.rawValue,
             "startDate": startDate.timeIntervalSince1970,
-            "duration": duration.rawValue
+            "duration": duration.rawValue,
+            "syncIdentifier": syncIdentifier.uuidString,
         ]
     }
 }
