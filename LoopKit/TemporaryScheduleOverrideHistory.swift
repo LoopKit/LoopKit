@@ -103,6 +103,17 @@ public final class TemporaryScheduleOverrideHistory {
     // Deletes overrides that start after the passed in override.
     private func record(_ override: TemporaryScheduleOverride, at enableDate: Date) {
         
+        // Check for modification of existing entry
+        var index = recentEvents.endIndex
+        while index != recentEvents.startIndex {
+            recentEvents.formIndex(before: &index)
+            if recentEvents[index].override.syncIdentifier == override.syncIdentifier {
+                recentEvents[index].override = override
+                recentEvents[index].modificationCounter = modificationCounter
+                return
+            }
+        }
+        
         deleteEventsStartingOnOrAfter(override.startDate)
         
         let overrideEnd = min(override.startDate.nearestPrevious, enableDate)
@@ -287,30 +298,33 @@ extension OverrideEvent: RawRepresentable {
 
 
 extension TemporaryScheduleOverrideHistory: RawRepresentable {
-    public typealias RawValue = [String: [[String: Any]]]
+    public typealias RawValue = [String: Any]
 
     public convenience init?(rawValue: RawValue) {
         self.init()
-        if let recentEventsRawValue = rawValue["recentEvents"] {
-            let recentEvents = recentEventsRawValue.compactMap(OverrideEvent.init(rawValue:))
-            guard recentEvents.count == recentEventsRawValue.count else {
-                return nil
-            }
-            self.recentEvents = recentEvents
-        }
-        if let taintedEventsRawValue = rawValue["taintedEventLog"] {
-            let taintedEventLog = taintedEventsRawValue.compactMap(OverrideEvent.init(rawValue:))
-            guard taintedEventLog.count == taintedEventsRawValue.count else {
-                return nil
-            }
-            self.taintedEventLog = taintedEventLog
-        }
+//        if let recentEventsRawValue = rawValue["recentEvents"] as? [[String: Any]] {
+//            let recentEvents = recentEventsRawValue.compactMap(OverrideEvent.init(rawValue:))
+//            guard recentEvents.count == recentEventsRawValue.count else {
+//                return nil
+//            }
+//            self.recentEvents = recentEvents
+//        }
+//        if let taintedEventsRawValue = rawValue["taintedEventLog"] as? [[String: Any]] {
+//            let taintedEventLog = taintedEventsRawValue.compactMap(OverrideEvent.init(rawValue:))
+//            guard taintedEventLog.count == taintedEventsRawValue.count else {
+//                return nil
+//            }
+//            self.taintedEventLog = taintedEventLog
+//        }
+//        
+//        self.modificationCounter = rawValue["modificationCounter"] as? Int ?? 0
     }
 
     public var rawValue: RawValue {
         return [
             "recentEvents": recentEvents.map { $0.rawValue },
-            "taintedEventLog": taintedEventLog.map { $0.rawValue }
+            "taintedEventLog": taintedEventLog.map { $0.rawValue },
+            "modificationCounter": modificationCounter
         ]
     }
 }

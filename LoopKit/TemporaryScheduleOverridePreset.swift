@@ -24,12 +24,14 @@ public struct TemporaryScheduleOverridePreset: Hashable {
         self.duration = duration
     }
 
-    public func createOverride(beginningAt date: Date = Date()) -> TemporaryScheduleOverride {
+    public func createOverride(enactTrigger: TemporaryScheduleOverride.EnactTrigger, beginningAt date: Date = Date()) -> TemporaryScheduleOverride {
         return TemporaryScheduleOverride(
             context: .preset(self),
             settings: settings,
             startDate: date,
-            duration: duration
+            duration: duration,
+            enactTrigger: enactTrigger,
+            syncIdentifier: UUID()
         )
     }
 }
