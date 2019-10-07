@@ -11,13 +11,13 @@ import UIKit
 private let Margin: CGFloat = 8
 
 
-final class ValidatingIndicatorView: UIView {
+public final class ValidatingIndicatorView: UIView {
 
     let indicatorView = UIActivityIndicatorView(style: .default)
 
     let label = UILabel()
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         label.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.headline)
         label.text = LocalizedString("Verifying", comment: "Label indicating validation is occurring")
@@ -37,7 +37,7 @@ final class ValidatingIndicatorView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
 
         // Center the label in the bounds so it appears aligned, then let the indicator view hang from the left side
@@ -46,7 +46,7 @@ final class ValidatingIndicatorView: UIView {
         indicatorView.frame.origin.x = -indicatorView.frame.size.width - Margin
     }
 
-    override var intrinsicContentSize : CGSize {
+    public override var intrinsicContentSize : CGSize {
         return label.intrinsicContentSize
     }
 }

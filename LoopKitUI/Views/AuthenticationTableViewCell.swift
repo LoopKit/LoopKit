@@ -9,13 +9,13 @@
 import UIKit
 
 
-final class AuthenticationTableViewCell: UITableViewCell {
+public final class AuthenticationTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet public weak var titleLabel: UILabel!
 
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet public weak var textField: UITextField!
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
+    public override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         if selected {
@@ -23,7 +23,7 @@ final class AuthenticationTableViewCell: UITableViewCell {
         }
     }
 
-    override func prepareForReuse() {
+    public override func prepareForReuse() {
         super.prepareForReuse()
 
         textField.delegate = nil
