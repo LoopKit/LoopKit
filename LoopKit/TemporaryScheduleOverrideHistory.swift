@@ -302,22 +302,22 @@ extension TemporaryScheduleOverrideHistory: RawRepresentable {
 
     public convenience init?(rawValue: RawValue) {
         self.init()
-//        if let recentEventsRawValue = rawValue["recentEvents"] as? [[String: Any]] {
-//            let recentEvents = recentEventsRawValue.compactMap(OverrideEvent.init(rawValue:))
-//            guard recentEvents.count == recentEventsRawValue.count else {
-//                return nil
-//            }
-//            self.recentEvents = recentEvents
-//        }
-//        if let taintedEventsRawValue = rawValue["taintedEventLog"] as? [[String: Any]] {
-//            let taintedEventLog = taintedEventsRawValue.compactMap(OverrideEvent.init(rawValue:))
-//            guard taintedEventLog.count == taintedEventsRawValue.count else {
-//                return nil
-//            }
-//            self.taintedEventLog = taintedEventLog
-//        }
-//        
-//        self.modificationCounter = rawValue["modificationCounter"] as? Int ?? 0
+        if let recentEventsRawValue = rawValue["recentEvents"] as? [[String: Any]] {
+            let recentEvents = recentEventsRawValue.compactMap(OverrideEvent.init(rawValue:))
+            guard recentEvents.count == recentEventsRawValue.count else {
+                return nil
+            }
+            self.recentEvents = recentEvents
+        }
+        if let taintedEventsRawValue = rawValue["taintedEventLog"] as? [[String: Any]] {
+            let taintedEventLog = taintedEventsRawValue.compactMap(OverrideEvent.init(rawValue:))
+            guard taintedEventLog.count == taintedEventsRawValue.count else {
+                return nil
+            }
+            self.taintedEventLog = taintedEventLog
+        }
+        
+        self.modificationCounter = rawValue["modificationCounter"] as? Int ?? 0
     }
 
     public var rawValue: RawValue {
