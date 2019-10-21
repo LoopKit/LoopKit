@@ -28,8 +28,7 @@ protocol CarbAbsorptionComputable {
     /// Returns the percentage of total carbohydrates absorbed as blood glucose at a specified interval after eating.
     ///
     /// - Parameters:
-    ///   - time: The interval after carbs were eaten
-    ///   - absorptionTime: The total time of carb absorption
+    ///   - percentTime: The percentage of the total absorption time
     /// - Returns: The percentage of the total carbohydrates that have been absorbed as blood glucose
     func percentAbsorptionAtPercentTime(_ percentTime: Double) -> Double
     
@@ -39,23 +38,23 @@ protocol CarbAbsorptionComputable {
     ///
     /// - Parameters:
     ///   - percentAbsorption: The percentage of the total carbohydrates that have been absorbed as blood glucose
-    /// - Returns: The percentage of the absorption time needed to absorb the percentage of carbs according to the absorption model
+    /// - Returns: The percentage of the absorption time needed to absorb the percentage of the total carbohydrates
     func percentTimeAtPercentAbsorption(_ percentAbsorption: Double) -> Double
 
     /// Returns the total absorption time for a percentage of total carbohydrates absorbed as blood glucose at a specified interval after eating.
     ///
     /// - Parameters:
     ///   - percentAbsorption: The percentage of the total carbohydrates that have been absorbed as blood glucose
-    ///   - time: The interval after the carbs were eaten
-    /// - Returns: The total time of carb absorption
+    ///   - time: The interval after the carbohydrates were eaten
+    /// - Returns: The total time of carbohydrates absorption
     func absorptionTime(forPercentAbsorption percentAbsorption: Double, atTime time: TimeInterval) -> TimeInterval
 
     /// Returns the number of total carbohydrates absorbed as blood glucose at a specified interval after eating
     ///
     /// - Parameters:
-    ///   - total: The total number of carbs eaten
-    ///   - time: The interval after carbs were eaten
-    ///   - absorptionTime: The total time of carb absorption
+    ///   - total: The total number of carbohydrates eaten
+    ///   - time: The interval after carbohydrates were eaten
+    ///   - absorptionTime: The total time of carbohydrates absorption
     /// - Returns: The number of total carbohydrates that have been absorbed as blood glucose
     func absorbedCarbs(of total: Double, atTime time: TimeInterval, absorptionTime: TimeInterval) -> Double
 
@@ -63,15 +62,15 @@ protocol CarbAbsorptionComputable {
     ///
     /// - Parameters:
     ///   - total: The total number of carbs eaten
-    ///   - time: The interval after carbs were eaten
+    ///   - time: The interval after carbohydrates were eaten
     ///   - absorptionTime: The total time of carb absorption
     /// - Returns: The number of total carbohydrates that have not yet been absorbed as blood glucose
     func unabsorbedCarbs(of total: Double, atTime time: TimeInterval, absorptionTime: TimeInterval) -> Double
     
-    /// Returns the number of total carbohydrates not yet absorbed as blood glucose at a specified interval after eating
+    /// Returns the normalized rate of carbohydrates absorption at a specified percentage of the absorption time
     ///
     /// - Parameters:
-    ///   - percentTime: The percentage of absorption time elapsed since start of absorption
+    ///   - percentTime: The percentage of absorption time elapsed since the carbohydrates were eaten
     /// - Returns: The percentage absorption rate at the percentage of absorption time
     func percentRateAtPercentTime(forPercentTime percentTime: Double) -> Double
 }
@@ -93,8 +92,9 @@ extension CarbAbsorptionComputable {
         return time / percentTime
     }
     
-    func timeToAbsorb(forPercentAbsorbed percentAbsorbed: Double, absorptionTime: TimeInterval) -> TimeInterval {
-        return percentTimeAtPercentAbsorption(percentAbsorbed) * absorptionTime
+    func timeToAbsorb(forPercentAbsorbed percentAbsorption: Double, absorptionTime: TimeInterval) -> TimeInterval {
+        let percentTime = percentTimeAtPercentAbsorption(percentAbsorption)
+        return percentTime * absorptionTime
     }
     
 }
@@ -636,7 +636,7 @@ fileprivate class CarbStatusBuilder<T: CarbEntry> {
         return clampedGrams / entryGrams
     }
     
-    /// Time to absorb observed grams according to the carb absorption model
+    /// The amount of time needed to absorb observed grams
     private var timeToAbsorbObservedCarbs: TimeInterval {
         let time = lastEffectDate.timeIntervalSince(entry.startDate) - delay
         guard time > 0 else {
@@ -647,7 +647,7 @@ fileprivate class CarbStatusBuilder<T: CarbEntry> {
             // If adaptive absorption rate is enabled, and if the time since start of absorption is greater than the standby interval, the time to absorb observed carbs equals the obervation time
             timeToAbsorb = time
         } else {
-            // If adaptive absorption rate is disabled, or if the time since start of absorption is less than the standby interval, the time to absorb observed carbs calculated based on the absorption model
+            // If adaptive absorption rate is disabled, or if the time since start of absorption is less than the standby interval, the time to absorb observed carbs is calculated based on the absorption model
             timeToAbsorb = absorptionModel.timeToAbsorb(forPercentAbsorbed: percentAbsorbed, absorptionTime: initialAbsorptionTime)
         }
         return min(timeToAbsorb, maxAbsorptionTime)
@@ -768,10 +768,10 @@ fileprivate class CarbStatusBuilder<T: CarbEntry> {
         guard dynamicAbsorptionTime > 0 else {
             return(0.0)
         }
-        // time t nomalized to estimated or observed total absorption time
+        // time t nomalized to absorption time
         let percentTime = t / dynamicAbsorptionTime
-        let absorptionRate = entryGrams / dynamicAbsorptionTime
-        return absorptionRate * absorptionModel.percentRateAtPercentTime(forPercentTime: percentTime)
+        let averageAbsorptionRate = entryGrams / dynamicAbsorptionTime
+        return averageAbsorptionRate * absorptionModel.percentRateAtPercentTime(forPercentTime: percentTime)
     }
     
 }
@@ -874,7 +874,6 @@ extension Collection where Element: CarbEntry {
                 builder.addNextEffect(partialEffectValue, start: dxEffect.startDate, end: dxEffect.endDate)
 
                 // If there's still remainder effects with no additional entries to account them to, count them as overrun on the final entry
-                // dm61 TODO(?): we should probably assign remainder effects to the entry with the latest end date, not to the entry with the latest start date
                 if effectValue > Double(Float.ulpOfOne) && builder === activeBuilders.last! {
                     builder.addNextEffect(effectValue, start: dxEffect.startDate, end: dxEffect.endDate)
                 }

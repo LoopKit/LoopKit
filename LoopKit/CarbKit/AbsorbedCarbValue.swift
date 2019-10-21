@@ -30,7 +30,7 @@ public struct AbsorbedCarbValue: SampleValue {
         return DateInterval(start: observedDate.start, duration: observedDate.duration + estimatedTimeRemaining)
     }
     
-    /// Time required to absorb observed carbs based on the carb absorption model
+    /// The amount of time required to absorb observed carbs
     public let timeToAbsorbObservedCarbs: TimeInterval
 
     /// Whether absorption is still in-progress
