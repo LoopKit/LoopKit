@@ -14,6 +14,10 @@ enum InsulinDeliveryStoreResult<T> {
     case failure(Error)
 }
 
+public extension NSNotification.Name {
+    /// Notification posted when cached data was modifed.
+    static let InsulinDeliveryStoreCacheDidChange = NSNotification.Name(rawValue: "com.loopkit.InsulinDeliveryStore.CacheDidChangeNotification")
+}
 
 /// Manages insulin dose data from HealthKit
 ///
@@ -99,6 +103,9 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
             // New data not written by LoopKit (see `MetadataKeyHasLoopKitOrigin`) should be assumed external to what could be fetched as PumpEvent data.
             // That external data could be factored into dose computation with some modification:
             // An example might be supplemental injections in cases of extended exercise periods without a pump
+            if cacheChanged {
+                NotificationCenter.default.post(name: .InsulinDeliveryStoreCacheDidChange, object: self)
+            }
         }
     }
 
