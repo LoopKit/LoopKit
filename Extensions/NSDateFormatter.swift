@@ -11,12 +11,12 @@ import Foundation
 
 // MARK: - Extensions useful in parsing fixture dates
 extension ISO8601DateFormatter {
-    static func localTimeDate() -> Self {
+    static func localTimeDate(timeZone: TimeZone = .currentFixed) -> Self {
         let formatter = self.init()
 
         formatter.formatOptions = .withInternetDateTime
         formatter.formatOptions.subtract(.withTimeZone)
-        formatter.timeZone = .currentFixed
+        formatter.timeZone = timeZone
 
         return formatter
     }
