@@ -14,7 +14,7 @@ open class LoadingTableViewCell: UITableViewCell {
     public var isLoading = false {
         didSet {
             if isLoading {
-                let indicator = UIActivityIndicatorView(style: .gray)
+                let indicator = UIActivityIndicatorView(style: .default)
                 accessoryView = indicator
                 indicator.startAnimating()
             } else {

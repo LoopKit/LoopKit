@@ -16,6 +16,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     public let endDate: Date
     internal let value: Double
     public let unit: DoseUnit
+    public let deliveredUnits: Double?
     public let description: String?
     internal(set) public var syncIdentifier: String?
 
@@ -30,12 +31,13 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units)
     }
 
-    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil) {
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
         self.value = value
         self.unit = unit
+        self.deliveredUnits = deliveredUnits
         self.description = description
         self.syncIdentifier = syncIdentifier
         self.scheduledBasalRate = scheduledBasalRate
@@ -50,7 +52,7 @@ extension DoseEntry {
         return endDate.timeIntervalSince(startDate).hours
     }
 
-    public var units: Double {
+    public var programmedUnits: Double {
         switch unit {
         case .units:
             return value
@@ -77,8 +79,10 @@ extension DoseEntry {
     public var netBasalUnits: Double {
         switch type {
         case .bolus:
-            return self.units
-        case .basal, .resume, .suspend, .tempBasal:
+            return deliveredUnits ?? programmedUnits
+        case .basal:
+            return 0
+        case .resume, .suspend, .tempBasal:
             break
         }
 
@@ -86,8 +90,15 @@ extension DoseEntry {
             return 0
         }
 
-        let units = netBasalUnitsPerHour * hours
-        return round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
+        let scheduledUnitsPerHour: Double
+        if let basalRate = scheduledBasalRate {
+            scheduledUnitsPerHour = basalRate.doubleValue(for: DoseEntry.unitsPerHour)
+        } else {
+            scheduledUnitsPerHour = 0
+        }
+
+        let scheduledUnits = scheduledUnitsPerHour * hours
+        return unitsInDeliverableIncrements - scheduledUnits
     }
 
     /// The rate of delivery, net the basal rate scheduled during that time, which can be used to compute insulin on-board and glucose effects
@@ -113,16 +124,16 @@ extension DoseEntry {
     }
 
     /// The smallest increment per unit of hourly basal delivery
-    /// TODO: Is this 40 for x23 models?
-    internal static let minimumMinimedIncrementPerUnit: Double = 20
+    /// TODO: Is this 40 for x23 models? (yes - PS 7/26/2019)
+    /// MinimedPumpmanager will be updated to report deliveredUnits, so this will end up not being used.
+    private static let minimumMinimedIncrementPerUnit: Double = 20
 
-    /// Rounds a given entry to the smallest increment of hourly delivery
-    internal var unitsRoundedToMinimedIncrements: Double {
+    /// Returns the delivered units, or rounds to nearest deliverable (mdt) increment
+    public var unitsInDeliverableIncrements: Double {
         guard case .unitsPerHour = unit else {
-            return self.units
+            return deliveredUnits ?? programmedUnits
         }
-        let units = self.units
 
-        return round(units * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
+        return deliveredUnits ?? round(programmedUnits * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
     }
 }

@@ -11,12 +11,22 @@ import HealthKit
 public struct PumpManagerStatus: Equatable {
     
     public enum BasalDeliveryState: Equatable {
-        case active
+        case active(_ at: Date)
+        case initiatingTempBasal
+        case tempBasal(_ dose: DoseEntry)
+        case cancelingTempBasal
         case suspending
-        case suspended
+        case suspended(_ at: Date)
         case resuming
+
+        public var isSuspended: Bool {
+            if case .suspended = self {
+                return true
+            }
+            return false
+        }
     }
-    
+
     public enum BolusState: Equatable {
         case none
         case initiating
@@ -52,7 +62,7 @@ extension PumpManagerStatus: CustomDebugStringConvertible {
         * timeZone: \(timeZone)
         * device: \(device)
         * pumpBatteryChargeRemaining: \(pumpBatteryChargeRemaining as Any)
-        * suspendState: \(basalDeliveryState)
+        * basalDeliveryState: \(basalDeliveryState)
         * bolusState: \(bolusState)
         """
     }

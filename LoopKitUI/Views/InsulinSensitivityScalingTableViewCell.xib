@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14854.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14806.4"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="InsulinSensitivityScalingTableViewCell" rowHeight="255" id="2pD-aG-AdC" customClass="InsulinSensitivityScalingTableViewCell" customModule="LoopKitUI" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="255"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2pD-aG-AdC" id="Mie-FZ-K4X">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="255"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OY7-Gl-3ie">
+                        <rect key="frame" x="317.5" y="19" width="42.5" height="20.5"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                        <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Wx-rq-Xv8">
+                        <rect key="frame" x="15" y="15" width="33.5" height="28"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="28" id="2gd-Hd-Z76"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q8T-8n-z7x" customClass="SegmentedGaugeBarView" customModule="LoopKitUI" customModuleProvider="target">
+                        <rect key="frame" x="52.5" y="51" width="270" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="32" id="fod-2i-9Ju"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="numberOfSegments">
+                                <integer key="value" value="2"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="2"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                <color key="value" systemColor="systemGrayColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="progress">
+                                <real key="value" value="1.5"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="startColor">
+                                <color key="value" name="Lightened Insulin"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="endColor">
+                                <color key="value" name="Darkened Insulin"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xRY-fO-8DS">
+                        <rect key="frame" x="15" y="83" width="345" height="145"/>
+                        <constraints>
+                            <constraint firstAttribute="height" priority="750" constant="124" id="H7Y-6b-6TJ"/>
+                        </constraints>
+                    </pickerView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fsa-vU-j7t">
+                        <rect key="frame" x="15" y="228" width="345" height="16"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                        <color key="textColor" systemColor="tertiaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Fsa-vU-j7t" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Q8T-8n-z7x" secondAttribute="bottom" constant="8" id="5gc-f3-cAI"/>
+                    <constraint firstItem="xRY-fO-8DS" firstAttribute="top" secondItem="Q8T-8n-z7x" secondAttribute="bottom" id="7ti-gT-2Mn"/>
+                    <constraint firstItem="xRY-fO-8DS" firstAttribute="leading" secondItem="Mie-FZ-K4X" secondAttribute="leadingMargin" id="9d8-R8-QJf"/>
+                    <constraint firstItem="Q8T-8n-z7x" firstAttribute="width" secondItem="Mie-FZ-K4X" secondAttribute="width" multiplier="0.72" id="CrZ-Dx-pvb"/>
+                    <constraint firstItem="8Wx-rq-Xv8" firstAttribute="top" secondItem="Mie-FZ-K4X" secondAttribute="topMargin" constant="4" id="DMc-rj-TRP"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Fsa-vU-j7t" secondAttribute="trailing" id="FHD-fs-0TZ"/>
+                    <constraint firstItem="Q8T-8n-z7x" firstAttribute="top" secondItem="8Wx-rq-Xv8" secondAttribute="bottom" constant="8" id="HdB-X3-Cwa"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="OY7-Gl-3ie" secondAttribute="trailing" id="N1K-Ci-kAZ"/>
+                    <constraint firstItem="Fsa-vU-j7t" firstAttribute="top" secondItem="xRY-fO-8DS" secondAttribute="bottom" id="P2Y-ri-cOD"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="xRY-fO-8DS" secondAttribute="trailing" id="Z4k-pn-V1n"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Fsa-vU-j7t" secondAttribute="bottom" id="aOb-gn-E1X"/>
+                    <constraint firstItem="Fsa-vU-j7t" firstAttribute="leading" secondItem="Mie-FZ-K4X" secondAttribute="leadingMargin" id="cwh-lf-lyL"/>
+                    <constraint firstItem="8Wx-rq-Xv8" firstAttribute="leading" secondItem="Mie-FZ-K4X" secondAttribute="leadingMargin" priority="999" id="dXr-kN-lK9"/>
+                    <constraint firstItem="OY7-Gl-3ie" firstAttribute="centerY" secondItem="8Wx-rq-Xv8" secondAttribute="centerY" id="x5G-vn-EHq"/>
+                    <constraint firstItem="Q8T-8n-z7x" firstAttribute="centerX" secondItem="Mie-FZ-K4X" secondAttribute="centerX" id="yCH-0V-Lw3"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="footerLabel" destination="Fsa-vU-j7t" id="mEQ-KQ-pqp"/>
+                <outlet property="gaugeBar" destination="Q8T-8n-z7x" id="ksl-9s-lWx"/>
+                <outlet property="scaleFactorPicker" destination="xRY-fO-8DS" id="d7g-sd-hta"/>
+                <outlet property="scaleFactorPickerHeightConstraint" destination="H7Y-6b-6TJ" id="mmr-X5-PAy"/>
+                <outlet property="titleLabel" destination="8Wx-rq-Xv8" id="x0v-VG-dmu"/>
+                <outlet property="valueLabel" destination="OY7-Gl-3ie" id="mAw-NN-xNv"/>
+            </connections>
+            <point key="canvasLocation" x="53.600000000000001" y="133.5832083958021"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <namedColor name="Darkened Insulin">
+            <color red="1" green="0.43500000238418579" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Lightened Insulin">
+            <color red="1" green="0.74900001287460327" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

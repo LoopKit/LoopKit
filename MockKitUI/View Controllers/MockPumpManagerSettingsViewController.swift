@@ -40,11 +40,11 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         tableView.estimatedSectionHeaderHeight = 55
 
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
-        tableView.register(SwitchTableViewCell.nib(), forCellReuseIdentifier: SwitchTableViewCell.className)
+        tableView.register(BoundSwitchTableViewCell.self, forCellReuseIdentifier: BoundSwitchTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
         tableView.register(SuspendResumeTableViewCell.self, forCellReuseIdentifier: SuspendResumeTableViewCell.className)
 
-        pumpManager.addStatusObserver(self)
+        pumpManager.addStatusObserver(self, queue: .main)
 
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
         self.navigationItem.setRightBarButton(button, animated: false)
@@ -159,8 +159,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
     }
 
     private func switchTableViewCell(for indexPath: IndexPath, titled title: String, boundTo keyPath: WritableKeyPath<MockPumpManagerState, Bool>) -> SwitchTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SwitchTableViewCell.className, for: indexPath) as! SwitchTableViewCell
-        cell.titleLabel?.text = title
+        let cell = tableView.dequeueReusableCell(withIdentifier: BoundSwitchTableViewCell.className, for: indexPath) as! BoundSwitchTableViewCell
+        cell.textLabel?.text = title
         cell.switch?.isOn = pumpManager.state[keyPath: keyPath]
         cell.onToggle = { [unowned pumpManager] isOn in
             pumpManager.state[keyPath: keyPath] = isOn
@@ -201,8 +201,11 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             }
         case .deletePump:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
-                self.pumpManager.pumpManagerDelegate?.pumpManagerWillDeactivate(self.pumpManager)
-                self.done()
+                self.pumpManager.notifyDelegateOfDeactivation {
+                    DispatchQueue.main.async {
+                        self.done()
+                    }
+                }
             })
 
             present(confirmVC, animated: true) {
@@ -236,12 +239,12 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
 }
 
 extension MockPumpManagerSettingsViewController: PumpManagerStatusObserver {
-    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus) {
-        DispatchQueue.main.async {
-            if let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionRow.suspendResume.rawValue, section: Section.actions.rawValue)) as? SuspendResumeTableViewCell
-            {
-                suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
-            }
+    public func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus) {
+        dispatchPrecondition(condition: .onQueue(.main))
+
+        if let suspendResumeTableViewCell = self.tableView?.cellForRow(at: IndexPath(row: ActionRow.suspendResume.rawValue, section: Section.actions.rawValue)) as? SuspendResumeTableViewCell
+        {
+            suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
         }
     }
 }
@@ -269,7 +272,7 @@ extension MockPumpManagerSettingsViewController: PercentageTextFieldTableViewCon
     func percentageTextFieldTableViewControllerDidChangePercentage(_ controller: PercentageTextFieldTableViewController) {
         guard let indexPath = controller.indexPath else { assertionFailure(); return }
         assert(indexPath == [Section.settings.rawValue, SettingsRow.batteryRemaining.rawValue])
-        pumpManager.status.pumpBatteryChargeRemaining = controller.percentage.map { $0.clamped(to: 0...1) }
+        pumpManager.pumpBatteryChargeRemaining = controller.percentage.map { $0.clamped(to: 0...1) }
         tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }

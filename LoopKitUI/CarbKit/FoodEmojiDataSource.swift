@@ -5,14 +5,12 @@
 //  Copyright © 2017 LoopKit Authors. All rights reserved.
 //
 
-
-struct FoodEmojiSection {
-    let items: [String]
-    let title: String
+func CarbAbsorptionInputController() -> EmojiInputController {
+    return EmojiInputController.instance(withEmojis: FoodEmojiDataSource())
 }
 
 
-class FoodEmojiDataSource {
+private class FoodEmojiDataSource: EmojiDataSource {
     private static let fast: [String] = {
         var fast = [
             "🍭", "🍇", "🍈", "🍉", "🍊", "🍋", "🍌", "🍍",
@@ -58,38 +56,30 @@ class FoodEmojiDataSource {
         return other
     }()
 
-    let sections: [FoodEmojiSection]
+    let sections: [EmojiSection]
 
     init() {
         sections = [
-            FoodEmojiSection(
+            EmojiSection(
+                title: LocalizedString("Fast", comment: "Section title for fast absorbing food"),
                 items: type(of: self).fast,
-                title: LocalizedString("Fast", comment: "Section title for fast absorbing food")
+                indexSymbol: " 🍭 "
             ),
-            FoodEmojiSection(
+            EmojiSection(
+                title: LocalizedString("Medium", comment: "Section title for medium absorbing food"),
                 items: type(of: self).medium,
-                title: LocalizedString("Medium", comment: "Section title for medium absorbing food")
+                indexSymbol: "🌮"
             ),
-            FoodEmojiSection(
+            EmojiSection(
+                title: LocalizedString("Slow", comment: "Section title for slow absorbing food"),
                 items: type(of: self).slow,
-                title: LocalizedString("Slow", comment: "Section title for slow absorbing food")
+                indexSymbol: "🍕"
             ),
-            FoodEmojiSection(
+            EmojiSection(
+                title: LocalizedString("Other", comment: "Section title for no-carb food"),
                 items: type(of: self).other,
-                title: LocalizedString("Other", comment: "Section title for no-carb food")
+                indexSymbol: "⋯ "
             )
         ]
-    }
-
-    func maxAbsorptionTimeIndexForText(_ text: String) -> Int? {
-        for (index, section) in sections.dropLast().enumerated().reversed() {
-            for character in text {
-                if section.items.contains(String(character)) {
-                    return index
-                }
-            }
-        }
-
-        return nil
     }
 }

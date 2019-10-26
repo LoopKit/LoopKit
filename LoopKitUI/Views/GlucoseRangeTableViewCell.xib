@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14854.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14806.4"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,35 +13,33 @@
             <rect key="frame" x="0.0" y="0.0" width="450" height="196"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jTy-fY-56C" id="MnU-jN-qVh">
-                <rect key="frame" x="0.0" y="0.0" width="450" height="195.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="450" height="196"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <datePicker clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="30" translatesAutoresizingMaskIntoConstraints="NO" id="s1x-uP-9eP">
-                        <rect key="frame" x="20" y="47" width="410" height="150"/>
+                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Y2-Mf-vhJ">
+                        <rect key="frame" x="0.0" y="47" width="450" height="150"/>
                         <constraints>
-                            <constraint firstAttribute="height" priority="750" constant="150" id="doQ-Ho-H5v"/>
+                            <constraint firstAttribute="height" priority="750" constant="150" id="GTK-4v-m6r" userLabel="Picker Height Constraint"/>
                         </constraints>
-                        <date key="date" timeIntervalSinceReferenceDate="476509177.72020698">
-                            <!--2016-02-07 03:39:37 +0000-->
-                        </date>
                         <connections>
-                            <action selector="dateChanged:" destination="jTy-fY-56C" eventType="valueChanged" id="pvK-ae-tov"/>
+                            <outlet property="dataSource" destination="jTy-fY-56C" id="SJz-d2-hDK"/>
+                            <outlet property="delegate" destination="jTy-fY-56C" id="bcP-65-UkF"/>
                         </connections>
-                    </datePicker>
+                    </pickerView>
                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Twz-7y-UUx">
-                        <rect key="frame" x="27" y="11" width="396" height="28"/>
+                        <rect key="frame" x="22" y="11" width="406" height="28"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="248" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8CT-w7-vKA">
-                                <rect key="frame" x="0.0" y="0.0" width="254.5" height="28"/>
+                                <rect key="frame" x="0.0" y="0.0" width="272.5" height="28"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" alignment="center" spacing="3" baselineRelativeArrangement="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OlF-DK-Tvf">
-                                <rect key="frame" x="254.5" y="0.0" width="141.5" height="28"/>
+                                <rect key="frame" x="272.5" y="0.0" width="133.5" height="28"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="min" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZFq-4F-l9E" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="3.5" width="36" height="21"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="min" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZFq-4F-l9E" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="3.5" width="32" height="21"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                                         <connections>
@@ -52,13 +47,13 @@
                                         </connections>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="–" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uqw-Z2-iOD">
-                                        <rect key="frame" x="39" y="4" width="8.5" height="20.5"/>
+                                        <rect key="frame" x="35" y="4" width="8.5" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="max" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dw2-da-mzO" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
-                                        <rect key="frame" x="50.5" y="3.5" width="36" height="21"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="max" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Dw2-da-mzO" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
+                                        <rect key="frame" x="46.5" y="3.5" width="32" height="21"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                         <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                                         <connections>
@@ -66,9 +61,9 @@
                                         </connections>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="U/hour" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kZs-Yo-cQX">
-                                        <rect key="frame" x="89.5" y="4" width="52" height="20.5"/>
+                                        <rect key="frame" x="81.5" y="4" width="52" height="20.5"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                        <color key="textColor" red="0.56000000238418579" green="0.56000000238418579" blue="0.56000000238418579" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -84,23 +79,24 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="Twz-7y-UUx" firstAttribute="top" secondItem="MnU-jN-qVh" secondAttribute="topMargin" id="8OC-8V-ccI"/>
-                    <constraint firstItem="s1x-uP-9eP" firstAttribute="top" secondItem="Twz-7y-UUx" secondAttribute="bottom" constant="8" id="RSE-1c-ijp"/>
+                    <constraint firstItem="8Y2-Mf-vhJ" firstAttribute="top" secondItem="Twz-7y-UUx" secondAttribute="bottom" constant="8" id="EsA-WQ-tkC"/>
+                    <constraint firstItem="8Y2-Mf-vhJ" firstAttribute="leading" secondItem="MnU-jN-qVh" secondAttribute="leading" id="SFT-xK-bLk"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Twz-7y-UUx" secondAttribute="trailing" constant="7" id="acT-zp-tJ3"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="s1x-uP-9eP" secondAttribute="bottom" priority="750" constant="-8.5" id="bkv-m8-Gr7"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="s1x-uP-9eP" secondAttribute="trailing" id="oqC-H6-J9c"/>
+                    <constraint firstAttribute="trailing" secondItem="8Y2-Mf-vhJ" secondAttribute="trailing" id="f0M-dW-xBE"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="8Y2-Mf-vhJ" secondAttribute="bottom" priority="750" constant="-8.5" id="oOA-QL-0Hl"/>
                     <constraint firstItem="Twz-7y-UUx" firstAttribute="leading" secondItem="MnU-jN-qVh" secondAttribute="leadingMargin" constant="7" id="sEN-yU-tin"/>
-                    <constraint firstItem="s1x-uP-9eP" firstAttribute="leading" secondItem="MnU-jN-qVh" secondAttribute="leadingMargin" id="slK-f7-QQa"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="dateLabel" destination="8CT-w7-vKA" id="O0e-53-vP0"/>
-                <outlet property="datePicker" destination="s1x-uP-9eP" id="knl-4h-ibG"/>
-                <outlet property="datePickerHeightConstraint" destination="doQ-Ho-H5v" id="EuZ-sq-UpZ"/>
+                <outlet property="maxValueTextField" destination="Dw2-da-mzO" id="sMh-qD-IIC"/>
                 <outlet property="minValueTextField" destination="ZFq-4F-l9E" id="r4S-Rk-agd"/>
-                <outlet property="textField" destination="Dw2-da-mzO" id="AGF-p5-4Sh"/>
+                <outlet property="picker" destination="8Y2-Mf-vhJ" id="kcp-Ua-Ly6"/>
+                <outlet property="pickerHeightConstraint" destination="GTK-4v-m6r" id="agW-mm-coZ"/>
+                <outlet property="separatorLabel" destination="Uqw-Z2-iOD" id="jPK-Nv-hlx"/>
                 <outlet property="unitLabel" destination="kZs-Yo-cQX" id="l7c-rs-AB1"/>
             </connections>
-            <point key="canvasLocation" x="314" y="292"/>
+            <point key="canvasLocation" x="313.60000000000002" y="291.45427286356824"/>
         </tableViewCell>
     </objects>
 </document>

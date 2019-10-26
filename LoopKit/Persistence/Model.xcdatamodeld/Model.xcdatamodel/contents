@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18G87" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CachedCarbObject" representedClassName=".CachedCarbObject" syncable="YES">
         <attribute name="absorptionTime" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="createdByCurrentApp" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
@@ -55,9 +55,11 @@
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="hasLoopKitOrigin" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="programmedTempBasalRate" optional="YES" attributeType="Double" usesScalarValueType="NO" elementID="scheduledTempBasalRate" syncable="YES"/>
         <attribute name="provenanceIdentifier" attributeType="String" syncable="YES"/>
         <attribute name="reason" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="scheduledBasalRate" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="scheduledTempBasalRate" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="startDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="syncIdentifier" attributeType="String" syncable="YES"/>
         <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
@@ -94,8 +96,10 @@
     <entity name="PumpEvent" representedClassName=".PumpEvent" syncable="YES">
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="deliveredUnits" optional="YES" attributeType="Double" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="doseType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="duration" attributeType="Double" minValueString="0" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="mutable" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="raw" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
@@ -110,6 +114,9 @@
         </fetchIndex>
         <fetchIndex name="byUploadedIndex">
             <fetchIndexElement property="uploaded" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byMutable">
+            <fetchIndexElement property="mutable" type="Binary" order="ascending"/>
         </fetchIndex>
         <uniquenessConstraints>
             <uniquenessConstraint>
@@ -129,9 +136,9 @@
     <elements>
         <element name="CachedCarbObject" positionX="-63" positionY="72" width="128" height="195"/>
         <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="180"/>
-        <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="195"/>
+        <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="210"/>
         <element name="DeletedCarbObject" positionX="-63" positionY="90" width="128" height="90"/>
-        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="195"/>
+        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="225"/>
         <element name="Reservoir" positionX="-63" positionY="-18" width="128" height="105"/>
     </elements>
 </model>

@@ -23,7 +23,7 @@ public extension DailyValueSchedule where T == Double {
 
      - returns: The total basal delivery
      */
-    public func total() -> Double {
+    func total() -> Double {
         var total: Double = 0
 
         for (index, item) in items.enumerated() {

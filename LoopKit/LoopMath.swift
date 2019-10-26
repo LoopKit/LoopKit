@@ -61,7 +61,7 @@ public enum LoopMath {
 
      - returns: A timeline of glucose values
      */
-    public static func predictGlucose(startingAt startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [GlucoseEffect]...) -> [GlucoseValue] {
+    public static func predictGlucose(startingAt startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [GlucoseEffect]...) -> [PredictedGlucoseValue] {
         return predictGlucose(startingAt: startingGlucose, momentum: momentum, effects: effects)
     }
 
@@ -80,7 +80,7 @@ public enum LoopMath {
 
      - returns: A timeline of glucose values
      */
-    public static func predictGlucose(startingAt startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [[GlucoseEffect]]) -> [GlucoseValue] {
+    public static func predictGlucose(startingAt startingGlucose: GlucoseValue, momentum: [GlucoseEffect] = [], effects: [[GlucoseEffect]]) -> [PredictedGlucoseValue] {
         var effectValuesAtDate: [Date: Double] = [:]
         let unit = HKUnit.milligramsPerDeciliter
 
@@ -124,9 +124,9 @@ public enum LoopMath {
             }
         }
 
-        let prediction = effectValuesAtDate.sorted { $0.0 < $1.0 }.reduce([PredictedGlucoseValue(startDate: startingGlucose.startDate, quantity: startingGlucose.quantity)]) { (prediction, effect) -> [GlucoseValue] in
+        let prediction = effectValuesAtDate.sorted { $0.0 < $1.0 }.reduce([PredictedGlucoseValue(startDate: startingGlucose.startDate, quantity: startingGlucose.quantity)]) { (prediction, effect) -> [PredictedGlucoseValue] in
             if effect.0 > startingGlucose.startDate, let lastValue = prediction.last {
-                let nextValue: GlucoseValue = PredictedGlucoseValue(
+                let nextValue = PredictedGlucoseValue(
                     startDate: effect.0,
                     quantity: HKQuantity(unit: unit, doubleValue: effect.1 + lastValue.quantity.doubleValue(for: unit))
                 )

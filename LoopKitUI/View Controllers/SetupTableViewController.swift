@@ -17,6 +17,8 @@ open class SetupTableViewController: UITableViewController {
 
     private var lastContentHeight: CGFloat = 0
 
+    public var padFooterToBottom: Bool = true
+
     public weak var delegate: SetupTableViewControllerDelegate?
     
     open override func viewDidLoad() {
@@ -37,9 +39,9 @@ open class SetupTableViewController: UITableViewController {
 
             var footerSize = footerView.systemLayoutSizeFitting(CGSize(width: tableView.frame.size.width, height: UIView.layoutFittingCompressedSize.height))
             let visibleHeight = tableView.bounds.size.height - (tableView.adjustedContentInset.top + tableView.adjustedContentInset.bottom)
-            let footerPadding = max(footerSize.height, visibleHeight - tableView.contentSize.height)
+            let footerHeight = padFooterToBottom ? max(footerSize.height, visibleHeight - tableView.contentSize.height) : footerSize.height
 
-            footerSize.height = footerPadding
+            footerSize.height = footerHeight
             footerView.frame.size = footerSize
             tableView.tableFooterView = footerView
         }

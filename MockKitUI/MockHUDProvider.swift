@@ -29,7 +29,7 @@ final class MockHUDProvider: NSObject, HUDProvider {
         self.pumpManager = pumpManager
         self.lastPumpManagerStatus = pumpManager.status
         super.init()
-        pumpManager.addStateObserver(self)
+        pumpManager.addStateObserver(self, queue: .main)
     }
 
     var visible: Bool = false
@@ -94,11 +94,11 @@ final class MockHUDProvider: NSObject, HUDProvider {
 }
 
 extension MockHUDProvider: MockPumpManagerStateObserver {
-    func mockPumpManager(_ manager: MockPumpManager, didUpdateState state: MockPumpManagerState) {
+    func mockPumpManager(_ manager: MockPumpManager, didUpdate state: MockPumpManagerState) {
         updateReservoirView()
     }
 
-    func mockPumpManager(_ manager: MockPumpManager, didUpdateStatus status: PumpManagerStatus) {
+    func mockPumpManager(_ manager: MockPumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus) {
         lastPumpManagerStatus = status
         updateBatteryView()
     }

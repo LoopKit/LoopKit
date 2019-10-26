@@ -18,8 +18,8 @@ class MockDoseProgressEstimator: DoseProgressTimerEstimator {
         let elapsed = -dose.startDate.timeIntervalSinceNow
         let duration = dose.endDate.timeIntervalSince(dose.startDate)
         let percentProgress = min(elapsed / duration, 1)
-        let delivered = round(percentProgress * dose.units * 20) / 20
-        return DoseProgress(deliveredUnits: delivered, percentComplete: delivered / dose.units)
+        let delivered = round(percentProgress * dose.programmedUnits * 20) / 20
+        return DoseProgress(deliveredUnits: delivered, percentComplete: delivered / dose.programmedUnits)
     }
 
     public init(reportingQueue: DispatchQueue, dose: DoseEntry) {

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14854.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Spl-kM-4iV">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14806.4"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Override Selection View Controller-->
+        <scene sceneID="p7E-ie-b8t">
+            <objects>
+                <collectionViewController id="CyX-XF-wlB" customClass="OverrideSelectionViewController" customModule="LoopKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="LT8-DN-vX3">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="7ub-d1-epW">
+                            <size key="itemSize" width="95" height="88"/>
+                            <size key="headerReferenceSize" width="50" height="50"/>
+                            <size key="footerReferenceSize" width="50" height="50"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="OverridePresetCollectionViewCell" id="RV3-fn-j5d" customClass="OverridePresetCollectionViewCell" customModule="LoopKitUI" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="50" width="95" height="88"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="95" height="88"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🏃‍♂️" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4bj-ZV-8Bo">
+                                            <rect key="frame" x="30.5" y="15" width="34" height="36"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="sFk-RH-xOB">
+                                            <rect key="frame" x="18" y="46" width="59.5" height="34"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Running" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XmF-7n-2zE">
+                                                    <rect key="frame" x="0.0" y="0.0" width="59.5" height="19.5"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="11:59 AM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l9G-1J-Kwy">
+                                                    <rect key="frame" x="0.0" y="19.5" width="59.5" height="14.5"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                                    <color key="textColor" systemColor="tertiaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
+                                    </subviews>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="4bj-ZV-8Bo" firstAttribute="centerY" secondItem="RV3-fn-j5d" secondAttribute="centerY" multiplier="0.75" id="K6E-va-VgJ"/>
+                                    <constraint firstItem="sFk-RH-xOB" firstAttribute="centerX" secondItem="RV3-fn-j5d" secondAttribute="centerX" id="QXL-ft-OjN"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="sFk-RH-xOB" secondAttribute="bottom" id="sLk-B2-ZBc"/>
+                                    <constraint firstItem="4bj-ZV-8Bo" firstAttribute="centerX" secondItem="RV3-fn-j5d" secondAttribute="centerX" id="z3R-J0-c2I"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="nameLabel" destination="XmF-7n-2zE" id="QCp-o0-rf7"/>
+                                    <outlet property="startTimeLabel" destination="l9G-1J-Kwy" id="FrT-xo-8Fj"/>
+                                    <outlet property="symbolLabel" destination="4bj-ZV-8Bo" id="1DT-1m-Rra"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="OverrideSelectionHeaderView" id="lWb-mS-6P2" customClass="OverrideSelectionHeaderView" customModule="LoopKitUI" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SCHEDULED OVERRIDE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Beu-u4-XXI">
+                                    <rect key="frame" x="16" y="17" width="145" height="16"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                    <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="Beu-u4-XXI" firstAttribute="leading" secondItem="lWb-mS-6P2" secondAttribute="leadingMargin" constant="8" id="7Va-4u-45K"/>
+                                <constraint firstItem="Beu-u4-XXI" firstAttribute="centerY" secondItem="lWb-mS-6P2" secondAttribute="centerY" id="veN-82-aqp"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="titleLabel" destination="Beu-u4-XXI" id="cax-Fu-TFT"/>
+                            </connections>
+                        </collectionReusableView>
+                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="OverrideSelectionFooterView" id="Gu1-c6-5YX" customClass="OverrideSelectionFooterView" customModule="LoopKitUI" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="138" width="375" height="50"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Footnote about configuring presets via settings" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1kV-g0-N5O">
+                                    <rect key="frame" x="16" y="8" width="351" height="16"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                    <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="trailingMargin" secondItem="1kV-g0-N5O" secondAttribute="trailing" id="7Ux-RS-s5t"/>
+                                <constraint firstItem="1kV-g0-N5O" firstAttribute="top" secondItem="Gu1-c6-5YX" secondAttribute="topMargin" id="NyE-2g-25s"/>
+                                <constraint firstItem="1kV-g0-N5O" firstAttribute="leading" secondItem="Gu1-c6-5YX" secondAttribute="leadingMargin" constant="8" id="aaV-6E-Am5"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="textLabel" destination="1kV-g0-N5O" id="h4Q-0S-Qsn"/>
+                            </connections>
+                        </collectionReusableView>
+                        <connections>
+                            <outlet property="dataSource" destination="CyX-XF-wlB" id="TyE-Fp-lJZ"/>
+                            <outlet property="delegate" destination="CyX-XF-wlB" id="ACP-2z-NFY"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="EdJ-4n-ktD"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5Od-OU-v2w" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="54" y="-141"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="afR-oU-8Dk">
+            <objects>
+                <navigationController id="Spl-kM-4iV" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="TXT-pK-sqr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="CyX-XF-wlB" kind="relationship" relationship="rootViewController" id="1sj-w1-PXX"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vHc-lQ-W2Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-807" y="-140"/>
+        </scene>
+    </scenes>
+</document>

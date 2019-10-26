@@ -309,8 +309,11 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             }
         case .deleteCGM:
             let confirmVC = UIAlertController(cgmDeletionHandler: {
-                self.cgmManager.cgmManagerDelegate?.cgmManagerWantsDeletion(self.cgmManager)
-                self.done()
+                self.cgmManager.notifyDelegateOfDeletion {
+                    DispatchQueue.main.async {
+                        self.done()
+                    }
+                }
             })
 
             present(confirmVC, animated: true) {

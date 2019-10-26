@@ -129,7 +129,7 @@ open class QuantityFormatter {
 }
 
 
-private extension HKUnit {
+public extension HKUnit {
     var usesMassFormatterForUnitString: Bool {
         return self == .gram()
     }
@@ -139,11 +139,16 @@ private extension HKUnit {
     }
 
     var preferredFractionDigits: Int {
-        if self == HKUnit.millimolesPerLiter {
+        if self == HKUnit.millimolesPerLiter || self == HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()) {
             return 1
         } else {
             return 0
         }
+    }
+
+    // Short localized unit string with unlocalized fallback
+    func shortLocalizedUnitString() -> String {
+        return localizedUnitString(in: .short) ?? unitString
     }
 
     func localizedUnitString(in style: Formatter.UnitStyle, singular: Bool = false) -> String? {
@@ -152,6 +157,8 @@ private extension HKUnit {
             case .short, .medium:
                 return LocalizedString("U", comment: "The short unit display string for international units of insulin")
             case .long:
+                fallthrough
+            @unknown default:
                 if singular {
                     return LocalizedString("Unit", comment: "The long unit display string for a singular international unit of insulin")
                 } else {
@@ -165,6 +172,8 @@ private extension HKUnit {
             case .short, .medium:
                 return LocalizedString("U/hr", comment: "The short unit display string for international units of insulin per hour")
             case .long:
+                fallthrough
+            @unknown default:
                 if singular {
                     return LocalizedString("Unit/hour", comment: "The long unit display string for a singular international unit of insulin per hour")
                 } else {
@@ -176,8 +185,43 @@ private extension HKUnit {
         if self == HKUnit.millimolesPerLiter {
             switch style {
             case .short, .medium:
-                return LocalizedString("mmol/L", comment: "The short unit display string for millimoles of glucose per liter")
+                return LocalizedString("mmol/L", comment: "The short unit display string for millimoles per liter")
             case .long:
+                break  // Fallback to the MeasurementFormatter localization
+            @unknown default:
+                break
+            }
+        }
+
+        if self == HKUnit.milligramsPerDeciliter.unitDivided(by: HKUnit.internationalUnit()) {
+            switch style {
+            case .short, .medium:
+                return LocalizedString("mg/dL/U", comment: "The short unit display string for milligrams per deciliter per U")
+            case .long:
+                break  // Fallback to the MeasurementFormatter localization
+            @unknown default:
+                break
+            }
+        }
+
+        if self == HKUnit.millimolesPerLiter.unitDivided(by: HKUnit.internationalUnit()) {
+            switch style {
+            case .short, .medium:
+                return LocalizedString("mmol/L/U", comment: "The short unit display string for millimoles per liter per U")
+            case .long:
+                break  // Fallback to the MeasurementFormatter localization
+            @unknown default:
+                break
+            }
+        }
+
+        if self == HKUnit.gram().unitDivided(by: HKUnit.internationalUnit()) {
+            switch style {
+            case .short, .medium:
+                return LocalizedString("g/U", comment: "The short unit display string for grams per U")
+            case .long:
+                fallthrough
+            @unknown default:
                 break  // Fallback to the MeasurementFormatter localization
             }
         }

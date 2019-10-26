@@ -26,6 +26,8 @@ public struct PersistedPumpEvent {
     public let title: String?
     /// The type of pump event
     public let type: PumpEventType?
+    /// Whether the pump event is marked mutable
+    public let isMutable: Bool
 }
 
 
@@ -39,7 +41,8 @@ extension PumpEvent {
             objectIDURL: objectID.uriRepresentation(),
             raw: raw,
             title: title,
-            type: type
+            type: type,
+            isMutable: mutable
         )
     }
 }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14854.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14806.4"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="54" id="dSs-90-isK" userLabel="Glucose Range Table View Cell" customClass="DoubleRangeTableViewCell" customModule="LoopKitUI" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="450" height="54"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dSs-90-isK" id="Xut-Jf-WRX">
+                <rect key="frame" x="0.0" y="0.0" width="450" height="54"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jZM-G3-SpT">
+                        <rect key="frame" x="15" y="11" width="420" height="32"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="248" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4xh-8v-ht7">
+                                <rect key="frame" x="0.0" y="0.0" width="286.5" height="32"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" alignment="center" spacing="3" baselineRelativeArrangement="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5BP-84-ufj">
+                                <rect key="frame" x="286.5" y="0.0" width="133.5" height="32"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="min" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="i0F-ik-iSL" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="5.5" width="32" height="21"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="–" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ol7-Pn-2NT">
+                                        <rect key="frame" x="35" y="6" width="8.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="max" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="v56-j6-gA3" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
+                                        <rect key="frame" x="46.5" y="5.5" width="32" height="21"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="U/hour" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kwu-BV-vv7">
+                                        <rect key="frame" x="81.5" y="6" width="52" height="20.5"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="i0F-ik-iSL" firstAttribute="width" secondItem="v56-j6-gA3" secondAttribute="width" id="Fgh-Oh-OvF"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="jZM-G3-SpT" firstAttribute="leading" secondItem="Xut-Jf-WRX" secondAttribute="leadingMargin" id="RKX-L5-kqN"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="jZM-G3-SpT" secondAttribute="trailing" id="RtY-FP-smz"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="jZM-G3-SpT" secondAttribute="bottom" id="d0Y-q2-by7"/>
+                    <constraint firstItem="jZM-G3-SpT" firstAttribute="top" secondItem="Xut-Jf-WRX" secondAttribute="topMargin" id="fhW-vR-gIU"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="maxValueTextField" destination="v56-j6-gA3" id="EMC-Tb-1lV"/>
+                <outlet property="minValueTextField" destination="i0F-ik-iSL" id="Fbj-bb-etL"/>
+                <outlet property="titleLabel" destination="4xh-8v-ht7" id="02U-gu-qE8"/>
+                <outlet property="unitLabel" destination="kwu-BV-vv7" id="BT8-Cs-zDJ"/>
+            </connections>
+            <point key="canvasLocation" x="313.60000000000002" y="295.95202398800603"/>
+        </tableViewCell>
+    </objects>
+</document>

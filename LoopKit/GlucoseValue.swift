@@ -14,7 +14,7 @@ public protocol GlucoseValue: SampleValue {
 }
 
 
-public struct PredictedGlucoseValue: GlucoseValue {
+public struct PredictedGlucoseValue: Equatable, GlucoseValue {
     public let startDate: Date
     public let quantity: HKQuantity
 
