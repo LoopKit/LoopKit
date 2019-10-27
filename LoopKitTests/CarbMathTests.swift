@@ -139,6 +139,8 @@ class CarbMathTests: XCTestCase {
         let input = loadHistoryFixture("carb_effect_from_history_input")
         let output = loadEffectOutputFixture()
         let (carbRatios, insulinSensitivities) = loadSchedules()
+        
+        CarbAbsorptionModel.settings = CarbModelSettings(absorptionModel: ParabolicAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
 
         let effects = input.glucoseEffects(carbRatios: carbRatios, insulinSensitivities: insulinSensitivities, defaultAbsorptionTime: TimeInterval(minutes: 180))
 
@@ -153,6 +155,8 @@ class CarbMathTests: XCTestCase {
     func testCarbsOnBoardFromHistory() {
         let input = loadHistoryFixture("carb_effect_from_history_input")
         let output = loadCOBOutputFixture("carbs_on_board_output")
+        
+        CarbAbsorptionModel.settings = CarbModelSettings(absorptionModel: ParabolicAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
 
         let cob = input.carbsOnBoard(defaultAbsorptionTime: TimeInterval(minutes: 180), delay: TimeInterval(minutes: 10), delta: TimeInterval(minutes: 5))
 
@@ -175,6 +179,8 @@ class CarbMathTests: XCTestCase {
             medium: TimeInterval(hours: 2),
             slow: TimeInterval(hours: 4)
         )
+        
+        CarbAbsorptionModel.settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium, adaptiveAbsorptionRateEnabled: false)
         
         let futureCarbEntry = carbEntries[2]
         
@@ -223,6 +229,8 @@ class CarbMathTests: XCTestCase {
             medium: TimeInterval(hours: 2),
             slow: TimeInterval(hours: 4)
         )
+        
+        CarbAbsorptionModel.settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium, adaptiveAbsorptionRateEnabled: false)
 
         let statuses = [carbEntries[0]].map(
             to: inputICE,
@@ -331,6 +339,8 @@ class CarbMathTests: XCTestCase {
             medium: TimeInterval(hours: 2),
             slow: TimeInterval(hours: 4)
         )
+        
+        CarbAbsorptionModel.settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium, adaptiveAbsorptionRateEnabled: false)
         
         let statuses = [carbEntries[1]].map(
             to: inputICE,
