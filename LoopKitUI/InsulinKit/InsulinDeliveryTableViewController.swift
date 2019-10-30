@@ -32,7 +32,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 doseStoreObserver = NotificationCenter.default.addObserver(forName: nil, object: doseStore, queue: OperationQueue.main, using: { [weak self] (note) -> Void in
 
                     switch note.name {
-                    case Notification.Name.DoseStoreValuesDidChange:
+                    case DoseStore.valuesDidChange:
                         if self?.isViewLoaded == true {
                             self?.reloadData()
                         }

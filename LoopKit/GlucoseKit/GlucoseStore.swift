@@ -17,13 +17,6 @@ public enum GlucoseStoreResult<T> {
     case failure(Error)
 }
 
-
-extension NSNotification.Name {
-    /// Notification posted when glucose samples were changed, either via add/replace/delete methods or from HealthKit
-    public static let GlucoseSamplesDidChange = NSNotification.Name(rawValue: "com.loopkit.GlucoseStore.GlucoseSamplesDidChange")
-}
-
-
 /**
  Manages storage, retrieval, and calculation of glucose data.
  
@@ -46,6 +39,9 @@ extension NSNotification.Name {
 ```
  */
 public final class GlucoseStore: HealthKitSampleStore {
+
+    /// Notification posted when glucose samples were changed, either via add/replace/delete methods or from HealthKit
+    public static let glucoseSamplesDidChange = NSNotification.Name(rawValue: "com.loopkit.GlucoseStore.glucoseSamplesDidChange")
 
     private let glucoseType = HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!
 
@@ -150,7 +146,7 @@ public final class GlucoseStore: HealthKitSampleStore {
             }
 
             if samplesAddedByExternalSourceWithinManagedDataInterval {
-                NotificationCenter.default.post(name: .GlucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
+                NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
             }
         }
     }
@@ -213,7 +209,7 @@ extension GlucoseStore {
                     self.updateLatestGlucose()
 
                     completion(.success(glucose))
-                    NotificationCenter.default.post(name: .GlucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
+                    NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
                 } else {
                     assertionFailure()
                 }

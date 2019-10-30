@@ -14,11 +14,6 @@ enum InsulinDeliveryStoreResult<T> {
     case failure(Error)
 }
 
-public extension NSNotification.Name {
-    /// Notification posted when cached data was modifed.
-    static let InsulinDeliveryStoreCacheDidChange = NSNotification.Name(rawValue: "com.loopkit.InsulinDeliveryStore.CacheDidChangeNotification")
-}
-
 /// Manages insulin dose data from HealthKit
 ///
 /// Scheduled doses (e.g. a bolus or temporary basal) shouldn't be written to HealthKit until they've
@@ -28,6 +23,10 @@ public extension NSNotification.Name {
 /// HealthKit data isn't a substitute for an insulin pump's diagnostic event history, but doses fetched
 /// from HealthKit can reduce the amount of repeated communication with an insulin pump.
 public class InsulinDeliveryStore: HealthKitSampleStore {
+    
+    /// Notification posted when cached data was modifed.
+    static let cacheDidChange = NSNotification.Name(rawValue: "com.loopkit.InsulinDeliveryStore.cacheDidChange")
+
     private let insulinType = HKQuantityType.quantityType(forIdentifier: .insulinDelivery)!
 
     private let queue = DispatchQueue(label: "com.loopkit.InsulinKit.InsulinDeliveryStore.queue", qos: .utility)
@@ -104,7 +103,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
             // That external data could be factored into dose computation with some modification:
             // An example might be supplemental injections in cases of extended exercise periods without a pump
             if cacheChanged {
-                NotificationCenter.default.post(name: .InsulinDeliveryStoreCacheDidChange, object: self)
+                NotificationCenter.default.post(name: InsulinDeliveryStore.cacheDidChange, object: self)
             }
         }
     }
