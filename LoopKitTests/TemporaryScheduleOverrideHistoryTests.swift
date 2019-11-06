@@ -14,11 +14,14 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
     // Midnight of an arbitrary date
     let referenceDate = Calendar.current.startOfDay(for: Date(timeIntervalSinceReferenceDate: .hours(100_000)))
 
-    let basalRateSchedule = BasalRateSchedule(dailyItems: [
-        RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
-        RepeatingScheduleValue(startTime: .hours(6), value: 1.4),
-        RepeatingScheduleValue(startTime: .hours(20), value: 1.0)
-    ])!
+    let basalRateSchedule = BasalRateSchedule(
+        dailyItems: [
+            RepeatingScheduleValue(startTime: .hours(0), value: 1.2),
+            RepeatingScheduleValue(startTime: .hours(6), value: 1.4),
+            RepeatingScheduleValue(startTime: .hours(20), value: 1.0)
+        ],
+        timeZone: Calendar.current.timeZone
+    )!
 
     let history = TemporaryScheduleOverrideHistory()
 
@@ -46,7 +49,6 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
     private func historyResolves(to expected: BasalRateSchedule, referenceDateOffset: TimeInterval = 0) -> Bool {
         let referenceDate = self.referenceDate + referenceDateOffset
         let actual = history.resolvingRecentBasalSchedule(basalRateSchedule, relativeTo: referenceDate)
-        print(actual)
         return actual.equals(expected, accuracy: 1e-6)
     }
 
