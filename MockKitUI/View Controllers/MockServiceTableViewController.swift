@@ -55,13 +55,12 @@ final class MockServiceTableViewController: UITableViewController {
     @objc private func done() {
         switch operation {
         case .create:
+            service.completeCreate()
             if let serviceViewController = navigationController as? ServiceViewController {
                 serviceViewController.notifyServiceCreated(service)
             }
         case .update:
-            if let serviceViewController = navigationController as? ServiceViewController {
-                serviceViewController.notifyServiceUpdated(service)
-            }
+            service.completeUpdate()
         }
 
         notifyComplete()
@@ -69,6 +68,7 @@ final class MockServiceTableViewController: UITableViewController {
 
     private func confirmDeletion(completion: (() -> Void)? = nil) {
         let alert = UIAlertController(serviceDeletionHandler: {
+            self.service.completeDelete()
             if let serviceViewController = self.navigationController as? ServiceViewController {
                 serviceViewController.notifyServiceDeleted(self.service)
             }

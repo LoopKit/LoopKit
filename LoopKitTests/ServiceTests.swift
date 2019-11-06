@@ -40,6 +40,8 @@ fileprivate class TestService: Service {
 
     static var localizedTitle: String { return "Test Service" }
 
+    public weak var serviceDelegate: ServiceDelegate?
+
     init() {}
 
     required init?(rawState: RawStateValue) { return nil }

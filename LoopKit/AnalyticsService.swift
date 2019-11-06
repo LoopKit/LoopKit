@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol AnalyticsService {
+public protocol AnalyticsService: Service {
 
     func recordAnalyticsEvent(_ name: String, withProperties properties: [AnyHashable: Any]?, outOfSession: Bool)
 
