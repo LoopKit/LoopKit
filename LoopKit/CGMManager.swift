@@ -75,6 +75,12 @@ public protocol CGMManager: DeviceManager {
     /// - Parameters:
     ///   - completion: A closure called when operation has completed
     func fetchNewDataIfNeeded(_ completion: @escaping (CGMResult) -> Void) -> Void
+    
+    /// Acknowledges the alert identified
+    ///
+    /// - Parameters:
+    ///   - alertID: identifier of the alert to acknowledge
+    func acknowledgeAlert(alertID: Int) -> Void
 }
 
 
@@ -92,5 +98,9 @@ public extension CGMManager {
             self.cgmManagerDelegate?.cgmManagerWantsDeletion(self)
             completion()
         }
+    }
+    
+    func acknowledgeAlert(alertID: Int) {
+        //optional
     }
 }
