@@ -17,7 +17,11 @@
 "Generate Data" = "Generate Data";
 
 /* The title text for the glucose target range schedule */
-"Glucose Target Range" = "Glucose Target Range";
+"Correction Range" = "Correction Range";
+
+/* The title of the insulin sensitivity schedule screen
+   The title text for the insulin sensitivity schedule */
+"Insulin Sensitivity" = "Insulin Sensitivity";
 
 /* The title text for the pump ID */
 "Pump ID" = "Pump ID";

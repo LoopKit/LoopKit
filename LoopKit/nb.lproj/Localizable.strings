@@ -41,7 +41,7 @@
 "Flat" = "Flatt";
 
 /* The short unit display string for grams per U */
-"g/U" = "g/U";
+"g/U" = "g/E";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Ugyldig konfigurasjon";
@@ -86,13 +86,14 @@
 "U/hr" = "E/hr";
 
 /* The long unit display string for a singular international unit of insulin */
-"Unit" = "Unit";
+"Unit" = "Enhet";
 
 /* The long unit display string for a singular international unit of insulin per hour */
-"Unit/hour" = "Unit/hour";
+"Unit/hour" = "Enhet/time";
 
 /* The long unit display string for international units of insulin */
 "Units" = "Enheter";
 
 /* The long unit display string for international units of insulin per hour */
-"Units/hour" = "Units/hour";
+"Units/hour" = "Enheter/time";
+

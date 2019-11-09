@@ -30,10 +30,10 @@
 "Are you sure you want to delete all reservoir values?" = "Tem certeza de que deseja excluir todos os valores do reservatório?";
 
 /* The title of the button to add the credentials for a service */
-"authentication-button-add" = "Adicionar Conta";
+"Add Account" = "Adicionar Conta";
 
 /* The title of the button to remove the credentials for a service */
-"authentication-button-delete" = "Remover Conta";
+"Delete Account" = "Remover Conta";
 
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "As quantidades basais, de bolus e de dose de insulina de correção diminuem em %@%%.";
@@ -54,10 +54,10 @@
 "Canceling Temp Basal" = "Cancelar Basal Temporária";
 
 /* The title of the view controller to create a new carb entry */
-"carb-entry-title-add" = "Adicionar Carb";
+"Add Carb Entry" = "Adicionar Carb";
 
 /* The title of the view controller to edit an existing carb entry */
-"carb-entry-title-edit" = "Editar Carb";
+"Edit Carb Entry" = "Editar Carb";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "As alterações serão aplicadas apenas desta vez que você ativar a sobreposição. As configurações padrão de %@ não serão afetadas.";
@@ -221,7 +221,7 @@
 "Temporary Override" = "Sobreposição Temporária";
 
 /* The default placeholder string for a credential */
-"text-placeholder-required" = "Obrigatório";
+"Required" = "Obrigatório";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "O tempo máximo de absorção é %@";

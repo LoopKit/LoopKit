@@ -1,21 +1,21 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% norm. insuliinista";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
 /* The format for an override preset cell. (1: symbol)(2: name)
    The format for an override symbol and name (1: symbol)(2: name) */
 "%1$@ %2$@" = "%1$@ %2$@";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ yksikköä jäljellä klo %2$@";
-
-/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
-"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
-
-/* The format for an insulin needs percentage. */
-"%@%% of normal insulin" = "%@%% norm. insuliinista";
-
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
-
-/* Format string for reservoir volume. (1: The localized volume) */
-"%@U" = "%@U";
 
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Imeytymisaika";
@@ -30,10 +30,10 @@
 "Are you sure you want to delete all reservoir values?" = "Haluatko varmasti poistaa kaikki säiliön arvot?";
 
 /* The title of the button to add the credentials for a service */
-"authentication-button-add" = "Lisää tili";
+"Add Account" = "Lisää tili";
 
 /* The title of the button to remove the credentials for a service */
-"authentication-button-delete" = "Poista tili";
+"Delete Account" = "Poista tili";
 
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Basaalin, boluksen ja korjaavan insuliiniannoksen määriä vähennetään %@%%.";
@@ -54,10 +54,10 @@
 "Canceling Temp Basal" = "Kumotaan tilapäinen basaali";
 
 /* The title of the view controller to create a new carb entry */
-"carb-entry-title-add" = "Lisää hiilihydraatteja";
+"Add Carb Entry" = "Lisää hiilihydraatteja";
 
 /* The title of the view controller to edit an existing carb entry */
-"carb-entry-title-edit" = "Muokkaa hiilihydraatteja";
+"Edit Carb Entry" = "Muokkaa hiilihydraatteja";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Muutokset otetaan käyttöön vain tällä kertaa, kun otat tilapäisasetuksen käyttöön. Alkuperäiset %@-asetukset pysyvät ennallaan.";
@@ -221,7 +221,7 @@
 "Temporary Override" = "Tilapäisasetus";
 
 /* The default placeholder string for a credential */
-"text-placeholder-required" = "Pakollinen";
+"Required" = "Pakollinen";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Pisin sallittu imeytymisaika on %@";
@@ -250,3 +250,4 @@
 
 /* Title for the workout override range */
 "Workout" = "Liikunta";
+

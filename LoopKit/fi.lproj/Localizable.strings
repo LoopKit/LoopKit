@@ -59,7 +59,7 @@
 "mmol/L/U" = "mmol/L/U";
 
 /* Sensor state description for the non-valid state */
-"Needs Attention" = "Tarvitsee huomion";
+"Needs Attention" = "Tarvitsee huomiota";
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "Arvoja ei löydy";
@@ -96,3 +96,4 @@
 
 /* The long unit display string for international units of insulin per hour */
 "Units/hour" = "Yksikköä/tunnissa";
+

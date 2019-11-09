@@ -23,7 +23,7 @@
 	<key>NSHealthShareUsageDescription</key>
 	<string>Meal data from the Health database is used to determine glucose effects. Glucose data is retrieved from HealthKit for graphing and analysis.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>Carbhydrate meal data entered in the app is stored in the Health database. Glucose data is stored securely in HealthKit.</string>
+	<string>Carbohydrate meal data entered in the app is stored in the Health database. Glucose data is stored securely in HealthKit.</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
 </dict>

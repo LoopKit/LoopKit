@@ -1,4 +1,3 @@
-
 /* Class = "UILabel"; text = "Title"; ObjectID = "7Fi-wD-gf2"; */
 "7Fi-wD-gf2.text" = "标题";
 
@@ -7,15 +6,6 @@
 
 /* Class = "UILabel"; text = "Detail"; ObjectID = "9jm-X6-3QA"; */
 "9jm-X6-3QA.text" = "详情";
-
-/* Class = "UILabel"; text = "..."; ObjectID = "PZQ-gO-084"; */
-"PZQ-gO-084.text" = "...";
-
-/* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[0] = "Reservoir"; ObjectID = "TyZ-xm-mVN"; */
-"TyZ-xm-mVN.segmentTitles[0]" = "储药器";
-
-/* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[1] = "Event History"; ObjectID = "TyZ-xm-mVN"; */
-"TyZ-xm-mVN.segmentTitles[1]" = "历史事件";
 
 /* Class = "UILabel"; text = "U IOB"; ObjectID = "dZi-Ta-IHm"; */
 "dZi-Ta-IHm.text" = "单位 活性胰岛素";
@@ -26,5 +16,15 @@
 /* Class = "UILabel"; text = "U Total"; ObjectID = "kys-by-14s"; */
 "kys-by-14s.text" = "单位 总计";
 
+/* Class = "UILabel"; text = "..."; ObjectID = "PZQ-gO-084"; */
+"PZQ-gO-084.text" = "...";
+
+/* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[0] = "Reservoir"; ObjectID = "TyZ-xm-mVN"; */
+"TyZ-xm-mVN.segmentTitles[0]" = "储药器";
+
+/* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[1] = "Event History"; ObjectID = "TyZ-xm-mVN"; */
+"TyZ-xm-mVN.segmentTitles[1]" = "历史事件";
+
 /* Class = "UINavigationItem"; title = "Insulin Delivery"; ObjectID = "vls-EW-uwI"; */
 "vls-EW-uwI.title" = "已输注胰岛素";
+

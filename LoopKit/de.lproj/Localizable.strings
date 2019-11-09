@@ -1,8 +1,8 @@
 /* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ E bolus fehlgeschlagen";
+"%1$@ U bolus failed" = "%1$@ IE bolus fehlgeschlagen";
 
 /* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ E bolus wurde wohl nicht abgegeben";
+"%1$@ U bolus may not have succeeded" = "%1$@ IE bolus wurde wohl nicht abgegeben";
 
 /* The error description describing when Health sharing was denied */
 "Authorization Denied" = "Autorisierung verweigert";
@@ -41,7 +41,7 @@
 "Flat" = "Gleichbleibend";
 
 /* The short unit display string for grams per U */
-"g/U" = "g/U";
+"g/U" = "g/IE";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Fehlerhafte Konfiguration";
@@ -50,13 +50,13 @@
 "It is safe to retry" = "Es ist sicher um es noch mal zu versuchen";
 
 /* The short unit display string for milligrams per deciliter per U */
-"mg/dL/U" = "mg/dL/U";
+"mg/dL/U" = "mg/dL/IE";
 
 /* The short unit display string for millimoles per liter */
 "mmol/L" = "mmol/L";
 
 /* The short unit display string for millimoles per liter per U */
-"mmol/L/U" = "mmol/L/U";
+"mmol/L/U" = "mmol/L/IE";
 
 /* Sensor state description for the non-valid state */
 "Needs Attention" = "Erfordert Aufmerksamkeit";
@@ -80,19 +80,20 @@
 "Rising very fast" = "Steigt sehr schnell";
 
 /* The short unit display string for international units of insulin */
-"U" = "U";
+"U" = "IE";
 
 /* The short unit display string for international units of insulin per hour */
-"U/hr" = "U/hr";
+"U/hr" = "IE/Std.";
 
 /* The long unit display string for a singular international unit of insulin */
-"Unit" = "Unit";
+"Unit" = "Einheit";
 
 /* The long unit display string for a singular international unit of insulin per hour */
-"Unit/hour" = "Unit/hour";
+"Unit/hour" = "Einheit/Std.";
 
 /* The long unit display string for international units of insulin */
 "Units" = "Einheiten";
 
 /* The long unit display string for international units of insulin per hour */
-"Units/hour" = "Units/hour";
+"Units/hour" = "Einheiten/Stunde";
+

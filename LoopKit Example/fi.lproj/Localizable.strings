@@ -14,7 +14,7 @@
 "Diagnostic" = "Diagnostiikka";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Syötä 6-numeroinen pumpun ID";
+"Enter the 6-digit pump ID" = "Syötä 6-numeroinen pumpun sarjanumero";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Luo tiedot";
@@ -24,7 +24,7 @@
 "Insulin Sensitivity" = "Insuliiniherkkyys";
 
 /* The title text for the pump ID */
-"Pump ID" = "Pumpun ID";
+"Pump ID" = "Pumpun sarjanumero";
 
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "Säiliö";
@@ -36,4 +36,5 @@
 "Sync With Pump" = "Synkronoi pumpun kanssa";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
-"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Pumpun ID löytyy pumpun takaosasta tai STATUS/Esc-valikon loppuosasta. Se on pelkästään numeroita sisältävä osa sarjanumerosta (SN tai S/N).";
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Pumpun sarjanumero löytyy pumpun takaosasta tai STATUS/Esc-valikon loppuosasta. Se on pelkästään numeroita sisältävä osa sarjanumerosta (SN tai S/N).";
+

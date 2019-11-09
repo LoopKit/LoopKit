@@ -100,9 +100,9 @@ public final class CarbEntryEditViewController: UITableViewController {
         tableView.register(DateAndDurationTableViewCell.nib(), forCellReuseIdentifier: DateAndDurationTableViewCell.className)
 
         if originalCarbEntry != nil {
-            title = LocalizedString("carb-entry-title-edit", value: "Edit Carb Entry", comment: "The title of the view controller to edit an existing carb entry")
+            title = LocalizedString("Edit Carb Entry", value: "Edit Carb Entry", comment: "The title of the view controller to edit an existing carb entry")
         } else {
-            title = LocalizedString("carb-entry-title-add", value: "Add Carb Entry", comment: "The title of the view controller to create a new carb entry")
+            title = LocalizedString("Add Carb Entry", value: "Add Carb Entry", comment: "The title of the view controller to create a new carb entry")
         }
     }
 

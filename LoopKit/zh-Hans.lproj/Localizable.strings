@@ -41,7 +41,7 @@
 "Flat" = "平稳";
 
 /* The short unit display string for grams per U */
-"g/U" = "g/U";
+"g/U" = "克/U";
 
 /* Generic pump error description */
 "Invalid Configuration" = "无效配置";
@@ -50,13 +50,13 @@
 "It is safe to retry" = "重试";
 
 /* The short unit display string for milligrams per deciliter per U */
-"mg/dL/U" = "mg/dL/U";
+"mg/dL/U" = "毫克/分升/U";
 
 /* The short unit display string for millimoles per liter */
 "mmol/L" = "毫摩尔/升";
 
 /* The short unit display string for millimoles per liter per U */
-"mmol/L/U" = "mmol/L/U";
+"mmol/L/U" = "毫摩尔/升/U";
 
 /* Sensor state description for the non-valid state */
 "Needs Attention" = "请注意";
@@ -65,7 +65,7 @@
 "No values found" = "未发现数据";
 
 /* Sensor state description for the valid state */
-"OK" = "好";
+"OK" = "OK";
 
 /* The error recovery suggestion when Health sharing was denied */
 "Please re-enable sharing in Health" = "请先在Health Kit中允许Loop读写数据";
@@ -80,19 +80,20 @@
 "Rising very fast" = "非常快速上升";
 
 /* The short unit display string for international units of insulin */
-"U" = "单位";
+"U" = "U";
 
 /* The short unit display string for international units of insulin per hour */
-"U/hr" = "单位/hr";
+"U/hr" = "U/小时";
 
 /* The long unit display string for a singular international unit of insulin */
 "Unit" = "单位";
 
 /* The long unit display string for a singular international unit of insulin per hour */
-"Unit/hour" = "单位/hour";
+"Unit/hour" = "单位/小时";
 
 /* The long unit display string for international units of insulin */
 "Units" = "单位";
 
 /* The long unit display string for international units of insulin per hour */
-"Units/hour" = "单位/hour";
+"Units/hour" = "单位/小时";
+

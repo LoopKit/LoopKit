@@ -1,0 +1,6 @@
+/* The alert title for a resume error */
+"Error Resuming" = "Fout bij hervatten";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Fout bij onderbreken";
+
