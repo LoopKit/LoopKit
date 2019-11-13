@@ -438,6 +438,10 @@
 		89D204D221CC837A001238CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89D204D121CC837A001238CC /* Assets.xcassets */; };
 		89F53E9422B4328E0024A67C /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B33226D15E0004D9350 /* MutableCollection.swift */; };
 		89F53E9522B437570024A67C /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B33226D15E0004D9350 /* MutableCollection.swift */; };
+		9E78433F236653F00016C583 /* ice_35_min_none_piecewiselinear_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 9E78433E236653F00016C583 /* ice_35_min_none_piecewiselinear_output.json */; };
+		9E784341236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 9E784340236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json */; };
+		9E784343236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 9E784342236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json */; };
+		9E78434523665B5A0016C583 /* ice_35_min_partial_piecewiselinear_adaptiverate_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 9E78434423665B5A0016C583 /* ice_35_min_partial_piecewiselinear_adaptiverate_output.json */; };
 		A9E6758222713F4700E25293 /* LoopNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */; };
 		A9E6758322713F4700E25293 /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
 		A9E6758422713F4700E25293 /* NewCarbEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE5B1C7291D80073BE78 /* NewCarbEntry.swift */; };
@@ -1124,6 +1128,10 @@
 		89D2049221CC7C13001238CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89D204D121CC837A001238CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89DC540C21B75AE7005A1CE0 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		9E78433E236653F00016C583 /* ice_35_min_none_piecewiselinear_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ice_35_min_none_piecewiselinear_output.json; sourceTree = "<group>"; };
+		9E784340236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ice_35_min_partial_piecewiselinear_output.json; sourceTree = "<group>"; };
+		9E784342236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ice_slow_absorption_piecewiselinear_output.json; sourceTree = "<group>"; };
+		9E78434423665B5A0016C583 /* ice_35_min_partial_piecewiselinear_adaptiverate_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ice_35_min_partial_piecewiselinear_adaptiverate_output.json; sourceTree = "<group>"; };
 		A9E675F022713F4700E25293 /* LoopKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoopKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9E675F2227140D800E25293 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		A9E675F4227140DD00E25293 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -1649,6 +1657,10 @@
 				4359E74F1EED04330022EF0C /* ice_35_min_partial_output.json */,
 				439BCD911EEDD33F00100EAA /* ice_slow_absorption_output.json */,
 				C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */,
+				9E78433E236653F00016C583 /* ice_35_min_none_piecewiselinear_output.json */,
+				9E784340236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json */,
+				9E784342236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json */,
+				9E78434423665B5A0016C583 /* ice_35_min_partial_piecewiselinear_adaptiverate_output.json */,
 			);
 			path = CarbKit;
 			sourceTree = "<group>";
@@ -2243,6 +2255,7 @@
 				435D2929205F3C760026F401 /* momentum_effect_rising_glucose_double_entries_input.json in Resources */,
 				4322B7AB202FA3D20002837D /* momentum_effect_stable_glucose_input.json in Resources */,
 				43D988A61C87FFA300DA4467 /* glucose_from_effects_momentum_flat_glucose_input.json in Resources */,
+				9E784341236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json in Resources */,
 				437874D5202FDD2D00A3D8B9 /* suspend_dose_reconciled_normalized.json in Resources */,
 				435D2925205F3A670026F401 /* counteraction_effect_falling_glucose_almost_duplicates_input.json in Resources */,
 				437874CD202FDD2D00A3D8B9 /* reconcile_history_output.json in Resources */,
@@ -2283,11 +2296,13 @@
 				437874D6202FDD2D00A3D8B9 /* suspend_dose_reconciled.json in Resources */,
 				4343951F205EED1F0056DC37 /* counteraction_effect_falling_glucose_output.json in Resources */,
 				43D988AE1C87FFA300DA4467 /* glucose_from_effects_glucose_input.json in Resources */,
+				9E78433F236653F00016C583 /* ice_35_min_none_piecewiselinear_output.json in Resources */,
 				4322B7AA202FA3D20002837D /* momentum_effect_rising_glucose_output.json in Resources */,
 				437874C3202FDD2D00A3D8B9 /* iob_from_bolus_420min_output.json in Resources */,
 				437874C5202FDD2D00A3D8B9 /* iob_from_doses_exponential_output.json in Resources */,
 				437874C2202FDD2D00A3D8B9 /* iob_from_bolus_360min_output.json in Resources */,
 				43026D642132404900A332E2 /* ice_minus_flat_carb_effect_output.json in Resources */,
+				9E784343236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json in Resources */,
 				43DC87BB1C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json in Resources */,
 				4322B7A1202FA3D20002837D /* momentum_effect_bouncing_glucose_input.json in Resources */,
 				43D988A91C87FFA300DA4467 /* glucose_from_effects_momentum_blend_output.json in Resources */,
@@ -2324,6 +2339,7 @@
 				437874B8202FDD2D00A3D8B9 /* bolus_dose.json in Resources */,
 				43D8FEF71C7295500073BE78 /* basal.json in Resources */,
 				4322B79D202FA3CC0002837D /* ice_35_min_none_output.json in Resources */,
+				9E78434523665B5A0016C583 /* ice_35_min_partial_piecewiselinear_adaptiverate_output.json in Resources */,
 				43D988A31C87FFA300DA4467 /* glucose_from_effects_momentum_up_input.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
