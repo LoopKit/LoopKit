@@ -750,7 +750,7 @@ extension DoseStore {
 
             // Only change pumpEventQueryAfterDate if we received new finalized records.
             if let finalDate = lastFinalDate {
-                if let mutableDate = firstMutableDate {
+                if let mutableDate = firstMutableDate, mutableDate < finalDate {
                     self.pumpEventQueryAfterDate = mutableDate
                 } else {
                     self.pumpEventQueryAfterDate = finalDate
