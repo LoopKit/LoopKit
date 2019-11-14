@@ -4,5 +4,5 @@ xcode_scheme:
     - LoopKit
     - LoopKitUI
 script:
-   - set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 6' test | xcpretty
-   - set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme "LoopKit Example" build -destination 'name=iPhone 6' CODE_SIGNING_ALLOWED=NO | xcpretty
+   - set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 8' test | xcpretty
+   - set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme "LoopKit Example" build -destination 'name=iPhone 8' CODE_SIGNING_ALLOWED=NO | xcpretty

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol RemoteDataService {
+public protocol RemoteDataService: Service {
 
     func uploadSettings(_ settings: Settings, lastUpdated: Date)
 

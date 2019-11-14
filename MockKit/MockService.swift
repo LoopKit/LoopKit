@@ -15,6 +15,8 @@ public final class MockService: Service {
 
     public static let localizedTitle = "Simulator"
 
+    public weak var serviceDelegate: ServiceDelegate?
+
     public var remoteData: Bool
 
     public var logging: Bool
@@ -48,6 +50,14 @@ public final class MockService: Service {
             "analytics": analytics
         ]
     }
+
+    public func completeCreate() {}
+
+    public func completeUpdate() {
+        serviceDelegate?.serviceDidUpdateState(self)
+    }
+
+    public func completeDelete() {}
 
     private func record(_ message: String) {
         let timestamp = dateFormatter.string(from: Date())

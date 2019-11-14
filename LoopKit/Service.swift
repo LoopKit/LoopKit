@@ -6,6 +6,17 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
+public protocol ServiceDelegate: AnyObject {
+
+    /// Informs the delegate that the state of the specified service was updated and the
+    /// delegate should persist the service.
+    ///
+    /// - Parameters:
+    ///     - service: The service whose state was updated.
+    func serviceDidUpdateState(_ service: Service)
+
+}
+
 public protocol Service: AnyObject {
 
     typealias RawStateValue = [String: Any]
@@ -15,6 +26,9 @@ public protocol Service: AnyObject {
 
     /// The localized title of this type of service.
     static var localizedTitle: String { get }
+
+    /// The delegate to notify of service updates.
+    var serviceDelegate: ServiceDelegate? { get set }
 
     /// Initializes the service with the previously-serialized state.
     ///

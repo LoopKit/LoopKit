@@ -8,7 +8,7 @@
 
 import os.log
 
-public protocol LoggingService {
+public protocol Logging {
 
     /// Log a message for the specific subsystem, category, type, and optional arguments. Modeled after OSLog, but
     /// captures all of the necessary data in one function call per message. Note that like OSLog, the message may
@@ -27,9 +27,11 @@ public protocol LoggingService {
 
 }
 
-public class SharedLoggingService {
+public protocol LoggingService: Logging, Service {}
 
-    /// A shared, global instance of LoggingService.
-    public static var instance: LoggingService?
+public class SharedLogging {
+
+    /// A shared, global instance of Logging.
+    public static var instance: Logging?
 
 }

@@ -18,6 +18,6 @@ public protocol ServiceUI: Service {
     /// Provides a view controller to configure an existing service.
     ///
     /// - Returns: A view controller to configure an existing service.
-    func settingsViewController() -> (UIViewController & ServiceSetupNotifying & CompletionNotifying)
+    func settingsViewController() -> (UIViewController & ServiceSettingsNotifying & CompletionNotifying)
 
 }

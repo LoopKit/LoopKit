@@ -56,10 +56,10 @@ public class DiagnosticLog {
             os_log(message, log: log, type: type, args)
         }
 
-        guard let sharedLoggingService = SharedLoggingService.instance else {
+        guard let sharedLogging = SharedLogging.instance else {
             return
         }
-        sharedLoggingService.log(message, subsystem: subsystem, category: category, type: type, args)
+        sharedLogging.log(message, subsystem: subsystem, category: category, type: type, args)
     }
 
 }

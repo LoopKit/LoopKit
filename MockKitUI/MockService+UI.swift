@@ -16,7 +16,7 @@ extension MockService: ServiceUI {
         return ServiceViewController(rootViewController: MockServiceTableViewController(service: MockService(), for: .create))
     }
 
-    public func settingsViewController() -> (UIViewController & ServiceSetupNotifying & CompletionNotifying) {
+    public func settingsViewController() -> (UIViewController & ServiceSettingsNotifying & CompletionNotifying) {
       return ServiceViewController(rootViewController: MockServiceTableViewController(service: self, for: .update))
     }
     

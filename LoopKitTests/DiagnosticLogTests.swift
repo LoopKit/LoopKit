@@ -13,16 +13,16 @@ import os.log
 
 class DiagnosticLogTests: XCTestCase {
     
-    fileprivate var testLoggingService: TestLoggingService!
+    fileprivate var testLogging: TestLogging!
     
     override func setUp() {
-        testLoggingService = TestLoggingService()
-        SharedLoggingService.instance = testLoggingService
+        testLogging = TestLogging()
+        SharedLogging.instance = testLogging
     }
     
     override func tearDown() {
-        SharedLoggingService.instance = nil
-        testLoggingService = nil
+        SharedLogging.instance = nil
+        testLogging = nil
     }
     
     func testInitializer() {
@@ -34,11 +34,11 @@ class DiagnosticLogTests: XCTestCase {
         
         diagnosticLog.debug("debug message without arguments")
         
-        XCTAssertEqual(testLoggingService.message.description, "debug message without arguments")
-        XCTAssertEqual(testLoggingService.subsystem, "debug subsystem")
-        XCTAssertEqual(testLoggingService.category, "debug category")
-        XCTAssertEqual(testLoggingService.type, .debug)
-        XCTAssertEqual(testLoggingService.args.count, 0)
+        XCTAssertEqual(testLogging.message.description, "debug message without arguments")
+        XCTAssertEqual(testLogging.subsystem, "debug subsystem")
+        XCTAssertEqual(testLogging.category, "debug category")
+        XCTAssertEqual(testLogging.type, .debug)
+        XCTAssertEqual(testLogging.args.count, 0)
     }
     
     func testDebugWithArguments() {
@@ -46,11 +46,11 @@ class DiagnosticLogTests: XCTestCase {
         
         diagnosticLog.debug("debug message with arguments", "a")
         
-        XCTAssertEqual(testLoggingService.message.description, "debug message with arguments")
-        XCTAssertEqual(testLoggingService.subsystem, "debug subsystem")
-        XCTAssertEqual(testLoggingService.category, "debug category")
-        XCTAssertEqual(testLoggingService.type, .debug)
-        XCTAssertEqual(testLoggingService.args.count, 1)
+        XCTAssertEqual(testLogging.message.description, "debug message with arguments")
+        XCTAssertEqual(testLogging.subsystem, "debug subsystem")
+        XCTAssertEqual(testLogging.category, "debug category")
+        XCTAssertEqual(testLogging.type, .debug)
+        XCTAssertEqual(testLogging.args.count, 1)
     }
     
     func testInfoWithoutArguments() {
@@ -58,11 +58,11 @@ class DiagnosticLogTests: XCTestCase {
         
         diagnosticLog.info("info message without arguments")
         
-        XCTAssertEqual(testLoggingService.message.description, "info message without arguments")
-        XCTAssertEqual(testLoggingService.subsystem, "info subsystem")
-        XCTAssertEqual(testLoggingService.category, "info category")
-        XCTAssertEqual(testLoggingService.type, .info)
-        XCTAssertEqual(testLoggingService.args.count, 0)
+        XCTAssertEqual(testLogging.message.description, "info message without arguments")
+        XCTAssertEqual(testLogging.subsystem, "info subsystem")
+        XCTAssertEqual(testLogging.category, "info category")
+        XCTAssertEqual(testLogging.type, .info)
+        XCTAssertEqual(testLogging.args.count, 0)
     }
     
     func testInfoWithArguments() {
@@ -70,11 +70,11 @@ class DiagnosticLogTests: XCTestCase {
         
         diagnosticLog.info("info message with arguments", "a", "b")
         
-        XCTAssertEqual(testLoggingService.message.description, "info message with arguments")
-        XCTAssertEqual(testLoggingService.subsystem, "info subsystem")
-        XCTAssertEqual(testLoggingService.category, "info category")
-        XCTAssertEqual(testLoggingService.type, .info)
-        XCTAssertEqual(testLoggingService.args.count, 2)
+        XCTAssertEqual(testLogging.message.description, "info message with arguments")
+        XCTAssertEqual(testLogging.subsystem, "info subsystem")
+        XCTAssertEqual(testLogging.category, "info category")
+        XCTAssertEqual(testLogging.type, .info)
+        XCTAssertEqual(testLogging.args.count, 2)
     }
     
     func testDefaultWithoutArguments() {
@@ -82,11 +82,11 @@ class DiagnosticLogTests: XCTestCase {
         
         diagnosticLog.default("default message without arguments")
         
-        XCTAssertEqual(testLoggingService.message.description, "default message without arguments")
-        XCTAssertEqual(testLoggingService.subsystem, "default subsystem")
-        XCTAssertEqual(testLoggingService.category, "default category")
-        XCTAssertEqual(testLoggingService.type, .default)
-        XCTAssertEqual(testLoggingService.args.count, 0)
+        XCTAssertEqual(testLogging.message.description, "default message without arguments")
+        XCTAssertEqual(testLogging.subsystem, "default subsystem")
+        XCTAssertEqual(testLogging.category, "default category")
+        XCTAssertEqual(testLogging.type, .default)
+        XCTAssertEqual(testLogging.args.count, 0)
     }
     
     func testDefaultWithArguments() {
@@ -94,11 +94,11 @@ class DiagnosticLogTests: XCTestCase {
         
         diagnosticLog.default("default message with arguments", "a", "b", "c")
         
-        XCTAssertEqual(testLoggingService.message.description, "default message with arguments")
-        XCTAssertEqual(testLoggingService.subsystem, "default subsystem")
-        XCTAssertEqual(testLoggingService.category, "default category")
-        XCTAssertEqual(testLoggingService.type, .default)
-        XCTAssertEqual(testLoggingService.args.count, 3)
+        XCTAssertEqual(testLogging.message.description, "default message with arguments")
+        XCTAssertEqual(testLogging.subsystem, "default subsystem")
+        XCTAssertEqual(testLogging.category, "default category")
+        XCTAssertEqual(testLogging.type, .default)
+        XCTAssertEqual(testLogging.args.count, 3)
     }
     
     func testErrorWithoutArguments() {
@@ -106,11 +106,11 @@ class DiagnosticLogTests: XCTestCase {
         
         diagnosticLog.error("error message without arguments")
         
-        XCTAssertEqual(testLoggingService.message.description, "error message without arguments")
-        XCTAssertEqual(testLoggingService.subsystem, "error subsystem")
-        XCTAssertEqual(testLoggingService.category, "error category")
-        XCTAssertEqual(testLoggingService.type, .error)
-        XCTAssertEqual(testLoggingService.args.count, 0)
+        XCTAssertEqual(testLogging.message.description, "error message without arguments")
+        XCTAssertEqual(testLogging.subsystem, "error subsystem")
+        XCTAssertEqual(testLogging.category, "error category")
+        XCTAssertEqual(testLogging.type, .error)
+        XCTAssertEqual(testLogging.args.count, 0)
     }
     
     func testErrorWithArguments() {
@@ -118,17 +118,17 @@ class DiagnosticLogTests: XCTestCase {
         
         diagnosticLog.error("error message with arguments", "a", "b", "c", "d")
         
-        XCTAssertEqual(testLoggingService.message.description, "error message with arguments")
-        XCTAssertEqual(testLoggingService.subsystem, "error subsystem")
-        XCTAssertEqual(testLoggingService.category, "error category")
-        XCTAssertEqual(testLoggingService.type, .error)
-        XCTAssertEqual(testLoggingService.args.count, 4)
+        XCTAssertEqual(testLogging.message.description, "error message with arguments")
+        XCTAssertEqual(testLogging.subsystem, "error subsystem")
+        XCTAssertEqual(testLogging.category, "error category")
+        XCTAssertEqual(testLogging.type, .error)
+        XCTAssertEqual(testLogging.args.count, 4)
     }
     
 }
 
-fileprivate class TestLoggingService: LoggingService {
-    
+fileprivate class TestLogging: Logging {
+
     var message: StaticString!
     
     var subsystem: String!

@@ -16,27 +16,28 @@ public protocol ServiceSetupDelegate: AnyObject {
     ///     - service: The service created.
     func serviceSetupNotifying(_ object: ServiceSetupNotifying, didCreateService service: Service)
 
-    /// Informs the delegate that the specified service was updated.
-    /// An existing service is considered updated when the credentials,
-    /// authorization, or any other configuration necessary for the
-    /// service are changed.
-    ///
-    /// - Parameters:
-    ///     - service: The service updated.
-    func serviceSetupNotifying(_ object: ServiceSetupNotifying, didUpdateService service: Service)
+}
+
+public protocol ServiceSetupNotifying: AnyObject {
+
+    /// Delegate to notify about service setup.
+    var serviceSetupDelegate: ServiceSetupDelegate? { get set }
+
+}
+
+public protocol ServiceSettingsDelegate: AnyObject {
 
     /// Informs the delegate that the specified service was deleted.
     ///
     /// - Parameters:
     ///     - service: The service deleted.
-    func serviceSetupNotifying(_ object: ServiceSetupNotifying, didDeleteService service: Service)
+    func serviceSettingsNotifying(_ object: ServiceSettingsNotifying, didDeleteService service: Service)
 
 }
 
-public protocol ServiceSetupNotifying: AnyObject {
+public protocol ServiceSettingsNotifying: AnyObject {
 
-    /// Delegate to notify about service changes.
-    var serviceSetupDelegate: ServiceSetupDelegate? { get set }
+    /// Delegate to notify about service settings.
+    var serviceSettingsDelegate: ServiceSettingsDelegate? { get set }
 
 }
-
