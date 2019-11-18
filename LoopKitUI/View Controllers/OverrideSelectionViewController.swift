@@ -125,7 +125,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
             return header
         case UICollectionView.elementKindSectionFooter:
             let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: OverrideSelectionFooterView.className, for: indexPath) as! OverrideSelectionFooterView
-            footer.textLabel.text = NSLocalizedString("Override presets can be set up under the 'Configuration' section of the settings screen.", comment: "Text directing the user to configure override presets")
+            footer.textLabel.text = NSLocalizedString("Tap '+' to create a new override preset.", comment: "Text directing the user to configure their first override preset")
             return footer
         default:
             fatalError("Unexpected supplementary element kind \(kind)")
