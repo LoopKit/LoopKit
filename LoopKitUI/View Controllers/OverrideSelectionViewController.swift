@@ -266,12 +266,16 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         present(navigationWrapper, animated: true)
     }
 
-    private var isEditingPresets = false
+    private var isEditingPresets = false {
+        didSet {
+            saveButton.isEnabled = !isEditingPresets
+            cancelButton.isEnabled = !isEditingPresets
+        }
+    }
 
     @objc private func beginEditing() {
         isEditingPresets = true
         navigationItem.setRightBarButtonItems([saveButton, doneButton], animated: true)
-        navigationItem.setLeftBarButton(nil, animated: true)
         configureCellsForEditingChanged()
 
         if let scheduledOverrideSection = sections.firstIndex(of: .scheduledOverride) {
@@ -291,7 +295,6 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
     @objc private func endEditing() {
         isEditingPresets = false
         navigationItem.setRightBarButtonItems([saveButton, editButton], animated: true)
-        navigationItem.setLeftBarButton(cancelButton, animated: true)
         configureCellsForEditingChanged()
 
         if let scheduledOverrideSection = sections.firstIndex(of: .scheduledOverride) {
