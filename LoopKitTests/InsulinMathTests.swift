@@ -1085,7 +1085,7 @@ class InsulinMathTests: XCTestCase {
     func testDoseEntryUnitsInDeliverableIncrements() {
 
         let makeDose = { (deliveredUnits: Double?) -> DoseEntry in
-            let startDate = ISO8601DateFormatter.localTimeDate().date(from: "2018-07-16T03:49:00")!
+            let startDate = self.fixtureDate("2018-07-16 03:49:00 +0000")
             let endDate = startDate.addingTimeInterval(TimeInterval(minutes: 5))
 
             let tempBasalRate = 1.0
@@ -1104,7 +1104,7 @@ class InsulinMathTests: XCTestCase {
     }
 
     func testDoseEntryAnnotateShouldSplitDosesProportionally() {
-        let startDate = ISO8601DateFormatter.localTimeDate().date(from: "2018-07-16T11:59:00")!
+        let startDate = self.fixtureDate("2018-07-16 11:59:00 +0000")
         let endDate = startDate.addingTimeInterval(TimeInterval(minutes: 5))
 
         let tempBasalRate = 1.0
@@ -1132,7 +1132,7 @@ class InsulinMathTests: XCTestCase {
     }
 
     func testDoseEntryWithoutDeliveredUnitsShouldSplitDosesProportionally() {
-        let startDate = ISO8601DateFormatter.localTimeDate().date(from: "2018-07-16T11:59:00")!
+        let startDate = self.fixtureDate("2018-07-16 11:59:00 +0000")
         let endDate = startDate.addingTimeInterval(TimeInterval(minutes: 5))
 
         let tempBasalRate = 1.0
