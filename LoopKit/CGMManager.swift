@@ -43,6 +43,12 @@ public protocol CGMManagerDelegate: class, DeviceManagerDelegate {
     ///
     /// - Parameter manager: The manager instance
     func cgmManagerDidUpdateState(_ manager: CGMManager)
+    
+    /// Asks the delegate for credential store prefix to avoid namespace conflicts
+    ///
+    /// - Parameter manager: The manager instance
+    /// - Returns: The unique prefix for the credential store
+    func credentialStoragePrefix(for manager: CGMManager) -> String
 }
 
 
@@ -69,6 +75,12 @@ public protocol CGMManager: DeviceManager {
     /// - Parameters:
     ///   - completion: A closure called when operation has completed
     func fetchNewDataIfNeeded(_ completion: @escaping (CGMResult) -> Void) -> Void
+    
+    /// Acknowledges the alert identified
+    ///
+    /// - Parameters:
+    ///   - alertID: identifier of the alert to acknowledge
+    func acknowledgeAlert(alertID: Int) -> Void
 }
 
 
@@ -86,5 +98,9 @@ public extension CGMManager {
             self.cgmManagerDelegate?.cgmManagerWantsDeletion(self)
             completion()
         }
+    }
+    
+    func acknowledgeAlert(alertID: Int) {
+        //optional
     }
 }

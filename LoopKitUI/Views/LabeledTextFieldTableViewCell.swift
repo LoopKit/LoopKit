@@ -9,14 +9,14 @@
 import UIKit
 
 
-class LabeledTextFieldTableViewCell: TextFieldTableViewCell {
-    @IBOutlet weak var titleLabel: UILabel!
+public class LabeledTextFieldTableViewCell: TextFieldTableViewCell {
+    @IBOutlet public weak var titleLabel: UILabel!
 
     private var customInputTextField: CustomInputTextField? {
         return textField as? CustomInputTextField
     }
 
-    var customInput: UIInputViewController? {
+    public var customInput: UIInputViewController? {
         get {
             return customInputTextField?.customInput
         }
