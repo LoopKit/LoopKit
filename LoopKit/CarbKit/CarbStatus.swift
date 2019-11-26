@@ -42,16 +42,12 @@ extension CarbStatus: CarbEntry {
 
 extension CarbStatus {
     
-    var absorptionModel: CarbAbsorptionComputable {
-      return CarbAbsorptionModel.settings.absorptionModel
-    }
-    
-    func dynamicCarbsOnBoard(at date: Date, defaultAbsorptionTime: TimeInterval, delay: TimeInterval, delta: TimeInterval) -> Double {
+    func dynamicCarbsOnBoard(at date: Date, defaultAbsorptionTime: TimeInterval, delay: TimeInterval, delta: TimeInterval, absorptionModel: CarbAbsorptionComputable) -> Double {
         guard date >= startDate - delta,
             let absorption = absorption
         else {
             // We have to have absorption info for dynamic calculation
-            return entry.carbsOnBoard(at: date, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay)
+            return entry.carbsOnBoard(at: date, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, absorptionModel: absorptionModel)
         }
 
         let unit = HKUnit.gram()
@@ -82,12 +78,12 @@ extension CarbStatus {
         }, 0)
     }
 
-    func dynamicAbsorbedCarbs(at date: Date, absorptionTime: TimeInterval, delay: TimeInterval, delta: TimeInterval) -> Double {
+    func dynamicAbsorbedCarbs(at date: Date, absorptionTime: TimeInterval, delay: TimeInterval, delta: TimeInterval, absorptionModel: CarbAbsorptionComputable) -> Double {
         guard date >= startDate,
             let absorption = absorption
         else {
             // We have to have absorption info for dynamic calculation
-            return entry.absorbedCarbs(at: date, absorptionTime: absorptionTime, delay: delay)
+            return entry.absorbedCarbs(at: date, absorptionTime: absorptionTime, delay: delay, absorptionModel: absorptionModel)
         }
 
         let unit = HKUnit.gram()

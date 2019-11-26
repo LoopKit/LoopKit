@@ -21,8 +21,6 @@ public enum CarbAbsorptionModel {
     case linear
     case nonlinear
     case adaptiveRateNonlinear
-        
-    static var settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
 }
 
 public protocol CarbStoreDelegate: class {
@@ -185,6 +183,8 @@ public final class CarbStore: HealthKitSampleStore {
     private let queue = DispatchQueue(label: "com.loudnate.CarbKit.dataAccessQueue", qos: .utility)
 
     private let log = OSLog(category: "CarbStore")
+    
+    var settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
 
     /**
      Initializes a new instance of the store.
@@ -244,11 +244,11 @@ public final class CarbStore: HealthKitSampleStore {
             // Carb model settings based on the selected absorption model
             switch self.carbAbsorptionModel {
             case .linear:
-                CarbAbsorptionModel.settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
+                self.settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
             case .nonlinear:
-                CarbAbsorptionModel.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
+                self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
             case .adaptiveRateNonlinear:
-                CarbAbsorptionModel.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.0, adaptiveAbsorptionRateEnabled: true, adaptiveRateStandbyIntervalFraction: 0.2)
+                self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.0, adaptiveAbsorptionRateEnabled: true, adaptiveRateStandbyIntervalFraction: 0.2)
             }
 
             // TODO: Consider resetting uploadState.uploading
@@ -392,7 +392,11 @@ extension CarbStore {
                     insulinSensitivity: self.insulinSensitivityScheduleApplyingOverrideHistory,
                     absorptionTimeOverrun: self.absorptionTimeOverrun,
                     defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                    delay: self.delay
+                    delay: self.delay,
+                    initialAbsorptionTimeOverrun: self.settings.initialAbsorptionTimeOverrun,
+                    absorptionModel: self.settings.absorptionModel,
+                    adaptiveAbsorptionRateEnabled: self.settings.adaptiveAbsorptionRateEnabled,
+                    adaptiveRateStandbyIntervalFraction: self.settings.adaptiveRateStandbyIntervalFraction
                 )
 
                 completion(.success(status))
@@ -798,11 +802,16 @@ extension CarbStore {
                     insulinSensitivity: insulinSensitivitySchedule,
                     absorptionTimeOverrun: self.absorptionTimeOverrun,
                     defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                    delay: self.delay
+                    delay: self.delay,
+                    initialAbsorptionTimeOverrun: self.settings.initialAbsorptionTimeOverrun,
+                    absorptionModel: self.settings.absorptionModel,
+                    adaptiveAbsorptionRateEnabled: self.settings.adaptiveAbsorptionRateEnabled,
+                    adaptiveRateStandbyIntervalFraction: self.settings.adaptiveRateStandbyIntervalFraction
                 ).dynamicCarbsOnBoard(
                     from: start,
                     to: end,
                     defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                    absorptionModel: self.settings.absorptionModel,
                     delay: self.delay,
                     delta: self.delta
                 )
@@ -811,6 +820,7 @@ extension CarbStore {
                     from: start,
                     to: end,
                     defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                    absorptionModel: self.settings.absorptionModel,
                     delay: self.delay,
                     delta: self.delta
                 )
@@ -854,13 +864,18 @@ extension CarbStore {
                         insulinSensitivity: insulinSensitivitySchedule,
                         absorptionTimeOverrun: absorptionTimeOverrun,
                         defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-                        delay: delay
+                        delay: delay,
+                        initialAbsorptionTimeOverrun: self.settings.initialAbsorptionTimeOverrun,
+                        absorptionModel: self.settings.absorptionModel,
+                        adaptiveAbsorptionRateEnabled: self.settings.adaptiveAbsorptionRateEnabled,
+                        adaptiveRateStandbyIntervalFraction: self.settings.adaptiveRateStandbyIntervalFraction
                     ).dynamicGlucoseEffects(
                         from: start,
                         to: end,
                         carbRatios: carbRatioSchedule,
                         insulinSensitivities: insulinSensitivitySchedule,
                         defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                        absorptionModel: self.settings.absorptionModel,
                         delay: delay,
                         delta: delta
                     )
@@ -871,6 +886,7 @@ extension CarbStore {
                         carbRatios: carbRatioSchedule,
                         insulinSensitivities: insulinSensitivitySchedule,
                         defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                        absorptionModel: self.settings.absorptionModel,
                         delay: delay,
                         delta: delta
                     )
@@ -937,7 +953,7 @@ extension CarbStore {
                 "* delta: \(self.delta)",
                 "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",
                 "* carbAbsorptionModel: \(carbAbsorptionModel)",
-                "* Carb absorption model settings: \(CarbAbsorptionModel.settings)",
+                "* Carb absorption model settings: \(self.settings)",
                 super.debugDescription,
                 "",
                 "cachedCarbEntries: [",

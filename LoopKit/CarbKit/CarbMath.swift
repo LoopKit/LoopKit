@@ -241,11 +241,7 @@ struct PiecewiseLinearAbsorption: CarbAbsorptionComputable {
 
 extension CarbEntry {
     
-    var absorptionModel: CarbAbsorptionComputable {
-      return CarbAbsorptionModel.settings.absorptionModel
-    }
-    
-    func carbsOnBoard(at date: Date, defaultAbsorptionTime: TimeInterval, delay: TimeInterval) -> Double {
+    func carbsOnBoard(at date: Date, defaultAbsorptionTime: TimeInterval, delay: TimeInterval, absorptionModel: CarbAbsorptionComputable) -> Double {
         let time = date.timeIntervalSince(startDate)
         let value: Double
 
@@ -262,7 +258,8 @@ extension CarbEntry {
     func absorbedCarbs(
         at date: Date,
         absorptionTime: TimeInterval,
-        delay: TimeInterval
+        delay: TimeInterval,
+        absorptionModel: CarbAbsorptionComputable
     ) -> Double {
         let time = date.timeIntervalSince(startDate)
 
@@ -279,12 +276,13 @@ extension CarbEntry {
         carbRatio: HKQuantity,
         insulinSensitivity: HKQuantity,
         defaultAbsorptionTime: TimeInterval,
-        delay: TimeInterval
+        delay: TimeInterval,
+        absorptionModel: CarbAbsorptionComputable
     ) -> Double {
-        return insulinSensitivity.doubleValue(for: HKUnit.milligramsPerDeciliter) / carbRatio.doubleValue(for: .gram()) * absorbedCarbs(at: date, absorptionTime: absorptionTime ?? defaultAbsorptionTime, delay: delay)
+        return insulinSensitivity.doubleValue(for: HKUnit.milligramsPerDeciliter) / carbRatio.doubleValue(for: .gram()) * absorbedCarbs(at: date, absorptionTime: absorptionTime ?? defaultAbsorptionTime, delay: delay, absorptionModel: absorptionModel)
     }
 
-    fileprivate func estimatedAbsorptionTime(forAbsorbedCarbs carbs: Double, at date: Date) -> TimeInterval {
+    fileprivate func estimatedAbsorptionTime(forAbsorbedCarbs carbs: Double, at date: Date, absorptionModel: CarbAbsorptionComputable) -> TimeInterval {
         let time = date.timeIntervalSince(startDate)
 
         return max(time, absorptionModel.absorptionTime(forPercentAbsorption: carbs / quantity.doubleValue(for: .gram()), atTime: time))
@@ -354,6 +352,7 @@ extension Collection where Element: CarbEntry {
         from start: Date? = nil,
         to end: Date? = nil,
         defaultAbsorptionTime: TimeInterval,
+        absorptionModel: CarbAbsorptionComputable,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [CarbValue] {
@@ -366,7 +365,7 @@ extension Collection where Element: CarbEntry {
 
         repeat {
             let value = reduce(0.0) { (value, entry) -> Double in
-                return value + entry.carbsOnBoard(at: date, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay)
+                return value + entry.carbsOnBoard(at: date, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, absorptionModel: absorptionModel)
             }
 
             values.append(CarbValue(startDate: date, quantity: HKQuantity(unit: HKUnit.gram(), doubleValue: value)))
@@ -382,6 +381,7 @@ extension Collection where Element: CarbEntry {
         carbRatios: CarbRatioSchedule,
         insulinSensitivities: InsulinSensitivitySchedule,
         defaultAbsorptionTime: TimeInterval,
+        absorptionModel: CarbAbsorptionComputable,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [GlucoseEffect] {
@@ -400,7 +400,8 @@ extension Collection where Element: CarbEntry {
                     carbRatio: carbRatios.quantity(at: entry.startDate),
                     insulinSensitivity: insulinSensitivities.quantity(at: entry.startDate),
                     defaultAbsorptionTime: defaultAbsorptionTime,
-                    delay: delay
+                    delay: delay,
+                    absorptionModel: absorptionModel
                 )
             }
 
@@ -439,6 +440,7 @@ extension Collection {
         from start: Date? = nil,
         to end: Date? = nil,
         defaultAbsorptionTime: TimeInterval,
+        absorptionModel: CarbAbsorptionComputable,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [CarbValue] where Element == CarbStatus<T> {
@@ -455,7 +457,8 @@ extension Collection {
                     at: date,
                     defaultAbsorptionTime: defaultAbsorptionTime,
                     delay: delay,
-                    delta: delta
+                    delta: delta,
+                    absorptionModel: absorptionModel
                 )
             }
 
@@ -472,6 +475,7 @@ extension Collection {
         carbRatios: CarbRatioSchedule,
         insulinSensitivities: InsulinSensitivitySchedule,
         defaultAbsorptionTime: TimeInterval,
+        absorptionModel: CarbAbsorptionComputable,
         delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [GlucoseEffect] where Element == CarbStatus<T> {
@@ -492,7 +496,8 @@ extension Collection {
                     at: date,
                     absorptionTime: entry.absorptionTime ?? defaultAbsorptionTime,
                     delay: delay,
-                    delta: delta
+                    delta: delta,
+                    absorptionModel: absorptionModel
                 )
             }
 
@@ -537,16 +542,14 @@ fileprivate class CarbStatusBuilder<T: CarbEntry> {
 
     // MARK: Model settings
     
-    private var absorptionModel: CarbAbsorptionComputable {
-      return CarbAbsorptionModel.settings.absorptionModel
-    }
+    private var absorptionModel: CarbAbsorptionComputable
     
-    private var adaptiveAbsorptionRateEnabled: Bool {
-        return CarbAbsorptionModel.settings.adaptiveAbsorptionRateEnabled
-    }
+    private var adaptiveAbsorptionRateEnabled: Bool
+   
+    private var adaptiveRateStandbyIntervalFraction: Double
     
     private var adaptiveRateStandbyInterval: TimeInterval {
-        return initialAbsorptionTime * CarbAbsorptionModel.settings.adaptiveRateStandbyIntervalFraction
+        return initialAbsorptionTime * adaptiveRateStandbyIntervalFraction
     }
     
     // MARK: User-entered data
@@ -693,7 +696,7 @@ fileprivate class CarbStatusBuilder<T: CarbEntry> {
     ///   - delay: An amount of time to wait after the entry date before minimum absorption is assumed to begin
     ///   - lastEffectDate: The last recorded date of effect observation, used to initialize absorption at model defined rate
     ///   - initialObservedEffect: The initial amount of observed effect, in glucose units. Defaults to 0.
-    init(entry: T, carbUnit: HKUnit, carbohydrateSensitivityFactor: Double, initialAbsorptionTime: TimeInterval, maxAbsorptionTime: TimeInterval, delay: TimeInterval, lastEffectDate: Date?, initialObservedEffect: Double = 0) {
+    init(entry: T, carbUnit: HKUnit, carbohydrateSensitivityFactor: Double, initialAbsorptionTime: TimeInterval, maxAbsorptionTime: TimeInterval, delay: TimeInterval, lastEffectDate: Date?, absorptionModel: CarbAbsorptionComputable, adaptiveAbsorptionRateEnabled: Bool, adaptiveRateStandbyIntervalFraction: Double, initialObservedEffect: Double = 0) {
         self.entry = entry
         self.carbUnit = carbUnit
         self.carbohydrateSensitivityFactor = carbohydrateSensitivityFactor
@@ -701,7 +704,9 @@ fileprivate class CarbStatusBuilder<T: CarbEntry> {
         self.maxAbsorptionTime = maxAbsorptionTime
         self.delay = delay
         self.observedEffect = initialObservedEffect
-
+        self.absorptionModel = absorptionModel
+        self.adaptiveAbsorptionRateEnabled = adaptiveAbsorptionRateEnabled
+        self.adaptiveRateStandbyIntervalFraction = adaptiveRateStandbyIntervalFraction
         self.entryGrams = entry.quantity.doubleValue(for: carbUnit)
         self.entryEffect = entryGrams * carbohydrateSensitivityFactor
         self.maxEndDate = entry.startDate.addingTimeInterval(maxAbsorptionTime + delay)
@@ -709,6 +714,7 @@ fileprivate class CarbStatusBuilder<T: CarbEntry> {
             maxEndDate,
             Swift.max(lastEffectDate ?? entry.startDate, entry.startDate)
         )
+
     }
 
     /// Increments the builder state with the next glucose effect.
@@ -799,7 +805,11 @@ extension Collection where Element: CarbEntry {
         insulinSensitivity: InsulinSensitivitySchedule?,
         absorptionTimeOverrun: Double,
         defaultAbsorptionTime: TimeInterval,
-        delay: TimeInterval
+        delay: TimeInterval,
+        initialAbsorptionTimeOverrun: Double,
+        absorptionModel: CarbAbsorptionComputable,
+        adaptiveAbsorptionRateEnabled: Bool,
+        adaptiveRateStandbyIntervalFraction: Double
     ) -> [CarbStatus<Element>] {
         guard count > 0 else {
             // TODO: Apply unmatched effects to meal prediction
@@ -819,7 +829,7 @@ extension Collection where Element: CarbEntry {
         let builders: [CarbStatusBuilder<Element>] = map { (entry) in
             let carbRatio = carbRatios.quantity(at: entry.startDate)
             let insulinSensitivity = insulinSensitivities.quantity(at: entry.startDate)
-            let initialAbsorptionTimeOverrun = CarbAbsorptionModel.settings.initialAbsorptionTimeOverrun
+            let initialAbsorptionTimeOverrun = initialAbsorptionTimeOverrun
 
             return CarbStatusBuilder(
                 entry: entry,
@@ -827,7 +837,10 @@ extension Collection where Element: CarbEntry {
                 carbohydrateSensitivityFactor: insulinSensitivity.doubleValue(for: glucoseUnit) / carbRatio.doubleValue(for: carbUnit), initialAbsorptionTime: (entry.absorptionTime ?? defaultAbsorptionTime) * initialAbsorptionTimeOverrun,
                 maxAbsorptionTime: (entry.absorptionTime ?? defaultAbsorptionTime) * absorptionTimeOverrun,
                 delay: delay,
-                lastEffectDate: effectVelocities.last?.endDate
+                lastEffectDate: effectVelocities.last?.endDate,
+                absorptionModel: absorptionModel,
+                adaptiveAbsorptionRateEnabled: adaptiveAbsorptionRateEnabled,
+                adaptiveRateStandbyIntervalFraction: adaptiveRateStandbyIntervalFraction
             )
         }
 
