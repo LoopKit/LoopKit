@@ -78,8 +78,8 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 configure(with: override.settings)
                 startDate = override.startDate
                 duration = override.duration
-                syncIdentifier = override.syncIdentifier
                 enactTrigger = override.enactTrigger
+                syncIdentifier = override.syncIdentifier
             }
         }
     }
@@ -104,10 +104,10 @@ public final class AddEditOverrideTableViewController: UITableViewController {
 
     private var duration: TemporaryScheduleOverride.Duration = .finite(.defaultOverrideDuration)
     
-    private var syncIdentifier = UUID()
-    
     private var enactTrigger: TemporaryScheduleOverride.EnactTrigger = .local
 
+    private var syncIdentifier = UUID()
+    
     private var isConfiguringPreset: Bool {
         switch inputMode {
         case .newPreset, .editPreset:

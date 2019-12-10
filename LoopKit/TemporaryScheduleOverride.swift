@@ -48,8 +48,8 @@ public struct TemporaryScheduleOverride: Hashable {
     public var context: Context
     public var settings: TemporaryScheduleOverrideSettings
     public var startDate: Date
-    public let syncIdentifier: UUID
     public let enactTrigger: EnactTrigger
+    public let syncIdentifier: UUID
 
     public var duration: Duration {
         didSet {
@@ -118,14 +118,6 @@ extension TemporaryScheduleOverride: RawRepresentable {
         
         let startDate = Date(timeIntervalSince1970: startDateSeconds)
 
-        let syncIdentifier: UUID
-        if let syncIdentifierRaw = rawValue["syncIdentifier"] as? String,
-            let storedSyncIdentifier = UUID(uuidString: syncIdentifierRaw) {
-            syncIdentifier = storedSyncIdentifier
-        } else {
-            syncIdentifier = UUID()
-        }
-        
         let enactTrigger: EnactTrigger
         if let enactTriggerRaw = rawValue["enactTrigger"] as? EnactTrigger.RawValue,
             let storedEnactTrigger = EnactTrigger(rawValue: enactTriggerRaw)
@@ -133,6 +125,14 @@ extension TemporaryScheduleOverride: RawRepresentable {
             enactTrigger = storedEnactTrigger
         } else {
             enactTrigger = .local
+        }
+
+        let syncIdentifier: UUID
+        if let syncIdentifierRaw = rawValue["syncIdentifier"] as? String,
+            let storedSyncIdentifier = UUID(uuidString: syncIdentifierRaw) {
+            syncIdentifier = storedSyncIdentifier
+        } else {
+            syncIdentifier = UUID()
         }
         
         self.init(context: context, settings: settings, startDate: startDate, duration: duration, enactTrigger: enactTrigger, syncIdentifier: syncIdentifier)
@@ -145,6 +145,7 @@ extension TemporaryScheduleOverride: RawRepresentable {
             "startDate": startDate.timeIntervalSince1970,
             "duration": duration.rawValue,
             "syncIdentifier": syncIdentifier.uuidString,
+            "enactTrigger": enactTrigger.rawValue,
         ]
     }
 }

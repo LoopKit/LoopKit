@@ -268,11 +268,7 @@ extension OverrideEvent: RawRepresentable {
 
         self.override = override
         
-        if let modificationCounter = rawValue["modificationCounter"] as? Int {
-            self.modificationCounter = modificationCounter
-        } else {
-            self.modificationCounter = 0
-        }
+        self.modificationCounter = rawValue["modificationCounter"] as? Int ?? 0
         
         if let isDeleted = rawValue["isDeleted"] as? Bool, isDeleted {
             self.end = .deleted

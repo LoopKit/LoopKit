@@ -36,7 +36,7 @@ open class TextFieldTableViewController: UITableViewController, UITextFieldDeleg
 
     public var keyboardType = UIKeyboardType.default
 
-    public var autocapitalizationType = UITextAutocapitalizationType.allCharacters
+    public var autocapitalizationType = UITextAutocapitalizationType.sentences
 
     open weak var delegate: TextFieldTableViewControllerDelegate?
 

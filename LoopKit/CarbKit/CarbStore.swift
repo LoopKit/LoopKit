@@ -184,7 +184,8 @@ public final class CarbStore: HealthKitSampleStore {
 
     private let log = OSLog(category: "CarbStore")
     
-    var settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
+    var settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
+
 
     /**
      Initializes a new instance of the store.
@@ -934,9 +935,12 @@ extension CarbStore {
             
             var carbAbsorptionModel: String
             switch self.carbAbsorptionModel {
-            case .linear: carbAbsorptionModel = "Linear"
-            case .nonlinear: carbAbsorptionModel = "Nonlinear"
-            case .adaptiveRateNonlinear: carbAbsorptionModel = "Nonlinear with Adaptive Rate for Remaining Carbs"
+            case .linear:
+                carbAbsorptionModel = "Linear"
+            case .nonlinear:
+                carbAbsorptionModel = "Nonlinear"
+            case .adaptiveRateNonlinear:
+                carbAbsorptionModel = "Nonlinear with Adaptive Rate for Remaining Carbs"
             }
             
             var report: [String] = [
