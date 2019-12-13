@@ -36,6 +36,8 @@ open class TextFieldTableViewController: UITableViewController, UITextFieldDeleg
 
     public var keyboardType = UIKeyboardType.default
 
+    public var autocapitalizationType = UITextAutocapitalizationType.sentences
+
     open weak var delegate: TextFieldTableViewControllerDelegate?
 
     public convenience init() {
@@ -70,6 +72,7 @@ open class TextFieldTableViewController: UITableViewController, UITextFieldDeleg
         cell.textField.text = value
         cell.textField.keyboardType = keyboardType
         cell.textField.placeholder = placeholder
+        cell.textField.autocapitalizationType = autocapitalizationType
         cell.unitLabel?.text = unit
 
         return cell

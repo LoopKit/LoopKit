@@ -26,12 +26,6 @@ public protocol DoseStoreDelegate: class {
 }
 
 
-public extension NSNotification.Name {
-    /// Notification posted when data was modifed.
-    static let DoseStoreValuesDidChange = NSNotification.Name(rawValue: "com.loopkit.DoseStore.ValuesDidChangeNotification")
-}
-
-
 public enum DoseStoreResult<T> {
     case success(T)
     case failure(DoseStore.DoseStoreError)
@@ -62,6 +56,9 @@ public enum DoseStoreResult<T> {
  Private members should be assumed to not be thread-safe, and access should be contained to within blocks submitted to `persistenceStore.managedObjectContext`, which executes them on a private, serial queue.
  */
 public final class DoseStore {
+    
+    /// Notification posted when data was modifed.
+    public static let valuesDidChange = NSNotification.Name(rawValue: "com.loopkit.DoseStore.valuesDidChange")
 
     public enum DoseStoreError: Error {
         case configurationError
@@ -532,7 +529,7 @@ extension DoseStore {
                     saveError
                 )
 
-                NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
+                NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
             }
         }
     }
@@ -629,7 +626,7 @@ extension DoseStore {
             self.persistenceController.save { (error) in
                 self.clearReservoirNormalizedDoseCache()
                 completion(deletedObjects, DoseStoreError(error: error))
-                NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
+                NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
             }
         }
     }
@@ -650,7 +647,7 @@ extension DoseStore {
                     self.validateReservoirContinuity()
 
                     completion(DoseStoreError(error: error))
-                    NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
+                    NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
                 }
             } catch let error as PersistenceController.PersistenceControllerError {
                 completion(DoseStoreError(error: error))
@@ -753,7 +750,7 @@ extension DoseStore {
 
             // Only change pumpEventQueryAfterDate if we received new finalized records.
             if let finalDate = lastFinalDate {
-                if let mutableDate = firstMutableDate {
+                if let mutableDate = firstMutableDate, mutableDate < finalDate {
                     self.pumpEventQueryAfterDate = mutableDate
                 } else {
                     self.pumpEventQueryAfterDate = finalDate
@@ -770,7 +767,7 @@ extension DoseStore {
 
                 self.syncPumpEventsToHealthStore() { _ in
                     completion(DoseStoreError(error: error))
-                    NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
+                    NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
                 }
             }
         }
@@ -801,7 +798,7 @@ extension DoseStore {
 
             self.persistenceController.save { (error) in
                 completion(DoseStoreError(error: error))
-                NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
+                NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
                 
                 self.lastRecordedPrimeEventDate = nil
                 self.validateReservoirContinuity()
@@ -830,7 +827,7 @@ extension DoseStore {
                         self.lastRecordedPrimeEventDate = nil
 
                         completion(DoseStoreError(error: error))
-                        NotificationCenter.default.post(name: .DoseStoreValuesDidChange, object: self)
+                        NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
                     }
                 } catch let error as PersistenceController.PersistenceControllerError {
                     completion(DoseStoreError(error: error))

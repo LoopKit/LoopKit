@@ -78,6 +78,8 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 configure(with: override.settings)
                 startDate = override.startDate
                 duration = override.duration
+                enactTrigger = override.enactTrigger
+                syncIdentifier = override.syncIdentifier
             }
         }
     }
@@ -101,7 +103,11 @@ public final class AddEditOverrideTableViewController: UITableViewController {
     private var startDate = Date()
 
     private var duration: TemporaryScheduleOverride.Duration = .finite(.defaultOverrideDuration)
+    
+    private var enactTrigger: TemporaryScheduleOverride.EnactTrigger = .local
 
+    private var syncIdentifier = UUID()
+    
     private var isConfiguringPreset: Bool {
         switch inputMode {
         case .newPreset, .editPreset:
@@ -500,7 +506,7 @@ extension AddEditOverrideTableViewController {
             return nil
         }
 
-        return TemporaryScheduleOverride(context: context, settings: settings, startDate: startDate, duration: duration)
+        return TemporaryScheduleOverride(context: context, settings: settings, startDate: startDate, duration: duration, enactTrigger: enactTrigger, syncIdentifier: syncIdentifier)
     }
 
     private func updateSaveButtonEnabled() {

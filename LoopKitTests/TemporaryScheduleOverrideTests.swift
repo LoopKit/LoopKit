@@ -34,7 +34,9 @@ class TemporaryScheduleOverrideTests: XCTestCase {
                 insulinNeedsScaleFactor: 1.5
             ),
             startDate: date(at: start),
-            duration: .finite(date(at: end).timeIntervalSince(date(at: start)))
+            duration: .finite(date(at: end).timeIntervalSince(date(at: start))),
+            enactTrigger: .local,
+            syncIdentifier: UUID()
         )
     }
 
