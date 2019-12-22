@@ -245,7 +245,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
                 editOverrideVC.delegate = self
                 show(editOverrideVC, sender: collectionView.cellForItem(at: indexPath))
             case .preset(let preset):
-                let override = preset.createOverride()
+                let override = preset.createOverride(enactTrigger: .local)
                 delegate?.overrideSelectionViewController(self, didConfirmOverride: override)
                 dismiss(animated: true)
             case .customOverride:
