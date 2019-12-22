@@ -133,7 +133,7 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
     /// Returns the underlying values in `unit`
     /// Consider using quantity(at:) instead
     public func value(at time: Date) -> DoubleRange {
-        if let override = override, override.isActive() {
+        if let override = override, time >= override.start && Date() < override.end {
             return override.value
         }
 
