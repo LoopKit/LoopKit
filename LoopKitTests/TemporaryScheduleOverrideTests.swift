@@ -210,6 +210,38 @@ class TemporaryScheduleOverrideTests: XCTestCase {
         XCTAssertEqual(3, annotated.count)
         XCTAssertEqual(dose.programmedUnits, annotated.map { $0.unitsInDeliverableIncrements }.reduce(0, +))
     }
+
+    // MARK: - Target range tests
+
+    func testActiveTargetRangeOverride() {
+        let overrideRange = DoubleRange(minValue: 120, maxValue: 140)
+        let overrideStart = Date()
+        let overrideDuration = TimeInterval(hours: 4)
+        let settings = TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter, targetRange: overrideRange)
+        let override = TemporaryScheduleOverride(context: .custom, settings: settings, startDate: overrideStart, duration: .finite(overrideDuration), enactTrigger: .local, syncIdentifier: UUID())
+        let normalRange = DoubleRange(minValue: 95, maxValue: 105)
+        let rangeSchedule = GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue(startTime: 0, value: normalRange)])!.applyingOverride(override)
+
+        XCTAssertEqual(rangeSchedule.value(at: overrideStart), overrideRange)
+        XCTAssertEqual(rangeSchedule.value(at: overrideStart + overrideDuration / 2), overrideRange)
+        XCTAssertEqual(rangeSchedule.value(at: overrideStart + overrideDuration), overrideRange)
+        XCTAssertEqual(rangeSchedule.value(at: overrideStart + overrideDuration + .hours(2)), overrideRange)
+    }
+
+    func testFutureTargetRangeOverride() {
+        let overrideRange = DoubleRange(minValue: 120, maxValue: 140)
+        let overrideStart = Date() + .hours(2)
+        let overrideDuration = TimeInterval(hours: 4)
+        let settings = TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter, targetRange: overrideRange)
+        let futureOverride = TemporaryScheduleOverride(context: .custom, settings: settings, startDate: overrideStart, duration: .finite(overrideDuration), enactTrigger: .local, syncIdentifier: UUID())
+        let normalRange = DoubleRange(minValue: 95, maxValue: 105)
+        let rangeSchedule = GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue(startTime: 0, value: normalRange)])!.applyingOverride(futureOverride)
+
+        XCTAssertEqual(rangeSchedule.value(at: overrideStart + .minutes(-5)), normalRange)
+        XCTAssertEqual(rangeSchedule.value(at: overrideStart), overrideRange)
+        XCTAssertEqual(rangeSchedule.value(at: overrideStart + overrideDuration), overrideRange)
+        XCTAssertEqual(rangeSchedule.value(at: overrideStart + overrideDuration + .hours(2)), overrideRange)
+    }
 }
 
 private extension TemporaryScheduleOverride.Duration {
