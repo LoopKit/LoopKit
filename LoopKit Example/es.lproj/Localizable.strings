@@ -7,6 +7,9 @@
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Carbohidratos";
 
+/* The title text for the glucose correction range schedule */
+"Correction Range" = "Rango Objetivo de Glucosa";
+
 /* The title for the cell displaying diagnostic data */
 "Diagnostic" = "Diagnóstico";
 
@@ -15,9 +18,6 @@
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Generar Datos";
-
-/* The title text for the glucose target range schedule */
-"Correction Range" = "Rango Objetivo de Glucosa";
 
 /* The title of the insulin sensitivity schedule screen
    The title text for the insulin sensitivity schedule */
