@@ -983,6 +983,7 @@
 		7D68AAC61FE31BE900522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D9A159223B04B8400983049 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D9A159323B0500D00983049 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7D9A159623B1D1D700983049 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D9BF0612336CC47005DCFD6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InsulinKit.strings; sourceTree = "<group>"; };
 		7D9BF0642336CD6B005DCFD6 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/CarbKit.strings; sourceTree = "<group>"; };
 		7D9BF0652336CD6B005DCFD6 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InsulinKit.strings; sourceTree = "<group>"; };
@@ -2995,6 +2996,7 @@
 				7D21EA412376A1DD001530A2 /* fr */,
 				7D9A159223B04B8400983049 /* da */,
 				7D9A159323B0500D00983049 /* it */,
+				7D9A159623B1D1D700983049 /* pl */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
