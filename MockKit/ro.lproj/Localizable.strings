@@ -1,0 +1,6 @@
+/* The alert title for a resume error */
+"Error Resuming" = "Eroare în timpul reluării";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Eroare în timpul suspendării";
+

@@ -1,0 +1,29 @@
+/* Class = "UILabel"; text = "Title"; ObjectID = "7Fi-wD-gf2"; */
+"7Fi-wD-gf2.text" = "Title";
+
+/* Class = "UILabel"; text = "..."; ObjectID = "7Fy-gG-Zof"; */
+"7Fy-gG-Zof.text" = "...";
+
+/* Class = "UILabel"; text = "Detail"; ObjectID = "9jm-X6-3QA"; */
+"9jm-X6-3QA.text" = "Chi tiết";
+
+/* Class = "UILabel"; text = "U IOB"; ObjectID = "dZi-Ta-IHm"; */
+"dZi-Ta-IHm.text" = "U IOB";
+
+/* Class = "UILabel"; text = "No pump configured"; ObjectID = "jSc-64-2tZ"; */
+"jSc-64-2tZ.text" = "Không có bơm nào được cấu hình";
+
+/* Class = "UILabel"; text = "U Total"; ObjectID = "kys-by-14s"; */
+"kys-by-14s.text" = "Tổng cộng  U";
+
+/* Class = "UILabel"; text = "..."; ObjectID = "PZQ-gO-084"; */
+"PZQ-gO-084.text" = "...";
+
+/* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[0] = "Reservoir"; ObjectID = "TyZ-xm-mVN"; */
+"TyZ-xm-mVN.segmentTitles[0]" = "Ngăn chứa insulin";
+
+/* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[1] = "Event History"; ObjectID = "TyZ-xm-mVN"; */
+"TyZ-xm-mVN.segmentTitles[1]" = "Tác vụ trước đó";
+
+/* Class = "UINavigationItem"; title = "Insulin Delivery"; ObjectID = "vls-EW-uwI"; */
+"vls-EW-uwI.title" = "Việc tiêm Insulin";

@@ -1,0 +1,40 @@
+/* The title text for the basal rate schedule */
+"Basal Rates" = "Rate bazale";
+
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "Raport carbohidrați";
+
+/* The title for the cell navigating to the carbs screen */
+"Carbs" = "Carbohidrați";
+
+/* The title text for the glucose correction range schedule */
+"Correction Range" = "Interval corecție";
+
+/* The title for the cell displaying diagnostic data */
+"Diagnostic" = "Diagnostic";
+
+/* The placeholder text instructing users how to enter a pump ID */
+"Enter the 6-digit pump ID" = "Introduceți ID-ul pompei din 6 cifre";
+
+/* The title for the cell displaying data generation */
+"Generate Data" = "Generează date";
+
+/* The title of the insulin sensitivity schedule screen
+   The title text for the insulin sensitivity schedule */
+"Insulin Sensitivity" = "Factor de sensibilitate la insulină";
+
+/* The title text for the pump ID */
+"Pump ID" = "ID pompă";
+
+/* The title for the cell navigating to the reservoir screen */
+"Reservoir" = "Rezervor";
+
+/* Title for the cell resetting the data manager */
+"Reset" = "Resetează";
+
+/* Title of button to sync basal profile from pump */
+"Sync With Pump" = "Sincronizează cu pompa";
+
+/* Instructions on where to find the pump ID on a Minimed pump */
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "ID-ul pompei poate fi găsit pe spate sau în partea inferioară a ecranului STATUS/Esc. Este format strict din porțiunea numerică a numărului serial (afișat ca SN sau S/N).";
+

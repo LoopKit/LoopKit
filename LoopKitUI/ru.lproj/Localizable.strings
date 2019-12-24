@@ -1,5 +1,27 @@
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ единиц остается в %2$@";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% нормального инсулина";
+
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Длительность усвоения";
+
+/* The title for the override emoji activity section */
+"Activity" = "Нагрузка";
 
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Подтвердите удаление всех записей истории?";
@@ -8,19 +30,37 @@
 "Are you sure you want to delete all reservoir values?" = "Подтвердите удаление всех записей резервуара?";
 
 /* The title of the button to add the credentials for a service */
-"authentication-button-add" = "Добавить пользователя";
+"Add Account" = "Добавить пользователя";
 
 /* The title of the button to remove the credentials for a service */
-"authentication-button-delete" = "Удалить аккаунт";
+"Delete Account" = "Удалить аккаунт";
+
+/* Describes a percentage decrease in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "База, болюсы и болюсы на коррекцию снижены на%@%%.";
+
+/* Describes a percentage increase in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "База, болюсы и болюсы на коррекцию увеличены на %@%%.";
+
+/* Describes a lack of change in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "BБаза, болюсы и болюсы на коррекцию не изменились.";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Отмена";
 
+/* The text for the override cancellation button */
+"Cancel Override" = "Отмена ручного контроля";
+
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Отмена врем базала";
+
 /* The title of the view controller to create a new carb entry */
-"carb-entry-title-add" = "Добавить запись углеводов";
+"Add Carb Entry" = "Добавить запись углеводов";
 
 /* The title of the view controller to edit an existing carb entry */
-"carb-entry-title-edit" = "Редактировать запись углеводов";
+"Edit Carb Entry" = "Редактировать запись углеводов";
+
+/* Footer text for customizing an override from a preset (1: preset name) */
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Изменения будут действительны только на время ручного контроля.";
 
 /* Carb entry section footer text explaining absorption time */
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Выберите более высокую длительность усвоения для обильной пищи или для пищи с белками и протеинами. Это единственное указание для алгоритма не нуждается в дополнительных уточнениях.";
@@ -40,14 +80,38 @@
 /* The title of the action used to dismiss an error alert */
 "com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
 
+/* The title for the override emoji condition section */
+"Condition" = "Условие";
+
 /* Title of the setup button to continue */
 "Continue" = "Продолжить";
+
+/* The section footer of correction range schedule */
+"Correction range is the blood glucose range that you would like Loop to correct to." = "Диапазон коррекции это желательный диапазон значений ГК для обработки алгоритмом петли.";
+
+/* The text for a custom override */
+"Custom" = "Настраиваемый";
+
+/* The title for the custom override entry screen */
+"Custom Override" = "Настраиваемое ручное управление";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Дата";
 
 /* Button title to delete all objects */
 "Delete All" = "Стереть все";
+
+/* The text for the override duration setting */
+"Duration" = "Продолжительность";
+
+/* The title for the override editing screen */
+"Edit Override" = "Редактировать ручной контроль";
+
+/* Footer text for editing an active override (1: preset name) */
+"Editing affects only the active override. The default settings of %@ will not be affected." = "Изменения затронут только активную версию. Значения по умолчанию %@ не изменятся.";
+
+/* The text for the indefinite override duration setting */
+"Enable Indefinitely" = "Активировать на неопределенное время";
 
 /* The detail text describing an enabled setting */
 "Enabled" = "Активировано";
@@ -61,6 +125,12 @@
 /* Section title for fast absorbing food */
 "Fast" = "Быстрая";
 
+/* The description shown on the insulin sensitivity schedule interface. */
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Чувствительность к инсулину показывает как ГК отреагирует на 1 ед. Инсулина. Меньшие величины означают подачу большего количества инсулина при ГК выше целевой. Слишком низкие величины могут привести к слишком низкой ГК.";
+
+/* Placeholder for maximum value in glucose range */
+"max" = "макс";
+
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Макс скорость базала";
 
@@ -70,38 +140,88 @@
 /* Section title for medium absorbing food */
 "Medium" = "Средняя";
 
-/* The unit display string for millimoles of glucose per liter */
-"mmol/L" = "ммоль/л";
+/* Placeholder for minimum value in glucose range */
+"min" = "мин";
 
 /* Alert action title to open error help */
 "More Info" = "Доп. инфо";
 
-/* Section title for no-carb food */
+/* The text for the override preset name setting */
+"Name" = "Имя";
+
+/* The title for the new override preset entry screen */
+"New Preset" = "Новый параметр";
+
+/* Section title for no-carb food
+The title for override emoji miscellaneous section */
 "Other" = "Другая";
 
+/* The title text for the insulin sensitivity scaling setting */
+"Overall Insulin Needs" = "Общая потребность в инсулине";
+
+/* The title text for the override presets screen */
+"Override Presets" = "Редактировать параметры";
+
+/* Text directing the user to configure override presets */
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Редактирование параметров может задаваться в разделе “Конфигурация” экрана настройки.";
+
 /* The section title of glucose overrides */
-"Overrides" = "Отменяет";
+"Overrides" = "Изменить";
 
 /* Title for the pre-meal override range */
 "Pre-Meal" = "До еды";
 
+/* The section header text override presets */
+"PRESETS" = "НАСТРОЙКИ";
+
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Событие помпы";
 
-/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
-"quantity-and-unit-space" = "%1$@ %2$@";
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Возобновить подачу";
 
-/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
-"quantity-and-unit-tight" = "%1$@%2$@";
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Возобновляется";
+
+/* The text for the override preset name field placeholder */
+"Running" = "Выполнение";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "Сохранить";
+
+/* The section header text for a scheduled override */
+"SCHEDULED OVERRIDE" = "ЗАПЛАНИРОВАННОЕ ВЫПОЛНЕНИЕ ИЗМЕНЕНИЙ";
 
 /* Section title for slow absorbing food */
 "Slow" = "Медленная";
 
+/* The text for the override start time */
+"Start Time" = "Время начала";
+
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Время начала временного базала";
+
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Остановить подачу";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Выполняется остановка";
+
+/* The text for the override preset symbol setting */
+"Symbol" = "Значок";
+
 /* The empty-state text for a configuration value */
 "Tap to set" = "Щелкнуть для ввода";
 
+/* The text for the override target range setting */
+"Target Range" = "Целевой диапазон";
+
+/* The title for the override selection screen */
+"Temporary Override" = "Временный";
+
 /* The default placeholder string for a credential */
-"text-placeholder-required" = "обязательный";
+"Required" = "обязательный";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Максимальная длительность усвоения %@";
@@ -118,7 +238,8 @@
 /* The unit string for units */
 "Units" = "Единицы";
 
-/* The default title to use when an entry has none */
+/* Accessibility value for an unknown value
+The default title to use when an entry has none */
 "Unknown" = "Неизвестно";
 
 /* Label indicating validation is occurring */

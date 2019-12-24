@@ -117,10 +117,10 @@ public final class AuthenticationViewController<T: ServiceAuthenticationUI>: UIT
 
             switch state {
             case .authorized:
-                cell.textLabel?.text = LocalizedString("authentication-button-delete", comment: "The title of the button to remove the credentials for a service")
+                cell.textLabel?.text = LocalizedString("Delete Account", comment: "The title of the button to remove the credentials for a service")
                 cell.tintColor = .delete
             case .empty, .unauthorized, .verifying:
-                cell.textLabel?.text = LocalizedString("authentication-button-add", comment: "The title of the button to add the credentials for a service")
+                cell.textLabel?.text = LocalizedString("Add Account", comment: "The title of the button to add the credentials for a service")
                 cell.tintColor = nil
             }
 
@@ -142,7 +142,7 @@ public final class AuthenticationViewController<T: ServiceAuthenticationUI>: UIT
             cell.textField.isSecureTextEntry = credential.field.isSecret
             cell.textField.returnKeyType = (indexPath.row < credentials.count - 1) ? .next : .done
             cell.textField.text = credential.value
-            cell.textField.placeholder = credential.field.placeholder ?? LocalizedString("text-placeholder-required", comment: "The default placeholder string for a credential")
+            cell.textField.placeholder = credential.field.placeholder ?? LocalizedString("Required", comment: "The default placeholder string for a credential")
 
             if let options = credential.field.options {
                 let picker = CredentialOptionPicker(options: options)

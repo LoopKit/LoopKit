@@ -1,0 +1,99 @@
+/* Describes a certain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus failed" = "%1$@ U bolus epäonnistui";
+
+/* Describes an uncertain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus may not have succeeded" = "%1$@ U bolus ei ehkä onnistunut";
+
+/* The error description describing when Health sharing was denied */
+"Authorization Denied" = "Valtuutus hylättiin";
+
+/* Recovery instruction for an uncertain bolus failure */
+"Check your pump before retrying" = "Tarkista pumppu ennen kuin yrität uudelleen";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Valtuutus hylättiin";
+
+/* The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Tämä näyte voidaan poistaa Terveys-sovelluksesta";
+
+/* Generic pump error description */
+"Communication Failure" = "Yhteys epäonnistui";
+
+/* Generic pump error description */
+"Connection Failure" = "Yhteysvirhe";
+
+/* Generic pump error description */
+"Device Refused" = "Laite hylättiin";
+
+/* Recovery suggestion for a no data error */
+"Ensure carb data exists for the specified date" = "Varmista, että hiilihydraattitiedot ovat olemassa määritettynä ajankohtana";
+
+/* Glucose trend down */
+"Falling" = "Laskeva";
+
+/* Glucose trend down-down */
+"Falling fast" = "Nopeasti laskeva";
+
+/* Glucose trend down-down-down */
+"Falling very fast" = "Erittäin nopeasti laskeva";
+
+/* Glucose trend flat */
+"Flat" = "Tasainen";
+
+/* The short unit display string for grams per U */
+"g/U" = "g/U";
+
+/* Generic pump error description */
+"Invalid Configuration" = "Virheellinen määritys";
+
+/* Recovery instruction for a certain bolus failure */
+"It is safe to retry" = "On turvallista yrittää uudelleen";
+
+/* The short unit display string for milligrams per deciliter per U */
+"mg/dL/U" = "mg/dL/U";
+
+/* The short unit display string for millimoles per liter */
+"mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per U */
+"mmol/L/U" = "mmol/L/U";
+
+/* Sensor state description for the non-valid state */
+"Needs Attention" = "Tarvitsee huomiota";
+
+/* Describes an error for no data found in a CarbStore request */
+"No values found" = "Arvoja ei löydy";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
+
+/* The error recovery suggestion when Health sharing was denied */
+"Please re-enable sharing in Health" = "Ota jakaminen uudelleen käyttöön Terveys-sovelluksessa";
+
+/* Glucose trend up */
+"Rising" = "Nouseva";
+
+/* Glucose trend up-up */
+"Rising fast" = "Nopeasti nouseva";
+
+/* Glucose trend up-up-up */
+"Rising very fast" = "Erittäin nopeasti nouseva";
+
+/* The short unit display string for international units of insulin */
+"U" = "U";
+
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "U/h";
+
+/* The long unit display string for a singular international unit of insulin */
+"Unit" = "Yksikkö";
+
+/* The long unit display string for a singular international unit of insulin per hour */
+"Unit/hour" = "Yksikkö/tunti";
+
+/* The long unit display string for international units of insulin */
+"Units" = "Yksikköä";
+
+/* The long unit display string for international units of insulin per hour */
+"Units/hour" = "Yksikköä/tunnissa";
+

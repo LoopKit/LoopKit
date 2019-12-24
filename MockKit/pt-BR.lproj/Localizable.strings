@@ -1,0 +1,5 @@
+/* The alert title for a resume error */
+"Error Resuming" = "Erro ao Retomar";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Erro ao Suspender";

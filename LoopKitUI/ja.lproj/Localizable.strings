@@ -1,0 +1,256 @@
+/* Separator between min and max glucose values */
+"-" = "-";
+
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% of normal insulin";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ units remaining at %2$@";
+
+/* Title of the carb entry absorption time cell */
+"Absorption Time" = "吸収時間";
+
+/* The title for the override emoji activity section */
+"Activity" = "アクティビティ";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "アカウントを追加";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "糖質の記入を追加";
+
+/* Action sheet confirmation message for pump history deletion */
+"Are you sure you want to delete all history entries?" = "入力履歴をすべて削除しますか?";
+
+/* Action sheet confirmation message for reservoir deletion */
+"Are you sure you want to delete all reservoir values?" = "リザーバの値をすべて削除しますか?";
+
+/* Describes a percentage decrease in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "基礎、ボーラス、補正注入の量が %@%%減ります。";
+
+/* Describes a percentage increase in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "基礎、ボーラス、補正注入の量が %@%%増えます。";
+
+/* Describes a lack of change in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "基礎、ボーラス、補正注入の量は変わりません。";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "キャンセル";
+
+/* The text for the override cancellation button */
+"Cancel Override" = "オーバーライドをキャンセル";
+
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "一時基礎レートをキャンセルします";
+
+/* Footer text for customizing an override from a preset (1: preset name) */
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "オーバーライドの有効化は今回のみ適用されます。%@ の初期設定は変わりません。";
+
+/* Carb entry section footer text explaining absorption time */
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "量の多い食事や脂質やたんぱく質を含んだ食事には長い吸収時間を選んでください。これはアルゴリズムのための参考で、厳密である必要はありません。";
+
+/* The format string describing the date of a COB value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.COBDateLabel" = "%1$@ 時点";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.totalDateLabel" = "%1$@ より";
+
+/* The format string describing the date of an IOB value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.IOBDateLabel" = "%1$@ 時点";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.totalDateLabel" = "%1$@ より";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* The title for the override emoji condition section */
+"Condition" = "コンディション";
+
+/* Title of the setup button to continue */
+"Continue" = "次へ";
+
+/* The section footer of correction range schedule */
+"Correction range is the blood glucose range that you would like Loop to correct to." = "目標グルコース範囲は、血糖値がこの範囲内に補正されるようループに設定する範囲です。";
+
+/* The text for a custom override */
+"Custom" = "カスタム";
+
+/* The title for the custom override entry screen */
+"Custom Override" = "カスタムオーバーライド";
+
+/* Title of the carb entry date picker cell */
+"Date" = "日付";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "アカウントを削除";
+
+/* Button title to delete all objects */
+"Delete All" = "すべて削除";
+
+/* The text for the override duration setting */
+"Duration" = "期間";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "糖質の記入を編集";
+
+/* The title for the override editing screen */
+"Edit Override" = "オーバーライドを編集";
+
+/* Footer text for editing an active override (1: preset name) */
+"Editing affects only the active override. The default settings of %@ will not be affected." = "オーバーライドの編集は今回のみ適用されます。%@ の初期設定は変わりません。";
+
+/* The text for the indefinite override duration setting */
+"Enable Indefinitely" = "無期限を有効にする";
+
+/* The detail text describing an enabled setting */
+"Enabled" = "有効";
+
+/* The placeholder text instructing users how to enter a maximum bolus */
+"Enter a number of units" = "単位数を入力";
+
+/* The placeholder text instructing users how to enter a maximum basal rate */
+"Enter a rate in units per hour" = "毎時単位(U/h)を入力";
+
+/* Section title for fast absorbing food */
+"Fast" = "速め";
+
+/* The description shown on the insulin sensitivity schedule interface. */
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "インスリン効果値は、1単位のインスリンによって血糖値がどれだけ反応するかを表します。この値が小さいほど、測定値がターゲットを超えたときに注入されるインスリンの量が多くなります。値を小さく設定しすぎると低血糖の原因となり危険です。";
+
+/* Placeholder for maximum value in glucose range */
+"max" = "max";
+
+/* The title text for the maximum basal rate value */
+"Maximum Basal Rate" = "最大基礎レート";
+
+/* The title text for the maximum bolus value */
+"Maximum Bolus" = "最大ボーラス";
+
+/* Section title for medium absorbing food */
+"Medium" = "中";
+
+/* Placeholder for minimum value in glucose range */
+"min" = "min";
+
+/* Alert action title to open error help */
+"More Info" = "詳細";
+
+/* The text for the override preset name setting */
+"Name" = "プリセット名";
+
+/* The title for the new override preset entry screen */
+"New Preset" = "プリセットを設定する";
+
+/* Section title for no-carb food
+   The title for override emoji miscellaneous section */
+"Other" = "その他";
+
+/* The title text for the insulin sensitivity scaling setting */
+"Overall Insulin Needs" = "総インスリン必要量";
+
+/* The title text for the override presets screen */
+"Override Presets" = "オーバーライドプリセット";
+
+/* Text directing the user to configure override presets */
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "オーバーライドプリセットは、設定画面のコンフィグレーションで設定できます。";
+
+/* The section title of glucose overrides */
+"Overrides" = "オーバーライド";
+
+/* Title for the pre-meal override range */
+"Pre-Meal" = "食前";
+
+/* The section header text override presets */
+"PRESETS" = "プリセット";
+
+/* The title of the screen displaying a pump event */
+"Pump Event" = "ポンプイベント";
+
+/* The default placeholder string for a credential */
+"Required" = "必須";
+
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "注入を再開";
+
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "再開中";
+
+/* The text for the override preset name field placeholder */
+"Running" = "動作中";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "保存";
+
+/* The section header text for a scheduled override */
+"SCHEDULED OVERRIDE" = "SCHEDULED OVERRIDE";
+
+/* Section title for slow absorbing food */
+"Slow" = "遅め";
+
+/* The text for the override start time */
+"Start Time" = "開始時間";
+
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "一時基礎を開始";
+
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "注入を一時停止";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "一時停止中";
+
+/* The text for the override preset symbol setting */
+"Symbol" = "シンボル";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "タップして確定";
+
+/* The text for the override target range setting */
+"Target Range" = "ターゲット範囲";
+
+/* The title for the override selection screen */
+"Temporary Override" = "一時的オーバーライト";
+
+/* Alert body displayed absorption time greater than max (1: maximum absorption time) */
+"The maximum absorption time is %@" = "最大吸収時間: %@";
+
+/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
+"The maximum allowed amount is %@ grams" = "最大量: %@ g";
+
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "時間帯 %1$@%2$@%3$@";
+
+/* The unit string for units per hour */
+"U/hour" = "U/時";
+
+/* The unit string for units */
+"Units" = "単位";
+
+/* Accessibility value for an unknown value
+   The default title to use when an entry has none */
+"Unknown" = "不明";
+
+/* Label indicating validation is occurring */
+"Verifying" = "確認中";
+
+/* Title of an alert containing a validation warning */
+"Warning" = "警告";
+
+/* Title for the workout override range */
+"Workout" = "運動";
+

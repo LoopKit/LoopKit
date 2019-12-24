@@ -1,0 +1,40 @@
+/* The title text for the basal rate schedule */
+"Basal Rates" = "Basaalitasot";
+
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "Hiilihydraattisuhteet";
+
+/* The title for the cell navigating to the carbs screen */
+"Carbs" = "Hiilihydraatit";
+
+/* The title text for the glucose correction range schedule */
+"Correction Range" = "Korjausalue";
+
+/* The title for the cell displaying diagnostic data */
+"Diagnostic" = "Diagnostiikka";
+
+/* The placeholder text instructing users how to enter a pump ID */
+"Enter the 6-digit pump ID" = "Syötä 6-numeroinen pumpun sarjanumero";
+
+/* The title for the cell displaying data generation */
+"Generate Data" = "Luo tiedot";
+
+/* The title of the insulin sensitivity schedule screen
+   The title text for the insulin sensitivity schedule */
+"Insulin Sensitivity" = "Insuliiniherkkyys";
+
+/* The title text for the pump ID */
+"Pump ID" = "Pumpun sarjanumero";
+
+/* The title for the cell navigating to the reservoir screen */
+"Reservoir" = "Säiliö";
+
+/* Title for the cell resetting the data manager */
+"Reset" = "Nollaa";
+
+/* Title of button to sync basal profile from pump */
+"Sync With Pump" = "Synkronoi pumpun kanssa";
+
+/* Instructions on where to find the pump ID on a Minimed pump */
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Pumpun sarjanumero löytyy pumpun takaosasta tai STATUS/Esc-valikon loppuosasta. Se on pelkästään numeroita sisältävä osa sarjanumerosta (SN tai S/N).";
+
