@@ -7,31 +7,36 @@
 
 import UIKit
 
-protocol FoodTypeShortcutCellDelegate: class {
+public protocol FoodTypeShortcutCellDelegate: class {
     func foodTypeShortcutCellDidUpdateSelection(_ cell: FoodTypeShortcutCell)
 }
 
 
-class FoodTypeShortcutCell: UITableViewCell {
+public class FoodTypeShortcutCell: UITableViewCell {
 
     @IBOutlet var buttonStack: UIStackView!
 
-    enum SelectionState: Int {
+    public enum SelectionState: Int {
         case fast
         case medium
         case slow
         case custom
     }
 
-    var selectionState = SelectionState.medium {
+    public var selectionState = SelectionState.medium {
         didSet {
             updateButtons()
         }
     }
 
-    weak var delegate: FoodTypeShortcutCellDelegate?
+    public weak var delegate: FoodTypeShortcutCellDelegate?
 
-    override func layoutSubviews() {
+    public var selectedEmoji: String {
+        let selectedButton = buttonStack.arrangedSubviews[selectionState.rawValue] as! UIButton
+        return selectedButton.title(for: .normal)!
+    }
+
+    public override func layoutSubviews() {
         super.layoutSubviews()
 
         contentView.layoutMargins.left = separatorInset.left
