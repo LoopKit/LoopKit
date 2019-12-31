@@ -29,6 +29,8 @@ extension NumberFormatter {
                 comment: "Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit)"
             )
         case .short:
+            fallthrough
+        @unknown default:
             format = LocalizedString(
                 "quantity-and-unit-tight",
                 value: "%1$@%2$@",

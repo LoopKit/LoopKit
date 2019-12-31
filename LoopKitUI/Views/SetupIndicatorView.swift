@@ -10,36 +10,49 @@ import UIKit
 @IBDesignable
 public class SetupIndicatorView: UIView {
 
-    public enum State {
+    public enum State: Equatable {
         case hidden
-        case loading
+        case indeterminantProgress
+        case timedProgress(finishTime: CFTimeInterval)
         case completed
     }
 
     public var state: State = .hidden {
         didSet {
-            switch (oldValue, state) {
-            case (.hidden, .hidden), (.loading, .loading), (.completed, .completed):
-                break
-            case (.hidden, .loading):
-                break
-            case (.hidden, .completed):
-                break
-            case (.completed, .hidden):
-                break
-            case (.completed, .loading):
-                break
-            case (.loading, .hidden):
-                break
-            case (.loading, .completed):
-                break
-            }
-
             animate(from: oldValue, to: state)
+
+            if case let .timedProgress(finishTime) = state {
+                let duration = finishTime - CACurrentMediaTime()
+                progressView.progress = 0
+                if duration > 0 {
+                    let animator = UIViewPropertyAnimator(duration: duration, curve: .linear)
+                    animator.addAnimations {
+                        self.progressView.setProgress(1, animated: true)
+                    }
+                    animator.startAnimation()
+                    self.progressAnimator = animator
+                } else {
+                    progressView.progress = 1
+                }
+            }
         }
     }
 
     @IBInspectable var animationDuration: Double = 0.5
+
+
+    private func viewUsedInState(_ state: State) -> UIView? {
+        switch state {
+        case .hidden:
+            return nil
+        case .indeterminantProgress:
+            return activityIndicatorView
+        case .timedProgress:
+            return progressView
+        case .completed:
+            return completionImageView
+        }
+    }
 
     private func animate(from oldState: State, to newState: State) {
         guard oldState != newState else {
@@ -47,41 +60,51 @@ public class SetupIndicatorView: UIView {
         }
 
         if let animator = self.animator, animator.isRunning {
-            switch oldState {
-            case .hidden:
-                break
-            case .loading, .completed:
-                completionImageView.alpha = 1
-                animator.isReversed = !animator.isReversed
-                return
-            }
+            animator.stopAnimation(true)
         }
 
-        let isActivityIndicatorViewRunning = (newState == .loading)
-        let isCompletionHidden = (newState != .completed)
-        let wasHidden = (oldState == .hidden)
+        // Figure out which views are not used in any ongoing animations
+        var unusedViews: Set = [activityIndicatorView, progressView, completionImageView]
 
-        completionImageView.alpha = wasHidden && isCompletionHidden ? 0 : 1
+        let viewToHide = viewUsedInState(oldState)
+        unusedViews.remove(viewToHide)
+
+        let viewToShow = viewUsedInState(newState)
+        unusedViews.remove(viewToShow)
+
+        for view in unusedViews {
+            view?.alpha = 0
+        }
+
+        if case .timedProgress = oldState {
+            progressAnimator?.stopAnimation(true)
+        }
 
         let animator = UIViewPropertyAnimator(duration: animationDuration, dampingRatio: 0.5)
         animator.addAnimations {
-            if isActivityIndicatorViewRunning {
-                self.activityIndicatorView.alpha = 1
-                self.activityIndicatorView.startAnimating()
-            } else {
-                self.activityIndicatorView.alpha = 0
+
+            viewToHide?.alpha = 0
+            viewToShow?.alpha = 1
+
+            switch oldState {
+            case .completed:
+                self.completionImageView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+            default:
+                break
             }
 
-            if isCompletionHidden {
-                self.completionImageView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
-                self.completionImageView.alpha = 0
-            } else {
+
+            switch newState {
+            case .indeterminantProgress:
+                self.activityIndicatorView.startAnimating()
+            case .completed:
                 self.completionImageView.transform = CGAffineTransform.identity
-                self.completionImageView.alpha = 1
+            default:
+                break
             }
         }
         animator.addCompletion { (position) in
-            if self.state != .loading {
+            if self.state != .indeterminantProgress {
                 self.activityIndicatorView.stopAnimating()
             }
         }
@@ -89,9 +112,13 @@ public class SetupIndicatorView: UIView {
         self.animator = animator
     }
 
+    private var progressAnimator: UIViewPropertyAnimator?
+
     private var animator: UIViewPropertyAnimator?
 
-    private let activityIndicatorView = UIActivityIndicatorView(style: .gray)
+    private let activityIndicatorView = UIActivityIndicatorView(style: .default)
+
+    private let progressView = UIProgressView(progressViewStyle: .default)
 
     private(set) var completionImageView: UIImageView!
 
@@ -111,26 +138,35 @@ public class SetupIndicatorView: UIView {
         let image = UIImage(named: "Checkmark", in: Bundle(for: type(of: self)), compatibleWith: traitCollection)!
         completionImageView = UIImageView(image: image)
         completionImageView.alpha = 0
+        completionImageView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
         completionImageView.translatesAutoresizingMaskIntoConstraints = false
 
         activityIndicatorView.alpha = 0
         activityIndicatorView.hidesWhenStopped = true
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
 
+        progressView.alpha = 0
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+
         addSubview(activityIndicatorView)
+        addSubview(progressView)
         addSubview(completionImageView)
 
         NSLayoutConstraint.activate([
-            widthAnchor.constraint(equalToConstant: image.size.width),
             heightAnchor.constraint(equalToConstant: image.size.height),
             completionImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             completionImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             activityIndicatorView.centerXAnchor.constraint(equalTo: centerXAnchor),
             activityIndicatorView.centerYAnchor.constraint(equalTo: centerYAnchor),
-        ])
+            progressView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            progressView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            progressView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            progressView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            ])
     }
 
     override public var intrinsicContentSize: CGSize {
         return completionImageView?.image?.size ?? activityIndicatorView.intrinsicContentSize
     }
 }
+    

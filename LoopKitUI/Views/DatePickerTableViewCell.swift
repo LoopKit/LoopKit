@@ -8,14 +8,14 @@
 
 import UIKit
 
-protocol DatePickerTableViewCellDelegate: class {
+public protocol DatePickerTableViewCellDelegate: class {
     func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell)
 }
 
 
-class DatePickerTableViewCell: UITableViewCell {
+open class DatePickerTableViewCell: UITableViewCell {
 
-    var date: Date {
+    open var date: Date {
         get {
             return datePicker.date
         }
@@ -25,7 +25,7 @@ class DatePickerTableViewCell: UITableViewCell {
         }
     }
 
-    var duration: TimeInterval {
+    open var duration: TimeInterval {
         get {
             return datePicker.countDownDuration
         }
@@ -35,7 +35,7 @@ class DatePickerTableViewCell: UITableViewCell {
         }
     }
 
-    var maximumDuration = TimeInterval(hours: 8) {
+    open var maximumDuration = TimeInterval(hours: 8) {
         didSet {
             if duration > maximumDuration {
                 duration = maximumDuration
@@ -43,13 +43,13 @@ class DatePickerTableViewCell: UITableViewCell {
         }
     }
 
-    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet open weak var datePicker: UIDatePicker!
 
-    @IBOutlet weak var datePickerHeightConstraint: NSLayoutConstraint!
+    @IBOutlet open weak var datePickerHeightConstraint: NSLayoutConstraint!
 
     private var datePickerExpandedHeight: CGFloat = 0
 
-    var isDatePickerHidden: Bool {
+    open var isDatePickerHidden: Bool {
         get {
             return datePicker.isHidden || !datePicker.isEnabled
         }
@@ -69,7 +69,7 @@ class DatePickerTableViewCell: UITableViewCell {
         }
     }
 
-    override func awakeFromNib() {
+    open override func awakeFromNib() {
         super.awakeFromNib()
 
         datePickerExpandedHeight = datePickerHeightConstraint.constant
@@ -78,7 +78,7 @@ class DatePickerTableViewCell: UITableViewCell {
         updateDateLabel()
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
+    open override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         if selected {
@@ -86,10 +86,10 @@ class DatePickerTableViewCell: UITableViewCell {
         }
     }
 
-    func updateDateLabel() {
+    open func updateDateLabel() {
     }
 
-    @IBAction func dateChanged(_ sender: UIDatePicker) {
+    @IBAction open func dateChanged(_ sender: UIDatePicker) {
         if case .countDownTimer = sender.datePickerMode, duration > maximumDuration {
             duration = maximumDuration
         } else {
@@ -101,7 +101,10 @@ class DatePickerTableViewCell: UITableViewCell {
 
 /// UITableViewController extensions to aid working with DatePickerTableViewCell
 extension DatePickerTableViewCellDelegate where Self: UITableViewController {
-    func hideDatePickerCells(excluding indexPath: IndexPath? = nil) {
+    public func hideDatePickerCells(excluding indexPath: IndexPath? = nil) {
+        guard isViewLoaded else {
+            return
+        }
         for case let cell as DatePickerTableViewCell in tableView.visibleCells where tableView.indexPath(for: cell) != indexPath && cell.isDatePickerHidden == false {
             cell.isDatePickerHidden = true
         }

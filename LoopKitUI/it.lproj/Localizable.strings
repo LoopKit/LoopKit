@@ -1,8 +1,33 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% of normal insulin";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ units remaining at %2$@";
+
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Tempo di assorbimento";
 
+/* The title for the override emoji activity section */
+"Activity" = "Activity";
+
 /* The title of the button to add the credentials for a service */
 "Add Account" = "Aggiungi Account";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Aggiungi carboidrati assunti";
 
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Sei sicuro di voler eliminare tutti gli inserimenti storiche?";
@@ -10,20 +35,26 @@
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Sei sicuro di voler eliminare tutti  i valori del serbato?";
 
-/* The title of the button to add the credentials for a service */
-"authentication-button-add" = "Aggiungi Account";
+/* Describes a percentage decrease in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Le dosi basali, di bolo e di correzione dell’insulina sono calate del %@%%.";
 
-/* The title of the button to remove the credentials for a service */
-"authentication-button-delete" = "Cancella Account";
+/* Describes a percentage increase in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Le dosi basali, di bolo e di correzione dell’insulina sono aumentate del %@%%.";
+
+/* Describes a lack of change in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "Le dosi basali, di bolo e di correzione dell’insulina sono rimaste invariate.";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Cancella";
 
-/* The title of the view controller to create a new carb entry */
-"carb-entry-title-add" = "Aggiungi carboidrati assunti";
+/* The text for the override cancellation button */
+"Cancel Override" = "Annulla regolazione manuale";
 
-/* The title of the view controller to edit an existing carb entry */
-"carb-entry-title-edit" = "Modifica carboidrati Assunti";
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Annullamento velocità basale temporanea in corso";
+
+/* Footer text for customizing an override from a preset (1: preset name) */
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Le modifiche saranno applicate solo all’attivazione della regolazione manuale. Le impostazioni predefinite di %@ rimarranno invariate.";
 
 /* Carb entry section footer text explaining absorption time */
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Scegli un tempo di assorbimento piu lungo per i pasti piu grandi o quelli contenenti grassi e proteine. Questa e solo una guida all’algoritmo e non e necessario che sia esatta.";
@@ -43,8 +74,20 @@
 /* The title of the action used to dismiss an error alert */
 "com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
 
+/* The title for the override emoji condition section */
+"Condition" = "Condizione";
+
 /* Title of the setup button to continue */
 "Continue" = "Continua";
+
+/* The section footer of correction range schedule */
+"Correction range is the blood glucose range that you would like Loop to correct to." = "L’intervallo di correzione è l’intervallo di glicemia al quale vuoi che si regoli Loop.";
+
+/* The text for a custom override */
+"Custom" = "Personalizzata";
+
+/* The title for the custom override entry screen */
+"Custom Override" = "Regolazione manuale personalizzata";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Data";
@@ -54,6 +97,21 @@
 
 /* Button title to delete all objects */
 "Delete All" = "Elimina tutto";
+
+/* The text for the override duration setting */
+"Duration" = "Durata";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Modifica carboidrati Assunti";
+
+/* The title for the override editing screen */
+"Edit Override" = "Modifica regolazione manuale";
+
+/* Footer text for editing an active override (1: preset name) */
+"Editing affects only the active override. The default settings of %@ will not be affected." = "La modifica riguarda solo la regolazione manuale attiva.  Le impostazioni predefinite di %@ resteranno invariate.";
+
+/* The text for the indefinite override duration setting */
+"Enable Indefinitely" = "Attiva a tempo indeterminato";
 
 /* The detail text describing an enabled setting */
 "Enabled" = "Abilitato";
@@ -67,6 +125,12 @@
 /* Section title for fast absorbing food */
 "Fast" = "Veloce";
 
+/* The description shown on the insulin sensitivity schedule interface. */
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "La sensibilità all’insulina descrive il modo in cui la tua glicemia dovrebbe rispondere a una dose di insulina pari a 1 Unità. In caso di valori inferiori, al superamento del target verrà somministrata più insulina. Valori troppo bassi possono causare livelli di glicemia pericolosamente bassi.";
+
+/* Placeholder for maximum value in glucose range */
+"max" = "max";
+
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Profilo Basale Massimo";
 
@@ -76,41 +140,88 @@
 /* Section title for medium absorbing food */
 "Medium" = "Medio";
 
-/* The unit display string for millimoles of glucose per liter */
-"mmol/L" = "mmol/L";
+/* Placeholder for minimum value in glucose range */
+"min" = "min";
 
 /* Alert action title to open error help */
 "More Info" = "Piu info";
 
-/* Section title for no-carb food */
+/* The text for the override preset name setting */
+"Name" = "Nome";
+
+/* The title for the new override preset entry screen */
+"New Preset" = "Nuove impostazioni predefinite";
+
+/* Section title for no-carb food
+   The title for override emoji miscellaneous section */
 "Other" = "Altro";
 
+/* The title text for the insulin sensitivity scaling setting */
+"Overall Insulin Needs" = "Fabbisogno complessivo di insulina";
+
+/* The title text for the override presets screen */
+"Override Presets" = "Impostazioni predefinite della regolazione manuale";
+
+/* Text directing the user to configure override presets */
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "È possibile configurare le impostazioni predefinite della regolazione manuale nella sezione ‘Configurazione' della schermata impostazioni.";
+
 /* The section title of glucose overrides */
-"Overrides" = "Sostituisci";
+"Overrides" = "Regolazioni manuali";
 
 /* Title for the pre-meal override range */
 "Pre-Meal" = "Pre-Pasto";
 
+/* The section header text override presets */
+"PRESETS" = "IMPOSTAZIONI PREDEFINITE";
+
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Evento Microinfusore";
-
-/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
-"quantity-and-unit-space" = "%1$@ %2$@";
-
-/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
-"quantity-and-unit-tight" = "%1$@%2$@";
 
 /* The default placeholder string for a credential */
 "Required" = "Necessario";
 
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Riprendi erogazione";
+
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Ripresa in corso";
+
+/* The text for the override preset name field placeholder */
+"Running" = "Corsa";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "Salva";
+
+/* The section header text for a scheduled override */
+"SCHEDULED OVERRIDE" = "REGOLAZIONE MANUALE PROGRAMMATA";
+
 /* Section title for slow absorbing food */
 "Slow" = "Lento";
+
+/* The text for the override start time */
+"Start Time" = "Ora di inizio";
+
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Attivazione velocità basale temporanea in corso";
+
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Sospendi erogazione";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Sospensione in corso";
+
+/* The text for the override preset symbol setting */
+"Symbol" = "Simbolo";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Imposta";
 
-/* The default placeholder string for a credential */
-"text-placeholder-required" = "Necessario";
+/* The text for the override target range setting */
+"Target Range" = "Intervallo target";
+
+/* The title for the override selection screen */
+"Temporary Override" = "Regolazione manuale temporanea";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Il tempo di assorbimento massimo e %@";
@@ -127,7 +238,8 @@
 /* The unit string for units */
 "Units" = "Unità";
 
-/* The default title to use when an entry has none */
+/* Accessibility value for an unknown value
+   The default title to use when an entry has none */
 "Unknown" = "Sconosciuto";
 
 /* Label indicating validation is occurring */

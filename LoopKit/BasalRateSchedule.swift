@@ -11,6 +11,11 @@ import Foundation
 
 public typealias BasalRateSchedule = DailyValueSchedule<Double>
 
+public struct BasalScheduleValidationResult {
+    let scheduleError: Error?
+    let itemErrors: [(index: Int, error: Error)]
+}
+
 
 public extension DailyValueSchedule where T == Double {
     /**
@@ -18,7 +23,7 @@ public extension DailyValueSchedule where T == Double {
 
      - returns: The total basal delivery
      */
-    public func total() -> Double {
+    func total() -> Double {
         var total: Double = 0
 
         for (index, item) in items.enumerated() {

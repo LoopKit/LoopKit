@@ -1,0 +1,39 @@
+/* The title text for the basal rate schedule */
+"Basal Rates" = "Taxas Basais";
+
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "Taxas de Carbs";
+
+/* The title for the cell navigating to the carbs screen */
+"Carbs" = "Carbs";
+
+/* The title text for the glucose correction range schedule */
+"Correction Range" = "Faixa de Correção";
+
+/* The title for the cell displaying diagnostic data */
+"Diagnostic" = "Diagnóstico";
+
+/* The placeholder text instructing users how to enter a pump ID */
+"Enter the 6-digit pump ID" = "Entre com o ID de 6 dígitos da bomba";
+
+/* The title for the cell displaying data generation */
+"Generate Data" = "Gerar Dados";
+
+/* The title of the insulin sensitivity schedule screen
+   The title text for the insulin sensitivity schedule */
+"Insulin Sensitivity" = "Sensibilidade a Insulina";
+
+/* The title text for the pump ID */
+"Pump ID" = "ID da Bomba";
+
+/* The title for the cell navigating to the reservoir screen */
+"Reservoir" = "Reservatório";
+
+/* Title for the cell resetting the data manager */
+"Reset" = "Restabelecer";
+
+/* Title of button to sync basal profile from pump */
+"Sync With Pump" = "Sincronizar com a Bomba";
+
+/* Instructions on where to find the pump ID on a Minimed pump */
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "O ID da bomba pode ser encontrado impresso na parte traseira ou na parte inferior da tela STATUS/Esc. É a parte estritamente numérica do número de série (mostrado como SN ou S/N).";

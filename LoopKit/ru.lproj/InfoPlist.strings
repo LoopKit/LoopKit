@@ -1,9 +1,0 @@
-/* Bundle name */
-"CFBundleName" = "$(PRODUCT_NAME)";
-
-/* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "Для определения воздействия на гликемию используются данные о еде из базы данных Здоровье";
-
-/* Privacy - Health Update Usage Description */
-"NSHealthUpdateUsageDescription" = "Данные об углеводах вносимые в приложение хранятся в базе данных Здоровье";
-

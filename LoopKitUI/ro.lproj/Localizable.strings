@@ -1,0 +1,253 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% din insulină normală";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ unități rămase la %2$@";
+
+/* Title of the carb entry absorption time cell */
+"Absorption Time" = "Timp de absorbție";
+
+/* The title for the override emoji activity section */
+"Activity" = "Activitate";
+
+/* Action sheet confirmation message for pump history deletion */
+"Are you sure you want to delete all history entries?" = "Sigur doriți să ștergeți toate înregistrările din istoric?";
+
+/* Action sheet confirmation message for reservoir deletion */
+"Are you sure you want to delete all reservoir values?" = "Sigur doriți să ștergeți toate valorile de rezervor?";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Adaugă cont";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Șterge cont";
+
+/* Describes a percentage decrease in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Dozele de insulină bazale, de bolus și de corecție sunt scăzute cu %@%%.";
+
+/* Describes a percentage increase in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Dozele de insulină bazale, de bolus și de corecție sunt crescute cu %@%%.";
+
+/* Describes a lack of change in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "Dozele de insulină bazale, de bolus și de corecție sunt neafectate.";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Renunță";
+
+/* The text for the override cancellation button */
+"Cancel Override" = "Oprește înlocuirea";
+
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Oprește bazala temporară";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Adaugă carbohidrați";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Editează carbohidrați";
+
+/* Footer text for customizing an override from a preset (1: preset name) */
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Modificările se vor aplica doar pe durata înlocuirii. Setările implicite de %@ nu vor fi afectate.";
+
+/* Carb entry section footer text explaining absorption time */
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Alegeți o durată mai lungă de absorbție pentru mese mai mari sau pentru cele care conțin grăsimi și proteine. Nu e necesară o valoare exactă, scopul e să oferim doar o ghidare pentru algoritm.";
+
+/* The format string describing the date of a COB value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.COBDateLabel" = "la %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.totalDateLabel" = "de la %1$@";
+
+/* The format string describing the date of an IOB value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.IOBDateLabel" = "la %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.totalDateLabel" = "de la %1$@";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* The title for the override emoji condition section */
+"Condition" = "Condiție";
+
+/* Title of the setup button to continue */
+"Continue" = "Continuă";
+
+/* The section footer of correction range schedule */
+"Correction range is the blood glucose range that you would like Loop to correct to." = "Correction range is the blood glucose range that you would like Loop to correct to.";
+
+/* The text for a custom override */
+"Custom" = "Personalizată";
+
+/* The title for the custom override entry screen */
+"Custom Override" = "Înlocuire personalizată";
+
+/* Title of the carb entry date picker cell */
+"Date" = "Data";
+
+/* Button title to delete all objects */
+"Delete All" = "Șterge tot";
+
+/* The text for the override duration setting */
+"Duration" = "Durată";
+
+/* The title for the override editing screen */
+"Edit Override" = "Editează înlocuirea";
+
+/* Footer text for editing an active override (1: preset name) */
+"Editing affects only the active override. The default settings of %@ will not be affected." = "Editarea afectează doar înlocuirea activă. Setările implicite de %@ nu vor fi afectate.";
+
+/* The text for the indefinite override duration setting */
+"Enable Indefinitely" = "Activează pe termen nedeterminat";
+
+/* The detail text describing an enabled setting */
+"Enabled" = "Activată";
+
+/* The placeholder text instructing users how to enter a maximum bolus */
+"Enter a number of units" = "Introduceți un număr de unități";
+
+/* The placeholder text instructing users how to enter a maximum basal rate */
+"Enter a rate in units per hour" = "Introduceți o rată exprimată în unități per oră";
+
+/* Section title for fast absorbing food */
+"Fast" = "Rapidă";
+
+/* The description shown on the insulin sensitivity schedule interface. */
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Factorul de sensibilitate la insulină descrie felul în care glicemia ar trebui să răspundă la 1 unitate de insulină. Valori mai mici determină administrarea unor doze mai mari de insulină pentru a scădea glicemia la intervalul țintă.";
+
+/* Placeholder for maximum value in glucose range */
+"max" = "max";
+
+/* The title text for the maximum basal rate value */
+"Maximum Basal Rate" = "Rată bazală maximă";
+
+/* The title text for the maximum bolus value */
+"Maximum Bolus" = "Bolus maxim";
+
+/* Section title for medium absorbing food */
+"Medium" = "Medie";
+
+/* Placeholder for minimum value in glucose range */
+"min" = "min";
+
+/* Alert action title to open error help */
+"More Info" = "Detalii";
+
+/* The text for the override preset name setting */
+"Name" = "Nume";
+
+/* The title for the new override preset entry screen */
+"New Preset" = "Presetare nouă";
+
+/* Section title for no-carb food
+   The title for override emoji miscellaneous section */
+"Other" = "Altele";
+
+/* The title text for the insulin sensitivity scaling setting */
+"Overall Insulin Needs" = "Necesar de insulină total";
+
+/* The title text for the override presets screen */
+"Override Presets" = "Presetări de înlocuire";
+
+/* Text directing the user to configure override presets */
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Presetările de înlocuire pot fi setate în secțiunea 'Configurație' din ecranul de setări.";
+
+/* The section title of glucose overrides */
+"Overrides" = "Înlocuiri";
+
+/* Title for the pre-meal override range */
+"Pre-Meal" = "Preprandial";
+
+/* The section header text override presets */
+"PRESETS" = "PRESETĂRI";
+
+/* The title of the screen displaying a pump event */
+"Pump Event" = "Eveniment de pompă";
+
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Reia administrarea";
+
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Se reia";
+
+/* The text for the override preset name field placeholder */
+"Running" = "Se rulează";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "Salvează";
+
+/* The section header text for a scheduled override */
+"SCHEDULED OVERRIDE" = "ÎNLOCUIRE PLANIFICATĂ";
+
+/* Section title for slow absorbing food */
+"Slow" = "Lentă";
+
+/* The text for the override start time */
+"Start Time" = "Oră începere";
+
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Pornire bazală temporară";
+
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Suspendă administrarea";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Se suspendă";
+
+/* The text for the override preset symbol setting */
+"Symbol" = "Simbol";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Apăsați pentru setare";
+
+/* The text for the override target range setting */
+"Target Range" = "Interval țintă";
+
+/* The title for the override selection screen */
+"Temporary Override" = "Înlocuire temporară";
+
+/* The default placeholder string for a credential */
+"Required" = "Necesar";
+
+/* Alert body displayed absorption time greater than max (1: maximum absorption time) */
+"The maximum absorption time is %@" = "Durata maximă de absorbție este de %@";
+
+/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
+"The maximum allowed amount is %@ grams" = "Cantitatea maximă admisă este de %@ grame";
+
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "Orele în %1$@%2$@%3$@";
+
+/* The unit string for units per hour */
+"U/hour" = "U/oră";
+
+/* The unit string for units */
+"Units" = "Unități";
+
+/* Accessibility value for an unknown value
+   The default title to use when an entry has none */
+"Unknown" = "Necunoscut";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Se verifică";
+
+/* Title of an alert containing a validation warning */
+"Warning" = "Avertizare";
+
+/* Title for the workout override range */
+"Workout" = "Activitate sportivă";
+

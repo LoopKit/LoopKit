@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class TextButtonTableViewCell: UITableViewCell {
+open class TextButtonTableViewCell: LoadingTableViewCell {
 
     override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -27,27 +27,23 @@ public class TextButtonTableViewCell: UITableViewCell {
         }
     }
 
-    public var isLoading = false {
-        didSet {
-            if isLoading {
-                let indicator = UIActivityIndicatorView(style: .gray)
-                accessoryView = indicator
-                indicator.startAnimating()
-            } else {
-                accessoryView = nil
-            }
-        }
-    }
-
-    public override func tintColorDidChange() {
+    open override func tintColorDidChange() {
         super.tintColorDidChange()
 
         textLabel?.textColor = tintColor
     }
 
-    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 
         textLabel?.textColor = tintColor
+    }
+
+    open override func prepareForReuse() {
+        super.prepareForReuse()
+
+        textLabel?.textAlignment = .natural
+        tintColor = nil
+        isEnabled = true
     }
 }

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14854.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1Vl-XQ-Scp">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14806.4"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Emoji Input Controller-->
+        <scene sceneID="BIv-bh-KrK">
+            <objects>
+                <viewController id="1Vl-XQ-Scp" customClass="EmojiInputController" customModule="LoopKitUI" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="lKE-z4-OIM" customClass="UIInputView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="253"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" layoutMarginsFollowReadableWidth="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="CGs-B7-uPl">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="220"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="220" id="gWv-wN-yvY"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="KsP-ir-cgE">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="10" height="50"/>
+                                    <size key="footerReferenceSize" width="20" height="10"/>
+                                    <inset key="sectionInset" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="EmojiInputCell" id="k9g-nh-BVh" customClass="EmojiInputCell" customModule="LoopKitUI" customModuleProvider="target">
+                                        <rect key="frame" x="10" y="20" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🍇" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YC0-Nv-XXW">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="46"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="YC0-Nv-XXW" secondAttribute="trailing" id="GDk-t2-9hv"/>
+                                            <constraint firstItem="YC0-Nv-XXW" firstAttribute="top" secondItem="k9g-nh-BVh" secondAttribute="top" id="TwX-d3-1hi"/>
+                                            <constraint firstAttribute="bottom" secondItem="YC0-Nv-XXW" secondAttribute="bottom" id="vzX-hH-hK9"/>
+                                            <constraint firstItem="YC0-Nv-XXW" firstAttribute="leading" secondItem="k9g-nh-BVh" secondAttribute="leading" id="y0p-nf-6RL"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="label" destination="YC0-Nv-XXW" id="adg-wo-Kvi"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="EmojiInputHeaderView" id="wGJ-pi-8bt" customClass="EmojiInputHeaderView" customModule="LoopKitUI" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="10" height="220"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MEDIUM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ezy-3D-Zg4">
+                                            <rect key="frame" x="10" y="4" width="50.5" height="14.5"/>
+                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                            <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="ezy-3D-Zg4" secondAttribute="trailing" priority="250" id="5j4-yU-Rh7"/>
+                                        <constraint firstItem="ezy-3D-Zg4" firstAttribute="top" secondItem="wGJ-pi-8bt" secondAttribute="top" constant="4" id="gKl-wL-YiW"/>
+                                        <constraint firstItem="ezy-3D-Zg4" firstAttribute="leading" secondItem="wGJ-pi-8bt" secondAttribute="trailing" id="uGA-bm-mnp"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="titleLabel" destination="ezy-3D-Zg4" id="R9Z-Im-OVz"/>
+                                    </connections>
+                                </collectionReusableView>
+                                <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Footer" id="HyU-U2-qYY">
+                                    <rect key="frame" x="60" y="0.0" width="20" height="220"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </collectionReusableView>
+                                <connections>
+                                    <outlet property="dataSource" destination="1Vl-XQ-Scp" id="Spk-lW-aEB"/>
+                                    <outlet property="delegate" destination="1Vl-XQ-Scp" id="VVZ-Iv-Kgx"/>
+                                </connections>
+                            </collectionView>
+                            <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5xF-hj-xbW">
+                                <rect key="frame" x="10" y="220" width="355" height="33"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uhB-Ts-gDS">
+                                        <rect key="frame" x="0.0" y="0.0" width="30" height="33"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <state key="normal" title="abc">
+                                            <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="switchKeyboard:" destination="1Vl-XQ-Scp" eventType="touchUpInside" id="VdO-GT-DIN"/>
+                                        </connections>
+                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Ag8-1E-ewa">
+                                        <rect key="frame" x="117" y="0.0" width="128" height="33"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 🍭 " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vrL-M3-kX6">
+                                                <rect key="frame" x="0.0" y="0.0" width="32" height="33"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🌮" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vi5-wd-QzL">
+                                                <rect key="frame" x="32" y="0.0" width="32" height="33"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🍕" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hYU-P4-ltF">
+                                                <rect key="frame" x="64" y="0.0" width="32" height="33"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⋯ " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LJZ-66-a5p">
+                                                <rect key="frame" x="96" y="0.0" width="32" height="33"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="Hbp-V9-WaU" appends="YES" id="o0h-Ey-1lu"/>
+                                        </connections>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Swx-bi-ftk">
+                                        <rect key="frame" x="332" y="0.0" width="23" height="33"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <state key="normal" image="Delete-Left"/>
+                                        <connections>
+                                            <action selector="deleteBackward:" destination="1Vl-XQ-Scp" eventType="touchUpInside" id="gAx-Bz-D8X"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="q2E-1p-KUC" firstAttribute="trailing" secondItem="5xF-hj-xbW" secondAttribute="trailing" constant="10" id="Eda-a0-BUb"/>
+                            <constraint firstItem="CGs-B7-uPl" firstAttribute="leading" secondItem="q2E-1p-KUC" secondAttribute="leading" id="RIH-QB-I4e"/>
+                            <constraint firstItem="5xF-hj-xbW" firstAttribute="top" secondItem="CGs-B7-uPl" secondAttribute="bottom" id="UvG-ux-asT"/>
+                            <constraint firstItem="5xF-hj-xbW" firstAttribute="leading" secondItem="q2E-1p-KUC" secondAttribute="leading" constant="10" id="WdY-vQ-D1V"/>
+                            <constraint firstItem="q2E-1p-KUC" firstAttribute="trailing" secondItem="CGs-B7-uPl" secondAttribute="trailing" id="iaQ-Se-wsk"/>
+                            <constraint firstItem="q2E-1p-KUC" firstAttribute="bottom" secondItem="5xF-hj-xbW" secondAttribute="bottom" id="mik-oI-TVv"/>
+                            <constraint firstItem="CGs-B7-uPl" firstAttribute="top" secondItem="lKE-z4-OIM" secondAttribute="top" id="rrj-fQ-cal"/>
+                            <constraint firstItem="5xF-hj-xbW" firstAttribute="top" secondItem="CGs-B7-uPl" secondAttribute="bottom" id="snw-7H-ggC"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="q2E-1p-KUC"/>
+                    </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="375" height="253"/>
+                    <connections>
+                        <outlet property="collectionView" destination="CGs-B7-uPl" id="epQ-Uc-AYB"/>
+                        <outlet property="deleteButton" destination="Swx-bi-ftk" id="4tE-k2-d33"/>
+                        <outlet property="sectionIndex" destination="Ag8-1E-ewa" id="Yf1-6z-OIu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1SM-Xb-S5F" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.10000000000000001" id="Hbp-V9-WaU">
+                    <connections>
+                        <action selector="indexTouched:" destination="1Vl-XQ-Scp" id="TJp-x0-nGO"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="4509.6000000000004" y="-1245.8770614692655"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Delete-Left" width="23" height="17"/>
+    </resources>
+</document>

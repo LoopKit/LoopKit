@@ -46,43 +46,39 @@ class MasterViewController: UITableViewController {
 
     // MARK: - Data Source
 
-    private enum Section: Int {
+    private enum Section: Int, CaseIterable {
         case data
         case configuration
-
-        static let count = 2
     }
 
-    private enum DataRow: Int {
+    private enum DataRow: Int, CaseIterable {
         case carbs = 0
         case reservoir
         case diagnostic
         case generate
         case reset
-
-        static let count = 5
     }
 
-    private enum ConfigurationRow: Int {
+    private enum ConfigurationRow: Int, CaseIterable {
         case basalRate
-        case glucoseTargetRange
+        case carbRatio
+        case correctionRange
+        case insulinSensitivity
         case pumpID
-
-        static let count = 3
     }
 
     // MARK: UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.count
+        return Section.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
         case .configuration:
-            return ConfigurationRow.count
+            return ConfigurationRow.allCases.count
         case .data:
-            return DataRow.count
+            return DataRow.allCases.count
         }
     }
 
@@ -94,8 +90,12 @@ class MasterViewController: UITableViewController {
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .basalRate:
                 cell.textLabel?.text = LocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
-            case .glucoseTargetRange:
-                cell.textLabel?.text = LocalizedString("Glucose Target Range", comment: "The title text for the glucose target range schedule")
+            case .carbRatio:
+                cell.textLabel?.text = LocalizedString("Carb Ratios", comment: "The title of the carb ratios schedule screen")
+            case .correctionRange:
+                cell.textLabel?.text = LocalizedString("Correction Range", comment: "The title text for the glucose correction range schedule")
+            case .insulinSensitivity:
+                cell.textLabel?.text = LocalizedString("Insulin Sensitivity", comment: "The title text for the insulin sensitivity schedule")
             case .pumpID:
                 cell.textLabel?.text = LocalizedString("Pump ID", comment: "The title text for the pump ID")
             }
@@ -127,10 +127,23 @@ class MasterViewController: UITableViewController {
             let row = ConfigurationRow(rawValue: indexPath.row)!
             switch row {
             case .basalRate:
-                let scheduleVC = SingleValueScheduleTableViewController(style: .grouped)
+
+                // x22 with max basal rate of 5U/hr
+                let pulsesPerUnit = 20
+                let basalRates = (1...100).map { Double($0) / Double(pulsesPerUnit) }
+
+                // full x23 rates
+//                let rateGroup1 = ((1...39).map { Double($0) / Double(40) })
+//                let rateGroup2 = ((20...199).map { Double($0) / Double(20) })
+//                let rateGroup3 = ((100...350).map { Double($0) / Double(10) })
+//                let basalRates = rateGroup1 + rateGroup2 + rateGroup3
+
+                let scheduleVC = BasalScheduleTableViewController(allowedBasalRates: basalRates, maximumScheduleItemCount: 5, minimumTimeInterval: .minutes(30))
 
                 if let profile = dataManager?.basalRateSchedule {
                     scheduleVC.timeZone = profile.timeZone
+
+
                     scheduleVC.scheduleItems = profile.items
                 }
                 scheduleVC.delegate = self
@@ -138,23 +151,48 @@ class MasterViewController: UITableViewController {
                 scheduleVC.syncSource = self
 
                 show(scheduleVC, sender: sender)
-            case .glucoseTargetRange:
-                let scheduleVC = GlucoseRangeScheduleTableViewController()
+            case .carbRatio:
+                let scheduleVC = DailyQuantityScheduleTableViewController()
+
+                scheduleVC.delegate = self
+                scheduleVC.title = NSLocalizedString("Carb Ratios", comment: "The title of the carb ratios schedule screen")
+                scheduleVC.unit = .gram()
+
+                if let schedule = dataManager?.carbRatioSchedule {
+                    scheduleVC.timeZone = schedule.timeZone
+                    scheduleVC.scheduleItems = schedule.items
+                    scheduleVC.unit = schedule.unit
+                }
+
+                show(scheduleVC, sender: sender)
+            case .correctionRange:
+
+                let unit = dataManager?.glucoseTargetRangeSchedule?.unit ?? dataManager?.glucoseStore.preferredUnit ?? HKUnit.milligramsPerDeciliter
+
+                let scheduleVC = GlucoseRangeScheduleTableViewController(allowedValues: unit.allowedCorrectionRangeValues, unit: unit)
 
                 scheduleVC.delegate = self
                 scheduleVC.title = sender?.textLabel?.text
 
                 if let schedule = dataManager?.glucoseTargetRangeSchedule {
-                    scheduleVC.timeZone = schedule.timeZone
-                    scheduleVC.scheduleItems = schedule.items
-                    scheduleVC.unit = schedule.unit
-                    scheduleVC.overrideRanges = schedule.overrideRanges
-
-                    show(scheduleVC, sender: sender)
-                } else if let unit = dataManager?.glucoseStore.preferredUnit {
-                    scheduleVC.unit = unit
-                    self.show(scheduleVC, sender: sender)
+                    var overrides: [TemporaryScheduleOverride.Context: DoubleRange] = [:]
+                    overrides[.preMeal] = dataManager?.preMealTargetRange
+                    overrides[.legacyWorkout] = dataManager?.legacyWorkoutTargetRange
+                    scheduleVC.setSchedule(schedule, withOverrideRanges: overrides)
                 }
+
+                show(scheduleVC, sender: sender)
+            case .insulinSensitivity:
+                let unit = dataManager?.insulinSensitivitySchedule?.unit ?? dataManager?.glucoseStore.preferredUnit ?? HKUnit.milligramsPerDeciliter
+                let scheduleVC = InsulinSensitivityScheduleViewController(allowedValues: unit.allowedSensitivityValues, unit: unit)
+
+                scheduleVC.unit = unit
+                scheduleVC.delegate = self
+                scheduleVC.insulinSensitivityScheduleStorageDelegate = self
+                scheduleVC.schedule = dataManager?.insulinSensitivitySchedule
+                scheduleVC.title = NSLocalizedString("Insulin Sensitivity", comment: "The title of the insulin sensitivity schedule screen")
+                show(scheduleVC, sender: sender)
+
             case .pumpID:
                 let textFieldVC = TextFieldTableViewController()
 
@@ -298,24 +336,9 @@ extension MasterViewController: DailyValueScheduleTableViewControllerDelegate {
             case .configuration:
                 switch ConfigurationRow(rawValue: indexPath.row)! {
                 case .basalRate:
-                    if let controller = controller as? SingleValueScheduleTableViewController {
+                    if let controller = controller as? BasalScheduleTableViewController {
                         dataManager?.basalRateSchedule = BasalRateSchedule(dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
                     }
-                case .glucoseTargetRange:
-                    if let controller = controller as? GlucoseRangeScheduleTableViewController {
-                        dataManager?.glucoseTargetRangeSchedule = GlucoseRangeSchedule(unit: controller.unit, dailyItems: controller.scheduleItems, timeZone: controller.timeZone, overrideRanges: controller.overrideRanges)
-                    }
-                /*case let row:
-                    if let controller = controller as? DailyQuantityScheduleTableViewController {
-                        switch row {
-                        case .CarbRatio:
-                            dataManager.carbRatioSchedule = CarbRatioSchedule(unit: controller.unit, dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
-                        case .InsulinSensitivity:
-                            dataManager.insulinSensitivitySchedule = InsulinSensitivitySchedule(unit: controller.unit, dailyItems: controller.scheduleItems, timeZone: controller.timeZone)
-                        default:
-                            break
-                        }
-                    }*/
                 default:
                     break
                 }
@@ -329,23 +352,76 @@ extension MasterViewController: DailyValueScheduleTableViewControllerDelegate {
 }
 
 
-extension MasterViewController: SingleValueScheduleTableViewControllerSyncSource {
-    func singleValueScheduleTableViewControllerIsReadOnly(_ viewController: SingleValueScheduleTableViewController) -> Bool {
+extension MasterViewController: BasalScheduleTableViewControllerSyncSource {
+    func basalScheduleTableViewControllerIsReadOnly(_ viewController: BasalScheduleTableViewController) -> Bool {
         return false
     }
 
-    func syncButtonDetailText(for viewController: SingleValueScheduleTableViewController) -> String? {
+    func syncButtonDetailText(for viewController: BasalScheduleTableViewController) -> String? {
         return nil
     }
 
-    func syncScheduleValues(for viewController: SingleValueScheduleTableViewController, completion: @escaping (RepeatingScheduleValueResult<Double>) -> Void) {
+    func syncScheduleValues(for viewController: BasalScheduleTableViewController, completion: @escaping (SyncBasalScheduleResult<Double>) -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-            completion(.success(scheduleItems: [], timeZone: .current))
+            let scheduleItems = viewController.scheduleItems
+            let timezone = self.dataManager?.basalRateSchedule?.timeZone ?? .currentFixed
+            let schedule = BasalRateSchedule(dailyItems: scheduleItems, timeZone: timezone)
+            self.dataManager?.basalRateSchedule = schedule
+            completion(.success(scheduleItems: scheduleItems, timeZone: .currentFixed))
         }
     }
 
-    func syncButtonTitle(for viewController: SingleValueScheduleTableViewController) -> String {
+    func syncButtonTitle(for viewController: BasalScheduleTableViewController) -> String {
         return LocalizedString("Sync With Pump", comment: "Title of button to sync basal profile from pump")
     }
 }
 
+extension MasterViewController: InsulinSensitivityScheduleStorageDelegate {
+    func saveSchedule(_ schedule: InsulinSensitivitySchedule, for viewController: InsulinSensitivityScheduleViewController, completion: @escaping (SaveInsulinSensitivityScheduleResult) -> Void) {
+        self.dataManager?.insulinSensitivitySchedule = schedule
+        completion(.success)
+    }
+}
+
+extension MasterViewController: GlucoseRangeScheduleStorageDelegate {
+    func saveSchedule(for viewController: GlucoseRangeScheduleTableViewController, completion: @escaping (SaveGlucoseRangeScheduleResult) -> Void) {
+        self.dataManager?.glucoseTargetRangeSchedule = viewController.schedule
+        for (context, range) in viewController.overrideRanges {
+            switch context {
+            case .preMeal:
+                self.dataManager?.preMealTargetRange = range
+            case .legacyWorkout:
+                self.dataManager?.legacyWorkoutTargetRange = range
+            default:
+                break
+            }
+        }
+        completion(.success)
+    }
+}
+
+private extension HKUnit {
+    var allowedSensitivityValues: [Double] {
+        if self == HKUnit.milligramsPerDeciliter {
+            return (10...500).map { Double($0) }
+        }
+
+        if self == HKUnit.millimolesPerLiter {
+            return (6...270).map { Double($0) / 10.0 }
+        }
+
+        return []
+    }
+
+    var allowedCorrectionRangeValues: [Double] {
+        if self == HKUnit.milligramsPerDeciliter {
+            return (60...180).map { Double($0) }
+        }
+
+        if self == HKUnit.millimolesPerLiter {
+            return (33...100).map { Double($0) / 10.0 }
+        }
+
+        return []
+    }
+}

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14845" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14799.2"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="227" id="9cw-WW-AKt" customClass="SetConstrainedScheduleEntryTableViewCell" customModule="LoopKitUI" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="352" height="227"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9cw-WW-AKt" id="Kbo-oO-Hzt">
+                <rect key="frame" x="0.0" y="0.0" width="352" height="227"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IiE-NW-t0Y">
+                        <rect key="frame" x="15" y="11" width="322" height="43.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="252" verticalCompressionResistancePriority="752" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IvR-bM-kHO">
+                                <rect key="frame" x="0.0" y="4" width="42" height="35.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="752" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S68-xc-fEG">
+                                <rect key="frame" x="46" y="4" width="268" height="35.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="S68-xc-fEG" firstAttribute="top" secondItem="IiE-NW-t0Y" secondAttribute="top" constant="4" id="1t9-pf-rUs"/>
+                            <constraint firstAttribute="trailing" secondItem="S68-xc-fEG" secondAttribute="trailing" constant="8" id="30C-3a-O5D"/>
+                            <constraint firstItem="IvR-bM-kHO" firstAttribute="leading" secondItem="IiE-NW-t0Y" secondAttribute="leading" id="32J-Hd-Bfs"/>
+                            <constraint firstAttribute="bottom" secondItem="IvR-bM-kHO" secondAttribute="bottom" constant="4" id="PlK-8s-Rac"/>
+                            <constraint firstItem="IvR-bM-kHO" firstAttribute="top" secondItem="IiE-NW-t0Y" secondAttribute="top" constant="4" id="PwR-sa-Rub"/>
+                            <constraint firstItem="S68-xc-fEG" firstAttribute="leading" secondItem="IvR-bM-kHO" secondAttribute="trailing" constant="4" id="b0m-Id-4if"/>
+                            <constraint firstAttribute="bottom" secondItem="S68-xc-fEG" secondAttribute="bottom" constant="4" id="bdU-NQ-Zye"/>
+                            <constraint firstItem="IvR-bM-kHO" firstAttribute="leading" secondItem="IiE-NW-t0Y" secondAttribute="leading" id="xfF-pE-uNG"/>
+                        </constraints>
+                    </view>
+                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iU4-wM-j06" userLabel="Picker">
+                        <rect key="frame" x="15" y="62.5" width="322" height="162"/>
+                        <constraints>
+                            <constraint firstAttribute="height" priority="750" constant="150" id="gat-53-oCQ"/>
+                        </constraints>
+                        <connections>
+                            <outlet property="dataSource" destination="9cw-WW-AKt" id="yQg-B9-aUz"/>
+                            <outlet property="delegate" destination="9cw-WW-AKt" id="pye-cL-cEo"/>
+                        </connections>
+                    </pickerView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="IiE-NW-t0Y" firstAttribute="leading" secondItem="Kbo-oO-Hzt" secondAttribute="leadingMargin" id="P2o-zO-sjE"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="IiE-NW-t0Y" secondAttribute="trailing" id="V7L-QA-Gp9"/>
+                    <constraint firstItem="iU4-wM-j06" firstAttribute="top" secondItem="IiE-NW-t0Y" secondAttribute="bottom" constant="8" symbolic="YES" id="VGp-xs-v8w"/>
+                    <constraint firstItem="iU4-wM-j06" firstAttribute="leading" secondItem="Kbo-oO-Hzt" secondAttribute="leadingMargin" id="bIU-8J-N2c"/>
+                    <constraint firstItem="iU4-wM-j06" firstAttribute="trailing" secondItem="Kbo-oO-Hzt" secondAttribute="trailingMargin" id="emn-LZ-yZm"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="iU4-wM-j06" secondAttribute="bottom" priority="750" constant="-8.5" id="k7K-WO-eb5"/>
+                    <constraint firstAttribute="trailing" secondItem="iU4-wM-j06" secondAttribute="trailing" constant="16" id="mf4-zs-0go"/>
+                    <constraint firstItem="IiE-NW-t0Y" firstAttribute="top" secondItem="Kbo-oO-Hzt" secondAttribute="topMargin" id="qPE-Tx-Kg7"/>
+                </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="mf4-zs-0go"/>
+                    </mask>
+                </variation>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="dateLabel" destination="IvR-bM-kHO" id="kZ6-T1-d3I"/>
+                <outlet property="picker" destination="iU4-wM-j06" id="Xjv-yj-8eK"/>
+                <outlet property="pickerHeightConstraint" destination="gat-53-oCQ" id="7tN-G6-XJV"/>
+                <outlet property="valueLabel" destination="S68-xc-fEG" id="RQG-5i-iFe"/>
+            </connections>
+            <point key="canvasLocation" x="12.800000000000001" y="-72.413793103448285"/>
+        </tableViewCell>
+    </objects>
+</document>

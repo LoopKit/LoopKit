@@ -35,7 +35,7 @@ public final class CarbEntryTableViewController: UITableViewController {
                     queue: OperationQueue.main,
                     using: { [weak self] (note) -> Void in
                         switch note.name {
-                        case Notification.Name.CarbEntriesDidUpdate:
+                        case CarbStore.carbEntriesDidUpdate:
                             if let strongSelf = self, strongSelf.isViewLoaded {
                                 strongSelf.reloadData()
                             }
@@ -157,7 +157,7 @@ public final class CarbEntryTableViewController: UITableViewController {
                         self.carbEntries = entries
                         self.tableView.reloadData()
                     case .failure(let error):
-                        self.presentAlertController(with: error)
+                        self.present(UIAlertController(with: error), animated: true)
                     }
 
                     self.updateTimelyStats(nil)
@@ -268,7 +268,7 @@ public final class CarbEntryTableViewController: UITableViewController {
                 DispatchQueue.main.async {
                     switch result {
                     case .failure(let error):
-                        self.presentAlertController(with: error)
+                        self.present(UIAlertController(with: error), animated: true)
                     case .success:
                         tableView.deleteRows(at: [indexPath], with: .automatic)
                         self.updateTimelyStats(nil)
@@ -302,7 +302,7 @@ public final class CarbEntryTableViewController: UITableViewController {
                     DispatchQueue.main.async {
                         switch result {
                         case .failure(let error):
-                            self.presentAlertController(with: error)
+                            self.present(UIAlertController(with: error), animated: true)
                         case .success:
                             self.reloadData()
                         }
@@ -313,7 +313,7 @@ public final class CarbEntryTableViewController: UITableViewController {
                     DispatchQueue.main.async {
                         switch result {
                         case .failure(let error):
-                            self.presentAlertController(with: error)
+                            self.present(UIAlertController(with: error), animated: true)
                         case .success:
                             self.reloadData()
                         }
@@ -347,7 +347,7 @@ public final class CarbEntryTableViewController: UITableViewController {
                     case .success:
                         self.state = .display
                     case .failure(let error):
-                        self.presentAlertController(with: error)
+                        self.present(UIAlertController(with: error), animated: true)
                     }
                 }
             }

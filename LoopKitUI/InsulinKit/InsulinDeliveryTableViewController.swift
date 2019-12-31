@@ -32,7 +32,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 doseStoreObserver = NotificationCenter.default.addObserver(forName: nil, object: doseStore, queue: OperationQueue.main, using: { [weak self] (note) -> Void in
 
                     switch note.name {
-                    case Notification.Name.DoseStoreValuesDidChange:
+                    case DoseStore.valuesDidChange:
                         if self?.isViewLoaded == true {
                             self?.reloadData()
                         }
@@ -305,7 +305,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
         let sheet = UIAlertController(deleteAllConfirmationMessage: confirmMessage) {
             self.deleteAllObjects()
         }
-        presentViewControllerOnActiveViewController(sheet, animated: true, completion: nil)
+        present(sheet, animated: true)
     }
 
     private var deletionPending = false
@@ -397,7 +397,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 doseStore?.deleteReservoirValue(value) { (_, error) -> Void in
                     if let error = error {
                         DispatchQueue.main.async {
-                            self.presentAlertController(with: error)
+                            self.present(UIAlertController(with: error), animated: true)
                             self.reloadData()
                         }
                     }
@@ -412,7 +412,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 doseStore?.deletePumpEvent(value) { (error) -> Void in
                     if let error = error {
                         DispatchQueue.main.async {
-                            self.presentAlertController(with: error)
+                            self.present(UIAlertController(with: error), animated: true)
                             self.reloadData()
                         }
                     }
@@ -451,4 +451,25 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
         }
     }
 
+}
+
+fileprivate extension UIAlertController {
+    convenience init(deleteAllConfirmationMessage: String, confirmationHandler handler: @escaping () -> Void) {
+        self.init(
+            title: nil,
+            message: deleteAllConfirmationMessage,
+            preferredStyle: .actionSheet
+        )
+        
+        addAction(UIAlertAction(
+            title: LocalizedString("Delete All", comment: "Button title to delete all objects"),
+            style: .destructive,
+            handler: { (_) in handler() }
+        ))
+
+        addAction(UIAlertAction(
+            title: LocalizedString("Cancel", comment: "The title of the cancel action in an action sheet"),
+            style: .cancel
+        ))
+    }
 }

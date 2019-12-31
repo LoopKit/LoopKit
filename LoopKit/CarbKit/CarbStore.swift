@@ -17,6 +17,12 @@ public enum CarbStoreResult<T> {
     case failure(CarbStore.CarbStoreError)
 }
 
+public enum CarbAbsorptionModel {
+    case linear
+    case nonlinear
+    case adaptiveRateNonlinear
+}
+
 public protocol CarbStoreDelegate: class {
 
     /// Informs the delegate that an internal error occurred
@@ -47,12 +53,6 @@ public protocol CarbStoreSyncDelegate: class {
     func carbStore(_ carbStore: CarbStore, hasDeletedEntries entries: [DeletedCarbEntry], completion: @escaping (_ entries: [DeletedCarbEntry]) -> Void)
 }
 
-extension NSNotification.Name {
-    /// Notification posted when carb entries were changed, either via add/replace/delete methods or from HealthKit
-    public static let CarbEntriesDidUpdate = NSNotification.Name(rawValue: "com.loudnate.CarbKit.CarbEntriesDidUpdateNotification")
-}
-
-
 /**
  Manages storage, retrieval, and calculation of carbohydrate data.
 
@@ -70,9 +70,18 @@ extension NSNotification.Name {
  ```
  */
 public final class CarbStore: HealthKitSampleStore {
+    
+    /// Notification posted when carb entries were changed, either via add/replace/delete methods or from HealthKit
+    public static let carbEntriesDidUpdate = NSNotification.Name(rawValue: "com.loudnate.CarbKit.carbEntriesDidUpdate")
+
     public typealias DefaultAbsorptionTimes = (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)
 
     public static let defaultAbsorptionTimes: DefaultAbsorptionTimes = (fast: TimeInterval(hours: 2), medium: TimeInterval(hours: 3), slow: TimeInterval(hours: 4))
+
+    /// The default longest expected absorption time interval for carbohydrates: 8 hours.
+    public static var defaultMaximumAbsorptionTimeInterval: TimeInterval {
+        return defaultAbsorptionTimes.slow * 2
+    }
 
     public enum CarbStoreError: Error {
         // The store isn't correctly configured for the requested operation
@@ -92,6 +101,9 @@ public final class CarbStore: HealthKitSampleStore {
         return super.preferredUnit
     }
 
+    /// A history of recently applied schedule overrides.
+    private let overrideHistory: TemporaryScheduleOverrideHistory?
+
     /// Carbohydrate-to-insulin ratio
     public var carbRatioSchedule: CarbRatioSchedule? {
         get {
@@ -102,6 +114,15 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
     private let lockedCarbRatioSchedule: Locked<CarbRatioSchedule?>
+
+    /// The carb ratio schedule, applying recent overrides relative to the current moment in time.
+    public var carbRatioScheduleApplyingOverrideHistory: CarbRatioSchedule? {
+        if let carbRatioSchedule = carbRatioSchedule {
+            return overrideHistory?.resolvingRecentCarbRatioSchedule(carbRatioSchedule)
+        } else {
+            return nil
+        }
+    }
 
     /// A trio of default carbohydrate absorption times. Defaults to 2, 3, and 4 hours.
     public let defaultAbsorptionTimes: DefaultAbsorptionTimes
@@ -117,6 +138,23 @@ public final class CarbStore: HealthKitSampleStore {
     }
     private let lockedInsulinSensitivitySchedule:  Locked<InsulinSensitivitySchedule?>
 
+    /// The insulin sensitivity schedule, applying recent overrides relative to the current moment in time.
+    public var insulinSensitivityScheduleApplyingOverrideHistory: InsulinSensitivitySchedule? {
+        if let insulinSensitivitySchedule = insulinSensitivitySchedule {
+            return overrideHistory?.resolvingRecentInsulinSensitivitySchedule(insulinSensitivitySchedule)
+        } else {
+            return nil
+        }
+    }
+
+    /// The computed carbohydrate sensitivity schedule based on the insulin sensitivity and carb ratio schedules.
+    public var carbSensitivitySchedule: CarbSensitivitySchedule? {
+        guard let insulinSensitivitySchedule = insulinSensitivitySchedule, let carbRatioSchedule = carbRatioSchedule else {
+            return nil
+        }
+        return .carbSensitivitySchedule(insulinSensitivitySchedule: insulinSensitivitySchedule, carbRatioSchedule: carbRatioSchedule)
+    }
+
     /// The expected delay in the appearance of glucose effects, accounting for both digestion and sensor lag
     public let delay: TimeInterval
 
@@ -125,6 +163,9 @@ public final class CarbStore: HealthKitSampleStore {
 
     /// The factor by which the entered absorption time can be extended to accomodate slower-than-expected absorption
     public let absorptionTimeOverrun: Double
+    
+    /// Carb absorption model
+    public let carbAbsorptionModel: CarbAbsorptionModel
 
     /// The interval of carb data to keep in cache
     public let cacheLength: TimeInterval
@@ -142,6 +183,8 @@ public final class CarbStore: HealthKitSampleStore {
     private let queue = DispatchQueue(label: "com.loudnate.CarbKit.dataAccessQueue", qos: .utility)
 
     private let log = OSLog(category: "CarbStore")
+    
+    var settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
 
     /**
      Initializes a new instance of the store.
@@ -156,20 +199,24 @@ public final class CarbStore: HealthKitSampleStore {
         defaultAbsorptionTimes: DefaultAbsorptionTimes = defaultAbsorptionTimes,
         carbRatioSchedule: CarbRatioSchedule? = nil,
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
+        overrideHistory: TemporaryScheduleOverrideHistory? = nil,
         syncVersion: Int = 1,
         absorptionTimeOverrun: Double = 1.5,
         calculationDelta: TimeInterval = 5 /* minutes */ * 60,
-        effectDelay: TimeInterval = 10 /* minutes */ * 60
+        effectDelay: TimeInterval = 10 /* minutes */ * 60,
+        carbAbsorptionModel: CarbAbsorptionModel = .nonlinear
     ) {
         self.cacheStore = cacheStore
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
         self.lockedCarbRatioSchedule = Locked(carbRatioSchedule)
         self.lockedInsulinSensitivitySchedule = Locked(insulinSensitivitySchedule)
+        self.overrideHistory = overrideHistory
         self.syncVersion = syncVersion
         self.absorptionTimeOverrun = absorptionTimeOverrun
         self.delta = calculationDelta
         self.delay = effectDelay
         self.cacheLength = max(cacheLength, defaultAbsorptionTimes.slow * 2)
+        self.carbAbsorptionModel = carbAbsorptionModel
 
         super.init(healthStore: healthStore, type: carbType, observationStart: Date(timeIntervalSinceNow: -cacheLength), observationEnabled: observationEnabled)
 
@@ -193,6 +240,16 @@ public final class CarbStore: HealthKitSampleStore {
             }
 
             UserDefaults.standard.purgeLegacyCarbEntryKeys()
+            
+            // Carb model settings based on the selected absorption model
+            switch self.carbAbsorptionModel {
+            case .linear:
+                self.settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
+            case .nonlinear:
+                self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
+            case .adaptiveRateNonlinear:
+                self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.0, adaptiveAbsorptionRateEnabled: true, adaptiveRateStandbyIntervalFraction: 0.2)
+            }
 
             // TODO: Consider resetting uploadState.uploading
         }
@@ -232,7 +289,7 @@ public final class CarbStore: HealthKitSampleStore {
                 self.cacheStore.save()
                 self.syncExternalDB()
 
-                NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
+                NotificationCenter.default.post(name: CarbStore.carbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
             }
         }
     }
@@ -331,11 +388,15 @@ extension CarbStore {
             case .success(let samples):
                 let status = samples.map(
                     to: effectVelocities ?? [],
-                    carbRatio: self.carbRatioSchedule,
-                    insulinSensitivity: self.insulinSensitivitySchedule,
+                    carbRatio: self.carbRatioScheduleApplyingOverrideHistory,
+                    insulinSensitivity: self.insulinSensitivityScheduleApplyingOverrideHistory,
                     absorptionTimeOverrun: self.absorptionTimeOverrun,
                     defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                    delay: self.delay
+                    delay: self.delay,
+                    initialAbsorptionTimeOverrun: self.settings.initialAbsorptionTimeOverrun,
+                    absorptionModel: self.settings.absorptionModel,
+                    adaptiveAbsorptionRateEnabled: self.settings.adaptiveAbsorptionRateEnabled,
+                    adaptiveRateStandbyIntervalFraction: self.settings.adaptiveRateStandbyIntervalFraction
                 )
 
                 completion(.success(status))
@@ -358,7 +419,7 @@ extension CarbStore {
                 if completed {
                     self.addCachedObject(for: stored)
                     completion(.success(stored))
-                    NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
+                    NotificationCenter.default.post(name: CarbStore.carbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
                     self.syncExternalDB()
                 } else if let error = error {
                     self.log.error("Error saving entry %@: %@", sample.uuid.uuidString, String(describing: error))
@@ -384,7 +445,7 @@ extension CarbStore {
                 if completed {
                     self.replaceCachedObject(for: oldEntry, with: stored)
                     completion(.success(stored))
-                    NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
+                    NotificationCenter.default.post(name: CarbStore.carbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
                     self.syncExternalDB()
                 } else if let error = error {
                     self.log.error("Error replacing entry %@: %@", oldEntry.sampleUUID.uuidString, String(describing: error))
@@ -408,7 +469,7 @@ extension CarbStore {
                 if success {
                     self.deleteCachedObject(for: entry)
                     completion(.success(true))
-                    NotificationCenter.default.post(name: .CarbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
+                    NotificationCenter.default.post(name: CarbStore.carbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
                     self.syncExternalDB()
                 } else if let error = error {
                     self.log.error("Error deleting entry %@: %@", entry.sampleUUID.uuidString, String(describing: error))
@@ -710,7 +771,7 @@ extension CarbStore {
     ///   - result: The carbs on-board value
     public func carbsOnBoard(at date: Date, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping (_ result: CarbStoreResult<CarbValue>) -> Void) {
         getCarbsOnBoardValues(start: date.addingTimeInterval(-delta), end: date, effectVelocities: effectVelocities) { (values) in
-            guard let value = values.closestPriorToDate(date) else {
+            guard let value = values.closestPrior(to: date) else {
                 completion(.failure(.noData))
                 return
             }
@@ -734,18 +795,23 @@ extension CarbStore {
         getCachedCarbSamples(start: foodStart, end: end) { (samples) in
             let carbsOnBoard: [CarbValue]
 
-            if let velocities = effectVelocities, let carbRatioSchedule = self.carbRatioSchedule, let insulinSensitivitySchedule = self.insulinSensitivitySchedule {
+            if let velocities = effectVelocities, let carbRatioSchedule = self.carbRatioScheduleApplyingOverrideHistory, let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory {
                 carbsOnBoard = samples.map(
                     to: velocities,
                     carbRatio: carbRatioSchedule,
                     insulinSensitivity: insulinSensitivitySchedule,
                     absorptionTimeOverrun: self.absorptionTimeOverrun,
                     defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                    delay: self.delay
+                    delay: self.delay,
+                    initialAbsorptionTimeOverrun: self.settings.initialAbsorptionTimeOverrun,
+                    absorptionModel: self.settings.absorptionModel,
+                    adaptiveAbsorptionRateEnabled: self.settings.adaptiveAbsorptionRateEnabled,
+                    adaptiveRateStandbyIntervalFraction: self.settings.adaptiveRateStandbyIntervalFraction
                 ).dynamicCarbsOnBoard(
                     from: start,
                     to: end,
                     defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                    absorptionModel: self.settings.absorptionModel,
                     delay: self.delay,
                     delta: self.delta
                 )
@@ -754,6 +820,7 @@ extension CarbStore {
                     from: start,
                     to: end,
                     defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
+                    absorptionModel: self.settings.absorptionModel,
                     delay: self.delay,
                     delta: self.delta
                 )
@@ -775,7 +842,7 @@ extension CarbStore {
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping(_ result: CarbStoreResult<[GlucoseEffect]>) -> Void) {
         queue.async {
-            guard let carbRatioSchedule = self.carbRatioSchedule, let insulinSensitivitySchedule = self.insulinSensitivitySchedule else {
+            guard let carbRatioSchedule = self.carbRatioScheduleApplyingOverrideHistory, let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory else {
                 completion(.failure(.notConfigured))
                 return
             }
@@ -797,13 +864,18 @@ extension CarbStore {
                         insulinSensitivity: insulinSensitivitySchedule,
                         absorptionTimeOverrun: absorptionTimeOverrun,
                         defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-                        delay: delay
+                        delay: delay,
+                        initialAbsorptionTimeOverrun: self.settings.initialAbsorptionTimeOverrun,
+                        absorptionModel: self.settings.absorptionModel,
+                        adaptiveAbsorptionRateEnabled: self.settings.adaptiveAbsorptionRateEnabled,
+                        adaptiveRateStandbyIntervalFraction: self.settings.adaptiveRateStandbyIntervalFraction
                     ).dynamicGlucoseEffects(
                         from: start,
                         to: end,
                         carbRatios: carbRatioSchedule,
                         insulinSensitivities: insulinSensitivitySchedule,
                         defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                        absorptionModel: self.settings.absorptionModel,
                         delay: delay,
                         delta: delta
                     )
@@ -814,6 +886,7 @@ extension CarbStore {
                         carbRatios: carbRatioSchedule,
                         insulinSensitivities: insulinSensitivitySchedule,
                         defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                        absorptionModel: self.settings.absorptionModel,
                         delay: delay,
                         delta: delta
                     )
@@ -858,22 +931,38 @@ extension CarbStore {
     /// - parameter completionHandler: A closure called once the report has been generated. The closure takes a single argument of the report string.
     public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
         queue.async {
+            
+            var carbAbsorptionModel: String
+            switch self.carbAbsorptionModel {
+            case .linear: carbAbsorptionModel = "Linear"
+            case .nonlinear: carbAbsorptionModel = "Nonlinear"
+            case .adaptiveRateNonlinear: carbAbsorptionModel = "Nonlinear with Adaptive Rate for Remaining Carbs"
+            }
+            
             var report: [String] = [
                 "## CarbStore",
                 "",
                 "* carbRatioSchedule: \(self.carbRatioSchedule?.debugDescription ?? "")",
+                "* carbRatioScheduleApplyingOverrideHistory: \(self.carbRatioScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
                 "* defaultAbsorptionTimes: \(self.defaultAbsorptionTimes)",
                 "* insulinSensitivitySchedule: \(self.insulinSensitivitySchedule?.debugDescription ?? "")",
+                "* insulinSensitivityScheduleApplyingOverrideHistory: \(self.insulinSensitivityScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
+                "* overrideHistory: \(self.overrideHistory.map(String.init(describing:)) ?? "nil")",
+                "* carbSensitivitySchedule: \(self.carbSensitivitySchedule?.debugDescription ?? "nil")",
                 "* delay: \(self.delay)",
                 "* delta: \(self.delta)",
                 "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",
+                "* carbAbsorptionModel: \(carbAbsorptionModel)",
+                "* Carb absorption model settings: \(self.settings)",
                 super.debugDescription,
                 "",
                 "cachedCarbEntries: [",
                 "\tStoredCarbEntry(sampleUUID, syncIdentifier, syncVersion, startDate, quantity, foodType, absorptionTime, createdByCurrentApp, externalID, isUploaded)"
             ]
 
-            report.append(self.getCachedCarbEntries().map({(entry: StoredCarbEntry) -> String in
+            let carbEntries = self.getCachedCarbEntries()
+
+            report.append(carbEntries.map({ (entry) -> String in
                 return [
                     "\t",
                     String(describing: entry.sampleUUID),

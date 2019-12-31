@@ -9,60 +9,61 @@ import Foundation
 import HealthKit
 
 public struct PumpManagerStatus: Equatable {
-    public let date: Date
-    public let timeZone: TimeZone
-    public let device: HKDevice?
-    public var lastValidFrequency: Measurement<UnitFrequency>?
-    public var lastTuned: Date?
-    public var battery: BatteryStatus?
-    public var isSuspended: Bool?
-    public var isBolusing: Bool?
-    public var remainingReservoir: HKQuantity?
+    
+    public enum BasalDeliveryState: Equatable {
+        case active(_ at: Date)
+        case initiatingTempBasal
+        case tempBasal(_ dose: DoseEntry)
+        case cancelingTempBasal
+        case suspending
+        case suspended(_ at: Date)
+        case resuming
 
-    public struct BatteryStatus: Equatable {
-        public let percent: Double?
-        public let voltage: Measurement<UnitElectricPotentialDifference>?
-        public let state: State?
-
-        public enum State {
-            case normal
-            case low
-        }
-
-        public init?(
-            percent: Double? = nil,
-            voltage: Measurement<UnitElectricPotentialDifference>? = nil,
-            state: State? = nil
-        ) {
-            guard percent != nil || voltage != nil || state != nil else {
-                return nil
+        public var isSuspended: Bool {
+            if case .suspended = self {
+                return true
             }
-
-            self.percent = percent
-            self.voltage = voltage
-            self.state = state
+            return false
         }
     }
 
+    public enum BolusState: Equatable {
+        case none
+        case initiating
+        case inProgress(_ dose: DoseEntry)
+        case canceling
+    }
+    
+    public let timeZone: TimeZone
+    public let device: HKDevice
+    public var pumpBatteryChargeRemaining: Double?
+    public var basalDeliveryState: BasalDeliveryState
+    public var bolusState: BolusState
+
     public init(
-        date: Date,
         timeZone: TimeZone,
-        device: HKDevice?,
-        lastValidFrequency: Measurement<UnitFrequency>?,
-        lastTuned: Date?,
-        battery: BatteryStatus?,
-        isSuspended: Bool?,
-        isBolusing: Bool?,
-        remainingReservoir: HKQuantity?
+        device: HKDevice,
+        pumpBatteryChargeRemaining: Double?,
+        basalDeliveryState: BasalDeliveryState,
+        bolusState: BolusState
     ) {
-        self.date = date
         self.timeZone = timeZone
         self.device = device
-        self.lastValidFrequency = lastValidFrequency
-        self.lastTuned = lastTuned
-        self.battery = battery
-        self.isSuspended = isSuspended
-        self.isBolusing = isBolusing
-        self.remainingReservoir = remainingReservoir
+        self.pumpBatteryChargeRemaining = pumpBatteryChargeRemaining
+        self.basalDeliveryState = basalDeliveryState
+        self.bolusState = bolusState
+    }
+}
+
+extension PumpManagerStatus: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return """
+        ## PumpManagerStatus
+        * timeZone: \(timeZone)
+        * device: \(device)
+        * pumpBatteryChargeRemaining: \(pumpBatteryChargeRemaining as Any)
+        * basalDeliveryState: \(basalDeliveryState)
+        * bolusState: \(bolusState)
+        """
     }
 }

@@ -52,7 +52,7 @@ open class DailyValueScheduleTableViewController: UITableViewController, DatePic
         tableView.estimatedRowHeight = 44
 
         if !isReadOnly {
-            navigationItem.rightBarButtonItems = [insertButtonItem(), editButtonItem]
+            navigationItem.rightBarButtonItems = [insertButtonItem, editButtonItem]
         }
 
         tableView.keyboardDismissMode = .onDrag
@@ -104,9 +104,9 @@ open class DailyValueScheduleTableViewController: UITableViewController, DatePic
 
     public weak var delegate: DailyValueScheduleTableViewControllerDelegate?
 
-    public func insertButtonItem() -> UIBarButtonItem {
+    public private(set) lazy var insertButtonItem: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addScheduleItem(_:)))
-    }
+    }()
 
     // MARK: - State
 
@@ -140,7 +140,7 @@ open class DailyValueScheduleTableViewController: UITableViewController, DatePic
             }
 
             if isViewLoaded {
-                navigationItem.setRightBarButtonItems(isReadOnly ? [] : [insertButtonItem(), editButtonItem], animated: true)
+                navigationItem.setRightBarButtonItems(isReadOnly ? [] : [insertButtonItem, editButtonItem], animated: true)
             }
         }
     }
@@ -237,26 +237,15 @@ open class DailyValueScheduleTableViewController: UITableViewController, DatePic
         }
 
         let interval = cell.datePickerInterval
-        let insertableIndices = insertableIndiciesByRemovingRow(sourceIndexPath.row, withInterval: interval)
+        let indices = insertableIndiciesByRemovingRow(sourceIndexPath.row, withInterval: interval)
 
-        if insertableIndices[proposedDestinationIndexPath.row] {
-            return proposedDestinationIndexPath
-        } else {
-            var closestRow = sourceIndexPath.row
-
-            for (index, valid) in insertableIndices.enumerated() where valid {
-                if abs(proposedDestinationIndexPath.row - index) < closestRow {
-                    closestRow = index
-                }
-            }
-
-            return IndexPath(row: closestRow, section: proposedDestinationIndexPath.section)
-        }
+        let closestDestinationRow = indices.insertableIndex(closestTo: proposedDestinationIndexPath.row, from: sourceIndexPath.row)
+        return IndexPath(row: closestDestinationRow, section: proposedDestinationIndexPath.section)
     }
 
     // MARK: - DatePickerTableViewCellDelegate
 
-    func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
+    public func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
 
         // Updates the TableView state. Subclasses should update their data model
         if let indexPath = tableView.indexPath(for: cell) {
@@ -276,5 +265,21 @@ open class DailyValueScheduleTableViewController: UITableViewController, DatePic
             }
         }
     }
-
 }
+
+extension Array where Element == Bool {
+    func insertableIndex(closestTo destination: Int, from source: Int) -> Int {
+        if self[destination] {
+            return destination
+        } else {
+            var closestRow = source
+            for (index, valid) in self.enumerated() where valid {
+                if abs(destination - index) < abs(destination - closestRow) {
+                    closestRow = index
+                }
+            }
+            return closestRow
+        }
+    }
+}
+

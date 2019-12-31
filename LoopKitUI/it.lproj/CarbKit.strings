@@ -4,14 +4,8 @@
 /* Class = "UIButton"; normalTitle = "Authorize"; ObjectID = "8sx-XB-DRV"; */
 "8sx-XB-DRV.normalTitle" = "Autorizzare";
 
-/* Class = "UIButton"; normalTitle = "abc"; ObjectID = "act-DJ-aXh"; */
-"act-DJ-aXh.normalTitle" = "abc";
-
 /* Class = "UILabel"; text = "Food Type"; ObjectID = "bdP-2A-DB8"; */
 "bdP-2A-DB8.text" = "Tipo di Cibo";
-
-/* Class = "UILabel"; text = "🌮"; ObjectID = "blb-Re-Esx"; */
-"blb-Re-Esx.text" = "🌮";
 
 /* Class = "UINavigationItem"; title = "Add/Edit Carb Entry"; ObjectID = "bM2-yI-YmX"; */
 "bM2-yI-YmX.title" = "Aggiungi/Modifica carboidrati assunti";
@@ -19,14 +13,8 @@
 /* Class = "UILabel"; text = "g"; ObjectID = "D2S-2h-yH6"; */
 "D2S-2h-yH6.text" = "g";
 
-/* Class = "UILabel"; text = "🍇"; ObjectID = "dug-Vc-f5B"; */
-"dug-Vc-f5B.text" = "🍇";
-
 /* Class = "UIButton"; normalTitle = "🍕"; ObjectID = "dyX-Zv-8wU"; */
 "dyX-Zv-8wU.normalTitle" = "🍕";
-
-/* Class = "UILabel"; text = " 🍭 "; ObjectID = "ez9-lR-yD7"; */
-"ez9-lR-yD7.text" = " 🍭 ";
 
 /* Class = "UILabel"; text = "Amount Consumed"; ObjectID = "K0S-my-3qL"; */
 "K0S-my-3qL.text" = "Quantita consumata";
@@ -43,9 +31,6 @@
 /* Class = "UIButton"; normalTitle = "🌮"; ObjectID = "Me5-3D-C34"; */
 "Me5-3D-C34.normalTitle" = "🌮";
 
-/* Class = "UILabel"; text = "⋯ "; ObjectID = "nBf-1A-P2k"; */
-"nBf-1A-P2k.text" = "⋯ ";
-
 /* Class = "UILabel"; text = "Food Type"; ObjectID = "NRZ-dT-iqj"; */
 "NRZ-dT-iqj.text" = "Tipo di Cibo";
 
@@ -57,9 +42,6 @@
 
 /* Class = "UINavigationItem"; title = "Carbohydrates"; ObjectID = "Qgq-n1-hm4"; */
 "Qgq-n1-hm4.title" = "Carboidrati";
-
-/* Class = "UILabel"; text = "MEDIUM"; ObjectID = "qMe-TA-UCA"; */
-"qMe-TA-UCA.text" = "MEDIO";
 
 /* Class = "UITextField"; placeholder = "0"; ObjectID = "qU9-hG-hMu"; */
 "qU9-hG-hMu.placeholder" = "0";
@@ -75,7 +57,4 @@
 
 /* Class = "UIButton"; normalTitle = "🍭"; ObjectID = "XaD-wV-oiS"; */
 "XaD-wV-oiS.normalTitle" = "🍭";
-
-/* Class = "UILabel"; text = "🍕"; ObjectID = "Zpw-Di-X7C"; */
-"Zpw-Di-X7C.text" = "🍕";
 

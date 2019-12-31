@@ -13,9 +13,9 @@ public protocol CGMManagerUI: CGMManager {
     /// Provides a view controller for setting up and configuring the manager if needed.
     ///
     /// If this method returns nil, it's expected that `init?(rawState: [:])` creates a non-nil manager
-    static func setupViewController() -> (UIViewController & CGMManagerSetupViewController)?
+    static func setupViewController() -> (UIViewController & CGMManagerSetupViewController & CompletionNotifying)?
 
-    func settingsViewController(for glucoseUnit: HKUnit) -> UIViewController
+    func settingsViewController(for glucoseUnit: HKUnit) -> (UIViewController & CompletionNotifying)
 
     var smallImage: UIImage? { get }
 }
@@ -28,13 +28,4 @@ public protocol CGMManagerSetupViewController {
 
 public protocol CGMManagerSetupViewControllerDelegate: class {
     func cgmManagerSetupViewController(_ cgmManagerSetupViewController: CGMManagerSetupViewController, didSetUpCGMManager cgmManager: CGMManagerUI)
-
-    func cgmManagerSetupViewControllerDidCancel(_ cgmManagerSetupViewController: CGMManagerSetupViewController)
-}
-
-
-public extension CGMManagerSetupViewController {
-    func cancelSetup() {
-        setupDelegate?.cgmManagerSetupViewControllerDidCancel(self)
-    }
 }

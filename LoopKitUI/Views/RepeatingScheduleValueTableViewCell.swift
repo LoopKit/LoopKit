@@ -71,9 +71,23 @@ class RepeatingScheduleValueTableViewCell: DatePickerTableViewCell, UITextFieldD
 
     @IBOutlet weak var dateLabel: UILabel!
 
-    @IBOutlet weak var unitLabel: UILabel!
+    @IBOutlet weak var unitLabel: UILabel! {
+        didSet {
+            // Setting this color in code because the nib isn't being applied correctly
+            if #available(iOSApplicationExtension 13.0, *) {
+                unitLabel.textColor = .secondaryLabel
+            }
+        }
+    }
 
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var textField: UITextField! {
+        didSet {
+            // Setting this color in code because the nib isn't being applied correctly
+            if #available(iOSApplicationExtension 13.0, *) {
+                textField.textColor = .label
+            }
+        }
+    }
 
     var unitString: String? {
         get {

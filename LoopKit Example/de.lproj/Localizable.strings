@@ -1,23 +1,30 @@
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basal Rates";
+"Basal Rates" = "Basalraten";
+
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "Kohlenhydratfaktoren";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Carbs";
 
+/* The title text for the glucose correction range schedule */
+"Correction Range" = "Korrekturbereich";
+
 /* The title for the cell displaying diagnostic data */
-"Diagnostic" = "Diagnostic";
+"Diagnostic" = "Diagnosedaten";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Enter the 6-digit pump ID";
+"Enter the 6-digit pump ID" = "Geben Sie die 6-stellige Pumpen-ID ein";
 
 /* The title for the cell displaying data generation */
-"Generate Data" = "Generate Data";
+"Generate Data" = "Erzeuge Daten";
 
-/* The title text for the glucose target range schedule */
-"Glucose Target Range" = "Glucose Target Range";
+/* The title of the insulin sensitivity schedule screen
+   The title text for the insulin sensitivity schedule */
+"Insulin Sensitivity" = "Insulinempfindlichkeit";
 
 /* The title text for the pump ID */
-"Pump ID" = "Pump ID";
+"Pump ID" = "Pumpen-ID";
 
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "Reservoir";
@@ -26,8 +33,8 @@
 "Reset" = "Reset";
 
 /* Title of button to sync basal profile from pump */
-"Sync With Pump" = "Sync With Pump";
+"Sync With Pump" = "Mit der Pumpe synchronisieren";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
-"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).";
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Die Pumpen-ID finden Sie auf der Rückseite oder am unteren Rand des STATUS / Esc-Bildschirms. Dies ist der streng numerische Teil der Seriennummer (gezeigt als SN oder S/N).";
 

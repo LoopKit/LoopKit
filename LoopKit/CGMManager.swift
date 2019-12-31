@@ -20,7 +20,7 @@ public enum CGMResult {
 }
 
 
-public protocol CGMManagerDelegate: class {
+public protocol CGMManagerDelegate: class, DeviceManagerDelegate {
     /// Asks the delegate for a date with which to filter incoming glucose data
     ///
     /// - Parameter manager: The manager instance
@@ -38,6 +38,11 @@ public protocol CGMManagerDelegate: class {
     ///
     /// - Parameter manager: The manager instance
     func cgmManagerWantsDeletion(_ manager: CGMManager)
+
+    /// Informs the delegate that the manager has updated its state and should be persisted.
+    ///
+    /// - Parameter manager: The manager instance
+    func cgmManagerDidUpdateState(_ manager: CGMManager)
 }
 
 
@@ -70,5 +75,16 @@ public protocol CGMManager: DeviceManager {
 public extension CGMManager {
     var appURL: URL? {
         return nil
+    }
+
+    /// Convenience wrapper for notifying the delegate of deletion on the delegate queue
+    ///
+    /// - Parameters:
+    ///   - completion: A closure called from the delegate queue after the delegate is called
+    func notifyDelegateOfDeletion(completion: @escaping () -> Void) {
+        delegateQueue.async {
+            self.cgmManagerDelegate?.cgmManagerWantsDeletion(self)
+            completion()
+        }
     }
 }

@@ -10,6 +10,8 @@ import UIKit
 
 class DecimalTextFieldTableViewCell: TextFieldTableViewCell {
 
+    @IBOutlet weak var titleLabel: UILabel!
+    
     var numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal

@@ -1,0 +1,40 @@
+/* The title text for the basal rate schedule */
+"Basal Rates" = "基礎インスリン";
+
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "Carb Ratios";
+
+/* The title for the cell navigating to the carbs screen */
+"Carbs" = "カーボ";
+
+/* The title text for the glucose correction range schedule */
+"Correction Range" = "ターゲット範囲";
+
+/* The title for the cell displaying diagnostic data */
+"Diagnostic" = "診断";
+
+/* The placeholder text instructing users how to enter a pump ID */
+"Enter the 6-digit pump ID" = "6桁のトランスミッターIDを入力";
+
+/* The title for the cell displaying data generation */
+"Generate Data" = "データ生成";
+
+/* The title of the insulin sensitivity schedule screen
+   The title text for the insulin sensitivity schedule */
+"Insulin Sensitivity" = "Insulin Sensitivity";
+
+/* The title text for the pump ID */
+"Pump ID" = "ポンプID";
+
+/* The title for the cell navigating to the reservoir screen */
+"Reservoir" = "リザーバ";
+
+/* Title for the cell resetting the data manager */
+"Reset" = "リセット";
+
+/* Title of button to sync basal profile from pump */
+"Sync With Pump" = "ポンプと同期する";
+
+/* Instructions on where to find the pump ID on a Minimed pump */
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "ポンプIDは、ポンプの裏面か、STATUS/Esc画面の下方に表示されています。シリアル番号の数字の部分です。(SNまたはS/Nで表示)";
+

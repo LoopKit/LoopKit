@@ -24,6 +24,11 @@ public struct DailyQuantitySchedule<T: RawRepresentable>: DailySchedule {
         self.valueSchedule = valueSchedule
     }
 
+    init(unit: HKUnit, valueSchedule: DailyValueSchedule<T>) {
+        self.unit = unit
+        self.valueSchedule = valueSchedule
+    }
+
     public init?(rawValue: RawValue) {
         guard let rawUnit = rawValue["unit"] as? String,
             let valueSchedule = DailyValueSchedule<T>(rawValue: rawValue)
@@ -78,7 +83,7 @@ public typealias SingleQuantitySchedule = DailyQuantitySchedule<Double>
 
 
 public extension DailyQuantitySchedule where T == Double {
-    public func quantity(at time: Date) -> HKQuantity {
+    func quantity(at time: Date) -> HKQuantity {
         return HKQuantity(unit: unit, doubleValue: valueSchedule.value(at: time))
     }
 
@@ -98,14 +103,30 @@ public extension DailyQuantitySchedule where T == Double {
         return total / valueSchedule.repeatInterval
     }
 
-    public func averageQuantity() -> HKQuantity {
+    func averageQuantity() -> HKQuantity {
         return HKQuantity(unit: unit, doubleValue: averageValue())
     }
 }
 
 
-extension DailyQuantitySchedule where T: Equatable {
-    public static func ==(lhs: DailyQuantitySchedule<T>, rhs: DailyQuantitySchedule<T>) -> Bool {
+extension DailyQuantitySchedule: Equatable where T: Equatable {
+    public static func == (lhs: DailyQuantitySchedule<T>, rhs: DailyQuantitySchedule<T>) -> Bool {
         return lhs.valueSchedule == rhs.valueSchedule && lhs.unit.unitString == rhs.unit.unitString
+    }
+}
+
+extension DailyQuantitySchedule where T: Numeric {
+    public static func * (lhs: DailyQuantitySchedule, rhs: DailyQuantitySchedule) -> DailyQuantitySchedule {
+        let unit = lhs.unit.unitMultiplied(by: rhs.unit)
+        let schedule = DailyValueSchedule.zip(lhs.valueSchedule, rhs.valueSchedule).map(*)
+        return DailyQuantitySchedule(unit: unit, valueSchedule: schedule)
+    }
+}
+
+extension DailyQuantitySchedule where T: FloatingPoint {
+    public static func / (lhs: DailyQuantitySchedule, rhs: DailyQuantitySchedule) -> DailyQuantitySchedule {
+        let unit = lhs.unit.unitDivided(by: rhs.unit)
+        let schedule = DailyValueSchedule.zip(lhs.valueSchedule, rhs.valueSchedule).map(/)
+        return DailyQuantitySchedule(unit: unit, valueSchedule: schedule)
     }
 }

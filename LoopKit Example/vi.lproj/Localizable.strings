@@ -1,0 +1,40 @@
+/* The title text for the basal rate schedule */
+"Basal Rates" = "Basal Rates";
+
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "Carb Ratios";
+
+/* The title for the cell navigating to the carbs screen */
+"Carbs" = "Carbs";
+
+/* The title text for the glucose correction range schedule */
+"Correction Range" = "Phạm vi liều Bổ sung";
+
+/* The title for the cell displaying diagnostic data */
+"Diagnostic" = "Chuẩn đoán";
+
+/* The placeholder text instructing users how to enter a pump ID */
+"Enter the 6-digit pump ID" = "Khai báo 6 số ID của bơm";
+
+/* The title for the cell displaying data generation */
+"Generate Data" = "Xuất bản dữ liệu";
+
+/* The title of the insulin sensitivity schedule screen
+   The title text for the insulin sensitivity schedule */
+"Insulin Sensitivity" = "Độ nhạy Insulin";
+
+/* The title text for the pump ID */
+"Pump ID" = "Số ID của bơm";
+
+/* The title for the cell navigating to the reservoir screen */
+"Reservoir" = "Ngăn chứa insulin";
+
+/* Title for the cell resetting the data manager */
+"Reset" = "Khôi phục lại";
+
+/* Title of button to sync basal profile from pump */
+"Sync With Pump" = "Đồng hóa dữ liệu với bơm";
+
+/* Instructions on where to find the pump ID on a Minimed pump */
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Số ID của bơm có thể nhìn thấy phía sau của bơm hay gần mục STATUS/Esc. Đây là phần số của số seri (bắt đầu bằng SN hay S/N).";
+

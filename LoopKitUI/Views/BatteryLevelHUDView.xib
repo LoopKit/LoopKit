@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14810.11" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14766.13"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="6Oq-Ei-hVf" customClass="BatteryLevelHUDView" customModule="LoopKitUI">
+            <rect key="frame" x="0.0" y="0.0" width="112" height="81"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="100%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="edK-06-YkL">
+                    <rect key="frame" x="2" y="56" width="108" height="25"/>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bVp-hz-Iqp">
+                    <rect key="frame" x="34" y="9" width="44" height="44"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4vG-st-3Jr" customClass="LevelMaskView" customModule="LoopKitUI">
+                            <rect key="frame" x="0.0" y="2" width="44" height="42"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="image" keyPath="maskImage" value="battery_mask"/>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" image="battery" translatesAutoresizingMaskIntoConstraints="NO" id="9iC-cs-8fx">
+                            <rect key="frame" x="9" y="0.0" width="26" height="44"/>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="4vG-st-3Jr" firstAttribute="leading" secondItem="bVp-hz-Iqp" secondAttribute="leading" id="7Pd-FP-nU1"/>
+                        <constraint firstItem="4vG-st-3Jr" firstAttribute="top" secondItem="bVp-hz-Iqp" secondAttribute="top" constant="2" id="8zf-A4-DjZ"/>
+                        <constraint firstItem="9iC-cs-8fx" firstAttribute="centerX" secondItem="bVp-hz-Iqp" secondAttribute="centerX" id="K7p-oX-v0a"/>
+                        <constraint firstAttribute="width" constant="44" id="P3z-R7-h8m"/>
+                        <constraint firstAttribute="height" constant="44" id="Qga-vf-ol4"/>
+                        <constraint firstItem="9iC-cs-8fx" firstAttribute="centerY" secondItem="bVp-hz-Iqp" secondAttribute="centerY" id="eeP-WQ-uSL"/>
+                        <constraint firstAttribute="trailing" secondItem="4vG-st-3Jr" secondAttribute="trailing" id="nlS-Me-9J5"/>
+                        <constraint firstAttribute="bottom" secondItem="4vG-st-3Jr" secondAttribute="bottom" id="qNA-y7-ViP"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <accessibility key="accessibilityConfiguration" label="Battery Level">
+                <bool key="isElement" value="YES"/>
+            </accessibility>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="edK-06-YkL" secondAttribute="bottom" id="FOV-EF-Vzz"/>
+                <constraint firstItem="edK-06-YkL" firstAttribute="leading" secondItem="6Oq-Ei-hVf" secondAttribute="leading" constant="2" id="IxK-mo-Wa8"/>
+                <constraint firstItem="edK-06-YkL" firstAttribute="top" secondItem="bVp-hz-Iqp" secondAttribute="bottom" constant="3" id="MQO-ld-5PF"/>
+                <constraint firstItem="bVp-hz-Iqp" firstAttribute="top" secondItem="6Oq-Ei-hVf" secondAttribute="top" constant="9" id="mgw-5E-82C"/>
+                <constraint firstItem="bVp-hz-Iqp" firstAttribute="centerX" secondItem="6Oq-Ei-hVf" secondAttribute="centerX" id="nO3-uA-Tel"/>
+                <constraint firstAttribute="trailing" secondItem="edK-06-YkL" secondAttribute="trailing" constant="2" id="wpf-3J-UyW"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="Ao7-OV-3iM"/>
+            <connections>
+                <outlet property="caption" destination="edK-06-YkL" id="Ncj-lt-KSN"/>
+                <outlet property="levelMaskView" destination="4vG-st-3Jr" id="vvA-iW-SPh"/>
+            </connections>
+            <point key="canvasLocation" x="352" y="-337.78110944527737"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="battery" width="26" height="44"/>
+        <image name="battery_mask" width="16" height="42"/>
+    </resources>
+</document>

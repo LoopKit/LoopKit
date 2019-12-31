@@ -1,8 +1,27 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% av normalt insulin";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@E";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ enheter gjennstår klokken %2$@";
+
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Absorbsjonstid";
 
-/* The title of the button to add the credentials for a service */
-"Add Account" = "Legg Til Konto";
+/* The title for the override emoji activity section */
+"Activity" = "Aktivitet";
 
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Er du sikker på at du vil slette alle historiske innslag?";
@@ -11,19 +30,37 @@
 "Are you sure you want to delete all reservoir values?" = "Er du sikker på at du vil slette alle reservoarverdier?";
 
 /* The title of the button to add the credentials for a service */
-"authentication-button-add" = "Legg Til Konto";
+"Add Account" = "Legg Til Konto";
 
 /* The title of the button to remove the credentials for a service */
-"authentication-button-delete" = "Slett Konto";
+"Delete Account" = "Slett Konto";
+
+/* Describes a percentage decrease in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Insulindoser for babsal, bolus og korreksjon er redusert med %@%%.";
+
+/* Describes a percentage increase in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Insulindoser for babsal, bolus og korreksjon er økt med %@%%";
+
+/* Describes a lack of change in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "Insulindoser for babsal, bolus og korreksjon er uendret.";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Avbryt";
 
+/* The text for the override cancellation button */
+"Cancel Override" = "Avbryt overstyring";
+
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Avbryter temp basal";
+
 /* The title of the view controller to create a new carb entry */
-"carb-entry-title-add" = "Legg til karbohydrater";
+"Add Carb Entry" = "Legg til karbohydrater";
 
 /* The title of the view controller to edit an existing carb entry */
-"carb-entry-title-edit" = "Rediger karbohydrater";
+"Edit Carb Entry" = "Rediger karbohydrater";
+
+/* Footer text for customizing an override from a preset (1: preset name) */
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Endringer vil kun gjelde for denne gangen du aktiverer overstyring. Standardinstillinger for %@ vil ikke bli påvirket.";
 
 /* Carb entry section footer text explaining absorption time */
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Velg en lengre absorpsjonstid for større måltider, eller de som inneholder fett og proteiner. Dette er bare veiledning til algoritmen og trenger ikke å være nøyaktig.";
@@ -43,17 +80,38 @@
 /* The title of the action used to dismiss an error alert */
 "com.loudnate.LoopKit.errorAlertActionTitle" = "Ok";
 
+/* The title for the override emoji condition section */
+"Condition" = "Betingelse";
+
 /* Title of the setup button to continue */
 "Continue" = "Fortsett";
+
+/* The section footer of correction range schedule */
+"Correction range is the blood glucose range that you would like Loop to correct to." = "Korreksjonsområde er området du ønsker at Loop skal korrigere blodsukker til.";
+
+/* The text for a custom override */
+"Custom" = "Tilpasset";
+
+/* The title for the custom override entry screen */
+"Custom Override" = "Tilpasset overstyring";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Dato";
 
-/* The title of the button to remove the credentials for a service */
-"Delete Account" = "Slett Konto";
-
 /* Button title to delete all objects */
 "Delete All" = "Slett alle";
+
+/* The text for the override duration setting */
+"Duration" = "Varighet";
+
+/* The title for the override editing screen */
+"Edit Override" = "Rediger overstyring";
+
+/* Footer text for editing an active override (1: preset name) */
+"Editing affects only the active override. The default settings of %@ will not be affected." = "Redigering påvirker kun den aktive overstyringen. Standardinnstillingen %@ vil ikke bbli påvirket.";
+
+/* The text for the indefinite override duration setting */
+"Enable Indefinitely" = "Aktiver på ubestemt tid";
 
 /* The detail text describing an enabled setting */
 "Enabled" = "Aktivert";
@@ -67,6 +125,12 @@
 /* Section title for fast absorbing food */
 "Fast" = "Rask";
 
+/* The description shown on the insulin sensitivity schedule interface. */
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insulinfølsomhet beskriver hvordan blodsukkeret responderer på 1 enhet insulin. Mindre verdier betyr at mer insulin vil bli gitt når man er over målområdet. Verdier som er for små kan føre til farlig lavt blodsukker. ";
+
+/* Placeholder for maximum value in glucose range */
+"max" = "max";
+
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Maks basalgrense";
 
@@ -76,41 +140,88 @@
 /* Section title for medium absorbing food */
 "Medium" = "Medium";
 
-/* The unit display string for millimoles of glucose per liter */
-"mmol/L" = "mmol/L";
+/* Placeholder for minimum value in glucose range */
+"min" = "min";
 
 /* Alert action title to open error help */
 "More Info" = "Mer info";
 
-/* Section title for no-carb food */
+/* The text for the override preset name setting */
+"Name" = "Navn";
+
+/* The title for the new override preset entry screen */
+"New Preset" = "Ny forhåndsinstilling";
+
+/* Section title for no-carb food
+   The title for override emoji miscellaneous section */
 "Other" = "Annet";
 
+/* The title text for the insulin sensitivity scaling setting */
+"Overall Insulin Needs" = "Insulinbehov totalt sett";
+
+/* The title text for the override presets screen */
+"Override Presets" = "Egendefinerte overstyringer";
+
+/* Text directing the user to configure override presets */
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Egendefinerte overstyringer kan settes opp under Konfigurasjons-delen av innstillingsskjermen";
+
 /* The section title of glucose overrides */
-"Overrides" = "Overstyrer";
+"Overrides" = "Overstyringer";
 
 /* Title for the pre-meal override range */
 "Pre-Meal" = "Pre-måltid";
 
+/* The section header text override presets */
+"PRESETS" = "FORHÅNDSINSTILLINGER";
+
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Pumpehendelse";
 
-/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
-"quantity-and-unit-space" = "%1$@ %2$@";
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Gjenoppta leveranse";
 
-/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
-"quantity-and-unit-tight" = "%1$@%2$@";
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Gjenopptar";
 
-/* The default placeholder string for a credential */
-"Required" = "Påkrevd";
+/* The text for the override preset name field placeholder */
+"Running" = "Løper";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "Lagre";
+
+/* The section header text for a scheduled override */
+"SCHEDULED OVERRIDE" = "PLANLAGT OVERSTYRING";
 
 /* Section title for slow absorbing food */
 "Slow" = "Langsom";
 
+/* The text for the override start time */
+"Start Time" = "Starttidspunkt";
+
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Starter temp-basal";
+
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Pause leveranse";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Pauser";
+
+/* The text for the override preset symbol setting */
+"Symbol" = "Symbol";
+
 /* The empty-state text for a configuration value */
 "Tap to set" = "Trykk for å angi";
 
+/* The text for the override target range setting */
+"Target Range" = "Målområde";
+
+/* The title for the override selection screen */
+"Temporary Override" = "Midlertidig overstyring";
+
 /* The default placeholder string for a credential */
-"text-placeholder-required" = "Påkrevd";
+"Required" = "Påkrevd";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Maks absorbsjonstid er %@";
@@ -127,7 +238,8 @@
 /* The unit string for units */
 "Units" = "Enheter";
 
-/* The default title to use when an entry has none */
+/* Accessibility value for an unknown value
+   The default title to use when an entry has none */
 "Unknown" = "Ukjent";
 
 /* Label indicating validation is occurring */

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14854.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14806.4"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,32 +13,29 @@
             <rect key="frame" x="0.0" y="0.0" width="352" height="227"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9cw-WW-AKt" id="Kbo-oO-Hzt">
-                <rect key="frame" x="0.0" y="0.0" width="352" height="226.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="352" height="227"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <datePicker clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="30" translatesAutoresizingMaskIntoConstraints="NO" id="kJu-yV-b8g">
-                        <rect key="frame" x="16" y="62.5" width="320" height="162"/>
+                        <rect key="frame" x="15" y="62.5" width="322" height="162"/>
                         <constraints>
                             <constraint firstAttribute="height" priority="750" constant="150" id="U4R-Ps-dsD"/>
                         </constraints>
-                        <date key="date" timeIntervalSinceReferenceDate="476509177.72020698">
-                            <!--2016-02-07 03:39:37 +0000-->
-                        </date>
                         <connections>
                             <action selector="dateChanged:" destination="9cw-WW-AKt" eventType="valueChanged" id="umZ-gG-0ZQ"/>
                         </connections>
                     </datePicker>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IiE-NW-t0Y">
-                        <rect key="frame" x="16" y="11" width="320" height="43.5"/>
+                        <rect key="frame" x="15" y="11" width="322" height="43.5"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IvR-bM-kHO">
                                 <rect key="frame" x="0.0" y="11.5" width="42" height="20.5"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="right" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="f5h-J3-8Bf" customClass="PaddedTextField" customModule="LoopKitUI" customModuleProvider="target">
-                                <rect key="frame" x="50" y="0.0" width="218" height="43"/>
+                                <rect key="frame" x="50" y="0.0" width="220" height="43.5"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                                 <userDefinedRuntimeAttributes>
@@ -55,13 +48,12 @@
                                 </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="U/hour" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HJF-Xw-CLE">
-                                <rect key="frame" x="268" y="11.5" width="52" height="20.5"/>
+                                <rect key="frame" x="270" y="11.5" width="52" height="20.5"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <color key="textColor" red="0.56000000238418579" green="0.56000000238418579" blue="0.56000000238418579" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="HJF-Xw-CLE" secondAttribute="trailing" id="OSG-vm-Xhd"/>
                             <constraint firstAttribute="bottom" secondItem="f5h-J3-8Bf" secondAttribute="bottom" id="aX2-LV-jsT"/>
@@ -91,7 +83,7 @@
                 <outlet property="textField" destination="f5h-J3-8Bf" id="gap-5X-l7j"/>
                 <outlet property="unitLabel" destination="HJF-Xw-CLE" id="wdV-aV-ngx"/>
             </connections>
-            <point key="canvasLocation" x="363" y="307.5"/>
+            <point key="canvasLocation" x="182" y="215"/>
         </tableViewCell>
     </objects>
 </document>

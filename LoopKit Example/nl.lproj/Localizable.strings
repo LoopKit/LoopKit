@@ -1,23 +1,30 @@
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basal Rates";
+"Basal Rates" = "Basaalsnelheden";
+
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "Koolhydraten absorptie snelheid";
 
 /* The title for the cell navigating to the carbs screen */
-"Carbs" = "Carbs";
+"Carbs" = "Koolhydraten";
 
 /* The title for the cell displaying diagnostic data */
-"Diagnostic" = "Diagnostic";
+"Diagnostic" = "Diagnose";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Enter the 6-digit pump ID";
+"Enter the 6-digit pump ID" = "Vul de 6 cijferige pomp ID in";
 
 /* The title for the cell displaying data generation */
-"Generate Data" = "Generate Data";
+"Generate Data" = "Genereer data";
+
+/* The title of the insulin sensitivity schedule screen
+   The title text for the insulin sensitivity schedule */
+"Insulin Sensitivity" = "Correctie bereik";
 
 /* The title text for the glucose target range schedule */
-"Glucose Target Range" = "Glucose Target Range";
+"Correction Range" = "Gewenst glucose doelbereik";
 
 /* The title text for the pump ID */
-"Pump ID" = "Pump ID";
+"Pump ID" = "Pomp ID";
 
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "Reservoir";
@@ -26,7 +33,7 @@
 "Reset" = "Reset";
 
 /* Title of button to sync basal profile from pump */
-"Sync With Pump" = "Sync With Pump";
+"Sync With Pump" = "Synchroniseer met pomp";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
 "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).";

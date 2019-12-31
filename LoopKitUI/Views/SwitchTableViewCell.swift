@@ -9,32 +9,37 @@
 import UIKit
 
 
-public final class SwitchTableViewCell: UITableViewCell {
-
-    @IBOutlet public weak var titleLabel: UILabel?
-
-    @IBOutlet public weak var subtitleLabel: UILabel?
+open class SwitchTableViewCell: UITableViewCell {
 
     public var `switch`: UISwitch?
 
-    override public func awakeFromNib() {
-        super.awakeFromNib()
+    public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .value1, reuseIdentifier: Self.className)
 
+        setUp()
+    }
+
+    required public init?(coder: NSCoder) {
+        super.init(coder: coder)
+
+        setUp()
+    }
+
+    private func setUp() {
         `switch` = UISwitch(frame: .zero)
         accessoryView = `switch`
     }
 
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
 
         contentView.layoutMargins.left = separatorInset.left
         contentView.layoutMargins.right = separatorInset.left
     }
 
-    override public func prepareForReuse() {
+    override open func prepareForReuse() {
         super.prepareForReuse()
 
         self.switch?.removeTarget(nil, action: nil, for: .valueChanged)
     }
-
 }

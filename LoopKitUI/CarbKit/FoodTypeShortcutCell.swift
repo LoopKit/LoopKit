@@ -45,7 +45,7 @@ class FoodTypeShortcutCell: UITableViewCell {
     }
 
     @IBAction func buttonTapped(_ sender: UIButton) {
-        guard let index = buttonStack.arrangedSubviews.index(of: sender),
+        guard let index = buttonStack.arrangedSubviews.firstIndex(of: sender),
             let selection = SelectionState(rawValue: index)
         else {
             return

@@ -1,0 +1,39 @@
+/* The title text for the basal rate schedule */
+"Basal Rates" = "Basaldoser";
+
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "Insulinkvoter";
+
+/* The title for the cell navigating to the carbs screen */
+"Carbs" = "Kolhydrater";
+
+/* The title text for the glucose correction range schedule */
+"Correction Range" = "Målvärden";
+
+/* The title for the cell displaying diagnostic data */
+"Diagnostic" = "Diagnostisk";
+
+/* The placeholder text instructing users how to enter a pump ID */
+"Enter the 6-digit pump ID" = "Ange ditt 6-siffriga pump-ID";
+
+/* The title for the cell displaying data generation */
+"Generate Data" = "Generera data";
+
+/* The title of the insulin sensitivity schedule screen
+   The title text for the insulin sensitivity schedule */
+"Insulin Sensitivity" = "Insulinkänslighet";
+
+/* The title text for the pump ID */
+"Pump ID" = "Pump ID";
+
+/* The title for the cell navigating to the reservoir screen */
+"Reservoir" = "Reservoar";
+
+/* Title for the cell resetting the data manager */
+"Reset" = "Återställ";
+
+/* Title of button to sync basal profile from pump */
+"Sync With Pump" = "Synka med pump";
+
+/* Instructions on where to find the pump ID on a Minimed pump */
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Ditt pump-ID står tryckt på baksidan, eller nästan längst ner på status/Esc-menyn. Det är den numeriska delen av serienumret (visad som SN eller S/N). ";

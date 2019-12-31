@@ -6,7 +6,16 @@
 //
 
 import Foundation
+import UserNotifications
 
+public protocol DeviceManagerDelegate {
+    func scheduleNotification(for manager: DeviceManager,
+                              identifier: String,
+                              content: UNNotificationContent,
+                              trigger: UNNotificationTrigger?)
+
+    func clearNotification(for manager: DeviceManager, identifier: String)
+}
 
 public protocol DeviceManager: class, CustomDebugStringConvertible {
     typealias RawStateValue = [String: Any]
@@ -19,6 +28,10 @@ public protocol DeviceManager: class, CustomDebugStringConvertible {
 
     /// A title describing this manager
     var localizedTitle: String { get }
+
+    /// The queue on which delegate methods are called
+    /// Setting to nil resets to a default provided by the manager
+    var delegateQueue: DispatchQueue! { get set }
 
     /// Initializes the manager with its previously-saved state
     ///

@@ -6,8 +6,6 @@
 //  Copyright © 2016 Nathan Racklyeft. All rights reserved.
 //
 
-
-
 public protocol GlucoseSampleValue: GlucoseValue {
     /// Whether the glucose value was provided for visual consistency, rather than an actual, calibrated reading.
     var isDisplayOnly: Bool { get }

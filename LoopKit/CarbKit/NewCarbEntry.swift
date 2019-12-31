@@ -19,15 +19,17 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
     public var absorptionTime: TimeInterval?
     public let createdByCurrentApp = true
     public let externalID: String?
+    public let syncIdentifier: String?
     public let isUploaded: Bool
 
-    public init(quantity: HKQuantity, startDate: Date, foodType: String?, absorptionTime: TimeInterval?, isUploaded: Bool = false, externalID: String? = nil) {
+    public init(quantity: HKQuantity, startDate: Date, foodType: String?, absorptionTime: TimeInterval?, isUploaded: Bool = false, externalID: String? = nil, syncIdentifier: String? = nil) {
         self.quantity = quantity
         self.startDate = startDate
         self.foodType = foodType
         self.absorptionTime = absorptionTime
         self.isUploaded = isUploaded
         self.externalID = externalID
+        self.syncIdentifier = syncIdentifier
     }
 
     public init?(rawValue: RawValue) {
@@ -46,7 +48,8 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
             foodType: rawValue["foodType"] as? String,
             absorptionTime: rawValue["absorptionTime"] as? TimeInterval,
             isUploaded: externalID != nil,
-            externalID: externalID
+            externalID: externalID,
+            syncIdentifier: rawValue["syncIdentifier"] as? String
         )
     }
 
@@ -59,6 +62,7 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
         rawValue["foodType"] = foodType
         rawValue["absorptionTime"] = absorptionTime
         rawValue["externalID"] = externalID
+        rawValue["syncIdentifier"] = syncIdentifier
 
         return rawValue
     }
@@ -83,7 +87,7 @@ extension NewCarbEntry {
         } else {
             // Add a sync identifier to allow for atomic modification if needed
             metadata[HKMetadataKeySyncVersion] = syncVersion
-            metadata[HKMetadataKeySyncIdentifier] = UUID().uuidString
+            metadata[HKMetadataKeySyncIdentifier] = syncIdentifier ?? UUID().uuidString
         }
 
         metadata[HKMetadataKeyExternalUUID] = externalID

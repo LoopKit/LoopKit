@@ -7,23 +7,23 @@
 
 import UIKit
 
+public protocol SetupTableViewControllerDelegate: class {
+    func setupTableViewControllerCancelButtonPressed(_ viewController: SetupTableViewController)
+}
 
 open class SetupTableViewController: UITableViewController {
-    open var setupViewController: PumpManagerSetupViewController? {
-        return navigationController as? PumpManagerSetupViewController
-    }
-
-    open var cgmSetupViewController: CGMManagerSetupViewController? {
-        return navigationController as? CGMManagerSetupViewController
-    }
 
     private(set) open lazy var footerView = SetupTableFooterView(frame: .zero)
 
     private var lastContentHeight: CGFloat = 0
 
+    public var padFooterToBottom: Bool = true
+
+    public weak var delegate: SetupTableViewControllerDelegate?
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelButtonPressed(_:)))
 
         footerView.primaryButton.addTarget(self, action: #selector(continueButtonPressed(_:)), for: .touchUpInside)
@@ -39,17 +39,16 @@ open class SetupTableViewController: UITableViewController {
 
             var footerSize = footerView.systemLayoutSizeFitting(CGSize(width: tableView.frame.size.width, height: UIView.layoutFittingCompressedSize.height))
             let visibleHeight = tableView.bounds.size.height - (tableView.adjustedContentInset.top + tableView.adjustedContentInset.bottom)
-            let footerPadding = max(footerSize.height, visibleHeight - tableView.contentSize.height)
+            let footerHeight = padFooterToBottom ? max(footerSize.height, visibleHeight - tableView.contentSize.height) : footerSize.height
 
-            footerSize.height = footerPadding
+            footerSize.height = footerHeight
             footerView.frame.size = footerSize
             tableView.tableFooterView = footerView
         }
     }
 
     @IBAction open func cancelButtonPressed(_: Any) {
-        setupViewController?.cancelSetup()
-        cgmSetupViewController?.cancelSetup()
+        delegate?.setupTableViewControllerCancelButtonPressed(self)
     }
 
     @IBAction open func continueButtonPressed(_ sender: Any) {
@@ -67,7 +66,10 @@ open class SetupTableViewController: UITableViewController {
     open override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-
+    
+    open override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
 }
 
 
