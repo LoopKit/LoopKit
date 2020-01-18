@@ -20,6 +20,9 @@ public protocol InsulinModel: CustomDebugStringConvertible {
     
     /// The expected duration of an insulin dose
     var effectDuration: TimeInterval { get }
+    
+    /// The time to delay the dose effect
+    var delay: TimeInterval { get }
 }
 
 

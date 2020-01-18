@@ -10,15 +10,17 @@ import Foundation
 
 public struct WalshInsulinModel {
     public let actionDuration: TimeInterval
-    
-    public init(actionDuration: TimeInterval) {
+    public let delay: TimeInterval
+
+    public init(actionDuration: TimeInterval, delay: TimeInterval = 600) {
         self.actionDuration = actionDuration
+        self.delay = delay
     }
 }
 
 extension WalshInsulinModel: InsulinModel {
     public var effectDuration: TimeInterval {
-        return self.actionDuration
+        return self.actionDuration + self.delay
     }
     
     /// Returns the percentage of total insulin effect remaining at a specified interval after delivery; 
@@ -31,8 +33,8 @@ extension WalshInsulinModel: InsulinModel {
     /// - Parameter time: The interval after insulin delivery
     /// - Returns: The percentage of total insulin effect remaining
     public func percentEffectRemaining(at time: TimeInterval) -> Double {
-        
-        switch time {
+        let timeAfterDelay = time - delay
+        switch timeAfterDelay {
         case let t where t <= 0:
             return 1
         case let t where t >= actionDuration:
@@ -50,7 +52,7 @@ extension WalshInsulinModel: InsulinModel {
                 nearestModeledDuration = TimeInterval(hours: round(actionDuration.hours))
             }
             
-            let minutes = time.minutes * nearestModeledDuration / actionDuration
+            let minutes = timeAfterDelay.minutes * nearestModeledDuration / actionDuration
             
             switch nearestModeledDuration {
             case TimeInterval(hours: 3):
@@ -71,7 +73,7 @@ extension WalshInsulinModel: InsulinModel {
 
 extension WalshInsulinModel: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "WalshInsulinModel(actionDuration: \(actionDuration))"
+        return "WalshInsulinModel(actionDuration: \(actionDuration), delay: \(delay))"
     }
 }
 
@@ -85,18 +87,21 @@ extension WalshInsulinModel: Equatable {
 extension WalshInsulinModel: Codable {
     enum CodingKeys: String, CodingKey {
         case actionDuration = "actionDuration"
+        case delay = "delay"
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let actionDuration: Double = try container.decode(Double.self, forKey: .actionDuration)
+        let delay: Double = try container.decode(Double.self, forKey: .delay)
         
-        self.init(actionDuration: actionDuration)
+        self.init(actionDuration: actionDuration, delay: delay)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(actionDuration, forKey: .actionDuration)
+        try container.encode(delay, forKey: .delay)
     }
 
 }

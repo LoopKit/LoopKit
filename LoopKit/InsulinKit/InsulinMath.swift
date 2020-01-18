@@ -11,7 +11,7 @@ import HealthKit
 
 
 extension DoseEntry {
-    private func continuousDeliveryInsulinOnBoard(at date: Date, model: InsulinModel, delay: TimeInterval, delta: TimeInterval) -> Double {
+    private func continuousDeliveryInsulinOnBoard(at date: Date, model: InsulinModel, delta: TimeInterval) -> Double {
         let doseDuration = endDate.timeIntervalSince(startDate)  // t1
         let time = date.timeIntervalSince(startDate)
         var iob: Double = 0
@@ -26,14 +26,14 @@ extension DoseEntry {
                 segment = 1
             }
 
-            iob += segment * model.percentEffectRemaining(at: time - delay - doseDate)
+            iob += segment * model.percentEffectRemaining(at: time - doseDate)
             doseDate += delta
-        } while doseDate <= min(floor((time + delay) / delta) * delta, doseDuration)
+        } while doseDate <= min(floor((time + model.delay) / delta) * delta, doseDuration)
 
         return iob
     }
 
-    func insulinOnBoard(at date: Date, model: InsulinModel, delay: TimeInterval, delta: TimeInterval) -> Double {
+    func insulinOnBoard(at date: Date, model: InsulinModel, delta: TimeInterval) -> Double {
         let time = date.timeIntervalSince(startDate)
         guard time >= 0 else {
             return 0
@@ -41,13 +41,13 @@ extension DoseEntry {
 
         // Consider doses within the delta time window as momentary
         if endDate.timeIntervalSince(startDate) <= 1.05 * delta {
-            return netBasalUnits * model.percentEffectRemaining(at: time - delay)
+            return netBasalUnits * model.percentEffectRemaining(at: time)
         } else {
-            return netBasalUnits * continuousDeliveryInsulinOnBoard(at: date, model: model, delay: delay, delta: delta)
+            return netBasalUnits * continuousDeliveryInsulinOnBoard(at: date, model: model, delta: delta)
         }
     }
 
-    private func continuousDeliveryGlucoseEffect(at date: Date, model: InsulinModel, delay: TimeInterval, delta: TimeInterval) -> Double {
+    private func continuousDeliveryGlucoseEffect(at date: Date, model: InsulinModel, delta: TimeInterval) -> Double {
         let doseDuration = endDate.timeIntervalSince(startDate)  // t1
         let time = date.timeIntervalSince(startDate)
         var value: Double = 0
@@ -62,14 +62,14 @@ extension DoseEntry {
                 segment = 1
             }
 
-            value += segment * (1.0 - model.percentEffectRemaining(at: time - delay - doseDate))
+            value += segment * (1.0 - model.percentEffectRemaining(at: time - doseDate))
             doseDate += delta
-        } while doseDate <= min(floor((time + delay) / delta) * delta, doseDuration)
+        } while doseDate <= min(floor((time + model.delay) / delta) * delta, doseDuration)
 
         return value
     }
 
-    func glucoseEffect(at date: Date, model: InsulinModel, insulinSensitivity: Double, delay: TimeInterval, delta: TimeInterval) -> Double {
+    func glucoseEffect(at date: Date, model: InsulinModel, insulinSensitivity: Double, delta: TimeInterval) -> Double {
         let time = date.timeIntervalSince(startDate)
 
         guard time >= 0 else {
@@ -78,9 +78,9 @@ extension DoseEntry {
 
         // Consider doses within the delta time window as momentary
         if endDate.timeIntervalSince(startDate) <= 1.05 * delta {
-            return netBasalUnits * -insulinSensitivity * (1.0 - model.percentEffectRemaining(at: time - delay))
+            return netBasalUnits * -insulinSensitivity * (1.0 - model.percentEffectRemaining(at: time))
         } else {
-            return netBasalUnits * -insulinSensitivity * continuousDeliveryGlucoseEffect(at: date, model: model, delay: delay, delta: delta)
+            return netBasalUnits * -insulinSensitivity * continuousDeliveryGlucoseEffect(at: date, model: model, delta: delta)
         }
     }
 
@@ -451,7 +451,6 @@ extension Collection where Element == DoseEntry {
      - parameter insulinModel:   The model of insulin activity over time
      - parameter start:          The date to begin the timeline
      - parameter end:            The date to end the timeline
-     - parameter delay:          The time to delay the dose effect
      - parameter delta:          The differential between timeline entries
 
      - returns: A sequence of insulin amount remaining
@@ -460,10 +459,9 @@ extension Collection where Element == DoseEntry {
         model: InsulinModel,
         from start: Date? = nil,
         to end: Date? = nil,
-        delay: TimeInterval = TimeInterval(minutes: 10),
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [InsulinValue] {
-        guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: model.effectDuration, delay: delay, delta: delta) else {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: model.effectDuration, delta: delta) else {
             return []
         }
 
@@ -472,7 +470,7 @@ extension Collection where Element == DoseEntry {
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
-                return value + dose.insulinOnBoard(at: date, model: model, delay: delay, delta: delta)
+                return value + dose.insulinOnBoard(at: date, model: model, delta: delta)
             }
 
             values.append(InsulinValue(startDate: date, value: value))
@@ -489,7 +487,6 @@ extension Collection where Element == DoseEntry {
     ///   - insulinSensitivity: The schedule of glucose effect per unit of insulin
     ///   - start: The earliest date of effects to return
     ///   - end: The latest date of effects to return
-    ///   - delay: The time after a dose to begin its modeled effects
     ///   - delta: The interval between returned effects
     /// - Returns: An array of glucose effects for the duration of the doses
     public func glucoseEffects(
@@ -497,10 +494,9 @@ extension Collection where Element == DoseEntry {
         insulinSensitivity: InsulinSensitivitySchedule,
         from start: Date? = nil,
         to end: Date? = nil,
-        delay: TimeInterval = TimeInterval(/* minutes: */60 * 10),
         delta: TimeInterval = TimeInterval(/* minutes: */60 * 5)
     ) -> [GlucoseEffect] {
-        guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: insulinModel.effectDuration, delay: delay, delta: delta) else {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: insulinModel.effectDuration, delta: delta) else {
             return []
         }
 
@@ -510,7 +506,7 @@ extension Collection where Element == DoseEntry {
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
-                return value + dose.glucoseEffect(at: date, model: insulinModel, insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delay: delay, delta: delta)
+                return value + dose.glucoseEffect(at: date, model: insulinModel, insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delta: delta)
             }
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
