@@ -598,7 +598,7 @@ extension AddEditOverrideTableViewController: TextFieldTableViewCellDelegate {
 }
 
 extension AddEditOverrideTableViewController: EmojiInputControllerDelegate {
-    func emojiInputControllerDidAdvanceToStandardInputMode(_ controller: EmojiInputController) {
+    public func emojiInputControllerDidAdvanceToStandardInputMode(_ controller: EmojiInputController) {
         guard
             let indexPath = indexPath(for: .symbol),
             let cell = tableView.cellForRow(at: indexPath) as? LabeledTextFieldTableViewCell,

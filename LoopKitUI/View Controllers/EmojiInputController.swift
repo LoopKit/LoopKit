@@ -8,13 +8,13 @@
 import UIKit
 
 
-class EmojiInputController: UIInputViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, IdentifiableClass {
+public class EmojiInputController: UIInputViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, IdentifiableClass {
 
     @IBOutlet private weak var collectionView: UICollectionView!
 
     @IBOutlet private weak var sectionIndex: UIStackView!
 
-    weak var delegate: EmojiInputControllerDelegate?
+    public weak var delegate: EmojiInputControllerDelegate?
 
     var emojis: EmojiDataSource!
 
@@ -26,7 +26,7 @@ class EmojiInputController: UIInputViewController, UICollectionViewDataSource, U
         return controller
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         inputView = view as? UIInputView
@@ -81,15 +81,15 @@ class EmojiInputController: UIInputViewController, UICollectionViewDataSource, U
 
     // MARK: - UICollectionViewDataSource
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return emojis.sections.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return emojis.sections[section].items.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: kind == UICollectionView.elementKindSectionHeader ? EmojiInputHeaderView.className : "Footer", for: indexPath)
 
         if let cell = cell as? EmojiInputHeaderView {
@@ -99,7 +99,7 @@ class EmojiInputController: UIInputViewController, UICollectionViewDataSource, U
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EmojiInputCell.className, for: indexPath) as! EmojiInputCell
 
         cell.label.text = emojis.sections[indexPath.section].items[indexPath.row]
@@ -111,7 +111,7 @@ class EmojiInputController: UIInputViewController, UICollectionViewDataSource, U
 
     // MARK: - UICollectionViewDelegate
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         inputView?.playInputClick​()
         textDocumentProxy.insertText(emojis.sections[indexPath.section].items[indexPath.row])
@@ -121,7 +121,7 @@ class EmojiInputController: UIInputViewController, UICollectionViewDataSource, U
 }
 
 
-protocol EmojiInputControllerDelegate: class {
+public protocol EmojiInputControllerDelegate: class {
     func emojiInputControllerDidAdvanceToStandardInputMode(_ controller: EmojiInputController)
 
     func emojiInputControllerDidSelectItemInSection(_ section: Int)
@@ -129,7 +129,7 @@ protocol EmojiInputControllerDelegate: class {
 
 // MARK: - Default Implementations
 extension EmojiInputControllerDelegate {
-    func emojiInputControllerDidSelectItemInSection(_ section: Int) { }
+    public func emojiInputControllerDidSelectItemInSection(_ section: Int) { }
 }
 
 extension UIInputView: UIInputViewAudioFeedback {
