@@ -16,11 +16,11 @@ extension UIFont {
     }
     
     public static var footnote: UIFont {
-        return .preferredFont(forTextStyle: .footnote)
+        return preferredFont(forTextStyle: .footnote)
     }
     
     public static var instructionTitle: UIFont {
-        return .preferredFont(forTextStyle: .headline)
+        return preferredFont(forTextStyle: .headline)
     }
     
     public static var instructionStep: UIFont {
