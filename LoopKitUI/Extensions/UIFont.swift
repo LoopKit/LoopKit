@@ -8,14 +8,30 @@
 
 extension UIFont {
     public static var titleFontGroupedInset: UIFont {
-        return UIFont.systemFont(ofSize: 28, weight: UIFont.Weight.semibold)
+        return UIFontMetrics(forTextStyle: .title1).scaledFont(for: systemFont(ofSize: 28, weight: UIFont.Weight.semibold))
     }
     
     public static var sectionHeaderFontGroupedInset: UIFont {
-        return UIFont.systemFont(ofSize: 19, weight: UIFont.Weight.semibold)
+        return UIFontMetrics(forTextStyle: .headline).scaledFont(for: systemFont(ofSize: 19, weight: UIFont.Weight.semibold))
     }
     
-    public static var descriptiveText: UIFont {
-        return UIFont.systemFont(ofSize: 13)
+    public static var footnote: UIFont {
+        return .preferredFont(forTextStyle: .footnote)
+    }
+    
+    public static var instructionTitle: UIFont {
+        return .preferredFont(forTextStyle: .headline)
+    }
+    
+    public static var instructionStep: UIFont {
+        return UIFontMetrics(forTextStyle: .subheadline).scaledFont(for: systemFont(ofSize: 14))
+    }
+    
+    public static var instructionNumber: UIFont {
+        return preferredFont(forTextStyle: .subheadline)
+    }
+    
+    public static var inputValue: UIFont {
+        return UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: systemFont(ofSize: 48))
     }
 }
