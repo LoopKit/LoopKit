@@ -12,16 +12,20 @@ public class TableViewTitleLabel: UILabel {
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        font = UIFont.titleFontGroupedInset
+        initFont()
     }
 
     required public init?(coder: NSCoder) {
         super.init(coder: coder)
-        font = UIFont.titleFontGroupedInset
+        initFont()
     }
     
     override public func awakeFromNib() {
         super.awakeFromNib()
+        initFont()
+    }
+    
+    public func initFont() {
         font = UIFont.titleFontGroupedInset
     }
     
