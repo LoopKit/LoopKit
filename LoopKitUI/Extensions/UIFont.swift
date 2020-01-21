@@ -8,11 +8,11 @@
 
 extension UIFont {
     public static var titleFontGroupedInset: UIFont {
-        return UIFontMetrics(forTextStyle: .title1).scaledFont(for: systemFont(ofSize: 28, weight: UIFont.Weight.semibold))
+        return UIFontMetrics(forTextStyle: .title1).scaledFont(for: systemFont(ofSize: 28, weight: .semibold))
     }
     
     public static var sectionHeaderFontGroupedInset: UIFont {
-        return UIFontMetrics(forTextStyle: .headline).scaledFont(for: systemFont(ofSize: 19, weight: UIFont.Weight.semibold))
+        return UIFontMetrics(forTextStyle: .headline).scaledFont(for: systemFont(ofSize: 19, weight: .semibold))
     }
     
     public static var footnote: UIFont {
