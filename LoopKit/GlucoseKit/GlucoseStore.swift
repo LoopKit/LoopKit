@@ -11,6 +11,16 @@ import CoreData
 import HealthKit
 import os.log
 
+public protocol GlucoseStoreDelegate: AnyObject {
+    
+    /**
+     Informs the delegate that the glucose store has updated glucose data.
+     
+     - Parameter glucoseStore: The glucose store that has updated glucose data.
+     */
+    func glucoseStoreHasUpdatedGlucoseData(_ glucoseStore: GlucoseStore)
+    
+}
 
 public enum GlucoseStoreResult<T> {
     case success(T)
@@ -42,6 +52,8 @@ public final class GlucoseStore: HealthKitSampleStore {
 
     /// Notification posted when glucose samples were changed, either via add/replace/delete methods or from HealthKit
     public static let glucoseSamplesDidChange = NSNotification.Name(rawValue: "com.loopkit.GlucoseStore.glucoseSamplesDidChange")
+    
+    public weak var delegate: GlucoseStoreDelegate?
 
     private let glucoseType = HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!
 
@@ -198,6 +210,8 @@ extension GlucoseStore {
                 return $0.quantitySample
             }
         }
+
+        delegate?.glucoseStoreHasUpdatedGlucoseData(self)
 
         healthStore.save(glucose) { (completed, error) in
             self.dataAccessQueue.async {
@@ -518,6 +532,78 @@ extension GlucoseStore {
             completion(samples.counteractionEffects(to: effects))
         }
     }
+}
+
+extension GlucoseStore {
+
+    public struct QueryAnchor: RawRepresentable {
+
+        public typealias RawValue = [String: Any]
+
+        internal var modificationCounter: Int64
+
+        public init() {
+            self.modificationCounter = 0
+        }
+
+        public init?(rawValue: RawValue) {
+            guard let modificationCounter = rawValue["modificationCounter"] as? Int64 else {
+                return nil
+            }
+            self.modificationCounter = modificationCounter
+        }
+
+        public var rawValue: RawValue {
+            var rawValue: RawValue = [:]
+            rawValue["modificationCounter"] = modificationCounter
+            return rawValue
+        }
+    }
+
+    public enum GlucoseQueryResult {
+        case success(QueryAnchor, [StoredGlucoseSample])
+        case failure(Error)
+    }
+
+    public func executeGlucoseQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (GlucoseQueryResult) -> Void) {
+        dataAccessQueue.async {
+            var queryAnchor = queryAnchor ?? QueryAnchor()
+            var queryResult = [StoredGlucoseSample]()
+            var queryError: Error?
+
+            guard limit > 0 else {
+                completion(.success(queryAnchor, queryResult))
+                return
+            }
+
+            self.cacheStore.managedObjectContext.performAndWait {
+                let storedRequest: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+
+                storedRequest.predicate = NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter)
+                storedRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+                storedRequest.fetchLimit = limit
+
+                do {
+                    let stored = try self.cacheStore.managedObjectContext.fetch(storedRequest)
+                    if let modificationCounter = stored.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
+                        queryAnchor.modificationCounter = modificationCounter
+                    }
+                    queryResult.append(contentsOf: stored.compactMap { StoredGlucoseSample(managedObject: $0) })
+                } catch let error {
+                    queryError = error
+                    return
+                }
+            }
+
+            if let queryError = queryError {
+                completion(.failure(queryError))
+                return
+            }
+
+            completion(.success(queryAnchor, queryResult))
+        }
+    }
+
 }
 
 extension GlucoseStore {

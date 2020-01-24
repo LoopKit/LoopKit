@@ -6,31 +6,92 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
-import Foundation
-
+/**
+ Protocol for a remote data service.
+*/
 public protocol RemoteDataService: Service {
 
-    func uploadSettings(_ settings: Settings, lastUpdated: Date)
+    /// The maximum number of carb data to upload to the remote data service at one time.
+    var carbDataLimit: Int? { get }
 
-    func uploadLoopStatus(
-        insulinOnBoard: InsulinValue?,
-        carbsOnBoard: CarbValue?,
-        predictedGlucose: [GlucoseValue]?,
-        recommendedTempBasal: (recommendation: TempBasalRecommendation, date: Date)?,
-        recommendedBolus: Double?,
-        lastReservoirValue: ReservoirValue?,
-        pumpManagerStatus: PumpManagerStatus?,
-        glucoseTargetRangeSchedule: GlucoseRangeSchedule?,
-        scheduleOverride: TemporaryScheduleOverride?,
-        glucoseTargetRangeScheduleApplyingOverrideIfActive: GlucoseRangeSchedule?,
-        loopError: Error?)
+    /**
+     Upload carb data to the remote data service.
 
-    func upload(glucoseValues values: [GlucoseValue], sensorState: SensorDisplayable?)
+     - Parameter deleted: The deleted carb data to upload.
+     - Parameter stored: The stored carb data to upload.
+     - Parameter completion: The completion function to call with any success or failure.
+     */
+    func uploadCarbData(deleted: [DeletedCarbEntry], stored: [StoredCarbEntry], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
 
-    func upload(pumpEvents events: [PersistedPumpEvent], fromSource source: String, completion: @escaping (Result<[URL], Error>) -> Void)
+    /// The maximum number of dose data to upload to the remote data service at one time.
+    var doseDataLimit: Int? { get }
 
-    func upload(carbEntries entries: [StoredCarbEntry], completion: @escaping (_ entries: [StoredCarbEntry]) -> Void)
+    /**
+     Upload dose data to the remote data service.
 
-    func delete(carbEntries entries: [DeletedCarbEntry], completion: @escaping (_ entries: [DeletedCarbEntry]) -> Void)
+     - Parameter stored: The stored dose data to upload.
+     - Parameter completion: The completion function to call with any success or failure.
+     */
+    func uploadDoseData(_ stored: [DoseEntry], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+
+    /// The maximum number of dosing decision data to upload to the remote data service at one time.
+    var dosingDecisionDataLimit: Int? { get }
+
+    /**
+     Upload dosing decision data to the remote data service.
+
+     - Parameter stored: The stored dosing decision data to upload.
+     - Parameter completion: The completion function to call with any success or failure.
+     */
+    func uploadDosingDecisionData(_ stored: [StoredDosingDecision], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+
+    /// The maximum number of glucose data to upload to the remote data service at one time.
+    var glucoseDataLimit: Int? { get }
+
+    /**
+     Upload glucose data to the remote data service.
+
+     - Parameter stored: The stored glucose data to upload.
+     - Parameter completion: The completion function to call with any success or failure.
+     */
+    func uploadGlucoseData(_ stored: [StoredGlucoseSample], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+
+    /// The maximum number of pump event data to upload to the remote data service at one time.
+    var pumpEventDataLimit: Int? { get }
+
+    /**
+     Upload pump event data to the remote data service.
+
+     - Parameter stored: The stored pump event data to upload.
+     - Parameter completion: The completion function to call with any success or failure.
+     */
+    func uploadPumpEventData(_ stored: [PersistedPumpEvent], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+
+    /// The maximum number of settings data to upload to the remote data service at one time.
+    var settingsDataLimit: Int? { get }
+
+    /**
+     Upload settings data to the remote data service.
+
+     - Parameter stored: The stored settings data to upload.
+     - Parameter completion: The completion function to call with any success or failure.
+     */
+    func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+
+}
+
+public extension RemoteDataService {
+
+    var carbDataLimit: Int? { return nil }
+
+    var doseDataLimit: Int? { return nil }
+
+    var dosingDecisionDataLimit: Int? { return nil }
+
+    var glucoseDataLimit: Int? { return nil }
+
+    var pumpEventDataLimit: Int? { return nil }
+
+    var settingsDataLimit: Int? { return nil }
 
 }

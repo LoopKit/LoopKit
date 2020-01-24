@@ -312,3 +312,433 @@ class DoseStoreTests: PersistenceControllerTestCase {
         XCTAssertEqual(f("2018-11-29 11:14:28 +0000"), doseStore.insulinDeliveryStore.test_lastBasalEndDate)
     }
 }
+
+class DoseStoreQueryAnchorTests: XCTestCase {
+    
+    var rawValue: DoseStore.QueryAnchor.RawValue = [
+        "modificationCounter": Int64(123)
+    ]
+    
+    func testInitializerDefault() {
+        let queryAnchor = DoseStore.QueryAnchor()
+        XCTAssertEqual(queryAnchor.modificationCounter, 0)
+    }
+    
+    func testInitializerRawValue() {
+        let queryAnchor = DoseStore.QueryAnchor(rawValue: rawValue)
+        XCTAssertNotNil(queryAnchor)
+        XCTAssertEqual(queryAnchor?.modificationCounter, 123)
+    }
+    
+    func testInitializerRawValueMissingModificationCounter() {
+        rawValue["modificationCounter"] = nil
+        XCTAssertNil(DoseStore.QueryAnchor(rawValue: rawValue))
+    }
+    
+    func testInitializerRawValueInvalidModificationCounter() {
+        rawValue["modificationCounter"] = "123"
+        XCTAssertNil(DoseStore.QueryAnchor(rawValue: rawValue))
+    }
+    
+    func testRawValueWithDefault() {
+        let rawValue = DoseStore.QueryAnchor().rawValue
+        XCTAssertEqual(rawValue.count, 1)
+        XCTAssertEqual(rawValue["modificationCounter"] as? Int64, Int64(0))
+    }
+    
+    func testRawValueWithNonDefault() {
+        var queryAnchor = DoseStore.QueryAnchor()
+        queryAnchor.modificationCounter = 123
+        let rawValue = queryAnchor.rawValue
+        XCTAssertEqual(rawValue.count, 1)
+        XCTAssertEqual(rawValue["modificationCounter"] as? Int64, Int64(123))
+    }
+    
+}
+
+class DoseStoreQueryTests: PersistenceControllerTestCase {
+    
+    let insulinModel = WalshInsulinModel(actionDuration: .hours(4))
+    let basalProfile = BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]])
+    let insulinSensitivitySchedule = InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]])
+    
+    var doseStore: DoseStore!
+    var completion: XCTestExpectation!
+    var queryAnchor: DoseStore.QueryAnchor!
+    var limit: Int!
+    
+    override func setUp() {
+        super.setUp()
+        
+        doseStore = DoseStore(healthStore: HKHealthStoreMock(), cacheStore: cacheStore, observationEnabled: false, insulinModel: insulinModel, basalProfile: basalProfile, insulinSensitivitySchedule: insulinSensitivitySchedule)
+        completion = expectation(description: "Completion")
+        queryAnchor = DoseStore.QueryAnchor()
+        limit = Int.max
+    }
+    
+    override func tearDown() {
+        limit = nil
+        queryAnchor = nil
+        completion = nil
+        doseStore = nil
+        
+        super.tearDown()
+    }
+    
+    func testDoseEmptyWithDefaultQueryAnchor() {
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 0)
+                XCTAssertEqual(data.count, 0)
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testDoseEmptyWithMissingQueryAnchor() {
+        queryAnchor = nil
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 0)
+                XCTAssertEqual(data.count, 0)
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testDoseEmptyWithNonDefaultQueryAnchor() {
+        queryAnchor.modificationCounter = 1
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 1)
+                XCTAssertEqual(data.count, 0)
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testDoseDataWithUnusedQueryAnchor() {
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        
+        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        addDoseData(withSyncIdentifiers: syncIdentifiers)
+        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 5)
+                XCTAssertEqual(data.count, 3)
+                for (index, syncIdentifier) in syncIdentifiers.enumerated() {
+                    XCTAssertEqual(data[index].syncIdentifier, syncIdentifier)
+                }
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testDoseDataWithStaleQueryAnchor() {
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        
+        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        addDoseData(withSyncIdentifiers: syncIdentifiers)
+        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        
+        queryAnchor.modificationCounter = 4
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 5)
+                XCTAssertEqual(data.count, 1)
+                XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[2])
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testDoseDataWithCurrentQueryAnchor() {
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        
+        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        addDoseData(withSyncIdentifiers: syncIdentifiers)
+        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        
+        queryAnchor.modificationCounter = 5
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 5)
+                XCTAssertEqual(data.count, 0)
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testDoseDataWithLimitZero() {
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        
+        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        addDoseData(withSyncIdentifiers: syncIdentifiers)
+        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        
+        limit = 0
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 0)
+                XCTAssertEqual(data.count, 0)
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testDoseDataWithLimitCoveredByData() {
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        
+        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        addDoseData(withSyncIdentifiers: syncIdentifiers)
+        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        
+        limit = 2
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 4)
+                XCTAssertEqual(data.count, 2)
+                XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[0])
+                XCTAssertEqual(data[1].syncIdentifier, syncIdentifiers[1])
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testPumpEventEmptyWithDefaultQueryAnchor() {
+        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 0)
+                XCTAssertEqual(data.count, 0)
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testPumpEventEmptyWithMissingQueryAnchor() {
+        queryAnchor = nil
+        
+        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 0)
+                XCTAssertEqual(data.count, 0)
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testPumpEventEmptyWithNonDefaultQueryAnchor() {
+        queryAnchor.modificationCounter = 1
+        
+        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 1)
+                XCTAssertEqual(data.count, 0)
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testPumpEventDataWithUnusedQueryAnchor() {
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        
+        addDoseData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        addPumpEventData(withSyncIdentifiers: syncIdentifiers)
+        addDoseData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        
+        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 5)
+                XCTAssertEqual(data.count, 3)
+                for (index, syncIdentifier) in syncIdentifiers.enumerated() {
+                    XCTAssertEqual(data[index].raw?.hexadecimalString, syncIdentifier)
+                }
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testPumpEventDataWithStaleQueryAnchor() {
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        
+        addDoseData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        addPumpEventData(withSyncIdentifiers: syncIdentifiers)
+        addDoseData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        
+        queryAnchor.modificationCounter = 4
+        
+        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 5)
+                XCTAssertEqual(data.count, 1)
+                XCTAssertEqual(data[0].raw?.hexadecimalString, syncIdentifiers[2])
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testPumpEventDataWithCurrentQueryAnchor() {
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        
+        addDoseData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        addPumpEventData(withSyncIdentifiers: syncIdentifiers)
+        addDoseData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        
+        queryAnchor.modificationCounter = 5
+        
+        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 5)
+                XCTAssertEqual(data.count, 0)
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testPumpEventDataWithLimitCoveredByData() {
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        
+        addDoseData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        addPumpEventData(withSyncIdentifiers: syncIdentifiers)
+        addDoseData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        
+        limit = 2
+        
+        doseStore.executePumpEventQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 4)
+                XCTAssertEqual(data.count, 2)
+                XCTAssertEqual(data[0].raw?.hexadecimalString, syncIdentifiers[0])
+                XCTAssertEqual(data[1].raw?.hexadecimalString, syncIdentifiers[1])
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    private func addDoseData(withSyncIdentifiers syncIdentifiers: [String]) {
+        cacheStore.managedObjectContext.performAndWait {
+            for syncIdentifier in syncIdentifiers {
+                let pumpEvent = PumpEvent(context: self.cacheStore.managedObjectContext)
+                pumpEvent.type = PumpEventType.doseTypes.randomElement()!
+                switch pumpEvent.type {
+                case .basal:
+                    pumpEvent.dose = DoseEntry(type: .basal, startDate: Date(), value: 0.75, unit: .unitsPerHour)
+                case .bolus:
+                    pumpEvent.dose = DoseEntry(type: .bolus, startDate: Date(), value: 1.25, unit: .units)
+                case .resume:
+                    pumpEvent.dose = DoseEntry(resumeDate: Date())
+                case .suspend:
+                    pumpEvent.dose = DoseEntry(suspendDate: Date())
+                case .tempBasal:
+                    pumpEvent.dose = DoseEntry(type: .tempBasal, startDate: Date(), value: 0, unit: .units)
+                default:
+                    break
+                }
+                pumpEvent.raw = Data(hexadecimalString: syncIdentifier)
+                
+                self.cacheStore.save()
+            }
+        }
+    }
+    
+    private func addPumpEventData(withSyncIdentifiers syncIdentifiers: [String]) {
+        cacheStore.managedObjectContext.performAndWait {
+            for syncIdentifier in syncIdentifiers {
+                let pumpEvent = PumpEvent(context: self.cacheStore.managedObjectContext)
+                pumpEvent.date = Date()
+                pumpEvent.type = PumpEventType.nonDoseTypes.randomElement()!
+                pumpEvent.raw = Data(hexadecimalString: syncIdentifier)
+                
+                self.cacheStore.save()
+            }
+        }
+    }
+    
+    private func generateSyncIdentifier() -> String {
+        return UUID().data.hexadecimalString
+    }
+    
+}
