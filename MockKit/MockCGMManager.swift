@@ -74,7 +74,7 @@ public final class MockCGMManager: TestingCGMManager {
     }
 
     private var glucoseUpdateTimer: Timer?
-
+    
     public init?(rawState: RawStateValue) {
         if let mockSensorStateRawValue = rawState["mockSensorState"] as? MockCGMState.RawValue,
             let mockSensorState = MockCGMState(rawValue: mockSensorStateRawValue) {
@@ -112,26 +112,53 @@ public final class MockCGMManager: TestingCGMManager {
 
     public let shouldSyncToRemoteService = false
 
+    private func logDeviceComms(_ type: DeviceLogEntryType, message: String) {
+        delegate.notify { (delegate) in
+            delegate?.deviceManager(self, logEventForDeviceIdentifier: "mockcgm", type: type, message: message, completion: nil)
+        }
+    }
+
+    private func sendCGMResult(_ result: CGMResult) {
+        self.delegate.notify { delegate in
+            delegate?.cgmManager(self, didUpdateWith: result)
+        }
+    }
+
     public func fetchNewDataIfNeeded(_ completion: @escaping (CGMResult) -> Void) {
-        dataSource.fetchNewData(completion)
+        logDeviceComms(.send, message: "Fetch new data")
+        dataSource.fetchNewData { (result) in
+            switch result {
+            case .error(let error):
+                self.logDeviceComms(.error, message: "Error fetching new data: \(error)")
+            case .newData(let samples):
+                self.logDeviceComms(.receive, message: "New data received: \(samples)")
+            case .noData:
+                self.logDeviceComms(.receive, message: "No new data")
+            }
+            completion(result)
+        }
     }
 
     public func backfillData(datingBack duration: TimeInterval) {
         let now = Date()
         dataSource.backfillData(from: DateInterval(start: now.addingTimeInterval(-duration), end: now)) { result in
-            self.delegate.notify { delegate in
-                delegate?.cgmManager(self, didUpdateWith: result)
+            switch result {
+            case .error(let error):
+                self.logDeviceComms(.error, message: "Backfill error: \(error)")
+            case .newData(let samples):
+                self.logDeviceComms(.receive, message: "Backfill data: \(samples)")
+            case .noData:
+                self.logDeviceComms(.receive, message: "Backfill empty")
             }
+            self.sendCGMResult(result)
         }
     }
     
     private func setupGlucoseUpdateTimer() {
         glucoseUpdateTimer = Timer.scheduledTimer(withTimeInterval: dataSource.dataPointFrequency, repeats: true) { [weak self] _ in
             guard let self = self else { return }
-            self.dataSource.fetchNewData { result in
-                self.delegate.notify { delegate in
-                    delegate?.cgmManager(self, didUpdateWith: result)
-                }
+            self.fetchNewDataIfNeeded() { result in
+                self.sendCGMResult(result)
             }
         }
     }
@@ -140,10 +167,7 @@ public final class MockCGMManager: TestingCGMManager {
         guard !samples.isEmpty else { return }
         var samples = samples
         samples.mutateEach { $0.device = device }
-        let result = CGMResult.newData(samples)
-        delegate.notify { delegate in
-            delegate?.cgmManager(self, didUpdateWith: result)
-        }
+        sendCGMResult(CGMResult.newData(samples))
     }
 }
 

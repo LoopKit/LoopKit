@@ -17,6 +17,8 @@ public protocol DeviceManagerDelegate {
     func clearNotification(for manager: DeviceManager, identifier: String)
     
     func removeNotificationRequests(for manager: DeviceManager, identifiers: [String])
+    
+    func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 }
 
 public protocol DeviceManager: class, CustomDebugStringConvertible {
@@ -34,7 +36,7 @@ public protocol DeviceManager: class, CustomDebugStringConvertible {
     /// The queue on which delegate methods are called
     /// Setting to nil resets to a default provided by the manager
     var delegateQueue: DispatchQueue! { get set }
-
+    
     /// Initializes the manager with its previously-saved state
     ///
     /// Return nil if the saved state is invalid to prevent restoration

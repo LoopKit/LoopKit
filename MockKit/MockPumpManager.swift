@@ -36,6 +36,7 @@ public final class MockPumpManager: TestingPumpManager {
 
     public static let managerIdentifier = "MockPumpManager"
     public static let localizedTitle = "Simulator"
+    
     private static let device = HKDevice(
         name: MockPumpManager.managerIdentifier,
         manufacturer: nil,
@@ -269,14 +270,20 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
+        logDeviceComms(.send, message: "Temp Basal \(unitsPerHour) U/hr Duration:\(duration.hours)")
+
         if state.tempBasalEnactmentShouldError {
-            completion(.failure(PumpManagerError.communication(MockPumpManagerError.communicationFailure)))
+            let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Temp Basal failed with error \(error)")
+            completion(.failure(error))
         } else {
             let now = Date()
             if let temp = state.unfinalizedTempBasal, temp.finishTime.compare(now) == .orderedDescending {
                 state.unfinalizedTempBasal?.cancel(at: now)
             }
             state.finalizeFinishedDoses()
+
+            logDeviceComms(.receive, message: "Temp Basal succeeded")
 
             if duration < .ulpOfOne {
                 // Cancel temp basal
@@ -293,11 +300,21 @@ public final class MockPumpManager: TestingPumpManager {
             }
         }
     }
+    
+    private func logDeviceComms(_ type: DeviceLogEntryType, message: String) {
+        delegate.notify { (delegate) in
+            delegate?.deviceManager(self, logEventForDeviceIdentifier: "mockpump", type: type, message: message, completion: nil)
+        }
+    }
 
     public func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (DoseEntry) -> Void, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
 
+        logDeviceComms(.send, message: "Bolus \(units) U")
+
         if state.bolusEnactmentShouldError {
-            completion(.failure(SetBolusError.certain(PumpManagerError.communication(MockPumpManagerError.communicationFailure))))
+            let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Bolus failed with error \(error)")
+            completion(.failure(SetBolusError.certain(error)))
         } else {
 
             state.finalizeFinishedDoses()
@@ -311,10 +328,15 @@ public final class MockPumpManager: TestingPumpManager {
                 completion(.failure(SetBolusError.certain(PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended))))
                 return
             }
+            
+            
             let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute))
             let dose = DoseEntry(bolus)
             willRequest(dose)
             state.unfinalizedBolus = bolus
+            
+            logDeviceComms(.receive, message: "Bolus accepted")
+            
             storeDoses { (error) in
                 completion(.success(dose))
             }
@@ -338,17 +360,24 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     public func suspendDelivery(completion: @escaping (Error?) -> Void) {
+        logDeviceComms(.send, message: "Suspend")
+            
         if self.state.deliverySuspensionShouldError {
-            completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
+            let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Suspend failed with error: \(error)")
+            completion(error)
         } else {
             let now = Date()
             state.unfinalizedTempBasal?.cancel(at: now)
             state.unfinalizedBolus?.cancel(at: now)
 
+
             let suspendDate = Date()
             let suspend = UnfinalizedDose(suspendStartTime: suspendDate)
             self.state.finalizedDoses.append(suspend)
             self.state.suspendState = .suspended(suspendDate)
+            logDeviceComms(.receive, message: "Suspend accepted")
+
             storeDoses { (error) in
                 completion(error)
             }
@@ -356,8 +385,12 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     public func resumeDelivery(completion: @escaping (Error?) -> Void) {
+        logDeviceComms(.send, message: "Resume")
+
         if self.state.deliveryResumptionShouldError {
-            completion(PumpManagerError.communication(MockPumpManagerError.communicationFailure))
+            let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Resume failed with error: \(error)")
+            completion(error)
         } else {
             let resumeDate = Date()
             let resume = UnfinalizedDose(resumeStartTime: resumeDate)
