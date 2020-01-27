@@ -121,7 +121,7 @@ public final class PersistenceController {
                 delegate?.persistenceControllerDidSave(self, error: nil)
                 completion?(nil)
             } catch let saveError as NSError {
-                self.log.error("Error while saving context: %{public}", saveError)
+                self.log.error("Error while saving context: %{public}@", saveError)
                 delegate?.persistenceControllerDidSave(self, error: .coreDataError(saveError))
                 completion?(.coreDataError(saveError))
             }

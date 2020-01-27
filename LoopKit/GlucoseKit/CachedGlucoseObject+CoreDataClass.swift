@@ -37,6 +37,13 @@ class CachedGlucoseObject: NSManagedObject {
             primitiveUploadState = NSNumber(value: newValue.rawValue)
         }
     }
+
+    override func willSave() {
+        if isInserted || isUpdated {
+            setPrimitiveValue(managedObjectContext!.modificationCounter ?? 0, forKey: "modificationCounter")
+        }
+        super.willSave()
+    }
 }
 
 

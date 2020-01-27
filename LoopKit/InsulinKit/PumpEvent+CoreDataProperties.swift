@@ -28,5 +28,6 @@ extension PumpEvent {
     @NSManaged var mutable: Bool
     @NSManaged var raw: Data?
     @NSManaged var title: String?
+    @NSManaged var modificationCounter: Int64
 
 }

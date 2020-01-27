@@ -342,7 +342,7 @@ extension CarbEntryEditViewController: DatePickerTableViewCellDelegate {
 
 
 extension CarbEntryEditViewController: FoodTypeShortcutCellDelegate {
-    func foodTypeShortcutCellDidUpdateSelection(_ cell: FoodTypeShortcutCell) {
+    public func foodTypeShortcutCellDidUpdateSelection(_ cell: FoodTypeShortcutCell) {
         var absorptionTime: TimeInterval?
 
         switch cell.selectionState {
@@ -372,7 +372,7 @@ extension CarbEntryEditViewController: FoodTypeShortcutCellDelegate {
 
 
 extension CarbEntryEditViewController: EmojiInputControllerDelegate {
-    func emojiInputControllerDidAdvanceToStandardInputMode(_ controller: EmojiInputController) {
+    public func emojiInputControllerDidAdvanceToStandardInputMode(_ controller: EmojiInputController) {
         if let cell = tableView.cellForRow(at: IndexPath(row: Row.foodType.rawValue, section: 0)) as? TextFieldTableViewCell, let textField = cell.textField as? CustomInputTextField, textField.customInput != nil {
             let customInput = textField.customInput
             textField.customInput = nil
@@ -382,7 +382,7 @@ extension CarbEntryEditViewController: EmojiInputControllerDelegate {
         }
     }
 
-    func emojiInputControllerDidSelectItemInSection(_ section: Int) {
+    public func emojiInputControllerDidSelectItemInSection(_ section: Int) {
         guard !absorptionTimeWasEdited, section < orderedAbsorptionTimes.count else {
             return
         }

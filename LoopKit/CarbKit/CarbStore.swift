@@ -25,32 +25,21 @@ public enum CarbAbsorptionModel {
 
 public protocol CarbStoreDelegate: class {
 
-    /// Informs the delegate that an internal error occurred
-    ///
-    /// - parameter carbStore: The carb store
-    /// - parameter error:     The error describing the issue
+    /**
+     Informs the delegate that the carb store has updated carb data.
+
+     - Parameter carbStore: The carb store that has updated carb data.
+     */
+    func carbStoreHasUpdatedCarbData(_ carbStore: CarbStore)
+
+    /**
+     Informs the delegate that an internal error occurred.
+
+     - parameter carbStore: The carb store
+     - parameter error:     The error describing the issue
+     */
     func carbStore(_ carbStore: CarbStore, didError error: CarbStore.CarbStoreError)
-}
 
-public protocol CarbStoreSyncDelegate: class {
-
-    /// Asks the delegate to upload recently-added carb entries not yet marked as uploaded.
-    ///
-    /// The completion handler must be called in all circumstances with each entry passed to the delegate
-    ///
-    /// - parameter carbStore:  The store instance
-    /// - parameter entries:    The carb entries
-    /// - parameter completion: The closure to execute when the upload attempt(s) have completed. The closure takes a single argument of an array of entries. Populate `externalID` and set `isUploaded` for each entry that was uploaded, or pass back the entry unmodified for each entry that failed to upload.
-    func carbStore(_ carbStore: CarbStore, hasEntriesNeedingUpload entries: [StoredCarbEntry], completion: @escaping (_ entries: [StoredCarbEntry]) -> Void)
-
-    /// Asks the delegate to delete carb entries that were previously uploaded.
-    ///
-    /// The completion handler must be called in all circumstances with each entry passed to the delegate
-    ///
-    /// - parameter carbStore:  The store instance
-    /// - parameter entries:    The deleted entries
-    /// - parameter completion: The closure to execute when the deletion attempt(s) have finished. The closure takes a single argument of an array of entries. Set `isUploaded` to true for each entry that was uploaded, or pass back the entry unmodified for each entry that failed to upload.
-    func carbStore(_ carbStore: CarbStore, hasDeletedEntries entries: [DeletedCarbEntry], completion: @escaping (_ entries: [DeletedCarbEntry]) -> Void)
 }
 
 /**
@@ -178,8 +167,6 @@ public final class CarbStore: HealthKitSampleStore {
 
     public weak var delegate: CarbStoreDelegate?
 
-    public weak var syncDelegate: CarbStoreSyncDelegate?
-
     private let queue = DispatchQueue(label: "com.loudnate.CarbKit.dataAccessQueue", qos: .utility)
 
     private let log = OSLog(category: "CarbStore")
@@ -288,7 +275,7 @@ public final class CarbStore: HealthKitSampleStore {
             // Notify listeners only if a meaningful change was made
             if notificationRequired {
                 self.cacheStore.save()
-                self.syncExternalDB()
+                self.notifyDelegateOfUpdatedCarbData()
 
                 NotificationCenter.default.post(name: CarbStore.carbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
             }
@@ -421,7 +408,7 @@ extension CarbStore {
                     self.addCachedObject(for: stored)
                     completion(.success(stored))
                     NotificationCenter.default.post(name: CarbStore.carbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
-                    self.syncExternalDB()
+                    self.notifyDelegateOfUpdatedCarbData()
                 } else if let error = error {
                     self.log.error("Error saving entry %@: %@", sample.uuid.uuidString, String(describing: error))
                     completion(.failure(.healthStoreError(error)))
@@ -447,7 +434,7 @@ extension CarbStore {
                     self.replaceCachedObject(for: oldEntry, with: stored)
                     completion(.success(stored))
                     NotificationCenter.default.post(name: CarbStore.carbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
-                    self.syncExternalDB()
+                    self.notifyDelegateOfUpdatedCarbData()
                 } else if let error = error {
                     self.log.error("Error replacing entry %@: %@", oldEntry.sampleUUID.uuidString, String(describing: error))
                     completion(.failure(.healthStoreError(error)))
@@ -471,7 +458,7 @@ extension CarbStore {
                     self.deleteCachedObject(for: entry)
                     completion(.success(true))
                     NotificationCenter.default.post(name: CarbStore.carbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
-                    self.syncExternalDB()
+                    self.notifyDelegateOfUpdatedCarbData()
                 } else if let error = error {
                     self.log.error("Error deleting entry %@: %@", entry.sampleUUID.uuidString, String(describing: error))
                     completion(.failure(.healthStoreError(error)))
@@ -574,10 +561,8 @@ extension CarbStore {
 
         cacheStore.managedObjectContext.performAndWait {
             for object in self.cacheStore.managedObjectContext.cachedCarbObjectsWithUUID(uuid) {
-                if let externalID = object.externalID {
-                    let deletedObject = DeletedCarbObject(context: self.cacheStore.managedObjectContext)
-                    deletedObject.externalID = externalID
-                }
+                let deletedObject = DeletedCarbObject(context: self.cacheStore.managedObjectContext)
+                deletedObject.update(from: object)
 
                 self.cacheStore.managedObjectContext.delete(object)
                 deleted = true
@@ -632,99 +617,12 @@ extension CarbStore {
         }
     }
 
-    private func syncExternalDB() {
+    private func notifyDelegateOfUpdatedCarbData() {
         dispatchPrecondition(condition: .onQueue(queue))
 
         self.purgeCachedCarbEntries()
 
-        guard let syncDelegate = self.syncDelegate else {
-            return
-        }
-
-        var entriesToUpload: [StoredCarbEntry] = []
-        var entriesToDelete: [DeletedCarbEntry] = []
-
-        cacheStore.managedObjectContext.performAndWait {
-            let notUploaded = NSPredicate(format: "uploadState == %d", UploadState.notUploaded.rawValue)
-
-            let cachedRequest: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
-            cachedRequest.predicate = notUploaded
-
-            if let objectsToUpload = try? self.cacheStore.managedObjectContext.fetch(cachedRequest) {
-                entriesToUpload = objectsToUpload.map { StoredCarbEntry(managedObject: $0) }
-                objectsToUpload.forEach { $0.uploadState = .uploading }
-            }
-
-            let deletedRequest: NSFetchRequest<DeletedCarbObject> = DeletedCarbObject.fetchRequest()
-            deletedRequest.predicate = notUploaded
-
-            if let objectsToDelete = try? self.cacheStore.managedObjectContext.fetch(deletedRequest) {
-                entriesToDelete = objectsToDelete.compactMap { DeletedCarbEntry(managedObject: $0) }
-                objectsToDelete.forEach { $0.uploadState = .uploading }
-            }
-
-            self.cacheStore.save()
-        }
-
-        if entriesToUpload.count > 0 {
-            syncDelegate.carbStore(self, hasEntriesNeedingUpload: entriesToUpload) { (entries) in
-                self.cacheStore.managedObjectContext.perform {
-                    var hasMissingObjects = false
-
-                    for entry in entries {
-                        let objects = self.cacheStore.managedObjectContext.cachedCarbObjectsWithUUID(entry.sampleUUID)
-                        for object in objects {
-                            object.externalID = entry.externalID
-                            object.uploadState = entry.isUploaded ? .uploaded : .notUploaded
-                        }
-
-                        // If our delegate sent back uploaded entries we no longer know about,
-                        // consider them needing deletion.
-                        if  objects.count == 0,
-                            entry.isUploaded,
-                            entry.startDate > self.earliestCacheDate,
-                            let externalID = entry.externalID
-                        {
-                            self.log.info("Uploaded entry %@ not found in cache", entry.sampleUUID.uuidString)
-                            let deleted = DeletedCarbObject(context: self.cacheStore.managedObjectContext)
-                            deleted.externalID = externalID
-                            hasMissingObjects = true
-                        }
-                    }
-
-                    self.cacheStore.save()
-
-                    if hasMissingObjects {
-                        self.queue.async {
-                            self.syncExternalDB()
-                        }
-                    }
-                }
-            }
-        }
-
-        if entriesToDelete.count > 0 {
-            syncDelegate.carbStore(self, hasDeletedEntries: entriesToDelete) { (entries) in
-                self.cacheStore.managedObjectContext.perform {
-                    for entry in entries {
-                        let request: NSFetchRequest<DeletedCarbObject> = DeletedCarbObject.fetchRequest()
-                        request.predicate = NSPredicate(format: "externalID == %@", entry.externalID)
-
-                        if let objects = try? self.cacheStore.managedObjectContext.fetch(request) {
-                            for object in objects {
-                                if entry.isUploaded {
-                                    self.cacheStore.managedObjectContext.delete(object)
-                                } else {
-                                    object.uploadState = .notUploaded
-                                }
-                            }
-                        }
-                    }
-
-                    self.cacheStore.save()
-                }
-            }
-        }
+        delegate?.carbStoreHasUpdatedCarbData(self)
     }
 
     // MARK: - Helpers
@@ -794,42 +692,77 @@ extension CarbStore {
         // To know COB at the requested start date, we need to fetch samples that might still be absorbing
         let foodStart = start.addingTimeInterval(-maximumAbsorptionTimeInterval)
         getCachedCarbSamples(start: foodStart, end: end) { (samples) in
-            let carbsOnBoard: [CarbValue]
-
-            if let velocities = effectVelocities, let carbRatioSchedule = self.carbRatioScheduleApplyingOverrideHistory, let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory {
-                carbsOnBoard = samples.map(
-                    to: velocities,
-                    carbRatio: carbRatioSchedule,
-                    insulinSensitivity: insulinSensitivitySchedule,
-                    absorptionTimeOverrun: self.absorptionTimeOverrun,
-                    defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                    delay: self.delay,
-                    initialAbsorptionTimeOverrun: self.settings.initialAbsorptionTimeOverrun,
-                    absorptionModel: self.settings.absorptionModel,
-                    adaptiveAbsorptionRateEnabled: self.settings.adaptiveAbsorptionRateEnabled,
-                    adaptiveRateStandbyIntervalFraction: self.settings.adaptiveRateStandbyIntervalFraction
-                ).dynamicCarbsOnBoard(
-                    from: start,
-                    to: end,
-                    defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                    absorptionModel: self.settings.absorptionModel,
-                    delay: self.delay,
-                    delta: self.delta
-                )
-            } else {
-                carbsOnBoard = samples.carbsOnBoard(
-                    from: start,
-                    to: end,
-                    defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
-                    absorptionModel: self.settings.absorptionModel,
-                    delay: self.delay,
-                    delta: self.delta
-                )
-            }
-
+            let carbsOnBoard = self.carbsOnBoard(from: samples, startingAt: start, endingAt: end, effectVelocities: effectVelocities)
             completion(carbsOnBoard)
         }
     }
+
+    /// Computes a timeline of unabsorbed carbohydrates
+    /// - Parameters:
+    ///   - start: The earliest date of values to retrieve
+    ///   - end: The latest date of values to retrieve, if provided
+    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
+    /// - Returns: A timeline of unabsorbed carbohydrates
+    public func carbsOnBoard<Sample: CarbEntry>(
+        from samples: [Sample],
+        startingAt start: Date,
+        endingAt end: Date? = nil,
+        effectVelocities: [GlucoseEffectVelocity]? = nil
+    ) -> [CarbValue] {
+        if  let velocities = effectVelocities,
+            let carbRatioSchedule = carbRatioScheduleApplyingOverrideHistory,
+            let insulinSensitivitySchedule = insulinSensitivityScheduleApplyingOverrideHistory
+        {
+            return samples.map(
+                to: velocities,
+                carbRatio: carbRatioSchedule,
+                insulinSensitivity: insulinSensitivitySchedule,
+                absorptionTimeOverrun: absorptionTimeOverrun,
+                defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                delay: delay,
+                initialAbsorptionTimeOverrun: settings.initialAbsorptionTimeOverrun,
+                absorptionModel: settings.absorptionModel,
+                adaptiveAbsorptionRateEnabled: settings.adaptiveAbsorptionRateEnabled,
+                adaptiveRateStandbyIntervalFraction: settings.adaptiveRateStandbyIntervalFraction
+            ).dynamicCarbsOnBoard(
+                from: start,
+                to: end,
+                defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                absorptionModel: settings.absorptionModel,
+                delay: delay,
+                delta: delta
+            )
+        } else {
+            return samples.carbsOnBoard(
+                from: start,
+                to: end,
+                defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                absorptionModel: settings.absorptionModel,
+                delay: delay,
+                delta: delta
+            )
+        }
+    }
+
+    /// Computes the single carbs on-board value occuring just prior or equal to the specified date
+    /// - Parameters:
+    ///   - date: The date of the value to retrieve
+    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
+    /// - Returns: The carbs on-board value
+    public func carbsOnBoard<Sample: CarbEntry>(
+        from samples: [Sample],
+        at date: Date,
+        effectVelocities: [GlucoseEffectVelocity]? = nil
+    ) throws -> CarbValue {
+        let values = carbsOnBoard(from: samples, startingAt: date.addingTimeInterval(-delta), endingAt: date, effectVelocities: effectVelocities)
+
+        guard let value = values.closestPrior(to: date) else {
+            throw CarbStoreError.noData
+        }
+
+        return value
+    }
+
 
     /// Retrieves a timeline of effect on blood glucose from carbohydrates
     ///
@@ -841,60 +774,80 @@ extension CarbStore {
     ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
     ///   - completion: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
-    public func getGlucoseEffects(start: Date, end: Date? = nil, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping(_ result: CarbStoreResult<[GlucoseEffect]>) -> Void) {
+    public func getGlucoseEffects(start: Date, end: Date? = nil, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping(_ result: CarbStoreResult<(samples: [StoredCarbEntry], effects: [GlucoseEffect])>) -> Void) {
         queue.async {
-            guard let carbRatioSchedule = self.carbRatioScheduleApplyingOverrideHistory, let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory else {
+            guard self.carbRatioSchedule != nil, self.insulinSensitivitySchedule != nil else {
                 completion(.failure(.notConfigured))
                 return
             }
 
             // To know glucose effects at the requested start date, we need to fetch samples that might still be absorbing
             let foodStart = start.addingTimeInterval(-self.maximumAbsorptionTimeInterval)
-            let defaultAbsorptionTimes = self.defaultAbsorptionTimes
-            let absorptionTimeOverrun = self.absorptionTimeOverrun
-            let delay = self.delay
-            let delta = self.delta
             
             self.getCachedCarbSamples(start: foodStart, end: end) { (samples) in
-                let effects: [GlucoseEffect]
-
-                if let effectVelocities = effectVelocities {
-                    effects = samples.map(
-                        to: effectVelocities,
-                        carbRatio: carbRatioSchedule,
-                        insulinSensitivity: insulinSensitivitySchedule,
-                        absorptionTimeOverrun: absorptionTimeOverrun,
-                        defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-                        delay: delay,
-                        initialAbsorptionTimeOverrun: self.settings.initialAbsorptionTimeOverrun,
-                        absorptionModel: self.settings.absorptionModel,
-                        adaptiveAbsorptionRateEnabled: self.settings.adaptiveAbsorptionRateEnabled,
-                        adaptiveRateStandbyIntervalFraction: self.settings.adaptiveRateStandbyIntervalFraction
-                    ).dynamicGlucoseEffects(
-                        from: start,
-                        to: end,
-                        carbRatios: carbRatioSchedule,
-                        insulinSensitivities: insulinSensitivitySchedule,
-                        defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-                        absorptionModel: self.settings.absorptionModel,
-                        delay: delay,
-                        delta: delta
-                    )
-                } else {
-                    effects = samples.glucoseEffects(
-                        from: start,
-                        to: end,
-                        carbRatios: carbRatioSchedule,
-                        insulinSensitivities: insulinSensitivitySchedule,
-                        defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-                        absorptionModel: self.settings.absorptionModel,
-                        delay: delay,
-                        delta: delta
-                    )
+                do {
+                    let effects = try self.glucoseEffects(of: samples, startingAt: start, endingAt: end, effectVelocities: effectVelocities)
+                    completion(.success((samples: samples, effects: effects)))
+                } catch let error as CarbStoreError {
+                    completion(.failure(error))
+                } catch {
+                    fatalError()
                 }
-
-                completion(.success(effects))
             }
+        }
+    }
+
+    /// Computes a timeline of effects on blood glucose from carbohydrates
+    /// - Parameters:
+    ///   - start: The earliest date of effects to retrieve
+    ///   - end: The latest date of effects to retrieve, if provided
+    ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
+    public func glucoseEffects<Sample: CarbEntry>(
+        of samples: [Sample],
+        startingAt start: Date,
+        endingAt end: Date? = nil,
+        effectVelocities: [GlucoseEffectVelocity]? = nil
+    ) throws -> [GlucoseEffect] {
+        guard
+            let carbRatioSchedule = carbRatioScheduleApplyingOverrideHistory,
+            let insulinSensitivitySchedule = insulinSensitivityScheduleApplyingOverrideHistory
+        else {
+            throw CarbStoreError.notConfigured
+        }
+
+        if let effectVelocities = effectVelocities {
+            return samples.map(
+                to: effectVelocities,
+                carbRatio: carbRatioSchedule,
+                insulinSensitivity: insulinSensitivitySchedule,
+                absorptionTimeOverrun: absorptionTimeOverrun,
+                defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                delay: delay,
+                initialAbsorptionTimeOverrun: settings.initialAbsorptionTimeOverrun,
+                absorptionModel: settings.absorptionModel,
+                adaptiveAbsorptionRateEnabled: settings.adaptiveAbsorptionRateEnabled,
+                adaptiveRateStandbyIntervalFraction: settings.adaptiveRateStandbyIntervalFraction
+            ).dynamicGlucoseEffects(
+                from: start,
+                to: end,
+                carbRatios: carbRatioSchedule,
+                insulinSensitivities: insulinSensitivitySchedule,
+                defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                absorptionModel: settings.absorptionModel,
+                delay: delay,
+                delta: delta
+            )
+        } else {
+            return samples.glucoseEffects(
+                from: start,
+                to: end,
+                carbRatios: carbRatioSchedule,
+                insulinSensitivities: insulinSensitivitySchedule,
+                defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+                absorptionModel: settings.absorptionModel,
+                delay: delay,
+                delta: delta
+            )
         }
     }
 
@@ -987,7 +940,7 @@ extension CarbStore {
             report.append("deletedCarbEntries: [")
             report.append("\tDeletedCarbEntry(externalID, isUploaded)")
             for entry in self.cachedDeletedCarbEntries {
-                report.append("\t\(entry.externalID), \(entry.isUploaded)")
+                report.append("\t\(String(describing: entry.externalID)), \(entry.isUploaded)")
             }
             report.append("]")
             report.append("")
@@ -995,4 +948,105 @@ extension CarbStore {
             completionHandler(report.joined(separator: "\n"))
         }
     }
+}
+
+extension CarbStore {
+    
+    public struct QueryAnchor: RawRepresentable {
+        
+        public typealias RawValue = [String: Any]
+        
+        internal var deletedModificationCounter: Int64
+        
+        internal var storedModificationCounter: Int64
+        
+        public init() {
+            self.deletedModificationCounter = 0
+            self.storedModificationCounter = 0
+        }
+        
+        public init?(rawValue: RawValue) {
+            guard let deletedModificationCounter = rawValue["deletedModificationCounter"] as? Int64,
+                let storedModificationCounter = rawValue["storedModificationCounter"] as? Int64
+                else {
+                    return nil
+            }
+            self.deletedModificationCounter = deletedModificationCounter
+            self.storedModificationCounter = storedModificationCounter
+        }
+        
+        public var rawValue: RawValue {
+            var rawValue: RawValue = [:]
+            rawValue["deletedModificationCounter"] = deletedModificationCounter
+            rawValue["storedModificationCounter"] = storedModificationCounter
+            return rawValue
+        }
+    }
+    
+    public enum CarbQueryResult {
+        case success(QueryAnchor, [DeletedCarbEntry], [StoredCarbEntry])
+        case failure(Error)
+    }
+    
+    public func executeCarbQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (CarbQueryResult) -> Void) {
+        queue.async {
+            var queryAnchor = queryAnchor ?? QueryAnchor()
+            var queryDeletedResult = [DeletedCarbEntry]()
+            var queryStoredResult = [StoredCarbEntry]()
+            var queryError: Error?
+
+            guard limit > 0 else {
+                completion(.success(queryAnchor, queryDeletedResult, queryStoredResult))
+                return
+            }
+            
+            self.cacheStore.managedObjectContext.performAndWait {
+                let deletedRequest: NSFetchRequest<DeletedCarbObject> = DeletedCarbObject.fetchRequest()
+                
+                deletedRequest.predicate = NSPredicate(format: "modificationCounter > %d", queryAnchor.deletedModificationCounter)
+                deletedRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+                deletedRequest.fetchLimit = limit
+                
+                do {
+                    let deleted = try self.cacheStore.managedObjectContext.fetch(deletedRequest)
+                    if let modificationCounter = deleted.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
+                        queryAnchor.deletedModificationCounter = modificationCounter
+                    }
+                    queryDeletedResult.append(contentsOf: deleted.compactMap { DeletedCarbEntry(managedObject: $0) })
+                } catch let error {
+                    queryError = error
+                    return
+                }
+                
+                if queryDeletedResult.count >= limit {
+                    return
+                }
+                
+                let storedRequest: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
+                
+                storedRequest.predicate = NSPredicate(format: "modificationCounter > %d", queryAnchor.storedModificationCounter)
+                storedRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+                storedRequest.fetchLimit = limit - queryDeletedResult.count
+                
+                do {
+                    let stored = try self.cacheStore.managedObjectContext.fetch(storedRequest)
+                    if let modificationCounter = stored.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
+                        queryAnchor.storedModificationCounter = modificationCounter
+                    }
+                    queryStoredResult.append(contentsOf: stored.compactMap { StoredCarbEntry(managedObject: $0) })
+                } catch let error {
+                    queryError = error
+                    return
+                }
+            }
+            
+            if let queryError = queryError {
+                completion(.failure(queryError))
+                return
+            }
+            
+            completion(.success(queryAnchor, queryDeletedResult, queryStoredResult))
+        }
+    }
+    
 }

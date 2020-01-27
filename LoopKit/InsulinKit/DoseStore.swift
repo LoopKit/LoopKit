@@ -10,21 +10,23 @@ import CoreData
 import HealthKit
 import os.log
 
+public protocol DoseStoreDelegate: AnyObject {
 
-public protocol DoseStoreDelegate: class {
     /**
-     Asks the delegate to upload recently-added pump events not yet marked as uploaded.
-     
-     The completion handler must be called in all circumstances, with an array of object IDs that were successfully uploaded and can be purged when they are no longer recent.
-     
-     - parameter doseStore:  The store instance
-     - parameter pumpEvents: The pump events
-     - parameter completion: The closure to execute when the upload attempt has finished. If no events were uploaded, call the closure with an empty array.
-     - parameter uploadedObjects: The array of object IDs that were successfully uploaded
-     */
-    func doseStore(_ doseStore: DoseStore, hasEventsNeedingUpload pumpEvents: [PersistedPumpEvent], completion: @escaping (_ uploadedObjectIDURLs: [URL]) -> Void)
-}
+     Informs the delegate that the dose store has updated dose data.
 
+     - Parameter doseStore: The dose store that has updated dose data.
+     */
+    func doseStoreHasUpdatedDoseData(_ doseStore: DoseStore)
+
+    /**
+     Informs the delegate that the dose store has updated pump event data.
+
+     - Parameter doseStore: The dose store that has updated pump event data.
+     */
+    func doseStoreHasUpdatedPumpEventData(_ doseStore: DoseStore)
+
+}
 
 public enum DoseStoreResult<T> {
     case success(T)
@@ -75,13 +77,7 @@ public final class DoseStore {
         }
     }
 
-    public weak var delegate: DoseStoreDelegate? {
-        didSet {
-            persistenceController.managedObjectContext.perform {
-                self.isUploadRequestPending = false
-            }
-        }
-    }
+    public weak var delegate: DoseStoreDelegate?
 
     private let log = OSLog(category: "DoseStore")
 
@@ -386,12 +382,6 @@ public final class DoseStore {
     }
     private var _lastRecordedPrimeEventDate: Date?
 
-    /**
-     Whether there's an outstanding upload request to the delegate.
-
-     *Access should be isolated to a managed object context block*
-     */
-    private var isUploadRequestPending = false
 }
 
 
@@ -763,7 +753,12 @@ extension DoseStore {
             }
 
             self.persistenceController.save { (error) -> Void in
-                self.uploadPumpEventsIfNeeded()
+                if events.contains(where: { $0.dose != nil }) {
+                    self.delegate?.doseStoreHasUpdatedDoseData(self)
+                }
+                if events.contains(where: { $0.dose == nil }) {
+                    self.delegate?.doseStoreHasUpdatedPumpEventData(self)
+                }
 
                 self.syncPumpEventsToHealthStore() { _ in
                     completion(DoseStoreError(error: error))
@@ -930,48 +925,6 @@ extension DoseStore {
 
             let reconciledDoses = doses.overlayBasalSchedule(basalSchedule, startingAt: startingAt, endingAt: endingAt, insertingBasalEntries: !self.pumpRecordsBasalProfileStartEvents)
             completion(.success(reconciledDoses))
-        }
-    }
-
-    /**
-     Asks the delegate to upload all non-uploaded pump events, and updates the store when the delegate calls its completion handler.
-
-     *This method should only be called from within a managed object context block.*
-     */
-    private func uploadPumpEventsIfNeeded() {
-        guard !isUploadRequestPending, let delegate = delegate else {
-            return
-        }
-
-        guard let objects = try? getPumpEventObjects(matching: NSPredicate(format: "uploaded = false"), chronological: true, limit: 5000), objects.count > 0 else {
-            return
-        }
-
-        let events = objects.map { $0.persistedPumpEvent }
-        isUploadRequestPending = true
-
-        delegate.doseStore(self, hasEventsNeedingUpload: events) { (uploadedObjectIDURLs) in
-            self.persistenceController.managedObjectContext.perform {
-                for url in uploadedObjectIDURLs {
-                    guard
-                        let id = self.persistenceController.managedObjectContext.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: url),
-                        let object = try? self.persistenceController.managedObjectContext.existingObject(with: id), let event = object as? PumpEvent else
-                    {
-                        continue
-                    }
-
-                    event.uploaded = true
-                }
-
-                // Remove uploaded events older than the
-                let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [self.purgeableValuesPredicate,
-                                                                                    NSPredicate(format: "uploaded = true")])
-                try? self.purgePumpEventObjects(matching: predicate)
-
-                self.persistenceController.save()
-
-                self.isUploadRequestPending = false
-            }
         }
     }
 
@@ -1329,7 +1282,6 @@ extension DoseStore {
             "* overrideHistory: \(overrideHistory.map(String.init(describing:)) ?? "nil")",
             "* egpSchedule: \(egpSchedule?.debugDescription ?? "nil")",
             "* areReservoirValuesValid: \(areReservoirValuesValid)",
-            "* isUploadRequestPending: \(isUploadRequestPending)",
             "* lastPumpEventsReconciliation: \(String(describing: lastPumpEventsReconciliation))",
             "* lastStoredReservoirValue: \(String(describing: lastStoredReservoirValue))",
             "* pumpEventQueryAfterDate: \(pumpEventQueryAfterDate)",
@@ -1427,4 +1379,122 @@ extension DoseStore {
             }
         }
     }
+}
+
+extension DoseStore {
+
+    public struct QueryAnchor: RawRepresentable {
+
+        public typealias RawValue = [String: Any]
+
+        internal var modificationCounter: Int64
+
+        public init() {
+            self.modificationCounter = 0
+        }
+
+        public init?(rawValue: RawValue) {
+            guard let modificationCounter = rawValue["modificationCounter"] as? Int64 else {
+                return nil
+            }
+            self.modificationCounter = modificationCounter
+        }
+
+        public var rawValue: RawValue {
+            var rawValue: RawValue = [:]
+            rawValue["modificationCounter"] = modificationCounter
+            return rawValue
+        }
+    }
+
+    public enum DoseQueryResult {
+        case success(QueryAnchor, [DoseEntry])
+        case failure(Error)
+    }
+
+    public enum PumpEventQueryResult {
+        case success(QueryAnchor, [PersistedPumpEvent])
+        case failure(Error)
+    }
+
+    public func executeDoseQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (DoseQueryResult) -> Void) {
+        var queryAnchor = queryAnchor ?? QueryAnchor()
+        var queryResult = [DoseEntry]()
+        var queryError: Error?
+
+        guard limit > 0 else {
+            completion(.success(queryAnchor, queryResult))
+            return
+        }
+
+        persistenceController.managedObjectContext.performAndWait {
+            let storedRequest: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
+
+            storedRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter),
+                NSPredicate(format: "type IN %@", PumpEventType.doseTypes.map { $0.rawValue })
+            ])
+            storedRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+            storedRequest.fetchLimit = limit
+
+            do {
+                let stored = try self.persistenceController.managedObjectContext.fetch(storedRequest)
+                if let modificationCounter = stored.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
+                    queryAnchor.modificationCounter = modificationCounter
+                }
+                queryResult.append(contentsOf: stored.compactMap { $0.dose })
+            } catch let error {
+                queryError = error
+                return
+            }
+        }
+
+        if let queryError = queryError {
+            completion(.failure(queryError))
+            return
+        }
+
+        completion(.success(queryAnchor, queryResult))
+    }
+
+    public func executePumpEventQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (PumpEventQueryResult) -> Void) {
+        var queryAnchor = queryAnchor ?? QueryAnchor()
+        var queryResult = [PersistedPumpEvent]()
+        var queryError: Error?
+
+        guard limit > 0 else {
+            completion(.success(queryAnchor, queryResult))
+            return
+        }
+
+        persistenceController.managedObjectContext.performAndWait {
+            let storedRequest: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
+
+            storedRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+                NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter),
+                NSPredicate(format: "type IN %@", PumpEventType.nonDoseTypes.map { $0.rawValue })
+            ])
+            storedRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+            storedRequest.fetchLimit = limit
+
+            do {
+                let stored = try self.persistenceController.managedObjectContext.fetch(storedRequest)
+                if let modificationCounter = stored.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
+                    queryAnchor.modificationCounter = modificationCounter
+                }
+                queryResult.append(contentsOf: stored.compactMap { $0.persistedPumpEvent })
+            } catch let error {
+                queryError = error
+                return
+            }
+        }
+
+        if let queryError = queryError {
+            completion(.failure(queryError))
+            return
+        }
+
+        completion(.success(queryAnchor, queryResult))
+    }
+
 }

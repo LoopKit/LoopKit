@@ -9,7 +9,7 @@ import Foundation
 
 
 /// A general set of ways insulin can be delivered by a pump
-public enum DoseType: String {
+public enum DoseType: String, CaseIterable {
     case basal
     case bolus
     case resume

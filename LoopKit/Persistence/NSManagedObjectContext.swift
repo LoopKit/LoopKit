@@ -41,3 +41,43 @@ extension NSManagedObjectContext {
         return objectIDs.count
     }
 }
+
+extension NSManagedObjectContext {
+
+    /// Returns the modification counter. The modification counter is a monotonically increasing integer
+    /// that auto-increments on every call to this property. The global value is stored in the first
+    /// peristent store associated with this context.
+    ///
+    /// - Return: The next modification counter for the persistent store associated with this context.
+    internal var modificationCounter: Int64? {
+        get {
+            guard let persistentStoreCoordinator = persistentStoreCoordinator,
+                let persistentStore = persistentStoreCoordinator.persistentStores.first
+                else {
+                    return nil
+            }
+
+            return NSManagedObjectContext.modificationCounterLock.withLock {
+                var metadata = persistentStoreCoordinator.metadata(for: persistentStore)
+
+                var modificationCounter: Int64
+                if let previousModificationCounter = metadata[NSManagedObjectContext.modificationCounterMetadataKey] as? Int64 {
+                    modificationCounter = previousModificationCounter + 1
+                } else {
+                    modificationCounter = 1
+                }
+
+                metadata[NSManagedObjectContext.modificationCounterMetadataKey] = modificationCounter
+
+                persistentStoreCoordinator.setMetadata(metadata, for: persistentStore)
+
+                return modificationCounter
+            }
+        }
+    }
+
+    private static let modificationCounterMetadataKey = "modificationCounter"
+
+    private static let modificationCounterLock = UnfairLock()
+
+}
