@@ -61,11 +61,11 @@ public class PersistentDeviceLog {
             do {
                 try self.managedObjectContext.save()
                 self.log.default("Logged: %{public}@ (%{public}@) %{public}@", String(describing: type), deviceIdentifier ?? "", message)
+                completion?(nil)
             } catch let error {
                 self.log.error("Could not store device log entry %{public}@", String(describing: error))
                 completion?(error)
             }
-            completion?(nil)
         }
     }
     
