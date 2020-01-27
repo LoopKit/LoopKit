@@ -33,7 +33,7 @@ public struct StoredDeviceLogEntry {
     init(managedObject: DeviceLogEntry) {
         self.init(
             type: managedObject.type!,
-            deviceManager: managedObject.deviceManager!,
+            deviceManager: managedObject.managerIdentifier!,
             deviceIdentifier: managedObject.deviceIdentifier,
             message: managedObject.message!,
             timestamp: managedObject.timestamp!

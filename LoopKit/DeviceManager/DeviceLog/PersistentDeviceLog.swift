@@ -12,8 +12,7 @@ import os.log
 
 
 // Using a framework specific class will search the framework's bundle for model files.
-class PersistentContainer: NSPersistentContainer {
-}
+class PersistentContainer: NSPersistentContainer { }
 
 public class PersistentDeviceLog {
     
@@ -50,10 +49,10 @@ public class PersistentDeviceLog {
         managedObjectContext.persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator
     }
     
-    public func log(deviceManagerIdentifier: String, deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)? = nil) {
+    public func log(managerIdentifier: String, deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)? = nil) {
         managedObjectContext.perform {
             let entry = DeviceLogEntry(context: self.managedObjectContext)
-            entry.deviceManager = deviceManagerIdentifier
+            entry.managerIdentifier = managerIdentifier
             entry.deviceIdentifier = deviceIdentifier
             entry.type = type
             entry.message = message
@@ -100,7 +99,7 @@ public class PersistentDeviceLog {
             let fetchRequest: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
             fetchRequest.predicate = predicate
             let count = try managedObjectContext.deleteObjects(matching: fetchRequest)
-            self.log.info("Deleted %d DeviceLogEntries", count)
+            log.info("Deleted %d DeviceLogEntries", count)
         } catch let error {
             log.error("Could not purge expired log entry %{public}@", String(describing: error))
         }

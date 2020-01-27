@@ -18,7 +18,7 @@ extension DeviceLogEntry {
     }
 
     @NSManaged public var primitiveType: String?
-    @NSManaged public var deviceManager: String?
+    @NSManaged public var managerIdentifier: String?
     @NSManaged public var deviceIdentifier: String?
     @NSManaged public var message: String?
     @NSManaged public var timestamp: Date?

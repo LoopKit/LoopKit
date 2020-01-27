@@ -16,7 +16,10 @@ class DeviceLogEntry: NSManagedObject {
         get {
             willAccessValue(forKey: "type")
             defer { didAccessValue(forKey: "type") }
-            return DeviceLogEntryType(rawValue: primitiveType ?? "")
+            guard let primitiveType = primitiveType else {
+                return nil
+            }
+            return DeviceLogEntryType(rawValue: primitiveType)
         }
         set {
             willChangeValue(forKey: "type")

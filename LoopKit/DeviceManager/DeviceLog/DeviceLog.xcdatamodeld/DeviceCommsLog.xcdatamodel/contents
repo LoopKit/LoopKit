@@ -2,7 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15400" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Entry" representedClassName=".DeviceLogEntry" syncable="YES">
         <attribute name="deviceIdentifier" optional="YES" attributeType="String"/>
-        <attribute name="deviceManager" attributeType="String"/>
+        <attribute name="managerIdentifier" attributeType="String"/>
         <attribute name="message" attributeType="String"/>
         <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="type" attributeType="String"/>
