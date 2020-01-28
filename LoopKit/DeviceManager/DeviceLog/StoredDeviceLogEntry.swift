@@ -10,20 +10,20 @@ import Foundation
 
 public struct StoredDeviceLogEntry {
     public let type: DeviceLogEntryType
-    public let deviceManager: String
+    public let managerIdentifier: String
     public let deviceIdentifier: String?
     public let message: String
     public let timestamp: Date
     
     public init(
         type: DeviceLogEntryType,
-        deviceManager: String,
+        managerIdentifier: String,
         deviceIdentifier: String?,
         message: String,
         timestamp: Date
     ) {
         self.type = type
-        self.deviceManager = deviceManager
+        self.managerIdentifier = managerIdentifier
         self.deviceIdentifier = deviceIdentifier
         self.message = message
         self.timestamp = timestamp
@@ -33,7 +33,7 @@ public struct StoredDeviceLogEntry {
     init(managedObject: DeviceLogEntry) {
         self.init(
             type: managedObject.type!,
-            deviceManager: managedObject.managerIdentifier!,
+            managerIdentifier: managedObject.managerIdentifier!,
             deviceIdentifier: managedObject.deviceIdentifier,
             message: managedObject.message!,
             timestamp: managedObject.timestamp!

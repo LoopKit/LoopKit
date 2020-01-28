@@ -22,17 +22,17 @@ public class PersistentDeviceLog {
 
     private let persistentContainer: NSPersistentContainer
     
-    private let maxAge: TimeInterval
+    private let maxEntryAge: TimeInterval
     
-    private var earliestLogDate: Date {
-        return Date(timeIntervalSinceNow: -maxAge)
+    private var earliestLogEntryDate: Date {
+        return Date(timeIntervalSinceNow: -maxEntryAge)
     }
     
     private let log = OSLog(category: "PersistentDeviceLog")
     
-    public init(storageFile: URL, maxAge: TimeInterval = TimeInterval(7 * 24 * 60 * 60)) {
+    public init(storageFile: URL, maxEntryAge: TimeInterval = TimeInterval(7 * 24 * 60 * 60)) {
         self.storageFile = storageFile
-        self.maxAge = maxAge
+        self.maxEntryAge = maxEntryAge
 
         managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
@@ -93,7 +93,7 @@ public class PersistentDeviceLog {
     
     // Should only be called from managed object context queue
     private func purgeExpiredLogEntries() {
-        let predicate = NSPredicate(format: "timestamp < %@", earliestLogDate as NSDate)
+        let predicate = NSPredicate(format: "timestamp < %@", earliestLogEntryDate as NSDate)
 
         do {
             let fetchRequest: NSFetchRequest<DeviceLogEntry> = DeviceLogEntry.fetchRequest()
