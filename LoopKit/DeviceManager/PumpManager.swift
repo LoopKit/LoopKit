@@ -80,7 +80,7 @@ public protocol PumpManager: DeviceManager {
     /// The primary client receiving notifications about the pump lifecycle
     /// All delegate methods are called on `delegateQueue`
     var pumpManagerDelegate: PumpManagerDelegate? { get set }
-
+    
     /// Whether the PumpManager provides DoseEntry values for scheduled basal delivery. If false, Loop will use the basal schedule to infer normal basal delivery during times not overridden by:
     ///  - Temporary basal delivery
     ///  - Suspend/Resume pairs
