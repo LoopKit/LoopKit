@@ -32,7 +32,7 @@ class DeviceDataManager : CarbStoreDelegate {
         doseStore = DoseStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
-            insulinModel: insulinModel,
+            defaultInsulinModel: insulinModel,
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )

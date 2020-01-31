@@ -85,7 +85,7 @@ public final class DoseStore {
 
     private let log = OSLog(category: "DoseStore")
 
-    public var insulinModel: InsulinModel? {
+    public var defaultInsulinModel: InsulinModel? {
         get {
             return lockedInsulinModel.value
         }
@@ -213,7 +213,7 @@ public final class DoseStore {
         healthStore: HKHealthStore,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
-        insulinModel: InsulinModel?,
+        defaultInsulinModel: InsulinModel?,
         basalProfile: BasalRateSchedule?,
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
         overrideHistory: TemporaryScheduleOverrideHistory? = nil,
@@ -221,13 +221,14 @@ public final class DoseStore {
         lastPumpEventsReconciliation: Date? = nil,
         test_currentDate: Date? = nil
     ) {
+        // TODO: update errors as the result of adding the "longestEffectDuration" property (stopped here)
         self.insulinDeliveryStore = InsulinDeliveryStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
             observationEnabled: observationEnabled,
             test_currentDate: test_currentDate
         )
-        self.lockedInsulinModel = Locked(insulinModel)
+        self.lockedInsulinModel = Locked(defaultInsulinModel)
         self.lockedInsulinSensitivitySchedule = Locked(insulinSensitivitySchedule)
         self.lockedBasalProfile = Locked(basalProfile)
         self.overrideHistory = overrideHistory
@@ -1219,7 +1220,7 @@ extension DoseStore {
     ///   - completion: A closure called once the values have been retrieved
     ///   - result: An array of insulin values, in chronological order
     public func getInsulinOnBoardValues(start: Date, end: Date? = nil, basalDosingEnd: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[InsulinValue]>) -> Void) {
-        guard let insulinModel = self.insulinModel else {
+        guard let defaultInsulinModel = self.defaultInsulinModel else {
             completion(.failure(.configurationError))
             return
         }
@@ -1232,7 +1233,8 @@ extension DoseStore {
                 completion(.failure(error))
             case .success(let doses):
                 let trimmedDoses = doses.map { $0.trimmed(to: basalDosingEnd) }
-                let insulinOnBoard = trimmedDoses.insulinOnBoard(model: insulinModel)
+                // TODO: update IOB accordingly
+                let insulinOnBoard = trimmedDoses.insulinOnBoard(model: defaultInsulinModel)
                 completion(.success(insulinOnBoard.filterDateRange(start, end)))
             }
         }
@@ -1249,7 +1251,8 @@ extension DoseStore {
     ///   - completion: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completion: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
-        guard let insulinModel = self.insulinModel,
+        
+        guard let defaultInsulinModel = self.defaultInsulinModel,
               let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory
         else {
             completion(.failure(.configurationError))
@@ -1269,7 +1272,8 @@ extension DoseStore {
                     }
                     return dose.trimmed(to: basalDosingEnd)
                 }
-                let glucoseEffects = trimmedDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+                // TODO: need to adjust glucoseEffects and IOB appropriatly
+                let glucoseEffects = trimmedDoses.glucoseEffects(insulinModel: defaultInsulinModel, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             }
         }
@@ -1321,7 +1325,7 @@ extension DoseStore {
         var report: [String] = [
             "## DoseStore",
             "",
-            "* insulinModel: \(String(reflecting: insulinModel))",
+            "* defaultInsulinModel: \(String(reflecting: defaultInsulinModel))",
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
             "* basalProfileApplyingOverrideHistory \(basalProfileApplyingOverrideHistory?.debugDescription ?? "nil")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
