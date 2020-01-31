@@ -98,12 +98,18 @@ public final class DoseStore {
                 self.validateReservoirContinuity()
             }
 
-            if let effectDuration = insulinModel?.effectDuration {
+            // TODO: see if this would change with multiple curves
+            if let effectDuration = defaultInsulinModel?.effectDuration {
                 insulinDeliveryStore.observationStart = Date(timeIntervalSinceNow: -effectDuration)
+                longestEffectDuration = max(self.longestEffectDuration, effectDuration)
             }
         }
     }
+    
     private let lockedInsulinModel: Locked<InsulinModel?>
+    
+    // TODO: need to worry about persistance?
+    public var longestEffectDuration: TimeInterval
 
     /// A history of recently applied schedule overrides.
     private let overrideHistory: TemporaryScheduleOverrideHistory?
@@ -408,29 +414,27 @@ extension DoseStore {
     private func validateReservoirContinuity(at date: Date? = nil) -> [Reservoir] {
         let date = date ?? currentDate()
 
-        if let insulinModel = insulinModel {
-            // Consider any entries longer than 30 minutes, or with a value of 0, to be unreliable
-            let maximumInterval = TimeInterval(minutes: 30)
-            let continuityStartDate = date.addingTimeInterval(-insulinModel.effectDuration)
+        // Consider any entries longer than 30 minutes, or with a value of 0, to be unreliable
+        let maximumInterval = TimeInterval(minutes: 30)
+        let continuityStartDate = date.addingTimeInterval(-longestEffectDuration)
 
-            if  let recentReservoirObjects = try? self.getReservoirObjects(since: continuityStartDate - maximumInterval),
-                let oldestRelevantReservoirObject = recentReservoirObjects.last
-            {
-                // Verify reservoir timestamps are continuous
-                let areReservoirValuesContinuous = recentReservoirObjects.reversed().isContinuous(
-                    from: continuityStartDate,
-                    to: date,
-                    within: maximumInterval
-                )
-                
-                // also make sure prime events don't exist withing the insulin action duration
-                let primeEventExistsWithinInsulinActionDuration = (lastRecordedPrimeEventDate ?? .distantPast) >= oldestRelevantReservoirObject.startDate
+        if  let recentReservoirObjects = try? self.getReservoirObjects(since: continuityStartDate - maximumInterval),
+            let oldestRelevantReservoirObject = recentReservoirObjects.last
+        {
+            // Verify reservoir timestamps are continuous
+            let areReservoirValuesContinuous = recentReservoirObjects.reversed().isContinuous(
+                from: continuityStartDate,
+                to: date,
+                within: maximumInterval
+            )
+            
+            // also make sure prime events don't exist withing the insulin action duration
+            let primeEventExistsWithinInsulinActionDuration = (lastRecordedPrimeEventDate ?? .distantPast) >= oldestRelevantReservoirObject.startDate
 
-                self.areReservoirValuesValid = areReservoirValuesContinuous && !primeEventExistsWithinInsulinActionDuration
-                self.lastStoredReservoirValue = recentReservoirObjects.first?.storedReservoirValue
+            self.areReservoirValuesValid = areReservoirValuesContinuous && !primeEventExistsWithinInsulinActionDuration
+            self.lastStoredReservoirValue = recentReservoirObjects.first?.storedReservoirValue
 
-                return recentReservoirObjects
-            }
+            return recentReservoirObjects
         }
 
         self.areReservoirValuesValid = false
@@ -1226,7 +1230,7 @@ extension DoseStore {
         }
 
         // To properly know IOB at startDate, we need to go back another DIA hours
-        let doseStart = start.addingTimeInterval(-insulinModel.effectDuration)
+        let doseStart = start.addingTimeInterval(-longestEffectDuration)
         getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
             switch result {
             case .failure(let error):
@@ -1260,7 +1264,7 @@ extension DoseStore {
         }
 
         // To properly know glucose effects at startDate, we need to go back another DIA hours
-        let doseStart = start.addingTimeInterval(-insulinModel.effectDuration)
+        let doseStart = start.addingTimeInterval(-longestEffectDuration)
         getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
             switch result {
             case .failure(let error):
