@@ -227,7 +227,6 @@ public final class DoseStore {
         lastPumpEventsReconciliation: Date? = nil,
         test_currentDate: Date? = nil
     ) {
-        // TODO: update errors as the result of adding the "longestEffectDuration" property (stopped here)
         self.insulinDeliveryStore = InsulinDeliveryStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
@@ -241,6 +240,8 @@ public final class DoseStore {
         self.persistenceController = cacheStore
         self.syncVersion = syncVersion
         self.lockedLastPumpEventsReconciliation = Locked(lastPumpEventsReconciliation)
+        // TODO: would going back 24 hours be desired behavior?
+        self.longestEffectDuration = defaultInsulinModel?.effectDuration ?? .hours(24)
 
         self.pumpEventQueryAfterDate = cacheStartDate
 
@@ -1237,8 +1238,7 @@ extension DoseStore {
                 completion(.failure(error))
             case .success(let doses):
                 let trimmedDoses = doses.map { $0.trimmed(to: basalDosingEnd) }
-                // TODO: update IOB accordingly
-                let insulinOnBoard = trimmedDoses.insulinOnBoard(model: defaultInsulinModel)
+                let insulinOnBoard = trimmedDoses.insulinOnBoard(defaultModel: defaultInsulinModel, longestEffectDuration: self.longestEffectDuration)
                 completion(.success(insulinOnBoard.filterDateRange(start, end)))
             }
         }
@@ -1276,8 +1276,7 @@ extension DoseStore {
                     }
                     return dose.trimmed(to: basalDosingEnd)
                 }
-                // TODO: need to adjust glucoseEffects and IOB appropriatly
-                let glucoseEffects = trimmedDoses.glucoseEffects(insulinModel: defaultInsulinModel, insulinSensitivity: insulinSensitivitySchedule)
+                let glucoseEffects = trimmedDoses.glucoseEffects(defaultModel: defaultInsulinModel, longestEffectDuration: self.longestEffectDuration, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             }
         }
