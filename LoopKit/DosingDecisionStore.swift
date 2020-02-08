@@ -131,6 +131,8 @@ public struct StoredDosingDecision {
     public var carbsOnBoard: CarbValue?
     
     public var predictedGlucose: [PredictedGlucoseValue]?
+
+    public var predictedGlucoseIncludingPendingInsulin: [PredictedGlucoseValue]?
     
     public var tempBasalRecommendationDate: TempBasalRecommendationDate?
     
