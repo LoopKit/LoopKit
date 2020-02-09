@@ -778,6 +778,32 @@ extension DoseStore {
             }
         }
     }
+    
+    // adds external dose(s) to Loop & HealthKit
+    // this logic is copy-pasted from savePumpEventsFromHealthstore
+    // need to make sure that doses passed in have a syncidentifier
+    public func addExternalDoses(doses: [DoseEntry], completion: @escaping (_ error: DoseStoreError?) -> Void) {
+        
+        guard doses.count > 0 else {
+            completion(DoseStoreError.persistenceError(description: "Could not save doses: no doses were passed in", recoverySuggestion: "Check that dose list is not empty"))
+            return
+        }
+        
+
+        for dose in doses {
+            self.log.debug("Adding external dose to HealthKit: %@", String(describing: dose))
+        }
+
+        self.insulinDeliveryStore.addReconciledDoses(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
+            switch result {
+            case .success:
+                completion(nil)
+            case .failure(let error):
+                self.log.error("Error adding doses: %{public}@", String(describing: error))
+                completion(DoseStoreError.persistenceError(description: error.localizedDescription, recoverySuggestion: nil))
+            }
+        }
+    }
 
     public func deletePumpEvent(_ event: PersistedPumpEvent, completion: @escaping (_ error: DoseStoreError?) -> Void) {
         persistenceController.managedObjectContext.perform {
