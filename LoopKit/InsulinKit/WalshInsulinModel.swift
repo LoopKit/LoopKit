@@ -23,6 +23,14 @@ extension WalshInsulinModel: InsulinModel {
         return self.actionDuration + self.delay
     }
     
+    /// Returns if one insulin model is equal to another
+    public func isEqualTo(other: InsulinModel?) -> Bool {
+        if let toCompare = other as? WalshInsulinModel {
+            return self == toCompare
+        }
+        return false
+    }
+    
     /// Returns the percentage of total insulin effect remaining at a specified interval after delivery; 
     /// also known as Insulin On Board (IOB).
     ///
