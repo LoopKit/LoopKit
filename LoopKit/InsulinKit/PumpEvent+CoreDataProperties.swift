@@ -22,6 +22,10 @@ extension PumpEvent {
     @NSManaged var primitiveDuration: NSNumber?
     @NSManaged var primitiveType: String?
     @NSManaged var primitiveUnit: String?
+    // COMMENTED
+    /*@NSManaged var primitiveModelPeak: NSNumber?
+    @NSManaged var primitiveModelDuration: NSNumber?
+    @NSManaged var primitiveModelDelay: NSNumber?*/
     @NSManaged var primitiveUploaded: NSNumber?
     @NSManaged var primitiveValue: NSNumber?
     @NSManaged var primitiveDeliveredUnits: NSNumber?

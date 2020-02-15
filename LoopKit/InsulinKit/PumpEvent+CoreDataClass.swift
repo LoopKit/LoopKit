@@ -50,7 +50,47 @@ class PumpEvent: NSManagedObject {
             primitiveUnit = newValue?.rawValue
         }
     }
-
+    
+    // COMMENTED
+    /*var modelPeak: Double? {
+        get {
+            willAccessValue(forKey: "modelPeak")
+            defer { didAccessValue(forKey: "modelPeak") }
+            return primitiveModelPeak?.doubleValue
+        }
+        set {
+            willChangeValue(forKey: "modelPeak")
+            defer { didChangeValue(forKey: "modelPeak") }
+            primitiveModelPeak = newValue != nil ? NSNumber(value: newValue!) : nil
+        }
+    }
+    
+    var modelDelay: Double? {
+        get {
+            willAccessValue(forKey: "modelDelay")
+            defer { didAccessValue(forKey: "modelDelay") }
+            return primitiveModelDelay?.doubleValue
+        }
+        set {
+            willChangeValue(forKey: "modelDelay")
+            defer { didChangeValue(forKey: "modelDelay") }
+            primitiveModelDelay = newValue != nil ? NSNumber(value: newValue!) : nil
+        }
+    }
+    
+    var modelDuration: Double? {
+        get {
+            willAccessValue(forKey: "modelDuration")
+            defer { didAccessValue(forKey: "modelDuration") }
+            return primitiveModelDuration?.doubleValue
+        }
+        set {
+            willChangeValue(forKey: "modelDuration")
+            defer { didChangeValue(forKey: "modelDuration") }
+            primitiveModelDuration = newValue != nil ? NSNumber(value: newValue!) : nil
+        }
+    }*/
+    
     var type: PumpEventType? {
         get {
             willAccessValue(forKey: "type")
@@ -162,6 +202,13 @@ extension PumpEvent {
             value = entry.value
             unit = entry.unit
             deliveredUnits = entry.deliveredUnits
+            // COMMENTED
+            /*modelDuration = entry.insulinModel?.effectDuration
+            modelDelay = entry.insulinModel?.delay
+            // TODO: check that no insulin model presets will make it here
+            if let model = entry.insulinModel as? ExponentialInsulinModel {
+                modelPeak = model.delay
+            }*/
         }
     }
 
