@@ -52,7 +52,7 @@ class PumpEvent: NSManagedObject {
     }
     
     // COMMENTED
-    /*var modelPeak: Double? {
+    var modelPeak: Double? {
         get {
             willAccessValue(forKey: "modelPeak")
             defer { didAccessValue(forKey: "modelPeak") }
@@ -89,7 +89,7 @@ class PumpEvent: NSManagedObject {
             defer { didChangeValue(forKey: "modelDuration") }
             primitiveModelDuration = newValue != nil ? NSNumber(value: newValue!) : nil
         }
-    }*/
+    }
     
     var type: PumpEventType? {
         get {
@@ -180,6 +180,17 @@ extension PumpEvent {
             guard let type = type, let value = value, let unit = unit else {
                 return nil
             }
+            
+            var model: InsulinModel? = nil
+            
+            // TODO: add in custom model identifier to make this easier
+            if let modelDuration = modelDuration {
+                if let modelPeak = modelPeak {
+                    model = ExponentialInsulinModel(actionDuration: modelDuration, peakActivityTime: modelPeak, delay: modelDelay ?? 600)
+                } else {
+                    model = WalshInsulinModel(actionDuration: modelDuration, delay: modelDelay ?? 600)
+                }
+            }
 
             return DoseEntry(
                 type: doseType ?? DoseType(pumpEventType: type)!,
@@ -188,7 +199,8 @@ extension PumpEvent {
                 value: value,
                 unit: unit,
                 deliveredUnits: deliveredUnits,
-                syncIdentifier: syncIdentifier
+                syncIdentifier: syncIdentifier,
+                insulinModel: model
             )
         }
         set {
@@ -203,12 +215,12 @@ extension PumpEvent {
             unit = entry.unit
             deliveredUnits = entry.deliveredUnits
             // COMMENTED
-            /*modelDuration = entry.insulinModel?.effectDuration
+            modelDuration = entry.insulinModel?.effectDuration
             modelDelay = entry.insulinModel?.delay
             // TODO: check that no insulin model presets will make it here
             if let model = entry.insulinModel as? ExponentialInsulinModel {
                 modelPeak = model.delay
-            }*/
+            }
         }
     }
 
