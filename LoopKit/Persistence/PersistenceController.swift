@@ -146,7 +146,7 @@ public final class PersistenceController {
                 }
             }
 
-            let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
+            let storeURL = directoryURL.appendingPathComponent("Model2.sqlite")
 
             do {
                 try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,

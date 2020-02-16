@@ -50,8 +50,7 @@ class PumpEvent: NSManagedObject {
             primitiveUnit = newValue?.rawValue
         }
     }
-    
-    // COMMENTED
+
     var modelPeak: Double? {
         get {
             willAccessValue(forKey: "modelPeak")
@@ -214,7 +213,6 @@ extension PumpEvent {
             value = entry.value
             unit = entry.unit
             deliveredUnits = entry.deliveredUnits
-            // COMMENTED
             modelDuration = entry.insulinModel?.effectDuration
             modelDelay = entry.insulinModel?.delay
             // TODO: check that no insulin model presets will make it here
