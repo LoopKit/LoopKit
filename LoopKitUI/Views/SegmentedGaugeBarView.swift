@@ -8,10 +8,16 @@
 
 import UIKit
 
+
+public protocol SegmentedGaugeBarViewDelegate: AnyObject {
+    /// Invoked only when `progress` is updated via gesture.
+    func segmentedGaugeBarView(_ view: SegmentedGaugeBarView, didUpdateProgressFrom oldValue: Double, to newValue: Double)
+}
+
 @IBDesignable
-class SegmentedGaugeBarView: UIView {
+public class SegmentedGaugeBarView: UIView {
     @IBInspectable
-    var numberOfSegments: Int {
+    public var numberOfSegments: Int {
         get {
             return gaugeLayer.numberOfSegments
         }
@@ -21,7 +27,7 @@ class SegmentedGaugeBarView: UIView {
     }
 
     @IBInspectable
-    var startColor: UIColor {
+    public var startColor: UIColor {
         get {
             return UIColor(cgColor: gaugeLayer.startColor)
         }
@@ -31,7 +37,7 @@ class SegmentedGaugeBarView: UIView {
     }
 
     @IBInspectable
-    var endColor: UIColor {
+    public var endColor: UIColor {
         get {
             return UIColor(cgColor: gaugeLayer.endColor)
         }
@@ -41,7 +47,7 @@ class SegmentedGaugeBarView: UIView {
     }
 
     @IBInspectable
-    var borderWidth: CGFloat {
+    public var borderWidth: CGFloat {
         get {
             return gaugeLayer.gaugeBorderWidth
         }
@@ -51,7 +57,7 @@ class SegmentedGaugeBarView: UIView {
     }
 
     @IBInspectable
-    var borderColor: UIColor {
+    public var borderColor: UIColor {
         get {
             return UIColor(cgColor: gaugeLayer.gaugeBorderColor)
         }
@@ -61,16 +67,18 @@ class SegmentedGaugeBarView: UIView {
     }
 
     @IBInspectable
-    var progress: Double {
+    public var progress: Double {
         get {
             return Double(gaugeLayer.progress)
         }
         set {
-            return gaugeLayer.progress = CGFloat(newValue)
+            gaugeLayer.progress = CGFloat(newValue)
         }
     }
 
-    override class var layerClass: AnyClass {
+    public weak var delegate: SegmentedGaugeBarViewDelegate?
+
+    override public class var layerClass: AnyClass {
         return SegmentedGaugeBarLayer.self
     }
 
@@ -78,7 +86,35 @@ class SegmentedGaugeBarView: UIView {
         return layer as! SegmentedGaugeBarLayer
     }
 
-    override func layoutSubviews() {
+    override public init(frame: CGRect) {
+        super.init(frame: frame)
+        setupPanGestureRecognizer()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupPanGestureRecognizer()
+    }
+
+    private func setupPanGestureRecognizer() {
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        addGestureRecognizer(pan)
+    }
+
+    @objc private func handlePan(_ recognizer: UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .began, .changed:
+            let location = recognizer.location(ofTouch: 0, in: self)
+            let fractionThrough = Double(location.x / frame.width)
+            let oldValue = progress
+            progress = (fractionThrough * Double(numberOfSegments)).clamped(to: 0...Double(numberOfSegments))
+            delegate?.segmentedGaugeBarView(self, didUpdateProgressFrom: oldValue, to: progress)
+        default:
+            break
+        }
+    }
+
+    override public func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = frame.height / 2
     }
