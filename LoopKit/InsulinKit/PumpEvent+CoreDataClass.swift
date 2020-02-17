@@ -215,9 +215,9 @@ extension PumpEvent {
             deliveredUnits = entry.deliveredUnits
             modelDuration = entry.insulinModel?.effectDuration
             modelDelay = entry.insulinModel?.delay
-            // TODO: check that no insulin model presets will make it here
+            // TODO: add attribute to distingish between models
             if let model = entry.insulinModel as? ExponentialInsulinModel {
-                modelPeak = model.delay
+                modelPeak = model.peakActivityTime
             }
         }
     }
