@@ -28,5 +28,8 @@ extension PumpEvent {
     @NSManaged var mutable: Bool
     @NSManaged var raw: Data?
     @NSManaged var title: String?
+    @NSManaged var primitiveModelPeak: NSNumber?
+    @NSManaged var primitiveModelDuration: NSNumber?
+    @NSManaged var primitiveModelDelay: NSNumber?
 
 }

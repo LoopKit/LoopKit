@@ -40,6 +40,15 @@ extension ExponentialInsulinModel: InsulinModel {
         return self.actionDuration + self.delay
     }
     
+    // Returns if two insulin models are equal
+    // TODO: this fails if it's an exponential preset
+    public func isEqualTo(other: InsulinModel?) -> Bool {
+        if let toCompare = other as? ExponentialInsulinModel {
+            return self == toCompare
+        }
+        return false
+    }
+    
     /// Returns the percentage of total insulin effect remaining at a specified interval after delivery;
     /// also known as Insulin On Board (IOB).
     ///
@@ -69,6 +78,12 @@ extension ExponentialInsulinModel: InsulinModel {
 extension ExponentialInsulinModel: CustomDebugStringConvertible {
     public var debugDescription: String {
         return "ExponentialInsulinModel(actionDuration: \(actionDuration), peakActivityTime: \(peakActivityTime), delay: \(delay)"
+    }
+}
+
+extension ExponentialInsulinModel: Equatable {
+    public static func ==(lhs: ExponentialInsulinModel, rhs: ExponentialInsulinModel) -> Bool {
+        return abs(lhs.actionDuration - rhs.actionDuration) < .ulpOfOne && abs(lhs.peakActivityTime - rhs.peakActivityTime) < .ulpOfOne && abs(lhs.delay - rhs.delay) < .ulpOfOne
     }
 }
 
