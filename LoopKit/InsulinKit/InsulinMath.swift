@@ -451,10 +451,11 @@ extension Collection where Element == DoseEntry {
     /**
      Calculates the timeline of insulin remaining for a collection of doses
 
-     - parameter insulinModel:   The model of insulin activity over time
-     - parameter start:          The date to begin the timeline
-     - parameter end:            The date to end the timeline
-     - parameter delta:          The differential between timeline entries
+     - parameter defaultModel:          The default model of insulin activity over time, normally the insulin type dispensed by the pump
+     - parameter longestEffectDuration: The longest duration that a dose could be active.
+     - parameter start:                 The date to start the timeline
+     - parameter end:                   The date to end the timeline
+     - parameter delta:                 The differential between timeline entries
 
      - returns: A sequence of insulin amount remaining
      */
@@ -487,13 +488,13 @@ extension Collection where Element == DoseEntry {
     /// Calculates the timeline of glucose effects for a collection of doses
     ///
     /// - Parameters:
-    ///   - insulinModel: The model of insulin activity over time
+    ///   - defaultModel: The default model of insulin activity over time, normally the insulin type dispensed by the pump
+    ///   - longestEffectDuration: The longest duration that a dose could be active.
     ///   - insulinSensitivity: The schedule of glucose effect per unit of insulin
     ///   - start: The earliest date of effects to return
     ///   - end: The latest date of effects to return
     ///   - delta: The interval between returned effects
     /// - Returns: An array of glucose effects for the duration of the doses
-    // TODO: update commenting for this file (specifically glucoseEffects and IOB)
     public func glucoseEffects(
         defaultModel: InsulinModel,
         longestEffectDuration: TimeInterval,
