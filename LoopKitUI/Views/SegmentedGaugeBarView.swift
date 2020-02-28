@@ -186,7 +186,7 @@ public class SegmentedGaugeBarView: UIView {
 
     private var thumbCenterXRange: ClosedRange<CGFloat> {
         let radius = thumb.bounds.width / 2
-        return (bounds.minX + 2 * borderWidth + radius)...(bounds.maxX - 2 * borderWidth - radius)
+        return (gaugeXRange.lowerBound + radius)...(gaugeXRange.upperBound - radius)
     }
 
     private func updateThumbPosition() {
@@ -196,7 +196,7 @@ public class SegmentedGaugeBarView: UIView {
 
         let diameter = bounds.height - 2 * borderWidth
         thumb.bounds.size = CGSize(width: diameter, height: diameter)
-        let xPosition = CGFloat(progress) * (thumbCenterXRange.upperBound - thumbCenterXRange.lowerBound) + thumbCenterXRange.lowerBound
+        let xPosition = interpolatedValue(at: CGFloat(progress), through: thumbCenterXRange)
         thumb.center = CGPoint(x: xPosition, y: bounds.midY)
     }
 
