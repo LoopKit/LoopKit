@@ -131,11 +131,14 @@ public final class GlucoseStore: HealthKitSampleStore {
             }
 
             // Deleted samples
-            for sample in deleted {
-                if self.deleteCachedObject(forSampleUUID: sample.uuid) {
-                    cacheChanged = true
-                }
-            }
+            self.log.debug("Starting deletion of %d samples", deleted.count)
+//            for sample in deleted {
+//                if self.deleteCachedObject(forSampleUUID: sample.uuid) {
+//                    cacheChanged = true
+//                }
+//            }
+            let cacheDeletedCount = self.deleteCachedObjects(forSampleUUIDs: deleted.map { $0.uuid })
+            self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
 
             if let startDate = newestSampleStartDateAddedByExternalSource {
                 self.purgeOldGlucoseSamples(includingManagedDataBefore: startDate)
@@ -407,6 +410,27 @@ extension GlucoseStore {
             }
         }
     }
+    
+    private func deleteCachedObjects(forSampleUUIDs uuids: [UUID], batchSize: Int = 500) -> Int {
+        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
+
+        var deleted = 0
+
+        cacheStore.managedObjectContext.performAndWait {
+            for batch in uuids.chunked(into: batchSize) {
+                for object in self.cacheStore.managedObjectContext.cachedGlucoseObjectsWithUUIDs(batch) {
+                    self.cacheStore.managedObjectContext.delete(object)
+                    deleted += 1
+                }
+            }
+
+            if deleted > 0 {
+                self.cacheStore.save()
+            }
+        }
+
+        return deleted
+    }
 
     private func deleteCachedObject(forSampleUUID uuid: UUID) -> Bool {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
@@ -547,6 +571,14 @@ extension GlucoseStore {
             report.append("")
 
             completionHandler(report.joined(separator: "\n"))
+        }
+    }
+}
+
+extension Array {
+    func chunked(into size: Int) -> [[Element]] {
+        return stride(from: 0, to: count, by: size).map {
+            Array(self[$0 ..< Swift.min($0 + size, count)])
         }
     }
 }
