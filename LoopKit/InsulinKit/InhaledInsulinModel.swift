@@ -32,14 +32,6 @@ extension InhaledInsulinModel: InsulinModel {
         return actionDuration
     }
     
-    // Returns if two insulin models are equal
-    public func isEqualTo(other: InsulinModel?) -> Bool {
-        if let other = other as? InhaledInsulinModel {
-            return self == other
-        }
-        return false
-    }
-    
     /// Returns the percentage of total insulin effect remaining at a specified interval after delivery;
     /// also known as Insulin On Board (IOB).
     public func percentEffectRemaining(at time: TimeInterval) -> Double {
