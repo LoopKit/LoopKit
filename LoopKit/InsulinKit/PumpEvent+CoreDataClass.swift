@@ -10,6 +10,14 @@ import Foundation
 import CoreData
 
 
+// ANNA TODO: use this to determine curve type
+// ANNA TODO: use current "default" insulin model if it wasn't passed in, to handle insulin model settings changes more gracefully
+private enum InsulinModelType {
+    case exponential
+    case walsh
+    case inhaled
+}
+
 class PumpEvent: NSManagedObject {
 
     var doseType: DoseType? {
@@ -182,7 +190,7 @@ extension PumpEvent {
             
             var model: InsulinModel? = nil
             
-            // TODO: add in custom model identifier to make this easier
+            // ANNA TODO: add in custom model identifier to make this easier
             if let modelDuration = modelDuration {
                 if let modelPeak = modelPeak {
                     model = ExponentialInsulinModel(actionDuration: modelDuration, peakActivityTime: modelPeak, delay: modelDelay ?? 600)
@@ -215,9 +223,12 @@ extension PumpEvent {
             deliveredUnits = entry.deliveredUnits
             modelDuration = entry.insulinModel?.effectDuration
             modelDelay = entry.insulinModel?.delay
-            // TODO: add attribute to distingish between models
+            // ANNA TODO: add attribute to distingish between models
             if let model = entry.insulinModel as? ExponentialInsulinModel {
                 modelPeak = model.peakActivityTime
+            // ANNA TODO: is the below bad style?
+            } else if let model = entry.insulinModel as? ExponentialInsulinModelPreset {
+                modelPeak = (model.getExponentialModel() as! ExponentialInsulinModel).peakActivityTime
             }
         }
     }
