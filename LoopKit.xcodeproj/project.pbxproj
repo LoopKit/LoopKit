@@ -546,6 +546,8 @@
 		C1F8B1E2223C3CC000DD66CF /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
 		E918E51623F932DC004C4B98 /* InhaledInsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E918E51523F932DC004C4B98 /* InhaledInsulinModel.swift */; };
 		E918E51B23F99EBE004C4B98 /* InhaledInsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E918E51523F932DC004C4B98 /* InhaledInsulinModel.swift */; };
+		E9AEEA3D240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */; };
+		E9AEEA3E240EE0FD0007AB41 /* ExponentialInsulinModelPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1150,6 +1152,7 @@
 		C1DB55B61F2EACD500C483A2 /* iob_from_bolus_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_bolus_exponential_output.json; sourceTree = "<group>"; };
 		E918E51423F8F2EC004C4B98 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		E918E51523F932DC004C4B98 /* InhaledInsulinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InhaledInsulinModel.swift; sourceTree = "<group>"; };
+		E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModelPreset.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1728,6 +1731,7 @@
 				4302F4E81D5066F400F0FCAF /* ReservoirValue.swift */,
 				C1DB55B01F2E95FD00C483A2 /* WalshInsulinModel.swift */,
 				E918E51523F932DC004C4B98 /* InhaledInsulinModel.swift */,
+				E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */,
 			);
 			path = InsulinKit;
 			sourceTree = "<group>";
@@ -2545,6 +2549,7 @@
 				4322B783202FA2AF0002837D /* Reservoir.swift in Sources */,
 				437AFEF02036A156008C4892 /* DeletedCarbObject+CoreDataProperties.swift in Sources */,
 				4322B777202FA2790002837D /* CarbValue.swift in Sources */,
+				E9AEEA3D240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift in Sources */,
 				4322B782202FA2AF0002837D /* PumpEventType.swift in Sources */,
 				4322B77C202FA2A60002837D /* NSData.swift in Sources */,
 				89AE2228228BC54C00BDFD85 /* TemporaryScheduleOverrideSettings.swift in Sources */,
@@ -2759,6 +2764,7 @@
 				A9E675A522713F4700E25293 /* GlucoseValue.swift in Sources */,
 				A9E675A622713F4700E25293 /* BasalRateSchedule.swift in Sources */,
 				A9E675A722713F4700E25293 /* DoseStore.swift in Sources */,
+				E9AEEA3E240EE0FD0007AB41 /* ExponentialInsulinModelPreset.swift in Sources */,
 				A9E675A822713F4700E25293 /* TimeZone.swift in Sources */,
 				A9E675A922713F4700E25293 /* PumpEvent+CoreDataProperties.swift in Sources */,
 				A9E675AA22713F4700E25293 /* ReservoirValue.swift in Sources */,
