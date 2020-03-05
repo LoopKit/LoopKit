@@ -9,17 +9,19 @@
 import SwiftUI
 
 public struct GuideNavigationButton<Destination>: View where Destination: View {
-    @State private var navigationLinkIsActive: Bool = false
+    @Binding var navigationLinkIsActive: Bool
     private let label: LocalizedStringKey
     private let buttonPressedAction: (() -> Void)?
     private let buttonStyle: GuideButtonStyle.ButtonType
     private let destination: () -> Destination
     
-    public init(label: LocalizedStringKey,
+    public init(navigationLinkIsActive: Binding<Bool>,
+                label: LocalizedStringKey,
                 buttonPressedAction: (() -> Void)? = nil,
                 buttonStyle: GuideButtonStyle.ButtonType = .primary,
                 @ViewBuilder destination: @escaping () -> Destination)
     {
+        self._navigationLinkIsActive = navigationLinkIsActive
         self.label = label
         self.buttonPressedAction = buttonPressedAction
         self.buttonStyle = buttonStyle
@@ -29,8 +31,9 @@ public struct GuideNavigationButton<Destination>: View where Destination: View {
     public var body: some View {
         ZStack(alignment: .leading) {
             NavigationLink(destination: destination(),
-                           isActive: self.$navigationLinkIsActive) {
-                            EmptyView()
+                           isActive: self.$navigationLinkIsActive)
+            {
+                EmptyView()
             }
             .disabled(true)
             Button(action: {
