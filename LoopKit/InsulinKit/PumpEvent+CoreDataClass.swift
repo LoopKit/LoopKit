@@ -9,12 +9,10 @@
 import Foundation
 import CoreData
 
-
-// ANNA TODO: use this to determine curve type
 // ANNA TODO: use current "default" insulin model if it wasn't passed in, to handle insulin model settings changes more gracefully
-private enum InsulinModelType {
+private enum InsulinModelType: Int {
+    case walsh = 0
     case exponential
-    case walsh
     case inhaled
 }
 
@@ -95,6 +93,22 @@ class PumpEvent: NSManagedObject {
             willChangeValue(forKey: "modelDuration")
             defer { didChangeValue(forKey: "modelDuration") }
             primitiveModelDuration = newValue != nil ? NSNumber(value: newValue!) : nil
+        }
+    }
+    
+    private var modelType: InsulinModelType? {
+        get {
+            willAccessValue(forKey: "modelType")
+            defer { didAccessValue(forKey: "modelType") }
+            guard let type = primitiveModelType else {
+                return nil
+            }
+            return InsulinModelType(rawValue: type.intValue)
+        }
+        set {
+            willChangeValue(forKey: "modelType")
+            defer { didChangeValue(forKey: "modelType") }
+            primitiveModelType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
         }
     }
     
@@ -190,13 +204,15 @@ extension PumpEvent {
             
             var model: InsulinModel? = nil
             
-            // ANNA TODO: add in custom model identifier to make this easier
-            if let modelDuration = modelDuration {
-                if let modelPeak = modelPeak {
-                    model = ExponentialInsulinModel(actionDuration: modelDuration, peakActivityTime: modelPeak, delay: modelDelay ?? 600)
-                } else {
-                    model = WalshInsulinModel(actionDuration: modelDuration, delay: modelDelay ?? 600)
-                }
+            switch modelType {
+            case .walsh:
+                model = WalshInsulinModel(actionDuration: modelDuration!, delay: modelDelay ?? 600)
+            case .exponential:
+                model = ExponentialInsulinModel(actionDuration: modelDuration!, peakActivityTime: modelPeak!, delay: modelDelay ?? 600)
+            case .inhaled:
+                model = InhaledInsulinModel(modelDelay: modelDelay ?? 600)
+            default:
+                break
             }
 
             return DoseEntry(
@@ -223,12 +239,18 @@ extension PumpEvent {
             deliveredUnits = entry.deliveredUnits
             modelDuration = entry.insulinModel?.effectDuration
             modelDelay = entry.insulinModel?.delay
-            // ANNA TODO: add attribute to distingish between models
+            // ANNA TODO: could this be more elegant?
             if let model = entry.insulinModel as? ExponentialInsulinModel {
                 modelPeak = model.peakActivityTime
-            // ANNA TODO: is the below bad style?
+                modelType = .exponential
             } else if let model = entry.insulinModel as? ExponentialInsulinModelPreset {
+                // ANNA TODO: is the below bad style?
                 modelPeak = (model.getExponentialModel() as! ExponentialInsulinModel).peakActivityTime
+                modelType = .exponential
+            } else if let _ = entry.insulinModel as? InhaledInsulinModel {
+                modelType = .inhaled
+            } else if let _ = entry.insulinModel as? WalshInsulinModel {
+                modelType = .walsh
             }
         }
     }

@@ -1153,6 +1153,7 @@
 		E918E51423F8F2EC004C4B98 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		E918E51523F932DC004C4B98 /* InhaledInsulinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InhaledInsulinModel.swift; sourceTree = "<group>"; };
 		E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModelPreset.swift; sourceTree = "<group>"; };
+		E9AEEA422412C0EE0007AB41 /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3600,10 +3601,11 @@
 		43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				E9AEEA422412C0EE0007AB41 /* Model 3.xcdatamodel */,
 				E918E51423F8F2EC004C4B98 /* Model 2.xcdatamodel */,
 				43D8FEE11C7294D50073BE78 /* Model.xcdatamodel */,
 			);
-			currentVersion = E918E51423F8F2EC004C4B98 /* Model 2.xcdatamodel */;
+			currentVersion = E9AEEA422412C0EE0007AB41 /* Model 3.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

@@ -31,5 +31,6 @@ extension PumpEvent {
     @NSManaged var primitiveModelPeak: NSNumber?
     @NSManaged var primitiveModelDuration: NSNumber?
     @NSManaged var primitiveModelDelay: NSNumber?
+    @NSManaged var primitiveModelType: NSNumber?
 
 }
