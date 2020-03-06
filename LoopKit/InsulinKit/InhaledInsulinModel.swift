@@ -20,9 +20,32 @@ public struct InhaledInsulinModel {
     fileprivate let c: Double = 0.008567227
     fileprivate let d: Double = -0.09821229
     
+    // ANNA TODO: make this be based on dose size
     /// Configures a new inhaled insulin model with a 6-hour duration
     public init(modelDelay: TimeInterval = 600) {
         actionDuration = TimeInterval(hours: 6)
+        delay = modelDelay
+    }
+    
+    /// Configures a new inhaled insulin model with a custom duration, which corresponds to a particular curve
+    public init(duration: TimeInterval, modelDelay: TimeInterval = 600) {
+        actionDuration = duration
+        delay = modelDelay
+    }
+    
+    /// Configures a new inhaled insulin model based on the dose size
+    public init(units: Double, modelDelay: TimeInterval = 600) {
+        switch units {
+        /// 4 units
+        case let x where x <= 4:
+            actionDuration = TimeInterval(hours: 6)
+        /// 8 units
+        case let x where x <= 8:
+            actionDuration = TimeInterval(hours: 6)
+        /// 12+ units
+        default:
+            actionDuration = TimeInterval(hours: 6)
+        }
         delay = modelDelay
     }
 }
