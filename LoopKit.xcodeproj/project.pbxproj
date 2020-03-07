@@ -548,6 +548,7 @@
 		E918E51B23F99EBE004C4B98 /* InhaledInsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E918E51523F932DC004C4B98 /* InhaledInsulinModel.swift */; };
 		E9AEEA3D240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */; };
 		E9AEEA3E240EE0FD0007AB41 /* ExponentialInsulinModelPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */; };
+		E9AEEA4424140B0B0007AB41 /* iob_from_multiple_curves_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9AEEA4324140B0A0007AB41 /* iob_from_multiple_curves_output.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1154,6 +1155,7 @@
 		E918E51523F932DC004C4B98 /* InhaledInsulinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InhaledInsulinModel.swift; sourceTree = "<group>"; };
 		E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModelPreset.swift; sourceTree = "<group>"; };
 		E9AEEA422412C0EE0007AB41 /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
+		E9AEEA4324140B0A0007AB41 /* iob_from_multiple_curves_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_multiple_curves_output.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1757,6 +1759,7 @@
 				C1DB55B41F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json */,
 				43D8FECE1C7294B80073BE78 /* iob_from_doses_output.json */,
 				43D8FECF1C7294B80073BE78 /* iob_from_reservoir_output.json */,
+				E9AEEA4324140B0A0007AB41 /* iob_from_multiple_curves_output.json */,
 				43CE7CED1CA9F2CF003CC1B0 /* normalize_edge_case_doses_input.json */,
 				43CE7CEF1CA9F32C003CC1B0 /* normalize_edge_case_doses_output.json */,
 				43B99B011C7451E500D050F5 /* normalized_doses.json */,
@@ -2326,6 +2329,7 @@
 				43D988A41C87FFA300DA4467 /* glucose_from_effects_momentum_flat_output.json in Resources */,
 				437874C1202FDD2D00A3D8B9 /* iob_from_bolus_312min_output.json in Resources */,
 				43D988AF1C87FFA300DA4467 /* glucose_from_effects_carb_effect_input.json in Resources */,
+				E9AEEA4424140B0B0007AB41 /* iob_from_multiple_curves_output.json in Resources */,
 				4322B793202FA3CC0002837D /* carb_effect_from_history_output.json in Resources */,
 				43D988A51C87FFA300DA4467 /* glucose_from_effects_momentum_flat_input.json in Resources */,
 				43D988A21C87FFA300DA4467 /* glucose_from_effects_momentum_up_output.json in Resources */,
