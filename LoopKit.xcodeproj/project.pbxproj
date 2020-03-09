@@ -586,10 +586,8 @@
 		B46B62AF23FF0BF6001E69BA /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62AE23FF0BF6001E69BA /* SectionHeader.swift */; };
 		B46B62B123FF0CA6001E69BA /* DescriptiveText.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62B023FF0CA6001E69BA /* DescriptiveText.swift */; };
 		B46B62B323FF0E62001E69BA /* SelectableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62B223FF0E62001E69BA /* SelectableLabel.swift */; };
-		B4C004B5241085DC00B40429 /* GuideButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B2241085DB00B40429 /* GuideButtonStyle.swift */; };
-		B4C004B6241085DC00B40429 /* GuidePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B3241085DB00B40429 /* GuidePage.swift */; };
-		B4C004B7241085DC00B40429 /* GuideNavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */; };
-		B4C004B9241085FE00B40429 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B8241085FE00B40429 /* Color.swift */; };
+		B4A2AAB1240830A30066563F /* LabeledTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A2AAB0240830A30066563F /* LabeledTextField.swift */; };
+		B4A2AAB3240832350066563F /* MultipleSelectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A2AAB2240832350066563F /* MultipleSelectionList.swift */; };
 		C164A56022F14C73000E3FA5 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A55F22F14C73000E3FA5 /* UnfinalizedDose.swift */; };
 		C164A56422F21081000E3FA5 /* MockPumpManagerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */; };
 		C16DA83F22E8D88F008624C2 /* LoopPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16DA83E22E8D88F008624C2 /* LoopPlugin.swift */; };
@@ -1231,6 +1229,8 @@
 		B46B62AE23FF0BF6001E69BA /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
 		B46B62B023FF0CA6001E69BA /* DescriptiveText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptiveText.swift; sourceTree = "<group>"; };
 		B46B62B223FF0E62001E69BA /* SelectableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableLabel.swift; sourceTree = "<group>"; };
+		B4A2AAB0240830A30066563F /* LabeledTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledTextField.swift; sourceTree = "<group>"; };
+		B4A2AAB2240832350066563F /* MultipleSelectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleSelectionList.swift; sourceTree = "<group>"; };
 		B4C004B2241085DB00B40429 /* GuideButtonStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuideButtonStyle.swift; sourceTree = "<group>"; };
 		B4C004B3241085DB00B40429 /* GuidePage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuidePage.swift; sourceTree = "<group>"; };
 		B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuideNavigationButton.swift; sourceTree = "<group>"; };
@@ -1503,6 +1503,8 @@
 				B46B62AE23FF0BF6001E69BA /* SectionHeader.swift */,
 				B46B62B023FF0CA6001E69BA /* DescriptiveText.swift */,
 				B46B62B223FF0E62001E69BA /* SelectableLabel.swift */,
+				B4A2AAB0240830A30066563F /* LabeledTextField.swift */,
+				B4A2AAB2240832350066563F /* MultipleSelectionList.swift */,
 				B4C004B3241085DB00B40429 /* GuidePage.swift */,
 				B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */,
 				B4C004B2241085DB00B40429 /* GuideButtonStyle.swift */,
@@ -2588,6 +2590,7 @@
 				892155182245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.swift in Sources */,
 				B4C004B9241085FE00B40429 /* Color.swift in Sources */,
 				892155132245C516009112BC /* SegmentedGaugeBarView.swift in Sources */,
+				B4A2AAB3240832350066563F /* MultipleSelectionList.swift in Sources */,
 				B46B62AB23FF0822001E69BA /* LabeledValueView.swift in Sources */,
 				43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */,
 				43BA7182201EE7090058961E /* TextFieldTableViewCell.swift in Sources */,
@@ -2602,6 +2605,7 @@
 				43BA7163201E490D0058961E /* InsulinDeliveryTableViewController.swift in Sources */,
 				B4C004B5241085DC00B40429 /* GuideButtonStyle.swift in Sources */,
 				43BA718A201EE8CF0058961E /* NSTimeInterval.swift in Sources */,
+				B4A2AAB1240830A30066563F /* LabeledTextField.swift in Sources */,
 				B46B62A923FF05F8001E69BA /* LabeledNumberInput.swift in Sources */,
 				892155152245C57E009112BC /* SegmentedGaugeBarLayer.swift in Sources */,
 				432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */,
