@@ -27,6 +27,7 @@ public struct InstructionList: View {
                     Text(self.instructions[index])
                         .padding(2)
                 }
+                .fixedSize(horizontal: false, vertical: true)
             }
         }
     }
