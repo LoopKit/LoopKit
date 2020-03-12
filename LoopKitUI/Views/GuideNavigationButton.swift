@@ -10,13 +10,13 @@ import SwiftUI
 
 public struct GuideNavigationButton<Destination>: View where Destination: View {
     @Binding var navigationLinkIsActive: Bool
-    private let label: LocalizedStringKey
+    private let label: String
     private let buttonPressedAction: (() -> Void)?
     private let buttonStyle: GuideButtonStyle.ButtonType
     private let destination: () -> Destination
     
     public init(navigationLinkIsActive: Binding<Bool>,
-                label: LocalizedStringKey,
+                label: String,
                 buttonPressedAction: (() -> Void)? = nil,
                 buttonStyle: GuideButtonStyle.ButtonType = .primary,
                 @ViewBuilder destination: @escaping () -> Destination)

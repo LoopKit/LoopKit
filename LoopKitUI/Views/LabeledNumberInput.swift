@@ -37,7 +37,7 @@ public struct LabeledNumberInput: View {
         )
     }
     
-    public init(value: Binding<Double?>, label: String, placeholder: String = "Value", allowFractions: Bool = false) {
+    public init(value: Binding<Double?>, label: String, placeholder: String = NSLocalizedString("Value", comment: "Placeholder text until value is entered") , allowFractions: Bool = false) {
         _value = value
         self.label = label
         self.placeholder = placeholder
