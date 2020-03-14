@@ -9,6 +9,7 @@ public enum ExponentialInsulinModelPreset: String {
     case humalogNovologAdult
     case humalogNovologChild
     case fiasp
+    case afrezza
 }
 
 
@@ -22,7 +23,10 @@ extension ExponentialInsulinModelPreset {
             return .minutes(360)
         case .fiasp:
             return .minutes(360)
+        case .afrezza:
+            return .minutes(160)
         }
+        
     }
 
     var peakActivity: TimeInterval {
@@ -33,6 +37,8 @@ extension ExponentialInsulinModelPreset {
             return .minutes(65)
         case .fiasp:
             return .minutes(55)
+        case .afrezza:
+            return .minutes(53)
         }
     }
     
@@ -43,6 +49,8 @@ extension ExponentialInsulinModelPreset {
         case .humalogNovologChild:
             return .minutes(10)
         case .fiasp:
+            return .minutes(10)
+        case .afrezza:
             return .minutes(10)
         }
     }
