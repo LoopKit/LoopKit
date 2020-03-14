@@ -113,7 +113,8 @@ extension DoseEntry {
             deliveredUnits: trimmedDeliveredUnits,
             description: description,
             syncIdentifier: syncIdentifier,
-            scheduledBasalRate: scheduledBasalRate
+            scheduledBasalRate: scheduledBasalRate,
+            insulinModel: insulinModel
         )
     }
 }
@@ -303,7 +304,7 @@ extension DoseEntry {
         let netTempBasalDoses = self.annotated(with: basalRateSchedule)
         
         // assume that temp basals will be delivered by the pump
-        // TODO: check this assumption is correct
+        // ANNA TODO: check this assumption is correct
         return netTempBasalDoses.glucoseEffects(defaultModel: insulinModel, longestEffectDuration: insulinModel.effectDuration, insulinSensitivity: insulinSensitivity)
     }
 
@@ -326,7 +327,7 @@ extension DoseEntry {
                 return self
             }
         }
-        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate)
+        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinModel: insulinModel)
     }
 }
 
@@ -361,6 +362,7 @@ extension Collection where Element == DoseEntry {
                 lastBasal = dose
             case .resume:
                 if let suspend = lastSuspend {
+                    // ANNA TODO: should the insulin model be the default?
                     reconciled.append(DoseEntry(
                         type: suspend.type,
                         startDate: suspend.startDate,
@@ -375,6 +377,7 @@ extension Collection where Element == DoseEntry {
 
                     // Continue temp basals that may have started before suspending
                     if let last = lastBasal {
+                        // ANNA TODO: test that suspend/resume works properly
                         if last.endDate > dose.endDate {
                             lastBasal = DoseEntry(
                                 type: last.type,
@@ -384,7 +387,8 @@ extension Collection where Element == DoseEntry {
                                 unit: last.unit,
                                 description: last.description,
                                 // We intentionally use the resume's identifier as the basal entry has already been entered
-                                syncIdentifier: dose.syncIdentifier
+                                syncIdentifier: dose.syncIdentifier,
+                                insulinModel: last.insulinModel
                             )
                         } else {
                             lastBasal = nil
@@ -400,7 +404,8 @@ extension Collection where Element == DoseEntry {
                         value: last.value,
                         unit: last.unit,
                         description: last.description,
-                        syncIdentifier: last.syncIdentifier
+                        syncIdentifier: last.syncIdentifier,
+                        insulinModel: last.insulinModel
                     ))
 
                     if last.endDate <= dose.startDate {
