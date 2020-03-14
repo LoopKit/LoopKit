@@ -280,6 +280,29 @@ extension DoseEntry {
 
         return doses
     }
+    
+    /// Annotates a dose with an insulin model curve, defaulting to the insulin type that the pump dispenses
+    ///
+    /// - Parameter model: The insulin model to annotate the dose with.
+    /// - Returns: A dose annotated with the insulin model
+    fileprivate func annotatedWithInsulinModel(model: InsulinModel) -> DoseEntry {
+        guard insulinModel == nil else {
+            return self
+        }
+        
+        return DoseEntry(
+            type: type,
+            startDate: startDate,
+            endDate: endDate,
+            value: value,
+            unit: unit,
+            deliveredUnits: deliveredUnits,
+            description: description,
+            syncIdentifier: syncIdentifier,
+            scheduledBasalRate: scheduledBasalRate,
+            insulinModel: model
+        )
+    }
 }
 
 extension DoseEntry {
@@ -437,6 +460,24 @@ extension Collection where Element == DoseEntry {
 
         for dose in self {
             annotatedDoses += dose.annotated(with: basalSchedule)
+        }
+
+        return annotatedDoses
+    }
+    
+    /// Annotates a sequence of dose entries with the specified insulin model.
+    ///
+    /// If a dose already has an associated insulin model, the model will remain the same.
+    ///
+    /// - Parameter basalSchedule: The basal rate schedule
+    /// - Returns: An array of annotated dose entries
+    func annotatedWithInsulinModel(model: InsulinModel) -> [DoseEntry] {
+        var annotatedDoses: [DoseEntry] = []
+
+        for dose in self {
+            annotatedDoses.append(
+                dose.annotatedWithInsulinModel(model: model)
+            )
         }
 
         return annotatedDoses

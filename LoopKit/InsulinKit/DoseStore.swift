@@ -1141,7 +1141,10 @@ extension DoseStore {
         // Ignore any doses which have not yet ended by the specified date.
         // Also, since we are retrieving dosing history older than basalStart for
         // reconciliation purposes, we need to filter that out after reconciliation.
-        let normalizedDoses = doses.reconciled().filter({ $0.endDate <= end }).annotated(with: basalProfile).filter({ $0.startDate >= basalStart || $0.type == .bolus })
+        var normalizedDoses = doses.reconciled().filter({ $0.endDate <= end }).annotated(with: basalProfile).filter({ $0.startDate >= basalStart || $0.type == .bolus })
+        if let model = defaultInsulinModel {
+            normalizedDoses = normalizedDoses.annotatedWithInsulinModel(model: model)
+        }
 
         return normalizedDoses
     }
