@@ -98,7 +98,7 @@ public final class DoseStore {
                 self.validateReservoirContinuity()
             }
 
-            // TODO: see if this would change with multiple curves
+            // ANNA TODO: see if this would change with multiple curves
             if let effectDuration = defaultInsulinModel?.effectDuration {
                 insulinDeliveryStore.observationStart = Date(timeIntervalSinceNow: -effectDuration)
                 longestEffectDuration = max(self.longestEffectDuration, effectDuration)
@@ -108,7 +108,7 @@ public final class DoseStore {
     
     private let lockedInsulinModel: Locked<InsulinModel?>
     
-    // TODO: need to worry about persistance?
+    // ANNA TODO: need to worry about persistance?
     public var longestEffectDuration: TimeInterval
 
     /// A history of recently applied schedule overrides.
@@ -240,7 +240,7 @@ public final class DoseStore {
         self.persistenceController = cacheStore
         self.syncVersion = syncVersion
         self.lockedLastPumpEventsReconciliation = Locked(lastPumpEventsReconciliation)
-        // TODO: would going back 24 hours be desired behavior?
+        // ANNA TODO: would going back 24 hours be desired behavior?
         self.longestEffectDuration = defaultInsulinModel?.effectDuration ?? .hours(24)
 
         self.pumpEventQueryAfterDate = cacheStartDate
@@ -1138,10 +1138,13 @@ extension DoseStore {
             matching: NSCompoundPredicate(orPredicateWithSubpredicates: [afterBasalStart, allBoluses]),
             chronological: true
         ).compactMap({ $0.dose })
+        
         // Ignore any doses which have not yet ended by the specified date.
         // Also, since we are retrieving dosing history older than basalStart for
         // reconciliation purposes, we need to filter that out after reconciliation.
         var normalizedDoses = doses.reconciled().filter({ $0.endDate <= end }).annotated(with: basalProfile).filter({ $0.startDate >= basalStart || $0.type == .bolus })
+        
+        // Annotate doses with the default insulin model before saving to keep track of insulin models if settings are changed
         if let model = defaultInsulinModel {
             normalizedDoses = normalizedDoses.annotatedWithInsulinModel(model: model)
         }
