@@ -14,6 +14,18 @@ let MetadataKeyScheduledBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduled
 /// Defines the programmed rate for a temporary basal dose
 let MetadataKeyProgrammedTempBasalRate = "com.loopkit.InsulinKit.MetadataKeyProgrammedTempBasalRate"
 
+/// Defines the insulin curve to use to evaluate the dose's activity
+let MetadataKeyInsulinCurveType = "com.loopkit.InsulinKit.MetadataKeyInsulinCurveType"
+
+/// Defines the duration of insulin curve to use to evaluate the dose's activity
+let MetadataKeyInsulinCurveDuration = "com.loopkit.InsulinKit.MetadataKeyInsulinCurveDuration"
+
+/// Defines the delay of insulin curve to use to evaluate the dose's activity
+let MetadataKeyInsulinCurveDelay = "com.loopkit.InsulinKit.MetadataKeyInsulinCurveDelay"
+
+/// Defines the peak of insulin curve to use to evaluate the dose's activity
+let MetadataKeyInsulinCurvePeak = "com.loopkit.InsulinKit.MetadataKeyInsulinCurvePeak"
+
 /// A crude determination of whether a sample was written by LoopKit, in the case of multiple LoopKit-enabled app versions on the same phone.
 let MetadataKeyHasLoopKitOrigin = "HasLoopKitOrigin"
 
@@ -28,7 +40,11 @@ extension HKQuantitySample {
         var metadata: [String: Any] = [
             HKMetadataKeySyncVersion: syncVersion,
             HKMetadataKeySyncIdentifier: syncIdentifier,
-            MetadataKeyHasLoopKitOrigin: true
+            MetadataKeyHasLoopKitOrigin: true,
+            MetadataKeyInsulinCurveType: 2,
+            MetadataKeyInsulinCurveDuration: -1.0,
+            MetadataKeyInsulinCurveDelay: -1.0,
+            MetadataKeyInsulinCurvePeak: -1.0
         ]
 
         switch dose.type {
@@ -56,6 +72,24 @@ extension HKQuantitySample {
             metadata[HKMetadataKeyInsulinDeliveryReason] = HKInsulinDeliveryReason.bolus.rawValue
         case .resume:
             return nil
+        }
+        
+        // Save the insulin model
+        // ANNA TODO: could there be an easier way to do this?
+        metadata[MetadataKeyInsulinCurveDuration] = dose.insulinModel?.effectDuration
+        metadata[MetadataKeyInsulinCurveDelay] = dose.insulinModel?.delay
+        // ANNA TODO: could this be more elegant?
+        if let model = dose.insulinModel as? ExponentialInsulinModel {
+            metadata[MetadataKeyInsulinCurvePeak] = model.peakActivityTime
+            metadata[MetadataKeyInsulinCurveType] = InsulinModelType.exponential.rawValue
+        } else if let model = dose.insulinModel as? ExponentialInsulinModelPreset {
+            // ANNA TODO: is the below bad style?
+            metadata[MetadataKeyInsulinCurvePeak] = (model.getExponentialModel() as! ExponentialInsulinModel).peakActivityTime
+           metadata[MetadataKeyInsulinCurveType] = InsulinModelType.exponential.rawValue
+        } else if let _ = dose.insulinModel as? InhaledInsulinModel {
+           metadata[MetadataKeyInsulinCurveType] = InsulinModelType.inhaled.rawValue
+        } else if let _ = dose.insulinModel as? WalshInsulinModel {
+            metadata[MetadataKeyInsulinCurveType] = InsulinModelType.walsh.rawValue
         }
 
         self.init(
@@ -90,6 +124,29 @@ extension HKQuantitySample {
 
     var programmedTempBasalRate: HKQuantity? {
         return metadata?[MetadataKeyProgrammedTempBasalRate] as? HKQuantity
+    }
+    
+    
+    // ANNA TODO: there's a bug when reading back data from HealthKit
+    var insulinModel: InsulinModel? {
+        guard let rawType = metadata?[MetadataKeyInsulinCurveType] as? Int, let modelType = InsulinModelType(rawValue: rawType) else {
+            return nil
+        }
+        
+        var model: InsulinModel? = nil
+
+        switch modelType {
+        case .walsh:
+            model = WalshInsulinModel(actionDuration: metadata?[MetadataKeyInsulinCurveDuration] as! TimeInterval, delay: (metadata?[MetadataKeyInsulinCurveDelay] ?? 600) as! TimeInterval)
+        case .exponential:
+            model = ExponentialInsulinModel(actionDuration: metadata?[MetadataKeyInsulinCurveDuration] as! TimeInterval, peakActivityTime: metadata?[MetadataKeyInsulinCurvePeak] as! TimeInterval, delay: (metadata?[MetadataKeyInsulinCurveDelay] ?? 600.0) as! TimeInterval)
+        case .inhaled:
+            model = InhaledInsulinModel(modelDelay: (metadata?[MetadataKeyInsulinCurveDelay] ?? 600.0) as! TimeInterval)
+        default:
+            break
+        }
+        
+        return model
     }
 
     /// Returns a DoseEntry representation of the sample.
@@ -143,7 +200,8 @@ extension HKQuantitySample {
             deliveredUnits: deliveredUnits,
             description: nil,
             syncIdentifier: metadata?[HKMetadataKeySyncIdentifier] as? String,
-            scheduledBasalRate: scheduledBasalRate
+            scheduledBasalRate: scheduledBasalRate,
+            insulinModel: insulinModel
         )
     }
 }

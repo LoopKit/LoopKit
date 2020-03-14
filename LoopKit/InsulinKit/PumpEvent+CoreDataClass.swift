@@ -9,11 +9,11 @@
 import Foundation
 import CoreData
 
-// ANNA TODO: use current "default" insulin model if it wasn't passed in, to handle insulin model settings changes more gracefully
-private enum InsulinModelType: Int {
+enum InsulinModelType: Int {
     case walsh = 0
     case exponential
     case inhaled
+    case none
 }
 
 class PumpEvent: NSManagedObject {
