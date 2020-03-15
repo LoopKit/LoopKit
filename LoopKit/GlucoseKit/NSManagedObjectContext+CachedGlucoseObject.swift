@@ -22,8 +22,7 @@ extension NSManagedObjectContext {
         let results: [CachedGlucoseObject]
         do {
             results = try fetch(request)
-        } catch (let error) {
-            print("Error while cachedGlucoseObjectsWithUUIDs: \(error)")
+        } catch {
             results = []
         }
         return results
