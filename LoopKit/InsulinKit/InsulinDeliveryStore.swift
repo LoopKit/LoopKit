@@ -72,7 +72,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
             cacheStore.fetchMetadata(key: InsulinDeliveryStore.queryAnchorMetadataKey) { (value) in
                 self.queue.async {
                     if let encoded = value as? Data {
-                        self.queryAnchor = NSKeyedUnarchiver.unarchiveObject(with: encoded) as? HKQueryAnchor
+                        self.queryAnchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: encoded)
                     }
 
                     if !self.authorizationRequired {
