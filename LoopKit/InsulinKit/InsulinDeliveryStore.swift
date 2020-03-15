@@ -70,12 +70,14 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
 
         cacheStore.onReady { (error) in
             cacheStore.fetchMetadata(key: InsulinDeliveryStore.queryAnchorMetadataKey) { (value) in
-                if let encoded = value as? Data {
-                    self.queryAnchor = NSKeyedUnarchiver.unarchiveObject(with: encoded) as? HKQueryAnchor
-                }
+                self.queue.async {
+                    if let encoded = value as? Data {
+                        self.queryAnchor = NSKeyedUnarchiver.unarchiveObject(with: encoded) as? HKQueryAnchor
+                    }
 
-                if !self.authorizationRequired {
-                    self.createQuery()
+                    if !self.authorizationRequired {
+                        self.createQuery()
+                    }
                 }
             }
         }
@@ -112,7 +114,6 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
             // Deleted samples
             self.log.debug("Starting deletion of %d samples", deleted.count)
             let cacheDeletedCount = self.deleteCachedObjects(forSampleUUIDs: deleted.map { $0.uuid })
-            //self.log.debug("Finished deletion")
             self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
 
             let cachePredicate = NSPredicate(format: "startDate < %@", self.earliestCacheDate as NSDate)

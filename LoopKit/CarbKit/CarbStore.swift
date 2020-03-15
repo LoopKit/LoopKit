@@ -281,12 +281,18 @@ public final class CarbStore: HealthKitSampleStore {
             }
 
             // Remove deleted samples
+            // Deleted samples
+            self.log.debug("Starting deletion of %d samples", deleted.count)
+            //let cacheDeletedCount = self.deleteCachedObjects(forSampleUUIDs: deleted.map { $0.uuid })
+
             for sample in deleted {
                 if self.deleteCachedObject(for: sample) {
                     self.log.debug("Deleted sample %@ from cache from HKAnchoredObjectQuery", sample.uuid.uuidString)
                     notificationRequired = true
                 }
             }
+            self.log.debug("Finished deletion")
+            //self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
 
             // Notify listeners only if a meaningful change was made
             if notificationRequired {

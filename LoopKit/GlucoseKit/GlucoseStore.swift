@@ -100,15 +100,17 @@ public final class GlucoseStore: HealthKitSampleStore {
 
         cacheStore.onReady { (error) in
             cacheStore.fetchMetadata(key: GlucoseStore.queryAnchorMetadataKey) { (value) in
-                if let encoded = value as? Data {
-                    self.queryAnchor = NSKeyedUnarchiver.unarchiveObject(with: encoded) as? HKQueryAnchor
-                }
-                
-                if !self.authorizationRequired {
-                    self.createQuery()
-                }
                 self.dataAccessQueue.async {
-                    self.updateLatestGlucose()
+                    if let encoded = value as? Data {
+                        self.queryAnchor = NSKeyedUnarchiver.unarchiveObject(with: encoded) as? HKQueryAnchor
+                    }
+                    
+                    if !self.authorizationRequired {
+                        self.createQuery()
+                    }
+                    self.dataAccessQueue.async {
+                        self.updateLatestGlucose()
+                    }
                 }
             }
         }
