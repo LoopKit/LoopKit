@@ -99,11 +99,9 @@ public final class GlucoseStore: HealthKitSampleStore {
         super.init(healthStore: healthStore, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -cacheLength), observationEnabled: observationEnabled)
 
         cacheStore.onReady { (error) in
-            cacheStore.fetchMetadata(key: GlucoseStore.queryAnchorMetadataKey) { (value) in
+            cacheStore.fetchAnchor(key: GlucoseStore.queryAnchorMetadataKey) { (anchor) in
                 self.dataAccessQueue.async {
-                    if let encoded = value as? Data {
-                        self.queryAnchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: encoded)
-                    }
+                    self.queryAnchor = anchor
                     
                     if !self.authorizationRequired {
                         self.createQuery()
@@ -118,15 +116,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     // MARK: - HealthKitSampleStore
     
     override func queryAnchorDidChange() {
-        let encoded = NSKeyedArchiver.archivedData(withRootObject: queryAnchor as Any)
-        cacheStore.updateMetadata(key: GlucoseStore.queryAnchorMetadataKey, value: encoded)
-        cacheStore.save { (error) in
-            if let error = error {
-                self.log.default("Failed to save queryAnchor metadata: %{public}@", String(describing: error))
-            } else {
-                self.log.default("Saved queryAnchor %{public}@", String(describing: self.queryAnchor))
-            }
-        }
+        cacheStore.storeAnchor(queryAnchor, key: GlucoseStore.queryAnchorMetadataKey)
     }
 
     override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {

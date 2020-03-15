@@ -7,7 +7,7 @@
 
 import CoreData
 import os.log
-
+import HealthKit
 
 
 
@@ -112,41 +112,70 @@ public final class PersistenceController {
 
     func save(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) {
         self.managedObjectContext.performAndWait {
-            guard !self.isReadOnly && self.managedObjectContext.hasChanges else {
-                completion?(nil)
-                return
-            }
+            self.saveInternal(completion)
+        }
+    }
 
-            do {
-                delegate?.persistenceControllerWillSave(self)
-                try self.managedObjectContext.save()
-                delegate?.persistenceControllerDidSave(self, error: nil)
-                completion?(nil)
-            } catch let saveError as NSError {
-                self.log.error("Error while saving context: %{public}", saveError)
-                delegate?.persistenceControllerDidSave(self, error: .coreDataError(saveError))
-                completion?(.coreDataError(saveError))
-            }
+    // Should only be called from PersistenceControllerError thread
+    internal func saveInternal(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) {
+        guard !self.isReadOnly && self.managedObjectContext.hasChanges else {
+            completion?(nil)
+            return
+        }
+
+        do {
+            delegate?.persistenceControllerWillSave(self)
+            try self.managedObjectContext.save()
+            delegate?.persistenceControllerDidSave(self, error: nil)
+            completion?(nil)
+        } catch let saveError as NSError {
+            self.log.error("Error while saving context: %{public}", saveError)
+            delegate?.persistenceControllerDidSave(self, error: .coreDataError(saveError))
+            completion?(.coreDataError(saveError))
         }
     }
-    
+
+    // Should only be called on managedObjectContext thread
     func updateMetadata(key: String, value: Any?) {
-        self.managedObjectContext.performAndWait {
-            if let coordinator = self.managedObjectContext.persistentStoreCoordinator, let store = coordinator.persistentStores.first {
-                var metadata = coordinator.metadata(for: store)
-                metadata[key] = value
-                coordinator.setMetadata(metadata, for: store)
-            }
+        if let coordinator = self.managedObjectContext.persistentStoreCoordinator, let store = coordinator.persistentStores.first {
+            var metadata = coordinator.metadata(for: store)
+            metadata[key] = value
+            coordinator.setMetadata(metadata, for: store)
         }
     }
     
+    // Should only be called on managedObjectContext thread
     func fetchMetadata(key: String, completion: @escaping (Any?) -> Void) {
+        if let coordinator = self.managedObjectContext.persistentStoreCoordinator, let store = coordinator.persistentStores.first {
+            let metadata = coordinator.metadata(for: store)
+            completion(metadata[key])
+        } else {
+            completion(nil)
+        }
+    }
+    
+    func storeAnchor(_ anchor: HKQueryAnchor?, key: String) {
         managedObjectContext.perform {
-            if let coordinator = self.managedObjectContext.persistentStoreCoordinator, let store = coordinator.persistentStores.first {
-                let metadata = coordinator.metadata(for: store)
-                completion(metadata[key])
+            let encoded: Data?
+            if let anchor = anchor {
+                encoded = try? NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true)
             } else {
-                completion(nil)
+                encoded = nil
+            }
+            self.updateMetadata(key: key, value: encoded)
+            self.saveInternal()
+        }
+    }
+    
+    func fetchAnchor(key: String, completion: @escaping (HKQueryAnchor?) -> Void) {
+        managedObjectContext.perform {
+            self.fetchMetadata(key: key) { (value) in
+                if let encoded = value as? Data {
+                    let anchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: encoded)
+                    completion(anchor)
+                } else {
+                    completion(nil)
+                }
             }
         }
     }
