@@ -65,6 +65,7 @@ public class HealthKitSampleStore {
         self.observationStart = observationStart
         self.observationEnabled = observationEnabled
         self.test_currentDate = test_currentDate
+        self.lockedQueryAnchor = Locked<HKQueryAnchor?>(nil)
 
         self.log = OSLog(category: String(describing: Swift.type(of: self)))
     }
@@ -136,12 +137,23 @@ public class HealthKitSampleStore {
 
     /// The last-retreived anchor from an anchored object query
     internal var queryAnchor: HKQueryAnchor? {
-        didSet {
-            if queryAnchor != oldValue {
+        get {
+            return lockedQueryAnchor.value
+        }
+        set {
+            var changed: Bool = false
+            lockedQueryAnchor.mutate { (anchor) in
+                if anchor != newValue {
+                    anchor = newValue
+                    changed = true
+                }
+            }
+            if(changed) {
                 queryAnchorDidChange()
             }
         }
     }
+    internal let lockedQueryAnchor: Locked<HKQueryAnchor?>
     
     func queryAnchorDidChange() {
         // Subclasses can override
