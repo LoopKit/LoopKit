@@ -67,11 +67,6 @@ public class HealthKitSampleStore {
         self.test_currentDate = test_currentDate
 
         self.log = OSLog(category: String(describing: Swift.type(of: self)))
-
-        if !authorizationRequired {
-            log.default("Creating query on store init")
-            createQuery()
-        }
     }
 
     deinit {
@@ -140,7 +135,17 @@ public class HealthKitSampleStore {
     }
 
     /// The last-retreived anchor from an anchored object query
-    private var queryAnchor: HKQueryAnchor?
+    internal var queryAnchor: HKQueryAnchor? {
+        didSet {
+            if queryAnchor != oldValue {
+                queryAnchorDidChange()
+            }
+        }
+    }
+    
+    func queryAnchorDidChange() {
+        // Subclasses can override
+    }
 
     /// Called in response to an update by the observer query
     ///
@@ -166,7 +171,10 @@ public class HealthKitSampleStore {
             }
 
             self.processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], error: error)
-            self.queryAnchor = anchor
+            
+            if anchor != nil {
+                self.queryAnchor = anchor
+            }
         }
 
         healthStore.execute(anchoredObjectQuery)
@@ -214,7 +222,7 @@ extension HealthKitSampleStore: HKSampleQueryTestable {
 
 // MARK: - Observation
 extension HealthKitSampleStore {
-    private func createQuery() {
+    internal func createQuery() {
         log.default("%@ [observationEnabled: %{public}d]", #function, observationEnabled)
 
         guard observationEnabled else {

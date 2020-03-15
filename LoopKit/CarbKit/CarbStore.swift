@@ -222,6 +222,10 @@ public final class CarbStore: HealthKitSampleStore {
 
         cacheStore.onReady { (error) in
             guard error == nil else { return }
+            
+            if !self.authorizationRequired {
+                self.createQuery()
+            }
 
             // Migrate modifiedCarbEntries and deletedCarbEntryIDs
             self.cacheStore.managedObjectContext.perform {

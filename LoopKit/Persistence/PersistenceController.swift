@@ -9,6 +9,8 @@ import CoreData
 import os.log
 
 
+
+
 public protocol PersistenceControllerDelegate: class {
     /// Informs the delegate that a save operation will start, so it can start a background task on its behalf
     ///
@@ -127,7 +129,28 @@ public final class PersistenceController {
             }
         }
     }
-
+    
+    func updateMetadata(key: String, value: Any?) {
+        self.managedObjectContext.performAndWait {
+            if let coordinator = self.managedObjectContext.persistentStoreCoordinator, let store = coordinator.persistentStores.first {
+                var metadata = coordinator.metadata(for: store)
+                metadata[key] = value
+                coordinator.setMetadata(metadata, for: store)
+            }
+        }
+    }
+    
+    func fetchMetadata(key: String, completion: @escaping (Any?) -> Void) {
+        managedObjectContext.perform {
+            if let coordinator = self.managedObjectContext.persistentStoreCoordinator, let store = coordinator.persistentStores.first {
+                let metadata = coordinator.metadata(for: store)
+                completion(metadata[key])
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
     // MARK: - 
 
     private func initializeStack(inDirectory directoryURL: URL, model: NSManagedObjectModel) {

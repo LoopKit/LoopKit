@@ -81,6 +81,8 @@ public final class GlucoseStore: HealthKitSampleStore {
     private let lockedLatestGlucose = Locked<GlucoseValue?>(nil)
 
     public let cacheStore: PersistenceController
+    
+    static let queryAnchorMetadataKey = "com.loopkit.GlucoseStore.queryAnchor"
 
     public init(
         healthStore: HKHealthStore,
@@ -92,17 +94,39 @@ public final class GlucoseStore: HealthKitSampleStore {
         self.cacheStore = cacheStore
         self.momentumDataInterval = momentumDataInterval
         self.cacheLength = max(cacheLength, momentumDataInterval)
+        
 
         super.init(healthStore: healthStore, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -cacheLength), observationEnabled: observationEnabled)
 
         cacheStore.onReady { (error) in
-            self.dataAccessQueue.async {
-                self.updateLatestGlucose()
+            cacheStore.fetchMetadata(key: GlucoseStore.queryAnchorMetadataKey) { (value) in
+                if let encoded = value as? Data {
+                    self.queryAnchor = NSKeyedUnarchiver.unarchiveObject(with: encoded) as? HKQueryAnchor
+                }
+                
+                if !self.authorizationRequired {
+                    self.createQuery()
+                }
+                self.dataAccessQueue.async {
+                    self.updateLatestGlucose()
+                }
             }
         }
     }
 
     // MARK: - HealthKitSampleStore
+    
+    override func queryAnchorDidChange() {
+        let encoded = NSKeyedArchiver.archivedData(withRootObject: queryAnchor as Any)
+        cacheStore.updateMetadata(key: GlucoseStore.queryAnchorMetadataKey, value: encoded)
+        cacheStore.save { (error) in
+            if let error = error {
+                self.log.default("Failed to save queryAnchor metadata: %{public}@", String(describing: error))
+            } else {
+                self.log.default("Saved queryAnchor %{public}@", String(describing: self.queryAnchor))
+            }
+        }
+    }
 
     override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {
         guard error == nil else {
@@ -132,11 +156,6 @@ public final class GlucoseStore: HealthKitSampleStore {
 
             // Deleted samples
             self.log.debug("Starting deletion of %d samples", deleted.count)
-//            for sample in deleted {
-//                if self.deleteCachedObject(forSampleUUID: sample.uuid) {
-//                    cacheChanged = true
-//                }
-//            }
             let cacheDeletedCount = self.deleteCachedObjects(forSampleUUIDs: deleted.map { $0.uuid })
             self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
 
