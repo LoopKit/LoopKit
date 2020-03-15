@@ -428,7 +428,7 @@ extension GlucoseStore {
 
         cacheStore.managedObjectContext.performAndWait {
             for batch in uuids.chunked(into: batchSize) {
-                for object in self.cacheStore.managedObjectContext.cachedGlucoseObjectsWithUUIDs(batch) {
+                for object in self.cacheStore.managedObjectContext.cachedGlucoseObjectsWithUUIDs(Array(batch)) {
                     self.cacheStore.managedObjectContext.delete(object)
                     deleted += 1
                 }
@@ -581,14 +581,6 @@ extension GlucoseStore {
             report.append("")
 
             completionHandler(report.joined(separator: "\n"))
-        }
-    }
-}
-
-extension Array {
-    func chunked(into size: Int) -> [[Element]] {
-        return stride(from: 0, to: count, by: size).map {
-            Array(self[$0 ..< Swift.min($0 + size, count)])
         }
     }
 }

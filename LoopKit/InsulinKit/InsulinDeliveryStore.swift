@@ -405,7 +405,7 @@ extension InsulinDeliveryStore {
 
         cacheStore.managedObjectContext.performAndWait {
             for batch in uuids.chunked(into: batchSize) {
-                for object in self.cacheStore.managedObjectContext.cachedInsulinDeliveryObjectsWithUUIDs(batch) {
+                for object in self.cacheStore.managedObjectContext.cachedInsulinDeliveryObjectsWithUUIDs(Array(batch)) {
 
                     self.cacheStore.managedObjectContext.delete(object)
                     self.log.default("Deleted CachedInsulinDeliveryObject with UUID %{public}@", object.uuid?.uuidString ?? "")
