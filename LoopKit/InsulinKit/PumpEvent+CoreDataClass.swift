@@ -12,7 +12,6 @@ import CoreData
 enum InsulinModelType: Int {
     case walsh = 0
     case exponential
-    case inhaled
     case none
 }
 
@@ -209,8 +208,6 @@ extension PumpEvent {
                 model = WalshInsulinModel(actionDuration: modelDuration!, delay: modelDelay ?? 600)
             case .exponential:
                 model = ExponentialInsulinModel(actionDuration: modelDuration!, peakActivityTime: modelPeak!, delay: modelDelay ?? 600)
-            case .inhaled:
-                model = InhaledInsulinModel(modelDelay: modelDelay ?? 600)
             default:
                 break
             }
@@ -247,8 +244,6 @@ extension PumpEvent {
                 // ANNA TODO: is the below bad style?
                 modelPeak = (model.getExponentialModel() as! ExponentialInsulinModel).peakActivityTime
                 modelType = .exponential
-            } else if let _ = entry.insulinModel as? InhaledInsulinModel {
-                modelType = .inhaled
             } else if let _ = entry.insulinModel as? WalshInsulinModel {
                 modelType = .walsh
             }

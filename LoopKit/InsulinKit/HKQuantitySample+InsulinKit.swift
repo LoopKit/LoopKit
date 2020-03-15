@@ -86,8 +86,6 @@ extension HKQuantitySample {
             // ANNA TODO: is the below bad style?
             metadata[MetadataKeyInsulinCurvePeak] = (model.getExponentialModel() as! ExponentialInsulinModel).peakActivityTime
            metadata[MetadataKeyInsulinCurveType] = InsulinModelType.exponential.rawValue
-        } else if let _ = dose.insulinModel as? InhaledInsulinModel {
-           metadata[MetadataKeyInsulinCurveType] = InsulinModelType.inhaled.rawValue
         } else if let _ = dose.insulinModel as? WalshInsulinModel {
             metadata[MetadataKeyInsulinCurveType] = InsulinModelType.walsh.rawValue
         }
@@ -140,8 +138,6 @@ extension HKQuantitySample {
             model = WalshInsulinModel(actionDuration: metadata?[MetadataKeyInsulinCurveDuration] as! TimeInterval, delay: (metadata?[MetadataKeyInsulinCurveDelay] ?? 600) as! TimeInterval)
         case .exponential:
             model = ExponentialInsulinModel(actionDuration: metadata?[MetadataKeyInsulinCurveDuration] as! TimeInterval, peakActivityTime: metadata?[MetadataKeyInsulinCurvePeak] as! TimeInterval, delay: (metadata?[MetadataKeyInsulinCurveDelay] ?? 600.0) as! TimeInterval)
-        case .inhaled:
-            model = InhaledInsulinModel(modelDelay: (metadata?[MetadataKeyInsulinCurveDelay] ?? 600.0) as! TimeInterval)
         default:
             break
         }
