@@ -154,32 +154,6 @@ public final class PersistenceController {
         }
     }
     
-    func storeAnchor(_ anchor: HKQueryAnchor?, key: String) {
-        managedObjectContext.perform {
-            let encoded: Data?
-            if let anchor = anchor {
-                encoded = try? NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true)
-            } else {
-                encoded = nil
-            }
-            self.updateMetadata(key: key, value: encoded)
-            self.saveInternal()
-        }
-    }
-    
-    func fetchAnchor(key: String, completion: @escaping (HKQueryAnchor?) -> Void) {
-        managedObjectContext.perform {
-            self.fetchMetadata(key: key) { (value) in
-                if let encoded = value as? Data {
-                    let anchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: encoded)
-                    completion(anchor)
-                } else {
-                    completion(nil)
-                }
-            }
-        }
-    }
-    
     // MARK: - 
 
     private func initializeStack(inDirectory directoryURL: URL, model: NSManagedObjectModel) {
@@ -242,5 +216,36 @@ extension PersistenceController: CustomDebugStringConvertible {
             "* directoryURL: \(directoryURL)",
             "* persistenceStoreCoordinator: \(String(describing: managedObjectContext.persistentStoreCoordinator))",
         ].joined(separator: "\n")
+    }
+}
+
+
+// MARK: - Anchor store/fetch helpers
+
+extension PersistenceController {
+    func storeAnchor(_ anchor: HKQueryAnchor?, key: String) {
+        managedObjectContext.perform {
+            let encoded: Data?
+            if let anchor = anchor {
+                encoded = try? NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true)
+            } else {
+                encoded = nil
+            }
+            self.updateMetadata(key: key, value: encoded)
+            self.saveInternal()
+        }
+    }
+    
+    func fetchAnchor(key: String, completion: @escaping (HKQueryAnchor?) -> Void) {
+        managedObjectContext.perform {
+            self.fetchMetadata(key: key) { (value) in
+                if let encoded = value as? Data {
+                    let anchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: encoded)
+                    completion(anchor)
+                } else {
+                    completion(nil)
+                }
+            }
+        }
     }
 }
