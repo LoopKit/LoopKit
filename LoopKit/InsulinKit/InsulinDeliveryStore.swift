@@ -47,6 +47,8 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
     public let cacheLength: TimeInterval
 
     public let cacheStore: PersistenceController
+    
+    static let queryAnchorMetadataKey = "com.loopkit.InsulinDeliveryStore.queryAnchor"
 
     public init(
         healthStore: HKHealthStore,
@@ -67,8 +69,28 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
         )
 
         cacheStore.onReady { (error) in
-            if !self.authorizationRequired {
-                self.createQuery()
+            cacheStore.fetchMetadata(key: InsulinDeliveryStore.queryAnchorMetadataKey) { (value) in
+                if let encoded = value as? Data {
+                    self.queryAnchor = NSKeyedUnarchiver.unarchiveObject(with: encoded) as? HKQueryAnchor
+                }
+
+                if !self.authorizationRequired {
+                    self.createQuery()
+                }
+            }
+        }
+    }
+    
+    // MARK: - HealthKitSampleStore
+
+    override func queryAnchorDidChange() {
+        let encoded = NSKeyedArchiver.archivedData(withRootObject: queryAnchor as Any)
+        cacheStore.updateMetadata(key: InsulinDeliveryStore.queryAnchorMetadataKey, value: encoded)
+        cacheStore.save { (error) in
+            if let error = error {
+                self.log.default("Failed to save queryAnchor metadata: %{public}@", String(describing: error))
+            } else {
+                self.log.default("Saved queryAnchor %{public}@", String(describing: self.queryAnchor))
             }
         }
     }
