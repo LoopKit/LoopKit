@@ -112,13 +112,18 @@ public final class PersistenceController {
 
     func save(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) {
         self.managedObjectContext.performAndWait {
+            guard self.managedObjectContext.hasChanges else {
+                completion?(nil)
+                return
+            }
+
             self.saveInternal(completion)
         }
     }
 
     // Should only be called from PersistenceControllerError thread
     internal func saveInternal(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) {
-        guard !self.isReadOnly && self.managedObjectContext.hasChanges else {
+        guard !self.isReadOnly else {
             completion?(nil)
             return
         }

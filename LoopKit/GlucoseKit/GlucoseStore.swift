@@ -148,6 +148,9 @@ public final class GlucoseStore: HealthKitSampleStore {
             // Deleted samples
             self.log.debug("Starting deletion of %d samples", deleted.count)
             let cacheDeletedCount = self.deleteCachedObjects(forSampleUUIDs: deleted.map { $0.uuid })
+            if cacheDeletedCount > 0 {
+                cacheChanged = true
+            }
             self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
 
             if let startDate = newestSampleStartDateAddedByExternalSource {

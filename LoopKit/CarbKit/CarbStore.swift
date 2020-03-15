@@ -185,6 +185,8 @@ public final class CarbStore: HealthKitSampleStore {
     private let log = OSLog(category: "CarbStore")
     
     var settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
+    
+    static let queryAnchorMetadataKey = "com.loopkit.CarbStore.queryAnchor"
 
     /**
      Initializes a new instance of the store.
@@ -223,43 +225,53 @@ public final class CarbStore: HealthKitSampleStore {
         cacheStore.onReady { (error) in
             guard error == nil else { return }
             
-            if !self.authorizationRequired {
-                self.createQuery()
-            }
-
-            // Migrate modifiedCarbEntries and deletedCarbEntryIDs
-            self.cacheStore.managedObjectContext.perform {
-                for entry in UserDefaults.standard.modifiedCarbEntries ?? [] {
-                    let object = CachedCarbObject(context: self.cacheStore.managedObjectContext)
-                    object.update(from: entry)
-                }
-
-
-                for externalID in UserDefaults.standard.deletedCarbEntryIds ?? [] {
-                    let object = DeletedCarbObject(context: self.cacheStore.managedObjectContext)
-                    object.externalID = externalID
-                }
-
-                self.cacheStore.save()
-            }
-
-            UserDefaults.standard.purgeLegacyCarbEntryKeys()
+            cacheStore.fetchAnchor(key: CarbStore.queryAnchorMetadataKey) { (anchor) in
+                self.queue.async {
+                    self.queryAnchor = anchor
             
-            // Carb model settings based on the selected absorption model
-            switch self.carbAbsorptionModel {
-            case .linear:
-                self.settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
-            case .nonlinear:
-                self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
-            case .adaptiveRateNonlinear:
-                self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.0, adaptiveAbsorptionRateEnabled: true, adaptiveRateStandbyIntervalFraction: 0.2)
-            }
+                    if !self.authorizationRequired {
+                        self.createQuery()
+                    }
 
+                    // Migrate modifiedCarbEntries and deletedCarbEntryIDs
+                    self.cacheStore.managedObjectContext.perform {
+                        for entry in UserDefaults.standard.modifiedCarbEntries ?? [] {
+                            let object = CachedCarbObject(context: self.cacheStore.managedObjectContext)
+                            object.update(from: entry)
+                        }
+
+
+                        for externalID in UserDefaults.standard.deletedCarbEntryIds ?? [] {
+                            let object = DeletedCarbObject(context: self.cacheStore.managedObjectContext)
+                            object.externalID = externalID
+                        }
+
+                        self.cacheStore.save()
+                    }
+                    
+
+                    UserDefaults.standard.purgeLegacyCarbEntryKeys()
+            
+                    // Carb model settings based on the selected absorption model
+                    switch self.carbAbsorptionModel {
+                    case .linear:
+                        self.settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
+                    case .nonlinear:
+                        self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
+                    case .adaptiveRateNonlinear:
+                        self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.0, adaptiveAbsorptionRateEnabled: true, adaptiveRateStandbyIntervalFraction: 0.2)
+                    }
+                }
+            }
             // TODO: Consider resetting uploadState.uploading
         }
     }
 
     // MARK: - HealthKitSampleStore
+    
+    override func queryAnchorDidChange() {
+        cacheStore.storeAnchor(queryAnchor, key: CarbStore.queryAnchorMetadataKey)
+    }
 
     public override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {
         if let error = error {
@@ -281,18 +293,12 @@ public final class CarbStore: HealthKitSampleStore {
             }
 
             // Remove deleted samples
-            // Deleted samples
             self.log.debug("Starting deletion of %d samples", deleted.count)
-            //let cacheDeletedCount = self.deleteCachedObjects(forSampleUUIDs: deleted.map { $0.uuid })
-
-            for sample in deleted {
-                if self.deleteCachedObject(for: sample) {
-                    self.log.debug("Deleted sample %@ from cache from HKAnchoredObjectQuery", sample.uuid.uuidString)
-                    notificationRequired = true
-                }
+            let cacheDeletedCount = self.deleteCachedObjects(for: deleted.map { $0.uuid })
+            if cacheDeletedCount > 0 {
+                notificationRequired = true
             }
-            self.log.debug("Finished deletion")
-            //self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
+            self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
 
             // Notify listeners only if a meaningful change was made
             if notificationRequired {
@@ -494,6 +500,16 @@ extension CarbStore {
 
 
 extension NSManagedObjectContext {
+    fileprivate func cachedCarbObjectsWithUUIDs(_ uuids: [UUID], fetchLimit: Int? = nil) -> [CachedCarbObject] {
+        let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
+        if let limit = fetchLimit {
+            request.fetchLimit = limit
+        }
+        request.predicate = NSPredicate(format: "uuid IN %@", uuids.map { $0 as NSUUID })
+
+        return (try? fetch(request)) ?? []
+    }
+
     fileprivate func cachedCarbObjectsWithUUID(_ uuid: UUID, fetchLimit: Int? = nil) -> [CachedCarbObject] {
         let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
         if let limit = fetchLimit {
@@ -573,6 +589,30 @@ extension CarbStore {
     @discardableResult
     private func deleteCachedObject(for entry: StoredCarbEntry) -> Bool {
         return deleteCachedObject(forSampleUUID: entry.sampleUUID)
+    }
+
+    @discardableResult
+    private func deleteCachedObjects(for uuids: [UUID], batchSize: Int = 500) -> Int {
+        dispatchPrecondition(condition: .onQueue(queue))
+
+        var deleted = 0
+
+        cacheStore.managedObjectContext.performAndWait {
+            for batch in uuids.chunked(into: batchSize) {
+                for object in self.cacheStore.managedObjectContext.cachedCarbObjectsWithUUIDs(Array(batch)) {
+                    if let externalID = object.externalID {
+                        let deletedObject = DeletedCarbObject(context: self.cacheStore.managedObjectContext)
+                        deletedObject.externalID = externalID
+                    }
+
+                    self.cacheStore.managedObjectContext.delete(object)
+                    deleted += 1
+                }
+            }
+            self.cacheStore.save()
+        }
+
+        return deleted
     }
 
     @discardableResult
