@@ -108,9 +108,8 @@ public final class GlucoseStore: HealthKitSampleStore {
                     if !self.authorizationRequired {
                         self.createQuery()
                     }
-                    self.dataAccessQueue.async {
-                        self.updateLatestGlucose()
-                    }
+                    
+                    self.updateLatestGlucose()
                 }
             }
         }
