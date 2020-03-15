@@ -98,10 +98,10 @@ public final class DoseStore {
                 self.validateReservoirContinuity()
             }
 
-            // ANNA TODO: see if this would change with multiple curves
             if let effectDuration = defaultInsulinModel?.effectDuration {
-                insulinDeliveryStore.observationStart = Date(timeIntervalSinceNow: -effectDuration)
-                longestEffectDuration = max(self.longestEffectDuration, effectDuration)
+                let longestPossibleDuration = max(self.longestEffectDuration, effectDuration)
+                insulinDeliveryStore.observationStart = Date(timeIntervalSinceNow: -longestPossibleDuration)
+                longestEffectDuration = longestPossibleDuration
             }
         }
     }
