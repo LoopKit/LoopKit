@@ -500,19 +500,6 @@ extension CarbStore {
 
 
 extension NSManagedObjectContext {
-    fileprivate func cachedCarbObjectsWithUUIDs(_ uuids: [UUID], fetchLimit: Int? = nil) -> [CachedCarbObject] {
-        guard uuids.count > 0 else {
-            return []
-        }
-        
-        let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
-        if let limit = fetchLimit {
-            request.fetchLimit = limit
-        }
-        request.predicate = NSPredicate(format: "uuid IN %@", uuids.map { $0 as NSUUID })
-
-        return (try? fetch(request)) ?? []
-    }
 
     fileprivate func cachedCarbObjectsWithUUID(_ uuid: UUID, fetchLimit: Int? = nil) -> [CachedCarbObject] {
         let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
@@ -603,19 +590,12 @@ extension CarbStore {
 
         cacheStore.managedObjectContext.performAndWait {
             for batch in uuids.chunked(into: batchSize) {
-                for object in self.cacheStore.managedObjectContext.cachedCarbObjectsWithUUIDs(Array(batch)) {
-                    if let externalID = object.externalID {
-                        let deletedObject = DeletedCarbObject(context: self.cacheStore.managedObjectContext)
-                        deletedObject.externalID = externalID
-                    }
-
-                    self.cacheStore.managedObjectContext.delete(object)
-                    deleted += 1
+                let predicate = NSPredicate(format: "uuid IN %@", batch.map { $0 as NSUUID })
+                if let count = try? cacheStore.managedObjectContext.purgeObjects(of: CachedCarbObject.self, matching: predicate) {
+                    deleted += count
                 }
             }
-            self.cacheStore.save()
         }
-
         return deleted
     }
 

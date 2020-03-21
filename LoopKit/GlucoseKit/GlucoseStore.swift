@@ -435,16 +435,14 @@ extension GlucoseStore {
 
         var deleted = 0
 
-        cacheStore.managedObjectContext.performAndWait {
-            for batch in uuids.chunked(into: batchSize) {
-                for object in self.cacheStore.managedObjectContext.cachedGlucoseObjectsWithUUIDs(Array(batch)) {
-                    self.cacheStore.managedObjectContext.delete(object)
-                    deleted += 1
-                }
-            }
-
-            if deleted > 0 {
-                self.cacheStore.save()
+        for batch in uuids.chunked(into: batchSize) {
+            let result = self.purgeCachedGlucoseObjects(matching: NSPredicate(format: "uuid IN %@", batch.map { $0 as NSUUID }))
+            switch result {
+            case .failure:
+                // ignore for now; it's already logged
+                break
+            case .success(let count):
+                deleted += count;
             }
         }
 
@@ -475,17 +473,22 @@ extension GlucoseStore {
         return Date(timeIntervalSinceNow: -cacheLength)
     }
 
-    private func purgeCachedGlucoseObjects(matching predicate: NSPredicate?) {
+    @discardableResult
+    private func purgeCachedGlucoseObjects(matching predicate: NSPredicate?) -> GlucoseStoreResult<Int> {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
+        
+        var result: GlucoseStoreResult<Int> = .success(0)
 
         cacheStore.managedObjectContext.performAndWait {
-
             do {
                 let count = try cacheStore.managedObjectContext.purgeObjects(of: CachedGlucoseObject.self, matching: predicate)
+                result = .success(count)
             } catch let error {
                 self.log.error("Unable to purge CachedGlucoseObjects: %@", String(describing: error))
+                result = .failure(error)
             }
         }
+        return result
     }
 }
 

@@ -102,12 +102,14 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
             }
 
             // Deleted samples
-            self.log.debug("Starting deletion of %d samples", deleted.count)
-            let cacheDeletedCount = self.deleteCachedObjects(forSampleUUIDs: deleted.map { $0.uuid })
-            if cacheDeletedCount > 0 {
-                cacheChanged = true
+            if deleted.count > 0 {
+                self.log.debug("Starting deletion of %d samples", deleted.count)
+                let cacheDeletedCount = self.deleteCachedObjects(forSampleUUIDs: deleted.map { $0.uuid })
+                if cacheDeletedCount > 0 {
+                    cacheChanged = true
+                }
+                self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
             }
-            self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
 
             let cachePredicate = NSPredicate(format: "startDate < %@", self.earliestCacheDate as NSDate)
             self.purgeCachedObjects(matching: cachePredicate)
@@ -396,20 +398,14 @@ extension InsulinDeliveryStore {
         var deleted = 0
 
         cacheStore.managedObjectContext.performAndWait {
-            for batch in uuids.chunked(into: batchSize) {
-                for object in self.cacheStore.managedObjectContext.cachedInsulinDeliveryObjectsWithUUIDs(Array(batch)) {
 
-                    self.cacheStore.managedObjectContext.delete(object)
-                    self.log.default("Deleted CachedInsulinDeliveryObject with UUID %{public}@", object.uuid?.uuidString ?? "")
-                    deleted += 1
+            for batch in uuids.chunked(into: batchSize) {
+                let predicate = NSPredicate(format: "uuid IN %@", batch.map { $0 as NSUUID })
+                if let count = try? cacheStore.managedObjectContext.purgeObjects(of: CachedInsulinDeliveryObject.self, matching: predicate) {
+                    deleted += count
                 }
             }
-
-            if deleted > 0 {
-                self.cacheStore.save()
-            }
         }
-
         return deleted
     }
 

@@ -119,6 +119,7 @@ public class HealthKitSampleStore {
             }
 
             if let query = observerQuery {
+                log.debug("Executing observerQuery %@", query)
                 healthStore.execute(query)
             }
         }
@@ -155,9 +156,6 @@ public class HealthKitSampleStore {
     }
     internal let lockedQueryAnchor: Locked<HKQueryAnchor?>
 
-    // Valid to mutate only from the HealthKit query response queue
-    private var lastQueriedAnchor: HKQueryAnchor?
-
     func queryAnchorDidChange() {
         // Subclasses can override
     }
@@ -175,12 +173,6 @@ public class HealthKitSampleStore {
 
         let queryAnchor = self.queryAnchor
 
-        if let lastQueriedAnchor = lastQueriedAnchor, let queryAnchor = queryAnchor, queryAnchor == lastQueriedAnchor {
-            log.default("%@ notified with changes but we've already queried for anchor: %{public}@", query, String(describing: queryAnchor))
-            return
-        }
-
-        lastQueriedAnchor = queryAnchor
         log.default("%@ notified with changes. Fetching from: %{public}@", query, queryAnchor.map(String.init(describing:)) ?? "0")
 
         let anchoredObjectQuery = HKAnchoredObjectQuery(
@@ -199,9 +191,6 @@ public class HealthKitSampleStore {
             
             if anchor != nil {
                 self.queryAnchor = anchor
-            } else {
-                // If we received an error, reset the last queried anchor
-                self.lastQueriedAnchor = nil
             }
         }
 
