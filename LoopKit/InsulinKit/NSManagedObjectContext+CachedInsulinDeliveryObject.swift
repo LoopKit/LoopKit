@@ -11,12 +11,15 @@ import CoreData
 
 extension NSManagedObjectContext {
     internal func cachedInsulinDeliveryObjectsWithUUIDs(_ uuids: [UUID], fetchLimit: Int? = nil) -> [CachedInsulinDeliveryObject] {
+        guard uuids.count > 0 else {
+            return []
+        }
+
         let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
         if let limit = fetchLimit {
             request.fetchLimit = limit
         }
         request.predicate = NSPredicate(format: "uuid IN %@", uuids.map { $0 as NSUUID })
-        request.sortDescriptors = [NSSortDescriptor(key: "uuid", ascending: true)]
 
         return (try? fetch(request)) ?? []
     }
@@ -27,7 +30,6 @@ extension NSManagedObjectContext {
             request.fetchLimit = limit
         }
         request.predicate = NSPredicate(format: "uuid == %@", uuid as NSUUID)
-        request.sortDescriptors = [NSSortDescriptor(key: "uuid", ascending: true)]
 
         return (try? fetch(request)) ?? []
     }

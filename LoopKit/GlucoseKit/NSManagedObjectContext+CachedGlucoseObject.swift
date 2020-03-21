@@ -12,12 +12,15 @@ import CoreData
 extension NSManagedObjectContext {
     
     internal func cachedGlucoseObjectsWithUUIDs(_ uuids: [UUID], fetchLimit: Int? = nil) -> [CachedGlucoseObject] {
+        guard uuids.count > 0 else {
+            return []
+        }
+
         let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
         if let limit = fetchLimit {
             request.fetchLimit = limit
         }
         request.predicate = NSPredicate(format: "uuid IN %@", uuids.map { $0 as NSUUID })
-        request.sortDescriptors = [NSSortDescriptor(key: "uuid", ascending: true)]
         
         let results: [CachedGlucoseObject]
         do {

@@ -501,6 +501,10 @@ extension CarbStore {
 
 extension NSManagedObjectContext {
     fileprivate func cachedCarbObjectsWithUUIDs(_ uuids: [UUID], fetchLimit: Int? = nil) -> [CachedCarbObject] {
+        guard uuids.count > 0 else {
+            return []
+        }
+        
         let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
         if let limit = fetchLimit {
             request.fetchLimit = limit

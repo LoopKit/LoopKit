@@ -84,15 +84,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
     // MARK: - HealthKitSampleStore
 
     override func queryAnchorDidChange() {
-        let encoded = NSKeyedArchiver.archivedData(withRootObject: queryAnchor as Any)
-        cacheStore.updateMetadata(key: InsulinDeliveryStore.queryAnchorMetadataKey, value: encoded)
-        cacheStore.save { (error) in
-            if let error = error {
-                self.log.default("Failed to save queryAnchor metadata: %{public}@", String(describing: error))
-            } else {
-                self.log.default("Saved queryAnchor %{public}@", String(describing: self.queryAnchor))
-            }
-        }
+        cacheStore.storeAnchor(queryAnchor, key: InsulinDeliveryStore.queryAnchorMetadataKey)
     }
 
     public override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {

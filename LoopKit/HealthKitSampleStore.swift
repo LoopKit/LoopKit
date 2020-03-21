@@ -148,13 +148,16 @@ public class HealthKitSampleStore {
                     changed = true
                 }
             }
-            if(changed) {
+            if changed {
                 queryAnchorDidChange()
             }
         }
     }
     internal let lockedQueryAnchor: Locked<HKQueryAnchor?>
-    
+
+    // Valid to mutate only from the HealthKit query response queue
+    private var lastQueriedAnchor: HKQueryAnchor?
+
     func queryAnchorDidChange() {
         // Subclasses can override
     }
@@ -170,10 +173,20 @@ public class HealthKitSampleStore {
             return
         }
 
+        let queryAnchor = self.queryAnchor
+
+        if let lastQueriedAnchor = lastQueriedAnchor, let queryAnchor = queryAnchor, queryAnchor == lastQueriedAnchor {
+            log.default("%@ notified with changes but we've already queried for anchor: %{public}@", query, String(describing: queryAnchor))
+            return
+        }
+
+        lastQueriedAnchor = queryAnchor
+        log.default("%@ notified with changes. Fetching from: %{public}@", query, queryAnchor.map(String.init(describing:)) ?? "0")
+
         let anchoredObjectQuery = HKAnchoredObjectQuery(
-            type: self.sampleType,
-            predicate: query.predicate,
-            anchor: self.queryAnchor,
+            type: sampleType,
+            predicate: queryAnchor == nil ? query.predicate : nil,
+            anchor: queryAnchor,
             limit: HKObjectQueryNoLimit
         ) { (query, newSamples, deletedSamples, anchor, error) in
             self.log.default("%{public}@: new: %{public}d deleted: %{public}d anchor: %{public}@ error: %{public}@", #function, newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor), String(describing: error))
@@ -186,6 +199,9 @@ public class HealthKitSampleStore {
             
             if anchor != nil {
                 self.queryAnchor = anchor
+            } else {
+                // If we received an error, reset the last queried anchor
+                self.lastQueriedAnchor = nil
             }
         }
 

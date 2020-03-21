@@ -84,6 +84,8 @@ public final class GlucoseStore: HealthKitSampleStore {
     
     static let queryAnchorMetadataKey = "com.loopkit.GlucoseStore.queryAnchor"
 
+    private let startAfterDatePredicate = NSPredicate(format: "startDate >= $start")
+
     public init(
         healthStore: HKHealthStore,
         cacheStore: PersistenceController,
@@ -125,6 +127,7 @@ public final class GlucoseStore: HealthKitSampleStore {
         }
 
         dataAccessQueue.async {
+
             var newestSampleStartDateAddedByExternalSource: Date?
             var samplesAddedByExternalSourceWithinManagedDataInterval = false
             var cacheChanged = false
@@ -204,6 +207,7 @@ extension GlucoseStore {
 
         var glucose: [HKQuantitySample] = []
 
+        // this isn't great that we're blocking the calling thread here?
         cacheStore.managedObjectContext.performAndWait {
             glucose = values.compactMap {
                 guard self.cacheStore.managedObjectContext.cachedGlucoseObjectsWithSyncIdentifier($0.syncIdentifier, fetchLimit: 1).count == 0 else {
@@ -220,6 +224,7 @@ extension GlucoseStore {
                 if let error = error {
                     completion(.failure(error))
                 } else if completed {
+
                     self.addCachedObjects(for: glucose)
                     self.purgeOldGlucoseSamples(includingManagedDataBefore: nil)
                     self.updateLatestGlucose()
@@ -367,12 +372,13 @@ extension GlucoseStore {
     }
 
     private func getCachedGlucoseObjects(start: Date, end: Date? = nil) -> [StoredGlucoseSample] {
+        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
         let predicate: NSPredicate
 
         if let end = end {
             predicate = NSPredicate(format: "startDate >= %@ AND startDate <= %@", start as NSDate, end as NSDate)
         } else {
-            predicate = NSPredicate(format: "startDate >= %@", start as NSDate)
+            predicate = startAfterDatePredicate.withSubstitutionVariables(["start": start])
         }
 
         return getCachedGlucoseObjects(matching: predicate)
@@ -473,9 +479,9 @@ extension GlucoseStore {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
 
         cacheStore.managedObjectContext.performAndWait {
+
             do {
                 let count = try cacheStore.managedObjectContext.purgeObjects(of: CachedGlucoseObject.self, matching: predicate)
-                self.log.default("Deleted %d CachedGlucoseObjects", count)
             } catch let error {
                 self.log.error("Unable to purge CachedGlucoseObjects: %@", String(describing: error))
             }
