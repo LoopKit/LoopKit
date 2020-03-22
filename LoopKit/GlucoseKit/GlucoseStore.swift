@@ -81,6 +81,10 @@ public final class GlucoseStore: HealthKitSampleStore {
     private let lockedLatestGlucose = Locked<GlucoseValue?>(nil)
 
     public let cacheStore: PersistenceController
+    
+    static let queryAnchorMetadataKey = "com.loopkit.GlucoseStore.queryAnchor"
+
+    private let startAfterDatePredicate = NSPredicate(format: "startDate >= $start")
 
     public init(
         healthStore: HKHealthStore,
@@ -92,17 +96,30 @@ public final class GlucoseStore: HealthKitSampleStore {
         self.cacheStore = cacheStore
         self.momentumDataInterval = momentumDataInterval
         self.cacheLength = max(cacheLength, momentumDataInterval)
+        
 
         super.init(healthStore: healthStore, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -cacheLength), observationEnabled: observationEnabled)
 
         cacheStore.onReady { (error) in
-            self.dataAccessQueue.async {
-                self.updateLatestGlucose()
+            cacheStore.fetchAnchor(key: GlucoseStore.queryAnchorMetadataKey) { (anchor) in
+                self.dataAccessQueue.async {
+                    self.queryAnchor = anchor
+                    
+                    if !self.authorizationRequired {
+                        self.createQuery()
+                    }
+                    
+                    self.updateLatestGlucose()
+                }
             }
         }
     }
 
     // MARK: - HealthKitSampleStore
+    
+    override func queryAnchorDidChange() {
+        cacheStore.storeAnchor(queryAnchor, key: GlucoseStore.queryAnchorMetadataKey)
+    }
 
     override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {
         guard error == nil else {
@@ -110,6 +127,7 @@ public final class GlucoseStore: HealthKitSampleStore {
         }
 
         dataAccessQueue.async {
+
             var newestSampleStartDateAddedByExternalSource: Date?
             var samplesAddedByExternalSourceWithinManagedDataInterval = false
             var cacheChanged = false
@@ -131,11 +149,12 @@ public final class GlucoseStore: HealthKitSampleStore {
             }
 
             // Deleted samples
-            for sample in deleted {
-                if self.deleteCachedObject(forSampleUUID: sample.uuid) {
-                    cacheChanged = true
-                }
+            self.log.debug("Starting deletion of %d samples", deleted.count)
+            let cacheDeletedCount = self.deleteCachedObjects(forSampleUUIDs: deleted.map { $0.uuid })
+            if cacheDeletedCount > 0 {
+                cacheChanged = true
             }
+            self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
 
             if let startDate = newestSampleStartDateAddedByExternalSource {
                 self.purgeOldGlucoseSamples(includingManagedDataBefore: startDate)
@@ -188,6 +207,7 @@ extension GlucoseStore {
 
         var glucose: [HKQuantitySample] = []
 
+        // this isn't great that we're blocking the calling thread here?
         cacheStore.managedObjectContext.performAndWait {
             glucose = values.compactMap {
                 guard self.cacheStore.managedObjectContext.cachedGlucoseObjectsWithSyncIdentifier($0.syncIdentifier, fetchLimit: 1).count == 0 else {
@@ -204,6 +224,7 @@ extension GlucoseStore {
                 if let error = error {
                     completion(.failure(error))
                 } else if completed {
+
                     self.addCachedObjects(for: glucose)
                     self.purgeOldGlucoseSamples(includingManagedDataBefore: nil)
                     self.updateLatestGlucose()
@@ -351,12 +372,13 @@ extension GlucoseStore {
     }
 
     private func getCachedGlucoseObjects(start: Date, end: Date? = nil) -> [StoredGlucoseSample] {
+        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
         let predicate: NSPredicate
 
         if let end = end {
             predicate = NSPredicate(format: "startDate >= %@ AND startDate <= %@", start as NSDate, end as NSDate)
         } else {
-            predicate = NSPredicate(format: "startDate >= %@", start as NSDate)
+            predicate = startAfterDatePredicate.withSubstitutionVariables(["start": start])
         }
 
         return getCachedGlucoseObjects(matching: predicate)
@@ -407,6 +429,25 @@ extension GlucoseStore {
             }
         }
     }
+    
+    private func deleteCachedObjects(forSampleUUIDs uuids: [UUID], batchSize: Int = 500) -> Int {
+        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
+
+        var deleted = 0
+
+        for batch in uuids.chunked(into: batchSize) {
+            let result = self.purgeCachedGlucoseObjects(matching: NSPredicate(format: "uuid IN %@", batch.map { $0 as NSUUID }))
+            switch result {
+            case .failure:
+                // ignore for now; it's already logged
+                break
+            case .success(let count):
+                deleted += count;
+            }
+        }
+
+        return deleted
+    }
 
     private func deleteCachedObject(forSampleUUID uuid: UUID) -> Bool {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
@@ -432,17 +473,22 @@ extension GlucoseStore {
         return Date(timeIntervalSinceNow: -cacheLength)
     }
 
-    private func purgeCachedGlucoseObjects(matching predicate: NSPredicate?) {
+    @discardableResult
+    private func purgeCachedGlucoseObjects(matching predicate: NSPredicate?) -> GlucoseStoreResult<Int> {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
+        
+        var result: GlucoseStoreResult<Int> = .success(0)
 
         cacheStore.managedObjectContext.performAndWait {
             do {
                 let count = try cacheStore.managedObjectContext.purgeObjects(of: CachedGlucoseObject.self, matching: predicate)
-                self.log.default("Deleted %d CachedGlucoseObjects", count)
+                result = .success(count)
             } catch let error {
                 self.log.error("Unable to purge CachedGlucoseObjects: %@", String(describing: error))
+                result = .failure(error)
             }
         }
+        return result
     }
 }
 

@@ -65,12 +65,9 @@ public class HealthKitSampleStore {
         self.observationStart = observationStart
         self.observationEnabled = observationEnabled
         self.test_currentDate = test_currentDate
+        self.lockedQueryAnchor = Locked<HKQueryAnchor?>(nil)
 
         self.log = OSLog(category: String(describing: Swift.type(of: self)))
-
-        if !authorizationRequired {
-            createQuery()
-        }
     }
 
     deinit {
@@ -93,6 +90,7 @@ public class HealthKitSampleStore {
     public func authorize(toShare: Bool = true, _ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
         healthStore.requestAuthorization(toShare: toShare ? [sampleType] : [], read: [sampleType]) { (completed, error) -> Void in
             if completed && !self.sharingDenied {
+                self.log.default("authorize completed: creating HK query")
                 self.createQuery()
                 completion(.success(true))
             } else {
@@ -121,6 +119,7 @@ public class HealthKitSampleStore {
             }
 
             if let query = observerQuery {
+                log.debug("Executing observerQuery %@", query)
                 healthStore.execute(query)
             }
         }
@@ -131,13 +130,35 @@ public class HealthKitSampleStore {
         didSet {
             // If we are now looking farther back, then reset the query
             if oldValue > observationStart {
+                log.default("observationStart changed: creating HK query")
                 createQuery()
             }
         }
     }
 
     /// The last-retreived anchor from an anchored object query
-    private var queryAnchor: HKQueryAnchor?
+    internal var queryAnchor: HKQueryAnchor? {
+        get {
+            return lockedQueryAnchor.value
+        }
+        set {
+            var changed: Bool = false
+            lockedQueryAnchor.mutate { (anchor) in
+                if anchor != newValue {
+                    anchor = newValue
+                    changed = true
+                }
+            }
+            if changed {
+                queryAnchorDidChange()
+            }
+        }
+    }
+    internal let lockedQueryAnchor: Locked<HKQueryAnchor?>
+
+    func queryAnchorDidChange() {
+        // Subclasses can override
+    }
 
     /// Called in response to an update by the observer query
     ///
@@ -150,20 +171,27 @@ public class HealthKitSampleStore {
             return
         }
 
+        let queryAnchor = self.queryAnchor
+
+        log.default("%@ notified with changes. Fetching from: %{public}@", query, queryAnchor.map(String.init(describing:)) ?? "0")
+
         let anchoredObjectQuery = HKAnchoredObjectQuery(
-            type: self.sampleType,
-            predicate: query.predicate,
-            anchor: self.queryAnchor,
+            type: sampleType,
+            predicate: queryAnchor == nil ? query.predicate : nil,
+            anchor: queryAnchor,
             limit: HKObjectQueryNoLimit
         ) { (query, newSamples, deletedSamples, anchor, error) in
-            self.log.debug("%@: new: %d deleted: %d anchor: %@ error: %@", #function, newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor), String(describing: error))
+            self.log.default("%{public}@: new: %{public}d deleted: %{public}d anchor: %{public}@ error: %{public}@", #function, newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor), String(describing: error))
 
             if let error = error {
                 self.log.error("%@: error executing anchoredObjectQuery: %@", String(describing: type(of: self)), error.localizedDescription)
             }
 
             self.processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], error: error)
-            self.queryAnchor = anchor
+            
+            if anchor != nil {
+                self.queryAnchor = anchor
+            }
         }
 
         healthStore.execute(anchoredObjectQuery)
@@ -211,8 +239,8 @@ extension HealthKitSampleStore: HKSampleQueryTestable {
 
 // MARK: - Observation
 extension HealthKitSampleStore {
-    private func createQuery() {
-        log.debug("%@ [observationEnabled: %d]", #function, observationEnabled)
+    internal func createQuery() {
+        log.default("%@ [observationEnabled: %{public}d]", #function, observationEnabled)
 
         guard observationEnabled else {
             return
@@ -231,7 +259,7 @@ extension HealthKitSampleStore {
             case .failure(let error):
                 self.log.error("Error enabling background delivery: %@", error.localizedDescription)
             case .success:
-                self.log.debug("Enabled background delivery for %@", self.sampleType)
+                self.log.default("Enabled background delivery for %{public}@", self.sampleType)
             }
         }
     }
