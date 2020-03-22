@@ -199,7 +199,7 @@ class CarbStoreTests: PersistenceControllerTestCase, CarbStoreSyncDelegate {
             addCarb1.fulfill()
         }
 
-        wait(for: [addCarb1, uploading1, addCarb2, uploading2, uploaded], timeout: 2, enforceOrder: true)
+        wait(for: [addCarb1, uploading1, addCarb2, uploading2, uploaded], timeout: 4, enforceOrder: true)
     }
 
     /// Adds an entry with a failed upload, validates its requested again for sync on next entry
