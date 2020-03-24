@@ -590,7 +590,7 @@
 		B4A2AAB3240832350066563F /* MultipleSelectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A2AAB2240832350066563F /* MultipleSelectionList.swift */; };
 		B4C004D12416961300B40429 /* GuidePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B3241085DB00B40429 /* GuidePage.swift */; };
 		B4C004D22416961300B40429 /* GuideNavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */; };
-		B4C004D32416961300B40429 /* GuideButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B2241085DB00B40429 /* GuideButtonStyle.swift */; };
+		B4C004D32416961300B40429 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B2241085DB00B40429 /* ActionButton.swift */; };
 		B4C004D42416962600B40429 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B8241085FE00B40429 /* Color.swift */; };
 		C164A56022F14C73000E3FA5 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A55F22F14C73000E3FA5 /* UnfinalizedDose.swift */; };
 		C164A56422F21081000E3FA5 /* MockPumpManagerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */; };
@@ -1235,7 +1235,7 @@
 		B46B62B223FF0E62001E69BA /* SelectableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableLabel.swift; sourceTree = "<group>"; };
 		B4A2AAB0240830A30066563F /* LabeledTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledTextField.swift; sourceTree = "<group>"; };
 		B4A2AAB2240832350066563F /* MultipleSelectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleSelectionList.swift; sourceTree = "<group>"; };
-		B4C004B2241085DB00B40429 /* GuideButtonStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuideButtonStyle.swift; sourceTree = "<group>"; };
+		B4C004B2241085DB00B40429 /* ActionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		B4C004B3241085DB00B40429 /* GuidePage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuidePage.swift; sourceTree = "<group>"; };
 		B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuideNavigationButton.swift; sourceTree = "<group>"; };
 		B4C004B8241085FE00B40429 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
@@ -1511,7 +1511,7 @@
 				B4A2AAB2240832350066563F /* MultipleSelectionList.swift */,
 				B4C004B3241085DB00B40429 /* GuidePage.swift */,
 				B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */,
-				B4C004B2241085DB00B40429 /* GuideButtonStyle.swift */,
+				B4C004B2241085DB00B40429 /* ActionButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2601,7 +2601,7 @@
 				B46B62A723FEFE4D001E69BA /* InstructionList.swift in Sources */,
 				8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */,
 				43F5034D210599CC009FA89A /* AuthenticationViewController.swift in Sources */,
-				B4C004D32416961300B40429 /* GuideButtonStyle.swift in Sources */,
+				B4C004D32416961300B40429 /* ActionButton.swift in Sources */,
 				895FE08922011F0C00FCF18A /* OverrideSelectionHeaderView.swift in Sources */,
 				898E6E67224179310019E459 /* BaseHUDView.swift in Sources */,
 				43F5034F210599DF009FA89A /* ValidatingIndicatorView.swift in Sources */,
