@@ -29,20 +29,17 @@ public struct GuideNavigationButton<Destination>: View where Destination: View {
     }
     
     public var body: some View {
-        ZStack(alignment: .leading) {
-            NavigationLink(destination: destination(),
-                           isActive: self.$navigationLinkIsActive)
-            {
-                EmptyView()
-            }
-            .disabled(true)
+        NavigationLink(destination: destination(),
+                       isActive: self.$navigationLinkIsActive)
+        {
             Button(action: {
                 self.buttonPressedAction?()
-                self.navigationLinkIsActive.toggle()
+                self.navigationLinkIsActive = true
             }) {
                 Text(label)
                     .guideButtonStyle(buttonStyle)
             }
         }
+        .isDetailLink(false)
     }
 }
