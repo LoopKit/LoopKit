@@ -609,6 +609,10 @@
 		C188B83422CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C188B83322CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift */; };
 		C1A174EC23DEAD670034DF11 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C1A174ED23DEAD6A0034DF11 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
+		C1E4B305242E98E900E70CCB /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B303242E98E900E70CCB /* ProgressView.swift */; };
+		C1E4B306242E98E900E70CCB /* ProgressIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */; };
+		C1E4B308242E995200E70CCB /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B307242E995200E70CCB /* ActivityIndicator.swift */; };
+		C1E4B30A242E99A800E70CCB /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B309242E99A800E70CCB /* Image.swift */; };
 		C1F8403923DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C1F8403A23DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
 		C1F8B1E2223C3CC000DD66CF /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
@@ -1260,6 +1264,10 @@
 		C1DB55B21F2E964400C483A2 /* ExponentialInsulinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModel.swift; sourceTree = "<group>"; };
 		C1DB55B41F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_doses_exponential_output.json; sourceTree = "<group>"; };
 		C1DB55B61F2EACD500C483A2 /* iob_from_bolus_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_bolus_exponential_output.json; sourceTree = "<group>"; };
+		C1E4B303242E98E900E70CCB /* ProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
+		C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressIndicatorView.swift; sourceTree = "<group>"; };
+		C1E4B307242E995200E70CCB /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		C1E4B309242E99A800E70CCB /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceLogEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceLogEntry+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1452,6 +1460,8 @@
 		4369F090208B0D68000E3E45 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C1E4B303242E98E900E70CCB /* ProgressView.swift */,
+				C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */,
 				43F5035821059AF7009FA89A /* AuthenticationTableViewCell.swift */,
 				43F5035921059AF7009FA89A /* AuthenticationTableViewCell.xib */,
 				892A5D63222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.swift */,
@@ -1512,6 +1522,7 @@
 				B4C004B3241085DB00B40429 /* GuidePage.swift */,
 				B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */,
 				B4C004B2241085DB00B40429 /* ActionButton.swift */,
+				C1E4B307242E995200E70CCB /* ActivityIndicator.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2039,6 +2050,7 @@
 		B41A60B023D1DBB700636320 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C1E4B309242E99A800E70CCB /* Image.swift */,
 				B4C004B8241085FE00B40429 /* Color.swift */,
 				B41A60B123D1DBC700636320 /* UIFont.swift */,
 			);
@@ -2605,9 +2617,11 @@
 				895FE08922011F0C00FCF18A /* OverrideSelectionHeaderView.swift in Sources */,
 				898E6E67224179310019E459 /* BaseHUDView.swift in Sources */,
 				43F5034F210599DF009FA89A /* ValidatingIndicatorView.swift in Sources */,
+				C1E4B308242E995200E70CCB /* ActivityIndicator.swift in Sources */,
 				43BA718C201EEE5A0058961E /* NSData.swift in Sources */,
 				43F5035A21059AF7009FA89A /* AuthenticationTableViewCell.swift in Sources */,
 				43BA7163201E490D0058961E /* InsulinDeliveryTableViewController.swift in Sources */,
+				C1E4B30A242E99A800E70CCB /* Image.swift in Sources */,
 				43BA718A201EE8CF0058961E /* NSTimeInterval.swift in Sources */,
 				B4A2AAB1240830A30066563F /* LabeledTextField.swift in Sources */,
 				B46B62A923FF05F8001E69BA /* LabeledNumberInput.swift in Sources */,
@@ -2655,6 +2669,7 @@
 				43F89C9F22BDFB10006BB54E /* UIActivityIndicatorView.swift in Sources */,
 				432CF86D20D76C470066B889 /* SwitchTableViewCell.swift in Sources */,
 				43BA7188201EE85B0058961E /* HKUnit.swift in Sources */,
+				C1E4B306242E98E900E70CCB /* ProgressIndicatorView.swift in Sources */,
 				4369F092208B0DFF000E3E45 /* DateAndDurationTableViewCell.swift in Sources */,
 				43BA7189201EE8980058961E /* UITableViewCell.swift in Sources */,
 				8997B4F523727E8A00061132 /* CustomOverrideCollectionViewCell.swift in Sources */,
@@ -2680,6 +2695,7 @@
 				43BA717D201EE7090058961E /* GlucoseRangeTableViewCell.swift in Sources */,
 				43BA7184201EE7090058961E /* TextFieldTableViewController.swift in Sources */,
 				895FE09122011F4800FCF18A /* AddEditOverrideTableViewController.swift in Sources */,
+				C1E4B305242E98E900E70CCB /* ProgressView.swift in Sources */,
 				C16DA84522E9330A008624C2 /* LoopUIPlugin.swift in Sources */,
 				B46B62AD23FF0A87001E69BA /* LabeledDateView.swift in Sources */,
 				895FE06E22011E9A00FCF18A /* OverrideEmojiDataSource.swift in Sources */,
