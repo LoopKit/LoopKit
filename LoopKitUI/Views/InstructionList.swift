@@ -9,9 +9,9 @@
 import SwiftUI
 
 public struct InstructionList: View {
-    let instructions: [String]
+    let instructions: [LocalizedStringKey]
     
-    public init(instructions: [String]) {
+    public init(instructions: [LocalizedStringKey]) {
         self.instructions = instructions
     }
     
@@ -24,10 +24,12 @@ public struct InstructionList: View {
                         .background(Circle().fill(Color.accentColor))
                         .foregroundColor(.white)
                         .font(.caption)
+                        .accessibility(label: Text("\(index+1), ")) // Adds a pause after the number
                     Text(self.instructions[index])
+                        .fixedSize(horizontal: false, vertical: true)
                         .padding(2)
                 }
-                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityElement(children: .combine)
             }
         }
     }
@@ -35,7 +37,7 @@ public struct InstructionList: View {
 
 struct InstructionList_Previews: PreviewProvider {
     static var previews: some View {
-        let instructions = [
+        let instructions: [LocalizedStringKey] = [
             "This is the first step.",
             "This second step is a bit more tricky and needs more description to support the user, albeit it could be more concise.",
             "With this final step, the task will be accomplished."
