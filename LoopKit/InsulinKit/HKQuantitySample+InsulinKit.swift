@@ -123,9 +123,7 @@ extension HKQuantitySample {
     var programmedTempBasalRate: HKQuantity? {
         return metadata?[MetadataKeyProgrammedTempBasalRate] as? HKQuantity
     }
-    
-    
-    // ANNA TODO: there's a bug when reading back data from HealthKit
+
     var insulinModel: InsulinModel? {
         guard let rawType = metadata?[MetadataKeyInsulinCurveType] as? Int, let modelType = InsulinModelType(rawValue: rawType) else {
             return nil
