@@ -3279,7 +3279,7 @@
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.loopkit.LoopKit-$(PLATFORM_NAME)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -3304,7 +3304,7 @@
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.loopkit.LoopKit-$(PLATFORM_NAME)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -3467,7 +3467,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.loopkit.LoopKit-$(PLATFORM_NAME)";
 				PRODUCT_NAME = LoopKit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
@@ -3491,7 +3491,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.loopkit.LoopKit-$(PLATFORM_NAME)";
 				PRODUCT_NAME = LoopKit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
