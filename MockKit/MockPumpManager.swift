@@ -133,8 +133,15 @@ public final class MockPumpManager: TestingPumpManager {
             return status(for: self.state)
         }
     }
-
-    private func notifyObservers() {
+    
+    private func notifyStatusObservers(oldStatus: PumpManagerStatus) {
+        let status = self.status
+        delegate.notify { (delegate) in
+            delegate?.pumpManager(self, didUpdate: status, oldStatus: oldStatus)
+        }
+        statusObservers.forEach { (observer) in
+            observer.pumpManager(self, didUpdate: status, oldStatus: oldStatus)
+        }
     }
 
     public var state: MockPumpManagerState {
@@ -145,7 +152,7 @@ public final class MockPumpManager: TestingPumpManager {
             let newStatus = status(for: newValue)
 
             if oldStatus != newStatus {
-                statusObservers.forEach { $0.pumpManager(self, didUpdate: newStatus, oldStatus: oldStatus) }
+                notifyStatusObservers(oldStatus: oldStatus)
             }
 
             stateObservers.forEach { $0.mockPumpManager(self, didUpdate: self.state) }
