@@ -47,6 +47,8 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
     public let cacheLength: TimeInterval
 
     public let cacheStore: PersistenceController
+    
+    static let queryAnchorMetadataKey = "com.loopkit.InsulinDeliveryStore.queryAnchor"
 
     public init(
         healthStore: HKHealthStore,
@@ -67,8 +69,22 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
         )
 
         cacheStore.onReady { (error) in
-            // Should we do something here?
+            cacheStore.fetchAnchor(key: InsulinDeliveryStore.queryAnchorMetadataKey) { (anchor) in
+                self.queue.async {
+                    self.queryAnchor = anchor
+
+                    if !self.authorizationRequired {
+                        self.createQuery()
+                    }
+                }
+            }
         }
+    }
+    
+    // MARK: - HealthKitSampleStore
+
+    override func queryAnchorDidChange() {
+        cacheStore.storeAnchor(queryAnchor, key: InsulinDeliveryStore.queryAnchorMetadataKey)
     }
 
     public override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {
@@ -86,10 +102,13 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
             }
 
             // Deleted samples
-            for sample in deleted {
-                if self.deleteCachedObject(forSampleUUID: sample.uuid) {
+            if deleted.count > 0 {
+                self.log.debug("Starting deletion of %d samples", deleted.count)
+                let cacheDeletedCount = self.deleteCachedObjects(forSampleUUIDs: deleted.map { $0.uuid })
+                if cacheDeletedCount > 0 {
                     cacheChanged = true
                 }
+                self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
             }
 
             let cachePredicate = NSPredicate(format: "startDate < %@", self.earliestCacheDate as NSDate)
@@ -367,6 +386,27 @@ extension InsulinDeliveryStore {
         }
 
         return doses
+    }
+
+    /// Deletes objects from the cache that match the given sample UUID
+    ///
+    /// - Parameter uuid: The UUID of the sample to delete
+    /// - Returns: Whether the deletion was made
+    private func deleteCachedObjects(forSampleUUIDs uuids: [UUID], batchSize: Int = 500) -> Int {
+        dispatchPrecondition(condition: .onQueue(queue))
+
+        var deleted = 0
+
+        cacheStore.managedObjectContext.performAndWait {
+
+            for batch in uuids.chunked(into: batchSize) {
+                let predicate = NSPredicate(format: "uuid IN %@", batch.map { $0 as NSUUID })
+                if let count = try? cacheStore.managedObjectContext.purgeObjects(of: CachedInsulinDeliveryObject.self, matching: predicate) {
+                    deleted += count
+                }
+            }
+        }
+        return deleted
     }
 
     /// Deletes objects from the cache that match the given sample UUID

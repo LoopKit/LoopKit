@@ -40,6 +40,13 @@ public class HealthKitSampleStore {
     /// Whether the store is observing changes to types
     public let observationEnabled: Bool
 
+    /// The last observer query completion, stored until the next anchored object query returns
+    private var observerQueryCompletionHandler: HKObserverQueryCompletionHandler? {
+        didSet {
+            oldValue?()
+        }
+    }
+
     /// For unit testing only.
     internal var testQueryStore: HKSampleQueryTestable?
 
@@ -65,12 +72,9 @@ public class HealthKitSampleStore {
         self.observationStart = observationStart
         self.observationEnabled = observationEnabled
         self.test_currentDate = test_currentDate
+        self.lockedQueryAnchor = Locked<HKQueryAnchor?>(nil)
 
         self.log = OSLog(category: String(describing: Swift.type(of: self)))
-
-        if !authorizationRequired {
-            createQuery()
-        }
     }
 
     deinit {
@@ -93,6 +97,7 @@ public class HealthKitSampleStore {
     public func authorize(toShare: Bool = true, _ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
         healthStore.requestAuthorization(toShare: toShare ? [sampleType] : [], read: [sampleType]) { (completed, error) -> Void in
             if completed && !self.sharingDenied {
+                self.log.default("authorize completed: creating HK query")
                 self.createQuery()
                 completion(.success(true))
             } else {
@@ -120,7 +125,11 @@ public class HealthKitSampleStore {
                 healthStore.stop(query)
             }
 
+            // Clear any existing completion handler (after calling it)
+            observerQueryCompletionHandler = nil
+
             if let query = observerQuery {
+                log.debug("Executing observerQuery %@", query)
                 healthStore.execute(query)
             }
         }
@@ -131,42 +140,67 @@ public class HealthKitSampleStore {
         didSet {
             // If we are now looking farther back, then reset the query
             if oldValue > observationStart {
+                log.default("observationStart changed: creating HK query")
                 createQuery()
             }
         }
     }
 
     /// The last-retreived anchor from an anchored object query
-    private var queryAnchor: HKQueryAnchor?
+    internal var queryAnchor: HKQueryAnchor? {
+        get {
+            return lockedQueryAnchor.value
+        }
+        set {
+            var changed: Bool = false
+            lockedQueryAnchor.mutate { (anchor) in
+                if anchor != newValue {
+                    anchor = newValue
+                    changed = true
+                }
+            }
+            if changed {
+                queryAnchorDidChange()
+            }
+        }
+    }
+    internal let lockedQueryAnchor: Locked<HKQueryAnchor?>
+
+    func queryAnchorDidChange() {
+        // Subclasses can override
+    }
 
     /// Called in response to an update by the observer query
     ///
     /// - Parameters:
     ///   - query: The query which triggered the update
     ///   - error: An error during the update, if one occurred
-    internal func observeUpdates(to query: HKObserverQuery, error: Error?) {
-        guard error == nil else {
-            log.error("%@ notified with changes with error: %{public}@", query, String(describing: error))
+    internal func observeUpdates(to query: HKObserverQuery, completionHandler: HKObserverQueryCompletionHandler?, error: Error?) {
+        if let error = error {
+            self.log.error("%@ notified with changes with error: %{public}@", query, String(describing: error))
             return
         }
 
-        let anchoredObjectQuery = HKAnchoredObjectQuery(
-            type: self.sampleType,
-            predicate: query.predicate,
-            anchor: self.queryAnchor,
-            limit: HKObjectQueryNoLimit
-        ) { (query, newSamples, deletedSamples, anchor, error) in
-            self.log.debug("%@: new: %d deleted: %d anchor: %@ error: %@", #function, newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor), String(describing: error))
+        // Hold the completion handler (calling any existing ones) until our next anchored object query returns
+        self.observerQueryCompletionHandler = completionHandler
 
-            if let error = error {
-                self.log.error("%@: error executing anchoredObjectQuery: %@", String(describing: type(of: self)), error.localizedDescription)
-            }
+        let queryAnchor = self.queryAnchor
+        log.default("%@ notified with changes. Fetching from: %{public}@", query, queryAnchor.map(String.init(describing:)) ?? "0")
 
-            self.processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], error: error)
-            self.queryAnchor = anchor
+        createAnchoredObjectQuery(predicate: query.predicate, anchor: queryAnchor)
+    }
+
+    private final func anchoredObjectQueryResultsHandler(query: HKAnchoredObjectQuery, newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, anchor: HKQueryAnchor?, error: Error?) {
+        log.default("anchoredObjectQuery.resultsHandler: new: %{public}d deleted: %{public}d anchor: %{public}@ error: %{public}@", newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor), String(describing: error))
+
+        // Clear any existing completion handler (after calling it)
+        observerQueryCompletionHandler = nil
+
+        processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], error: error)
+
+        if anchor != nil {
+            queryAnchor = anchor
         }
-
-        healthStore.execute(anchoredObjectQuery)
     }
 
     /// Called in response to new results from an anchored object query
@@ -211,8 +245,8 @@ extension HealthKitSampleStore: HKSampleQueryTestable {
 
 // MARK: - Observation
 extension HealthKitSampleStore {
-    private func createQuery() {
-        log.debug("%@ [observationEnabled: %d]", #function, observationEnabled)
+    internal func createQuery() {
+        log.default("%@ [observationEnabled: %{public}d]", #function, observationEnabled)
 
         guard observationEnabled else {
             return
@@ -220,10 +254,12 @@ extension HealthKitSampleStore {
 
         let predicate = HKQuery.predicateForSamples(withStart: observationStart, end: nil)
 
-        observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { [weak self] (query, completionHandler, error) in
-            self?.observeUpdates(to: query, error: error)
+        createObserverQuery(predicate: predicate)
+    }
 
-            completionHandler()
+    private func createObserverQuery(predicate: NSPredicate) {
+        observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { [weak self] (query, completionHandler, error) in
+            self?.observeUpdates(to: query, completionHandler: completionHandler, error: error)
         }
 
         enableBackgroundDelivery { (result) in
@@ -231,9 +267,22 @@ extension HealthKitSampleStore {
             case .failure(let error):
                 self.log.error("Error enabling background delivery: %@", error.localizedDescription)
             case .success:
-                self.log.debug("Enabled background delivery for %@", self.sampleType)
+                self.log.default("Enabled background delivery for %{public}@", self.sampleType)
             }
         }
+    }
+
+    private func createAnchoredObjectQuery(predicate: NSPredicate?, anchor: HKQueryAnchor?) {
+        let anchoredObjectQuery = HKAnchoredObjectQuery(
+            type: sampleType,
+            predicate: anchor == nil ? predicate : nil,
+            anchor: anchor,
+            limit: HKObjectQueryNoLimit
+        ) { (query, newSamples, deletedSamples, anchor, error) in
+            self.anchoredObjectQueryResultsHandler(query: query, newSamples: newSamples, deletedSamples: deletedSamples, anchor: anchor, error: error)
+        }
+
+        healthStore.execute(anchoredObjectQuery)
     }
 
     /// Enables the immediate background delivery of updates to samples from HealthKit.
