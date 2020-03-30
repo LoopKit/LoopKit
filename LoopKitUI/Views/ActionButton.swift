@@ -1,5 +1,5 @@
 //
-//  GuideButtonStyle.swift
+//  ActionButton.swift
 //  LoopKitUI
 //
 //  Created by Pete Schwamb on 2020-03-04.
@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-public struct GuideButtonStyle: ViewModifier {
+public struct ActionButton: ViewModifier {
     private let fontColor: Color
     private let backgroundColor: Color
     private let edgeColor: Color
-    private let cornerRadius: CGFloat = 8
+    private let cornerRadius: CGFloat = 10
     
     public enum ButtonType {
         case primary
@@ -51,7 +51,7 @@ public struct GuideButtonStyle: ViewModifier {
 }
 
 public extension View {
-    func guideButtonStyle(_ style: GuideButtonStyle.ButtonType = .primary) -> some View {
-        ModifiedContent(content: self, modifier: GuideButtonStyle(style))
+    func actionButtonStyle(_ style: ActionButton.ButtonType = .primary) -> some View {
+        ModifiedContent(content: self, modifier: ActionButton(style))
     }
 }

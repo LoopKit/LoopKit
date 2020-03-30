@@ -8,34 +8,54 @@
 
 import SwiftUI
 
-public struct GuidePage<Content>: View where Content: View {
-    
-    let content: () -> Content
-    
-    public init(@ViewBuilder content: @escaping () -> Content) {
-        self.content = content
+public struct GuidePage<Content, ActionAreaContent>: View where Content: View, ActionAreaContent: View {
+    let content: Content
+    let actionAreaContent: ActionAreaContent
+
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+
+    public init(@ViewBuilder content: @escaping () -> Content,
+         @ViewBuilder actionAreaContent: @escaping () -> ActionAreaContent)
+    {
+        self.content = content()
+        self.actionAreaContent = actionAreaContent()
     }
-    
+
     public var body: some View {
-        GeometryReader { geometry in
-            ScrollView {
-                VStack {
-                    self.content()
+        VStack(spacing: 0) {
+            List {
+                if self.horizontalSizeClass == .compact {
+                    Section(header: EmptyView(), footer: EmptyView()) {
+                        self.content
+                    }
+                } else {
+                    self.content
                 }
-                .padding()
-                .frame(minHeight: geometry.size.height)
-                .background(Color(UIColor.systemGroupedBackground))
             }
+            .environment(\.horizontalSizeClass, self.horizontalSizeClass)
+            .listStyle(GroupedListStyle())
+            VStack {
+                self.actionAreaContent
+            }
+            .background(Color(UIColor.systemBackground).shadow(radius: 5))
         }
     }
 }
 
 struct GuidePage_Previews: PreviewProvider {
     static var previews: some View {
-        GuidePage() {
+        GuidePage(content: {
             Text("content")
             Text("more content")
             Image(systemName: "circle")
+        }) {
+            Button(action: {
+                print("Button tapped")
+            }) {
+                Text("Action Button")
+                    .actionButtonStyle()
+            }
         }
     }
 }
+

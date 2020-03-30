@@ -12,13 +12,13 @@ public struct GuideNavigationButton<Destination>: View where Destination: View {
     @Binding var navigationLinkIsActive: Bool
     private let label: String
     private let buttonPressedAction: (() -> Void)?
-    private let buttonStyle: GuideButtonStyle.ButtonType
+    private let buttonStyle: ActionButton.ButtonType
     private let destination: () -> Destination
     
     public init(navigationLinkIsActive: Binding<Bool>,
                 label: String,
                 buttonPressedAction: (() -> Void)? = nil,
-                buttonStyle: GuideButtonStyle.ButtonType = .primary,
+                buttonStyle: ActionButton.ButtonType = .primary,
                 @ViewBuilder destination: @escaping () -> Destination)
     {
         self._navigationLinkIsActive = navigationLinkIsActive
@@ -37,7 +37,7 @@ public struct GuideNavigationButton<Destination>: View where Destination: View {
                 self.navigationLinkIsActive = true
             }) {
                 Text(label)
-                    .guideButtonStyle(buttonStyle)
+                    .actionButtonStyle(buttonStyle)
             }
         }
         .isDetailLink(false)
