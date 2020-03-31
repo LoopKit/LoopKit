@@ -202,7 +202,7 @@ extension PumpEvent {
             }
             
             var model: InsulinModel? = nil
-            
+
             switch modelType {
             case .walsh:
                 model = WalshInsulinModel(actionDuration: modelDuration!, delay: modelDelay ?? 600)

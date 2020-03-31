@@ -751,7 +751,13 @@ extension DoseStore {
                 object.title = event.title
                 object.type = event.type
                 object.mutable = event.isMutable
-                object.dose = event.dose
+                if let defaultModel = self.defaultInsulinModel {
+                    object.dose = event.dose?.annotateDoseWithInsulinModel(model: defaultModel)
+                } else {
+                    object.dose = event.dose
+                }
+                
+                
             }
 
             // Only change pumpEventQueryAfterDate if we received new finalized records.
@@ -934,7 +940,13 @@ extension DoseStore {
                 return
             }
 
-            let reconciledDoses = doses.overlayBasalSchedule(basalSchedule, startingAt: startingAt, endingAt: endingAt, insertingBasalEntries: !self.pumpRecordsBasalProfileStartEvents)
+            var reconciledDoses = doses.overlayBasalSchedule(basalSchedule, startingAt: startingAt, endingAt: endingAt, insertingBasalEntries: !self.pumpRecordsBasalProfileStartEvents)
+            
+            // Annotate doses with the default insulin model before saving to keep track of insulin models if settings are changed
+            if let model = self.defaultInsulinModel {
+                reconciledDoses = reconciledDoses.annotatedWithInsulinModel(model: model)
+            }
+            
             completion(.success(reconciledDoses))
         }
     }
@@ -1116,12 +1128,7 @@ extension DoseStore {
         // Ignore any doses which have not yet ended by the specified date.
         // Also, since we are retrieving dosing history older than basalStart for
         // reconciliation purposes, we need to filter that out after reconciliation.
-        var normalizedDoses = doses.reconciled().filter({ $0.endDate <= end }).annotated(with: basalProfile).filter({ $0.startDate >= basalStart || $0.type == .bolus })
-        
-        // Annotate doses with the default insulin model before saving to keep track of insulin models if settings are changed
-        if let model = defaultInsulinModel {
-            normalizedDoses = normalizedDoses.annotatedWithInsulinModel(model: model)
-        }
+        let normalizedDoses = doses.reconciled().filter({ $0.endDate <= end }).annotated(with: basalProfile).filter({ $0.startDate >= basalStart || $0.type == .bolus })
 
         return normalizedDoses
     }

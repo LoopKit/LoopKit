@@ -285,7 +285,7 @@ extension DoseEntry {
     ///
     /// - Parameter model: The insulin model to annotate the dose with.
     /// - Returns: A dose annotated with the insulin model
-    fileprivate func annotatedWithInsulinModel(model: InsulinModel) -> DoseEntry {
+    func annotateDoseWithInsulinModel(model: InsulinModel) -> DoseEntry {
         guard insulinModel == nil else {
             return self
         }
@@ -469,14 +469,14 @@ extension Collection where Element == DoseEntry {
     ///
     /// If a dose already has an associated insulin model, the model will remain the same.
     ///
-    /// - Parameter basalSchedule: The basal rate schedule
+    /// - Parameter model: an insulin model to annotate the doses with if they do not currently have a model
     /// - Returns: An array of annotated dose entries
     func annotatedWithInsulinModel(model: InsulinModel) -> [DoseEntry] {
         var annotatedDoses: [DoseEntry] = []
 
         for dose in self {
             annotatedDoses.append(
-                dose.annotatedWithInsulinModel(model: model)
+                dose.annotateDoseWithInsulinModel(model: model)
             )
         }
 
