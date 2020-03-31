@@ -191,6 +191,8 @@ public final class MockPumpManager: TestingPumpManager {
     private var statusObservers = WeakSynchronizedSet<PumpManagerStatusObserver>()
     private var stateObservers = WeakSynchronizedSet<MockPumpManagerStateObserver>()
 
+    private var pumpUpdateTimer: Timer?
+    
     public init() {
         state = MockPumpManagerState(
             reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity,
@@ -212,6 +214,22 @@ public final class MockPumpManager: TestingPumpManager {
             return nil
         }
         self.state = state
+        
+        setupPumpUpdateTimer()
+    }
+    
+    deinit {
+        pumpUpdateTimer?.invalidate()
+    }
+    
+    private func setupPumpUpdateTimer() {
+        pumpUpdateTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.delegate.notify { (d) in
+                d?.pumpManagerBLEHeartbeatDidFire(self)
+            }
+        }
     }
 
     public var rawState: RawStateValue {
