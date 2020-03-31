@@ -17,7 +17,7 @@
 "com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Tämä näyte voidaan poistaa Terveys-sovelluksesta";
 
 /* Generic pump error description */
-"Communication Failure" = "Yhteys epäonnistui";
+"Communication Failure" = "Kommunikaatiovirhe";
 
 /* Generic pump error description */
 "Connection Failure" = "Yhteysvirhe";
