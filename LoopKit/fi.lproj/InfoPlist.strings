@@ -1,6 +1,0 @@
-/* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "Terveys-tietokannan ateriatietoja käytetään glukoosivaikutusten määrittämiseen. Glukoositiedot haetaan HealthKitistä ja sitä käytetään graafeissa ja analyysissä.";
-
-/* Privacy - Health Update Usage Description */
-"NSHealthUpdateUsageDescription" = "Sovelluksessa tallennetut hiilihydraattitiedot tallennetaan Terveys-tietokantaan. Glukoositiedot tallennetaan turvallisesti HealthKitiin.";
-
