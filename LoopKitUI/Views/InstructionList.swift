@@ -9,9 +9,9 @@
 import SwiftUI
 
 public struct InstructionList: View {
-    let instructions: [LocalizedStringKey]
+    let instructions: [String]
     
-    public init(instructions: [LocalizedStringKey]) {
+    public init(instructions: [String]) {
         self.instructions = instructions
     }
     
@@ -37,7 +37,7 @@ public struct InstructionList: View {
 
 struct InstructionList_Previews: PreviewProvider {
     static var previews: some View {
-        let instructions: [LocalizedStringKey] = [
+        let instructions: [String] = [
             "This is the first step.",
             "This second step is a bit more tricky and needs more description to support the user, albeit it could be more concise.",
             "With this final step, the task will be accomplished."
