@@ -301,6 +301,7 @@
 		43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB610620DDF19B002B996B /* PumpManagerError.swift */; };
 		7D21EA3423766455001530A2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D21EA3223766455001530A2 /* Localizable.strings */; };
 		7D68A9AE1FE0A3D000522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9B01FE0A3D000522C49 /* Localizable.strings */; };
+		80F864E32433B9EE0026EC26 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 80F864E12433B9EE0026EC26 /* InfoPlist.strings */; };
 		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
 		891A3FC72247268F00378B27 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A3FC62247268F00378B27 /* Math.swift */; };
 		891A3FD12249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A3FD02249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift */; };
@@ -1034,6 +1035,7 @@
 		7D9BF14A2337133E005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D9BF14B2337133E005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D9BF14C2337133E005DCFD6 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
+		80F864E22433B9EE0026EC26 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEntryTableViewController.swift; sourceTree = "<group>"; };
 		8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineCurveParametersTableViewController.swift; sourceTree = "<group>"; };
 		891A3FC62247268F00378B27 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
@@ -1284,6 +1286,7 @@
 				435F355C1C9CD14E00C204D2 /* Extensions */,
 				4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */,
 				430158071C7EC03B00B64B63 /* Info.plist */,
+				80F864E12433B9EE0026EC26 /* InfoPlist.strings */,
 				430157F91C7EC03B00B64B63 /* AppDelegate.swift */,
 				430157FB1C7EC03B00B64B63 /* MasterViewController.swift */,
 				430158021C7EC03B00B64B63 /* Assets.xcassets */,
@@ -2239,6 +2242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D68A9AE1FE0A3D000522C49 /* Localizable.strings in Resources */,
+				80F864E32433B9EE0026EC26 /* InfoPlist.strings in Resources */,
 				430158061C7EC03B00B64B63 /* LaunchScreen.storyboard in Resources */,
 				430158031C7EC03B00B64B63 /* Assets.xcassets in Resources */,
 				430158011C7EC03B00B64B63 /* Main.storyboard in Resources */,
@@ -3101,6 +3105,14 @@
 				7D9BF14C2337133E005DCFD6 /* ro */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		80F864E12433B9EE0026EC26 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				80F864E22433B9EE0026EC26 /* fi */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
