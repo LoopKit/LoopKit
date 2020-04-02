@@ -84,6 +84,61 @@ class CachedInsulinDeliveryObject: NSManagedObject {
             primitiveProgrammedTempBasalRate = NSNumber(value: rate)
         }
     }
+    
+    var modelPeak: Double? {
+        get {
+            willAccessValue(forKey: "modelPeak")
+            defer { didAccessValue(forKey: "modelPeak") }
+            return primitiveModelPeak?.doubleValue
+        }
+        set {
+            willChangeValue(forKey: "modelPeak")
+            defer { didChangeValue(forKey: "modelPeak") }
+            primitiveModelPeak = newValue != nil ? NSNumber(value: newValue!) : nil
+        }
+    }
+    
+    var modelDelay: Double? {
+        get {
+            willAccessValue(forKey: "modelDelay")
+            defer { didAccessValue(forKey: "modelDelay") }
+            return primitiveModelDelay?.doubleValue
+        }
+        set {
+            willChangeValue(forKey: "modelDelay")
+            defer { didChangeValue(forKey: "modelDelay") }
+            primitiveModelDelay = newValue != nil ? NSNumber(value: newValue!) : nil
+        }
+    }
+    
+    var modelDuration: Double? {
+        get {
+            willAccessValue(forKey: "modelDuration")
+            defer { didAccessValue(forKey: "modelDuration") }
+            return primitiveModelDuration?.doubleValue
+        }
+        set {
+            willChangeValue(forKey: "modelDuration")
+            defer { didChangeValue(forKey: "modelDuration") }
+            primitiveModelDuration = newValue != nil ? NSNumber(value: newValue!) : nil
+        }
+    }
+    
+    private var modelType: InsulinModelType? {
+        get {
+            willAccessValue(forKey: "modelType")
+            defer { didAccessValue(forKey: "modelType") }
+            guard let type = primitiveModelType else {
+                return nil
+            }
+            return InsulinModelType(rawValue: type.intValue)
+        }
+        set {
+            willChangeValue(forKey: "modelType")
+            defer { didChangeValue(forKey: "modelType") }
+            primitiveModelType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
+        }
+    }
 
     override func awakeFromInsert() {
         super.awakeFromInsert()
@@ -94,6 +149,37 @@ class CachedInsulinDeliveryObject: NSManagedObject {
 
 
 extension CachedInsulinDeliveryObject {
+    var insulinModel: InsulinModel? {
+        get {
+            switch modelType {
+            case .walsh:
+                return WalshInsulinModel(actionDuration: modelDuration!, delay: modelDelay ?? 600)
+            case .exponential:
+                return ExponentialInsulinModel(actionDuration: modelDuration!, peakActivityTime: modelPeak!, delay: modelDelay ?? 600)
+            default:
+                return nil
+            }
+        }
+        set {
+            guard let model = newValue else {
+                return
+            }
+            modelDuration = model.effectDuration
+            modelDelay = model.delay
+            // ANNA TODO: could this be more elegant?
+            if let model = model as? ExponentialInsulinModel {
+                modelPeak = model.peakActivityTime
+                modelType = .exponential
+            } else if let model = model as? ExponentialInsulinModelPreset {
+                // ANNA TODO: is the below bad style?
+                modelPeak = (model.getExponentialModel() as! ExponentialInsulinModel).peakActivityTime
+                modelType = .exponential
+            } else if let _ = model as? WalshInsulinModel {
+                modelType = .walsh
+            }
+        }
+    }
+    
     var dose: DoseEntry! {
         guard let startDate = startDate else {
             return nil
@@ -137,7 +223,8 @@ extension CachedInsulinDeliveryObject {
             deliveredUnits: deliveredUnits,
             description: nil,
             syncIdentifier: syncIdentifier,
-            scheduledBasalRate: scheduledBasalRate
+            scheduledBasalRate: scheduledBasalRate,
+            insulinModel: insulinModel
         )
     }
 
@@ -153,5 +240,6 @@ extension CachedInsulinDeliveryObject {
         hasLoopKitOrigin = sample.hasLoopKitOrigin
         value = sample.quantity.doubleValue(for: .internationalUnit())
         provenanceIdentifier = sample.provenanceIdentifier
+        insulinModel = sample.insulinModel
     }
 }
