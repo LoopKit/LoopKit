@@ -241,7 +241,6 @@ extension PumpEvent {
                 modelPeak = model.peakActivityTime
                 modelType = .exponential
             } else if let model = entry.insulinModel as? ExponentialInsulinModelPreset {
-                // ANNA TODO: is the below bad style?
                 modelPeak = (model.getExponentialModel() as! ExponentialInsulinModel).peakActivityTime
                 modelType = .exponential
             } else if let _ = entry.insulinModel as? WalshInsulinModel {

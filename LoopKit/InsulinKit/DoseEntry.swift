@@ -21,7 +21,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     public let insulinModel: InsulinModel?
     internal(set) public var syncIdentifier: String?
     
-    // ANNA TODO: comparison, try to make this unneeded
+    // ANNA TODO: this is needed due to the fact the insulin model doesn't conform to equatable; would it be possible to avoid having to specify this?
     public static func == (lhs: DoseEntry, rhs: DoseEntry) -> Bool {
         return lhs.type == rhs.type && lhs.startDate == rhs.startDate && lhs.endDate == rhs.endDate && lhs.value == rhs.value && lhs.deliveredUnits == rhs.deliveredUnits && lhs.description == rhs.description && lhs.insulinModel?.effectDuration == rhs.insulinModel?.effectDuration && lhs.insulinModel?.delay == rhs.insulinModel?.delay
     }

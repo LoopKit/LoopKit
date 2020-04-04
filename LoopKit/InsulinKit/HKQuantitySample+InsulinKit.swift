@@ -83,7 +83,6 @@ extension HKQuantitySample {
             metadata[MetadataKeyInsulinCurvePeak] = model.peakActivityTime
             metadata[MetadataKeyInsulinCurveType] = InsulinModelType.exponential.rawValue
         } else if let model = dose.insulinModel as? ExponentialInsulinModelPreset {
-            // ANNA TODO: is the below bad style?
             metadata[MetadataKeyInsulinCurvePeak] = (model.getExponentialModel() as! ExponentialInsulinModel).peakActivityTime
            metadata[MetadataKeyInsulinCurveType] = InsulinModelType.exponential.rawValue
         } else if let _ = dose.insulinModel as? WalshInsulinModel {

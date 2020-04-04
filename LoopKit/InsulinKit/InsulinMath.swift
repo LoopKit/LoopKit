@@ -326,8 +326,7 @@ extension DoseEntry {
         
         let netTempBasalDoses = self.annotated(with: basalRateSchedule)
         
-        // assume that temp basals will be delivered by the pump
-        // ANNA TODO: check this assumption is correct
+        // Assume that temp basals will be delivered by the pump
         return netTempBasalDoses.glucoseEffects(defaultModel: insulinModel, longestEffectDuration: insulinModel.effectDuration, insulinSensitivity: insulinSensitivity)
     }
 
@@ -385,7 +384,6 @@ extension Collection where Element == DoseEntry {
                 lastBasal = dose
             case .resume:
                 if let suspend = lastSuspend {
-                    // ANNA TODO: should the insulin model be the default?
                     reconciled.append(DoseEntry(
                         type: suspend.type,
                         startDate: suspend.startDate,
@@ -393,14 +391,15 @@ extension Collection where Element == DoseEntry {
                         value: suspend.value,
                         unit: suspend.unit,
                         description: suspend.description ?? dose.description,
-                        syncIdentifier: suspend.syncIdentifier
+                        syncIdentifier: suspend.syncIdentifier,
+                        insulinModel: suspend.insulinModel
                     ))
 
                     lastSuspend = nil
 
                     // Continue temp basals that may have started before suspending
                     if let last = lastBasal {
-                        // ANNA TODO: test that suspend/resume works properly
+                        // ANNA TODO: test that suspend/resume works properly if the insulin model is changed
                         if last.endDate > dose.endDate {
                             lastBasal = DoseEntry(
                                 type: last.type,

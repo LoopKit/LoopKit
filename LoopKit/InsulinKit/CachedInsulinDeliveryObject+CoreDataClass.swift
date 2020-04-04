@@ -171,7 +171,6 @@ extension CachedInsulinDeliveryObject {
                 modelPeak = model.peakActivityTime
                 modelType = .exponential
             } else if let model = model as? ExponentialInsulinModelPreset {
-                // ANNA TODO: is the below bad style?
                 modelPeak = (model.getExponentialModel() as! ExponentialInsulinModel).peakActivityTime
                 modelType = .exponential
             } else if let _ = model as? WalshInsulinModel {

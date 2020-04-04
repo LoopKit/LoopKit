@@ -107,8 +107,7 @@ public final class DoseStore {
     }
     
     private let lockedInsulinModel: Locked<InsulinModel?>
-    
-    // ANNA TODO: need to worry about persistance?
+
     public var longestEffectDuration: TimeInterval
 
     /// A history of recently applied schedule overrides.
@@ -240,7 +239,6 @@ public final class DoseStore {
         self.persistenceController = cacheStore
         self.syncVersion = syncVersion
         self.lockedLastPumpEventsReconciliation = Locked(lastPumpEventsReconciliation)
-        // ANNA TODO: would going back 24 hours be desired behavior?
         self.longestEffectDuration = defaultInsulinModel?.effectDuration ?? .hours(24)
 
         self.pumpEventQueryAfterDate = cacheStartDate
