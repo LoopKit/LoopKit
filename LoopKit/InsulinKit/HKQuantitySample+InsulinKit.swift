@@ -41,7 +41,7 @@ extension HKQuantitySample {
             HKMetadataKeySyncVersion: syncVersion,
             HKMetadataKeySyncIdentifier: syncIdentifier,
             MetadataKeyHasLoopKitOrigin: true,
-            MetadataKeyInsulinCurveType: 2,
+            MetadataKeyInsulinCurveType: 2, // The default model is type "none"
             MetadataKeyInsulinCurveDuration: -1.0,
             MetadataKeyInsulinCurveDelay: -1.0,
             MetadataKeyInsulinCurvePeak: -1.0
@@ -75,10 +75,9 @@ extension HKQuantitySample {
         }
         
         // Save the insulin model
-        // ANNA TODO: could there be an easier way to do this?
         metadata[MetadataKeyInsulinCurveDuration] = dose.insulinModel?.effectDuration
         metadata[MetadataKeyInsulinCurveDelay] = dose.insulinModel?.delay
-        // ANNA TODO: could this be more elegant?
+
         if let model = dose.insulinModel as? ExponentialInsulinModel {
             metadata[MetadataKeyInsulinCurvePeak] = model.peakActivityTime
             metadata[MetadataKeyInsulinCurveType] = InsulinModelType.exponential.rawValue
@@ -129,7 +128,6 @@ extension HKQuantitySample {
         }
         
         var model: InsulinModel? = nil
-
         switch modelType {
         case .walsh:
             model = WalshInsulinModel(actionDuration: metadata?[MetadataKeyInsulinCurveDuration] as! TimeInterval, delay: (metadata?[MetadataKeyInsulinCurveDelay] ?? 600) as! TimeInterval)

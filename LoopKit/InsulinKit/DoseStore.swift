@@ -1125,7 +1125,6 @@ extension DoseStore {
             matching: NSCompoundPredicate(orPredicateWithSubpredicates: [afterBasalStart, allBoluses]),
             chronological: true
         ).compactMap({ $0.dose })
-        
         // Ignore any doses which have not yet ended by the specified date.
         // Also, since we are retrieving dosing history older than basalStart for
         // reconciliation purposes, we need to filter that out after reconciliation.
@@ -1291,10 +1290,11 @@ extension DoseStore {
                     return dose.trimmed(to: basalDosingEnd)
                 }
                 // Update the longest effect duration based on the doses retrieved
-                // ANNA TODO: any way to make this more "clean"?
+                // ANNA TODO: any way to make this more "clean"? Essensially, the aim is to find the longest effect duration among the doses
                 self.longestEffectDuration = trimmedDoses.max {
                     ($0.insulinModel?.effectDuration ?? defaultInsulinModel.effectDuration)
-                    < ($1.insulinModel?.effectDuration ?? defaultInsulinModel.effectDuration)}?.insulinModel?.effectDuration ?? self.longestEffectDuration
+                    < ($1.insulinModel?.effectDuration ?? defaultInsulinModel.effectDuration)}?.insulinModel?.effectDuration
+                    ?? self.longestEffectDuration
 
                 let glucoseEffects = trimmedDoses.glucoseEffects(defaultModel: defaultInsulinModel, longestEffectDuration: self.longestEffectDuration, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))

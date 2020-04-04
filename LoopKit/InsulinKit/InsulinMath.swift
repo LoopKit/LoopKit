@@ -399,7 +399,6 @@ extension Collection where Element == DoseEntry {
 
                     // Continue temp basals that may have started before suspending
                     if let last = lastBasal {
-                        // ANNA TODO: test that suspend/resume works properly if the insulin model is changed
                         if last.endDate > dose.endDate {
                             lastBasal = DoseEntry(
                                 type: last.type,
@@ -408,7 +407,7 @@ extension Collection where Element == DoseEntry {
                                 value: last.value,
                                 unit: last.unit,
                                 description: last.description,
-                                // We intentionally use the resume's identifier as the basal entry has already been entered
+                                // We intentionally use the resume's identifier, as the basal entry has already been entered
                                 syncIdentifier: dose.syncIdentifier,
                                 insulinModel: last.insulinModel
                             )

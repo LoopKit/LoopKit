@@ -563,46 +563,6 @@ class InsulinMathTests: XCTestCase {
             XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), accuracy: 3.0)
         }
     }
-    
-    func testGetAfrezza() {
-        let input = [DoseEntry(
-            type: .bolus,
-            startDate: Date(),
-            endDate: Date(),
-            value: 1,
-            unit: .units,
-            description: "",
-            syncIdentifier: "02039920244801130",
-            insulinModel: ExponentialInsulinModelPreset.afrezza
-        )]
-        
-        let insulinSensitivitySchedule = self.insulinSensitivitySchedule
-
-        let effects = input.glucoseEffects(defaultModel: model,
-        longestEffectDuration: model.effectDuration, insulinSensitivity: insulinSensitivitySchedule)
-        
-        var output = [Double]()
-        var previousEffect: GlucoseEffect?
-        
-        for (index, effect) in effects.enumerated() {
-            if index < 1 {
-                previousEffect = effect
-                continue
-            }
-            if index >= effects.count - 1 {
-                continue
-            }
-            
-            guard let previous = previousEffect else {
-                continue
-            }
-            
-            output.append(effect.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter) - previous.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter))
-            previousEffect = effect
-        }
-        print (output)
-
-    }
 
     func testGlucoseEffectFromNoDoses() {
         let input: [DoseEntry] = []

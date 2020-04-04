@@ -166,7 +166,6 @@ extension CachedInsulinDeliveryObject {
             }
             modelDuration = model.effectDuration
             modelDelay = model.delay
-            // ANNA TODO: could this be more elegant?
             if let model = model as? ExponentialInsulinModel {
                 modelPeak = model.peakActivityTime
                 modelType = .exponential
