@@ -15,12 +15,14 @@ public protocol MockPumpManagerStateObserver {
     func mockPumpManager(_ manager: MockPumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus)
 }
 
-private enum MockPumpManagerError: LocalizedError {
+public enum MockPumpManagerError: LocalizedError {
     case pumpSuspended
     case communicationFailure
     case bolusInProgress
+    case missingSettings
+    
 
-    var failureReason: String? {
+    public var failureReason: String? {
         switch self {
         case .pumpSuspended:
             return "Pump is suspended"
@@ -28,6 +30,8 @@ private enum MockPumpManagerError: LocalizedError {
             return "Unable to communicate with pump"
         case .bolusInProgress:
             return "Bolus in progress"
+        case .missingSettings:
+            return "Missing Settings"
         }
     }
 }
