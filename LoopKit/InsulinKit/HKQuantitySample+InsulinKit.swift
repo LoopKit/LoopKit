@@ -14,20 +14,23 @@ let MetadataKeyScheduledBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduled
 /// Defines the programmed rate for a temporary basal dose
 let MetadataKeyProgrammedTempBasalRate = "com.loopkit.InsulinKit.MetadataKeyProgrammedTempBasalRate"
 
-/// Defines the insulin curve to use to evaluate the dose's activity
-let MetadataKeyInsulinCurveType = "com.loopkit.InsulinKit.MetadataKeyInsulinCurveType"
+/// Defines the insulin curve type to use to evaluate the dose's activity
+let MetadataKeyInsulinModelType = "com.loopkit.InsulinKit.MetadataKeyInsulinModelType"
 
-/// Defines the duration of insulin curve to use to evaluate the dose's activity
-let MetadataKeyInsulinCurveDuration = "com.loopkit.InsulinKit.MetadataKeyInsulinCurveDuration"
-
-/// Defines the delay of insulin curve to use to evaluate the dose's activity
-let MetadataKeyInsulinCurveDelay = "com.loopkit.InsulinKit.MetadataKeyInsulinCurveDelay"
-
-/// Defines the peak of insulin curve to use to evaluate the dose's activity
-let MetadataKeyInsulinCurvePeak = "com.loopkit.InsulinKit.MetadataKeyInsulinCurvePeak"
+/// Defines the insulin curve duration, if the insulin curve is a Walsh model
+let MetadataKeyInsulinModelDuration = "com.loopkit.InsulinKit.MetadataKeyInsulinModelDuration"
 
 /// A crude determination of whether a sample was written by LoopKit, in the case of multiple LoopKit-enabled app versions on the same phone.
 let MetadataKeyHasLoopKitOrigin = "HasLoopKitOrigin"
+
+// ANNA TODO: check this works when everything else is implemented
+public enum CachedInsulinModel: Int {
+    case none = 0
+    case exponentialAdult
+    case exponentialChild
+    case fiasp
+    case walsh
+}
 
 extension HKQuantitySample {
     convenience init?(type: HKQuantityType, unit: HKUnit, dose: DoseEntry, device: HKDevice?, syncVersion: Int = 1) {
@@ -41,10 +44,8 @@ extension HKQuantitySample {
             HKMetadataKeySyncVersion: syncVersion,
             HKMetadataKeySyncIdentifier: syncIdentifier,
             MetadataKeyHasLoopKitOrigin: true,
-            MetadataKeyInsulinCurveType: 2, // The default model is type "none"
-            MetadataKeyInsulinCurveDuration: -1.0,
-            MetadataKeyInsulinCurveDelay: -1.0,
-            MetadataKeyInsulinCurvePeak: -1.0
+            MetadataKeyInsulinModelType: CachedInsulinModel.none.rawValue,
+            MetadataKeyInsulinModelDuration: 0
         ]
 
         switch dose.type {
@@ -73,19 +74,22 @@ extension HKQuantitySample {
         case .resume:
             return nil
         }
-        
-        // Save the insulin model
-        metadata[MetadataKeyInsulinCurveDuration] = dose.insulinModel?.effectDuration
-        metadata[MetadataKeyInsulinCurveDelay] = dose.insulinModel?.delay
 
-        if let model = dose.insulinModel as? ExponentialInsulinModel {
-            metadata[MetadataKeyInsulinCurvePeak] = model.peakActivityTime
-            metadata[MetadataKeyInsulinCurveType] = InsulinModelType.exponential.rawValue
-        } else if let model = dose.insulinModel as? ExponentialInsulinModelPreset {
-            metadata[MetadataKeyInsulinCurvePeak] = (model.getExponentialModel() as! ExponentialInsulinModel).peakActivityTime
-           metadata[MetadataKeyInsulinCurveType] = InsulinModelType.exponential.rawValue
-        } else if let _ = dose.insulinModel as? WalshInsulinModel {
-            metadata[MetadataKeyInsulinCurveType] = InsulinModelType.walsh.rawValue
+        switch dose.insulinModelSetting {
+        case .none:
+            metadata[MetadataKeyInsulinModelType] = CachedInsulinModel.none.rawValue
+        case .exponentialPreset(let preset):
+            switch preset {
+            case .humalogNovologAdult:
+                metadata[MetadataKeyInsulinModelType] = CachedInsulinModel.exponentialAdult.rawValue
+            case .humalogNovologChild:
+                metadata[MetadataKeyInsulinModelType] = CachedInsulinModel.exponentialChild.rawValue
+            case .fiasp:
+                metadata[MetadataKeyInsulinModelType] = CachedInsulinModel.fiasp.rawValue
+            }
+        case .walsh(let model):
+            metadata[MetadataKeyInsulinModelType] = CachedInsulinModel.walsh.rawValue
+            metadata[MetadataKeyInsulinModelDuration] = model.actionDuration
         }
 
         self.init(
@@ -122,22 +126,29 @@ extension HKQuantitySample {
         return metadata?[MetadataKeyProgrammedTempBasalRate] as? HKQuantity
     }
 
-    var insulinModel: InsulinModel? {
-        guard let rawType = metadata?[MetadataKeyInsulinCurveType] as? Int, let modelType = InsulinModelType(rawValue: rawType) else {
+    var insulinModelSetting: InsulinModelSettings? {
+        guard let rawType = metadata?[MetadataKeyInsulinModelType] as? Int, let modelType = CachedInsulinModel(rawValue: rawType) else {
             return nil
         }
         
-        var model: InsulinModel? = nil
+        var insulinModelSetting: InsulinModelSettings? = nil
         switch modelType {
+        case .exponentialAdult:
+            insulinModelSetting = InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)
+        case .exponentialChild:
+            insulinModelSetting = InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologChild)
+        case .fiasp:
+            insulinModelSetting = InsulinModelSettings(model: ExponentialInsulinModelPreset.fiasp)
         case .walsh:
-            model = WalshInsulinModel(actionDuration: metadata?[MetadataKeyInsulinCurveDuration] as! TimeInterval, delay: (metadata?[MetadataKeyInsulinCurveDelay] ?? 600) as! TimeInterval)
-        case .exponential:
-            model = ExponentialInsulinModel(actionDuration: metadata?[MetadataKeyInsulinCurveDuration] as! TimeInterval, peakActivityTime: metadata?[MetadataKeyInsulinCurvePeak] as! TimeInterval, delay: (metadata?[MetadataKeyInsulinCurveDelay] ?? 600.0) as! TimeInterval)
+            guard let duration = metadata?[MetadataKeyInsulinModelDuration] as? TimeInterval, duration > 0 else {
+                break
+            }
+            insulinModelSetting = InsulinModelSettings(model: WalshInsulinModel(actionDuration: duration))
         default:
             break
         }
         
-        return model
+        return insulinModelSetting
     }
 
     /// Returns a DoseEntry representation of the sample.
@@ -192,7 +203,7 @@ extension HKQuantitySample {
             description: nil,
             syncIdentifier: metadata?[HKMetadataKeySyncIdentifier] as? String,
             scheduledBasalRate: scheduledBasalRate,
-            insulinModel: insulinModel
+            insulinModelSetting: insulinModelSetting
         )
     }
 }

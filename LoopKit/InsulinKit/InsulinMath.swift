@@ -114,7 +114,7 @@ extension DoseEntry {
             description: description,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinModel: insulinModel
+            insulinModelSetting: insulinModelSetting
         )
     }
 }
@@ -281,12 +281,12 @@ extension DoseEntry {
         return doses
     }
     
-    /// Annotates a dose with an insulin model curve, defaulting to the insulin type that the pump dispenses
+    /// Annotates a dose with an insulin model curve, defaulting to the insulin type that the pump dispenses.
     ///
-    /// - Parameter model: The insulin model to annotate the dose with.
+    /// - Parameter modelSetting: The insulin model preset to annotate the dose with.
     /// - Returns: A dose annotated with the insulin model
-    func annotateDoseWithInsulinModel(model: InsulinModel) -> DoseEntry {
-        guard insulinModel == nil else {
+    func annotateDoseWithInsulinModel(modelSetting: InsulinModelSettings) -> DoseEntry {
+        guard insulinModelSetting == nil else {
             return self
         }
         
@@ -300,7 +300,7 @@ extension DoseEntry {
             description: description,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinModel: model
+            insulinModelSetting: modelSetting
         )
     }
 }
@@ -349,7 +349,7 @@ extension DoseEntry {
                 return self
             }
         }
-        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinModel: insulinModel)
+        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinModelSetting: insulinModelSetting)
     }
 }
 
@@ -392,7 +392,7 @@ extension Collection where Element == DoseEntry {
                         unit: suspend.unit,
                         description: suspend.description ?? dose.description,
                         syncIdentifier: suspend.syncIdentifier,
-                        insulinModel: suspend.insulinModel
+                        insulinModelSetting: suspend.insulinModelSetting
                     ))
 
                     lastSuspend = nil
@@ -409,7 +409,7 @@ extension Collection where Element == DoseEntry {
                                 description: last.description,
                                 // We intentionally use the resume's identifier, as the basal entry has already been entered
                                 syncIdentifier: dose.syncIdentifier,
-                                insulinModel: last.insulinModel
+                                insulinModelSetting: last.insulinModelSetting
                             )
                         } else {
                             lastBasal = nil
@@ -426,7 +426,7 @@ extension Collection where Element == DoseEntry {
                         unit: last.unit,
                         description: last.description,
                         syncIdentifier: last.syncIdentifier,
-                        insulinModel: last.insulinModel
+                        insulinModelSetting: last.insulinModelSetting
                     ))
 
                     if last.endDate <= dose.startDate {
@@ -467,14 +467,14 @@ extension Collection where Element == DoseEntry {
     ///
     /// If a dose already has an associated insulin model, the model will remain the same.
     ///
-    /// - Parameter model: an insulin model to annotate the doses with if they do not currently have a model
+    /// - Parameter modelSetting: an insulin model preset to annotate the doses with (if they do not currently have a model)
     /// - Returns: An array of annotated dose entries
-    func annotatedWithInsulinModel(model: InsulinModel) -> [DoseEntry] {
+    func annotatedWithInsulinModel(modelSetting: InsulinModelSettings) -> [DoseEntry] {
         var annotatedDoses: [DoseEntry] = []
 
         for dose in self {
             annotatedDoses.append(
-                dose.annotateDoseWithInsulinModel(model: model)
+                dose.annotateDoseWithInsulinModel(modelSetting: modelSetting)
             )
         }
 
@@ -519,7 +519,7 @@ extension Collection where Element == DoseEntry {
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
-                return value + dose.insulinOnBoard(at: date, model: dose.insulinModel ?? defaultModel, delta: delta)
+                return value + dose.insulinOnBoard(at: date, model: dose.insulinModelSetting?.model ?? defaultModel, delta: delta)
             }
 
             values.append(InsulinValue(startDate: date, value: value))
@@ -557,7 +557,7 @@ extension Collection where Element == DoseEntry {
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
-                return value + dose.glucoseEffect(at: date, model: dose.insulinModel ?? defaultModel, insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delta: delta)
+                return value + dose.glucoseEffect(at: date, model: dose.insulinModelSetting?.model ?? defaultModel, insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delta: delta)
             }
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))

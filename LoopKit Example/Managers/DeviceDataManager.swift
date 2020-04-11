@@ -32,7 +32,7 @@ class DeviceDataManager : CarbStoreDelegate {
         doseStore = DoseStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
-            defaultInsulinModel: insulinModel,
+            defaultInsulinModelSetting: InsulinModelSettings(insulinModel),
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )
@@ -71,7 +71,8 @@ class DeviceDataManager : CarbStoreDelegate {
             UserDefaults.standard.insulinActionDuration = insulinActionDuration
 
             if let duration = insulinActionDuration {
-                doseStore.defaultInsulinModel = WalshInsulinModel(actionDuration: duration)
+                let model = WalshInsulinModel(actionDuration: duration)
+                doseStore.defaultInsulinModelSetting = InsulinModelSettings(model: model)
             }
         }
     }

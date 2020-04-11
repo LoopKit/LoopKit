@@ -74,7 +74,7 @@ extension ExponentialInsulinModel: CustomDebugStringConvertible {
 
 extension ExponentialInsulinModel: Equatable {
     public static func ==(lhs: ExponentialInsulinModel, rhs: ExponentialInsulinModel) -> Bool {
-        return abs(lhs.actionDuration - rhs.actionDuration) < .ulpOfOne && abs(lhs.peakActivityTime - rhs.peakActivityTime) < .ulpOfOne && abs(lhs.delay - rhs.delay) < .ulpOfOne
+        return lhs.actionDuration == rhs.actionDuration && lhs.peakActivityTime == rhs.peakActivityTime && lhs.delay == rhs.delay
     }
 }
 

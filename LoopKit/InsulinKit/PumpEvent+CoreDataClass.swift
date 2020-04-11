@@ -9,12 +9,6 @@
 import Foundation
 import CoreData
 
-enum InsulinModelType: Int {
-    case walsh = 0
-    case exponential
-    case none
-}
-
 class PumpEvent: NSManagedObject {
 
     var doseType: DoseType? {
@@ -55,32 +49,6 @@ class PumpEvent: NSManagedObject {
             primitiveUnit = newValue?.rawValue
         }
     }
-
-    var modelPeak: Double? {
-        get {
-            willAccessValue(forKey: "modelPeak")
-            defer { didAccessValue(forKey: "modelPeak") }
-            return primitiveModelPeak?.doubleValue
-        }
-        set {
-            willChangeValue(forKey: "modelPeak")
-            defer { didChangeValue(forKey: "modelPeak") }
-            primitiveModelPeak = newValue != nil ? NSNumber(value: newValue!) : nil
-        }
-    }
-    
-    var modelDelay: Double? {
-        get {
-            willAccessValue(forKey: "modelDelay")
-            defer { didAccessValue(forKey: "modelDelay") }
-            return primitiveModelDelay?.doubleValue
-        }
-        set {
-            willChangeValue(forKey: "modelDelay")
-            defer { didChangeValue(forKey: "modelDelay") }
-            primitiveModelDelay = newValue != nil ? NSNumber(value: newValue!) : nil
-        }
-    }
     
     var modelDuration: Double? {
         get {
@@ -95,14 +63,14 @@ class PumpEvent: NSManagedObject {
         }
     }
     
-    private var modelType: InsulinModelType? {
+    private var modelType: CachedInsulinModel? {
         get {
             willAccessValue(forKey: "modelType")
             defer { didAccessValue(forKey: "modelType") }
             guard let type = primitiveModelType else {
                 return nil
             }
-            return InsulinModelType(rawValue: type.intValue)
+            return CachedInsulinModel(rawValue: type.intValue)
         }
         set {
             willChangeValue(forKey: "modelType")
@@ -193,23 +161,49 @@ extension PumpEvent: TimelineValue {
 
 
 extension PumpEvent {
+    var insulinModelSetting: InsulinModelSettings? {
+        get {
+            switch modelType {
+            case .exponentialAdult:
+                return InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)
+            case .exponentialChild:
+                return InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologChild)
+            case .fiasp:
+                return InsulinModelSettings(model: ExponentialInsulinModelPreset.fiasp)
+            case .walsh:
+                guard let duration = modelDuration else {
+                    return nil
+                }
+                return InsulinModelSettings(model: WalshInsulinModel(actionDuration: duration))
+            default:
+                return nil
+            }
+        }
+        set {
+            switch newValue {
+            case .none:
+                modelType = CachedInsulinModel.none
+            case .exponentialPreset(let preset):
+                switch preset {
+                case .humalogNovologAdult:
+                    modelType = .exponentialAdult
+                case .humalogNovologChild:
+                    modelType = .exponentialChild
+                case .fiasp:
+                    modelType = .fiasp
+                }
+            case .walsh(let model):
+                modelType = .walsh
+                modelDuration = model.actionDuration
+            }
+        }
+    }
 
     var dose: DoseEntry? {
         get {
             // To handle migration, we're requiring any dose to also have a PumpEventType
             guard let type = type, let value = value, let unit = unit else {
                 return nil
-            }
-            
-            var model: InsulinModel? = nil
-
-            switch modelType {
-            case .walsh:
-                model = WalshInsulinModel(actionDuration: modelDuration!, delay: modelDelay ?? 600)
-            case .exponential:
-                model = ExponentialInsulinModel(actionDuration: modelDuration!, peakActivityTime: modelPeak!, delay: modelDelay ?? 600)
-            default:
-                break
             }
 
             return DoseEntry(
@@ -220,7 +214,7 @@ extension PumpEvent {
                 unit: unit,
                 deliveredUnits: deliveredUnits,
                 syncIdentifier: syncIdentifier,
-                insulinModel: model
+                insulinModelSetting: insulinModelSetting
             )
         }
         set {
@@ -234,18 +228,7 @@ extension PumpEvent {
             value = entry.value
             unit = entry.unit
             deliveredUnits = entry.deliveredUnits
-            modelDuration = entry.insulinModel?.effectDuration
-            modelDelay = entry.insulinModel?.delay
-            // ANNA TODO: could this be more elegant?
-            if let model = entry.insulinModel as? ExponentialInsulinModel {
-                modelPeak = model.peakActivityTime
-                modelType = .exponential
-            } else if let model = entry.insulinModel as? ExponentialInsulinModelPreset {
-                modelPeak = (model.getExponentialModel() as! ExponentialInsulinModel).peakActivityTime
-                modelType = .exponential
-            } else if let _ = entry.insulinModel as? WalshInsulinModel {
-                modelType = .walsh
-            }
+            insulinModelSetting = entry.insulinModelSetting
         }
     }
 

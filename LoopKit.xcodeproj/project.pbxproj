@@ -547,6 +547,8 @@
 		E9AEEA3D240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */; };
 		E9AEEA3E240EE0FD0007AB41 /* ExponentialInsulinModelPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */; };
 		E9AEEA4424140B0B0007AB41 /* iob_from_multiple_curves_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9AEEA4324140B0A0007AB41 /* iob_from_multiple_curves_output.json */; };
+		E9D754A0243E75E5000AF240 /* InsulinModelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D7549F243E75E5000AF240 /* InsulinModelSettings.swift */; };
+		E9D754A4243E79AB000AF240 /* InsulinModelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D7549F243E75E5000AF240 /* InsulinModelSettings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1154,6 +1156,8 @@
 		E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModelPreset.swift; sourceTree = "<group>"; };
 		E9AEEA422412C0EE0007AB41 /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
 		E9AEEA4324140B0A0007AB41 /* iob_from_multiple_curves_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_multiple_curves_output.json; sourceTree = "<group>"; };
+		E9D7549F243E75E5000AF240 /* InsulinModelSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinModelSettings.swift; sourceTree = "<group>"; };
+		E9D754A5243E9D8C000AF240 /* Model 5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 5.xcdatamodel"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1732,6 +1736,7 @@
 				4302F4E81D5066F400F0FCAF /* ReservoirValue.swift */,
 				C1DB55B01F2E95FD00C483A2 /* WalshInsulinModel.swift */,
 				E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */,
+				E9D7549F243E75E5000AF240 /* InsulinModelSettings.swift */,
 			);
 			path = InsulinKit;
 			sourceTree = "<group>";
@@ -2559,6 +2564,7 @@
 				437AFEEE2036A156008C4892 /* CachedCarbObject+CoreDataProperties.swift in Sources */,
 				4322B772202FA2790002837D /* AbsorbedCarbValue.swift in Sources */,
 				1F5DAB1F2118C95700048054 /* LocalizedString.swift in Sources */,
+				E9D754A0243E75E5000AF240 /* InsulinModelSettings.swift in Sources */,
 				434113AD20F287DC00D05747 /* NSManagedObjectContext.swift in Sources */,
 				4322B77B202FA2790002837D /* StoredCarbEntry.swift in Sources */,
 				4322B790202FA2B30002837D /* InsulinValue.swift in Sources */,
@@ -2784,6 +2790,7 @@
 				A9E675B822713F4700E25293 /* StoredCarbEntry.swift in Sources */,
 				A9E675BA22713F4700E25293 /* InsulinValue.swift in Sources */,
 				A9E675BB22713F4700E25293 /* NumberFormatter.swift in Sources */,
+				E9D754A4243E79AB000AF240 /* InsulinModelSettings.swift in Sources */,
 				89AE2230228BC68100BDFD85 /* DoseProgressReporter.swift in Sources */,
 				A9E675BC22713F4700E25293 /* DeletedCarbObject+CoreDataClass.swift in Sources */,
 				A9E675BD22713F4700E25293 /* HKQuantitySample+InsulinKit.swift in Sources */,
@@ -3600,12 +3607,13 @@
 		43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				E9D754A5243E9D8C000AF240 /* Model 5.xcdatamodel */,
 				E92643682433CB7B002819F6 /* Model 4.xcdatamodel */,
 				E9AEEA422412C0EE0007AB41 /* Model 3.xcdatamodel */,
 				E918E51423F8F2EC004C4B98 /* Model 2.xcdatamodel */,
 				43D8FEE11C7294D50073BE78 /* Model.xcdatamodel */,
 			);
-			currentVersion = E92643682433CB7B002819F6 /* Model 4.xcdatamodel */;
+			currentVersion = E9D754A5243E9D8C000AF240 /* Model 5.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

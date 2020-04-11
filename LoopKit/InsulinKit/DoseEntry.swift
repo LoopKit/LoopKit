@@ -18,13 +18,8 @@ public struct DoseEntry: TimelineValue, Equatable {
     public let unit: DoseUnit
     public let deliveredUnits: Double?
     public let description: String?
-    public let insulinModel: InsulinModel?
+    public let insulinModelSetting: InsulinModelSettings?
     internal(set) public var syncIdentifier: String?
-    
-    // ANNA TODO: this is needed due to the fact the insulin model doesn't conform to equatable; would it be possible to avoid having to specify this?
-    public static func == (lhs: DoseEntry, rhs: DoseEntry) -> Bool {
-        return lhs.type == rhs.type && lhs.startDate == rhs.startDate && lhs.endDate == rhs.endDate && lhs.value == rhs.value && lhs.deliveredUnits == rhs.deliveredUnits && lhs.description == rhs.description && lhs.insulinModel?.effectDuration == rhs.insulinModel?.effectDuration && lhs.insulinModel?.delay == rhs.insulinModel?.delay
-    }
 
     /// The scheduled basal rate during this dose entry
     internal var scheduledBasalRate: HKQuantity?
@@ -37,7 +32,8 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units)
     }
 
-    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinModel: InsulinModel? = nil) {
+    // If the insulin model field is nil, it's assumed that the model is the type of insulin the pump dispenses
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinModelSetting: InsulinModelSettings? = nil) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
@@ -47,7 +43,7 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.description = description
         self.syncIdentifier = syncIdentifier
         self.scheduledBasalRate = scheduledBasalRate
-        self.insulinModel = insulinModel // if nil, it's assumed that the insulin model is the type of insulin the pump dispenses
+        self.insulinModelSetting = insulinModelSetting
     }
 }
 

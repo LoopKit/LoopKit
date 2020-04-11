@@ -85,32 +85,6 @@ class CachedInsulinDeliveryObject: NSManagedObject {
         }
     }
     
-    var modelPeak: Double? {
-        get {
-            willAccessValue(forKey: "modelPeak")
-            defer { didAccessValue(forKey: "modelPeak") }
-            return primitiveModelPeak?.doubleValue
-        }
-        set {
-            willChangeValue(forKey: "modelPeak")
-            defer { didChangeValue(forKey: "modelPeak") }
-            primitiveModelPeak = newValue != nil ? NSNumber(value: newValue!) : nil
-        }
-    }
-    
-    var modelDelay: Double? {
-        get {
-            willAccessValue(forKey: "modelDelay")
-            defer { didAccessValue(forKey: "modelDelay") }
-            return primitiveModelDelay?.doubleValue
-        }
-        set {
-            willChangeValue(forKey: "modelDelay")
-            defer { didChangeValue(forKey: "modelDelay") }
-            primitiveModelDelay = newValue != nil ? NSNumber(value: newValue!) : nil
-        }
-    }
-    
     var modelDuration: Double? {
         get {
             willAccessValue(forKey: "modelDuration")
@@ -124,14 +98,14 @@ class CachedInsulinDeliveryObject: NSManagedObject {
         }
     }
     
-    private var modelType: InsulinModelType? {
+    private var modelType: CachedInsulinModel? {
         get {
             willAccessValue(forKey: "modelType")
             defer { didAccessValue(forKey: "modelType") }
             guard let type = primitiveModelType else {
                 return nil
             }
-            return InsulinModelType(rawValue: type.intValue)
+            return CachedInsulinModel(rawValue: type.intValue)
         }
         set {
             willChangeValue(forKey: "modelType")
@@ -149,31 +123,40 @@ class CachedInsulinDeliveryObject: NSManagedObject {
 
 
 extension CachedInsulinDeliveryObject {
-    var insulinModel: InsulinModel? {
+    var insulinModelSetting: InsulinModelSettings? {
         get {
             switch modelType {
+            case .exponentialAdult:
+                return InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)
+            case .exponentialChild:
+                return InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologChild)
+            case .fiasp:
+                return InsulinModelSettings(model: ExponentialInsulinModelPreset.fiasp)
             case .walsh:
-                return WalshInsulinModel(actionDuration: modelDuration!, delay: modelDelay ?? 600)
-            case .exponential:
-                return ExponentialInsulinModel(actionDuration: modelDuration!, peakActivityTime: modelPeak!, delay: modelDelay ?? 600)
+                guard let duration = modelDuration else {
+                    return nil
+                }
+                return InsulinModelSettings(model: WalshInsulinModel(actionDuration: duration))
             default:
                 return nil
             }
         }
         set {
-            guard let model = newValue else {
-                return
-            }
-            modelDuration = model.effectDuration
-            modelDelay = model.delay
-            if let model = model as? ExponentialInsulinModel {
-                modelPeak = model.peakActivityTime
-                modelType = .exponential
-            } else if let model = model as? ExponentialInsulinModelPreset {
-                modelPeak = (model.getExponentialModel() as! ExponentialInsulinModel).peakActivityTime
-                modelType = .exponential
-            } else if let _ = model as? WalshInsulinModel {
+            switch newValue {
+            case .none:
+                modelType = .none
+            case .exponentialPreset(let preset):
+                switch preset {
+                case .humalogNovologAdult:
+                    modelType = .exponentialAdult
+                case .humalogNovologChild:
+                    modelType = .exponentialChild
+                case .fiasp:
+                    modelType = .fiasp
+                }
+            case .walsh(let model):
                 modelType = .walsh
+                modelDuration = model.actionDuration
             }
         }
     }
@@ -222,7 +205,7 @@ extension CachedInsulinDeliveryObject {
             description: nil,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinModel: insulinModel
+            insulinModelSetting: insulinModelSetting
         )
     }
 
@@ -238,6 +221,6 @@ extension CachedInsulinDeliveryObject {
         hasLoopKitOrigin = sample.hasLoopKitOrigin
         value = sample.quantity.doubleValue(for: .internationalUnit())
         provenanceIdentifier = sample.provenanceIdentifier
-        insulinModel = sample.insulinModel
+        insulinModelSetting = sample.insulinModelSetting
     }
 }
