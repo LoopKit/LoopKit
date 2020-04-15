@@ -89,7 +89,7 @@ extension DoseEntry {
         let originalDuration = endDate.timeIntervalSince(startDate)
 
         let startDate = max(start ?? .distantPast, self.startDate)
-        let endDate = max(startDate, min(end ?? .distantFuture, self.endDate))
+        let endDate = max(startDate, min(end ?? startDate.addingTimeInterval(.minutes(30)), self.endDate))
 
         var trimmedDeliveredUnits: Double? = deliveredUnits
         var trimmedValue: Double = value
