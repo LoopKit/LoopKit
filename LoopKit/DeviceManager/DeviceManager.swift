@@ -23,7 +23,6 @@ public protocol DeviceManagerDelegate: DeviceAlertHandler {
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 }
 
-
 public protocol DeviceManager: CustomDebugStringConvertible, DeviceAlertResponder {
     typealias RawStateValue = [String: Any]
 
@@ -61,5 +60,17 @@ public extension DeviceManager {
     var managerIdentifier: String {
         return Self.managerIdentifier
     }
-
 }
+
+#if !USE_NEW_ALERT_FACILITY
+public extension DeviceManager {
+    // Temporary default implementation
+    func acknowledgeAlert(typeIdentifier: DeviceAlert.TypeIdentifier) -> Void { }
+}
+public extension DeviceManagerDelegate {
+    // Temporary default implementation
+    func issueAlert(_ alert: DeviceAlert) { }
+    func removePendingAlert(identifier: DeviceAlert.Identifier) { }
+    func removeDeliveredAlert(identifier: DeviceAlert.Identifier) { }
+}
+#endif
