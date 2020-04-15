@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1DA649AB2445174400F61E75 /* DeviceAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* DeviceAlert.swift */; };
+		1DD3DEB624451C3300BD8E40 /* DeviceAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* DeviceAlert.swift */; };
 		1F5DAB1D2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
 		1F5DAB1F2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
 		1F5DAB202118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
@@ -722,6 +724,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1DA649AA2445174400F61E75 /* DeviceAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceAlert.swift; sourceTree = "<group>"; };
 		1F50C31F212B20D300C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		1F50C320212B20D300C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Main.strings; sourceTree = "<group>"; };
 		1F50C321212B20D300C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/CarbKit.strings; sourceTree = "<group>"; };
@@ -1717,6 +1720,7 @@
 				89AE221F228BC54C00BDFD85 /* TemporaryScheduleOverridePreset.swift */,
 				89AE2224228BC54C00BDFD85 /* TemporaryScheduleOverrideSettings.swift */,
 				C1ABE38D2245CFCD00570E82 /* UnfairLock.swift */,
+				1DA649AA2445174400F61E75 /* DeviceAlert.swift */,
 				89AE222A228BC56A00BDFD85 /* WeakSet.swift */,
 				C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */,
 				43CACE0D2247F89100F90AF5 /* WeakSynchronizedSet.swift */,
@@ -2776,6 +2780,7 @@
 				89AE222B228BC56A00BDFD85 /* WeakSet.swift in Sources */,
 				A9498D7C23386C3300DAA9B9 /* AnalyticsService.swift in Sources */,
 				4322B783202FA2AF0002837D /* Reservoir.swift in Sources */,
+				1DA649AB2445174400F61E75 /* DeviceAlert.swift in Sources */,
 				437AFEF02036A156008C4892 /* DeletedCarbObject+CoreDataProperties.swift in Sources */,
 				4322B777202FA2790002837D /* CarbValue.swift in Sources */,
 				4322B782202FA2AF0002837D /* PumpEventType.swift in Sources */,
@@ -3053,6 +3058,7 @@
 				A9E675C122713F4700E25293 /* NewGlucoseSample.swift in Sources */,
 				A9E675C222713F4700E25293 /* InsulinMath.swift in Sources */,
 				A9E675C322713F4700E25293 /* UnfairLock.swift in Sources */,
+				1DD3DEB624451C3300BD8E40 /* DeviceAlert.swift in Sources */,
 				A9E675C422713F4700E25293 /* HealthStoreUnitCache.swift in Sources */,
 				A9E675C622713F4700E25293 /* CarbStatus.swift in Sources */,
 				A9498D7023386C0B00DAA9B9 /* TempBasalRecommendation.swift in Sources */,

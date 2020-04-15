@@ -8,20 +8,23 @@
 import Foundation
 import UserNotifications
 
-public protocol DeviceManagerDelegate {
+public protocol DeviceManagerDelegate: DeviceAlertHandler {
+    
+    #if !USE_NEW_ALERT_FACILITY
     func scheduleNotification(for manager: DeviceManager,
                               identifier: String,
                               content: UNNotificationContent,
                               trigger: UNNotificationTrigger?)
 
     func clearNotification(for manager: DeviceManager, identifier: String)
-    
+
     func removeNotificationRequests(for manager: DeviceManager, identifiers: [String])
-    
+    #endif
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 }
 
-public protocol DeviceManager: class, CustomDebugStringConvertible {
+
+public protocol DeviceManager: CustomDebugStringConvertible, DeviceAlertResponder {
     typealias RawStateValue = [String: Any]
 
     /// The identifier of the manager. This should be unique
@@ -53,4 +56,10 @@ public extension DeviceManager {
     var localizedTitle: String {
         return type(of: self).localizedTitle
     }
+    
+    /// Represents a per-device-manager-Type identifier that can uniquely identify a class of this type.
+    var managerIdentifier: String {
+        return Self.managerIdentifier
+    }
+
 }
