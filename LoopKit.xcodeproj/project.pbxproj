@@ -544,6 +544,8 @@
 		C1814B8C226371DF008D2D8E /* WeakSynchronizedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */; };
 		C188B83422CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C188B83322CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift */; };
 		C1F8B1E2223C3CC000DD66CF /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
+		E93D4BE1244A5A8F0007CA5F /* OutsideDoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93D4BE0244A5A8F0007CA5F /* OutsideDoseEvent.swift */; };
+		E93D4BE2244A5A8F0007CA5F /* OutsideDoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93D4BE0244A5A8F0007CA5F /* OutsideDoseEvent.swift */; };
 		E9AEEA3D240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */; };
 		E9AEEA3E240EE0FD0007AB41 /* ExponentialInsulinModelPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */; };
 		E9AEEA4424140B0B0007AB41 /* iob_from_multiple_curves_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9AEEA4324140B0A0007AB41 /* iob_from_multiple_curves_output.json */; };
@@ -1153,6 +1155,8 @@
 		C1DB55B61F2EACD500C483A2 /* iob_from_bolus_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_bolus_exponential_output.json; sourceTree = "<group>"; };
 		E918E51423F8F2EC004C4B98 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		E92643682433CB7B002819F6 /* Model 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 4.xcdatamodel"; sourceTree = "<group>"; };
+		E93D4BE0244A5A8F0007CA5F /* OutsideDoseEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutsideDoseEvent.swift; sourceTree = "<group>"; };
+		E93D4BE3244A5ADE0007CA5F /* Model 6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.xcdatamodel"; sourceTree = "<group>"; };
 		E9AEEA3C240EE0F30007AB41 /* ExponentialInsulinModelPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModelPreset.swift; sourceTree = "<group>"; };
 		E9AEEA422412C0EE0007AB41 /* Model 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 3.xcdatamodel"; sourceTree = "<group>"; };
 		E9AEEA4324140B0A0007AB41 /* iob_from_multiple_curves_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_multiple_curves_output.json; sourceTree = "<group>"; };
@@ -1727,6 +1731,7 @@
 				43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */,
 				4302F4EA1D50670500F0FCAF /* NewPumpEvent.swift */,
 				434113AE20F2885300D05747 /* NSManagedObjectContext+CachedInsulinDeliveryObject.swift */,
+				E93D4BE0244A5A8F0007CA5F /* OutsideDoseEvent.swift */,
 				4302F4EC1D5068CE00F0FCAF /* PersistedPumpEvent.swift */,
 				43DFE27B1CB1D6A600EFBE95 /* PumpEvent+CoreDataClass.swift */,
 				43DFE27C1CB1D6A600EFBE95 /* PumpEvent+CoreDataProperties.swift */,
@@ -2548,6 +2553,7 @@
 				4303C4921E2D665000ADEDC8 /* TimeZone.swift in Sources */,
 				4322B781202FA2AF0002837D /* PumpEvent+CoreDataProperties.swift in Sources */,
 				4322B785202FA2AF0002837D /* ReservoirValue.swift in Sources */,
+				E93D4BE1244A5A8F0007CA5F /* OutsideDoseEvent.swift in Sources */,
 				891A3FD9224BEB4600378B27 /* EGPSchedule.swift in Sources */,
 				89AE2229228BC54C00BDFD85 /* TemporaryScheduleOverrideHistory.swift in Sources */,
 				437AFF24203BE402008C4892 /* HKHealthStore.swift in Sources */,
@@ -2761,6 +2767,7 @@
 				A9E6759C22713F4700E25293 /* InsulinDeliveryStore.swift in Sources */,
 				A9E6759D22713F4700E25293 /* DeviceManager.swift in Sources */,
 				A9E6759E22713F4700E25293 /* DoseUnit.swift in Sources */,
+				E93D4BE2244A5A8F0007CA5F /* OutsideDoseEvent.swift in Sources */,
 				A9E6759F22713F4700E25293 /* NSManagedObjectContext+CachedInsulinDeliveryObject.swift in Sources */,
 				A9E675A022713F4700E25293 /* HKQuantitySample.swift in Sources */,
 				A9E675A122713F4700E25293 /* Double.swift in Sources */,
@@ -3607,13 +3614,14 @@
 		43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				E93D4BE3244A5ADE0007CA5F /* Model 6.xcdatamodel */,
 				E9D754A5243E9D8C000AF240 /* Model 5.xcdatamodel */,
 				E92643682433CB7B002819F6 /* Model 4.xcdatamodel */,
 				E9AEEA422412C0EE0007AB41 /* Model 3.xcdatamodel */,
 				E918E51423F8F2EC004C4B98 /* Model 2.xcdatamodel */,
 				43D8FEE11C7294D50073BE78 /* Model.xcdatamodel */,
 			);
-			currentVersion = E9D754A5243E9D8C000AF240 /* Model 5.xcdatamodel */;
+			currentVersion = E93D4BE3244A5ADE0007CA5F /* Model 6.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
