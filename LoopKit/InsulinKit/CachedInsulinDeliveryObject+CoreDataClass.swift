@@ -144,7 +144,7 @@ extension CachedInsulinDeliveryObject {
         set {
             switch newValue {
             case .none:
-                modelType = .none
+                modelType = CachedInsulinModel.none
             case .exponentialPreset(let preset):
                 switch preset {
                 case .humalogNovologAdult:

@@ -23,7 +23,6 @@ let MetadataKeyInsulinModelDuration = "com.loopkit.InsulinKit.MetadataKeyInsulin
 /// A crude determination of whether a sample was written by LoopKit, in the case of multiple LoopKit-enabled app versions on the same phone.
 let MetadataKeyHasLoopKitOrigin = "HasLoopKitOrigin"
 
-// ANNA TODO: check this works when everything else is implemented
 public enum CachedInsulinModel: Int {
     case none = 0
     case exponentialAdult

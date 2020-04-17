@@ -90,7 +90,6 @@ extension InsulinModelSettings: RawRepresentable {
 }
 
 extension InsulinModelSettings: Equatable {
-    // ANNA TODO: reduce number of paths?
     public static func == (lhs: InsulinModelSettings, rhs: InsulinModelSettings) -> Bool {
         switch lhs {
         case .exponentialPreset(let model1):
