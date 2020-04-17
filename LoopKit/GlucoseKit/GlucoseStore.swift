@@ -121,12 +121,13 @@ public final class GlucoseStore: HealthKitSampleStore {
         cacheStore.storeAnchor(queryAnchor, key: GlucoseStore.queryAnchorMetadataKey)
     }
 
-    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {
-        guard error == nil else {
-            return
-        }
-
+    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (_ didSucceed: Bool) -> Void) {
         dataAccessQueue.async {
+            guard anchor != self.queryAnchor else {
+                self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
+                completion(false)
+                return
+            }
 
             var newestSampleStartDateAddedByExternalSource: Date?
             var samplesAddedByExternalSourceWithinManagedDataInterval = false
@@ -167,6 +168,8 @@ public final class GlucoseStore: HealthKitSampleStore {
             if samplesAddedByExternalSourceWithinManagedDataInterval {
                 NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
             }
+
+            completion(true)
         }
     }
 }
@@ -224,13 +227,13 @@ extension GlucoseStore {
                 if let error = error {
                     completion(.failure(error))
                 } else if completed {
-
                     self.addCachedObjects(for: glucose)
                     self.purgeOldGlucoseSamples(includingManagedDataBefore: nil)
                     self.updateLatestGlucose()
 
                     completion(.success(glucose))
                     NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
+
                 } else {
                     assertionFailure()
                 }
@@ -289,7 +292,8 @@ extension GlucoseStore {
         // If we're within our cache duration, skip the HealthKit query
         guard start <= earliestCacheDate else {
             self.dataAccessQueue.async {
-                completion(self.getCachedGlucoseObjects(start: start, end: end))
+                let objects = self.getCachedGlucoseObjects(start: start, end: end)
+                completion(objects)
             }
             return
         }
@@ -302,7 +306,8 @@ extension GlucoseStore {
             case .failure:
                 // Expected when database is inaccessible
                 self.dataAccessQueue.async {
-                    completion(self.getCachedGlucoseObjects(start: start, end: end))
+                    let objects = self.getCachedGlucoseObjects(start: start, end: end)
+                    completion(objects)
                 }
             }
         }
@@ -480,11 +485,11 @@ extension GlucoseStore {
         var result: GlucoseStoreResult<Int> = .success(0)
 
         cacheStore.managedObjectContext.performAndWait {
+
             do {
                 let count = try cacheStore.managedObjectContext.purgeObjects(of: CachedGlucoseObject.self, matching: predicate)
                 result = .success(count)
             } catch let error {
-                self.log.error("Unable to purge CachedGlucoseObjects: %@", String(describing: error))
                 result = .failure(error)
             }
         }

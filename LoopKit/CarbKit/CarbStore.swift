@@ -23,15 +23,6 @@ public enum CarbAbsorptionModel {
     case adaptiveRateNonlinear
 }
 
-public protocol CarbStoreDelegate: class {
-
-    /// Informs the delegate that an internal error occurred
-    ///
-    /// - parameter carbStore: The carb store
-    /// - parameter error:     The error describing the issue
-    func carbStore(_ carbStore: CarbStore, didError error: CarbStore.CarbStoreError)
-}
-
 public protocol CarbStoreSyncDelegate: class {
 
     /// Asks the delegate to upload recently-added carb entries not yet marked as uploaded.
@@ -176,8 +167,6 @@ public final class CarbStore: HealthKitSampleStore {
     /// Choose a lower or higher sync version if the same sample might be written twice (e.g. from an extension and from an app) for deterministic conflict resolution
     public let syncVersion: Int
 
-    public weak var delegate: CarbStoreDelegate?
-
     public weak var syncDelegate: CarbStoreSyncDelegate?
 
     private let queue = DispatchQueue(label: "com.loudnate.CarbKit.dataAccessQueue", qos: .utility)
@@ -273,13 +262,14 @@ public final class CarbStore: HealthKitSampleStore {
         cacheStore.storeAnchor(queryAnchor, key: CarbStore.queryAnchorMetadataKey)
     }
 
-    public override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {
-        if let error = error {
-            self.delegate?.carbStore(self, didError: .healthStoreError(error))
-            return
-        }
-
+    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
         queue.async {
+            guard anchor != self.queryAnchor else {
+                self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
+                completion(false)
+                return
+            }
+
             var notificationRequired = false
 
             // Append the new samples
@@ -307,6 +297,8 @@ public final class CarbStore: HealthKitSampleStore {
 
                 NotificationCenter.default.post(name: CarbStore.carbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
             }
+
+            completion(true)
         }
     }
 }
@@ -348,7 +340,8 @@ extension CarbStore {
         // If we're within our cache duration, skip the HealthKit query
         guard start <= earliestCacheDate else {
             self.queue.async {
-                completion(self.getCachedCarbEntries().filterDateRange(start, end))
+                let entries = self.getCachedCarbEntries().filterDateRange(start, end)
+                completion(entries)
             }
             return
         }
