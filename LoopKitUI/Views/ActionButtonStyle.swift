@@ -1,26 +1,27 @@
 //
-//  ActionButton.swift
+//  ActionButtonStyle.swift
 //  LoopKitUI
 //
-//  Created by Pete Schwamb on 2020-03-04.
+//  Created by Michael Pangburn on 4/15/20.
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
 import SwiftUI
 
-// TODO: Migrate use sites to ActionButtonStyle
-public struct ActionButton: ViewModifier {
-    private let fontColor: Color
-    private let backgroundColor: Color
-    private let edgeColor: Color
-    private let cornerRadius: CGFloat = 10
-    
-    public enum ButtonType {
+
+struct ActionButtonStyle: ButtonStyle {
+    enum ButtonType {
         case primary
         case secondary
         case destructive
     }
-    
+
+    private let fontColor: Color
+    private let backgroundColor: Color
+    private let edgeColor: Color
+    private let cornerRadius: CGFloat = 10
+    private let squidge: CGFloat = 1
+
     init(_ style: ButtonType = .primary) {
         switch style {
         case .primary:
@@ -37,22 +38,19 @@ public struct ActionButton: ViewModifier {
             edgeColor = .accentColor
         }
     }
-    
-    public func body(content: Content) -> some View {
-        content
-            .padding(.all)
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(configuration.isPressed ? -squidge : 0)
+            .padding()
             .foregroundColor(fontColor)
             .font(.headline)
             .frame(maxWidth: .infinity)
             .background(backgroundColor)
+            .overlay(Color(.secondarySystemBackground).opacity(configuration.isPressed ? 0.35 : 0))
             .cornerRadius(cornerRadius)
+            .padding(configuration.isPressed ? squidge : 0)
             .overlay(RoundedRectangle(cornerRadius: cornerRadius)
                 .stroke(edgeColor))
-    }
-}
-
-public extension View {
-    func actionButtonStyle(_ style: ActionButton.ButtonType = .primary) -> some View {
-        ModifiedContent(content: self, modifier: ActionButton(style))
     }
 }
