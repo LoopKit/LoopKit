@@ -8,9 +8,9 @@
 import Foundation
 import UserNotifications
 
-public protocol DeviceManagerDelegate: DeviceAlertHandler {
+public protocol DeviceManagerDelegate: DeviceAlertPresenter {
     
-    #if !USE_NEW_ALERT_FACILITY
+//    #if TO BE REMOVED
     func scheduleNotification(for manager: DeviceManager,
                               identifier: String,
                               content: UNNotificationContent,
@@ -19,7 +19,7 @@ public protocol DeviceManagerDelegate: DeviceAlertHandler {
     func clearNotification(for manager: DeviceManager, identifier: String)
 
     func removeNotificationRequests(for manager: DeviceManager, identifiers: [String])
-    #endif
+//    #endif
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 }
 
@@ -62,15 +62,18 @@ public extension DeviceManager {
     }
 }
 
-#if !USE_NEW_ALERT_FACILITY
+//#if TO BE REMOVED
 public extension DeviceManager {
     // Temporary default implementation
-    func acknowledgeAlert(typeIdentifier: DeviceAlert.TypeIdentifier) -> Void { }
+    func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) -> Void { }
 }
 public extension DeviceManagerDelegate {
     // Temporary default implementation
     func issueAlert(_ alert: DeviceAlert) { }
     func removePendingAlert(identifier: DeviceAlert.Identifier) { }
     func removeDeliveredAlert(identifier: DeviceAlert.Identifier) { }
+    func scheduleNotification(for manager: DeviceManager, identifier: String, content: UNNotificationContent, trigger: UNNotificationTrigger?) { }
+    func clearNotification(for manager: DeviceManager, identifier: String) { }
+    func removeNotificationRequests(for manager: DeviceManager, identifiers: [String]) { }
 }
-#endif
+//#endif
