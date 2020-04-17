@@ -785,6 +785,48 @@ extension DoseStore {
             }
         }
     }
+    
+    /**
+     Adds and persists external dose entries
+
+     - parameter doses: An array of dose entries to add.
+     - parameter completion: A closure called after the doses are saved. The closure takes a single argument:
+     - parameter error: An error object explaining why the doses could not be saved.
+     */
+    public func logOutsideDoseEvents(_ doses: [DoseEntry], completion: @escaping (_ error: Error?) -> Void) {
+        guard doses.count > 0 else {
+            completion(nil)
+            return
+        }
+        persistenceController.managedObjectContext.perform {
+            for dose in doses {
+                let object = OutsideDoseEvent(context: self.persistenceController.managedObjectContext)
+
+                object.date = dose.startDate
+                // ANNA TODO: where to get raw data from...
+                object.raw = Data(UUID().uuidString.utf8)
+                object.title = "Logged Dose: \(String(describing: dose.programmedUnits)) \(String(describing: dose.unit)) on \(String(describing: dose.startDate))"
+                object.type = PumpEventType.loggedDose
+                // Logged doses cannot be changed
+                object.mutable = false
+                object.dose = dose
+            }
+        }
+        
+        self.persistenceController.save { (error) -> Void in
+            // ANNA TODO: change device type to be something manual?
+            self.insulinDeliveryStore.addReconciledDoses(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
+                switch result {
+                case .success:
+                    completion(nil)
+                    NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
+                case .failure(let error):
+                    self.log.error("Error adding doses: %{public}@", String(describing: error))
+                    completion(error)
+                }
+            }
+        }
+    }
 
     public func deletePumpEvent(_ event: PersistedPumpEvent, completion: @escaping (_ error: DoseStoreError?) -> Void) {
         persistenceController.managedObjectContext.perform {
@@ -969,6 +1011,7 @@ extension DoseStore {
         let events = objects.map { $0.persistedPumpEvent }
         isUploadRequestPending = true
 
+        // ANNA TODO: make logged dose entries correctly upload to nightscout
         delegate.doseStore(self, hasEventsNeedingUpload: events) { (uploadedObjectIDURLs) in
             self.persistenceController.managedObjectContext.perform {
                 for url in uploadedObjectIDURLs {
@@ -991,6 +1034,65 @@ extension DoseStore {
 
                 self.isUploadRequestPending = false
             }
+        }
+    }
+    
+    /// *This method should only be called from within a managed object context block.*
+    ///
+    /// - Parameter startDate: The earliest outside dose event date to include
+    /// - Returns: An array of logged dose managed objects, in reverse-chronological order
+    /// - Throws: An error describing the failure to fetch objects
+    public func getLoggedDoses(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<[PersistedOutsideDoseEvent]>) -> Void) {
+        persistenceController.managedObjectContext.perform {
+            do {
+                let events = try self.getLoggedDoses(
+                    matching: NSPredicate(format: "date >= %@", startDate as NSDate),
+                    chronological: false
+                )
+
+                completion(.success(events))
+            } catch let error as DoseStoreError {
+                completion(.failure(error))
+            } catch {
+                assertionFailure()
+            }
+        }
+        
+        
+    }
+    
+    /// *This method should only be called from within a managed object context block.*
+    ///
+    /// Objects are ordered by date using the DoseType sort ordering as a tiebreaker for stability
+    ///
+    /// - Parameters:
+    ///   - predicate: The predicate to apply to the objects
+    ///   - chronological: Whether to return the objects in chronological or reverse-chronological order
+    /// - Returns: An array of pump events in the specified order by date
+    /// - Throws: An error describing the failure to fetch objects
+    private func getLoggedDoses(matching predicate: NSPredicate, chronological: Bool, limit: Int? = nil) throws -> [PersistedOutsideDoseEvent] {
+        let request: NSFetchRequest<OutsideDoseEvent> = OutsideDoseEvent.fetchRequest()
+        request.predicate = predicate
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: chronological)]
+
+        if let limit = limit {
+            request.fetchLimit = limit
+        }
+
+        do {
+            return try persistenceController.managedObjectContext.fetch(request).sorted(by: { (lhs, rhs) -> Bool in
+                let (first, second) = chronological ? (lhs, rhs) : (rhs, lhs)
+
+                if  first.startDate == second.startDate,
+                    let firstType = first.type, let secondType = second.type
+                {
+                    return firstType.sortOrder < secondType.sortOrder
+                } else {
+                    return first.startDate < second.startDate
+                }
+            }).compactMap{ $0.persistedOutsideDoseEvent }
+        } catch let fetchError as NSError {
+            throw DoseStoreError.fetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
         }
     }
 
