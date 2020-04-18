@@ -821,12 +821,87 @@ extension DoseStore {
                     completion(nil)
                     NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
                 case .failure(let error):
-                    self.log.error("Error adding doses: %{public}@", String(describing: error))
+                    self.log.error("Error adding logged dose: %{public}@", String(describing: error))
                     completion(error)
                 }
             }
         }
     }
+    
+    // anna todo: possible to merge this with deletepumpevent?
+    public func deleteOutsideDoseEvent(_ event: PersistedOutsideDoseEvent, completion: @escaping (_ error: DoseStoreError?) -> Void) {
+        persistenceController.managedObjectContext.perform {
+
+            if  let objectID = self.persistenceController.managedObjectContext.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: event.objectIDURL),
+                let object = try? self.persistenceController.managedObjectContext.existingObject(with: objectID)
+            {
+                self.persistenceController.managedObjectContext.delete(object)
+            }
+
+            // Reset the latest query date to the newest PumpEvent
+            let request: NSFetchRequest<OutsideDoseEvent> = OutsideDoseEvent.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+            request.predicate = NSPredicate(format: "mutable != true")
+            request.fetchLimit = 1
+
+            self.persistenceController.save { (error) in
+                completion(DoseStoreError(error: error))
+                NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
+            }
+        }
+    }
+    
+    /// Deletes all outside/external dose events
+    ///
+    /// - Parameter completion: A closure called after all the events are deleted. This closure takes a single argument:
+    /// - Parameter error: An error explaining why the deletion failed
+    public func deleteAllOutsideDoseEvents(_ completion: @escaping (_ error: DoseStoreError?) -> Void) {
+        self.persistenceController.managedObjectContext.perform {
+            do {
+                self.log.info("Deleting all outside dose events")
+                try self.purgeOutsideDoseEvents()
+
+                self.persistenceController.save { (error) in
+
+                    completion(DoseStoreError(error: error))
+                    NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
+                }
+            } catch let error as PersistenceController.PersistenceControllerError {
+                completion(DoseStoreError(error: error))
+            } catch {
+                assertionFailure()
+            }
+        }
+    }
+    
+    /**
+     Removes logged doses older than the recency predicate
+     
+     *This method should only be called from within a managed object context block.*
+
+     - throws: PersistenceController.PersistenceControllerError.coreDataError if the delete request failed
+     */
+    private func purgeOutsideDoseEvents(matching predicate: NSPredicate? = nil) throws {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: OutsideDoseEvent.entity().name!)
+        fetchRequest.predicate = predicate
+
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        deleteRequest.resultType = .resultTypeObjectIDs
+
+        do {
+            if let result = try persistenceController.managedObjectContext.execute(deleteRequest) as? NSBatchDeleteResult,
+                let objectIDs = result.result as? [NSManagedObjectID],
+                objectIDs.count > 0
+            {
+                let changes = [NSDeletedObjectsKey: objectIDs]
+                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [persistenceController.managedObjectContext])
+                persistenceController.managedObjectContext.refreshAllObjects()
+            }
+        } catch let error as NSError {
+            throw PersistenceController.PersistenceControllerError.coreDataError(error)
+        }
+    }
+    
 
     public func deletePumpEvent(_ event: PersistedPumpEvent, completion: @escaping (_ error: DoseStoreError?) -> Void) {
         persistenceController.managedObjectContext.perform {
