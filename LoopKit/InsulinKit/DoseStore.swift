@@ -827,8 +827,7 @@ extension DoseStore {
             }
         }
     }
-    
-    // anna todo: possible to merge this with deletepumpevent?
+
     public func deleteOutsideDoseEvent(_ event: PersistedOutsideDoseEvent, completion: @escaping (_ error: DoseStoreError?) -> Void) {
         persistenceController.managedObjectContext.perform {
 
@@ -1082,8 +1081,14 @@ extension DoseStore {
         guard let objects = try? getPumpEventObjects(matching: NSPredicate(format: "uploaded = false"), chronological: true, limit: 5000), objects.count > 0 else {
             return
         }
+        
+        var events = objects.map { $0.persistedPumpEvent }
+        
+        // If there were outside doses logged in Loop, also upload those
+        if let outsideDoses = try? getLoggedDoses(matching: NSPredicate(format: "uploaded = false"), chronological: true, limit: 5000) {
+            events += outsideDoses.map{ $0.persistedPumpEvent }
+        }
 
-        let events = objects.map { $0.persistedPumpEvent }
         isUploadRequestPending = true
 
         // ANNA TODO: make logged dose entries correctly upload to nightscout
