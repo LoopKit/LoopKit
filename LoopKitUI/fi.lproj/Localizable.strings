@@ -10,8 +10,7 @@
 /* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
 "%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
 
-/* The format for an override preset cell. (1: symbol)(2: name)
-   The format for an override symbol and name (1: symbol)(2: name) */
+/* The format for an override symbol and name (1: symbol)(2: name) */
 "%1$@ %2$@" = "%1$@ %2$@";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
@@ -23,17 +22,17 @@
 /* The title for the override emoji activity section */
 "Activity" = "Liikunta";
 
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Lisää tili";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Lisää hiilihydraatteja";
+
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Haluatko varmasti poistaa kaikki historiatiedot?";
 
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Haluatko varmasti poistaa kaikki säiliön arvot?";
-
-/* The title of the button to add the credentials for a service */
-"Add Account" = "Lisää tili";
-
-/* The title of the button to remove the credentials for a service */
-"Delete Account" = "Poista tili";
 
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Basaalin, boluksen ja korjaavan insuliiniannoksen määriä vähennetään %@%%.";
@@ -48,22 +47,16 @@
 "Cancel" = "Kumoa";
 
 /* The text for the override cancellation button */
-"Cancel Override" = "Kumoa Tilapäisas.";
+"Cancel Override" = "Kumoa tilapäisasetus";
 
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Kumotaan tilapäinen basaali";
-
-/* The title of the view controller to create a new carb entry */
-"Add Carb Entry" = "Lisää hiilihydraatteja";
-
-/* The title of the view controller to edit an existing carb entry */
-"Edit Carb Entry" = "Muokkaa hiilihydraatteja";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Muutokset otetaan käyttöön vain tällä kertaa, kun otat tilapäisasetuksen käyttöön. Alkuperäiset %@-asetukset pysyvät ennallaan.";
 
 /* Carb entry section footer text explaining absorption time */
-"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Valitse pidempi imeytymisaika isommille aterioille tai aterioille, jotka sisältävät paljon rasvaa ja proteiineja. Tämä on vain ohje algoritmille, eikä sen tarvitse olla tarkka.";
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Valitse pidempi imeytymisaika isoille tai paljon rasvaa ja proteiineja sisältäville aterioille. Tämä on suuntaa antava ohje, eikä sen tarvitse olla tarkka.";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
 "com.loudnate.CarbKit.COBDateLabel" = "klo %1$@";
@@ -93,10 +86,13 @@
 "Custom" = "Mukautettu";
 
 /* The title for the custom override entry screen */
-"Custom Override" = "Muk. tilapäisasetus";
+"Custom Override" = "Mukautettu tilapäisasetus";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Aika";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Poista tili";
 
 /* Button title to delete all objects */
 "Delete All" = "Poista kaikki";
@@ -104,14 +100,20 @@
 /* The text for the override duration setting */
 "Duration" = "Kesto";
 
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Muokkaa hiilihydraatteja";
+
 /* The title for the override editing screen */
 "Edit Override" = "Muokkaa tilapäisasetusta";
 
 /* Footer text for editing an active override (1: preset name) */
 "Editing affects only the active override. The default settings of %@ will not be affected." = "Muokkaus vaikuttaa vain aktiiviseen tilapäisasetukseen. Alkuperäiset %@-asetukset säilyvät ennallaan.";
 
+/* The button text for enabling a temporary override */
+"Enable" = "Ota käyttöön";
+
 /* The text for the indefinite override duration setting */
-"Enable Indefinitely" = "Ota käyttöön ilman aikarajaa";
+"Enable Indefinitely" = "Ilman aikarajaa";
 
 /* The detail text describing an enabled setting */
 "Enabled" = "Käytössä";
@@ -150,7 +152,7 @@
 "Name" = "Nimi";
 
 /* The title for the new override preset entry screen */
-"New Preset" = "Uusi tilapäisasetus";
+"New Preset" = "Uusi esiasetus";
 
 /* Section title for no-carb food
    The title for override emoji miscellaneous section */
@@ -163,7 +165,7 @@
 "Override Presets" = "Tilapäisasetukset";
 
 /* Text directing the user to configure override presets */
-"Override presets can be set up under the 'Configuration' section of the settings screen." = "Tilapäisasetuksia voidaan luoda Asetukset-näkymän Kokoonpano-osiossa.";
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Tilapäisasetuksia voidaan luoda Asetukset-näkymän Määritykset-osiossa.";
 
 /* The section title of glucose overrides */
 "Overrides" = "Tilapäisasetukset";
@@ -176,6 +178,9 @@
 
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Pumpputapahtuma";
+
+/* The default placeholder string for a credential */
+"Required" = "Pakollinen";
 
 /* Title text for button to resume insulin delivery */
 "Resume Delivery" = "Jatka annostelua";
@@ -191,7 +196,7 @@
 "Save" = "Tallenna";
 
 /* The section header text for a scheduled override */
-"SCHEDULED OVERRIDE" = "SUUNNITELTU TILAPÄISASETUS";
+"SCHEDULED OVERRIDE" = "AJASTETTU TILAPÄISASETUS";
 
 /* Section title for slow absorbing food */
 "Slow" = "Hidas";
@@ -211,6 +216,9 @@
 /* The text for the override preset symbol setting */
 "Symbol" = "Symboli";
 
+/* Text directing the user to configure their first override preset */
+"Tap '+' to create a new override preset." = "Luo uusi tilapäisasetus napauttamalla '+'.";
+
 /* The empty-state text for a configuration value */
 "Tap to set" = "Napauta asettaaksesi";
 
@@ -219,9 +227,6 @@
 
 /* The title for the override selection screen */
 "Temporary Override" = "Tilapäisasetus";
-
-/* The default placeholder string for a credential */
-"Required" = "Pakollinen";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Pisin sallittu imeytymisaika on %@";

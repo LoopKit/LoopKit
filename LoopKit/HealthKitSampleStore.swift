@@ -40,13 +40,6 @@ public class HealthKitSampleStore {
     /// Whether the store is observing changes to types
     public let observationEnabled: Bool
 
-    /// The last observer query completion, stored until the next anchored object query returns
-    private var observerQueryCompletionHandler: HKObserverQueryCompletionHandler? {
-        didSet {
-            oldValue?()
-        }
-    }
-
     /// For unit testing only.
     internal var testQueryStore: HKSampleQueryTestable?
 
@@ -166,6 +159,23 @@ public class HealthKitSampleStore {
     }
     internal let lockedQueryAnchor: Locked<HKQueryAnchor?>
 
+    /// The last observer query completion, stored until the next anchored object query returns
+    private var observerQueryCompletionHandler: HKObserverQueryCompletionHandler? {
+        get {
+            lockedObserverQueryCompletionHandler.value
+        }
+        set {
+            var oldValue: HKObserverQueryCompletionHandler?
+            lockedObserverQueryCompletionHandler.mutate { handler in
+                oldValue = handler
+                handler = newValue
+            }
+
+            oldValue?()
+        }
+    }
+    private let lockedObserverQueryCompletionHandler: Locked<HKObserverQueryCompletionHandler?> = Locked(nil)
+
     func queryAnchorDidChange() {
         // Subclasses can override
     }
@@ -175,9 +185,10 @@ public class HealthKitSampleStore {
     /// - Parameters:
     ///   - query: The query which triggered the update
     ///   - error: An error during the update, if one occurred
-    internal func observeUpdates(to query: HKObserverQuery, completionHandler: HKObserverQueryCompletionHandler?, error: Error?) {
+    internal final func observeUpdates(to query: HKObserverQuery, completionHandler: HKObserverQueryCompletionHandler?, error: Error?) {
         if let error = error {
             self.log.error("%@ notified with changes with error: %{public}@", query, String(describing: error))
+            completionHandler?()
             return
         }
 
@@ -193,13 +204,19 @@ public class HealthKitSampleStore {
     private final func anchoredObjectQueryResultsHandler(query: HKAnchoredObjectQuery, newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, anchor: HKQueryAnchor?, error: Error?) {
         log.default("anchoredObjectQuery.resultsHandler: new: %{public}d deleted: %{public}d anchor: %{public}@ error: %{public}@", newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor), String(describing: error))
 
-        // Clear any existing completion handler (after calling it)
-        observerQueryCompletionHandler = nil
+        guard let anchor = anchor else {
+            // Clear any existing completion handler (after calling it)
+            self.observerQueryCompletionHandler = nil
+            return
+        }
 
-        processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], error: error)
+        processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], anchor: anchor) { didSucceed in
+            if didSucceed {
+                self.queryAnchor = anchor
+            }
 
-        if anchor != nil {
-            queryAnchor = anchor
+            // Clear any existing completion handler (after calling it)
+            self.observerQueryCompletionHandler = nil
         }
     }
 
@@ -210,8 +227,9 @@ public class HealthKitSampleStore {
     ///   - added: An array of samples added
     ///   - deleted: An array of samples deleted
     ///   - error: An error from the query, if one occurred
-    internal func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {
+    internal func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (_ didSucceed: Bool) -> Void) {
         // To be overridden
+        completion(true)
     }
 
     /// The preferred unit for the sample type

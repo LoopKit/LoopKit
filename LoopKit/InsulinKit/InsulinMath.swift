@@ -547,7 +547,9 @@ extension Collection where Element == DoseEntry {
         to end: Date? = nil,
         delta: TimeInterval = TimeInterval(/* minutes: */60 * 5)
     ) -> [GlucoseEffect] {
-        guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: longestEffectDuration, delta: delta) else {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(self.filter({ entry in
+            entry.netBasalUnits != 0
+        }), from: start, to: end, duration: longestEffectDuration, delta: delta) else {
             return []
         }
 

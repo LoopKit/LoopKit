@@ -11,7 +11,7 @@ import HealthKit
 import LoopKit
 
 
-class DeviceDataManager : CarbStoreDelegate {
+class DeviceDataManager {
 
     init() {
         let healthStore = HKHealthStore()
@@ -37,7 +37,6 @@ class DeviceDataManager : CarbStoreDelegate {
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )
         glucoseStore = GlucoseStore(healthStore: healthStore, cacheStore: cacheStore)
-        carbStore?.delegate = self
     }
 
     // Data stores
@@ -112,11 +111,5 @@ class DeviceDataManager : CarbStoreDelegate {
                 doseStore.resetPumpData()
             }
         }
-    }
-
-    // MARK: CarbStoreDelegate
-
-    func carbStore(_ carbStore: CarbStore, didError error: CarbStore.CarbStoreError) {
-        print("carbstore error: \(error)")
     }
 }

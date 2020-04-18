@@ -110,7 +110,7 @@ extension DoseEntry {
         case .bolus:
             return self.unitsPerHour
         default:
-            break;
+            break
         }
         
         guard let basalRate = scheduledBasalRate else {
