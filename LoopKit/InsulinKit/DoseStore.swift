@@ -700,14 +700,11 @@ extension DoseStore {
 
      - parameter events: An array of new pump events. Pump events should have end times reflective of when delivery is actually expected to be finished, as doses that end prior to a reservoir reading are ignored when reservoir data is being used.
      - parameter lastReconciliation: The date that pump events were most recently reconciled against recorded pump history. Pump events are assumed to be reflective of delivery up until this point in time. If reservoir values are recorded after this time, they may be used to supplement event based delivery.
-     - parameter updateLastReconciliation: Whether or not the last reconciliation time should be updated with the new value.
      - parameter completion: A closure called after the events are saved. The closure takes a single argument:
      - parameter error: An error object explaining why the events could not be saved.
      */
-    public func addPumpEvents(_ events: [NewPumpEvent], lastReconciliation: Date?, updateLastReconciliation: Bool = true, completion: @escaping (_ error: DoseStoreError?) -> Void) {
-        if updateLastReconciliation {
-            lastPumpEventsReconciliation = lastReconciliation
-        }
+    public func addPumpEvents(_ events: [NewPumpEvent], lastReconciliation: Date?, completion: @escaping (_ error: DoseStoreError?) -> Void) {
+        lastPumpEventsReconciliation = lastReconciliation
 
         guard events.count > 0 else {
             completion(nil)
@@ -827,6 +824,10 @@ extension DoseStore {
         }
     }
 
+    /// Deletes one particular logged dose event from the store
+    ///
+    /// - Parameter completion: A closure called after the event deleted. This closure takes a single argument:
+    /// - Parameter error: An error explaining why the deletion failed
     public func deleteOutsideDoseEvent(_ event: PersistedOutsideDoseEvent, completion: @escaping (_ error: DoseStoreError?) -> Void) {
         persistenceController.managedObjectContext.perform {
 
