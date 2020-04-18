@@ -803,7 +803,7 @@ extension DoseStore {
                 let object = OutsideDoseEvent(context: self.persistenceController.managedObjectContext)
 
                 object.date = dose.startDate
-                // ANNA TODO: where to get raw data from...
+                // ANNA TODO: Where to get raw data from...
                 object.raw = Data(UUID().uuidString.utf8)
                 object.title = "Logged Dose: \(String(describing: dose.programmedUnits)) \(String(describing: dose.unit)) on \(String(describing: dose.startDate))"
                 object.type = PumpEventType.loggedDose
@@ -814,7 +814,6 @@ extension DoseStore {
         }
         
         self.persistenceController.save { (error) -> Void in
-            // ANNA TODO: change device type to be something manual?
             self.insulinDeliveryStore.addReconciledDoses(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
                 switch result {
                 case .success:
@@ -1091,7 +1090,6 @@ extension DoseStore {
 
         isUploadRequestPending = true
 
-        // ANNA TODO: make logged dose entries correctly upload to nightscout
         delegate.doseStore(self, hasEventsNeedingUpload: events) { (uploadedObjectIDURLs) in
             self.persistenceController.managedObjectContext.perform {
                 for url in uploadedObjectIDURLs {
