@@ -1617,14 +1617,29 @@ extension DoseStore {
                                     report.append("* \(entry)")
                                 }
                             }
-
-                            self.insulinDeliveryStore.generateDiagnosticReport { (result) in
+                            
+                            self.getLoggedDoses(since: firstPumpEventDate) { (result) in
                                 report.append("")
-                                report.append(result)
+                                report.append("### getLoggedDoses")
 
-                                report.append("")
-                                completion(report.joined(separator: "\n"))
-                            }
+                                switch result {
+                                case .failure(let error):
+                                    report.append("Error: \(error)")
+                                case .success(let entries):
+                                    report.append("")
+                                    for entry in entries {
+                                        report.append("* \(entry)")
+                                    }
+                                }
+                                
+                                self.insulinDeliveryStore.generateDiagnosticReport { (result) in
+                                    report.append("")
+                                    report.append(result)
+
+                                    report.append("")
+                                    completion(report.joined(separator: "\n"))
+                                }
+                        }
                         })
                     }
                 }
