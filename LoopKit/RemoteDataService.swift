@@ -84,14 +84,38 @@ public extension RemoteDataService {
 
     var carbDataLimit: Int? { return nil }
 
+    func uploadCarbData(deleted: [DeletedCarbEntry], stored: [StoredCarbEntry], completion: @escaping (_ result: Result<Bool, Error>) -> Void) {
+        completion(.success(false))
+    }
+
     var doseDataLimit: Int? { return nil }
+
+    func uploadDoseData(_ stored: [DoseEntry], completion: @escaping (_ result: Result<Bool, Error>) -> Void) {
+        completion(.success(false))
+    }
 
     var dosingDecisionDataLimit: Int? { return nil }
 
+    func uploadDosingDecisionData(_ stored: [StoredDosingDecision], completion: @escaping (_ result: Result<Bool, Error>) -> Void) {
+        completion(.success(false))
+    }
+
     var glucoseDataLimit: Int? { return nil }
+
+    func uploadGlucoseData(_ stored: [StoredGlucoseSample], completion: @escaping (_ result: Result<Bool, Error>) -> Void) {
+        completion(.success(false))
+    }
 
     var pumpEventDataLimit: Int? { return nil }
 
+    func uploadPumpEventData(_ stored: [PersistedPumpEvent], completion: @escaping (_ result: Result<Bool, Error>) -> Void) {
+        completion(.success(false))
+    }
+
     var settingsDataLimit: Int? { return nil }
+
+    func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (_ result: Result<Bool, Error>) -> Void) {
+        completion(.success(false))
+    }
 
 }
