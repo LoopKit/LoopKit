@@ -18,7 +18,4 @@ public enum LoopNotificationCategory: String {
     case pumpExpired
     case pumpFault
     case alert
-//    #if TO BE REMOVED
-    case cgmAlert
-//    #endif
 }
