@@ -9,6 +9,15 @@ import Foundation
 import UserNotifications
 
 public protocol DeviceManagerDelegate: DeviceAlertPresenter {
+    func scheduleNotification(for manager: DeviceManager,
+                              identifier: String,
+                              content: UNNotificationContent,
+                              trigger: UNNotificationTrigger?)
+
+    func clearNotification(for manager: DeviceManager, identifier: String)
+    
+    func removeNotificationRequests(for manager: DeviceManager, identifiers: [String])
+
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 }
 
