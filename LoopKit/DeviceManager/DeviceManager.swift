@@ -64,3 +64,10 @@ public extension DeviceManager {
     // Default implementation of DeviceAlertResponder
     func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) -> Void { }
 }
+
+public extension DeviceManagerDelegate {
+    // Default implementation of DeviceAlertPresenter
+    func issueAlert(_ alert: DeviceAlert) { }
+    func removePendingAlert(identifier: DeviceAlert.Identifier) { }
+    func removeDeliveredAlert(identifier: DeviceAlert.Identifier) { }
+}
