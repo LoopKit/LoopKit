@@ -50,3 +50,8 @@ public extension DeviceManager {
         return Self.managerIdentifier
     }
 }
+
+public extension DeviceManager {
+    // Default implementation of DeviceAlertResponder
+    func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) -> Void { }
+}
