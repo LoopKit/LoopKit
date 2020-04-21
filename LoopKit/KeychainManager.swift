@@ -82,20 +82,24 @@ public struct KeychainManager {
 
         return query
     }
-
-    private func updatedQuery(_ query: Query, withPassword password: String) throws -> Query {
+    
+    private func updatedQuery(_ query: Query, withPassword password: Data) throws -> Query {
         var query = query
 
-        guard let value = password.data(using: String.Encoding.utf8) else {
-            throw KeychainManagerError.add(errSecDecode)
-        }
-
-        query[kSecValueData as String] = value as NSObject?
+        query[kSecValueData as String] = password as NSObject?
         query[kSecAttrAccessible as String] = accessibility
 
         return query
     }
 
+    private func updatedQuery(_ query: Query, withPassword password: String) throws -> Query {
+        guard let value = password.data(using: String.Encoding.utf8) else {
+            throw KeychainManagerError.add(errSecDecode)
+        }
+
+        return try updatedQuery(query, withPassword: value)
+    }
+    
     func delete(_ query: Query) throws {
         let statusCode = SecItemDelete(query as CFDictionary)
 
@@ -123,8 +127,26 @@ public struct KeychainManager {
             throw KeychainManagerError.add(statusCode)
         }
     }
+    
+    public func replaceGenericPassword(_ password: Data?, forService service: String) throws {
+        var query = queryForGenericPassword(by: service)
 
-    public func getGenericPasswordForService(_ service: String) throws -> String {
+        try delete(query)
+
+        guard let password = password else {
+            return
+        }
+
+        query = try updatedQuery(query, withPassword: password)
+
+        let statusCode = SecItemAdd(query as CFDictionary, nil)
+
+        guard statusCode == errSecSuccess else {
+            throw KeychainManagerError.add(statusCode)
+        }
+    }
+
+    public func getGenericPasswordForServiceAsData(_ service: String) throws -> Data {
         var query = queryForGenericPassword(by: service)
 
         query[kSecReturnData as String] = kCFBooleanTrue
@@ -138,7 +160,17 @@ public struct KeychainManager {
             throw KeychainManagerError.copy(statusCode)
         }
 
-        guard let passwordData = result as? Data, let password = String(data: passwordData, encoding: String.Encoding.utf8) else {
+        guard let passwordData = result as? Data else {
+            throw KeychainManagerError.unknownResult
+        }
+
+        return passwordData
+    }
+    
+    public func getGenericPasswordForService(_ service: String) throws -> String {
+        let passwordData = try getGenericPasswordForServiceAsData(service)
+        
+        guard let password = String(data: passwordData, encoding: String.Encoding.utf8) else {
             throw KeychainManagerError.unknownResult
         }
 
