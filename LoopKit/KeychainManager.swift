@@ -110,6 +110,10 @@ public struct KeychainManager {
 
     // MARK: – Generic Passwords
 
+    public func deleteGenericPassword(forService service: String) throws {
+        try delete(queryForGenericPassword(by: service))
+    }
+
     public func replaceGenericPassword(_ password: String?, forService service: String) throws {
         var query = queryForGenericPassword(by: service)
 
