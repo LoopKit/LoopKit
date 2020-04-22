@@ -449,6 +449,10 @@
 		89F53E9422B4328E0024A67C /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B33226D15E0004D9350 /* MutableCollection.swift */; };
 		89F53E9522B437570024A67C /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B33226D15E0004D9350 /* MutableCollection.swift */; };
 		89F6E30D2449713600CB9E15 /* CardStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E30C2449713600CB9E15 /* CardStack.swift */; };
+		89F6E30F244A1A5D00CB9E15 /* Guardrail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E30E244A1A5D00CB9E15 /* Guardrail.swift */; };
+		89F6E311244A1AAB00CB9E15 /* SettingDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E310244A1AAB00CB9E15 /* SettingDescription.swift */; };
+		89F6E314244A1AB600CB9E15 /* GuardrailWarning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */; };
+		89F6E315244A1AB600CB9E15 /* GlucoseValuePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */; };
 		9E78433F236653F00016C583 /* ice_35_min_none_piecewiselinear_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 9E78433E236653F00016C583 /* ice_35_min_none_piecewiselinear_output.json */; };
 		9E784341236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 9E784340236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json */; };
 		9E784343236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 9E784342236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json */; };
@@ -1215,6 +1219,10 @@
 		89D204D121CC837A001238CC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89DC540C21B75AE7005A1CE0 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		89F6E30C2449713600CB9E15 /* CardStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStack.swift; sourceTree = "<group>"; };
+		89F6E30E244A1A5D00CB9E15 /* Guardrail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Guardrail.swift; sourceTree = "<group>"; };
+		89F6E310244A1AAB00CB9E15 /* SettingDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingDescription.swift; sourceTree = "<group>"; };
+		89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuardrailWarning.swift; sourceTree = "<group>"; };
+		89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseValuePicker.swift; sourceTree = "<group>"; };
 		9E78433E236653F00016C583 /* ice_35_min_none_piecewiselinear_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ice_35_min_none_piecewiselinear_output.json; sourceTree = "<group>"; };
 		9E784340236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ice_35_min_partial_piecewiselinear_output.json; sourceTree = "<group>"; };
 		9E784342236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ice_slow_absorption_piecewiselinear_output.json; sourceTree = "<group>"; };
@@ -1545,6 +1553,9 @@
 				89AF78C524482268002B4FCC /* ActionButtonStyle.swift */,
 				893C9F8A2447DBC100CD4185 /* CardList */,
 				89627B172441168900BEB424 /* ConfigurationPage.swift */,
+				89F6E310244A1AAB00CB9E15 /* SettingDescription.swift */,
+				89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */,
+				89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1751,6 +1762,7 @@
 				1F5DAB2B2118CE9300048054 /* Localizable.strings */,
 				437874B4202FDC8300A3D8B9 /* Persistence */,
 				C16DA83E22E8D88F008624C2 /* LoopPlugin.swift */,
+				89F6E30E244A1A5D00CB9E15 /* Guardrail.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -2646,6 +2658,7 @@
 				B46B62AB23FF0822001E69BA /* LabeledValueView.swift in Sources */,
 				43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */,
 				43BA7182201EE7090058961E /* TextFieldTableViewCell.swift in Sources */,
+				89F6E314244A1AB600CB9E15 /* GuardrailWarning.swift in Sources */,
 				B46B62A723FEFE4D001E69BA /* InstructionList.swift in Sources */,
 				8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */,
 				43F5034D210599CC009FA89A /* AuthenticationViewController.swift in Sources */,
@@ -2724,6 +2737,7 @@
 				43BA718B201EE93C0058961E /* TimeZone.swift in Sources */,
 				A991161423426A0A00A4B2E9 /* ServiceSetupNotifying.swift in Sources */,
 				43BA717B201EE6A40058961E /* NibLoadable.swift in Sources */,
+				89F6E315244A1AB600CB9E15 /* GlucoseValuePicker.swift in Sources */,
 				895FE08122011F0C00FCF18A /* OverridePresetCollectionViewCell.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
 				8974B0692215FE460043F01B /* Collection.swift in Sources */,
@@ -2754,6 +2768,7 @@
 				B46B62B123FF0CA6001E69BA /* DescriptiveText.swift in Sources */,
 				B4C004D22416961300B40429 /* GuideNavigationButton.swift in Sources */,
 				89627B16244115A400BEB424 /* CardList.swift in Sources */,
+				89F6E311244A1AAB00CB9E15 /* SettingDescription.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2887,6 +2902,7 @@
 				4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */,
 				43AF1FB21C926CDD00EA2F3D /* HKQuantity.swift in Sources */,
 				A91A601A23CD023800C0E8A1 /* Modelv2.xcmappingmodel in Sources */,
+				89F6E30F244A1A5D00CB9E15 /* Guardrail.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
