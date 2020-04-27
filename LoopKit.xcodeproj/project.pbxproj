@@ -377,6 +377,8 @@
 		898E6E732241EE000019E459 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5DBB2231E20C008961AB /* Comparable.swift */; };
 		8992426521EC138000EA512B /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8992426421EC138000EA512B /* UIColor.swift */; };
 		8997B4F523727E8A00061132 /* CustomOverrideCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */; };
+		89AC9DCB24529927004A6B8A /* QuantityPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC9DCA24529927004A6B8A /* QuantityPicker.swift */; };
+		89AC9DCD24529D9B004A6B8A /* TimePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC9DCC24529D9B004A6B8A /* TimePicker.swift */; };
 		89ADE129226BDB280067222B /* TestingScenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE128226BDB280067222B /* TestingScenario.swift */; };
 		89ADE12B226BDB730067222B /* DateRelativeCarbEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE12A226BDB730067222B /* DateRelativeCarbEntry.swift */; };
 		89ADE12D226BDD190067222B /* DateRelativeBasalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADE12C226BDD190067222B /* DateRelativeBasalEntry.swift */; };
@@ -1189,6 +1191,8 @@
 		89AC792D224C781100B8E9BA /* DoseProgressTimerEstimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseProgressTimerEstimator.swift; sourceTree = "<group>"; };
 		89AC792E224C781200B8E9BA /* Locked.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locked.swift; sourceTree = "<group>"; };
 		89AC7934224C783500B8E9BA /* MockDoseProgressEstimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDoseProgressEstimator.swift; sourceTree = "<group>"; };
+		89AC9DCA24529927004A6B8A /* QuantityPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantityPicker.swift; sourceTree = "<group>"; };
+		89AC9DCC24529D9B004A6B8A /* TimePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TimePicker.swift; path = CardList/TimePicker.swift; sourceTree = "<group>"; };
 		89ADE128226BDB280067222B /* TestingScenario.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingScenario.swift; sourceTree = "<group>"; };
 		89ADE12A226BDB730067222B /* DateRelativeCarbEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelativeCarbEntry.swift; sourceTree = "<group>"; };
 		89ADE12C226BDD190067222B /* DateRelativeBasalEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelativeBasalEntry.swift; sourceTree = "<group>"; };
@@ -1557,7 +1561,9 @@
 				89627B172441168900BEB424 /* ConfigurationPage.swift */,
 				89F6E310244A1AAB00CB9E15 /* SettingDescription.swift */,
 				89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */,
+				89AC9DCA24529927004A6B8A /* QuantityPicker.swift */,
 				89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */,
+				89AC9DCC24529D9B004A6B8A /* TimePicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2715,6 +2721,7 @@
 				895FE08222011F0C00FCF18A /* LabeledTextFieldTableViewCell.swift in Sources */,
 				892A5DB22231E191008961AB /* LoadingTableViewCell.swift in Sources */,
 				4369F094208BA001000E3E45 /* TextButtonTableViewCell.swift in Sources */,
+				89AC9DCD24529D9B004A6B8A /* TimePicker.swift in Sources */,
 				A9498D8B23386CC700DAA9B9 /* ServiceUI.swift in Sources */,
 				892A5DB82231E1A0008961AB /* ReservoirVolumeHUDView.swift in Sources */,
 				43BA716C201E49220058961E /* CustomInputTextField.swift in Sources */,
@@ -2769,6 +2776,7 @@
 				43BA7162201E490D0058961E /* ErrorBackgroundView.swift in Sources */,
 				892A5D9A2231E0E4008961AB /* SettingsNavigationViewController.swift in Sources */,
 				B46B62B123FF0CA6001E69BA /* DescriptiveText.swift in Sources */,
+				89AC9DCB24529927004A6B8A /* QuantityPicker.swift in Sources */,
 				B4C004D22416961300B40429 /* GuideNavigationButton.swift in Sources */,
 				89627B16244115A400BEB424 /* CardList.swift in Sources */,
 				89F6E311244A1AAB00CB9E15 /* SettingDescription.swift in Sources */,

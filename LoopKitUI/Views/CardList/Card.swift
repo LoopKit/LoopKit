@@ -123,7 +123,7 @@ extension Card {
 private struct CardBackground: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 10)
-            .foregroundColor(Color(.systemBackground))
+            .foregroundColor(Color(.secondarySystemGroupedBackground))
     }
 }
 

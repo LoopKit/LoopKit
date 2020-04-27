@@ -11,23 +11,26 @@ import SwiftUI
 
 public struct ConfigurationPage<ActionAreaContent: View>: View {
     var title: Text
-    var isSaveButtonEnabled: Bool
+    var actionButtonTitle: Text
+    var isActionButtonEnabled: Bool
     var cards: CardStack
     var actionAreaContent: ActionAreaContent
-    var save: () -> Void
+    var action: () -> Void
 
     public init(
         title: Text,
-        isSaveButtonEnabled: Bool = true,
+        actionButtonTitle: Text,
+        isActionButtonEnabled: Bool = true,
         @CardStackBuilder cards: () -> CardStack,
         @ViewBuilder actionAreaContent: () -> ActionAreaContent,
-        onSave save: @escaping () -> Void
+        action: @escaping () -> Void
     ) {
         self.title = title
-        self.isSaveButtonEnabled = isSaveButtonEnabled
+        self.actionButtonTitle = actionButtonTitle
+        self.isActionButtonEnabled = isActionButtonEnabled
         self.cards = cards()
         self.actionAreaContent = actionAreaContent()
-        self.save = save
+        self.action = action
     }
 
     public var body: some View {
@@ -39,19 +42,38 @@ public struct ConfigurationPage<ActionAreaContent: View>: View {
                     .padding(.top)
 
                 Button(
-                    action: save,
+                    action: action,
                     label: {
-                        Text("Save", comment: "The button text for saving on a configuration page")
+                        actionButtonTitle
                     }
                 )
                 .buttonStyle(ActionButtonStyle(.primary))
-                .disabled(!isSaveButtonEnabled)
+                .disabled(!isActionButtonEnabled)
                 .padding()
             }
             .padding(.bottom) // FIXME: unnecessary on iPhone 8 size devices
-            .background(Color(.systemBackground).shadow(radius: 5))
+            .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5))
         }
         .edgesIgnoringSafeArea(.bottom)
+    }
+}
+
+extension ConfigurationPage {
+    /// Convenience initializer for a page whose action is 'Save'
+    public init(
+        title: Text,
+        isSaveButtonEnabled: Bool = true,
+        @CardStackBuilder cards: () -> CardStack,
+        @ViewBuilder actionAreaContent: () -> ActionAreaContent,
+        onSave save: @escaping () -> Void
+    ) {
+        self.init(
+            title: title,
+            actionButtonTitle: Text("Save", comment: "The button text for saving on a configuration page"),
+            cards: cards,
+            actionAreaContent: actionAreaContent,
+            action: save
+        )
     }
 }
 
