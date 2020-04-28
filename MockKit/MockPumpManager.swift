@@ -121,7 +121,8 @@ public final class MockPumpManager: TestingPumpManager {
             device: MockPumpManager.device,
             pumpBatteryChargeRemaining: state.pumpBatteryChargeRemaining,
             basalDeliveryState: basalDeliveryState(for: state),
-            bolusState: .none)
+            bolusState: bolusState(for: state)
+        )
     }
 
     public var pumpBatteryChargeRemaining: Double? {
