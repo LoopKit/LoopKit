@@ -9,6 +9,8 @@ import Foundation
 import UserNotifications
 
 public protocol DeviceManagerDelegate: DeviceAlertPresenter {
+    // Begin obsolescent code
+    // Note: once all plugins are updated to use the new alert system instead of Notifications, this can be removed.
     func scheduleNotification(for manager: DeviceManager,
                               identifier: String,
                               content: UNNotificationContent,
@@ -17,11 +19,12 @@ public protocol DeviceManagerDelegate: DeviceAlertPresenter {
     func clearNotification(for manager: DeviceManager, identifier: String)
     
     func removeNotificationRequests(for manager: DeviceManager, identifiers: [String])
-
+    // End obsolescent code
+    
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 }
 
-public protocol DeviceManager: CustomDebugStringConvertible, DeviceAlertResponder {
+public protocol DeviceManager: CustomDebugStringConvertible, DeviceAlertResponder, DeviceAlertSoundVendor {
     typealias RawStateValue = [String: Any]
 
     /// The identifier of the manager. This should be unique
@@ -63,6 +66,12 @@ public extension DeviceManager {
 public extension DeviceManager {
     // Default implementation of DeviceAlertResponder
     func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) -> Void { }
+}
+
+public extension DeviceManager {
+    // Default implementation of DeviceAlertSoundVendor
+    func getSoundBaseURL() -> URL? { return nil }
+    func getSounds() -> [DeviceAlert.Sound] { return [] }
 }
 
 public extension DeviceManagerDelegate {

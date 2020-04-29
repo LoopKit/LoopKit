@@ -26,15 +26,21 @@ public final class MockCGMManager: TestingCGMManager {
     public static let localizedTitle = "Simulator"
 
     public struct MockAlert {
+        public let sound: DeviceAlert.Sound
         public let identifier: DeviceAlert.AlertIdentifier
         public let foregroundContent: DeviceAlert.Content
         public let backgroundContent: DeviceAlert.Content
     }
     let alerts: [DeviceAlert.AlertIdentifier: MockAlert] = [
-        "alert1": MockAlert(identifier: "alert1",
-                            foregroundContent: DeviceAlert.Content(title: "Alert: FG Title", body: "Alert: Foreground Body", acknowledgeActionButtonLabel: "FG OK"),
-                            backgroundContent: DeviceAlert.Content(title: "Alert: BG Title", body: "Alert: Background Body", acknowledgeActionButtonLabel: "BG OK"))
+        submarine.identifier: submarine, buzz.identifier: buzz
     ]
+    
+    public static let submarine = MockAlert(sound: .sound(name: "sub.caf"), identifier: "submarine",
+                                            foregroundContent: DeviceAlert.Content(title: "Alert: FG Title", body: "Alert: Foreground Body", acknowledgeActionButtonLabel: "FG OK"),
+                                            backgroundContent: DeviceAlert.Content(title: "Alert: BG Title", body: "Alert: Background Body", acknowledgeActionButtonLabel: "BG OK"))
+    public static let buzz = MockAlert(sound: .vibrate, identifier: "buzz",
+                                       foregroundContent: DeviceAlert.Content(title: "Alert: FG Title", body: "FG bzzzt", acknowledgeActionButtonLabel: "Buzz"),
+                                       backgroundContent: DeviceAlert.Content(title: "Alert: BG Title", body: "BG bzzzt", acknowledgeActionButtonLabel: "Buzz"))
 
     public var mockSensorState: MockCGMState {
         didSet {
@@ -188,16 +194,26 @@ public final class MockCGMManager: TestingCGMManager {
 
 extension MockCGMManager {
     
+    public func getSoundBaseURL() -> URL? {
+        return Bundle(for: type(of: self)).bundleURL
+    }
+    
+    public func getSounds() -> [DeviceAlert.Sound] {
+        return alerts.map { $1.sound }
+    }
+    
     public func issueAlert(identifier: DeviceAlert.AlertIdentifier, trigger: DeviceAlert.Trigger, delay: TimeInterval?) {
+        guard let alert = alerts[identifier] else {
+            return
+        }
         registerBackgroundTask()
         delegate.notifyDelayed(by: delay ?? 0) { delegate in
             self.logDeviceComms(.delegate, message: "\(#function): \(identifier) \(trigger)")
-            delegate?.issueAlert(DeviceAlert(identifier:
-                DeviceAlert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: identifier),
-                                             foregroundContent: self.alerts[identifier]?.foregroundContent,
-                                             backgroundContent: self.alerts[identifier]?.backgroundContent,
-                                             trigger: trigger
-            ))
+            delegate?.issueAlert(DeviceAlert(identifier: DeviceAlert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: identifier),
+                                             foregroundContent: alert.foregroundContent,
+                                             backgroundContent: alert.backgroundContent,
+                                             trigger: trigger,
+                                             sound: alert.sound))
         }
     }
     

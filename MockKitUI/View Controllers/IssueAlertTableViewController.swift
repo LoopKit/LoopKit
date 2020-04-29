@@ -20,13 +20,15 @@ final class IssueAlertTableViewController: UITableViewController {
         case delayed
         case repeating
         case issueLater
-        
+        case buzz
+       
         var description: String {
             switch self {
             case .immediate: return "Immediate"
             case .delayed: return "Delayed 5 seconds"
             case .repeating: return "Repeating every 8 seconds"
-            case .issueLater: return "10 seconds later"
+            case .issueLater: return "10 seconds Later"
+            case .buzz: return "Vibrate"
             }
         }
         
@@ -36,6 +38,7 @@ final class IssueAlertTableViewController: UITableViewController {
             case .delayed: return .delayed(interval: 5)
             case .repeating: return .repeating(repeatInterval: 8)
             case .issueLater: return .immediate
+            case .buzz: return .immediate
             }
         }
         
@@ -47,7 +50,10 @@ final class IssueAlertTableViewController: UITableViewController {
         }
         
         var identifier: DeviceAlert.AlertIdentifier {
-            return "alert1"
+            switch self {
+            case .buzz: return MockCGMManager.buzz.identifier
+            default: return MockCGMManager.submarine.identifier
+            }
         }
     }
 

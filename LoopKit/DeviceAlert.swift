@@ -27,7 +27,7 @@ public protocol DeviceAlertResponder: class {
 /// Structure that represents an Alert that is issued from a Device.
 public struct DeviceAlert {
     /// Representation of an alert Trigger
-    public enum Trigger {
+    public enum Trigger: Equatable {
         /// Trigger the alert immediately
         case immediate
         /// Delay triggering the alert by `interval`, but issue it only once.
@@ -79,13 +79,39 @@ public struct DeviceAlert {
     /// An alert's "identifier" is a tuple of `managerIdentifier` and `alertIdentifier`.  It's purpose is to uniquely identify an alert so we can
     /// find which device issued it, and send acknowledgment of that alert to the proper device manager.
     public let identifier: Identifier
-        
-    public init(identifier: Identifier, foregroundContent: Content?, backgroundContent: Content?, trigger: Trigger) {
+
+    /// Representation of a "sound" (or other sound-like action, like vibrate) to perform when the alert is issued.
+    public enum Sound: Equatable {
+        case vibrate
+        case silence
+        case sound(name: String)
+    }
+    public let sound: Sound?
+    
+    public init(identifier: Identifier, foregroundContent: Content?, backgroundContent: Content?, trigger: Trigger, sound: Sound? = nil) {
         self.identifier = identifier
         self.foregroundContent = foregroundContent
         self.backgroundContent = backgroundContent
         self.trigger = trigger
+        self.sound = sound
     }
+}
+
+public extension DeviceAlert.Sound {
+    var filename: String? {
+        switch self {
+        case .sound(let name): return name
+        case .silence, .vibrate: return nil
+        }
+    }
+}
+
+public protocol DeviceAlertSoundVendor {
+    // Get the base URL for where to find all the vendor's sounds.  It is under here that all of the sound files should be.
+    // Returns nil if the vendor has no sounds.
+    func getSoundBaseURL() -> URL?
+    // Get all the sounds for this vendor.  Returns an empty array if the vendor has no sounds.
+    func getSounds() -> [DeviceAlert.Sound]
 }
 
 // For later:
