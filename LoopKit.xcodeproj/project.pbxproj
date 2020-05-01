@@ -417,6 +417,7 @@
 		89AF78C02447E285002B4FCC /* CardStackBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AF78BF2447E285002B4FCC /* CardStackBuilder.swift */; };
 		89AF78C22447E353002B4FCC /* Splat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AF78C12447E353002B4FCC /* Splat.swift */; };
 		89AF78C624482269002B4FCC /* ActionButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AF78C524482268002B4FCC /* ActionButtonStyle.swift */; };
+		89B0B2AA2453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */; };
 		89CA2B35226D1624004D9350 /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B33226D15E0004D9350 /* MutableCollection.swift */; };
 		89CA2B36226D1627004D9350 /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B33226D15E0004D9350 /* MutableCollection.swift */; };
 		89CA2B38226D4456004D9350 /* DateRelativeQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B37226D4456004D9350 /* DateRelativeQuantity.swift */; };
@@ -1211,6 +1212,7 @@
 		89AF78BF2447E285002B4FCC /* CardStackBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackBuilder.swift; sourceTree = "<group>"; };
 		89AF78C12447E353002B4FCC /* Splat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splat.swift; sourceTree = "<group>"; };
 		89AF78C524482268002B4FCC /* ActionButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtonStyle.swift; sourceTree = "<group>"; };
+		89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardrailConstraintedQuantityView.swift; sourceTree = "<group>"; };
 		89CA2B33226D15E0004D9350 /* MutableCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableCollection.swift; sourceTree = "<group>"; };
 		89CA2B37226D4456004D9350 /* DateRelativeQuantity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelativeQuantity.swift; sourceTree = "<group>"; };
 		89CC35D32403450E008FB633 /* ThumbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbView.swift; sourceTree = "<group>"; };
@@ -1584,6 +1586,7 @@
 				89AC9DCA24529927004A6B8A /* QuantityPicker.swift */,
 				89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */,
 				89AC9DCC24529D9B004A6B8A /* TimePicker.swift */,
+				89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2684,6 +2687,7 @@
 				898E6E6E2241ED9F0019E459 /* SuspendResumeTableViewCell.swift in Sources */,
 				B4C004D12416961300B40429 /* GuidePage.swift in Sources */,
 				898E6E69224179310019E459 /* BatteryLevelHUDView.swift in Sources */,
+				89B0B2AA2453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift in Sources */,
 				892155182245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.swift in Sources */,
 				892155132245C516009112BC /* SegmentedGaugeBarView.swift in Sources */,
 				B4A2AAB3240832350066563F /* MultipleSelectionList.swift in Sources */,

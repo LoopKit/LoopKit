@@ -11,12 +11,23 @@ import LoopKit
 
 
 public struct GuardrailWarning: View {
-    var title: Text
-    var threshold: SafetyClassification.Threshold
+    private enum CrossedThresholds {
+        case one(SafetyClassification.Threshold)
+        case oneOrMore([SafetyClassification.Threshold])
+    }
+
+    private var title: Text
+    private var crossedThresholds: CrossedThresholds
 
     public init(title: Text, threshold: SafetyClassification.Threshold) {
-        self.threshold = threshold
         self.title = title
+        self.crossedThresholds = .one(threshold)
+    }
+
+    public init(title: Text, thresholds: [SafetyClassification.Threshold]) {
+        precondition(!thresholds.isEmpty)
+        self.title = title
+        self.crossedThresholds = .oneOrMore(thresholds)
     }
 
     public var body: some View {
@@ -35,7 +46,7 @@ public struct GuardrailWarning: View {
 
                 caption
                     .font(.callout)
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color(.secondaryLabel))
                     .fixedSize(horizontal: false, vertical: true)
                     .animation(nil)
             }
@@ -45,24 +56,54 @@ public struct GuardrailWarning: View {
     }
 
     private var accentColor: Color {
+        switch crossedThresholds {
+        case .one(let threshold):
+            return color(for: threshold)
+        case .oneOrMore(let thresholds):
+            return color(for: thresholds.max(by: { $0.severity < $1.severity })!)
+        }
+    }
+
+    private func color(for threshold: SafetyClassification.Threshold) -> Color {
         switch threshold {
-            case .minimum, .maximum:
-                return .severeWarning
-            case .belowRecommended, .aboveRecommended:
-                return .warning
+        case .minimum, .maximum:
+            return .severeWarning
+        case .belowRecommended, .aboveRecommended:
+            return .warning
         }
     }
 
     private var caption: Text {
-        switch threshold {
-        case .minimum:
-            return Text("The value you have chosen is the lowest possible and outside what Tidepool recommends.", comment: "Warning for entering a setting's minimum value")
-        case .belowRecommended:
-            return Text("The value you have chosen is lower than Tidepool recommends.", comment: "Warning for entering a low setting value")
-        case .aboveRecommended:
-            return Text("The value you have chosen is higher than Tidepool recommends.", comment: "Warning for entering a high setting value")
-        case .maximum:
-            return Text("The value you have chosen is the highest possible and outside what Tidepool recommends.", comment: "Warning for entering a setting's highest value")
+        switch crossedThresholds {
+        case .one(let threshold):
+            switch threshold {
+            case .minimum, .belowRecommended:
+                return Text("The value you have chosen is lower than Tidepool generally recommends.", comment: "Warning for entering a low setting value")
+            case .aboveRecommended, .maximum:
+                return Text("The value you have chosen is higher than Tidepool generally recommends.", comment: "Warning for entering a high setting value")
+            }
+        case .oneOrMore(let thresholds):
+            if thresholds.count == 1 {
+                switch thresholds.first! {
+                case .minimum, .belowRecommended:
+                        return Text("A value you have chosen is lower than Tidepool generally recommends.", comment: "Warning for entering a low setting value in a schedule interface")
+                case .aboveRecommended, .maximum:
+                        return Text("A value you have chosen is higher than Tidepool generally recommends.", comment: "Warning for entering a high setting value in a schedule interface")
+                }
+            } else {
+                return Text("Some of the values you have entered are outside of what Tidepool generally recommends.")
+            }
+        }
+    }
+}
+
+fileprivate extension SafetyClassification.Threshold {
+    var severity: Int {
+        switch self {
+        case .belowRecommended, .aboveRecommended:
+            return 1
+        case .minimum, .maximum:
+            return 2
         }
     }
 }

@@ -20,7 +20,7 @@ public struct SettingDescription: View {
         HStack(spacing: 16) {
             text
                 .font(.callout)
-                .foregroundColor(.gray)
+                .foregroundColor(Color(.secondaryLabel))
                 .fixedSize(horizontal: false, vertical: true)
 
             Button(

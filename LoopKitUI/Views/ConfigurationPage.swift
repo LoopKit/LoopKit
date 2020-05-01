@@ -70,6 +70,7 @@ extension ConfigurationPage {
         self.init(
             title: title,
             actionButtonTitle: Text("Save", comment: "The button text for saving on a configuration page"),
+            isActionButtonEnabled: isSaveButtonEnabled,
             cards: cards,
             actionAreaContent: actionAreaContent,
             action: save
