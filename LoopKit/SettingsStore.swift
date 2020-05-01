@@ -102,18 +102,14 @@ extension SettingsStore {
 
         lock.withLock {
             if queryAnchor.modificationCounter < self.modificationCounter {
-                let startModificationCounter = queryAnchor.modificationCounter + 1
-                var endModificationCounter = self.modificationCounter
-                if limit <= endModificationCounter - startModificationCounter {
-                    endModificationCounter = queryAnchor.modificationCounter + Int64(limit)
-                }
-                for modificationCounter in (startModificationCounter...endModificationCounter) {
+                var modificationCounter = queryAnchor.modificationCounter
+                while modificationCounter < self.modificationCounter && queryResult.count < limit {
+                    modificationCounter += 1
                     if let settings = self.settings[modificationCounter] {
                         queryResult.append(settings)
                     }
                 }
-
-                queryAnchor.modificationCounter = endModificationCounter
+                queryAnchor.modificationCounter = modificationCounter
             }
         }
 
@@ -123,48 +119,81 @@ extension SettingsStore {
 }
 
 public struct StoredSettings {
-    
-    public var date: Date = Date()
-    
-    public var dosingEnabled: Bool = false
-    
-    public var glucoseTargetRangeSchedule: GlucoseRangeSchedule?
-    
-    public var preMealTargetRange: DoubleRange?
-    
-    public var overridePresets: [TemporaryScheduleOverridePreset] = []
-    
-    public var scheduleOverride: TemporaryScheduleOverride?
-    
-    public var maximumBasalRatePerHour: Double?
-    
-    public var maximumBolus: Double?
-    
-    public var suspendThreshold: GlucoseThreshold?
-    
-    public var glucoseUnit: HKUnit?
-    
-    public var deviceToken: Data?
+    public let date: Date
+    public let dosingEnabled: Bool
+    public let glucoseTargetRangeSchedule: GlucoseRangeSchedule?
+    public let preMealTargetRange: DoubleRange?
+    public let workoutTargetRange: DoubleRange?
+    public let overridePresets: [TemporaryScheduleOverridePreset]?
+    public let scheduleOverride: TemporaryScheduleOverride?
+    public let preMealOverride: TemporaryScheduleOverride?
+    public let maximumBasalRatePerHour: Double?
+    public let maximumBolus: Double?
+    public let suspendThreshold: GlucoseThreshold?
+    public let deviceToken: String?
+    public let insulinModel: InsulinModel?
+    public let basalRateSchedule: BasalRateSchedule?
+    public let insulinSensitivitySchedule: InsulinSensitivitySchedule?
+    public let carbRatioSchedule: CarbRatioSchedule?
+    public let bloodGlucoseUnit: HKUnit?
+    public let syncIdentifier: String
 
-    public var bundleIdentifier: String?
-
-    public var insulinModel: InsulinModel?
-    
-    public var basalRateSchedule: BasalRateSchedule?
-    
-    public var insulinSensitivitySchedule: InsulinSensitivitySchedule?
-    
-    public var carbRatioSchedule: CarbRatioSchedule?
-    
-    public var syncIdentifier: String
-
-    public var syncVersion: Int
-
-    public init() {
-        self.syncIdentifier = UUID().uuidString
-        self.syncVersion = 1
+    public init(date: Date = Date(),
+                dosingEnabled: Bool = false,
+                glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
+                preMealTargetRange: DoubleRange? = nil,
+                workoutTargetRange: DoubleRange? = nil,
+                overridePresets: [TemporaryScheduleOverridePreset]? = nil,
+                scheduleOverride: TemporaryScheduleOverride? = nil,
+                preMealOverride: TemporaryScheduleOverride? = nil,
+                maximumBasalRatePerHour: Double? = nil,
+                maximumBolus: Double? = nil,
+                suspendThreshold: GlucoseThreshold? = nil,
+                deviceToken: String? = nil,
+                insulinModel: InsulinModel? = nil,
+                basalRateSchedule: BasalRateSchedule? = nil,
+                insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
+                carbRatioSchedule: CarbRatioSchedule? = nil,
+                bloodGlucoseUnit: HKUnit? = nil,
+                syncIdentifier: String = UUID().uuidString) {
+        self.date = date
+        self.dosingEnabled = dosingEnabled
+        self.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
+        self.preMealTargetRange = preMealTargetRange
+        self.workoutTargetRange = workoutTargetRange
+        self.overridePresets = overridePresets
+        self.scheduleOverride = scheduleOverride
+        self.preMealOverride = preMealOverride
+        self.maximumBasalRatePerHour = maximumBasalRatePerHour
+        self.maximumBolus = maximumBolus
+        self.suspendThreshold = suspendThreshold
+        self.deviceToken = deviceToken
+        self.insulinModel = insulinModel
+        self.basalRateSchedule = basalRateSchedule
+        self.insulinSensitivitySchedule = insulinSensitivitySchedule
+        self.carbRatioSchedule = carbRatioSchedule
+        self.bloodGlucoseUnit = bloodGlucoseUnit
+        self.syncIdentifier = syncIdentifier
     }
 
+    public struct InsulinModel {
+        public enum ModelType: String {
+            case fiasp
+            case rapidAdult
+            case rapidChild
+            case walsh
+        }
+        
+        public let modelType: ModelType
+        public let actionDuration: TimeInterval
+        public let peakActivity: TimeInterval?
+
+        public init(modelType: ModelType, actionDuration: TimeInterval, peakActivity: TimeInterval? = nil) {
+            self.modelType = modelType
+            self.actionDuration = actionDuration
+            self.peakActivity = peakActivity
+        }
+    }
 }
 
 extension UserDefaults: SettingsStoreCacheStore {
