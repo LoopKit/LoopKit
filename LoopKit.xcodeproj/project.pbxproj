@@ -12,6 +12,7 @@
 		1DA649AB2445174400F61E75 /* DeviceAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* DeviceAlert.swift */; };
 		1DABAD3A2453615200ACF708 /* IssueAlertTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DABAD392453615200ACF708 /* IssueAlertTableViewController.swift */; };
 		1DD3DEB624451C3300BD8E40 /* DeviceAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* DeviceAlert.swift */; };
+		1DFB99D6245CB2E900DCC8C9 /* DeviceAlertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFB99D5245CB2E900DCC8C9 /* DeviceAlertTests.swift */; };
 		1F5DAB1D2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
 		1F5DAB1F2118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
 		1F5DAB202118C95700048054 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5DAB1C2118C95700048054 /* LocalizedString.swift */; };
@@ -748,6 +749,7 @@
 		1D841AAC24577EE10069DBFF /* DeviceAlertSoundPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceAlertSoundPlayer.swift; sourceTree = "<group>"; };
 		1DA649AA2445174400F61E75 /* DeviceAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceAlert.swift; sourceTree = "<group>"; };
 		1DABAD392453615200ACF708 /* IssueAlertTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueAlertTableViewController.swift; sourceTree = "<group>"; };
+		1DFB99D5245CB2E900DCC8C9 /* DeviceAlertTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAlertTests.swift; sourceTree = "<group>"; };
 		1F50C31F212B20D300C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		1F50C320212B20D300C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Main.strings; sourceTree = "<group>"; };
 		1F50C321212B20D300C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/CarbKit.strings; sourceTree = "<group>"; };
@@ -1813,6 +1815,7 @@
 				43D8FE411C7291900073BE78 /* CarbMathTests.swift */,
 				437AFF192039F149008C4892 /* CarbStoreTests.swift */,
 				891A3FD6224BE62100378B27 /* DailyValueScheduleTests.swift */,
+				1DFB99D5245CB2E900DCC8C9 /* DeviceAlertTests.swift */,
 				A99C7374233993FE00C80963 /* DiagnosticLogTests.swift */,
 				43A067121F245A2F00E9E90F /* DoseStoreTests.swift */,
 				A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */,
@@ -2981,6 +2984,7 @@
 				434113BE20F2C72000D05747 /* CachedCarbObjectTests.swift in Sources */,
 				43260F6E21C4BF7A00DD6837 /* UUID.swift in Sources */,
 				A971C8A223C6B17D0099BEFC /* SettingsStoreTests.swift in Sources */,
+				1DFB99D6245CB2E900DCC8C9 /* DeviceAlertTests.swift in Sources */,
 				4303C4941E2D665F00ADEDC8 /* TimeZone.swift in Sources */,
 				4322B76D202F9EF20002837D /* GlucoseMathTests.swift in Sources */,
 				43025DAF1D5AB2E300106C28 /* NSTimeInterval.swift in Sources */,

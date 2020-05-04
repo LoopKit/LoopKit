@@ -15,6 +15,8 @@ final class IssueAlertTableViewController: UITableViewController {
   
     let cgmManager: MockCGMManager
 
+    static let delay = TimeInterval(30)
+    
     private enum AlertRow: Int, CaseIterable, CustomStringConvertible {
         case immediate = 0
         case delayed
@@ -24,19 +26,19 @@ final class IssueAlertTableViewController: UITableViewController {
        
         var description: String {
             switch self {
-            case .immediate: return "Immediate"
-            case .delayed: return "Delayed 5 seconds"
-            case .repeating: return "Repeating every 8 seconds"
-            case .issueLater: return "10 seconds Later"
-            case .buzz: return "Vibrate"
+            case .immediate: return "Issue an immediate alert"
+            case .delayed: return "Issue a \"delayed \(delay) seconds\" alert"
+            case .repeating: return "Issue a \"repeating every \(delay) seconds\" alert"
+            case .issueLater: return "Issue an immediate alert \(delay) seconds from now"
+            case .buzz: return "Issue an immediate vibrate alert"
             }
         }
         
         var trigger: DeviceAlert.Trigger {
             switch self {
             case .immediate: return .immediate
-            case .delayed: return .delayed(interval: 5)
-            case .repeating: return .repeating(repeatInterval: 8)
+            case .delayed: return .delayed(interval: delay)
+            case .repeating: return .repeating(repeatInterval: delay)
             case .issueLater: return .immediate
             case .buzz: return .immediate
             }
@@ -44,7 +46,7 @@ final class IssueAlertTableViewController: UITableViewController {
         
         var delayBeforeIssue: TimeInterval? {
             switch self {
-            case .issueLater: return 10
+            case .issueLater: return delay
             default: return nil
             }
         }
