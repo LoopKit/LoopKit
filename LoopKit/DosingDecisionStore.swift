@@ -102,18 +102,14 @@ extension DosingDecisionStore {
 
         lock.withLock {
             if queryAnchor.modificationCounter < self.modificationCounter {
-                let startModificationCounter = queryAnchor.modificationCounter + 1
-                var endModificationCounter = self.modificationCounter
-                if limit <= endModificationCounter - startModificationCounter {
-                    endModificationCounter = queryAnchor.modificationCounter + Int64(limit)
-                }
-                for modificationCounter in (startModificationCounter...endModificationCounter) {
+                var modificationCounter = queryAnchor.modificationCounter
+                while modificationCounter < self.modificationCounter && queryResult.count < limit {
+                    modificationCounter += 1
                     if let dosingDecision = self.dosingDecision[modificationCounter] {
                         queryResult.append(dosingDecision)
                     }
                 }
-                
-                queryAnchor.modificationCounter = endModificationCounter
+                queryAnchor.modificationCounter = modificationCounter
             }
         }
         
@@ -123,68 +119,80 @@ extension DosingDecisionStore {
 }
 
 public struct StoredDosingDecision {
-    
-    public let date: Date = Date()
-    
-    public var insulinOnBoard: InsulinValue?
-    
-    public var carbsOnBoard: CarbValue?
-    
-    public var predictedGlucose: [PredictedGlucoseValue]?
-
-    public var predictedGlucoseIncludingPendingInsulin: [PredictedGlucoseValue]?
-    
-    public var tempBasalRecommendationDate: TempBasalRecommendationDate?
-    
-    public var recommendedBolus: Double?
-    
-    public var lastReservoirValue: LastReservoirValue?
-    
-    public var pumpManagerStatus: PumpManagerStatus?
-    
-    public var glucoseTargetRangeSchedule: GlucoseRangeSchedule?
-    
-    public var scheduleOverride: TemporaryScheduleOverride?
-    
-    public var glucoseTargetRangeScheduleApplyingOverrideIfActive: GlucoseRangeSchedule?
-    
-    public var error: Error?
-
-    public var syncIdentifier: String
-
-    public var syncVersion: Int
-
-    public init() {
-        self.syncIdentifier = UUID().uuidString
-        self.syncVersion = 1
-    }
-    
-}
-
-public struct TempBasalRecommendationDate {
-    
-    public let recommendation: TempBasalRecommendation
-    
     public let date: Date
-    
-    public init(recommendation: TempBasalRecommendation, date: Date) {
-        self.recommendation = recommendation
-        self.date = date
-    }
-    
-}
+    public var insulinOnBoard: InsulinValue?
+    public var carbsOnBoard: CarbValue?
+    public var scheduleOverride: TemporaryScheduleOverride?
+    public var glucoseTargetRangeSchedule: GlucoseRangeSchedule?
+    public var glucoseTargetRangeScheduleApplyingOverrideIfActive: GlucoseRangeSchedule?
+    public var predictedGlucose: [PredictedGlucoseValue]?
+    public var predictedGlucoseIncludingPendingInsulin: [PredictedGlucoseValue]?
+    public var lastReservoirValue: LastReservoirValue?
+    public var recommendedTempBasal: TempBasalRecommendationWithDate?
+    public var recommendedBolus: BolusRecommendationWithDate?
+    public var pumpManagerStatus: PumpManagerStatus?
+    public var errors: [Error]?
+    public let syncIdentifier: String
 
-public struct LastReservoirValue {
-    
-    public let startDate: Date
-    
-    public let unitVolume: Double
-    
-    public init(startDate: Date, unitVolume: Double) {
-        self.startDate = startDate
-        self.unitVolume = unitVolume
+    public init(date: Date = Date(),
+                insulinOnBoard: InsulinValue? = nil,
+                carbsOnBoard: CarbValue? = nil,
+                scheduleOverride: TemporaryScheduleOverride? = nil,
+                glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
+                glucoseTargetRangeScheduleApplyingOverrideIfActive: GlucoseRangeSchedule? = nil,
+                predictedGlucose: [PredictedGlucoseValue]? = nil,
+                predictedGlucoseIncludingPendingInsulin: [PredictedGlucoseValue]? = nil,
+                lastReservoirValue: LastReservoirValue? = nil,
+                recommendedTempBasal: TempBasalRecommendationWithDate? = nil,
+                recommendedBolus: BolusRecommendationWithDate? = nil,
+                pumpManagerStatus: PumpManagerStatus? = nil,
+                errors: [Error]? = nil,
+                syncIdentifier: String = UUID().uuidString) {
+        self.date = date
+        self.insulinOnBoard = insulinOnBoard
+        self.carbsOnBoard = carbsOnBoard
+        self.scheduleOverride = scheduleOverride
+        self.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
+        self.glucoseTargetRangeScheduleApplyingOverrideIfActive = glucoseTargetRangeScheduleApplyingOverrideIfActive
+        self.predictedGlucose = predictedGlucose
+        self.predictedGlucoseIncludingPendingInsulin = predictedGlucoseIncludingPendingInsulin
+        self.lastReservoirValue = lastReservoirValue
+        self.recommendedTempBasal = recommendedTempBasal
+        self.recommendedBolus = recommendedBolus
+        self.pumpManagerStatus = pumpManagerStatus
+        self.errors = errors
+        self.syncIdentifier = syncIdentifier
     }
-    
+
+    public struct LastReservoirValue {
+        public let startDate: Date
+        public let unitVolume: Double
+
+        public init(startDate: Date, unitVolume: Double) {
+            self.startDate = startDate
+            self.unitVolume = unitVolume
+        }
+    }
+
+    public struct TempBasalRecommendationWithDate {
+        public let recommendation: TempBasalRecommendation
+        public let date: Date
+
+        public init(recommendation: TempBasalRecommendation, date: Date) {
+            self.recommendation = recommendation
+            self.date = date
+        }
+    }
+
+    public struct BolusRecommendationWithDate {
+        public let recommendation: BolusRecommendation
+        public let date: Date
+
+        public init(recommendation: BolusRecommendation, date: Date) {
+            self.recommendation = recommendation
+            self.date = date
+        }
+    }
 }
 
 extension UserDefaults: DosingDecisionStoreCacheStore {

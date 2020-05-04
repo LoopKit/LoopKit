@@ -245,7 +245,6 @@ class DosingDecisionStoreQueryTests: XCTestCase, DosingDecisionStoreCacheStore {
                 XCTAssertEqual(data.count, 3)
                 for (index, syncIdentifier) in syncIdentifiers.enumerated() {
                     XCTAssertEqual(data[index].syncIdentifier, syncIdentifier)
-                    XCTAssertEqual(data[index].syncVersion, index)
                 }
             }
             self.completion.fulfill()
@@ -269,7 +268,6 @@ class DosingDecisionStoreQueryTests: XCTestCase, DosingDecisionStoreCacheStore {
                 XCTAssertEqual(anchor.modificationCounter, 3)
                 XCTAssertEqual(data.count, 1)
                 XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[2])
-                XCTAssertEqual(data[0].syncVersion, 2)
             }
             self.completion.fulfill()
         }
@@ -334,9 +332,7 @@ class DosingDecisionStoreQueryTests: XCTestCase, DosingDecisionStoreCacheStore {
                 XCTAssertEqual(anchor.modificationCounter, 2)
                 XCTAssertEqual(data.count, 2)
                 XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[0])
-                XCTAssertEqual(data[0].syncVersion, 0)
                 XCTAssertEqual(data[1].syncIdentifier, syncIdentifiers[1])
-                XCTAssertEqual(data[1].syncVersion, 1)
             }
             self.completion.fulfill()
         }
@@ -345,11 +341,8 @@ class DosingDecisionStoreQueryTests: XCTestCase, DosingDecisionStoreCacheStore {
     }
 
     private func addData(withSyncIdentifiers syncIdentifiers: [String]) {
-        for (index, syncIdentifier) in syncIdentifiers.enumerated() {
-            var dosingDecision = StoredDosingDecision()
-            dosingDecision.syncIdentifier = syncIdentifier
-            dosingDecision.syncVersion = index
-            self.dosingDecisionStore.storeDosingDecision(dosingDecision) {}
+        for (_, syncIdentifier) in syncIdentifiers.enumerated() {
+            self.dosingDecisionStore.storeDosingDecision(StoredDosingDecision(syncIdentifier: syncIdentifier)) {}
         }
     }
 
