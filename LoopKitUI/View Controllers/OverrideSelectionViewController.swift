@@ -40,7 +40,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         super.viewDidLoad()
 
         title = NSLocalizedString("Custom Preset", comment: "The title for the custom preset selection screen")
-        collectionView?.backgroundColor = .groupTableViewBackground
+        collectionView?.backgroundColor = .systemGroupedBackground
         navigationItem.rightBarButtonItems = [saveButton, editButton]
         navigationItem.leftBarButtonItem = cancelButton
     }
