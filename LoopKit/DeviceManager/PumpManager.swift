@@ -95,7 +95,7 @@ public protocol PumpManager: DeviceManager {
     
     /// The most-recent status
     var status: PumpManagerStatus { get }
-
+    
     /// Adds an observer of changes in PumpManagerStatus
     ///
     /// Observers are held by weak reference.
@@ -163,6 +163,12 @@ public protocol PumpManager: DeviceManager {
     ///   - completion: A closure called after the command is complete
     ///   - error: An error describing why the command failed
     func resumeDelivery(completion: @escaping (_ error: Error?) -> Void)
+    
+    /// Notifies the PumpManager of a change in the user's preference for maximum basal rate.
+    ///
+    /// - Parameters:
+    ///   - rate: The maximum rate the pumpmanager should expect to receive in an enactTempBasal command.
+    func setMaximumTempBasalRate(_ rate: Double)
 }
 
 

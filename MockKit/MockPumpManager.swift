@@ -412,6 +412,8 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     public func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) { }
+    
+    public func setMaximumTempBasalRate(_ rate: Double) { }
 }
 
 extension MockPumpManager {
