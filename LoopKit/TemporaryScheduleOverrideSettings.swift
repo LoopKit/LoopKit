@@ -79,3 +79,5 @@ extension TemporaryScheduleOverrideSettings: RawRepresentable {
         return raw
     }
 }
+
+extension TemporaryScheduleOverrideSettings: Codable {}

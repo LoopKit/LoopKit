@@ -6,62 +6,94 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
+import os.log
 import Foundation
+import CoreData
 import HealthKit
 
 public protocol SettingsStoreDelegate: AnyObject {
-    
     /**
      Informs the delegate that the settings store has updated settings data.
      
      - Parameter settingsStore: The settings store that has updated settings data.
      */
     func settingsStoreHasUpdatedSettingsData(_ settingsStore: SettingsStore)
-    
-}
 
-public protocol SettingsStoreCacheStore: AnyObject {
-
-    /// The settings store modification counter
-    var settingsStoreModificationCounter: Int64? { get set }
-    
 }
 
 public class SettingsStore {
-    
     public weak var delegate: SettingsStoreDelegate?
     
-    private let lock = UnfairLock()
-    
-    private let storeCache: SettingsStoreCacheStore
-    
-    private var settings: [Int64: StoredSettings]
-    
-    private var modificationCounter: Int64 {
-        didSet {
-            storeCache.settingsStoreModificationCounter = modificationCounter
-        }
-    }
-    
-    public init(storeCache: SettingsStoreCacheStore) {
-        self.storeCache = storeCache
-        self.settings = [:]
-        self.modificationCounter = storeCache.settingsStoreModificationCounter ?? 0
+    private let store: PersistenceController
+    private let expireAfter: TimeInterval
+    private let dataAccessQueue = DispatchQueue(label: "com.loopkit.SettingsStore.dataAccessQueue", qos: .utility)
+    private let log = OSLog(category: "SettingsStore")
+
+    public init(store: PersistenceController, expireAfter: TimeInterval) {
+        self.store = store
+        self.expireAfter = expireAfter
     }
     
     public func storeSettings(_ settings: StoredSettings, completion: @escaping () -> Void) {
-        lock.withLock {
-            self.modificationCounter += 1
-            self.settings[self.modificationCounter] = settings
+        dataAccessQueue.async {
+            if let data = self.encodeSettings(settings) {
+                self.store.managedObjectContext.performAndWait {
+                    let object = SettingsObject(context: self.store.managedObjectContext)
+                    object.data = data
+                    object.date = settings.date
+                    self.store.save()
+                }
+            }
+
+            self.purgeExpiredSettingsObjects()
+
+            self.delegate?.settingsStoreHasUpdatedSettingsData(self)
+            completion()
         }
-        self.delegate?.settingsStoreHasUpdatedSettingsData(self)
-        completion()
     }
-    
+
+    private var expireDate: Date {
+        return Date(timeIntervalSinceNow: -expireAfter)
+    }
+
+    private func purgeExpiredSettingsObjects() {
+        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
+
+        store.managedObjectContext.performAndWait {
+            do {
+                let fetchRequest: NSFetchRequest<SettingsObject> = SettingsObject.fetchRequest()
+                fetchRequest.predicate = NSPredicate(format: "date < %@", expireDate as NSDate)
+                let count = try self.store.managedObjectContext.deleteObjects(matching: fetchRequest)
+                self.log.info("Deleted %d SettingsObjects", count)
+            } catch let error {
+                self.log.error("Unable to purge SettingsObjects: %@", String(describing: error))
+            }
+        }
+    }
+
+    private func encodeSettings(_ settings: StoredSettings) -> Data? {
+        do {
+            let encoder = PropertyListEncoder()
+            encoder.outputFormat = .binary
+            return try encoder.encode(settings)
+        } catch let error {
+            self.log.error("Error encoding StoredSettings: %@", String(describing: error))
+            return nil
+        }
+    }
+
+    private func decodeSettings(fromData data: Data) -> StoredSettings? {
+        do {
+            let decoder = PropertyListDecoder()
+            return try decoder.decode(StoredSettings.self, from: data)
+        } catch let error {
+            self.log.error("Error decoding StoredSettings: %@", String(describing: error))
+            return nil
+        }
+    }
 }
 
 extension SettingsStore {
-    
     public struct QueryAnchor: RawRepresentable {
         
         public typealias RawValue = [String: Any]
@@ -90,32 +122,45 @@ extension SettingsStore {
         case success(QueryAnchor, [StoredSettings])
         case failure(Error)
     }
-    
+
     public func executeSettingsQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (SettingsQueryResult) -> Void) {
-        var queryAnchor = queryAnchor ?? QueryAnchor()
-        var queryResult = [StoredSettings]()
+        dataAccessQueue.async {
+            var queryAnchor = queryAnchor ?? QueryAnchor()
+            var queryResult = [StoredSettings]()
+            var queryError: Error?
 
-        guard limit > 0 else {
-            completion(.success(queryAnchor, queryResult))
-            return
-        }
-
-        lock.withLock {
-            if queryAnchor.modificationCounter < self.modificationCounter {
-                var modificationCounter = queryAnchor.modificationCounter
-                while modificationCounter < self.modificationCounter && queryResult.count < limit {
-                    modificationCounter += 1
-                    if let settings = self.settings[modificationCounter] {
-                        queryResult.append(settings)
-                    }
-                }
-                queryAnchor.modificationCounter = modificationCounter
+            guard limit > 0 else {
+                completion(.success(queryAnchor, queryResult))
+                return
             }
-        }
 
-        completion(.success(queryAnchor, queryResult))
+            self.store.managedObjectContext.performAndWait {
+                let storedRequest: NSFetchRequest<SettingsObject> = SettingsObject.fetchRequest()
+
+                storedRequest.predicate = NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter)
+                storedRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+                storedRequest.fetchLimit = limit
+
+                do {
+                    let stored = try self.store.managedObjectContext.fetch(storedRequest)
+                    if let modificationCounter = stored.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
+                        queryAnchor.modificationCounter = modificationCounter
+                    }
+                    queryResult.append(contentsOf: stored.compactMap { self.decodeSettings(fromData: $0.data) })
+                } catch let error {
+                    queryError = error
+                    return
+                }
+            }
+
+            if let queryError = queryError {
+                completion(.failure(queryError))
+                return
+            }
+
+            completion(.success(queryAnchor, queryResult))
+        }
     }
-    
 }
 
 public struct StoredSettings {
@@ -176,8 +221,8 @@ public struct StoredSettings {
         self.syncIdentifier = syncIdentifier
     }
 
-    public struct InsulinModel {
-        public enum ModelType: String {
+    public struct InsulinModel: Codable, Equatable {
+        public enum ModelType: String, Codable {
             case fiasp
             case rapidAdult
             case rapidChild
@@ -196,26 +241,84 @@ public struct StoredSettings {
     }
 }
 
-extension UserDefaults: SettingsStoreCacheStore {
-    
-    private enum Key: String {
-        case settingsStoreModificationCounter = "com.loopkit.SettingsStore.ModificationCounter"
-    }
-    
-    public var settingsStoreModificationCounter: Int64? {
-        get {
-            guard let value = object(forKey: Key.settingsStoreModificationCounter.rawValue) as? NSNumber else {
-                return nil
-            }
-            return value.int64Value
+extension StoredSettings: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        var bloodGlucoseUnit: HKUnit?
+        if let bloodGlucoseUnitString = try container.decodeIfPresent(String.self, forKey: .bloodGlucoseUnit) {
+            bloodGlucoseUnit = HKUnit(from: bloodGlucoseUnitString)
         }
-        set {
-            if let newValue = newValue {
-                set(NSNumber(value: newValue), forKey: Key.settingsStoreModificationCounter.rawValue)
-            } else {
-                removeObject(forKey: Key.settingsStoreModificationCounter.rawValue)
-            }
-        }
+        self.init(date: try container.decode(Date.self, forKey: .date),
+                  dosingEnabled: try container.decode(Bool.self, forKey: .dosingEnabled),
+                  glucoseTargetRangeSchedule: try container.decodeIfPresent(GlucoseRangeSchedule.self, forKey: .glucoseTargetRangeSchedule),
+                  preMealTargetRange: try container.decodeIfPresent(DoubleRange.self, forKey: .preMealTargetRange),
+                  workoutTargetRange: try container.decodeIfPresent(DoubleRange.self, forKey: .workoutTargetRange),
+                  overridePresets: try container.decodeIfPresent([TemporaryScheduleOverridePreset].self, forKey: .overridePresets),
+                  scheduleOverride: try container.decodeIfPresent(TemporaryScheduleOverride.self, forKey: .scheduleOverride),
+                  preMealOverride: try container.decodeIfPresent(TemporaryScheduleOverride.self, forKey: .preMealOverride),
+                  maximumBasalRatePerHour: try container.decodeIfPresent(Double.self, forKey: .maximumBasalRatePerHour),
+                  maximumBolus: try container.decodeIfPresent(Double.self, forKey: .maximumBolus),
+                  suspendThreshold: try container.decodeIfPresent(GlucoseThreshold.self, forKey: .suspendThreshold),
+                  deviceToken: try container.decodeIfPresent(String.self, forKey: .deviceToken),
+                  insulinModel: try container.decodeIfPresent(InsulinModel.self, forKey: .insulinModel),
+                  basalRateSchedule: try container.decodeIfPresent(BasalRateSchedule.self, forKey: .basalRateSchedule),
+                  insulinSensitivitySchedule: try container.decodeIfPresent(InsulinSensitivitySchedule.self, forKey: .insulinSensitivitySchedule),
+                  carbRatioSchedule: try container.decodeIfPresent(CarbRatioSchedule.self, forKey: .carbRatioSchedule),
+                  bloodGlucoseUnit: bloodGlucoseUnit,
+                  syncIdentifier: try container.decode(String.self, forKey: .syncIdentifier))
     }
-    
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(date, forKey: .date)
+        try container.encode(dosingEnabled, forKey: .dosingEnabled)
+        try container.encodeIfPresent(glucoseTargetRangeSchedule, forKey: .glucoseTargetRangeSchedule)
+        try container.encodeIfPresent(preMealTargetRange, forKey: .preMealTargetRange)
+        try container.encodeIfPresent(workoutTargetRange, forKey: .workoutTargetRange)
+        try container.encodeIfPresent(overridePresets, forKey: .overridePresets)
+        try container.encodeIfPresent(scheduleOverride, forKey: .scheduleOverride)
+        try container.encodeIfPresent(preMealOverride, forKey: .preMealOverride)
+        try container.encodeIfPresent(maximumBasalRatePerHour, forKey: .maximumBasalRatePerHour)
+        try container.encodeIfPresent(maximumBolus, forKey: .maximumBolus)
+        try container.encodeIfPresent(suspendThreshold, forKey: .suspendThreshold)
+        try container.encodeIfPresent(deviceToken, forKey: .deviceToken)
+        try container.encodeIfPresent(insulinModel, forKey: .insulinModel)
+        try container.encodeIfPresent(basalRateSchedule, forKey: .basalRateSchedule)
+        try container.encodeIfPresent(insulinSensitivitySchedule, forKey: .insulinSensitivitySchedule)
+        try container.encodeIfPresent(carbRatioSchedule, forKey: .carbRatioSchedule)
+        try container.encodeIfPresent(bloodGlucoseUnit?.unitString, forKey: .bloodGlucoseUnit)
+        try container.encode(syncIdentifier, forKey: .syncIdentifier)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case date
+        case dosingEnabled
+        case glucoseTargetRangeSchedule
+        case preMealTargetRange
+        case workoutTargetRange
+        case overridePresets
+        case scheduleOverride
+        case preMealOverride
+        case maximumBasalRatePerHour
+        case maximumBolus
+        case suspendThreshold
+        case deviceToken
+        case insulinModel
+        case basalRateSchedule
+        case insulinSensitivitySchedule
+        case carbRatioSchedule
+        case bloodGlucoseUnit
+        case syncIdentifier
+    }
+}
+
+extension NSManagedObjectContext {
+    fileprivate func deleteObjects<T>(matching fetchRequest: NSFetchRequest<T>) throws -> Int where T: NSManagedObject {
+        let objects = try fetch(fetchRequest)
+        objects.forEach { delete($0) }
+        if hasChanges {
+            try save()
+        }
+        return objects.count
+    }
 }

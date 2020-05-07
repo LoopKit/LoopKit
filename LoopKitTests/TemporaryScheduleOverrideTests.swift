@@ -244,6 +244,76 @@ class TemporaryScheduleOverrideTests: XCTestCase {
     }
 }
 
+class TemporaryScheduleOverrideContextCodableTests: XCTestCase {
+    func testCodablePreMeal() throws {
+        try assertTemporaryScheduleOverrideContextCodable(.preMeal)
+    }
+
+    func testCodableLegacyWorkout() throws {
+        try assertTemporaryScheduleOverrideContextCodable(.legacyWorkout)
+    }
+
+    func testCodablePreset() throws {
+        let settings = TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter, targetRange: DoubleRange(minValue: 90, maxValue: 100))
+        let preset = TemporaryScheduleOverridePreset(symbol: "🚀", name: "Rocket", settings: settings, duration: .indefinite)
+        try assertTemporaryScheduleOverrideContextCodable(.preset(preset))
+    }
+
+    func testCodableCustom() throws {
+        try assertTemporaryScheduleOverrideContextCodable(.custom)
+    }
+
+    func assertTemporaryScheduleOverrideContextCodable(_ original: TemporaryScheduleOverride.Context) throws {
+        let data = try PropertyListEncoder().encode(TestContainer(context: original))
+        let decoded = try PropertyListDecoder().decode(TestContainer.self, from: data)
+        XCTAssertEqual(decoded.context, original)
+    }
+
+    private struct TestContainer: Codable, Equatable {
+        let context: TemporaryScheduleOverride.Context
+    }
+}
+
+class TemporaryScheduleOverrideEnactTriggerCodableTests: XCTestCase {
+    func testCodableLocal() throws {
+        try assertTemporaryScheduleOverrideEnactTriggerCodable(.local)
+    }
+
+    func testCodableRemote() throws {
+        try assertTemporaryScheduleOverrideEnactTriggerCodable(.remote("address"))
+    }
+
+    func assertTemporaryScheduleOverrideEnactTriggerCodable(_ original: TemporaryScheduleOverride.EnactTrigger) throws {
+        let data = try PropertyListEncoder().encode(TestContainer(enactTrigger: original))
+        let decoded = try PropertyListDecoder().decode(TestContainer.self, from: data)
+        XCTAssertEqual(decoded.enactTrigger, original)
+    }
+
+    private struct TestContainer: Codable, Equatable {
+        let enactTrigger: TemporaryScheduleOverride.EnactTrigger
+    }
+}
+
+class TemporaryScheduleOverrideDurationCodableTests: XCTestCase {
+    func testCodableFinite() throws {
+        try assertTemporaryScheduleOverrideDurationCodable(.finite(.hours(2.34)))
+    }
+
+    func testCodableIndefinite() throws {
+        try assertTemporaryScheduleOverrideDurationCodable(.indefinite)
+    }
+
+    func assertTemporaryScheduleOverrideDurationCodable(_ original: TemporaryScheduleOverride.Duration) throws {
+        let data = try PropertyListEncoder().encode(TestContainer(duration: original))
+        let decoded = try PropertyListDecoder().decode(TestContainer.self, from: data)
+        XCTAssertEqual(decoded.duration, original)
+    }
+
+    private struct TestContainer: Codable, Equatable {
+        let duration: TemporaryScheduleOverride.Duration
+    }
+}
+
 private extension TemporaryScheduleOverride.Duration {
     static func += (lhs: inout TemporaryScheduleOverride.Duration, rhs: TimeInterval) {
         switch lhs {

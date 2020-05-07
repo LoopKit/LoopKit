@@ -73,3 +73,19 @@ class GlucoseThresholdTests: XCTestCase {
     }
     
 }
+
+class GlucoseThresholdCodableTests: XCTestCase {
+    func testCodableMilligramsPerDeciliter() throws {
+        try assertGlucoseThresholdCodable(GlucoseThreshold(unit: .milligramsPerDeciliter, value: 123))
+    }
+
+    func testCodableMillimolesPerLiter() throws {
+        try assertGlucoseThresholdCodable(GlucoseThreshold(unit: .millimolesPerLiter, value: 6.83))
+    }
+
+    func assertGlucoseThresholdCodable(_ original: GlucoseThreshold) throws {
+        let data = try PropertyListEncoder().encode(original)
+        let decoded = try PropertyListDecoder().decode(GlucoseThreshold.self, from: data)
+        XCTAssertEqual(decoded, original)
+    }
+}

@@ -39,3 +39,22 @@ public struct GlucoseThreshold: Equatable, RawRepresentable {
         ]
     }
 }
+
+extension GlucoseThreshold: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.value = try container.decode(Double.self, forKey: .value)
+        self.unit = HKUnit(from: try container.decode(String.self, forKey: .unit))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(value, forKey: .value)
+        try container.encode(unit.unitString, forKey: .unit)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case value
+        case unit
+    }
+}

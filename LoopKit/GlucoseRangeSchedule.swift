@@ -52,6 +52,7 @@ extension DoubleRange: Equatable {
 
 extension DoubleRange: Hashable {}
 
+extension DoubleRange: Codable {}
 
 /// Defines a daily schedule of glucose ranges
 public struct GlucoseRangeSchedule: DailySchedule, Equatable {
@@ -165,6 +166,10 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         return rangeSchedule.rawValue
     }
 }
+
+extension GlucoseRangeSchedule: Codable {}
+
+extension GlucoseRangeSchedule.Override: Codable {}
 
 extension DoubleRange {
     public func quantityRange(for unit: HKUnit) -> ClosedRange<HKQuantity> {
