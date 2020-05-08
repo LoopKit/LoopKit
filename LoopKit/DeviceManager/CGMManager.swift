@@ -51,6 +51,9 @@ public protocol CGMManager: DeviceManager {
 
     var appURL: URL? { get }
 
+    // The cgmManagers associated batteryLevel, from 1 to 100
+    var batteryLevel : Int? { get }
+
     /// Whether the device is capable of waking the app
     var providesBLEHeartbeat: Bool { get }
 
@@ -69,6 +72,12 @@ public protocol CGMManager: DeviceManager {
     /// - Parameters:
     ///   - completion: A closure called when operation has completed
     func fetchNewDataIfNeeded(_ completion: @escaping (CGMResult) -> Void) -> Void
+}
+
+public extension CGMManager {
+    var batteryLevel: Int? {
+        return nil
+    }
 }
 
 
