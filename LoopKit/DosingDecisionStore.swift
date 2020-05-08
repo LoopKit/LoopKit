@@ -6,64 +6,94 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
+import os.log
 import Foundation
+import CoreData
 import HealthKit
 
 public protocol DosingDecisionStoreDelegate: AnyObject {
-    
     /**
      Informs the delegate that the dosing decision store has updated dosing decision data.
      
      - Parameter dosingDecisionStore: The dosing decision store that has updated dosing decision data.
      */
     func dosingDecisionStoreHasUpdatedDosingDecisionData(_ dosingDecisionStore: DosingDecisionStore)
-    
-}
-
-public protocol DosingDecisionStoreCacheStore: AnyObject {
-
-    /// The dosing decision store modification counter
-    var dosingDecisionStoreModificationCounter: Int64? { get set }
-
 }
 
 public class DosingDecisionStore {
-    
     public weak var delegate: DosingDecisionStoreDelegate?
     
-    private let lock = UnfairLock()
+    private let store: PersistenceController
+    private let expireAfter: TimeInterval
+    private let dataAccessQueue = DispatchQueue(label: "com.loopkit.DosingDecisionStore.dataAccessQueue", qos: .utility)
+    private let log = OSLog(category: "DosingDecisionStore")
 
-    private let storeCache: DosingDecisionStoreCacheStore
+    public init(store: PersistenceController, expireAfter: TimeInterval) {
+        self.store = store
+        self.expireAfter = expireAfter
+    }
 
-    private var dosingDecision: [Int64: StoredDosingDecision]
-    
-    private var modificationCounter: Int64 {
-        didSet {
-            storeCache.dosingDecisionStoreModificationCounter = modificationCounter
-        }
-    }
-    
-    public init(storeCache: DosingDecisionStoreCacheStore) {
-        self.storeCache = storeCache
-        self.dosingDecision = [:]
-        self.modificationCounter = storeCache.dosingDecisionStoreModificationCounter ?? 0
-    }
-    
     public func storeDosingDecision(_ dosingDecision: StoredDosingDecision, completion: @escaping () -> Void) {
-        lock.withLock {
-            self.modificationCounter += 1
-            self.dosingDecision[self.modificationCounter] = dosingDecision
+        dataAccessQueue.async {
+            if let data = self.encodeDosingDecision(dosingDecision) {
+                self.store.managedObjectContext.performAndWait {
+                    let object = DosingDecisionObject(context: self.store.managedObjectContext)
+                    object.data = data
+                    object.date = dosingDecision.date
+                    self.store.save()
+                }
+            }
+
+            self.purgeExpiredDosingDecisionObjects()
+
+            self.delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
+            completion()
         }
-        self.delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
-        completion()
     }
-    
+
+    private var expireDate: Date {
+        return Date(timeIntervalSinceNow: -expireAfter)
+    }
+
+    private func purgeExpiredDosingDecisionObjects() {
+        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
+
+        store.managedObjectContext.performAndWait {
+            do {
+                let fetchRequest: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
+                fetchRequest.predicate = NSPredicate(format: "date < %@", expireDate as NSDate)
+                let count = try self.store.managedObjectContext.deleteObjects(matching: fetchRequest)
+                self.log.info("Deleted %d DosingDecisionObjects", count)
+            } catch let error {
+                self.log.error("Unable to purge DosingDecisionObjects: %@", String(describing: error))
+            }
+        }
+    }
+
+    private func encodeDosingDecision(_ dosingDecision: StoredDosingDecision) -> Data? {
+        do {
+            let encoder = PropertyListEncoder()
+            encoder.outputFormat = .binary
+            return try encoder.encode(dosingDecision)
+        } catch let error {
+            self.log.error("Error encoding StoredDosingDecision: %@", String(describing: error))
+            return nil
+        }
+    }
+
+    private func decodeDosingDecision(fromData data: Data) -> StoredDosingDecision? {
+        do {
+            let decoder = PropertyListDecoder()
+            return try decoder.decode(StoredDosingDecision.self, from: data)
+        } catch let error {
+            self.log.error("Error decoding StoredDosingDecision: %@", String(describing: error))
+            return nil
+        }
+    }
 }
 
 extension DosingDecisionStore {
-    
     public struct QueryAnchor: RawRepresentable {
-        
         public typealias RawValue = [String: Any]
         
         internal var modificationCounter: Int64
@@ -92,33 +122,46 @@ extension DosingDecisionStore {
     }
     
     public func executeDosingDecisionQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (DosingDecisionQueryResult) -> Void) {
-        var queryAnchor = queryAnchor ?? QueryAnchor()
-        var queryResult = [StoredDosingDecision]()
+        dataAccessQueue.async {
+            var queryAnchor = queryAnchor ?? QueryAnchor()
+            var queryResult = [StoredDosingDecision]()
+            var queryError: Error?
 
-        guard limit > 0 else {
-            completion(.success(queryAnchor, queryResult))
-            return
-        }
-
-        lock.withLock {
-            if queryAnchor.modificationCounter < self.modificationCounter {
-                var modificationCounter = queryAnchor.modificationCounter
-                while modificationCounter < self.modificationCounter && queryResult.count < limit {
-                    modificationCounter += 1
-                    if let dosingDecision = self.dosingDecision[modificationCounter] {
-                        queryResult.append(dosingDecision)
-                    }
-                }
-                queryAnchor.modificationCounter = modificationCounter
+            guard limit > 0 else {
+                completion(.success(queryAnchor, queryResult))
+                return
             }
+
+            self.store.managedObjectContext.performAndWait {
+                let storedRequest: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
+
+                storedRequest.predicate = NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter)
+                storedRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+                storedRequest.fetchLimit = limit
+
+                do {
+                    let stored = try self.store.managedObjectContext.fetch(storedRequest)
+                    if let modificationCounter = stored.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
+                        queryAnchor.modificationCounter = modificationCounter
+                    }
+                    queryResult.append(contentsOf: stored.compactMap { self.decodeDosingDecision(fromData: $0.data) })
+                } catch let error {
+                    queryError = error
+                    return
+                }
+            }
+
+            if let queryError = queryError {
+                completion(.failure(queryError))
+                return
+            }
+
+            completion(.success(queryAnchor, queryResult))
         }
-        
-        completion(.success(queryAnchor, queryResult))
     }
-    
 }
 
-public struct StoredDosingDecision {
+public struct StoredDosingDecision: Codable {
     public let date: Date
     public var insulinOnBoard: InsulinValue?
     public var carbsOnBoard: CarbValue?
@@ -131,7 +174,7 @@ public struct StoredDosingDecision {
     public var recommendedTempBasal: TempBasalRecommendationWithDate?
     public var recommendedBolus: BolusRecommendationWithDate?
     public var pumpManagerStatus: PumpManagerStatus?
-    public var errors: [Error]?
+    public var errors: [CodableError]?
     public let syncIdentifier: String
 
     public init(date: Date = Date(),
@@ -160,11 +203,11 @@ public struct StoredDosingDecision {
         self.recommendedTempBasal = recommendedTempBasal
         self.recommendedBolus = recommendedBolus
         self.pumpManagerStatus = pumpManagerStatus
-        self.errors = errors
+        self.errors = errors?.map { CodableError($0) }
         self.syncIdentifier = syncIdentifier
     }
 
-    public struct LastReservoirValue {
+    public struct LastReservoirValue: Codable {
         public let startDate: Date
         public let unitVolume: Double
 
@@ -174,7 +217,7 @@ public struct StoredDosingDecision {
         }
     }
 
-    public struct TempBasalRecommendationWithDate {
+    public struct TempBasalRecommendationWithDate: Codable {
         public let recommendation: TempBasalRecommendation
         public let date: Date
 
@@ -184,7 +227,7 @@ public struct StoredDosingDecision {
         }
     }
 
-    public struct BolusRecommendationWithDate {
+    public struct BolusRecommendationWithDate: Codable {
         public let recommendation: BolusRecommendation
         public let date: Date
 
@@ -193,28 +236,26 @@ public struct StoredDosingDecision {
             self.date = date
         }
     }
+
+    // TODO: Temporary placeholder for error serialization. Will be fixed with https://tidepool.atlassian.net/browse/LOOP-1144
+    public struct CodableError: Error, CustomStringConvertible, Codable {
+        private let errorString: String
+
+        init(_ error: Error) {
+            self.errorString = String(describing: error)
+        }
+
+        public var description: String { return errorString }
+    }
 }
 
-extension UserDefaults: DosingDecisionStoreCacheStore {
-    
-    private enum Key: String {
-        case dosingDecisionStoreModificationCounter = "com.loopkit.DosingDecisionStore.ModificationCounter"
-    }
-    
-    public var dosingDecisionStoreModificationCounter: Int64? {
-        get {
-            guard let value = object(forKey: Key.dosingDecisionStoreModificationCounter.rawValue) as? NSNumber else {
-                return nil
-            }
-            return value.int64Value
+extension NSManagedObjectContext {
+    fileprivate func deleteObjects<T>(matching fetchRequest: NSFetchRequest<T>) throws -> Int where T: NSManagedObject {
+        let objects = try fetch(fetchRequest)
+        objects.forEach { delete($0) }
+        if hasChanges {
+            try save()
         }
-        set {
-            if let newValue = newValue {
-                set(NSNumber(value: newValue), forKey: Key.dosingDecisionStoreModificationCounter.rawValue)
-            } else {
-                removeObject(forKey: Key.dosingDecisionStoreModificationCounter.rawValue)
-            }
-        }
+        return objects.count
     }
-    
 }

@@ -493,6 +493,15 @@
 		A9498D8D23386CD800DAA9B9 /* MockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8C23386CD700DAA9B9 /* MockService.swift */; };
 		A9498D8F23386CE800DAA9B9 /* MockServiceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8E23386CE800DAA9B9 /* MockServiceTableViewController.swift */; };
 		A9498D9123386D0800DAA9B9 /* MockService+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D9023386D0800DAA9B9 /* MockService+UI.swift */; };
+		A95A1D7F2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */; };
+		A95A1D802460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */; };
+		A95A1D822460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */; };
+		A95A1D832460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */; };
+		A95A1D852460CAD50079378D /* CarbValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D842460CAD50079378D /* CarbValueTests.swift */; };
+		A95A1D872460F1250079378D /* GlucoseValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D862460F1250079378D /* GlucoseValueTests.swift */; };
+		A95A1D892460F8930079378D /* PumpManagerStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D882460F8930079378D /* PumpManagerStatusTests.swift */; };
+		A95A1D8B2460FD620079378D /* BolusRecommendationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D8A2460FD620079378D /* BolusRecommendationTests.swift */; };
+		A95A1D8D246101760079378D /* DoseEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D8C246101760079378D /* DoseEntryTests.swift */; };
 		A971C89F23C68B030099BEFC /* GlucoseStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */; };
 		A971C8A023C69E0F0099BEFC /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FB64B1D712449007B9C70 /* NSData.swift */; };
 		A971C8A223C6B17D0099BEFC /* SettingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A971C8A123C6B17D0099BEFC /* SettingsStoreTests.swift */; };
@@ -1266,6 +1275,13 @@
 		A9498D8C23386CD700DAA9B9 /* MockService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockService.swift; sourceTree = "<group>"; };
 		A9498D8E23386CE800DAA9B9 /* MockServiceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockServiceTableViewController.swift; sourceTree = "<group>"; };
 		A9498D9023386D0800DAA9B9 /* MockService+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MockService+UI.swift"; sourceTree = "<group>"; };
+		A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DosingDecisionObject+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DosingDecisionObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A95A1D842460CAD50079378D /* CarbValueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbValueTests.swift; sourceTree = "<group>"; };
+		A95A1D862460F1250079378D /* GlucoseValueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseValueTests.swift; sourceTree = "<group>"; };
+		A95A1D882460F8930079378D /* PumpManagerStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerStatusTests.swift; sourceTree = "<group>"; };
+		A95A1D8A2460FD620079378D /* BolusRecommendationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BolusRecommendationTests.swift; sourceTree = "<group>"; };
+		A95A1D8C246101760079378D /* DoseEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseEntryTests.swift; sourceTree = "<group>"; };
 		A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseStoreTests.swift; sourceTree = "<group>"; };
 		A971C8A123C6B17D0099BEFC /* SettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStoreTests.swift; sourceTree = "<group>"; };
 		A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DosingDecisionStoreTests.swift; sourceTree = "<group>"; };
@@ -1761,8 +1777,6 @@
 				43D8FDD01C728FDF0073BE78 /* Info.plist */,
 				A9498D7323386C3200DAA9B9 /* AnalyticsService.swift */,
 				43D8FDE51C7290340073BE78 /* BasalRateSchedule.swift */,
-				A912BE28245B9CD500CBE199 /* SettingsObject+CoreDataClass.swift */,
-				A912BE2A245B9E8600CBE199 /* SettingsObject+CoreDataProperties.swift */,
 				43D8FDE61C7290350073BE78 /* CarbRatioSchedule.swift */,
 				891A3FDA224BEC0D00378B27 /* CarbSensitivitySchedule.swift */,
 				43D8FDE71C7290350073BE78 /* DailyQuantitySchedule.swift */,
@@ -1770,6 +1784,8 @@
 				43D8FDE81C7290350073BE78 /* DailyValueSchedule.swift */,
 				1DA649AA2445174400F61E75 /* DeviceAlert.swift */,
 				A9498D7723386C3300DAA9B9 /* DiagnosticLog.swift */,
+				A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */,
+				A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */,
 				A919889E2355016B00B75EEE /* DosingDecisionStore.swift */,
 				891A3FD8224BEB4500378B27 /* EGPSchedule.swift */,
 				43C9805B212D216A003B5D17 /* GlucoseChange.swift */,
@@ -1791,6 +1807,8 @@
 				A9498D7623386C3300DAA9B9 /* Service.swift */,
 				43F5035421059A8A009FA89A /* ServiceAuthentication.swift */,
 				43FB60EA20DDC868002B996B /* SetBolusError.swift */,
+				A912BE28245B9CD500CBE199 /* SettingsObject+CoreDataClass.swift */,
+				A912BE2A245B9E8600CBE199 /* SettingsObject+CoreDataProperties.swift */,
 				A919889B2354E5EB00B75EEE /* SettingsStore.swift */,
 				89AE2223228BC54C00BDFD85 /* TemporaryScheduleOverride.swift */,
 				89AE2225228BC54C00BDFD85 /* TemporaryScheduleOverrideHistory.swift */,
@@ -1822,21 +1840,26 @@
 				43D8FDDC1C728FDF0073BE78 /* Info.plist */,
 				1F5DAB252118CE9300048054 /* InfoPlist.strings */,
 				43D8FE1A1C72906E0073BE78 /* BasalRateScheduleTests.swift */,
+				A95A1D8A2460FD620079378D /* BolusRecommendationTests.swift */,
 				43D8FE411C7291900073BE78 /* CarbMathTests.swift */,
 				437AFF192039F149008C4892 /* CarbStoreTests.swift */,
+				A95A1D842460CAD50079378D /* CarbValueTests.swift */,
 				A9BFA03D245CCCB9001E4AE3 /* DailyQuantityScheduleTests.swift */,
 				891A3FD6224BE62100378B27 /* DailyValueScheduleTests.swift */,
 				1DFB99D5245CB2E900DCC8C9 /* DeviceAlertTests.swift */,
 				A99C7374233993FE00C80963 /* DiagnosticLogTests.swift */,
+				A95A1D8C246101760079378D /* DoseEntryTests.swift */,
 				43A067121F245A2F00E9E90F /* DoseStoreTests.swift */,
 				A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */,
 				43D8FE991C7293D00073BE78 /* GlucoseMathTests.swift */,
 				A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */,
 				A99C73762339A67A00C80963 /* GlucoseThresholdTests.swift */,
+				A95A1D862460F1250079378D /* GlucoseValueTests.swift */,
 				43D8FEC81C7294640073BE78 /* InsulinMathTests.swift */,
 				43D8FDDA1C728FDF0073BE78 /* LoopKitTests.swift */,
 				43D9888C1C87EBE400DA4467 /* LoopMathTests.swift */,
 				43D8FE1B1C72906E0073BE78 /* NSDateTests.swift */,
+				A95A1D882460F8930079378D /* PumpManagerStatusTests.swift */,
 				A99C7372233990D400C80963 /* TempBasalRecommendationTests.swift */,
 				8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */,
 				891A3FD02249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift */,
@@ -2870,9 +2893,11 @@
 				A9498D8023386C3300DAA9B9 /* RemoteDataService.swift in Sources */,
 				4379CFE321102A4100AADC79 /* DeviceManager.swift in Sources */,
 				4322B78A202FA2B30002837D /* DoseUnit.swift in Sources */,
+				A95A1D7F2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift in Sources */,
 				434113AF20F2885300D05747 /* NSManagedObjectContext+CachedInsulinDeliveryObject.swift in Sources */,
 				432762741D60505F0083215A /* HKQuantitySample.swift in Sources */,
 				43D8FDF81C7290350073BE78 /* Double.swift in Sources */,
+				A95A1D822460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift in Sources */,
 				43F5034B21051FCE009FA89A /* KeychainManager.swift in Sources */,
 				891A3FD5224B047200378B27 /* DailyQuantitySchedule+Override.swift in Sources */,
 				432CF87320D774220066B889 /* PumpManager.swift in Sources */,
@@ -2973,15 +2998,19 @@
 				1F5DAB202118C95700048054 /* LocalizedString.swift in Sources */,
 				434113B820F2BDE800D05747 /* PersistenceControllerTestCase.swift in Sources */,
 				437874B6202FDD1500A3D8B9 /* InsulinMathTests.swift in Sources */,
+				A95A1D8B2460FD620079378D /* BolusRecommendationTests.swift in Sources */,
 				A99C7373233990D400C80963 /* TempBasalRecommendationTests.swift in Sources */,
 				A971C89F23C68B030099BEFC /* GlucoseStoreTests.swift in Sources */,
 				A971C8A423C6B1890099BEFC /* DosingDecisionStoreTests.swift in Sources */,
 				437AFF21203AA740008C4892 /* NSManagedObjectContext.swift in Sources */,
+				A95A1D852460CAD50079378D /* CarbValueTests.swift in Sources */,
 				434C5FA1209AC4EE00B2FD1A /* HKUnit.swift in Sources */,
 				437AFF1F203A763F008C4892 /* HKHealthStoreMock.swift in Sources */,
 				A99C73792339ACDC00C80963 /* ServiceTests.swift in Sources */,
 				891A3FD32249990900378B27 /* DailyValueSchedule.swift in Sources */,
 				434C5FA0209ABD4700B2FD1A /* QuantityFormatterTests.swift in Sources */,
+				A95A1D892460F8930079378D /* PumpManagerStatusTests.swift in Sources */,
+				A95A1D8D246101760079378D /* DoseEntryTests.swift in Sources */,
 				43D8FE1E1C72906E0073BE78 /* NSDateTests.swift in Sources */,
 				43D9888D1C87EBE400DA4467 /* LoopMathTests.swift in Sources */,
 				434113BA20F2C41C00D05747 /* DeletedCarbObjectTests.swift in Sources */,
@@ -3008,6 +3037,7 @@
 				A9BFA03E245CCCB9001E4AE3 /* DailyQuantityScheduleTests.swift in Sources */,
 				A99C73772339A67A00C80963 /* GlucoseThresholdTests.swift in Sources */,
 				434113BC20F2C56100D05747 /* CachedGlucoseObjectTests.swift in Sources */,
+				A95A1D872460F1250079378D /* GlucoseValueTests.swift in Sources */,
 				891A3FD7224BE62100378B27 /* DailyValueScheduleTests.swift in Sources */,
 				430059241CCDD08C00C861EA /* NSDateFormatter.swift in Sources */,
 			);
@@ -3145,6 +3175,7 @@
 				A9E675A722713F4700E25293 /* DoseStore.swift in Sources */,
 				A9E675A822713F4700E25293 /* TimeZone.swift in Sources */,
 				A9E675A922713F4700E25293 /* PumpEvent+CoreDataProperties.swift in Sources */,
+				A95A1D832460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift in Sources */,
 				A9E675AA22713F4700E25293 /* ReservoirValue.swift in Sources */,
 				A9E675AB22713F4700E25293 /* HKHealthStore.swift in Sources */,
 				A9E675AC22713F4700E25293 /* Reservoir.swift in Sources */,
@@ -3166,6 +3197,7 @@
 				A9498D7D23386C3300DAA9B9 /* AnalyticsService.swift in Sources */,
 				A9E675BA22713F4700E25293 /* InsulinValue.swift in Sources */,
 				A9E675BB22713F4700E25293 /* NumberFormatter.swift in Sources */,
+				A95A1D802460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift in Sources */,
 				89AE2230228BC68100BDFD85 /* DoseProgressReporter.swift in Sources */,
 				A9E675BC22713F4700E25293 /* DeletedCarbObject+CoreDataClass.swift in Sources */,
 				A9E675BD22713F4700E25293 /* HKQuantitySample+InsulinKit.swift in Sources */,

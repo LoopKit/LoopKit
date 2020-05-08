@@ -22,3 +22,5 @@ public struct TempBasalRecommendation: Equatable {
         self.duration = duration
     }
 }
+
+extension TempBasalRecommendation: Codable {}

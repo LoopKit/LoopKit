@@ -95,7 +95,6 @@ public class SettingsStore {
 
 extension SettingsStore {
     public struct QueryAnchor: RawRepresentable {
-        
         public typealias RawValue = [String: Any]
         
         internal var modificationCounter: Int64

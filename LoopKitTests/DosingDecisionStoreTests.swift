@@ -9,7 +9,7 @@
 import XCTest
 @testable import LoopKit
 
-class DosingDecisionStorePersistenceTests: XCTestCase, DosingDecisionStoreCacheStore, DosingDecisionStoreDelegate {
+class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, DosingDecisionStoreDelegate {
 
     var dosingDecisionStore: DosingDecisionStore!
 
@@ -17,23 +17,17 @@ class DosingDecisionStorePersistenceTests: XCTestCase, DosingDecisionStoreCacheS
         super.setUp()
 
         dosingDecisionStoreHasUpdatedDosingDecisionDataHandler = nil
-        dosingDecisionStoreModificationCounter = nil
-        dosingDecisionStore = DosingDecisionStore(storeCache: self)
+        dosingDecisionStore = DosingDecisionStore(store: cacheStore, expireAfter: .hours(24))
         dosingDecisionStore.delegate = self
     }
 
     override func tearDown() {
         dosingDecisionStore.delegate = nil
         dosingDecisionStore = nil
-        dosingDecisionStoreModificationCounter = nil
         dosingDecisionStoreHasUpdatedDosingDecisionDataHandler = nil
 
         super.tearDown()
     }
-
-    // MARK: - DosingDecisionStoreCacheStore
-
-    var dosingDecisionStoreModificationCounter: Int64?
 
     // MARK: - DosingDecisionStoreDelegate
 
@@ -63,7 +57,6 @@ class DosingDecisionStorePersistenceTests: XCTestCase, DosingDecisionStoreCacheS
         }
 
         dosingDecisionStore.storeDosingDecision(StoredDosingDecision()) {
-            XCTAssertEqual(self.dosingDecisionStoreModificationCounter, 1)
             storeDosingDecisionCompletion.fulfill()
         }
 
@@ -92,12 +85,10 @@ class DosingDecisionStorePersistenceTests: XCTestCase, DosingDecisionStoreCacheS
         }
 
         dosingDecisionStore.storeDosingDecision(StoredDosingDecision()) {
-            XCTAssertEqual(self.dosingDecisionStoreModificationCounter, 1)
             storeDosingDecisionCompletion1.fulfill()
         }
 
         dosingDecisionStore.storeDosingDecision(StoredDosingDecision()) {
-            XCTAssertEqual(self.dosingDecisionStoreModificationCounter, 2)
             storeDosingDecisionCompletion2.fulfill()
         }
 
@@ -149,7 +140,7 @@ class DosingDecisionStoreQueryAnchorTests: XCTestCase {
 
 }
 
-class DosingDecisionStoreQueryTests: XCTestCase, DosingDecisionStoreCacheStore {
+class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
 
     var dosingDecisionStore: DosingDecisionStore!
     var completion: XCTestExpectation!
@@ -159,8 +150,7 @@ class DosingDecisionStoreQueryTests: XCTestCase, DosingDecisionStoreCacheStore {
     override func setUp() {
         super.setUp()
 
-        dosingDecisionStoreModificationCounter = nil
-        dosingDecisionStore = DosingDecisionStore(storeCache: self)
+        dosingDecisionStore = DosingDecisionStore(store: cacheStore, expireAfter: .hours(24))
         completion = expectation(description: "Completion")
         queryAnchor = DosingDecisionStore.QueryAnchor()
         limit = Int.max
@@ -171,14 +161,9 @@ class DosingDecisionStoreQueryTests: XCTestCase, DosingDecisionStoreCacheStore {
         queryAnchor = nil
         completion = nil
         dosingDecisionStore = nil
-        dosingDecisionStoreModificationCounter = nil
 
         super.tearDown()
     }
-
-    // MARK: - DosingDecisionStoreCacheStore
-
-    var dosingDecisionStoreModificationCounter: Int64?
 
     // MARK: -
 
@@ -341,9 +326,11 @@ class DosingDecisionStoreQueryTests: XCTestCase, DosingDecisionStoreCacheStore {
     }
 
     private func addData(withSyncIdentifiers syncIdentifiers: [String]) {
+        let semaphore = DispatchSemaphore(value: 0)
         for (_, syncIdentifier) in syncIdentifiers.enumerated() {
-            self.dosingDecisionStore.storeDosingDecision(StoredDosingDecision(syncIdentifier: syncIdentifier)) {}
+            self.dosingDecisionStore.storeDosingDecision(StoredDosingDecision(syncIdentifier: syncIdentifier)) { semaphore.signal() }
         }
+        for _ in syncIdentifiers { semaphore.wait() }
     }
 
     private func generateSyncIdentifier() -> String {

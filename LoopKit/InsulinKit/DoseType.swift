@@ -17,6 +17,7 @@ public enum DoseType: String, CaseIterable {
     case tempBasal
 }
 
+extension DoseType: Codable {}
 
 /// Compatibility transform to PumpEventType
 extension DoseType {

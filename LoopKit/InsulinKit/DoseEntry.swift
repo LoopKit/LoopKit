@@ -137,3 +137,50 @@ extension DoseEntry {
         return deliveredUnits ?? round(programmedUnits * DoseEntry.minimumMinimedIncrementPerUnit) / DoseEntry.minimumMinimedIncrementPerUnit
     }
 }
+
+extension DoseEntry: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.type = try container.decode(DoseType.self, forKey: .type)
+        self.startDate = try container.decode(Date.self, forKey: .startDate)
+        self.endDate = try container.decode(Date.self, forKey: .endDate)
+        self.value = try container.decode(Double.self, forKey: .value)
+        self.unit = try container.decode(DoseUnit.self, forKey: .unit)
+        self.deliveredUnits = try container.decodeIfPresent(Double.self, forKey: .deliveredUnits)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.syncIdentifier = try container.decodeIfPresent(String.self, forKey: .syncIdentifier)
+        if let scheduledBasalRate = try container.decodeIfPresent(Double.self, forKey: .scheduledBasalRate),
+            let scheduledBasalRateUnit = try container.decodeIfPresent(String.self, forKey: .scheduledBasalRateUnit) {
+            self.scheduledBasalRate = HKQuantity(unit: HKUnit(from: scheduledBasalRateUnit), doubleValue: scheduledBasalRate)
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(type, forKey: .type)
+        try container.encode(startDate, forKey: .startDate)
+        try container.encode(endDate, forKey: .endDate)
+        try container.encode(value, forKey: .value)
+        try container.encode(unit, forKey: .unit)
+        try container.encodeIfPresent(deliveredUnits, forKey: .deliveredUnits)
+        try container.encodeIfPresent(description, forKey: .description)
+        try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
+        if let scheduledBasalRate = scheduledBasalRate {
+            try container.encode(scheduledBasalRate.doubleValue(for: DoseEntry.unitsPerHour), forKey: .scheduledBasalRate)
+            try container.encode(DoseEntry.unitsPerHour.unitString, forKey: .scheduledBasalRateUnit)
+        }
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case type
+        case startDate
+        case endDate
+        case value
+        case unit
+        case deliveredUnits
+        case description
+        case syncIdentifier
+        case scheduledBasalRate
+        case scheduledBasalRateUnit
+    }
+}
