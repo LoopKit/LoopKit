@@ -62,21 +62,3 @@ public extension DeviceManager {
         return Self.managerIdentifier
     }
 }
-
-public extension DeviceManager {
-    // Default implementation of DeviceAlertResponder
-    func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) -> Void { }
-}
-
-public extension DeviceManager {
-    // Default implementation of DeviceAlertSoundVendor
-    func getSoundBaseURL() -> URL? { return nil }
-    func getSounds() -> [DeviceAlert.Sound] { return [] }
-}
-
-public extension DeviceManagerDelegate {
-    // Default implementation of DeviceAlertPresenter
-    func issueAlert(_ alert: DeviceAlert) { }
-    func removePendingAlert(identifier: DeviceAlert.Identifier) { }
-    func removeDeliveredAlert(identifier: DeviceAlert.Identifier) { }
-}
