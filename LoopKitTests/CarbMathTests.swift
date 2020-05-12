@@ -158,8 +158,6 @@ class CarbMathTests: XCTestCase {
         let input = loadHistoryFixture("carb_effect_from_history_input")
         let output = loadCOBOutputFixture("carbs_on_board_output")
         
-        //CarbAbsorptionModel.settings = CarbModelSettings(absorptionModel: ParabolicAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
-
         let cob = input.carbsOnBoard(defaultAbsorptionTime: TimeInterval(minutes: 180), absorptionModel: ParabolicAbsorption(), delay: TimeInterval(minutes: 10), delta: TimeInterval(minutes: 5))
 
         XCTAssertEqual(output.count, cob.count)
@@ -541,8 +539,6 @@ class CarbMathTests: XCTestCase {
             medium: TimeInterval(hours: 2),
             slow: TimeInterval(hours: 4)
         )
-        
-        //CarbAbsorptionModel.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
         
         let statuses = [carbEntries[0]].map(
             to: inputICE,

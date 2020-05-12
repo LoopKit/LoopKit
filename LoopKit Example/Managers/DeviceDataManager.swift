@@ -111,4 +111,12 @@ class DeviceDataManager {
             }
         }
     }
+
+    // MARK: CarbStoreDelegate
+
+    func carbStoreHasUpdatedCarbData(_ carbStore: CarbStore) {}
+
+    func carbStore(_ carbStore: CarbStore, didError error: CarbStore.CarbStoreError) {
+        print("carbstore error: \(error)")
+    }
 }

@@ -60,6 +60,7 @@ extension RepeatingScheduleValue: RawRepresentable where T: RawRepresentable {
     }
 }
 
+extension RepeatingScheduleValue: Codable where T: Codable {}
 
 public protocol DailySchedule {
     associatedtype T
@@ -247,6 +248,7 @@ extension DailyValueSchedule: RawRepresentable, CustomDebugStringConvertible whe
     }
 }
 
+extension DailyValueSchedule: Codable where T: Codable {}
 
 extension DailyValueSchedule: Equatable where T: Equatable {}
 

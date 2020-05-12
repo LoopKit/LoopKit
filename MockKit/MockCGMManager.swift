@@ -10,7 +10,6 @@ import HealthKit
 import LoopKit
 import LoopTestingKit
 
-
 public struct MockCGMState: SensorDisplayable {
     public var isStateValid: Bool
 
@@ -22,8 +21,26 @@ public struct MockCGMState: SensorDisplayable {
 }
 
 public final class MockCGMManager: TestingCGMManager {
+    
     public static let managerIdentifier = "MockCGMManager"
     public static let localizedTitle = "Simulator"
+
+    public struct MockAlert {
+        public let sound: DeviceAlert.Sound
+        public let identifier: DeviceAlert.AlertIdentifier
+        public let foregroundContent: DeviceAlert.Content
+        public let backgroundContent: DeviceAlert.Content
+    }
+    let alerts: [DeviceAlert.AlertIdentifier: MockAlert] = [
+        submarine.identifier: submarine, buzz.identifier: buzz
+    ]
+    
+    public static let submarine = MockAlert(sound: .sound(name: "sub.caf"), identifier: "submarine",
+                                            foregroundContent: DeviceAlert.Content(title: "Alert: FG Title", body: "Alert: Foreground Body", acknowledgeActionButtonLabel: "FG OK"),
+                                            backgroundContent: DeviceAlert.Content(title: "Alert: BG Title", body: "Alert: Background Body", acknowledgeActionButtonLabel: "BG OK"))
+    public static let buzz = MockAlert(sound: .vibrate, identifier: "buzz",
+                                       foregroundContent: DeviceAlert.Content(title: "Alert: FG Title", body: "FG bzzzt", acknowledgeActionButtonLabel: "Buzz"),
+                                       backgroundContent: DeviceAlert.Content(title: "Alert: BG Title", body: "BG bzzzt", acknowledgeActionButtonLabel: "Buzz"))
 
     public var mockSensorState: MockCGMState {
         didSet {
@@ -75,6 +92,8 @@ public final class MockCGMManager: TestingCGMManager {
 
     private var glucoseUpdateTimer: Timer?
 
+    private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
+
     public init?(rawState: RawStateValue) {
         if let mockSensorStateRawValue = rawState["mockSensorState"] as? MockCGMState.RawValue,
             let mockSensorState = MockCGMState(rawValue: mockSensorStateRawValue) {
@@ -118,29 +137,54 @@ public final class MockCGMManager: TestingCGMManager {
         }
     }
 
+    private func logDeviceComms(_ type: DeviceLogEntryType, message: String) {
+        delegate.notify { (delegate) in
+            delegate?.deviceManager(self, logEventForDeviceIdentifier: "mockcgm", type: type, message: message, completion: nil)
+        }
+    }
+
+    private func sendCGMResult(_ result: CGMResult) {
+        self.delegate.notify { delegate in
+            delegate?.cgmManager(self, didUpdateWith: result)
+        }
+    }
+
     public func fetchNewDataIfNeeded(_ completion: @escaping (CGMResult) -> Void) {
-        dataSource.fetchNewData(completion)
+        logDeviceComms(.send, message: "Fetch new data")
+        dataSource.fetchNewData { (result) in
+            switch result {
+            case .error(let error):
+                self.logDeviceComms(.error, message: "Error fetching new data: \(error)")
+            case .newData(let samples):
+                self.logDeviceComms(.receive, message: "New data received: \(samples)")
+            case .noData:
+                self.logDeviceComms(.receive, message: "No new data")
+            }
+            completion(result)
+        }
     }
 
     public func backfillData(datingBack duration: TimeInterval) {
         let now = Date()
         self.logDeviceCommunication("backfillData(\(duration))")
         dataSource.backfillData(from: DateInterval(start: now.addingTimeInterval(-duration), end: now)) { result in
-            self.logDeviceCommunication("backfillData received (\(result))", type: .receive)
-            self.delegate.notify { delegate in
-                delegate?.cgmManager(self, didUpdateWith: result)
+            switch result {
+            case .error(let error):
+                self.logDeviceComms(.error, message: "Backfill error: \(error)")
+            case .newData(let samples):
+                self.logDeviceComms(.receive, message: "Backfill data: \(samples)")
+            case .noData:
+                self.logDeviceComms(.receive, message: "Backfill empty")
             }
+            self.sendCGMResult(result)
         }
     }
     
     private func setupGlucoseUpdateTimer() {
         glucoseUpdateTimer = Timer.scheduledTimer(withTimeInterval: dataSource.dataPointFrequency, repeats: true) { [weak self] _ in
             guard let self = self else { return }
-            self.dataSource.fetchNewData { result in
-                self.logDeviceCommunication("updated data: \(result)", type: .receive)
-                self.delegate.notify { delegate in
-                    delegate?.cgmManager(self, didUpdateWith: result)
-                }
+            self.fetchNewDataIfNeeded() { result in
+                self.sendCGMResult(result)
             }
         }
     }
@@ -149,11 +193,54 @@ public final class MockCGMManager: TestingCGMManager {
         guard !samples.isEmpty else { return }
         var samples = samples
         samples.mutateEach { $0.device = device }
-        let result = CGMResult.newData(samples)
-        delegate.notify { delegate in
-            delegate?.cgmManager(self, didUpdateWith: result)
+        sendCGMResult(CGMResult.newData(samples))
+    }
+}
+
+// MARK: Alert Stuff
+
+extension MockCGMManager {
+    
+    public func getSoundBaseURL() -> URL? {
+        return Bundle(for: type(of: self)).bundleURL
+    }
+    
+    public func getSounds() -> [DeviceAlert.Sound] {
+        return alerts.map { $1.sound }
+    }
+    
+    public func issueAlert(identifier: DeviceAlert.AlertIdentifier, trigger: DeviceAlert.Trigger, delay: TimeInterval?) {
+        guard let alert = alerts[identifier] else {
+            return
+        }
+        registerBackgroundTask()
+        delegate.notifyDelayed(by: delay ?? 0) { delegate in
+            self.logDeviceComms(.delegate, message: "\(#function): \(identifier) \(trigger)")
+            delegate?.issueAlert(DeviceAlert(identifier: DeviceAlert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: identifier),
+                                             foregroundContent: alert.foregroundContent,
+                                             backgroundContent: alert.backgroundContent,
+                                             trigger: trigger,
+                                             sound: alert.sound))
         }
     }
+    
+    public func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) {
+        endBackgroundTask()
+        self.logDeviceComms(.delegateResponse, message: "\(#function): Alert \(alertIdentifier) acknowledged.")
+    }
+
+    private func registerBackgroundTask() {
+        backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
+            self?.endBackgroundTask()
+        }
+        assert(backgroundTask != .invalid)
+    }
+    
+    private func endBackgroundTask() {
+        UIApplication.shared.endBackgroundTask(backgroundTask)
+        backgroundTask = .invalid
+    }
+    
 }
 
 extension MockCGMManager {

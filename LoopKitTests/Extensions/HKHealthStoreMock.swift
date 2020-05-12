@@ -32,6 +32,12 @@ class HKHealthStoreMock: HKHealthStore {
         }
     }
 
+    override func deleteObjects(of objectType: HKObjectType, predicate: NSPredicate, withCompletion completion: @escaping (Bool, Int, Error?) -> Void) {
+        queue.async {
+            completion(self.deleteError == nil, 0, self.deleteError)
+        }
+    }
+
     func setSaveHandler(_ saveHandler: ((_ objects: [HKObject], _ success: Bool, _ error: Error?) -> Void)?) {
         queue.sync {
             self.saveHandler = saveHandler

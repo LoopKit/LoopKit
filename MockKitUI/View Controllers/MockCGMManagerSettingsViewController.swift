@@ -61,6 +61,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case model = 0
         case effects
         case history
+        case issueAlert
         case deleteCGM
     }
 
@@ -96,6 +97,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return EffectsRow.allCases.count
         case .history:
             return HistoryRow.allCases.count
+        case .issueAlert:
+            return 1
         case .deleteCGM:
             return 1
         }
@@ -109,6 +112,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return "Effects"
         case .history:
             return "History"
+        case .issueAlert:
+            return "Alerts"
         case .deleteCGM:
             return " " // Use an empty string for more dramatic spacing
         }
@@ -204,6 +209,11 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .backfill:
                 cell.textLabel?.text = "Backfill Glucose"
             }
+            cell.accessoryType = .disclosureIndicator
+            return cell
+        case .issueAlert:
+            let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+            cell.textLabel?.text = "Issue Alerts"
             cell.accessoryType = .disclosureIndicator
             return cell
         case .deleteCGM:
@@ -307,6 +317,9 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 }
                 show(vc, sender: sender)
             }
+        case .issueAlert:
+            let vc = IssueAlertTableViewController(cgmManager: cgmManager)
+            show(vc, sender: sender)
         case .deleteCGM:
             let confirmVC = UIAlertController(cgmDeletionHandler: {
                 self.cgmManager.notifyDelegateOfDeletion {

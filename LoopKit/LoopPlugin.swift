@@ -13,9 +13,7 @@ public enum LoopPluginBundleKey: String {
     case pumpManagerIdentifier = "com.loopkit.Loop.PumpManagerIdentifier"
     case cgmManagerDisplayName = "com.loopkit.Loop.CGMManagerDisplayName"
     case cgmManagerIdentifier = "com.loopkit.Loop.CGMManagerIdentifier"
+    case serviceDisplayName = "com.loopkit.Loop.ServiceDisplayName"
+    case serviceIdentifier = "com.loopkit.Loop.ServiceIdentifier"
 }
 
-public protocol LoopPlugin {
-    var pumpManagerType: PumpManager.Type? { get }
-    var cgmManagerType: CGMManager.Type? { get }
-}

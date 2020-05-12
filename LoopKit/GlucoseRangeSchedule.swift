@@ -52,6 +52,7 @@ extension DoubleRange: Equatable {
 
 extension DoubleRange: Hashable {}
 
+extension DoubleRange: Codable {}
 
 /// Defines a daily schedule of glucose ranges
 public struct GlucoseRangeSchedule: DailySchedule, Equatable {
@@ -67,13 +68,13 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         /// Initializes a new override
         ///
         /// - Parameters:
+        ///   - value: The value to return when active
         ///   - start: The date at which the override starts
         ///   - end: The date at which the override ends, or nil for an indefinite override
-        ///   - value: The value to return when active
-        public init(start: Date, end: Date?, value: DoubleRange) {
+        public init(value: DoubleRange, start: Date, end: Date? = nil) {
+            self.value = value
             self.start = start
             self.end = end ?? .distantFuture
-            self.value = value
         }
 
         public var activeDates: DateInterval {
@@ -165,6 +166,10 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         return rangeSchedule.rawValue
     }
 }
+
+extension GlucoseRangeSchedule: Codable {}
+
+extension GlucoseRangeSchedule.Override: Codable {}
 
 extension DoubleRange {
     public func quantityRange(for unit: HKUnit) -> ClosedRange<HKQuantity> {
