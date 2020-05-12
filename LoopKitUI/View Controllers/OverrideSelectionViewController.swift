@@ -343,11 +343,6 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         case .preset:
             return true
         }
-
-        return proposedIndexPath == indexPathOfCustomOverride()
-            ? originalIndexPath
-            : proposedIndexPath
-
     }
 
     public override func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {

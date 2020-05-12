@@ -171,6 +171,8 @@ public final class CarbStore: HealthKitSampleStore {
 
     private let log = OSLog(category: "CarbStore")
     
+    static let queryAnchorMetadataKey = "com.loopkit.CarbStore.queryAnchor"
+    
     var settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
 
 
