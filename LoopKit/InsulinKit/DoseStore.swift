@@ -285,12 +285,6 @@ public final class DoseStore {
         return insulinDeliveryStore.currentDate(timeIntervalSinceNow: timeIntervalSinceNow)
     }
 
-    /// A incremental cache of total insulin delivery since the last date requested by a client, used to avoid repeated work
-    ///
-    /// *Access should be isolated to a managed object context block*
-    private var totalDeliveryCache: InsulinValue?
-
-
     // MARK: - Reservoir Data
 
     /// The last-created reservoir object.
@@ -451,7 +445,6 @@ extension DoseStore {
                     // If we're violating consistency of the previous value, reset.
                     do {
                         try self.purgeReservoirObjects()
-                        self.totalDeliveryCache = nil
                         self.clearReservoirNormalizedDoseCache()
                         self.validateReservoirContinuity()
                     } catch let error {
@@ -489,14 +482,6 @@ extension DoseStore {
                     self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filterDateRange(self.cacheStartDate, nil)
 
                     self.recentReservoirNormalizedDoseEntriesCache! += newDoseEntries.annotated(with: basalProfile)
-                }
-
-                /// Increment the total delivery cache
-                if let totalDelivery = self.totalDeliveryCache {
-                    self.totalDeliveryCache = InsulinValue(
-                        startDate: totalDelivery.startDate,
-                        value: totalDelivery.value + newDoseEntries.totalDelivery
-                    )
                 }
             }
 
@@ -632,7 +617,6 @@ extension DoseStore {
                 try self.purgeReservoirObjects()
 
                 self.persistenceController.save { (error) in
-                    self.totalDeliveryCache = nil
                     self.clearReservoirNormalizedDoseCache()
                     self.validateReservoirContinuity()
 
@@ -1236,24 +1220,15 @@ extension DoseStore {
     ///   - result: The total units delivered and the date of the first dose
     public func getTotalUnitsDelivered(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<InsulinValue>) -> Void) {
         persistenceController.managedObjectContext.perform {
-            if  let totalDeliveryCache = self.totalDeliveryCache,
-                totalDeliveryCache.startDate >= startDate
-            {
-                completion(.success(totalDeliveryCache))
-                return
-            }
 
             self.getNormalizedDoseEntries(start: startDate) { (result) in
                 switch result {
                 case .success(let doses):
+                    let trimmedDoses = doses.map { $0.trimmed(from: startDate, to: self.currentDate())}
                     let result = InsulinValue(
-                        startDate: doses.first?.startDate ?? self.currentDate(),
-                        value: doses.totalDelivery
+                        startDate: startDate,
+                        value: trimmedDoses.totalDelivery
                     )
-
-                    if doses.count > 0 {
-                        self.totalDeliveryCache = result
-                    }
 
                     completion(.success(result))
                 case .failure(let error):
@@ -1285,7 +1260,6 @@ extension DoseStore {
             "* lastPumpEventsReconciliation: \(String(describing: lastPumpEventsReconciliation))",
             "* lastStoredReservoirValue: \(String(describing: lastStoredReservoirValue))",
             "* pumpEventQueryAfterDate: \(pumpEventQueryAfterDate)",
-            "* totalDeliveryCache: \(String(describing: totalDeliveryCache))",
             "* lastRecordedPrimeEventDate: \(String(describing: lastRecordedPrimeEventDate))",
             "* pumpRecordsBasalProfileStartEvents: \(pumpRecordsBasalProfileStartEvents)",
             "* device: \(String(describing: device))",
