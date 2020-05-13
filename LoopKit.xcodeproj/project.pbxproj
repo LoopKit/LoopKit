@@ -378,6 +378,7 @@
 		898E6E702241EDB70019E459 /* PercentageTextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E6F2241EDB70019E459 /* PercentageTextFieldTableViewController.swift */; };
 		898E6E722241EDC10019E459 /* DateAndDurationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E712241EDC10019E459 /* DateAndDurationTableViewController.swift */; };
 		898E6E732241EE000019E459 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5DBB2231E20C008961AB /* Comparable.swift */; };
+		89904032245B5CA500F1C0A2 /* Deletable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89904031245B5CA500F1C0A2 /* Deletable.swift */; };
 		8992426521EC138000EA512B /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8992426421EC138000EA512B /* UIColor.swift */; };
 		8997B4F523727E8A00061132 /* CustomOverrideCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */; };
 		89AC9DCB24529927004A6B8A /* QuantityPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AC9DCA24529927004A6B8A /* QuantityPicker.swift */; };
@@ -419,6 +420,11 @@
 		89AF78C22447E353002B4FCC /* Splat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AF78C12447E353002B4FCC /* Splat.swift */; };
 		89AF78C624482269002B4FCC /* ActionButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AF78C524482268002B4FCC /* ActionButtonStyle.swift */; };
 		89B0B2AA2453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */; };
+		89BE75C124649C2E00B145D9 /* ModalHeaderButtonBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BE75C024649C2E00B145D9 /* ModalHeaderButtonBar.swift */; };
+		89BE75C324649C4C00B145D9 /* RoundedCorners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BE75C224649C4C00B145D9 /* RoundedCorners.swift */; };
+		89BE75C524649C8100B145D9 /* NewScheduleItemEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BE75C424649C8100B145D9 /* NewScheduleItemEditor.swift */; };
+		89BE75C72464B4A900B145D9 /* Environment+Dismiss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BE75C62464B4A900B145D9 /* Environment+Dismiss.swift */; };
+		89BE75CB2464BC2000B145D9 /* AlertContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89BE75CA2464BC2000B145D9 /* AlertContent.swift */; };
 		89CA2B35226D1624004D9350 /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B33226D15E0004D9350 /* MutableCollection.swift */; };
 		89CA2B36226D1627004D9350 /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B33226D15E0004D9350 /* MutableCollection.swift */; };
 		89CA2B38226D4456004D9350 /* DateRelativeQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B37226D4456004D9350 /* DateRelativeQuantity.swift */; };
@@ -460,6 +466,9 @@
 		89F6E311244A1AAB00CB9E15 /* SettingDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E310244A1AAB00CB9E15 /* SettingDescription.swift */; };
 		89F6E314244A1AB600CB9E15 /* GuardrailWarning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */; };
 		89F6E315244A1AB600CB9E15 /* GlucoseValuePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */; };
+		89FC6891245A2D680075CF59 /* ScheduleItemPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FC688C245A2D680075CF59 /* ScheduleItemPicker.swift */; };
+		89FC6892245A2D680075CF59 /* ScheduleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FC688D245A2D680075CF59 /* ScheduleEditor.swift */; };
+		89FC6893245A2D680075CF59 /* ScheduleItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FC688E245A2D680075CF59 /* ScheduleItemView.swift */; };
 		9E78433F236653F00016C583 /* ice_35_min_none_piecewiselinear_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 9E78433E236653F00016C583 /* ice_35_min_none_piecewiselinear_output.json */; };
 		9E784341236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 9E784340236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json */; };
 		9E784343236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 9E784342236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json */; };
@@ -1201,6 +1210,7 @@
 		898E6E6D2241ED9F0019E459 /* SuspendResumeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuspendResumeTableViewCell.swift; sourceTree = "<group>"; };
 		898E6E6F2241EDB70019E459 /* PercentageTextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PercentageTextFieldTableViewController.swift; sourceTree = "<group>"; };
 		898E6E712241EDC10019E459 /* DateAndDurationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateAndDurationTableViewController.swift; sourceTree = "<group>"; };
+		89904031245B5CA500F1C0A2 /* Deletable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deletable.swift; sourceTree = "<group>"; };
 		8992426421EC138000EA512B /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomOverrideCollectionViewCell.swift; sourceTree = "<group>"; };
 		89AB9EC621A4774500351324 /* MockPumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManager.swift; sourceTree = "<group>"; };
@@ -1231,6 +1241,11 @@
 		89AF78C12447E353002B4FCC /* Splat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splat.swift; sourceTree = "<group>"; };
 		89AF78C524482268002B4FCC /* ActionButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtonStyle.swift; sourceTree = "<group>"; };
 		89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardrailConstraintedQuantityView.swift; sourceTree = "<group>"; };
+		89BE75C024649C2E00B145D9 /* ModalHeaderButtonBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalHeaderButtonBar.swift; sourceTree = "<group>"; };
+		89BE75C224649C4C00B145D9 /* RoundedCorners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorners.swift; sourceTree = "<group>"; };
+		89BE75C424649C8100B145D9 /* NewScheduleItemEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewScheduleItemEditor.swift; sourceTree = "<group>"; };
+		89BE75C62464B4A900B145D9 /* Environment+Dismiss.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Environment+Dismiss.swift"; sourceTree = "<group>"; };
+		89BE75CA2464BC2000B145D9 /* AlertContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertContent.swift; sourceTree = "<group>"; };
 		89CA2B33226D15E0004D9350 /* MutableCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableCollection.swift; sourceTree = "<group>"; };
 		89CA2B37226D4456004D9350 /* DateRelativeQuantity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelativeQuantity.swift; sourceTree = "<group>"; };
 		89CC35D32403450E008FB633 /* ThumbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbView.swift; sourceTree = "<group>"; };
@@ -1253,6 +1268,9 @@
 		89F6E310244A1AAB00CB9E15 /* SettingDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingDescription.swift; sourceTree = "<group>"; };
 		89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuardrailWarning.swift; sourceTree = "<group>"; };
 		89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseValuePicker.swift; sourceTree = "<group>"; };
+		89FC688C245A2D680075CF59 /* ScheduleItemPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleItemPicker.swift; sourceTree = "<group>"; };
+		89FC688D245A2D680075CF59 /* ScheduleEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleEditor.swift; sourceTree = "<group>"; };
+		89FC688E245A2D680075CF59 /* ScheduleItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleItemView.swift; sourceTree = "<group>"; };
 		9E78433E236653F00016C583 /* ice_35_min_none_piecewiselinear_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ice_35_min_none_piecewiselinear_output.json; sourceTree = "<group>"; };
 		9E784340236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ice_35_min_partial_piecewiselinear_output.json; sourceTree = "<group>"; };
 		9E784342236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ice_slow_absorption_piecewiselinear_output.json; sourceTree = "<group>"; };
@@ -1616,6 +1634,14 @@
 				89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */,
 				89AC9DCC24529D9B004A6B8A /* TimePicker.swift */,
 				89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */,
+				89FC688D245A2D680075CF59 /* ScheduleEditor.swift */,
+				89BE75C024649C2E00B145D9 /* ModalHeaderButtonBar.swift */,
+				89FC688C245A2D680075CF59 /* ScheduleItemPicker.swift */,
+				89FC688E245A2D680075CF59 /* ScheduleItemView.swift */,
+				89BE75C224649C4C00B145D9 /* RoundedCorners.swift */,
+				89BE75C424649C8100B145D9 /* NewScheduleItemEditor.swift */,
+				89BE75CA2464BC2000B145D9 /* AlertContent.swift */,
+				89904031245B5CA500F1C0A2 /* Deletable.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2172,8 +2198,9 @@
 		B41A60B023D1DBB700636320 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				C1E4B309242E99A800E70CCB /* Image.swift */,
 				B4C004B8241085FE00B40429 /* Color.swift */,
+				89BE75C62464B4A900B145D9 /* Environment+Dismiss.swift */,
+				C1E4B309242E99A800E70CCB /* Image.swift */,
 				B41A60B123D1DBC700636320 /* UIFont.swift */,
 			);
 			path = Extensions;
@@ -2744,6 +2771,7 @@
 				898E6E67224179310019E459 /* BaseHUDView.swift in Sources */,
 				43F5034F210599DF009FA89A /* ValidatingIndicatorView.swift in Sources */,
 				C1E4B308242E995200E70CCB /* ActivityIndicator.swift in Sources */,
+				89FC6891245A2D680075CF59 /* ScheduleItemPicker.swift in Sources */,
 				43BA718C201EEE5A0058961E /* NSData.swift in Sources */,
 				43F5035A21059AF7009FA89A /* AuthenticationTableViewCell.swift in Sources */,
 				43BA7163201E490D0058961E /* InsulinDeliveryTableViewController.swift in Sources */,
@@ -2763,6 +2791,7 @@
 				895FE08322011F0C00FCF18A /* OverrideSelectionFooterView.swift in Sources */,
 				89AF78C22447E353002B4FCC /* Splat.swift in Sources */,
 				893C9F8C2447DBD900CD4185 /* CardBuilder.swift in Sources */,
+				89BE75C524649C8100B145D9 /* NewScheduleItemEditor.swift in Sources */,
 				4369F08F208859E6000E3E45 /* PaddedTextField.swift in Sources */,
 				A9498D8823386CAF00DAA9B9 /* ServiceViewController.swift in Sources */,
 				892A5D9E2231E122008961AB /* StateColorPalette.swift in Sources */,
@@ -2794,12 +2823,14 @@
 				892A5DB82231E1A0008961AB /* ReservoirVolumeHUDView.swift in Sources */,
 				43BA716C201E49220058961E /* CustomInputTextField.swift in Sources */,
 				B46B62B323FF0E62001E69BA /* SelectableLabel.swift in Sources */,
+				89FC6893245A2D680075CF59 /* ScheduleItemView.swift in Sources */,
 				43BA716F201E49220058961E /* FoodEmojiDataSource.swift in Sources */,
 				43F89C9F22BDFB10006BB54E /* UIActivityIndicatorView.swift in Sources */,
 				892ADE002446C858007CE08C /* Card.swift in Sources */,
 				432CF86D20D76C470066B889 /* SwitchTableViewCell.swift in Sources */,
 				43BA7188201EE85B0058961E /* HKUnit.swift in Sources */,
 				89F6E30D2449713600CB9E15 /* CardStack.swift in Sources */,
+				89BE75C324649C4C00B145D9 /* RoundedCorners.swift in Sources */,
 				C1E4B306242E98E900E70CCB /* ProgressIndicatorView.swift in Sources */,
 				4369F092208B0DFF000E3E45 /* DateAndDurationTableViewCell.swift in Sources */,
 				43BA7189201EE8980058961E /* UITableViewCell.swift in Sources */,
@@ -2814,19 +2845,24 @@
 				43A8EC3C210CEEA500A81379 /* CGMManagerUI.swift in Sources */,
 				43BA718B201EE93C0058961E /* TimeZone.swift in Sources */,
 				A991161423426A0A00A4B2E9 /* ServiceSetupNotifying.swift in Sources */,
+				89FC6892245A2D680075CF59 /* ScheduleEditor.swift in Sources */,
 				43BA717B201EE6A40058961E /* NibLoadable.swift in Sources */,
+				89BE75C124649C2E00B145D9 /* ModalHeaderButtonBar.swift in Sources */,
 				89F6E315244A1AB600CB9E15 /* GlucoseValuePicker.swift in Sources */,
 				895FE08122011F0C00FCF18A /* OverridePresetCollectionViewCell.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
 				8974B0692215FE460043F01B /* Collection.swift in Sources */,
+				89BE75C72464B4A900B145D9 /* Environment+Dismiss.swift in Sources */,
 				43BA717F201EE7090058961E /* GlucoseRangeOverrideTableViewCell.swift in Sources */,
 				895FE09022011F4800FCF18A /* OverrideSelectionViewController.swift in Sources */,
+				89904032245B5CA500F1C0A2 /* Deletable.swift in Sources */,
 				43F5035721059A8A009FA89A /* ServiceCredential.swift in Sources */,
 				43BA7169201E49220058961E /* CarbEntryEditViewController.swift in Sources */,
 				892A5DA22231E137008961AB /* HUDProvider.swift in Sources */,
 				892A5DBC2231E20C008961AB /* Comparable.swift in Sources */,
 				898E6E6C224194060019E459 /* UIColor.swift in Sources */,
 				43BA717D201EE7090058961E /* GlucoseRangeTableViewCell.swift in Sources */,
+				89BE75CB2464BC2000B145D9 /* AlertContent.swift in Sources */,
 				43BA7184201EE7090058961E /* TextFieldTableViewController.swift in Sources */,
 				895FE09122011F4800FCF18A /* AddEditOverrideTableViewController.swift in Sources */,
 				C1E4B305242E98E900E70CCB /* ProgressView.swift in Sources */,

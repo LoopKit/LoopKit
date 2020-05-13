@@ -19,20 +19,32 @@ private struct PickerValueBoundsKey: PreferenceKey {
     }
 }
 
+struct QuantityPickerUnitLabelWidthKey: PreferenceKey {
+    static let defaultValue: CGFloat? = nil
+
+    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+        value = value ?? nextValue()
+    }
+}
+
 public struct QuantityPicker: View {
     @Binding var value: HKQuantity
     var unit: HKUnit
     var guardrail: Guardrail<HKQuantity>
 
-    private let possibleValues: [Double]
+    private let selectableValues: [Double]
     private let formatter: NumberFormatter
 
     public init(value: Binding<HKQuantity>, unit: HKUnit, stride: HKQuantity, guardrail: Guardrail<HKQuantity>) {
+        let selectableValues = guardrail.allValues(stridingBy: stride, unit: unit)
+        self.init(value: value, unit: unit, guardrail: guardrail, selectableValues: selectableValues)
+    }
+
+    public init(value: Binding<HKQuantity>, unit: HKUnit, guardrail: Guardrail<HKQuantity>, selectableValues: [Double]) {
         self._value = value
         self.unit = unit
         self.guardrail = guardrail
-
-        self.possibleValues = guardrail.allValues(stridingBy: stride, unit: unit).map { $0.doubleValue(for: unit) }
+        self.selectableValues = selectableValues
         self.formatter = {
             let quantityFormatter = QuantityFormatter()
             quantityFormatter.setPreferredNumberFormatter(for: unit)
@@ -49,7 +61,7 @@ public struct QuantityPicker: View {
 
     public var body: some View {
         Picker("Quantity", selection: selection) {
-            ForEach(possibleValues, id: \.self) { value in
+            ForEach(selectableValues, id: \.self) { value in
                 Text(self.formatter.string(from: value) ?? "\(value)")
                     .foregroundColor(self.pickerTextColor(for: value))
                     .anchorPreference(key: PickerValueBoundsKey.self, value: .bounds, transform: { [$0] })
@@ -76,20 +88,26 @@ public struct QuantityPicker: View {
     }
 
     private func unitLabel(positionedFrom pickerValueBounds: [Anchor<CGRect>]) -> some View {
-        let unitLabelOffset: CGFloat = 8
-        return GeometryReader { geometry in
+        GeometryReader { geometry in
             if !pickerValueBounds.isEmpty {
                 Text(self.unit.shortLocalizedUnitString())
+                    .background(GeometryReader { textGeometry in
+                        Color.clear.preference(key: QuantityPickerUnitLabelWidthKey.self, value: textGeometry.size.width)
+                    })
                     .foregroundColor(.gray)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                    .offset(x: self.maxBounds(from: pickerValueBounds, in: geometry).maxX + unitLabelOffset)
+                    .offset(x: pickerValueBounds.union(in: geometry).maxX + self.unitLabelSpacing)
                     .animation(.default)
             }
         }
     }
 
-    private func maxBounds(from individualBounds: [Anchor<CGRect>], in geometry: GeometryProxy) -> CGRect {
-        individualBounds.lazy
+    private var unitLabelSpacing: CGFloat { 8 }
+}
+
+extension Sequence where Element == Anchor<CGRect> {
+    func union(in geometry: GeometryProxy) -> CGRect {
+        lazy
             .map { geometry[$0] }
             .reduce(.null) { $0.union($1) }
     }

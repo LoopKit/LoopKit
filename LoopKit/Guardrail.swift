@@ -65,12 +65,16 @@ extension Guardrail where Value == HKQuantity {
         self.init(absoluteBounds: absoluteBoundsWithUnit, recommendedBounds: recommendedBoundsWithUnit)
     }
 
-    public func allValues(stridingBy increment: HKQuantity, unit: HKUnit) -> [HKQuantity] {
-        stride(
+    public func allQuantities(stridingBy increment: HKQuantity, unit: HKUnit) -> [HKQuantity] {
+        allValues(stridingBy: increment, unit: unit)
+            .map { HKQuantity(unit: unit, doubleValue: $0) }
+    }
+
+    public func allValues(stridingBy increment: HKQuantity, unit: HKUnit) -> [Double] {
+        Array(stride(
             from: absoluteBounds.lowerBound.doubleValue(for: unit),
             through: absoluteBounds.upperBound.doubleValue(for: unit),
             by: increment.doubleValue(for: unit)
-        )
-        .map { HKQuantity(unit: unit, doubleValue: $0) }
+        ))
     }
 }

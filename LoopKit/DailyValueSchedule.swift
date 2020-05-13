@@ -11,8 +11,8 @@ import HealthKit
 
 
 public struct RepeatingScheduleValue<T> {
-    public let startTime: TimeInterval
-    public let value: T
+    public var startTime: TimeInterval
+    public var value: T
 
     public init(startTime: TimeInterval, value: T) {
         self.startTime = startTime
