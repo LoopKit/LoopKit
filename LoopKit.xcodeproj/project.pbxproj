@@ -368,6 +368,7 @@
 		8974AFC022120D7A0043F01B /* TemporaryScheduleOverrideTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */; };
 		8974B0682215FE460043F01B /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974B0672215FE460043F01B /* Collection.swift */; };
 		8974B0692215FE460043F01B /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974B0672215FE460043F01B /* Collection.swift */; };
+		898B4E75246CCAB50053C484 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898B4E74246CCAB50053C484 /* Binding.swift */; };
 		898E6E5D2241783C0019E459 /* SetConstrainedScheduleEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D63222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.swift */; };
 		898E6E67224179310019E459 /* BaseHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E64224179300019E459 /* BaseHUDView.swift */; };
 		898E6E68224179310019E459 /* BatteryLevelHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 898E6E65224179300019E459 /* BatteryLevelHUDView.xib */; };
@@ -466,6 +467,8 @@
 		89F6E311244A1AAB00CB9E15 /* SettingDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E310244A1AAB00CB9E15 /* SettingDescription.swift */; };
 		89F6E314244A1AB600CB9E15 /* GuardrailWarning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */; };
 		89F6E315244A1AB600CB9E15 /* GlucoseValuePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */; };
+		89FC688F245A2D680075CF59 /* InsulinSensitivityScheduleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FC688A245A2D670075CF59 /* InsulinSensitivityScheduleEditor.swift */; };
+		89FC6890245A2D680075CF59 /* QuantityScheduleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FC688B245A2D670075CF59 /* QuantityScheduleEditor.swift */; };
 		89FC6891245A2D680075CF59 /* ScheduleItemPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FC688C245A2D680075CF59 /* ScheduleItemPicker.swift */; };
 		89FC6892245A2D680075CF59 /* ScheduleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FC688D245A2D680075CF59 /* ScheduleEditor.swift */; };
 		89FC6893245A2D680075CF59 /* ScheduleItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FC688E245A2D680075CF59 /* ScheduleItemView.swift */; };
@@ -1203,6 +1206,7 @@
 		89627B172441168900BEB424 /* ConfigurationPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPage.swift; sourceTree = "<group>"; };
 		8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideTests.swift; sourceTree = "<group>"; };
 		8974B0672215FE460043F01B /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		898B4E74246CCAB50053C484 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		898E6E64224179300019E459 /* BaseHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseHUDView.swift; sourceTree = "<group>"; };
 		898E6E65224179300019E459 /* BatteryLevelHUDView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BatteryLevelHUDView.xib; sourceTree = "<group>"; };
 		898E6E66224179300019E459 /* BatteryLevelHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryLevelHUDView.swift; sourceTree = "<group>"; };
@@ -1268,6 +1272,8 @@
 		89F6E310244A1AAB00CB9E15 /* SettingDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingDescription.swift; sourceTree = "<group>"; };
 		89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuardrailWarning.swift; sourceTree = "<group>"; };
 		89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseValuePicker.swift; sourceTree = "<group>"; };
+		89FC688A245A2D670075CF59 /* InsulinSensitivityScheduleEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinSensitivityScheduleEditor.swift; sourceTree = "<group>"; };
+		89FC688B245A2D670075CF59 /* QuantityScheduleEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuantityScheduleEditor.swift; sourceTree = "<group>"; };
 		89FC688C245A2D680075CF59 /* ScheduleItemPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleItemPicker.swift; sourceTree = "<group>"; };
 		89FC688D245A2D680075CF59 /* ScheduleEditor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleEditor.swift; sourceTree = "<group>"; };
 		89FC688E245A2D680075CF59 /* ScheduleItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleItemView.swift; sourceTree = "<group>"; };
@@ -1634,6 +1640,8 @@
 				89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */,
 				89AC9DCC24529D9B004A6B8A /* TimePicker.swift */,
 				89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */,
+				89FC688A245A2D670075CF59 /* InsulinSensitivityScheduleEditor.swift */,
+				89FC688B245A2D670075CF59 /* QuantityScheduleEditor.swift */,
 				89FC688D245A2D680075CF59 /* ScheduleEditor.swift */,
 				89BE75C024649C2E00B145D9 /* ModalHeaderButtonBar.swift */,
 				89FC688C245A2D680075CF59 /* ScheduleItemPicker.swift */,
@@ -2198,6 +2206,7 @@
 		B41A60B023D1DBB700636320 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				898B4E74246CCAB50053C484 /* Binding.swift */,
 				B4C004B8241085FE00B40429 /* Color.swift */,
 				89BE75C62464B4A900B145D9 /* Environment+Dismiss.swift */,
 				C1E4B309242E99A800E70CCB /* Image.swift */,
@@ -2756,6 +2765,7 @@
 				B4C004D12416961300B40429 /* GuidePage.swift in Sources */,
 				898E6E69224179310019E459 /* BatteryLevelHUDView.swift in Sources */,
 				89B0B2AA2453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift in Sources */,
+				898B4E75246CCAB50053C484 /* Binding.swift in Sources */,
 				892155182245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.swift in Sources */,
 				892155132245C516009112BC /* SegmentedGaugeBarView.swift in Sources */,
 				B4A2AAB3240832350066563F /* MultipleSelectionList.swift in Sources */,
@@ -2803,6 +2813,7 @@
 				43FB60E520DCBA02002B996B /* SetupTableViewController.swift in Sources */,
 				43BA7180201EE7090058961E /* SingleValueScheduleTableViewController.swift in Sources */,
 				898E6E5D2241783C0019E459 /* SetConstrainedScheduleEntryTableViewCell.swift in Sources */,
+				89FC688F245A2D680075CF59 /* InsulinSensitivityScheduleEditor.swift in Sources */,
 				895FE09322011F4800FCF18A /* EmojiInputController.swift in Sources */,
 				43BA717E201EE7090058961E /* CommandResponseViewController.swift in Sources */,
 				C188B83422CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift in Sources */,
@@ -2812,6 +2823,7 @@
 				B46B62AF23FF0BF6001E69BA /* SectionHeader.swift in Sources */,
 				43BA7183201EE7090058961E /* DailyQuantityScheduleTableViewController.swift in Sources */,
 				43F503632106C761009FA89A /* ServiceAuthenticationUI.swift in Sources */,
+				89FC6890245A2D680075CF59 /* QuantityScheduleEditor.swift in Sources */,
 				432CF86B20D76B9C0066B889 /* SetupIndicatorView.swift in Sources */,
 				898E6E722241EDC10019E459 /* DateAndDurationTableViewController.swift in Sources */,
 				43BA716D201E49220058961E /* DatePickerTableViewCell.swift in Sources */,

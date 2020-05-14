@@ -19,14 +19,6 @@ private struct PickerValueBoundsKey: PreferenceKey {
     }
 }
 
-struct QuantityPickerUnitLabelWidthKey: PreferenceKey {
-    static let defaultValue: CGFloat? = nil
-
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
-        value = value ?? nextValue()
-    }
-}
-
 public struct QuantityPicker: View {
     @Binding var value: HKQuantity
     var unit: HKUnit
@@ -91,9 +83,6 @@ public struct QuantityPicker: View {
         GeometryReader { geometry in
             if !pickerValueBounds.isEmpty {
                 Text(self.unit.shortLocalizedUnitString())
-                    .background(GeometryReader { textGeometry in
-                        Color.clear.preference(key: QuantityPickerUnitLabelWidthKey.self, value: textGeometry.size.width)
-                    })
                     .foregroundColor(.gray)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                     .offset(x: pickerValueBounds.union(in: geometry).maxX + self.unitLabelSpacing)

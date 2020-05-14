@@ -11,24 +11,29 @@ import LoopKit
 
 
 struct NewScheduleItemEditor<Value, ValuePicker: View>: View {
+    enum SelectableTimes {
+        case only(TimeInterval)
+        case allExcept(Set<TimeInterval>)
+    }
+
     @Binding var isPresented: Bool
     @State var item: RepeatingScheduleValue<Value>
     var initialItem: RepeatingScheduleValue<Value>
-    var unavailableTimes: Set<TimeInterval>
-    var valuePicker: (_ item: Binding<RepeatingScheduleValue<Value>>) -> ValuePicker
+    var selectableTimes: SelectableTimes
+    var valuePicker: (_ item: Binding<RepeatingScheduleValue<Value>>, _ availableWidth: CGFloat) -> ValuePicker
     var save: (RepeatingScheduleValue<Value>) -> Void
 
     init(
         isPresented: Binding<Bool>,
         initialItem: RepeatingScheduleValue<Value>,
-        unavailableTimes: Set<TimeInterval>,
-        @ViewBuilder valuePicker: @escaping (_ item: Binding<RepeatingScheduleValue<Value>>) -> ValuePicker,
+        selectableTimes: SelectableTimes,
+        @ViewBuilder valuePicker: @escaping (_ item: Binding<RepeatingScheduleValue<Value>>, _ availableWidth: CGFloat) -> ValuePicker,
         onSave save: @escaping (RepeatingScheduleValue<Value>) -> Void
     ) {
         self._isPresented = isPresented
         self._item = State(initialValue: initialItem)
         self.initialItem = initialItem
-        self.unavailableTimes = unavailableTimes
+        self.selectableTimes = selectableTimes
         self.valuePicker = valuePicker
         self.save = save
     }
@@ -46,8 +51,8 @@ struct NewScheduleItemEditor<Value, ValuePicker: View>: View {
 
             ScheduleItemPicker(
                 item: $item,
-                isTimeSelectable: { !self.unavailableTimes.contains($0) },
-                valuePicker: { valuePicker($item) }
+                isTimeSelectable: isTimeSelectable,
+                valuePicker: { self.valuePicker(self.$item, $0) }
             )
             .padding(.horizontal)
             .background(
@@ -56,6 +61,15 @@ struct NewScheduleItemEditor<Value, ValuePicker: View>: View {
             )
         }
         .padding(.horizontal)
+    }
+
+    func isTimeSelectable(_ time: TimeInterval) -> Bool {
+        switch selectableTimes {
+        case .only(let selectableTime):
+            return time == selectableTime
+        case .allExcept(let unavailableTimes):
+            return !unavailableTimes.contains(time)
+        }
     }
 
     var addButton: some View {
