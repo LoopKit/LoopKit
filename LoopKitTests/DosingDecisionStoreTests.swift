@@ -39,9 +39,9 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
 
     // MARK: -
 
-    func testStoreDosingDecision() {
-        let storeDosingDecisionHandler = expectation(description: "Store dosing decision handler")
-        let storeDosingDecisionCompletion = expectation(description: "Store dosing decision completion")
+    func testStoreDosingDecisionData() {
+        let storeDosingDecisionDataHandler = expectation(description: "Store dosing decision data handler")
+        let storeDosingDecisionDataCompletion = expectation(description: "Store dosing decision data completion")
 
         var handlerInvocation = 0
 
@@ -50,24 +50,24 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
 
             switch handlerInvocation {
             case 1:
-                storeDosingDecisionHandler.fulfill()
+                storeDosingDecisionDataHandler.fulfill()
             default:
                 XCTFail("Unexpected handler invocation")
             }
         }
 
-        dosingDecisionStore.storeDosingDecision(StoredDosingDecision()) {
-            storeDosingDecisionCompletion.fulfill()
+        dosingDecisionStore.storeDosingDecisionData(StoredDosingDecisionData()) {
+            storeDosingDecisionDataCompletion.fulfill()
         }
 
-        wait(for: [storeDosingDecisionHandler, storeDosingDecisionCompletion], timeout: 2, enforceOrder: true)
+        wait(for: [storeDosingDecisionDataHandler, storeDosingDecisionDataCompletion], timeout: 2, enforceOrder: true)
     }
 
-    func testStoreDosingDecisionMultiple() {
-        let storeDosingDecisionHandler1 = expectation(description: "Store dosing decision handler 1")
-        let storeDosingDecisionHandler2 = expectation(description: "Store dosing decision handler 2")
-        let storeDosingDecisionCompletion1 = expectation(description: "Store dosing decision completion 1")
-        let storeDosingDecisionCompletion2 = expectation(description: "Store dosing decision completion 2")
+    func testStoreDosingDecisionDataMultiple() {
+        let storeDosingDecisionDataHandler1 = expectation(description: "Store dosing decision data handler 1")
+        let storeDosingDecisionDataHandler2 = expectation(description: "Store dosing decision data handler 2")
+        let storeDosingDecisionDataCompletion1 = expectation(description: "Store dosing decision data completion 1")
+        let storeDosingDecisionDataCompletion2 = expectation(description: "Store dosing decision data completion 2")
 
         var handlerInvocation = 0
 
@@ -76,23 +76,23 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
 
             switch handlerInvocation {
             case 1:
-                storeDosingDecisionHandler1.fulfill()
+                storeDosingDecisionDataHandler1.fulfill()
             case 2:
-                storeDosingDecisionHandler2.fulfill()
+                storeDosingDecisionDataHandler2.fulfill()
             default:
                 XCTFail("Unexpected handler invocation")
             }
         }
 
-        dosingDecisionStore.storeDosingDecision(StoredDosingDecision()) {
-            storeDosingDecisionCompletion1.fulfill()
+        dosingDecisionStore.storeDosingDecisionData(StoredDosingDecisionData()) {
+            storeDosingDecisionDataCompletion1.fulfill()
         }
 
-        dosingDecisionStore.storeDosingDecision(StoredDosingDecision()) {
-            storeDosingDecisionCompletion2.fulfill()
+        dosingDecisionStore.storeDosingDecisionData(StoredDosingDecisionData()) {
+            storeDosingDecisionDataCompletion2.fulfill()
         }
 
-        wait(for: [storeDosingDecisionHandler1, storeDosingDecisionCompletion1, storeDosingDecisionHandler2, storeDosingDecisionCompletion2], timeout: 2, enforceOrder: true)
+        wait(for: [storeDosingDecisionDataHandler1, storeDosingDecisionDataCompletion1, storeDosingDecisionDataHandler2, storeDosingDecisionDataCompletion2], timeout: 2, enforceOrder: true)
     }
 
 }
@@ -168,7 +168,7 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
     // MARK: -
 
     func testEmptyWithDefaultQueryAnchor() {
-        dosingDecisionStore.executeDosingDecisionQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        dosingDecisionStore.executeDosingDecisionDataQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -185,7 +185,7 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
     func testEmptyWithMissingQueryAnchor() {
         queryAnchor = nil
 
-        dosingDecisionStore.executeDosingDecisionQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        dosingDecisionStore.executeDosingDecisionDataQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -202,7 +202,7 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
     func testEmptyWithNonDefaultQueryAnchor() {
         queryAnchor.modificationCounter = 1
 
-        dosingDecisionStore.executeDosingDecisionQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        dosingDecisionStore.executeDosingDecisionDataQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -217,19 +217,19 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
     }
 
     func testDataWithUnusedQueryAnchor() {
-        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        let dataStrings = [generateDataString(), generateDataString(), generateDataString()]
 
-        addData(withSyncIdentifiers: syncIdentifiers)
+        addData(withDataStrings: dataStrings)
 
-        dosingDecisionStore.executeDosingDecisionQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        dosingDecisionStore.executeDosingDecisionDataQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let anchor, let data):
                 XCTAssertEqual(anchor.modificationCounter, 3)
                 XCTAssertEqual(data.count, 3)
-                for (index, syncIdentifier) in syncIdentifiers.enumerated() {
-                    XCTAssertEqual(data[index].syncIdentifier, syncIdentifier)
+                for (index, dataString) in dataStrings.enumerated() {
+                    XCTAssertEqual(data[index].dataString, dataString)
                 }
             }
             self.completion.fulfill()
@@ -239,20 +239,20 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
     }
 
     func testDataWithStaleQueryAnchor() {
-        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        let dataStrings = [generateDataString(), generateDataString(), generateDataString()]
 
-        addData(withSyncIdentifiers: syncIdentifiers)
+        addData(withDataStrings: dataStrings)
 
         queryAnchor.modificationCounter = 2
 
-        dosingDecisionStore.executeDosingDecisionQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        dosingDecisionStore.executeDosingDecisionDataQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let anchor, let data):
                 XCTAssertEqual(anchor.modificationCounter, 3)
                 XCTAssertEqual(data.count, 1)
-                XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[2])
+                XCTAssertEqual(data[0].dataString, dataStrings[2])
             }
             self.completion.fulfill()
         }
@@ -261,13 +261,13 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
     }
 
     func testDataWithCurrentQueryAnchor() {
-        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        let dataStrings = [generateDataString(), generateDataString(), generateDataString()]
 
-        addData(withSyncIdentifiers: syncIdentifiers)
+        addData(withDataStrings: dataStrings)
 
         queryAnchor.modificationCounter = 3
 
-        dosingDecisionStore.executeDosingDecisionQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        dosingDecisionStore.executeDosingDecisionDataQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -282,13 +282,13 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
     }
 
     func testDataWithLimitZero() {
-        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        let dataStrings = [generateDataString(), generateDataString(), generateDataString()]
 
-        addData(withSyncIdentifiers: syncIdentifiers)
+        addData(withDataStrings: dataStrings)
 
         limit = 0
 
-        dosingDecisionStore.executeDosingDecisionQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        dosingDecisionStore.executeDosingDecisionDataQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -303,21 +303,21 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
     }
 
     func testDataWithLimitCoveredByData() {
-        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        let dataStrings = [generateDataString(), generateDataString(), generateDataString()]
 
-        addData(withSyncIdentifiers: syncIdentifiers)
+        addData(withDataStrings: dataStrings)
 
         limit = 2
 
-        dosingDecisionStore.executeDosingDecisionQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        dosingDecisionStore.executeDosingDecisionDataQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let anchor, let data):
                 XCTAssertEqual(anchor.modificationCounter, 2)
                 XCTAssertEqual(data.count, 2)
-                XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[0])
-                XCTAssertEqual(data[1].syncIdentifier, syncIdentifiers[1])
+                XCTAssertEqual(data[0].dataString, dataStrings[0])
+                XCTAssertEqual(data[1].dataString, dataStrings[1])
             }
             self.completion.fulfill()
         }
@@ -325,16 +325,26 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
 
-    private func addData(withSyncIdentifiers syncIdentifiers: [String]) {
+    private func addData(withDataStrings dataStrings: [String]) {
         let semaphore = DispatchSemaphore(value: 0)
-        for (_, syncIdentifier) in syncIdentifiers.enumerated() {
-            self.dosingDecisionStore.storeDosingDecision(StoredDosingDecision(syncIdentifier: syncIdentifier)) { semaphore.signal() }
+        for dataString in dataStrings {
+            self.dosingDecisionStore.storeDosingDecisionData(StoredDosingDecisionData(dataString: dataString)) { semaphore.signal() }
         }
-        for _ in syncIdentifiers { semaphore.wait() }
+        for _ in dataStrings { semaphore.wait() }
     }
 
-    private func generateSyncIdentifier() -> String {
+    private func generateDataString() -> String {
         return UUID().uuidString
     }
 
+}
+
+extension StoredDosingDecisionData {
+    init(date: Date = Date(), dataString: String = UUID().uuidString) {
+        self.init(date: date, data: dataString.data(using: .utf8)!)
+    }
+
+    var dataString: String {
+        return String(data: data, encoding: .utf8)!
+    }
 }

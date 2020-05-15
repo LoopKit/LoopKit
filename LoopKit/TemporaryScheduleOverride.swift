@@ -212,7 +212,7 @@ extension TemporaryScheduleOverride.Context: Codable {
             }
         } else {
             let container = try decoder.container(keyedBy: CodableKeys.self)
-            if let preset = try? container.decode(Preset.self, forKey: .preset) {
+            if let preset = try container.decodeIfPresent(Preset.self, forKey: .preset) {
                 self = .preset(preset.preset)
             } else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
@@ -294,7 +294,7 @@ extension TemporaryScheduleOverride.Duration: Codable {
             }
         } else {
             let container = try decoder.container(keyedBy: CodableKeys.self)
-            if let finite = try? container.decode(Finite.self, forKey: .finite) {
+            if let finite = try container.decodeIfPresent(Finite.self, forKey: .finite) {
                 self = .finite(finite.duration)
             } else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
@@ -368,7 +368,7 @@ extension TemporaryScheduleOverride.EnactTrigger: Codable {
             }
         } else {
             let container = try decoder.container(keyedBy: CodableKeys.self)
-            if let remote = try? container.decode(Remote.self, forKey: .remote) {
+            if let remote = try container.decodeIfPresent(Remote.self, forKey: .remote) {
                 self = .remote(remote.address)
             } else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))

@@ -10,44 +10,44 @@ import XCTest
 @testable import LoopKit
 
 class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStoreDelegate {
-
+    
     var settingsStore: SettingsStore!
-
+    
     override func setUp() {
         super.setUp()
-
+        
         settingsStoreHasUpdatedSettingsDataHandler = nil
         settingsStore = SettingsStore(store: cacheStore, expireAfter: .hours(24))
         settingsStore.delegate = self
     }
-
+    
     override func tearDown() {
         settingsStore.delegate = nil
         settingsStore = nil
         settingsStoreHasUpdatedSettingsDataHandler = nil
-
+        
         super.tearDown()
     }
-
+    
     // MARK: - SettingsStoreDelegate
-
+    
     var settingsStoreHasUpdatedSettingsDataHandler: ((_ : SettingsStore) -> Void)?
-
+    
     func settingsStoreHasUpdatedSettingsData(_ settingsStore: SettingsStore) {
         settingsStoreHasUpdatedSettingsDataHandler?(settingsStore)
     }
-
+    
     // MARK: -
-
+    
     func testStoreSettings() {
         let storeSettingsHandler = expectation(description: "Store settings handler")
         let storeSettingsCompletion = expectation(description: "Store settings completion")
-
+        
         var handlerInvocation = 0
-
+        
         settingsStoreHasUpdatedSettingsDataHandler = { settingsStore in
             handlerInvocation += 1
-
+            
             switch handlerInvocation {
             case 1:
                 storeSettingsHandler.fulfill()
@@ -55,25 +55,25 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
                 XCTFail("Unexpected handler invocation")
             }
         }
-
+        
         settingsStore.storeSettings(StoredSettings()) {
             storeSettingsCompletion.fulfill()
         }
-
+        
         wait(for: [storeSettingsHandler, storeSettingsCompletion], timeout: 2, enforceOrder: true)
     }
-
+    
     func testStoreSettingsMultiple() {
         let storeSettingsHandler1 = expectation(description: "Store settings handler 1")
         let storeSettingsHandler2 = expectation(description: "Store settings handler 2")
         let storeSettingsCompletion1 = expectation(description: "Store settings completion 1")
         let storeSettingsCompletion2 = expectation(description: "Store settings completion 2")
-
+        
         var handlerInvocation = 0
-
+        
         settingsStoreHasUpdatedSettingsDataHandler = { settingsStore in
             handlerInvocation += 1
-
+            
             switch handlerInvocation {
             case 1:
                 storeSettingsHandler1.fulfill()
@@ -83,53 +83,53 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
                 XCTFail("Unexpected handler invocation")
             }
         }
-
+        
         settingsStore.storeSettings(StoredSettings()) {
             storeSettingsCompletion1.fulfill()
         }
-
+        
         settingsStore.storeSettings(StoredSettings()) {
             storeSettingsCompletion2.fulfill()
         }
-
+        
         wait(for: [storeSettingsHandler1, storeSettingsCompletion1, storeSettingsHandler2, storeSettingsCompletion2], timeout: 2, enforceOrder: true)
     }
-
+    
 }
 
 class SettingsStoreQueryAnchorTests: XCTestCase {
-
+    
     var rawValue: SettingsStore.QueryAnchor.RawValue = [
         "modificationCounter": Int64(123)
     ]
-
+    
     func testInitializerDefault() {
         let queryAnchor = SettingsStore.QueryAnchor()
         XCTAssertEqual(queryAnchor.modificationCounter, 0)
     }
-
+    
     func testInitializerRawValue() {
         let queryAnchor = SettingsStore.QueryAnchor(rawValue: rawValue)
         XCTAssertNotNil(queryAnchor)
         XCTAssertEqual(queryAnchor?.modificationCounter, 123)
     }
-
+    
     func testInitializerRawValueMissingModificationCounter() {
         rawValue["modificationCounter"] = nil
         XCTAssertNil(SettingsStore.QueryAnchor(rawValue: rawValue))
     }
-
+    
     func testInitializerRawValueInvalidModificationCounter() {
         rawValue["modificationCounter"] = "123"
         XCTAssertNil(SettingsStore.QueryAnchor(rawValue: rawValue))
     }
-
+    
     func testRawValueWithDefault() {
         let rawValue = SettingsStore.QueryAnchor().rawValue
         XCTAssertEqual(rawValue.count, 1)
         XCTAssertEqual(rawValue["modificationCounter"] as? Int64, Int64(0))
     }
-
+    
     func testRawValueWithNonDefault() {
         var queryAnchor = SettingsStore.QueryAnchor()
         queryAnchor.modificationCounter = 123
@@ -137,36 +137,36 @@ class SettingsStoreQueryAnchorTests: XCTestCase {
         XCTAssertEqual(rawValue.count, 1)
         XCTAssertEqual(rawValue["modificationCounter"] as? Int64, Int64(123))
     }
-
+    
 }
 
 class SettingsStoreQueryTests: PersistenceControllerTestCase {
-
+    
     var settingsStore: SettingsStore!
     var completion: XCTestExpectation!
     var queryAnchor: SettingsStore.QueryAnchor!
     var limit: Int!
-
+    
     override func setUp() {
         super.setUp()
-
+        
         settingsStore = SettingsStore(store: cacheStore, expireAfter: .hours(24))
         completion = expectation(description: "Completion")
         queryAnchor = SettingsStore.QueryAnchor()
         limit = Int.max
     }
-
+    
     override func tearDown() {
         limit = nil
         queryAnchor = nil
         completion = nil
         settingsStore = nil
-
+        
         super.tearDown()
     }
-
+    
     // MARK: -
-
+    
     func testEmptyWithDefaultQueryAnchor() {
         settingsStore.executeSettingsQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
@@ -178,13 +178,13 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             }
             self.completion.fulfill()
         }
-
+        
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
-
+    
     func testEmptyWithMissingQueryAnchor() {
         queryAnchor = nil
-
+        
         settingsStore.executeSettingsQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
@@ -195,13 +195,13 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             }
             self.completion.fulfill()
         }
-
+        
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
-
+    
     func testEmptyWithNonDefaultQueryAnchor() {
         queryAnchor.modificationCounter = 1
-
+        
         settingsStore.executeSettingsQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
@@ -212,15 +212,15 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             }
             self.completion.fulfill()
         }
-
+        
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
-
+    
     func testDataWithUnusedQueryAnchor() {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
-
+        
         addData(withSyncIdentifiers: syncIdentifiers)
-
+        
         settingsStore.executeSettingsQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
@@ -234,17 +234,17 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             }
             self.completion.fulfill()
         }
-
+        
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
-
+    
     func testDataWithStaleQueryAnchor() {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
-
+        
         addData(withSyncIdentifiers: syncIdentifiers)
-
+        
         queryAnchor.modificationCounter = 2
-
+        
         settingsStore.executeSettingsQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
@@ -256,17 +256,17 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             }
             self.completion.fulfill()
         }
-
+        
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
-
+    
     func testDataWithCurrentQueryAnchor() {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
-
+        
         addData(withSyncIdentifiers: syncIdentifiers)
-
+        
         queryAnchor.modificationCounter = 3
-
+        
         settingsStore.executeSettingsQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
@@ -277,17 +277,17 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             }
             self.completion.fulfill()
         }
-
+        
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
-
+    
     func testDataWithLimitZero() {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
-
+        
         addData(withSyncIdentifiers: syncIdentifiers)
-
+        
         limit = 0
-
+        
         settingsStore.executeSettingsQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
@@ -298,17 +298,17 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             }
             self.completion.fulfill()
         }
-
+        
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
-
+    
     func testDataWithLimitCoveredByData() {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
-
+        
         addData(withSyncIdentifiers: syncIdentifiers)
-
+        
         limit = 2
-
+        
         settingsStore.executeSettingsQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
@@ -321,39 +321,39 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
             }
             self.completion.fulfill()
         }
-
+        
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
-
+    
     private func addData(withSyncIdentifiers syncIdentifiers: [String]) {
         let semaphore = DispatchSemaphore(value: 0)
-        for (_, syncIdentifier) in syncIdentifiers.enumerated() {
+        for syncIdentifier in syncIdentifiers {
             self.settingsStore.storeSettings(StoredSettings(syncIdentifier: syncIdentifier)) { semaphore.signal() }
         }
         for _ in syncIdentifiers { semaphore.wait() }
     }
-
+    
     private func generateSyncIdentifier() -> String {
         return UUID().uuidString
     }
-
+    
 }
 
 class StoredSettingsCodableTests: XCTestCase {
     func testCodable() throws {
-        let settings = StoredSettings(date: Date(),
+        let settings = StoredSettings(date: dateFormatter.date(from: "2020-05-14T22:48:15Z")!,
                                       dosingEnabled: true,
                                       glucoseTargetRangeSchedule: GlucoseRangeSchedule(rangeSchedule: DailyQuantitySchedule(unit: .milligramsPerDeciliter,
                                                                                                                             dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: DoubleRange(minValue: 100.0, maxValue: 110.0)),
                                                                                                                                          RepeatingScheduleValue(startTime: .hours(7), value: DoubleRange(minValue: 90.0, maxValue: 100.0)),
                                                                                                                                          RepeatingScheduleValue(startTime: .hours(21), value: DoubleRange(minValue: 110.0, maxValue: 120.0))],
-                                                                                                                            timeZone: TimeZone.currentFixed)!,
+                                                                                                                            timeZone: TimeZone(identifier: "America/Los_Angeles")!)!,
                                                                                        override: GlucoseRangeSchedule.Override(value: DoubleRange(minValue: 105.0, maxValue: 115.0),
-                                                                                                                               start: Date(),
-                                                                                                                               end: Date().addingTimeInterval(.minutes(30)))),
+                                                                                                                               start: dateFormatter.date(from: "2020-05-14T12:48:15Z")!,
+                                                                                                                               end: dateFormatter.date(from: "2020-05-14T14:48:15Z")!)),
                                       preMealTargetRange: DoubleRange(minValue: 80.0, maxValue: 90.0),
                                       workoutTargetRange: DoubleRange(minValue: 150.0, maxValue: 160.0),
-                                      overridePresets: [TemporaryScheduleOverridePreset(id: UUID(),
+                                      overridePresets: [TemporaryScheduleOverridePreset(id: UUID(uuidString: "2A67A303-5203-4CB8-8263-79498265368E")!,
                                                                                         symbol: "🍎",
                                                                                         name: "Apple",
                                                                                         settings: TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter,
@@ -364,18 +364,18 @@ class StoredSettingsCodableTests: XCTestCase {
                                                                                   settings: TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter,
                                                                                                                               targetRange: DoubleRange(minValue: 110.0, maxValue: 120.0),
                                                                                                                               insulinNeedsScaleFactor: 1.5),
-                                                                                  startDate: Date(),
+                                                                                  startDate: dateFormatter.date(from: "2020-05-14T14:48:19Z")!,
                                                                                   duration: .finite(.minutes(60)),
                                                                                   enactTrigger: .remote("127.0.0.1"),
-                                                                                  syncIdentifier: UUID()),
+                                                                                  syncIdentifier: UUID(uuidString: "2A67A303-1234-4CB8-8263-79498265368E")!),
                                       preMealOverride: TemporaryScheduleOverride(context: .preMeal,
                                                                                  settings: TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter,
                                                                                                                              targetRange: DoubleRange(minValue: 80.0, maxValue: 90.0),
                                                                                                                              insulinNeedsScaleFactor: 0.5),
-                                                                                 startDate: Date(),
+                                                                                 startDate: dateFormatter.date(from: "2020-05-14T14:38:39Z")!,
                                                                                  duration: .indefinite,
                                                                                  enactTrigger: .local,
-                                                                                 syncIdentifier: UUID()),
+                                                                                 syncIdentifier: UUID(uuidString: "2A67A303-5203-1234-8263-79498265368E")!),
                                       maximumBasalRatePerHour: 3.5,
                                       maximumBolus: 10.0,
                                       suspendThreshold: GlucoseThreshold(unit: .milligramsPerDeciliter, value: 75.0),
@@ -384,27 +384,238 @@ class StoredSettingsCodableTests: XCTestCase {
                                       basalRateSchedule: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1.0),
                                                                                         RepeatingScheduleValue(startTime: .hours(6), value: 1.5),
                                                                                         RepeatingScheduleValue(startTime: .hours(18), value: 1.25)],
-                                                                           timeZone: TimeZone.currentFixed),
+                                                                           timeZone: TimeZone(identifier: "America/Los_Angeles")!),
                                       insulinSensitivitySchedule: InsulinSensitivitySchedule(unit: .milligramsPerDeciliter,
                                                                                              dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 45.0),
                                                                                                           RepeatingScheduleValue(startTime: .hours(3), value: 40.0),
                                                                                                           RepeatingScheduleValue(startTime: .hours(15), value: 50.0)],
-                                                                                             timeZone: TimeZone.currentFixed),
+                                                                                             timeZone: TimeZone(identifier: "America/Los_Angeles")!),
                                       carbRatioSchedule: CarbRatioSchedule(unit: .gram(),
                                                                            dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 15.0),
                                                                                         RepeatingScheduleValue(startTime: .hours(9), value: 14.0),
                                                                                         RepeatingScheduleValue(startTime: .hours(20), value: 18.0)],
-                                                                           timeZone: TimeZone.currentFixed),
+                                                                           timeZone: TimeZone(identifier: "America/Los_Angeles")!),
                                       bloodGlucoseUnit: .milligramsPerDeciliter,
-                                      syncIdentifier: UUID().uuidString)
-        try assertStoredSettingsCodable(settings)
+                                      syncIdentifier: "2A67A303-1234-4CB8-1234-79498265368E")
+        try assertStoredSettingsCodable(settings, encodesJSON: """
+{
+  "basalRateSchedule" : {
+    "items" : [
+      {
+        "startTime" : 0,
+        "value" : 1
+      },
+      {
+        "startTime" : 21600,
+        "value" : 1.5
+      },
+      {
+        "startTime" : 64800,
+        "value" : 1.25
+      }
+    ],
+    "referenceTimeInterval" : 0,
+    "repeatInterval" : 86400,
+    "timeZone" : {
+      "identifier" : "America/Los_Angeles"
     }
-
-    func assertStoredSettingsCodable(_ original: StoredSettings) throws {
-        let data = try PropertyListEncoder().encode(original)
-        let decoded = try PropertyListDecoder().decode(StoredSettings.self, from: data)
+  },
+  "bloodGlucoseUnit" : "mg/dL",
+  "carbRatioSchedule" : {
+    "unit" : "g",
+    "valueSchedule" : {
+      "items" : [
+        {
+          "startTime" : 0,
+          "value" : 15
+        },
+        {
+          "startTime" : 32400,
+          "value" : 14
+        },
+        {
+          "startTime" : 72000,
+          "value" : 18
+        }
+      ],
+      "referenceTimeInterval" : 0,
+      "repeatInterval" : 86400,
+      "timeZone" : {
+        "identifier" : "America/Los_Angeles"
+      }
+    }
+  },
+  "date" : "2020-05-14T22:48:15Z",
+  "deviceToken" : "DeviceTokenString",
+  "dosingEnabled" : true,
+  "glucoseTargetRangeSchedule" : {
+    "override" : {
+      "end" : "2020-05-14T14:48:15Z",
+      "start" : "2020-05-14T12:48:15Z",
+      "value" : {
+        "maxValue" : 115,
+        "minValue" : 105
+      }
+    },
+    "rangeSchedule" : {
+      "unit" : "mg/dL",
+      "valueSchedule" : {
+        "items" : [
+          {
+            "startTime" : 0,
+            "value" : {
+              "maxValue" : 110,
+              "minValue" : 100
+            }
+          },
+          {
+            "startTime" : 25200,
+            "value" : {
+              "maxValue" : 100,
+              "minValue" : 90
+            }
+          },
+          {
+            "startTime" : 75600,
+            "value" : {
+              "maxValue" : 120,
+              "minValue" : 110
+            }
+          }
+        ],
+        "referenceTimeInterval" : 0,
+        "repeatInterval" : 86400,
+        "timeZone" : {
+          "identifier" : "America/Los_Angeles"
+        }
+      }
+    }
+  },
+  "insulinModel" : {
+    "actionDuration" : 21600,
+    "modelType" : "rapidAdult",
+    "peakActivity" : 10800
+  },
+  "insulinSensitivitySchedule" : {
+    "unit" : "mg/dL",
+    "valueSchedule" : {
+      "items" : [
+        {
+          "startTime" : 0,
+          "value" : 45
+        },
+        {
+          "startTime" : 10800,
+          "value" : 40
+        },
+        {
+          "startTime" : 54000,
+          "value" : 50
+        }
+      ],
+      "referenceTimeInterval" : 0,
+      "repeatInterval" : 86400,
+      "timeZone" : {
+        "identifier" : "America/Los_Angeles"
+      }
+    }
+  },
+  "maximumBasalRatePerHour" : 3.5,
+  "maximumBolus" : 10,
+  "overridePresets" : [
+    {
+      "duration" : {
+        "finite" : {
+          "duration" : 3600
+        }
+      },
+      "id" : "2A67A303-5203-4CB8-8263-79498265368E",
+      "name" : "Apple",
+      "settings" : {
+        "insulinNeedsScaleFactor" : 2,
+        "targetRangeInMgdl" : {
+          "maxValue" : 140,
+          "minValue" : 130
+        }
+      },
+      "symbol" : "🍎"
+    }
+  ],
+  "preMealOverride" : {
+    "context" : "preMeal",
+    "duration" : "indefinite",
+    "enactTrigger" : "local",
+    "settings" : {
+      "insulinNeedsScaleFactor" : 0.5,
+      "targetRangeInMgdl" : {
+        "maxValue" : 90,
+        "minValue" : 80
+      }
+    },
+    "startDate" : "2020-05-14T14:38:39Z",
+    "syncIdentifier" : "2A67A303-5203-1234-8263-79498265368E"
+  },
+  "preMealTargetRange" : {
+    "maxValue" : 90,
+    "minValue" : 80
+  },
+  "scheduleOverride" : {
+    "context" : "preMeal",
+    "duration" : {
+      "finite" : {
+        "duration" : 3600
+      }
+    },
+    "enactTrigger" : {
+      "remote" : {
+        "address" : "127.0.0.1"
+      }
+    },
+    "settings" : {
+      "insulinNeedsScaleFactor" : 1.5,
+      "targetRangeInMgdl" : {
+        "maxValue" : 120,
+        "minValue" : 110
+      }
+    },
+    "startDate" : "2020-05-14T14:48:19Z",
+    "syncIdentifier" : "2A67A303-1234-4CB8-8263-79498265368E"
+  },
+  "suspendThreshold" : {
+    "unit" : "mg/dL",
+    "value" : 75
+  },
+  "syncIdentifier" : "2A67A303-1234-4CB8-1234-79498265368E",
+  "workoutTargetRange" : {
+    "maxValue" : 160,
+    "minValue" : 150
+  }
+}
+"""
+        )
+    }
+    
+    private func assertStoredSettingsCodable(_ original: StoredSettings, encodesJSON string: String) throws {
+        let data = try encoder.encode(original)
+        XCTAssertEqual(String(data: data, encoding: .utf8), string)
+        let decoded = try decoder.decode(StoredSettings.self, from: data)
         XCTAssertEqual(decoded, original)
     }
+    
+    private let dateFormatter = ISO8601DateFormatter()
+    
+    private let encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        encoder.dateEncodingStrategy = .iso8601
+        return encoder
+    }()
+    
+    private let decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
 }
 
 extension StoredSettings: Equatable {

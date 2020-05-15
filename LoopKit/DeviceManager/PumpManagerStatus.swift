@@ -133,11 +133,11 @@ extension PumpManagerStatus.BasalDeliveryState: Codable {
             }
         } else {
             let container = try decoder.container(keyedBy: CodableKeys.self)
-            if let active = try? container.decode(Active.self, forKey: .active) {
+            if let active = try container.decodeIfPresent(Active.self, forKey: .active) {
                 self = .active(active.at)
-            } else if let tempBasal = try? container.decode(TempBasal.self, forKey: .tempBasal) {
+            } else if let tempBasal = try container.decodeIfPresent(TempBasal.self, forKey: .tempBasal) {
                 self = .tempBasal(tempBasal.dose)
-            } else if let suspended = try? container.decode(Suspended.self, forKey: .suspended) {
+            } else if let suspended = try container.decodeIfPresent(Suspended.self, forKey: .suspended) {
                 self = .suspended(suspended.at)
             } else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
@@ -209,7 +209,7 @@ extension PumpManagerStatus.BolusState: Codable {
             }
         } else {
             let container = try decoder.container(keyedBy: CodableKeys.self)
-            if let inProgress = try? container.decode(InProgress.self, forKey: .inProgress) {
+            if let inProgress = try container.decodeIfPresent(InProgress.self, forKey: .inProgress) {
                 self = .inProgress(inProgress.dose)
             } else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))

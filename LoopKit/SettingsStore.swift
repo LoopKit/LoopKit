@@ -71,21 +71,26 @@ public class SettingsStore {
         }
     }
 
+    private static var encoder: PropertyListEncoder = {
+        let encoder = PropertyListEncoder()
+        encoder.outputFormat = .binary
+        return encoder
+    }()
+
     private func encodeSettings(_ settings: StoredSettings) -> Data? {
         do {
-            let encoder = PropertyListEncoder()
-            encoder.outputFormat = .binary
-            return try encoder.encode(settings)
+            return try SettingsStore.encoder.encode(settings)
         } catch let error {
             self.log.error("Error encoding StoredSettings: %@", String(describing: error))
             return nil
         }
     }
 
+    private static var decoder = PropertyListDecoder()
+
     private func decodeSettings(fromData data: Data) -> StoredSettings? {
         do {
-            let decoder = PropertyListDecoder()
-            return try decoder.decode(StoredSettings.self, from: data)
+            return try SettingsStore.decoder.decode(StoredSettings.self, from: data)
         } catch let error {
             self.log.error("Error decoding StoredSettings: %@", String(describing: error))
             return nil

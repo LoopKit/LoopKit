@@ -26,22 +26,20 @@ public class DosingDecisionStore {
     private let store: PersistenceController
     private let expireAfter: TimeInterval
     private let dataAccessQueue = DispatchQueue(label: "com.loopkit.DosingDecisionStore.dataAccessQueue", qos: .utility)
-    private let log = OSLog(category: "DosingDecisionStore")
+    public let log = OSLog(category: "DosingDecisionStore")
 
     public init(store: PersistenceController, expireAfter: TimeInterval) {
         self.store = store
         self.expireAfter = expireAfter
     }
 
-    public func storeDosingDecision(_ dosingDecision: StoredDosingDecision, completion: @escaping () -> Void) {
+    public func storeDosingDecisionData(_ dosingDecisionData: StoredDosingDecisionData, completion: @escaping () -> Void) {
         dataAccessQueue.async {
-            if let data = self.encodeDosingDecision(dosingDecision) {
-                self.store.managedObjectContext.performAndWait {
-                    let object = DosingDecisionObject(context: self.store.managedObjectContext)
-                    object.data = data
-                    object.date = dosingDecision.date
-                    self.store.save()
-                }
+            self.store.managedObjectContext.performAndWait {
+                let object = DosingDecisionObject(context: self.store.managedObjectContext)
+                object.date = dosingDecisionData.date
+                object.data = dosingDecisionData.data
+                self.store.save()
             }
 
             self.purgeExpiredDosingDecisionObjects()
@@ -67,27 +65,6 @@ public class DosingDecisionStore {
             } catch let error {
                 self.log.error("Unable to purge DosingDecisionObjects: %@", String(describing: error))
             }
-        }
-    }
-
-    private func encodeDosingDecision(_ dosingDecision: StoredDosingDecision) -> Data? {
-        do {
-            let encoder = PropertyListEncoder()
-            encoder.outputFormat = .binary
-            return try encoder.encode(dosingDecision)
-        } catch let error {
-            self.log.error("Error encoding StoredDosingDecision: %@", String(describing: error))
-            return nil
-        }
-    }
-
-    private func decodeDosingDecision(fromData data: Data) -> StoredDosingDecision? {
-        do {
-            let decoder = PropertyListDecoder()
-            return try decoder.decode(StoredDosingDecision.self, from: data)
-        } catch let error {
-            self.log.error("Error decoding StoredDosingDecision: %@", String(describing: error))
-            return nil
         }
     }
 }
@@ -116,15 +93,15 @@ extension DosingDecisionStore {
         }
     }
     
-    public enum DosingDecisionQueryResult {
-        case success(QueryAnchor, [StoredDosingDecision])
+    public enum DosingDecisionDataQueryResult {
+        case success(QueryAnchor, [StoredDosingDecisionData])
         case failure(Error)
     }
     
-    public func executeDosingDecisionQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (DosingDecisionQueryResult) -> Void) {
+    public func executeDosingDecisionDataQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (DosingDecisionDataQueryResult) -> Void) {
         dataAccessQueue.async {
             var queryAnchor = queryAnchor ?? QueryAnchor()
-            var queryResult = [StoredDosingDecision]()
+            var queryResult = [StoredDosingDecisionData]()
             var queryError: Error?
 
             guard limit > 0 else {
@@ -144,7 +121,7 @@ extension DosingDecisionStore {
                     if let modificationCounter = stored.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
                         queryAnchor.modificationCounter = modificationCounter
                     }
-                    queryResult.append(contentsOf: stored.compactMap { self.decodeDosingDecision(fromData: $0.data) })
+                    queryResult.append(contentsOf: stored.compactMap { StoredDosingDecisionData(date: $0.date, data: $0.data) })
                 } catch let error {
                     queryError = error
                     return
@@ -161,20 +138,30 @@ extension DosingDecisionStore {
     }
 }
 
-public struct StoredDosingDecision: Codable {
+public struct StoredDosingDecisionData {
     public let date: Date
-    public var insulinOnBoard: InsulinValue?
-    public var carbsOnBoard: CarbValue?
-    public var scheduleOverride: TemporaryScheduleOverride?
-    public var glucoseTargetRangeSchedule: GlucoseRangeSchedule?
-    public var glucoseTargetRangeScheduleApplyingOverrideIfActive: GlucoseRangeSchedule?
-    public var predictedGlucose: [PredictedGlucoseValue]?
-    public var predictedGlucoseIncludingPendingInsulin: [PredictedGlucoseValue]?
-    public var lastReservoirValue: LastReservoirValue?
-    public var recommendedTempBasal: TempBasalRecommendationWithDate?
-    public var recommendedBolus: BolusRecommendationWithDate?
-    public var pumpManagerStatus: PumpManagerStatus?
-    public var errors: [CodableError]?
+    public let data: Data
+
+    public init(date: Date, data: Data) {
+        self.date = date
+        self.data = data
+    }
+}
+
+public struct StoredDosingDecision {
+    public let date: Date
+    public let insulinOnBoard: InsulinValue?
+    public let carbsOnBoard: CarbValue?
+    public let scheduleOverride: TemporaryScheduleOverride?
+    public let glucoseTargetRangeSchedule: GlucoseRangeSchedule?
+    public let glucoseTargetRangeScheduleApplyingOverrideIfActive: GlucoseRangeSchedule?
+    public let predictedGlucose: [PredictedGlucoseValue]?
+    public let predictedGlucoseIncludingPendingInsulin: [PredictedGlucoseValue]?
+    public let lastReservoirValue: LastReservoirValue?
+    public let recommendedTempBasal: TempBasalRecommendationWithDate?
+    public let recommendedBolus: BolusRecommendationWithDate?
+    public let pumpManagerStatus: PumpManagerStatus?
+    public let errors: [Error]?
     public let syncIdentifier: String
 
     public init(date: Date = Date(),
@@ -203,7 +190,7 @@ public struct StoredDosingDecision: Codable {
         self.recommendedTempBasal = recommendedTempBasal
         self.recommendedBolus = recommendedBolus
         self.pumpManagerStatus = pumpManagerStatus
-        self.errors = errors?.map { CodableError($0) }
+        self.errors = errors
         self.syncIdentifier = syncIdentifier
     }
 
@@ -235,17 +222,6 @@ public struct StoredDosingDecision: Codable {
             self.recommendation = recommendation
             self.date = date
         }
-    }
-
-    // TODO: Temporary placeholder for error serialization. Will be fixed with https://tidepool.atlassian.net/browse/LOOP-1144
-    public struct CodableError: Error, CustomStringConvertible, Codable {
-        private let errorString: String
-
-        init(_ error: Error) {
-            self.errorString = String(describing: error)
-        }
-
-        public var description: String { return errorString }
     }
 }
 

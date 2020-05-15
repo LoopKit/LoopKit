@@ -21,63 +21,178 @@ class PumpManagerStatusCodableTests: XCTestCase {
                               softwareVersion: "2.3.4",
                               localIdentifier: "Locally Identified",
                               udiDeviceIdentifier: "U0D1I2")
-        try assertPumpManagerStatusCodable(PumpManagerStatus(timeZone: TimeZone.currentFixed,
+        try assertPumpManagerStatusCodable(PumpManagerStatus(timeZone: TimeZone(identifier: "America/Los_Angeles")!,
                                                              device: device,
-                                                             pumpBatteryChargeRemaining: 0.67,
-                                                             basalDeliveryState: .active(Date()),
-                                                             bolusState: .none))
+                                                             pumpBatteryChargeRemaining: 0.75,
+                                                             basalDeliveryState: .active(dateFormatter.date(from: "2020-05-14T15:56:09Z")!),
+                                                             bolusState: .none),
+                                           encodesJSON: """
+{
+  "basalDeliveryState" : {
+    "active" : {
+      "at" : "2020-05-14T15:56:09Z"
+    }
+  },
+  "bolusState" : "none",
+  "device" : {
+    "firmwareVersion" : "1.2.3",
+    "hardwareVersion" : "0.1.2",
+    "localIdentifier" : "Locally Identified",
+    "manufacturer" : "Acme",
+    "model" : "Best",
+    "name" : "Acme Best Device",
+    "softwareVersion" : "2.3.4",
+    "udiDeviceIdentifier" : "U0D1I2"
+  },
+  "pumpBatteryChargeRemaining" : 0.75,
+  "timeZone" : {
+    "identifier" : "America/Los_Angeles"
+  }
+}
+"""
+        )
     }
 
-    func assertPumpManagerStatusCodable(_ original: PumpManagerStatus) throws {
-        let data = try PropertyListEncoder().encode(original)
-        let decoded = try PropertyListDecoder().decode(PumpManagerStatus.self, from: data)
+    private func assertPumpManagerStatusCodable(_ original: PumpManagerStatus, encodesJSON string: String) throws {
+        let data = try encoder.encode(original)
+        XCTAssertEqual(String(data: data, encoding: .utf8), string)
+        let decoded = try decoder.decode(PumpManagerStatus.self, from: data)
         XCTAssertEqual(decoded, original)
     }
+
+    private let dateFormatter = ISO8601DateFormatter()
+
+    private let encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        encoder.dateEncodingStrategy = .iso8601
+        return encoder
+    }()
+
+    private let decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
 }
 
 class PumpManagerStatusBasalDeliveryStateCodableTests: XCTestCase {
     func testCodableActive() throws {
-        try assertPumpManagerStatusBasalDeliveryStateCodable(.active(Date()))
+        try assertPumpManagerStatusBasalDeliveryStateCodable(.active(dateFormatter.date(from: "2020-05-14T12:18:09Z")!), encodesJSON: """
+{
+  "basalDeliveryState" : {
+    "active" : {
+      "at" : "2020-05-14T12:18:09Z"
+    }
+  }
+}
+"""
+        )
     }
 
     func testCodableInitiatingTempBasal() throws {
-        try assertPumpManagerStatusBasalDeliveryStateCodable(.initiatingTempBasal)
+        try assertPumpManagerStatusBasalDeliveryStateCodable(.initiatingTempBasal, encodesJSON: """
+{
+  "basalDeliveryState" : "initiatingTempBasal"
+}
+"""
+        )
     }
 
     func testCodableTempBasal() throws {
         let dose = DoseEntry(type: .tempBasal,
-                             startDate: Date(),
-                             endDate: Date().addingTimeInterval(.minutes(30)),
+                             startDate: dateFormatter.date(from: "2020-05-14T13:13:14Z")!,
+                             endDate: dateFormatter.date(from: "2020-05-14T13:43:14Z")!,
                              value: 1.25,
                              unit: .unitsPerHour,
                              deliveredUnits: 0.5,
                              description: "Temporary Basal",
-                             syncIdentifier: UUID().uuidString,
+                             syncIdentifier: "238E41EA-9576-4981-A1A4-51E10228584F",
                              scheduledBasalRate: HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: 1.0))
-        try assertPumpManagerStatusBasalDeliveryStateCodable(.tempBasal(dose))
+        try assertPumpManagerStatusBasalDeliveryStateCodable(.tempBasal(dose), encodesJSON: """
+{
+  "basalDeliveryState" : {
+    "tempBasal" : {
+      "dose" : {
+        "deliveredUnits" : 0.5,
+        "description" : "Temporary Basal",
+        "endDate" : "2020-05-14T13:43:14Z",
+        "scheduledBasalRate" : 1,
+        "scheduledBasalRateUnit" : "IU/hr",
+        "startDate" : "2020-05-14T13:13:14Z",
+        "syncIdentifier" : "238E41EA-9576-4981-A1A4-51E10228584F",
+        "type" : "tempBasal",
+        "unit" : "U/hour",
+        "value" : 1.25
+      }
+    }
+  }
+}
+"""
+        )
     }
 
     func testCodableCancelingTempBasal() throws {
-        try assertPumpManagerStatusBasalDeliveryStateCodable(.cancelingTempBasal)
+        try assertPumpManagerStatusBasalDeliveryStateCodable(.cancelingTempBasal, encodesJSON: """
+{
+  "basalDeliveryState" : "cancelingTempBasal"
+}
+"""
+        )
     }
 
     func testCodableSuspending() throws {
-        try assertPumpManagerStatusBasalDeliveryStateCodable(.suspending)
+        try assertPumpManagerStatusBasalDeliveryStateCodable(.suspending, encodesJSON: """
+{
+  "basalDeliveryState" : "suspending"
+}
+"""
+        )
     }
 
     func testCodableSuspended() throws {
-        try assertPumpManagerStatusBasalDeliveryStateCodable(.suspended(Date()))
+        try assertPumpManagerStatusBasalDeliveryStateCodable(.suspended(dateFormatter.date(from: "2020-05-14T22:38:19Z")!), encodesJSON: """
+{
+  "basalDeliveryState" : {
+    "suspended" : {
+      "at" : "2020-05-14T22:38:19Z"
+    }
+  }
+}
+"""
+        )
     }
 
     func testCodableResuming() throws {
-        try assertPumpManagerStatusBasalDeliveryStateCodable(.resuming)
+        try assertPumpManagerStatusBasalDeliveryStateCodable(.resuming, encodesJSON: """
+{
+  "basalDeliveryState" : "resuming"
+}
+"""
+        )
     }
 
-    func assertPumpManagerStatusBasalDeliveryStateCodable(_ original: PumpManagerStatus.BasalDeliveryState) throws {
-        let data = try PropertyListEncoder().encode(TestContainer(basalDeliveryState: original))
-        let decoded = try PropertyListDecoder().decode(TestContainer.self, from: data)
+    private func assertPumpManagerStatusBasalDeliveryStateCodable(_ original: PumpManagerStatus.BasalDeliveryState, encodesJSON string: String) throws {
+        let data = try encoder.encode(TestContainer(basalDeliveryState: original))
+        XCTAssertEqual(String(data: data, encoding: .utf8), string)
+        let decoded = try decoder.decode(TestContainer.self, from: data)
         XCTAssertEqual(decoded.basalDeliveryState, original)
     }
+
+    private let dateFormatter = ISO8601DateFormatter()
+
+    private let encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        encoder.dateEncodingStrategy = .iso8601
+        return encoder
+    }()
+
+    private let decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
 
     private struct TestContainer: Codable, Equatable {
         let basalDeliveryState: PumpManagerStatus.BasalDeliveryState
@@ -86,33 +201,82 @@ class PumpManagerStatusBasalDeliveryStateCodableTests: XCTestCase {
 
 class PumpManagerStatusBolusStateCodableTests: XCTestCase {
     func testCodableNone() throws {
-        try assertPumpManagerStatusBolusStateCodable(.none)
+        try assertPumpManagerStatusBolusStateCodable(.none, encodesJSON: """
+{
+  "bolusState" : "none"
+}
+"""
+        )
     }
 
     func testCodableInitiating() throws {
-        try assertPumpManagerStatusBolusStateCodable(.initiating)
+        try assertPumpManagerStatusBolusStateCodable(.initiating, encodesJSON: """
+{
+  "bolusState" : "initiating"
+}
+"""
+        )
     }
 
     func testCodableInProgress() throws {
         let dose = DoseEntry(type: .bolus,
-                             startDate: Date(),
+                             startDate: dateFormatter.date(from: "2020-05-14T22:38:16Z")!,
                              value: 2.5,
                              unit: .units,
                              deliveredUnits: 1.0,
                              description: "Bolus",
-                             syncIdentifier: UUID().uuidString)
-        try assertPumpManagerStatusBolusStateCodable(.inProgress(dose))
+                             syncIdentifier: "2A67A303-5203-4CB8-8123-79498265368E")
+        try assertPumpManagerStatusBolusStateCodable(.inProgress(dose), encodesJSON: """
+{
+  "bolusState" : {
+    "inProgress" : {
+      "dose" : {
+        "deliveredUnits" : 1,
+        "description" : "Bolus",
+        "endDate" : "2020-05-14T22:38:16Z",
+        "startDate" : "2020-05-14T22:38:16Z",
+        "syncIdentifier" : "2A67A303-5203-4CB8-8123-79498265368E",
+        "type" : "bolus",
+        "unit" : "U",
+        "value" : 2.5
+      }
+    }
+  }
+}
+"""
+        )
     }
 
     func testCodableCancelling() throws {
-        try assertPumpManagerStatusBolusStateCodable(.canceling)
+        try assertPumpManagerStatusBolusStateCodable(.canceling, encodesJSON: """
+{
+  "bolusState" : "canceling"
+}
+"""
+        )
     }
 
-    func assertPumpManagerStatusBolusStateCodable(_ original: PumpManagerStatus.BolusState) throws {
-        let data = try PropertyListEncoder().encode(TestContainer(bolusState: original))
-        let decoded = try PropertyListDecoder().decode(TestContainer.self, from: data)
+    private func assertPumpManagerStatusBolusStateCodable(_ original: PumpManagerStatus.BolusState, encodesJSON string: String) throws {
+        let data = try encoder.encode(TestContainer(bolusState: original))
+        XCTAssertEqual(String(data: data, encoding: .utf8), string)
+        let decoded = try decoder.decode(TestContainer.self, from: data)
         XCTAssertEqual(decoded.bolusState, original)
     }
+
+    private let dateFormatter = ISO8601DateFormatter()
+
+    private let encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        encoder.dateEncodingStrategy = .iso8601
+        return encoder
+    }()
+
+    private let decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
 
     private struct TestContainer: Codable, Equatable {
         let bolusState: PumpManagerStatus.BolusState
