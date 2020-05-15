@@ -53,6 +53,7 @@ struct ScheduleItemView<ValueContent: View, ExpandedContent: View>: View {
     private var timeText: Text {
         let dayAtTime = fixedMidnight.addingTimeInterval(time)
         return Text(DateFormatter.localizedString(from: dayAtTime, dateStyle: .none, timeStyle: .short))
+            .foregroundColor(isEditing ? .blue : Color(.label))
     }
 }
 
