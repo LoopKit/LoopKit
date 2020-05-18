@@ -51,8 +51,8 @@ public protocol CGMManager: DeviceManager {
 
     var appURL: URL? { get }
 
-    // The cgmManagers associated batteryLevel, from 1 to 100
-    var batteryLevel : Int? { get }
+    // The cgmManagers associated batteryLevel, from 0 to 1
+    var batteryLevel : Double? { get }
 
     /// Whether the device is capable of waking the app
     var providesBLEHeartbeat: Bool { get }
@@ -75,7 +75,7 @@ public protocol CGMManager: DeviceManager {
 }
 
 public extension CGMManager {
-    var batteryLevel: Int? {
+    var batteryLevel: Double? {
         return nil
     }
 }
