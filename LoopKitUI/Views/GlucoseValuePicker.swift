@@ -15,15 +15,42 @@ public struct GlucoseValuePicker: View {
     @Binding var value: HKQuantity
     var unit: HKUnit
     var guardrail: Guardrail<HKQuantity>
+    var bounds: ClosedRange<HKQuantity>
+    var isUnitLabelVisible: Bool
 
-    public init(value: Binding<HKQuantity>, unit: HKUnit, guardrail: Guardrail<HKQuantity>) {
+    public init(
+        value: Binding<HKQuantity>,
+        unit: HKUnit,
+        guardrail: Guardrail<HKQuantity>,
+        bounds: ClosedRange<HKQuantity>,
+        isUnitLabelVisible: Bool = true
+    ) {
         self._value = value
         self.unit = unit
         self.guardrail = guardrail
+        self.bounds = bounds
+        self.isUnitLabelVisible = isUnitLabelVisible
+    }
+
+    public init(
+        value: Binding<HKQuantity>,
+        unit: HKUnit,
+        guardrail: Guardrail<HKQuantity>,
+        isUnitLabelVisible: Bool = true
+    ) {
+        self.init(value: value, unit: unit, guardrail: guardrail, bounds: guardrail.absoluteBounds, isUnitLabelVisible: isUnitLabelVisible)
     }
 
     public var body: some View {
-        QuantityPicker(value: $value, unit: unit, stride: stride, guardrail: guardrail)
+        QuantityPicker(value: $value, unit: unit, guardrail: guardrail, selectableValues: selectableValues, isUnitLabelVisible: isUnitLabelVisible)
+    }
+
+    private var selectableValues: [Double] {
+        Array(Swift.stride(
+            from: bounds.lowerBound.doubleValue(for: unit),
+            through: bounds.upperBound.doubleValue(for: unit),
+            by: stride.doubleValue(for: unit)
+        ))
     }
 
     private var stride: HKQuantity {

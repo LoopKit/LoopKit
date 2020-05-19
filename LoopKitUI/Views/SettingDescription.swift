@@ -17,11 +17,13 @@ public struct SettingDescription: View {
     }
 
     public var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 8) {
             text
                 .font(.callout)
                 .foregroundColor(Color(.secondaryLabel))
                 .fixedSize(horizontal: false, vertical: true)
+
+            Spacer()
 
             Button(
                 action: {
@@ -33,6 +35,7 @@ public struct SettingDescription: View {
                         .foregroundColor(.accentColor)
                 }
             )
+            .padding(.trailing, 4)
         }
     }
 }

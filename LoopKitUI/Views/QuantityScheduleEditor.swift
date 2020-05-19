@@ -100,7 +100,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
                     guardrail: self.guardrail,
                     selectableValues: self.selectableValues
                 )
-                .frame(width: availableWidth / 3)
+                .frame(width: availableWidth / 2)
                 // Ensure overlaid unit label is not clipped
                 .padding(.trailing, self.unitLabelWidth + self.unitLabelSpacing)
                 .clipped()

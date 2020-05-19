@@ -39,7 +39,7 @@ struct ScheduleItemPicker<Value, ValuePicker: View>: View {
                         .frame(width: geometry.size.width / 3)
                         .clipped()
 
-                    self.valuePicker(geometry.size.width)
+                    self.valuePicker(/* availableWidth: */ 2/3 * geometry.size.width)
                 }
                 Spacer()
             }
