@@ -10,7 +10,7 @@ import UIKit
 import LoopKit
 
 
-public final class AuthenticationViewController<T: ServiceAuthenticationUI>: UITableViewController, UITextFieldDelegate {
+public class AuthenticationViewController<T: ServiceAuthenticationUI>: UITableViewController, UITextFieldDelegate {
 
     public typealias AuthenticationObserver = (_ authentication: T) -> Void
 
