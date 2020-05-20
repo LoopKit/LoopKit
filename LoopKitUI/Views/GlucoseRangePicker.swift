@@ -11,23 +11,29 @@ import HealthKit
 import LoopKit
 
 
-struct GlucoseRangePicker: View {
+public struct GlucoseRangePicker: View {
+    public enum UsageContext: Equatable {
+        /// This picker is one component of a larger multi-component picker (e.g. a schedule item picker).
+        case component(availableWidth: CGFloat)
+
+        /// This picker operates independently.
+        case independent
+    }
+
     @Binding var lowerBound: HKQuantity
     @Binding var upperBound: HKQuantity
     var unit: HKUnit
     var minValue: HKQuantity?
     var guardrail: Guardrail<HKQuantity>
-    var stride: HKQuantity
     var formatter: NumberFormatter
-    var availableWidth: CGFloat
+    var usageContext: UsageContext
 
-    init(
+    public init(
         range: Binding<ClosedRange<HKQuantity>>,
         unit: HKUnit,
         minValue: HKQuantity?,
         guardrail: Guardrail<HKQuantity>,
-        stride: HKQuantity,
-        availableWidth: CGFloat
+        usageContext: UsageContext = .independent
     ) {
         self._lowerBound = Binding(
             get: { range.wrappedValue.lowerBound},
@@ -40,16 +46,33 @@ struct GlucoseRangePicker: View {
         self.unit = unit
         self.minValue = minValue
         self.guardrail = guardrail
-        self.stride = stride
         self.formatter = {
             let quantityFormatter = QuantityFormatter()
             quantityFormatter.setPreferredNumberFormatter(for: unit)
             return quantityFormatter.numberFormatter
         }()
-        self.availableWidth = availableWidth
+        self.usageContext = usageContext
     }
 
-    var body: some View {
+    public var body: some View {
+        switch usageContext {
+        case .component(availableWidth: let availableWidth):
+            return AnyView(body(availableWidth: availableWidth))
+        case .independent:
+            return AnyView(
+                GeometryReader { geometry in
+                    HStack {
+                        Spacer()
+                        self.body(availableWidth: geometry.size.width)
+                        Spacer()
+                    }
+                }
+                .frame(height: 216)
+            )
+        }
+    }
+
+    private func body(availableWidth: CGFloat) -> some View {
         HStack(spacing: 0) {
             GlucoseValuePicker(
                 value: $lowerBound,
@@ -67,8 +90,10 @@ struct GlucoseRangePicker: View {
                     .offset(x: spacing + separatorWidth),
                 alignment: .trailing
             )
+            .padding(.leading, usageContext == .independent ? unitLabelWidth + spacing : 0)
             .padding(.trailing, spacing + separatorWidth + spacing)
             .clipped()
+            .accessibility(identifier: "min_glucose_picker")
 
             GlucoseValuePicker(
                 value: $upperBound,
@@ -81,6 +106,7 @@ struct GlucoseRangePicker: View {
             .frame(width: availableWidth / 3.5)
             .padding(.trailing, spacing + unitLabelWidth)
             .clipped()
+            .accessibility(identifier: "max_glucose_picker")
         }
     }
 

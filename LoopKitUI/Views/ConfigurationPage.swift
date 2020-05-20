@@ -13,33 +13,18 @@ public struct ConfigurationPage<ActionAreaContent: View>: View {
     var title: Text
     var actionButtonTitle: Text
     var isActionButtonEnabled: Bool
-    var cards: CardStack
+    var cardListStyle: CardList.Style
     var actionAreaContent: ActionAreaContent
     var action: () -> Void
 
-    public init(
-        title: Text,
-        actionButtonTitle: Text,
-        isActionButtonEnabled: Bool = true,
-        @CardStackBuilder cards: () -> CardStack,
-        @ViewBuilder actionAreaContent: () -> ActionAreaContent,
-        action: @escaping () -> Void
-    ) {
-        self.title = title
-        self.actionButtonTitle = actionButtonTitle
-        self.isActionButtonEnabled = isActionButtonEnabled
-        self.cards = cards()
-        self.actionAreaContent = actionAreaContent()
-        self.action = action
-    }
-
     public var body: some View {
         VStack(spacing: 0) {
-            CardList(title: title, content: cards)
+            CardList(title: title, style: cardListStyle)
 
             VStack {
                 actionAreaContent
-                    .padding(.top)
+                    .padding([.top, .horizontal])
+                    .transition(AnyTransition.opacity.combined(with: .move(edge: .bottom)))
 
                 Button(
                     action: action,
@@ -59,6 +44,22 @@ public struct ConfigurationPage<ActionAreaContent: View>: View {
 }
 
 extension ConfigurationPage {
+    public init(
+        title: Text,
+        actionButtonTitle: Text,
+        isActionButtonEnabled: Bool = true,
+        @CardStackBuilder cards: () -> CardStack,
+        @ViewBuilder actionAreaContent: () -> ActionAreaContent,
+        action: @escaping () -> Void
+    ) {
+        self.title = title
+        self.actionButtonTitle = actionButtonTitle
+        self.isActionButtonEnabled = isActionButtonEnabled
+        self.cardListStyle = .simple(cards())
+        self.actionAreaContent = actionAreaContent()
+        self.action = action
+    }
+
     /// Convenience initializer for a page whose action is 'Save'
     public init(
         title: Text,
@@ -73,6 +74,24 @@ extension ConfigurationPage {
             isActionButtonEnabled: isSaveButtonEnabled,
             cards: cards,
             actionAreaContent: actionAreaContent,
+            action: save
+        )
+    }
+
+    /// Convenience initializer for a sectioned page whose action is 'Save'
+    public init(
+        title: Text,
+        isSaveButtonEnabled: Bool = true,
+        sections: [CardListSection],
+        @ViewBuilder actionAreaContent: () -> ActionAreaContent,
+        onSave save: @escaping () -> Void
+    ) {
+        self.init(
+            title: title,
+            actionButtonTitle: Text("Save", comment: "The button text for saving on a configuration page"),
+            isActionButtonEnabled: isSaveButtonEnabled,
+            cardListStyle: .sectioned(sections),
+            actionAreaContent: actionAreaContent(),
             action: save
         )
     }

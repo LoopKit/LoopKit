@@ -382,6 +382,7 @@
 		898E6E702241EDB70019E459 /* PercentageTextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E6F2241EDB70019E459 /* PercentageTextFieldTableViewController.swift */; };
 		898E6E722241EDC10019E459 /* DateAndDurationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E712241EDC10019E459 /* DateAndDurationTableViewController.swift */; };
 		898E6E732241EE000019E459 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5DBB2231E20C008961AB /* Comparable.swift */; };
+		899012C1246F1D8F007B88BA /* ExpandableSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 899012C0246F1D8F007B88BA /* ExpandableSetting.swift */; };
 		89904032245B5CA500F1C0A2 /* Deletable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89904031245B5CA500F1C0A2 /* Deletable.swift */; };
 		8992426521EC138000EA512B /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8992426421EC138000EA512B /* UIColor.swift */; };
 		8997B4F523727E8A00061132 /* CustomOverrideCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */; };
@@ -1220,6 +1221,7 @@
 		898E6E6D2241ED9F0019E459 /* SuspendResumeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuspendResumeTableViewCell.swift; sourceTree = "<group>"; };
 		898E6E6F2241EDB70019E459 /* PercentageTextFieldTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PercentageTextFieldTableViewController.swift; sourceTree = "<group>"; };
 		898E6E712241EDC10019E459 /* DateAndDurationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateAndDurationTableViewController.swift; sourceTree = "<group>"; };
+		899012C0246F1D8F007B88BA /* ExpandableSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableSetting.swift; sourceTree = "<group>"; };
 		89904031245B5CA500F1C0A2 /* Deletable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deletable.swift; sourceTree = "<group>"; };
 		8992426421EC138000EA512B /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomOverrideCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1659,6 +1661,7 @@
 				89BE75C424649C8100B145D9 /* NewScheduleItemEditor.swift */,
 				89BE75CA2464BC2000B145D9 /* AlertContent.swift */,
 				89904031245B5CA500F1C0A2 /* Deletable.swift */,
+				899012C0246F1D8F007B88BA /* ExpandableSetting.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2834,6 +2837,7 @@
 				B46B62AF23FF0BF6001E69BA /* SectionHeader.swift in Sources */,
 				43BA7183201EE7090058961E /* DailyQuantityScheduleTableViewController.swift in Sources */,
 				43F503632106C761009FA89A /* ServiceAuthenticationUI.swift in Sources */,
+				899012C1246F1D8F007B88BA /* ExpandableSetting.swift in Sources */,
 				89FC6890245A2D680075CF59 /* QuantityScheduleEditor.swift in Sources */,
 				432CF86B20D76B9C0066B889 /* SetupIndicatorView.swift in Sources */,
 				898E6E722241EDC10019E459 /* DateAndDurationTableViewController.swift in Sources */,

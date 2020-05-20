@@ -36,8 +36,9 @@ struct ScheduleItemPicker<Value, ValuePicker: View>: View {
                         stride: .hours(0.5),
                         isTimeExcluded: { !self.isTimeSelectable($0) }
                     )
-                        .frame(width: geometry.size.width / 3)
-                        .clipped()
+                    .frame(width: geometry.size.width / 3)
+                    .clipped()
+                    .accessibility(identifier: "time_picker")
 
                     self.valuePicker(/* availableWidth: */ 2/3 * geometry.size.width)
                 }

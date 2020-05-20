@@ -11,20 +11,22 @@ import HealthKit
 import LoopKit
 
 
-struct GuardrailConstrainedQuantityRangeView: View {
-    var range: ClosedRange<HKQuantity>
+public struct GuardrailConstrainedQuantityRangeView: View {
+    var range: ClosedRange<HKQuantity>?
     var unit: HKUnit
     var guardrail: Guardrail<HKQuantity>
     var isEditing: Bool
     var formatter: NumberFormatter
+    var forceDisableAnimations: Bool
 
     @State var hasAppeared = false
 
-    init(
-        range: ClosedRange<HKQuantity>,
+    public init(
+        range: ClosedRange<HKQuantity>?,
         unit: HKUnit,
         guardrail: Guardrail<HKQuantity>,
-        isEditing: Bool
+        isEditing: Bool,
+        forceDisableAnimations: Bool = false
     ) {
         self.range = range
         self.unit = unit
@@ -35,32 +37,61 @@ struct GuardrailConstrainedQuantityRangeView: View {
             quantityFormatter.setPreferredNumberFormatter(for: unit)
             return quantityFormatter.numberFormatter
         }()
+        self.forceDisableAnimations = forceDisableAnimations
     }
 
-    var body: some View {
+    public var body: some View {
         HStack {
-            GuardrailConstrainedQuantityView(
-                value: range.lowerBound,
-                unit: unit,
-                guardrail: guardrail,
-                isEditing: isEditing,
-                iconSpacing: 4,
-                isUnitLabelVisible: false
-            )
+            lowerBoundView
 
             Text("–")
                 .foregroundColor(Color(.secondaryLabel))
-                .animation(isEditing || !hasAppeared ? nil : .default)
 
-            GuardrailConstrainedQuantityView(
-                value: range.upperBound,
-                unit: unit,
-                guardrail: guardrail,
-                isEditing: isEditing,
-                iconSpacing: 4,
-                iconAnimatesOut: false
-            )
+            upperBoundView
         }
+        .animation(forceDisableAnimations || isEditing || !hasAppeared ? nil : .default)
         .onAppear { self.hasAppeared = true }
+    }
+
+    var lowerBoundView: some View {
+        Group {
+            if range != nil {
+                GuardrailConstrainedQuantityView(
+                    value: range!.lowerBound,
+                    unit: unit,
+                    guardrail: guardrail,
+                    isEditing: isEditing,
+                    iconSpacing: 4,
+                    isUnitLabelVisible: false,
+                    forceDisableAnimations: forceDisableAnimations
+                )
+            } else {
+                Text("min", comment: "Placeholder for quantity range lower bound")
+                    .foregroundColor(Color(.tertiaryLabel))
+            }
+        }
+    }
+
+    var upperBoundView: some View {
+        Group {
+            if range != nil {
+                GuardrailConstrainedQuantityView(
+                    value: range!.upperBound,
+                    unit: unit,
+                    guardrail: guardrail,
+                    isEditing: isEditing,
+                    iconSpacing: 4,
+                    forceDisableAnimations: forceDisableAnimations
+                )
+            } else {
+                HStack {
+                    Text("max", comment: "Placeholder for quantity range upper bound")
+                        .foregroundColor(Color(.tertiaryLabel))
+
+                    Text(unit.shortLocalizedUnitString())
+                        .foregroundColor(Color(.secondaryLabel))
+                }
+            }
+        }
     }
 }

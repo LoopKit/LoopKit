@@ -12,7 +12,7 @@ import LoopKit
 
 
 extension Guardrail where Value == HKQuantity {
-    static let correctionRange = Guardrail(absoluteBounds: 60...180, recommendedBounds: 100...120, unit: .milligramsPerDeciliter)
+    public static let correctionRange = Guardrail(absoluteBounds: 60...180, recommendedBounds: 100...120, unit: .milligramsPerDeciliter)
 }
 
 
@@ -63,8 +63,7 @@ public struct CorrectionRangeScheduleEditor: View {
                     unit: self.unit,
                     minValue: self.minValue,
                     guardrail: self.guardrail,
-                    stride: self.stride,
-                    availableWidth: availableWidth
+                    usageContext: .component(availableWidth: availableWidth)
                 )
             },
             actionAreaContent: {
@@ -79,17 +78,6 @@ public struct CorrectionRangeScheduleEditor: View {
             }
         )
         .alert(isPresented: $showingConfirmationAlert, content: confirmationAlert)
-    }
-
-    private var stride: HKQuantity {
-        switch unit {
-        case .milligramsPerDeciliter:
-            return HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 1)
-        case .millimolesPerLiter:
-            return HKQuantity(unit: .millimolesPerLiter, doubleValue: 0.1)
-        default:
-            fatalError("Unsupported glucose unit \(unit)")
-        }
     }
 
     var defaultFirstScheduleItemValue: DoubleRange {

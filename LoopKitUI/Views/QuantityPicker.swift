@@ -76,6 +76,7 @@ public struct QuantityPicker: View {
         .labelsHidden()
         .pickerStyle(WheelPickerStyle())
         .overlayPreferenceValue(PickerValueBoundsKey.self, unitLabel(positionedFrom:))
+        .accessibility(identifier: "quantity_picker")
     }
 
     private func pickerTextColor(for value: Double) -> Color {

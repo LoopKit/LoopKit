@@ -30,24 +30,12 @@ struct ScheduleItemView<ValueContent: View, ExpandedContent: View>: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                timeText
-                Spacer()
-                valueContent
-            }
-            .contentShape(Rectangle())
-            .onTapGesture {
-                withAnimation {
-                    self.isEditing.toggle()
-                }
-            }
-
-            if isEditing {
-                expandedContent
-                    .transition(.fadeInFromTop)
-            }
-        }
+        ExpandableSetting(
+            isEditing: $isEditing,
+            leadingValueContent: { timeText },
+            trailingValueContent: { valueContent },
+            valuePicker: { expandedContent }
+        )
     }
 
     private var timeText: Text {
@@ -57,7 +45,7 @@ struct ScheduleItemView<ValueContent: View, ExpandedContent: View>: View {
     }
 }
 
-fileprivate extension AnyTransition {
+extension AnyTransition {
     static let fadeInFromTop = move(edge: .top).combined(with: .opacity)
         .delayingInsertion(by: 0.1)
         .speedingUpRemoval(by: 1.8)

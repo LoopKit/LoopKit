@@ -87,8 +87,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                     },
                     actionAreaContent: {
                         actionAreaContent
-                            .padding(.horizontal)
-                            .transition(AnyTransition.opacity.combined(with: .move(edge: .bottom)))
                     },
                     onSave: {
                         self.save(self.scheduleItems)
@@ -165,6 +163,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                 }
             )
         }
+        .accessibility(identifier: "schedule_item_\(index)")
     }
 
     private func isEditing(_ index: Int) -> Binding<Bool> {
