@@ -28,6 +28,9 @@ struct FractionalQuantityPicker: View {
     var fractionalValuesByWhole: [Double: [Double]]
     var usageContext: UsageContext
 
+    /// The maximum number of decimal places supported by the picker.
+    private static var maximumSupportedPrecision: Int { 3 }
+
     private static let wholeFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.minimumIntegerDigits = 1
@@ -56,18 +59,29 @@ struct FractionalQuantityPicker: View {
 
         self._whole = Binding(
             get: { doubleValue.wrappedValue.whole },
-            set: { newValue in
-                if newValue == guardrail.absoluteBounds.upperBound.doubleValue(for: unit) {
-                    doubleValue.wrappedValue = newValue
+            set: { newWholeValue in
+                // If the new whole value supports the same fractional value, keep it; otherwise, truncate.
+                let supportedFractionValues = fractionalValuesByWhole[newWholeValue]!
+                let currentFraction = doubleValue.wrappedValue.fraction
+                let nearestSupportedFraction = currentFraction.roundedToNearest(of: supportedFractionValues)
+                let newFractionValue: Double
+                if abs(nearestSupportedFraction - currentFraction) <= pow(10.0, Double(-Self.maximumSupportedPrecision)) {
+                    newFractionValue = nearestSupportedFraction
                 } else {
-                    doubleValue.wrappedValue = newValue
-                        + doubleValue.wrappedValue.fraction.truncating(toOneOf: fractionalValuesByWhole[newValue]!)
+                    newFractionValue = currentFraction.truncating(toOneOf: supportedFractionValues)
                 }
+                let newDoubleValue = newWholeValue + newFractionValue
+                let maxValue = guardrail.absoluteBounds.upperBound.doubleValue(for: unit)
+                doubleValue.wrappedValue = min(newDoubleValue, maxValue)
             }
         )
         self._fraction = Binding(
             get: { doubleValue.wrappedValue.fraction.roundedToNearest(of: fractionalValuesByWhole[doubleValue.wrappedValue.whole]!) },
-            set: { doubleValue.wrappedValue = doubleValue.wrappedValue.whole + $0 }
+            set: { newFractionValue in
+                let newDoubleValue = doubleValue.wrappedValue.whole + newFractionValue
+                let minValue = guardrail.absoluteBounds.lowerBound.doubleValue(for: unit)
+                doubleValue.wrappedValue = max(newDoubleValue, minValue)
+            }
         )
         self.unit = unit
         self.guardrail = guardrail
@@ -128,15 +142,12 @@ struct FractionalQuantityPicker: View {
         }
     }
 
-    /// The maximum number of decimal places supported by the picker.
-    private var maximumSupportedPrecision: Int { 3 }
-
     private var fractionalFormatter: NumberFormatter {
         // Mutate the shared instance to avoid extra allocations.
         Self.fractionalFormatter.minimumFractionDigits = fractionalValuesByWhole[whole]!
             .lazy
             .map { Decimal($0) }
-            .deltaScale(boundedBy: maximumSupportedPrecision)
+            .deltaScale(boundedBy: Self.maximumSupportedPrecision)
         return Self.fractionalFormatter
     }
 
