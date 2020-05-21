@@ -12,23 +12,23 @@ import SwiftUI
 public struct ExpandableSetting<
     LeadingValueContent: View,
     TrailingValueContent: View,
-    ValuePicker: View
+    ExpandedContent: View
 >: View {
     @Binding var isEditing: Bool
     var leadingValueContent: LeadingValueContent
     var trailingValueContent: TrailingValueContent
-    var valuePicker: ValuePicker
+    var expandedContent: ExpandedContent
 
     public init(
         isEditing: Binding<Bool>,
         @ViewBuilder leadingValueContent: () -> LeadingValueContent,
         @ViewBuilder trailingValueContent: () -> TrailingValueContent,
-        @ViewBuilder valuePicker: () -> ValuePicker
+        @ViewBuilder expandedContent: () -> ExpandedContent
     ) {
         self._isEditing = isEditing
         self.leadingValueContent = leadingValueContent()
         self.trailingValueContent = trailingValueContent()
-        self.valuePicker = valuePicker()
+        self.expandedContent = expandedContent()
     }
 
     public var body: some View {
@@ -46,7 +46,7 @@ public struct ExpandableSetting<
             }
 
             if isEditing {
-                valuePicker
+                expandedContent
                     .padding(.horizontal, -8)
                     .transition(.fadeInFromTop)
             }
@@ -59,8 +59,8 @@ extension ExpandableSetting where LeadingValueContent == EmptyView {
     public init(
         isEditing: Binding<Bool>,
         @ViewBuilder valueContent: () -> TrailingValueContent,
-        @ViewBuilder valuePicker: () -> ValuePicker
+        @ViewBuilder expandedContent: () -> ExpandedContent
     ) {
-        self.init(isEditing: isEditing, leadingValueContent: EmptyView.init, trailingValueContent: valueContent, valuePicker: valuePicker)
+        self.init(isEditing: isEditing, leadingValueContent: EmptyView.init, trailingValueContent: valueContent, expandedContent: expandedContent)
     }
 }

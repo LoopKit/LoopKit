@@ -11,12 +11,20 @@ import HealthKit
 import LoopKit
 
 struct QuantityScheduleEditor<ActionAreaContent: View>: View {
+    enum QuantitySelectionMode {
+        /// A single picker for selecting quantity values.
+        case whole
+        // A two-component picker for selecting the whole and fractional quantity values independently.
+        case fractional
+    }
+
     var title: Text
     var description: Text
     var initialScheduleItems: [RepeatingScheduleValue<Double>]
     @State var scheduleItems: [RepeatingScheduleValue<Double>]
     var unit: HKUnit
     var selectableValues: [Double]
+    var quantitySelectionMode: QuantitySelectionMode
     var guardrail: Guardrail<HKQuantity>
     var defaultFirstScheduleItemValue: HKQuantity
     var confirmationAlertContent: AlertContent
@@ -33,6 +41,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
         unit: HKUnit,
         selectableValues: [Double],
         guardrail: Guardrail<HKQuantity>,
+        quantitySelectionMode: QuantitySelectionMode = .whole,
         defaultFirstScheduleItemValue: HKQuantity,
         confirmationAlertContent: AlertContent,
         @ViewBuilder guardrailWarning: @escaping (_ thresholds: [SafetyClassification.Threshold]) -> ActionAreaContent,
@@ -43,6 +52,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
         self.initialScheduleItems = schedule?.items ?? []
         self._scheduleItems = State(initialValue: schedule?.items ?? [])
         self.unit = unit
+        self.quantitySelectionMode = quantitySelectionMode
         self.selectableValues = selectableValues
         self.guardrail = guardrail
         self.defaultFirstScheduleItemValue = defaultFirstScheduleItemValue
@@ -58,6 +68,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
         unit: HKUnit,
         guardrail: Guardrail<HKQuantity>,
         selectableValueStride: HKQuantity,
+        quantitySelectionMode: QuantitySelectionMode = .whole,
         defaultFirstScheduleItemValue: HKQuantity,
         confirmationAlertContent: AlertContent,
         @ViewBuilder guardrailWarning: @escaping (_ thresholds: [SafetyClassification.Threshold]) -> ActionAreaContent,
@@ -71,6 +82,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
             unit: unit,
             selectableValues: selectableValues,
             guardrail: guardrail,
+            quantitySelectionMode: quantitySelectionMode,
             defaultFirstScheduleItemValue: defaultFirstScheduleItemValue,
             confirmationAlertContent: confirmationAlertContent,
             guardrailWarning: guardrailWarning,
@@ -94,16 +106,26 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
                 )
             },
             valuePicker: { item, availableWidth in
-                QuantityPicker(
-                    value: item.value.animation().withUnit(self.unit),
-                    unit: self.unit,
-                    guardrail: self.guardrail,
-                    selectableValues: self.selectableValues
-                )
-                .frame(width: availableWidth / 2)
-                // Ensure overlaid unit label is not clipped
-                .padding(.trailing, self.unitLabelWidth + self.unitLabelSpacing)
-                .clipped()
+                if self.quantitySelectionMode == .whole {
+                    QuantityPicker(
+                        value: item.value.animation().withUnit(self.unit),
+                        unit: self.unit,
+                        guardrail: self.guardrail,
+                        selectableValues: self.selectableValues
+                    )
+                    .frame(width: availableWidth / 2)
+                    // Ensure overlaid unit label is not clipped
+                    .padding(.trailing, self.unitLabelWidth + self.unitLabelSpacing)
+                    .clipped()
+                } else {
+                    FractionalQuantityPicker(
+                        value: item.value.animation().withUnit(self.unit),
+                        unit: self.unit,
+                        guardrail: self.guardrail,
+                        selectableValues: self.selectableValues,
+                        usageContext: .component(availableWidth: availableWidth)
+                    )
+                }
             },
             actionAreaContent: {
                 guardrailWarningIfNecessary

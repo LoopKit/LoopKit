@@ -18,3 +18,12 @@ extension Binding where Value == Double {
         )
     }
 }
+
+extension Binding where Value == HKQuantity {
+    func doubleValue(for unit: HKUnit) -> Binding<Double> {
+        Binding<Double>(
+            get: { self.wrappedValue.doubleValue(for: unit) },
+            set: { self.wrappedValue = HKQuantity(unit: unit, doubleValue: $0) }
+        )
+    }
+}

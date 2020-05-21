@@ -22,7 +22,7 @@ private struct PickerValueBoundsKey: PreferenceKey {
 public struct QuantityPicker: View {
     @Binding var value: HKQuantity
     var unit: HKUnit
-    var guardrail: Guardrail<HKQuantity>
+    var guardrail: Guardrail<HKQuantity>?
     var isUnitLabelVisible: Bool
 
     private let selectableValues: [Double]
@@ -33,24 +33,26 @@ public struct QuantityPicker: View {
         unit: HKUnit,
         stride: HKQuantity,
         guardrail: Guardrail<HKQuantity>,
+        formatter: NumberFormatter? = nil,
         isUnitLabelVisible: Bool = true
     ) {
         let selectableValues = guardrail.allValues(stridingBy: stride, unit: unit)
-        self.init(value: value, unit: unit, guardrail: guardrail, selectableValues: selectableValues, isUnitLabelVisible: isUnitLabelVisible)
+        self.init(value: value, unit: unit, guardrail: guardrail, selectableValues: selectableValues, formatter: formatter, isUnitLabelVisible: isUnitLabelVisible)
     }
 
     public init(
         value: Binding<HKQuantity>,
         unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
+        guardrail: Guardrail<HKQuantity>? = nil,
         selectableValues: [Double],
+        formatter: NumberFormatter? = nil,
         isUnitLabelVisible: Bool = true
     ) {
         self._value = value
         self.unit = unit
         self.guardrail = guardrail
         self.selectableValues = selectableValues
-        self.formatter = {
+        self.formatter = formatter ?? {
             let quantityFormatter = QuantityFormatter()
             quantityFormatter.setPreferredNumberFormatter(for: unit)
             return quantityFormatter.numberFormatter
@@ -58,15 +60,8 @@ public struct QuantityPicker: View {
         self.isUnitLabelVisible = isUnitLabelVisible
     }
 
-    private var selection: Binding<Double> {
-        Binding(
-            get: { self.value.doubleValue(for: self.unit) },
-            set: { self.value = HKQuantity(unit: self.unit, doubleValue: $0) }
-        )
-    }
-
     public var body: some View {
-        Picker("Quantity", selection: selection) {
+        Picker("Quantity", selection: $value.doubleValue(for: unit)) {
             ForEach(selectableValues, id: \.self) { value in
                 Text(self.formatter.string(from: value) ?? "\(value)")
                     .foregroundColor(self.pickerTextColor(for: value))
@@ -80,6 +75,10 @@ public struct QuantityPicker: View {
     }
 
     private func pickerTextColor(for value: Double) -> Color {
+        guard let guardrail = guardrail else {
+            return .primary
+        }
+
         let quantity = HKQuantity(unit: unit, doubleValue: value)
         switch guardrail.classification(for: quantity) {
         case .withinRecommendedRange:

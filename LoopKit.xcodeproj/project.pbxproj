@@ -365,6 +365,8 @@
 		895FE09322011F4800FCF18A /* EmojiInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895FE08F22011F4800FCF18A /* EmojiInputController.swift */; };
 		89627B16244115A400BEB424 /* CardList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89627B15244115A400BEB424 /* CardList.swift */; };
 		89627B182441168900BEB424 /* ConfigurationPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89627B172441168900BEB424 /* ConfigurationPage.swift */; };
+		89653C802473527100E1BAA5 /* FractionalQuantityPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89653C7F2473527100E1BAA5 /* FractionalQuantityPicker.swift */; };
+		89653C822473592600E1BAA5 /* CarbRatioScheduleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89653C812473592600E1BAA5 /* CarbRatioScheduleEditor.swift */; };
 		8974AFC022120D7A0043F01B /* TemporaryScheduleOverrideTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */; };
 		8974B0682215FE460043F01B /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974B0672215FE460043F01B /* Collection.swift */; };
 		8974B0692215FE460043F01B /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8974B0672215FE460043F01B /* Collection.swift */; };
@@ -1208,6 +1210,8 @@
 		895FE08F22011F4800FCF18A /* EmojiInputController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmojiInputController.swift; sourceTree = "<group>"; };
 		89627B15244115A400BEB424 /* CardList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardList.swift; sourceTree = "<group>"; };
 		89627B172441168900BEB424 /* ConfigurationPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPage.swift; sourceTree = "<group>"; };
+		89653C7F2473527100E1BAA5 /* FractionalQuantityPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FractionalQuantityPicker.swift; sourceTree = "<group>"; };
+		89653C812473592600E1BAA5 /* CarbRatioScheduleEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbRatioScheduleEditor.swift; sourceTree = "<group>"; };
 		8974AFBF22120D7A0043F01B /* TemporaryScheduleOverrideTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideTests.swift; sourceTree = "<group>"; };
 		8974B0672215FE460043F01B /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		898B4E74246CCAB50053C484 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
@@ -1662,6 +1666,8 @@
 				89BE75CA2464BC2000B145D9 /* AlertContent.swift */,
 				89904031245B5CA500F1C0A2 /* Deletable.swift */,
 				899012C0246F1D8F007B88BA /* ExpandableSetting.swift */,
+				89653C7F2473527100E1BAA5 /* FractionalQuantityPicker.swift */,
+				89653C812473592600E1BAA5 /* CarbRatioScheduleEditor.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2791,6 +2797,7 @@
 				43F5034D210599CC009FA89A /* AuthenticationViewController.swift in Sources */,
 				B4C004D32416961300B40429 /* ActionButton.swift in Sources */,
 				895FE08922011F0C00FCF18A /* OverrideSelectionHeaderView.swift in Sources */,
+				89653C802473527100E1BAA5 /* FractionalQuantityPicker.swift in Sources */,
 				898E6E67224179310019E459 /* BaseHUDView.swift in Sources */,
 				43F5034F210599DF009FA89A /* ValidatingIndicatorView.swift in Sources */,
 				C1E4B308242E995200E70CCB /* ActivityIndicator.swift in Sources */,
@@ -2816,6 +2823,7 @@
 				89AF78C22447E353002B4FCC /* Splat.swift in Sources */,
 				893C9F8C2447DBD900CD4185 /* CardBuilder.swift in Sources */,
 				89BE75C524649C8100B145D9 /* NewScheduleItemEditor.swift in Sources */,
+				89653C822473592600E1BAA5 /* CarbRatioScheduleEditor.swift in Sources */,
 				4369F08F208859E6000E3E45 /* PaddedTextField.swift in Sources */,
 				A9498D8823386CAF00DAA9B9 /* ServiceViewController.swift in Sources */,
 				892A5D9E2231E122008961AB /* StateColorPalette.swift in Sources */,

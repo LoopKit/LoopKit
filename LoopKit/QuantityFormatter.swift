@@ -46,7 +46,7 @@ open class QuantityFormatter {
     open func setPreferredNumberFormatter(for unit: HKUnit) {
         numberFormatter.numberStyle = .decimal
         numberFormatter.minimumFractionDigits = unit.preferredFractionDigits
-        numberFormatter.maximumFractionDigits = unit.preferredFractionDigits
+        numberFormatter.maximumFractionDigits = unit.maxFractionDigits
     }
 
     private var hasNumberFormatter = false
@@ -143,6 +143,14 @@ public extension HKUnit {
             return 1
         } else {
             return 0
+        }
+    }
+
+    var maxFractionDigits: Int {
+        if self == HKUnit.gram().unitDivided(by: .internationalUnit()) {
+            return 2
+        } else {
+            return preferredFractionDigits
         }
     }
 
