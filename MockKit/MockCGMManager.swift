@@ -32,12 +32,15 @@ public final class MockCGMManager: TestingCGMManager {
         public let backgroundContent: DeviceAlert.Content
     }
     let alerts: [DeviceAlert.AlertIdentifier: MockAlert] = [
-        submarine.identifier: submarine, buzz.identifier: buzz
+        submarine.identifier: submarine, buzz.identifier: buzz, critical.identifier: critical
     ]
     
     public static let submarine = MockAlert(sound: .sound(name: "sub.caf"), identifier: "submarine",
                                             foregroundContent: DeviceAlert.Content(title: "Alert: FG Title", body: "Alert: Foreground Body", acknowledgeActionButtonLabel: "FG OK"),
                                             backgroundContent: DeviceAlert.Content(title: "Alert: BG Title", body: "Alert: Background Body", acknowledgeActionButtonLabel: "BG OK"))
+    public static let critical = MockAlert(sound: .sound(name: "critical.caf"), identifier: "critical",
+                                            foregroundContent: DeviceAlert.Content(title: "Critical Alert: FG Title", body: "Critical Alert: Foreground Body", acknowledgeActionButtonLabel: "Critical FG OK", isCritical: true),
+                                            backgroundContent: DeviceAlert.Content(title: "Critical Alert: BG Title", body: "Critical Alert: Background Body", acknowledgeActionButtonLabel: "Critical BG OK", isCritical: true))
     public static let buzz = MockAlert(sound: .vibrate, identifier: "buzz",
                                        foregroundContent: DeviceAlert.Content(title: "Alert: FG Title", body: "FG bzzzt", acknowledgeActionButtonLabel: "Buzz"),
                                        backgroundContent: DeviceAlert.Content(title: "Alert: BG Title", body: "BG bzzzt", acknowledgeActionButtonLabel: "Buzz"))
@@ -222,6 +225,10 @@ extension MockCGMManager {
         self.logDeviceComms(.delegateResponse, message: "\(#function): Alert \(alertIdentifier) acknowledged.")
     }
 
+    public func retractAlert(identifier: DeviceAlert.AlertIdentifier) {
+        delegate.notify { $0?.retractAlert(identifier: DeviceAlert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: identifier)) }
+    }
+    
     private func registerBackgroundTask() {
         backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
             self?.endBackgroundTask()

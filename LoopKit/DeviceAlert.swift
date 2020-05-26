@@ -12,10 +12,8 @@ import Foundation
 public protocol DeviceAlertPresenter: class {
     /// Issue (post) the given alert, according to its trigger schedule.
     func issueAlert(_ alert: DeviceAlert)
-    /// Unschedule any pending alerts with the given identifier.
-    func removePendingAlert(identifier: DeviceAlert.Identifier)
-    /// Remove any alerts currently posted with the given identifier.  It ignores any pending alerts.
-    func removeDeliveredAlert(identifier: DeviceAlert.Identifier)
+    /// Retract any alerts with the given identifier.  This includes both pending and delivered alerts.
+    func retractAlert(identifier: DeviceAlert.Identifier)
 }
 
 /// Protocol that describes something that can deal with a user's response to an alert.
@@ -237,18 +235,4 @@ extension Decoder {
         return DecodingError.dataCorrupted(DecodingError.Context(codingPath: codingPath, debugDescription: "invalid enumeration"))
     }
 }
-
-// For later:
-//public struct UserAlertAction {
-//    let identifier: UniqueCommonIdentifier
-//    let name: String
-//    let isHandledInBackground: Bool // Can this action be handled in the background, or does the app need to be brought up?
-//    let destructive: Bool // Should this action be displayed in a way that signifies it is "destructive" (e.g. is the button red?)
-//    let deepLinkTarget: String? // The screen to target when the app is brought up. TODO: what type should this be?  A URL/URN or some kind of path makes sense but I'm not sure.
-//    let perform: ()->Void
-//}
-//
-//public protocol UserAlertProvider {
-//    func listPossibleActions() -> [UserAlert.Action]
-//}
 

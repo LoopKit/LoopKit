@@ -49,7 +49,7 @@ extension NSManagedObjectContext {
     /// peristent store associated with this context.
     ///
     /// - Return: The next modification counter for the persistent store associated with this context.
-    internal var modificationCounter: Int64? {
+    public var modificationCounter: Int64? {
         get {
             guard let persistentStoreCoordinator = persistentStoreCoordinator,
                 let persistentStore = persistentStoreCoordinator.persistentStores.first

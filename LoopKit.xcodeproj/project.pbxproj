@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D25C22E246A2A1A00E87FA0 /* critical.caf in Resources */ = {isa = PBXBuildFile; fileRef = 1D25C22D246A2A1A00E87FA0 /* critical.caf */; };
 		1D640FF724525228008F9755 /* sub.caf in Resources */ = {isa = PBXBuildFile; fileRef = 1D640FF524524284008F9755 /* sub.caf */; };
 		1D841AAD24577EE10069DBFF /* DeviceAlertSoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D841AAC24577EE10069DBFF /* DeviceAlertSoundPlayer.swift */; };
 		1DA649AB2445174400F61E75 /* DeviceAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* DeviceAlert.swift */; };
@@ -777,6 +778,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1D25C22D246A2A1A00E87FA0 /* critical.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = critical.caf; sourceTree = "<group>"; };
 		1D640FF524524284008F9755 /* sub.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sub.caf; sourceTree = "<group>"; };
 		1D841AAC24577EE10069DBFF /* DeviceAlertSoundPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceAlertSoundPlayer.swift; sourceTree = "<group>"; };
 		1DA649AA2445174400F61E75 /* DeviceAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceAlert.swift; sourceTree = "<group>"; };
@@ -1464,6 +1466,7 @@
 		1D640FF424524274008F9755 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				1D25C22D246A2A1A00E87FA0 /* critical.caf */,
 				1D640FF524524284008F9755 /* sub.caf */,
 			);
 			path = Sounds;
@@ -2733,6 +2736,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D640FF724525228008F9755 /* sub.caf in Resources */,
+				1D25C22E246A2A1A00E87FA0 /* critical.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
