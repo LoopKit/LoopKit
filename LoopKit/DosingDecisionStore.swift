@@ -10,6 +10,7 @@ import os.log
 import Foundation
 import CoreData
 import HealthKit
+import UserNotifications
 
 public protocol DosingDecisionStoreDelegate: AnyObject {
     /**
@@ -161,6 +162,7 @@ public struct StoredDosingDecision {
     public let recommendedTempBasal: TempBasalRecommendationWithDate?
     public let recommendedBolus: BolusRecommendationWithDate?
     public let pumpManagerStatus: PumpManagerStatus?
+    public let notificationSettings: UNNotificationSettings?
     public let errors: [Error]?
     public let syncIdentifier: String
 
@@ -176,6 +178,7 @@ public struct StoredDosingDecision {
                 recommendedTempBasal: TempBasalRecommendationWithDate? = nil,
                 recommendedBolus: BolusRecommendationWithDate? = nil,
                 pumpManagerStatus: PumpManagerStatus? = nil,
+                notificationSettings: UNNotificationSettings? = nil,
                 errors: [Error]? = nil,
                 syncIdentifier: String = UUID().uuidString) {
         self.date = date
@@ -190,6 +193,7 @@ public struct StoredDosingDecision {
         self.recommendedTempBasal = recommendedTempBasal
         self.recommendedBolus = recommendedBolus
         self.pumpManagerStatus = pumpManagerStatus
+        self.notificationSettings = notificationSettings
         self.errors = errors
         self.syncIdentifier = syncIdentifier
     }
