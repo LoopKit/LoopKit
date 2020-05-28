@@ -412,6 +412,12 @@ public final class MockPumpManager: TestingPumpManager {
     }
     
     public func setMaximumTempBasalRate(_ rate: Double) { }
+
+    public func syncBasalRateSchedule(items scheduleItems: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(500)) {
+            completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: self.status.timeZone)!))
+        }
+    }
 }
 
 // MARK: - DeviceAlertResponder implementation
