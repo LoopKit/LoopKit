@@ -276,7 +276,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                     .contentShape(Rectangle())
             }
         )
-        .disabled(tableDeletionState != .disabled || scheduleItems.count > scheduleItemLimit)
+        .disabled(tableDeletionState != .disabled || scheduleItems.count >= scheduleItemLimit)
     }
 }
 

@@ -12,7 +12,7 @@ import LoopKit
 
 
 extension Guardrail where Value == HKQuantity {
-    public static let correctionRange = Guardrail(absoluteBounds: 60...180, recommendedBounds: 100...120, unit: .milligramsPerDeciliter)
+    public static let correctionRange = Guardrail(absoluteBounds: 60...180, recommendedBounds: 70...120, unit: .milligramsPerDeciliter)
 }
 
 

@@ -57,6 +57,7 @@ public struct GuardrailConstrainedQuantityView: View {
 
                 Text(formatter.string(from: value.doubleValue(for: unit)) ?? "\(value.doubleValue(for: unit))")
                     .foregroundColor(warningColor)
+                    .fixedSize(horizontal: true, vertical: false)
             }
 
             if isUnitLabelVisible {

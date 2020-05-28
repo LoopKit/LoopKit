@@ -34,7 +34,7 @@ struct ScheduleItemView<ValueContent: View, ExpandedContent: View>: View {
             isEditing: $isEditing,
             leadingValueContent: { timeText },
             trailingValueContent: { valueContent },
-            expandedContent: { expandedContent }
+            expandedContent: { self.expandedContent }
         )
     }
 

@@ -66,6 +66,7 @@ public struct QuantityPicker: View {
                 Text(self.formatter.string(from: value) ?? "\(value)")
                     .foregroundColor(self.pickerTextColor(for: value))
                     .anchorPreference(key: PickerValueBoundsKey.self, value: .bounds, transform: { [$0] })
+                    .accessibility(identifier: self.formatter.string(from: value) ?? "\(value)")
             }
         }
         .labelsHidden()

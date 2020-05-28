@@ -61,7 +61,7 @@ public struct GlucoseRangePicker: View {
         case .independent:
             return AnyView(
                 GeometryReader { geometry in
-                    HStack {
+                    HStack(spacing: 0) {
                         Spacer()
                         self.body(availableWidth: geometry.size.width)
                         Spacer()
@@ -90,7 +90,7 @@ public struct GlucoseRangePicker: View {
                     .offset(x: spacing + separatorWidth),
                 alignment: .trailing
             )
-            .padding(.leading, usageContext == .independent ? unitLabelWidth + spacing : 0)
+            .padding(.leading, usageContext == .independent ? unitLabelWidth : 0)
             .padding(.trailing, spacing + separatorWidth + spacing)
             .clipped()
             .accessibility(identifier: "min_glucose_picker")
@@ -104,7 +104,7 @@ public struct GlucoseRangePicker: View {
             // Ensure the selectable picker values update when either bound changes
             .id(lowerBound...upperBound)
             .frame(width: availableWidth / 3.5)
-            .padding(.trailing, spacing + unitLabelWidth)
+            .padding(.trailing, unitLabelWidth)
             .clipped()
             .accessibility(identifier: "max_glucose_picker")
         }
