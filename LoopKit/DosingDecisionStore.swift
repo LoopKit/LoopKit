@@ -163,6 +163,7 @@ public struct StoredDosingDecision {
     public let recommendedBolus: BolusRecommendationWithDate?
     public let pumpManagerStatus: PumpManagerStatus?
     public let notificationSettings: UNNotificationSettings?
+    public let deviceSettings: DeviceSettings?
     public let errors: [Error]?
     public let syncIdentifier: String
 
@@ -179,6 +180,7 @@ public struct StoredDosingDecision {
                 recommendedBolus: BolusRecommendationWithDate? = nil,
                 pumpManagerStatus: PumpManagerStatus? = nil,
                 notificationSettings: UNNotificationSettings? = nil,
+                deviceSettings: DeviceSettings? = nil,
                 errors: [Error]? = nil,
                 syncIdentifier: String = UUID().uuidString) {
         self.date = date
@@ -194,6 +196,7 @@ public struct StoredDosingDecision {
         self.recommendedBolus = recommendedBolus
         self.pumpManagerStatus = pumpManagerStatus
         self.notificationSettings = notificationSettings
+        self.deviceSettings = deviceSettings
         self.errors = errors
         self.syncIdentifier = syncIdentifier
     }
@@ -225,6 +228,33 @@ public struct StoredDosingDecision {
         public init(recommendation: BolusRecommendation, date: Date) {
             self.recommendation = recommendation
             self.date = date
+        }
+    }
+
+    public struct DeviceSettings: Codable, Equatable {
+        let name: String
+        let systemName: String
+        let systemVersion: String
+        let model: String
+        let modelIdentifier: String
+        let batteryLevel: Float?
+        let batteryState: BatteryState?
+
+        public init(name: String, systemName: String, systemVersion: String, model: String, modelIdentifier: String, batteryLevel: Float? = nil, batteryState: BatteryState? = nil) {
+            self.name = name
+            self.systemName = systemName
+            self.systemVersion = systemVersion
+            self.model = model
+            self.modelIdentifier = modelIdentifier
+            self.batteryLevel = batteryLevel
+            self.batteryState = batteryState
+        }
+
+        public enum BatteryState: String, Codable {
+            case unknown
+            case unplugged
+            case charging
+            case full
         }
     }
 }
