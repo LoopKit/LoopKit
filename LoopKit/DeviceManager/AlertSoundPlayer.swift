@@ -1,5 +1,5 @@
 //
-//  DeviceAlertSoundPlayer.swift
+//  AlertSoundPlayer.swift
 //  Loop
 //
 //  Created by Rick Pasetto on 4/27/20.
@@ -14,12 +14,12 @@ import AudioToolbox
 import AVFoundation
 import os.log
 
-public protocol DeviceAlertSoundPlayer {
+public protocol AlertSoundPlayer {
     func vibrate()
     func play(url: URL)
 }
 
-public class DeviceAVSoundPlayer: DeviceAlertSoundPlayer {
+public class DeviceAVSoundPlayer: AlertSoundPlayer {
     private let log = OSLog(category: "DeviceAVSoundPlayer")
     private let baseURL: URL?
     private var delegate: Delegate!
@@ -70,7 +70,7 @@ public class DeviceAVSoundPlayer: DeviceAlertSoundPlayer {
 
 public extension DeviceAVSoundPlayer {
 
-    func playAlert(sound: DeviceAlert.Sound) {
+    func playAlert(sound: Alert.Sound) {
         switch sound {
         case .silence:
             // noop

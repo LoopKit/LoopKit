@@ -1,5 +1,5 @@
 //
-//  DeviceAlert.swift
+//  Alert.swift
 //  LoopKit
 //
 //  Created by Rick Pasetto on 4/8/20.
@@ -9,21 +9,21 @@
 import Foundation
 
 /// Protocol that describes any class that presents Alerts.
-public protocol DeviceAlertPresenter: class {
+public protocol AlertPresenter: class {
     /// Issue (post) the given alert, according to its trigger schedule.
-    func issueAlert(_ alert: DeviceAlert)
+    func issueAlert(_ alert: Alert)
     /// Retract any alerts with the given identifier.  This includes both pending and delivered alerts.
-    func retractAlert(identifier: DeviceAlert.Identifier)
+    func retractAlert(identifier: Alert.Identifier)
 }
 
 /// Protocol that describes something that can deal with a user's response to an alert.
-public protocol DeviceAlertResponder: class {
+public protocol AlertResponder: class {
     /// Acknowledge alerts with a given type identifier
-    func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) -> Void
+    func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) -> Void
 }
 
 /// Structure that represents an Alert that is issued from a Device.
-public struct DeviceAlert: Equatable {
+public struct Alert: Equatable {
     /// Representation of an alert Trigger
     public enum Trigger: Equatable {
         /// Trigger the alert immediately
@@ -95,7 +95,7 @@ public struct DeviceAlert: Equatable {
     }
 }
 
-public extension DeviceAlert.Sound {
+public extension Alert.Sound {
     var filename: String? {
         switch self {
         case .sound(let name): return name
@@ -104,25 +104,25 @@ public extension DeviceAlert.Sound {
     }
 }
 
-public protocol DeviceAlertSoundVendor {
+public protocol AlertSoundVendor {
     // Get the base URL for where to find all the vendor's sounds.  It is under here that all of the sound files should be.
     // Returns nil if the vendor has no sounds.
     func getSoundBaseURL() -> URL?
     // Get all the sounds for this vendor.  Returns an empty array if the vendor has no sounds.
-    func getSounds() -> [DeviceAlert.Sound]
+    func getSounds() -> [Alert.Sound]
 }
 
 // MARK: Codable implementations
 
-extension DeviceAlert: Codable {
+extension Alert: Codable {
     enum CodableError: Swift.Error { case encodeFailed, decodeFailed }
     public func encode() throws -> Data {
         let encoder = JSONEncoder()
         return try encoder.encode(self)
     }
-    public static func decode(from data: Data) throws -> DeviceAlert {
+    public static func decode(from data: Data) throws -> Alert {
         let decoder = JSONDecoder()
-        return try decoder.decode(DeviceAlert.self, from: data)
+        return try decoder.decode(Alert.self, from: data)
     }
     public func encodeToString() throws -> String {
         let data = try encode()
@@ -131,7 +131,7 @@ extension DeviceAlert: Codable {
         }
         return result
     }
-    public static func decode(from string: String) throws -> DeviceAlert {
+    public static func decode(from string: String) throws -> Alert {
         guard let data = string.data(using: .utf8) else {
             throw CodableError.decodeFailed
         }
@@ -139,11 +139,11 @@ extension DeviceAlert: Codable {
     }
 }
 
-extension DeviceAlert.Content: Codable { }
-extension DeviceAlert.Identifier: Codable { }
+extension Alert.Content: Codable { }
+extension Alert.Identifier: Codable { }
 // These Codable implementations of enums with associated values cannot be synthesized (yet) in Swift.
 // The code below follows a pattern described by https://medium.com/@hllmandel/codable-enum-with-associated-values-swift-4-e7d75d6f4370
-extension DeviceAlert.Trigger: Codable {
+extension Alert.Trigger: Codable {
     private enum CodingKeys: String, CodingKey {
       case immediate, delayed, repeating
     }
@@ -188,7 +188,7 @@ extension DeviceAlert.Trigger: Codable {
     }
 }
 
-extension DeviceAlert.Sound: Codable {
+extension Alert.Sound: Codable {
     private enum CodingKeys: String, CodingKey {
       case silence, vibrate, sound
     }

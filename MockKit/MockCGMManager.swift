@@ -26,24 +26,24 @@ public final class MockCGMManager: TestingCGMManager {
     public static let localizedTitle = "Simulator"
 
     public struct MockAlert {
-        public let sound: DeviceAlert.Sound
-        public let identifier: DeviceAlert.AlertIdentifier
-        public let foregroundContent: DeviceAlert.Content
-        public let backgroundContent: DeviceAlert.Content
+        public let sound: Alert.Sound
+        public let identifier: Alert.AlertIdentifier
+        public let foregroundContent: Alert.Content
+        public let backgroundContent: Alert.Content
     }
-    let alerts: [DeviceAlert.AlertIdentifier: MockAlert] = [
+    let alerts: [Alert.AlertIdentifier: MockAlert] = [
         submarine.identifier: submarine, buzz.identifier: buzz, critical.identifier: critical
     ]
     
     public static let submarine = MockAlert(sound: .sound(name: "sub.caf"), identifier: "submarine",
-                                            foregroundContent: DeviceAlert.Content(title: "Alert: FG Title", body: "Alert: Foreground Body", acknowledgeActionButtonLabel: "FG OK"),
-                                            backgroundContent: DeviceAlert.Content(title: "Alert: BG Title", body: "Alert: Background Body", acknowledgeActionButtonLabel: "BG OK"))
+                                            foregroundContent: Alert.Content(title: "Alert: FG Title", body: "Alert: Foreground Body", acknowledgeActionButtonLabel: "FG OK"),
+                                            backgroundContent: Alert.Content(title: "Alert: BG Title", body: "Alert: Background Body", acknowledgeActionButtonLabel: "BG OK"))
     public static let critical = MockAlert(sound: .sound(name: "critical.caf"), identifier: "critical",
-                                            foregroundContent: DeviceAlert.Content(title: "Critical Alert: FG Title", body: "Critical Alert: Foreground Body", acknowledgeActionButtonLabel: "Critical FG OK", isCritical: true),
-                                            backgroundContent: DeviceAlert.Content(title: "Critical Alert: BG Title", body: "Critical Alert: Background Body", acknowledgeActionButtonLabel: "Critical BG OK", isCritical: true))
+                                            foregroundContent: Alert.Content(title: "Critical Alert: FG Title", body: "Critical Alert: Foreground Body", acknowledgeActionButtonLabel: "Critical FG OK", isCritical: true),
+                                            backgroundContent: Alert.Content(title: "Critical Alert: BG Title", body: "Critical Alert: Background Body", acknowledgeActionButtonLabel: "Critical BG OK", isCritical: true))
     public static let buzz = MockAlert(sound: .vibrate, identifier: "buzz",
-                                       foregroundContent: DeviceAlert.Content(title: "Alert: FG Title", body: "FG bzzzt", acknowledgeActionButtonLabel: "Buzz"),
-                                       backgroundContent: DeviceAlert.Content(title: "Alert: BG Title", body: "BG bzzzt", acknowledgeActionButtonLabel: "Buzz"))
+                                       foregroundContent: Alert.Content(title: "Alert: FG Title", body: "FG bzzzt", acknowledgeActionButtonLabel: "Buzz"),
+                                       backgroundContent: Alert.Content(title: "Alert: BG Title", body: "BG bzzzt", acknowledgeActionButtonLabel: "Buzz"))
 
     public var mockSensorState: MockCGMState {
         didSet {
@@ -201,32 +201,32 @@ extension MockCGMManager {
         return Bundle(for: type(of: self)).bundleURL
     }
     
-    public func getSounds() -> [DeviceAlert.Sound] {
+    public func getSounds() -> [Alert.Sound] {
         return alerts.map { $1.sound }
     }
     
-    public func issueAlert(identifier: DeviceAlert.AlertIdentifier, trigger: DeviceAlert.Trigger, delay: TimeInterval?) {
+    public func issueAlert(identifier: Alert.AlertIdentifier, trigger: Alert.Trigger, delay: TimeInterval?) {
         guard let alert = alerts[identifier] else {
             return
         }
         registerBackgroundTask()
         delegate.notifyDelayed(by: delay ?? 0) { delegate in
             self.logDeviceComms(.delegate, message: "\(#function): \(identifier) \(trigger)")
-            delegate?.issueAlert(DeviceAlert(identifier: DeviceAlert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: identifier),
-                                             foregroundContent: alert.foregroundContent,
-                                             backgroundContent: alert.backgroundContent,
-                                             trigger: trigger,
-                                             sound: alert.sound))
+            delegate?.issueAlert(Alert(identifier: Alert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: identifier),
+                                       foregroundContent: alert.foregroundContent,
+                                       backgroundContent: alert.backgroundContent,
+                                       trigger: trigger,
+                                       sound: alert.sound))
         }
     }
     
-    public func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) {
+    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) {
         endBackgroundTask()
         self.logDeviceComms(.delegateResponse, message: "\(#function): Alert \(alertIdentifier) acknowledged.")
     }
 
-    public func retractAlert(identifier: DeviceAlert.AlertIdentifier) {
-        delegate.notify { $0?.retractAlert(identifier: DeviceAlert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: identifier)) }
+    public func retractAlert(identifier: Alert.AlertIdentifier) {
+        delegate.notify { $0?.retractAlert(identifier: Alert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: identifier)) }
     }
     
     private func registerBackgroundTask() {

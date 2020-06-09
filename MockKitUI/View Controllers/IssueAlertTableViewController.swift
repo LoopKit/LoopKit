@@ -38,7 +38,7 @@ final class IssueAlertTableViewController: UITableViewController {
             }
         }
         
-        var trigger: DeviceAlert.Trigger {
+        var trigger: Alert.Trigger {
             switch self {
             case .immediate: return .immediate
             case .retract: return .immediate
@@ -57,7 +57,7 @@ final class IssueAlertTableViewController: UITableViewController {
             }
         }
         
-        var identifier: DeviceAlert.AlertIdentifier {
+        var identifier: Alert.AlertIdentifier {
             switch self {
             case .buzz: return MockCGMManager.buzz.identifier
             case .critical: return MockCGMManager.critical.identifier

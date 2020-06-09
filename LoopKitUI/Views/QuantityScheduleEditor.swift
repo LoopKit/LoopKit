@@ -178,8 +178,8 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
         dismiss()
     }
 
-    private func confirmationAlert() -> Alert {
-        Alert(
+    private func confirmationAlert() -> SwiftUI.Alert {
+        SwiftUI.Alert(
             title: confirmationAlertContent.title,
             message: confirmationAlertContent.message,
             primaryButton: .cancel(Text("Go Back")),
