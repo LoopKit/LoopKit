@@ -43,29 +43,36 @@ public class DosingDecisionStore {
                 self.store.save()
             }
 
-            self.purgeExpiredDosingDecisionObjects()
-
-            self.delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
+            self.purgeExpiredDosingDecisions()
             completion()
         }
     }
 
-    private var expireDate: Date {
+    public var expireDate: Date {
         return Date(timeIntervalSinceNow: -expireAfter)
     }
 
-    private func purgeExpiredDosingDecisionObjects() {
+    private func purgeExpiredDosingDecisions() {
+        purgeDosingDecisionObjects(before: expireDate)
+    }
+
+    public func purgeDosingDecisions(before date: Date, completion: @escaping (Error?) -> Void) {
+        dataAccessQueue.async {
+            self.purgeDosingDecisionObjects(before: date, completion: completion)
+        }
+    }
+
+    private func purgeDosingDecisionObjects(before date: Date, completion: ((Error?) -> Void)? = nil) {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
 
-        store.managedObjectContext.performAndWait {
-            do {
-                let fetchRequest: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
-                fetchRequest.predicate = NSPredicate(format: "date < %@", expireDate as NSDate)
-                let count = try self.store.managedObjectContext.deleteObjects(matching: fetchRequest)
-                self.log.info("Deleted %d DosingDecisionObjects", count)
-            } catch let error {
-                self.log.error("Unable to purge DosingDecisionObjects: %@", String(describing: error))
-            }
+        do {
+            let count = try self.store.managedObjectContext.purgeObjects(of: DosingDecisionObject.self, matching: NSPredicate(format: "date < %@", date as NSDate))
+            self.log.info("Purged %d DosingDecisionObjects", count)
+            self.delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
+            completion?(nil)
+        } catch let error {
+            self.log.error("Unable to purge DosingDecisionObjects: %{public}@", String(describing: error))
+            completion?(error)
         }
     }
 }
@@ -259,13 +266,35 @@ public struct StoredDosingDecision {
     }
 }
 
-extension NSManagedObjectContext {
-    fileprivate func deleteObjects<T>(matching fetchRequest: NSFetchRequest<T>) throws -> Int where T: NSManagedObject {
-        let objects = try fetch(fetchRequest)
-        objects.forEach { delete($0) }
-        if hasChanges {
-            try save()
+// MARK: - Core Data (Bulk) - TEST ONLY
+
+extension DosingDecisionStore {
+    public func addStoredDosingDecisionDatas(dosingDecisionDatas: [StoredDosingDecisionData], completion: @escaping (Error?) -> Void) {
+        guard !dosingDecisionDatas.isEmpty else {
+            completion(nil)
+            return
         }
-        return objects.count
+
+        dataAccessQueue.async {
+            var error: Error?
+
+            self.store.managedObjectContext.performAndWait {
+                for dosingDecisionData in dosingDecisionDatas {
+                    let object = DosingDecisionObject(context: self.store.managedObjectContext)
+                    object.date = dosingDecisionData.date
+                    object.data = dosingDecisionData.data
+                }
+                self.store.save { error = $0 }
+            }
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            self.log.info("Added %d DosingDecisionObjects", dosingDecisionDatas.count)
+            self.delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
+            completion(nil)
+        }
     }
 }

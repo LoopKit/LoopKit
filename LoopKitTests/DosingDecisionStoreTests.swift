@@ -17,7 +17,7 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
         super.setUp()
 
         dosingDecisionStoreHasUpdatedDosingDecisionDataHandler = nil
-        dosingDecisionStore = DosingDecisionStore(store: cacheStore, expireAfter: .hours(24))
+        dosingDecisionStore = DosingDecisionStore(store: cacheStore, expireAfter: .hours(1))
         dosingDecisionStore.delegate = self
     }
 
@@ -150,7 +150,7 @@ class DosingDecisionStoreQueryTests: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
 
-        dosingDecisionStore = DosingDecisionStore(store: cacheStore, expireAfter: .hours(24))
+        dosingDecisionStore = DosingDecisionStore(store: cacheStore, expireAfter: .hours(1))
         completion = expectation(description: "Completion")
         queryAnchor = DosingDecisionStore.QueryAnchor()
         limit = Int.max

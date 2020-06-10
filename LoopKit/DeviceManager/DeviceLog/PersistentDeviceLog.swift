@@ -15,7 +15,7 @@ import os.log
 class PersistentContainer: NSPersistentContainer { }
 
 public class PersistentDeviceLog {
-    
+
     private let storageFile: URL
     
     private let managedObjectContext: NSManagedObjectContext
@@ -24,7 +24,7 @@ public class PersistentDeviceLog {
     
     private let maxEntryAge: TimeInterval
     
-    private var earliestLogEntryDate: Date {
+    public var earliestLogEntryDate: Date {
         return Date(timeIntervalSinceNow: -maxEntryAge)
     }
     
@@ -104,21 +104,46 @@ public class PersistentDeviceLog {
             log.error("Could not purge expired log entry %{public}@", String(describing: error))
         }
     }
+
+    public func purgeLogEntries(before date: Date, completion: ((Error?) -> Void)? = nil) {
+        do {
+            let count = try managedObjectContext.purgeObjects(of: DeviceLogEntry.self, matching: NSPredicate(format: "timestamp < %@", date as NSDate))
+            log.info("Purged %d DeviceLogEntries", count)
+            completion?(nil)
+        } catch let error {
+            log.error("Unable to purge DeviceLogEntries: %{public}@", String(describing: error))
+            completion?(error)
+        }
+    }
 }
 
-extension NSManagedObjectContext {
+// MARK: - Core Data (Bulk) - TEST ONLY
 
-    fileprivate func deleteObjects<T>(matching fetchRequest: NSFetchRequest<T>) throws -> Int where T: NSManagedObject {
-        let objects = try fetch(fetchRequest)
-
-        for object in objects {
-            delete(object)
+extension PersistentDeviceLog {
+    public func addStoredDeviceLogEntries(entries: [StoredDeviceLogEntry]) -> Error? {
+        guard !entries.isEmpty else {
+            return nil
         }
 
-        if hasChanges {
-            try save()
+        var error: Error?
+
+        self.managedObjectContext.performAndWait {
+            for entry in entries {
+                let object = DeviceLogEntry(context: self.managedObjectContext)
+                object.update(from: entry)
+            }
+            do {
+                try self.managedObjectContext.save()
+            } catch let saveError {
+                error = saveError
+            }
         }
 
-        return objects.count
+        guard error == nil else {
+            return error
+        }
+
+        self.log.info("Added %d StoredDeviceLogEntries", entries.count)
+        return nil
     }
 }

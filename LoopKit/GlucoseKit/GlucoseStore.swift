@@ -32,9 +32,10 @@ public enum GlucoseStoreResult<T> {
  
  There are three tiers of storage:
  
- * Short-term persistant cache, stored in Core Data, used to ensure access if the app is suspended and re-launched while the Health database is protected
+ * Persistant cache, stored in Core Data, used to ensure access if the app is suspended and re-launched while the Health database
+ * is protected and to provide data for upload to remote data services. Backfilled from HealthKit data up to observation interval.
 ```
- 0    [max(momentumDataInterval, cacheLength)]
+ 0    [max(cacheLength, momentumDataInterval, observationInterval)]
  |––––|
 ```
  * HealthKit data, managed by the current application
@@ -77,6 +78,9 @@ public final class GlucoseStore: HealthKitSampleStore {
     /// The interval of glucose data to use for momentum calculation
     public let momentumDataInterval: TimeInterval
 
+    /// The interval to observe HealthKit data to populate the cache
+    public let observationInterval: TimeInterval
+
     private let dataAccessQueue = DispatchQueue(label: "com.loudnate.GlucoseKit.dataAccessQueue", qos: .utility)
 
     private let log = OSLog(category: "GlucoseStore")
@@ -92,20 +96,24 @@ public final class GlucoseStore: HealthKitSampleStore {
     }
     private let lockedLatestGlucose = Locked<GlucoseValue?>(nil)
 
-    public let cacheStore: PersistenceController
+    private let cacheStore: PersistenceController
 
     public init(
         healthStore: HKHealthStore,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 60 /* minutes */ * 60 /* seconds */,
-        momentumDataInterval: TimeInterval = 15 /* minutes */ * 60 /* seconds */
+        momentumDataInterval: TimeInterval = 15 /* minutes */ * 60 /* seconds */,
+        observationInterval: TimeInterval? = nil
     ) {
+        let cacheLength = max(cacheLength, momentumDataInterval, observationInterval ?? 0)
+
         self.cacheStore = cacheStore
         self.momentumDataInterval = momentumDataInterval
-        self.cacheLength = max(cacheLength, momentumDataInterval)
+        self.cacheLength = cacheLength
+        self.observationInterval = observationInterval ?? cacheLength
 
-        super.init(healthStore: healthStore, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -cacheLength), observationEnabled: observationEnabled)
+        super.init(healthStore: healthStore, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -self.observationInterval), observationEnabled: observationEnabled)
 
         cacheStore.onReady { (error) in
             self.dataAccessQueue.async {
@@ -279,8 +287,8 @@ extension GlucoseStore {
     ///   - samples: An array of glucose values, in chronological order by startDate
     public func getCachedGlucoseSamples(start: Date, end: Date? = nil, completion: @escaping (_ samples: [StoredGlucoseSample]) -> Void) {
         #if os(iOS)
-        // If we're within our cache duration, skip the HealthKit query
-        guard start <= earliestCacheDate else {
+        // If we're within our observation duration, skip the HealthKit query
+        guard start <= earliestObservationDate else {
             self.dataAccessQueue.async {
                 completion(self.getCachedGlucoseObjects(start: start, end: end))
             }
@@ -442,21 +450,43 @@ extension GlucoseStore {
         return deleted
     }
 
-    private var earliestCacheDate: Date {
+    public var earliestCacheDate: Date {
         return Date(timeIntervalSinceNow: -cacheLength)
     }
 
-    private func purgeCachedGlucoseObjects(matching predicate: NSPredicate?) {
+    private var earliestObservationDate: Date {
+        return Date(timeIntervalSinceNow: -observationInterval)
+    }
+
+    public func purgeCachedGlucoseObjects(before date: Date, completion: @escaping (Error?) -> Void) {
+        dataAccessQueue.async {
+            self.purgeCachedGlucoseObjects(matching: NSPredicate(format: "startDate < %@", date as NSDate)) { error in
+                guard error == nil else {
+                    completion(error)
+                    return
+                }
+                self.delegate?.glucoseStoreHasUpdatedGlucoseData(self)
+                completion(nil)
+            }
+        }
+    }
+
+    private func purgeCachedGlucoseObjects(matching predicate: NSPredicate?, completion: ((Error?) -> Void)? = nil) {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
+
+        var purgeError: Error?
 
         cacheStore.managedObjectContext.performAndWait {
             do {
                 let count = try cacheStore.managedObjectContext.purgeObjects(of: CachedGlucoseObject.self, matching: predicate)
-                self.log.default("Deleted %d CachedGlucoseObjects", count)
+                self.log.default("Purged %d CachedGlucoseObjects", count)
             } catch let error {
-                self.log.error("Unable to purge CachedGlucoseObjects: %@", String(describing: error))
+                self.log.error("Unable to purge CachedGlucoseObjects: %{public}@", String(describing: error))
+                purgeError = error
             }
         }
+
+        completion?(purgeError)
     }
 }
 
@@ -621,6 +651,7 @@ extension GlucoseStore {
                 "* managedDataInterval: \(self.managedDataInterval ?? 0)",
                 "* cacheLength: \(self.cacheLength)",
                 "* momentumDataInterval: \(self.momentumDataInterval)",
+                "* observationInterval: \(self.observationInterval)",
                 super.debugDescription,
                 "",
                 "### cachedGlucoseSamples",
@@ -633,6 +664,61 @@ extension GlucoseStore {
             report.append("")
 
             completionHandler(report.joined(separator: "\n"))
+        }
+    }
+}
+
+extension NSManagedObjectContext {
+    fileprivate func cachedGlucoseObjectsWithUUID(_ uuid: UUID, fetchLimit: Int? = nil) -> [CachedGlucoseObject] {
+        let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+        if let limit = fetchLimit {
+            request.fetchLimit = limit
+        }
+        request.predicate = NSPredicate(format: "uuid == %@", uuid as NSUUID)
+        request.sortDescriptors = [NSSortDescriptor(key: "uuid", ascending: true)]
+
+        return (try? fetch(request)) ?? []
+    }
+
+    fileprivate func cachedGlucoseObjectsWithSyncIdentifier(_ syncIdentifier: String, fetchLimit: Int? = nil) -> [CachedGlucoseObject] {
+        let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+        if let limit = fetchLimit {
+            request.fetchLimit = limit
+        }
+        request.predicate = NSPredicate(format: "syncIdentifier == %@", syncIdentifier)
+
+        return (try? fetch(request)) ?? []
+    }
+}
+
+// MARK: - Core Data (Bulk) - TEST ONLY
+
+extension GlucoseStore {
+    public func addGlucoseSamples(samples: [StoredGlucoseSample], completion: @escaping (Error?) -> Void) {
+        guard !samples.isEmpty else {
+            completion(nil)
+            return
+        }
+
+        dataAccessQueue.async {
+            var error: Error?
+
+            self.cacheStore.managedObjectContext.performAndWait {
+                for sample in samples {
+                    let object = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
+                    object.update(from: sample)
+                }
+                self.cacheStore.save { error = $0 }
+            }
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            self.log.info("Added %d CachedGlucoseObjects", samples.count)
+            self.delegate?.glucoseStoreHasUpdatedGlucoseData(self)
+            completion(nil)
         }
     }
 }

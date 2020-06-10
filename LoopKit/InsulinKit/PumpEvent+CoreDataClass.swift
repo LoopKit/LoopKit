@@ -186,4 +186,15 @@ extension PumpEvent {
     }
 }
 
-
+extension PumpEvent {
+    func update(from event: PersistedPumpEvent) {
+        createdAt = event.persistedDate
+        date = event.date
+        type = event.type
+        uploaded = event.isUploaded
+        mutable = event.isMutable
+        raw = event.raw
+        title = event.title
+        dose = event.dose
+    }
+}

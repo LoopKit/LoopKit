@@ -17,7 +17,7 @@ extension NSManagedObjectContext {
     ///   - type: The object type to delete
     ///   - predicate: The predicate to match
     /// - Returns: The number of deleted objects
-    /// - Throws: NSBatchDeleteRequest exeuction errors
+    /// - Throws: NSBatchDeleteRequest execution errors
     internal func purgeObjects<T: NSManagedObject>(of type: T.Type, matching predicate: NSPredicate? = nil) throws -> Int {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = T.fetchRequest()
         fetchRequest.predicate = predicate
@@ -39,6 +39,21 @@ extension NSManagedObjectContext {
         }
 
         return objectIDs.count
+    }
+
+    /// Deletes all saved objects returned from the specified fetch request
+    ///
+    /// - Parameters:
+    ///   - fetchRequest: The fetch request performed to determine objects to subsequently delete
+    /// - Returns: The number of deleted objects
+    /// - Throws: Any core data error during fetch or delete
+    internal func deleteObjects<T>(matching fetchRequest: NSFetchRequest<T>) throws -> Int where T: NSManagedObject {
+        let objects = try fetch(fetchRequest)
+        objects.forEach { delete($0) }
+        if hasChanges {
+            try save()
+        }
+        return objects.count
     }
 }
 

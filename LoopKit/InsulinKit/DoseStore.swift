@@ -209,6 +209,7 @@ public final class DoseStore {
         healthStore: HKHealthStore,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
+        cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
         insulinModel: InsulinModel?,
         basalProfile: BasalRateSchedule?,
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
@@ -228,6 +229,7 @@ public final class DoseStore {
         self.lockedBasalProfile = Locked(basalProfile)
         self.overrideHistory = overrideHistory
         self.persistenceController = cacheStore
+        self.cacheLength = cacheLength
         self.syncVersion = syncVersion
         self.lockedLastPumpEventsReconciliation = Locked(lastPumpEventsReconciliation)
 
@@ -271,13 +273,19 @@ public final class DoseStore {
 
     private let persistenceController: PersistenceController
 
+    private let cacheLength: TimeInterval
+
     private var purgeableValuesPredicate: NSPredicate {
         return NSPredicate(format: "date < %@", cacheStartDate as NSDate)
     }
 
     /// The maximum length of time to keep data around.
     /// Dose data is unprotected on disk, and should only remain persisted long enough to support dosing algorithms and until its persisted by the delegate.
-    private var cacheStartDate: Date {
+    public var cacheStartDate: Date {
+        return currentDate(timeIntervalSinceNow: -cacheLength)
+    }
+
+    private var recentStartDate: Date {
         return Calendar.current.date(byAdding: .day, value: -1, to: currentDate())!
     }
 
@@ -358,7 +366,8 @@ public final class DoseStore {
             if _lastRecordedPrimeEventDate == nil {
                 if  let pumpEvents = try? self.getPumpEventObjects(
                         matching: NSPredicate(format: "type = %@", PumpEventType.prime.rawValue),
-                        chronological: false
+                        chronological: false,
+                        limit: 1
                     ),
                     let firstEvent = pumpEvents.first
                 {
@@ -479,7 +488,7 @@ extension DoseStore {
                 let newDoseEntries = newValues.doseEntries
 
                 if self.recentReservoirNormalizedDoseEntriesCache != nil {
-                    self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filterDateRange(self.cacheStartDate, nil)
+                    self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filterDateRange(self.recentStartDate, nil)
 
                     self.recentReservoirNormalizedDoseEntriesCache! += newDoseEntries.annotated(with: basalProfile)
                 }
@@ -825,7 +834,7 @@ extension DoseStore {
             switch result {
             case .success(let date):
                 // Limit the query behavior to 24 hours
-                let date = max(date, self.cacheStartDate)
+                let date = max(date, self.recentStartDate)
                 self.savePumpEventsToHealthStore(after: date, completion: completion)
             case .failure(let error):
                 // Failures are expected when the health database is protected
@@ -1037,7 +1046,7 @@ extension DoseStore {
         let queryStart = basalStart.addingTimeInterval(-pumpEventReconciliationWindow)
 
         let afterBasalStart = NSPredicate(format: "date >= %@ && doseType != nil && mutable == false", queryStart as NSDate)
-        let allBoluses = NSPredicate(format: "doseType == %@ && mutable == false", DoseType.bolus.rawValue)
+        let allBoluses = NSPredicate(format: "date >= %@ && doseType == %@ && mutable == false", recentStartDate as NSDate, DoseType.bolus.rawValue)
 
         let doses = try getPumpEventObjects(
             matching: NSCompoundPredicate(orPredicateWithSubpredicates: [afterBasalStart, allBoluses]),
@@ -1051,6 +1060,19 @@ extension DoseStore {
         return normalizedDoses
     }
 
+    public func purgePumpEventObjects(before date: Date, completion: (Error?) -> Void) {
+        do {
+            let count = try purgePumpEventObjects(matching: NSPredicate(format: "date < %@", date as NSDate))
+            self.log.info("Purged %d PumpEvents", count)
+            self.delegate?.doseStoreHasUpdatedDoseData(self)
+            self.delegate?.doseStoreHasUpdatedPumpEventData(self)
+            completion(nil)
+        } catch let error {
+            self.log.error("Unable to purge PumpEvents: %{public}@", String(describing: error))
+            completion(error)
+        }
+    }
+
     /**
      Removes uploaded pump event objects older than the recency predicate
 
@@ -1058,7 +1080,8 @@ extension DoseStore {
 
      - throws: A core data exception if the delete request failed
      */
-    private func purgePumpEventObjects(matching predicate: NSPredicate? = nil) throws {
+    @discardableResult
+    private func purgePumpEventObjects(matching predicate: NSPredicate? = nil) throws -> Int {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: PumpEvent.entity().name!)
         fetchRequest.predicate = predicate
 
@@ -1072,7 +1095,10 @@ extension DoseStore {
             let changes = [NSDeletedObjectsKey: objectIDs]
             NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [persistenceController.managedObjectContext])
             persistenceController.managedObjectContext.refreshAllObjects()
+            return objectIDs.count
         }
+
+        return 0
     }
 }
 
@@ -1471,4 +1497,33 @@ extension DoseStore {
         completion(.success(queryAnchor, queryResult))
     }
 
+}
+
+// MARK: - Core Data (Bulk) - TEST ONLY
+
+extension DoseStore {
+    public func addPumpEvents(events: [PersistedPumpEvent]) -> Error? {
+        guard !events.isEmpty else {
+            return nil
+        }
+
+        var error: Error?
+
+        self.persistenceController.managedObjectContext.performAndWait {
+            for event in events {
+                let object = PumpEvent(context: self.persistenceController.managedObjectContext)
+                object.update(from: event)
+            }
+            self.persistenceController.save { error = $0 }
+        }
+
+        guard error == nil else {
+            return error
+        }
+
+        self.log.info("Added %d PumpEvents", events.count)
+        self.delegate?.doseStoreHasUpdatedDoseData(self)
+        self.delegate?.doseStoreHasUpdatedPumpEventData(self)
+        return nil
+    }
 }

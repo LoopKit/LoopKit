@@ -17,7 +17,7 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
         super.setUp()
         
         settingsStoreHasUpdatedSettingsDataHandler = nil
-        settingsStore = SettingsStore(store: cacheStore, expireAfter: .hours(24))
+        settingsStore = SettingsStore(store: cacheStore, expireAfter: .hours(1))
         settingsStore.delegate = self
     }
     
@@ -150,7 +150,7 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
         
-        settingsStore = SettingsStore(store: cacheStore, expireAfter: .hours(24))
+        settingsStore = SettingsStore(store: cacheStore, expireAfter: .hours(1))
         completion = expectation(description: "Completion")
         queryAnchor = SettingsStore.QueryAnchor()
         limit = Int.max
