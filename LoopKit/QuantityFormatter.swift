@@ -147,7 +147,9 @@ public extension HKUnit {
     }
 
     var maxFractionDigits: Int {
-        if self == HKUnit.gram().unitDivided(by: .internationalUnit()) {
+        if self == .internationalUnitsPerHour {
+            return 3
+        } else if self == HKUnit.gram().unitDivided(by: .internationalUnit()) {
             return 2
         } else {
             return preferredFractionDigits

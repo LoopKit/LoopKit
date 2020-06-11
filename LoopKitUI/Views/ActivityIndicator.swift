@@ -12,14 +12,18 @@ public struct ActivityIndicator: UIViewRepresentable {
 
     @Binding var isAnimating: Bool
     let style: UIActivityIndicatorView.Style
+    let color: UIColor?
     
-    public init(isAnimating: Binding<Bool>, style: UIActivityIndicatorView.Style) {
+    public init(isAnimating: Binding<Bool>, style: UIActivityIndicatorView.Style, color: UIColor? = nil) {
         self._isAnimating = isAnimating
         self.style = style
+        self.color = color
     }
 
     public func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
-        return UIActivityIndicatorView(style: style)
+        let activityIndicator = UIActivityIndicatorView(style: style)
+        activityIndicator.color = color
+        return activityIndicator
     }
 
     public func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {

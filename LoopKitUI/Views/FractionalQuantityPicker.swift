@@ -25,6 +25,7 @@ struct FractionalQuantityPicker: View {
     @Binding var fraction: Double
     var unit: HKUnit
     var guardrail: Guardrail<HKQuantity>
+    var selectableWholeValues: [Double]
     var fractionalValuesByWhole: [Double: [Double]]
     var usageContext: UsageContext
 
@@ -53,9 +54,13 @@ struct FractionalQuantityPicker: View {
         usageContext: UsageContext = .independent
     ) {
         let doubleValue = value.doubleValue(for: unit)
-        let fractionalValuesByWhole = selectableValues.reduce(into: [:], { fractionalValuesByWhole, selectableValue in
-            fractionalValuesByWhole[selectableValue.whole, default: []].append(selectableValue.fraction)
-        })
+        let (selectableWholeValues, fractionalValuesByWhole): ([Double], [Double: [Double]]) = selectableValues.reduce(into: ([], [:])) { pair, selectableValue in
+            let whole = selectableValue.whole
+            if pair.0.last != whole {
+                pair.0.append(whole)
+            }
+            pair.1[whole, default: []].append(selectableValue.fraction)
+        }
 
         self._whole = Binding(
             get: { doubleValue.wrappedValue.whole },
@@ -85,6 +90,7 @@ struct FractionalQuantityPicker: View {
         )
         self.unit = unit
         self.guardrail = guardrail
+        self.selectableWholeValues = selectableWholeValues
         self.fractionalValuesByWhole = fractionalValuesByWhole
         self.usageContext = usageContext
     }
@@ -112,8 +118,8 @@ struct FractionalQuantityPicker: View {
             QuantityPicker(
                 value: $whole.withUnit(unit),
                 unit: unit,
-                stride: HKQuantity(unit: unit, doubleValue: 1),
                 guardrail: guardrail,
+                selectableValues: selectableWholeValues,
                 formatter: Self.wholeFormatter,
                 isUnitLabelVisible: false
             )

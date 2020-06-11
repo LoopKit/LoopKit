@@ -18,16 +18,23 @@ public struct GuardrailWarning: View {
 
     private var title: Text
     private var crossedThresholds: CrossedThresholds
+    private var customCaption: (_ crossedThresholds: [SafetyClassification.Threshold]) -> Text?
 
     public init(title: Text, threshold: SafetyClassification.Threshold) {
         self.title = title
         self.crossedThresholds = .one(threshold)
+        self.customCaption = { _ in nil }
     }
 
-    public init(title: Text, thresholds: [SafetyClassification.Threshold]) {
+    public init(
+        title: Text,
+        thresholds: [SafetyClassification.Threshold],
+        customCaption: @escaping (_ crossedThresholds: [SafetyClassification.Threshold]) -> Text? = { _ in nil }
+    ) {
         precondition(!thresholds.isEmpty)
         self.title = title
         self.crossedThresholds = .oneOrMore(thresholds)
+        self.customCaption = customCaption
     }
 
     public var body: some View {
@@ -35,7 +42,7 @@ public struct GuardrailWarning: View {
             VStack(alignment: .leading) {
                 HStack(alignment: .firstTextBaseline) {
                     Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundColor(accentColor)
+                        .foregroundColor(warningColor)
 
                     title
                         .font(Font(UIFont.preferredFont(forTextStyle: .title3)))
@@ -55,7 +62,7 @@ public struct GuardrailWarning: View {
         }
     }
 
-    private var accentColor: Color {
+    private var warningColor: Color {
         switch crossedThresholds {
         case .one(let threshold):
             return color(for: threshold)
@@ -83,6 +90,10 @@ public struct GuardrailWarning: View {
                 return Text("The value you have chosen is higher than Tidepool generally recommends.", comment: "Warning for entering a high setting value")
             }
         case .oneOrMore(let thresholds):
+            if let caption = customCaption(thresholds) {
+                return caption
+            }
+
             if thresholds.count == 1 {
                 switch thresholds.first! {
                 case .minimum, .belowRecommended:

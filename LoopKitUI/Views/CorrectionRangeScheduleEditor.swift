@@ -24,9 +24,6 @@ public struct CorrectionRangeScheduleEditor: View {
     var save: (GlucoseRangeSchedule) -> Void
     let guardrail = Guardrail.correctionRange
 
-    @Environment(\.dismiss) var dismiss
-    @State var showingConfirmationAlert = false
-
     public init(
         schedule: GlucoseRangeSchedule?,
         unit: HKUnit,
@@ -47,6 +44,7 @@ public struct CorrectionRangeScheduleEditor: View {
             scheduleItems: $scheduleItems,
             initialScheduleItems: initialSchedule?.items ?? [],
             defaultFirstScheduleItemValue: defaultFirstScheduleItemValue,
+            saveConfirmation: saveConfirmation,
             valueContent: { range, isEditing in
                 GuardrailConstrainedQuantityRangeView(range: range.quantityRange(for: self.unit), unit: self.unit, guardrail: self.guardrail, isEditing: isEditing)
             },
@@ -69,15 +67,12 @@ public struct CorrectionRangeScheduleEditor: View {
             actionAreaContent: {
                 guardrailWarningIfNecessary
             },
-            onSave: { scheduleItems in
-                if self.crossedThresholds.isEmpty {
-                    self.saveAndDismiss()
-                } else {
-                    self.showingConfirmationAlert = true
-                }
+            savingMechanism: .synchronous { items in
+                let quantitySchedule = DailyQuantitySchedule(unit: self.unit, dailyItems: items)!
+                let rangeSchedule = GlucoseRangeSchedule(rangeSchedule: quantitySchedule, override: self.initialSchedule?.override)
+                self.save(rangeSchedule)
             }
         )
-        .alert(isPresented: $showingConfirmationAlert, content: confirmationAlert)
     }
 
     var defaultFirstScheduleItemValue: DoubleRange {
@@ -93,6 +88,10 @@ public struct CorrectionRangeScheduleEditor: View {
 
     var description: Text {
         Text("The app adjusts insulin delivery in an effort to bring your glucose into your correction range.", comment: "Description of correction range setting")
+    }
+
+    var saveConfirmation: SaveConfirmation {
+        crossedThresholds.isEmpty ? .notRequired : .required(confirmationAlertContent)
     }
 
     var guardrailWarningIfNecessary: some View {
@@ -119,22 +118,10 @@ public struct CorrectionRangeScheduleEditor: View {
         }
     }
 
-    func saveAndDismiss() {
-        let quantitySchedule = DailyQuantitySchedule(unit: unit, dailyItems: scheduleItems)!
-        let rangeSchedule = GlucoseRangeSchedule(rangeSchedule: quantitySchedule, override: initialSchedule?.override)
-        save(rangeSchedule)
-        dismiss()
-    }
-
-    private func confirmationAlert() -> SwiftUI.Alert {
-        SwiftUI.Alert(
+    private var confirmationAlertContent: AlertContent {
+        AlertContent(
             title: Text("Save Correction Range(s)?", comment: "Alert title for confirming correction ranges outside the recommended range"),
-            message: Text("One or more of the values you have entered are outside of what Tidepool generally recommends.", comment: "Alert message for confirming correction ranges outside the recommended range"),
-            primaryButton: .cancel(Text("Go Back")),
-            secondaryButton: .default(
-                Text("Continue"),
-                action: saveAndDismiss
-            )
+            message: Text("One or more of the values you have entered are outside of what Tidepool generally recommends.", comment: "Alert message for confirming correction ranges outside the recommended range")
         )
     }
 }

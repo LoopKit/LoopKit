@@ -11,17 +11,44 @@ import HealthKit
 import LoopKit
 
 
+enum SavingMechanism<Value> {
+    case synchronous((_ value: Value) -> Void)
+    case asynchronous((_ value: Value, _ completion: @escaping (Error?) -> Void) -> Void)
+
+    func pullback<NewValue>(_ transform: @escaping (NewValue) -> Value) -> SavingMechanism<NewValue> {
+        switch self {
+        case .synchronous(let save):
+            return .synchronous { newValue in save(transform(newValue)) }
+        case .asynchronous(let save):
+            return .asynchronous { newValue, completion in
+                save(transform(newValue), completion)
+            }
+        }
+    }
+}
+
+enum SaveConfirmation {
+    case required(AlertContent)
+    case notRequired
+}
+
 struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, ActionAreaContent: View>: View {
+    fileprivate enum PresentedAlert {
+        case saveConfirmation(AlertContent)
+        case saveError(Error)
+    }
+
     var title: Text
     var description: Text
     var initialScheduleItems: [RepeatingScheduleValue<Value>]
     @Binding var scheduleItems: [RepeatingScheduleValue<Value>]
     var defaultFirstScheduleItemValue: Value
     var scheduleItemLimit: Int
+    var saveConfirmation: SaveConfirmation
     var valueContent: (_ value: Value, _ isEditing: Bool) -> ValueContent
     var valuePicker: (_ item: Binding<RepeatingScheduleValue<Value>>, _ availableWidth: CGFloat) -> ValuePicker
     var actionAreaContent: ActionAreaContent
-    var save: ([RepeatingScheduleValue<Value>]) -> Void
+    var savingMechanism: SavingMechanism<[RepeatingScheduleValue<Value>]>
 
     @State var editingIndex: Int?
 
@@ -41,6 +68,10 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         }
     }
 
+    @State var isSyncing = false
+
+    @State private var presentedAlert: PresentedAlert?
+
     @Environment(\.dismiss) var dismiss
 
     init(
@@ -50,10 +81,11 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         initialScheduleItems: [RepeatingScheduleValue<Value>],
         defaultFirstScheduleItemValue: Value,
         scheduleItemLimit: Int = 48,
+        saveConfirmation: SaveConfirmation,
         @ViewBuilder valueContent: @escaping (_ value: Value, _ isEditing: Bool) -> ValueContent,
         @ViewBuilder valuePicker: @escaping (_ item: Binding<RepeatingScheduleValue<Value>>, _ availableWidth: CGFloat) -> ValuePicker,
         @ViewBuilder actionAreaContent: () -> ActionAreaContent,
-        onSave save: @escaping ([RepeatingScheduleValue<Value>]) -> Void
+        savingMechanism: SavingMechanism<[RepeatingScheduleValue<Value>]>
     ) {
         self.title = title
         self.description = description
@@ -61,10 +93,11 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         self._scheduleItems = scheduleItems
         self.defaultFirstScheduleItemValue = defaultFirstScheduleItemValue
         self.scheduleItemLimit = scheduleItemLimit
+        self.saveConfirmation = saveConfirmation
         self.valueContent = valueContent
         self.valuePicker = valuePicker
         self.actionAreaContent = actionAreaContent()
-        self.save = save
+        self.savingMechanism = savingMechanism
     }
 
     var body: some View {
@@ -72,7 +105,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             NavigationView {
                 ConfigurationPage(
                     title: title,
-                    isSaveButtonEnabled: isSaveButtonEnabled,
+                    saveButtonState: saveButtonState,
                     cards: {
                         // TODO: Remove conditional when Swift 5.3 ships
                         // https://bugs.swift.org/browse/SR-11628
@@ -89,16 +122,22 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                         actionAreaContent
                     },
                     onSave: {
-                        self.save(self.scheduleItems)
+                        switch self.saveConfirmation {
+                        case .required(let alertContent):
+                            self.presentedAlert = .saveConfirmation(alertContent)
+                        case .notRequired:
+                            self.beginSaving()
+                        }
                     }
                 )
+                .alert(item: $presentedAlert, content: alert(for:))
                 .navigationBarTitle("", displayMode: .inline)
                 .navigationBarItems(
                     leading: cancelButton,
                     trailing: trailingNavigationItems
                 )
             }
-            .disabled(isAddingNewItem)
+            .disabled(isSyncing || isAddingNewItem)
             .zIndex(0)
 
             if isAddingNewItem {
@@ -127,8 +166,16 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         }
     }
 
-    private var isSaveButtonEnabled: Bool {
-        !scheduleItems.isEmpty && scheduleItems != initialScheduleItems
+    private var saveButtonState: ConfigurationPageActionButtonState {
+        if isSyncing {
+            return .loading
+        }
+
+        let isEnabled = !scheduleItems.isEmpty
+            && scheduleItems != initialScheduleItems
+            && tableDeletionState == .disabled
+
+        return isEnabled ? .enabled : .disabled
     }
 
     private func itemView(for item: RepeatingScheduleValue<Value>, at index: Int) -> some View {
@@ -278,6 +325,52 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         )
         .disabled(tableDeletionState != .disabled || scheduleItems.count >= scheduleItemLimit)
     }
+
+    private func beginSaving() {
+        switch savingMechanism {
+        case .synchronous(let save):
+            save(scheduleItems)
+            dismiss()
+        case .asynchronous(let save):
+            withAnimation {
+                self.editingIndex = nil
+                self.isSyncing = true
+            }
+
+            save(scheduleItems) { error in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        withAnimation {
+                            self.isSyncing = false
+                        }
+                        self.presentedAlert = .saveError(error)
+                    } else {
+                        self.dismiss()
+                    }
+                }
+            }
+        }
+    }
+
+    private func alert(for presentedAlert: PresentedAlert) -> SwiftUI.Alert {
+        switch presentedAlert {
+        case .saveConfirmation(let content):
+            return Alert(
+                title: content.title,
+                message: content.message,
+                primaryButton: .cancel(Text("Go Back", comment: "Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range")),
+                secondaryButton: .default(
+                    Text("Continue", comment: "Button text to confirm saving from alert popup when some schedule values are outside the recommended range"),
+                    action: beginSaving
+                )
+            )
+        case .saveError(let error):
+            return Alert(
+                title: Text("Unable to Save", comment: "Alert title when error occurs while saving a schedule"),
+                message: Text(error.localizedDescription)
+            )
+        }
+    }
 }
 
 struct DarkenedOverlay: View {
@@ -285,5 +378,16 @@ struct DarkenedOverlay: View {
         Rectangle()
             .fill(Color.black.opacity(0.3))
             .edgesIgnoringSafeArea(.all)
+    }
+}
+
+extension ScheduleEditor.PresentedAlert: Identifiable {
+    var id: Int {
+        switch self {
+        case .saveConfirmation:
+            return 0
+        case .saveError:
+            return 1
+        }
     }
 }

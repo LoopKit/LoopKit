@@ -10,6 +10,7 @@ import SwiftUI
 import HealthKit
 import LoopKit
 
+
 struct QuantityScheduleEditor<ActionAreaContent: View>: View {
     enum QuantitySelectionMode {
         /// A single picker for selecting quantity values.
@@ -27,68 +28,12 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
     var quantitySelectionMode: QuantitySelectionMode
     var guardrail: Guardrail<HKQuantity>
     var defaultFirstScheduleItemValue: HKQuantity
+    var scheduleItemLimit: Int
     var confirmationAlertContent: AlertContent
     var guardrailWarning: (_ crossedThresholds: [SafetyClassification.Threshold]) -> ActionAreaContent
-    var save: (DailyQuantitySchedule<Double>) -> Void
-
+    var savingMechanism: SavingMechanism<DailyQuantitySchedule<Double>>
+    
     @Environment(\.dismiss) var dismiss
-    @State var showingConfirmationAlert = false
-
-    init(
-        title: Text,
-        description: Text,
-        schedule: DailyQuantitySchedule<Double>?,
-        unit: HKUnit,
-        selectableValues: [Double],
-        guardrail: Guardrail<HKQuantity>,
-        quantitySelectionMode: QuantitySelectionMode = .whole,
-        defaultFirstScheduleItemValue: HKQuantity,
-        confirmationAlertContent: AlertContent,
-        @ViewBuilder guardrailWarning: @escaping (_ thresholds: [SafetyClassification.Threshold]) -> ActionAreaContent,
-        onSave save: @escaping (DailyQuantitySchedule<Double>) -> Void
-    ) {
-        self.title = title
-        self.description = description
-        self.initialScheduleItems = schedule?.items ?? []
-        self._scheduleItems = State(initialValue: schedule?.items ?? [])
-        self.unit = unit
-        self.quantitySelectionMode = quantitySelectionMode
-        self.selectableValues = selectableValues
-        self.guardrail = guardrail
-        self.defaultFirstScheduleItemValue = defaultFirstScheduleItemValue
-        self.confirmationAlertContent = confirmationAlertContent
-        self.guardrailWarning = guardrailWarning
-        self.save = save
-    }
-
-    init(
-        title: Text,
-        description: Text,
-        schedule: DailyQuantitySchedule<Double>?,
-        unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>,
-        selectableValueStride: HKQuantity,
-        quantitySelectionMode: QuantitySelectionMode = .whole,
-        defaultFirstScheduleItemValue: HKQuantity,
-        confirmationAlertContent: AlertContent,
-        @ViewBuilder guardrailWarning: @escaping (_ thresholds: [SafetyClassification.Threshold]) -> ActionAreaContent,
-        onSave save: @escaping (DailyQuantitySchedule<Double>) -> Void
-    ) {
-        let selectableValues = guardrail.allValues(stridingBy: selectableValueStride, unit: unit)
-        self.init(
-            title: title,
-            description: description,
-            schedule: schedule,
-            unit: unit,
-            selectableValues: selectableValues,
-            guardrail: guardrail,
-            quantitySelectionMode: quantitySelectionMode,
-            defaultFirstScheduleItemValue: defaultFirstScheduleItemValue,
-            confirmationAlertContent: confirmationAlertContent,
-            guardrailWarning: guardrailWarning,
-            onSave: save
-        )
-    }
 
     var body: some View {
         ScheduleEditor(
@@ -97,6 +42,8 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
             scheduleItems: $scheduleItems,
             initialScheduleItems: initialScheduleItems,
             defaultFirstScheduleItemValue: defaultFirstScheduleItemValue.doubleValue(for: unit),
+            scheduleItemLimit: scheduleItemLimit,
+            saveConfirmation: saveConfirmation,
             valueContent: { value, isEditing in
                 GuardrailConstrainedQuantityView(
                     value: HKQuantity(unit: self.unit, doubleValue: value),
@@ -130,15 +77,14 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
             actionAreaContent: {
                 guardrailWarningIfNecessary
             },
-            onSave: { _ in
-                if self.crossedThresholds.isEmpty {
-                    self.saveAndDismiss()
-                } else {
-                    self.showingConfirmationAlert = true
-                }
+            savingMechanism: savingMechanism.pullback { items in
+                DailyQuantitySchedule(unit: self.unit, dailyItems: items)!
             }
         )
-        .alert(isPresented: $showingConfirmationAlert, content: confirmationAlert)
+    }
+
+    private var saveConfirmation: SaveConfirmation {
+        crossedThresholds.isEmpty ? .notRequired : .required(confirmationAlertContent)
     }
 
     private var unitLabelWidth: CGFloat {
@@ -172,21 +118,68 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
                 }
         }
     }
+}
 
-    private func saveAndDismiss() {
-        save(DailyQuantitySchedule(unit: unit, dailyItems: scheduleItems)!)
-        dismiss()
+// MARK: - Initializers
+
+extension QuantityScheduleEditor {
+    init(
+        title: Text,
+        description: Text,
+        schedule: DailyQuantitySchedule<Double>?,
+        unit: HKUnit,
+        selectableValues: [Double],
+        guardrail: Guardrail<HKQuantity>,
+        quantitySelectionMode: QuantitySelectionMode = .whole,
+        defaultFirstScheduleItemValue: HKQuantity,
+        scheduleItemLimit: Int = 48,
+        confirmationAlertContent: AlertContent,
+        @ViewBuilder guardrailWarning: @escaping (_ thresholds: [SafetyClassification.Threshold]) -> ActionAreaContent,
+        onSave savingMechanism: SavingMechanism<DailyQuantitySchedule<Double>>
+    ) {
+        self.title = title
+        self.description = description
+        self.initialScheduleItems = schedule?.items ?? []
+        self._scheduleItems = State(initialValue: schedule?.items ?? [])
+        self.unit = unit
+        self.quantitySelectionMode = quantitySelectionMode
+        self.selectableValues = selectableValues
+        self.guardrail = guardrail
+        self.defaultFirstScheduleItemValue = defaultFirstScheduleItemValue
+        self.scheduleItemLimit = scheduleItemLimit
+        self.confirmationAlertContent = confirmationAlertContent
+        self.guardrailWarning = guardrailWarning
+        self.savingMechanism = savingMechanism
     }
 
-    private func confirmationAlert() -> SwiftUI.Alert {
-        SwiftUI.Alert(
-            title: confirmationAlertContent.title,
-            message: confirmationAlertContent.message,
-            primaryButton: .cancel(Text("Go Back")),
-            secondaryButton: .default(
-                Text("Continue"),
-                action: saveAndDismiss
-            )
+    init(
+        title: Text,
+        description: Text,
+        schedule: DailyQuantitySchedule<Double>?,
+        unit: HKUnit,
+        guardrail: Guardrail<HKQuantity>,
+        selectableValueStride: HKQuantity,
+        quantitySelectionMode: QuantitySelectionMode = .whole,
+        defaultFirstScheduleItemValue: HKQuantity,
+        scheduleItemLimit: Int = 48,
+        confirmationAlertContent: AlertContent,
+        @ViewBuilder guardrailWarning: @escaping (_ thresholds: [SafetyClassification.Threshold]) -> ActionAreaContent,
+        onSave save: @escaping (DailyQuantitySchedule<Double>) -> Void
+    ) {
+        let selectableValues = guardrail.allValues(stridingBy: selectableValueStride, unit: unit)
+        self.init(
+            title: title,
+            description: description,
+            schedule: schedule,
+            unit: unit,
+            selectableValues: selectableValues,
+            guardrail: guardrail,
+            quantitySelectionMode: quantitySelectionMode,
+            defaultFirstScheduleItemValue: defaultFirstScheduleItemValue,
+            scheduleItemLimit: scheduleItemLimit,
+            confirmationAlertContent: confirmationAlertContent,
+            guardrailWarning: guardrailWarning,
+            onSave: .synchronous(save)
         )
     }
 }
