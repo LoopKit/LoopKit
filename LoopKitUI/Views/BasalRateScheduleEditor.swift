@@ -67,7 +67,12 @@ public struct BasalRateScheduleEditor: View {
             defaultFirstScheduleItemValue: guardrail.absoluteBounds.lowerBound,
             scheduleItemLimit: maximumScheduleEntryCount,
             confirmationAlertContent: confirmationAlertContent,
-            guardrailWarning: BasalRateGuardrailWarning.init(crossedThresholds:),
+            guardrailWarning: {
+                BasalRateGuardrailWarning(
+                    crossedThresholds: $0,
+                    isZeroUnitRateSelectable: self.supportedBasalRates.first! == 0
+                )
+            },
             onSave: .asynchronous { quantitySchedule, completion in
                 self.syncSchedule(quantitySchedule.items) { result in
                     switch result {
@@ -99,6 +104,7 @@ public struct BasalRateScheduleEditor: View {
 
 private struct BasalRateGuardrailWarning: View {
     var crossedThresholds: [SafetyClassification.Threshold]
+    var isZeroUnitRateSelectable: Bool
 
     var body: some View {
         assert(!crossedThresholds.isEmpty)
@@ -106,8 +112,8 @@ private struct BasalRateGuardrailWarning: View {
             title: crossedThresholds.count == 1 ? singularWarningTitle(for: crossedThresholds.first!) : multipleWarningTitle,
             thresholds: crossedThresholds,
             customCaption: { crossedThresholds in
-                crossedThresholds.allSatisfy({ $0 == .minimum })
-                    ? Text("A setting of 0 U/hr means you will not receive basal insulin or automation.", comment: "Warning text for basal rate of 0 U/hr")
+                self.isZeroUnitRateSelectable && crossedThresholds.allSatisfy({ $0 == .minimum })
+                    ? Text("A value of 0 U/hr means you will be scheduled to receive no basal insulin.", comment: "Warning text for basal rate of 0 U/hr")
                     : nil
             }
         )
@@ -115,9 +121,9 @@ private struct BasalRateGuardrailWarning: View {
 
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
-        case .minimum:
+        case .minimum where isZeroUnitRateSelectable:
             return Text("No Basal Insulin", comment: "Title text for the zero basal rate warning")
-        case .belowRecommended:
+        case .minimum, .belowRecommended:
             return Text("Low Basal Rate", comment: "Title text for the low basal rate warning")
         case .aboveRecommended, .maximum:
             return Text("High Basal Rate", comment: "Title text for the high basal rate warning")
@@ -125,7 +131,7 @@ private struct BasalRateGuardrailWarning: View {
     }
 
     private var multipleWarningTitle: Text {
-        crossedThresholds.allSatisfy({ $0 == .minimum })
+        isZeroUnitRateSelectable && crossedThresholds.allSatisfy({ $0 == .minimum })
             ? Text("No Basal Insulin", comment: "Title text for the zero basal rate warning")
             : Text("Basal Rates", comment: "Title text for multi-value basal rate warning")
     }

@@ -118,11 +118,13 @@ struct FractionalQuantityPicker: View {
             QuantityPicker(
                 value: $whole.withUnit(unit),
                 unit: unit,
-                guardrail: guardrail,
+                guardrail: wholeGuardrail,
                 selectableValues: selectableWholeValues,
                 formatter: Self.wholeFormatter,
                 isUnitLabelVisible: false
             )
+            // Ensure whole picker color updates when fraction updates
+            .id(whole + fraction)
             .frame(width: availableWidth / 3.5)
             .overlay(
                 Text(separator)
@@ -137,6 +139,7 @@ struct FractionalQuantityPicker: View {
             QuantityPicker(
                 value: $fraction.withUnit(unit),
                 unit: unit,
+                guardrail: fractionalGuardrail,
                 selectableValues: fractionalValuesByWhole[whole]!,
                 formatter: fractionalFormatter
             )
@@ -145,6 +148,84 @@ struct FractionalQuantityPicker: View {
             .frame(width: availableWidth / 3.5)
             .padding(.trailing, spacing + unitLabelWidth)
             .clipped()
+        }
+    }
+
+    private var wholeGuardrail: Guardrail<HKQuantity> {
+        // Whether or not the whole value should be colored as 'out of range' depends only on the fraction value.
+        let lowerRecommendedBound = guardrail.recommendedBounds.lowerBound.doubleValue(for: unit)
+        if fraction < lowerRecommendedBound.fraction {
+            return guardrail
+        } else {
+            // Shift the lower bounds down one 'whole' value.
+            // Note: this shift doesn't affect which values are selectable, only the coloration of the selectable values.
+            // For example, if the real guardrail's lower bound is 3.00, the whole '3' should be colored only when '00' is selected
+            // in the fractional picker, regardless of the current whole value.
+            return Guardrail(
+                absoluteBounds: HKQuantity(unit: unit, doubleValue: guardrail.absoluteBounds.lowerBound.doubleValue(for: unit) - 1)...guardrail.absoluteBounds.upperBound,
+                recommendedBounds: HKQuantity(unit: unit, doubleValue: lowerRecommendedBound - 1)...guardrail.recommendedBounds.upperBound
+            )
+        }
+    }
+
+    private var fractionalGuardrail: Guardrail<HKQuantity>? {
+        let lowerAbsoluteBound = guardrail.absoluteBounds.lowerBound.doubleValue(for: unit)
+        let upperAbsoluteBound = guardrail.absoluteBounds.upperBound.doubleValue(for: unit)
+        let lowerRecommendedBound = guardrail.recommendedBounds.lowerBound.doubleValue(for: unit)
+        let upperRecommendedBound = guardrail.recommendedBounds.upperBound.doubleValue(for: unit)
+
+        // Thresholds for use in defining recommended bounds,
+        // to simplify the expression of (e.g.) "all selectable values are smaller than recommended",
+        // resulting in 'warning'-colored picker values.
+        let valueTooSmallToSelect: Double = -1
+        let valueTooLargeToSelect: Double = 1
+
+        switch whole {
+        case lowerAbsoluteBound.whole:
+            let fractionalLowerRecommendedBound = lowerAbsoluteBound.whole == lowerRecommendedBound.whole
+                ? fractionalValuesByWhole[whole]!.first! + pow(10.0, -Double(Self.maximumSupportedPrecision))
+                : valueTooLargeToSelect
+            return Guardrail(
+                absoluteBounds: fractionalValuesByWhole[whole]!.first!...valueTooLargeToSelect,
+                recommendedBounds: fractionalLowerRecommendedBound...valueTooLargeToSelect,
+                unit: unit
+            )
+        case ..<lowerRecommendedBound.whole:
+            return Guardrail(
+                absoluteBounds: valueTooSmallToSelect...valueTooLargeToSelect,
+                recommendedBounds: valueTooLargeToSelect...valueTooLargeToSelect,
+                unit: unit
+            )
+        case lowerRecommendedBound.whole:
+            let fractionalLowerRecommendedBound = lowerRecommendedBound.fraction + pow(10.0, -Double(Self.maximumSupportedPrecision))
+            return Guardrail(
+                absoluteBounds: valueTooSmallToSelect...valueTooLargeToSelect,
+                recommendedBounds: fractionalLowerRecommendedBound...valueTooLargeToSelect,
+                unit: unit
+            )
+        case ..<upperRecommendedBound.whole:
+            return nil
+        case upperRecommendedBound.whole:
+            return Guardrail(
+                absoluteBounds: valueTooSmallToSelect...valueTooLargeToSelect,
+                recommendedBounds: valueTooSmallToSelect...upperRecommendedBound.fraction,
+                unit: unit
+            )
+        case ..<upperAbsoluteBound.whole:
+            return Guardrail(
+                absoluteBounds: valueTooSmallToSelect...valueTooLargeToSelect,
+                recommendedBounds: valueTooSmallToSelect...valueTooSmallToSelect,
+                unit: unit
+            )
+        case upperAbsoluteBound.whole:
+            return Guardrail(
+                absoluteBounds: valueTooSmallToSelect...fractionalValuesByWhole[whole]!.last!,
+                recommendedBounds: valueTooSmallToSelect...valueTooSmallToSelect,
+                unit: unit
+            )
+        default:
+            assertionFailure("unreachable")
+            return nil
         }
     }
 
