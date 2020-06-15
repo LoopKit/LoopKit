@@ -86,7 +86,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     private let log = OSLog(category: "GlucoseStore")
 
     /// The most-recent glucose value.
-    public private(set) var latestGlucose: GlucoseValue? {
+    public private(set) var latestGlucose: GlucoseSampleValue? {
         get {
             return lockedLatestGlucose.value
         }
@@ -94,7 +94,7 @@ public final class GlucoseStore: HealthKitSampleStore {
             lockedLatestGlucose.value = newValue
         }
     }
-    private let lockedLatestGlucose = Locked<GlucoseValue?>(nil)
+    private let lockedLatestGlucose = Locked<GlucoseSampleValue?>(nil)
 
     private let cacheStore: PersistenceController
 

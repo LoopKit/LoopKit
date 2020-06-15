@@ -281,7 +281,7 @@ class MasterViewController: UITableViewController {
                     }
 
                     group.enter()
-                    dataManager.glucoseStore.addGlucose(NewGlucoseSample(date: Date(), quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 101), isDisplayOnly: false, syncIdentifier: UUID().uuidString), completion: { (result) in
+                    dataManager.glucoseStore.addGlucose(NewGlucoseSample(date: Date(), quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 101), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: UUID().uuidString), completion: { (result) in
                         group.leave()
                     })
 

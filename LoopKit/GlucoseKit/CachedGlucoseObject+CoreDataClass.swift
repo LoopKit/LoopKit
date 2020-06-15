@@ -57,5 +57,6 @@ extension CachedGlucoseObject {
         startDate = sample.startDate
         provenanceIdentifier = sample.provenanceIdentifier
         isDisplayOnly = sample.isDisplayOnly
+        wasUserEntered = sample.wasUserEntered
     }
 }

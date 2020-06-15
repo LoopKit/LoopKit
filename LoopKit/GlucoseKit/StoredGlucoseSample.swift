@@ -24,6 +24,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue {
     // MARK: - GlucoseSampleValue
 
     public let isDisplayOnly: Bool
+    public let wasUserEntered: Bool
     public let provenanceIdentifier: String
 
     init(sample: HKQuantitySample) {
@@ -34,6 +35,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue {
             startDate: sample.startDate,
             quantity: sample.quantity,
             isDisplayOnly: sample.isDisplayOnly,
+            wasUserEntered: sample.wasUserEntered,
             provenanceIdentifier: sample.provenanceIdentifier
         )
     }
@@ -45,6 +47,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue {
         startDate: Date,
         quantity: HKQuantity,
         isDisplayOnly: Bool,
+        wasUserEntered: Bool,
         provenanceIdentifier: String
     ) {
         self.sampleUUID = sampleUUID
@@ -53,6 +56,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue {
         self.startDate = startDate
         self.quantity = quantity
         self.isDisplayOnly = isDisplayOnly
+        self.wasUserEntered = wasUserEntered
         self.provenanceIdentifier = provenanceIdentifier
     }
 }
@@ -82,6 +86,7 @@ extension StoredGlucoseSample {
             startDate: managedObject.startDate,
             quantity: HKQuantity(unit: HKUnit(from: managedObject.unitString!), doubleValue: managedObject.value),
             isDisplayOnly: managedObject.isDisplayOnly,
+            wasUserEntered: managedObject.wasUserEntered,
             provenanceIdentifier: managedObject.provenanceIdentifier!
         )
     }

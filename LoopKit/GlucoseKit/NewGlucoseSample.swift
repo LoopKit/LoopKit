@@ -12,6 +12,7 @@ public struct NewGlucoseSample: Equatable {
     public let date: Date
     public let quantity: HKQuantity
     public let isDisplayOnly: Bool
+    public let wasUserEntered: Bool
     public let syncIdentifier: String
     public var syncVersion: Int
     public var device: HKDevice?
@@ -20,13 +21,15 @@ public struct NewGlucoseSample: Equatable {
     ///   - date: The date the sample was collected
     ///   - quantity: The glucose sample quantity
     ///   - isDisplayOnly: Whether the reading was shifted for visual consistency after calibration
+    ///   - wasUserEntered: Whether the reading was entered by the user (manual) or not (device)
     ///   - syncIdentifier: A unique identifier representing the sample, used for de-duplication
     ///   - syncVersion: A version number for determining resolution in de-duplication
     ///   - device: The description of the device the collected the sample
-    public init(date: Date, quantity: HKQuantity, isDisplayOnly: Bool, syncIdentifier: String, syncVersion: Int = 1, device: HKDevice? = nil) {
+    public init(date: Date, quantity: HKQuantity, isDisplayOnly: Bool, wasUserEntered: Bool, syncIdentifier: String, syncVersion: Int = 1, device: HKDevice? = nil) {
         self.date = date
         self.quantity = quantity
         self.isDisplayOnly = isDisplayOnly
+        self.wasUserEntered = wasUserEntered
         self.syncIdentifier = syncIdentifier
         self.syncVersion = syncVersion
         self.device = device
@@ -36,11 +39,15 @@ public struct NewGlucoseSample: Equatable {
 
 extension NewGlucoseSample {
     public var quantitySample: HKQuantitySample {
-        let metadata: [String: Any] = [
+        var metadata: [String: Any] = [
             MetadataKeyGlucoseIsDisplayOnly: isDisplayOnly,
             HKMetadataKeySyncIdentifier: syncIdentifier,
             HKMetadataKeySyncVersion: syncVersion,
         ]
+
+        if wasUserEntered {
+            metadata[HKMetadataKeyWasUserEntered] = true
+        }
 
         return HKQuantitySample(
             type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!,
