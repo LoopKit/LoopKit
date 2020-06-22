@@ -16,16 +16,16 @@ public enum HUDTapAction {
 public protocol HUDProvider: class  {
     var managerIdentifier: String { get }
 
-    typealias HUDViewsRawState = [String: Any]
+    typealias HUDViewRawState = [String: Any]
 
-    // Creates the initial views to be shown in Loop HUD.
-    func createHUDViews() -> [BaseHUDView]
+    // Creates the initial view (typically reservoir volume) to be shown in Loop HUD.
+    func createHUDView() -> LevelHUDView?
 
     // Returns the action that should be taken when the view is tapped
     func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction?
 
     // The current, serializable state of the HUD views
-    var hudViewsRawState: HUDViewsRawState { get }
+    var hudViewRawState: HUDViewRawState { get }
 
     // This notifies the HUDProvider whether hud views are offscreen or
     // backgrounded. When not visible, updates should be deferred to better

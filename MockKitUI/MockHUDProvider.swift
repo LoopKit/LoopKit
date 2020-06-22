@@ -34,8 +34,8 @@ final class MockHUDProvider: NSObject, HUDProvider {
 
     var visible: Bool = false
 
-    var hudViewsRawState: HUDViewsRawState {
-        var rawValue: HUDViewsRawState = [
+    var hudViewRawState: HUDViewRawState {
+        var rawValue: HUDViewRawState = [
             "pumpReservoirCapacity": pumpManager.pumpReservoirCapacity
         ]
 
@@ -48,19 +48,16 @@ final class MockHUDProvider: NSObject, HUDProvider {
         return rawValue
     }
 
-    func createHUDViews() -> [BaseHUDView] {
+    func createHUDView() -> LevelHUDView? {
         reservoirView = ReservoirVolumeHUDView.instantiate()
         updateReservoirView()
-
-        batteryView = BatteryLevelHUDView.instantiate()
-        updateBatteryView()
-
-        return [reservoirView, batteryView].compactMap { $0 }
+    
+        return reservoirView
     }
 
-    static func createHUDViews(rawValue: HUDViewsRawState) -> [BaseHUDView] {
+    static func createHUDView(rawValue: HUDViewRawState) -> LevelHUDView? {
         guard let pumpReservoirCapacity = rawValue["pumpReservoirCapacity"] as? Double else {
-            return []
+            return nil
         }
 
         let reservoirVolumeHUDView = ReservoirVolumeHUDView.instantiate()
@@ -70,11 +67,7 @@ final class MockHUDProvider: NSObject, HUDProvider {
             reservoirVolumeHUDView.setReservoirVolume(volume: reservoirUnitsRemaining, at: Date())
         }
 
-        let batteryPercentage = rawValue["pumpBatteryChargeRemaining"] as? Double
-        let batteryLevelHUDView = BatteryLevelHUDView.instantiate()
-        batteryLevelHUDView.batteryLevel = batteryPercentage
-
-        return [reservoirVolumeHUDView, batteryLevelHUDView]
+        return reservoirVolumeHUDView
     }
 
     func didTapOnHUDView(_ view: BaseHUDView) -> HUDTapAction? {
