@@ -18,6 +18,12 @@ public protocol CGMManagerUI: CGMManager {
     func settingsViewController(for glucoseUnit: HKUnit) -> (UIViewController & CompletionNotifying)
 
     var smallImage: UIImage? { get }
+    
+    /// a message from the cgm that needs to be brought to the user's attention in the status bar
+    var cgmStatusHighlight: DeviceStatusHighlight? { get }
+    
+    /// the completed percent of the progress bar to display in the status bar
+    var progressPercentCompleted: Double? { get }
 }
 
 
