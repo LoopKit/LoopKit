@@ -19,7 +19,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
         super.setUp()
         
         healthStore = HKHealthStoreMock()
-        carbStore = CarbStore(healthStore: healthStore, cacheStore: cacheStore)
+        carbStore = CarbStore(healthStore: healthStore, observeHealthKitForCurrentAppOnly: false, cacheStore: cacheStore)
         carbStore.testQueryStore = healthStore
         carbStore.delegate = self
     }
@@ -383,7 +383,7 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
         
-        carbStore = CarbStore(healthStore: HKHealthStoreMock(), cacheStore: cacheStore)
+        carbStore = CarbStore(healthStore: HKHealthStoreMock(), observeHealthKitForCurrentAppOnly: false, cacheStore: cacheStore)
         completion = expectation(description: "Completion")
         queryAnchor = CarbStore.QueryAnchor()
         limit = Int.max

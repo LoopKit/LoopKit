@@ -100,6 +100,7 @@ public final class GlucoseStore: HealthKitSampleStore {
 
     public init(
         healthStore: HKHealthStore,
+        observeHealthKitForCurrentAppOnly: Bool,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 60 /* minutes */ * 60 /* seconds */,
@@ -113,7 +114,7 @@ public final class GlucoseStore: HealthKitSampleStore {
         self.cacheLength = cacheLength
         self.observationInterval = observationInterval ?? cacheLength
 
-        super.init(healthStore: healthStore, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -self.observationInterval), observationEnabled: observationEnabled)
+        super.init(healthStore: healthStore, observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -self.observationInterval), observationEnabled: observationEnabled)
 
         cacheStore.onReady { (error) in
             self.dataAccessQueue.async {
@@ -267,7 +268,7 @@ extension GlucoseStore {
         if let managedDataDate = managedDataDate, let managedDataInterval = managedDataInterval {
             let end = min(Date(timeIntervalSinceNow: -managedDataInterval), managedDataDate)
 
-            let predicate = HKQuery.predicateForSamples(withStart: Date(timeIntervalSinceNow: -maxPurgeInterval), end: end, options: [])
+            let predicate = HKQuery.predicateForSamples(observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, withStart: Date(timeIntervalSinceNow: -maxPurgeInterval), end: end, options: [])
 
             healthStore.deleteObjects(of: glucoseType, predicate: predicate) { (success, count, error) -> Void in
                 // error is expected and ignored if protected data is unavailable
@@ -317,7 +318,7 @@ extension GlucoseStore {
     ///   - completion: A closure called once the values have been retrieved
     ///   - result: An array of glucose values, in chronological order by startDate
     public func getGlucoseSamples(start: Date, end: Date? = nil, completion: @escaping (_ result: GlucoseStoreResult<[StoredGlucoseSample]>) -> Void) {
-        let predicate = HKQuery.predicateForSamples(withStart: start, end: end)
+        let predicate = HKQuery.predicateForSamples(observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, withStart: start, end: end)
         let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
 
         let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in

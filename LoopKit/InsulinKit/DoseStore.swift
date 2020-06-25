@@ -198,6 +198,7 @@ public final class DoseStore {
     ///
     /// - Parameters:
     ///   - healthStore: The HealthKit store for reading & writing insulin delivery
+    ///   - observeHealthKitForCurrentAppOnly: Whether or not this Store should only read HealthKit data written by this app
     ///   - cacheStore: The cache store for reading & writing short-term intermediate data
     ///   - observationEnabled: Whether the store should observe changes from HealthKit
     ///   - insulinModel: The model of insulin effect over time
@@ -207,6 +208,7 @@ public final class DoseStore {
     ///   - lastPumpEventsReconciliation: The date the PumpManger last reconciled with the pump
     public init(
         healthStore: HKHealthStore,
+        observeHealthKitForCurrentAppOnly: Bool,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
@@ -220,6 +222,7 @@ public final class DoseStore {
     ) {
         self.insulinDeliveryStore = InsulinDeliveryStore(
             healthStore: healthStore,
+            observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly,
             cacheStore: cacheStore,
             observationEnabled: observationEnabled,
             test_currentDate: test_currentDate

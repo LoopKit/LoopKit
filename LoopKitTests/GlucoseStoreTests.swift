@@ -64,7 +64,9 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
         
-        glucoseStore = GlucoseStore(healthStore: HKHealthStoreMock(), cacheStore: cacheStore)
+        glucoseStore = GlucoseStore(healthStore: HKHealthStoreMock(),
+                                    observeHealthKitForCurrentAppOnly: false,
+                                    cacheStore: cacheStore)
         completion = expectation(description: "Completion")
         queryAnchor = GlucoseStore.QueryAnchor()
         limit = Int.max

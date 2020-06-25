@@ -19,6 +19,7 @@ class DeviceDataManager : CarbStoreDelegate {
 
         carbStore = CarbStore(
             healthStore: healthStore,
+            observeHealthKitForCurrentAppOnly: false,
             cacheStore: cacheStore,
             carbRatioSchedule: carbRatioSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
@@ -31,12 +32,15 @@ class DeviceDataManager : CarbStoreDelegate {
         }
         doseStore = DoseStore(
             healthStore: healthStore,
+            observeHealthKitForCurrentAppOnly: false,
             cacheStore: cacheStore,
             insulinModel: insulinModel,
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )
-        glucoseStore = GlucoseStore(healthStore: healthStore, cacheStore: cacheStore)
+        glucoseStore = GlucoseStore(healthStore: healthStore,
+                                    observeHealthKitForCurrentAppOnly: false,
+                                    cacheStore: cacheStore)
         carbStore?.delegate = self
     }
 

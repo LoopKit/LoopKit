@@ -36,6 +36,9 @@ public class HealthKitSampleStore {
 
     /// The health store used for underlying queries
     public let healthStore: HKHealthStore
+    
+    /// Whether the store should only fetch data that was written to HealthKit from Loop, or from any other source
+    internal let observeHealthKitForCurrentAppOnly: Bool
 
     /// Whether the store is observing changes to types
     public let observationEnabled: Bool
@@ -55,12 +58,14 @@ public class HealthKitSampleStore {
 
     public init(
         healthStore: HKHealthStore,
+        observeHealthKitForCurrentAppOnly: Bool,
         type: HKSampleType,
         observationStart: Date,
         observationEnabled: Bool,
         test_currentDate: Date? = nil
     ) {
         self.healthStore = healthStore
+        self.observeHealthKitForCurrentAppOnly = observeHealthKitForCurrentAppOnly
         self.sampleType = type
         self.observationStart = observationStart
         self.observationEnabled = observationEnabled
@@ -218,7 +223,7 @@ extension HealthKitSampleStore {
             return
         }
 
-        let predicate = HKQuery.predicateForSamples(withStart: observationStart, end: nil)
+        let predicate = HKQuery.predicateForSamples(observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, withStart: observationStart, end: nil)
 
         observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { [weak self] (query, completionHandler, error) in
             self?.observeUpdates(to: query, error: error)
