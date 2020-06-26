@@ -44,19 +44,51 @@ public struct MockCGMState: SensorDisplayable {
             highGlucoseThresholdValue = newValue.doubleValue(for: HKUnit.milligramsPerDeciliter)
         }
     }
+    
+    public var cgmStatusHighlight: MockCGMStatusHighlight?
 
     public init(isStateValid: Bool = true,
                 trendType: GlucoseTrend? = nil,
                 glucoseValueType: GlucoseValueType? = nil,
                 lowGlucoseThresholdValue: Double = 80,
-                highGlucoseThresholdValue: Double = 200)
+                highGlucoseThresholdValue: Double = 200,
+                cgmStatusHighlight: MockCGMStatusHighlight? = nil)
     {
         self.isStateValid = isStateValid
         self.trendType = trendType
         self.glucoseValueType = glucoseValueType
         self.lowGlucoseThresholdValue = lowGlucoseThresholdValue
         self.highGlucoseThresholdValue = highGlucoseThresholdValue
+        self.cgmStatusHighlight = cgmStatusHighlight
     }
+}
+
+public struct MockCGMStatusHighlight: DeviceStatusHighlight {
+    public var localizedMessage: String
+    
+    public var icon: UIImage {
+        switch alertIdentifier {
+        case MockCGMManager.submarine.identifier:
+            return UIImage(systemName: "dot.radiowaves.left.and.right")!
+        case MockCGMManager.buzz.identifier:
+            return UIImage(systemName: "clock")!
+        default:
+            return UIImage(systemName: "exclamationmark.circle.fill")!
+        }
+    }
+    
+    public var color: UIColor {
+        switch alertIdentifier {
+        case MockCGMManager.submarine.identifier:
+            return .systemPurple
+        case MockCGMManager.buzz.identifier:
+            return .systemOrange
+        default:
+            return .systemRed
+        }
+    }
+    
+    public var alertIdentifier: Alert.AlertIdentifier
 }
 
 public final class MockCGMManager: TestingCGMManager {
@@ -180,6 +212,18 @@ public final class MockCGMManager: TestingCGMManager {
     }
 
     private func sendCGMResult(_ result: CGMResult) {
+        if case .newData(let samples) = result,
+            let currentValue = samples.first
+        {
+            switch currentValue.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter) {
+            case ..<mockSensorState.lowGlucoseThreshold.doubleValue(for: HKUnit.milligramsPerDeciliter):
+                mockSensorState.glucoseValueType = .low
+            case mockSensorState.lowGlucoseThreshold.doubleValue(for: HKUnit.milligramsPerDeciliter)..<mockSensorState.highGlucoseThreshold.doubleValue(for: HKUnit.milligramsPerDeciliter):
+                mockSensorState.glucoseValueType = .normal
+            default:
+                mockSensorState.glucoseValueType = .high
+            }
+        }
         self.delegate.notify { delegate in
             delegate?.cgmManager(self, didUpdateWith: result)
         }
@@ -215,8 +259,13 @@ public final class MockCGMManager: TestingCGMManager {
         }
     }
     
+    public func updateGlucoseUpdateTimer() {
+        glucoseUpdateTimer?.invalidate()
+        setupGlucoseUpdateTimer()
+    }
+    
     private func setupGlucoseUpdateTimer() {
-        glucoseUpdateTimer = Timer.scheduledTimer(withTimeInterval: dataSource.dataPointFrequency, repeats: true) { [weak self] _ in
+        glucoseUpdateTimer = Timer.scheduledTimer(withTimeInterval: dataSource.dataPointFrequency.frequency, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             self.fetchNewDataIfNeeded() { result in
                 self.sendCGMResult(result)
@@ -257,6 +306,9 @@ extension MockCGMManager {
                                        trigger: trigger,
                                        sound: alert.sound))
         }
+
+        // updating the status report
+        mockSensorState.cgmStatusHighlight = MockCGMStatusHighlight(localizedMessage: alert.foregroundContent.title, alertIdentifier: alert.identifier)
     }
     
     public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) {
@@ -266,6 +318,8 @@ extension MockCGMManager {
 
     public func retractAlert(identifier: Alert.AlertIdentifier) {
         delegate.notify { $0?.retractAlert(identifier: Alert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: identifier)) }
+        // updating the status report
+        mockSensorState.cgmStatusHighlight = nil
     }
     
     private func registerBackgroundTask() {
@@ -314,6 +368,12 @@ extension MockCGMState: RawRepresentable {
         if let glucoseValueTypeRawValue = rawValue["glucoseValueType"] as? GlucoseValueType.RawValue {
             self.glucoseValueType = GlucoseValueType(rawValue: glucoseValueTypeRawValue)
         }
+        
+        if let localizedMessage = rawValue["localizedMessage"] as? String,
+            let alertIdentifier = rawValue["alertIdentifier"] as? Alert.AlertIdentifier
+        {
+            self.cgmStatusHighlight = MockCGMStatusHighlight(localizedMessage: localizedMessage, alertIdentifier: alertIdentifier)
+        }
     }
 
     public var rawValue: RawValue {
@@ -330,6 +390,11 @@ extension MockCGMState: RawRepresentable {
         if let glucoseValueType = glucoseValueType {
             rawValue["glucoseValueType"] = glucoseValueType.rawValue
         }
+        
+        if let cgmStatusHighlight = cgmStatusHighlight {
+            rawValue["localizedMessage"] = cgmStatusHighlight.localizedMessage
+            rawValue["alertIdentifier"] = cgmStatusHighlight.alertIdentifier
+        }
 
         return rawValue
     }
@@ -344,6 +409,7 @@ extension MockCGMState: CustomDebugStringConvertible {
         * lowGlucoseThresholdValue: \(lowGlucoseThresholdValue)
         * highGlucoseThresholdValue: \(highGlucoseThresholdValue)
         * glucoseValueType: \(glucoseValueType as Any)
+        * cgmStatusHighlight: \(cgmStatusHighlight as Any)
         """
     }
 }

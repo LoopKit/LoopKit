@@ -8,13 +8,13 @@
 
 import Foundation
 
-public protocol DeviceStatusHighlight: Codable {
+public protocol DeviceStatusHighlight {
     /// a localized message from the device
-    var message: String { get }
+    var localizedMessage: String { get }
 
     /// the icon related to the message
-    var iconName: UIImage { get }
+    var icon: UIImage { get }
     
-    /// the color of the icon
-    var iconColor: UIColor { get }
+    /// the color of the highlight
+    var color: UIColor { get }
 }

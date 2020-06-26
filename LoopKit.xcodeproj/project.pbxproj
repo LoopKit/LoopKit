@@ -635,7 +635,9 @@
 		B41A60AF23D1DB5B00636320 /* TableViewTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41A60AE23D1DB5B00636320 /* TableViewTitleLabel.swift */; };
 		B41A60B223D1DBC700636320 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41A60B123D1DBC700636320 /* UIFont.swift */; };
 		B42A7472235885B600247B03 /* LoopNotificationUserInfoKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42A7471235885B600247B03 /* LoopNotificationUserInfoKey.swift */; };
-		B42C950324A3713300857C73 /* DeviceStatusHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42C94FD24A2A2B000857C73 /* DeviceStatusHighlight.swift */; };
+		B42C950B24A3BCCD00857C73 /* GlucoseValueType+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42C950824A3BCC200857C73 /* GlucoseValueType+Color.swift */; };
+		B42C950E24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42C950C24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift */; };
+		B42C951924A508CE00857C73 /* DeviceStatusHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42C94FD24A2A2B000857C73 /* DeviceStatusHighlight.swift */; };
 		B46B62A723FEFE4D001E69BA /* InstructionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62A623FEFE4D001E69BA /* InstructionList.swift */; };
 		B46B62A923FF05F8001E69BA /* LabeledNumberInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62A823FF05F8001E69BA /* LabeledNumberInput.swift */; };
 		B46B62AB23FF0822001E69BA /* LabeledValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62AA23FF0822001E69BA /* LabeledValueView.swift */; };
@@ -1341,6 +1343,8 @@
 		B41A60B123D1DBC700636320 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		B42A7471235885B600247B03 /* LoopNotificationUserInfoKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopNotificationUserInfoKey.swift; sourceTree = "<group>"; };
 		B42C94FD24A2A2B000857C73 /* DeviceStatusHighlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusHighlight.swift; sourceTree = "<group>"; };
+		B42C950824A3BCC200857C73 /* GlucoseValueType+Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GlucoseValueType+Color.swift"; sourceTree = "<group>"; };
+		B42C950C24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasurementFrequencyTableViewController.swift; sourceTree = "<group>"; };
 		B46B62A623FEFE4D001E69BA /* InstructionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionList.swift; sourceTree = "<group>"; };
 		B46B62A823FF05F8001E69BA /* LabeledNumberInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledNumberInput.swift; sourceTree = "<group>"; };
 		B46B62AA23FF0822001E69BA /* LabeledValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledValueView.swift; sourceTree = "<group>"; };
@@ -1737,8 +1741,8 @@
 				43BA719920203EF30058961E /* CarbKit.storyboard */,
 				43A8EC3B210CEEA500A81379 /* CGMManagerUI.swift */,
 				892A5D9F2231E12F008961AB /* CompletionNotifying.swift */,
-				B42C94FD24A2A2B000857C73 /* DeviceStatusHighlight.swift */,
 				895FE07022011EDD00FCF18A /* EmojiInputController.storyboard */,
+				B42C950824A3BCC200857C73 /* GlucoseValueType+Color.swift */,
 				892A5DA12231E136008961AB /* HUDProvider.swift */,
 				43BA7157201E484D0058961E /* Info.plist */,
 				1F5DAB282118CE9300048054 /* InfoPlist.strings */,
@@ -2219,6 +2223,7 @@
 		89D204B621CC7E77001238CC /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B42C950C24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift */,
 				89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */,
 				89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */,
 				89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */,
@@ -2261,6 +2266,7 @@
 				4352A73B20DECF0600CAC200 /* CGMManager.swift */,
 				1D841AAC24577EE10069DBFF /* AlertSoundPlayer.swift */,
 				4379CFE221102A4100AADC79 /* DeviceManager.swift */,
+				B42C94FD24A2A2B000857C73 /* DeviceStatusHighlight.swift */,
 				89AC792C224C781100B8E9BA /* DoseProgressReporter.swift */,
 				89AC792D224C781100B8E9BA /* DoseProgressTimerEstimator.swift */,
 				432CF87220D774220066B889 /* PumpManager.swift */,
@@ -2826,7 +2832,6 @@
 				B4C004D42416962600B40429 /* Color.swift in Sources */,
 				432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */,
 				898B4E7B246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift in Sources */,
-				B42C950324A3713300857C73 /* DeviceStatusHighlight.swift in Sources */,
 				898E6E6A224179530019E459 /* BasalScheduleTableViewController.swift in Sources */,
 				892A5DB42231E191008961AB /* LevelMaskView.swift in Sources */,
 				892A5DA02231E130008961AB /* CompletionNotifying.swift in Sources */,
@@ -2911,6 +2916,7 @@
 				43F5035721059A8A009FA89A /* ServiceCredential.swift in Sources */,
 				43BA7169201E49220058961E /* CarbEntryEditViewController.swift in Sources */,
 				892A5DA22231E137008961AB /* HUDProvider.swift in Sources */,
+				B42C950B24A3BCCD00857C73 /* GlucoseValueType+Color.swift in Sources */,
 				892A5DBC2231E20C008961AB /* Comparable.swift in Sources */,
 				898E6E6C224194060019E459 /* UIColor.swift in Sources */,
 				43BA717D201EE7090058961E /* GlucoseRangeTableViewCell.swift in Sources */,
@@ -2947,6 +2953,7 @@
 				C1814B84225B9ED5008D2D8E /* LoopNotificationCategory.swift in Sources */,
 				43D8FDFD1C7290350073BE78 /* HKUnit.swift in Sources */,
 				C17F39C123CD24A000FA1113 /* DeviceLog.xcdatamodeld in Sources */,
+				B42C951924A508CE00857C73 /* DeviceStatusHighlight.swift in Sources */,
 				4322B779202FA2790002837D /* NewCarbEntry.swift in Sources */,
 				4322B76E202FA26B0002837D /* GlucoseMath.swift in Sources */,
 				4322B791202FA2B70002837D /* Model.xcdatamodeld in Sources */,
@@ -3189,6 +3196,7 @@
 				89D204BC21CC7F34001238CC /* SineCurveParametersTableViewController.swift in Sources */,
 				C1F8B1E2223C3CC000DD66CF /* TimeZone.swift in Sources */,
 				89D204BD21CC7F34001238CC /* RandomOutlierTableViewController.swift in Sources */,
+				B42C950E24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift in Sources */,
 				89D204B821CC7F34001238CC /* MockPumpManagerSettingsSetupViewController.swift in Sources */,
 				898E6E732241EE000019E459 /* Comparable.swift in Sources */,
 				892A5D28222EF567008961AB /* (null) in Sources */,

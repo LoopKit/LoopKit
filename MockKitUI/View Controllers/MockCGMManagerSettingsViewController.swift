@@ -61,7 +61,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case model = 0
         case effects
         case history
-        case issueAlert
+        case alerts
         case deleteCGM
     }
 
@@ -69,6 +69,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case constant = 0
         case sineCurve
         case noData
+        case frequency
     }
 
     private enum EffectsRow: Int, CaseIterable {
@@ -81,6 +82,12 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
     private enum HistoryRow: Int, CaseIterable {
         case trend = 0
         case backfill
+    }
+    
+    private enum AlertsRow: Int, CaseIterable {
+        case issueAlert = 0
+        case lowGlucoseThreshold
+        case highGlucoseThreshold
     }
 
     // MARK: - UITableViewDataSource
@@ -97,8 +104,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return EffectsRow.allCases.count
         case .history:
             return HistoryRow.allCases.count
-        case .issueAlert:
-            return 1
+        case .alerts:
+            return AlertsRow.allCases.count
         case .deleteCGM:
             return 1
         }
@@ -112,7 +119,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return "Effects"
         case .history:
             return "History"
-        case .issueAlert:
+        case .alerts:
             return "Alerts"
         case .deleteCGM:
             return " " // Use an empty string for more dramatic spacing
@@ -127,7 +134,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         formatter.maximumFractionDigits = 1
         return formatter
     }()
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch Section(rawValue: indexPath.section)! {
         case .model:
@@ -157,6 +164,10 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 if case .noData = cgmManager.dataSource.model {
                     cell.accessoryType = .checkmark
                 }
+            case .frequency:
+                cell.textLabel?.text = "Measurement Frequency"
+                cell.detailTextLabel?.text = cgmManager.dataSource.dataPointFrequency.localizedDescription
+                cell.accessoryType = .disclosureIndicator
             }
             return cell
         case .effects:
@@ -211,10 +222,21 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             }
             cell.accessoryType = .disclosureIndicator
             return cell
-        case .issueAlert:
+        case .alerts:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
-            cell.textLabel?.text = "Issue Alerts"
-            cell.accessoryType = .disclosureIndicator
+            switch AlertsRow(rawValue: indexPath.row)! {
+            case .issueAlert:
+                cell.textLabel?.text = "Issue Alerts"
+                cell.accessoryType = .disclosureIndicator
+            case .lowGlucoseThreshold:
+                cell.textLabel?.text = "Low Glucose Threshold"
+                cell.accessoryType = .disclosureIndicator
+                cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.lowGlucoseThreshold, for: glucoseUnit)
+            case .highGlucoseThreshold:
+                cell.textLabel?.text = "High Glucose Threshold"
+                cell.accessoryType = .disclosureIndicator
+                cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.highGlucoseThreshold, for: glucoseUnit)
+            }
             return cell
         case .deleteCGM:
             let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
@@ -254,6 +276,12 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .noData:
                 cgmManager.dataSource.model = .noData
                 tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
+            case .frequency:
+                let vc = MeasurementFrequencyTableViewController()
+                vc.measurementFrequency = cgmManager.dataSource.dataPointFrequency
+                vc.title = "Measurement Frequency"
+                vc.measurementFrequencyDelegate = self
+                show(vc, sender: sender)
             }
         case .effects:
             switch EffectsRow(rawValue: indexPath.row)! {
@@ -317,9 +345,26 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 }
                 show(vc, sender: sender)
             }
-        case .issueAlert:
-            let vc = IssueAlertTableViewController(cgmManager: cgmManager)
-            show(vc, sender: sender)
+        case .alerts:
+            switch AlertsRow(rawValue: indexPath.row)! {
+            case .issueAlert:
+                let vc = IssueAlertTableViewController(cgmManager: cgmManager)
+                show(vc, sender: sender)
+            case .lowGlucoseThreshold:
+                let vc = GlucoseEntryTableViewController(glucoseUnit: glucoseUnit)
+                vc.title = "Low Glucose Threshold"
+                vc.indexPath = indexPath
+                vc.contextHelp = "The glucose value that marks the low glucose threshold. Any value at or below this vlaue is considered low."
+                vc.glucoseEntryDelegate = self
+                show(vc, sender: sender)
+            case .highGlucoseThreshold:
+                let vc = GlucoseEntryTableViewController(glucoseUnit: glucoseUnit)
+                vc.title = "High Glucose Threshold"
+                vc.indexPath = indexPath
+                vc.contextHelp = "The glucose value that marks the high glucose threshold. Any value at or above this vlaue is considered high."
+                vc.glucoseEntryDelegate = self
+                show(vc, sender: sender)
+            }
         case .deleteCGM:
             let confirmVC = UIAlertController(cgmDeletionHandler: {
                 self.cgmManager.notifyDelegateOfDeletion {
@@ -365,6 +410,16 @@ extension MockCGMManagerSettingsViewController: GlucoseEntryTableViewControllerD
                 cgmManager.dataSource.effects.glucoseNoise = glucose
             }
             tableView.reloadRows(at: [indexPath], with: .automatic)
+        case [Section.alerts.rawValue, AlertsRow.lowGlucoseThreshold.rawValue]:
+            if let glucose = controller.glucose {
+                cgmManager.mockSensorState.lowGlucoseThreshold = glucose
+                tableView.reloadRows(at: indexPaths(forSection: .alerts, rows: AlertsRow.self), with: .automatic)
+            }
+        case [Section.alerts.rawValue, AlertsRow.highGlucoseThreshold.rawValue]:
+            if let glucose = controller.glucose {
+                cgmManager.mockSensorState.highGlucoseThreshold = glucose
+                tableView.reloadRows(at: indexPaths(forSection: .alerts, rows: AlertsRow.self), with: .automatic)
+            }
         default:
             assertionFailure()
         }
@@ -423,6 +478,16 @@ extension MockCGMManagerSettingsViewController: GlucoseTrendTableViewControllerD
     func glucoseTrendTableViewControllerDidChangeTrend(_ controller: GlucoseTrendTableViewController) {
         cgmManager.mockSensorState.trendType = controller.glucoseTrend
         tableView.reloadRows(at: [[Section.history.rawValue, HistoryRow.trend.rawValue]], with: .automatic)
+    }
+}
+
+extension MockCGMManagerSettingsViewController: MeasurementFrequencyTableViewControllerDelegate {
+    func measurementFrequencyTableViewControllerDidChangeFrequency(_ controller: MeasurementFrequencyTableViewController) {
+        if let measurementFrequency = controller.measurementFrequency {
+            cgmManager.dataSource.dataPointFrequency = measurementFrequency
+            cgmManager.updateGlucoseUpdateTimer()
+            tableView.reloadRows(at: [[Section.model.rawValue, ModelRow.frequency.rawValue]], with: .automatic)
+        }
     }
 }
 
