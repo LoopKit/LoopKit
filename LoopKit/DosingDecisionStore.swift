@@ -9,7 +9,6 @@
 import os.log
 import Foundation
 import CoreData
-import HealthKit
 import UserNotifications
 
 public protocol DosingDecisionStoreDelegate: AnyObject {
