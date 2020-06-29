@@ -81,6 +81,11 @@ public extension DailySchedule {
     }
 }
 
+extension DailySchedule where T: Comparable {
+    public func valueRange() -> ClosedRange<T> {
+        items.range(of: { $0.value })!
+    }
+}
 
 public struct DailyValueSchedule<T>: DailySchedule {
     let referenceTimeInterval: TimeInterval

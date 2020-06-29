@@ -12,7 +12,7 @@ import LoopKit
 
 
 public struct GuardrailConstrainedQuantityView: View {
-    var value: HKQuantity
+    var value: HKQuantity?
     var unit: HKUnit
     var guardrail: Guardrail<HKQuantity>
     var isEditing: Bool
@@ -24,7 +24,7 @@ public struct GuardrailConstrainedQuantityView: View {
     @State private var hasAppeared = false
 
     public init(
-        value: HKQuantity,
+        value: HKQuantity?,
         unit: HKUnit,
         guardrail: Guardrail<HKQuantity>,
         isEditing: Bool,
@@ -49,15 +49,20 @@ public struct GuardrailConstrainedQuantityView: View {
     public var body: some View {
         HStack {
             HStack(spacing: iconSpacing) {
-                if guardrail.classification(for: value) != .withinRecommendedRange {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundColor(warningColor)
-                        .transition(.springInDisappear)
-                }
+                if value != nil {
+                    if guardrail.classification(for: value!) != .withinRecommendedRange {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(warningColor)
+                            .transition(.springInDisappear)
+                    }
 
-                Text(formatter.string(from: value.doubleValue(for: unit)) ?? "\(value.doubleValue(for: unit))")
-                    .foregroundColor(warningColor)
-                    .fixedSize(horizontal: true, vertical: false)
+                    Text(formatter.string(from: value!.doubleValue(for: unit)) ?? "\(value!.doubleValue(for: unit))")
+                        .foregroundColor(warningColor)
+                        .fixedSize(horizontal: true, vertical: false)
+                } else {
+                    Text("—")
+                        .foregroundColor(.secondary)
+                }
             }
 
             if isUnitLabelVisible {
@@ -82,6 +87,10 @@ public struct GuardrailConstrainedQuantityView: View {
     }
 
     private var warningColor: Color {
+        guard let value = value else {
+            return .primary
+        }
+
         switch guardrail.classification(for: value) {
         case .withinRecommendedRange:
             return isEditing ? .accentColor : .primary

@@ -147,11 +147,12 @@ public extension HKUnit {
     }
 
     var maxFractionDigits: Int {
-        if self == .internationalUnitsPerHour {
+        switch self {
+        case .internationalUnit(), .internationalUnitsPerHour:
             return 3
-        } else if self == HKUnit.gram().unitDivided(by: .internationalUnit()) {
+        case HKUnit.gram().unitDivided(by: .internationalUnit()):
             return 2
-        } else {
+        default:
             return preferredFractionDigits
         }
     }

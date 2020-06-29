@@ -18,23 +18,27 @@ public struct GuardrailWarning: View {
 
     private var title: Text
     private var crossedThresholds: CrossedThresholds
-    private var customCaption: (_ crossedThresholds: [SafetyClassification.Threshold]) -> Text?
+    private var captionOverride: Text?
 
-    public init(title: Text, threshold: SafetyClassification.Threshold) {
+    public init(
+        title: Text,
+        threshold: SafetyClassification.Threshold,
+        caption: Text? = nil
+    ) {
         self.title = title
         self.crossedThresholds = .one(threshold)
-        self.customCaption = { _ in nil }
+        self.captionOverride = caption
     }
 
     public init(
         title: Text,
         thresholds: [SafetyClassification.Threshold],
-        customCaption: @escaping (_ crossedThresholds: [SafetyClassification.Threshold]) -> Text? = { _ in nil }
+        caption: Text? = nil
     ) {
         precondition(!thresholds.isEmpty)
         self.title = title
         self.crossedThresholds = .oneOrMore(thresholds)
-        self.customCaption = customCaption
+        self.captionOverride = caption
     }
 
     public var body: some View {
@@ -81,6 +85,10 @@ public struct GuardrailWarning: View {
     }
 
     private var caption: Text {
+        if let caption = captionOverride {
+            return caption
+        }
+
         switch crossedThresholds {
         case .one(let threshold):
             switch threshold {
@@ -90,10 +98,6 @@ public struct GuardrailWarning: View {
                 return Text("The value you have chosen is higher than Tidepool generally recommends.", comment: "Warning for entering a high setting value")
             }
         case .oneOrMore(let thresholds):
-            if let caption = customCaption(thresholds) {
-                return caption
-            }
-
             if thresholds.count == 1 {
                 switch thresholds.first! {
                 case .minimum, .belowRecommended:

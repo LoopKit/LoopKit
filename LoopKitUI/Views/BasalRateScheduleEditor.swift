@@ -108,14 +108,15 @@ private struct BasalRateGuardrailWarning: View {
 
     var body: some View {
         assert(!crossedThresholds.isEmpty)
+
+        let caption = self.isZeroUnitRateSelectable && crossedThresholds.allSatisfy({ $0 == .minimum })
+            ? Text("A value of 0 U/hr means you will be scheduled to receive no basal insulin.", comment: "Warning text for basal rate of 0 U/hr")
+            : nil
+
         return GuardrailWarning(
             title: crossedThresholds.count == 1 ? singularWarningTitle(for: crossedThresholds.first!) : multipleWarningTitle,
             thresholds: crossedThresholds,
-            customCaption: { crossedThresholds in
-                self.isZeroUnitRateSelectable && crossedThresholds.allSatisfy({ $0 == .minimum })
-                    ? Text("A value of 0 U/hr means you will be scheduled to receive no basal insulin.", comment: "Warning text for basal rate of 0 U/hr")
-                    : nil
-            }
+            caption: caption
         )
     }
 

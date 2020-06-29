@@ -12,8 +12,8 @@ import LoopKit
 
 
 /// Enables selecting the whole and fractional parts of an HKQuantity value in independent pickers.
-struct FractionalQuantityPicker: View {
-    enum UsageContext: Equatable {
+public struct FractionalQuantityPicker: View {
+    public enum UsageContext: Equatable {
         /// This picker is one component of a larger multi-component picker (e.g. a schedule item picker).
         case component(availableWidth: CGFloat)
 
@@ -46,7 +46,7 @@ struct FractionalQuantityPicker: View {
         return formatter
     }()
 
-    init(
+    public init(
         value: Binding<HKQuantity>,
         unit: HKUnit,
         guardrail: Guardrail<HKQuantity>,
@@ -95,7 +95,7 @@ struct FractionalQuantityPicker: View {
         self.usageContext = usageContext
     }
 
-    var body: some View {
+    public var body: some View {
         switch usageContext {
         case .component(availableWidth: let availableWidth):
             return AnyView(body(availableWidth: availableWidth))
