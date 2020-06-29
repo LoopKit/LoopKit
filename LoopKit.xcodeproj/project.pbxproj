@@ -675,6 +675,7 @@
 		C188B83422CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C188B83322CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift */; };
 		C1A174EC23DEAD670034DF11 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C1A174ED23DEAD6A0034DF11 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
+		C1A3F5BE24AA6EE200329152 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		C1E4B305242E98E900E70CCB /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B303242E98E900E70CCB /* ProgressView.swift */; };
 		C1E4B306242E98E900E70CCB /* ProgressIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */; };
 		C1E4B308242E995200E70CCB /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B307242E995200E70CCB /* ActivityIndicator.swift */; };
@@ -2858,6 +2859,7 @@
 				1DEE226F24A676A300693C32 /* GlucoseStoreHKFilterTests.swift in Sources */,
 				1DEE227724A676A300693C32 /* HKHealthStoreMock.swift in Sources */,
 				1DEE228424A676A300693C32 /* CarbStoreHKFilterTests.swift in Sources */,
+				C1A3F5BE24AA6EE200329152 /* NSTimeInterval.swift in Sources */,
 				1DEE229724A676A300693C32 /* DoseStoreHKFilterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

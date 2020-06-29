@@ -21,6 +21,9 @@ class DeviceDataManager : CarbStoreDelegate {
             healthStore: healthStore,
             observeHealthKitForCurrentAppOnly: false,
             cacheStore: cacheStore,
+            cacheLength: .hours(24),
+            defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
+            observationInterval: .hours(24),
             carbRatioSchedule: carbRatioSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )

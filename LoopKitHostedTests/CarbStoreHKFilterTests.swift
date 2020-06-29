@@ -25,7 +25,14 @@ class CarbStoreHKFilterTests: XCTestCase {
     private func checkEntries(fromCurrentAppOnly: Bool, file: StaticString = #file, line: UInt = #line) {
         let pc = PersistenceController(directoryURL: URL.init(fileURLWithPath: ""))
         let mockHKStore = HKHealthStoreMock()
-        let carbStore = CarbStore(healthStore: mockHKStore, observeHealthKitForCurrentAppOnly: fromCurrentAppOnly, cacheStore: pc)
+        let carbStore = CarbStore(
+            healthStore: mockHKStore,
+            observeHealthKitForCurrentAppOnly: fromCurrentAppOnly,
+            cacheStore: pc,
+            cacheLength: .hours(24),
+            defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
+            observationInterval: .hours(24)
+        )
         carbStore.getCarbEntries(start: Date.distantPast) { _ in }
         guard let predicate = try? XCTUnwrap(mockHKStore.lastQuery?.predicate, file: file, line: line) else { return }
         XCTAssertTrue(predicate.evaluate(with: sampleFromCurrentApp), file: file, line: line)

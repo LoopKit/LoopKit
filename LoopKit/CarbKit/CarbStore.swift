@@ -66,13 +66,6 @@ public final class CarbStore: HealthKitSampleStore {
 
     public typealias DefaultAbsorptionTimes = (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)
 
-    public static let defaultAbsorptionTimes: DefaultAbsorptionTimes = (fast: TimeInterval(hours: 2), medium: TimeInterval(hours: 3), slow: TimeInterval(hours: 4))
-
-    /// The default longest expected absorption time interval for carbohydrates: 8 hours.
-    public static var defaultMaximumAbsorptionTimeInterval: TimeInterval {
-        return defaultAbsorptionTimes.slow * 2
-    }
-
     public enum CarbStoreError: Error {
         // The store isn't correctly configured for the requested operation
         case notConfigured
@@ -187,10 +180,9 @@ public final class CarbStore: HealthKitSampleStore {
         healthStore: HKHealthStore,
         observeHealthKitForCurrentAppOnly: Bool,
         cacheStore: PersistenceController,
-        observationEnabled: Bool = true,
-        cacheLength: TimeInterval = defaultAbsorptionTimes.slow * 2,
-        defaultAbsorptionTimes: DefaultAbsorptionTimes = defaultAbsorptionTimes,
-        observationInterval: TimeInterval? = nil,
+        cacheLength: TimeInterval,
+        defaultAbsorptionTimes: DefaultAbsorptionTimes,
+        observationInterval: TimeInterval,
         carbRatioSchedule: CarbRatioSchedule? = nil,
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
         overrideHistory: TemporaryScheduleOverrideHistory? = nil,
@@ -209,9 +201,11 @@ public final class CarbStore: HealthKitSampleStore {
         self.absorptionTimeOverrun = absorptionTimeOverrun
         self.delta = calculationDelta
         self.delay = effectDelay
-        self.cacheLength = max(cacheLength, observationInterval ?? 0, defaultAbsorptionTimes.slow * 2)
-        self.observationInterval = max(observationInterval ?? 0, defaultAbsorptionTimes.slow * 2)
+        self.cacheLength = cacheLength
+        self.observationInterval = observationInterval
         self.carbAbsorptionModel = carbAbsorptionModel
+        
+        let observationEnabled = observationInterval > 0
 
         super.init(healthStore: healthStore, observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, type: carbType, observationStart: Date(timeIntervalSinceNow: -self.observationInterval), observationEnabled: observationEnabled)
 
