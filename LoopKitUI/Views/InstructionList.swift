@@ -10,9 +10,11 @@ import SwiftUI
 
 public struct InstructionList: View {
     let instructions: [String]
+    let stepsColor: Color
     
-    public init(instructions: [String]) {
+    public init(instructions: [String], stepsColor: Color = Color.accentColor) {
         self.instructions = instructions
+        self.stepsColor = stepsColor
     }
     
     public var body: some View {
@@ -21,7 +23,7 @@ public struct InstructionList: View {
                 HStack(alignment: .top) {
                     Text("\(index+1)")
                         .padding(6)
-                        .background(Circle().fill(Color.accentColor))
+                        .background(Circle().fill(self.stepsColor))
                         .foregroundColor(.white)
                         .font(.caption)
                         .accessibility(label: Text("\(index+1), ")) // Adds a pause after the number
