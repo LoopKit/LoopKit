@@ -47,7 +47,7 @@ public struct BasalRateScheduleEditor: View {
 
         self.guardrail = Guardrail(
             absoluteBounds: supportedBasalRates.first!...supportedBasalRates.last!,
-            recommendedBounds: supportedBasalRates.dropFirst().first!...supportedBasalRates.dropLast().last!,
+            recommendedBounds: supportedBasalRates.dropFirst().first!...supportedBasalRates.last!,
             unit: .internationalUnitsPerHour
         )
         self.maximumScheduleEntryCount = maximumScheduleEntryCount
