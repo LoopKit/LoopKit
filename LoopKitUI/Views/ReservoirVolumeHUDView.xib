@@ -9,36 +9,43 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="Fgu-h0-N6n" customClass="ReservoirVolumeHUDView" customModule="LoopKitUI">
-            <rect key="frame" x="0.0" y="0.0" width="60" height="50"/>
+            <rect key="frame" x="0.0" y="0.0" width="52" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sSE-Jz-j8k">
-                    <rect key="frame" x="0.0" y="5" width="40" height="40"/>
+                <view clipsSubviews="YES" contentMode="center" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="sSE-Jz-j8k">
+                    <rect key="frame" x="8" y="5" width="36" height="34"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UOD-1q-wHA" customClass="LevelMaskView" customModule="LoopKitUI">
-                            <rect key="frame" x="0.0" y="5" width="40" height="35"/>
+                        <view contentMode="scaleToFill" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="UOD-1q-wHA" customClass="LevelMaskView" customModule="LoopKitUI">
+                            <rect key="frame" x="4" y="5" width="28" height="29"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="29" id="gdu-Kp-mV8"/>
+                            </constraints>
                             <userDefinedRuntimeAttributes>
                                 <userDefinedRuntimeAttribute type="image" keyPath="maskImage" value="reservoir_mask"/>
                             </userDefinedRuntimeAttributes>
                         </view>
-                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="reservoir" translatesAutoresizingMaskIntoConstraints="NO" id="zcH-tM-6Pm">
-                            <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="1000" image="reservoir" translatesAutoresizingMaskIntoConstraints="NO" id="zcH-tM-6Pm">
+                            <rect key="frame" x="4" y="0.0" width="28" height="34"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="28" id="27G-w5-6JR"/>
+                                <constraint firstAttribute="height" constant="34" id="iHS-ze-rHu"/>
+                            </constraints>
                         </imageView>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="UOD-1q-wHA" firstAttribute="leading" secondItem="sSE-Jz-j8k" secondAttribute="leading" id="SXN-bj-sAO"/>
-                        <constraint firstAttribute="trailing" secondItem="UOD-1q-wHA" secondAttribute="trailing" id="co9-t4-Q4a"/>
+                        <constraint firstItem="UOD-1q-wHA" firstAttribute="width" secondItem="zcH-tM-6Pm" secondAttribute="width" id="PWW-DH-nVr"/>
+                        <constraint firstItem="UOD-1q-wHA" firstAttribute="leading" secondItem="sSE-Jz-j8k" secondAttribute="leading" constant="4" id="SXN-bj-sAO"/>
+                        <constraint firstAttribute="trailing" secondItem="UOD-1q-wHA" secondAttribute="trailing" constant="4" id="co9-t4-Q4a"/>
                         <constraint firstAttribute="bottom" secondItem="zcH-tM-6Pm" secondAttribute="bottom" id="eNS-sV-TWI"/>
-                        <constraint firstItem="zcH-tM-6Pm" firstAttribute="leading" secondItem="sSE-Jz-j8k" secondAttribute="leading" id="kKl-WM-ctU"/>
-                        <constraint firstAttribute="trailing" secondItem="zcH-tM-6Pm" secondAttribute="trailing" id="l3H-lf-Tur"/>
+                        <constraint firstItem="zcH-tM-6Pm" firstAttribute="leading" secondItem="sSE-Jz-j8k" secondAttribute="leading" constant="4" id="kKl-WM-ctU"/>
+                        <constraint firstAttribute="trailing" secondItem="zcH-tM-6Pm" secondAttribute="trailing" constant="4" id="l3H-lf-Tur"/>
                         <constraint firstAttribute="bottom" secondItem="UOD-1q-wHA" secondAttribute="bottom" id="n3j-1B-03F"/>
-                        <constraint firstAttribute="width" constant="40" id="s8k-0v-E3X"/>
                         <constraint firstItem="zcH-tM-6Pm" firstAttribute="top" secondItem="sSE-Jz-j8k" secondAttribute="top" id="xM0-Di-QOf"/>
                         <constraint firstItem="UOD-1q-wHA" firstAttribute="top" secondItem="sSE-Jz-j8k" secondAttribute="top" constant="5" id="xVz-y5-INC"/>
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="44U" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g9J-nS-4US">
-                    <rect key="frame" x="8.5" y="21.5" width="23" height="13.5"/>
+                    <rect key="frame" x="14.5" y="15.5" width="23" height="13.5"/>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="11"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -50,9 +57,10 @@
             <constraints>
                 <constraint firstItem="sSE-Jz-j8k" firstAttribute="top" secondItem="Fgu-h0-N6n" secondAttribute="top" constant="5" id="6WN-Ek-Oap"/>
                 <constraint firstItem="g9J-nS-4US" firstAttribute="centerX" secondItem="sSE-Jz-j8k" secondAttribute="centerX" id="ADM-vN-GBJ"/>
-                <constraint firstItem="g9J-nS-4US" firstAttribute="centerY" secondItem="sSE-Jz-j8k" secondAttribute="centerY" constant="3" id="NeR-1T-w3W"/>
+                <constraint firstItem="g9J-nS-4US" firstAttribute="centerY" secondItem="sSE-Jz-j8k" secondAttribute="centerY" id="NeR-1T-w3W"/>
+                <constraint firstAttribute="trailing" secondItem="sSE-Jz-j8k" secondAttribute="trailing" constant="8" id="OKI-gf-CUb"/>
                 <constraint firstAttribute="bottom" secondItem="sSE-Jz-j8k" secondAttribute="bottom" constant="5" id="ajf-eB-wcp"/>
-                <constraint firstItem="sSE-Jz-j8k" firstAttribute="leading" secondItem="Fgu-h0-N6n" secondAttribute="leading" id="bb8-Rc-5WZ"/>
+                <constraint firstItem="sSE-Jz-j8k" firstAttribute="leading" secondItem="Fgu-h0-N6n" secondAttribute="leading" constant="8" id="bb8-Rc-5WZ"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>

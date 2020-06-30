@@ -40,6 +40,7 @@ public class LevelMaskView: UIView {
 
             mask = UIView()
             maskImageView = UIImageView(image: maskImage)
+            maskImageView!.frame = CGRect(origin: .zero, size: frame.size)
             maskImageView!.contentMode = .center
             mask!.addSubview(maskImageView!)
 
@@ -58,13 +59,13 @@ public class LevelMaskView: UIView {
     override public func layoutSubviews() {
         super.layoutSubviews()
 
-        guard let maskImage = maskImage else { return }
+        guard let maskImageView = maskImageView else { return }
 
-        let maskImageSize = maskImage.size
+        let maskImageViewSize = maskImageView.frame.size
 
-        mask?.frame = CGRect(origin: .zero, size: maskImageSize)
+        mask?.frame = CGRect(origin: .zero, size: maskImageViewSize)
         mask?.center = CGPoint(x: bounds.midX, y: bounds.midY)
-        maskImageView?.frame = mask?.bounds ?? bounds
+        self.maskImageView?.frame = mask?.bounds ?? bounds
 
         if (fillView?.layer.animationKeys()?.count ?? 0) == 0 {
             updateFillViewFrame()

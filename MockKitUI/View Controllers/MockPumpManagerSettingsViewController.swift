@@ -73,6 +73,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
 
     private enum ActionRow: Int, CaseIterable {
         case suspendResume = 0
+        case occlusion
+        case pumpError
     }
 
     private enum SettingsRow: Int, CaseIterable {
@@ -119,6 +121,22 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             case .suspendResume:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SuspendResumeTableViewCell.className, for: indexPath) as! SuspendResumeTableViewCell
                 cell.basalDeliveryState = pumpManager.status.basalDeliveryState
+                return cell
+            case .occlusion:
+                let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
+                if pumpManager.state.occlusionDetected {
+                    cell.textLabel?.text = "Resolve Occlusion"
+                } else {
+                    cell.textLabel?.text = "Detect Occlusion"
+                }
+                return cell
+            case .pumpError:
+                let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
+                if pumpManager.state.pumpErrorDetected {
+                    cell.textLabel?.text = "Resolve Pump Error"
+                } else {
+                    cell.textLabel?.text = "Cause Pump Error"
+                }
                 return cell
             }
         case .settings:
@@ -179,6 +197,14 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                     suspendResumeCellTapped(suspendResumeCell)
                 }
                 tableView.deselectRow(at: indexPath, animated: true)
+            case .occlusion:
+                pumpManager.state.occlusionDetected = !pumpManager.state.occlusionDetected
+                tableView.deselectRow(at: indexPath, animated: true)
+                tableView.reloadRows(at: [indexPath], with: .automatic)
+            case .pumpError:
+                pumpManager.state.pumpErrorDetected = !pumpManager.state.pumpErrorDetected
+                tableView.deselectRow(at: indexPath, animated: true)
+                tableView.reloadRows(at: [indexPath], with: .automatic)
             }
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {

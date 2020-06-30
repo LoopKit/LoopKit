@@ -18,6 +18,8 @@ public struct MockPumpManagerState {
     public var maximumBasalRatePerHour: Double
     public var suspendState: SuspendState
     public var pumpBatteryChargeRemaining: Double?
+    public var occlusionDetected: Bool = false
+    public var pumpErrorDetected: Bool = false
 
     public var unfinalizedBolus: UnfinalizedDose?
     public var unfinalizedTempBasal: UnfinalizedDose?
@@ -58,6 +60,8 @@ extension MockPumpManagerState: RawRepresentable {
         self.maximumBolus = rawValue["maximumBolus"] as? Double ?? 25.0
         self.maximumBasalRatePerHour = rawValue["maximumBasalRatePerHour"] as? Double ?? 5.0
         self.pumpBatteryChargeRemaining = rawValue["pumpBatteryChargeRemaining"] as? Double ?? nil
+        self.occlusionDetected = rawValue["occlusionDetected"] as? Bool ?? false
+        self.pumpErrorDetected = rawValue["pumpErrorDetected"] as? Bool ?? false
 
         if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue {
             self.unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
@@ -113,6 +117,9 @@ extension MockPumpManagerState: RawRepresentable {
         raw["unfinalizedTempBasal"] = unfinalizedTempBasal?.rawValue
 
         raw["pumpBatteryChargeRemaining"] = pumpBatteryChargeRemaining
+        
+        raw["occlusionDetected"] = occlusionDetected
+        raw["pumpErrorDetected"] = pumpErrorDetected
 
         return raw
     }
@@ -134,6 +141,8 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
         * unfinalizedBolus: \(String(describing: unfinalizedBolus))
         * unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))
         * finalizedDoses: \(finalizedDoses)
+        * occlusionDetected: \(occlusionDetected)
+        * pumpErrorDetected: \(pumpErrorDetected)
         """
     }
 }

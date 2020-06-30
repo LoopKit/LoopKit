@@ -6,9 +6,24 @@
 //
 
 import Foundation
+import UIKit
 import HealthKit
 
 public struct PumpManagerStatus: Equatable {
+    
+    public struct PumpStatusHighlight: DeviceStatusHighlight, Equatable {
+        public var localizedMessage: String
+        
+        public var icon: UIImage
+        
+        public var color: UIColor
+        
+        public init(localizedMessage: String, icon: UIImage, color: UIColor) {
+            self.localizedMessage = localizedMessage
+            self.icon = icon
+            self.color = color
+        }
+    }
     
     public enum BasalDeliveryState: Equatable {
         case active(_ at: Date)
@@ -39,19 +54,22 @@ public struct PumpManagerStatus: Equatable {
     public var pumpBatteryChargeRemaining: Double?
     public var basalDeliveryState: BasalDeliveryState
     public var bolusState: BolusState
+    public var pumpStatusHighlight: PumpStatusHighlight?
 
     public init(
         timeZone: TimeZone,
         device: HKDevice,
         pumpBatteryChargeRemaining: Double?,
         basalDeliveryState: BasalDeliveryState,
-        bolusState: BolusState
+        bolusState: BolusState,
+        pumpStatusHighlight: PumpStatusHighlight? = nil
     ) {
         self.timeZone = timeZone
         self.device = device
         self.pumpBatteryChargeRemaining = pumpBatteryChargeRemaining
         self.basalDeliveryState = basalDeliveryState
         self.bolusState = bolusState
+        self.pumpStatusHighlight = pumpStatusHighlight
     }
 }
 
