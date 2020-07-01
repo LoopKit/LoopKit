@@ -12,6 +12,7 @@ public struct MockPumpManagerState {
     public var reservoirUnitsRemaining: Double
     public var tempBasalEnactmentShouldError: Bool
     public var bolusEnactmentShouldError: Bool
+    public var bolusCancelShouldError: Bool
     public var deliverySuspensionShouldError: Bool
     public var deliveryResumptionShouldError: Bool
     public var maximumBolus: Double
@@ -55,6 +56,7 @@ extension MockPumpManagerState: RawRepresentable {
         self.reservoirUnitsRemaining = reservoirUnitsRemaining
         self.tempBasalEnactmentShouldError = rawValue["tempBasalEnactmentShouldError"] as? Bool ?? false
         self.bolusEnactmentShouldError = rawValue["bolusEnactmentShouldError"] as? Bool ?? false
+        self.bolusCancelShouldError = rawValue["bolusCancelShouldError"] as? Bool ?? false
         self.deliverySuspensionShouldError = rawValue["deliverySuspensionShouldError"] as? Bool ?? false
         self.deliveryResumptionShouldError = rawValue["deliveryResumptionShouldError"] as? Bool ?? false
         self.maximumBolus = rawValue["maximumBolus"] as? Double ?? 25.0
@@ -100,6 +102,10 @@ extension MockPumpManagerState: RawRepresentable {
             raw["bolusEnactmentShouldError"] = true
         }
 
+        if bolusCancelShouldError {
+            raw["bolusCancelShouldError"] = true
+        }
+
         if deliverySuspensionShouldError {
             raw["deliverySuspensionShouldError"] = true
         }
@@ -132,6 +138,7 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
         * reservoirUnitsRemaining: \(reservoirUnitsRemaining)
         * tempBasalEnactmentShouldError: \(tempBasalEnactmentShouldError)
         * bolusEnactmentShouldError: \(bolusEnactmentShouldError)
+        * bolusCancelShouldError: \(bolusCancelShouldError)
         * deliverySuspensionShouldError: \(deliverySuspensionShouldError)
         * deliveryResumptionShouldError: \(deliveryResumptionShouldError)
         * maximumBolus: \(maximumBolus)

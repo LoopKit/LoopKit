@@ -218,6 +218,7 @@ public final class MockPumpManager: TestingPumpManager {
             reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity,
             tempBasalEnactmentShouldError: false,
             bolusEnactmentShouldError: false,
+            bolusCancelShouldError: false,
             deliverySuspensionShouldError: false,
             deliveryResumptionShouldError: false,
             maximumBolus: 25.0,
@@ -372,13 +373,20 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     public func cancelBolus(completion: @escaping (PumpManagerResult<DoseEntry?>) -> Void) {
-
-        state.unfinalizedBolus?.cancel(at: Date())
-
-        storeDoses { (_) in
-            DispatchQueue.main.async {
-                self.state.finalizeFinishedDoses()
-                completion(.success(nil))
+        logDeviceComms(.send, message: "Cancel")
+        
+        if self.state.bolusCancelShouldError {
+            let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Cancel failed with error: \(error)")
+            completion(.failure(error))
+        } else {
+            state.unfinalizedBolus?.cancel(at: Date())
+            
+            storeDoses { (_) in
+                DispatchQueue.main.async {
+                    self.state.finalizeFinishedDoses()
+                    completion(.success(nil))
+                }
             }
         }
     }

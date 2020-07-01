@@ -82,6 +82,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         case batteryRemaining
         case tempBasalErrorToggle
         case bolusErrorToggle
+        case bolusCancelErrorToggle
         case suspendErrorToggle
         case resumeErrorToggle
     }
@@ -161,6 +162,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 return switchTableViewCell(for: indexPath, titled: "Error on Temp Basal", boundTo: \.tempBasalEnactmentShouldError)
             case .bolusErrorToggle:
                 return switchTableViewCell(for: indexPath, titled: "Error on Bolus", boundTo: \.bolusEnactmentShouldError)
+            case .bolusCancelErrorToggle:
+                return switchTableViewCell(for: indexPath, titled: "Error on Cancel Bolus", boundTo: \.bolusCancelShouldError)
             case .suspendErrorToggle:
                 return switchTableViewCell(for: indexPath, titled: "Error on Suspend", boundTo: \.deliverySuspensionShouldError)
             case .resumeErrorToggle:
@@ -222,7 +225,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 vc.indexPath = indexPath
                 vc.percentageDelegate = self
                 show(vc, sender: sender)
-            case .tempBasalErrorToggle, .bolusErrorToggle, .suspendErrorToggle, .resumeErrorToggle:
+            case .tempBasalErrorToggle, .bolusErrorToggle, .bolusCancelErrorToggle, .suspendErrorToggle, .resumeErrorToggle:
                 break
             }
         case .deletePump:
