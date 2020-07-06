@@ -16,6 +16,7 @@
 		1DABAD3A2453615200ACF708 /* IssueAlertTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DABAD392453615200ACF708 /* IssueAlertTableViewController.swift */; };
 		1DD1964E248AE88000420876 /* HorizontalSizeClassOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD1964D248AE88000420876 /* HorizontalSizeClassOverride.swift */; };
 		1DD3DEB624451C3300BD8E40 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* Alert.swift */; };
+		1DE35E7A24ABEC720086F9AE /* DeviceManagerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE35E7924ABEC720086F9AE /* DeviceManagerUI.swift */; };
 		1DEE226F24A676A300693C32 /* GlucoseStoreHKFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEE226024A6642300693C32 /* GlucoseStoreHKFilterTests.swift */; };
 		1DEE227724A676A300693C32 /* HKHealthStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437AFF1E203A763F008C4892 /* HKHealthStoreMock.swift */; };
 		1DEE228424A676A300693C32 /* CarbStoreHKFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEE226224A6642400693C32 /* CarbStoreHKFilterTests.swift */; };
@@ -821,6 +822,7 @@
 		1DA649AA2445174400F61E75 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		1DABAD392453615200ACF708 /* IssueAlertTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueAlertTableViewController.swift; sourceTree = "<group>"; };
 		1DD1964D248AE88000420876 /* HorizontalSizeClassOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSizeClassOverride.swift; sourceTree = "<group>"; };
+		1DE35E7924ABEC720086F9AE /* DeviceManagerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManagerUI.swift; sourceTree = "<group>"; };
 		1DEE226024A6642300693C32 /* GlucoseStoreHKFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseStoreHKFilterTests.swift; sourceTree = "<group>"; };
 		1DEE226124A6642300693C32 /* DoseStoreHKFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseStoreHKFilterTests.swift; sourceTree = "<group>"; };
 		1DEE226224A6642400693C32 /* CarbStoreHKFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbStoreHKFilterTests.swift; sourceTree = "<group>"; };
@@ -1805,6 +1807,7 @@
 				43BA719920203EF30058961E /* CarbKit.storyboard */,
 				43A8EC3B210CEEA500A81379 /* CGMManagerUI.swift */,
 				892A5D9F2231E12F008961AB /* CompletionNotifying.swift */,
+				1DE35E7924ABEC720086F9AE /* DeviceManagerUI.swift */,
 				895FE07022011EDD00FCF18A /* EmojiInputController.storyboard */,
 				B42C950824A3BCC200857C73 /* GlucoseValueType+Color.swift */,
 				892A5DA12231E136008961AB /* HUDProvider.swift */,
@@ -3055,6 +3058,7 @@
 				B4C004D22416961300B40429 /* GuideNavigationButton.swift in Sources */,
 				89627B16244115A400BEB424 /* CardList.swift in Sources */,
 				89F6E311244A1AAB00CB9E15 /* SettingDescription.swift in Sources */,
+				1DE35E7A24ABEC720086F9AE /* DeviceManagerUI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

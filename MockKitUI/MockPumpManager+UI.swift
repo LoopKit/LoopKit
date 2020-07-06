@@ -13,6 +13,8 @@ import MockKit
 
 
 extension MockPumpManager: PumpManagerUI {
+    public var smallImage: UIImage? { return UIImage(named: "Simulator Small", in: Bundle(for: MockPumpManagerSettingsViewController.self), compatibleWith: nil) }
+
     public static func setupViewController() -> (UIViewController & CompletionNotifying & PumpManagerSetupViewController) {
         return MockPumpManagerSetupViewController.instantiateFromStoryboard()
     }
@@ -21,10 +23,6 @@ extension MockPumpManager: PumpManagerUI {
         let settings = MockPumpManagerSettingsViewController(pumpManager: self)
         let nav = SettingsNavigationViewController(rootViewController: settings)
         return nav
-    }
-
-    public var smallImage: UIImage? {
-        return UIImage(named: "Simulator Small", in: Bundle(for: MockPumpManagerSettingsViewController.self), compatibleWith: nil)
     }
 
     public func hudProvider() -> HUDProvider? {

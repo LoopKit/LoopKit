@@ -8,14 +8,11 @@
 import UIKit
 import LoopKit
 
-public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
+public protocol PumpManagerUI: DeviceManagerUI, PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
     
     static func setupViewController() -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying)
 
     func settingsViewController() -> (UIViewController & CompletionNotifying)
-    
-    // An image representing the pump configuration
-    var smallImage: UIImage? { get }
     
     // Returns a class that can provide HUD views
     func hudProvider() -> HUDProvider?

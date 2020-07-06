@@ -14,6 +14,8 @@ import MockKit
 
 
 extension MockCGMManager: CGMManagerUI {
+    public var smallImage: UIImage? { nil }  // TODO: come up with a better image
+
     public static func setupViewController() -> (UIViewController & CGMManagerSetupViewController & CompletionNotifying)? {
         return nil
     }
@@ -22,10 +24,6 @@ extension MockCGMManager: CGMManagerUI {
         let settings = MockCGMManagerSettingsViewController(cgmManager: self, glucoseUnit: glucoseUnit)
         let nav = SettingsNavigationViewController(rootViewController: settings)
         return nav
-    }
-
-    public var smallImage: UIImage? {
-        return nil
     }
     
     public var cgmStatusHighlight: DeviceStatusHighlight? {
