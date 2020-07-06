@@ -41,7 +41,6 @@ final class MeasurementFrequencyTableViewController: RadioSelectionTableViewCont
         options = MeasurementFrequency.allCases.map { frequency in
             "\(frequency.localizedDescription)"
         }
-        options = ["5 seconds", "5 minutes"]
         delegate = self
     }
 }

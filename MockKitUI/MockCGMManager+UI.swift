@@ -33,7 +33,13 @@ extension MockCGMManager: CGMManagerUI {
     }
     
     // TODO Placeholder. This functionality will come with LOOP-1293
-    public var progressPercentCompleted: Double? {
-        return nil
+    public var cgmLifecycleProgress: DeviceLifecycleProgress? {
+        return self.mockSensorState.cgmLifecycleProgress
+    }
+}
+
+extension MockCGMLifecycleProgress {
+    var color: UIColor {
+        return progressState.color
     }
 }

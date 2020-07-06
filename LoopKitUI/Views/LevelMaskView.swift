@@ -41,7 +41,7 @@ public class LevelMaskView: UIView {
             mask = UIView()
             maskImageView = UIImageView(image: maskImage)
             maskImageView!.frame = CGRect(origin: .zero, size: frame.size)
-            maskImageView!.contentMode = .center
+            maskImageView!.contentMode = .scaleAspectFit
             mask!.addSubview(maskImageView!)
 
             clipsToBounds = true

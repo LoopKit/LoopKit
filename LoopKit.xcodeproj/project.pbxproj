@@ -641,6 +641,8 @@
 		A9E675EC22713F4700E25293 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1F5DAB2B2118CE9300048054 /* Localizable.strings */; };
 		A9E675F3227140D800E25293 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E675F2227140D800E25293 /* CoreData.framework */; };
 		A9E675F5227140DD00E25293 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E675F4227140DD00E25293 /* HealthKit.framework */; };
+		B4102D3224ABB068005D460B /* DeviceLifecycleProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4102D3124ABB068005D460B /* DeviceLifecycleProgress.swift */; };
+		B4102D3324ABB0D8005D460B /* DeviceLifecycleProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4102D3124ABB068005D460B /* DeviceLifecycleProgress.swift */; };
 		B41A60AF23D1DB5B00636320 /* TableViewTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41A60AE23D1DB5B00636320 /* TableViewTitleLabel.swift */; };
 		B41A60B223D1DBC700636320 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41A60B123D1DBC700636320 /* UIFont.swift */; };
 		B42A7472235885B600247B03 /* LoopNotificationUserInfoKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42A7471235885B600247B03 /* LoopNotificationUserInfoKey.swift */; };
@@ -663,6 +665,9 @@
 		B4C004D22416961300B40429 /* GuideNavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */; };
 		B4C004D32416961300B40429 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B2241085DB00B40429 /* ActionButton.swift */; };
 		B4C004D42416962600B40429 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B8241085FE00B40429 /* Color.swift */; };
+		B4F3D24C24AF59450095CE44 /* DeviceLifecycleProgressState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F3D24B24AF59450095CE44 /* DeviceLifecycleProgressState.swift */; };
+		B4F3D24D24AF59450095CE44 /* DeviceLifecycleProgressState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F3D24B24AF59450095CE44 /* DeviceLifecycleProgressState.swift */; };
+		B4F3D24F24AF59B50095CE44 /* DeviceLifecycleProgressState+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F3D24E24AF59B50095CE44 /* DeviceLifecycleProgressState+Color.swift */; };
 		C164A56022F14C73000E3FA5 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A55F22F14C73000E3FA5 /* UnfinalizedDose.swift */; };
 		C164A56422F21081000E3FA5 /* MockPumpManagerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */; };
 		C16DA83F22E8D88F008624C2 /* LoopPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16DA83E22E8D88F008624C2 /* LoopPlugin.swift */; };
@@ -1372,6 +1377,7 @@
 		A9E675F022713F4700E25293 /* LoopKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LoopKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9E675F2227140D800E25293 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		A9E675F4227140DD00E25293 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
+		B4102D3124ABB068005D460B /* DeviceLifecycleProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLifecycleProgress.swift; sourceTree = "<group>"; };
 		B41A60AE23D1DB5B00636320 /* TableViewTitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewTitleLabel.swift; sourceTree = "<group>"; };
 		B41A60B123D1DBC700636320 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		B42A7471235885B600247B03 /* LoopNotificationUserInfoKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopNotificationUserInfoKey.swift; sourceTree = "<group>"; };
@@ -1392,6 +1398,8 @@
 		B4C004B3241085DB00B40429 /* GuidePage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuidePage.swift; sourceTree = "<group>"; };
 		B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuideNavigationButton.swift; sourceTree = "<group>"; };
 		B4C004B8241085FE00B40429 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		B4F3D24B24AF59450095CE44 /* DeviceLifecycleProgressState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLifecycleProgressState.swift; sourceTree = "<group>"; };
+		B4F3D24E24AF59B50095CE44 /* DeviceLifecycleProgressState+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeviceLifecycleProgressState+Color.swift"; sourceTree = "<group>"; };
 		C1110E981EE98CF5009BB852 /* ice_35_min_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_input.json; sourceTree = "<group>"; };
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
@@ -1821,6 +1829,7 @@
 				432CF86320D769070066B889 /* View Controllers */,
 				4369F090208B0D68000E3E45 /* Views */,
 				1DD1964D248AE88000420876 /* HorizontalSizeClassOverride.swift */,
+				B4F3D24E24AF59B50095CE44 /* DeviceLifecycleProgressState+Color.swift */,
 			);
 			path = LoopKitUI;
 			sourceTree = "<group>";
@@ -2330,6 +2339,8 @@
 				432CF87220D774220066B889 /* PumpManager.swift */,
 				43FB610620DDF19B002B996B /* PumpManagerError.swift */,
 				43FB60E820DCBE64002B996B /* PumpManagerStatus.swift */,
+				B4102D3124ABB068005D460B /* DeviceLifecycleProgress.swift */,
+				B4F3D24B24AF59450095CE44 /* DeviceLifecycleProgressState.swift */,
 			);
 			path = DeviceManager;
 			sourceTree = "<group>";
@@ -2986,6 +2997,7 @@
 				898B4E77246DAE280053C484 /* GlucoseRangePicker.swift in Sources */,
 				432CF86D20D76C470066B889 /* SwitchTableViewCell.swift in Sources */,
 				43BA7188201EE85B0058961E /* HKUnit.swift in Sources */,
+				B4F3D24F24AF59B50095CE44 /* DeviceLifecycleProgressState+Color.swift in Sources */,
 				89F6E30D2449713600CB9E15 /* CardStack.swift in Sources */,
 				89BE75C324649C4C00B145D9 /* RoundedCorners.swift in Sources */,
 				C1E4B306242E98E900E70CCB /* ProgressIndicatorView.swift in Sources */,
@@ -3050,6 +3062,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4102D3224ABB068005D460B /* DeviceLifecycleProgress.swift in Sources */,
 				C17F39C923CD269200FA1113 /* DeviceLogEntryType.swift in Sources */,
 				C1814B84225B9ED5008D2D8E /* LoopNotificationCategory.swift in Sources */,
 				43D8FDFD1C7290350073BE78 /* HKUnit.swift in Sources */,
@@ -3147,6 +3160,7 @@
 				43CF0B3F2030FD0D002A66DE /* UploadState.swift in Sources */,
 				C16DA83F22E8D88F008624C2 /* LoopPlugin.swift in Sources */,
 				C1F8403923DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift in Sources */,
+				B4F3D24C24AF59450095CE44 /* DeviceLifecycleProgressState.swift in Sources */,
 				433BC7AD20538FCA000B1200 /* StoredGlucoseSample.swift in Sources */,
 				43D8FDF91C7290350073BE78 /* GlucoseEffect.swift in Sources */,
 				1D841AAD24577EE10069DBFF /* AlertSoundPlayer.swift in Sources */,
@@ -3349,6 +3363,7 @@
 				A9E6759322713F4700E25293 /* CarbMath.swift in Sources */,
 				A9E6759522713F4700E25293 /* ExponentialInsulinModel.swift in Sources */,
 				A91A601B23CD023800C0E8A1 /* Modelv2.xcmappingmodel in Sources */,
+				B4102D3324ABB0D8005D460B /* DeviceLifecycleProgress.swift in Sources */,
 				A9498D8323386C3300DAA9B9 /* Service.swift in Sources */,
 				A9E6759622713F4700E25293 /* NSTimeInterval.swift in Sources */,
 				A9E6759722713F4700E25293 /* DailyQuantitySchedule.swift in Sources */,
@@ -3412,6 +3427,7 @@
 				A9E675C322713F4700E25293 /* UnfairLock.swift in Sources */,
 				1DD3DEB624451C3300BD8E40 /* Alert.swift in Sources */,
 				A9E675C422713F4700E25293 /* HealthStoreUnitCache.swift in Sources */,
+				B4F3D24D24AF59450095CE44 /* DeviceLifecycleProgressState.swift in Sources */,
 				A9D77A30242E8BDE0009F62C /* BolusRecommendation.swift in Sources */,
 				A9E675C622713F4700E25293 /* CarbStatus.swift in Sources */,
 				B42C951B24A63B8100857C73 /* DeviceStatusHighlight.swift in Sources */,

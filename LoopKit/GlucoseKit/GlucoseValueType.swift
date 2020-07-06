@@ -10,6 +10,7 @@ import Foundation
 
 public enum GlucoseValueType: Int, CaseIterable {
     case belowRange
+    case urgentLow
     case low
     case normal
     case high
