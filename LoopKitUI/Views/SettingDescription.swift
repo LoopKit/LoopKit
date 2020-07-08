@@ -8,12 +8,39 @@
 
 import SwiftUI
 
+public enum TherapySetting: Int {
+    case glucoseTargetRange
+    case correctionRangeOverrides
+    case suspendThreshold
+    case basalRate
+    case deliveryLimits
+    case insulinModel
+    case carbRatio
+    case insulinSensitivity
+    case none
+    
+    public func helpScreen() -> some View {
+        switch self {
+        case .glucoseTargetRange:
+            return AnyView(CorrectionRangeInformationView(onExit: nil, mode: .modal))
+        // ANNA TODO: add more once other instructional screens are created
+        default:
+            return AnyView(Text("To be implemented"))
+        }
+    }
+}
 
-public struct SettingDescription: View {
+public struct SettingDescription<InformationalContent: View>: View {
     var text: Text
+    var informationalContent: InformationalContent
+    @State var displayHelpPage: Bool = false
 
-    public init(text: Text) {
+    public init(
+        text: Text,
+        @ViewBuilder informationalContent: @escaping () -> InformationalContent
+    ) {
         self.text = text
+        self.informationalContent = informationalContent()
     }
 
     public var body: some View {
@@ -24,25 +51,27 @@ public struct SettingDescription: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             Spacer()
-
-            Button(
-                action: {
-                    // TODO: Open a link to a support article
-                },
-                label: {
-                    Image(systemName: "info.circle")
-                        .font(.system(size: 25))
-                        .foregroundColor(.accentColor)
+            
+            infoButton
+            .sheet(isPresented: $displayHelpPage) {
+                NavigationView {
+                    self.informationalContent
                 }
-            )
-            .padding(.trailing, 4)
+            }
         }
     }
-}
-
-struct SettingDescription_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingDescription(text: Text(verbatim: "When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U and will not recommend a bolus."))
-            .padding(.horizontal)
+    
+    private var infoButton: some View {
+        Button(
+            action: {
+                self.displayHelpPage = true
+            },
+            label: {
+                Image(systemName: "info.circle")
+                    .font(.system(size: 25))
+                    .foregroundColor(.accentColor)
+            }
+        )
+        .padding(.trailing, 4)
     }
 }

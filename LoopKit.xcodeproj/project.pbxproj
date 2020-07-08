@@ -693,6 +693,10 @@
 		C1F8403923DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C1F8403A23DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
 		C1F8B1E2223C3CC000DD66CF /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
+		E9077D2724ACD59F0066A88D /* InformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9077D2624ACD59F0066A88D /* InformationView.swift */; };
+		E9077D2A24ACDE2C0066A88D /* CorrectionRangeInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */; };
+		E9086B3924B3CB4B0062F5C8 /* TherapySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9086B3824B3CB4B0062F5C8 /* TherapySettings.swift */; };
+		E9086B3B24B3CFFD0062F5C8 /* TherapySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9086B3824B3CB4B0062F5C8 /* TherapySettings.swift */; };
 		E93BA06624A39DBC00C5D7E6 /* DismissableHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93BA06524A39DBC00C5D7E6 /* DismissableHostingController.swift */; };
 /* End PBXBuildFile section */
 
@@ -1428,6 +1432,9 @@
 		C1E4B309242E99A800E70CCB /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceLogEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceLogEntry+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E9077D2624ACD59F0066A88D /* InformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationView.swift; sourceTree = "<group>"; };
+		E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeInformationView.swift; sourceTree = "<group>"; };
+		E9086B3824B3CB4B0062F5C8 /* TherapySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TherapySettings.swift; sourceTree = "<group>"; };
 		E93BA06524A39DBC00C5D7E6 /* DismissableHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissableHostingController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1747,6 +1754,7 @@
 				89653C7F2473527100E1BAA5 /* FractionalQuantityPicker.swift */,
 				89653C812473592600E1BAA5 /* CarbRatioScheduleEditor.swift */,
 				89653C8324738D2B00E1BAA5 /* BasalRateScheduleEditor.swift */,
+				E9077D2824ACD5AA0066A88D /* Information Screens */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1963,6 +1971,7 @@
 				437874B4202FDC8300A3D8B9 /* Persistence */,
 				C16DA83E22E8D88F008624C2 /* LoopPlugin.swift */,
 				89F6E30E244A1A5D00CB9E15 /* Guardrail.swift */,
+				E9086B3824B3CB4B0062F5C8 /* TherapySettings.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -2358,6 +2367,15 @@
 				C17F39CF23CE34B100FA1113 /* StoredDeviceLogEntry.swift */,
 			);
 			path = DeviceLog;
+			sourceTree = "<group>";
+		};
+		E9077D2824ACD5AA0066A88D /* Information Screens */ = {
+			isa = PBXGroup;
+			children = (
+				E9077D2624ACD59F0066A88D /* InformationView.swift */,
+				E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */,
+			);
+			path = "Information Screens";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2919,6 +2937,7 @@
 				898B4E75246CCAB50053C484 /* Binding.swift in Sources */,
 				892155182245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.swift in Sources */,
 				892155132245C516009112BC /* SegmentedGaugeBarView.swift in Sources */,
+				E9077D2A24ACDE2C0066A88D /* CorrectionRangeInformationView.swift in Sources */,
 				B4A2AAB3240832350066563F /* MultipleSelectionList.swift in Sources */,
 				B46B62AB23FF0822001E69BA /* LabeledValueView.swift in Sources */,
 				43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */,
@@ -2994,6 +3013,7 @@
 				B46B62B323FF0E62001E69BA /* SelectableLabel.swift in Sources */,
 				89FC6893245A2D680075CF59 /* ScheduleItemView.swift in Sources */,
 				43BA716F201E49220058961E /* FoodEmojiDataSource.swift in Sources */,
+				E9077D2724ACD59F0066A88D /* InformationView.swift in Sources */,
 				43F89C9F22BDFB10006BB54E /* UIActivityIndicatorView.swift in Sources */,
 				892ADE002446C858007CE08C /* Card.swift in Sources */,
 				89653C8424738D2B00E1BAA5 /* BasalRateScheduleEditor.swift in Sources */,
@@ -3091,6 +3111,7 @@
 				43FB60E920DCBE64002B996B /* PumpManagerStatus.swift in Sources */,
 				4322B774202FA2790002837D /* CarbMath.swift in Sources */,
 				4322B78B202FA2B30002837D /* ExponentialInsulinModel.swift in Sources */,
+				E9086B3924B3CB4B0062F5C8 /* TherapySettings.swift in Sources */,
 				89AE222F228BC68000BDFD85 /* DoseProgressTimerEstimator.swift in Sources */,
 				43D8FE011C7290350073BE78 /* NSTimeInterval.swift in Sources */,
 				43D8FDF61C7290350073BE78 /* DailyQuantitySchedule.swift in Sources */,
@@ -3452,6 +3473,7 @@
 				A9E675D522713F4700E25293 /* WalshInsulinModel.swift in Sources */,
 				A9E675D622713F4700E25293 /* GlucoseEffectVelocity.swift in Sources */,
 				A9E675D722713F4700E25293 /* PumpEvent+CoreDataClass.swift in Sources */,
+				E9086B3B24B3CFFD0062F5C8 /* TherapySettings.swift in Sources */,
 				A9E675D822713F4700E25293 /* UpdateSource.swift in Sources */,
 				A9E675D922713F4700E25293 /* Reservoir+CoreDataProperties.swift in Sources */,
 				A9E675DA22713F4700E25293 /* HKQuantitySample+CarbKit.swift in Sources */,

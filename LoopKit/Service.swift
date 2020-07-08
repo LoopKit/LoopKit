@@ -15,6 +15,12 @@ public protocol ServiceDelegate: AnyObject {
     ///     - service: The service whose state was updated.
     func serviceDidUpdateState(_ service: Service)
 
+    /// Informs the delegate that the service has new settings that should be saved
+    /// to Loop
+    ///
+    /// - Parameters:
+    ///     - settings: The settings object containing the new settings.
+    func serviceHasNewTherapySettings(_ settings: TherapySettings)
 }
 
 public protocol Service: AnyObject {

@@ -42,6 +42,7 @@ public struct ConfigurationPage<ActionAreaContent: View>: View {
                                 .opacity(0) // For layout only, to ensure the button text is centered
 
                             actionButtonTitle
+                            .animation(nil)
 
                             ActivityIndicator(isAnimating: .constant(true), style: .medium, color: .white)
                                 .opacity(actionButtonState == .loading ? 1 : 0)

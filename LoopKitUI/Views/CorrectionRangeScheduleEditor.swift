@@ -15,7 +15,6 @@ extension Guardrail where Value == HKQuantity {
     public static let correctionRange = Guardrail(absoluteBounds: 60...180, recommendedBounds: 70...120, unit: .milligramsPerDeciliter)
 }
 
-
 public struct CorrectionRangeScheduleEditor: View {
     var initialSchedule: GlucoseRangeSchedule?
     @State var scheduleItems: [RepeatingScheduleValue<DoubleRange>]
@@ -23,24 +22,29 @@ public struct CorrectionRangeScheduleEditor: View {
     var minValue: HKQuantity?
     var save: (GlucoseRangeSchedule) -> Void
     let guardrail = Guardrail.correctionRange
-
+    let mode: PresentationMode
+    @State private var userDidTap: Bool = false
+    
     public init(
         schedule: GlucoseRangeSchedule?,
         unit: HKUnit,
         minValue: HKQuantity?,
-        onSave save: @escaping (GlucoseRangeSchedule) -> Void
+        onSave save: @escaping (GlucoseRangeSchedule) -> Void,
+        mode: PresentationMode = .modal
     ) {
         self.initialSchedule = schedule
         self._scheduleItems = State(initialValue: schedule?.items ?? [])
         self.unit = unit
         self.minValue = minValue
         self.save = save
+        self.mode = mode
     }
 
     public var body: some View {
         ScheduleEditor(
             title: Text("Correction Ranges", comment: "Title of correction range schedule editor"),
             description: description,
+            buttonText: buttonText,
             scheduleItems: $scheduleItems,
             initialScheduleItems: initialSchedule?.items ?? [],
             defaultFirstScheduleItemValue: defaultFirstScheduleItemValue,
@@ -65,14 +69,20 @@ public struct CorrectionRangeScheduleEditor: View {
                 )
             },
             actionAreaContent: {
+                instructionalContentIfNecessary
                 guardrailWarningIfNecessary
             },
             savingMechanism: .synchronous { items in
                 let quantitySchedule = DailyQuantitySchedule(unit: self.unit, dailyItems: items)!
                 let rangeSchedule = GlucoseRangeSchedule(rangeSchedule: quantitySchedule, override: self.initialSchedule?.override)
                 self.save(rangeSchedule)
-            }
+            },
+            mode: mode,
+            therapySettingType: .glucoseTargetRange
         )
+        .onTapGesture {
+            self.userDidTap = true
+        }
     }
 
     var defaultFirstScheduleItemValue: DoubleRange {
@@ -93,11 +103,31 @@ public struct CorrectionRangeScheduleEditor: View {
     var saveConfirmation: SaveConfirmation {
         crossedThresholds.isEmpty ? .notRequired : .required(confirmationAlertContent)
     }
+    
+    var instructionalContentIfNecessary: some View {
+        return Group {
+            if mode == .flow && !userDidTap {
+                instructionalContent
+            }
+        }
+    }
+    
+    var instructionalContent: some View {
+        HStack { // to align with guardrail warning, if present
+            VStack(alignment: .leading, spacing: 20) {
+                Text(LocalizedString("You can edit a setting by tapping into any line item.", comment: "Description of how to edit setting"))
+                Text(LocalizedString("You can add different correction ranges for different times of day by using the [+].", comment: "Description of how to add a configuration range"))
+            }
+            .foregroundColor(.accentColor)
+            .font(.subheadline)
+            Spacer()
+        }
+    }
 
     var guardrailWarningIfNecessary: some View {
         let crossedThresholds = self.crossedThresholds
         return Group {
-            if !crossedThresholds.isEmpty {
+            if !crossedThresholds.isEmpty && (userDidTap || mode == .modal) {
                 CorrectionRangeGuardrailWarning(crossedThresholds: crossedThresholds)
             }
         }
@@ -115,6 +145,15 @@ public struct CorrectionRangeScheduleEditor: View {
                     return threshold
                 }
             }
+        }
+    }
+    
+    private var buttonText: Text {
+        switch mode {
+        case .modal:
+            return Text("Save", comment: "The button text for saving on a configuration page")
+        case .flow:
+            return self.initialSchedule?.items == scheduleItems ? Text(LocalizedString("Accept Setting", comment: "The button text for accepting the prescribed setting")) : Text(LocalizedString("Save Setting", comment: "The button text for saving the edited setting"))
         }
     }
 
