@@ -16,3 +16,8 @@ public protocol DeviceLifecycleProgress {
     var progressState: DeviceLifecycleProgressState { get }
 }
 
+public enum DeviceLifecycleProgressState: String, Codable {
+    case normal
+    case warning
+    case critical
+}

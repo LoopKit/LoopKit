@@ -14,14 +14,25 @@ public struct PumpManagerStatus: Equatable {
     public struct PumpStatusHighlight: DeviceStatusHighlight, Equatable {
         public var localizedMessage: String
         
-        public var icon: UIImage
+        public var imageSystemName: String
         
-        public var color: UIColor
+        public var state: DeviceStatusHighlightState
         
-        public init(localizedMessage: String, icon: UIImage, color: UIColor) {
+        public init(localizedMessage: String, imageSystemName: String, state: DeviceStatusHighlightState) {
             self.localizedMessage = localizedMessage
-            self.icon = icon
-            self.color = color
+            self.imageSystemName = imageSystemName
+            self.state = state
+        }
+    }
+    
+    public struct PumpLifecycleProgress: DeviceLifecycleProgress, Equatable {
+        public var percentComplete: Double
+        
+        public var progressState: DeviceLifecycleProgressState
+        
+        public init(percentComplete: Double, progressState: DeviceLifecycleProgressState) {
+            self.percentComplete = percentComplete
+            self.progressState = progressState
         }
     }
     
@@ -55,6 +66,7 @@ public struct PumpManagerStatus: Equatable {
     public var basalDeliveryState: BasalDeliveryState
     public var bolusState: BolusState
     public var pumpStatusHighlight: PumpStatusHighlight?
+    public var pumpLifecycleProgress: PumpLifecycleProgress?
 
     public init(
         timeZone: TimeZone,
@@ -62,7 +74,8 @@ public struct PumpManagerStatus: Equatable {
         pumpBatteryChargeRemaining: Double?,
         basalDeliveryState: BasalDeliveryState,
         bolusState: BolusState,
-        pumpStatusHighlight: PumpStatusHighlight? = nil
+        pumpStatusHighlight: PumpStatusHighlight? = nil,
+        pumpLifecycleProgress: PumpLifecycleProgress? = nil
     ) {
         self.timeZone = timeZone
         self.device = device
@@ -70,6 +83,7 @@ public struct PumpManagerStatus: Equatable {
         self.basalDeliveryState = basalDeliveryState
         self.bolusState = bolusState
         self.pumpStatusHighlight = pumpStatusHighlight
+        self.pumpLifecycleProgress = pumpLifecycleProgress
     }
 }
 
@@ -81,6 +95,8 @@ extension PumpManagerStatus: Codable {
         self.pumpBatteryChargeRemaining = try container.decodeIfPresent(Double.self, forKey: .pumpBatteryChargeRemaining)
         self.basalDeliveryState = try container.decode(BasalDeliveryState.self, forKey: .basalDeliveryState)
         self.bolusState = try container.decode(BolusState.self, forKey: .bolusState)
+        self.pumpStatusHighlight = try container.decode(PumpStatusHighlight.self, forKey: .pumpStatusHighlight)
+        self.pumpLifecycleProgress = try container.decode(PumpLifecycleProgress.self, forKey: .pumpLifecycleProgress)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -90,6 +106,8 @@ extension PumpManagerStatus: Codable {
         try container.encodeIfPresent(pumpBatteryChargeRemaining, forKey: .pumpBatteryChargeRemaining)
         try container.encode(basalDeliveryState, forKey: .basalDeliveryState)
         try container.encode(bolusState, forKey: .bolusState)
+        try container.encode(pumpStatusHighlight, forKey: .pumpStatusHighlight)
+        try container.encode(pumpLifecycleProgress, forKey: .pumpLifecycleProgress)
     }
 
     private struct CodableDevice: Codable {
@@ -131,6 +149,8 @@ extension PumpManagerStatus: Codable {
         case pumpBatteryChargeRemaining
         case basalDeliveryState
         case bolusState
+        case pumpStatusHighlight
+        case pumpLifecycleProgress
     }
 }
 
@@ -264,6 +284,10 @@ extension PumpManagerStatus.BolusState: Codable {
     }
 }
 
+extension PumpManagerStatus.PumpStatusHighlight: Codable { }
+
+extension PumpManagerStatus.PumpLifecycleProgress: Codable { }
+
 extension PumpManagerStatus: CustomDebugStringConvertible {
     public var debugDescription: String {
         return """
@@ -273,6 +297,8 @@ extension PumpManagerStatus: CustomDebugStringConvertible {
         * pumpBatteryChargeRemaining: \(pumpBatteryChargeRemaining as Any)
         * basalDeliveryState: \(basalDeliveryState)
         * bolusState: \(bolusState)
+        * pumpStatusHighlight: \(pumpStatusHighlight as Any)
+        * pumpLifecycleProgress: \(pumpLifecycleProgress as Any)
         """
     }
 }

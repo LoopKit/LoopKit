@@ -186,25 +186,25 @@ public struct MockCGMState: SensorDisplayable {
 public struct MockCGMStatusHighlight: DeviceStatusHighlight {
     public var localizedMessage: String
     
-    public var icon: UIImage {
+    public var imageSystemName: String {
         switch alertIdentifier {
         case MockCGMManager.submarine.identifier:
-            return UIImage(systemName: "dot.radiowaves.left.and.right")!
+            return "dot.radiowaves.left.and.right"
         case MockCGMManager.buzz.identifier:
-            return UIImage(systemName: "clock")!
+            return "clock"
         default:
-            return UIImage(systemName: "exclamationmark.circle.fill")!
+            return "exclamationmark.circle.fill"
         }
     }
     
-    public var color: UIColor {
+    public var state: DeviceStatusHighlightState{
         switch alertIdentifier {
         case MockCGMManager.submarine.identifier:
-            return .systemPurple
+            return .normal
         case MockCGMManager.buzz.identifier:
-            return .systemOrange
+            return .warning
         default:
-            return .systemRed
+            return .critical
         }
     }
     

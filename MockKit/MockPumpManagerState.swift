@@ -24,9 +24,13 @@ public struct MockPumpManagerState {
 
     public var unfinalizedBolus: UnfinalizedDose?
     public var unfinalizedTempBasal: UnfinalizedDose?
-
+    
     var finalizedDoses: [UnfinalizedDose]
 
+    public var progressPercentComplete: Double?
+    public var progressWarningThresholdPercentValue: Double?
+    public var progressCriticalThresholdPercentValue: Double?
+    
     public var dosesToStore: [UnfinalizedDose] {
         return finalizedDoses + [unfinalizedTempBasal, unfinalizedBolus].compactMap {$0}
     }
@@ -64,7 +68,11 @@ extension MockPumpManagerState: RawRepresentable {
         self.pumpBatteryChargeRemaining = rawValue["pumpBatteryChargeRemaining"] as? Double ?? nil
         self.occlusionDetected = rawValue["occlusionDetected"] as? Bool ?? false
         self.pumpErrorDetected = rawValue["pumpErrorDetected"] as? Bool ?? false
-
+        
+        self.progressPercentComplete = rawValue["progressPercentComplete"] as? Double
+        self.progressWarningThresholdPercentValue = rawValue["progressWarningThresholdPercentValue"] as? Double
+        self.progressCriticalThresholdPercentValue = rawValue["progressCriticalThresholdPercentValue"] as? Double
+        
         if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue {
             self.unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
         }
@@ -126,7 +134,11 @@ extension MockPumpManagerState: RawRepresentable {
         
         raw["occlusionDetected"] = occlusionDetected
         raw["pumpErrorDetected"] = pumpErrorDetected
-
+        
+        raw["progressPercentComplete"] = progressPercentComplete
+        raw["progressWarningThresholdPercentValue"] = progressWarningThresholdPercentValue
+        raw["progressCriticalThresholdPercentValue"] = progressCriticalThresholdPercentValue
+        
         return raw
     }
 }
@@ -150,6 +162,9 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
         * finalizedDoses: \(finalizedDoses)
         * occlusionDetected: \(occlusionDetected)
         * pumpErrorDetected: \(pumpErrorDetected)
+        * progressPercentComplete: \(progressPercentComplete as Any)
+        * progressWarningThresholdPercentValue: \(progressWarningThresholdPercentValue as Any)
+        * progressCriticalThresholdPercentValue: \(progressCriticalThresholdPercentValue as Any)
         """
     }
 }

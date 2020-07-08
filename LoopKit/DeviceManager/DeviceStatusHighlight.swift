@@ -12,9 +12,16 @@ public protocol DeviceStatusHighlight {
     /// a localized message from the device
     var localizedMessage: String { get }
 
-    /// the icon related to the message
-    var icon: UIImage { get }
-    
-    /// the color of the highlight
-    var color: UIColor { get }
+    /// the system name of the icon related to the message
+    var imageSystemName: String { get }
+        
+    /// the state of the status highlight (guides presentation)
+    var state: DeviceStatusHighlightState { get }
 }
+
+public enum DeviceStatusHighlightState: String, Codable {
+    case normal
+    case warning
+    case critical
+}
+
