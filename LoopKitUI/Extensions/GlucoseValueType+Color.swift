@@ -11,9 +11,9 @@ import LoopKit
 extension GlucoseValueType {
     public var glucoseColor: UIColor {
         switch self {
-        case .low, .normal, .high:
+        case .normal, .high:
             return .label
-        case .urgentLow, .belowRange:
+        case .low, .urgentLow, .belowRange:
             return .systemRed
         case .aboveRange:
             return .systemOrange
