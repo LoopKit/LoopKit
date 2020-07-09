@@ -170,6 +170,16 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         let minDoubleValue = items.lazy.map { $0.value.minValue }.min()!
         return HKQuantity(unit: unit, doubleValue: minDoubleValue)
     }
+
+    public func scheduleRange() -> ClosedRange<HKQuantity> {
+        let minDoubleValue = items.lazy.map { $0.value.minValue }.min()!
+        let lowerBound = HKQuantity(unit: unit, doubleValue: minDoubleValue)
+
+        let maxDoubleValue = items.lazy.map { $0.value.maxValue }.max()!
+        let upperBound = HKQuantity(unit: unit, doubleValue: maxDoubleValue)
+
+        return lowerBound...upperBound
+    }
 }
 
 extension GlucoseRangeSchedule: Codable {}

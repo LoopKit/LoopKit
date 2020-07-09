@@ -24,6 +24,7 @@ public struct GlucoseRangePicker: View {
     @Binding var upperBound: HKQuantity
     var unit: HKUnit
     var minValue: HKQuantity?
+    var maxValue: HKQuantity?
     var guardrail: Guardrail<HKQuantity>
     var formatter: NumberFormatter
     var usageContext: UsageContext
@@ -32,11 +33,12 @@ public struct GlucoseRangePicker: View {
         range: Binding<ClosedRange<HKQuantity>>,
         unit: HKUnit,
         minValue: HKQuantity?,
+        maxValue: HKQuantity? = nil,
         guardrail: Guardrail<HKQuantity>,
         usageContext: UsageContext = .independent
     ) {
         self._lowerBound = Binding(
-            get: { range.wrappedValue.lowerBound},
+            get: { range.wrappedValue.lowerBound },
             set: { range.wrappedValue = $0...range.wrappedValue.upperBound }
         )
         self._upperBound = Binding(
@@ -45,6 +47,7 @@ public struct GlucoseRangePicker: View {
         )
         self.unit = unit
         self.minValue = minValue
+        self.maxValue = maxValue
         self.guardrail = guardrail
         self.formatter = {
             let quantityFormatter = QuantityFormatter()
@@ -141,7 +144,8 @@ public struct GlucoseRangePicker: View {
 
     var upperBoundRange: ClosedRange<HKQuantity> {
         let min = max(guardrail.absoluteBounds.lowerBound, lowerBound)
-        let max = guardrail.absoluteBounds.upperBound
+        let max = maxValue.map { Swift.min(guardrail.absoluteBounds.upperBound, $0) }
+            ?? guardrail.absoluteBounds.upperBound
         return min...max
     }
 }
