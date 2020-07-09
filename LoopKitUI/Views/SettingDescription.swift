@@ -23,6 +23,8 @@ public enum TherapySetting: Int {
         switch self {
         case .glucoseTargetRange:
             return AnyView(CorrectionRangeInformationView(onExit: nil, mode: .modal))
+        case .correctionRangeOverrides:
+            return AnyView(CorrectionRangeOverrideInformationView(onExit: nil, mode: .modal))
         // ANNA TODO: add more once other instructional screens are created
         default:
             return AnyView(Text("To be implemented"))

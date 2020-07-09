@@ -14,7 +14,7 @@ public struct TherapySettings: Equatable {
 
     public var preMealTargetRange: DoubleRange?
 
-    public var legacyWorkoutTargetRange: DoubleRange?
+    public var workoutTargetRange: DoubleRange?
 
     public var maximumBasalRatePerHour: Double?
 
