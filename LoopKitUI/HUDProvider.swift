@@ -11,6 +11,9 @@ import Foundation
 public enum HUDTapAction {
     case presentViewController(UIViewController & CompletionNotifying)
     case openAppURL(URL)
+    case setupNewPump
+    case setupNewCGM
+    case takeNoAction
 }
 
 public protocol HUDProvider: class  {
