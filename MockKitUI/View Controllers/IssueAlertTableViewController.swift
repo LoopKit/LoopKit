@@ -15,7 +15,7 @@ final class IssueAlertTableViewController: UITableViewController {
   
     let cgmManager: MockCGMManager
 
-    static let delay = TimeInterval(30)
+    static let delay = TimeInterval(60)
     
     private enum AlertRow: Int, CaseIterable, CustomStringConvertible {
         case immediate = 0
