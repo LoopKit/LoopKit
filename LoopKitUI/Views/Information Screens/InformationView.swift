@@ -36,7 +36,7 @@ struct InformationView<InformationalContent: View> : View {
     var body: some View {
         ScrollView {
             bodyWithCancelButtonIfNeeded
-            .navigationBarTitle(title)
+            .navigationBarTitle(title, displayMode: .large)
             .padding()
         }
     }
