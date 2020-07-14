@@ -18,6 +18,7 @@ public struct BasalRateScheduleEditor: View {
     var maximumScheduleEntryCount: Int
     var syncSchedule: (_ items: [RepeatingScheduleValue<Double>], _ completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) -> Void
     var save: (BasalRateSchedule) -> Void
+    let mode: PresentationMode
 
     /// - Precondition: `supportedBasalRates` is nonempty and sorted in ascending order.
     public init(
@@ -29,7 +30,8 @@ public struct BasalRateScheduleEditor: View {
             _ items: [RepeatingScheduleValue<Double>],
             _ completion: @escaping (Result<BasalRateSchedule, Error>) -> Void
         ) -> Void,
-        onSave save: @escaping (BasalRateSchedule) -> Void
+        onSave save: @escaping (BasalRateSchedule) -> Void,
+        mode: PresentationMode = .modal
     ) {
         self.schedule = schedule.map { schedule in
             DailyQuantitySchedule(
@@ -53,6 +55,7 @@ public struct BasalRateScheduleEditor: View {
         self.maximumScheduleEntryCount = maximumScheduleEntryCount
         self.syncSchedule = syncSchedule
         self.save = save
+        self.mode = mode
     }
 
     public var body: some View {
@@ -73,7 +76,27 @@ public struct BasalRateScheduleEditor: View {
                     isZeroUnitRateSelectable: self.supportedBasalRates.first! == 0
                 )
             },
-            onSave: .asynchronous { quantitySchedule, completion in
+            onSave: savingMechanism,
+            mode: mode,
+            settingType: .basalRate
+        )
+    }
+    
+    private var description: Text {
+        Text("Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs.", comment: "Basal rate setting description")
+    }
+
+    private var confirmationAlertContent: AlertContent {
+        AlertContent(
+            title: Text("Save Basal Rates?", comment: "Alert title for confirming basal rates outside the recommended range"),
+            message: Text("One or more of the values you have entered are outside of what Tidepool generally recommends.", comment: "Alert message for confirming basal rates outside the recommended range")
+        )
+    }
+    
+    private var savingMechanism: SavingMechanism<DailyQuantitySchedule<Double>> {
+        switch mode {
+        case .modal:
+            return .asynchronous { quantitySchedule, completion in
                 self.syncSchedule(quantitySchedule.items) { result in
                     switch result {
                     case .success(let syncedSchedule):
@@ -87,18 +110,13 @@ public struct BasalRateScheduleEditor: View {
 
                 }
             }
-        )
-    }
-
-    private var description: Text {
-        Text("Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs.", comment: "Basal rate setting description")
-    }
-
-    private var confirmationAlertContent: AlertContent {
-        AlertContent(
-            title: Text("Save Basal Rates?", comment: "Alert title for confirming basal rates outside the recommended range"),
-            message: Text("One or more of the values you have entered are outside of what Tidepool generally recommends.", comment: "Alert message for confirming basal rates outside the recommended range")
-        )
+        case .flow:
+            // TODO: get timezone from pump
+            return .synchronous { quantitySchedule in
+                let schedule = BasalRateSchedule(dailyItems: quantitySchedule.items, timeZone: .currentFixed)!
+                self.save(schedule)
+            }
+        }
     }
 }
 

@@ -27,6 +27,8 @@ public enum TherapySetting: Int {
             return AnyView(CorrectionRangeOverrideInformationView(onExit: nil, mode: .modal))
         case .suspendThreshold:
             return AnyView(SuspendThresholdInformationView(onExit: nil, mode: .modal))
+        case .basalRate:
+            return AnyView(BasalRatesInformationView(onExit: nil, mode: .modal))
         // ANNA TODO: add more once other instructional screens are created
         default:
             return AnyView(Text("To be implemented"))

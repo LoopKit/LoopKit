@@ -40,7 +40,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
 
     var title: Text
     var description: Text
-    var buttonText: Text
     var initialScheduleItems: [RepeatingScheduleValue<Value>]
     @Binding var scheduleItems: [RepeatingScheduleValue<Value>]
     var defaultFirstScheduleItemValue: Value
@@ -80,8 +79,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     init(
         title: Text,
         description: Text,
-        // ANNA TODO: remove default once other pages are merged in
-        buttonText: Text = Text("Save", comment: "The button text for saving on a configuration page"),
         scheduleItems: Binding<[RepeatingScheduleValue<Value>]>,
         initialScheduleItems: [RepeatingScheduleValue<Value>],
         defaultFirstScheduleItemValue: Value,
@@ -96,7 +93,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     ) {
         self.title = title
         self.description = description
-        self.buttonText = buttonText
         self.initialScheduleItems = initialScheduleItems
         self._scheduleItems = scheduleItems
         self.defaultFirstScheduleItemValue = defaultFirstScheduleItemValue
@@ -305,6 +301,15 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             }
 
             addButton
+        }
+    }
+    
+    private var buttonText: Text {
+        switch mode {
+        case .modal:
+            return Text("Save", comment: "The button text for saving on a configuration page")
+        case .flow:
+            return scheduleItems == initialScheduleItems ? Text(LocalizedString("Accept Setting", comment: "The button text for accepting the prescribed setting")) : Text(LocalizedString("Save Setting", comment: "The button text for saving the edited setting"))
         }
     }
 

@@ -32,8 +32,12 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
     var confirmationAlertContent: AlertContent
     var guardrailWarning: (_ crossedThresholds: [SafetyClassification.Threshold]) -> ActionAreaContent
     var savingMechanism: SavingMechanism<DailyQuantitySchedule<Double>>
+    var mode: PresentationMode
+    var buttonText: Text
+    var settingType: TherapySetting
     
     @Environment(\.dismiss) var dismiss
+    @State private var userDidTap: Bool = false
 
     var body: some View {
         ScheduleEditor(
@@ -75,12 +79,18 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
                 }
             },
             actionAreaContent: {
+                instructionalContentIfNecessary
                 guardrailWarningIfNecessary
             },
             savingMechanism: savingMechanism.pullback { items in
                 DailyQuantitySchedule(unit: self.unit, dailyItems: items)!
-            }
+            },
+            mode: mode,
+            therapySettingType: settingType
         )
+        .onTapGesture {
+            self.userDidTap = true
+        }
     }
 
     private var saveConfirmation: SaveConfirmation {
@@ -96,6 +106,26 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
     }
 
     private var unitLabelSpacing: CGFloat { 8 }
+    
+    private var instructionalContentIfNecessary: some View {
+        return Group {
+            if mode == .flow && !userDidTap {
+                instructionalContent
+            }
+        }
+    }
+
+    private var instructionalContent: some View {
+        HStack { // to align with guardrail warning, if present
+            VStack (alignment: .leading, spacing: 20) {
+                Text(LocalizedString("You can edit a setting by tapping into any line item.", comment: "Description of how to edit setting"))
+                Text(LocalizedString("You can add different correction ranges for different times of day by using the [+].", comment: "Description of how to add a configuration range"))
+            }
+            .foregroundColor(.accentColor)
+            .font(.subheadline)
+            Spacer()
+        }
+    }
 
     private var guardrailWarningIfNecessary: some View {
         let crossedThresholds = self.crossedThresholds
@@ -124,6 +154,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
 
 extension QuantityScheduleEditor {
     init(
+        buttonText: Text = Text("Save", comment: "The button text for saving on a configuration page"),
         title: Text,
         description: Text,
         schedule: DailyQuantitySchedule<Double>?,
@@ -135,8 +166,11 @@ extension QuantityScheduleEditor {
         scheduleItemLimit: Int = 48,
         confirmationAlertContent: AlertContent,
         @ViewBuilder guardrailWarning: @escaping (_ thresholds: [SafetyClassification.Threshold]) -> ActionAreaContent,
-        onSave savingMechanism: SavingMechanism<DailyQuantitySchedule<Double>>
+        onSave savingMechanism: SavingMechanism<DailyQuantitySchedule<Double>>,
+        mode: PresentationMode = .modal,
+        settingType: TherapySetting = .none
     ) {
+        self.buttonText = buttonText
         self.title = title
         self.description = description
         self.initialScheduleItems = schedule?.items ?? []
@@ -150,6 +184,8 @@ extension QuantityScheduleEditor {
         self.confirmationAlertContent = confirmationAlertContent
         self.guardrailWarning = guardrailWarning
         self.savingMechanism = savingMechanism
+        self.mode = mode
+        self.settingType = settingType
     }
 
     init(
