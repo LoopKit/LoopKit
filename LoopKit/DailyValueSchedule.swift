@@ -30,6 +30,8 @@ extension RepeatingScheduleValue: Equatable where T: Equatable {
     }
 }
 
+extension RepeatingScheduleValue: Hashable where T: Hashable {}
+
 public struct AbsoluteScheduleValue<T>: TimelineValue {
     public let startDate: Date
     public let endDate: Date

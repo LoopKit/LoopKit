@@ -199,3 +199,9 @@ extension ClosedRange where Bound == HKQuantity {
         return DoubleRange(minValue: lowerBound.doubleValue(for: unit), maxValue: upperBound.doubleValue(for: unit))
     }
 }
+
+public extension DoubleRange {
+    init(_ val: ClosedRange<Double>) {
+        self.init(minValue: val.lowerBound, maxValue: val.upperBound)
+    }
+}

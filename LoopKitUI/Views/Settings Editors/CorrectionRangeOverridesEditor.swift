@@ -12,7 +12,7 @@ import LoopKit
 
 
 public struct CorrectionRangeOverrides: Equatable {
-    enum Preset: Hashable {
+    enum Preset: Hashable, CaseIterable {
         case preMeal
         case workout
     }
@@ -104,30 +104,18 @@ public struct CorrectionRangeOverridesEditor: View {
     private func card(for preset: CorrectionRangeOverrides.Preset) -> Card {
         Card {
             SettingDescription(text: description(of: preset), informationalContent: {TherapySetting.correctionRangeOverrides.helpScreen()})
-            ExpandableSetting(
+            CorrectionRangeOverridesExpandableSetting(
                 isEditing: Binding(
                     get: { self.presetBeingEdited == preset },
                     set: { isEditing in
                         withAnimation {
                             self.presetBeingEdited = isEditing ? preset : nil
                         }
-                    }
-                ),
-                leadingValueContent: {
-                    HStack {
-                        icon(for: preset)
-                        name(of: preset)
-                    }
-                },
-                trailingValueContent: {
-                    GuardrailConstrainedQuantityRangeView(
-                        range: value.ranges[preset],
-                        unit: unit,
-                        guardrail: self.guardrail(for: preset),
-                        isEditing: presetBeingEdited == preset,
-                        forceDisableAnimations: true
-                    )
-                },
+                }),
+                value: $value,
+                preset: preset,
+                unit: unit,
+                correctionRangeScheduleRange: correctionRangeScheduleRange,
                 expandedContent: {
                     GlucoseRangePicker(
                         range: Binding(
@@ -136,15 +124,14 @@ public struct CorrectionRangeOverridesEditor: View {
                                 withAnimation {
                                     self.value.ranges[preset] = newValue
                                 }
-                            }
+                        }
                         ),
                         unit: self.unit,
                         minValue: self.selectableBounds(for: preset).lowerBound,
                         maxValue: self.selectableBounds(for: preset).upperBound,
                         guardrail: self.guardrail(for: preset)
                     )
-                }
-            )
+            })
         }
     }
 
@@ -156,46 +143,11 @@ public struct CorrectionRangeOverridesEditor: View {
             return Text("Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events.", comment: "Description of workout mode")
         }
     }
-
-    private func name(of preset: CorrectionRangeOverrides.Preset) -> Text {
-        switch preset {
-        case .preMeal:
-            return Text("Pre-Meal", comment: "Title for pre-meal mode configuration section")
-        case .workout:
-            return Text("Workout", comment: "Title for workout mode configuration section")
-        }
-    }
-
-    private func icon(for preset: CorrectionRangeOverrides.Preset) -> some View {
-        switch preset {
-        case .preMeal:
-            return icon(named: "Pre-Meal", tinted: Color(.COBTintColor))
-        case .workout:
-            return icon(named: "workout", tinted: Color(.glucoseTintColor))
-        }
-    }
-
-    private func icon(named name: String, tinted color: Color) -> some View {
-        Image(name)
-            .renderingMode(.template)
-            .foregroundColor(color)
-    }
-
-    private func guardrail(for preset: CorrectionRangeOverrides.Preset) -> Guardrail<HKQuantity> {
-        switch preset {
-        case .preMeal:
-            return Guardrail(
-                absoluteBounds: Guardrail.correctionRange.absoluteBounds,
-                recommendedBounds: Guardrail.correctionRange.recommendedBounds.lowerBound...max(correctionRangeScheduleRange.lowerBound, Guardrail.correctionRange.recommendedBounds.lowerBound)
-            )
-        case .workout:
-            return Guardrail(
-                absoluteBounds: Guardrail.correctionRange.absoluteBounds,
-                recommendedBounds: max(Guardrail.correctionRange.recommendedBounds.lowerBound, correctionRangeScheduleRange.lowerBound)...Guardrail.correctionRange.absoluteBounds.upperBound
-            )
-        }
-    }
     
+    private func guardrail(for preset: CorrectionRangeOverrides.Preset) -> Guardrail<HKQuantity> {
+        return Guardrail.correctionRangeOverridePreset(preset, correctionRangeScheduleRange: correctionRangeScheduleRange)
+    }
+
     private var buttonText: Text {
         switch mode {
         case .modal:
@@ -336,5 +288,22 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
         return crossedPreMealThresholds.allSatisfy { $0 == .aboveRecommended || $0 == .maximum }
             ? Text("The value you have entered for this range is higher than your usual correction range. Tidepool typically recommends your pre-meal range be lower than your usual correction range.", comment: "Warning text for high pre-meal target value")
             : nil
+    }
+}
+
+extension Guardrail where Value == HKQuantity {
+    static func correctionRangeOverridePreset(_ preset: CorrectionRangeOverrides.Preset, correctionRangeScheduleRange: ClosedRange<HKQuantity>) -> Guardrail {
+        switch preset {
+        case .preMeal:
+            return Guardrail(
+                absoluteBounds: Guardrail.correctionRange.absoluteBounds,
+                recommendedBounds: Guardrail.correctionRange.recommendedBounds.lowerBound...max(correctionRangeScheduleRange.lowerBound, Guardrail.correctionRange.recommendedBounds.lowerBound)
+            )
+        case .workout:
+            return Guardrail(
+                absoluteBounds: Guardrail.correctionRange.absoluteBounds,
+                recommendedBounds: max(Guardrail.correctionRange.recommendedBounds.lowerBound, correctionRangeScheduleRange.lowerBound)...Guardrail.correctionRange.absoluteBounds.upperBound
+            )
+        }
     }
 }
