@@ -182,12 +182,16 @@ public struct FractionalQuantityPicker: View {
 
         switch whole {
         case lowerAbsoluteBound.whole:
+            let smallestSelectableValue = fractionalValuesByWhole[whole]!.first!
             let fractionalLowerRecommendedBound = lowerAbsoluteBound.whole == lowerRecommendedBound.whole
-                ? fractionalValuesByWhole[whole]!.first! + pow(10.0, -Double(Self.maximumSupportedPrecision))
+                ? max(lowerRecommendedBound.fraction, smallestSelectableValue)
+                : valueTooLargeToSelect
+            let fractionalUpperRecommendedBound = lowerAbsoluteBound.whole == upperRecommendedBound.whole
+                ? upperRecommendedBound.fraction
                 : valueTooLargeToSelect
             return Guardrail(
-                absoluteBounds: fractionalValuesByWhole[whole]!.first!...valueTooLargeToSelect,
-                recommendedBounds: fractionalLowerRecommendedBound...valueTooLargeToSelect,
+                absoluteBounds: smallestSelectableValue...valueTooLargeToSelect,
+                recommendedBounds: fractionalLowerRecommendedBound...fractionalUpperRecommendedBound,
                 unit: unit
             )
         case ..<lowerRecommendedBound.whole:
