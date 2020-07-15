@@ -10,6 +10,9 @@
 		1D1A019E24B678BF0077D86E /* TherapySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */; };
 		1D1FCE2324BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2224BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift */; };
 		1D1FCE2524BD42EF000300A8 /* TherapySettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2424BD42EF000300A8 /* TherapySettingsViewModel.swift */; };
+		1D1FCE2724BE4DE2000300A8 /* CorrectionRangeOverrides.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2624BE4DE2000300A8 /* CorrectionRangeOverrides.swift */; };
+		1D1FCE2924BE4F11000300A8 /* TherapySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2824BE4F11000300A8 /* TherapySetting.swift */; };
+		1D1FCE2B24BE704A000300A8 /* TherapySettingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2A24BE704A000300A8 /* TherapySettingExtension.swift */; };
 		1D25C22E246A2A1A00E87FA0 /* critical.caf in Resources */ = {isa = PBXBuildFile; fileRef = 1D25C22D246A2A1A00E87FA0 /* critical.caf */; };
 		1D4990E624A17564005CC357 /* HKQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4990E524A17564005CC357 /* HKQuery.swift */; };
 		1D4990E724A17898005CC357 /* HKQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4990E524A17564005CC357 /* HKQuery.swift */; };
@@ -17,6 +20,8 @@
 		1D841AAD24577EE10069DBFF /* AlertSoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D841AAC24577EE10069DBFF /* AlertSoundPlayer.swift */; };
 		1DA649AB2445174400F61E75 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* Alert.swift */; };
 		1DABAD3A2453615200ACF708 /* IssueAlertTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DABAD392453615200ACF708 /* IssueAlertTableViewController.swift */; };
+		1DC64C7C24BF6BFD004A63A1 /* CorrectionRangeOverridesExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC64C7B24BF6BFD004A63A1 /* CorrectionRangeOverridesExtension.swift */; };
+		1DC64C7E24BF6EBC004A63A1 /* DeliveryLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC64C7D24BF6EBC004A63A1 /* DeliveryLimits.swift */; };
 		1DD1964E248AE88000420876 /* HorizontalSizeClassOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD1964D248AE88000420876 /* HorizontalSizeClassOverride.swift */; };
 		1DD3DEB624451C3300BD8E40 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* Alert.swift */; };
 		1DE35E7A24ABEC720086F9AE /* DeviceManagerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE35E7924ABEC720086F9AE /* DeviceManagerUI.swift */; };
@@ -831,12 +836,17 @@
 		1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TherapySettingsView.swift; sourceTree = "<group>"; };
 		1D1FCE2224BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesExpandableSetting.swift; sourceTree = "<group>"; };
 		1D1FCE2424BD42EF000300A8 /* TherapySettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TherapySettingsViewModel.swift; sourceTree = "<group>"; };
+		1D1FCE2624BE4DE2000300A8 /* CorrectionRangeOverrides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverrides.swift; sourceTree = "<group>"; };
+		1D1FCE2824BE4F11000300A8 /* TherapySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TherapySetting.swift; sourceTree = "<group>"; };
+		1D1FCE2A24BE704A000300A8 /* TherapySettingExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TherapySettingExtension.swift; sourceTree = "<group>"; };
 		1D25C22D246A2A1A00E87FA0 /* critical.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = critical.caf; sourceTree = "<group>"; };
 		1D4990E524A17564005CC357 /* HKQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKQuery.swift; sourceTree = "<group>"; };
 		1D640FF524524284008F9755 /* sub.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sub.caf; sourceTree = "<group>"; };
 		1D841AAC24577EE10069DBFF /* AlertSoundPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertSoundPlayer.swift; sourceTree = "<group>"; };
 		1DA649AA2445174400F61E75 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		1DABAD392453615200ACF708 /* IssueAlertTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueAlertTableViewController.swift; sourceTree = "<group>"; };
+		1DC64C7B24BF6BFD004A63A1 /* CorrectionRangeOverridesExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesExtension.swift; sourceTree = "<group>"; };
+		1DC64C7D24BF6EBC004A63A1 /* DeliveryLimits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimits.swift; sourceTree = "<group>"; };
 		1DD1964D248AE88000420876 /* HorizontalSizeClassOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSizeClassOverride.swift; sourceTree = "<group>"; };
 		1DE35E7924ABEC720086F9AE /* DeviceManagerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManagerUI.swift; sourceTree = "<group>"; };
 		1DEE226024A6642300693C32 /* GlucoseStoreHKFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseStoreHKFilterTests.swift; sourceTree = "<group>"; };
@@ -1989,6 +1999,9 @@
 				C16DA83E22E8D88F008624C2 /* LoopPlugin.swift */,
 				89F6E30E244A1A5D00CB9E15 /* Guardrail.swift */,
 				E9086B3824B3CB4B0062F5C8 /* TherapySettings.swift */,
+				1D1FCE2624BE4DE2000300A8 /* CorrectionRangeOverrides.swift */,
+				1D1FCE2824BE4F11000300A8 /* TherapySetting.swift */,
+				1DC64C7D24BF6EBC004A63A1 /* DeliveryLimits.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -2407,9 +2420,11 @@
 				89653C812473592600E1BAA5 /* CarbRatioScheduleEditor.swift */,
 				E916F56824AD32F000BE3547 /* CorrectionRangeOverridesEditor.swift */,
 				1D1FCE2224BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift */,
+				1DC64C7B24BF6BFD004A63A1 /* CorrectionRangeOverridesExtension.swift */,
 				898B4E7A246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift */,
 				89FC688A245A2D670075CF59 /* InsulinSensitivityScheduleEditor.swift */,
 				E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */,
+				1D1FCE2A24BE704A000300A8 /* TherapySettingExtension.swift */,
 				1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */,
 				1D1FCE2424BD42EF000300A8 /* TherapySettingsViewModel.swift */,
 			);
@@ -3016,6 +3031,7 @@
 				893C9F8C2447DBD900CD4185 /* CardBuilder.swift in Sources */,
 				89BE75C524649C8100B145D9 /* NewScheduleItemEditor.swift in Sources */,
 				89653C822473592600E1BAA5 /* CarbRatioScheduleEditor.swift in Sources */,
+				1D1FCE2B24BE704A000300A8 /* TherapySettingExtension.swift in Sources */,
 				4369F08F208859E6000E3E45 /* PaddedTextField.swift in Sources */,
 				A9498D8823386CAF00DAA9B9 /* ServiceViewController.swift in Sources */,
 				892A5D9E2231E122008961AB /* StateColorPalette.swift in Sources */,
@@ -3077,6 +3093,7 @@
 				1DD1964E248AE88000420876 /* HorizontalSizeClassOverride.swift in Sources */,
 				892A5D9C2231E118008961AB /* UIAlertController.swift in Sources */,
 				43BA7181201EE7090058961E /* RepeatingScheduleValueTableViewCell.swift in Sources */,
+				1DC64C7C24BF6BFD004A63A1 /* CorrectionRangeOverridesExtension.swift in Sources */,
 				43BA716E201E49220058961E /* DecimalTextFieldTableViewCell.swift in Sources */,
 				891A3FC72247268F00378B27 /* Math.swift in Sources */,
 				895FE08722011F0C00FCF18A /* EmojiInputCell.swift in Sources */,
@@ -3263,10 +3280,13 @@
 				433BC7AB20538D4C000B1200 /* CachedGlucoseObject+CoreDataProperties.swift in Sources */,
 				43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */,
 				89AE2232228BC68600BDFD85 /* UnfairLock.swift in Sources */,
+				1DC64C7E24BF6EBC004A63A1 /* DeliveryLimits.swift in Sources */,
 				A9498D8423386C3300DAA9B9 /* DiagnosticLog.swift in Sources */,
 				43FB60EB20DDC868002B996B /* SetBolusError.swift in Sources */,
 				4322B770202FA26F0002837D /* GlucoseStore.swift in Sources */,
 				C1814B8C226371DF008D2D8E /* WeakSynchronizedDelegate.swift in Sources */,
+				1D1FCE2724BE4DE2000300A8 /* CorrectionRangeOverrides.swift in Sources */,
+				1D1FCE2924BE4F11000300A8 /* TherapySetting.swift in Sources */,
 				4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */,
 				4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */,
 				43AF1FB21C926CDD00EA2F3D /* HKQuantity.swift in Sources */,

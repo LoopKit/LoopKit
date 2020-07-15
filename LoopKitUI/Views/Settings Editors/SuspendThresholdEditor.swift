@@ -58,7 +58,7 @@ public struct SuspendThresholdEditor: View {
 
     public var body: some View {
         ConfigurationPage(
-            title: Text("Suspend Threshold", comment: "Title for suspend threshold configuration page"),
+            title: Text(TherapySetting.suspendThreshold.title),
             actionButtonTitle: buttonText,
             actionButtonState: saveButtonState,
             cards: {
@@ -115,7 +115,7 @@ public struct SuspendThresholdEditor: View {
     }
 
     var description: Text {
-        Text(LocalizedString("When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus.", comment: "Information about suspend threshold"))
+        Text(TherapySetting.suspendThreshold.descriptiveText)
     }
     
     private var instructionalContentIfNecessary: some View {

@@ -42,7 +42,7 @@ public struct CorrectionRangeScheduleEditor: View {
 
     public var body: some View {
         ScheduleEditor(
-            title: Text("Correction Ranges", comment: "Title of correction range schedule editor"),
+            title: Text(TherapySetting.glucoseTargetRange.title),
             description: description,
             scheduleItems: $scheduleItems,
             initialScheduleItems: initialSchedule?.items ?? [],
@@ -96,7 +96,7 @@ public struct CorrectionRangeScheduleEditor: View {
     }
 
     var description: Text {
-        Text("The app adjusts insulin delivery in an effort to bring your glucose into your correction range.", comment: "Description of correction range setting")
+        Text(TherapySetting.glucoseTargetRange.descriptiveText)
     }
 
     var saveConfirmation: SaveConfirmation {

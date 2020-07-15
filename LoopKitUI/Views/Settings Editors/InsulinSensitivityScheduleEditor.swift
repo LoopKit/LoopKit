@@ -43,7 +43,7 @@ public struct InsulinSensitivityScheduleEditor: View {
 
     public var body: some View {
         QuantityScheduleEditor(
-            title: Text("Insulin Sensitivities", comment: "Title of insulin sensitivity settings page"),
+            title: Text(TherapySetting.insulinSensitivity.title),
             description: description,
             schedule: schedule,
             unit: sensitivityUnit,
@@ -60,7 +60,7 @@ public struct InsulinSensitivityScheduleEditor: View {
     }
 
     private var description: Text {
-        Text("Your insulin sensitivity factor (ISF) is the drop in glucose expected from one unit of insulin.", comment: "Insulin sensitivity setting description")
+        Text(TherapySetting.insulinSensitivity.descriptiveText)
     }
 
     private var sensitivityUnit: HKUnit {

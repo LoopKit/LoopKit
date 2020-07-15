@@ -24,8 +24,8 @@ public struct CorrectionRangeOverridesExpandableSetting<ExpandedContent: View>: 
             isEditing: $isEditing,
             leadingValueContent: {
                 HStack {
-                    icon(for: preset)
-                    name(of: preset)
+                    preset.icon
+                    Text(preset.title)
                 }
             },
             trailingValueContent: {
@@ -40,31 +40,7 @@ public struct CorrectionRangeOverridesExpandableSetting<ExpandedContent: View>: 
             expandedContent: expandedContent
         )
     }
-    
-    private func name(of preset: CorrectionRangeOverrides.Preset) -> Text {
-        switch preset {
-        case .preMeal:
-            return Text("Pre-Meal", comment: "Title for pre-meal mode configuration section")
-        case .workout:
-            return Text("Workout", comment: "Title for workout mode configuration section")
-        }
-    }
 
-    private func icon(for preset: CorrectionRangeOverrides.Preset) -> some View {
-        switch preset {
-        case .preMeal:
-            return icon(named: "Pre-Meal", tinted: Color(.COBTintColor))
-        case .workout:
-            return icon(named: "workout", tinted: Color(.glucoseTintColor))
-        }
-    }
-    
-    private func icon(named name: String, tinted color: Color) -> some View {
-        Image(name)
-            .renderingMode(.template)
-            .foregroundColor(color)
-    }
-    
     private func guardrail(for preset: CorrectionRangeOverrides.Preset) -> Guardrail<HKQuantity> {
         return Guardrail.correctionRangeOverridePreset(preset, correctionRangeScheduleRange: correctionRangeScheduleRange)
     }

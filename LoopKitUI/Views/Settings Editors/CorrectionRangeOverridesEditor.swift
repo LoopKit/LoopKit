@@ -10,25 +10,6 @@ import SwiftUI
 import HealthKit
 import LoopKit
 
-
-public struct CorrectionRangeOverrides: Equatable {
-    enum Preset: Hashable, CaseIterable {
-        case preMeal
-        case workout
-    }
-
-    var ranges: [Preset: ClosedRange<HKQuantity>]
-
-    public init(preMeal: DoubleRange?, workout: DoubleRange?, unit: HKUnit) {
-        ranges = [:]
-        ranges[.preMeal] = preMeal?.quantityRange(for: unit)
-        ranges[.workout] = workout?.quantityRange(for: unit)
-    }
-
-    public var preMeal: ClosedRange<HKQuantity>? { ranges[.preMeal] }
-    public var workout: ClosedRange<HKQuantity>? { ranges[.workout] }
-}
-
 public struct CorrectionRangeOverridesEditor: View {
     var initialValue: CorrectionRangeOverrides
     var unit: HKUnit
@@ -74,7 +55,7 @@ public struct CorrectionRangeOverridesEditor: View {
 
     public var body: some View {
         ConfigurationPage(
-            title: Text("Temporary\nCorrection Ranges", comment: "Title for temporary correction ranges page"),
+            title: Text(TherapySetting.correctionRangeOverrides.title),
             actionButtonTitle: buttonText,
             actionButtonState: value != initialValue || mode == .flow ? .enabled : .disabled,
             cards: {
@@ -138,9 +119,9 @@ public struct CorrectionRangeOverridesEditor: View {
     private func description(of preset: CorrectionRangeOverrides.Preset) -> Text {
         switch preset {
         case .preMeal:
-            return Text("Temporarily lower your glucose target before a meal to impact post-meal glucose spikes.", comment: "Description of pre-meal mode")
+            return Text(preset.descriptiveText)
         case .workout:
-            return Text("Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events.", comment: "Description of workout mode")
+            return Text(preset.descriptiveText)
         }
     }
     

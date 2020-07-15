@@ -60,7 +60,7 @@ public struct BasalRateScheduleEditor: View {
 
     public var body: some View {
         QuantityScheduleEditor(
-            title: Text("Basal Rates", comment: "Title of basal rate settings page"),
+            title: Text(TherapySetting.basalRate.title),
             description: description,
             schedule: schedule,
             unit: .internationalUnitsPerHour,
@@ -83,7 +83,7 @@ public struct BasalRateScheduleEditor: View {
     }
     
     private var description: Text {
-        Text("Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs.", comment: "Basal rate setting description")
+        Text(TherapySetting.basalRate.descriptiveText)
     }
 
     private var confirmationAlertContent: AlertContent {

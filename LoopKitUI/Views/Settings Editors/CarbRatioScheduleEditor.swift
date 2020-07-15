@@ -45,7 +45,7 @@ public struct CarbRatioScheduleEditor: View {
 
     public var body: some View {
         QuantityScheduleEditor(
-            title: Text("Carb Ratios", comment: "Title of carb ratio settings page"),
+            title: Text(TherapySetting.carbRatio.title),
             description: description,
             schedule: schedule,
             unit: .realCarbRatioScheduleUnit,
@@ -63,7 +63,7 @@ public struct CarbRatioScheduleEditor: View {
     }
 
     private var description: Text {
-        Text("Your carb ratio is the number of grams of carbohydrate covered by one unit of insulin.", comment: "Carb ratio setting description")
+        Text(TherapySetting.carbRatio.descriptiveText)
     }
 
     private var confirmationAlertContent: AlertContent {

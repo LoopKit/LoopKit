@@ -8,34 +8,6 @@
 
 import SwiftUI
 
-public enum TherapySetting: Int {
-    case glucoseTargetRange
-    case correctionRangeOverrides
-    case suspendThreshold
-    case basalRate
-    case deliveryLimits
-    case insulinModel
-    case carbRatio
-    case insulinSensitivity
-    case none
-    
-    public func helpScreen() -> some View {
-        switch self {
-        case .glucoseTargetRange:
-            return AnyView(CorrectionRangeInformationView(onExit: nil, mode: .modal))
-        case .correctionRangeOverrides:
-            return AnyView(CorrectionRangeOverrideInformationView(onExit: nil, mode: .modal))
-        case .suspendThreshold:
-            return AnyView(SuspendThresholdInformationView(onExit: nil, mode: .modal))
-        case .basalRate:
-            return AnyView(BasalRatesInformationView(onExit: nil, mode: .modal))
-        // ANNA TODO: add more once other instructional screens are created
-        default:
-            return AnyView(Text("To be implemented"))
-        }
-    }
-}
-
 public struct SettingDescription<InformationalContent: View>: View {
     var text: Text
     var informationalContent: InformationalContent

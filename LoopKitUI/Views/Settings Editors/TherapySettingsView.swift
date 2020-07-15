@@ -129,8 +129,8 @@ extension TherapySettingsView {
     
     private var correctionRangeSection: some View {
         SectionWithEdit(isEditing: $isEditing,
-                        title: LocalizedString("Correction Range", comment: "Correction Range section title"),
-                        descriptiveText: "Correction range is the glucose value (or range of values) that you want Tidepool Loop to aim for in adjusting your basal insulin.",
+                        title: TherapySetting.glucoseTargetRange.title,
+                        descriptiveText: TherapySetting.glucoseTargetRange.descriptiveText,
                         editAction: { self.delegate?.gotoEdit(therapySetting: TherapySetting.glucoseTargetRange) })
         {
             Group {
@@ -147,8 +147,8 @@ extension TherapySettingsView {
     
     private var temporaryCorrectionRangesSection: some View {
         SectionWithEdit(isEditing: $isEditing,
-                        title: LocalizedString("Temporary Correction Ranges", comment: "Temporary Correction Ranges section title"),
-                        descriptiveText: "Pre-Meal and Workout ranges temporarily adjust your glucose target based on your selected activity.",
+                        title: TherapySetting.correctionRangeOverrides.title,
+                        descriptiveText: TherapySetting.correctionRangeOverrides.descriptiveText,
                         editAction: { self.delegate?.gotoEdit(therapySetting: TherapySetting.correctionRangeOverrides) })
         {
             Group {
