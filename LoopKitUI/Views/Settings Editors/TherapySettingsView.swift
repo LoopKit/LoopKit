@@ -45,6 +45,7 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
         List {
             correctionRangeSection
             temporaryCorrectionRangesSection
+            suspendThreshold
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle(Text(LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")))
@@ -128,45 +129,58 @@ extension TherapySettingsView {
     }
     
     private var correctionRangeSection: some View {
-        SectionWithEdit(isEditing: $isEditing,
-                        title: TherapySetting.glucoseTargetRange.title,
-                        descriptiveText: TherapySetting.glucoseTargetRange.descriptiveText,
-                        editAction: { self.delegate?.gotoEdit(therapySetting: TherapySetting.glucoseTargetRange) })
-        {
-            Group {
-                if self.glucoseUnit != nil && self.therapySettings.glucoseTargetRangeSchedule != nil {
-                    ForEach(self.therapySettings.glucoseTargetRangeSchedule!.items, id: \.self) { value in
-                        ScheduleRangeItem(time: value.startTime, range: value.value, unit: self.glucoseUnit!, guardrail: Guardrail.correctionRange)
-                    }
-                } else {
-                    DescriptiveText(label: LocalizedString("Tap \"Edit\" to add a Correction Range", comment: "Correction Range section edit hint"))
+        section(for: .glucoseTargetRange) {
+            if self.glucoseUnit != nil && self.therapySettings.glucoseTargetRangeSchedule != nil {
+                ForEach(self.therapySettings.glucoseTargetRangeSchedule!.items, id: \.self) { value in
+                    ScheduleRangeItem(time: value.startTime, range: value.value, unit: self.glucoseUnit!, guardrail: .correctionRange)
                 }
+            } else {
+                DescriptiveText(label: LocalizedString("Tap \"Edit\" to add a Correction Range", comment: "Correction Range section edit hint"))
             }
         }
     }
     
     private var temporaryCorrectionRangesSection: some View {
-        SectionWithEdit(isEditing: $isEditing,
-                        title: TherapySetting.correctionRangeOverrides.title,
-                        descriptiveText: TherapySetting.correctionRangeOverrides.descriptiveText,
-                        editAction: { self.delegate?.gotoEdit(therapySetting: TherapySetting.correctionRangeOverrides) })
-        {
-            Group {
-                if self.glucoseUnit != nil && self.therapySettings.glucoseTargetRangeSchedule != nil {
-                    ForEach(CorrectionRangeOverrides.Preset.allCases, id: \.self) { preset in
-                        CorrectionRangeOverridesRangeItem(
-                            preMealTargetRange: self.therapySettings.preMealTargetRange,
-                            workoutTargetRange: self.therapySettings.workoutTargetRange,
-                            unit: self.glucoseUnit!,
-                            preset: preset,
-                            correctionRangeScheduleRange: self.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
-                        )
-                    }
+        section(for: .correctionRangeOverrides) {
+            if self.glucoseUnit != nil && self.therapySettings.glucoseTargetRangeSchedule != nil {
+                ForEach(CorrectionRangeOverrides.Preset.allCases, id: \.self) { preset in
+                    CorrectionRangeOverridesRangeItem(
+                        preMealTargetRange: self.therapySettings.preMealTargetRange,
+                        workoutTargetRange: self.therapySettings.workoutTargetRange,
+                        unit: self.glucoseUnit!,
+                        preset: preset,
+                        correctionRangeScheduleRange: self.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
+                    )
                 }
             }
         }
     }
     
+    private var suspendThreshold: some View {
+        section(for: .suspendThreshold) {
+            if self.glucoseUnit != nil {
+                HStack {
+                    Spacer()
+                    GuardrailConstrainedQuantityView(
+                        value: self.therapySettings.suspendThreshold?.quantity,
+                        unit: self.glucoseUnit!,
+                        guardrail: .suspendThreshold,
+                        isEditing: false,
+                        // Workaround for strange animation behavior on appearance
+                        forceDisableAnimations: true
+                    )
+                }
+            }
+        }
+    }
+    
+    private func section<Content>(for therapySetting: TherapySetting, @ViewBuilder content: @escaping () -> Content) -> some View where Content: View {
+        SectionWithEdit(isEditing: $isEditing,
+                        title: therapySetting.title,
+                        descriptiveText: therapySetting.descriptiveText,
+                        editAction: { self.delegate?.gotoEdit(therapySetting: therapySetting) },
+                        content: content)
+    }
 }
 
 struct ScheduleRangeItem: View {
@@ -207,18 +221,6 @@ struct CorrectionRangeOverridesRangeItem: View {
     }
 }
 
-struct SectionHeaderWithEdit: View {
-    @Binding var isEditing: Bool
-    let title: String
-    let editAction: () -> Void
-
-    public var body: some View {
-        HStack(alignment: .firstTextBaseline) {
-            SectionHeader(label: title)
-        }
-    }
-}
-
 // Note: I didn't call this "EditableSection" because it doesn't actually make the section editable,
 // it just optionally provides a link to go to an editor screen.
 struct SectionWithEdit<Content>: View where Content: View {
@@ -248,9 +250,9 @@ struct SectionWithEdit<Content>: View where Content: View {
     private var navigationButton: some View {
         Button(action: { self.editAction() }) {
             HStack {
-                Spacer()
                 Text(String(format: LocalizedString("Edit %@", comment: "The string format for the Edit navigation button"), title))
                 Spacer()
+                Image(systemName: "chevron.right").foregroundColor(.gray).font(.footnote)
             }
         }
         .disabled(!isEditing)
@@ -270,7 +272,7 @@ public let preview_therapySettings = TherapySettings(
     workoutTargetRange: DoubleRange(99...111),
     maximumBasalRatePerHour: 55,
     maximumBolus: 4,
-    suspendThreshold: GlucoseThreshold.init(unit: .milligramsPerDeciliter, value: 123),
+    suspendThreshold: GlucoseThreshold.init(unit: .milligramsPerDeciliter, value: 60),
     insulinSensitivitySchedule: nil,
     carbRatioSchedule: nil)
 
