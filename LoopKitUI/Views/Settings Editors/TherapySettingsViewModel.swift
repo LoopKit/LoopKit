@@ -13,10 +13,12 @@ public class TherapySettingsViewModel: ObservableObject {
     private var initialTherapySettings: TherapySettings
     public var therapySettings: TherapySettings
     public var didFinishStep: (() -> Void)?
+    let supportedBasalRates: [Double]?
 
-    public init(therapySettings: TherapySettings) {
+    public init(therapySettings: TherapySettings, supportedBasalRates: [Double]? = nil) {
         self.therapySettings = therapySettings
         self.initialTherapySettings = therapySettings
+        self.supportedBasalRates = supportedBasalRates
     }
     
     /// Reset to original

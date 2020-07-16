@@ -47,14 +47,7 @@ public struct BasalRateScheduleEditor: View {
             self.supportedBasalRates = supportedBasalRates
         }
 
-        let recommendedLowerBound = supportedBasalRates.first == 0
-            ? supportedBasalRates.dropFirst().first!
-            : supportedBasalRates.first!
-        self.guardrail = Guardrail(
-            absoluteBounds: supportedBasalRates.first!...supportedBasalRates.last!,
-            recommendedBounds: recommendedLowerBound...supportedBasalRates.last!,
-            unit: .internationalUnitsPerHour
-        )
+        self.guardrail = Guardrail.basalRate(supportedBasalRates: supportedBasalRates)
         self.maximumScheduleEntryCount = maximumScheduleEntryCount
         self.syncSchedule = syncSchedule
         self.save = save
@@ -156,5 +149,18 @@ private struct BasalRateGuardrailWarning: View {
         isZeroUnitRateSelectable && crossedThresholds.allSatisfy({ $0 == .minimum })
             ? Text("No Basal Insulin", comment: "Title text for the zero basal rate warning")
             : Text("Basal Rates", comment: "Title text for multi-value basal rate warning")
+    }
+}
+
+extension Guardrail where Value == HKQuantity {
+    static func basalRate(supportedBasalRates: [Double]) -> Guardrail {
+        let recommendedLowerBound = supportedBasalRates.first == 0
+            ? supportedBasalRates.dropFirst().first!
+            : supportedBasalRates.first!
+        return Guardrail(
+            absoluteBounds: supportedBasalRates.first!...supportedBasalRates.last!,
+            recommendedBounds: recommendedLowerBound...supportedBasalRates.last!,
+            unit: .internationalUnitsPerHour
+        )
     }
 }
