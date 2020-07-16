@@ -35,4 +35,9 @@ extension Collection {
             completion(transformed)
         }
     }
+
+    /// Returns a sequence containing adjacent pairs of elements in the ordered collection.
+    func adjacentPairs() -> Zip2Sequence<Self, SubSequence> {
+        return zip(self, dropFirst())
+    }
 }

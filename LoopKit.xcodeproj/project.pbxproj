@@ -327,6 +327,8 @@
 		7D68A9B81FE0A3D100522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9BA1FE0A3D100522C49 /* InfoPlist.strings */; };
 		7D68A9C21FE0A3D200522C49 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9C41FE0A3D200522C49 /* InfoPlist.strings */; };
 		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
+		89186C0524BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */; };
+		89186C0724BF7FC70003D0F3 /* Guardrail+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0624BF7FC70003D0F3 /* Guardrail+UI.swift */; };
 		891A3FC72247268F00378B27 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A3FC62247268F00378B27 /* Math.swift */; };
 		891A3FD12249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A3FD02249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift */; };
 		891A3FD32249990900378B27 /* DailyValueSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A3FD22249990900378B27 /* DailyValueSchedule.swift */; };
@@ -1225,6 +1227,8 @@
 		7D68AAC61FE31BE900522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEntryTableViewController.swift; sourceTree = "<group>"; };
 		8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineCurveParametersTableViewController.swift; sourceTree = "<group>"; };
+		89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControlTableViewCell.swift; sourceTree = "<group>"; };
+		89186C0624BF7FC70003D0F3 /* Guardrail+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Guardrail+UI.swift"; sourceTree = "<group>"; };
 		891A3FC62247268F00378B27 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		891A3FD02249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideHistoryTests.swift; sourceTree = "<group>"; };
 		891A3FD22249990900378B27 /* DailyValueSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyValueSchedule.swift; sourceTree = "<group>"; };
@@ -1729,6 +1733,7 @@
 				43D8FE0B1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib */,
 				892A5DB62231E19F008961AB /* ReservoirVolumeHUDView.swift */,
 				892A5DB52231E19F008961AB /* ReservoirVolumeHUDView.xib */,
+				89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */,
 				432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */,
 				432CF86820D76B320066B889 /* SetupButton.swift */,
 				432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */,
@@ -2357,6 +2362,7 @@
 				B41A60B123D1DBC700636320 /* UIFont.swift */,
 				E916F56A24AD346D00BE3547 /* UIColor+LoopKit.swift */,
 				E96175AD24B7BE38008E5080 /* Dictionary.swift */,
+				89186C0624BF7FC70003D0F3 /* Guardrail+UI.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3038,6 +3044,7 @@
 				895FE08022011F0C00FCF18A /* EmojiDataSource.swift in Sources */,
 				432CF86920D76B320066B889 /* SetupButton.swift in Sources */,
 				898E6E702241EDB70019E459 /* PercentageTextFieldTableViewController.swift in Sources */,
+				89186C0724BF7FC70003D0F3 /* Guardrail+UI.swift in Sources */,
 				432CF87420D774520066B889 /* NumberFormatter.swift in Sources */,
 				1F5DAB212118C95700048054 /* LocalizedString.swift in Sources */,
 				43FB60E520DCBA02002B996B /* SetupTableViewController.swift in Sources */,
@@ -3105,6 +3112,7 @@
 				43BA717B201EE6A40058961E /* NibLoadable.swift in Sources */,
 				E916F56F24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift in Sources */,
 				89BE75C124649C2E00B145D9 /* ModalHeaderButtonBar.swift in Sources */,
+				89186C0524BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift in Sources */,
 				89F6E315244A1AB600CB9E15 /* GlucoseValuePicker.swift in Sources */,
 				895FE08122011F0C00FCF18A /* OverridePresetCollectionViewCell.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,

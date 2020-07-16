@@ -22,8 +22,8 @@ private struct PickerValueBoundsKey: PreferenceKey {
 public struct QuantityPicker: View {
     @Binding var value: HKQuantity
     var unit: HKUnit
-    var guardrail: Guardrail<HKQuantity>?
     var isUnitLabelVisible: Bool
+    var colorForValue: (_ value: Double) -> Color
 
     private let selectableValues: [Double]
     private let formatter: NumberFormatter
@@ -43,14 +43,34 @@ public struct QuantityPicker: View {
     public init(
         value: Binding<HKQuantity>,
         unit: HKUnit,
-        guardrail: Guardrail<HKQuantity>? = nil,
+        guardrail: Guardrail<HKQuantity>,
         selectableValues: [Double],
         formatter: NumberFormatter? = nil,
         isUnitLabelVisible: Bool = true
     ) {
+        self.init(
+            value: value,
+            unit: unit,
+            selectableValues: selectableValues,
+            formatter: formatter,
+            isUnitLabelVisible: isUnitLabelVisible,
+            colorForValue: { value in
+                let quantity = HKQuantity(unit: unit, doubleValue: value)
+                return guardrail.color(for: quantity)
+            }
+        )
+    }
+
+    public init(
+        value: Binding<HKQuantity>,
+        unit: HKUnit,
+        selectableValues: [Double],
+        formatter: NumberFormatter? = nil,
+        isUnitLabelVisible: Bool = true,
+        colorForValue: @escaping (_ value: Double) -> Color = { _ in .primary }
+    ) {
         self._value = value
         self.unit = unit
-        self.guardrail = guardrail
         self.selectableValues = selectableValues
         self.formatter = formatter ?? {
             let quantityFormatter = QuantityFormatter()
@@ -58,13 +78,14 @@ public struct QuantityPicker: View {
             return quantityFormatter.numberFormatter
         }()
         self.isUnitLabelVisible = isUnitLabelVisible
-    }
+        self.colorForValue = colorForValue
+    }   
 
     public var body: some View {
         Picker("Quantity", selection: $value.doubleValue(for: unit)) {
             ForEach(selectableValues, id: \.self) { value in
                 Text(self.formatter.string(from: value) ?? "\(value)")
-                    .foregroundColor(self.pickerTextColor(for: value))
+                    .foregroundColor(self.colorForValue(value))
                     .anchorPreference(key: PickerValueBoundsKey.self, value: .bounds, transform: { [$0] })
                     .accessibility(identifier: self.formatter.string(from: value) ?? "\(value)")
             }
@@ -73,25 +94,6 @@ public struct QuantityPicker: View {
         .pickerStyle(WheelPickerStyle())
         .overlayPreferenceValue(PickerValueBoundsKey.self, unitLabel(positionedFrom:))
         .accessibility(identifier: "quantity_picker")
-    }
-
-    private func pickerTextColor(for value: Double) -> Color {
-        guard let guardrail = guardrail else {
-            return .primary
-        }
-
-        let quantity = HKQuantity(unit: unit, doubleValue: value)
-        switch guardrail.classification(for: quantity) {
-        case .withinRecommendedRange:
-            return .primary
-        case .outsideRecommendedRange(let threshold):
-            switch threshold {
-                case .minimum, .maximum:
-                    return .severeWarning
-                case .belowRecommended, .aboveRecommended:
-                    return .warning
-            }
-        }
     }
 
     private func unitLabel(positionedFrom pickerValueBounds: [Anchor<CGRect>]) -> some View {

@@ -9,6 +9,13 @@
 import Foundation
 
 public struct MockPumpManagerState {
+    public enum DeliverableIncrements: String, CaseIterable {
+        case omnipod
+        case medtronicX22
+        case medtronicX23
+    }
+
+    public var deliverableIncrements: DeliverableIncrements
     public var reservoirUnitsRemaining: Double
     public var tempBasalEnactmentShouldError: Bool
     public var bolusEnactmentShouldError: Bool
@@ -46,6 +53,44 @@ public struct MockPumpManagerState {
             unfinalizedTempBasal = nil
         }
     }
+
+    var supportedBolusVolumes: [Double] {
+        switch deliverableIncrements {
+        case .omnipod:
+            // 0.05 units for volumes between 0.05-30U
+            return (1...600).map { Double($0) * 0.05 }
+        case .medtronicX22:
+            // 0.1 units for volumes between 0.1-25U
+            return (1...250).map { Double($0) * 0.1 }
+        case .medtronicX23:
+            let breakpoints = [0, 1, 10, 25]
+            let scales = [40, 20, 10]
+            let scalingGroups = zip(scales, breakpoints.adjacentPairs().map(...))
+            return scalingGroups.flatMap { (scale, range) -> [Double] in
+                let scaledRanges = (range.lowerBound * scale + 1)...(range.upperBound * scale)
+                return scaledRanges.map { Double($0) / Double(scale) }
+            }
+        }
+    }
+
+    var supportedBasalRates: [Double] {
+        switch deliverableIncrements {
+        case .omnipod:
+            // 0.05 units for rates between 0.05-30U/hr
+            return (1...600).map { Double($0) * 0.05 }
+        case .medtronicX22:
+            // 0.05 units for rates between 0.0-35U/hr
+            return (0...700).map { Double($0) * 0.05 }
+        case .medtronicX23:
+            // 0.025 units for rates between 0.0-0.975 U/h
+            let rateGroup1 = (0...39).map { Double($0) * 0.025 }
+            // 0.05 units for rates between 1-9.95 U/h
+            let rateGroup2 = (20...199).map { Double($0) * 0.05 }
+            // 0.1 units for rates between 10-35 U/h
+            let rateGroup3 = (100...350).map { Double($0) * 0.1 }
+            return rateGroup1 + rateGroup2 + rateGroup3
+        }
+    }
 }
 
 
@@ -57,6 +102,7 @@ extension MockPumpManagerState: RawRepresentable {
             return nil
         }
 
+        self.deliverableIncrements = (rawValue["deliverableIncrements"] as? DeliverableIncrements.RawValue).flatMap(DeliverableIncrements.init(rawValue:)) ?? .medtronicX22
         self.reservoirUnitsRemaining = reservoirUnitsRemaining
         self.tempBasalEnactmentShouldError = rawValue["tempBasalEnactmentShouldError"] as? Bool ?? false
         self.bolusEnactmentShouldError = rawValue["bolusEnactmentShouldError"] as? Bool ?? false
@@ -97,6 +143,7 @@ extension MockPumpManagerState: RawRepresentable {
     public var rawValue: RawValue {
 
         var raw: RawValue = [
+            "deliverableIncrements": deliverableIncrements.rawValue,
             "reservoirUnitsRemaining": reservoirUnitsRemaining,
         ]
 

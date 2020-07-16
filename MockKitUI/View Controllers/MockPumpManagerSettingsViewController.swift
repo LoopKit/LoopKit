@@ -39,6 +39,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.estimatedSectionHeaderHeight = 55
 
+        tableView.register(SegmentedControlTableViewCell.self, forCellReuseIdentifier: SegmentedControlTableViewCell.className)
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
         tableView.register(BoundSwitchTableViewCell.self, forCellReuseIdentifier: BoundSwitchTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
@@ -79,7 +80,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
     }
 
     private enum SettingsRow: Int, CaseIterable {
-        case reservoirRemaining = 0
+        case deliverableIncrements = 0
+        case reservoirRemaining
         case batteryRemaining
         case tempBasalErrorToggle
         case bolusErrorToggle
@@ -153,6 +155,25 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             }
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
+            case .deliverableIncrements:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SegmentedControlTableViewCell.className, for: indexPath) as! SegmentedControlTableViewCell
+                let possibleDeliverableIncrements = MockPumpManagerState.DeliverableIncrements.allCases
+                cell.textLabel?.text = "Increments"
+                cell.options = possibleDeliverableIncrements.map { increments in
+                    switch increments {
+                    case .omnipod:
+                        return "Pod"
+                    case .medtronicX22:
+                        return "x22"
+                    case .medtronicX23:
+                        return "x23"
+                    }
+                }
+                cell.segmentedControl.selectedSegmentIndex = possibleDeliverableIncrements.firstIndex(of: pumpManager.state.deliverableIncrements)!
+                cell.onSelection { [pumpManager] index in
+                    pumpManager.state.deliverableIncrements = possibleDeliverableIncrements[index]
+                }
+                return cell
             case .reservoirRemaining:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = "Reservoir Remaining"
@@ -249,6 +270,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             }
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
+            case .deliverableIncrements:
+                break
             case .reservoirRemaining:
                 let vc = TextFieldTableViewController()
                 vc.value = String(format: "%.1f", pumpManager.state.reservoirUnitsRemaining)

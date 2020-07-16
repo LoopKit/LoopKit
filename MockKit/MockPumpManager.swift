@@ -70,11 +70,11 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     public var supportedBolusVolumes: [Double] {
-        return supportedBasalRates
+        return state.supportedBolusVolumes
     }
 
     public var supportedBasalRates: [Double] {
-        return (0...700).map { Double($0) / Double(type(of: self).pulsesPerUnit) }
+        return state.supportedBasalRates
     }
 
     public var maximumBasalScheduleEntryCount: Int {
@@ -238,6 +238,7 @@ public final class MockPumpManager: TestingPumpManager {
 
     public init() {
         state = MockPumpManagerState(
+            deliverableIncrements: .medtronicX22,
             reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity,
             tempBasalEnactmentShouldError: false,
             bolusEnactmentShouldError: false,
