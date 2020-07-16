@@ -329,6 +329,7 @@
 		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
 		89186C0524BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */; };
 		89186C0724BF7FC70003D0F3 /* Guardrail+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0624BF7FC70003D0F3 /* Guardrail+UI.swift */; };
+		89186C0B24BFD6DB0003D0F3 /* DurationPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0A24BFD6DB0003D0F3 /* DurationPicker.swift */; };
 		891A3FC72247268F00378B27 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A3FC62247268F00378B27 /* Math.swift */; };
 		891A3FD12249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A3FD02249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift */; };
 		891A3FD32249990900378B27 /* DailyValueSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891A3FD22249990900378B27 /* DailyValueSchedule.swift */; };
@@ -1231,6 +1232,7 @@
 		8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineCurveParametersTableViewController.swift; sourceTree = "<group>"; };
 		89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControlTableViewCell.swift; sourceTree = "<group>"; };
 		89186C0624BF7FC70003D0F3 /* Guardrail+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Guardrail+UI.swift"; sourceTree = "<group>"; };
+		89186C0A24BFD6DB0003D0F3 /* DurationPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationPicker.swift; sourceTree = "<group>"; };
 		891A3FC62247268F00378B27 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		891A3FD02249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryScheduleOverrideHistoryTests.swift; sourceTree = "<group>"; };
 		891A3FD22249990900378B27 /* DailyValueSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyValueSchedule.swift; sourceTree = "<group>"; };
@@ -1789,6 +1791,7 @@
 				89904031245B5CA500F1C0A2 /* Deletable.swift */,
 				899012C0246F1D8F007B88BA /* ExpandableSetting.swift */,
 				89653C7F2473527100E1BAA5 /* FractionalQuantityPicker.swift */,
+				89186C0A24BFD6DB0003D0F3 /* DurationPicker.swift */,
 				E916F56724AD31F900BE3547 /* Settings Editors */,
 				E9077D2824ACD5AA0066A88D /* Information Screens */,
 			);
@@ -3122,6 +3125,7 @@
 				89F6E315244A1AB600CB9E15 /* GlucoseValuePicker.swift in Sources */,
 				895FE08122011F0C00FCF18A /* OverridePresetCollectionViewCell.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
+				89186C0B24BFD6DB0003D0F3 /* DurationPicker.swift in Sources */,
 				8974B0692215FE460043F01B /* Collection.swift in Sources */,
 				89BE75C72464B4A900B145D9 /* Environment+Dismiss.swift in Sources */,
 				43BA717F201EE7090058961E /* GlucoseRangeOverrideTableViewCell.swift in Sources */,
