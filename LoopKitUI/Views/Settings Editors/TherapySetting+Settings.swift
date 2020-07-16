@@ -1,5 +1,5 @@
 //
-//  TherapySettingExtension.swift
+//  TherapySetting+Settings.swift
 //  LoopKitUI
 //
 //  Created by Rick Pasetto on 7/14/20.
