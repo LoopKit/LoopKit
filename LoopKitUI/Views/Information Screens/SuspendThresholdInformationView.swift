@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import LoopKit
 
 public struct SuspendThresholdInformationView: View {
     var onExit: (() -> Void)?
@@ -24,7 +25,7 @@ public struct SuspendThresholdInformationView: View {
     
     public var body: some View {
         InformationView(
-            title: Text(LocalizedString("Suspend Threshold", comment: "Title for suspend threshold informational screen")),
+            title: Text(TherapySetting.suspendThreshold.title),
             buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to setting editor")),
             informationalContent: {text},
             onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
@@ -34,7 +35,7 @@ public struct SuspendThresholdInformationView: View {
     
     private var text: some View {
         VStack(alignment: .leading, spacing: 25) {
-            Text(LocalizedString("When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus.", comment: "Information about suspend threshold"))
+            Text(TherapySetting.suspendThreshold.descriptiveText)
         }
         .accentColor(.secondary)
         .foregroundColor(.accentColor)

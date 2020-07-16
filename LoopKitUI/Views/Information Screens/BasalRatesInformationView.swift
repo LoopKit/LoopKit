@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import LoopKit
 
 public struct BasalRatesInformationView: View {
     var onExit: (() -> Void)?
@@ -22,7 +23,7 @@ public struct BasalRatesInformationView: View {
     
     public var body: some View {
         InformationView(
-            title: Text(LocalizedString("Basal Rates", comment: "Title for basal rate informational screen")),
+            title: Text(TherapySetting.basalRate.title),
             buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to setting editor")),
             informationalContent: {text},
             onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },

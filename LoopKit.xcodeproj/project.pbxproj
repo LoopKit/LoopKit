@@ -711,6 +711,8 @@
 		E916F56B24AD346D00BE3547 /* UIColor+LoopKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916F56A24AD346D00BE3547 /* UIColor+LoopKit.swift */; };
 		E916F56F24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E916F56E24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift */; };
 		E93BA06624A39DBC00C5D7E6 /* DismissableHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93BA06524A39DBC00C5D7E6 /* DismissableHostingController.swift */; };
+		E949E38924AFC82F00024DA0 /* DeliveryLimitsInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */; };
+		E949E38B24B35DA400024DA0 /* DeliveryLimitsEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E949E38A24B35DA400024DA0 /* DeliveryLimitsEditor.swift */; };
 		E96175AE24B7BE38008E5080 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96175AD24B7BE38008E5080 /* Dictionary.swift */; };
 		E96DCB5824AEF50F007117BC /* SuspendThresholdInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */; };
 		E96DCB5A24AF74AC007117BC /* SuspendThresholdEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */; };
@@ -1466,6 +1468,8 @@
 		E916F56A24AD346D00BE3547 /* UIColor+LoopKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+LoopKit.swift"; sourceTree = "<group>"; };
 		E916F56E24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverrideInformationView.swift; sourceTree = "<group>"; };
 		E93BA06524A39DBC00C5D7E6 /* DismissableHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissableHostingController.swift; sourceTree = "<group>"; };
+		E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimitsInformationView.swift; sourceTree = "<group>"; };
+		E949E38A24B35DA400024DA0 /* DeliveryLimitsEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimitsEditor.swift; sourceTree = "<group>"; };
 		E96175AD24B7BE38008E5080 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdInformationView.swift; sourceTree = "<group>"; };
 		E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdEditor.swift; sourceTree = "<group>"; };
@@ -2412,6 +2416,7 @@
 			children = (
 				E9077D2624ACD59F0066A88D /* InformationView.swift */,
 				E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */,
+				E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */,
 				E916F56E24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift */,
 				E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */,
 				E96DCB5D24AF7DC7007117BC /* BasalRatesInformationView.swift */,
@@ -2422,6 +2427,7 @@
 		E916F56724AD31F900BE3547 /* Settings Editors */ = {
 			isa = PBXGroup;
 			children = (
+				E949E38A24B35DA400024DA0 /* DeliveryLimitsEditor.swift */,
 				89653C8324738D2B00E1BAA5 /* BasalRateScheduleEditor.swift */,
 				89653C812473592600E1BAA5 /* CarbRatioScheduleEditor.swift */,
 				E916F56824AD32F000BE3547 /* CorrectionRangeOverridesEditor.swift */,
@@ -3143,10 +3149,12 @@
 				892A5DB32231E191008961AB /* LevelHUDView.swift in Sources */,
 				B41A60B223D1DBC700636320 /* UIFont.swift in Sources */,
 				B41A60AF23D1DB5B00636320 /* TableViewTitleLabel.swift in Sources */,
+				E949E38B24B35DA400024DA0 /* DeliveryLimitsEditor.swift in Sources */,
 				89CC35D42403450E008FB633 /* ThumbView.swift in Sources */,
 				43BA7162201E490D0058961E /* ErrorBackgroundView.swift in Sources */,
 				892A5D9A2231E0E4008961AB /* SettingsNavigationViewController.swift in Sources */,
 				B46B62B123FF0CA6001E69BA /* DescriptiveText.swift in Sources */,
+				E949E38924AFC82F00024DA0 /* DeliveryLimitsInformationView.swift in Sources */,
 				89AC9DCB24529927004A6B8A /* QuantityPicker.swift in Sources */,
 				B4C004D22416961300B40429 /* GuideNavigationButton.swift in Sources */,
 				89627B16244115A400BEB424 /* CardList.swift in Sources */,

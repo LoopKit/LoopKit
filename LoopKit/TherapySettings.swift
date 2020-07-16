@@ -30,6 +30,10 @@ public struct TherapySettings: Equatable, Codable {
     
     public var insulinModel: StoredSettings.InsulinModel?
     
+    public var glucoseUnit: HKUnit? {
+        return glucoseTargetRangeSchedule?.unit
+    }
+    
     public init(
         glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
         preMealTargetRange: DoubleRange? = nil,

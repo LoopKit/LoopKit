@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import LoopKit
 
 public struct CorrectionRangeInformationView: View {
     var onExit: (() -> Void)?
@@ -22,7 +23,7 @@ public struct CorrectionRangeInformationView: View {
     
     public var body: some View {
         InformationView(
-            title: Text(LocalizedString("Correction Range", comment: "Title for correction range informational screen")),
+            title: Text(TherapySetting.glucoseTargetRange.title),
             buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to correction range setting editor")),
             informationalContent: {text},
             onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
