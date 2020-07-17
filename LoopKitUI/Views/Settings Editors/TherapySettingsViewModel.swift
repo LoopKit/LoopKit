@@ -10,15 +10,16 @@ import LoopKit
 import HealthKit
 
 public class TherapySettingsViewModel: ObservableObject {
+    
     private var initialTherapySettings: TherapySettings
     public var therapySettings: TherapySettings
     public var didFinishStep: (() -> Void)?
-    let supportedBasalRates: [Double]?
+    let pumpSupportedIncrements: PumpSupportedIncrements?
 
-    public init(therapySettings: TherapySettings, supportedBasalRates: [Double]? = nil) {
+    public init(therapySettings: TherapySettings, pumpSupportedIncrements: PumpSupportedIncrements? = nil) {
         self.therapySettings = therapySettings
         self.initialTherapySettings = therapySettings
-        self.supportedBasalRates = supportedBasalRates
+        self.pumpSupportedIncrements = pumpSupportedIncrements
     }
     
     /// Reset to original

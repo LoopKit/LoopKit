@@ -18,6 +18,7 @@
 		1D4990E624A17564005CC357 /* HKQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4990E524A17564005CC357 /* HKQuery.swift */; };
 		1D4990E724A17898005CC357 /* HKQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4990E524A17564005CC357 /* HKQuery.swift */; };
 		1D640FF724525228008F9755 /* sub.caf in Resources */ = {isa = PBXBuildFile; fileRef = 1D640FF524524284008F9755 /* sub.caf */; };
+		1D6EAB9124C12C090081249D /* PumpSupportedIncrements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6EAB9024C12C090081249D /* PumpSupportedIncrements.swift */; };
 		1D841AAD24577EE10069DBFF /* AlertSoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D841AAC24577EE10069DBFF /* AlertSoundPlayer.swift */; };
 		1DA649AB2445174400F61E75 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* Alert.swift */; };
 		1DABAD3A2453615200ACF708 /* IssueAlertTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DABAD392453615200ACF708 /* IssueAlertTableViewController.swift */; };
@@ -849,6 +850,7 @@
 		1D25C22D246A2A1A00E87FA0 /* critical.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = critical.caf; sourceTree = "<group>"; };
 		1D4990E524A17564005CC357 /* HKQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKQuery.swift; sourceTree = "<group>"; };
 		1D640FF524524284008F9755 /* sub.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sub.caf; sourceTree = "<group>"; };
+		1D6EAB9024C12C090081249D /* PumpSupportedIncrements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpSupportedIncrements.swift; sourceTree = "<group>"; };
 		1D841AAC24577EE10069DBFF /* AlertSoundPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertSoundPlayer.swift; sourceTree = "<group>"; };
 		1DA649AA2445174400F61E75 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		1DABAD392453615200ACF708 /* IssueAlertTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueAlertTableViewController.swift; sourceTree = "<group>"; };
@@ -2432,15 +2434,16 @@
 		E916F56724AD31F900BE3547 /* Settings Editors */ = {
 			isa = PBXGroup;
 			children = (
-				E949E38A24B35DA400024DA0 /* DeliveryLimitsEditor.swift */,
 				89653C8324738D2B00E1BAA5 /* BasalRateScheduleEditor.swift */,
 				89653C812473592600E1BAA5 /* CarbRatioScheduleEditor.swift */,
 				E916F56824AD32F000BE3547 /* CorrectionRangeOverridesEditor.swift */,
 				1D1FCE2224BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift */,
 				1DC64C7B24BF6BFD004A63A1 /* CorrectionRangeOverridesExtension.swift */,
 				898B4E7A246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift */,
+				E949E38A24B35DA400024DA0 /* DeliveryLimitsEditor.swift */,
 				1D1FCE2C24BEA669000300A8 /* Guardrail+Settings.swift */,
 				89FC688A245A2D670075CF59 /* InsulinSensitivityScheduleEditor.swift */,
+				1D6EAB9024C12C090081249D /* PumpSupportedIncrements.swift */,
 				E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */,
 				1D1FCE2A24BE704A000300A8 /* TherapySetting+Settings.swift */,
 				1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */,
@@ -3077,6 +3080,7 @@
 				1D1FCE2324BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift in Sources */,
 				E93BA06624A39DBC00C5D7E6 /* DismissableHostingController.swift in Sources */,
 				43F503632106C761009FA89A /* ServiceAuthenticationUI.swift in Sources */,
+				1D6EAB9124C12C090081249D /* PumpSupportedIncrements.swift in Sources */,
 				899012C1246F1D8F007B88BA /* ExpandableSetting.swift in Sources */,
 				89FC6890245A2D680075CF59 /* QuantityScheduleEditor.swift in Sources */,
 				432CF86B20D76B9C0066B889 /* SetupIndicatorView.swift in Sources */,

@@ -178,12 +178,12 @@ extension TherapySettingsView {
     
     private var basalRatesSection: some View {
         section(for: .basalRate) {
-            if self.therapySettings.basalRateSchedule != nil && self.viewModel.supportedBasalRates != nil {
+            if self.therapySettings.basalRateSchedule != nil && self.viewModel.pumpSupportedIncrements != nil {
                 ForEach(self.therapySettings.basalRateSchedule!.items, id: \.self) { value in
                     ScheduleValueItem(time: value.startTime,
                                       value: value.value,
                                       unit: .internationalUnitsPerHour,
-                                      guardrail: Guardrail.basalRate(supportedBasalRates: self.viewModel.supportedBasalRates!))
+                                      guardrail: Guardrail.basalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!.basalRates))
                 }
             }
         }
@@ -191,23 +191,45 @@ extension TherapySettingsView {
     
     private var deliveryLimitsSection: some View {
         section(for: .deliveryLimits) {
-            HStack {
-                Text(DeliveryLimits.Setting.maximumBasalRate.title)
-                Spacer()
-                if self.viewModel.supportedBasalRates != nil {
-                    
-                    GuardrailConstrainedQuantityView(
-                        value: self.therapySettings.maximumBasalRatePerHour == nil ? nil : HKQuantity(unit: .internationalUnitsPerHour, doubleValue: self.therapySettings.maximumBasalRatePerHour!),
-                        unit: .internationalUnitsPerHour,
-                        guardrail: Guardrail.maximumBasalRate(supportedBasalRates: self.viewModel.supportedBasalRates!, scheduledBasalRange: self.therapySettings.basalRateSchedule?.valueRange()),
-                        isEditing: false,
-                        // Workaround for strange animation behavior on appearance
-                        forceDisableAnimations: true
-                    )
-                }
+            self.maxBasalRateItem
+            self.maxBolusItem
+        }
+    }
+    
+    private var maxBasalRateItem: some View {
+        HStack {
+            Text(DeliveryLimits.Setting.maximumBasalRate.title)
+            Spacer()
+            if self.viewModel.pumpSupportedIncrements != nil {
+                GuardrailConstrainedQuantityView(
+                    value: self.therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
+                    unit: .internationalUnitsPerHour,
+                    guardrail: Guardrail.maximumBasalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!.basalRates, scheduledBasalRange: self.therapySettings.basalRateSchedule?.valueRange()),
+                    isEditing: false,
+                    // Workaround for strange animation behavior on appearance
+                    forceDisableAnimations: true
+                )
             }
         }
     }
+    
+    private var maxBolusItem: some View {
+        HStack {
+            Text(DeliveryLimits.Setting.maximumBolus.title)
+            Spacer()
+            if self.viewModel.pumpSupportedIncrements != nil {
+                GuardrailConstrainedQuantityView(
+                    value: self.therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) },
+                    unit: .internationalUnit(),
+                    guardrail: Guardrail.maximumBolus(supportedBolusVolumes: self.viewModel.pumpSupportedIncrements!.bolusVolumes),
+                    isEditing: false,
+                    // Workaround for strange animation behavior on appearance
+                    forceDisableAnimations: true
+                )
+            }
+        }
+    }
+    
 }
 
 // MARK: Utilities
@@ -326,42 +348,47 @@ struct SectionWithEdit<Content>: View where Content: View {
     }
 }
 
-// For previews:
-let preview_glucoseScheduleItems = [
-    RepeatingScheduleValue(startTime: 0, value: DoubleRange(80...90)),
-    RepeatingScheduleValue(startTime: 1800, value: DoubleRange(90...100)),
-    RepeatingScheduleValue(startTime: 3600, value: DoubleRange(100...110))
-]
-
-let preview_therapySettings = TherapySettings(
-    glucoseTargetRangeSchedule: GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: preview_glucoseScheduleItems),
-    preMealTargetRange: DoubleRange(88...99),
-    workoutTargetRange: DoubleRange(99...111),
-    maximumBasalRatePerHour: 55,
-    maximumBolus: 4,
-    suspendThreshold: GlucoseThreshold.init(unit: .milligramsPerDeciliter, value: 60),
-    insulinSensitivitySchedule: InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliter.unitDivided(by: HKUnit.internationalUnit()), dailyItems: []),
-    carbRatioSchedule: nil,
-    basalRateSchedule: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: 0, value: 0.2), RepeatingScheduleValue(startTime: 1800, value: 0.75)]))
-
-let preview_supportedBasalRates = [0.2, 0.5, 0.75, 1.0]
-
 public struct TherapySettingsView_Previews: PreviewProvider {
+
+    static let preview_glucoseScheduleItems = [
+        RepeatingScheduleValue(startTime: 0, value: DoubleRange(80...90)),
+        RepeatingScheduleValue(startTime: 1800, value: DoubleRange(90...100)),
+        RepeatingScheduleValue(startTime: 3600, value: DoubleRange(100...110))
+    ]
+
+    static let preview_therapySettings = TherapySettings(
+        glucoseTargetRangeSchedule: GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: preview_glucoseScheduleItems),
+        preMealTargetRange: DoubleRange(88...99),
+        workoutTargetRange: DoubleRange(99...111),
+        maximumBasalRatePerHour: 55,
+        maximumBolus: 4,
+        suspendThreshold: GlucoseThreshold.init(unit: .milligramsPerDeciliter, value: 60),
+        insulinSensitivitySchedule: InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliter.unitDivided(by: HKUnit.internationalUnit()), dailyItems: []),
+        carbRatioSchedule: nil,
+        basalRateSchedule: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: 0, value: 0.2), RepeatingScheduleValue(startTime: 1800, value: 0.75)]))
+
+    static let preview_supportedBasalRates = [0.2, 0.5, 0.75, 1.0]
+    static let preview_supportedBolusVolumes = [5.0, 10.0, 15.0]
+
+    static let preview_viewModel = TherapySettingsViewModel(therapySettings: preview_therapySettings,
+                                                            pumpSupportedIncrements: PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
+                                                                                                             bolusVolumes: preview_supportedBolusVolumes))
+
     public static var previews: some View {
         Group {
-            TherapySettingsView(mode: .modal,viewModel: TherapySettingsViewModel(therapySettings: preview_therapySettings, supportedBasalRates: preview_supportedBasalRates))
+            TherapySettingsView(mode: .modal, viewModel: preview_viewModel)
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (onboarding)")
-            TherapySettingsView(mode: .flow, viewModel: TherapySettingsViewModel(therapySettings: preview_therapySettings, supportedBasalRates: preview_supportedBasalRates))
+            TherapySettingsView(mode: .flow, viewModel: preview_viewModel)
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (settings)")
-            TherapySettingsView(mode: .modal, viewModel: TherapySettingsViewModel(therapySettings: preview_therapySettings, supportedBasalRates: preview_supportedBasalRates))
+            TherapySettingsView(mode: .modal, viewModel: preview_viewModel)
                 .colorScheme(.dark)
                 .previewDevice(PreviewDevice(rawValue: "iPhone XS Max"))
                 .previewDisplayName("XS Max dark (settings)")
-            TherapySettingsView(mode: .modal, viewModel: TherapySettingsViewModel(therapySettings: TherapySettings(), supportedBasalRates: nil))
+            TherapySettingsView(mode: .modal, viewModel: TherapySettingsViewModel(therapySettings: TherapySettings()))
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (Empty TherapySettings)")
