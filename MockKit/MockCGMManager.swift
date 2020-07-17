@@ -186,7 +186,7 @@ public struct MockCGMState: SensorDisplayable {
 public struct MockCGMStatusHighlight: DeviceStatusHighlight {
     public var localizedMessage: String
     
-    public var imageSystemName: String {
+    public var imageName: String {
         switch alertIdentifier {
         case MockCGMManager.submarine.identifier:
             return "dot.radiowaves.left.and.right"

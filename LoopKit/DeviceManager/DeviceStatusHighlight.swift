@@ -13,7 +13,7 @@ public protocol DeviceStatusHighlight {
     var localizedMessage: String { get }
 
     /// the system name of the icon related to the message
-    var imageSystemName: String { get }
+    var imageName: String { get }
         
     /// the state of the status highlight (guides presentation)
     var state: DeviceStatusHighlightState { get }

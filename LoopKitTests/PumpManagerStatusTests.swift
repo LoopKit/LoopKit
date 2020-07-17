@@ -22,7 +22,7 @@ class PumpManagerStatusCodableTests: XCTestCase {
                               localIdentifier: "Locally Identified",
                               udiDeviceIdentifier: "U0D1I2")
         let pumpStatusHighlight = PumpManagerStatus.PumpStatusHighlight(localizedMessage: "Test message",
-                                                                        imageSystemName: "test.image",
+                                                                        imageName: "test.image",
                                                                         state: .normal)
         let pumpLifecycleProgress = PumpManagerStatus.PumpLifecycleProgress(percentComplete: 0.5,
                                                                             progressState: .warning)
@@ -57,7 +57,7 @@ class PumpManagerStatusCodableTests: XCTestCase {
     "progressState" : "warning"
   },
   "pumpStatusHighlight" : {
-    "imageSystemName" : "test.image",
+    "imageName" : "test.image",
     "localizedMessage" : "Test message",
     "state" : "normal"
   },

@@ -14,13 +14,13 @@ public struct PumpManagerStatus: Equatable {
     public struct PumpStatusHighlight: DeviceStatusHighlight, Equatable {
         public var localizedMessage: String
         
-        public var imageSystemName: String
+        public var imageName: String
         
         public var state: DeviceStatusHighlightState
         
-        public init(localizedMessage: String, imageSystemName: String, state: DeviceStatusHighlightState) {
+        public init(localizedMessage: String, imageName: String, state: DeviceStatusHighlightState) {
             self.localizedMessage = localizedMessage
-            self.imageSystemName = imageSystemName
+            self.imageName = imageName
             self.state = state
         }
     }

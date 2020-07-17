@@ -118,19 +118,19 @@ public final class MockPumpManager: TestingPumpManager {
     private func pumpStatusHighlight(for state: MockPumpManagerState) -> PumpManagerStatus.PumpStatusHighlight? {
         if state.reservoirUnitsRemaining == 0 {
             return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("No Insulin", comment: "Status highlight that a pump is out of insulin."),
-                                                         imageSystemName: "exclamationmark.circle.fill",
+                                                         imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         } else if state.occlusionDetected {
             return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Occlusion", comment: "Status highlight that an occlusion was detected."),
-                                                         imageSystemName: "exclamationmark.circle.fill",
+                                                         imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         } else if state.pumpErrorDetected {
             return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Error", comment: "Status highlight that a pump error occurred."),
-                                                         imageSystemName: "exclamationmark.circle.fill",
+                                                         imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         } else if case .suspended = state.suspendState {
             return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
-                                                         imageSystemName: "pause.circle.fill",
+                                                         imageName: "pause.circle.fill",
                                                          state: .warning)
         }
         

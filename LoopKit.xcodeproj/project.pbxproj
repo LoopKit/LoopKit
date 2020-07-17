@@ -659,6 +659,8 @@
 		B4102D3324ABB0D8005D460B /* DeviceLifecycleProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4102D3124ABB068005D460B /* DeviceLifecycleProgress.swift */; };
 		B41A60AF23D1DB5B00636320 /* TableViewTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41A60AE23D1DB5B00636320 /* TableViewTitleLabel.swift */; };
 		B41A60B223D1DBC700636320 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41A60B123D1DBC700636320 /* UIFont.swift */; };
+		B429D66C24BF7204003E1B4A /* GlucoseTrend.swift in Sources */ = {isa = PBXBuildFile; fileRef = B429D66B24BF7204003E1B4A /* GlucoseTrend.swift */; };
+		B429D66E24BF7255003E1B4A /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B429D66D24BF7255003E1B4A /* UIImage.swift */; };
 		B42A7472235885B600247B03 /* LoopNotificationUserInfoKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42A7471235885B600247B03 /* LoopNotificationUserInfoKey.swift */; };
 		B42C950B24A3BCCD00857C73 /* GlucoseValueType+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42C950824A3BCC200857C73 /* GlucoseValueType+Color.swift */; };
 		B42C950E24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42C950C24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift */; };
@@ -674,6 +676,7 @@
 		B46B62B323FF0E62001E69BA /* SelectableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62B223FF0E62001E69BA /* SelectableLabel.swift */; };
 		B4A2AAB1240830A30066563F /* LabeledTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A2AAB0240830A30066563F /* LabeledTextField.swift */; };
 		B4A2AAB3240832350066563F /* MultipleSelectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A2AAB2240832350066563F /* MultipleSelectionList.swift */; };
+		B4AA27F224C1ECDC001B8AFA /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AA27F124C1ECDC001B8AFA /* UIColor.swift */; };
 		B4B85FCD24A2312000A296A3 /* GlucoseValueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B85FCC24A2312000A296A3 /* GlucoseValueType.swift */; };
 		B4B85FD024A2318A00A296A3 /* GlucoseValueType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B85FCC24A2312000A296A3 /* GlucoseValueType.swift */; };
 		B4C004D12416961300B40429 /* GuidePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C004B3241085DB00B40429 /* GuidePage.swift */; };
@@ -1420,6 +1423,8 @@
 		B4102D3124ABB068005D460B /* DeviceLifecycleProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLifecycleProgress.swift; sourceTree = "<group>"; };
 		B41A60AE23D1DB5B00636320 /* TableViewTitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewTitleLabel.swift; sourceTree = "<group>"; };
 		B41A60B123D1DBC700636320 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
+		B429D66B24BF7204003E1B4A /* GlucoseTrend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseTrend.swift; sourceTree = "<group>"; };
+		B429D66D24BF7255003E1B4A /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		B42A7471235885B600247B03 /* LoopNotificationUserInfoKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopNotificationUserInfoKey.swift; sourceTree = "<group>"; };
 		B42C94FD24A2A2B000857C73 /* DeviceStatusHighlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusHighlight.swift; sourceTree = "<group>"; };
 		B42C950824A3BCC200857C73 /* GlucoseValueType+Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GlucoseValueType+Color.swift"; sourceTree = "<group>"; };
@@ -1434,6 +1439,7 @@
 		B46B62B223FF0E62001E69BA /* SelectableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableLabel.swift; sourceTree = "<group>"; };
 		B4A2AAB0240830A30066563F /* LabeledTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledTextField.swift; sourceTree = "<group>"; };
 		B4A2AAB2240832350066563F /* MultipleSelectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleSelectionList.swift; sourceTree = "<group>"; };
+		B4AA27F124C1ECDC001B8AFA /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		B4B85FCC24A2312000A296A3 /* GlucoseValueType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseValueType.swift; sourceTree = "<group>"; };
 		B4C004B2241085DB00B40429 /* ActionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		B4C004B3241085DB00B40429 /* GuidePage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GuidePage.swift; sourceTree = "<group>"; };
@@ -1621,6 +1627,7 @@
 				434570431FE605E30089C4DC /* OSLog.swift */,
 				89ED163F24A29BA300C9A105 /* Sequence.swift */,
 				4303C4901E2D664200ADEDC8 /* TimeZone.swift */,
+				B4AA27F124C1ECDC001B8AFA /* UIColor.swift */,
 				434FF1E31CF26A1E000DB779 /* UITableViewCell.swift */,
 				43260F6D21C4BF7A00DD6837 /* UUID.swift */,
 			);
@@ -2368,12 +2375,14 @@
 				B4F3D24E24AF59B50095CE44 /* DeviceLifecycleProgressState+Color.swift */,
 				B46A70B924B3B4BF00B4DEEC /* DeviceStatusHighlight+Color.swift */,
 				89BE75C62464B4A900B145D9 /* Environment+Dismiss.swift */,
+				B429D66B24BF7204003E1B4A /* GlucoseTrend.swift */,
 				B42C950824A3BCC200857C73 /* GlucoseValueType+Color.swift */,
 				C1E4B309242E99A800E70CCB /* Image.swift */,
-				B41A60B123D1DBC700636320 /* UIFont.swift */,
 				E916F56A24AD346D00BE3547 /* UIColor+LoopKit.swift */,
 				E96175AD24B7BE38008E5080 /* Dictionary.swift */,
 				89186C0624BF7FC70003D0F3 /* Guardrail+UI.swift */,
+				B41A60B123D1DBC700636320 /* UIFont.swift */,
+				B429D66D24BF7255003E1B4A /* UIImage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2993,6 +3002,7 @@
 				430157FC1C7EC03B00B64B63 /* MasterViewController.swift in Sources */,
 				430157FA1C7EC03B00B64B63 /* AppDelegate.swift in Sources */,
 				43177D021D3729E60006E908 /* IdentifiableClass.swift in Sources */,
+				B4AA27F224C1ECDC001B8AFA /* UIColor.swift in Sources */,
 				4302F4D91D4D32D500F0FCAF /* NSTimeInterval.swift in Sources */,
 				435F355E1C9CD16A00C204D2 /* NSUserDefaults.swift in Sources */,
 				435F35611C9CD25F00C204D2 /* DeviceDataManager.swift in Sources */,
@@ -3036,8 +3046,10 @@
 				C1E4B30A242E99A800E70CCB /* Image.swift in Sources */,
 				43BA718A201EE8CF0058961E /* NSTimeInterval.swift in Sources */,
 				B4A2AAB1240830A30066563F /* LabeledTextField.swift in Sources */,
+				B429D66E24BF7255003E1B4A /* UIImage.swift in Sources */,
 				B46B62A923FF05F8001E69BA /* LabeledNumberInput.swift in Sources */,
 				892155152245C57E009112BC /* SegmentedGaugeBarLayer.swift in Sources */,
+				B429D66C24BF7204003E1B4A /* GlucoseTrend.swift in Sources */,
 				B4C004D42416962600B40429 /* Color.swift in Sources */,
 				432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */,
 				898B4E7B246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift in Sources */,
