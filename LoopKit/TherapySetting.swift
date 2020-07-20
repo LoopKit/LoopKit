@@ -27,7 +27,7 @@ public extension TherapySetting {
         case .glucoseTargetRange:
             return LocalizedString("Correction Range", comment: "Title text for glucose target range")
         case .correctionRangeOverrides:
-            return LocalizedString("Temporary Correction Ranges", comment: "Title text for temporary correction ranges")
+            return LocalizedString("Temporary Ranges", comment: "Title text for temporary correction ranges")
         case .suspendThreshold:
             return LocalizedString("Suspend Threshold", comment: "Title text for suspend threshold")
         case .basalRate:

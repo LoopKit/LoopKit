@@ -10,9 +10,8 @@ import LoopKit
 import HealthKit
 
 public class TherapySettingsViewModel: ObservableObject {
-    
-    private var initialTherapySettings: TherapySettings
-    public var therapySettings: TherapySettings
+    var initialTherapySettings: TherapySettings
+    @Published public var therapySettings: TherapySettings
     public var didFinishStep: (() -> Void)?
     let pumpSupportedIncrements: PumpSupportedIncrements?
 
