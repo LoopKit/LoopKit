@@ -22,6 +22,10 @@ extension HKUnit {
         return HKUnit.internationalUnit().unitDivided(by: .hour())
     }()
 
+    static let gramsPerUnit: HKUnit = {
+        return HKUnit.gram().unitDivided(by: .internationalUnit())
+    }()
+    
     var foundationUnit: Unit? {
         if self == HKUnit.milligramsPerDeciliter {
             return UnitConcentrationMass.milligramsPerDeciliter

@@ -13,7 +13,7 @@ import LoopKit
 
 fileprivate extension HKUnit {
     static let storedCarbRatioScheduleUnit = HKUnit.gram()
-    static let realCarbRatioScheduleUnit = HKUnit.gram().unitDivided(by: .internationalUnit())
+    static let realCarbRatioScheduleUnit = HKUnit.gramsPerUnit
 }
 
 extension Guardrail where Value == HKQuantity {

@@ -51,6 +51,7 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
             basalRatesSection
             deliveryLimitsSection
             insulinModelSection
+            carbRatioSection
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle(Text(LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")))
@@ -231,7 +232,7 @@ extension TherapySettingsView {
         }
     }
         
-    var insulinModelSection: some View {
+    private var insulinModelSection: some View {
         section(for: .insulinModel) {
             self.insulinModelItem(InsulinModelSettings.exponentialPreset(.humalogNovologAdult))
             self.insulinModelItem(InsulinModelSettings.exponentialPreset(.humalogNovologChild))
@@ -272,14 +273,18 @@ extension TherapySettingsView {
             .padding(.bottom, 4)
     }
 
-    private func isSelected(_ settings: InsulinModelSettings) -> Binding<Bool> {
-        return .constant(self.viewModel.therapySettings.insulinModel == StoredSettings.InsulinModel(settings))
+    private var carbRatioSection: some View {
+        section(for: .carbRatio) {
+            if self.therapySettings.carbRatioSchedule != nil {
+                ForEach(self.therapySettings.carbRatioSchedule!.items, id: \.self) { value in
+                    ScheduleValueItem(time: value.startTime,
+                                      value: value.value,
+                                      unit: .gramsPerUnit,
+                                      guardrail: Guardrail.carbRatio)
+                }
+            }
+        }
     }
-    
-    private var isWalshModelSelected: Binding<Bool> {
-        return .constant(self.viewModel.therapySettings.insulinModel?.modelType == .some(.walsh))
-    }
-
 }
 
 // MARK: Utilities
@@ -295,6 +300,14 @@ extension TherapySettingsView {
     
     private var sensitivityUnit: HKUnit? {
         glucoseUnit?.unitDivided(by: .internationalUnit())
+    }
+    
+    private func isSelected(_ settings: InsulinModelSettings) -> Binding<Bool> {
+        return .constant(self.viewModel.therapySettings.insulinModel == StoredSettings.InsulinModel(settings))
+    }
+    
+    private var isWalshModelSelected: Binding<Bool> {
+        return .constant(self.viewModel.therapySettings.insulinModel?.modelType == .some(.walsh))
     }
 
     private func section<Content>(for therapySetting: TherapySetting, @ViewBuilder content: @escaping () -> Content) -> some View where Content: View {
