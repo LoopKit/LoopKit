@@ -55,7 +55,7 @@ public struct CorrectionRangeOverridesEditor: View {
 
     public var body: some View {
         ConfigurationPage(
-            title: Text(TherapySetting.correctionRangeOverrides.title),
+            title: Text(TherapySetting.correctionRangeOverrides.smallTitle),
             actionButtonTitle: buttonText,
             actionButtonState: value != initialValue || mode == .flow ? .enabled : .disabled,
             cards: {

@@ -27,8 +27,7 @@ public extension TherapySetting {
         case .glucoseTargetRange:
             return LocalizedString("Correction Range", comment: "Title text for glucose target range")
         case .correctionRangeOverrides:
-            // TODO: make this title be "Temporary Correction Ranges" when SwiftUI supports multi-line titles
-            return LocalizedString("Temporary Ranges", comment: "Title text for temporary correction ranges")
+            return LocalizedString("Temporary Correction Ranges", comment: "Title text for temporary correction ranges")
         case .suspendThreshold:
             return LocalizedString("Suspend Threshold", comment: "Title text for suspend threshold")
         case .basalRate:
@@ -46,6 +45,15 @@ public extension TherapySetting {
         }
     }
     
+    var smallTitle: String {
+        switch self {
+        case .correctionRangeOverrides:
+            return LocalizedString("Temporary Ranges", comment: "Title text for temporary correction ranges")
+        default:
+            return title
+        }
+    }
+    
     var descriptiveText: String {
         switch self {
         case .glucoseTargetRange:
@@ -59,7 +67,7 @@ public extension TherapySetting {
         case .deliveryLimits:
             return "\(DeliveryLimits.Setting.maximumBasalRate.descriptiveText)\n\n\(DeliveryLimits.Setting.maximumBolus.descriptiveText)"
         case .insulinModel:
-            return LocalizedString("The app assumes insulin is actively working for 6 hours. You can choose from two different models for how the app measures the insulin’s peak activity.", comment: "Descriptive text for insulin model")
+            return LocalizedString("The app assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity.", comment: "Descriptive text for insulin model")
         case .carbRatio:
             return LocalizedString("Your carb ratio is the number of grams of carbohydrate covered by one unit of insulin.", comment: "Descriptive text for carb ratio")
         case .insulinSensitivity:

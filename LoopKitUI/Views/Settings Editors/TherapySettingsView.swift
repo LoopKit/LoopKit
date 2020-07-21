@@ -50,6 +50,7 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
             suspendThresholdSection
             basalRatesSection
             deliveryLimitsSection
+            insulinModelSection
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle(Text(LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")))
@@ -229,7 +230,56 @@ extension TherapySettingsView {
             }
         }
     }
+        
+    var insulinModelSection: some View {
+        section(for: .insulinModel) {
+            self.insulinModelItem(InsulinModelSettings.exponentialPreset(.humalogNovologAdult))
+            self.insulinModelItem(InsulinModelSettings.exponentialPreset(.humalogNovologChild))
+                .padding(.bottom, self.viewModel.supportedInsulinModelSettings.fiaspModelEnabled ? 0 : 4)
+
+            if self.viewModel.supportedInsulinModelSettings.fiaspModelEnabled {
+                self.insulinModelItem(InsulinModelSettings.exponentialPreset(.fiasp))
+            }
+
+            if self.viewModel.supportedInsulinModelSettings.walshModelEnabled {
+                self.walshInsulinModelItem()
+            }
+        }
+    }
+        
+    private func insulinModelItem(_ insulinModelSettings: InsulinModelSettings) -> some View {
+        CheckmarkListItem(
+            title: Text(insulinModelSettings.title),
+            titleFont: .body,
+            description: Text(insulinModelSettings.subtitle),
+            isSelected: self.isSelected(insulinModelSettings),
+            isEnabled: false
+        )
+        .padding(.vertical, 4)
+    }
     
+    private func walshInsulinModelItem() -> some View {
+        return DurationBasedCheckmarkListItem(
+            title: Text(WalshInsulinModel.title),
+            titleFont: .body,
+            description: Text(WalshInsulinModel.subtitle),
+            isSelected: self.isWalshModelSelected,
+            isEnabled: false,
+            duration: .constant(self.therapySettings.insulinModel?.actionDuration ?? 0),
+            validDurationRange: InsulinModelSettings.validWalshModelDurationRange
+        )
+            .padding(.vertical, 4)
+            .padding(.bottom, 4)
+    }
+
+    private func isSelected(_ settings: InsulinModelSettings) -> Binding<Bool> {
+        return .constant(self.viewModel.therapySettings.insulinModel == StoredSettings.InsulinModel(settings))
+    }
+    
+    private var isWalshModelSelected: Binding<Bool> {
+        return .constant(self.viewModel.therapySettings.insulinModel?.modelType == .some(.walsh))
+    }
+
 }
 
 // MARK: Utilities
@@ -371,6 +421,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
     static let preview_supportedBolusVolumes = [5.0, 10.0, 15.0]
 
     static let preview_viewModel = TherapySettingsViewModel(therapySettings: preview_therapySettings,
+                                                            supportedInsulinModelSettings: SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                                                             pumpSupportedIncrements: PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
                                                                                                              bolusVolumes: preview_supportedBolusVolumes))
 
