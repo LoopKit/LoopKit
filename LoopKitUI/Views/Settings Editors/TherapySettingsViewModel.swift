@@ -16,14 +16,17 @@ public class TherapySettingsViewModel: ObservableObject {
     public var supportedInsulinModelSettings: SupportedInsulinModelSettings
     public var didFinishStep: (() -> Void)?
     let pumpSupportedIncrements: PumpSupportedIncrements?
+    let includeSupportSection: Bool
 
     public init(therapySettings: TherapySettings,
                 supportedInsulinModelSettings: SupportedInsulinModelSettings = SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
-                pumpSupportedIncrements: PumpSupportedIncrements? = nil) {
+                pumpSupportedIncrements: PumpSupportedIncrements? = nil,
+                includeSupportSection: Bool = true) {
         self.therapySettings = therapySettings
         self.initialTherapySettings = therapySettings
         self.pumpSupportedIncrements = pumpSupportedIncrements
         self.supportedInsulinModelSettings = supportedInsulinModelSettings
+        self.includeSupportSection = includeSupportSection
     }
     
     /// Reset to initial

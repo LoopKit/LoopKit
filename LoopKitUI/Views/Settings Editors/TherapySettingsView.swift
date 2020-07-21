@@ -52,6 +52,10 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
             deliveryLimitsSection
             insulinModelSection
             carbRatioSection
+            insulinSensitivitiesSection
+            if viewModel.includeSupportSection {
+                supportSection
+            }
         }
         .listStyle(GroupedListStyle())
         .navigationBarTitle(Text(LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")))
@@ -282,6 +286,28 @@ extension TherapySettingsView {
                                       unit: .gramsPerUnit,
                                       guardrail: Guardrail.carbRatio)
                 }
+            }
+        }
+    }
+    
+    private var insulinSensitivitiesSection: some View {
+        section(for: .insulinSensitivity) {
+            if self.therapySettings.insulinSensitivitySchedule != nil && self.sensitivityUnit != nil {
+                ForEach(self.therapySettings.insulinSensitivitySchedule!.items, id: \.self) { value in
+                    ScheduleValueItem(time: value.startTime,
+                                      value: value.value,
+                                      unit: self.sensitivityUnit!,
+                                      guardrail: Guardrail.insulinSensitivity)
+                }
+            }
+        }
+    }
+    
+    private var supportSection: some View {
+        Section(header: SectionHeader(label: LocalizedString("Support", comment: "Title for support section")),
+                footer: DescriptiveText(label: "Text description here.")) {
+            NavigationLink(destination: Text("Therapy Settings Support Placeholder")) {
+                Text("Get help with Therapy Settings", comment: "Support button for Therapy Settings")
             }
         }
     }
