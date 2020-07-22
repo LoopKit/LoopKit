@@ -17,7 +17,7 @@ public struct CorrectionRangeOverrideInformationView: View {
     
     public init(
         onExit: (() -> Void)?,
-        mode: PresentationMode = .flow
+        mode: PresentationMode = .acceptanceFlow
     ) {
         self.onExit = onExit
         self.mode = mode
@@ -25,7 +25,7 @@ public struct CorrectionRangeOverrideInformationView: View {
     
     public var body: some View {
         InformationView(
-            title: Text(TherapySetting.correctionRangeOverrides.title),
+            title: Text(TherapySetting.correctionRangeOverrides.smallTitle),
             buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to setting editor")),
             informationalContent: {
                 VStack (alignment: .leading, spacing: 20) {

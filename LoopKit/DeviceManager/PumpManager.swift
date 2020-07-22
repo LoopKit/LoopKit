@@ -170,6 +170,8 @@ public protocol PumpManager: DeviceManager {
     ///   - rate: The maximum rate the pumpmanager should expect to receive in an enactTempBasal command.
     func setMaximumTempBasalRate(_ rate: Double)
 
+    typealias SyncSchedule = (_ items: [RepeatingScheduleValue<Double>], _ completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) -> Void
+
     /// Sync the schedule of basal rates to the pump, annotating the result with the proper time zone.
     ///
     /// - Precondition:

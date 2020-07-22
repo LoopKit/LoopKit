@@ -41,7 +41,7 @@ public struct CorrectionRangeOverridesEditor: View {
         minValue: HKQuantity?,
         onSave save: @escaping (_ overrides: CorrectionRangeOverrides) -> Void,
         sensitivityOverridesEnabled: Bool,
-        mode: PresentationMode = .modal
+        mode: PresentationMode = .legacySettings
     ) {
         self._value = State(initialValue: value)
         self.initialValue = value
@@ -57,7 +57,7 @@ public struct CorrectionRangeOverridesEditor: View {
         ConfigurationPage(
             title: Text(TherapySetting.correctionRangeOverrides.smallTitle),
             actionButtonTitle: buttonText,
-            actionButtonState: value != initialValue || mode == .flow ? .enabled : .disabled,
+            actionButtonState: value != initialValue || mode == .acceptanceFlow ? .enabled : .disabled,
             cards: {
                 card(for: .preMeal)
                 if !sensitivityOverridesEnabled {
@@ -77,6 +77,7 @@ public struct CorrectionRangeOverridesEditor: View {
             }
         )
         .alert(isPresented: $showingConfirmationAlert, content: confirmationAlert)
+        .navigationBarTitle("", displayMode: .inline)
         .onTapGesture {
             self.userDidTap = true
         }
@@ -131,16 +132,16 @@ public struct CorrectionRangeOverridesEditor: View {
 
     private var buttonText: Text {
         switch mode {
-        case .modal:
+        case .settings, .legacySettings:
             return Text("Save", comment: "The button text for saving on a configuration page")
-        case .flow:
+        case .acceptanceFlow:
             return self.initialValue == self.value ? Text(LocalizedString("Accept Setting", comment: "The button text for accepting the prescribed setting")) : Text(LocalizedString("Save Setting", comment: "The button text for saving the edited setting"))
         }
     }
     
     private var instructionalContentIfNecessary: some View {
         return Group {
-            if mode == .flow && !userDidTap {
+            if mode == .acceptanceFlow && !userDidTap {
                 instructionalContent
             }
         }
@@ -179,7 +180,7 @@ public struct CorrectionRangeOverridesEditor: View {
     private var guardrailWarningIfNecessary: some View {
         let crossedThresholds = self.crossedThresholds
         return Group {
-            if !crossedThresholds.isEmpty && (userDidTap || mode == .modal) {
+            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings || mode == .legacySettings) {
                 CorrectionRangeOverridesGuardrailWarning(crossedThresholds: crossedThresholds)
             }
         }
@@ -216,7 +217,7 @@ public struct CorrectionRangeOverridesEditor: View {
 
     private func saveAndDismiss() {
         save(value)
-        if mode == .modal {
+        if mode == .legacySettings {
             dismiss()
         }
     }

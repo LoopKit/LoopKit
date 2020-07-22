@@ -23,9 +23,11 @@ public struct InsulinSensitivityScheduleEditor: View {
     private var schedule: DailyQuantitySchedule<Double>?
     private var glucoseUnit: HKUnit
     private var save: (InsulinSensitivitySchedule) -> Void
+    private var mode: PresentationMode
 
     public init(
         schedule: InsulinSensitivitySchedule?,
+        mode: PresentationMode = .legacySettings,
         glucoseUnit: HKUnit,
         onSave save: @escaping (InsulinSensitivitySchedule) -> Void
     ) {
@@ -39,6 +41,7 @@ public struct InsulinSensitivityScheduleEditor: View {
         }
         self.glucoseUnit = glucoseUnit
         self.save = save
+        self.mode = mode
     }
 
     public var body: some View {
@@ -55,7 +58,9 @@ public struct InsulinSensitivityScheduleEditor: View {
             onSave: {
                 // Convert back to the expected glucose-unit-only schedule.
                 self.save(DailyQuantitySchedule(unit: self.glucoseUnit, dailyItems: $0.items)!)
-            }
+            },
+            mode: mode,
+            settingType: .insulinSensitivity
         )
     }
 

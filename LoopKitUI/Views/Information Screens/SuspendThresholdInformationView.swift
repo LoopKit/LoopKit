@@ -17,7 +17,7 @@ public struct SuspendThresholdInformationView: View {
     
     public init(
         onExit: (() -> Void)?,
-        mode: PresentationMode = .flow
+        mode: PresentationMode = .acceptanceFlow
     ){
         self.onExit = onExit
         self.mode = mode

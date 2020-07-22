@@ -88,7 +88,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         @ViewBuilder valuePicker: @escaping (_ item: Binding<RepeatingScheduleValue<Value>>, _ availableWidth: CGFloat) -> ValuePicker,
         @ViewBuilder actionAreaContent: () -> ActionAreaContent,
         savingMechanism: SavingMechanism<[RepeatingScheduleValue<Value>]>,
-        mode: PresentationMode = .modal,
+        mode: PresentationMode = .legacySettings,
         therapySettingType: TherapySetting = .none
     ) {
         self.title = title
@@ -140,9 +140,9 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     
     private var setupConfigurationPage: some View {
         switch mode {
-        case .modal:
+        case .legacySettings:
             return AnyView(wrappedPage)
-        case .flow:
+        case .acceptanceFlow, .settings:
             return AnyView(configurationPage)
         }
     }
@@ -199,7 +199,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         }
 
         let isEnabled = !scheduleItems.isEmpty
-            && (scheduleItems != initialScheduleItems || mode == .flow)
+            && (scheduleItems != initialScheduleItems || mode == .acceptanceFlow)
             && tableDeletionState == .disabled
 
         return isEnabled ? .enabled : .disabled
@@ -306,9 +306,9 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     
     private var buttonText: Text {
         switch mode {
-        case .modal:
+        case .settings, .legacySettings:
             return Text("Save", comment: "The button text for saving on a configuration page")
-        case .flow:
+        case .acceptanceFlow:
             return scheduleItems == initialScheduleItems ? Text(LocalizedString("Accept Setting", comment: "The button text for accepting the prescribed setting")) : Text(LocalizedString("Save Setting", comment: "The button text for saving the edited setting"))
         }
     }
@@ -364,7 +364,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         switch savingMechanism {
         case .synchronous(let save):
             save(scheduleItems)
-            if mode == .modal {
+            if mode == .legacySettings {
                 dismiss()
             }
         case .asynchronous(let save):
@@ -380,7 +380,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                             self.isSyncing = false
                         }
                         self.presentedAlert = .saveError(error)
-                    } else if self.mode == .modal {
+                    } else if self.mode == .legacySettings {
                         self.dismiss()
                     }
                 }

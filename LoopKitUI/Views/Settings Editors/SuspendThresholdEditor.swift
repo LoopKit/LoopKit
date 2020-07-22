@@ -47,7 +47,7 @@ public struct SuspendThresholdEditor: View {
         unit: HKUnit,
         maxValue: HKQuantity?,
         onSave save: @escaping (_ suspendThreshold: HKQuantity) -> Void,
-        mode: PresentationMode = .modal
+        mode: PresentationMode = .legacySettings
     ) {
         self._value = State(initialValue: value ?? Self.defaultValue(for: unit))
         self.initialValue = value
@@ -108,7 +108,7 @@ public struct SuspendThresholdEditor: View {
             },
             actionAreaContent: {
                 instructionalContentIfNecessary
-                if warningThreshold != nil && (userDidTap || mode == .modal) {
+                if warningThreshold != nil && (userDidTap || mode != .acceptanceFlow) {
                     SuspendThresholdGuardrailWarning(safetyClassificationThreshold: warningThreshold!)
                 }
             },
@@ -121,6 +121,7 @@ public struct SuspendThresholdEditor: View {
             }
         )
         .alert(isPresented: $showingConfirmationAlert, content: confirmationAlert)
+        .navigationBarTitle("", displayMode: .inline)
         .onTapGesture {
             self.userDidTap = true
         }
@@ -132,7 +133,7 @@ public struct SuspendThresholdEditor: View {
     
     private var instructionalContentIfNecessary: some View {
         return Group {
-            if mode == .flow && !userDidTap {
+            if mode == .acceptanceFlow && !userDidTap {
                 instructionalContent
             }
         }
@@ -148,14 +149,14 @@ public struct SuspendThresholdEditor: View {
     }
 
     private var saveButtonState: ConfigurationPageActionButtonState {
-        initialValue == nil || value != initialValue! || mode == .flow ? .enabled : .disabled
+        initialValue == nil || value != initialValue! || mode == .acceptanceFlow ? .enabled : .disabled
     }
     
     private var buttonText: Text {
         switch mode {
-        case .flow:
+        case .acceptanceFlow:
             return self.initialValue == self.value ? Text(LocalizedString("Accept Setting", comment: "The button text for accepting the prescribed setting")) : Text(LocalizedString("Save Setting", comment: "The button text for saving the edited setting"))
-        case .modal:
+        case .settings, .legacySettings:
             return Text("Save", comment: "The button text for saving on a configuration page")
         }
     }
@@ -183,7 +184,7 @@ public struct SuspendThresholdEditor: View {
 
     private func saveAndDismiss() {
         save(value)
-        if mode == .modal {
+        if mode == .legacySettings {
             dismiss()
         }
     }

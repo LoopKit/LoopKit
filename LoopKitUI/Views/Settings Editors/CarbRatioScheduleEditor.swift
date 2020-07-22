@@ -26,10 +26,12 @@ extension Guardrail where Value == HKQuantity {
 
 public struct CarbRatioScheduleEditor: View {
     private var schedule: DailyQuantitySchedule<Double>?
+    private var mode: PresentationMode
     private var save: (CarbRatioSchedule) -> Void
 
     public init(
         schedule: CarbRatioSchedule?,
+        mode: PresentationMode = .legacySettings,
         onSave save: @escaping (CarbRatioSchedule) -> Void
     ) {
         // CarbRatioSchedule stores only the gram unit.
@@ -40,6 +42,7 @@ public struct CarbRatioScheduleEditor: View {
                 dailyItems: schedule.items
             )!
         }
+        self.mode = mode
         self.save = save
     }
 
@@ -58,7 +61,9 @@ public struct CarbRatioScheduleEditor: View {
             onSave: {
                 // Convert back to the expected gram-unit-only schedule.
                 self.save(DailyQuantitySchedule(unit: .storedCarbRatioScheduleUnit, dailyItems: $0.items)!)
-            }
+            },
+            mode: mode,
+            settingType: .carbRatio
         )
     }
 

@@ -16,7 +16,7 @@ public struct BasalRateScheduleEditor: View {
     var supportedBasalRates: [Double]
     var guardrail: Guardrail<HKQuantity>
     var maximumScheduleEntryCount: Int
-    var syncSchedule: (_ items: [RepeatingScheduleValue<Double>], _ completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) -> Void
+    var syncSchedule: PumpManager.SyncSchedule?
     var save: (BasalRateSchedule) -> Void
     let mode: PresentationMode
 
@@ -26,12 +26,9 @@ public struct BasalRateScheduleEditor: View {
         supportedBasalRates: [Double],
         maximumBasalRate: Double?,
         maximumScheduleEntryCount: Int,
-        syncSchedule: @escaping (
-            _ items: [RepeatingScheduleValue<Double>],
-            _ completion: @escaping (Result<BasalRateSchedule, Error>) -> Void
-        ) -> Void,
+        syncSchedule: PumpManager.SyncSchedule?,
         onSave save: @escaping (BasalRateSchedule) -> Void,
-        mode: PresentationMode = .modal
+        mode: PresentationMode = .legacySettings
     ) {
         self.schedule = schedule.map { schedule in
             DailyQuantitySchedule(
@@ -91,9 +88,10 @@ public struct BasalRateScheduleEditor: View {
     
     private var savingMechanism: SavingMechanism<DailyQuantitySchedule<Double>> {
         switch mode {
-        case .modal:
+        case .settings, .legacySettings:
             return .asynchronous { quantitySchedule, completion in
-                self.syncSchedule(quantitySchedule.items) { result in
+                precondition(self.syncSchedule != nil)
+                self.syncSchedule?(quantitySchedule.items) { result in
                     switch result {
                     case .success(let syncedSchedule):
                         DispatchQueue.main.async {
@@ -103,10 +101,9 @@ public struct BasalRateScheduleEditor: View {
                     case .failure(let error):
                         completion(error)
                     }
-
                 }
             }
-        case .flow:
+        case .acceptanceFlow:
             // TODO: get timezone from pump
             return .synchronous { quantitySchedule in
                 let schedule = BasalRateSchedule(dailyItems: quantitySchedule.items, timeZone: .currentFixed)!

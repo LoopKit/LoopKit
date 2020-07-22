@@ -9,8 +9,10 @@
 public struct PumpSupportedIncrements {
     let basalRates: [Double]
     let bolusVolumes: [Double]
-    public init(basalRates: [Double], bolusVolumes: [Double]) {
+    let maximumBasalScheduleEntryCount: Int
+    public init(basalRates: [Double], bolusVolumes: [Double], maximumBasalScheduleEntryCount: Int) {
         self.basalRates = basalRates
         self.bolusVolumes = bolusVolumes
+        self.maximumBasalScheduleEntryCount = maximumBasalScheduleEntryCount
     }
 }

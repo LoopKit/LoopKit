@@ -8,10 +8,6 @@
 
 import SwiftUI
 
-public enum PresentationMode {
-    case modal, flow
-}
-
 struct InformationView<InformationalContent: View> : View {
     var informationalContent: InformationalContent
     var title: Text
@@ -24,7 +20,7 @@ struct InformationView<InformationalContent: View> : View {
         buttonText: Text,
         @ViewBuilder informationalContent: () -> InformationalContent,
         onExit: @escaping () -> Void,
-        mode: PresentationMode = .flow
+        mode: PresentationMode = .acceptanceFlow
     ) {
         self.title = title
         self.buttonText = buttonText
@@ -43,9 +39,9 @@ struct InformationView<InformationalContent: View> : View {
     
     private var bodyWithCancelButtonIfNeeded: some View {
         switch mode {
-        case .flow:
+        case .acceptanceFlow:
             return AnyView(bodyWithBottomButton)
-        case .modal:
+        case .settings, .legacySettings:
             return AnyView(bodyWithCancelButton)
         }
     }
