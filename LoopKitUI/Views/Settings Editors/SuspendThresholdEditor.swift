@@ -71,7 +71,7 @@ public struct SuspendThresholdEditor: View {
     public var body: some View {
         ConfigurationPage(
             title: Text(TherapySetting.suspendThreshold.title),
-            actionButtonTitle: buttonText,
+            actionButtonTitle: Text(mode.buttonText),
             actionButtonState: saveButtonState,
             cards: {
                 // TODO: Remove conditional when Swift 5.3 ships
@@ -150,15 +150,6 @@ public struct SuspendThresholdEditor: View {
 
     private var saveButtonState: ConfigurationPageActionButtonState {
         initialValue == nil || value != initialValue! || mode == .acceptanceFlow ? .enabled : .disabled
-    }
-    
-    private var buttonText: Text {
-        switch mode {
-        case .acceptanceFlow:
-            return self.initialValue == self.value ? Text(LocalizedString("Accept Setting", comment: "The button text for accepting the prescribed setting")) : Text(LocalizedString("Save Setting", comment: "The button text for saving the edited setting"))
-        case .settings, .legacySettings:
-            return Text("Save", comment: "The button text for saving on a configuration page")
-        }
     }
 
     private var warningThreshold: SafetyClassification.Threshold? {

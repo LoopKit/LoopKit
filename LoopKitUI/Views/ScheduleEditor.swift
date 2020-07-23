@@ -160,7 +160,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     private var configurationPage: some View {
         ConfigurationPage(
             title: title,
-            actionButtonTitle: buttonText,
+            actionButtonTitle: Text(mode.buttonText),
             actionButtonState: saveButtonState,
             cards: {
                 // TODO: Remove conditional when Swift 5.3 ships
@@ -301,15 +301,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             }
 
             addButton
-        }
-    }
-    
-    private var buttonText: Text {
-        switch mode {
-        case .settings, .legacySettings:
-            return Text("Save", comment: "The button text for saving on a configuration page")
-        case .acceptanceFlow:
-            return scheduleItems == initialScheduleItems ? Text(LocalizedString("Accept Setting", comment: "The button text for accepting the prescribed setting")) : Text(LocalizedString("Save Setting", comment: "The button text for saving the edited setting"))
         }
     }
 

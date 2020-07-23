@@ -52,7 +52,7 @@ public struct DeliveryLimitsEditor: View {
     public var body: some View {
         ConfigurationPage(
             title: Text(TherapySetting.deliveryLimits.title),
-            actionButtonTitle: buttonText,
+            actionButtonTitle: Text(mode.buttonText),
             actionButtonState: saveButtonState,
             cards: {
                 maximumBasalRateCard
@@ -200,14 +200,6 @@ public struct DeliveryLimitsEditor: View {
             .foregroundColor(.instructionalContent)
             .font(.subheadline)
             Spacer()
-        }
-    }
-    
-    private var buttonText: Text {
-        if self.initialValue != self.value || mode == .legacySettings || mode == .settings {
-            return Text(LocalizedString("Save Setting", comment: "The button text for saving the edited setting"))
-        } else {
-            return Text(LocalizedString("Accept Setting", comment: "The button text for accepting the prescribed setting"))
         }
     }
 

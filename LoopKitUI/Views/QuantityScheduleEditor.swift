@@ -33,7 +33,6 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
     var guardrailWarning: (_ crossedThresholds: [SafetyClassification.Threshold]) -> ActionAreaContent
     var savingMechanism: SavingMechanism<DailyQuantitySchedule<Double>>
     var mode: PresentationMode
-    var buttonText: Text
     var settingType: TherapySetting
     
     @State private var userDidTap: Bool = false
@@ -153,7 +152,6 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
 
 extension QuantityScheduleEditor {
     init(
-        buttonText: Text = Text("Save", comment: "The button text for saving on a configuration page"),
         title: Text,
         description: Text,
         schedule: DailyQuantitySchedule<Double>?,
@@ -169,7 +167,6 @@ extension QuantityScheduleEditor {
         mode: PresentationMode = .legacySettings,
         settingType: TherapySetting = .none
     ) {
-        self.buttonText = buttonText
         self.title = title
         self.description = description
         self.initialScheduleItems = schedule?.items ?? []

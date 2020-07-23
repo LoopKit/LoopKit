@@ -56,7 +56,7 @@ public struct CorrectionRangeOverridesEditor: View {
     public var body: some View {
         ConfigurationPage(
             title: Text(TherapySetting.correctionRangeOverrides.smallTitle),
-            actionButtonTitle: buttonText,
+            actionButtonTitle: Text(mode.buttonText),
             actionButtonState: value != initialValue || mode == .acceptanceFlow ? .enabled : .disabled,
             cards: {
                 card(for: .preMeal)
@@ -128,15 +128,6 @@ public struct CorrectionRangeOverridesEditor: View {
     
     private func guardrail(for preset: CorrectionRangeOverrides.Preset) -> Guardrail<HKQuantity> {
         return Guardrail.correctionRangeOverridePreset(preset, correctionRangeScheduleRange: correctionRangeScheduleRange)
-    }
-
-    private var buttonText: Text {
-        switch mode {
-        case .settings, .legacySettings:
-            return Text("Save", comment: "The button text for saving on a configuration page")
-        case .acceptanceFlow:
-            return self.initialValue == self.value ? Text(LocalizedString("Accept Setting", comment: "The button text for accepting the prescribed setting")) : Text(LocalizedString("Save Setting", comment: "The button text for saving the edited setting"))
-        }
     }
     
     private var instructionalContentIfNecessary: some View {
