@@ -242,43 +242,16 @@ extension TherapySettingsView {
         
     private var insulinModelSection: some View {
         section(for: .insulinModel) {
-            self.insulinModelItem(InsulinModelSettings.exponentialPreset(.humalogNovologAdult))
-            self.insulinModelItem(InsulinModelSettings.exponentialPreset(.humalogNovologChild))
-                .padding(.bottom, self.viewModel.supportedInsulinModelSettings.fiaspModelEnabled ? 0 : 4)
-
-            if self.viewModel.supportedInsulinModelSettings.fiaspModelEnabled {
-                self.insulinModelItem(InsulinModelSettings.exponentialPreset(.fiasp))
-            }
-
-            if self.viewModel.supportedInsulinModelSettings.walshModelEnabled {
-                self.walshInsulinModelItem()
+            if self.viewModel.therapySettings.insulinModel != nil {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(InsulinModelSettings(from: self.viewModel.therapySettings.insulinModel!).title)
+                        .font(.body)
+                    Text(InsulinModelSettings(from: self.viewModel.therapySettings.insulinModel!).subtitle)
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                }
             }
         }
-    }
-        
-    private func insulinModelItem(_ insulinModelSettings: InsulinModelSettings) -> some View {
-        CheckmarkListItem(
-            title: Text(insulinModelSettings.title),
-            titleFont: .body,
-            description: Text(insulinModelSettings.subtitle),
-            isSelected: self.isSelected(insulinModelSettings),
-            isEnabled: false
-        )
-        .padding(.vertical, 4)
-    }
-    
-    private func walshInsulinModelItem() -> some View {
-        return DurationBasedCheckmarkListItem(
-            title: Text(WalshInsulinModel.title),
-            titleFont: .body,
-            description: Text(WalshInsulinModel.subtitle),
-            isSelected: self.isWalshModelSelected,
-            isEnabled: false,
-            duration: .constant(self.viewModel.therapySettings.insulinModel?.actionDuration ?? 0),
-            validDurationRange: InsulinModelSettings.validWalshModelDurationRange
-        )
-            .padding(.vertical, 4)
-            .padding(.bottom, 4)
     }
 
     private var carbRatioSection: some View {
@@ -326,14 +299,6 @@ extension TherapySettingsView {
     
     private var sensitivityUnit: HKUnit? {
         glucoseUnit?.unitDivided(by: .internationalUnit())
-    }
-    
-    private func isSelected(_ settings: InsulinModelSettings) -> Binding<Bool> {
-        return .constant(viewModel.therapySettings.insulinModel == StoredSettings.InsulinModel(settings))
-    }
-    
-    private var isWalshModelSelected: Binding<Bool> {
-        return .constant(viewModel.therapySettings.insulinModel?.modelType == .some(.walsh))
     }
 
     private func section<Content>(for therapySetting: TherapySetting,
