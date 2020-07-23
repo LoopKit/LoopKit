@@ -21,13 +21,13 @@ public struct BasalRatesReview: View {
         self.mode = mode
     }
     
-    @ViewBuilder public var body: some View {
+    public var body: some View {
         return BasalRateScheduleEditor(
             schedule: viewModel.therapySettings.basalRateSchedule,
             supportedBasalRates: viewModel.pumpSupportedIncrements!.basalRates ,
             maximumBasalRate: viewModel.therapySettings.maximumBasalRatePerHour,
             maximumScheduleEntryCount: viewModel.pumpSupportedIncrements!.maximumBasalScheduleEntryCount,
-            syncSchedule: viewModel.pumpSyncSchedule,
+            syncSchedule: viewModel.syncPumpSchedule,
             onSave: { newRates in
                 self.viewModel.saveBasalRates(basalRates: newRates)
         },
