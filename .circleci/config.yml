@@ -18,6 +18,31 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Homebrew + Carthage Setup
+          command: |
+            if ! [ -x "$(command -v brew)" ]; then
+                # Install Homebrew
+                ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+            fi
+
+            if brew ls carthage > /dev/null; then
+                brew upgrade carthage || echo "Continuing…"
+            else
+                brew install carthage
+            fi
+      - run:
+          name: Carthage Bootstrap
+          command: |
+            echo "Bootstrapping carthage dependencies"
+            unset LLVM_TARGET_TRIPLE_SUFFIX
+
+            if ! cmp -s Cartfile.Resolved Carthage/Cartfile.resolved; then
+                time /usr/local/bin/carthage bootstrap --project-directory "$SRCROOT" --platform ios,watchos --cache-builds --verbose
+                cp Cartfile.resolved Carthage
+            else
+                echo "Carthage: not bootstrapping"
+            fi
+      - run:
           name: Test
           command: |
             set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 8' test | xcpretty
@@ -30,6 +55,31 @@ jobs:
       xcode: 11.5.0
     steps:
       - checkout
+      - run:
+          name: Homebrew + Carthage Setup
+          command: |
+            if ! [ -x "$(command -v brew)" ]; then
+                # Install Homebrew
+                ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+            fi
+
+            if brew ls carthage > /dev/null; then
+                brew upgrade carthage || echo "Continuing…"
+            else
+                brew install carthage
+            fi
+      - run:
+          name: Carthage Bootstrap
+          command: |
+            echo "Bootstrapping carthage dependencies"
+            unset LLVM_TARGET_TRIPLE_SUFFIX
+
+            if ! cmp -s Cartfile.Resolved Carthage/Cartfile.resolved; then
+                time /usr/local/bin/carthage bootstrap --project-directory "$SRCROOT" --platform ios,watchos --cache-builds --verbose
+                cp Cartfile.resolved Carthage
+            else
+                echo "Carthage: not bootstrapping"
+            fi
       - run:
           name: Build Example
           command: |

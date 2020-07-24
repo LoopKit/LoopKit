@@ -8,6 +8,23 @@
 import UIKit
 
 extension UIColor {
+    // TODO: make these colors configurable
+    @nonobjc static let axisLabelColor = secondaryLabelColor
+
+    @nonobjc static let axisLineColor = UIColor.clear
+
+    @nonobjc static let doseTintColor = UIColor.systemOrange
+    
+    @nonobjc static let gridColor = UIColor(white: 0, alpha: 0.4)
+    
+    @nonobjc static let secondaryLabelColor: UIColor = {
+        if #available(iOSApplicationExtension 13.0, iOS 13.0, *) {
+            return UIColor.secondaryLabel
+        } else {
+            return UIColor.systemGray
+        }
+    }()
+    
     @nonobjc static let COBTintColor: UIColor = {
         return UIColor(dynamicProvider: { (traitCollection) in
             // If we're in accessibility mode, return the system color
