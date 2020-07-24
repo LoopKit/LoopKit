@@ -472,6 +472,7 @@
 		89CAB36B24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */; };
 		89CAB36D24C9EC98009EE3CE /* Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CAB36C24C9EC98009EE3CE /* Keyboard.swift */; };
 		89CAB36F24C9ECCA009EE3CE /* View+KeyboardAware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CAB36E24C9ECCA009EE3CE /* View+KeyboardAware.swift */; };
+		89CAB37124CB4DEC009EE3CE /* WarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CAB37024CB4DEC009EE3CE /* WarningView.swift */; };
 		89CC35D42403450E008FB633 /* ThumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CC35D32403450E008FB633 /* ThumbView.swift */; };
 		89D2048221CC7BD8001238CC /* MockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 89D2047421CC7BD7001238CC /* MockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		89D2048921CC7BF7001238CC /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
@@ -1396,6 +1397,7 @@
 		89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissibleKeyboardTextField.swift; sourceTree = "<group>"; };
 		89CAB36C24C9EC98009EE3CE /* Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keyboard.swift; sourceTree = "<group>"; };
 		89CAB36E24C9ECCA009EE3CE /* View+KeyboardAware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+KeyboardAware.swift"; sourceTree = "<group>"; };
+		89CAB37024CB4DEC009EE3CE /* WarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningView.swift; sourceTree = "<group>"; };
 		89CC35D32403450E008FB633 /* ThumbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbView.swift; sourceTree = "<group>"; };
 		89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMDataSource.swift; sourceTree = "<group>"; };
 		89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockCGMManager+UI.swift"; sourceTree = "<group>"; };
@@ -1859,6 +1861,7 @@
 				89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */,
 				89AC9DCA24529927004A6B8A /* QuantityPicker.swift */,
 				89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */,
+				89CAB37024CB4DEC009EE3CE /* WarningView.swift */,
 				89AC9DCC24529D9B004A6B8A /* TimePicker.swift */,
 				89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */,
 				898B4E7D246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift */,
@@ -3303,6 +3306,7 @@
 				43BA718B201EE93C0058961E /* TimeZone.swift in Sources */,
 				A991161423426A0A00A4B2E9 /* ServiceSetupNotifying.swift in Sources */,
 				89FC6892245A2D680075CF59 /* ScheduleEditor.swift in Sources */,
+				89CAB37124CB4DEC009EE3CE /* WarningView.swift in Sources */,
 				43BA717B201EE6A40058961E /* NibLoadable.swift in Sources */,
 				E916F56F24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift in Sources */,
 				89BE75C124649C2E00B145D9 /* ModalHeaderButtonBar.swift in Sources */,

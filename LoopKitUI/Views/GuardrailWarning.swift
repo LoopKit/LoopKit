@@ -42,45 +42,15 @@ public struct GuardrailWarning: View {
     }
 
     public var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                HStack(alignment: .firstTextBaseline) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundColor(warningColor)
-
-                    title
-                        .font(Font(UIFont.preferredFont(forTextStyle: .title3)))
-                        .bold()
-                        .fixedSize()
-                        .animation(nil)
-                }
-
-                caption
-                    .font(.callout)
-                    .foregroundColor(Color(.secondaryLabel))
-                    .fixedSize(horizontal: false, vertical: true)
-                    .animation(nil)
-            }
-
-            Spacer()
-        }
+        WarningView(title: title, caption: caption, severity: severity)
     }
 
-    private var warningColor: Color {
+    private var severity: WarningSeverity {
         switch crossedThresholds {
         case .one(let threshold):
-            return color(for: threshold)
+            return threshold.severity
         case .oneOrMore(let thresholds):
-            return color(for: thresholds.max(by: { $0.severity < $1.severity })!)
-        }
-    }
-
-    private func color(for threshold: SafetyClassification.Threshold) -> Color {
-        switch threshold {
-        case .minimum, .maximum:
-            return .severeWarning
-        case .belowRecommended, .aboveRecommended:
-            return .warning
+            return thresholds.lazy.map({ $0.severity }).max()!
         }
     }
 
@@ -113,12 +83,12 @@ public struct GuardrailWarning: View {
 }
 
 fileprivate extension SafetyClassification.Threshold {
-    var severity: Int {
+    var severity: WarningSeverity {
         switch self {
         case .belowRecommended, .aboveRecommended:
-            return 1
+            return .default
         case .minimum, .maximum:
-            return 2
+            return .critical
         }
     }
 }
