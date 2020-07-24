@@ -9,8 +9,8 @@
 import SwiftUI
 
 
-struct ActionButtonStyle: ButtonStyle {
-    enum ButtonType {
+public struct ActionButtonStyle: ButtonStyle {
+    public enum ButtonType {
         case primary
         case secondary
         case destructive
@@ -22,7 +22,7 @@ struct ActionButtonStyle: ButtonStyle {
     private let cornerRadius: CGFloat = 10
     private let squidge: CGFloat = 1
 
-    init(_ style: ButtonType = .primary) {
+    public init(_ style: ButtonType = .primary) {
         switch style {
         case .primary:
             fontColor = .white
@@ -39,7 +39,7 @@ struct ActionButtonStyle: ButtonStyle {
         }
     }
 
-    func makeBody(configuration: Configuration) -> some View {
+    public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding(configuration.isPressed ? -squidge : 0)
             .padding()

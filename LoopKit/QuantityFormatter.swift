@@ -15,6 +15,11 @@ open class QuantityFormatter {
     public init() {
     }
 
+    public convenience init(for unit: HKUnit) {
+        self.init()
+        setPreferredNumberFormatter(for: unit)
+    }
+
     /// The unit style determines how the unit strings are abbreviated, and spacing between the value and unit
     open var unitStyle: Formatter.UnitStyle = .medium {
         didSet {

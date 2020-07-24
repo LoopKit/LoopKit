@@ -470,6 +470,9 @@
 		89CA2B35226D1624004D9350 /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B33226D15E0004D9350 /* MutableCollection.swift */; };
 		89CA2B36226D1627004D9350 /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B33226D15E0004D9350 /* MutableCollection.swift */; };
 		89CA2B38226D4456004D9350 /* DateRelativeQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CA2B37226D4456004D9350 /* DateRelativeQuantity.swift */; };
+		89CAB36B24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */; };
+		89CAB36D24C9EC98009EE3CE /* Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CAB36C24C9EC98009EE3CE /* Keyboard.swift */; };
+		89CAB36F24C9ECCA009EE3CE /* View+KeyboardAware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CAB36E24C9ECCA009EE3CE /* View+KeyboardAware.swift */; };
 		89CC35D42403450E008FB633 /* ThumbView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CC35D32403450E008FB633 /* ThumbView.swift */; };
 		89D2048221CC7BD8001238CC /* MockKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 89D2047421CC7BD7001238CC /* MockKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		89D2048921CC7BF7001238CC /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
@@ -1376,6 +1379,9 @@
 		89BE75CA2464BC2000B145D9 /* AlertContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertContent.swift; sourceTree = "<group>"; };
 		89CA2B33226D15E0004D9350 /* MutableCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableCollection.swift; sourceTree = "<group>"; };
 		89CA2B37226D4456004D9350 /* DateRelativeQuantity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelativeQuantity.swift; sourceTree = "<group>"; };
+		89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissibleKeyboardTextField.swift; sourceTree = "<group>"; };
+		89CAB36C24C9EC98009EE3CE /* Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keyboard.swift; sourceTree = "<group>"; };
+		89CAB36E24C9ECCA009EE3CE /* View+KeyboardAware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+KeyboardAware.swift"; sourceTree = "<group>"; };
 		89CC35D32403450E008FB633 /* ThumbView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbView.swift; sourceTree = "<group>"; };
 		89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMDataSource.swift; sourceTree = "<group>"; };
 		89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockCGMManager+UI.swift"; sourceTree = "<group>"; };
@@ -1841,6 +1847,7 @@
 				E916F56724AD31F900BE3547 /* Settings Editors */,
 				E9077D2824ACD5AA0066A88D /* Information Screens */,
 				1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */,
+				89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2413,15 +2420,17 @@
 				B4C004B8241085FE00B40429 /* Color.swift */,
 				B4F3D24E24AF59B50095CE44 /* DeviceLifecycleProgressState+Color.swift */,
 				B46A70B924B3B4BF00B4DEEC /* DeviceStatusHighlight+Color.swift */,
+				E96175AD24B7BE38008E5080 /* Dictionary.swift */,
 				89BE75C62464B4A900B145D9 /* Environment+Dismiss.swift */,
 				B429D66B24BF7204003E1B4A /* GlucoseTrend.swift */,
 				B42C950824A3BCC200857C73 /* GlucoseValueType+Color.swift */,
-				C1E4B309242E99A800E70CCB /* Image.swift */,
-				E916F56A24AD346D00BE3547 /* UIColor+LoopKit.swift */,
-				E96175AD24B7BE38008E5080 /* Dictionary.swift */,
 				89186C0624BF7FC70003D0F3 /* Guardrail+UI.swift */,
+				C1E4B309242E99A800E70CCB /* Image.swift */,
+				89CAB36C24C9EC98009EE3CE /* Keyboard.swift */,
+				E916F56A24AD346D00BE3547 /* UIColor+LoopKit.swift */,
 				B41A60B123D1DBC700636320 /* UIFont.swift */,
 				B429D66D24BF7255003E1B4A /* UIImage.swift */,
+				89CAB36E24C9ECCA009EE3CE /* View+KeyboardAware.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3112,6 +3121,7 @@
 				89AF78C22447E353002B4FCC /* Splat.swift in Sources */,
 				893C9F8C2447DBD900CD4185 /* CardBuilder.swift in Sources */,
 				89BE75C524649C8100B145D9 /* NewScheduleItemEditor.swift in Sources */,
+				89CAB36F24C9ECCA009EE3CE /* View+KeyboardAware.swift in Sources */,
 				89653C822473592600E1BAA5 /* CarbRatioScheduleEditor.swift in Sources */,
 				1D66303D24C661FD00F2EF6E /* SuspendThresholdReview.swift in Sources */,
 				1D1FCE2B24BE704A000300A8 /* TherapySetting+Settings.swift in Sources */,
@@ -3121,6 +3131,7 @@
 				895FE08022011F0C00FCF18A /* EmojiDataSource.swift in Sources */,
 				432CF86920D76B320066B889 /* SetupButton.swift in Sources */,
 				898E6E702241EDB70019E459 /* PercentageTextFieldTableViewController.swift in Sources */,
+				89CAB36D24C9EC98009EE3CE /* Keyboard.swift in Sources */,
 				1DEF977524C62F8400D630CB /* SupportedInsulinModelSettings.swift in Sources */,
 				89186C0724BF7FC70003D0F3 /* Guardrail+UI.swift in Sources */,
 				432CF87420D774520066B889 /* NumberFormatter.swift in Sources */,
@@ -3234,6 +3245,7 @@
 				892A5D9A2231E0E4008961AB /* SettingsNavigationViewController.swift in Sources */,
 				B46B62B123FF0CA6001E69BA /* DescriptiveText.swift in Sources */,
 				E949E38924AFC82F00024DA0 /* DeliveryLimitsInformationView.swift in Sources */,
+				89CAB36B24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift in Sources */,
 				89AC9DCB24529927004A6B8A /* QuantityPicker.swift in Sources */,
 				1D096BFA24C242300078B6B5 /* CheckmarkListItem.swift in Sources */,
 				B4C004D22416961300B40429 /* GuideNavigationButton.swift in Sources */,
