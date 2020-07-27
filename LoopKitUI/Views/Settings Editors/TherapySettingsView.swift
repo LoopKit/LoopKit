@@ -61,6 +61,9 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
             lastItem
         }
         .listStyle(GroupedListStyle())
+        .onAppear() {
+            UITableView.appearance().separatorStyle = .singleLine // Add lines between rows
+        }
         .navigationBarTitle(Text(LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")))
         .environment(\.horizontalSizeClass, horizontalOverride)
     }

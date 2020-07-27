@@ -19,22 +19,22 @@ final class IssueAlertTableViewController: UITableViewController {
     
     private enum AlertRow: Int, CaseIterable, CustomStringConvertible {
         case immediate = 0
-        case retract
-        case critical
         case delayed
         case repeating
         case issueLater
+        case retract
         case buzz
-       
+        case critical
+
         var description: String {
             switch self {
             case .immediate: return "Issue an immediate alert"
-            case .retract: return "Retract the immediate alert above"
-            case .critical: return "Issue a critical immediate alert"
             case .delayed: return "Issue a \"delayed \(delay) seconds\" alert"
             case .repeating: return "Issue a \"repeating every \(delay) seconds\" alert"
             case .issueLater: return "Issue an immediate alert \(delay) seconds from now"
+            case .retract: return "Retract any alert above"
             case .buzz: return "Issue an immediate vibrate alert"
+            case .critical: return "Issue a critical immediate alert"
             }
         }
         
@@ -130,6 +130,7 @@ final class IssueAlertTableViewController: UITableViewController {
         default:
             cgmManager.issueAlert(identifier: row.identifier, trigger: row.trigger, delay: row.delayBeforeIssue)
         }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
