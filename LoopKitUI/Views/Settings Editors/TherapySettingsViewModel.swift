@@ -12,6 +12,8 @@ import HealthKit
 public class TherapySettingsViewModel: ObservableObject {
     public typealias SaveCompletion = (TherapySetting, TherapySettings) -> Void
     
+    public let mode: PresentationMode
+    
     @Published public var therapySettings: TherapySettings
     public var supportedInsulinModelSettings: SupportedInsulinModelSettings
     private let didSave: SaveCompletion?
@@ -21,16 +23,16 @@ public class TherapySettingsViewModel: ObservableObject {
     let syncPumpSchedule: PumpManager.SyncSchedule?
     let sensitivityOverridesEnabled: Bool
     let prescription: Prescription?
-    let includeSupportSection: Bool
 
-    public init(therapySettings: TherapySettings,
+    public init(mode: PresentationMode,
+                therapySettings: TherapySettings,
                 supportedInsulinModelSettings: SupportedInsulinModelSettings = SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                 pumpSupportedIncrements: PumpSupportedIncrements? = nil,
                 syncPumpSchedule: PumpManager.SyncSchedule? = nil,
                 sensitivityOverridesEnabled: Bool = false,
-                includeSupportSection: Bool = true,
                 prescription: Prescription? = nil,
                 didSave: SaveCompletion? = nil) {
+        self.mode = mode
         self.therapySettings = therapySettings
         self.initialTherapySettings = therapySettings
         self.pumpSupportedIncrements = pumpSupportedIncrements
@@ -38,7 +40,6 @@ public class TherapySettingsViewModel: ObservableObject {
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
         self.prescription = prescription
         self.supportedInsulinModelSettings = supportedInsulinModelSettings
-        self.includeSupportSection = includeSupportSection
         self.didSave = didSave
     }
     
