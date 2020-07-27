@@ -45,47 +45,59 @@ public class SettingsStore {
                 }
             }
 
-            self.purgeExpiredSettingsObjects()
-
-            self.delegate?.settingsStoreHasUpdatedSettingsData(self)
+            self.purgeExpiredSettings()
             completion()
         }
     }
 
-    private var expireDate: Date {
+    public var expireDate: Date {
         return Date(timeIntervalSinceNow: -expireAfter)
     }
 
-    private func purgeExpiredSettingsObjects() {
-        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
+    private func purgeExpiredSettings() {
+        purgeSettingsObjects(before: expireDate)
+    }
 
-        store.managedObjectContext.performAndWait {
-            do {
-                let fetchRequest: NSFetchRequest<SettingsObject> = SettingsObject.fetchRequest()
-                fetchRequest.predicate = NSPredicate(format: "date < %@", expireDate as NSDate)
-                let count = try self.store.managedObjectContext.deleteObjects(matching: fetchRequest)
-                self.log.info("Deleted %d SettingsObjects", count)
-            } catch let error {
-                self.log.error("Unable to purge SettingsObjects: %@", String(describing: error))
-            }
+    public func purgeSettings(before date: Date, completion: @escaping (Error?) -> Void) {
+        dataAccessQueue.async {
+            self.purgeSettingsObjects(before: date, completion: completion)
         }
     }
 
+    private func purgeSettingsObjects(before date: Date, completion: ((Error?) -> Void)? = nil) {
+        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
+
+        do {
+            let count = try self.store.managedObjectContext.purgeObjects(of: SettingsObject.self, matching: NSPredicate(format: "date < %@", date as NSDate))
+            self.log.info("Purged %d SettingsObjects", count)
+            self.delegate?.settingsStoreHasUpdatedSettingsData(self)
+            completion?(nil)
+        } catch let error {
+            self.log.error("Unable to purge SettingsObjects: %{public}@", String(describing: error))
+            completion?(error)
+        }
+    }
+
+    private static var encoder: PropertyListEncoder = {
+        let encoder = PropertyListEncoder()
+        encoder.outputFormat = .binary
+        return encoder
+    }()
+
     private func encodeSettings(_ settings: StoredSettings) -> Data? {
         do {
-            let encoder = PropertyListEncoder()
-            encoder.outputFormat = .binary
-            return try encoder.encode(settings)
+            return try SettingsStore.encoder.encode(settings)
         } catch let error {
             self.log.error("Error encoding StoredSettings: %@", String(describing: error))
             return nil
         }
     }
 
+    private static var decoder = PropertyListDecoder()
+
     private func decodeSettings(fromData data: Data) -> StoredSettings? {
         do {
-            let decoder = PropertyListDecoder()
-            return try decoder.decode(StoredSettings.self, from: data)
+            return try SettingsStore.decoder.decode(StoredSettings.self, from: data)
         } catch let error {
             self.log.error("Error decoding StoredSettings: %@", String(describing: error))
             return nil
@@ -311,13 +323,38 @@ extension StoredSettings: Codable {
     }
 }
 
-extension NSManagedObjectContext {
-    fileprivate func deleteObjects<T>(matching fetchRequest: NSFetchRequest<T>) throws -> Int where T: NSManagedObject {
-        let objects = try fetch(fetchRequest)
-        objects.forEach { delete($0) }
-        if hasChanges {
-            try save()
+// MARK: - Core Data (Bulk) - TEST ONLY
+
+extension SettingsStore {
+    public func addStoredSettings(settings: [StoredSettings], completion: @escaping (Error?) -> Void) {
+        guard !settings.isEmpty else {
+            completion(nil)
+            return
         }
-        return objects.count
+
+        dataAccessQueue.async {
+            var error: Error?
+
+            self.store.managedObjectContext.performAndWait {
+                for setting in settings {
+                    guard let data = self.encodeSettings(setting) else {
+                        continue
+                    }
+                    let object = SettingsObject(context: self.store.managedObjectContext)
+                    object.data = data
+                    object.date = setting.date
+                }
+                self.store.save { error = $0 }
+            }
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            self.log.info("Added %d SettingsObjects", settings.count)
+            self.delegate?.settingsStoreHasUpdatedSettingsData(self)
+            completion(nil)
+        }
     }
 }

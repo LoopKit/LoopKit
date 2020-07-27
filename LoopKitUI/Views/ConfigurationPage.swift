@@ -9,46 +9,48 @@
 import SwiftUI
 
 
+public enum ConfigurationPageActionButtonState {
+    case enabled
+    case loading
+    case disabled
+}
+
 public struct ConfigurationPage<ActionAreaContent: View>: View {
+    public typealias ActionButtonState = ConfigurationPageActionButtonState
+
     var title: Text
     var actionButtonTitle: Text
-    var isActionButtonEnabled: Bool
-    var cards: CardStack
+    var actionButtonState: ActionButtonState
+    var cardListStyle: CardList.Style
     var actionAreaContent: ActionAreaContent
     var action: () -> Void
 
-    public init(
-        title: Text,
-        actionButtonTitle: Text,
-        isActionButtonEnabled: Bool = true,
-        @CardStackBuilder cards: () -> CardStack,
-        @ViewBuilder actionAreaContent: () -> ActionAreaContent,
-        action: @escaping () -> Void
-    ) {
-        self.title = title
-        self.actionButtonTitle = actionButtonTitle
-        self.isActionButtonEnabled = isActionButtonEnabled
-        self.cards = cards()
-        self.actionAreaContent = actionAreaContent()
-        self.action = action
-    }
-
     public var body: some View {
         VStack(spacing: 0) {
-            CardList(title: title, content: cards)
+            CardList(title: title, style: cardListStyle)
 
-            VStack {
+            VStack(spacing: 0) {
                 actionAreaContent
-                    .padding(.top)
+                    .padding([.top, .horizontal])
+                    .transition(AnyTransition.opacity.combined(with: .move(edge: .bottom)))
 
                 Button(
                     action: action,
                     label: {
-                        actionButtonTitle
+                        HStack(spacing: 12) {
+                            ActivityIndicator(isAnimating: .constant(false), style: .medium)
+                                .opacity(0) // For layout only, to ensure the button text is centered
+
+                            actionButtonTitle
+                            .animation(nil)
+
+                            ActivityIndicator(isAnimating: .constant(true), style: .medium, color: .white)
+                                .opacity(actionButtonState == .loading ? 1 : 0)
+                        }
                     }
                 )
                 .buttonStyle(ActionButtonStyle(.primary))
-                .disabled(!isActionButtonEnabled)
+                .disabled(actionButtonState != .enabled)
                 .padding()
             }
             .padding(.bottom) // FIXME: unnecessary on iPhone 8 size devices
@@ -59,10 +61,26 @@ public struct ConfigurationPage<ActionAreaContent: View>: View {
 }
 
 extension ConfigurationPage {
+    public init(
+        title: Text,
+        actionButtonTitle: Text,
+        actionButtonState: ActionButtonState = .enabled,
+        @CardStackBuilder cards: () -> CardStack,
+        @ViewBuilder actionAreaContent: () -> ActionAreaContent,
+        action: @escaping () -> Void
+    ) {
+        self.title = title
+        self.actionButtonTitle = actionButtonTitle
+        self.actionButtonState = actionButtonState
+        self.cardListStyle = .simple(cards())
+        self.actionAreaContent = actionAreaContent()
+        self.action = action
+    }
+
     /// Convenience initializer for a page whose action is 'Save'
     public init(
         title: Text,
-        isSaveButtonEnabled: Bool = true,
+        saveButtonState: ActionButtonState = .enabled,
         @CardStackBuilder cards: () -> CardStack,
         @ViewBuilder actionAreaContent: () -> ActionAreaContent,
         onSave save: @escaping () -> Void
@@ -70,9 +88,27 @@ extension ConfigurationPage {
         self.init(
             title: title,
             actionButtonTitle: Text("Save", comment: "The button text for saving on a configuration page"),
-            isActionButtonEnabled: isSaveButtonEnabled,
+            actionButtonState: saveButtonState,
             cards: cards,
             actionAreaContent: actionAreaContent,
+            action: save
+        )
+    }
+
+    /// Convenience initializer for a sectioned page whose action is 'Save'
+    public init(
+        title: Text,
+        saveButtonState: ActionButtonState = .enabled,
+        sections: [CardListSection],
+        @ViewBuilder actionAreaContent: () -> ActionAreaContent,
+        onSave save: @escaping () -> Void
+    ) {
+        self.init(
+            title: title,
+            actionButtonTitle: Text("Save", comment: "The button text for saving on a configuration page"),
+            actionButtonState: saveButtonState,
+            cardListStyle: .sectioned(sections),
+            actionAreaContent: actionAreaContent(),
             action: save
         )
     }

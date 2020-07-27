@@ -8,7 +8,7 @@
 import Foundation
 import UserNotifications
 
-public protocol DeviceManagerDelegate: DeviceAlertPresenter {
+public protocol DeviceManagerDelegate: AlertPresenter {
     // Begin obsolescent code
     // Note: once all plugins are updated to use the new alert system instead of Notifications, this can be removed.
     func scheduleNotification(for manager: DeviceManager,
@@ -24,7 +24,7 @@ public protocol DeviceManagerDelegate: DeviceAlertPresenter {
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 }
 
-public protocol DeviceManager: CustomDebugStringConvertible, DeviceAlertResponder, DeviceAlertSoundVendor {
+public protocol DeviceManager: CustomDebugStringConvertible, AlertResponder, AlertSoundVendor {
     typealias RawStateValue = [String: Any]
 
     /// The identifier of the manager. This should be unique

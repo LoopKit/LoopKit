@@ -94,42 +94,43 @@ extension MockService: RemoteDataService {
     
     public func uploadCarbData(deleted: [DeletedCarbEntry], stored: [StoredCarbEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
         if remoteData {
-            record("[RemoteDataService] Upload carb data")
+            record("[RemoteDataService] Upload carb data (deleted: \(deleted.count), stored: \(stored.count))")
         }
         completion(.success(false))
     }
     
     public func uploadDoseData(_ stored: [DoseEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
         if remoteData {
-            record("[RemoteDataService] Upload dose data")
+            record("[RemoteDataService] Upload dose data (stored: \(stored.count))")
         }
         completion(.success(false))
     }
 
     public func uploadDosingDecisionData(_ stored: [StoredDosingDecision], completion: @escaping (Result<Bool, Error>) -> Void) {
         if remoteData {
-            record("[RemoteDataService] Upload dosing decision data")
+            let errored = stored.filter { $0.errors?.isEmpty == false }
+            record("[RemoteDataService] Upload dosing decision data (stored: \(stored.count), errored: \(errored.count))")
         }
         completion(.success(false))
     }
 
     public func uploadGlucoseData(_ stored: [StoredGlucoseSample], completion: @escaping (Result<Bool, Error>) -> Void) {
         if remoteData {
-            record("[RemoteDataService] Upload glucose data")
+            record("[RemoteDataService] Upload glucose data (stored: \(stored.count))")
         }
         completion(.success(false))
     }
     
     public func uploadPumpEventData(_ stored: [PersistedPumpEvent], completion: @escaping (Result<Bool, Error>) -> Void) {
         if remoteData {
-            record("[RemoteDataService] Upload pump event data")
+            record("[RemoteDataService] Upload pump event data (stored: \(stored.count))")
         }
         completion(.success(false))
     }
     
     public func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (Result<Bool, Error>) -> Void) {
         if remoteData {
-            record("[RemoteDataService] Upload settings data")
+            record("[RemoteDataService] Upload settings data (stored: \(stored.count))")
         }
         completion(.success(false))
     }

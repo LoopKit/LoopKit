@@ -8,20 +8,17 @@
 import UIKit
 import LoopKit
 
-public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
+public protocol PumpManagerUI: DeviceManagerUI, PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
     
     static func setupViewController() -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying)
 
     func settingsViewController() -> (UIViewController & CompletionNotifying)
     
-    // An image representing the pump configuration
-    var smallImage: UIImage? { get }
-    
     // Returns a class that can provide HUD views
     func hudProvider() -> HUDProvider?
     
-    // Instantiates HUD views from the raw state returned by hudViewsRawState
-    static func createHUDViews(rawValue: HUDProvider.HUDViewsRawState) -> [BaseHUDView]
+    // Instantiates HUD view (typically reservoir volume) from the raw state returned by hudViewRawState
+    static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView?
 }
 
 

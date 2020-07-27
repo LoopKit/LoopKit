@@ -14,7 +14,7 @@ public struct CarbValue: SampleValue {
     public let endDate: Date
     public var quantity: HKQuantity
 
-    init(startDate: Date, endDate: Date? = nil, quantity: HKQuantity) {
+    public init(startDate: Date, endDate: Date? = nil, quantity: HKQuantity) {
         self.startDate = startDate
         self.endDate = endDate ?? startDate
         self.quantity = quantity

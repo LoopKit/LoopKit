@@ -25,6 +25,7 @@ extension CachedGlucoseObject {
     @NSManaged public var primitiveStartDate: NSDate?
     @NSManaged public var provenanceIdentifier: String?
     @NSManaged public var isDisplayOnly: Bool
+    @NSManaged public var wasUserEntered: Bool
     @NSManaged public var modificationCounter: Int64
 
 }

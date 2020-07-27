@@ -198,6 +198,7 @@ public final class DoseStore {
     ///
     /// - Parameters:
     ///   - healthStore: The HealthKit store for reading & writing insulin delivery
+    ///   - observeHealthKitForCurrentAppOnly: Whether or not this Store should only read HealthKit data written by this app
     ///   - cacheStore: The cache store for reading & writing short-term intermediate data
     ///   - observationEnabled: Whether the store should observe changes from HealthKit
     ///   - insulinModel: The model of insulin effect over time
@@ -207,8 +208,10 @@ public final class DoseStore {
     ///   - lastPumpEventsReconciliation: The date the PumpManger last reconciled with the pump
     public init(
         healthStore: HKHealthStore,
+        observeHealthKitForCurrentAppOnly: Bool,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
+        cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
         insulinModel: InsulinModel?,
         basalProfile: BasalRateSchedule?,
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
@@ -219,6 +222,7 @@ public final class DoseStore {
     ) {
         self.insulinDeliveryStore = InsulinDeliveryStore(
             healthStore: healthStore,
+            observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly,
             cacheStore: cacheStore,
             observationEnabled: observationEnabled,
             test_currentDate: test_currentDate
@@ -228,6 +232,7 @@ public final class DoseStore {
         self.lockedBasalProfile = Locked(basalProfile)
         self.overrideHistory = overrideHistory
         self.persistenceController = cacheStore
+        self.cacheLength = cacheLength
         self.syncVersion = syncVersion
         self.lockedLastPumpEventsReconciliation = Locked(lastPumpEventsReconciliation)
 
@@ -271,25 +276,25 @@ public final class DoseStore {
 
     private let persistenceController: PersistenceController
 
+    private let cacheLength: TimeInterval
+
     private var purgeableValuesPredicate: NSPredicate {
         return NSPredicate(format: "date < %@", cacheStartDate as NSDate)
     }
 
     /// The maximum length of time to keep data around.
     /// Dose data is unprotected on disk, and should only remain persisted long enough to support dosing algorithms and until its persisted by the delegate.
-    private var cacheStartDate: Date {
+    public var cacheStartDate: Date {
+        return currentDate(timeIntervalSinceNow: -cacheLength)
+    }
+
+    private var recentStartDate: Date {
         return Calendar.current.date(byAdding: .day, value: -1, to: currentDate())!
     }
 
     internal func currentDate(timeIntervalSinceNow: TimeInterval = 0) -> Date {
         return insulinDeliveryStore.currentDate(timeIntervalSinceNow: timeIntervalSinceNow)
     }
-
-    /// A incremental cache of total insulin delivery since the last date requested by a client, used to avoid repeated work
-    ///
-    /// *Access should be isolated to a managed object context block*
-    private var totalDeliveryCache: InsulinValue?
-
 
     // MARK: - Reservoir Data
 
@@ -364,7 +369,8 @@ public final class DoseStore {
             if _lastRecordedPrimeEventDate == nil {
                 if  let pumpEvents = try? self.getPumpEventObjects(
                         matching: NSPredicate(format: "type = %@", PumpEventType.prime.rawValue),
-                        chronological: false
+                        chronological: false,
+                        limit: 1
                     ),
                     let firstEvent = pumpEvents.first
                 {
@@ -451,7 +457,6 @@ extension DoseStore {
                     // If we're violating consistency of the previous value, reset.
                     do {
                         try self.purgeReservoirObjects()
-                        self.totalDeliveryCache = nil
                         self.clearReservoirNormalizedDoseCache()
                         self.validateReservoirContinuity()
                     } catch let error {
@@ -486,17 +491,9 @@ extension DoseStore {
                 let newDoseEntries = newValues.doseEntries
 
                 if self.recentReservoirNormalizedDoseEntriesCache != nil {
-                    self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filterDateRange(self.cacheStartDate, nil)
+                    self.recentReservoirNormalizedDoseEntriesCache = self.recentReservoirNormalizedDoseEntriesCache!.filterDateRange(self.recentStartDate, nil)
 
                     self.recentReservoirNormalizedDoseEntriesCache! += newDoseEntries.annotated(with: basalProfile)
-                }
-
-                /// Increment the total delivery cache
-                if let totalDelivery = self.totalDeliveryCache {
-                    self.totalDeliveryCache = InsulinValue(
-                        startDate: totalDelivery.startDate,
-                        value: totalDelivery.value + newDoseEntries.totalDelivery
-                    )
                 }
             }
 
@@ -632,7 +629,6 @@ extension DoseStore {
                 try self.purgeReservoirObjects()
 
                 self.persistenceController.save { (error) in
-                    self.totalDeliveryCache = nil
                     self.clearReservoirNormalizedDoseCache()
                     self.validateReservoirContinuity()
 
@@ -841,7 +837,7 @@ extension DoseStore {
             switch result {
             case .success(let date):
                 // Limit the query behavior to 24 hours
-                let date = max(date, self.cacheStartDate)
+                let date = max(date, self.recentStartDate)
                 self.savePumpEventsToHealthStore(after: date, completion: completion)
             case .failure(let error):
                 // Failures are expected when the health database is protected
@@ -1053,7 +1049,7 @@ extension DoseStore {
         let queryStart = basalStart.addingTimeInterval(-pumpEventReconciliationWindow)
 
         let afterBasalStart = NSPredicate(format: "date >= %@ && doseType != nil && mutable == false", queryStart as NSDate)
-        let allBoluses = NSPredicate(format: "doseType == %@ && mutable == false", DoseType.bolus.rawValue)
+        let allBoluses = NSPredicate(format: "date >= %@ && doseType == %@ && mutable == false", recentStartDate as NSDate, DoseType.bolus.rawValue)
 
         let doses = try getPumpEventObjects(
             matching: NSCompoundPredicate(orPredicateWithSubpredicates: [afterBasalStart, allBoluses]),
@@ -1067,6 +1063,19 @@ extension DoseStore {
         return normalizedDoses
     }
 
+    public func purgePumpEventObjects(before date: Date, completion: (Error?) -> Void) {
+        do {
+            let count = try purgePumpEventObjects(matching: NSPredicate(format: "date < %@", date as NSDate))
+            self.log.info("Purged %d PumpEvents", count)
+            self.delegate?.doseStoreHasUpdatedDoseData(self)
+            self.delegate?.doseStoreHasUpdatedPumpEventData(self)
+            completion(nil)
+        } catch let error {
+            self.log.error("Unable to purge PumpEvents: %{public}@", String(describing: error))
+            completion(error)
+        }
+    }
+
     /**
      Removes uploaded pump event objects older than the recency predicate
 
@@ -1074,7 +1083,8 @@ extension DoseStore {
 
      - throws: A core data exception if the delete request failed
      */
-    private func purgePumpEventObjects(matching predicate: NSPredicate? = nil) throws {
+    @discardableResult
+    private func purgePumpEventObjects(matching predicate: NSPredicate? = nil) throws -> Int {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: PumpEvent.entity().name!)
         fetchRequest.predicate = predicate
 
@@ -1088,7 +1098,10 @@ extension DoseStore {
             let changes = [NSDeletedObjectsKey: objectIDs]
             NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [persistenceController.managedObjectContext])
             persistenceController.managedObjectContext.refreshAllObjects()
+            return objectIDs.count
         }
+
+        return 0
     }
 }
 
@@ -1236,24 +1249,15 @@ extension DoseStore {
     ///   - result: The total units delivered and the date of the first dose
     public func getTotalUnitsDelivered(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<InsulinValue>) -> Void) {
         persistenceController.managedObjectContext.perform {
-            if  let totalDeliveryCache = self.totalDeliveryCache,
-                totalDeliveryCache.startDate >= startDate
-            {
-                completion(.success(totalDeliveryCache))
-                return
-            }
 
             self.getNormalizedDoseEntries(start: startDate) { (result) in
                 switch result {
                 case .success(let doses):
+                    let trimmedDoses = doses.map { $0.trimmed(from: startDate, to: self.currentDate())}
                     let result = InsulinValue(
-                        startDate: doses.first?.startDate ?? self.currentDate(),
-                        value: doses.totalDelivery
+                        startDate: startDate,
+                        value: trimmedDoses.totalDelivery
                     )
-
-                    if doses.count > 0 {
-                        self.totalDeliveryCache = result
-                    }
 
                     completion(.success(result))
                 case .failure(let error):
@@ -1285,7 +1289,6 @@ extension DoseStore {
             "* lastPumpEventsReconciliation: \(String(describing: lastPumpEventsReconciliation))",
             "* lastStoredReservoirValue: \(String(describing: lastStoredReservoirValue))",
             "* pumpEventQueryAfterDate: \(pumpEventQueryAfterDate)",
-            "* totalDeliveryCache: \(String(describing: totalDeliveryCache))",
             "* lastRecordedPrimeEventDate: \(String(describing: lastRecordedPrimeEventDate))",
             "* pumpRecordsBasalProfileStartEvents: \(pumpRecordsBasalProfileStartEvents)",
             "* device: \(String(describing: device))",
@@ -1497,4 +1500,33 @@ extension DoseStore {
         completion(.success(queryAnchor, queryResult))
     }
 
+}
+
+// MARK: - Core Data (Bulk) - TEST ONLY
+
+extension DoseStore {
+    public func addPumpEvents(events: [PersistedPumpEvent]) -> Error? {
+        guard !events.isEmpty else {
+            return nil
+        }
+
+        var error: Error?
+
+        self.persistenceController.managedObjectContext.performAndWait {
+            for event in events {
+                let object = PumpEvent(context: self.persistenceController.managedObjectContext)
+                object.update(from: event)
+            }
+            self.persistenceController.save { error = $0 }
+        }
+
+        guard error == nil else {
+            return error
+        }
+
+        self.log.info("Added %d PumpEvents", events.count)
+        self.delegate?.doseStoreHasUpdatedDoseData(self)
+        self.delegate?.doseStoreHasUpdatedPumpEventData(self)
+        return nil
+    }
 }

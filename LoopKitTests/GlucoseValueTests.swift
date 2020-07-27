@@ -21,7 +21,7 @@ class SimpleGlucoseValueTests: XCTestCase {
         XCTAssertEqual(simpleGlucoseValue.endDate, endDate)
         XCTAssertEqual(simpleGlucoseValue.quantity, quantity)
     }
-
+    
     func testInitializerMillimolesPerLiter() {
         let startDate = Date()
         let endDate = Date().addingTimeInterval(.hours(1))
@@ -31,7 +31,7 @@ class SimpleGlucoseValueTests: XCTestCase {
         XCTAssertEqual(simpleGlucoseValue.endDate, endDate)
         XCTAssertEqual(simpleGlucoseValue.quantity, quantity)
     }
-
+    
     func testInitializerMissingEndDate() {
         let startDate = Date()
         let quantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)
@@ -40,7 +40,7 @@ class SimpleGlucoseValueTests: XCTestCase {
         XCTAssertEqual(simpleGlucoseValue.endDate, startDate)
         XCTAssertEqual(simpleGlucoseValue.quantity, quantity)
     }
-
+    
     func testInitializerGlucoseValue() {
         let startDate = Date()
         let endDate = Date().addingTimeInterval(.hours(1))
@@ -54,38 +54,104 @@ class SimpleGlucoseValueTests: XCTestCase {
 
 class SimpleGlucoseValueCodableTests: XCTestCase {
     func testCodableMilligramsPerDeciliter() throws {
-        try assertSimpleGlucoseValueCodable(SimpleGlucoseValue(startDate: Date(),
-                                                               endDate: Date().addingTimeInterval(.hours(1)),
-                                                               quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)))
+        try assertSimpleGlucoseValueCodable(SimpleGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T22:00:03Z")!,
+                                                               endDate: dateFormatter.date(from: "2020-05-14T23:00:03Z")!,
+                                                               quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)),
+                                            encodesJSON: """
+{
+  "endDate" : "2020-05-14T23:00:03Z",
+  "quantity" : 234.5,
+  "quantityUnit" : "mg/dL",
+  "startDate" : "2020-05-14T22:00:03Z"
+}
+"""
+        )
     }
-
+    
     func testCodableMillimolesPerLiter() throws {
-        try assertSimpleGlucoseValueCodable(SimpleGlucoseValue(startDate: Date(),
-                                                               endDate: Date().addingTimeInterval(.hours(1)),
-                                                               quantity: HKQuantity(unit: .millimolesPerLiter, doubleValue: 12.3)))
+        try assertSimpleGlucoseValueCodable(SimpleGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T14:05:03Z")!,
+                                                               endDate: dateFormatter.date(from: "2020-05-14T15:05:03Z")!,
+                                                               quantity: HKQuantity(unit: .millimolesPerLiter, doubleValue: 13.2)),
+                                            encodesJSON: """
+{
+  "endDate" : "2020-05-14T15:05:03Z",
+  "quantity" : 237.80576160007135,
+  "quantityUnit" : "mg/dL",
+  "startDate" : "2020-05-14T14:05:03Z"
+}
+"""
+        )
     }
-
-    func assertSimpleGlucoseValueCodable(_ original: SimpleGlucoseValue) throws {
-        let data = try PropertyListEncoder().encode(original)
-        let decoded = try PropertyListDecoder().decode(SimpleGlucoseValue.self, from: data)
+    
+    private func assertSimpleGlucoseValueCodable(_ original: SimpleGlucoseValue, encodesJSON string: String) throws {
+        let data = try encoder.encode(original)
+        XCTAssertEqual(String(data: data, encoding: .utf8), string)
+        let decoded = try decoder.decode(SimpleGlucoseValue.self, from: data)
         XCTAssertEqual(decoded, original)
     }
+    
+    private let dateFormatter = ISO8601DateFormatter()
+    
+    private let encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        encoder.dateEncodingStrategy = .iso8601
+        return encoder
+    }()
+    
+    private let decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
 }
 
 class PredictedGlucoseValueCodableTests: XCTestCase {
     func testCodableMilligramsPerDeciliter() throws {
-        try assertPredictedGlucoseValueCodable(PredictedGlucoseValue(startDate: Date(),
-                                                                     quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)))
+        try assertPredictedGlucoseValueCodable(PredictedGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T22:38:26Z")!,
+                                                                     quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 234.5)),
+                                               encodesJSON: """
+{
+  "quantity" : 234.5,
+  "quantityUnit" : "mg/dL",
+  "startDate" : "2020-05-14T22:38:26Z"
+}
+"""
+        )
     }
-
+    
     func testCodableMillimolesPerLiter() throws {
-        try assertPredictedGlucoseValueCodable(PredictedGlucoseValue(startDate: Date(),
-                                                                     quantity: HKQuantity(unit: .millimolesPerLiter, doubleValue: 12.3)))
+        try assertPredictedGlucoseValueCodable(PredictedGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T21:23:33Z")!,
+                                                                     quantity: HKQuantity(unit: .millimolesPerLiter, doubleValue: 12.3)),
+                                               encodesJSON: """
+{
+  "quantity" : 221.59173240006652,
+  "quantityUnit" : "mg/dL",
+  "startDate" : "2020-05-14T21:23:33Z"
+}
+"""
+        )
     }
-
-    func assertPredictedGlucoseValueCodable(_ original: PredictedGlucoseValue) throws {
-        let data = try PropertyListEncoder().encode(original)
-        let decoded = try PropertyListDecoder().decode(PredictedGlucoseValue.self, from: data)
+    
+    private func assertPredictedGlucoseValueCodable(_ original: PredictedGlucoseValue, encodesJSON string: String) throws {
+        let data = try encoder.encode(original)
+        XCTAssertEqual(String(data: data, encoding: .utf8), string)
+        let decoded = try decoder.decode(PredictedGlucoseValue.self, from: data)
         XCTAssertEqual(decoded, original)
     }
+    
+    private let dateFormatter = ISO8601DateFormatter()
+    
+    private let encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        encoder.dateEncodingStrategy = .iso8601
+        return encoder
+    }()
+    
+    private let decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
 }

@@ -50,6 +50,7 @@ public struct Card: View {
                     if self.parts[index] != nil {
                         VStack {
                             self.parts[index]!
+                                .padding(.top, 4)
 
                             if index != self.parts.indices.last! {
                                 CardSectionDivider()

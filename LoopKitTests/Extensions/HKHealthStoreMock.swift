@@ -14,6 +14,7 @@ class HKHealthStoreMock: HKHealthStore {
     var saveError: Error?
     var deleteError: Error?
     var queryResults: (samples: [HKSample]?, error: Error?)?
+    var lastQuery: HKQuery?
 
     private var saveHandler: ((_ objects: [HKObject], _ success: Bool, _ error: Error?) -> Void)?
 
@@ -45,6 +46,12 @@ class HKHealthStoreMock: HKHealthStore {
     }
 }
 
+extension HKHealthStoreMock {
+
+    override func execute(_ query: HKQuery) {
+        self.lastQuery = query
+    }
+}
 
 extension HKHealthStoreMock: HKSampleQueryTestable {
     func executeSampleQuery(

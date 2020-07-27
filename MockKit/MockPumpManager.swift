@@ -70,11 +70,11 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     public var supportedBolusVolumes: [Double] {
-        return supportedBasalRates
+        return state.supportedBolusVolumes
     }
 
     public var supportedBasalRates: [Double] {
-        return (0...700).map { Double($0) / Double(type(of: self).pulsesPerUnit) }
+        return state.supportedBasalRates
     }
 
     public var maximumBasalScheduleEntryCount: Int {
@@ -114,6 +114,50 @@ public final class MockPumpManager: TestingPumpManager {
             return .none
         }
     }
+    
+    private func pumpStatusHighlight(for state: MockPumpManagerState) -> PumpManagerStatus.PumpStatusHighlight? {
+        if state.reservoirUnitsRemaining == 0 {
+            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("No Insulin", comment: "Status highlight that a pump is out of insulin."),
+                                                         imageName: "exclamationmark.circle.fill",
+                                                         state: .critical)
+        } else if state.occlusionDetected {
+            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Occlusion", comment: "Status highlight that an occlusion was detected."),
+                                                         imageName: "exclamationmark.circle.fill",
+                                                         state: .critical)
+        } else if state.pumpErrorDetected {
+            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Error", comment: "Status highlight that a pump error occurred."),
+                                                         imageName: "exclamationmark.circle.fill",
+                                                         state: .critical)
+        } else if case .suspended = state.suspendState {
+            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
+                                                         imageName: "pause.circle.fill",
+                                                         state: .warning)
+        }
+        
+        return nil
+    }
+    
+    private func pumpLifecycleProgress(for state: MockPumpManagerState) -> PumpManagerStatus.PumpLifecycleProgress? {
+        guard let progressPercentComplete = state.progressPercentComplete else {
+            return nil
+        }
+        
+        let progressState: DeviceLifecycleProgressState
+        if let progressCriticalThresholdPercentValue = state.progressCriticalThresholdPercentValue,
+            progressPercentComplete >= progressCriticalThresholdPercentValue
+        {
+            progressState = .critical
+        } else if let progressWarningThresholdPercentValue = state.progressWarningThresholdPercentValue,
+            progressPercentComplete >= progressWarningThresholdPercentValue
+        {
+            progressState = .warning
+        } else {
+            progressState = .normal
+        }
+        
+        return PumpManagerStatus.PumpLifecycleProgress(percentComplete: progressPercentComplete,
+                                                       progressState: progressState)
+    }
 
     private func status(for state: MockPumpManagerState) -> PumpManagerStatus {
         return PumpManagerStatus(
@@ -121,7 +165,9 @@ public final class MockPumpManager: TestingPumpManager {
             device: MockPumpManager.device,
             pumpBatteryChargeRemaining: state.pumpBatteryChargeRemaining,
             basalDeliveryState: basalDeliveryState(for: state),
-            bolusState: bolusState(for: state)
+            bolusState: bolusState(for: state),
+            pumpStatusHighlight: pumpStatusHighlight(for: state),
+            pumpLifecycleProgress: pumpLifecycleProgress(for: state)
         )
     }
 
@@ -199,9 +245,11 @@ public final class MockPumpManager: TestingPumpManager {
 
     public init() {
         state = MockPumpManagerState(
+            deliverableIncrements: .medtronicX22,
             reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity,
             tempBasalEnactmentShouldError: false,
             bolusEnactmentShouldError: false,
+            bolusCancelShouldError: false,
             deliverySuspensionShouldError: false,
             deliveryResumptionShouldError: false,
             maximumBolus: 25.0,
@@ -210,7 +258,9 @@ public final class MockPumpManager: TestingPumpManager {
             pumpBatteryChargeRemaining: 1,
             unfinalizedBolus: nil,
             unfinalizedTempBasal: nil,
-            finalizedDoses: [])
+            finalizedDoses: [],
+            progressWarningThresholdPercentValue: 0.75,
+            progressCriticalThresholdPercentValue: 0.9)
     }
 
     public init?(rawState: RawStateValue) {
@@ -368,16 +418,20 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     public func cancelBolus(completion: @escaping (PumpManagerResult<DoseEntry?>) -> Void) {
-
-        logDeviceCommunication("cancelBolus()")
-
-        state.unfinalizedBolus?.cancel(at: Date())
-
-        storeDoses { (_) in
-            DispatchQueue.main.async {
-                self.state.finalizeFinishedDoses()
-                completion(.success(nil))
-                self.logDeviceCommunication("cancelBolus succeeded", type: .receive)
+        logDeviceComms(.send, message: "Cancel")
+        
+        if self.state.bolusCancelShouldError {
+            let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
+            logDeviceComms(.error, message: "Cancel failed with error: \(error)")
+            completion(.failure(error))
+        } else {
+            state.unfinalizedBolus?.cancel(at: Date())
+            
+            storeDoses { (_) in
+                DispatchQueue.main.async {
+                    self.state.finalizeFinishedDoses()
+                    completion(.success(nil))
+                }
             }
         }
     }
@@ -436,17 +490,23 @@ public final class MockPumpManager: TestingPumpManager {
     }
     
     public func setMaximumTempBasalRate(_ rate: Double) { }
+
+    public func syncBasalRateSchedule(items scheduleItems: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(500)) {
+            completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: self.status.timeZone)!))
+        }
+    }
 }
 
-// MARK: - DeviceAlertResponder implementation
+// MARK: - AlertResponder implementation
 extension MockPumpManager {
-    public func acknowledgeAlert(alertIdentifier: DeviceAlert.AlertIdentifier) { }
+    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) { }
 }
 
-// MARK: - DeviceAlertSoundVendor implementation
+// MARK: - AlertSoundVendor implementation
 extension MockPumpManager {
     public func getSoundBaseURL() -> URL? { return nil }
-    public func getSounds() -> [DeviceAlert.Sound] { return [] }
+    public func getSounds() -> [Alert.Sound] { return [] }
 }
 
 extension MockPumpManager {

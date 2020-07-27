@@ -18,62 +18,47 @@ public struct GuardrailWarning: View {
 
     private var title: Text
     private var crossedThresholds: CrossedThresholds
+    private var captionOverride: Text?
 
-    public init(title: Text, threshold: SafetyClassification.Threshold) {
+    public init(
+        title: Text,
+        threshold: SafetyClassification.Threshold,
+        caption: Text? = nil
+    ) {
         self.title = title
         self.crossedThresholds = .one(threshold)
+        self.captionOverride = caption
     }
 
-    public init(title: Text, thresholds: [SafetyClassification.Threshold]) {
+    public init(
+        title: Text,
+        thresholds: [SafetyClassification.Threshold],
+        caption: Text? = nil
+    ) {
         precondition(!thresholds.isEmpty)
         self.title = title
         self.crossedThresholds = .oneOrMore(thresholds)
+        self.captionOverride = caption
     }
 
     public var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                HStack(alignment: .firstTextBaseline) {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .foregroundColor(accentColor)
-
-                    title
-                        .font(Font(UIFont.preferredFont(forTextStyle: .title3)))
-                        .bold()
-                        .fixedSize()
-                        .animation(nil)
-                }
-
-                caption
-                    .font(.callout)
-                    .foregroundColor(Color(.secondaryLabel))
-                    .fixedSize(horizontal: false, vertical: true)
-                    .animation(nil)
-            }
-
-            Spacer()
-        }
+        WarningView(title: title, caption: caption, severity: severity)
     }
 
-    private var accentColor: Color {
+    private var severity: WarningSeverity {
         switch crossedThresholds {
         case .one(let threshold):
-            return color(for: threshold)
+            return threshold.severity
         case .oneOrMore(let thresholds):
-            return color(for: thresholds.max(by: { $0.severity < $1.severity })!)
-        }
-    }
-
-    private func color(for threshold: SafetyClassification.Threshold) -> Color {
-        switch threshold {
-        case .minimum, .maximum:
-            return .severeWarning
-        case .belowRecommended, .aboveRecommended:
-            return .warning
+            return thresholds.lazy.map({ $0.severity }).max()!
         }
     }
 
     private var caption: Text {
+        if let caption = captionOverride {
+            return caption
+        }
+
         switch crossedThresholds {
         case .one(let threshold):
             switch threshold {
@@ -98,12 +83,12 @@ public struct GuardrailWarning: View {
 }
 
 fileprivate extension SafetyClassification.Threshold {
-    var severity: Int {
+    var severity: WarningSeverity {
         switch self {
         case .belowRecommended, .aboveRecommended:
-            return 1
+            return .default
         case .minimum, .maximum:
-            return 2
+            return .critical
         }
     }
 }

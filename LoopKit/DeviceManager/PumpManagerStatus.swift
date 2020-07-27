@@ -6,9 +6,35 @@
 //
 
 import Foundation
+import UIKit
 import HealthKit
 
 public struct PumpManagerStatus: Equatable {
+    
+    public struct PumpStatusHighlight: DeviceStatusHighlight, Equatable {
+        public var localizedMessage: String
+        
+        public var imageName: String
+        
+        public var state: DeviceStatusHighlightState
+        
+        public init(localizedMessage: String, imageName: String, state: DeviceStatusHighlightState) {
+            self.localizedMessage = localizedMessage
+            self.imageName = imageName
+            self.state = state
+        }
+    }
+    
+    public struct PumpLifecycleProgress: DeviceLifecycleProgress, Equatable {
+        public var percentComplete: Double
+        
+        public var progressState: DeviceLifecycleProgressState
+        
+        public init(percentComplete: Double, progressState: DeviceLifecycleProgressState) {
+            self.percentComplete = percentComplete
+            self.progressState = progressState
+        }
+    }
     
     public enum BasalDeliveryState: Equatable {
         case active(_ at: Date)
@@ -39,19 +65,25 @@ public struct PumpManagerStatus: Equatable {
     public var pumpBatteryChargeRemaining: Double?
     public var basalDeliveryState: BasalDeliveryState
     public var bolusState: BolusState
+    public var pumpStatusHighlight: PumpStatusHighlight?
+    public var pumpLifecycleProgress: PumpLifecycleProgress?
 
     public init(
         timeZone: TimeZone,
         device: HKDevice,
         pumpBatteryChargeRemaining: Double?,
         basalDeliveryState: BasalDeliveryState,
-        bolusState: BolusState
+        bolusState: BolusState,
+        pumpStatusHighlight: PumpStatusHighlight? = nil,
+        pumpLifecycleProgress: PumpLifecycleProgress? = nil
     ) {
         self.timeZone = timeZone
         self.device = device
         self.pumpBatteryChargeRemaining = pumpBatteryChargeRemaining
         self.basalDeliveryState = basalDeliveryState
         self.bolusState = bolusState
+        self.pumpStatusHighlight = pumpStatusHighlight
+        self.pumpLifecycleProgress = pumpLifecycleProgress
     }
 }
 
@@ -63,6 +95,8 @@ extension PumpManagerStatus: Codable {
         self.pumpBatteryChargeRemaining = try container.decodeIfPresent(Double.self, forKey: .pumpBatteryChargeRemaining)
         self.basalDeliveryState = try container.decode(BasalDeliveryState.self, forKey: .basalDeliveryState)
         self.bolusState = try container.decode(BolusState.self, forKey: .bolusState)
+        self.pumpStatusHighlight = try container.decode(PumpStatusHighlight.self, forKey: .pumpStatusHighlight)
+        self.pumpLifecycleProgress = try container.decode(PumpLifecycleProgress.self, forKey: .pumpLifecycleProgress)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -72,6 +106,8 @@ extension PumpManagerStatus: Codable {
         try container.encodeIfPresent(pumpBatteryChargeRemaining, forKey: .pumpBatteryChargeRemaining)
         try container.encode(basalDeliveryState, forKey: .basalDeliveryState)
         try container.encode(bolusState, forKey: .bolusState)
+        try container.encode(pumpStatusHighlight, forKey: .pumpStatusHighlight)
+        try container.encode(pumpLifecycleProgress, forKey: .pumpLifecycleProgress)
     }
 
     private struct CodableDevice: Codable {
@@ -113,6 +149,8 @@ extension PumpManagerStatus: Codable {
         case pumpBatteryChargeRemaining
         case basalDeliveryState
         case bolusState
+        case pumpStatusHighlight
+        case pumpLifecycleProgress
     }
 }
 
@@ -133,11 +171,11 @@ extension PumpManagerStatus.BasalDeliveryState: Codable {
             }
         } else {
             let container = try decoder.container(keyedBy: CodableKeys.self)
-            if let active = try? container.decode(Active.self, forKey: .active) {
+            if let active = try container.decodeIfPresent(Active.self, forKey: .active) {
                 self = .active(active.at)
-            } else if let tempBasal = try? container.decode(TempBasal.self, forKey: .tempBasal) {
+            } else if let tempBasal = try container.decodeIfPresent(TempBasal.self, forKey: .tempBasal) {
                 self = .tempBasal(tempBasal.dose)
-            } else if let suspended = try? container.decode(Suspended.self, forKey: .suspended) {
+            } else if let suspended = try container.decodeIfPresent(Suspended.self, forKey: .suspended) {
                 self = .suspended(suspended.at)
             } else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
@@ -209,7 +247,7 @@ extension PumpManagerStatus.BolusState: Codable {
             }
         } else {
             let container = try decoder.container(keyedBy: CodableKeys.self)
-            if let inProgress = try? container.decode(InProgress.self, forKey: .inProgress) {
+            if let inProgress = try container.decodeIfPresent(InProgress.self, forKey: .inProgress) {
                 self = .inProgress(inProgress.dose)
             } else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
@@ -246,6 +284,10 @@ extension PumpManagerStatus.BolusState: Codable {
     }
 }
 
+extension PumpManagerStatus.PumpStatusHighlight: Codable { }
+
+extension PumpManagerStatus.PumpLifecycleProgress: Codable { }
+
 extension PumpManagerStatus: CustomDebugStringConvertible {
     public var debugDescription: String {
         return """
@@ -255,6 +297,8 @@ extension PumpManagerStatus: CustomDebugStringConvertible {
         * pumpBatteryChargeRemaining: \(pumpBatteryChargeRemaining as Any)
         * basalDeliveryState: \(basalDeliveryState)
         * bolusState: \(bolusState)
+        * pumpStatusHighlight: \(pumpStatusHighlight as Any)
+        * pumpLifecycleProgress: \(pumpLifecycleProgress as Any)
         """
     }
 }

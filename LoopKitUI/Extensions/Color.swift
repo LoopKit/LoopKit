@@ -17,4 +17,6 @@ extension Color {
             ? UIColor(red: 0.902, green: 0.494, blue: 0.039, alpha: 1)
             : UIColor(red: 0.863, green: 0.455, blue: 0, alpha: 1)
     }))
+    
+    public static let instructionalContent = Color.secondary
 }

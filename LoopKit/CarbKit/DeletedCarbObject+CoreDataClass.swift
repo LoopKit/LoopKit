@@ -43,4 +43,12 @@ extension DeletedCarbObject {
         syncVersion = cachedCarbObject.syncVersion
     }
 
+    func update(from entry: DeletedCarbEntry) {
+        externalID = entry.externalID
+        uploadState = entry.isUploaded ? .uploaded : .notUploaded
+        startDate = entry.startDate
+        uuid = entry.uuid
+        syncIdentifier = entry.syncIdentifier
+        syncVersion = Int32(entry.syncVersion)
+    }
 }

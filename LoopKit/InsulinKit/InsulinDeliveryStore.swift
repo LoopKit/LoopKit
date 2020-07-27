@@ -46,12 +46,13 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
     /// The interval of insulin delivery data to keep in cache
     public let cacheLength: TimeInterval
 
-    public let cacheStore: PersistenceController
+    private let cacheStore: PersistenceController
     
     static let queryAnchorMetadataKey = "com.loopkit.InsulinDeliveryStore.queryAnchor"
 
     public init(
         healthStore: HKHealthStore,
+        observeHealthKitForCurrentAppOnly: Bool,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
@@ -62,6 +63,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
 
         super.init(
             healthStore: healthStore,
+            observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly,
             type: insulinType,
             observationStart: (test_currentDate ?? Date()).addingTimeInterval(-cacheLength),
             observationEnabled: observationEnabled,
@@ -258,7 +260,7 @@ extension InsulinDeliveryStore {
     }
 
     private func getSamples(start: Date, end: Date? = nil, isChronological: Bool = true, _ completion: @escaping (_ result: InsulinDeliveryStoreResult<[HKQuantitySample]>) -> Void) {
-        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: [])
+        let predicate = HKQuery.predicateForSamples(observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, withStart: start, end: end, options: [])
         getSamples(matching: predicate, isChronological: isChronological, completion)
     }
 
@@ -449,7 +451,7 @@ extension InsulinDeliveryStore {
                 let count = try cacheStore.managedObjectContext.purgeObjects(of: CachedInsulinDeliveryObject.self, matching: predicate)
                 self.log.default("Purged %d CachedInsulinDeliveryObjects", count)
             } catch let error {
-                self.log.error("Unable to purge CachedInsulinDeliveryObjects: %@", String(describing: error))
+                self.log.error("Unable to purge CachedInsulinDeliveryObjects: %{public}@", String(describing: error))
             }
         }
     }
@@ -499,5 +501,28 @@ extension InsulinDeliveryStore {
                 self.lastBasalEndDate = newValue
             }
         }
+    }
+}
+
+extension NSManagedObjectContext {
+    fileprivate func cachedInsulinDeliveryObjectsWithUUID(_ uuid: UUID, fetchLimit: Int? = nil) -> [CachedInsulinDeliveryObject] {
+        let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
+        if let limit = fetchLimit {
+            request.fetchLimit = limit
+        }
+        request.predicate = NSPredicate(format: "uuid == %@", uuid as NSUUID)
+        request.sortDescriptors = [NSSortDescriptor(key: "uuid", ascending: true)]
+
+        return (try? fetch(request)) ?? []
+    }
+
+    fileprivate func cachedInsulinDeliveryObjectsWithSyncIdentifier(_ syncIdentifier: String, fetchLimit: Int? = nil) -> [CachedInsulinDeliveryObject] {
+        let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
+        if let limit = fetchLimit {
+            request.fetchLimit = limit
+        }
+        request.predicate = NSPredicate(format: "syncIdentifier == %@", syncIdentifier)
+
+        return (try? fetch(request)) ?? []
     }
 }

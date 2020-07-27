@@ -47,9 +47,10 @@ public protocol CarbStoreDelegate: class {
 
  There are two tiers of storage:
 
- * Short-term persistant cache, stored in Core Data, used to ensure access if the app is suspended and re-launched while the Health database is protected
+ * Persistant cache, stored in Core Data, used to ensure access if the app is suspended and re-launched while the Health database
+   is protected and to provide data for upload to remote data services. Backfilled from HealthKit data up to observation interval.
  ```
- 0       [cacheLength]
+ 0       [max(cacheLength, observationInterval, defaultAbsorptionTimes.slow * 2)]
  |––––––––––––|
  ```
  * HealthKit data, managed by the current application and persisted indefinitely
@@ -64,13 +65,6 @@ public final class CarbStore: HealthKitSampleStore {
     public static let carbEntriesDidUpdate = NSNotification.Name(rawValue: "com.loudnate.CarbKit.carbEntriesDidUpdate")
 
     public typealias DefaultAbsorptionTimes = (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)
-
-    public static let defaultAbsorptionTimes: DefaultAbsorptionTimes = (fast: TimeInterval(hours: 2), medium: TimeInterval(hours: 3), slow: TimeInterval(hours: 4))
-
-    /// The default longest expected absorption time interval for carbohydrates: 8 hours.
-    public static var defaultMaximumAbsorptionTimeInterval: TimeInterval {
-        return defaultAbsorptionTimes.slow * 2
-    }
 
     public enum CarbStoreError: Error {
         // The store isn't correctly configured for the requested operation
@@ -159,7 +153,10 @@ public final class CarbStore: HealthKitSampleStore {
     /// The interval of carb data to keep in cache
     public let cacheLength: TimeInterval
 
-    public let cacheStore: PersistenceController
+    /// The interval to observe HealthKit data to populate the cache
+    public let observationInterval: TimeInterval
+
+    private let cacheStore: PersistenceController
 
     /// The sync version used for new samples written to HealthKit
     /// Choose a lower or higher sync version if the same sample might be written twice (e.g. from an extension and from an app) for deterministic conflict resolution
@@ -183,10 +180,11 @@ public final class CarbStore: HealthKitSampleStore {
      */
     public init(
         healthStore: HKHealthStore,
+        observeHealthKitForCurrentAppOnly: Bool,
         cacheStore: PersistenceController,
-        observationEnabled: Bool = true,
-        cacheLength: TimeInterval = defaultAbsorptionTimes.slow * 2,
-        defaultAbsorptionTimes: DefaultAbsorptionTimes = defaultAbsorptionTimes,
+        cacheLength: TimeInterval,
+        defaultAbsorptionTimes: DefaultAbsorptionTimes,
+        observationInterval: TimeInterval,
         carbRatioSchedule: CarbRatioSchedule? = nil,
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
         overrideHistory: TemporaryScheduleOverrideHistory? = nil,
@@ -205,10 +203,13 @@ public final class CarbStore: HealthKitSampleStore {
         self.absorptionTimeOverrun = absorptionTimeOverrun
         self.delta = calculationDelta
         self.delay = effectDelay
-        self.cacheLength = max(cacheLength, defaultAbsorptionTimes.slow * 2)
+        self.cacheLength = cacheLength
+        self.observationInterval = observationInterval
         self.carbAbsorptionModel = carbAbsorptionModel
+        
+        let observationEnabled = observationInterval > 0
 
-        super.init(healthStore: healthStore, type: carbType, observationStart: Date(timeIntervalSinceNow: -cacheLength), observationEnabled: observationEnabled)
+        super.init(healthStore: healthStore, observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, type: carbType, observationStart: Date(timeIntervalSinceNow: -self.observationInterval), observationEnabled: observationEnabled)
 
         cacheStore.onReady { (error) in
             guard error == nil else { return }
@@ -313,7 +314,7 @@ extension CarbStore {
     ///   - completion: A closure called once the samples have been retrieved
     ///   - result: An array of samples, in chronological order by startDate
     private func getCarbSamples(start: Date, end: Date? = nil, completion: @escaping (_ result: CarbStoreResult<[StoredCarbEntry]>) -> Void) {
-        let predicate = HKQuery.predicateForSamples(withStart: start, end: end)
+        let predicate = HKQuery.predicateForSamples(observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, withStart: start, end: end)
         let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
 
         let query = HKSampleQuery(sampleType: carbType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: sortDescriptors) { (query, samples, error) in
@@ -336,8 +337,8 @@ extension CarbStore {
     ///   - samples: An array of samples, in chronological order by startDate
     public func getCachedCarbSamples(start: Date, end: Date? = nil, completion: @escaping (_ samples: [StoredCarbEntry]) -> Void) {
         #if os(iOS)
-        // If we're within our cache duration, skip the HealthKit query
-        guard start <= earliestCacheDate else {
+        // If we're within our observation duration, skip the HealthKit query
+        guard start <= earliestObservationDate else {
             self.queue.async {
                 let entries = self.getCachedCarbEntries().filterDateRange(start, end)
                 completion(entries)
@@ -502,27 +503,17 @@ extension NSManagedObjectContext {
 
         return (try? fetch(request)) ?? []
     }
-
-    fileprivate func deleteObjects<T>(matching fetchRequest: NSFetchRequest<T>) throws -> Int where T: NSManagedObject {
-        let objects = try fetch(fetchRequest)
-
-        for object in objects {
-            delete(object)
-        }
-
-        if hasChanges {
-            try save()
-        }
-
-        return objects.count
-    }
 }
 
 
 // MARK: - Cache management
 extension CarbStore {
-    private var earliestCacheDate: Date {
+    public var earliestCacheDate: Date {
         return Date(timeIntervalSinceNow: -cacheLength)
+    }
+
+    private var earliestObservationDate: Date {
+        return Date(timeIntervalSinceNow: -observationInterval)
     }
 
     @discardableResult
@@ -629,7 +620,7 @@ extension CarbStore {
         return entries
     }
 
-    private func purgeCachedCarbEntries() {
+    private func purgeExpiredCachedCarbEntries() {
         dispatchPrecondition(condition: .onQueue(queue))
 
         cacheStore.managedObjectContext.performAndWait {
@@ -641,7 +632,7 @@ extension CarbStore {
                 let count = try self.cacheStore.managedObjectContext.deleteObjects(matching: fetchRequest)
                 self.log.info("Deleted %d CachedCarbObjects", count)
             } catch let error {
-                self.log.error("Unable to purge CachedCarbObjects: %@", String(describing: error))
+                self.log.error("Unable to purge CachedCarbObjects: %{public}@", String(describing: error))
             }
 
             do {
@@ -650,15 +641,55 @@ extension CarbStore {
                 let count = try self.cacheStore.managedObjectContext.deleteObjects(matching: fetchRequest)
                 self.log.info("Deleted %d DeletedCarbObjects", count)
             } catch let error {
-                self.log.error("Unable to purge DeletedCarbObjects: %@", String(describing: error))
+                self.log.error("Unable to purge DeletedCarbObjects: %{public}@", String(describing: error))
             }
         }
+    }
+
+    public func purgeCachedCarbEntries(before date: Date, completion: @escaping (Error?) -> Void) {
+        queue.async {
+            self.purgeCachedCarbObjects(before: date) { error in
+                guard error == nil else {
+                    completion(error)
+                    return
+                }
+                self.delegate?.carbStoreHasUpdatedCarbData(self)
+                completion(nil)
+            }
+        }
+    }
+
+    private func purgeCachedCarbObjects(before date: Date, completion: ((Error?) -> Void)? = nil) {
+        dispatchPrecondition(condition: .onQueue(queue))
+
+        let predicate = NSPredicate(format: "startDate < %@", date as NSDate)
+        var purgeError: Error?
+
+        cacheStore.managedObjectContext.performAndWait {
+            do {
+                let count = try self.cacheStore.managedObjectContext.purgeObjects(of: CachedCarbObject.self, matching: predicate)
+                self.log.info("Purged %d CachedCarbObjects", count)
+            } catch let error {
+                self.log.error("Unable to purge CachedCarbObjects: %{public}@", String(describing: error))
+                purgeError = error
+            }
+
+            do {
+                let count = try self.cacheStore.managedObjectContext.purgeObjects(of: DeletedCarbObject.self, matching: predicate)
+                self.log.info("Purged %d DeletedCarbObjects", count)
+            } catch let error {
+                self.log.error("Unable to purge DeletedCarbObjects: %{public}@", String(describing: error))
+                purgeError = error
+            }
+        }
+
+        completion?(purgeError)
     }
 
     private func notifyDelegateOfUpdatedCarbData() {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        self.purgeCachedCarbEntries()
+        self.purgeExpiredCachedCarbEntries()
 
         delegate?.carbStoreHasUpdatedCarbData(self)
     }
@@ -939,7 +970,9 @@ extension CarbStore {
                 "",
                 "* carbRatioSchedule: \(self.carbRatioSchedule?.debugDescription ?? "")",
                 "* carbRatioScheduleApplyingOverrideHistory: \(self.carbRatioScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
+                "* cacheLength: \(self.cacheLength)",
                 "* defaultAbsorptionTimes: \(self.defaultAbsorptionTimes)",
+                "* observationInterval: \(self.observationInterval)",
                 "* insulinSensitivitySchedule: \(self.insulinSensitivitySchedule?.debugDescription ?? "")",
                 "* insulinSensitivityScheduleApplyingOverrideHistory: \(self.insulinSensitivityScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
                 "* overrideHistory: \(self.overrideHistory.map(String.init(describing:)) ?? "nil")",
@@ -1087,4 +1120,64 @@ extension CarbStore {
         }
     }
     
+}
+
+// MARK: - Core Data (Bulk) - TEST ONLY
+
+extension CarbStore {
+    public func addStoredCarbEntries(entries: [StoredCarbEntry], completion: @escaping (Error?) -> Void) {
+        guard !entries.isEmpty else {
+            completion(nil)
+            return
+        }
+
+        queue.async {
+            var error: Error?
+
+            self.cacheStore.managedObjectContext.performAndWait {
+                for entry in entries {
+                    let object = CachedCarbObject(context: self.cacheStore.managedObjectContext)
+                    object.update(from: entry)
+                }
+                self.cacheStore.save { error = $0 }
+            }
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            self.log.info("Added %d CachedCarbObjects", entries.count)
+            self.delegate?.carbStoreHasUpdatedCarbData(self)
+            completion(nil)
+        }
+    }
+
+    public func addDeletedCarbEntries(entries: [DeletedCarbEntry], completion: @escaping (Error?) -> Void) {
+        guard !entries.isEmpty else {
+            completion(nil)
+            return
+        }
+
+        queue.async {
+            var error: Error?
+
+            self.cacheStore.managedObjectContext.performAndWait {
+                for entry in entries {
+                    let object = DeletedCarbObject(context: self.cacheStore.managedObjectContext)
+                    object.update(from: entry)
+                }
+                self.cacheStore.save { error = $0 }
+            }
+
+            guard error == nil else {
+                completion(error)
+                return
+            }
+
+            self.log.info("Added %d DeletedCarbObjects", entries.count)
+            self.delegate?.carbStoreHasUpdatedCarbData(self)
+            completion(nil)
+        }
+    }
 }

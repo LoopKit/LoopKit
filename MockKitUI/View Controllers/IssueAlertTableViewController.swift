@@ -15,28 +15,34 @@ final class IssueAlertTableViewController: UITableViewController {
   
     let cgmManager: MockCGMManager
 
-    static let delay = TimeInterval(30)
+    static let delay = TimeInterval(60)
     
     private enum AlertRow: Int, CaseIterable, CustomStringConvertible {
         case immediate = 0
         case delayed
         case repeating
         case issueLater
+        case retract
         case buzz
-       
+        case critical
+
         var description: String {
             switch self {
             case .immediate: return "Issue an immediate alert"
             case .delayed: return "Issue a \"delayed \(delay) seconds\" alert"
             case .repeating: return "Issue a \"repeating every \(delay) seconds\" alert"
             case .issueLater: return "Issue an immediate alert \(delay) seconds from now"
+            case .retract: return "Retract any alert above"
             case .buzz: return "Issue an immediate vibrate alert"
+            case .critical: return "Issue a critical immediate alert"
             }
         }
         
-        var trigger: DeviceAlert.Trigger {
+        var trigger: Alert.Trigger {
             switch self {
             case .immediate: return .immediate
+            case .retract: return .immediate
+            case .critical: return .immediate
             case .delayed: return .delayed(interval: delay)
             case .repeating: return .repeating(repeatInterval: delay)
             case .issueLater: return .immediate
@@ -51,9 +57,10 @@ final class IssueAlertTableViewController: UITableViewController {
             }
         }
         
-        var identifier: DeviceAlert.AlertIdentifier {
+        var identifier: Alert.AlertIdentifier {
             switch self {
             case .buzz: return MockCGMManager.buzz.identifier
+            case .critical: return MockCGMManager.critical.identifier
             default: return MockCGMManager.submarine.identifier
             }
         }
@@ -117,7 +124,13 @@ final class IssueAlertTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = AlertRow(rawValue: indexPath.row)!
-        cgmManager.issueAlert(identifier: row.identifier, trigger: row.trigger, delay: row.delayBeforeIssue)
+        switch row {
+        case .retract:
+            cgmManager.retractAlert(identifier: row.identifier)
+        default:
+            cgmManager.issueAlert(identifier: row.identifier, trigger: row.trigger, delay: row.delayBeforeIssue)
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }

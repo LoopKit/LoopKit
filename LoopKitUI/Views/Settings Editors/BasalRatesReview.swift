@@ -1,0 +1,37 @@
+//
+//  BasalRatesReview.swift
+//  LoopKitUI
+//
+//  Created by Anna Quinlan on 7/3/20.
+//  Copyright © 2020 LoopKit Authors. All rights reserved.
+//
+
+import SwiftUI
+import LoopKit
+import HealthKit
+
+public struct BasalRatesReview: View {
+    @ObservedObject var viewModel: TherapySettingsViewModel
+    private let mode: PresentationMode
+    
+    public init(mode: PresentationMode = .acceptanceFlow, viewModel: TherapySettingsViewModel) {
+        precondition(viewModel.therapySettings.glucoseUnit != nil)
+        precondition(viewModel.pumpSupportedIncrements != nil)
+        self.viewModel = viewModel
+        self.mode = mode
+    }
+    
+    public var body: some View {
+        return BasalRateScheduleEditor(
+            schedule: viewModel.therapySettings.basalRateSchedule,
+            supportedBasalRates: viewModel.pumpSupportedIncrements!.basalRates ,
+            maximumBasalRate: viewModel.therapySettings.maximumBasalRatePerHour,
+            maximumScheduleEntryCount: viewModel.pumpSupportedIncrements!.maximumBasalScheduleEntryCount,
+            syncSchedule: viewModel.syncPumpSchedule,
+            onSave: { newRates in
+                self.viewModel.saveBasalRates(basalRates: newRates)
+        },
+            mode: mode
+        )
+    }
+}

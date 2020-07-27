@@ -8,38 +8,48 @@
 
 import SwiftUI
 
-
-public struct SettingDescription: View {
+public struct SettingDescription<InformationalContent: View>: View {
     var text: Text
+    var informationalContent: InformationalContent
+    @State var displayHelpPage: Bool = false
 
-    public init(text: Text) {
+    public init(
+        text: Text,
+        @ViewBuilder informationalContent: @escaping () -> InformationalContent
+    ) {
         self.text = text
+        self.informationalContent = informationalContent()
     }
 
     public var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 8) {
             text
                 .font(.callout)
                 .foregroundColor(Color(.secondaryLabel))
                 .fixedSize(horizontal: false, vertical: true)
 
-            Button(
-                action: {
-                    // TODO: Open a link to a support article
-                },
-                label: {
-                    Image(systemName: "info.circle")
-                        .font(.system(size: 25))
-                        .foregroundColor(.accentColor)
+            Spacer()
+            
+            infoButton
+            .sheet(isPresented: $displayHelpPage) {
+                NavigationView {
+                    self.informationalContent
                 }
-            )
+            }
         }
     }
-}
-
-struct SettingDescription_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingDescription(text: Text(verbatim: "When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U and will not recommend a bolus."))
-            .padding(.horizontal)
+    
+    private var infoButton: some View {
+        Button(
+            action: {
+                self.displayHelpPage = true
+            },
+            label: {
+                Image(systemName: "info.circle")
+                    .font(.system(size: 25))
+                    .foregroundColor(.accentColor)
+            }
+        )
+        .padding(.trailing, 4)
     }
 }
