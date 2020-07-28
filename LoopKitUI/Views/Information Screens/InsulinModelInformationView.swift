@@ -7,20 +7,23 @@
 //
 
 import SwiftUI
+import LoopKit
 
 public struct InsulinModelInformationView: View {
-    var exitPage: (() -> Void)
+    var onExit: (() -> Void)?
     var mode: PresentationMode
     
-    public init(exitPage: @escaping (() -> Void), mode: PresentationMode = .acceptanceFlow) {
-        self.exitPage = exitPage
+    @Environment(\.presentationMode) var presentationMode
+    
+    public init(onExit: (() -> Void)?, mode: PresentationMode = .acceptanceFlow) {
+        self.onExit = onExit
         self.mode = mode
     }
     
     public var body: some View {
         InformationView(
-            title: Text(LocalizedString("Insulin Model", comment: "Title for insulin model informational screen")),
-            buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to setting selector")),
+            title: Text(TherapySetting.insulinModel.title),
+            buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to setting editor")),
             informationalContent: {
                 VStack (alignment: .leading, spacing: 20) {
                     diaInfo
@@ -28,8 +31,9 @@ public struct InsulinModelInformationView: View {
                 }
                 .foregroundColor(.secondary)
             },
-            onExit: exitPage,
-            mode: mode)
+            onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
+            mode: mode
+        )
     }
     
     private var diaInfo: Text {

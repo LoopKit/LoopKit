@@ -32,6 +32,33 @@ public enum InsulinModelSettings: Equatable {
     }
 }
 
+extension InsulinModelSettings: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        do {
+            let exponential =  try container.decode(ExponentialInsulinModelPreset.self, forKey: .exponential)
+            self = .exponentialPreset(exponential)
+        } catch {
+            let walsh =  try container.decode(WalshInsulinModel.self, forKey: .walsh)
+            self = .walsh(walsh)
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .exponentialPreset(let model):
+            try container.encode(model, forKey: .exponential)
+        case .walsh(let model):
+            try container.encode(model, forKey: .walsh)
+        }
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case exponential
+        case walsh
+    }
+}
 
 extension InsulinModelSettings: CustomDebugStringConvertible {
     public var debugDescription: String {
