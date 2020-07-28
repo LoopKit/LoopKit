@@ -113,6 +113,7 @@ public struct CorrectionRangeOverridesEditor: View {
                         maxValue: self.selectableBounds(for: preset).upperBound,
                         guardrail: self.guardrail(for: preset)
                     )
+                    .accessibility(identifier: "\(self.accessibilityIdentifier(for: preset))_picker")
             })
         }
     }
@@ -210,6 +211,15 @@ public struct CorrectionRangeOverridesEditor: View {
         save(value)
         if mode == .legacySettings {
             dismiss()
+        }
+    }
+
+    private func accessibilityIdentifier(for preset: CorrectionRangeOverrides.Preset) -> String {
+        switch preset {
+        case .preMeal:
+            return "pre-meal"
+        case .workout:
+            return "workout"
         }
     }
 }

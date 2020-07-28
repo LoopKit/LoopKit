@@ -132,6 +132,7 @@ public struct DeliveryLimitsEditor: View {
                         selectableValues: self.selectableBasalRates,
                         usageContext: .independent
                     )
+                    .accessibility(identifier: "max_basal_picker")
                 }
             )
         }
@@ -181,6 +182,7 @@ public struct DeliveryLimitsEditor: View {
                         selectableValues: self.supportedBolusVolumes,
                         usageContext: .independent
                     )
+                    .accessibility(identifier: "max_bolus_picker")
                 }
             )
         }
