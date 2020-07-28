@@ -276,9 +276,9 @@ extension TherapySettingsView {
         section(for: .insulinModel) {
             if self.viewModel.therapySettings.insulinModel != nil {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(InsulinModelSettings(from: self.viewModel.therapySettings.insulinModel!).title)
+                    Text(self.viewModel.therapySettings.insulinModel!.title)
                         .font(.body)
-                    Text(InsulinModelSettings(from: self.viewModel.therapySettings.insulinModel!).subtitle)
+                    Text(self.viewModel.therapySettings.insulinModel!.subtitle)
                         .font(.footnote)
                         .foregroundColor(.secondary)
                 }

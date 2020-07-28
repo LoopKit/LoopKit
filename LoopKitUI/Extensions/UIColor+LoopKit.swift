@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIColor {
-    // TODO: make these colors configurable
+    // TODO: make these colors configurable in the charts initializer so they aren't hardcoded
     @nonobjc static let axisLabelColor = secondaryLabelColor
 
     @nonobjc static let axisLineColor = UIColor.clear

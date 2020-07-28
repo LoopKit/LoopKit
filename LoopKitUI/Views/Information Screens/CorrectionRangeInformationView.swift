@@ -26,7 +26,8 @@ public struct CorrectionRangeInformationView: View {
             buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to correction range setting editor")),
             informationalContent: {text},
             onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
-            mode: mode)
+            mode: mode
+        )
     }
     
     private var text: some View {

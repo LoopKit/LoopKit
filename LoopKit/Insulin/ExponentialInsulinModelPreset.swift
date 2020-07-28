@@ -5,7 +5,7 @@
 //  Copyright © 2017 LoopKit Authors. All rights reserved.
 //
 
-public enum ExponentialInsulinModelPreset: String {
+public enum ExponentialInsulinModelPreset: String, Codable {
     case humalogNovologAdult
     case humalogNovologChild
     case fiasp

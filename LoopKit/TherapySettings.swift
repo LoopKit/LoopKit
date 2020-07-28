@@ -28,7 +28,7 @@ public struct TherapySettings: Equatable, Codable {
     
     public var basalRateSchedule: BasalRateSchedule?
     
-    public var insulinModel: StoredSettings.InsulinModel?
+    public var insulinModel: InsulinModelSettings?
     
     public var glucoseUnit: HKUnit? {
         return glucoseTargetRangeSchedule?.unit
@@ -44,7 +44,7 @@ public struct TherapySettings: Equatable, Codable {
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
         carbRatioSchedule: CarbRatioSchedule? = nil,
         basalRateSchedule: BasalRateSchedule? = nil,
-        insulinModel: StoredSettings.InsulinModel? = nil
+        insulinModel: InsulinModelSettings? = nil
     ){
         self.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
         self.preMealTargetRange = preMealTargetRange

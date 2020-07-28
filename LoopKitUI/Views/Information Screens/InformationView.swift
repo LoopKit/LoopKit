@@ -63,7 +63,7 @@ struct InformationView<InformationalContent: View> : View {
     }
     
     private var cancelButton: some View {
-        Button(action: onExit, label: { Text("Cancel") })
+        Button(action: onExit, label: { Text(LocalizedString("Close", comment: "Text to close informational page")) })
     }
     
     private var nextPageButton: some View {

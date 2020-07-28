@@ -33,7 +33,8 @@ public struct DeliveryLimitsInformationView: View {
                 .fixedSize(horizontal: false, vertical: true) // prevent text from being cut off
             },
             onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
-            mode: mode)
+            mode: mode
+        )
     }
     
     private var deliveryLimitDescription: some View {

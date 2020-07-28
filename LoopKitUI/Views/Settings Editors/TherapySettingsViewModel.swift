@@ -84,4 +84,9 @@ public class TherapySettingsViewModel: ObservableObject {
         therapySettings.insulinSensitivitySchedule = insulinSensitivitySchedule
         didSave?(TherapySetting.insulinSensitivity, therapySettings)
     }
+    
+    public func saveInsulinModel(insulinModel: InsulinModelSettings) {
+        therapySettings.insulinModel = insulinModel
+        didSave?(TherapySetting.insulinModel, therapySettings)
+    }
 }
