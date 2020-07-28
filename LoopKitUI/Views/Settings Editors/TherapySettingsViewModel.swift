@@ -6,8 +6,10 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
+import Combine
 import LoopKit
 import HealthKit
+import SwiftUI
 
 public class TherapySettingsViewModel: ObservableObject {
     public typealias SaveCompletion = (TherapySetting, TherapySettings) -> Void
@@ -23,9 +25,13 @@ public class TherapySettingsViewModel: ObservableObject {
     let syncPumpSchedule: PumpManager.SyncSchedule?
     let sensitivityOverridesEnabled: Bool
     let prescription: Prescription?
+    let appName: String
+
+    lazy private var cancellables = Set<AnyCancellable>()
 
     public init(mode: PresentationMode,
                 therapySettings: TherapySettings,
+                appName: String,
                 supportedInsulinModelSettings: SupportedInsulinModelSettings = SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                 pumpSupportedIncrements: PumpSupportedIncrements? = nil,
                 syncPumpSchedule: PumpManager.SyncSchedule? = nil,
@@ -40,7 +46,20 @@ public class TherapySettingsViewModel: ObservableObject {
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
         self.prescription = prescription
         self.supportedInsulinModelSettings = supportedInsulinModelSettings
+        self.appName = appName
         self.didSave = didSave
+    }
+    
+    var insulinModelSelectionViewModel: InsulinModelSelectionViewModel {
+        let result = InsulinModelSelectionViewModel(
+            insulinModelSettings: therapySettings.insulinModelSettings!,
+            insulinSensitivitySchedule: therapySettings.insulinSensitivitySchedule!)
+        result.$insulinModelSettings
+            .dropFirst() // This is needed to avoid reading the initial value, which starts off an infinite loop
+            .sink {
+            [weak self] in self?.saveInsulinModel(insulinModelSettings: $0)
+        }.store(in: &cancellables)
+        return result
     }
     
     /// Reset to initial
@@ -75,6 +94,11 @@ public class TherapySettingsViewModel: ObservableObject {
         didSave?(TherapySetting.deliveryLimits, therapySettings)
     }
     
+    public func saveInsulinModel(insulinModelSettings: InsulinModelSettings) {
+        therapySettings.insulinModelSettings = insulinModelSettings
+        didSave?(TherapySetting.insulinModel, therapySettings)
+    }
+    
     public func saveCarbRatioSchedule(carbRatioSchedule: CarbRatioSchedule) {
         therapySettings.carbRatioSchedule = carbRatioSchedule
         didSave?(TherapySetting.carbRatio, therapySettings)
@@ -83,10 +107,5 @@ public class TherapySettingsViewModel: ObservableObject {
     public func saveInsulinSensitivitySchedule(insulinSensitivitySchedule: InsulinSensitivitySchedule) {
         therapySettings.insulinSensitivitySchedule = insulinSensitivitySchedule
         didSave?(TherapySetting.insulinSensitivity, therapySettings)
-    }
-    
-    public func saveInsulinModel(insulinModel: InsulinModelSettings) {
-        therapySettings.insulinModel = insulinModel
-        didSave?(TherapySetting.insulinModel, therapySettings)
     }
 }

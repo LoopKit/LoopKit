@@ -22,7 +22,7 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
     }
     
     @Environment(\.dismiss) var dismiss
-        
+
     @ObservedObject var viewModel: TherapySettingsViewModel
     
     @State var isEditing: Bool = false
@@ -274,11 +274,11 @@ extension TherapySettingsView {
         
     private var insulinModelSection: some View {
         section(for: .insulinModel) {
-            if self.viewModel.therapySettings.insulinModel != nil {
+            if self.viewModel.therapySettings.insulinModelSettings != nil {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(self.viewModel.therapySettings.insulinModel!.title)
+                    Text(self.viewModel.therapySettings.insulinModelSettings!.title)
                         .font(.body)
-                    Text(self.viewModel.therapySettings.insulinModel!.subtitle)
+                    Text(self.viewModel.therapySettings.insulinModelSettings!.subtitle)
                         .font(.footnote)
                         .foregroundColor(.secondary)
                 }
@@ -457,8 +457,13 @@ private extension TherapySettingsView {
         case .deliveryLimits:
             return AnyView(DeliveryLimitsReview(mode: viewModel.mode, viewModel: viewModel))
         case .insulinModel:
-            // TODO insulin viewModel.model
-            break
+            if viewModel.therapySettings.glucoseUnit != nil && viewModel.therapySettings.insulinModelSettings != nil && viewModel.therapySettings.insulinSensitivitySchedule != nil {
+                return AnyView(InsulinModelSelection(viewModel: viewModel.insulinModelSelectionViewModel,
+                                                     glucoseUnit: self.viewModel.therapySettings.glucoseUnit!,
+                                                     supportedModelSettings: viewModel.supportedInsulinModelSettings,
+                                                     appName: viewModel.appName,
+                                                     mode: viewModel.mode))
+            }
         case .carbRatio:
             return AnyView(CarbRatioScheduleEditor(
                 schedule: viewModel.therapySettings.carbRatioSchedule,
@@ -474,7 +479,6 @@ private extension TherapySettingsView {
                     onSave: { self.viewModel.saveInsulinSensitivitySchedule(insulinSensitivitySchedule: $0) }
                 ))
             }
-            break
         case .none:
             break
         }
@@ -509,6 +513,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
     static func preview_viewModel(mode: PresentationMode) -> TherapySettingsViewModel {
         TherapySettingsViewModel(mode: mode,
                                  therapySettings: preview_therapySettings,
+                                 appName: "Loop",
                                  supportedInsulinModelSettings: SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                                  pumpSupportedIncrements: PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
                                                                                   bolusVolumes: preview_supportedBolusVolumes,
@@ -529,7 +534,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                 .colorScheme(.dark)
                 .previewDevice(PreviewDevice(rawValue: "iPhone XS Max"))
                 .previewDisplayName("XS Max dark (settings)")
-            TherapySettingsView(viewModel: TherapySettingsViewModel(mode: .legacySettings, therapySettings: TherapySettings()))
+            TherapySettingsView(viewModel: TherapySettingsViewModel(mode: .legacySettings, therapySettings: TherapySettings(), appName: "Loop"))
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (Empty TherapySettings)")

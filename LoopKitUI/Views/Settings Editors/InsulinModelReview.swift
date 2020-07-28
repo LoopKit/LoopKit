@@ -20,12 +20,13 @@ public struct InsulinModelReview: View {
         appName: String
     ) {
         precondition(settingsViewModel.therapySettings.glucoseUnit != nil)
+        precondition(settingsViewModel.therapySettings.insulinModelSettings != nil)
         self.settingsViewModel = settingsViewModel
         self.supportedModels = supportedModels
         self.appName = appName
 
         self.insulinSelectionViewModel = InsulinModelSelectionViewModel(
-            insulinModelSettings: settingsViewModel.therapySettings.insulinModel!,
+            insulinModelSettings: settingsViewModel.therapySettings.insulinModelSettings!,
             insulinSensitivitySchedule: settingsViewModel.therapySettings.insulinSensitivitySchedule
         )
     }
@@ -43,7 +44,7 @@ public struct InsulinModelReview: View {
             }
             VStack {
                 Button(action: {
-                    self.settingsViewModel.saveInsulinModel(insulinModel: self.insulinSelectionViewModel.insulinModelSettings)
+                    self.settingsViewModel.saveInsulinModel(insulinModelSettings: self.insulinSelectionViewModel.insulinModelSettings)
                 }) {
                     Text(PresentationMode.acceptanceFlow.buttonText)
                     .actionButtonStyle(.primary)

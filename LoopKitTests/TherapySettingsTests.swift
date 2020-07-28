@@ -83,7 +83,7 @@ class TherapySettingsTests: XCTestCase {
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             carbRatioSchedule: carbRatioSchedule,
             basalRateSchedule: basalRateSchedule,
-            insulinModel: InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)
+            insulinModelSettings: InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)
         )
     }
 
@@ -238,7 +238,7 @@ class TherapySettingsTests: XCTestCase {
           }
         }
       },
-      "insulinModel" : {
+      "insulinModelSettings" : {
         "exponential" : "humalogNovologAdult"
       },
       "insulinSensitivitySchedule" : {
@@ -293,20 +293,43 @@ class TherapySettingsTests: XCTestCase {
       }
     }
     """
+    
+    func testInsulinModelEncoding() throws {
+        let adult = InsulinModelSettings.exponentialPreset(.humalogNovologAdult)
+        let child = InsulinModelSettings.exponentialPreset(.humalogNovologChild)
+        let walsh = InsulinModelSettings.walsh(WalshInsulinModel(actionDuration: 10))
+        
+        XCTAssertEqual("""
+        {
+          "exponential" : "humalogNovologAdult"
+        }
+        """, String(data: try encoder.encode(adult), encoding: .utf8)!)
+        XCTAssertEqual("""
+        {
+          "exponential" : "humalogNovologChild"
+        }
+        """, String(data: try encoder.encode(child), encoding: .utf8)!)
+        XCTAssertEqual("""
+        {
+          "walsh" : {
+            "actionDuration" : 10
+          }
+        }
+        """, String(data: try encoder.encode(walsh), encoding: .utf8)!)
+    }
 
     func testTherapySettingEncoding() throws {
         let original = getTherapySettings()
         let data = try encoder.encode(original)
-        
-        print(String(data: data, encoding: .utf8)!)
-        
-        XCTAssertEqual(String(data: data, encoding: .utf8)!, encodedString)
+        XCTAssertEqual(encodedString, String(data: data, encoding: .utf8)!)
     }
     
     func testTherapySettingDecoding() throws {
         let data = encodedString.data(using: .utf8)!
         let decoded = try decoder.decode(TherapySettings.self, from: data)
         let expected = getTherapySettings()
+        
+        XCTAssertEqual(expected, decoded)
         
         XCTAssertEqual(decoded.basalRateSchedule, expected.basalRateSchedule)
         XCTAssertEqual(decoded.glucoseUnit, expected.glucoseUnit)
@@ -317,7 +340,7 @@ class TherapySettingsTests: XCTestCase {
         XCTAssertEqual(decoded.maximumBasalRatePerHour, expected.maximumBasalRatePerHour)
         XCTAssertEqual(decoded.suspendThreshold, expected.suspendThreshold)
         XCTAssertEqual(decoded.carbRatioSchedule, expected.carbRatioSchedule)
-        XCTAssertEqual(decoded.insulinModel, expected.insulinModel)
+        XCTAssertEqual(decoded.insulinModelSettings, expected.insulinModelSettings)
         XCTAssertEqual(decoded.glucoseTargetRangeSchedule, expected.glucoseTargetRangeSchedule)
     }
 }

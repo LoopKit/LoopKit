@@ -45,20 +45,20 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     @ObservedObject var viewModel: InsulinModelSelectionViewModel
     var glucoseUnit: HKUnit
     var supportedModelSettings: SupportedInsulinModelSettings
-    let appName: String
     let mode: PresentationMode
+    let appName: String
     
     public init(
         viewModel: InsulinModelSelectionViewModel,
         glucoseUnit: HKUnit,
         supportedModelSettings: SupportedInsulinModelSettings,
         appName: String,
-        mode: PresentationMode = .settings
+        mode: PresentationMode
     ){
         self.viewModel = viewModel
         self.glucoseUnit = glucoseUnit
         self.supportedModelSettings = supportedModelSettings
-        self.appName = appName // TODO: pull this from the environment
+        self.appName = appName
         self.mode = mode
     }
 
@@ -82,16 +82,12 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     }()
 
     @Environment(\.dismiss) var dismiss
-
-    public var body: some View {
-        configuredBody
-    }
     
-    private var configuredBody: some View {
+    public var body: some View {
         switch mode {
-        case .acceptanceFlow:
+        case .acceptanceFlow, .settings:
             return AnyView(content)
-        default:
+        case .legacySettings:
             return AnyView(navigationContent)
         }
     }
