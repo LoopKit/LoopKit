@@ -23,7 +23,6 @@ public struct BasalRatesInformationView: View {
     public var body: some View {
         InformationView(
             title: Text(TherapySetting.basalRate.title),
-            buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to setting editor")),
             informationalContent: {text},
             onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
             mode: mode

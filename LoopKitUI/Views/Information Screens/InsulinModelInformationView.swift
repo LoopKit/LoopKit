@@ -23,7 +23,6 @@ public struct InsulinModelInformationView: View {
     public var body: some View {
         InformationView(
             title: Text(TherapySetting.insulinModel.title),
-            buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to setting editor")),
             informationalContent: {
                 VStack (alignment: .leading, spacing: 20) {
                     diaInfo

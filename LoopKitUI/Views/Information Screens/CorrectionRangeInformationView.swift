@@ -23,7 +23,6 @@ public struct CorrectionRangeInformationView: View {
     public var body: some View {
         InformationView(
             title: Text(TherapySetting.glucoseTargetRange.title),
-            buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to correction range setting editor")),
             informationalContent: {text},
             onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
             mode: mode

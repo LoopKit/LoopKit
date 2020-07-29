@@ -20,13 +20,29 @@ struct InformationView<InformationalContent: View> : View {
         buttonText: Text,
         @ViewBuilder informationalContent: () -> InformationalContent,
         onExit: @escaping () -> Void,
-        mode: PresentationMode = .acceptanceFlow
+        mode: PresentationMode
     ) {
         self.title = title
         self.buttonText = buttonText
         self.informationalContent = informationalContent()
         self.onExit = onExit
         self.mode = mode
+    }
+    
+    // Convenience initializer for info view w/next page button
+    init(
+        title: Text,
+        @ViewBuilder informationalContent: () -> InformationalContent,
+        onExit: @escaping () -> Void,
+        mode: PresentationMode = .acceptanceFlow
+    ) {
+        self.init(
+            title: title,
+            buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to setting editor")),
+            informationalContent: informationalContent,
+            onExit: onExit,
+            mode: mode
+        )
     }
     
     var body: some View {
