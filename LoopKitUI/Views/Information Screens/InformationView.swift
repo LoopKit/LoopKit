@@ -75,7 +75,7 @@ struct InformationView<InformationalContent: View> : View {
             informationalContent
             Spacer()
         }
-        .navigationBarItems(leading: cancelButton)
+        .navigationBarItems(trailing: cancelButton)
     }
     
     private var cancelButton: some View {
