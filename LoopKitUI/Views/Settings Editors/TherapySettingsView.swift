@@ -273,10 +273,11 @@ extension TherapySettingsView {
     private func section<Content>(for therapySetting: TherapySetting,
                                   addExtraSpaceAboveSection: Bool = false,
                                   @ViewBuilder content: @escaping () -> Content) -> some View where Content: View {
-        SectionWithTapToEdit(addExtraSpaceAboveSection: addExtraSpaceAboveSection,
+        SectionWithTapToEdit(isEnabled: viewModel.mode != .acceptanceFlow,
+                             header: addExtraSpaceAboveSection ? AnyView(Spacer()) : AnyView(EmptyView()),
                              title: therapySetting.title,
                              descriptiveText: therapySetting.descriptiveText,
-                             destination: self.screen(for: therapySetting),
+                             destination: screen(for: therapySetting),
                              content: content)
     }
 }
@@ -337,8 +338,9 @@ struct CorrectionRangeOverridesRangeItem: View {
     }
 }
 
-struct SectionWithTapToEdit<Content, NavigationDestination>: View where Content: View, NavigationDestination: View  {
-    let addExtraSpaceAboveSection: Bool
+struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where Header: View, Content: View, NavigationDestination: View  {
+    let isEnabled: Bool
+    let header: Header
     let title: String
     let descriptiveText: String
     let destination: (_ goBack: @escaping () -> Void) -> NavigationDestination
@@ -355,8 +357,10 @@ struct SectionWithTapToEdit<Content, NavigationDestination>: View where Content:
                 Spacer()
                 ZStack(alignment: .leading) {
                     DescriptiveText(label: descriptiveText)
-                    NavigationLink(destination: destination({ self.isActive = false }), isActive: $isActive) {
-                        EmptyView()
+                    if isEnabled {
+                        NavigationLink(destination: destination({ self.isActive = false }), isActive: $isActive) {
+                            EmptyView()
+                        }
                     }
                 }
                 Spacer()
@@ -368,10 +372,6 @@ struct SectionWithTapToEdit<Content, NavigationDestination>: View where Content:
                 .onEnded { _ in
                     self.isActive = true
         })
-    }
-    
-    private var header: some View {
-        addExtraSpaceAboveSection ? AnyView(Spacer()) : AnyView(EmptyView())
     }
 }
 

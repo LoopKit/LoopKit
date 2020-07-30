@@ -120,7 +120,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             content
             Button(action: { self.onSave?(self.viewModel.insulinModelSettings) }) {
                 Text(mode.buttonText)
-                    .buttonStyle(ActionButtonStyle(.primary))
+                    .actionButtonStyle(.primary)
                     .padding()
             }
             .disabled(viewModel.insulinModelSettings == initialInsulinModelSettings)
