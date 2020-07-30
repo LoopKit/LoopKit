@@ -35,9 +35,3 @@ extension MockCGMManager: CGMManagerUI {
         return self.mockSensorState.cgmLifecycleProgress
     }
 }
-
-extension MockCGMLifecycleProgress {
-    var color: UIColor {
-        return progressState.color
-    }
-}

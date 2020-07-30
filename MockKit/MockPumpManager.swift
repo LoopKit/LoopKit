@@ -152,7 +152,7 @@ public final class MockPumpManager: TestingPumpManager {
         {
             progressState = .warning
         } else {
-            progressState = .normal
+            progressState = .normalPump
         }
         
         return PumpManagerStatus.PumpLifecycleProgress(percentComplete: progressPercentComplete,

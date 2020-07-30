@@ -20,8 +20,9 @@ public protocol DeviceStatusHighlight {
 }
 
 public enum DeviceStatusHighlightState: String, Codable {
-    case normal
-    case warning
     case critical
+    case normalCGM
+    case normalPump
+    case warning
 }
 

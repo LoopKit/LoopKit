@@ -23,7 +23,7 @@ class PumpManagerStatusCodableTests: XCTestCase {
                               udiDeviceIdentifier: "U0D1I2")
         let pumpStatusHighlight = PumpManagerStatus.PumpStatusHighlight(localizedMessage: "Test message",
                                                                         imageName: "test.image",
-                                                                        state: .normal)
+                                                                        state: .normalPump)
         let pumpLifecycleProgress = PumpManagerStatus.PumpLifecycleProgress(percentComplete: 0.5,
                                                                             progressState: .warning)
         try assertPumpManagerStatusCodable(PumpManagerStatus(timeZone: TimeZone(identifier: "America/Los_Angeles")!,
@@ -59,7 +59,7 @@ class PumpManagerStatusCodableTests: XCTestCase {
   "pumpStatusHighlight" : {
     "imageName" : "test.image",
     "localizedMessage" : "Test message",
-    "state" : "normal"
+    "state" : "normalPump"
   },
   "timeZone" : {
     "identifier" : "America/Los_Angeles"
