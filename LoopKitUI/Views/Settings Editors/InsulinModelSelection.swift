@@ -42,20 +42,37 @@ public final class InsulinModelSelectionViewModel: ObservableObject {
 
 public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
 
+    let initialInsulinModelSettings: InsulinModelSettings
     @ObservedObject var viewModel: InsulinModelSelectionViewModel
     var glucoseUnit: HKUnit
     var supportedModelSettings: SupportedInsulinModelSettings
     let mode: PresentationMode
     let appName: String
-    
+    let onSave: ((InsulinModelSettings) -> Void)?
+
     public init(
         viewModel: InsulinModelSelectionViewModel,
         glucoseUnit: HKUnit,
         supportedModelSettings: SupportedInsulinModelSettings,
         appName: String,
-        mode: PresentationMode
+        mode: PresentationMode,
+        onSave: ((InsulinModelSettings) -> Void)? = nil
     ){
-        self.viewModel = viewModel
+        initialInsulinModelSettings = viewModel.insulinModelSettings
+        if mode == .settings {
+            // Use a copy, and then write back when saving
+            self.viewModel = InsulinModelSelectionViewModel(
+                insulinModelSettings: viewModel.insulinModelSettings,
+                insulinSensitivitySchedule: viewModel.insulinSensitivitySchedule
+            )
+            self.onSave = {
+                viewModel.insulinModelSettings = $0
+                onSave?($0)
+            }
+        } else {
+            self.viewModel = viewModel
+            self.onSave = onSave
+        }
         self.glucoseUnit = glucoseUnit
         self.supportedModelSettings = supportedModelSettings
         self.appName = appName
@@ -85,10 +102,9 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     
     public var body: some View {
         switch mode {
-        case .acceptanceFlow, .settings:
-            return AnyView(content)
-        case .legacySettings:
-            return AnyView(navigationContent)
+        case .acceptanceFlow: return AnyView(content)
+        case .settings:       return AnyView(contentWithSaveButton)
+        case .legacySettings: return AnyView(navigationContent)
         }
     }
     
@@ -97,6 +113,22 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             content
             .navigationBarItems(leading: dismissButton)
         }
+    }
+    
+    private var contentWithSaveButton: some View {
+        VStack {
+            content
+            Button(action: { self.onSave?(self.viewModel.insulinModelSettings) }) {
+                Text(mode.buttonText)
+                    .buttonStyle(ActionButtonStyle(.primary))
+                    .padding()
+            }
+            .disabled(viewModel.insulinModelSettings == initialInsulinModelSettings)
+            // Styling to mimic the floating button of a ConfigurationPage
+            .padding(.bottom)
+            .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5))
+        }
+        .edgesIgnoringSafeArea(.bottom)
     }
     
     private var content: some View {

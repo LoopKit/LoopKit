@@ -50,16 +50,25 @@ public class TherapySettingsViewModel: ObservableObject {
         self.didSave = didSave
     }
     
-    var insulinModelSelectionViewModel: InsulinModelSelectionViewModel {
+    var insulinModelSelectionViewModel: InsulinModelSelectionViewModel? {
+        guard let insulinModelSettings = therapySettings.insulinModelSettings,
+            let insulinSensitivitySchedule = therapySettings.insulinSensitivitySchedule else {
+            return nil
+        }
         let result = InsulinModelSelectionViewModel(
-            insulinModelSettings: therapySettings.insulinModelSettings!,
-            insulinSensitivitySchedule: therapySettings.insulinSensitivitySchedule!)
+            insulinModelSettings: insulinModelSettings,
+            insulinSensitivitySchedule: insulinSensitivitySchedule)
         result.$insulinModelSettings
             .dropFirst() // This is needed to avoid reading the initial value, which starts off an infinite loop
             .sink {
             [weak self] in self?.saveInsulinModel(insulinModelSettings: $0)
         }.store(in: &cancellables)
         return result
+    }
+    
+    var deliveryLimits: DeliveryLimits {
+        return DeliveryLimits(maximumBasalRate: therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
+                              maximumBolus: therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) } )
     }
     
     /// Reset to initial
