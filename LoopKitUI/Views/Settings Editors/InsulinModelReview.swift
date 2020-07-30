@@ -32,17 +32,15 @@ public struct InsulinModelReview: View {
     }
     
     public var body: some View {
-        VStack {
-            VStack {
-                InsulinModelSelection(
-                    viewModel: insulinSelectionViewModel,
-                    glucoseUnit: settingsViewModel.therapySettings.glucoseUnit!,
-                    supportedModelSettings: supportedModels,
-                    appName: appName,
-                    mode: .acceptanceFlow // don't wrap the view in a navigation view
-                )
-            }
-            VStack {
+        VStack(spacing: 0) {
+            InsulinModelSelection(
+                viewModel: insulinSelectionViewModel,
+                glucoseUnit: settingsViewModel.therapySettings.glucoseUnit!,
+                supportedModelSettings: supportedModels,
+                appName: appName,
+                mode: .acceptanceFlow // don't wrap the view in a navigation view
+            )
+            VStack(spacing: 0) {
                 Button(action: {
                     self.settingsViewModel.saveInsulinModel(insulinModelSettings: self.insulinSelectionViewModel.insulinModelSettings)
                 }) {
