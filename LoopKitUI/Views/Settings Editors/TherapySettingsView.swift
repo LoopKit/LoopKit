@@ -442,7 +442,7 @@ private extension TherapySettingsView {
                         onSave: { newRates in
                             self.viewModel.saveBasalRates(basalRates: newRates)
                             goBack()
-                    },
+                        },
                         mode: self.viewModel.mode
                     ))
                 }
@@ -458,24 +458,23 @@ private extension TherapySettingsView {
                         onSave: { limits in
                             self.viewModel.saveDeliveryLimits(limits: limits)
                             goBack()
-                    },
+                        },
                         mode: self.viewModel.mode
                     ))
                 }
             }
         case .insulinModel:
-            if self.viewModel.therapySettings.glucoseUnit != nil && self.viewModel.insulinModelSelectionViewModel != nil {
+            if self.viewModel.therapySettings.glucoseUnit != nil && self.viewModel.therapySettings.insulinModelSettings != nil {
                 return { goBack in
-                    AnyView(InsulinModelSelection(viewModel: self.viewModel.insulinModelSelectionViewModel!,
+                    AnyView(InsulinModelSelection(value: self.viewModel.therapySettings.insulinModelSettings!,
+                                                  insulinSensitivitySchedule: self.viewModel.therapySettings.insulinSensitivitySchedule,
                                                   glucoseUnit: self.viewModel.therapySettings.glucoseUnit!,
                                                   supportedModelSettings: self.viewModel.supportedInsulinModelSettings,
                                                   appName: self.viewModel.appName,
                                                   mode: self.viewModel.mode,
-                                                  onSave: { _ in
-                                                    // Note: TherapySettingsViewModel takes care of calling saveInsulinModel.
-                                                    // This is different than the others because it had to construct an
-                                                    // InsulinModelSelectionViewModel on its own and "listen" to changes
-                                                    goBack()
+                                                  onSave: { insulinModelSettings in
+                                                      self.viewModel.saveInsulinModel(insulinModelSettings: insulinModelSettings)
+                                                      goBack()
                                                   }
                     ))
                 }

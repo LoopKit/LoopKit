@@ -743,7 +743,6 @@
 		E93C86A424C8F79C0073089B /* ChartLineModel+LoopKitUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86A324C8F79C0073089B /* ChartLineModel+LoopKitUI.swift */; };
 		E93C86A624C8F7D90073089B /* ChartSettings+LoopKitUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86A524C8F7D90073089B /* ChartSettings+LoopKitUI.swift */; };
 		E93C86A824C8F7F70073089B /* InsulinModelChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86A724C8F7F60073089B /* InsulinModelChartView.swift */; };
-		E93C86AE24CF2DED0073089B /* InsulinModelReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86AD24CF2DEC0073089B /* InsulinModelReview.swift */; };
 		E93C86B024CF7C470073089B /* TherapySettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86AF24CF7C470073089B /* TherapySettingsTests.swift */; };
 		E93C86B224D080E00073089B /* CarbRatioInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86B124D080E00073089B /* CarbRatioInformationView.swift */; };
 		E93C86B624D08CAD0073089B /* InsulinSensitivityInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93C86B524D08CAD0073089B /* InsulinSensitivityInformationView.swift */; };
@@ -1538,7 +1537,6 @@
 		E93C86A324C8F79C0073089B /* ChartLineModel+LoopKitUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChartLineModel+LoopKitUI.swift"; sourceTree = "<group>"; };
 		E93C86A524C8F7D90073089B /* ChartSettings+LoopKitUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChartSettings+LoopKitUI.swift"; sourceTree = "<group>"; };
 		E93C86A724C8F7F60073089B /* InsulinModelChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModelChartView.swift; sourceTree = "<group>"; };
-		E93C86AD24CF2DEC0073089B /* InsulinModelReview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModelReview.swift; sourceTree = "<group>"; };
 		E93C86AF24CF7C470073089B /* TherapySettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TherapySettingsTests.swift; sourceTree = "<group>"; };
 		E93C86B124D080E00073089B /* CarbRatioInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbRatioInformationView.swift; sourceTree = "<group>"; };
 		E93C86B524D08CAD0073089B /* InsulinSensitivityInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinSensitivityInformationView.swift; sourceTree = "<group>"; };
@@ -2553,7 +2551,6 @@
 		E916F56724AD31F900BE3547 /* Settings Editors */ = {
 			isa = PBXGroup;
 			children = (
-				E93C86AD24CF2DEC0073089B /* InsulinModelReview.swift */,
 				89653C8324738D2B00E1BAA5 /* BasalRateScheduleEditor.swift */,
 				1D66303F24C662ED00F2EF6E /* BasalRatesReview.swift */,
 				89653C812473592600E1BAA5 /* CarbRatioScheduleEditor.swift */,
@@ -3345,7 +3342,6 @@
 				89AF78C02447E285002B4FCC /* CardStackBuilder.swift in Sources */,
 				43BA7185201EE7090058961E /* DailyValueScheduleTableViewController.swift in Sources */,
 				892A5DB32231E191008961AB /* LevelHUDView.swift in Sources */,
-				E93C86AE24CF2DED0073089B /* InsulinModelReview.swift in Sources */,
 				B41A60B223D1DBC700636320 /* UIFont.swift in Sources */,
 				B41A60AF23D1DB5B00636320 /* TableViewTitleLabel.swift in Sources */,
 				89CC35D42403450E008FB633 /* ThumbView.swift in Sources */,
