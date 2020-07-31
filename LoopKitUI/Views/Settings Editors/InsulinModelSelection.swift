@@ -95,7 +95,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     }
     
     private var contentWithSaveButton: some View {
-        VStack {
+        VStack(spacing: 0) {
             content
             Button(action: { self.doSave() }) {
                 Text(mode.buttonText)
