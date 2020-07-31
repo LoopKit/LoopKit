@@ -90,11 +90,7 @@ public struct FractionalQuantityPicker: View {
         for currentFraction: Double,
         from supportedFractionValues: [Double]
     ) -> Double {
-        // If the whole value supports the same fractional value, keep it; otherwise, truncate.
-        let nearestSupportedFraction = currentFraction.roundedToNearest(of: supportedFractionValues)
-        return abs(nearestSupportedFraction - currentFraction) <= pow(10.0, Double(-Self.maximumSupportedPrecision))
-            ? nearestSupportedFraction
-            : currentFraction.truncating(toOneOf: supportedFractionValues)
+        currentFraction.matchingOrTruncatedValue(from: supportedFractionValues, withinDecimalPlaces: Self.maximumSupportedPrecision)
     }
 
     public var body: some View {
@@ -205,36 +201,6 @@ public struct FractionalQuantityPicker: View {
 fileprivate extension FloatingPoint {
     var whole: Self { modf(self).0 }
     var fraction: Self { modf(self).1 }
-
-    /// Precondition: - `supportedValues` is sorted in ascending order.
-    func roundedToNearest(of supportedValues: [Self]) -> Self {
-        guard !supportedValues.isEmpty else {
-            return self
-        }
-
-        let splitPoint = supportedValues.partitioningIndex(where: { $0 > self })
-        switch splitPoint {
-        case supportedValues.startIndex:
-            return supportedValues.first!
-        case supportedValues.endIndex:
-            return supportedValues.last!
-        default:
-            let (lesser, greater) = (supportedValues[splitPoint - 1], supportedValues[splitPoint])
-            return (self - lesser) <= (greater - self) ? lesser : greater
-        }
-    }
-
-    /// Precondition: - `supportedValues` is sorted in ascending order.
-    func truncating(toOneOf supportedValues: [Self]) -> Self {
-        guard !supportedValues.isEmpty else {
-            return self
-        }
-
-        let splitPoint = supportedValues.partitioningIndex(where: { $0 > self })
-        return splitPoint == supportedValues.startIndex
-            ? supportedValues.first!
-            : supportedValues[splitPoint - 1]
-    }
 }
 
 fileprivate extension Decimal {

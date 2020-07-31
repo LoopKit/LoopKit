@@ -270,20 +270,3 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
             : nil
     }
 }
-
-extension Guardrail where Value == HKQuantity {
-    static func correctionRangeOverridePreset(_ preset: CorrectionRangeOverrides.Preset, correctionRangeScheduleRange: ClosedRange<HKQuantity>) -> Guardrail {
-        switch preset {
-        case .preMeal:
-            return Guardrail(
-                absoluteBounds: Guardrail.correctionRange.absoluteBounds,
-                recommendedBounds: Guardrail.correctionRange.recommendedBounds.lowerBound...max(correctionRangeScheduleRange.lowerBound, Guardrail.correctionRange.recommendedBounds.lowerBound)
-            )
-        case .workout:
-            return Guardrail(
-                absoluteBounds: Guardrail.correctionRange.absoluteBounds,
-                recommendedBounds: max(Guardrail.correctionRange.recommendedBounds.lowerBound, correctionRangeScheduleRange.lowerBound)...Guardrail.correctionRange.absoluteBounds.upperBound
-            )
-        }
-    }
-}

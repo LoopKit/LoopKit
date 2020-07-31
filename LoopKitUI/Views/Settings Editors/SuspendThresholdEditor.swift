@@ -11,22 +11,6 @@ import HealthKit
 import LoopKit
 
 
-extension Guardrail where Value == HKQuantity {
-    static let suspendThreshold = Guardrail(absoluteBounds: 54...180, recommendedBounds: 71...120, unit: .milligramsPerDeciliter)
-    
-    public static func maxSuspendThresholdValue(correctionRangeSchedule: GlucoseRangeSchedule?, preMealTargetRange: DoubleRange?, workoutTargetRange: DoubleRange?, unit: HKUnit) -> HKQuantity? {
-        
-        return [
-            correctionRangeSchedule?.minLowerBound().doubleValue(for: unit),
-            preMealTargetRange?.minValue,
-            workoutTargetRange?.minValue
-        ]
-        .compactMap { $0 }
-        .min()
-        .map { HKQuantity(unit: unit, doubleValue: $0) }
-    }
-}
-
 public struct SuspendThresholdEditor: View {
     var initialValue: HKQuantity?
     var unit: HKUnit

@@ -18,7 +18,6 @@
 		1D1FCE2724BE4DE2000300A8 /* CorrectionRangeOverrides.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2624BE4DE2000300A8 /* CorrectionRangeOverrides.swift */; };
 		1D1FCE2924BE4F11000300A8 /* TherapySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2824BE4F11000300A8 /* TherapySetting.swift */; };
 		1D1FCE2B24BE704A000300A8 /* TherapySetting+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2A24BE704A000300A8 /* TherapySetting+Settings.swift */; };
-		1D1FCE2D24BEA669000300A8 /* Guardrail+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2C24BEA669000300A8 /* Guardrail+Settings.swift */; };
 		1D24A8D524C896E100AB8DB9 /* Prescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D24A8D424C896E100AB8DB9 /* Prescription.swift */; };
 		1D25C22E246A2A1A00E87FA0 /* critical.caf in Resources */ = {isa = PBXBuildFile; fileRef = 1D25C22D246A2A1A00E87FA0 /* critical.caf */; };
 		1D4990E624A17564005CC357 /* HKQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4990E524A17564005CC357 /* HKQuery.swift */; };
@@ -409,6 +408,9 @@
 		898B4E77246DAE280053C484 /* GlucoseRangePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898B4E76246DAE280053C484 /* GlucoseRangePicker.swift */; };
 		898B4E7B246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898B4E7A246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift */; };
 		898B4E7E246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898B4E7D246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift */; };
+		898C896A24D4BF11002FA994 /* Guardrail+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898C896924D4BF11002FA994 /* Guardrail+Settings.swift */; };
+		898C896D24D4BF75002FA994 /* FloatingPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898C896C24D4BF75002FA994 /* FloatingPoint.swift */; };
+		898C897124D4C0E4002FA994 /* GuardrailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898C897024D4C0E4002FA994 /* GuardrailTests.swift */; };
 		898E6E5D2241783C0019E459 /* SetConstrainedScheduleEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D63222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.swift */; };
 		898E6E67224179310019E459 /* BaseHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E64224179300019E459 /* BaseHUDView.swift */; };
 		898E6E68224179310019E459 /* BatteryLevelHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 898E6E65224179300019E459 /* BatteryLevelHUDView.xib */; };
@@ -886,7 +888,6 @@
 		1D1FCE2624BE4DE2000300A8 /* CorrectionRangeOverrides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverrides.swift; sourceTree = "<group>"; };
 		1D1FCE2824BE4F11000300A8 /* TherapySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TherapySetting.swift; sourceTree = "<group>"; };
 		1D1FCE2A24BE704A000300A8 /* TherapySetting+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TherapySetting+Settings.swift"; sourceTree = "<group>"; };
-		1D1FCE2C24BEA669000300A8 /* Guardrail+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Guardrail+Settings.swift"; sourceTree = "<group>"; };
 		1D24A8D424C896E100AB8DB9 /* Prescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prescription.swift; sourceTree = "<group>"; };
 		1D25C22D246A2A1A00E87FA0 /* critical.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = critical.caf; sourceTree = "<group>"; };
 		1D4990E524A17564005CC357 /* HKQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKQuery.swift; sourceTree = "<group>"; };
@@ -1350,6 +1351,9 @@
 		898B4E76246DAE280053C484 /* GlucoseRangePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseRangePicker.swift; sourceTree = "<group>"; };
 		898B4E7A246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeScheduleEditor.swift; sourceTree = "<group>"; };
 		898B4E7D246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardrailConstrainedQuantityRangeView.swift; sourceTree = "<group>"; };
+		898C896924D4BF11002FA994 /* Guardrail+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Guardrail+Settings.swift"; sourceTree = "<group>"; };
+		898C896C24D4BF75002FA994 /* FloatingPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPoint.swift; sourceTree = "<group>"; };
+		898C897024D4C0E4002FA994 /* GuardrailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardrailTests.swift; sourceTree = "<group>"; };
 		898E6E64224179300019E459 /* BaseHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseHUDView.swift; sourceTree = "<group>"; };
 		898E6E65224179300019E459 /* BatteryLevelHUDView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BatteryLevelHUDView.xib; sourceTree = "<group>"; };
 		898E6E66224179300019E459 /* BatteryLevelHUDView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryLevelHUDView.swift; sourceTree = "<group>"; };
@@ -1918,6 +1922,7 @@
 			children = (
 				43D8FDF01C7290350073BE78 /* Date.swift */,
 				43D8FDE91C7290350073BE78 /* Double.swift */,
+				898C896C24D4BF75002FA994 /* FloatingPoint.swift */,
 				437AFF23203BE402008C4892 /* HKHealthStore.swift */,
 				43AF1FB11C926CDD00EA2F3D /* HKQuantity.swift */,
 				432762731D60505F0083215A /* HKQuantitySample.swift */,
@@ -2107,6 +2112,7 @@
 				437874B4202FDC8300A3D8B9 /* Persistence */,
 				C16DA83E22E8D88F008624C2 /* LoopPlugin.swift */,
 				89F6E30E244A1A5D00CB9E15 /* Guardrail.swift */,
+				898C896924D4BF11002FA994 /* Guardrail+Settings.swift */,
 				E9086B3824B3CB4B0062F5C8 /* TherapySettings.swift */,
 				1D1FCE2624BE4DE2000300A8 /* CorrectionRangeOverrides.swift */,
 				1D1FCE2824BE4F11000300A8 /* TherapySetting.swift */,
@@ -2140,6 +2146,7 @@
 				A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */,
 				A99C73762339A67A00C80963 /* GlucoseThresholdTests.swift */,
 				A95A1D862460F1250079378D /* GlucoseValueTests.swift */,
+				898C897024D4C0E4002FA994 /* GuardrailTests.swift */,
 				43D8FEC81C7294640073BE78 /* InsulinMathTests.swift */,
 				43D8FDDA1C728FDF0073BE78 /* LoopKitTests.swift */,
 				43D9888C1C87EBE400DA4467 /* LoopMathTests.swift */,
@@ -2564,7 +2571,6 @@
 				1D66303824C6562F00F2EF6E /* CorrectionRangeReview.swift */,
 				898B4E7A246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift */,
 				1D66303E24C662ED00F2EF6E /* DeliveryLimitsReview.swift */,
-				1D1FCE2C24BEA669000300A8 /* Guardrail+Settings.swift */,
 				89FC688A245A2D670075CF59 /* InsulinSensitivityScheduleEditor.swift */,
 				E93C86A724C8F7F60073089B /* InsulinModelChartView.swift */,
 				1D6EAB9024C12C090081249D /* PumpSupportedIncrements.swift */,
@@ -2823,7 +2829,7 @@
 		43D8FDC21C728FDF0073BE78 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1010;
+				LastSwiftUpdateCheck = 1160;
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "LoopKit Authors";
 				TargetAttributes = {
@@ -3249,7 +3255,6 @@
 				E9086B2924B39EDC0062F5C8 /* ChartsTableViewController.swift in Sources */,
 				43BA7187201EE7090058961E /* GlucoseRangeScheduleTableViewController.swift in Sources */,
 				B46B62AF23FF0BF6001E69BA /* SectionHeader.swift in Sources */,
-				1D1FCE2D24BEA669000300A8 /* Guardrail+Settings.swift in Sources */,
 				43BA7183201EE7090058961E /* DailyQuantityScheduleTableViewController.swift in Sources */,
 				1D1FCE2324BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift in Sources */,
 				E93BA06624A39DBC00C5D7E6 /* DismissableHostingController.swift in Sources */,
@@ -3376,6 +3381,7 @@
 				C17F39C123CD24A000FA1113 /* DeviceLog.xcdatamodeld in Sources */,
 				B42C951924A508CE00857C73 /* DeviceStatusHighlight.swift in Sources */,
 				4322B779202FA2790002837D /* NewCarbEntry.swift in Sources */,
+				898C896A24D4BF11002FA994 /* Guardrail+Settings.swift in Sources */,
 				4322B76E202FA26B0002837D /* GlucoseMath.swift in Sources */,
 				4322B791202FA2B70002837D /* Model.xcdatamodeld in Sources */,
 				891A3FDB224BEC0D00378B27 /* CarbSensitivitySchedule.swift in Sources */,
@@ -3414,6 +3420,7 @@
 				432762741D60505F0083215A /* HKQuantitySample.swift in Sources */,
 				43D8FDF81C7290350073BE78 /* Double.swift in Sources */,
 				A95A1D822460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift in Sources */,
+				898C896D24D4BF75002FA994 /* FloatingPoint.swift in Sources */,
 				43F5034B21051FCE009FA89A /* KeychainManager.swift in Sources */,
 				891A3FD5224B047200378B27 /* DailyQuantitySchedule+Override.swift in Sources */,
 				432CF87320D774220066B889 /* PumpManager.swift in Sources */,
@@ -3553,6 +3560,7 @@
 				A971C8A223C6B17D0099BEFC /* SettingsStoreTests.swift in Sources */,
 				1DFB99D6245CB2E900DCC8C9 /* AlertTests.swift in Sources */,
 				4303C4941E2D665F00ADEDC8 /* TimeZone.swift in Sources */,
+				898C897124D4C0E4002FA994 /* GuardrailTests.swift in Sources */,
 				4322B76D202F9EF20002837D /* GlucoseMathTests.swift in Sources */,
 				43025DAF1D5AB2E300106C28 /* NSTimeInterval.swift in Sources */,
 				43D8FDDB1C728FDF0073BE78 /* LoopKitTests.swift in Sources */,
