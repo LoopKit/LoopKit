@@ -24,7 +24,7 @@ public class TherapySettingsViewModel: ObservableObject {
     let pumpSupportedIncrements: PumpSupportedIncrements?
     let syncPumpSchedule: PumpManager.SyncSchedule?
     let sensitivityOverridesEnabled: Bool
-    let prescription: Prescription?
+    public var prescription: Prescription?
     let appName: String
 
     lazy private var cancellables = Set<AnyCancellable>()

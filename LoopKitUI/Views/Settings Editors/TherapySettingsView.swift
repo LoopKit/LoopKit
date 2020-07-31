@@ -62,7 +62,7 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
         .onAppear() {
             UITableView.appearance().separatorStyle = .singleLine // Add lines between rows
         }
-        .navigationBarTitle(Text(LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")))
+        .navigationBarTitle(Text(LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")), displayMode: .large)
         .environment(\.horizontalSizeClass, horizontalOverride)
     }
     
@@ -213,12 +213,15 @@ extension TherapySettingsView {
     private var insulinModelSection: some View {
         section(for: .insulinModel) {
             if self.viewModel.therapySettings.insulinModelSettings != nil {
+                // Spacing and paddings here is my best guess based on the design...
                 VStack(alignment: .leading, spacing: 4) {
                     Text(self.viewModel.therapySettings.insulinModelSettings!.title)
                         .font(.body)
+                        .padding(.top, 5)
                     Text(self.viewModel.therapySettings.insulinModelSettings!.subtitle)
                         .font(.footnote)
                         .foregroundColor(.secondary)
+                        .padding(.bottom, 8)
                 }
             }
         }
@@ -398,14 +401,20 @@ private extension TherapySettingsView {
         case .correctionRangeOverrides:
             if self.viewModel.therapySettings.glucoseUnit != nil {
                 return { goBack in
-                    AnyView(CorrectionRangeScheduleEditor(
-                        schedule: self.viewModel.therapySettings.glucoseTargetRangeSchedule,
+                   AnyView(CorrectionRangeOverridesEditor(
+                        value: CorrectionRangeOverrides(
+                            preMeal: self.viewModel.therapySettings.preMealTargetRange,
+                            workout: self.viewModel.therapySettings.workoutTargetRange,
+                            unit: self.viewModel.therapySettings.glucoseUnit!
+                        ),
                         unit: self.viewModel.therapySettings.glucoseUnit!,
+                        correctionRangeScheduleRange: self.viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange(),
                         minValue: self.viewModel.therapySettings.suspendThreshold?.quantity,
-                        onSave: { newSchedule in
-                            self.viewModel.saveCorrectionRange(range: newSchedule)
+                        onSave: { overrides in
+                            self.viewModel.saveCorrectionRangeOverrides(overrides: overrides, unit: self.viewModel.therapySettings.glucoseUnit!)
                             goBack()
-                    },
+                        },
+                        sensitivityOverridesEnabled: self.viewModel.sensitivityOverridesEnabled,
                         mode: self.viewModel.mode
                     ))
                 }
