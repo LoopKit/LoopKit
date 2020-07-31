@@ -1646,13 +1646,6 @@
 			path = Insulin;
 			sourceTree = "<group>";
 		};
-		1D60355C24D39E260095DC2A /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		1D640FF324524269008F9755 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -2035,7 +2028,6 @@
 				892A5D35222F03CB008961AB /* LoopTestingKit */,
 				43BA718D202020140058961E /* Frameworks */,
 				43D8FDCC1C728FDF0073BE78 /* Products */,
-				1D60355C24D39E260095DC2A /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
