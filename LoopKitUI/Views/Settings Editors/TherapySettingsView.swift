@@ -479,7 +479,6 @@ private extension TherapySettingsView {
                                                   insulinSensitivitySchedule: self.viewModel.therapySettings.insulinSensitivitySchedule,
                                                   glucoseUnit: self.viewModel.therapySettings.glucoseUnit!,
                                                   supportedModelSettings: self.viewModel.supportedInsulinModelSettings,
-                                                  appName: self.viewModel.appName,
                                                   mode: self.viewModel.mode,
                                                   onSave: { insulinModelSettings in
                                                       self.viewModel.saveInsulinModel(insulinModelSettings: insulinModelSettings)
@@ -547,7 +546,6 @@ public struct TherapySettingsView_Previews: PreviewProvider {
     static func preview_viewModel(mode: PresentationMode) -> TherapySettingsViewModel {
         TherapySettingsViewModel(mode: mode,
                                  therapySettings: preview_therapySettings,
-                                 appName: "Loop",
                                  supportedInsulinModelSettings: SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                                  pumpSupportedIncrements: PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
                                                                                   bolusVolumes: preview_supportedBolusVolumes,
@@ -568,7 +566,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                 .colorScheme(.dark)
                 .previewDevice(PreviewDevice(rawValue: "iPhone XS Max"))
                 .previewDisplayName("XS Max dark (settings)")
-            TherapySettingsView(viewModel: TherapySettingsViewModel(mode: .legacySettings, therapySettings: TherapySettings(), appName: "Loop"))
+            TherapySettingsView(viewModel: TherapySettingsViewModel(mode: .legacySettings, therapySettings: TherapySettings()))
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (Empty TherapySettings)")

@@ -11,13 +11,14 @@ import SwiftUI
 import LoopKit
 
 public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
+    @Environment(\.appName) private var appName   
+    
     let initialValue: InsulinModelSettings
     @State var value: InsulinModelSettings
     let insulinSensitivitySchedule: InsulinSensitivitySchedule
     let glucoseUnit: HKUnit
     let supportedModelSettings: SupportedInsulinModelSettings
     let mode: PresentationMode
-    let appName: String
     let save: (InsulinModelSettings) -> Void
 
     static let defaultInsulinSensitivitySchedule = InsulinSensitivitySchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue<Double>(startTime: 0, value: 40)])!
@@ -45,7 +46,6 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
         glucoseUnit: HKUnit,
         supportedModelSettings: SupportedInsulinModelSettings,
-        appName: String,
         mode: PresentationMode,
         onSave save: @escaping (InsulinModelSettings) -> Void
     ){
@@ -55,7 +55,6 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         self.save = save
         self.glucoseUnit = glucoseUnit
         self.supportedModelSettings = supportedModelSettings
-        self.appName = appName
         self.mode = mode
     }
 
