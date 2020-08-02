@@ -163,6 +163,11 @@ public final class TemporaryScheduleOverrideHistory {
             base.applyingCarbRatioMultiplier(from: override, relativeTo: referenceDate)
         }
     }
+    
+    public func getEvents(relativeTo referenceDate: Date = Date()) -> [TemporaryScheduleOverride] {
+        filterRecentEvents(relativeTo: referenceDate)
+        return recentEvents.map { $0.override }
+    }
 
     private func relevantPeriod(relativeTo referenceDate: Date) -> DateInterval {
         let window = CarbStore.defaultMaximumAbsorptionTimeInterval
