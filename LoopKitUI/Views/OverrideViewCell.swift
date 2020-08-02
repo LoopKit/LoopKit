@@ -10,24 +10,26 @@ import SwiftUI
 
 public struct OverrideViewCell: View {
     var symbolLabel: Text
-    var startTimeLabel: Text
     var nameLabel: Text
     var targetRangeLabel: Text
-    // var insulinNeedsBar
     var durationLabel: Text
+    var subtitleLabel: Text
+    var insulinNeedsScaleFactor: Double?
     
     public init(
         symbol: Text,
-        startTime: Text,
         name: Text,
         targetRange: Text,
-        duration: Text
+        duration: Text,
+        subtitle: Text,
+        insulinNeedsScaleFactor: Double?
     ) {
-        symbolLabel = symbol
-        startTimeLabel = startTime
-        nameLabel = name
-        targetRangeLabel = targetRange
-        durationLabel = duration
+        self.symbolLabel = symbol
+        self.nameLabel = name
+        self.targetRangeLabel = targetRange
+        self.durationLabel = duration
+        self.subtitleLabel = subtitle
+        self.insulinNeedsScaleFactor = insulinNeedsScaleFactor
     }
 
     public var body: some View {
@@ -40,7 +42,7 @@ public struct OverrideViewCell: View {
                     targetRangeLabel
                     .font(.caption)
                     .foregroundColor(Color.gray)
-                    // insulinNeedsBar
+                    insulinNeedsBarIfNeeded
                 }
                 Spacer()
                 VStack {
@@ -50,9 +52,18 @@ public struct OverrideViewCell: View {
                         .font(.caption)
                     }
                     .foregroundColor(Color.gray)
-                    scheduleButton
+                    subtitleLabel
+                    .font(.caption)
                 }
 
+            }
+        }
+    }
+    
+    private var insulinNeedsBarIfNeeded: some View {
+        Group {
+            if insulinNeedsScaleFactor != nil {
+                SegmentedGaugeBar(insulinNeedsScaler: insulinNeedsScaleFactor!)
             }
         }
     }
@@ -62,20 +73,28 @@ public struct OverrideViewCell: View {
         .resizable()
         .frame(width: 12.0, height: 12.0)
     }
-
-    var scheduleButton: some View {
-        Button(action: {
-            print("Anna TODO")
-        }) {
-            Image(systemName: "calendar")
-            .resizable()
-            .frame(width: 20.0, height: 20.0)
-        }
-    }
 }
 
-struct OverrideSelectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        OverrideViewCell(symbol: Text("⚾️"), startTime: Text("TODO"), name: Text("Baseball"), targetRange: Text("100-100"), duration: Text("1h"))
+struct SegmentedGaugeBar: UIViewRepresentable {
+    var insulinNeedsScaler: Double
+    
+    init(insulinNeedsScaler: Double) {
+        self.insulinNeedsScaler = insulinNeedsScaler
+    }
+    
+    func makeUIView(context: Context) -> SegmentedGaugeBarView {
+        let view = SegmentedGaugeBarView()
+        view.backgroundColor = .white
+        view.numberOfSegments = 2
+        view.startColor = UIColor.orange
+        view.endColor = UIColor.red
+        view.borderWidth = 1
+        view.borderColor = .systemGray
+        view.progress = insulinNeedsScaler
+        return view
+    }
+    
+    func updateUIView(_ view: SegmentedGaugeBarView, context: Context) {
+       
     }
 }
