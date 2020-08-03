@@ -40,6 +40,30 @@ public struct SuspendThresholdEditor: View {
         self.save = save
         self.mode = mode
     }
+    
+    public init(
+           viewModel: TherapySettingsViewModel,
+           didSave: (() -> Void)? = nil
+    ) {
+        precondition(viewModel.therapySettings.glucoseUnit != nil)
+        let unit = viewModel.therapySettings.glucoseUnit!
+        self.init(
+            value: viewModel.therapySettings.suspendThreshold?.quantity,
+            unit: unit,
+            maxValue: Guardrail.maxSuspendThresholdValue(
+                correctionRangeSchedule: viewModel.therapySettings.glucoseTargetRangeSchedule,
+                preMealTargetRange: viewModel.therapySettings.preMealTargetRange,
+                workoutTargetRange: viewModel.therapySettings.workoutTargetRange,
+                unit: unit
+            ),
+            onSave: { [weak viewModel] newValue in
+                let newThreshold = GlucoseThreshold(unit: viewModel!.therapySettings.glucoseUnit!, value: newValue.doubleValue(for: viewModel!.therapySettings.glucoseUnit!))
+                viewModel?.saveSuspendThreshold(value: newThreshold)
+                didSave?()
+            },
+            mode: viewModel.mode
+        )
+    }
 
     private static func defaultValue(for unit: HKUnit) -> HKQuantity {
         switch unit {
