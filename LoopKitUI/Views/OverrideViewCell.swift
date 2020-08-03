@@ -40,7 +40,7 @@ public struct OverrideViewCell: View {
                 symbolLabel
                 .font(.largeTitle)
                 .frame(width: Self.symbolWidth) // for alignment
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 3) {
                     nameLabel
                     targetRangeLabel
                     .font(.caption)
@@ -64,14 +64,15 @@ public struct OverrideViewCell: View {
     }
     
     private var insulinNeedsBarIfNeeded: some View {
-        Group {
-            if insulinNeedsScaleFactor != nil {
-                GeometryReader { geo in
-                    SegmentedGaugeBar(insulinNeedsScaler: self.insulinNeedsScaleFactor!)
-                    // ANNA TODO: fix alignment
-                    .frame(maxWidth: geo.size.width / 2, minHeight: 12)
+        GeometryReader { geo in
+            HStack {
+                Group {
+                    if self.insulinNeedsScaleFactor != nil {
+                        SegmentedGaugeBar(insulinNeedsScaler: self.insulinNeedsScaleFactor!)
+                        .frame(minHeight: 13)
+                    }
                 }
-                
+                Spacer(minLength: geo.size.width * 0.4) // Hack to fix spacing
             }
         }
     }
