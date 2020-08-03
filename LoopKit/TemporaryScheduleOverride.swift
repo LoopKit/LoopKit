@@ -50,7 +50,19 @@ public struct TemporaryScheduleOverride: Hashable {
     public var startDate: Date
     public let syncIdentifier: UUID
     public let enactTrigger: EnactTrigger
-    var end: End = .natural
+    
+    var actualEnd: End = .natural
+    
+    public var actualEndDate: Date {
+        switch actualEnd {
+        case .natural:
+            return scheduledEndDate
+        case .early(let endDate):
+            return endDate
+        case .deleted:
+            return scheduledEndDate
+        }
+    }
 
     public var duration: Duration {
         didSet {
@@ -58,7 +70,7 @@ public struct TemporaryScheduleOverride: Hashable {
         }
     }
 
-    public var endDate: Date {
+    public var scheduledEndDate: Date {
         get {
             return startDate + duration.timeInterval
         }
@@ -74,16 +86,16 @@ public struct TemporaryScheduleOverride: Hashable {
 
     public var activeInterval: DateInterval {
         get {
-            return DateInterval(start: startDate, end: endDate)
+            return DateInterval(start: startDate, end: actualEndDate)
         }
         set {
             startDate = newValue.start
-            endDate = newValue.end
+            scheduledEndDate = newValue.end
         }
     }
 
     public func hasFinished(relativeTo date: Date = Date()) -> Bool {
-        return date > endDate
+        return date > scheduledEndDate
     }
 
     public init(context: Context, settings: TemporaryScheduleOverrideSettings, startDate: Date, duration: Duration, enactTrigger: EnactTrigger, syncIdentifier: UUID) {

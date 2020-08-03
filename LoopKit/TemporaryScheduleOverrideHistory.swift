@@ -28,11 +28,11 @@ private struct OverrideEvent: Equatable {
     var actualEndDate: Date {
         switch end {
         case .natural:
-            return override.endDate
+            return override.scheduledEndDate
         case .early(let endDate):
             return endDate
         case .deleted:
-            return override.endDate
+            return override.scheduledEndDate
         }
     }
 }
@@ -95,6 +95,8 @@ public final class TemporaryScheduleOverrideHistory {
         recentEvents.mutateEach { (event) in
             if event.override.startDate >= date {
                 event.end = .deleted
+                // ANNA TODO
+                event.override.actualEnd = .deleted
                 event.modificationCounter = modificationCounter
             }
         }
@@ -131,10 +133,14 @@ public final class TemporaryScheduleOverrideHistory {
             
             if recentEvents[index].end != .deleted {
                 if recentEvents[index].actualEndDate > date {
+                    // ANNA TODO
                     if recentEvents[index].override.startDate > date {
                         recentEvents[index].end = .deleted
+                        recentEvents[index].override.actualEnd = .deleted
+                        
                     } else {
                         recentEvents[index].end = .early(date)
+                        recentEvents[index].override.actualEnd = .early(date)
                     }
                     recentEvents[index].modificationCounter = modificationCounter
                 }
@@ -193,16 +199,16 @@ public final class TemporaryScheduleOverrideHistory {
         var overrides = recentEvents.filter({$0.end != .deleted}).map { event -> TemporaryScheduleOverride in
             var override = event.override
             if case .early(let endDate) = event.end {
-                override.endDate = endDate
+                override.scheduledEndDate = endDate
             }
             return override
         }
         let period = relevantPeriod(relativeTo: referenceDate)
         overrides.mutateEach { override in
             // Save the actual (computed) end date prior to modifying the start date, which shifts the whole interval
-            let end = override.endDate
+            let end = override.scheduledEndDate
             override.startDate = max(override.startDate, period.start)
-            override.endDate = min(end, period.end)
+            override.scheduledEndDate = min(end, period.end)
         }
         validateOverridesReflectingEnabledDuration(overrides)
         return overrides
@@ -246,7 +252,7 @@ public final class TemporaryScheduleOverrideHistory {
             if anchor == nil || event.modificationCounter >= anchor! {
                 var override = event.override
                 if case .early(let endDate) = event.end {
-                    override.endDate = endDate
+                    override.scheduledEndDate = endDate
                 }
                 if event.end == .deleted {
                     deletedOverrides.append(override)
@@ -279,10 +285,13 @@ extension OverrideEvent: RawRepresentable {
             self.modificationCounter = 0
         }
         
+        // ANNA TODO
         if let isDeleted = rawValue["isDeleted"] as? Bool, isDeleted {
             self.end = .deleted
+            self.override.actualEnd = .deleted
         } else if let endDate = rawValue["endDate"] as? Date {
             self.end = .early(endDate)
+            self.override.actualEnd = .early(endDate)
         }
     }
 
