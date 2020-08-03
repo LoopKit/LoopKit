@@ -8,13 +8,13 @@
 
 import Foundation
 
+public enum End: Equatable, Hashable {
+    case natural
+    case early(Date)
+    case deleted // Ended before started
+}
 
 private struct OverrideEvent: Equatable {
-    enum End: Equatable {
-        case natural
-        case early(Date)
-        case deleted // Ended before started
-    }
 
     var override: TemporaryScheduleOverride
     var end: End = .natural

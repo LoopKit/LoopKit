@@ -50,6 +50,7 @@ public struct TemporaryScheduleOverride: Hashable {
     public var startDate: Date
     public let syncIdentifier: UUID
     public let enactTrigger: EnactTrigger
+    var end: End = .natural
 
     public var duration: Duration {
         didSet {

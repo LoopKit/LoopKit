@@ -64,6 +64,7 @@ public struct OverrideViewCell: View {
         Group {
             if insulinNeedsScaleFactor != nil {
                 SegmentedGaugeBar(insulinNeedsScaler: insulinNeedsScaleFactor!)
+                .frame(minHeight: 12)
             }
         }
     }
