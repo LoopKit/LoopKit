@@ -16,6 +16,8 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
     var textColor: UIColor
     var textAlignment: NSTextAlignment
     var keyboardType: UIKeyboardType
+    var autocapitalizationType: UITextAutocapitalizationType
+    var autocorrectionType: UITextAutocorrectionType
 
     public init(
         text: Binding<String>,
@@ -23,7 +25,9 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         font: UIFont = .preferredFont(forTextStyle: .body),
         textColor: UIColor = .label,
         textAlignment: NSTextAlignment = .natural,
-        keyboardType: UIKeyboardType = .default
+        keyboardType: UIKeyboardType = .default,
+        autocapitalizationType: UITextAutocapitalizationType = .sentences,
+        autocorrectionType: UITextAutocorrectionType = .default
     ) {
         self._text = text
         self.placeholder = placeholder
@@ -31,6 +35,8 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         self.textColor = textColor
         self.textAlignment = textAlignment
         self.keyboardType = keyboardType
+        self.autocapitalizationType = autocapitalizationType
+        self.autocorrectionType = autocorrectionType
     }
 
     public func makeUIView(context: Context) -> UITextField {
@@ -40,6 +46,8 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         textField.textColor = textColor
         textField.textAlignment = textAlignment
         textField.keyboardType = keyboardType
+        textField.autocapitalizationType = autocapitalizationType
+        textField.autocorrectionType = autocorrectionType
         textField.inputAccessoryView = makeDoneToolbar(for: textField)
         textField.addTarget(context.coordinator, action: #selector(Coordinator.textChanged), for: .editingChanged)
         return textField
