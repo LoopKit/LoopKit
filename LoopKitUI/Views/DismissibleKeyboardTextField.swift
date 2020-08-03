@@ -18,6 +18,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
     var keyboardType: UIKeyboardType
     var autocapitalizationType: UITextAutocapitalizationType
     var autocorrectionType: UITextAutocorrectionType
+    var shouldBecomeFirstResponder: Bool
 
     public init(
         text: Binding<String>,
@@ -27,7 +28,8 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         textAlignment: NSTextAlignment = .natural,
         keyboardType: UIKeyboardType = .default,
         autocapitalizationType: UITextAutocapitalizationType = .sentences,
-        autocorrectionType: UITextAutocorrectionType = .default
+        autocorrectionType: UITextAutocorrectionType = .default,
+        shouldBecomeFirstResponder: Bool = false
     ) {
         self._text = text
         self.placeholder = placeholder
@@ -37,17 +39,11 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         self.keyboardType = keyboardType
         self.autocapitalizationType = autocapitalizationType
         self.autocorrectionType = autocorrectionType
+        self.shouldBecomeFirstResponder = shouldBecomeFirstResponder
     }
 
     public func makeUIView(context: Context) -> UITextField {
         let textField = UITextField()
-        textField.placeholder = placeholder
-        textField.font = font
-        textField.textColor = textColor
-        textField.textAlignment = textAlignment
-        textField.keyboardType = keyboardType
-        textField.autocapitalizationType = autocapitalizationType
-        textField.autocorrectionType = autocorrectionType
         textField.inputAccessoryView = makeDoneToolbar(for: textField)
         textField.addTarget(context.coordinator, action: #selector(Coordinator.textChanged), for: .editingChanged)
         return textField
@@ -64,6 +60,18 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
 
     public func updateUIView(_ textField: UITextField, context: Context) {
         textField.text = text
+        textField.placeholder = placeholder
+        textField.font = font
+        textField.textColor = textColor
+        textField.textAlignment = textAlignment
+        textField.keyboardType = keyboardType
+        textField.autocapitalizationType = autocapitalizationType
+        textField.autocorrectionType = autocorrectionType
+
+        if shouldBecomeFirstResponder && !context.coordinator.didBecomeFirstResponder {
+            textField.becomeFirstResponder()
+            context.coordinator.didBecomeFirstResponder = true
+        }
     }
 
     public func makeCoordinator() -> Coordinator {
@@ -72,6 +80,10 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
 
     public final class Coordinator {
         var parent: DismissibleKeyboardTextField
+
+        // Track in the coordinator to ensure the text field only becomes first responder once,
+        // rather than on every state change.
+        var didBecomeFirstResponder = false
 
         init(_ parent: DismissibleKeyboardTextField) {
             self.parent = parent
