@@ -277,6 +277,7 @@ class InsulinMathTests: XCTestCase {
     
     func testInsulinOnBoardLimitsForExponentialModel() {
         let insulinModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75))
+        let childModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 65))
         
         XCTAssertEqual(1, insulinModel.percentEffectRemaining(at: .minutes(-1)), accuracy: 0.001)
         XCTAssertEqual(1, insulinModel.percentEffectRemaining(at: .minutes(0)), accuracy: 0.001)
@@ -285,6 +286,9 @@ class InsulinMathTests: XCTestCase {
         
         // Test random point
         XCTAssertEqual(0.5110493617156, insulinModel.percentEffectRemaining(at: .minutes(108)), accuracy: 0.001)
+        
+        // Test for child curve
+        XCTAssertEqual(0.6002510111374046, childModel.percentEffectRemaining(at: .minutes(82)), accuracy: 0.001)
 
     }
     
