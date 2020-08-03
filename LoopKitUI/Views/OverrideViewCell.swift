@@ -35,31 +35,29 @@ public struct OverrideViewCell: View {
     }
 
     public var body: some View {
-        Section {
-            HStack {
-                symbolLabel
-                .font(.largeTitle)
-                .frame(width: Self.symbolWidth) // for alignment
-                VStack(alignment: .leading, spacing: 3) {
-                    nameLabel
-                    targetRangeLabel
-                    .font(.caption)
-                    .foregroundColor(Color.gray)
-                    insulinNeedsBarIfNeeded
-                }
-                Spacer()
-                VStack {
-                    HStack(spacing: 4) {
-                        timer
-                        durationLabel
-                        .font(.caption)
-                    }
-                    .foregroundColor(Color.gray)
-                    subtitleLabel
-                    .font(.caption)
-                }
-
+        HStack {
+            symbolLabel
+            .font(.largeTitle)
+            .frame(width: Self.symbolWidth) // for alignment
+            VStack(alignment: .leading, spacing: 3) {
+                nameLabel
+                targetRangeLabel
+                .font(.caption)
+                .foregroundColor(Color.gray)
+                insulinNeedsBarIfNeeded
             }
+            Spacer()
+            VStack {
+                HStack(spacing: 4) {
+                    timer
+                    durationLabel
+                    .font(.caption)
+                }
+                .foregroundColor(Color.gray)
+                subtitleLabel
+                .font(.caption)
+            }
+
         }
     }
     
