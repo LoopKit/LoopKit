@@ -17,7 +17,6 @@ public enum End: Equatable, Hashable {
 private struct OverrideEvent: Equatable {
 
     var override: TemporaryScheduleOverride
-    var end: End = .natural
     var modificationCounter: Int
 
     init(override: TemporaryScheduleOverride, modificationCounter: Int) {
@@ -26,7 +25,7 @@ private struct OverrideEvent: Equatable {
     }
 
     var actualEndDate: Date {
-        switch end {
+        switch override.actualEnd {
         case .natural:
             return override.scheduledEndDate
         case .early(let endDate):
@@ -88,14 +87,12 @@ public final class TemporaryScheduleOverrideHistory {
     }
     
     private var lastUndeletedEvent: OverrideEvent? {
-        return recentEvents.reversed().first { $0.end != .deleted }
+        return recentEvents.reversed().first { $0.override.actualEnd != .deleted }
     }
     
     private func deleteEventsStartingOnOrAfter(_ date: Date) {
         recentEvents.mutateEach { (event) in
             if event.override.startDate >= date {
-                event.end = .deleted
-                // ANNA TODO
                 event.override.actualEnd = .deleted
                 event.modificationCounter = modificationCounter
             }
@@ -131,15 +128,12 @@ public final class TemporaryScheduleOverrideHistory {
         while index != recentEvents.startIndex {
             recentEvents.formIndex(before: &index)
             
-            if recentEvents[index].end != .deleted {
+            if recentEvents[index].override.actualEnd != .deleted {
                 if recentEvents[index].actualEndDate > date {
-                    // ANNA TODO
                     if recentEvents[index].override.startDate > date {
-                        recentEvents[index].end = .deleted
                         recentEvents[index].override.actualEnd = .deleted
                         
                     } else {
-                        recentEvents[index].end = .early(date)
                         recentEvents[index].override.actualEnd = .early(date)
                     }
                     recentEvents[index].modificationCounter = modificationCounter
@@ -196,9 +190,9 @@ public final class TemporaryScheduleOverrideHistory {
     }
 
     private func overridesReflectingEnabledDuration(relativeTo referenceDate: Date) -> [TemporaryScheduleOverride] {
-        var overrides = recentEvents.filter({$0.end != .deleted}).map { event -> TemporaryScheduleOverride in
+        var overrides = recentEvents.filter({$0.override.actualEnd != .deleted}).map { event -> TemporaryScheduleOverride in
             var override = event.override
-            if case .early(let endDate) = event.end {
+            if case .early(let endDate) = event.override.actualEnd {
                 override.scheduledEndDate = endDate
             }
             return override
@@ -251,10 +245,10 @@ public final class TemporaryScheduleOverrideHistory {
         for event in recentEvents {
             if anchor == nil || event.modificationCounter >= anchor! {
                 var override = event.override
-                if case .early(let endDate) = event.end {
+                if case .early(let endDate) = event.override.actualEnd {
                     override.scheduledEndDate = endDate
                 }
-                if event.end == .deleted {
+                if event.override.actualEnd == .deleted {
                     deletedOverrides.append(override)
                 } else {
                     resultOverrides.append(override)
@@ -284,13 +278,10 @@ extension OverrideEvent: RawRepresentable {
         } else {
             self.modificationCounter = 0
         }
-        
-        // ANNA TODO
+
         if let isDeleted = rawValue["isDeleted"] as? Bool, isDeleted {
-            self.end = .deleted
             self.override.actualEnd = .deleted
         } else if let endDate = rawValue["endDate"] as? Date {
-            self.end = .early(endDate)
             self.override.actualEnd = .early(endDate)
         }
     }
@@ -299,10 +290,10 @@ extension OverrideEvent: RawRepresentable {
         var raw: RawValue = [
             "override": override.rawValue,
             "modificationCounter": modificationCounter,
-            "isDeleted": self.end == .deleted,
+            "isDeleted": override.actualEnd == .deleted,
         ]
 
-        if case .early(let endDate) = end {
+        if case .early(let endDate) = override.actualEnd {
             raw["endDate"] = endDate
         }
 

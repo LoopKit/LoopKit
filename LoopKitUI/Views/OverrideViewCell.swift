@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct OverrideViewCell: View {
-    static let symbolWidth: CGFloat = 20
+    static let symbolWidth: CGFloat = 40
     
     var symbolLabel: Text
     var nameLabel: Text
@@ -38,14 +38,13 @@ public struct OverrideViewCell: View {
         Section {
             HStack {
                 symbolLabel
-                .font(.title)
+                .font(.largeTitle)
                 .frame(width: Self.symbolWidth) // for alignment
                 VStack(alignment: .leading) {
                     nameLabel
                     targetRangeLabel
                     .font(.caption)
                     .foregroundColor(Color.gray)
-                    
                     insulinNeedsBarIfNeeded
                 }
                 Spacer()
@@ -69,6 +68,7 @@ public struct OverrideViewCell: View {
             if insulinNeedsScaleFactor != nil {
                 GeometryReader { geo in
                     SegmentedGaugeBar(insulinNeedsScaler: self.insulinNeedsScaleFactor!)
+                    // ANNA TODO: fix alignment
                     .frame(maxWidth: geo.size.width / 2, minHeight: 12)
                 }
                 
