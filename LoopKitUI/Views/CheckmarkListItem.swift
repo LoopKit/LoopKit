@@ -24,7 +24,18 @@ public struct CheckmarkListItem: View {
         self.isEnabled = isEnabled
     }
 
+    @ViewBuilder
     public var body: some View {
+        if isEnabled {
+            Button(action: { self.isSelected = true }) {
+                content
+            }
+        } else {
+            content
+        }
+    }
+    
+    private var content: some View {
         HStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
                 title
@@ -60,11 +71,9 @@ public struct CheckmarkListItem: View {
                 .background(Circle().stroke()) // Ensure size aligns with open circle
                 .foregroundColor(.accentColor)
         } else {
-            Button(action: { self.isSelected = true }) {
-                Circle()
-                    .stroke()
-                    .foregroundColor(Color(.systemGray4))
-            }
+            Circle()
+                .stroke()
+                .foregroundColor(Color(.systemGray4))
         }
     }
     

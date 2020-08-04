@@ -6,8 +6,10 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
+import Combine
 import LoopKit
 import HealthKit
+import SwiftUI
 
 public class TherapySettingsViewModel: ObservableObject {
     public typealias SaveCompletion = (TherapySetting, TherapySettings) -> Void
@@ -22,7 +24,9 @@ public class TherapySettingsViewModel: ObservableObject {
     let pumpSupportedIncrements: PumpSupportedIncrements?
     let syncPumpSchedule: PumpManager.SyncSchedule?
     let sensitivityOverridesEnabled: Bool
-    let prescription: Prescription?
+    public var prescription: Prescription?
+
+    lazy private var cancellables = Set<AnyCancellable>()
 
     public init(mode: PresentationMode,
                 therapySettings: TherapySettings,
@@ -41,6 +45,11 @@ public class TherapySettingsViewModel: ObservableObject {
         self.prescription = prescription
         self.supportedInsulinModelSettings = supportedInsulinModelSettings
         self.didSave = didSave
+    }
+    
+    var deliveryLimits: DeliveryLimits {
+        return DeliveryLimits(maximumBasalRate: therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
+                              maximumBolus: therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) } )
     }
     
     /// Reset to initial
@@ -75,6 +84,11 @@ public class TherapySettingsViewModel: ObservableObject {
         didSave?(TherapySetting.deliveryLimits, therapySettings)
     }
     
+    public func saveInsulinModel(insulinModelSettings: InsulinModelSettings) {
+        therapySettings.insulinModelSettings = insulinModelSettings
+        didSave?(TherapySetting.insulinModel, therapySettings)
+    }
+    
     public func saveCarbRatioSchedule(carbRatioSchedule: CarbRatioSchedule) {
         therapySettings.carbRatioSchedule = carbRatioSchedule
         didSave?(TherapySetting.carbRatio, therapySettings)
@@ -83,10 +97,5 @@ public class TherapySettingsViewModel: ObservableObject {
     public func saveInsulinSensitivitySchedule(insulinSensitivitySchedule: InsulinSensitivitySchedule) {
         therapySettings.insulinSensitivitySchedule = insulinSensitivitySchedule
         didSave?(TherapySetting.insulinSensitivity, therapySettings)
-    }
-    
-    public func saveInsulinModel(insulinModel: InsulinModelSettings) {
-        therapySettings.insulinModel = insulinModel
-        didSave?(TherapySetting.insulinModel, therapySettings)
     }
 }

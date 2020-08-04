@@ -10,55 +10,51 @@ import HealthKit
 import SwiftUI
 import LoopKit
 
-
-public final class InsulinModelSelectionViewModel: ObservableObject {
-    @Published public var insulinModelSettings: InsulinModelSettings
-    var insulinSensitivitySchedule: InsulinSensitivitySchedule
+public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
+    @Environment(\.appName) private var appName   
+    
+    let initialValue: InsulinModelSettings
+    @State var value: InsulinModelSettings
+    let insulinSensitivitySchedule: InsulinSensitivitySchedule
+    let glucoseUnit: HKUnit
+    let supportedModelSettings: SupportedInsulinModelSettings
+    let mode: PresentationMode
+    let save: (InsulinModelSettings) -> Void
 
     static let defaultInsulinSensitivitySchedule = InsulinSensitivitySchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue<Double>(startTime: 0, value: 40)])!
-
-    static let defaultWalshInsulinModelDuration = TimeInterval(hours: 6)
-    static let validWalshModelDurationRange = InsulinModelSettings.validWalshModelDurationRange
-
-    var walshActionDuration: TimeInterval {
-        get {
-            if case .walsh(let walshModel) = insulinModelSettings {
-                return walshModel.actionDuration
-            } else {
-                return Self.defaultWalshInsulinModelDuration
-            }
-        }
-        set {
-            precondition(Self.validWalshModelDurationRange.contains(newValue))
-            insulinModelSettings = .walsh(WalshInsulinModel(actionDuration: newValue))
-        }
-    }
-
-    public init(insulinModelSettings: InsulinModelSettings, insulinSensitivitySchedule: InsulinSensitivitySchedule?) {
-        self._insulinModelSettings = Published(wrappedValue: insulinModelSettings)
-        self.insulinSensitivitySchedule = insulinSensitivitySchedule ?? Self.defaultInsulinSensitivitySchedule
-    }
-}
-
-public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
-
-    @ObservedObject var viewModel: InsulinModelSelectionViewModel
-    var glucoseUnit: HKUnit
-    var supportedModelSettings: SupportedInsulinModelSettings
-    let appName: String
-    let mode: PresentationMode
     
+    static let defaultWalshInsulinModelDuration = TimeInterval(hours: 6)
+
+    var walshActionDuration: Binding<TimeInterval> {
+        Binding(
+            get: {
+                if case .walsh(let walshModel) = self.value {
+                    return walshModel.actionDuration
+                } else {
+                    return Self.defaultWalshInsulinModelDuration
+                }
+            },
+            set: { newValue in
+                precondition(InsulinModelSettings.validWalshModelDurationRange.contains(newValue))
+                self.value = .walsh(WalshInsulinModel(actionDuration: newValue))
+            }
+        )
+    }
+
     public init(
-        viewModel: InsulinModelSelectionViewModel,
+        value: InsulinModelSettings,
+        insulinSensitivitySchedule: InsulinSensitivitySchedule?,
         glucoseUnit: HKUnit,
         supportedModelSettings: SupportedInsulinModelSettings,
-        appName: String,
-        mode: PresentationMode = .settings
+        mode: PresentationMode,
+        onSave save: @escaping (InsulinModelSettings) -> Void
     ){
-        self.viewModel = viewModel
+        self._value = State(initialValue: value)
+        self.initialValue = value
+        self.insulinSensitivitySchedule = insulinSensitivitySchedule ?? Self.defaultInsulinSensitivitySchedule
+        self.save = save
         self.glucoseUnit = glucoseUnit
         self.supportedModelSettings = supportedModelSettings
-        self.appName = appName // TODO: pull this from the environment
         self.mode = mode
     }
 
@@ -82,25 +78,36 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     }()
 
     @Environment(\.dismiss) var dismiss
-
-    public var body: some View {
-        configuredBody
-    }
     
-    private var configuredBody: some View {
+    public var body: some View {
         switch mode {
-        case .acceptanceFlow:
-            return AnyView(content)
-        default:
-            return AnyView(navigationContent)
+        case .acceptanceFlow: return AnyView(contentWithSaveButton)
+        case .settings:       return AnyView(contentWithSaveButton)
+        case .legacySettings: return AnyView(navigationContent)
         }
     }
     
     private var navigationContent: some View {
         NavigationView {
-            content
+            contentWithSaveButton
             .navigationBarItems(leading: dismissButton)
         }
+    }
+    
+    private var contentWithSaveButton: some View {
+        VStack(spacing: 0) {
+            content
+            Button(action: { self.doSave() }) {
+                Text(mode.buttonText)
+                    .actionButtonStyle(.primary)
+                    .padding()
+            }
+            .disabled(value == initialValue && mode != .acceptanceFlow)
+            // Styling to mimic the floating button of a ConfigurationPage
+            .padding(.bottom)
+            .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5))
+        }
+        .edgesIgnoringSafeArea(.bottom)
     }
     
     private var content: some View {
@@ -155,8 +162,8 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
                         title: Text(WalshInsulinModel.title),
                         description: Text(WalshInsulinModel.subtitle),
                         isSelected: isWalshModelSelected,
-                        duration: $viewModel.walshActionDuration,
-                        validDurationRange: InsulinModelSelectionViewModel.validWalshModelDurationRange
+                        duration: walshActionDuration,
+                        validDurationRange: InsulinModelSettings.validWalshModelDurationRange
                     )
                     .padding(.vertical, 4)
                     .padding(.bottom, 4)
@@ -167,6 +174,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         .listStyle(GroupedListStyle())
         .environment(\.horizontalSizeClass, horizontalOverride)
         .navigationBarTitle(Text(TherapySetting.insulinModel.title), displayMode: .large)
+        .supportedInterfaceOrientations(.portrait)
     }
 
     var insulinModelSettingDescription: Text {
@@ -190,31 +198,31 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         }
 
         if supportedModelSettings.walshModelEnabled {
-            options.append(.walsh(WalshInsulinModel(actionDuration: viewModel.walshActionDuration)))
+            options.append(.walsh(WalshInsulinModel(actionDuration: walshActionDuration.wrappedValue)))
         }
 
         return options
     }
 
     private var selectedInsulinModelValues: [GlucoseValue] {
-        oneUnitBolusEffectPrediction(using: viewModel.insulinModelSettings.model)
+        oneUnitBolusEffectPrediction(using: value.model)
     }
 
     private var unselectedInsulinModelValues: [[GlucoseValue]] {
         selectableInsulinModelSettings
-            .filter { $0 != viewModel.insulinModelSettings }
+            .filter { $0 != value }
             .map { oneUnitBolusEffectPrediction(using: $0.model) }
     }
 
     private func oneUnitBolusEffectPrediction(using model: InsulinModel) -> [GlucoseValue] {
         let bolus = DoseEntry(type: .bolus, startDate: chartManager.startDate, value: 1, unit: .units)
         let startingGlucoseSample = HKQuantitySample(type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!, quantity: startingGlucoseQuantity, start: chartManager.startDate, end: chartManager.startDate)
-        let effects = [bolus].glucoseEffects(insulinModel: model, insulinSensitivity: viewModel.insulinSensitivitySchedule)
+        let effects = [bolus].glucoseEffects(insulinModel: model, insulinSensitivity: insulinSensitivitySchedule)
         return LoopMath.predictGlucose(startingAt: startingGlucoseSample, effects: effects)
     }
 
     private var startingGlucoseQuantity: HKQuantity {
-        let startingGlucoseValue = viewModel.insulinSensitivitySchedule.quantity(at: chartManager.startDate).doubleValue(for: glucoseUnit) + glucoseUnit.glucoseExampleTargetValue
+        let startingGlucoseValue = insulinSensitivitySchedule.quantity(at: chartManager.startDate).doubleValue(for: glucoseUnit) + glucoseUnit.glucoseExampleTargetValue
         return HKQuantity(unit: glucoseUnit, doubleValue: startingGlucoseValue)
     }
 
@@ -224,11 +232,11 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
 
     private func isSelected(_ settings: InsulinModelSettings) -> Binding<Bool> {
         Binding(
-            get: { self.viewModel.insulinModelSettings == settings },
+            get: { self.value == settings },
             set: { isSelected in
                 if isSelected {
                     withAnimation {
-                        self.viewModel.insulinModelSettings = settings
+                        self.value = settings
                     }
                 }
             }
@@ -237,17 +245,24 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
 
     private var isWalshModelSelected: Binding<Bool> {
         Binding(
-            get: { self.viewModel.insulinModelSettings.model is WalshInsulinModel },
+            get: { self.value.model is WalshInsulinModel },
             set: { isSelected in
                 if isSelected {
                     withAnimation {
-                        self.viewModel.insulinModelSettings = .walsh(WalshInsulinModel(actionDuration: self.viewModel.walshActionDuration))
+                        self.value = .walsh(WalshInsulinModel(actionDuration: self.walshActionDuration.wrappedValue))
                     }
                 }
             }
         )
     }
 
+    private func doSave() {
+        save(value)
+        if mode == .legacySettings {
+            dismiss()
+        }
+    }
+    
     var dismissButton: some View {
         Button(action: dismiss) {
             Text("Close", comment: "Button text to close a modal")

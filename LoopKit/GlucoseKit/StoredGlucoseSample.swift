@@ -27,7 +27,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue {
     public let wasUserEntered: Bool
     public let provenanceIdentifier: String
 
-    init(sample: HKQuantitySample) {
+    public init(sample: HKQuantitySample) {
         self.init(
             sampleUUID: sample.uuid,
             syncIdentifier: sample.metadata?[HKMetadataKeySyncIdentifier] as? String,

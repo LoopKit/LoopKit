@@ -23,10 +23,13 @@ extension TherapySetting {
             return AnyView(BasalRatesInformationView(onExit: nil, mode: .settings))
         case .deliveryLimits:
             return AnyView(DeliveryLimitsInformationView(onExit: nil, mode: .settings))
-        // ANNA TODO: add more once other instructional screens are created
         case .insulinModel:
             return AnyView(InsulinModelInformationView(onExit: nil, mode: .settings))
-        default:
+        case .carbRatio:
+            return AnyView(CarbRatioInformationView(onExit: nil, mode: .settings))
+        case .insulinSensitivity:
+            return AnyView(InsulinSensitivityInformationView(onExit: nil, mode: .settings))
+        case .none:
             return AnyView(Text("To be implemented"))
         }
     }

@@ -16,14 +16,6 @@ fileprivate extension HKUnit {
     static let realCarbRatioScheduleUnit = HKUnit.gramsPerUnit
 }
 
-extension Guardrail where Value == HKQuantity {
-    static let carbRatio = Guardrail(
-        absoluteBounds: 1...150,
-        recommendedBounds: 3.0.nextUp...28.0.nextDown,
-        unit: .realCarbRatioScheduleUnit
-    )
-}
-
 public struct CarbRatioScheduleEditor: View {
     private var schedule: DailyQuantitySchedule<Double>?
     private var mode: PresentationMode

@@ -77,17 +77,17 @@ public struct MockPumpManagerState {
         switch deliverableIncrements {
         case .omnipod:
             // 0.05 units for rates between 0.05-30U/hr
-            return (1...600).map { Double($0) * 0.05 }
+            return (1...600).map { Double($0) / 20 }
         case .medtronicX22:
             // 0.05 units for rates between 0.0-35U/hr
-            return (0...700).map { Double($0) * 0.05 }
+            return (0...700).map { Double($0) / 20 }
         case .medtronicX23:
             // 0.025 units for rates between 0.0-0.975 U/h
-            let rateGroup1 = (0...39).map { Double($0) * 0.025 }
+            let rateGroup1 = (0...39).map { Double($0) / 40 }
             // 0.05 units for rates between 1-9.95 U/h
-            let rateGroup2 = (20...199).map { Double($0) * 0.05 }
+            let rateGroup2 = (20...199).map { Double($0) / 20 }
             // 0.1 units for rates between 10-35 U/h
-            let rateGroup3 = (100...350).map { Double($0) * 0.1 }
+            let rateGroup3 = (100...350).map { Double($0) / 10 }
             return rateGroup1 + rateGroup2 + rateGroup3
         }
     }

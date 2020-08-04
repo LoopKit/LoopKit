@@ -11,22 +11,6 @@ import HealthKit
 import LoopKit
 
 
-extension Guardrail where Value == HKQuantity {
-    static let suspendThreshold = Guardrail(absoluteBounds: 54...180, recommendedBounds: 71...120, unit: .milligramsPerDeciliter)
-    
-    public static func maxSuspendThresholdValue(correctionRangeSchedule: GlucoseRangeSchedule?, preMealTargetRange: DoubleRange?, workoutTargetRange: DoubleRange?, unit: HKUnit) -> HKQuantity? {
-        
-        return [
-            correctionRangeSchedule?.minLowerBound().doubleValue(for: unit),
-            preMealTargetRange?.minValue,
-            workoutTargetRange?.minValue
-        ]
-        .compactMap { $0 }
-        .min()
-        .map { HKQuantity(unit: unit, doubleValue: $0) }
-    }
-}
-
 public struct SuspendThresholdEditor: View {
     var initialValue: HKQuantity?
     var unit: HKUnit
@@ -55,6 +39,30 @@ public struct SuspendThresholdEditor: View {
         self.maxValue = maxValue
         self.save = save
         self.mode = mode
+    }
+    
+    public init(
+           viewModel: TherapySettingsViewModel,
+           didSave: (() -> Void)? = nil
+    ) {
+        precondition(viewModel.therapySettings.glucoseUnit != nil)
+        let unit = viewModel.therapySettings.glucoseUnit!
+        self.init(
+            value: viewModel.therapySettings.suspendThreshold?.quantity,
+            unit: unit,
+            maxValue: Guardrail.maxSuspendThresholdValue(
+                correctionRangeSchedule: viewModel.therapySettings.glucoseTargetRangeSchedule,
+                preMealTargetRange: viewModel.therapySettings.preMealTargetRange,
+                workoutTargetRange: viewModel.therapySettings.workoutTargetRange,
+                unit: unit
+            ),
+            onSave: { [weak viewModel] newValue in
+                let newThreshold = GlucoseThreshold(unit: viewModel!.therapySettings.glucoseUnit!, value: newValue.doubleValue(for: viewModel!.therapySettings.glucoseUnit!))
+                viewModel?.saveSuspendThreshold(value: newThreshold)
+                didSave?()
+            },
+            mode: viewModel.mode
+        )
     }
 
     private static func defaultValue(for unit: HKUnit) -> HKQuantity {

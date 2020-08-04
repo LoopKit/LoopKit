@@ -52,6 +52,28 @@ public struct CorrectionRangeOverridesEditor: View {
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
         self.mode = mode
     }
+    
+    public init(
+        viewModel: TherapySettingsViewModel,
+        didSave: (() -> Void)? = nil
+    ) {
+        self.init(
+            value: CorrectionRangeOverrides(
+                preMeal: viewModel.therapySettings.preMealTargetRange,
+                workout: viewModel.therapySettings.workoutTargetRange,
+                unit: viewModel.therapySettings.glucoseUnit!
+            ),
+            unit: viewModel.therapySettings.glucoseUnit!,
+            correctionRangeScheduleRange: viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange(),
+            minValue: viewModel.therapySettings.suspendThreshold?.quantity,
+            onSave: { [weak viewModel] overrides in
+                viewModel?.saveCorrectionRangeOverrides(overrides: overrides, unit: viewModel?.therapySettings.glucoseUnit ?? .milligramsPerDeciliter)
+                didSave?()
+            },
+            sensitivityOverridesEnabled: viewModel.sensitivityOverridesEnabled,
+            mode: viewModel.mode
+        )
+    }
 
     public var body: some View {
         ConfigurationPage(
@@ -113,6 +135,7 @@ public struct CorrectionRangeOverridesEditor: View {
                         maxValue: self.selectableBounds(for: preset).upperBound,
                         guardrail: self.guardrail(for: preset)
                     )
+                    .accessibility(identifier: "\(self.accessibilityIdentifier(for: preset))_picker")
             })
         }
     }
@@ -212,6 +235,15 @@ public struct CorrectionRangeOverridesEditor: View {
             dismiss()
         }
     }
+
+    private func accessibilityIdentifier(for preset: CorrectionRangeOverrides.Preset) -> String {
+        switch preset {
+        case .preMeal:
+            return "pre-meal"
+        case .workout:
+            return "workout"
+        }
+    }
 }
 
 private struct CorrectionRangeOverridesGuardrailWarning: View {
@@ -258,22 +290,5 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
         return crossedPreMealThresholds.allSatisfy { $0 == .aboveRecommended || $0 == .maximum }
             ? Text("The value you have entered for this range is higher than your usual correction range. Tidepool typically recommends your pre-meal range be lower than your usual correction range.", comment: "Warning text for high pre-meal target value")
             : nil
-    }
-}
-
-extension Guardrail where Value == HKQuantity {
-    static func correctionRangeOverridePreset(_ preset: CorrectionRangeOverrides.Preset, correctionRangeScheduleRange: ClosedRange<HKQuantity>) -> Guardrail {
-        switch preset {
-        case .preMeal:
-            return Guardrail(
-                absoluteBounds: Guardrail.correctionRange.absoluteBounds,
-                recommendedBounds: Guardrail.correctionRange.recommendedBounds.lowerBound...max(correctionRangeScheduleRange.lowerBound, Guardrail.correctionRange.recommendedBounds.lowerBound)
-            )
-        case .workout:
-            return Guardrail(
-                absoluteBounds: Guardrail.correctionRange.absoluteBounds,
-                recommendedBounds: max(Guardrail.correctionRange.recommendedBounds.lowerBound, correctionRangeScheduleRange.lowerBound)...Guardrail.correctionRange.absoluteBounds.upperBound
-            )
-        }
     }
 }

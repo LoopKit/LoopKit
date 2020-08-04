@@ -32,7 +32,7 @@ public extension ExponentialInsulinModelPreset {
     var title: String {
         switch self {
         case .humalogNovologAdult:
-            return LocalizedString("Rapid-Acting – Adult", comment: "Title of insulin model preset - rapid acting adult")
+            return LocalizedString("Rapid-Acting – Adults", comment: "Title of insulin model preset - rapid acting adult")
         case .humalogNovologChild:
             return LocalizedString("Rapid-Acting – Children", comment: "Title of insulin model preset - rapid acting children")
         case .fiasp:

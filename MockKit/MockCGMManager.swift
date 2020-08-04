@@ -148,7 +148,7 @@ public struct MockCGMState: SensorDisplayable {
         {
             cgmLifecycleProgress.progressState = .warning
         } else {
-            cgmLifecycleProgress.progressState = .normal
+            cgmLifecycleProgress.progressState = .normalCGM
         }
         
         self.cgmLifecycleProgress = cgmLifecycleProgress
@@ -200,7 +200,7 @@ public struct MockCGMStatusHighlight: DeviceStatusHighlight {
     public var state: DeviceStatusHighlightState{
         switch alertIdentifier {
         case MockCGMManager.submarine.identifier:
-            return .normal
+            return .normalCGM
         case MockCGMManager.buzz.identifier:
             return .warning
         default:
@@ -216,7 +216,7 @@ public struct MockCGMLifecycleProgress: DeviceLifecycleProgress, Equatable {
     
     public var progressState: DeviceLifecycleProgressState
         
-    public init(percentComplete: Double, progressState: DeviceLifecycleProgressState = .normal) {
+    public init(percentComplete: Double, progressState: DeviceLifecycleProgressState = .normalCGM) {
         self.percentComplete = percentComplete
         self.progressState = progressState
     }

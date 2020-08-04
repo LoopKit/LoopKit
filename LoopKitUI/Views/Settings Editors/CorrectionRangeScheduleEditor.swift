@@ -11,10 +11,6 @@ import HealthKit
 import LoopKit
 
 
-extension Guardrail where Value == HKQuantity {
-    public static let correctionRange = Guardrail(absoluteBounds: 60...180, recommendedBounds: 70...120, unit: .milligramsPerDeciliter)
-}
-
 public struct CorrectionRangeScheduleEditor: View {
     var initialSchedule: GlucoseRangeSchedule?
     @State var scheduleItems: [RepeatingScheduleValue<DoubleRange>]
@@ -38,6 +34,23 @@ public struct CorrectionRangeScheduleEditor: View {
         self.minValue = minValue
         self.save = save
         self.mode = mode
+    }
+    
+    public init(
+           viewModel: TherapySettingsViewModel,
+           didSave: (() -> Void)? = nil
+    ) {
+        precondition(viewModel.therapySettings.glucoseUnit != nil)
+        self.init(
+            schedule: viewModel.therapySettings.glucoseTargetRangeSchedule,
+            unit: viewModel.therapySettings.glucoseUnit!,
+            minValue: viewModel.therapySettings.suspendThreshold?.quantity,
+            onSave: { [weak viewModel] newSchedule in
+                viewModel?.saveCorrectionRange(range: newSchedule)
+                didSave?()
+            },
+            mode: viewModel.mode
+        )
     }
 
     public var body: some View {

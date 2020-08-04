@@ -23,7 +23,6 @@ public struct DeliveryLimitsInformationView: View {
     public var body: some View {
         InformationView(
             title: Text(TherapySetting.deliveryLimits.title),
-            buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to setting editor")),
             informationalContent: {
                 VStack (alignment: .leading, spacing: 20) {
                     deliveryLimitDescription
