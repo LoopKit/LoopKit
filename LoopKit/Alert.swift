@@ -114,31 +114,7 @@ public protocol AlertSoundVendor {
 
 // MARK: Codable implementations
 
-extension Alert: Codable {
-    enum CodableError: Swift.Error { case encodeFailed, decodeFailed }
-    public func encode() throws -> Data {
-        let encoder = JSONEncoder()
-        return try encoder.encode(self)
-    }
-    public static func decode(from data: Data) throws -> Alert {
-        let decoder = JSONDecoder()
-        return try decoder.decode(Alert.self, from: data)
-    }
-    public func encodeToString() throws -> String {
-        let data = try encode()
-        guard let result = String(data: data, encoding: .utf8) else {
-            throw CodableError.encodeFailed
-        }
-        return result
-    }
-    public static func decode(from string: String) throws -> Alert {
-        guard let data = string.data(using: .utf8) else {
-            throw CodableError.decodeFailed
-        }
-        return try decode(from: data)
-    }
-}
-
+extension Alert: Codable { }
 extension Alert.Content: Codable { }
 extension Alert.Identifier: Codable { }
 // These Codable implementations of enums with associated values cannot be synthesized (yet) in Swift.

@@ -102,3 +102,29 @@ class AlertTests: XCTestCase {
         XCTAssertEqual("foo", Alert.Sound.sound(name: "foo").filename)
     }
 }
+
+extension Alert {
+    enum CodableError: Swift.Error { case encodeFailed, decodeFailed }
+    func encode() throws -> Data {
+        let encoder = JSONEncoder()
+        return try encoder.encode(self)
+    }
+    static func decode(from data: Data) throws -> Alert {
+        let decoder = JSONDecoder()
+        return try decoder.decode(Alert.self, from: data)
+    }
+    func encodeToString() throws -> String {
+        let data = try encode()
+        guard let result = String(data: data, encoding: .utf8) else {
+            throw CodableError.encodeFailed
+        }
+        return result
+    }
+    static func decode(from string: String) throws -> Alert {
+        guard let data = string.data(using: .utf8) else {
+            throw CodableError.decodeFailed
+        }
+        return try decode(from: data)
+    }
+}
+
