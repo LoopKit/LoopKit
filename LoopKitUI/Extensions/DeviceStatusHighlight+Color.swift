@@ -20,7 +20,7 @@ extension DeviceStatusHighlight {
     public var color: UIColor {
         switch state {
         case .normal:
-            return .systemPurple
+            return .systemBlue
         case .warning:
             return .systemOrange
         case .critical:
