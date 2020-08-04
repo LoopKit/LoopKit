@@ -63,20 +63,20 @@ public struct GuardrailWarning: View {
         case .one(let threshold):
             switch threshold {
             case .minimum, .belowRecommended:
-                return Text("The value you have chosen is lower than Tidepool generally recommends.", comment: "Warning for entering a low setting value")
+                return Text("The value you have chosen is lower than is generally recommended.", comment: "Warning for entering a low setting value")
             case .aboveRecommended, .maximum:
-                return Text("The value you have chosen is higher than Tidepool generally recommends.", comment: "Warning for entering a high setting value")
+                return Text("The value you have chosen is higher than is generally recommended.", comment: "Warning for entering a high setting value")
             }
         case .oneOrMore(let thresholds):
             if thresholds.count == 1 {
                 switch thresholds.first! {
                 case .minimum, .belowRecommended:
-                        return Text("A value you have chosen is lower than Tidepool generally recommends.", comment: "Warning for entering a low setting value in a schedule interface")
+                        return Text("A value you have chosen is lower than is generally recommended.", comment: "Warning for entering a low setting value in a schedule interface")
                 case .aboveRecommended, .maximum:
-                        return Text("A value you have chosen is higher than Tidepool generally recommends.", comment: "Warning for entering a high setting value in a schedule interface")
+                        return Text("A value you have chosen is higher than is generally recommended.", comment: "Warning for entering a high setting value in a schedule interface")
                 }
             } else {
-                return Text("Some of the values you have entered are outside of what Tidepool generally recommends.")
+                return Text("Some of the values you have entered are outside of what is generally recommended.")
             }
         }
     }

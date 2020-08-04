@@ -258,7 +258,7 @@ public struct DeliveryLimitsEditor: View {
     private func confirmationAlert() -> SwiftUI.Alert {
         SwiftUI.Alert(
             title: Text("Save Delivery Limits?", comment: "Alert title for confirming delivery limits outside the recommended range"),
-            message: Text("One or more of the values you have entered are outside of what Tidepool generally recommends.", comment: "Alert message for confirming delivery limits outside the recommended range"),
+            message: Text("One or more of the values you have entered are outside of what is generally recommended.", comment: "Alert message for confirming delivery limits outside the recommended range"),
             primaryButton: .cancel(Text("Go Back")),
             secondaryButton: .default(
                 Text("Continue"),
@@ -300,7 +300,7 @@ struct DeliveryLimitsGuardrailWarning: View {
                 switch threshold {
                 case .minimum, .belowRecommended:
                     title = Text("Low Maximum Basal Rate", comment: "Title text for low maximum basal rate warning")
-                    caption = Text("A setting of 0 U/hr means Tidepool Loop will not automatically administer insulin.", comment: "Caption text for low maximum basal rate warning")
+                    caption = Text("A setting of 0 U/hr means Loop will not automatically administer insulin.", comment: "Caption text for low maximum basal rate warning")
                 case .aboveRecommended, .maximum:
                     guard let maximumScheduledBasalRate = maximumScheduledBasalRate else {
                         preconditionFailure("No maximum basal rate warning can be generated without a maximum scheduled basal rate")
@@ -309,7 +309,7 @@ struct DeliveryLimitsGuardrailWarning: View {
                     title = Text("High Maximum Basal Rate", comment: "Title text for high maximum basal rate warning")
                     let scheduledBasalRateMultiplierString = Self.scheduledBasalRateMultiplierFormatter.string(from: Guardrail.recommendedMaximumScheduledBasalScaleFactor) ?? String(describing:  Guardrail.recommendedMaximumScheduledBasalScaleFactor)
                     let maximumScheduledBasalRateString = Self.basalRateFormatter.string(from: maximumScheduledBasalRate) ?? String(describing: maximumScheduledBasalRate)
-                    caption = Text("The value you have entered exceeds \(scheduledBasalRateMultiplierString) times your highest scheduled basal rate of \(maximumScheduledBasalRateString) U/hr, which is higher than Tidepool generally recommends.", comment: "Caption text for high maximum basal rate warning")
+                    caption = Text("The value you have entered exceeds \(scheduledBasalRateMultiplierString) times your highest scheduled basal rate of \(maximumScheduledBasalRateString) U/hr, which is higher than is generally recommended.", comment: "Caption text for high maximum basal rate warning")
                 }
             case .maximumBolus:
                 switch threshold {
@@ -327,7 +327,7 @@ struct DeliveryLimitsGuardrailWarning: View {
             return GuardrailWarning(
                 title: Text("Delivery Limits"),
                 thresholds: Array(crossedThresholds.values),
-                caption: Text("The values you have entered are outside of what Tidepool generally recommends.", comment: "Caption text for warning where both delivery limits are outside the recommended range")
+                caption: Text("The values you have entered are outside of what is generally recommended.", comment: "Caption text for warning where both delivery limits are outside the recommended range")
             )
         default:
             preconditionFailure("Unreachable: only two delivery limit settings exist")

@@ -46,7 +46,7 @@ public struct DeliveryLimitsInformationView: View {
             Text(LocalizedString("Maximum basal rate", comment: "Maximum basal rate title"))
             .font(.headline)
             VStack(alignment: .leading, spacing: 20) {
-                Text(LocalizedString("Maximum basal rate is the maximum automatically adjusted basal rate that Tidepool Loop is allowed to enact to help reach your correction range.", comment: "Information about maximum basal rate"))
+                Text(LocalizedString("Maximum basal rate is the maximum automatically adjusted basal rate that Loop is allowed to enact to help reach your correction range.", comment: "Information about maximum basal rate"))
                 Text(LocalizedString("Some users choose a value 2, 3, or 4 times their highest scheduled basal rate.", comment: "Information about typical maximum basal rates"))
                 Text(LocalizedString("Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable.", comment: "Disclaimer"))
             }
@@ -58,7 +58,7 @@ public struct DeliveryLimitsInformationView: View {
         VStack(alignment: .leading, spacing: 20) {
             Text(LocalizedString("Maximum bolus", comment: "Maximum bolus title"))
             .font(.headline)
-            Text(LocalizedString("Maximum bolus is the highest bolus amount that you will allow Tidepool Loop to recommend at one time to cover carbs or bring down high glucose.", comment: "Information about maximum bolus"))
+            Text(LocalizedString("Maximum bolus is the highest bolus amount that you will allow Loop to recommend at one time to cover carbs or bring down high glucose.", comment: "Information about maximum bolus"))
             .foregroundColor(.secondary)
         }
     }

@@ -66,7 +66,7 @@ public struct CarbRatioScheduleEditor: View {
     private var confirmationAlertContent: AlertContent {
         AlertContent(
             title: Text("Save Carb Ratios?", comment: "Alert title for confirming carb ratios outside the recommended range"),
-            message: Text("One or more of the values you have entered are outside of what Tidepool generally recommends.", comment: "Alert message for confirming carb ratios outside the recommended range")
+            message: Text("One or more of the values you have entered are outside of what is generally recommended.", comment: "Alert message for confirming carb ratios outside the recommended range")
         )
     }
 }

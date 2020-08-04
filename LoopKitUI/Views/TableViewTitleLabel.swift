@@ -3,7 +3,7 @@
 //  LoopKitUI
 //
 //  Created by Nathaniel Hamming on 2020-01-17.
-//  Copyright © 2020 Tidepool Project. All rights reserved.
+//  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
 import UIKit

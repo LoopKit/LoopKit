@@ -220,7 +220,7 @@ public struct CorrectionRangeOverridesEditor: View {
     private func confirmationAlert() -> SwiftUI.Alert {
         SwiftUI.Alert(
             title: Text("Save Correction Range Overrides?", comment: "Alert title for confirming correction range overrides outside the recommended range"),
-            message: Text("One or more of the values you have entered are outside of what Tidepool generally recommends.", comment: "Alert message for confirming correction range overrides outside the recommended range"),
+            message: Text("One or more of the values you have entered are outside of what is generally recommended.", comment: "Alert message for confirming correction range overrides outside the recommended range"),
             primaryButton: .cancel(Text("Go Back")),
             secondaryButton: .default(
                 Text("Continue"),
@@ -288,7 +288,7 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
         }
 
         return crossedPreMealThresholds.allSatisfy { $0 == .aboveRecommended || $0 == .maximum }
-            ? Text("The value you have entered for this range is higher than your usual correction range. Tidepool typically recommends your pre-meal range be lower than your usual correction range.", comment: "Warning text for high pre-meal target value")
+            ? Text("The value you have entered for this range is higher than your usual correction range. It is recommended that your pre-meal range be lower than your usual correction range.", comment: "Warning text for high pre-meal target value")
             : nil
     }
 }

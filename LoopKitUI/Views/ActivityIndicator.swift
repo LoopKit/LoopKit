@@ -3,7 +3,7 @@
 //  DashKitUI
 //
 //  Created by Pete Schwamb on 2/10/20.
-//  Copyright © 2020 Tidepool. All rights reserved.
+//  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
 import SwiftUI
