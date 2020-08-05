@@ -12,14 +12,16 @@ import LoopKit
 
 public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     @Environment(\.appName) private var appName   
-    
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.authenticate) var authenticate
+
     let initialValue: InsulinModelSettings
     @State var value: InsulinModelSettings
     let insulinSensitivitySchedule: InsulinSensitivitySchedule
     let glucoseUnit: HKUnit
     let supportedModelSettings: SupportedInsulinModelSettings
     let mode: PresentationMode
-    let save: (InsulinModelSettings) -> Void
+    let save: (_ insulinModelSettings: InsulinModelSettings) -> Void
 
     static let defaultInsulinSensitivitySchedule = InsulinSensitivitySchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue<Double>(startTime: 0, value: 40)])!
     
@@ -40,14 +42,14 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             }
         )
     }
-
+    
     public init(
         value: InsulinModelSettings,
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
         glucoseUnit: HKUnit,
         supportedModelSettings: SupportedInsulinModelSettings,
-        mode: PresentationMode,
-        onSave save: @escaping (InsulinModelSettings) -> Void
+        onSave save: @escaping (_ insulinModelSettings: InsulinModelSettings) -> Void,
+        mode: PresentationMode
     ){
         self._value = State(initialValue: value)
         self.initialValue = value
@@ -58,6 +60,25 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         self.mode = mode
     }
 
+    public init(
+           viewModel: TherapySettingsViewModel,
+           didSave: (() -> Void)? = nil
+    ) {
+        precondition(viewModel.therapySettings.glucoseUnit != nil)
+        precondition(viewModel.therapySettings.insulinModelSettings != nil)
+        self.init(
+            value: viewModel.therapySettings.insulinModelSettings!,
+            insulinSensitivitySchedule: viewModel.therapySettings.insulinSensitivitySchedule,
+            glucoseUnit: viewModel.therapySettings.glucoseUnit!,
+            supportedModelSettings: viewModel.supportedInsulinModelSettings,
+            onSave: { [weak viewModel] insulinModelSettings in
+                viewModel?.saveInsulinModel(insulinModelSettings: insulinModelSettings)
+                didSave?()
+            },
+            mode: viewModel.mode
+        )
+    }
+    
     let chartManager: ChartsManager = {
         let chartManager = ChartsManager(
             colors: .default,
@@ -77,27 +98,43 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         return chartManager
     }()
 
-    @Environment(\.dismiss) var dismiss
-    
     public var body: some View {
         switch mode {
-        case .acceptanceFlow: return AnyView(contentWithSaveButton)
-        case .settings:       return AnyView(contentWithSaveButton)
+        case .acceptanceFlow: return AnyView(content)
+        case .settings: return AnyView(contentWithCancel)
         case .legacySettings: return AnyView(navigationContent)
         }
     }
     
-    private var navigationContent: some View {
-        NavigationView {
-            contentWithSaveButton
-            .navigationBarItems(leading: dismissButton)
+    private var contentWithCancel: some View {
+        if value == initialValue {
+            return AnyView(content
+                .navigationBarBackButtonHidden(false)
+                .navigationBarItems(leading: EmptyView())
+            )
+        } else {
+            return AnyView(content
+                .navigationBarBackButtonHidden(true)
+                .navigationBarItems(leading: cancelButton)
+            )
         }
     }
     
-    private var contentWithSaveButton: some View {
-        VStack(spacing: 0) {
+    private var cancelButton: some View {
+        Button(action: { self.dismiss() } ) { Text("Cancel", comment: "Cancel editing settings button title") }
+    }
+
+    private var navigationContent: some View {
+        NavigationView {
             content
-            Button(action: { self.doSave() }) {
+                .navigationBarItems(leading: dismissButton)
+        }
+    }
+    
+    private var content: some View {
+        VStack(spacing: 0) {
+            list
+            Button(action: { self.startSaving() }) {
                 Text(mode.buttonText)
                     .actionButtonStyle(.primary)
                     .padding()
@@ -107,10 +144,13 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             .padding(.bottom)
             .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5))
         }
+        .environment(\.horizontalSizeClass, horizontalOverride)
+        .navigationBarTitle(Text(TherapySetting.insulinModel.title), displayMode: .large)
+        .supportedInterfaceOrientations(.portrait)
         .edgesIgnoringSafeArea(.bottom)
     }
     
-    private var content: some View {
+    private var list: some View {
         List {
             Section {
                 SettingDescription(
@@ -172,9 +212,6 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
         }
         .listStyle(GroupedListStyle())
-        .environment(\.horizontalSizeClass, horizontalOverride)
-        .navigationBarTitle(Text(TherapySetting.insulinModel.title), displayMode: .large)
-        .supportedInterfaceOrientations(.portrait)
     }
 
     var insulinModelSettingDescription: Text {
@@ -255,14 +292,27 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             }
         )
     }
-
-    private func doSave() {
-        save(value)
-        if mode == .legacySettings {
-            dismiss()
+    
+    private func startSaving() {
+        guard mode == .settings || mode == .legacySettings else {
+            self.continueSaving()
+            return
+        }
+        authenticate(LocalizedString("Authenticate to change setting", comment: "Authentication hint string")) {
+            switch $0 {
+            case .success: self.continueSaving()
+            case .failure: break
+            }
         }
     }
     
+    private func continueSaving() {
+        self.save(self.value)
+        if self.mode == .legacySettings {
+            self.dismiss()
+        }
+    }
+
     var dismissButton: some View {
         Button(action: dismiss) {
             Text("Close", comment: "Button text to close a modal")

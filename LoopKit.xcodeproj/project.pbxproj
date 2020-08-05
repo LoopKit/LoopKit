@@ -20,6 +20,7 @@
 		1D1FCE2B24BE704A000300A8 /* TherapySetting+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2A24BE704A000300A8 /* TherapySetting+Settings.swift */; };
 		1D24A8D524C896E100AB8DB9 /* Prescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D24A8D424C896E100AB8DB9 /* Prescription.swift */; };
 		1D25C22E246A2A1A00E87FA0 /* critical.caf in Resources */ = {isa = PBXBuildFile; fileRef = 1D25C22D246A2A1A00E87FA0 /* critical.caf */; };
+		1D498E4724D892B0000627F2 /* Environment+Authenticate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D498E4624D892B0000627F2 /* Environment+Authenticate.swift */; };
 		1D4990E624A17564005CC357 /* HKQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4990E524A17564005CC357 /* HKQuery.swift */; };
 		1D4990E724A17898005CC357 /* HKQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D4990E524A17564005CC357 /* HKQuery.swift */; };
 		1D60355E24D39ED10095DC2A /* Environment+AppName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D60355D24D39ED10095DC2A /* Environment+AppName.swift */; };
@@ -890,6 +891,7 @@
 		1D1FCE2A24BE704A000300A8 /* TherapySetting+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TherapySetting+Settings.swift"; sourceTree = "<group>"; };
 		1D24A8D424C896E100AB8DB9 /* Prescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prescription.swift; sourceTree = "<group>"; };
 		1D25C22D246A2A1A00E87FA0 /* critical.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = critical.caf; sourceTree = "<group>"; };
+		1D498E4624D892B0000627F2 /* Environment+Authenticate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Environment+Authenticate.swift"; sourceTree = "<group>"; };
 		1D4990E524A17564005CC357 /* HKQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKQuery.swift; sourceTree = "<group>"; };
 		1D60355D24D39ED10095DC2A /* Environment+AppName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Environment+AppName.swift"; sourceTree = "<group>"; };
 		1D640FF524524284008F9755 /* sub.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sub.caf; sourceTree = "<group>"; };
@@ -1692,6 +1694,7 @@
 				89ED164224A29BE400C9A105 /* ClosedRange.swift */,
 				8974B0672215FE460043F01B /* Collection.swift */,
 				892A5DBB2231E20C008961AB /* Comparable.swift */,
+				898C896924D4BF11002FA994 /* Guardrail+Settings.swift */,
 				43D8FDEE1C7290350073BE78 /* HKUnit.swift */,
 				434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */,
 				891A3FC62247268F00378B27 /* Math.swift */,
@@ -2112,7 +2115,6 @@
 				437874B4202FDC8300A3D8B9 /* Persistence */,
 				C16DA83E22E8D88F008624C2 /* LoopPlugin.swift */,
 				89F6E30E244A1A5D00CB9E15 /* Guardrail.swift */,
-				898C896924D4BF11002FA994 /* Guardrail+Settings.swift */,
 				E9086B3824B3CB4B0062F5C8 /* TherapySettings.swift */,
 				1D1FCE2624BE4DE2000300A8 /* CorrectionRangeOverrides.swift */,
 				1D1FCE2824BE4F11000300A8 /* TherapySetting.swift */,
@@ -2476,6 +2478,7 @@
 				E9086B4924B540B70062F5C8 /* DateFormatter.swift */,
 				E96175AD24B7BE38008E5080 /* Dictionary.swift */,
 				1D60355D24D39ED10095DC2A /* Environment+AppName.swift */,
+				1D498E4624D892B0000627F2 /* Environment+Authenticate.swift */,
 				89BE75C62464B4A900B145D9 /* Environment+Dismiss.swift */,
 				B429D66B24BF7204003E1B4A /* GlucoseTrend.swift */,
 				89186C0624BF7FC70003D0F3 /* Guardrail+UI.swift */,
@@ -2573,7 +2576,6 @@
 				1DC64C7B24BF6BFD004A63A1 /* CorrectionRangeOverridesExtension.swift */,
 				898B4E7A246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift */,
 				E94141CF24C8F31C0096C326 /* DeliveryLimitsEditor.swift */,
-				1D1FCE2C24BEA669000300A8 /* Guardrail+Settings.swift */,
 				89FC688A245A2D670075CF59 /* InsulinSensitivityScheduleEditor.swift */,
 				E93C86A724C8F7F60073089B /* InsulinModelChartView.swift */,
 				1D6EAB9024C12C090081249D /* PumpSupportedIncrements.swift */,
@@ -3186,6 +3188,7 @@
 				892155182245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.swift in Sources */,
 				892155132245C516009112BC /* SegmentedGaugeBarView.swift in Sources */,
 				E9077D2A24ACDE2C0066A88D /* CorrectionRangeInformationView.swift in Sources */,
+				1D498E4724D892B0000627F2 /* Environment+Authenticate.swift in Sources */,
 				B4A2AAB3240832350066563F /* MultipleSelectionList.swift in Sources */,
 				B46B62AB23FF0822001E69BA /* LabeledValueView.swift in Sources */,
 				43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */,
