@@ -205,6 +205,9 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         )
         .alert(item: $presentedAlert, content: alert(for:))
         .navigationBarTitle("", displayMode: .inline)
+        .navigationBarItems(
+            trailing: trailingNavigationItems
+        )
     }
 
     private var saveButtonState: ConfigurationPageActionButtonState {
