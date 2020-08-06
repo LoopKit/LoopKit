@@ -299,7 +299,7 @@ public struct DeliveryLimitsEditor: View {
             self.continueSaving()
             return
         }
-        authenticate(LocalizedString("Authenticate to change setting", comment: "Authentication hint string")) {
+        authenticate(TherapySetting.deliveryLimits.authenticationChallengeDescription) {
             switch $0 {
             case .success: self.continueSaving()
             case .failure: break

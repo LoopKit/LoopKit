@@ -39,7 +39,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
 
     var title: Text
     var description: Text
-    let authenticationChallengeDescription: String
     var initialScheduleItems: [RepeatingScheduleValue<Value>]
     @Binding var scheduleItems: [RepeatingScheduleValue<Value>]
     var defaultFirstScheduleItemValue: Value
@@ -80,7 +79,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     init(
         title: Text,
         description: Text,
-        authenticationChallengeDescription: String = LocalizedString("Authenticate to change setting", comment: "Authentication hint string"),
         scheduleItems: Binding<[RepeatingScheduleValue<Value>]>,
         initialScheduleItems: [RepeatingScheduleValue<Value>],
         defaultFirstScheduleItemValue: Value,
@@ -106,7 +104,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         self.savingMechanism = savingMechanism
         self.mode = mode
         self.therapySettingType = therapySettingType
-        self.authenticationChallengeDescription = authenticationChallengeDescription
     }
 
     var body: some View {
@@ -374,7 +371,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             return
         }
         
-        authenticate(authenticationChallengeDescription) {
+        authenticate(therapySettingType.authenticationChallengeDescription) {
             switch $0 {
             case .success: self.continueSaving()
             case .failure: break
