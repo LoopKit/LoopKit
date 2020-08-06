@@ -52,5 +52,6 @@ public struct ActionButtonStyle: ButtonStyle {
             .padding(configuration.isPressed ? squidge : 0)
             .overlay(RoundedRectangle(cornerRadius: cornerRadius)
                 .stroke(edgeColor))
+            .contentShape(Rectangle())
     }
 }
