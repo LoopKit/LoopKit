@@ -22,6 +22,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     let supportedModelSettings: SupportedInsulinModelSettings
     let mode: PresentationMode
     let save: (_ insulinModelSettings: InsulinModelSettings) -> Void
+    let chartManager: ChartsManager
 
     static let defaultInsulinSensitivitySchedule = InsulinSensitivitySchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue<Double>(startTime: 0, value: 40)])!
     
@@ -48,6 +49,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
         glucoseUnit: HKUnit,
         supportedModelSettings: SupportedInsulinModelSettings,
+        chartColors: ChartColorPalette,
         onSave save: @escaping (_ insulinModelSettings: InsulinModelSettings) -> Void,
         mode: PresentationMode
     ){
@@ -58,6 +60,24 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         self.glucoseUnit = glucoseUnit
         self.supportedModelSettings = supportedModelSettings
         self.mode = mode
+        self.chartManager = {
+            let chartManager = ChartsManager(
+                colors: chartColors,
+                settings: .default,
+                axisLabelFont: .systemFont(ofSize: 12),
+                charts: [InsulinModelChart()],
+                traitCollection: .current
+            )
+            
+            chartManager.startDate = Calendar.current.nextDate(
+                after: Date(),
+                matching: DateComponents(minute: 0),
+                matchingPolicy: .strict,
+                direction: .backward
+                ) ?? Date()
+            
+            return chartManager
+        }()
     }
 
     public init(
@@ -71,6 +91,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             insulinSensitivitySchedule: viewModel.therapySettings.insulinSensitivitySchedule,
             glucoseUnit: viewModel.therapySettings.glucoseUnit!,
             supportedModelSettings: viewModel.supportedInsulinModelSettings,
+            chartColors: viewModel.chartColors,
             onSave: { [weak viewModel] insulinModelSettings in
                 viewModel?.saveInsulinModel(insulinModelSettings: insulinModelSettings)
                 didSave?()
@@ -78,25 +99,6 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             mode: viewModel.mode
         )
     }
-    
-    let chartManager: ChartsManager = {
-        let chartManager = ChartsManager(
-            colors: .default,
-            settings: .default,
-            axisLabelFont: .systemFont(ofSize: 12),
-            charts: [InsulinModelChart()],
-            traitCollection: .current
-        )
-
-        chartManager.startDate = Calendar.current.nextDate(
-            after: Date(),
-            matching: DateComponents(minute: 0),
-            matchingPolicy: .strict,
-            direction: .backward
-        ) ?? Date()
-
-        return chartManager
-    }()
 
     public var body: some View {
         switch mode {

@@ -177,7 +177,7 @@ public struct SuspendThresholdEditor: View {
     private var instructionalContent: some View {
         HStack { // to align with guardrail warning, if present
             Text(LocalizedString("You can edit the setting by tapping into the line item.", comment: "Description of how to edit setting"))
-            .foregroundColor(.instructionalContent)
+            .foregroundColor(.secondary)
             .font(.subheadline)
             Spacer()
         }

@@ -468,7 +468,8 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                                  supportedInsulinModelSettings: SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                                  pumpSupportedIncrements: PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
                                                                                   bolusVolumes: preview_supportedBolusVolumes,
-                                                                                  maximumBasalScheduleEntryCount: 24))
+                                                                                  maximumBasalScheduleEntryCount: 24),
+                                 chartColors: ChartColorPalette(axisLine: .clear, axisLabel: .secondaryLabel, grid: .systemGray3, glucoseTint: .systemTeal, doseTint: .systemOrange))
     }
 
     public static var previews: some View {
@@ -485,7 +486,13 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                 .colorScheme(.dark)
                 .previewDevice(PreviewDevice(rawValue: "iPhone XS Max"))
                 .previewDisplayName("XS Max dark (settings)")
-            TherapySettingsView(viewModel: TherapySettingsViewModel(mode: .legacySettings, therapySettings: TherapySettings()))
+            TherapySettingsView(viewModel: TherapySettingsViewModel(mode: .legacySettings,
+                                                                    therapySettings: TherapySettings(),
+                                                                    chartColors: ChartColorPalette(axisLine: .clear,
+                                                                                                   axisLabel: .secondaryLabel,
+                                                                                                   grid: .systemGray3,
+                                                                                                   glucoseTint: .systemTeal,
+                                                                                                   doseTint: .systemOrange)))
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (Empty TherapySettings)")

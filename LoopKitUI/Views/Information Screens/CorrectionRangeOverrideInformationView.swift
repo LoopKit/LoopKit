@@ -14,6 +14,8 @@ public struct CorrectionRangeOverrideInformationView: View {
     var mode: PresentationMode
     
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.carbTintColor) var carbTintColor
+    @Environment(\.glucoseTintColor) var glucoseTintColor
     
     public init(
         onExit: (() -> Void)?,
@@ -83,17 +85,6 @@ public struct CorrectionRangeOverrideInformationView: View {
     
     
     private func icon(for preset: CorrectionRangeOverrides.Preset) -> some View {
-        switch preset {
-        case .preMeal:
-            return icon(named: "Pre-Meal", tinted: Color(.COBTintColor))
-        case .workout:
-            return icon(named: "workout", tinted: Color(.glucoseTintColor))
-        }
-    }
-
-    private func icon(named name: String, tinted color: Color) -> some View {
-        Image(name)
-            .renderingMode(.template)
-            .foregroundColor(color)
+        return preset.icon(usingCarbTintColor: carbTintColor, orGlucoseTintColor: glucoseTintColor)
     }
 }

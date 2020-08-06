@@ -27,6 +27,8 @@ public class TherapySettingsViewModel: ObservableObject {
     public var prescription: Prescription?
 
     lazy private var cancellables = Set<AnyCancellable>()
+    
+    public let chartColors: ChartColorPalette
 
     public init(mode: PresentationMode,
                 therapySettings: TherapySettings,
@@ -35,6 +37,7 @@ public class TherapySettingsViewModel: ObservableObject {
                 syncPumpSchedule: PumpManager.SyncSchedule? = nil,
                 sensitivityOverridesEnabled: Bool = false,
                 prescription: Prescription? = nil,
+                chartColors: ChartColorPalette,
                 didSave: SaveCompletion? = nil) {
         self.mode = mode
         self.therapySettings = therapySettings
@@ -44,6 +47,7 @@ public class TherapySettingsViewModel: ObservableObject {
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
         self.prescription = prescription
         self.supportedInsulinModelSettings = supportedInsulinModelSettings
+        self.chartColors = chartColors
         self.didSave = didSave
     }
     

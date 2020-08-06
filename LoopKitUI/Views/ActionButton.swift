@@ -30,7 +30,7 @@ public struct ActionButton: ViewModifier {
             edgeColor = .clear
         case .destructive:
             fontColor = .white
-            backgroundColor = .destructive
+            backgroundColor = .red
             edgeColor = .clear
         case .secondary:
             fontColor = .accentColor
