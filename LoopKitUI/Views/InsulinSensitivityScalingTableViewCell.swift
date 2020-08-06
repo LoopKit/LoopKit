@@ -110,7 +110,7 @@ final class InsulinSensitivityScalingTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        titleLabel.text = NSLocalizedString("Overall Insulin Needs", comment: "The title text for the insulin sensitivity scaling setting")
+        titleLabel.text = LocalizedString("Overall Insulin Needs", comment: "The title text for the insulin sensitivity scaling setting")
 
         selectedPercentage = 100
         setSelected(true, animated: false)
@@ -143,16 +143,16 @@ final class InsulinSensitivityScalingTableViewCell: UITableViewCell {
         let delta = selectedPercentage - 100
         if delta < 0 {
             footerText = String(
-                format: NSLocalizedString("Basal, bolus, and correction insulin dose amounts are decreased by %@%%.", comment: "Describes a percentage decrease in overall insulin needs"),
+                format: LocalizedString("Basal, bolus, and correction insulin dose amounts are decreased by %@%%.", comment: "Describes a percentage decrease in overall insulin needs"),
                 String(abs(delta))
             )
         } else if delta > 0 {
             footerText = String(
-                format: NSLocalizedString("Basal, bolus, and correction insulin dose amounts are increased by %@%%.", comment: "Describes a percentage increase in overall insulin needs"),
+                format: LocalizedString("Basal, bolus, and correction insulin dose amounts are increased by %@%%.", comment: "Describes a percentage increase in overall insulin needs"),
                 String(delta)
             )
         } else {
-            footerText = NSLocalizedString("Basal, bolus, and correction insulin dose amounts are unaffected.", comment: "Describes a lack of change in overall insulin needs")
+            footerText = LocalizedString("Basal, bolus, and correction insulin dose amounts are unaffected.", comment: "Describes a lack of change in overall insulin needs")
         }
 
         footerLabel.text = footerText
