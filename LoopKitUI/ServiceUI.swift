@@ -7,6 +7,7 @@
 //
 
 import LoopKit
+import SwiftUI
 
 public protocol ServiceUI: Service {
 
@@ -18,5 +19,6 @@ public protocol ServiceUI: Service {
     /// Provides a view controller to configure an existing service.
     ///
     /// - Returns: A view controller to configure an existing service.
-    func settingsViewController(chartColors: ChartColorPalette) -> (UIViewController & ServiceSettingsNotifying & CompletionNotifying)
+    func settingsViewController(chartColors: ChartColorPalette, carbTintColor: Color, glucoseTintColor: Color, guidanceColors: GuidanceColors, insulinTintColor: Color) -> (UIViewController & ServiceSettingsNotifying & CompletionNotifying)
+
 }

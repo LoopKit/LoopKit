@@ -23,14 +23,16 @@ public class DismissibleHostingController: UIHostingController<AnyView> {
         onDisappear: @escaping () -> Void = {},
         carbTintColor: Color = .green,
         glucoseTintColor: Color = Color(.systemTeal),
-        guidanceColors: GuidanceColors = GuidanceColors()
+        guidanceColors: GuidanceColors = GuidanceColors(),
+        insulinTintColor: Color = .orange
     ) {
         // Delay initialization of dismissal closure pushed into SwiftUI Environment until after calling the designated initializer
         var dismiss = {}
         self.init(rootView: AnyView(rootView.environment(\.dismiss, { dismiss() })
             .environment(\.carbTintColor, carbTintColor)
             .environment(\.glucoseTintColor, glucoseTintColor)
-            .environment(\.guidanceColors, guidanceColors)))
+            .environment(\.guidanceColors, guidanceColors)
+            .environment(\.insulinTintColor, insulinTintColor)))
 
         switch dismissalMode {
         case .modalDismiss:

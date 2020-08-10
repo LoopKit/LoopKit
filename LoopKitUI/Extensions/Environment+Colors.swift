@@ -40,3 +40,14 @@ public extension EnvironmentValues {
         set { self[GlucoseTintColorKey.self] = newValue }
     }
 }
+
+private struct InsulinTintColorKey: EnvironmentKey {
+    static let defaultValue: Color = .orange
+}
+
+public extension EnvironmentValues {
+    var insulinTintColor: Color {
+        get { self[InsulinTintColorKey.self] }
+        set { self[InsulinTintColorKey.self] = newValue }
+    }
+}

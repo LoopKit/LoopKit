@@ -469,7 +469,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                                  pumpSupportedIncrements: PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
                                                                                   bolusVolumes: preview_supportedBolusVolumes,
                                                                                   maximumBasalScheduleEntryCount: 24),
-                                 chartColors: ChartColorPalette(axisLine: .clear, axisLabel: .secondaryLabel, grid: .systemGray3, glucoseTint: .systemTeal, doseTint: .systemOrange))
+                                 chartColors: ChartColorPalette(axisLine: .clear, axisLabel: .secondaryLabel, grid: .systemGray3, glucoseTint: .systemTeal, insulinTint: .systemOrange))
     }
 
     public static var previews: some View {
@@ -492,7 +492,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                                                                                                    axisLabel: .secondaryLabel,
                                                                                                    grid: .systemGray3,
                                                                                                    glucoseTint: .systemTeal,
-                                                                                                   doseTint: .systemOrange)))
+                                                                                                   insulinTint: .systemOrange)))
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (Empty TherapySettings)")
