@@ -50,6 +50,35 @@ class PumpEvent: NSManagedObject {
             primitiveUnit = newValue?.rawValue
         }
     }
+    
+    var modelDuration: Double? {
+        get {
+            willAccessValue(forKey: "modelDuration")
+            defer { didAccessValue(forKey: "modelDuration") }
+            return primitiveModelDuration?.doubleValue
+        }
+        set {
+            willChangeValue(forKey: "modelDuration")
+            defer { didChangeValue(forKey: "modelDuration") }
+            primitiveModelDuration = newValue != nil ? NSNumber(value: newValue!) : nil
+        }
+    }
+
+    private var modelType: CachedInsulinModel? {
+        get {
+            willAccessValue(forKey: "modelType")
+            defer { didAccessValue(forKey: "modelType") }
+            guard let type = primitiveModelType else {
+                return nil
+            }
+            return CachedInsulinModel(rawValue: type.intValue)
+        }
+        set {
+            willChangeValue(forKey: "modelType")
+            defer { didChangeValue(forKey: "modelType") }
+            primitiveModelType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
+        }
+    }
 
     var type: PumpEventType? {
         get {
@@ -141,7 +170,44 @@ extension PumpEvent: TimelineValue {
 
 
 extension PumpEvent {
-
+    var insulinModelSetting: InsulinModelSettings? {
+        get {
+            switch modelType {
+            case .exponentialAdult:
+                return InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)
+            case .exponentialChild:
+                return InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologChild)
+            case .fiasp:
+                return InsulinModelSettings(model: ExponentialInsulinModelPreset.fiasp)
+            case .walsh:
+                guard let duration = modelDuration else {
+                    return nil
+                }
+                return InsulinModelSettings(model: WalshInsulinModel(actionDuration: duration))
+            default:
+                return nil
+            }
+        }
+        set {
+            switch newValue {
+            case .none:
+                modelType = CachedInsulinModel.none
+            case .exponentialPreset(let preset):
+                switch preset {
+                case .humalogNovologAdult:
+                    modelType = .exponentialAdult
+                case .humalogNovologChild:
+                    modelType = .exponentialChild
+                case .fiasp:
+                    modelType = .fiasp
+                }
+            case .walsh(let model):
+                modelType = .walsh
+                modelDuration = model.actionDuration
+            }
+        }
+    }
+    
     var dose: DoseEntry? {
         get {
             // To handle migration, we're requiring any dose to also have a PumpEventType
@@ -156,7 +222,8 @@ extension PumpEvent {
                 value: value,
                 unit: unit,
                 deliveredUnits: deliveredUnits,
-                syncIdentifier: syncIdentifier
+                syncIdentifier: syncIdentifier,
+                insulinModelSetting: insulinModelSetting
             )
         }
         set {
@@ -170,6 +237,7 @@ extension PumpEvent {
             value = entry.value
             unit = entry.unit
             deliveredUnits = entry.deliveredUnits
+            insulinModelSetting = entry.insulinModelSetting
         }
     }
 

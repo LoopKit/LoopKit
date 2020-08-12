@@ -11,15 +11,16 @@ import Foundation
 
 /// A subset of pump event types, with raw values matching decocare's strings
 public enum PumpEventType: String {
-    case alarm      = "AlarmPump"
-    case alarmClear = "ClearAlarm"
-    case basal      = "BasalProfileStart"
-    case bolus      = "Bolus"
-    case prime      = "Prime"
-    case resume     = "PumpResume"
-    case rewind     = "Rewind"
-    case suspend    = "PumpSuspend"
-    case tempBasal  = "TempBasal"
+    case alarm       = "AlarmPump"
+    case alarmClear  = "ClearAlarm"
+    case basal       = "BasalProfileStart"
+    case bolus       = "Bolus"
+    case loggedDose  = "LoggedDose"
+    case prime       = "Prime"
+    case resume      = "PumpResume"
+    case rewind      = "Rewind"
+    case suspend     = "PumpSuspend"
+    case tempBasal   = "TempBasal"
 }
 
 
@@ -27,6 +28,8 @@ extension PumpEventType {
     /// Provides an ordering between types used for stable, chronological sorting for doses that share the same date.
     var sortOrder: Int {
         switch self {
+        case .loggedDose:
+            return 0
         case .bolus:
             return 1
         // An alarm should happen before a clear

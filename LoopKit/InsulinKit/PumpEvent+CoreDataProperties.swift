@@ -29,5 +29,6 @@ extension PumpEvent {
     @NSManaged var raw: Data?
     @NSManaged var title: String?
     @NSManaged var modificationCounter: Int64
-
+    @NSManaged var primitiveModelDuration: NSNumber?
+    @NSManaged var primitiveModelType: NSNumber?
 }

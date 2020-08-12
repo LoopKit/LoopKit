@@ -18,6 +18,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     public let unit: DoseUnit
     public let deliveredUnits: Double?
     public let description: String?
+    public let insulinModelSetting: InsulinModelSettings?
     internal(set) public var syncIdentifier: String?
 
     /// The scheduled basal rate during this dose entry
@@ -31,7 +32,8 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units)
     }
 
-    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil) {
+    // If the insulin model field is nil, it's assumed that the model is the type of insulin the pump dispenses
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinModelSetting: InsulinModelSettings? = nil) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
@@ -41,6 +43,7 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.description = description
         self.syncIdentifier = syncIdentifier
         self.scheduledBasalRate = scheduledBasalRate
+        self.insulinModelSetting = insulinModelSetting
     }
 }
 

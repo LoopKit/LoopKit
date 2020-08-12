@@ -66,3 +66,19 @@ extension PumpEvent {
         )
     }
 }
+
+extension PersistedOutsideDoseEvent {
+    var persistedPumpEvent: PersistedPumpEvent {
+        return PersistedPumpEvent (
+            date: date,
+            persistedDate: persistedDate,
+            dose: dose,
+            isUploaded: isUploaded,
+            objectIDURL: objectIDURL,
+            raw: raw,
+            title: title,
+            type: PumpEventType.loggedDose,
+            isMutable: isMutable
+        )
+    }
+}
