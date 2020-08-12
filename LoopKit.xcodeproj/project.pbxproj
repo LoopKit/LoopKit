@@ -559,6 +559,8 @@
 		C18A419C2428268500BBAF28 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18A418F24281CAD00BBAF28 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C18A419D2428268800BBAF28 /* DeviceLog.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C18A419024281CAD00BBAF28 /* DeviceLog.xcdatamodeld */; };
 		C1F8B1E2223C3CC000DD66CF /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
+		E93E866424DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93E866324DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift */; };
+		E93E866A24DD05FA00FF40C8 /* OverrideSelectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93E866924DD05FA00FF40C8 /* OverrideSelectionHistory.swift */; };
 		E9C58A6E24DA65E400487A17 /* AddEditOverrideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C58A6D24DA65E400487A17 /* AddEditOverrideView.swift */; };
 		E9E5E56A24D5CCE800B5DFFE /* OverrideViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -1171,6 +1173,8 @@
 		C1DB55B21F2E964400C483A2 /* ExponentialInsulinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModel.swift; sourceTree = "<group>"; };
 		C1DB55B41F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_doses_exponential_output.json; sourceTree = "<group>"; };
 		C1DB55B61F2EACD500C483A2 /* iob_from_bolus_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_bolus_exponential_output.json; sourceTree = "<group>"; };
+		E93E866324DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideHistoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		E93E866924DD05FA00FF40C8 /* OverrideSelectionHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideSelectionHistory.swift; sourceTree = "<group>"; };
 		E9C58A6D24DA65E400487A17 /* AddEditOverrideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditOverrideView.swift; sourceTree = "<group>"; };
 		E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1363,6 +1367,7 @@
 		4369F090208B0D68000E3E45 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E93E866924DD05FA00FF40C8 /* OverrideSelectionHistory.swift */,
 				43F5035821059AF7009FA89A /* AuthenticationTableViewCell.swift */,
 				43F5035921059AF7009FA89A /* AuthenticationTableViewCell.xib */,
 				892A5D63222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.swift */,
@@ -1410,6 +1415,7 @@
 				892155172245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.xib */,
 				8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */,
 				E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */,
+				E93E866324DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2450,6 +2456,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				898E6E6E2241ED9F0019E459 /* SuspendResumeTableViewCell.swift in Sources */,
+				E93E866A24DD05FA00FF40C8 /* OverrideSelectionHistory.swift in Sources */,
 				898E6E69224179310019E459 /* BatteryLevelHUDView.swift in Sources */,
 				892155182245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.swift in Sources */,
 				892155132245C516009112BC /* SegmentedGaugeBarView.swift in Sources */,
@@ -2516,6 +2523,7 @@
 				43A8EC3C210CEEA500A81379 /* CGMManagerUI.swift in Sources */,
 				43BA718B201EE93C0058961E /* TimeZone.swift in Sources */,
 				43BA717B201EE6A40058961E /* NibLoadable.swift in Sources */,
+				E93E866424DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift in Sources */,
 				895FE08122011F0C00FCF18A /* OverridePresetCollectionViewCell.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
 				8974B0692215FE460043F01B /* Collection.swift in Sources */,

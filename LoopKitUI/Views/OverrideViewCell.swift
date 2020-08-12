@@ -67,10 +67,10 @@ public struct OverrideViewCell: View {
                 Group {
                     if self.insulinNeedsScaleFactor != nil {
                         SegmentedGaugeBar(insulinNeedsScaler: self.insulinNeedsScaleFactor!)
-                        .frame(minHeight: 13)
+                        .frame(minHeight: 12)
                     }
                 }
-                Spacer(minLength: geo.size.width * 0.4) // Hack to fix spacing
+                Spacer(minLength: geo.size.width * 0.35) // Hack to fix spacing
             }
         }
     }
