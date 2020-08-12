@@ -217,7 +217,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     private func oneUnitBolusEffectPrediction(using model: InsulinModel) -> [GlucoseValue] {
         let bolus = DoseEntry(type: .bolus, startDate: chartManager.startDate, value: 1, unit: .units)
         let startingGlucoseSample = HKQuantitySample(type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!, quantity: startingGlucoseQuantity, start: chartManager.startDate, end: chartManager.startDate)
-        let effects = [bolus].glucoseEffects(insulinModel: model, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = [bolus].glucoseEffects(defaultModel: model, longestEffectDuration: model.effectDuration, insulinSensitivity: insulinSensitivitySchedule)
         return LoopMath.predictGlucose(startingAt: startingGlucoseSample, effects: effects)
     }
 
