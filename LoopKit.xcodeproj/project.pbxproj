@@ -1497,6 +1497,7 @@
 		E96DCB5D24AF7DC7007117BC /* BasalRatesInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalRatesInformationView.swift; sourceTree = "<group>"; };
 		E9CDA72624E3A4BA0049B0D5 /* OutsideDoseEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutsideDoseEvent.swift; sourceTree = "<group>"; };
 		E9CDA72924E3A4F60049B0D5 /* PersistedOutsideDoseEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistedOutsideDoseEvent.swift; sourceTree = "<group>"; };
+		E9CDA72C24E3FFAC0049B0D5 /* Modelv3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv3.xcdatamodel; sourceTree = "<group>"; };
 		E9D95F6424C7BC400079F47D /* PresentationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationMode.swift; sourceTree = "<group>"; };
 		E9E5E56124D362E800B5DFFE /* dynamic_glucose_effect_none_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_none_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_never_fully_observed_output.json; sourceTree = "<group>"; };
@@ -4507,10 +4508,11 @@
 		43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				E9CDA72C24E3FFAC0049B0D5 /* Modelv3.xcdatamodel */,
 				A91A601823CD01B000C0E8A1 /* Modelv2.xcdatamodel */,
 				43D8FEE11C7294D50073BE78 /* Model.xcdatamodel */,
 			);
-			currentVersion = A91A601823CD01B000C0E8A1 /* Modelv2.xcdatamodel */;
+			currentVersion = E9CDA72C24E3FFAC0049B0D5 /* Modelv3.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

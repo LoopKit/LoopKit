@@ -152,6 +152,7 @@ extension DoseEntry: Codable {
         self.deliveredUnits = try container.decodeIfPresent(Double.self, forKey: .deliveredUnits)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.syncIdentifier = try container.decodeIfPresent(String.self, forKey: .syncIdentifier)
+        self.insulinModelSetting = try container.decodeIfPresent(InsulinModelSettings.self, forKey: .insulinModelSetting)
         if let scheduledBasalRate = try container.decodeIfPresent(Double.self, forKey: .scheduledBasalRate),
             let scheduledBasalRateUnit = try container.decodeIfPresent(String.self, forKey: .scheduledBasalRateUnit) {
             self.scheduledBasalRate = HKQuantity(unit: HKUnit(from: scheduledBasalRateUnit), doubleValue: scheduledBasalRate)
@@ -168,6 +169,7 @@ extension DoseEntry: Codable {
         try container.encodeIfPresent(deliveredUnits, forKey: .deliveredUnits)
         try container.encodeIfPresent(description, forKey: .description)
         try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
+        try container.encodeIfPresent(insulinModelSetting, forKey: .insulinModelSetting)
         if let scheduledBasalRate = scheduledBasalRate {
             try container.encode(scheduledBasalRate.doubleValue(for: DoseEntry.unitsPerHour), forKey: .scheduledBasalRate)
             try container.encode(DoseEntry.unitsPerHour.unitString, forKey: .scheduledBasalRateUnit)
@@ -185,5 +187,6 @@ extension DoseEntry: Codable {
         case syncIdentifier
         case scheduledBasalRate
         case scheduledBasalRateUnit
+        case insulinModelSetting
     }
 }
