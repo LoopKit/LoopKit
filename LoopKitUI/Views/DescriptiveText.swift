@@ -10,15 +10,17 @@ import SwiftUI
 
 public struct DescriptiveText: View {
     var label: String
+    let color: Color
     
-    public init(label: String) {
+    public init(label: String, color: Color = .secondary) {
         self.label = label
+        self.color = color
     }
     
     public var body: some View {
         Text(label)
             .font(.footnote)
-            .foregroundColor(.secondary)
+            .foregroundColor(color)
     }
 }
 

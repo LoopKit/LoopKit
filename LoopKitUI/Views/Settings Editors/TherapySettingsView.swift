@@ -34,6 +34,7 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
     }
         
     public var body: some View {
+        // TODO: simplify this once 'legacy settings' are factored out
         switch viewModel.mode {
         case .acceptanceFlow: return AnyView(content)
         case .settings: return AnyView(content)
@@ -45,7 +46,11 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
         List {
             Group {
                 if viewModel.mode == .acceptanceFlow && viewModel.prescription != nil {
+                    // At start of acceptance flow
                     prescriptionSection
+                } else if viewModel.mode == .acceptanceFlow && viewModel.prescription == nil {
+                    // At end of acceptance flow
+                    summaryHeaderSection
                 }
                 suspendThresholdSection
                 correctionRangeSection
@@ -101,6 +106,32 @@ extension TherapySettingsView {
                 Spacer()
             }
         }
+    }
+    
+    private var summaryHeaderSection: some View {
+        Section(header: Spacer()) {
+            VStack(alignment: .leading) {
+                Spacer()
+                Text(LocalizedString("Review and Save Settings", comment: "title for summary description section"))
+                    .bold()
+                    .foregroundColor(.white)
+                Spacer()
+                VStack (alignment: .leading, spacing: 10) {
+                    DescriptiveText(label: summaryHeaderReviewText, color: .white)
+                    DescriptiveText(label: summaryHeaderEditText, color: .white)
+                }
+                Spacer()
+            }
+        }
+        .listRowBackground(Color.accentColor)
+    }
+    
+    private var summaryHeaderReviewText: String {
+        String(format: LocalizedString("Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen.", comment: "Description of how to interact with summary screen"))
+    }
+    
+    private var summaryHeaderEditText: String {
+        String(format: LocalizedString("If these settings look good to you, tap Save Settings to continue.", comment: "Description of how to interact with summary screen"))
     }
     
     private var prescriptionDescriptiveText: String {
