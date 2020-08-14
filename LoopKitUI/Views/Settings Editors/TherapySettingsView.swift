@@ -54,7 +54,10 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
                 }
                 suspendThresholdSection
                 correctionRangeSection
-                temporaryCorrectionRangesSection
+                preMealCorrectionRangeSection
+                if !viewModel.sensitivityOverridesEnabled {
+                    workoutCorrectionRangeSection
+                }
                 basalRatesSection
                 deliveryLimitsSection
                 insulinModelSection
@@ -140,37 +143,8 @@ extension TherapySettingsView {
                DateFormatter.localizedString(from: viewModel.prescription!.datePrescribed, dateStyle: .short, timeStyle: .none))
     }
     
-    private var correctionRangeSection: some View {
-        section(for: .glucoseTargetRange) {
-            if self.glucoseUnit != nil && self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
-                ForEach(self.viewModel.therapySettings.glucoseTargetRangeSchedule!.items, id: \.self) { value in
-                    ScheduleRangeItem(time: value.startTime,
-                                      range: value.value,
-                                      unit: self.glucoseUnit!,
-                                      guardrail: .correctionRange)
-                }
-            }
-        }
-    }
-    
-    private var temporaryCorrectionRangesSection: some View {
-        section(for: .correctionRangeOverrides) {
-            if self.glucoseUnit != nil && self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
-                ForEach(CorrectionRangeOverrides.Preset.allCases, id: \.self) { preset in
-                    CorrectionRangeOverridesRangeItem(
-                        preMealTargetRange: self.viewModel.therapySettings.preMealTargetRange,
-                        workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange,
-                        unit: self.glucoseUnit!,
-                        preset: preset,
-                        correctionRangeScheduleRange: self.viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
-                    )
-                }
-            }
-        }
-    }
-    
     private var suspendThresholdSection: some View {
-        section(for: .suspendThreshold, addExtraSpaceAboveSection: viewModel.prescription == nil) {
+        section(for: .suspendThreshold, header: viewModel.prescription == nil ? AnyView(Spacer()) : AnyView(EmptyView())) {
             if self.glucoseUnit != nil {
                 HStack {
                     Spacer()
@@ -187,6 +161,47 @@ extension TherapySettingsView {
         }
     }
     
+    private var correctionRangeSection: some View {
+        section(for: .glucoseTargetRange) {
+            if self.glucoseUnit != nil && self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
+                ForEach(self.viewModel.therapySettings.glucoseTargetRangeSchedule!.items, id: \.self) { value in
+                    ScheduleRangeItem(time: value.startTime,
+                                      range: value.value,
+                                      unit: self.glucoseUnit!,
+                                      guardrail: .correctionRange)
+                }
+            }
+        }
+    }
+    
+    private var preMealCorrectionRangeSection: some View {
+        section(for: .preMealCorrectionRangeOverride) {
+            if self.glucoseUnit != nil && self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
+                CorrectionRangeOverridesRangeItem(
+                    preMealTargetRange: self.viewModel.therapySettings.preMealTargetRange,
+                    workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange,
+                    unit: self.glucoseUnit!,
+                    preset: CorrectionRangeOverrides.Preset.preMeal,
+                    correctionRangeScheduleRange: self.viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
+                )
+            }
+        }
+    }
+    
+    private var workoutCorrectionRangeSection: some View {
+        section(for: .workoutCorrectionRangeOverride) {
+            if self.glucoseUnit != nil && self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
+                CorrectionRangeOverridesRangeItem(
+                    preMealTargetRange: self.viewModel.therapySettings.preMealTargetRange,
+                    workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange,
+                    unit: self.glucoseUnit!,
+                    preset: CorrectionRangeOverrides.Preset.workout,
+                    correctionRangeScheduleRange: self.viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
+                )
+            }
+        }
+    }
+
     private var basalRatesSection: some View {
         section(for: .basalRate) {
             if self.viewModel.therapySettings.basalRateSchedule != nil && self.viewModel.pumpSupportedIncrements != nil {
@@ -303,12 +318,22 @@ extension TherapySettingsView {
     private var sensitivityUnit: HKUnit? {
         glucoseUnit?.unitDivided(by: .internationalUnit())
     }
-
+    
     private func section<Content>(for therapySetting: TherapySetting,
-                                  addExtraSpaceAboveSection: Bool = false,
                                   @ViewBuilder content: @escaping () -> Content) -> some View where Content: View {
         SectionWithTapToEdit(isEnabled: viewModel.mode != .acceptanceFlow,
-                             header: addExtraSpaceAboveSection ? AnyView(Spacer()) : AnyView(EmptyView()),
+                             header: EmptyView(),
+                             title: therapySetting.title,
+                             descriptiveText: therapySetting.descriptiveText,
+                             destination: screen(for: therapySetting),
+                             content: content)
+    }
+
+    private func section<Content, Header>(for therapySetting: TherapySetting,
+                                          header: Header,
+                                          @ViewBuilder content: @escaping () -> Content) -> some View where Content: View, Header: View {
+        SectionWithTapToEdit(isEnabled: viewModel.mode != .acceptanceFlow,
+                             header: header,
                              title: therapySetting.title,
                              descriptiveText: therapySetting.descriptiveText,
                              destination: screen(for: therapySetting),
@@ -428,10 +453,16 @@ private extension TherapySettingsView {
                     AnyView(CorrectionRangeScheduleEditor(viewModel: self.viewModel, didSave: goBack).environment(\.dismiss, goBack))
                 }
             }
-        case .correctionRangeOverrides:
+        case .preMealCorrectionRangeOverride:
             if self.viewModel.therapySettings.glucoseUnit != nil {
                 return { goBack in
-                   AnyView(CorrectionRangeOverridesEditor(viewModel: self.viewModel, didSave: goBack).environment(\.dismiss, goBack))
+                    AnyView(CorrectionRangeOverridesEditor(viewModel: self.viewModel, preset: .preMeal, didSave: goBack).environment(\.dismiss, goBack))
+                }
+            }
+        case .workoutCorrectionRangeOverride:
+            if self.viewModel.therapySettings.glucoseUnit != nil {
+                return { goBack in
+                    AnyView(CorrectionRangeOverridesEditor(viewModel: self.viewModel, preset: .workout, didSave: goBack).environment(\.dismiss, goBack))
                 }
             }
         case .basalRate:

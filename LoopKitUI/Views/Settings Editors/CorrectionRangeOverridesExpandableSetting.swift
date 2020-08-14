@@ -44,6 +44,6 @@ public struct CorrectionRangeOverridesExpandableSetting<ExpandedContent: View>: 
     }
 
     private func guardrail(for preset: CorrectionRangeOverrides.Preset) -> Guardrail<HKQuantity> {
-        return Guardrail.correctionRangeOverridePreset(preset, correctionRangeScheduleRange: correctionRangeScheduleRange)
+        return Guardrail.correctionRangeOverride(for: preset, correctionRangeScheduleRange: correctionRangeScheduleRange)
     }
 }

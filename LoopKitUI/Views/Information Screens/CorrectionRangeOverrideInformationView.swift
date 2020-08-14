@@ -10,29 +10,30 @@ import LoopKit
 import SwiftUI
 
 public struct CorrectionRangeOverrideInformationView: View {
+    let preset: CorrectionRangeOverrides.Preset
     var onExit: (() -> Void)?
-    var mode: PresentationMode
+    let mode: PresentationMode
     
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.carbTintColor) var carbTintColor
     @Environment(\.glucoseTintColor) var glucoseTintColor
     
     public init(
+        preset: CorrectionRangeOverrides.Preset,
         onExit: (() -> Void)?,
         mode: PresentationMode = .acceptanceFlow
     ) {
+        self.preset = preset
         self.onExit = onExit
         self.mode = mode
     }
     
     public var body: some View {
         InformationView(
-            title: Text(TherapySetting.correctionRangeOverrides.smallTitle),
+            title: Text(preset.therapySetting.title),
             informationalContent: {
                 VStack (alignment: .leading, spacing: 20) {
-                    section(for: CorrectionRangeOverrides.Preset.preMeal)
-                    Divider()
-                    section(for: CorrectionRangeOverrides.Preset.workout)
+                    section(for: preset)
                 }
             },
             onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
