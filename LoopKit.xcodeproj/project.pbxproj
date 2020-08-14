@@ -754,6 +754,7 @@
 		E9CDA72B24E3A4F60049B0D5 /* PersistedOutsideDoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CDA72924E3A4F60049B0D5 /* PersistedOutsideDoseEvent.swift */; };
 		E9D95F6524C7BC400079F47D /* PresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D95F6424C7BC400079F47D /* PresentationMode.swift */; };
 		E9DFB92724E490BE00468917 /* ExpandableDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92624E490BE00468917 /* ExpandableDatePicker.swift */; };
+		E9DFB92C24E634E800468917 /* ExpandablePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92B24E634E800468917 /* ExpandablePicker.swift */; };
 		E9E5E56524D362E900B5DFFE /* dynamic_glucose_effect_none_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56124D362E800B5DFFE /* dynamic_glucose_effect_none_observed_output.json */; };
 		E9E5E56624D362E900B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */; };
 		E9E5E56724D362E900B5DFFE /* dynamic_glucose_effect_partially_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56324D362E800B5DFFE /* dynamic_glucose_effect_partially_observed_output.json */; };
@@ -1499,6 +1500,7 @@
 		E9CDA72C24E3FFAC0049B0D5 /* Modelv3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv3.xcdatamodel; sourceTree = "<group>"; };
 		E9D95F6424C7BC400079F47D /* PresentationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationMode.swift; sourceTree = "<group>"; };
 		E9DFB92624E490BE00468917 /* ExpandableDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDatePicker.swift; sourceTree = "<group>"; };
+		E9DFB92B24E634E800468917 /* ExpandablePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandablePicker.swift; sourceTree = "<group>"; };
 		E9E5E56124D362E800B5DFFE /* dynamic_glucose_effect_none_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_none_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_never_fully_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56324D362E800B5DFFE /* dynamic_glucose_effect_partially_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_partially_observed_output.json; sourceTree = "<group>"; };
@@ -1838,6 +1840,7 @@
 				E9086B3424B3A8820062F5C8 /* ChartContainerView.swift */,
 				89186C0A24BFD6DB0003D0F3 /* DurationPicker.swift */,
 				E9DFB92624E490BE00468917 /* ExpandableDatePicker.swift */,
+				E9DFB92B24E634E800468917 /* ExpandablePicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3187,6 +3190,7 @@
 				1F5DAB212118C95700048054 /* LocalizedString.swift in Sources */,
 				43FB60E520DCBA02002B996B /* SetupTableViewController.swift in Sources */,
 				43BA7180201EE7090058961E /* SingleValueScheduleTableViewController.swift in Sources */,
+				E9DFB92C24E634E800468917 /* ExpandablePicker.swift in Sources */,
 				898E6E5D2241783C0019E459 /* SetConstrainedScheduleEntryTableViewCell.swift in Sources */,
 				89FC688F245A2D680075CF59 /* InsulinSensitivityScheduleEditor.swift in Sources */,
 				E96DCB5E24AF7DC7007117BC /* BasalRatesInformationView.swift in Sources */,
