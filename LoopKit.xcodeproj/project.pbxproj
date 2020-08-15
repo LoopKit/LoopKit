@@ -755,6 +755,7 @@
 		E9D95F6524C7BC400079F47D /* PresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D95F6424C7BC400079F47D /* PresentationMode.swift */; };
 		E9DFB92724E490BE00468917 /* ExpandableDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92624E490BE00468917 /* ExpandableDatePicker.swift */; };
 		E9DFB92C24E634E800468917 /* ExpandablePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92B24E634E800468917 /* ExpandablePicker.swift */; };
+		E9DFB92E24E8A75C00468917 /* iob_from_multiple_curves_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9DFB92D24E8A75C00468917 /* iob_from_multiple_curves_output.json */; };
 		E9E5E56524D362E900B5DFFE /* dynamic_glucose_effect_none_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56124D362E800B5DFFE /* dynamic_glucose_effect_none_observed_output.json */; };
 		E9E5E56624D362E900B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */; };
 		E9E5E56724D362E900B5DFFE /* dynamic_glucose_effect_partially_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56324D362E800B5DFFE /* dynamic_glucose_effect_partially_observed_output.json */; };
@@ -1501,6 +1502,7 @@
 		E9D95F6424C7BC400079F47D /* PresentationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationMode.swift; sourceTree = "<group>"; };
 		E9DFB92624E490BE00468917 /* ExpandableDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDatePicker.swift; sourceTree = "<group>"; };
 		E9DFB92B24E634E800468917 /* ExpandablePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandablePicker.swift; sourceTree = "<group>"; };
+		E9DFB92D24E8A75C00468917 /* iob_from_multiple_curves_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_multiple_curves_output.json; sourceTree = "<group>"; };
 		E9E5E56124D362E800B5DFFE /* dynamic_glucose_effect_none_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_none_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_never_fully_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56324D362E800B5DFFE /* dynamic_glucose_effect_partially_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_partially_observed_output.json; sourceTree = "<group>"; };
@@ -2252,6 +2254,7 @@
 				43B99AFF1C7450EE00D050F5 /* effect_from_history_output.json */,
 				43CE7CE11CA9EA1A003CC1B0 /* iob_from_bolus_120min_output.json */,
 				43CE7CE31CA9EB1E003CC1B0 /* iob_from_bolus_180min_output.json */,
+				E9DFB92D24E8A75C00468917 /* iob_from_multiple_curves_output.json */,
 				43CE7CDF1CA9E8B0003CC1B0 /* iob_from_bolus_240min_output.json */,
 				43CE7CE51CA9EBD2003CC1B0 /* iob_from_bolus_300min_output.json */,
 				43CE7CE71CA9EC1F003CC1B0 /* iob_from_bolus_312min_output.json */,
@@ -2932,6 +2935,7 @@
 				4322B7A8202FA3D20002837D /* momentum_effect_mixed_provenance_glucose_input.json in Resources */,
 				435D2929205F3C760026F401 /* momentum_effect_rising_glucose_double_entries_input.json in Resources */,
 				4322B7AB202FA3D20002837D /* momentum_effect_stable_glucose_input.json in Resources */,
+				E9DFB92E24E8A75C00468917 /* iob_from_multiple_curves_output.json in Resources */,
 				43D988A61C87FFA300DA4467 /* glucose_from_effects_momentum_flat_glucose_input.json in Resources */,
 				9E784341236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json in Resources */,
 				437874D5202FDD2D00A3D8B9 /* suspend_dose_reconciled_normalized.json in Resources */,
