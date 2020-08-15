@@ -491,7 +491,7 @@ class StoredSettingsCodableTests: XCTestCase {
       }
     }
   },
-  "defaultInsulinModelSetting" : {
+  "insulinModel" : {
     "actionDuration" : 21600,
     "modelType" : "rapidAdult",
     "peakActivity" : 10800
