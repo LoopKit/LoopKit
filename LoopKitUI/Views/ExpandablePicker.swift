@@ -26,9 +26,10 @@ public struct ExpandablePicker: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .center) {
-                Text("Insulin Model")
+                Text("Insulin Model", comment: "Insulin model title")
                 Spacer()
                 Text(items[pickerIndex])
+                .foregroundColor(.gray)
             }
             .padding(.vertical, 5)
             .frame(minWidth: 0, maxWidth: .infinity).onTapGesture {
