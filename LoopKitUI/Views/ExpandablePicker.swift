@@ -10,15 +10,17 @@ import SwiftUI
 
 public struct ExpandablePicker: View {
     @State var pickerShouldExpand = false
-    @Binding var selectedIndex: Int
+    @State var pickerIndex: Int = 0
+    var onUpdate: (Int) -> Void
+    
     let items: [String]
     
     public init (
         with items: [String],
-        pickerIndex: Binding<Int>
+        onUpdate: @escaping (Int) -> Void
     ) {
         self.items = items
-        _selectedIndex = pickerIndex
+        self.onUpdate = onUpdate
     }
     
     public var body: some View {
@@ -26,7 +28,7 @@ public struct ExpandablePicker: View {
             HStack(alignment: .center) {
                 Text("Insulin Model")
                 Spacer()
-                Text(items[selectedIndex])
+                Text(items[pickerIndex])
             }
             .padding(.vertical, 5)
             .frame(minWidth: 0, maxWidth: .infinity).onTapGesture {
@@ -34,7 +36,7 @@ public struct ExpandablePicker: View {
             }
             if pickerShouldExpand {
                 HStack {
-                    Picker(selection: $selectedIndex, label: Text("")) {
+                    Picker(selection: $pickerIndex.onChange(onUpdate), label: Text("")) {
                         ForEach(0 ..< items.count) {
                             Text(self.items[$0])
                        }
@@ -44,6 +46,17 @@ public struct ExpandablePicker: View {
                 }
             }
         }
+    }
+}
+
+extension Binding {
+    func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
+        return Binding(
+            get: { self.wrappedValue },
+            set: { selection in
+                self.wrappedValue = selection
+                handler(selection)
+        })
     }
 }
 
