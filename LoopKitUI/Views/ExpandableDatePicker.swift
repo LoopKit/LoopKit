@@ -32,7 +32,7 @@ public struct ExpandableDatePicker: View {
             // ANNA TOOD: fix buggy animations
             DatePicker(
                 "",
-                selection: $date,
+                selection: $date.onChange(onUpdate),
                 in: Date().addingTimeInterval(-.hours(6))...Date().addingTimeInterval(.hours(6)),
                 displayedComponents: [.date, .hourAndMinute]
             )
