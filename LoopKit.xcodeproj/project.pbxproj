@@ -756,6 +756,8 @@
 		E9DFB92724E490BE00468917 /* ExpandableDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92624E490BE00468917 /* ExpandableDatePicker.swift */; };
 		E9DFB92C24E634E800468917 /* ExpandablePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92B24E634E800468917 /* ExpandablePicker.swift */; };
 		E9DFB92E24E8A75C00468917 /* iob_from_multiple_curves_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9DFB92D24E8A75C00468917 /* iob_from_multiple_curves_output.json */; };
+		E9DFB93024E8CA8500468917 /* LegacyInsulinDeliveryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92F24E8CA8500468917 /* LegacyInsulinDeliveryTableViewController.swift */; };
+		E9DFB93524E8CD5800468917 /* LegacyInsulinDeliveryTableViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9DFB93324E8CD5800468917 /* LegacyInsulinDeliveryTableViewController.storyboard */; };
 		E9E5E56524D362E900B5DFFE /* dynamic_glucose_effect_none_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56124D362E800B5DFFE /* dynamic_glucose_effect_none_observed_output.json */; };
 		E9E5E56624D362E900B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */; };
 		E9E5E56724D362E900B5DFFE /* dynamic_glucose_effect_partially_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56324D362E800B5DFFE /* dynamic_glucose_effect_partially_observed_output.json */; };
@@ -1503,6 +1505,18 @@
 		E9DFB92624E490BE00468917 /* ExpandableDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDatePicker.swift; sourceTree = "<group>"; };
 		E9DFB92B24E634E800468917 /* ExpandablePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandablePicker.swift; sourceTree = "<group>"; };
 		E9DFB92D24E8A75C00468917 /* iob_from_multiple_curves_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_multiple_curves_output.json; sourceTree = "<group>"; };
+		E9DFB92F24E8CA8500468917 /* LegacyInsulinDeliveryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyInsulinDeliveryTableViewController.swift; sourceTree = "<group>"; };
+		E9DFB93424E8CD5800468917 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LegacyInsulinDeliveryTableViewController.storyboard; sourceTree = "<group>"; };
+		E9DFB93724E8CD7400468917 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		E9DFB93924E8CD7800468917 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LegacyInsulinDeliveryTableViewController.strings"; sourceTree = "<group>"; };
+		E9DFB93B24E8CD7A00468917 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		E9DFB93D24E8CD7B00468917 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		E9DFB93F24E8CD7C00468917 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		E9DFB94124E8CD7D00468917 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		E9DFB94324E8CD8100468917 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		E9DFB94524E8CD8300468917 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		E9DFB94724E8CD8400468917 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		E9DFB94924E8CD8600468917 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
 		E9E5E56124D362E800B5DFFE /* dynamic_glucose_effect_none_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_none_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_never_fully_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56324D362E800B5DFFE /* dynamic_glucose_effect_partially_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_partially_observed_output.json; sourceTree = "<group>"; };
@@ -1912,6 +1926,7 @@
 				1D096C0424C624F70078B6B5 /* InsulinModelSettings+LoopKitUI.swift */,
 				43BA7161201E48EB0058961E /* InsulinKit */,
 				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
+				E9DFB93324E8CD5800468917 /* LegacyInsulinDeliveryTableViewController.storyboard */,
 				7D68A9E31FE0A3D300522C49 /* Localizable.strings */,
 				43BA7156201E484D0058961E /* LoopKitUI.h */,
 				C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */,
@@ -1954,6 +1969,7 @@
 			isa = PBXGroup;
 			children = (
 				43D8FEEF1C7294E90073BE78 /* ErrorBackgroundView.swift */,
+				E9DFB92F24E8CA8500468917 /* LegacyInsulinDeliveryTableViewController.swift */,
 			);
 			path = InsulinKit;
 			sourceTree = "<group>";
@@ -2893,6 +2909,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43BA7194202039A90058961E /* GlucoseRangeTableViewCell.xib in Resources */,
+				E9DFB93524E8CD5800468917 /* LegacyInsulinDeliveryTableViewController.storyboard in Resources */,
 				895FE07122011EDD00FCF18A /* EmojiInputController.storyboard in Resources */,
 				892A5DAE2231E185008961AB /* HUDAssets.xcassets in Resources */,
 				43BA719720203EF30058961E /* CarbKit.storyboard in Resources */,
@@ -3186,6 +3203,7 @@
 				892A5D9E2231E122008961AB /* StateColorPalette.swift in Sources */,
 				895FE08022011F0C00FCF18A /* EmojiDataSource.swift in Sources */,
 				432CF86920D76B320066B889 /* SetupButton.swift in Sources */,
+				E9DFB93024E8CA8500468917 /* LegacyInsulinDeliveryTableViewController.swift in Sources */,
 				898E6E702241EDB70019E459 /* PercentageTextFieldTableViewController.swift in Sources */,
 				89CAB36D24C9EC98009EE3CE /* Keyboard.swift in Sources */,
 				1DEF977524C62F8400D630CB /* SupportedInsulinModelSettings.swift in Sources */,
@@ -3923,6 +3941,24 @@
 				1F50C329212B20D400C18FAB /* pl */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		E9DFB93324E8CD5800468917 /* LegacyInsulinDeliveryTableViewController.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E9DFB93424E8CD5800468917 /* Base */,
+				E9DFB93724E8CD7400468917 /* en */,
+				E9DFB93924E8CD7800468917 /* zh-Hans */,
+				E9DFB93B24E8CD7A00468917 /* nl */,
+				E9DFB93D24E8CD7B00468917 /* fr */,
+				E9DFB93F24E8CD7C00468917 /* de */,
+				E9DFB94124E8CD7D00468917 /* it */,
+				E9DFB94324E8CD8100468917 /* nb */,
+				E9DFB94524E8CD8300468917 /* pl */,
+				E9DFB94724E8CD8400468917 /* ru */,
+				E9DFB94924E8CD8600468917 /* es */,
+			);
+			name = LegacyInsulinDeliveryTableViewController.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

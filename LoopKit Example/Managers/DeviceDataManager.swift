@@ -27,17 +27,18 @@ class DeviceDataManager {
             carbRatioSchedule: carbRatioSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )
-        let insulinModel: WalshInsulinModel?
+        let insulinModelSetting: InsulinModelSettings?
         if let actionDuration = insulinActionDuration {
-            insulinModel = WalshInsulinModel(actionDuration: actionDuration)
+            let insulinModel = WalshInsulinModel(actionDuration: actionDuration)
+            insulinModelSetting = InsulinModelSettings(model: insulinModel)
         } else {
-            insulinModel = nil
+            insulinModelSetting = nil
         }
         doseStore = DoseStore(
             healthStore: healthStore,
             observeHealthKitForCurrentAppOnly: false,
             cacheStore: cacheStore,
-            defaultInsulinModelSetting: InsulinModelSettings(insulinModel),
+            defaultInsulinModelSetting: insulinModelSetting,
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )

@@ -210,7 +210,7 @@ class MasterViewController: UITableViewController {
             case .carbs:
                 performSegue(withIdentifier: CarbEntryTableViewController.className, sender: sender)
             case .reservoir:
-                performSegue(withIdentifier: InsulinDeliveryTableViewController.className, sender: sender)
+                performSegue(withIdentifier: LegacyInsulinDeliveryTableViewController.className, sender: sender)
             case .diagnostic:
                 let vc = CommandResponseViewController(command: { [weak self] (completionHandler) -> String in
                     let group = DispatchGroup()
@@ -320,7 +320,7 @@ class MasterViewController: UITableViewController {
                 vc.defaultAbsorptionTimes = carbStore.defaultAbsorptionTimes
                 vc.preferredUnit = carbStore.preferredUnit
             }
-        case let vc as InsulinDeliveryTableViewController:
+        case let vc as LegacyInsulinDeliveryTableViewController:
             vc.doseStore = dataManager?.doseStore
         default:
             break
