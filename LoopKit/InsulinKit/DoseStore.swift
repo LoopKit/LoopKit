@@ -852,7 +852,6 @@ extension DoseStore {
                 let object = OutsideDoseEvent(context: self.persistenceController.managedObjectContext)
 
                 object.date = dose.startDate
-                // ANNA TODO: Where to get raw data from...
                 object.raw = Data(UUID().uuidString.utf8)
                 object.title = "Logged Dose: \(String(describing: dose.programmedUnits)) \(String(describing: dose.unit)) on \(String(describing: dose.startDate))"
                 object.type = PumpEventType.loggedDose

@@ -28,7 +28,7 @@ public struct PersistedOutsideDoseEvent {
 
 extension OutsideDoseEvent {
     var persistedOutsideDoseEvent: PersistedOutsideDoseEvent {
-        return PersistedOutsideDoseEvent (
+        return PersistedOutsideDoseEvent(
             date: date,
             persistedDate: createdAt,
             dose: dose,
