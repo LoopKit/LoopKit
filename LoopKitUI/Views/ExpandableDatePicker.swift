@@ -37,7 +37,7 @@ public struct ExpandableDatePicker: View {
                 displayedComponents: [.date, .hourAndMinute]
             )
             .pickerStyle(WheelPickerStyle())
-            Text("Date")
+            Text(text)
         }
     }
     

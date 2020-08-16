@@ -12,21 +12,24 @@ public struct ExpandablePicker: View {
     @State var pickerShouldExpand = false
     @State var pickerIndex: Int = 0
     var onUpdate: (Int) -> Void
+    let label: String
     
     let items: [String]
     
     public init (
         with items: [String],
-        onUpdate: @escaping (Int) -> Void
+        onUpdate: @escaping (Int) -> Void,
+        label: String = ""
     ) {
         self.items = items
         self.onUpdate = onUpdate
+        self.label = label
     }
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .center) {
-                Text("Insulin Model", comment: "Insulin model title")
+                Text(label)
                 Spacer()
                 Text(items[pickerIndex])
                 .foregroundColor(.gray)
