@@ -178,7 +178,7 @@ public final class CarbStore: HealthKitSampleStore {
      */
     public init(
         healthStore: HKHealthStore,
-        observeHealthKitForCurrentAppOnly: Bool,
+        observeHealthKitSamplesFromOtherApps: Bool = true,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval,
         defaultAbsorptionTimes: DefaultAbsorptionTimes,
@@ -207,7 +207,11 @@ public final class CarbStore: HealthKitSampleStore {
         
         let observationEnabled = observationInterval > 0
 
-        super.init(healthStore: healthStore, observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, type: carbType, observationStart: Date(timeIntervalSinceNow: -self.observationInterval), observationEnabled: observationEnabled)
+        super.init(healthStore: healthStore,
+                   observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
+                   type: carbType,
+                   observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
+                   observationEnabled: observationEnabled)
 
         cacheStore.onReady { (error) in
             guard error == nil else { return }
@@ -295,7 +299,11 @@ extension CarbStore {
     ///   - completion: A closure called once the samples have been retrieved
     ///   - result: An array of samples, in chronological order by startDate
     private func getCarbSamples(start: Date, end: Date? = nil, completion: @escaping (_ result: CarbStoreResult<[StoredCarbEntry]>) -> Void) {
-        let predicate = HKQuery.predicateForSamples(observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, withStart: start, end: end)
+        guard let predicate = predicateForSamples(withStart: start, end: end) else {
+            completion(.success([]))
+            return
+        }
+        
         let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
 
         let query = HKSampleQuery(sampleType: carbType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: sortDescriptors) { (query, samples, error) in

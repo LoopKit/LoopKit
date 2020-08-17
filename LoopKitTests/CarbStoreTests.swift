@@ -21,7 +21,6 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
         healthStore = HKHealthStoreMock()
         carbStore = CarbStore(
             healthStore: healthStore,
-            observeHealthKitForCurrentAppOnly: false,
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
@@ -391,7 +390,6 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
         
         carbStore = CarbStore(
             healthStore: HKHealthStoreMock(),
-            observeHealthKitForCurrentAppOnly: false,
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),

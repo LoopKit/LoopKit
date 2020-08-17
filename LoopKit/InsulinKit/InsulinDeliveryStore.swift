@@ -50,7 +50,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
 
     public init(
         healthStore: HKHealthStore,
-        observeHealthKitForCurrentAppOnly: Bool,
+        observeHealthKitSamplesFromOtherApps: Bool = true,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
@@ -61,7 +61,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
 
         super.init(
             healthStore: healthStore,
-            observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly,
+            observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
             type: insulinType,
             observationStart: (test_currentDate ?? Date()).addingTimeInterval(-cacheLength),
             observationEnabled: observationEnabled,
@@ -234,7 +234,11 @@ extension InsulinDeliveryStore {
     }
 
     private func getSamples(start: Date, end: Date? = nil, isChronological: Bool = true, _ completion: @escaping (_ result: InsulinDeliveryStoreResult<[HKQuantitySample]>) -> Void) {
-        let predicate = HKQuery.predicateForSamples(observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, withStart: start, end: end, options: [])
+        guard let predicate = predicateForSamples(withStart: start, end: end) else {
+            completion(.success([]))
+            return
+        }
+
         getSamples(matching: predicate, isChronological: isChronological, completion)
     }
 

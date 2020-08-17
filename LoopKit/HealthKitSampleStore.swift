@@ -36,9 +36,12 @@ public class HealthKitSampleStore {
 
     /// The health store used for underlying queries
     public let healthStore: HKHealthStore
-    
-    /// Whether the store should only fetch data that was written to HealthKit from Loop, or from any other source
-    internal let observeHealthKitForCurrentAppOnly: Bool
+
+    /// Whether the store should fetch data that was written to HealthKit from current app
+    private let observeHealthKitSamplesFromCurrentApp: Bool
+
+    /// Whether the store should fetch data that was written to HealthKit from other apps
+    private let observeHealthKitSamplesFromOtherApps: Bool
 
     /// Whether the store is observing changes to types
     public let observationEnabled: Bool
@@ -58,14 +61,16 @@ public class HealthKitSampleStore {
 
     public init(
         healthStore: HKHealthStore,
-        observeHealthKitForCurrentAppOnly: Bool,
+        observeHealthKitSamplesFromCurrentApp: Bool = true,
+        observeHealthKitSamplesFromOtherApps: Bool = true,
         type: HKSampleType,
         observationStart: Date,
         observationEnabled: Bool,
         test_currentDate: Date? = nil
     ) {
         self.healthStore = healthStore
-        self.observeHealthKitForCurrentAppOnly = observeHealthKitForCurrentAppOnly
+        self.observeHealthKitSamplesFromCurrentApp = observeHealthKitSamplesFromCurrentApp
+        self.observeHealthKitSamplesFromOtherApps = observeHealthKitSamplesFromOtherApps
         self.sampleType = type
         self.observationStart = observationStart
         self.observationEnabled = observationEnabled
@@ -214,16 +219,40 @@ extension HealthKitSampleStore: HKSampleQueryTestable {
 }
 
 
+// MARK: - Query
+extension HealthKitSampleStore {
+    internal func predicateForSamples(withStart startDate: Date?, end endDate: Date?, options: HKQueryOptions = []) -> NSPredicate? {
+        guard observeHealthKitSamplesFromCurrentApp || observeHealthKitSamplesFromOtherApps else {
+            return nil
+        }
+
+        var predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: options)
+
+        if !observeHealthKitSamplesFromCurrentApp {
+            predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, NSCompoundPredicate(notPredicateWithSubpredicate: HKQuery.predicateForObjects(from: HKSource.default()))])
+        } else if !observeHealthKitSamplesFromOtherApps {
+            predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, HKQuery.predicateForObjects(from: HKSource.default())])
+        }
+
+        return predicate
+    }
+}
+
+
 // MARK: - Observation
 extension HealthKitSampleStore {
     private func createQuery() {
         log.debug("%@ [observationEnabled: %d]", #function, observationEnabled)
+        log.debug("%@ [observeHealthKitSamplesFromCurrentApp: %d]", #function, observeHealthKitSamplesFromCurrentApp)
+        log.debug("%@ [observeHealthKitSamplesFromOtherApps: %d]", #function, observeHealthKitSamplesFromOtherApps)
 
         guard observationEnabled else {
             return
         }
 
-        let predicate = HKQuery.predicateForSamples(observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, withStart: observationStart, end: nil)
+        guard let predicate = predicateForSamples(withStart: observationStart, end: nil) else {
+            return
+        }
 
         observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { [weak self] (query, completionHandler, error) in
             self?.observeUpdates(to: query, error: error)
