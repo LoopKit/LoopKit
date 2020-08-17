@@ -15,8 +15,8 @@ import MockKit
 
 
 extension MockCGMManager: CGMManagerUI {
-    public var smallImage: UIImage? { nil }  // TODO: come up with a better image
-
+    public var smallImage: UIImage? { return UIImage(named: "CGM Simulator", in: Bundle(for: MockCGMManagerSettingsViewController.self), compatibleWith: nil) }
+    
     public static func setupViewController(glucoseTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CGMManagerSetupViewController & CompletionNotifying)? {
         return nil
     }

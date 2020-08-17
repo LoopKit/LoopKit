@@ -250,7 +250,7 @@ extension MockCGMLifecycleProgress: RawRepresentable {
 public final class MockCGMManager: TestingCGMManager {
     
     public static let managerIdentifier = "MockCGMManager"
-    public static let localizedTitle = "Simulator"
+    public static let localizedTitle = "CGM Simulator"
 
     public struct MockAlert {
         public let sound: Alert.Sound

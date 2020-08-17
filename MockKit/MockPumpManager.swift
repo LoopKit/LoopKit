@@ -39,7 +39,7 @@ public enum MockPumpManagerError: LocalizedError {
 public final class MockPumpManager: TestingPumpManager {
 
     public static let managerIdentifier = "MockPumpManager"
-    public static let localizedTitle = "Simulator"
+    public static let localizedTitle = "Insulin Pump Simulator"
     
     private static let device = HKDevice(
         name: MockPumpManager.managerIdentifier,
