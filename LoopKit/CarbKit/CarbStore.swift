@@ -243,8 +243,6 @@ public final class CarbStore: HealthKitSampleStore {
             case .adaptiveRateNonlinear:
                 self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.0, adaptiveAbsorptionRateEnabled: true, adaptiveRateStandbyIntervalFraction: 0.2)
             }
-
-            // TODO: Consider resetting uploadState.uploading
         }
     }
 
@@ -535,7 +533,6 @@ extension CarbStore {
         cacheStore.managedObjectContext.performAndWait {
             for object in self.cacheStore.managedObjectContext.cachedCarbObjectsWithUUID(oldEntry.sampleUUID) {
                 object.update(from: newEntry)
-                object.uploadState = .notUploaded
             }
 
             self.cacheStore.save()
@@ -955,7 +952,7 @@ extension CarbStore {
                 super.debugDescription,
                 "",
                 "cachedCarbEntries: [",
-                "\tStoredCarbEntry(sampleUUID, syncIdentifier, syncVersion, startDate, quantity, foodType, absorptionTime, createdByCurrentApp, externalID, isUploaded)"
+                "\tStoredCarbEntry(sampleUUID, syncIdentifier, syncVersion, startDate, quantity, foodType, absorptionTime, createdByCurrentApp, externalID)"
             ]
 
             let carbEntries = self.getCachedCarbEntries()
@@ -972,16 +969,15 @@ extension CarbStore {
                     String(describing: entry.absorptionTime ?? self.defaultAbsorptionTimes.medium),
                     String(describing: entry.createdByCurrentApp),
                     entry.externalID ?? "",
-                    String(describing: entry.isUploaded),
                 ].joined(separator: ", ")
             }).joined(separator: "\n"))
             report.append("]")
             report.append("")
 
             report.append("deletedCarbEntries: [")
-            report.append("\tDeletedCarbEntry(externalID, isUploaded)")
+            report.append("\tDeletedCarbEntry(externalID)")
             for entry in self.cachedDeletedCarbEntries {
-                report.append("\t\(String(describing: entry.externalID)), \(entry.isUploaded)")
+                report.append("\t\(String(describing: entry.externalID))")
             }
             report.append("]")
             report.append("")

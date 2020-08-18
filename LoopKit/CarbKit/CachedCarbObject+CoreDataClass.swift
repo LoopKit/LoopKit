@@ -38,19 +38,6 @@ class CachedCarbObject: NSManagedObject {
         }
     }
 
-    var uploadState: UploadState {
-        get {
-            willAccessValue(forKey: "uploadState")
-            defer { didAccessValue(forKey: "uploadState") }
-            return UploadState(rawValue: primitiveUploadState!.intValue)!
-        }
-        set {
-            willChangeValue(forKey: "uploadState")
-            defer { didChangeValue(forKey: "uploadState") }
-            primitiveUploadState = NSNumber(value: newValue.rawValue)
-        }
-    }
-
     override func willSave() {
         if isInserted || isUpdated {
             setPrimitiveValue(managedObjectContext!.modificationCounter ?? 0, forKey: "modificationCounter")

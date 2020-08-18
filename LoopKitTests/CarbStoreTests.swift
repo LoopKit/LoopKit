@@ -52,8 +52,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     // MARK: -
     
     func testAddCarbEntry() {
-        let syncIdentifier = generateSyncIdentifier()
-        let addCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3), syncIdentifier: syncIdentifier)
+        let addCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
         let addCarbEntryCompletion = expectation(description: "Add carb entry completion")
         let addCarbEntryHandler = expectation(description: "Add carb entry handler")
         
@@ -74,9 +73,8 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].foodType, addCarbEntry.foodType)
                     XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
-                    XCTAssertEqual(objects[0].uploadState, .notUploaded)
                     XCTAssertNotNil(objects[0].uuid)
-                    XCTAssertEqual(objects[0].syncIdentifier, syncIdentifier)
+                    XCTAssertNotNil(objects[0].syncIdentifier)
                     XCTAssertEqual(objects[0].syncVersion, 1)
                     XCTAssertGreaterThan(objects[0].modificationCounter, 0)
                 default:
@@ -93,8 +91,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     }
     
     func testAddAndReplaceCarbEntry() {
-        let syncIdentifier = generateSyncIdentifier()
-        let addCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3), syncIdentifier: syncIdentifier)
+        let addCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
         let replaceCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 15), startDate: Date(), foodType: "Replace", absorptionTime: .hours(4))
         let addCarbEntryCompletion = expectation(description: "Add carb entry completion")
         let addCarbEntryHandler = expectation(description: "Add carb entry handler")
@@ -104,6 +101,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
         var handlerInvocation = 0
         
         var lastUUID: UUID?
+        var lastSyncIdentifier: String?
         var lastModificationCounter: Int64?
         
         carbStoreHasUpdatedCarbDataHandler = { (carbStore) in
@@ -121,12 +119,12 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].foodType, addCarbEntry.foodType)
                     XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
-                    XCTAssertEqual(objects[0].uploadState, .notUploaded)
                     XCTAssertNotNil(objects[0].uuid)
-                    XCTAssertEqual(objects[0].syncIdentifier, syncIdentifier)
+                    XCTAssertNotNil(objects[0].syncIdentifier)
                     XCTAssertEqual(objects[0].syncVersion, 1)
                     XCTAssertGreaterThan(objects[0].modificationCounter, 0)
                     lastUUID = objects[0].uuid
+                    lastSyncIdentifier = objects[0].syncIdentifier
                     lastModificationCounter = objects[0].modificationCounter
                     self.carbStore.replaceCarbEntry(StoredCarbEntry(managedObject: objects[0]), withEntry: replaceCarbEntry) { (result) in
                         replaceCarbEntryCompletion.fulfill()
@@ -141,10 +139,9 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].foodType, replaceCarbEntry.foodType)
                     XCTAssertEqual(objects[0].grams, replaceCarbEntry.quantity.doubleValue(for: .gram()))
                     XCTAssertEqual(objects[0].startDate, replaceCarbEntry.startDate)
-                    XCTAssertEqual(objects[0].uploadState, .notUploaded)
                     XCTAssertNotNil(objects[0].uuid)
                     XCTAssertNotEqual(objects[0].uuid!, lastUUID!)
-                    XCTAssertEqual(objects[0].syncIdentifier, syncIdentifier)
+                    XCTAssertEqual(objects[0].syncIdentifier, lastSyncIdentifier)
                     XCTAssertEqual(objects[0].syncVersion, 2)
                     XCTAssertGreaterThan(objects[0].modificationCounter, lastModificationCounter!)
                 default:
@@ -162,8 +159,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     }
     
     func testAddAndDeleteCarbEntry() {
-        let syncIdentifier = generateSyncIdentifier()
-        let addCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3), syncIdentifier: syncIdentifier)
+        let addCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
         let addCarbEntryCompletion = expectation(description: "Add carb entry completion")
         let addCarbEntryHandler = expectation(description: "Add carb entry handler")
         let deleteCarbEntryCompletion = expectation(description: "Delete carb entry completion")
@@ -172,6 +168,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
         var handlerInvocation = 0
         
         var lastUUID: UUID?
+        var lastSyncIdentifier: String?
         var lastModificationCounter: Int64?
         
         carbStoreHasUpdatedCarbDataHandler = { (carbStore) in
@@ -189,12 +186,12 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].foodType, addCarbEntry.foodType)
                     XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
-                    XCTAssertEqual(objects[0].uploadState, .notUploaded)
                     XCTAssertNotNil(objects[0].uuid)
-                    XCTAssertEqual(objects[0].syncIdentifier, syncIdentifier)
+                    XCTAssertNotNil(objects[0].syncIdentifier)
                     XCTAssertEqual(objects[0].syncVersion, 1)
                     XCTAssertGreaterThan(objects[0].modificationCounter, 0)
                     lastUUID = objects[0].uuid
+                    lastSyncIdentifier = objects[0].syncIdentifier
                     lastModificationCounter = objects[0].modificationCounter
                     self.carbStore.deleteCarbEntry(StoredCarbEntry(managedObject: objects[0])) { (result) in
                         deleteCarbEntryCompletion.fulfill()
@@ -204,11 +201,10 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     let objects: [DeletedCarbObject] = self.cacheStore.managedObjectContext.all()
                     XCTAssertEqual(objects.count, 1)
                     XCTAssertNil(objects[0].externalID)
-                    XCTAssertEqual(objects[0].uploadState, .notUploaded)
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
                     XCTAssertNotNil(objects[0].uuid)
                     XCTAssertEqual(objects[0].uuid!, lastUUID!)
-                    XCTAssertEqual(objects[0].syncIdentifier, syncIdentifier)
+                    XCTAssertEqual(objects[0].syncIdentifier, lastSyncIdentifier)
                     XCTAssertEqual(objects[0].syncVersion, 1)
                     XCTAssertGreaterThan(objects[0].modificationCounter, lastModificationCounter!)
                 default:
@@ -226,8 +222,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
     }
     
     func testAddAndReplaceAndDeleteCarbEntry() {
-        let syncIdentifier = generateSyncIdentifier()
-        let addCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3), syncIdentifier: syncIdentifier)
+        let addCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10), startDate: Date(), foodType: "Add", absorptionTime: .hours(3))
         let replaceCarbEntry = NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 15), startDate: Date(), foodType: "Replace", absorptionTime: .hours(4))
         let addCarbEntryCompletion = expectation(description: "Add carb entry completion")
         let addCarbEntryHandler = expectation(description: "Add carb entry handler")
@@ -239,6 +234,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
         var handlerInvocation = 0
         
         var lastUUID: UUID?
+        var lastSyncIdentifier: String?
         var lastModificationCounter: Int64?
         
         carbStoreHasUpdatedCarbDataHandler = { (carbStore) in
@@ -256,12 +252,12 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].foodType, addCarbEntry.foodType)
                     XCTAssertEqual(objects[0].grams, addCarbEntry.quantity.doubleValue(for: .gram()))
                     XCTAssertEqual(objects[0].startDate, addCarbEntry.startDate)
-                    XCTAssertEqual(objects[0].uploadState, .notUploaded)
                     XCTAssertNotNil(objects[0].uuid)
-                    XCTAssertEqual(objects[0].syncIdentifier, syncIdentifier)
+                    XCTAssertNotNil(objects[0].syncIdentifier)
                     XCTAssertEqual(objects[0].syncVersion, 1)
                     XCTAssertGreaterThan(objects[0].modificationCounter, 0)
                     lastUUID = objects[0].uuid
+                    lastSyncIdentifier = objects[0].syncIdentifier
                     lastModificationCounter = objects[0].modificationCounter
                     self.carbStore.replaceCarbEntry(StoredCarbEntry(managedObject: objects[0]), withEntry: replaceCarbEntry) { (result) in
                         replaceCarbEntryCompletion.fulfill()
@@ -276,10 +272,9 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     XCTAssertEqual(objects[0].foodType, replaceCarbEntry.foodType)
                     XCTAssertEqual(objects[0].grams, replaceCarbEntry.quantity.doubleValue(for: .gram()))
                     XCTAssertEqual(objects[0].startDate, replaceCarbEntry.startDate)
-                    XCTAssertEqual(objects[0].uploadState, .notUploaded)
                     XCTAssertNotNil(objects[0].uuid)
                     XCTAssertNotEqual(objects[0].uuid!, lastUUID!)
-                    XCTAssertEqual(objects[0].syncIdentifier, syncIdentifier)
+                    XCTAssertEqual(objects[0].syncIdentifier, lastSyncIdentifier)
                     XCTAssertEqual(objects[0].syncVersion, 2)
                     XCTAssertGreaterThan(objects[0].modificationCounter, lastModificationCounter!)
                     lastUUID = objects[0].uuid
@@ -292,11 +287,10 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     let objects: [DeletedCarbObject] = self.cacheStore.managedObjectContext.all()
                     XCTAssertEqual(objects.count, 1)
                     XCTAssertNil(objects[0].externalID)
-                    XCTAssertEqual(objects[0].uploadState, .notUploaded)
                     XCTAssertEqual(objects[0].startDate, replaceCarbEntry.startDate)
                     XCTAssertNotNil(objects[0].uuid)
                     XCTAssertEqual(objects[0].uuid!, lastUUID!)
-                    XCTAssertEqual(objects[0].syncIdentifier, syncIdentifier)
+                    XCTAssertEqual(objects[0].syncIdentifier, lastSyncIdentifier)
                     XCTAssertEqual(objects[0].syncVersion, 2)
                     XCTAssertGreaterThan(objects[0].modificationCounter, lastModificationCounter!)
                 default:
