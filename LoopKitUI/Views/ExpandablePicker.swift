@@ -10,7 +10,8 @@ import SwiftUI
 
 public struct ExpandablePicker: View {
     @State var pickerShouldExpand = false
-    @State var pickerIndex: Int = 0
+    @State var pickerIndex: Int = 0 // initializing with zero so it doesn't error
+    let initialPickerIndex: Int
     var onUpdate: (Int) -> Void
     let label: String
     
@@ -19,11 +20,13 @@ public struct ExpandablePicker: View {
     public init (
         with items: [String],
         onUpdate: @escaping (Int) -> Void,
-        label: String = ""
+        label: String = "",
+        initialPickerIndex: Int = 0
     ) {
         self.items = items
         self.onUpdate = onUpdate
         self.label = label
+        self.initialPickerIndex = initialPickerIndex
     }
     
     public var body: some View {
@@ -37,6 +40,9 @@ public struct ExpandablePicker: View {
             .padding(.vertical, 5)
             .frame(minWidth: 0, maxWidth: .infinity).onTapGesture {
                 self.pickerShouldExpand.toggle()
+            }
+            .onAppear {
+                self.pickerIndex = self.initialPickerIndex
             }
             if pickerShouldExpand {
                 HStack {
