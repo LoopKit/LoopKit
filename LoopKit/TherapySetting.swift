@@ -60,9 +60,9 @@ public extension TherapySetting {
         case .glucoseTargetRange:
             return LocalizedString("Correction range is the glucose value (or range of values) that you want Tidepool Loop to aim for in adjusting your basal insulin.", comment: "Descriptive text for glucose target range")
         case .preMealCorrectionRangeOverride:
-            return CorrectionRangeOverrides.Preset.preMeal.descriptiveText
+            return LocalizedString("Temporarily lower your glucose target before a meal to impact post-meal glucose spikes.", comment: "Descriptive text for pre-meal correction range override")
         case .workoutCorrectionRangeOverride:
-            return CorrectionRangeOverrides.Preset.workout.descriptiveText
+            return LocalizedString("Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events.", comment: "Descriptive text for workout correction range override")
         case .suspendThreshold:
             return LocalizedString("When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus.", comment: "Descriptive text for suspend threshold")
         case .basalRate:
