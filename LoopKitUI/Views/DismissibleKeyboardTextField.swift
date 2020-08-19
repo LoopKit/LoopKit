@@ -53,6 +53,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: textField, action: #selector(UITextField.resignFirstResponder))
+        doneButton.tintColor = textColor
         toolbar.items = [flexibleSpace, doneButton]
         toolbar.sizeToFit()
         return toolbar
