@@ -33,7 +33,6 @@ public enum DoseStoreResult<T> {
     case failure(DoseStore.DoseStoreError)
 }
 
-
 /**
  Manages storage, retrieval, and calculation of insulin pump delivery data.
  
