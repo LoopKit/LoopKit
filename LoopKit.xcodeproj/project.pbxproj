@@ -1496,6 +1496,34 @@
 		E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_never_fully_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56324D362E800B5DFFE /* dynamic_glucose_effect_partially_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_partially_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56424D362E900B5DFFE /* dynamic_glucose_effect_fully_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_fully_observed_output.json; sourceTree = "<group>"; };
+		F514D32C24EE3EB3006E2C17 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F514D32D24EE3EB3006E2C17 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Main.strings; sourceTree = "<group>"; };
+		F514D32E24EE3EB3006E2C17 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F514D32F24EE3EB3006E2C17 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F514D33024EE3ECE006E2C17 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F514D33124EE3ECF006E2C17 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Main.strings; sourceTree = "<group>"; };
+		F514D33224EE3ECF006E2C17 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F514D33324EE3ECF006E2C17 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F514D33424EE3EE1006E2C17 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F514D33524EE3EE1006E2C17 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
+		F514D33624EE3EE1006E2C17 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F514D33724EE3EE1006E2C17 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F514D33824EE3EF8006E2C17 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		F514D33924EE3EF8006E2C17 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Main.strings"; sourceTree = "<group>"; };
+		F514D33A24EE3EF8006E2C17 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/CarbKit.strings"; sourceTree = "<group>"; };
+		F514D33B24EE3EF8006E2C17 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InsulinKit.strings"; sourceTree = "<group>"; };
+		F514D33C24EE3F09006E2C17 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F514D33D24EE3F0A006E2C17 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Main.strings; sourceTree = "<group>"; };
+		F514D33E24EE3F0A006E2C17 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F514D33F24EE3F0A006E2C17 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F514D34024EE3F15006E2C17 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F514D34124EE3F15006E2C17 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
+		F514D34224EE3F15006E2C17 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F514D34324EE3F16006E2C17 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F514D34424EE3F22006E2C17 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F514D34524EE3F22006E2C17 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Main.strings; sourceTree = "<group>"; };
+		F514D34624EE3F22006E2C17 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F514D34724EE3F22006E2C17 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/InsulinKit.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2834,6 +2862,13 @@
 				nb,
 				pl,
 				ru,
+				da,
+				fi,
+				ja,
+				"pt-BR",
+				ro,
+				sv,
+				vi,
 			);
 			mainGroup = 43D8FDC11C728FDF0073BE78;
 			productRefGroup = 43D8FDCC1C728FDF0073BE78 /* Products */;
@@ -3824,6 +3859,13 @@
 			isa = PBXVariantGroup;
 			children = (
 				430158001C7EC03B00B64B63 /* Base */,
+				F514D32D24EE3EB3006E2C17 /* da */,
+				F514D33124EE3ECF006E2C17 /* fi */,
+				F514D33524EE3EE1006E2C17 /* ja */,
+				F514D33924EE3EF8006E2C17 /* pt-BR */,
+				F514D33D24EE3F0A006E2C17 /* ro */,
+				F514D34124EE3F15006E2C17 /* sv */,
+				F514D34524EE3F22006E2C17 /* vi */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -3832,6 +3874,13 @@
 			isa = PBXVariantGroup;
 			children = (
 				430158051C7EC03B00B64B63 /* Base */,
+				F514D32C24EE3EB3006E2C17 /* da */,
+				F514D33024EE3ECE006E2C17 /* fi */,
+				F514D33424EE3EE1006E2C17 /* ja */,
+				F514D33824EE3EF8006E2C17 /* pt-BR */,
+				F514D33C24EE3F09006E2C17 /* ro */,
+				F514D34024EE3F15006E2C17 /* sv */,
+				F514D34424EE3F22006E2C17 /* vi */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -3849,6 +3898,13 @@
 				1F5DAB6B2118F3C200048054 /* nl */,
 				1F5DAB772118F3FB00048054 /* nb */,
 				1F50C321212B20D300C18FAB /* pl */,
+				F514D32E24EE3EB3006E2C17 /* da */,
+				F514D33224EE3ECF006E2C17 /* fi */,
+				F514D33624EE3EE1006E2C17 /* ja */,
+				F514D33A24EE3EF8006E2C17 /* pt-BR */,
+				F514D33E24EE3F0A006E2C17 /* ro */,
+				F514D34224EE3F15006E2C17 /* sv */,
+				F514D34624EE3F22006E2C17 /* vi */,
 			);
 			name = CarbKit.storyboard;
 			sourceTree = "<group>";
@@ -3866,6 +3922,13 @@
 				1F5DAB6C2118F3C200048054 /* nl */,
 				1F5DAB782118F3FB00048054 /* nb */,
 				1F50C322212B20D300C18FAB /* pl */,
+				F514D32F24EE3EB3006E2C17 /* da */,
+				F514D33324EE3ECF006E2C17 /* fi */,
+				F514D33724EE3EE1006E2C17 /* ja */,
+				F514D33B24EE3EF8006E2C17 /* pt-BR */,
+				F514D33F24EE3F0A006E2C17 /* ro */,
+				F514D34324EE3F16006E2C17 /* sv */,
+				F514D34724EE3F22006E2C17 /* vi */,
 			);
 			name = InsulinKit.storyboard;
 			sourceTree = "<group>";
