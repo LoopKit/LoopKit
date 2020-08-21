@@ -18,14 +18,10 @@ public class OverrideHistoryViewModel: ObservableObject {
 
     public init(
         overrides: [TemporaryScheduleOverride],
-        glucoseUnit: HKUnit,
-        didEditOverride: ((TemporaryScheduleOverride) -> Void)?,
-        didDeleteOverride: ((TemporaryScheduleOverride) -> Void)?
+        glucoseUnit: HKUnit
     ) {
         self.overrides = overrides
         self.glucoseUnit = glucoseUnit
-        self.didEditOverride = didEditOverride
-        self.didDeleteOverride = didDeleteOverride
     }
 }
 
@@ -57,7 +53,7 @@ public struct OverrideSelectionHistory: View {
         List {
             ForEach(model.overrides, id: \.self) { override in
                 Section {
-                    NavigationLink(destination: self.editor(for: override)) {
+                    NavigationLink(destination: self.detailView(for: override)) {
                         self.createCell(for: override)
                         .padding(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
                     }
@@ -125,7 +121,7 @@ public struct OverrideSelectionHistory: View {
                 insulinNeedsScaleFactor: insulinNeeds)
         case .custom:
             return OverrideViewCell(
-                symbol: Text("..."),
+                symbol: Text("···"),
                 name: Text("Custom"),
                 targetRange: Text(targetRange),
                 duration: Text(duration),
@@ -134,12 +130,28 @@ public struct OverrideSelectionHistory: View {
         }
     }
     
-    private func editor(for override: TemporaryScheduleOverride) -> some View {
-        // ANNA TODO: create new one to just view the override
-        return AddEditOverrideView(
-            inputMode: .editOverride(override),
+    private func title(for override: TemporaryScheduleOverride) -> String {
+        switch override.context {
+        case .legacyWorkout:
+            return LocalizedString("🏃‍♂️ Workout", comment: "Workout override preset title")
+        case .preMeal:
+            return LocalizedString("🍽 Pre-Meal", comment: "Premeal override preset title")
+        case .preset(let preset):
+            let symbol = preset.symbol
+            let name = preset.name
+            let format = LocalizedString("%1$@ %2$@", comment: "The format for an override symbol and name (1: symbol)(2: name)")
+            return String(format: format, symbol, name)
+        case .custom:
+            return LocalizedString("Custom Override", comment: "Custom override preset title")
+        }
+    }
+    
+    private func detailView(for override: TemporaryScheduleOverride) -> some View {
+        let editorTitle = title(for: override)
+        return HistoricalOverrideDetailView(
+            override: override,
             glucoseUnit: model.glucoseUnit,
             delegate: nil
-        )
+        ).navigationBarTitle(editorTitle)
     }
 }

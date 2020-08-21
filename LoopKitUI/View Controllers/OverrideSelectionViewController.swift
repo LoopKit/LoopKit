@@ -271,13 +271,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
             case .history:
                 let model = OverrideHistoryViewModel(
                     overrides: overrideHistory,
-                    glucoseUnit: glucoseUnit,
-                    didEditOverride: { override in
-                        // TODO: save the edited setting
-                    },
-                    didDeleteOverride: { override in
-                        // TODO: delete the override
-                    }
+                    glucoseUnit: glucoseUnit
                 )
                 let overrideHistoryView = OverrideSelectionHistory(model: model)
                 let hostedView = UIHostingController(rootView: overrideHistoryView)

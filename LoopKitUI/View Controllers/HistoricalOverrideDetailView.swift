@@ -9,26 +9,27 @@ import SwiftUI
 import LoopKit
 import HealthKit
 
-// ANNA TODO: think about renaming
+
 public struct HistoricalOverrideDetailView: UIViewControllerRepresentable {
-    public var inputMode: AddEditOverrideTableViewController.InputMode
+    public var override: TemporaryScheduleOverride
     public var glucoseUnit: HKUnit
     public weak var delegate: AddEditOverrideTableViewControllerDelegate?
     
     public init(
-        inputMode: AddEditOverrideTableViewController.InputMode,
+        override: TemporaryScheduleOverride,
         glucoseUnit: HKUnit,
         delegate: AddEditOverrideTableViewControllerDelegate?
     ) {
-        self.inputMode = inputMode
+        self.override = override
         self.glucoseUnit = glucoseUnit
         self.delegate = delegate
     }
     
     public func makeUIViewController(context: Context) -> AddEditOverrideTableViewController {
         let viewController = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit)
-        viewController.inputMode = inputMode
+        viewController.inputMode = .editOverride(override)
         viewController.delegate = delegate
+        viewController.view.isUserInteractionEnabled = false // disable interactions while viewing historical data
 
         return viewController
     }
