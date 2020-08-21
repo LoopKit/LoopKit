@@ -163,7 +163,7 @@ public struct CorrectionRangeScheduleEditor: View {
     private var confirmationAlertContent: AlertContent {
         AlertContent(
             title: Text("Save Correction Range(s)?", comment: "Alert title for confirming correction ranges outside the recommended range"),
-            message: Text("One or more of the values you have entered are outside of what Tidepool generally recommends.", comment: "Alert message for confirming correction ranges outside the recommended range")
+            message: Text(TherapySetting.glucoseTargetRange.guardrailSaveWarningCaption)
         )
     }
 }

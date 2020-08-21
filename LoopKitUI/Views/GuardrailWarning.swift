@@ -61,22 +61,25 @@ public struct GuardrailWarning: View {
 
         switch crossedThresholds {
         case .one(let threshold):
+            // Chose to use premeal range override because it's not a schedule
             switch threshold {
             case .minimum, .belowRecommended:
-                return Text("The value you have chosen is lower than Tidepool generally recommends.", comment: "Warning for entering a low setting value")
+                return Text(TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForLowValue)
             case .aboveRecommended, .maximum:
-                return Text("The value you have chosen is higher than Tidepool generally recommends.", comment: "Warning for entering a high setting value")
+                return Text(TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForHighValue)
             }
         case .oneOrMore(let thresholds):
+            // Chose to use correction range because it's a schedule
             if thresholds.count == 1 {
                 switch thresholds.first! {
                 case .minimum, .belowRecommended:
-                        return Text("A value you have chosen is lower than Tidepool generally recommends.", comment: "Warning for entering a low setting value in a schedule interface")
+                    return Text(TherapySetting.glucoseTargetRange.guardrailCaptionForLowValue)
                 case .aboveRecommended, .maximum:
-                        return Text("A value you have chosen is higher than Tidepool generally recommends.", comment: "Warning for entering a high setting value in a schedule interface")
+                        return Text(TherapySetting.glucoseTargetRange.guardrailCaptionForHighValue)
                 }
             } else {
-                return Text("Some of the values you have entered are outside of what Tidepool generally recommends.")
+                // ANNA TODO: figure out this one
+                return Text("Some of the values you have entered are outside of what Tidepool typically recommends for most people.")
             }
         }
     }

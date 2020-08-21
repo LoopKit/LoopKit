@@ -100,7 +100,7 @@ public struct BasalRateScheduleEditor: View {
     private var confirmationAlertContent: AlertContent {
         AlertContent(
             title: Text("Save Basal Rates?", comment: "Alert title for confirming basal rates outside the recommended range"),
-            message: Text("One or more of the values you have entered are outside of what Tidepool generally recommends.", comment: "Alert message for confirming basal rates outside the recommended range")
+            message: Text(TherapySetting.basalRate.guardrailSaveWarningCaption)
         )
     }
     
@@ -139,6 +139,7 @@ private struct BasalRateGuardrailWarning: View {
         assert(!crossedThresholds.isEmpty)
 
         let caption = self.isZeroUnitRateSelectable && crossedThresholds.allSatisfy({ $0 == .minimum })
+            // ANNA TODO: ask MLee about this one
             ? Text("A value of 0 U/hr means you will be scheduled to receive no basal insulin.", comment: "Warning text for basal rate of 0 U/hr")
             : nil
 
