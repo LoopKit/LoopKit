@@ -59,7 +59,7 @@ public struct OverrideViewCell: View {
             }
 
         }
-        .frame(minHeight: 60)
+        .frame(minHeight: 55)
     }
     
     private var insulinNeedsBarIfNeeded: some View {
