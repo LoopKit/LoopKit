@@ -27,7 +27,7 @@ public struct HistoricalOverrideDetailView: UIViewControllerRepresentable {
     
     public func makeUIViewController(context: Context) -> AddEditOverrideTableViewController {
         let viewController = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit)
-        viewController.inputMode = .editOverride(override)
+        viewController.inputMode = .viewOverride(override)
         viewController.delegate = delegate
         viewController.view.isUserInteractionEnabled = false // disable interactions while viewing historical data
 

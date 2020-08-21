@@ -59,18 +59,19 @@ public struct OverrideViewCell: View {
             }
 
         }
+        .frame(minHeight: 60)
     }
     
     private var insulinNeedsBarIfNeeded: some View {
-        GeometryReader { geo in
-            HStack {
-                Group {
-                    if self.insulinNeedsScaleFactor != nil {
+        Group {
+            if self.insulinNeedsScaleFactor != nil {
+                GeometryReader { geo in
+                    HStack {
                         SegmentedGaugeBar(insulinNeedsScaler: self.insulinNeedsScaleFactor!)
-                        .frame(minHeight: 12)
+                            .frame(minHeight: 12)
+                        Spacer(minLength: geo.size.width * 0.35) // Hack to fix spacing
                     }
                 }
-                Spacer(minLength: geo.size.width * 0.35) // Hack to fix spacing
             }
         }
     }

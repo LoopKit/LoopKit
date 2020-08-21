@@ -39,6 +39,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         case customizePresetOverride(TemporaryScheduleOverridePreset)   // Defining an override relative to an existing preset
         case customOverride                                             // Defining a one-off custom override
         case editOverride(TemporaryScheduleOverride)                    // Editing an active override
+        case viewOverride(TemporaryScheduleOverride)                    // Viewing an override
     }
 
     public enum DismissalMode {
@@ -68,6 +69,19 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 startDate = Date()
                 duration = .finite(.defaultOverrideDuration)
             case .editOverride(let override):
+                if case .preset(let preset) = override.context {
+                    symbol = preset.symbol
+                    name = preset.name
+                } else {
+                    symbol = nil
+                    name = nil
+                }
+                configure(with: override.settings)
+                startDate = override.startDate
+                duration = override.duration
+                syncIdentifier = override.syncIdentifier
+                enactTrigger = override.enactTrigger
+            case .viewOverride(let override):
                 if case .preset(let preset) = override.context {
                     symbol = preset.symbol
                     name = preset.name
@@ -112,7 +126,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         switch inputMode {
         case .newPreset, .editPreset:
             return true
-        case .customizePresetOverride, .customOverride, .editOverride:
+        case .customizePresetOverride, .customOverride, .editOverride, .viewOverride:
             return false
         }
     }
@@ -325,7 +339,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
             case .indefinite:
                 duration = .finite(.defaultOverrideDuration)
             }
-        case .editOverride(let override):
+        case .editOverride(let override), .viewOverride(let override):
             if case .preset(let preset) = override.context,
                 case .finite(let interval) = preset.duration {
                 duration = .finite(interval)
@@ -423,6 +437,8 @@ extension AddEditOverrideTableViewController {
                 title = LocalizedString("Custom Override", comment: "The title for the custom override entry screen")
             case .editOverride:
                 title = LocalizedString("Edit Override", comment: "The title for the override editing screen")
+            case .viewOverride:
+                title = LocalizedString("View Override", comment: "The title for the override editing screen")
             }
         }
     }
@@ -433,6 +449,7 @@ extension AddEditOverrideTableViewController {
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(save))
         case .customizePresetOverride, .customOverride:
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: LocalizedString("Enable", comment: "The button text for enabling a temporary override"), style: .done, target: self, action: #selector(save))
+        case .viewOverride: break
         }
 
         updateSaveButtonEnabled()
@@ -497,7 +514,7 @@ extension AddEditOverrideTableViewController {
                 duration: duration
             )
             context = .preset(customizedPreset)
-        case .editOverride(let override):
+        case .editOverride(let override), .viewOverride(let override):
             context = override.context
         case .customOverride:
             context = .custom
@@ -516,6 +533,8 @@ extension AddEditOverrideTableViewController {
                 return configuredPreset != nil
             case .customizePresetOverride, .customOverride, .editOverride:
                 return configuredOverride != nil
+            case .viewOverride:
+                return false
             }
         }()
     }
@@ -534,6 +553,7 @@ extension AddEditOverrideTableViewController {
                 break
             }
             delegate?.addEditOverrideTableViewController(self, didSaveOverride: configuredOverride)
+        case .viewOverride: break
         }
         dismiss()
     }
@@ -549,7 +569,7 @@ extension AddEditOverrideTableViewController {
             switch inputMode {
             case .newPreset, .customizePresetOverride, .customOverride:
                 dismiss(with: .dismissModal)
-            case .editPreset, .editOverride:
+            case .editPreset, .editOverride, .viewOverride:
                 dismiss(with: .popViewController)
             }
         }
