@@ -51,7 +51,7 @@ public struct TemporaryScheduleOverride: Hashable {
     public let syncIdentifier: UUID
     public let enactTrigger: EnactTrigger
     
-    var actualEnd: End = .natural
+    public var actualEnd: End = .natural
     
     public var actualEndDate: Date {
         switch actualEnd {

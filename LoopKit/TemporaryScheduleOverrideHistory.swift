@@ -132,7 +132,6 @@ public final class TemporaryScheduleOverrideHistory {
                 if recentEvents[index].actualEndDate > date {
                     if recentEvents[index].override.startDate > date {
                         recentEvents[index].override.actualEnd = .deleted
-                        
                     } else {
                         recentEvents[index].override.actualEnd = .early(date)
                     }

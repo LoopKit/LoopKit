@@ -52,10 +52,15 @@ public struct OverrideSelectionHistory: View {
     public var body: some View {
         List {
             ForEach(model.overrides, id: \.self) { override in
-                Section {
-                    NavigationLink(destination: self.detailView(for: override)) {
-                        self.createCell(for: override)
-                        .padding(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+                Group {
+                    // Don't show overrides in history that were never active
+                    if override.actualEnd != .deleted {
+                        Section {
+                            NavigationLink(destination: self.detailView(for: override)) {
+                                self.createCell(for: override)
+                                .padding(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+                            }
+                        }
                     }
                 }
             }
