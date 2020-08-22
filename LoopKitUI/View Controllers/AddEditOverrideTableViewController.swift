@@ -179,6 +179,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         case insulinNeeds
         case targetRange
         case startDate
+        case endDate
         case durationFiniteness
         case duration
     }
@@ -187,6 +188,8 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         var rows: [PropertyRow] = {
             if isConfiguringPreset {
                 return [.symbol, .name, .insulinNeeds, .targetRange, .durationFiniteness]
+            } else if case let .viewOverride(override) = inputMode, override.hasFinished() {
+                return [.insulinNeeds, .targetRange, .startDate, .endDate]
             } else {
                 return [.insulinNeeds, .targetRange, .startDate, .durationFiniteness]
             }
@@ -282,6 +285,16 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 cell.date = startDate
                 cell.delegate = self
                 return cell
+            case .endDate:
+                guard case let .viewOverride(override) = inputMode else {
+                    fatalError("endDate should only be used when viewing override history")
+                }
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
+                cell.titleLabel.text = LocalizedString("End Time", comment: "The text for the override start time")
+                cell.datePicker.datePickerMode = .dateAndTime
+                cell.date = override.actualEndDate
+                return cell
             case .durationFiniteness:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SwitchTableViewCell.className, for: indexPath) as! SwitchTableViewCell
                 cell.selectionStyle = .none
@@ -291,13 +304,20 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 return cell
             case .duration:
                 let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
-                cell.titleLabel.text = LocalizedString("Duration", comment: "The text for the override duration setting")
                 cell.datePicker.datePickerMode = .countDownTimer
-                cell.datePicker.minuteInterval = 15
                 guard case .finite(let duration) = duration else {
                     preconditionFailure("Duration should only be selectable when duration is finite")
                 }
-                cell.duration = duration
+                // Use the actual duration if we're retrospectively viewing overrides
+                if case let .viewOverride(override) = inputMode {
+                    cell.titleLabel.text = LocalizedString("Active Duration", comment: "The text for the override history duration")
+                    cell.datePicker.minuteInterval = 1
+                    cell.duration = override.actualEndDate.timeIntervalSince(override.startDate)
+                } else {
+                    cell.titleLabel.text = LocalizedString("Duration", comment: "The text for the override duration setting")
+                    cell.datePicker.minuteInterval = 15
+                    cell.duration = duration
+                }
                 cell.maximumDuration = .hours(24)
                 cell.delegate = self
                 return cell

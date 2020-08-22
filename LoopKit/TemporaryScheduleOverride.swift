@@ -95,7 +95,7 @@ public struct TemporaryScheduleOverride: Hashable {
     }
 
     public func hasFinished(relativeTo date: Date = Date()) -> Bool {
-        return date > scheduledEndDate
+        return date > actualEndDate
     }
 
     public init(context: Context, settings: TemporaryScheduleOverrideSettings, startDate: Date, duration: Duration, enactTrigger: EnactTrigger, syncIdentifier: UUID) {
