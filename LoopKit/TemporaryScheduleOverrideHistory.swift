@@ -25,14 +25,7 @@ private struct OverrideEvent: Equatable {
     }
 
     var actualEndDate: Date {
-        switch override.actualEnd {
-        case .natural:
-            return override.scheduledEndDate
-        case .early(let endDate):
-            return endDate
-        case .deleted:
-            return override.scheduledEndDate
-        }
+        return override.actualEndDate
     }
 }
 
