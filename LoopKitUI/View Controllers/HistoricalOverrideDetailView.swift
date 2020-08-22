@@ -34,7 +34,5 @@ public struct HistoricalOverrideDetailView: UIViewControllerRepresentable {
         return viewController
     }
     
-    public func updateUIViewController(_ viewController: AddEditOverrideTableViewController, context: Context) {
-        
-    }
+    public func updateUIViewController(_ viewController: AddEditOverrideTableViewController, context: Context) { }
 }
