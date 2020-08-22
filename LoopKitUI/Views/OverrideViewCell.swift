@@ -44,7 +44,9 @@ public struct OverrideViewCell: View {
                 targetRangeLabel
                 .font(.caption)
                 .foregroundColor(Color.gray)
-                insulinNeedsBarIfNeeded
+                if self.insulinNeedsScaleFactor != nil {
+                    insulinNeedsBar
+                }
             }
             Spacer()
             VStack {
@@ -57,21 +59,20 @@ public struct OverrideViewCell: View {
                 subtitleLabel
                 .font(.caption)
             }
-
         }
-        .frame(minHeight: 55)
+        .frame(minHeight: 53)
     }
     
-    private var insulinNeedsBarIfNeeded: some View {
-        Group {
-            if self.insulinNeedsScaleFactor != nil {
-                GeometryReader { geo in
-                    HStack {
+    private var insulinNeedsBar: some View {
+        GeometryReader { geo in
+            HStack {
+                Group {
+                    if self.insulinNeedsScaleFactor != nil {
                         SegmentedGaugeBar(insulinNeedsScaler: self.insulinNeedsScaleFactor!)
-                            .frame(minHeight: 12)
-                        Spacer(minLength: geo.size.width * 0.35) // Hack to fix spacing
+                        .frame(minHeight: 12)
                     }
                 }
+                Spacer(minLength: geo.size.width * 0.35) // Hack to fix spacing
             }
         }
     }
@@ -94,15 +95,13 @@ struct SegmentedGaugeBar: UIViewRepresentable {
         let view = SegmentedGaugeBarView()
         view.backgroundColor = .white
         view.numberOfSegments = 2
-        view.startColor = UIColor.orange
-        view.endColor = UIColor.red
+        view.startColor = UIColor.lightenedInsulin!
+        view.endColor = UIColor.darkenedInsulin!
         view.borderWidth = 1
         view.borderColor = .systemGray
         view.progress = insulinNeedsScaler
         return view
     }
     
-    func updateUIView(_ view: SegmentedGaugeBarView, context: Context) {
-       
-    }
+    func updateUIView(_ view: SegmentedGaugeBarView, context: Context) { }
 }
