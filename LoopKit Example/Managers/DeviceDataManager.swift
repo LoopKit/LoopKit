@@ -19,7 +19,6 @@ class DeviceDataManager {
 
         carbStore = CarbStore(
             healthStore: healthStore,
-            observeHealthKitForCurrentAppOnly: false,
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
@@ -35,14 +34,12 @@ class DeviceDataManager {
         }
         doseStore = DoseStore(
             healthStore: healthStore,
-            observeHealthKitForCurrentAppOnly: false,
             cacheStore: cacheStore,
             insulinModel: insulinModel,
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )
         glucoseStore = GlucoseStore(healthStore: healthStore,
-                                    observeHealthKitForCurrentAppOnly: false,
                                     cacheStore: cacheStore)
     }
 

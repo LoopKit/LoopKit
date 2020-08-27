@@ -72,8 +72,8 @@ class CarbMathTests: XCTestCase {
         }
     }
 
-    private func loadEffectOutputFixture() -> [GlucoseEffect] {
-        let fixture: [JSONDictionary] = loadFixture("carb_effect_from_history_output")
+    private func loadEffectOutputFixture(_ name: String) -> [GlucoseEffect] {
+        let fixture: [JSONDictionary] = loadFixture(name)
         let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.map {
@@ -141,7 +141,7 @@ class CarbMathTests: XCTestCase {
 
     func testCarbEffectFromHistory() {
         let input = loadHistoryFixture("carb_effect_from_history_input")
-        let output = loadEffectOutputFixture()
+        let output = loadEffectOutputFixture("carb_effect_from_history_output")
         let (carbRatios, insulinSensitivities) = loadSchedules()
         
         let effects = input.glucoseEffects(carbRatios: carbRatios, insulinSensitivities: insulinSensitivities, defaultAbsorptionTime: TimeInterval(minutes: 180), absorptionModel: ParabolicAbsorption())
@@ -171,7 +171,7 @@ class CarbMathTests: XCTestCase {
     func testDynamicGlucoseEffectAbsorptionNoneObserved() {
         let inputICE = loadICEInputFixture("ice_35_min_input")
         let carbEntries = loadCarbEntryFixture()
-        let output = loadCOBOutputFixture("dynamic_glucose_effect_none_observed_output")
+        let output = loadEffectOutputFixture("dynamic_glucose_effect_none_observed_output")
 
         let (carbRatios, insulinSensitivities) = loadSchedules()
         let defaultAbsorptionTimes = CarbStore.DefaultAbsorptionTimes(
@@ -329,7 +329,7 @@ class CarbMathTests: XCTestCase {
     func testDynamicGlucoseEffectAbsorptionPartiallyObserved() {
         let inputICE = loadICEInputFixture("ice_35_min_input")
         let carbEntries = loadCarbEntryFixture()
-        let output = loadCOBOutputFixture("dynamic_glucose_effect_partially_observed_output")
+        let output = loadEffectOutputFixture("dynamic_glucose_effect_partially_observed_output")
 
         let (carbRatios, insulinSensitivities) = loadSchedules()
         let defaultAbsorptionTimes = CarbStore.DefaultAbsorptionTimes(
@@ -442,7 +442,7 @@ class CarbMathTests: XCTestCase {
     func testDynamicGlucoseEffectsAbsorptionFullyObserved() {
         let inputICE = loadICEInputFixture("ice_1_hour_input")
         let carbEntries = loadCarbEntryFixture()
-        let output = loadCOBOutputFixture("dynamic_glucose_effect_fully_observed_output")
+        let output = loadEffectOutputFixture("dynamic_glucose_effect_fully_observed_output")
 
         let (carbRatios, insulinSensitivities) = loadSchedules()
         let defaultAbsorptionTimes = CarbStore.DefaultAbsorptionTimes(
@@ -549,7 +549,7 @@ class CarbMathTests: XCTestCase {
     func testDynamicGlucoseEffectsAbsorptionNeverFullyObserved() {
         let inputICE = loadICEInputFixture("ice_slow_absorption")
         let carbEntries = loadCarbEntryFixture()
-        let output = loadCOBOutputFixture("dynamic_glucose_effect_never_fully_observed_output")
+        let output = loadEffectOutputFixture("dynamic_glucose_effect_never_fully_observed_output")
 
         let (carbRatios, insulinSensitivities) = loadSchedules()
         let defaultAbsorptionTimes = CarbStore.DefaultAbsorptionTimes(

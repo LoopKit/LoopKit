@@ -12,16 +12,18 @@ import LoopKit
 
 
 extension Guardrail where Value == HKQuantity {
-    func color(for quantity: HKQuantity) -> Color {
+    func color(for quantity: HKQuantity,
+               guidanceColors: GuidanceColors) -> Color
+    {
         switch classification(for: quantity) {
         case .withinRecommendedRange:
-            return .primary
+            return guidanceColors.acceptable
         case .outsideRecommendedRange(let threshold):
             switch threshold {
             case .minimum, .maximum:
-                return .severeWarning
+                return guidanceColors.critical
             case .belowRecommended, .aboveRecommended:
-                return .warning
+                return guidanceColors.warning
             }
         }
     }

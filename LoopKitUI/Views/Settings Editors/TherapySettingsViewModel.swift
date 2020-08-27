@@ -27,6 +27,8 @@ public class TherapySettingsViewModel: ObservableObject {
     public var prescription: Prescription?
 
     lazy private var cancellables = Set<AnyCancellable>()
+    
+    public let chartColors: ChartColorPalette
 
     public init(mode: PresentationMode,
                 therapySettings: TherapySettings,
@@ -35,6 +37,7 @@ public class TherapySettingsViewModel: ObservableObject {
                 syncPumpSchedule: PumpManager.SyncSchedule? = nil,
                 sensitivityOverridesEnabled: Bool = false,
                 prescription: Prescription? = nil,
+                chartColors: ChartColorPalette,
                 didSave: SaveCompletion? = nil) {
         self.mode = mode
         self.therapySettings = therapySettings
@@ -44,6 +47,7 @@ public class TherapySettingsViewModel: ObservableObject {
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
         self.prescription = prescription
         self.supportedInsulinModelSettings = supportedInsulinModelSettings
+        self.chartColors = chartColors
         self.didSave = didSave
     }
     
@@ -61,11 +65,15 @@ public class TherapySettingsViewModel: ObservableObject {
         therapySettings.glucoseTargetRangeSchedule = range
         didSave?(TherapySetting.glucoseTargetRange, therapySettings)
     }
+        
+    public func saveCorrectionRangeOverride(preMeal: ClosedRange<HKQuantity>?, unit: HKUnit) {
+        therapySettings.preMealTargetRange = preMeal?.doubleRange(for: unit)
+        didSave?(TherapySetting.preMealCorrectionRangeOverride, therapySettings)
+    }
     
-    public func saveCorrectionRangeOverrides(overrides: CorrectionRangeOverrides, unit: HKUnit) {
-        therapySettings.preMealTargetRange = overrides.preMeal?.doubleRange(for: unit)
-        therapySettings.workoutTargetRange = overrides.workout?.doubleRange(for: unit)
-        didSave?(TherapySetting.correctionRangeOverrides, therapySettings)
+    public func saveCorrectionRangeOverride(workout: ClosedRange<HKQuantity>?, unit: HKUnit) {
+        therapySettings.workoutTargetRange = workout?.doubleRange(for: unit)
+        didSave?(TherapySetting.workoutCorrectionRangeOverride, therapySettings)
     }
     
     public func saveSuspendThreshold(value: GlucoseThreshold) {
