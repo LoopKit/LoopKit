@@ -293,7 +293,7 @@ extension HealthKitSampleStore {
 
 // MARK: - Observation
 extension HealthKitSampleStore {
-    private func createQuery() {
+    internal func createQuery() {
         log.debug("%@ [observationEnabled: %d]", #function, observationEnabled)
         log.debug("%@ [observeHealthKitSamplesFromCurrentApp: %d]", #function, observeHealthKitSamplesFromCurrentApp)
         log.debug("%@ [observeHealthKitSamplesFromOtherApps: %d]", #function, observeHealthKitSamplesFromOtherApps)
