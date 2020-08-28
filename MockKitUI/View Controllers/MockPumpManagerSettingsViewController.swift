@@ -20,6 +20,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
     init(pumpManager: MockPumpManager) {
         self.pumpManager = pumpManager
         super.init(style: .grouped)
+        title = NSLocalizedString("Pump Settings", comment: "Title for Pump simulator settings")
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -30,8 +31,6 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        title = "Pump Settings"
 
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
