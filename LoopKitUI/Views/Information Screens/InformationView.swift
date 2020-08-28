@@ -57,7 +57,7 @@ struct InformationView<InformationalContent: View> : View {
         switch mode {
         case .acceptanceFlow:
             return AnyView(bodyWithBottomButton)
-        case .settings, .legacySettings:
+        case .settings:
             return AnyView(bodyWithCancelButton)
         }
     }

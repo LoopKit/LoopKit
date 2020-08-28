@@ -88,7 +88,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         @ViewBuilder valuePicker: @escaping (_ item: Binding<RepeatingScheduleValue<Value>>, _ availableWidth: CGFloat) -> ValuePicker,
         @ViewBuilder actionAreaContent: () -> ActionAreaContent,
         savingMechanism: SavingMechanism<[RepeatingScheduleValue<Value>]>,
-        mode: PresentationMode = .legacySettings,
+        mode: PresentationMode = .settings,
         therapySettingType: TherapySetting = .none
     ) {
         self.title = title
@@ -140,25 +140,13 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     
     private var configurationPage: some View {
         switch mode {
-        case .legacySettings:
-            return AnyView(navigationPage)
         case .acceptanceFlow:
             return AnyView(page)
         case .settings:
             return AnyView(pageWithCancel)
         }
     }
-    
-    private var navigationPage: some View {
-        NavigationView {
-            page
-                .navigationBarItems(
-                    leading: cancelButton, // add in cancel button if modal
-                    trailing: trailingNavigationItems
-            )
-        }
-    }
-    
+        
     private var pageWithCancel: some View {
         switch saveButtonState {
         case .disabled, .loading:
@@ -369,7 +357,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     }
 
     private func startSaving() {
-        guard mode == .settings || mode == .legacySettings else {
+        guard mode == .settings else {
             self.continueSaving()
             return
         }
@@ -387,9 +375,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         switch savingMechanism {
         case .synchronous(let save):
             save(scheduleItems)
-            if mode == .legacySettings {
-                dismiss()
-            }
         case .asynchronous(let save):
             withAnimation {
                 self.editingIndex = nil
@@ -403,8 +388,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                             self.isSyncing = false
                         }
                         self.presentedAlert = .saveError(error)
-                    } else if self.mode == .legacySettings {
-                        self.dismiss()
                     }
                 }
             }

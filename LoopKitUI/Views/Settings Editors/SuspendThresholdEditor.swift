@@ -32,7 +32,7 @@ public struct SuspendThresholdEditor: View {
         unit: HKUnit,
         maxValue: HKQuantity?,
         onSave save: @escaping (_ suspendThreshold: HKQuantity) -> Void,
-        mode: PresentationMode = .legacySettings
+        mode: PresentationMode = .settings
     ) {
         self._value = State(initialValue: value ?? Self.defaultValue(for: unit))
         self.initialValue = value
@@ -81,7 +81,6 @@ public struct SuspendThresholdEditor: View {
         switch mode {
         case .settings: return AnyView(contentWithCancel)
         case .acceptanceFlow: return AnyView(content)
-        case .legacySettings: return AnyView(content)
         }
     }
     
@@ -209,7 +208,7 @@ public struct SuspendThresholdEditor: View {
     }
     
     private func startSaving() {
-        guard mode == .settings || mode == .legacySettings else {
+        guard mode == .settings else {
             self.continueSaving()
             return
         }
@@ -223,9 +222,6 @@ public struct SuspendThresholdEditor: View {
     
     private func continueSaving() {
         self.save(self.value)
-        if self.mode == .legacySettings {
-            self.dismiss()
-        }
     }
 }
 

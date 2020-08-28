@@ -24,7 +24,7 @@ public struct CarbRatioScheduleEditor: View {
     public init(
         schedule: CarbRatioSchedule?,
         onSave save: @escaping (CarbRatioSchedule) -> Void,
-        mode: PresentationMode = .legacySettings
+        mode: PresentationMode = .settings
     ) {
         // CarbRatioSchedule stores only the gram unit.
         // For consistency across display & computation, convert to "real" g/U units.
