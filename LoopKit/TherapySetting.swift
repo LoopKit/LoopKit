@@ -34,7 +34,7 @@ public extension TherapySetting {
         case .suspendThreshold:
             return LocalizedString("Suspend Threshold", comment: "Title text for suspend threshold")
         case .basalRate:
-            return LocalizedString("Basal Rate", comment: "Title text for basal rate")
+            return LocalizedString("Basal Rates", comment: "Title text for basal rates")
         case .deliveryLimits:
             return LocalizedString("Delivery Limits", comment: "Title text for delivery limits")
         case .insulinModel:
