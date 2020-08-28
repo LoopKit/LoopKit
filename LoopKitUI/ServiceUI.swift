@@ -27,6 +27,9 @@ public protocol ServiceUI: Service {
 }
 
 public extension ServiceUI {
+
+    // Default
+    static var image: UIImage? { nil }
     
     var image: UIImage? { return type(of: self).image }
 }
