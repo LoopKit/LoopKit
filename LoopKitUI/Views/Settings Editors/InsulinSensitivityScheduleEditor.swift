@@ -19,7 +19,7 @@ public struct InsulinSensitivityScheduleEditor: View {
 
     public init(
         schedule: InsulinSensitivitySchedule?,
-        mode: PresentationMode = .legacySettings,
+        mode: PresentationMode = .settings,
         glucoseUnit: HKUnit,
         onSave save: @escaping (InsulinSensitivitySchedule) -> Void
     ) {
