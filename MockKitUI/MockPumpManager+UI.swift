@@ -14,6 +14,10 @@ import MockKit
 
 
 extension MockPumpManager: PumpManagerUI {
+    private var appName: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
+    }
+    
     public var smallImage: UIImage? { return UIImage(named: "Pump Simulator", in: Bundle(for: MockPumpManagerSettingsViewController.self), compatibleWith: nil) }
     
     public static func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying & PumpManagerSetupViewController) {
@@ -25,6 +29,13 @@ extension MockPumpManager: PumpManagerUI {
         let nav = SettingsNavigationViewController(rootViewController: settings)
         return nav
     }
+    
+    public func deliveryUncertaintyRecoveryViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
+        return DeliveryUncertaintyRecoveryViewController(appName: appName, uncertaintyStartedAt: Date()) {
+            self.state.deliveryCommandsShouldTriggerUncertainDelivery = false
+            self.state.deliveryIsUncertain = false
+        }
+    }
 
     public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider? {
         return MockHUDProvider(pumpManager: self)
@@ -33,6 +44,8 @@ extension MockPumpManager: PumpManagerUI {
     public static func createHUDView(rawValue: [String : Any]) -> LevelHUDView? {
         return MockHUDProvider.createHUDView(rawValue: rawValue)
     }
+    
+    
 }
 
 // MARK: - DeliveryLimitSettingsTableViewControllerSyncSource
