@@ -53,7 +53,6 @@ public final class MockPumpManager: TestingPumpManager {
     )
 
     private static let deliveryUnitsPerMinute = 1.5
-    private static let pulsesPerUnit: Double = 20
     private static let pumpReservoirCapacity: Double = 200
 
     public var pumpReservoirCapacity: Double {
@@ -89,8 +88,10 @@ public final class MockPumpManager: TestingPumpManager {
         return type(of: self).device
     }
 
+    public var testLastReconciliation: Date? = nil
+    
     public var lastReconciliation: Date? {
-        return Date()
+        return testLastReconciliation ?? Date()
     }
 
     private func basalDeliveryState(for state: MockPumpManagerState) -> PumpManagerStatus.BasalDeliveryState {
