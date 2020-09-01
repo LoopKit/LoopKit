@@ -32,7 +32,8 @@ class PumpManagerStatusCodableTests: XCTestCase {
                                                              basalDeliveryState: .active(dateFormatter.date(from: "2020-05-14T15:56:09Z")!),
                                                              bolusState: .none,
                                                              pumpStatusHighlight: pumpStatusHighlight,
-                                                             pumpLifecycleProgress: pumpLifecycleProgress),
+                                                             pumpLifecycleProgress: pumpLifecycleProgress,
+                                                             deliveryIsUncertain: true),
                                            encodesJSON: """
 {
   "basalDeliveryState" : {
@@ -41,6 +42,7 @@ class PumpManagerStatusCodableTests: XCTestCase {
     }
   },
   "bolusState" : "none",
+  "deliveryIsUncertain" : true,
   "device" : {
     "firmwareVersion" : "1.2.3",
     "hardwareVersion" : "0.1.2",

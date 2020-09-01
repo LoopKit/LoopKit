@@ -67,6 +67,7 @@ public struct PumpManagerStatus: Equatable {
     public var bolusState: BolusState
     public var pumpStatusHighlight: PumpStatusHighlight?
     public var pumpLifecycleProgress: PumpLifecycleProgress?
+    public var deliveryIsUncertain: Bool
 
     public init(
         timeZone: TimeZone,
@@ -75,7 +76,8 @@ public struct PumpManagerStatus: Equatable {
         basalDeliveryState: BasalDeliveryState,
         bolusState: BolusState,
         pumpStatusHighlight: PumpStatusHighlight? = nil,
-        pumpLifecycleProgress: PumpLifecycleProgress? = nil
+        pumpLifecycleProgress: PumpLifecycleProgress? = nil,
+        deliveryIsUncertain: Bool = false
     ) {
         self.timeZone = timeZone
         self.device = device
@@ -84,6 +86,7 @@ public struct PumpManagerStatus: Equatable {
         self.bolusState = bolusState
         self.pumpStatusHighlight = pumpStatusHighlight
         self.pumpLifecycleProgress = pumpLifecycleProgress
+        self.deliveryIsUncertain = deliveryIsUncertain
     }
 }
 
@@ -97,6 +100,7 @@ extension PumpManagerStatus: Codable {
         self.bolusState = try container.decode(BolusState.self, forKey: .bolusState)
         self.pumpStatusHighlight = try container.decode(PumpStatusHighlight.self, forKey: .pumpStatusHighlight)
         self.pumpLifecycleProgress = try container.decode(PumpLifecycleProgress.self, forKey: .pumpLifecycleProgress)
+        self.deliveryIsUncertain = try container.decode(Bool.self, forKey: .deliveryIsUncertain)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -108,6 +112,7 @@ extension PumpManagerStatus: Codable {
         try container.encode(bolusState, forKey: .bolusState)
         try container.encode(pumpStatusHighlight, forKey: .pumpStatusHighlight)
         try container.encode(pumpLifecycleProgress, forKey: .pumpLifecycleProgress)
+        try container.encode(deliveryIsUncertain, forKey: .deliveryIsUncertain)
     }
 
     private struct CodableDevice: Codable {
@@ -151,6 +156,7 @@ extension PumpManagerStatus: Codable {
         case bolusState
         case pumpStatusHighlight
         case pumpLifecycleProgress
+        case deliveryIsUncertain
     }
 }
 
@@ -299,6 +305,7 @@ extension PumpManagerStatus: CustomDebugStringConvertible {
         * bolusState: \(bolusState)
         * pumpStatusHighlight: \(pumpStatusHighlight as Any)
         * pumpLifecycleProgress: \(pumpLifecycleProgress as Any)
+        * deliveryIsUncertain: \(deliveryIsUncertain)
         """
     }
 }

@@ -11,7 +11,7 @@ import HealthKit
 
 public enum PumpManagerResult<T> {
     case success(T)
-    case failure(Error)
+    case failure(PumpManagerError)
 }
 
 public protocol PumpManagerStatusObserver: class {
@@ -38,7 +38,7 @@ public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObs
 
     func pumpManager(_ pumpManager: PumpManager, hasNewPumpEvents events: [NewPumpEvent], lastReconciliation: Date?, completion: @escaping (_ error: Error?) -> Void)
 
-    func pumpManager(_ pumpManager: PumpManager, didReadReservoirValue units: Double, at date: Date, completion: @escaping (_ result: PumpManagerResult<(newValue: ReservoirValue, lastValue: ReservoirValue?, areStoredValuesContinuous: Bool)>) -> Void)
+    func pumpManager(_ pumpManager: PumpManager, didReadReservoirValue units: Double, at date: Date, completion: @escaping (_ result: Result<(newValue: ReservoirValue, lastValue: ReservoirValue?, areStoredValuesContinuous: Bool), Error>) -> Void)
 
     func pumpManager(_ pumpManager: PumpManager, didAdjustPumpClockBy adjustment: TimeInterval)
 
@@ -129,10 +129,9 @@ public protocol PumpManager: DeviceManager {
     /// - Parameters:
     ///   - units: The number of units to deliver
     ///   - startDate: The date the bolus command was originally set
-    ///   - willRequest: A closure called just before the pump command is sent, if all preconditions are met
     ///   - completion: A closure called after the command is complete
     ///   - result: A DoseEntry or an error describing why the command failed
-    func enactBolus(units: Double, at startDate: Date, willRequest: @escaping (_ dose: DoseEntry) -> Void, completion: @escaping (_ result: PumpManagerResult<DoseEntry>) -> Void)
+    func enactBolus(units: Double, at startDate: Date, completion: @escaping (_ result: PumpManagerResult<DoseEntry>) -> Void)
 
     /// Cancels the current, in progress, bolus.
     ///

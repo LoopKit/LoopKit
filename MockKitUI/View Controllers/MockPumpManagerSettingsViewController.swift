@@ -87,6 +87,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         case bolusCancelErrorToggle
         case suspendErrorToggle
         case resumeErrorToggle
+        case uncertainDeliveryErrorToggle
     }
     
     private enum StatusProgressRow: Int, CaseIterable {
@@ -199,6 +200,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 return switchTableViewCell(for: indexPath, titled: "Error on Suspend", boundTo: \.deliverySuspensionShouldError)
             case .resumeErrorToggle:
                 return switchTableViewCell(for: indexPath, titled: "Error on Resume", boundTo: \.deliveryResumptionShouldError)
+            case .uncertainDeliveryErrorToggle:
+                return switchTableViewCell(for: indexPath, titled: "Next Delivery Command Uncertain", boundTo: \.deliveryCommandsShouldTriggerUncertainDelivery)
             }
         case .statusProgress:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -285,7 +288,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 vc.indexPath = indexPath
                 vc.percentageDelegate = self
                 show(vc, sender: sender)
-            case .tempBasalErrorToggle, .bolusErrorToggle, .bolusCancelErrorToggle, .suspendErrorToggle, .resumeErrorToggle:
+            case .tempBasalErrorToggle, .bolusErrorToggle, .bolusCancelErrorToggle, .suspendErrorToggle, .resumeErrorToggle, .uncertainDeliveryErrorToggle:
                 break
             }
         case .statusProgress:

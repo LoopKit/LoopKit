@@ -11,10 +11,15 @@ import LoopKit
 
 public protocol PumpManagerUI: DeviceManagerUI, PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
     
+    // View for initial setup of device.
     static func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying)
 
+    // View for managing device after initial setup
     func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying)
-    
+
+    // View for recovering from delivery uncertainty
+    func deliveryUncertaintyRecoveryViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying)
+
     // Returns a class that can provide HUD views
     func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider?
     
