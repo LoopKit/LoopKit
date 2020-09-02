@@ -96,3 +96,20 @@ public extension Sequence where Element: TimelineValue {
         }
     }
 }
+
+public extension Sequence where Element: SampleValue {
+    func average(unit: HKUnit) -> HKQuantity? {
+        let (sum, count) = reduce(into: (sum: 0.0, count: 0)) { result, element in
+            result.0 += element.quantity.doubleValue(for: unit)
+            result.1 += 1
+        }
+        
+        guard count > 0 else {
+            return nil
+        }
+        
+        let average = sum / Double(count)
+        
+        return HKQuantity(unit: unit, doubleValue: average)
+    }
+}
