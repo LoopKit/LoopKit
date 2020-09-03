@@ -87,7 +87,7 @@ public final class PersistenceController {
 
         self.directoryURL = directoryURL
         self.isReadOnly = isReadOnly
-
+        
         initializeStack(inDirectory: directoryURL, model: model)
     }
 

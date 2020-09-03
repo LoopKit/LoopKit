@@ -139,6 +139,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     // MARK: - HealthKitSampleStore
     
     override func queryAnchorDidChange() {
+        self.log.default("GlucoseStore.queryAnchorDidChange(): %{public}@", String(describing: self.queryAnchor))
         cacheStore.storeAnchor(queryAnchor, key: GlucoseStore.queryAnchorMetadataKey)
     }
 

@@ -714,6 +714,8 @@
 		C1E4B308242E995200E70CCB /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B307242E995200E70CCB /* ActivityIndicator.swift */; };
 		C1E4B30A242E99A800E70CCB /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B309242E99A800E70CCB /* Image.swift */; };
 		C1E7035D24FFFA5C00DAB534 /* CollectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E7035C24FFFA5C00DAB534 /* CollectionTests.swift */; };
+		C1E703602500224600DAB534 /* HKObserverQueryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E7035E25001EA500DAB534 /* HKObserverQueryMock.swift */; };
+		C1E703622500390B00DAB534 /* HKAnchoredObjectQueryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E703612500390B00DAB534 /* HKAnchoredObjectQueryMock.swift */; };
 		C1F8403923DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C1F8403A23DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
 		C1F8B1E2223C3CC000DD66CF /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
@@ -1466,6 +1468,8 @@
 		C1E4B307242E995200E70CCB /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		C1E4B309242E99A800E70CCB /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		C1E7035C24FFFA5C00DAB534 /* CollectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTests.swift; sourceTree = "<group>"; };
+		C1E7035E25001EA500DAB534 /* HKObserverQueryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObserverQueryMock.swift; sourceTree = "<group>"; };
+		C1E703612500390B00DAB534 /* HKAnchoredObjectQueryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKAnchoredObjectQueryMock.swift; sourceTree = "<group>"; };
 		C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceLogEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceLogEntry+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E9077D2624ACD59F0066A88D /* InformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationView.swift; sourceTree = "<group>"; };
@@ -2097,6 +2101,8 @@
 				A99C73762339A67A00C80963 /* GlucoseThresholdTests.swift */,
 				A95A1D862460F1250079378D /* GlucoseValueTests.swift */,
 				898C897024D4C0E4002FA994 /* GuardrailTests.swift */,
+				C1E703612500390B00DAB534 /* HKAnchoredObjectQueryMock.swift */,
+				C1E7035E25001EA500DAB534 /* HKObserverQueryMock.swift */,
 				43D8FEC81C7294640073BE78 /* InsulinMathTests.swift */,
 				43D8FDDA1C728FDF0073BE78 /* LoopKitTests.swift */,
 				43D9888C1C87EBE400DA4467 /* LoopMathTests.swift */,
@@ -3487,12 +3493,14 @@
 				1F5DAB202118C95700048054 /* LocalizedString.swift in Sources */,
 				434113B820F2BDE800D05747 /* PersistenceControllerTestCase.swift in Sources */,
 				437874B6202FDD1500A3D8B9 /* InsulinMathTests.swift in Sources */,
+				C1E703602500224600DAB534 /* HKObserverQueryMock.swift in Sources */,
 				A95A1D8B2460FD620079378D /* BolusRecommendationTests.swift in Sources */,
 				A99C7373233990D400C80963 /* TempBasalRecommendationTests.swift in Sources */,
 				A971C89F23C68B030099BEFC /* GlucoseStoreTests.swift in Sources */,
 				A971C8A423C6B1890099BEFC /* DosingDecisionStoreTests.swift in Sources */,
 				437AFF21203AA740008C4892 /* NSManagedObjectContext.swift in Sources */,
 				A95A1D852460CAD50079378D /* CarbValueTests.swift in Sources */,
+				C1E703622500390B00DAB534 /* HKAnchoredObjectQueryMock.swift in Sources */,
 				434C5FA1209AC4EE00B2FD1A /* HKUnit.swift in Sources */,
 				437AFF1F203A763F008C4892 /* HKHealthStoreMock.swift in Sources */,
 				A99C73792339ACDC00C80963 /* ServiceTests.swift in Sources */,

@@ -44,6 +44,16 @@ class HKHealthStoreMock: HKHealthStore {
             self.saveHandler = saveHandler
         }
     }
+    
+    override func requestAuthorization(toShare typesToShare: Set<HKSampleType>?, read typesToRead: Set<HKObjectType>?, completion: @escaping (Bool, Error?) -> Void) {
+        DispatchQueue.main.async {
+            completion(true, nil)
+        }
+    }
+    
+    override func authorizationStatus(for type: HKObjectType) -> HKAuthorizationStatus {
+        return .notDetermined
+    }
 }
 
 extension HKHealthStoreMock {

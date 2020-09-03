@@ -36,7 +36,7 @@ public class HealthKitSampleStore {
 
     /// The health store used for underlying queries
     public let healthStore: HKHealthStore
-
+    
     /// Whether the store should fetch data that was written to HealthKit from current app
     private let observeHealthKitSamplesFromCurrentApp: Bool
 
@@ -55,6 +55,16 @@ public class HealthKitSampleStore {
     internal func currentDate(timeIntervalSinceNow: TimeInterval = 0) -> Date {
         let date = test_currentDate ?? Date()
         return date.addingTimeInterval(timeIntervalSinceNow)
+    }
+    
+    /// Allows unit test to inject a mock for HKObserverQuery
+    public var createObserverQuery: (HKSampleType, NSPredicate?, @escaping (HKObserverQuery, @escaping HKObserverQueryCompletionHandler, Error?) -> Void) -> HKObserverQuery = { (sampleType, predicate, updateHandler) in
+        return HKObserverQuery(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+    }
+    
+    /// Allows unit test to inject a mock for HKAnchoredObjectQuery
+    public var createAnchoredObjectQuery: (HKSampleType, NSPredicate?, HKQueryAnchor?, Int, @escaping (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void) -> HKAnchoredObjectQuery = { (sampleType, predicate, anchor, limit, resultsHandler) in
+        return HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: limit, resultsHandler: resultsHandler)
     }
 
     private let log: OSLog
@@ -208,7 +218,11 @@ public class HealthKitSampleStore {
         let queryAnchor = self.queryAnchor
         log.default("%@ notified with changes. Fetching from: %{public}@", query, queryAnchor.map(String.init(describing:)) ?? "0")
 
-        createAnchoredObjectQuery(predicate: query.predicate, anchor: queryAnchor)
+        let anchoredObjectQuery = createAnchoredObjectQuery(sampleType, queryAnchor == nil ? query.predicate : nil, queryAnchor, HKObjectQueryNoLimit) {  [weak self] (query, newSamples, deletedSamples, anchor, error) in
+            self?.anchoredObjectQueryResultsHandler(query: query, newSamples: newSamples, deletedSamples: deletedSamples, anchor: anchor, error: error)
+        }
+
+        healthStore.execute(anchoredObjectQuery)
     }
 
     private final func anchoredObjectQueryResultsHandler(query: HKAnchoredObjectQuery, newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, anchor: HKQueryAnchor?, error: Error?) {
@@ -221,6 +235,7 @@ public class HealthKitSampleStore {
         }
 
         processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], anchor: anchor) { didSucceed in
+            self.log.default("processed results: didSucceed = %{public}@", String(describing: didSucceed))
             if didSucceed {
                 self.queryAnchor = anchor
             }
@@ -306,11 +321,7 @@ extension HealthKitSampleStore {
             return
         }
 
-        createObserverQuery(predicate: predicate)
-    }
-
-    private func createObserverQuery(predicate: NSPredicate) {
-        observerQuery = HKObserverQuery(sampleType: sampleType, predicate: predicate) { [weak self] (query, completionHandler, error) in
+        observerQuery = createObserverQuery(sampleType, predicate) { [weak self] (query, completionHandler, error) in
             self?.observeUpdates(to: query, completionHandler: completionHandler, error: error)
         }
 
@@ -324,18 +335,6 @@ extension HealthKitSampleStore {
         }
     }
 
-    private func createAnchoredObjectQuery(predicate: NSPredicate?, anchor: HKQueryAnchor?) {
-        let anchoredObjectQuery = HKAnchoredObjectQuery(
-            type: sampleType,
-            predicate: anchor == nil ? predicate : nil,
-            anchor: anchor,
-            limit: HKObjectQueryNoLimit
-        ) { (query, newSamples, deletedSamples, anchor, error) in
-            self.anchoredObjectQueryResultsHandler(query: query, newSamples: newSamples, deletedSamples: deletedSamples, anchor: anchor, error: error)
-        }
-
-        healthStore.execute(anchoredObjectQuery)
-    }
 
     /// Enables the immediate background delivery of updates to samples from HealthKit.
     ///
