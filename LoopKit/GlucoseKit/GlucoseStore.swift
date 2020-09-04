@@ -143,11 +143,11 @@ public final class GlucoseStore: HealthKitSampleStore {
         cacheStore.storeAnchor(queryAnchor, key: GlucoseStore.queryAnchorMetadataKey)
     }
 
-    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (_ didSucceed: Bool) -> Void) {
+    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping () -> Void) {
         dataAccessQueue.async {
             guard anchor != self.queryAnchor else {
                 self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
-                completion(false)
+                completion()
                 return
             }
 
@@ -191,7 +191,7 @@ public final class GlucoseStore: HealthKitSampleStore {
                 NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
             }
 
-            completion(true)
+            completion()
         }
     }
 }

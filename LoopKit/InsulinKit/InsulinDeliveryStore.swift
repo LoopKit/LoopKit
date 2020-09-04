@@ -89,14 +89,15 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
         cacheStore.storeAnchor(queryAnchor, key: InsulinDeliveryStore.queryAnchorMetadataKey)
     }
 
-    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
+    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping () -> Void) {
         queue.async {
             guard anchor != self.queryAnchor else {
                 self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
                 if self.lastBasalEndDate == nil {
                     self.updateLastBasalEndDate()
                 }
-                completion(false)
+                // Skipping processing,
+                completion()
                 return
             }
 
@@ -132,7 +133,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
                 NotificationCenter.default.post(name: InsulinDeliveryStore.cacheDidChange, object: self)
             }
 
-            completion(true)
+            completion()
         }
     }
 

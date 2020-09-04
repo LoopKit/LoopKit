@@ -82,7 +82,8 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
         limit = nil
         queryAnchor = nil
         glucoseStore = nil
-        
+        healthStore.lastQuery = nil
+
         super.tearDown()
     }
     
@@ -122,12 +123,9 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
 
         wait(for: [anchoredObjectQueryCreationExpectation], timeout: 3)
 
-        XCTAssertNotNil(healthStore.lastQuery)
-        let query = healthStore.lastQuery as! HKAnchoredObjectQueryMock
-
         // Trigger results handler for anchored object query
         let returnedAnchor = HKQueryAnchor(fromValue: 5)
-        query.resultsHandler(query, [], [], returnedAnchor, nil)
+        anchoredObjectQuery!.resultsHandler(anchoredObjectQuery!, [], [], returnedAnchor, nil)
 
         // Wait for observerQueryCompletionExpectation
         waitForExpectations(timeout: 3)
@@ -170,6 +168,8 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
         
         // Assert new glucose store is querying with the last anchor that our HealthKit mock returned
         XCTAssertEqual(returnedAnchor, anchoredObjectQuery?.anchor)
+        
+        anchoredObjectQuery!.resultsHandler(anchoredObjectQuery!, [], [], returnedAnchor, nil)
     }
     
     func testEmptyWithDefaultQueryAnchor() {

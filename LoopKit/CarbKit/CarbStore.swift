@@ -265,11 +265,11 @@ public final class CarbStore: HealthKitSampleStore {
         cacheStore.storeAnchor(queryAnchor, key: CarbStore.queryAnchorMetadataKey)
     }
 
-    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
+    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping () -> Void) {
         queue.async {
             guard anchor != self.queryAnchor else {
                 self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
-                completion(false)
+                completion()
                 return
             }
 
@@ -301,7 +301,7 @@ public final class CarbStore: HealthKitSampleStore {
                 NotificationCenter.default.post(name: CarbStore.carbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
             }
 
-            completion(true)
+            completion()
         }
     }
 }
