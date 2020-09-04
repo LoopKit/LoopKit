@@ -79,7 +79,9 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
                         self.createQuery()
                     }
                     
-                    self.updateLastBasalEndDate()
+                    if self.lastBasalEndDate == nil {
+                        self.updateLastBasalEndDate()
+                    }
                 }
             }
         }
