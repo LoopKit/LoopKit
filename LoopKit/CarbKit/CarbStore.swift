@@ -168,7 +168,7 @@ public final class CarbStore: HealthKitSampleStore {
 
     private let log = OSLog(category: "CarbStore")
     
-    static let queryAnchorMetadataKey = "com.loopkit.CarbStore.queryAnchor"
+    static let healthKitQueryAnchorMetadataKey = "com.loopkit.CarbStore.hkQueryAnchor"
     
     var settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
 
@@ -218,7 +218,7 @@ public final class CarbStore: HealthKitSampleStore {
         cacheStore.onReady { (error) in
             guard error == nil else { return }
             
-            cacheStore.fetchAnchor(key: CarbStore.queryAnchorMetadataKey) { (anchor) in
+            cacheStore.fetchAnchor(key: CarbStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
                     self.queryAnchor = anchor
             
@@ -262,18 +262,20 @@ public final class CarbStore: HealthKitSampleStore {
     // MARK: - HealthKitSampleStore
     
     override func queryAnchorDidChange() {
-        cacheStore.storeAnchor(queryAnchor, key: CarbStore.queryAnchorMetadataKey)
+        cacheStore.storeAnchor(queryAnchor, key: CarbStore.healthKitQueryAnchorMetadataKey)
     }
 
-    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping () -> Void) {
+    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
         queue.async {
             guard anchor != self.queryAnchor else {
                 self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
-                completion()
+                completion(true)
                 return
             }
 
             var notificationRequired = false
+            
+            var storageError = false
 
             // Append the new samples
             if let samples = added as? [HKQuantitySample] {
@@ -281,17 +283,26 @@ public final class CarbStore: HealthKitSampleStore {
                     if self.addCachedObject(for: sample) {
                         self.log.debug("Saved sample %@ into cache from HKAnchoredObjectQuery", sample.uuid.uuidString)
                         notificationRequired = true
+                    } else {
+                        self.log.error("Failed to save sample %@", sample.uuid.uuidString)
+                        storageError = true
+                        break
                     }
                 }
             }
 
             // Remove deleted samples
             self.log.debug("Starting deletion of %d samples", deleted.count)
-            let cacheDeletedCount = self.deleteCachedObjects(for: deleted.map { $0.uuid })
-            if cacheDeletedCount > 0 {
-                notificationRequired = true
+            switch self.deleteCachedObjects(for: deleted.map({ $0.uuid })) {
+            case .success(let cacheDeletedCount):
+                if cacheDeletedCount > 0 {
+                    notificationRequired = true
+                }
+                self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
+            case .failure(let error):
+                self.log.error("Failed to delete samples: %{public}@", String(describing: error))
+                storageError = true
             }
-            self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
 
             // Notify listeners only if a meaningful change was made
             if notificationRequired {
@@ -301,7 +312,7 @@ public final class CarbStore: HealthKitSampleStore {
                 NotificationCenter.default.post(name: CarbStore.carbEntriesDidUpdate, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
             }
 
-            completion()
+            completion(storageError == false)
         }
     }
 }
@@ -542,8 +553,9 @@ extension CarbStore {
             let object = CachedCarbObject(context: self.cacheStore.managedObjectContext)
             object.update(from: entry)
 
-            self.cacheStore.save()
-            created = true
+            self.cacheStore.save { (error) in
+                created = error == nil
+            }
         }
 
         return created
@@ -572,20 +584,28 @@ extension CarbStore {
     }
 
     @discardableResult
-    private func deleteCachedObjects(for uuids: [UUID], batchSize: Int = 500) -> Int {
+    private func deleteCachedObjects(for uuids: [UUID], batchSize: Int = 500) -> Result<Int,Error> {
         dispatchPrecondition(condition: .onQueue(queue))
 
         var deleted = 0
+        var storageError: Error? = nil
 
         cacheStore.managedObjectContext.performAndWait {
             for batch in uuids.chunked(into: batchSize) {
                 let predicate = NSPredicate(format: "uuid IN %@", batch.map { $0 as NSUUID })
-                if let count = try? cacheStore.managedObjectContext.purgeObjects(of: CachedCarbObject.self, matching: predicate) {
-                    deleted += count
+                do {
+                    deleted += try cacheStore.managedObjectContext.purgeObjects(of: CachedCarbObject.self, matching: predicate)
+                } catch let error {
+                   storageError = error
                 }
             }
         }
-        return deleted
+        
+        if let error = storageError {
+            return .failure(error)
+        } else {
+            return .success(deleted)
+        }
     }
 
     @discardableResult

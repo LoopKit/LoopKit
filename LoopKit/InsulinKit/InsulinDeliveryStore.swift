@@ -48,7 +48,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
 
     private let cacheStore: PersistenceController
     
-    static let queryAnchorMetadataKey = "com.loopkit.InsulinDeliveryStore.queryAnchor"
+    static let healthKitQueryAnchorMetadataKey = "com.loopkit.InsulinDeliveryStore.hkQueryAnchor"
 
     public init(
         healthStore: HKHealthStore,
@@ -71,13 +71,15 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
         )
 
         cacheStore.onReady { (error) in
-            cacheStore.fetchAnchor(key: InsulinDeliveryStore.queryAnchorMetadataKey) { (anchor) in
+            cacheStore.fetchAnchor(key: InsulinDeliveryStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
                     self.queryAnchor = anchor
 
                     if !self.authorizationRequired {
                         self.createQuery()
                     }
+                    
+                    self.updateLastBasalEndDate()
                 }
             }
         }
@@ -86,18 +88,14 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
     // MARK: - HealthKitSampleStore
 
     override func queryAnchorDidChange() {
-        cacheStore.storeAnchor(queryAnchor, key: InsulinDeliveryStore.queryAnchorMetadataKey)
+        cacheStore.storeAnchor(queryAnchor, key: InsulinDeliveryStore.healthKitQueryAnchorMetadataKey)
     }
 
-    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping () -> Void) {
+    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
         queue.async {
             guard anchor != self.queryAnchor else {
                 self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
-                if self.lastBasalEndDate == nil {
-                    self.updateLastBasalEndDate()
-                }
-                // Skipping processing,
-                completion()
+                completion(true)
                 return
             }
 
@@ -112,17 +110,32 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
             // Deleted samples
             if deleted.count > 0 {
                 self.log.debug("Starting deletion of %d samples", deleted.count)
-                let cacheDeletedCount = self.deleteCachedObjects(forSampleUUIDs: deleted.map { $0.uuid })
-                if cacheDeletedCount > 0 {
-                    cacheChanged = true
+                switch self.deleteCachedObjects(forSampleUUIDs: deleted.map({ $0.uuid })) {
+                case .failure(let error):
+                    self.log.error("Error deleting cached objects: %{public}@", String(describing: error))
+                    completion(false)
+                case .success(let cacheDeletedCount):
+                    if cacheDeletedCount > 0 {
+                        cacheChanged = true
+                    }
+                    self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
                 }
-                self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
             }
 
+            // Purge old objects in cache
             let cachePredicate = NSPredicate(format: "startDate < %@", self.earliestCacheDate as NSDate)
-            self.purgeCachedObjects(matching: cachePredicate)
+            switch self.purgeCachedObjects(matching: cachePredicate) {
+            case .success(let count):
+                self.log.default("Purged %d CachedInsulinDeliveryObjects", count)
+                if count > 0 {
+                    cacheChanged = true
+                }
+            case .failure(let error):
+                self.log.error("Unable to purge CachedInsulinDeliveryObjects: %{public}@", String(describing: error))
+                completion(false)
+            }
 
-            if cacheChanged || self.lastBasalEndDate == nil {
+            if cacheChanged {
                 self.updateLastBasalEndDate()
             }
 
@@ -133,7 +146,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
                 NotificationCenter.default.post(name: InsulinDeliveryStore.cacheDidChange, object: self)
             }
 
-            completion()
+            completion(true)
         }
     }
 
@@ -406,21 +419,29 @@ extension InsulinDeliveryStore {
     ///
     /// - Parameter uuid: The UUID of the sample to delete
     /// - Returns: Whether the deletion was made
-    private func deleteCachedObjects(forSampleUUIDs uuids: [UUID], batchSize: Int = 500) -> Int {
+    private func deleteCachedObjects(forSampleUUIDs uuids: [UUID], batchSize: Int = 500) -> Result<Int, Error> {
         dispatchPrecondition(condition: .onQueue(queue))
 
         var deleted = 0
+        var caughtError: Error? = nil
 
         cacheStore.managedObjectContext.performAndWait {
 
             for batch in uuids.chunked(into: batchSize) {
                 let predicate = NSPredicate(format: "uuid IN %@", batch.map { $0 as NSUUID })
-                if let count = try? cacheStore.managedObjectContext.purgeObjects(of: CachedInsulinDeliveryObject.self, matching: predicate) {
-                    deleted += count
+                do {
+                    deleted += try cacheStore.managedObjectContext.purgeObjects(of: CachedInsulinDeliveryObject.self, matching: predicate)
+                } catch let error {
+                    caughtError = error
+                    break
                 }
             }
         }
-        return deleted
+        if let error = caughtError {
+            return .failure(error)
+        } else {
+            return .success(deleted)
+        }
     }
 
     /// Deletes objects from the cache that match the given sample UUID
@@ -448,17 +469,20 @@ extension InsulinDeliveryStore {
         return deleted
     }
 
-    private func purgeCachedObjects(matching predicate: NSPredicate) {
+    private func purgeCachedObjects(matching predicate: NSPredicate) -> Result<Int, Error> {
         dispatchPrecondition(condition: .onQueue(queue))
+        
+        var result: Result<Int, Error>?
 
         cacheStore.managedObjectContext.performAndWait {
             do {
                 let count = try cacheStore.managedObjectContext.purgeObjects(of: CachedInsulinDeliveryObject.self, matching: predicate)
-                self.log.default("Purged %d CachedInsulinDeliveryObjects", count)
+                result = .success(count)
             } catch let error {
-                self.log.error("Unable to purge CachedInsulinDeliveryObjects: %{public}@", String(describing: error))
+                result = .failure(error)
             }
         }
+        return result!
     }
 }
 

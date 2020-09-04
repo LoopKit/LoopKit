@@ -98,7 +98,7 @@ public final class GlucoseStore: HealthKitSampleStore {
 
     private let cacheStore: PersistenceController
     
-    static let queryAnchorMetadataKey = "com.loopkit.GlucoseStore.queryAnchor"
+    static let healthKitQueryAnchorMetadataKey = "com.loopkit.GlucoseStore.hkQueryAnchor"
 
     private let startAfterDatePredicate = NSPredicate(format: "startDate >= $start")
 
@@ -122,7 +122,7 @@ public final class GlucoseStore: HealthKitSampleStore {
         super.init(healthStore: healthStore, observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -self.observationInterval), observationEnabled: observationEnabled)
 
         cacheStore.onReady { (error) in
-            cacheStore.fetchAnchor(key: GlucoseStore.queryAnchorMetadataKey) { (anchor) in
+            cacheStore.fetchAnchor(key: GlucoseStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.dataAccessQueue.async {
                     self.queryAnchor = anchor
                     
@@ -139,15 +139,14 @@ public final class GlucoseStore: HealthKitSampleStore {
     // MARK: - HealthKitSampleStore
     
     override func queryAnchorDidChange() {
-        self.log.default("GlucoseStore.queryAnchorDidChange(): %{public}@", String(describing: self.queryAnchor))
-        cacheStore.storeAnchor(queryAnchor, key: GlucoseStore.queryAnchorMetadataKey)
+        cacheStore.storeAnchor(queryAnchor, key: GlucoseStore.healthKitQueryAnchorMetadataKey)
     }
 
-    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping () -> Void) {
+    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
         dataAccessQueue.async {
             guard anchor != self.queryAnchor else {
                 self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
-                completion()
+                completion(true)
                 return
             }
 
@@ -167,17 +166,28 @@ public final class GlucoseStore: HealthKitSampleStore {
                 }
             }
 
-            if self.addCachedObjects(for: samples) {
-                cacheChanged = true
+            switch self.addCachedObjects(for: samples) {
+            case .success(let didCreate):
+                cacheChanged = didCreate
+            case .failure(let error):
+                self.log.error("Samples added to HK could not added to cache: %{public}@", String(describing: error))
+                completion(false)
+                return
             }
 
             // Deleted samples
             self.log.debug("Starting deletion of %d samples", deleted.count)
-            let cacheDeletedCount = self.deleteCachedObjects(forSampleUUIDs: deleted.map { $0.uuid })
-            if cacheDeletedCount > 0 {
-                cacheChanged = true
+            switch self.deleteCachedObjects(forSampleUUIDs: deleted.map({ $0.uuid })) {
+            case .success(let cacheDeletedCount):
+                if cacheDeletedCount > 0 {
+                    cacheChanged = true
+                }
+                self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
+            case .failure(let error):
+                self.log.error("Samples deleted from HK could not be deleted from cache: %{public}@", String(describing: error))
+                completion(false)
+                return
             }
-            self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
 
             if let startDate = newestSampleStartDateAddedByExternalSource {
                 self.purgeOldGlucoseSamples(includingManagedDataBefore: startDate)
@@ -191,7 +201,7 @@ public final class GlucoseStore: HealthKitSampleStore {
                 NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
             }
 
-            completion()
+            completion(true)
         }
     }
 }
@@ -369,19 +379,21 @@ extension GlucoseStore {
 // MARK: - Core Data
 extension GlucoseStore {
     @discardableResult
-    private func addCachedObjects(for samples: [HKQuantitySample]) -> Bool {
+    private func addCachedObjects(for samples: [HKQuantitySample]) -> Result<Bool,Error> {
         return addCachedObjects(for: samples.map { StoredGlucoseSample(sample: $0) })
     }
 
     /// Creates new cached glucose objects from samples if they're not already cached and within the cache interval
     ///
     /// - Parameter samples: The samples to cache
-    /// - Returns: Whether new cached objects were created
+    /// - Returns: Result. If successful, bool indicates if any objects were created. Otherwise, failure returns error.
     @discardableResult
-    private func addCachedObjects(for samples: [StoredGlucoseSample]) -> Bool {
+    private func addCachedObjects(for samples: [StoredGlucoseSample]) -> Result<Bool,Error> {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
 
         var created = false
+        var storageError: Error? = nil
+        
         cacheStore.managedObjectContext.performAndWait {
             for sample in samples {
                 guard
@@ -397,11 +409,17 @@ extension GlucoseStore {
             }
 
             if created {
-                self.cacheStore.save()
+                self.cacheStore.save { (error) in
+                    storageError = error
+                }
             }
         }
-
-        return created
+        
+        if let error = storageError {
+            return .failure(error)
+        } else {
+            return .success(created)
+        }
     }
 
     private func getCachedGlucoseObjects(start: Date, end: Date? = nil) -> [StoredGlucoseSample] {
@@ -411,7 +429,7 @@ extension GlucoseStore {
         if let end = end {
             predicate = NSPredicate(format: "startDate >= %@ AND startDate <= %@", start as NSDate, end as NSDate)
         } else {
-            predicate = startAfterDatePredicate.withSubstitutionVariables(["start": start])
+            predicate = NSPredicate(format: "startDate >= %@", start as NSDate)
         }
 
         return getCachedGlucoseObjects(matching: predicate)
@@ -463,7 +481,7 @@ extension GlucoseStore {
         }
     }
     
-    private func deleteCachedObjects(forSampleUUIDs uuids: [UUID], batchSize: Int = 500) -> Int {
+    private func deleteCachedObjects(forSampleUUIDs uuids: [UUID], batchSize: Int = 500) -> Result<Int,Error> {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
 
         var deleted = 0
@@ -471,15 +489,14 @@ extension GlucoseStore {
         for batch in uuids.chunked(into: batchSize) {
             let result = self.purgeCachedGlucoseObjects(matching: NSPredicate(format: "uuid IN %@", batch.map { $0 as NSUUID }))
             switch result {
-            case .failure:
-                // ignore for now; it's already logged
-                break
+            case .failure(let error):
+                return .failure(error)
             case .success(let count):
-                deleted += count;
+                deleted += count
             }
         }
 
-        return deleted
+        return .success(deleted)
     }
 
     private func deleteCachedObject(forSampleUUID uuid: UUID) -> Bool {

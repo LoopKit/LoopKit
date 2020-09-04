@@ -26,7 +26,7 @@ public class HealthKitSampleStore {
     /// Describes the source of an update notification. Value is of type `UpdateSource.RawValue`
     public static let notificationUpdateSourceKey = "com.loopkit.UpdateSource"
     
-    private let observerQueryUpdateHandlerQueue = DispatchQueue(label: "com.loopkit.HealthKitSampleStore.observerQueryUpdateHandlerQueue", qos: .utility)
+    private let observerQueryUpdateHandlerQueue: DispatchQueue
 
     public enum StoreError: Error {
         case authorizationDenied
@@ -90,6 +90,8 @@ public class HealthKitSampleStore {
         self.lockedQueryAnchor = Locked<HKQueryAnchor?>(nil)
 
         self.log = OSLog(category: String(describing: Swift.type(of: self)))
+ 
+        self.observerQueryUpdateHandlerQueue = DispatchQueue(label: "com.loopkit.HealthKitSampleStore.observerQueryUpdateHandlerQueue.\(Swift.type(of: self))", qos: .utility)
     }
 
     deinit {
@@ -112,7 +114,7 @@ public class HealthKitSampleStore {
     public func authorize(toShare: Bool = true, _ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
         healthStore.requestAuthorization(toShare: toShare ? [sampleType] : [], read: [sampleType]) { (completed, error) -> Void in
             if completed && !self.sharingDenied {
-                self.log.default("authorize completed: creating HK query")
+                self.log.default("Authorize completed: creating HK query")
                 self.createQuery()
                 completion(.success(true))
             } else {
@@ -176,7 +178,7 @@ public class HealthKitSampleStore {
             }
         }
     }
-    internal let lockedQueryAnchor: Locked<HKQueryAnchor?>
+    private let lockedQueryAnchor: Locked<HKQueryAnchor?>
 
     func queryAnchorDidChange() {
         // Subclasses can override
@@ -233,12 +235,16 @@ public class HealthKitSampleStore {
         self.log.default("anchoredObjectQuery.resultsHandler: new: %{public}d deleted: %{public}d anchor: %{public}@", newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor))
         
         guard let anchor = anchor else {
+            self.log.error("anchoredObjectQueryResultsHandler called with no anchor")
             completion()
             return
         }
 
-        self.processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], anchor: anchor) {
-            self.queryAnchor = anchor
+        self.processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], anchor: anchor) { (success) in
+            if success {
+                // Do not advance anchor if we failed to update local cache
+                self.queryAnchor = anchor
+            }
             completion()
         }
     }
@@ -250,9 +256,9 @@ public class HealthKitSampleStore {
     ///   - added: An array of samples added
     ///   - deleted: An array of samples deleted
     ///   - error: An error from the query, if one occurred
-    internal func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping () -> Void) {
+    internal func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
         // To be overridden
-        completion()
+        completion(true)
     }
 
     /// The preferred unit for the sample type

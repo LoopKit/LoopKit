@@ -121,7 +121,7 @@ public final class PersistenceController {
         }
     }
     
-    // Should only be called from PersistenceControllerError thread
+    // Should only be called from managedObjectContext thread
     internal func saveInternal(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) {
         guard !self.isReadOnly else {
             completion?(nil)
@@ -134,7 +134,7 @@ public final class PersistenceController {
             delegate?.persistenceControllerDidSave(self, error: nil)
             completion?(nil)
         } catch let saveError as NSError {
-            self.log.error("Error while saving context: %{public}", saveError)
+            self.log.error("Error while saving context: %{public}@", saveError)
             delegate?.persistenceControllerDidSave(self, error: .coreDataError(saveError))
             completion?(.coreDataError(saveError))
         }
@@ -151,12 +151,12 @@ public final class PersistenceController {
     }
     
     // Should only be called on managedObjectContext thread
-    func fetchMetadata(key: String, completion: @escaping (Any?) -> Void) {
+    func fetchMetadata(key: String) -> Any? {
         if let coordinator = self.managedObjectContext.persistentStoreCoordinator, let store = coordinator.persistentStores.first {
             let metadata = coordinator.metadata(for: store)
-            completion(metadata[key])
+            return metadata[key]
         } else {
-            completion(nil)
+            return nil
         }
     }
     
@@ -234,6 +234,9 @@ extension PersistenceController {
             let encoded: Data?
             if let anchor = anchor {
                 encoded = try? NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true)
+                if encoded == nil {
+                    self.log.error("Encoding anchor %{public} failed.", String(describing: anchor))
+                }
             } else {
                 encoded = nil
             }
@@ -244,13 +247,15 @@ extension PersistenceController {
     
     func fetchAnchor(key: String, completion: @escaping (HKQueryAnchor?) -> Void) {
         managedObjectContext.perform {
-            self.fetchMetadata(key: key) { (value) in
-                if let encoded = value as? Data {
-                    let anchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: encoded)
-                    completion(anchor)
-                } else {
-                    completion(nil)
+            let value = self.fetchMetadata(key: key)
+            if let encoded = value as? Data {
+                let anchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: encoded)
+                if anchor == nil {
+                    self.log.error("Decoding anchor from %{public} failed.", String(describing: encoded))
                 }
+                completion(anchor)
+            } else {
+                completion(nil)
             }
         }
     }
