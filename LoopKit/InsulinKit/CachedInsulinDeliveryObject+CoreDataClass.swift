@@ -147,7 +147,7 @@ extension CachedInsulinDeliveryObject {
         endDate = sample.endDate
         reason = sample.insulinDeliveryReason
         // External doses might not have a syncIdentifier, so use the UUID
-        syncIdentifier = sample.metadata?[HKMetadataKeySyncIdentifier] as? String ?? sample.uuid.uuidString
+        syncIdentifier = sample.syncIdentifier ?? sample.uuid.uuidString
         scheduledBasalRate = sample.scheduledBasalRate
         programmedTempBasalRate = sample.programmedTempBasalRate
         hasLoopKitOrigin = sample.hasLoopKitOrigin

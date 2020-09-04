@@ -24,7 +24,8 @@ class DeviceDataManager : CarbStoreDelegate {
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
             observationInterval: .hours(24),
             carbRatioSchedule: carbRatioSchedule,
-            insulinSensitivitySchedule: insulinSensitivitySchedule
+            insulinSensitivitySchedule: insulinSensitivitySchedule,
+            provenanceIdentifier: HKSource.default().bundleIdentifier
         )
         let insulinModel: WalshInsulinModel?
         if let actionDuration = insulinActionDuration {

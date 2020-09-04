@@ -108,7 +108,10 @@ public final class PersistenceController {
         }
     }
 
-    func save(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) {
+    @discardableResult
+    func save(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) -> PersistenceControllerError? {
+        var error: PersistenceControllerError?
+
         self.managedObjectContext.performAndWait {
             guard !self.isReadOnly && self.managedObjectContext.hasChanges else {
                 completion?(nil)
@@ -122,10 +125,13 @@ public final class PersistenceController {
                 completion?(nil)
             } catch let saveError as NSError {
                 self.log.error("Error while saving context: %{public}@", saveError)
-                delegate?.persistenceControllerDidSave(self, error: .coreDataError(saveError))
-                completion?(.coreDataError(saveError))
+                error = .coreDataError(saveError)
+                delegate?.persistenceControllerDidSave(self, error: error)
+                completion?(error)
             }
         }
+
+        return error
     }
 
     // MARK: - 

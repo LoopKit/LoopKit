@@ -30,8 +30,8 @@ public struct StoredGlucoseSample: GlucoseSampleValue {
     public init(sample: HKQuantitySample) {
         self.init(
             sampleUUID: sample.uuid,
-            syncIdentifier: sample.metadata?[HKMetadataKeySyncIdentifier] as? String,
-            syncVersion: sample.metadata?[HKMetadataKeySyncVersion] as? Int ?? 1,
+            syncIdentifier: sample.syncIdentifier,
+            syncVersion: sample.syncVersion ?? 1,
             startDate: sample.startDate,
             quantity: sample.quantity,
             isDisplayOnly: sample.isDisplayOnly,
