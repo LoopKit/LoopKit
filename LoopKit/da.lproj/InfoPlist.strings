@@ -1,0 +1,9 @@
+/* Bundle name */
+"CFBundleName" = "LoopKit";
+
+/* Privacy - Health Share Usage Description */
+"NSHealthShareUsageDescription" = "Måltider data fra Health database bruges til at bestemme glukoseeffekter. Glukose data hentes fra HealthKit til grafik og analyse.";
+
+/* Privacy - Health Update Usage Description */
+"NSHealthUpdateUsageDescription" = "Kulhydrat måltid data indtastet i appen gemmes i Health databasen. Blodsukker data lagres sikkert i HealthKit.";
+

@@ -5,25 +5,40 @@
 "%1$@ U bolus may not have succeeded" = "%1$@ E bolus er måske ikke gennemført";
 
 /* The error description describing when Health sharing was denied */
-"Authorization Denied" = "Tilladelse Nægtet";
+"Authorization Denied" = "Tilladelse nægtet";
+
+/* Title text for basal rate */
+"Basal Rate" = "Basal rater";
+
+/* Title text for carb ratios */
+"Carb Ratios" = "Kulhydrat ratios";
 
 /* Recovery instruction for an uncertain bolus failure */
 "Check your pump before retrying" = "Check pumpen før du prøver igen";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
-"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Tilladelse Nægtet";
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Tilladelse nægtet";
 
 /* The error recovery suggestion when attempting to delete a sample not shared by the current app */
-"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "This sample can be deleted from the Health app";
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Dette eksempel kan slettes fra Sundheds appen";
 
 /* Generic pump error description */
-"Communication Failure" = "Kommunikations Fejl";
+"Communication Failure" = "Kommunikations fejl";
 
 /* Generic pump error description */
-"Connection Failure" = "Forbindelses Fejl";
+"Connection Failure" = "Forbindelses fejl";
+
+/* Title text for glucose target range */
+"Correction Range" = "Korrektions interval";
+
+/* Descriptive text for glucose target range */
+"Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin." = "Korrektionsinterval er den blodsukkerværdi (eller værdiinterval), som du vil have Loop til at sigte efter når din basal insulin justeres.";
+
+/* Title text for delivery limits */
+"Delivery Limits" = "Indgivningsgrænser";
 
 /* Generic pump error description */
-"Device Refused" = "Enhed Nægtet";
+"Device Refused" = "Enhed nægtet";
 
 /* Recovery suggestion for a no data error */
 "Ensure carb data exists for the specified date" = "Sørg for at kulhydrat data findes for den angivne dato";
@@ -43,11 +58,29 @@
 /* The short unit display string for grams per U */
 "g/U" = "g/E";
 
+/* Title text for insulin model */
+"Insulin Model" = "Insulin type";
+
+/* Title text for insulin sensitivity */
+"Insulin Sensitivities" = "Insulin følsomheder";
+
 /* Generic pump error description */
-"Invalid Configuration" = "Forkert Indstilling";
+"Invalid Configuration" = "Forkert indstilling";
 
 /* Recovery instruction for a certain bolus failure */
 "It is safe to retry" = "Det er sikkert at forsøge igen";
+
+/* Title text for maximum basal rate configuration */
+"Maximum Basal Rate" = "Maksimal basaldosis";
+
+/* Descriptive text for maximum basal rate */
+"Maximum basal rate is the highest temporary basal rate Loop is allowed to set automatically." = "Maksimum basal dosis, er den højeste midlertidige basal dosis Loop er tilladt at indstille automatisk.";
+
+/* Title text for maximum bolus configuration */
+"Maximum Bolus" = "Maksimum bolus";
+
+/* Descriptive text for maximum bolus */
+"Maximum bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksimum bolus er den højeste bolus mængde du kan levere på én gang, som dækker dine kulhydratter eller bringer højt blodsukker ned.";
 
 /* The short unit display string for milligrams per deciliter per U */
 "mg/dL/U" = "mg/dL/E";
@@ -59,7 +92,7 @@
 "mmol/L/U" = "mmol/L/E";
 
 /* Sensor state description for the non-valid state */
-"Needs Attention" = "Behøver Opmærksomhed";
+"Needs Attention" = "Behøver opmærksomhed";
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "Ingen værdier fundet";
@@ -70,6 +103,18 @@
 /* The error recovery suggestion when Health sharing was denied */
 "Please re-enable sharing in Health" = "Venligst gen-aktiver deling i Sundhed";
 
+/* Title for pre-meal mode */
+"Pre-Meal" = "Før-Måltid";
+
+/* Descriptive text for correction range overrides */
+"Pre-Meal and Workout ranges temporarily adjust your glucose target based on your selected activity." = "Før-måltid og trænings intervaller justere midlertidigt dit blodsukker mål baseret på din valgte aktivitet.";
+
+/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
+"quantity-and-unit-space" = "%1$@ %2$@";
+
+/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
+"quantity-and-unit-tight" = "%1$@%2$@";
+
 /* Glucose trend up */
 "Rising" = "Stiger";
 
@@ -78,6 +123,24 @@
 
 /* Glucose trend up-up-up */
 "Rising very fast" = "Stiger meget hurtigt";
+
+/* Title text for suspend threshold */
+"Suspend Threshold" = "Suspenderingsgrænse";
+
+/* Description of pre-meal mode */
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes. This range can be set anywhere from your suspend threshold on the low end to the top of your regular correction range on the high end." = "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes. This range can be set anywhere from your suspend threshold on the low end to the top of your regular correction range on the high end.";
+
+/* Description of workout mode */
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events. This range can be set anywhere from the top of your regular correction range on the low end to 180 mg/dL (10 mmol/L) on the high end." = "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events. This range can be set anywhere from the top of your regular correction range on the low end to 180 mg/dL (10 mmol/L) on the high end.";
+
+/* Title text for temporary correction ranges */
+"Temporary Correction Ranges" = "Midlertidige korrektionsinterval";
+
+/* Title text for temporary correction ranges */
+"Temporary Ranges" = "Midlertidige intervaller";
+
+/* Descriptive text for insulin model */
+"The app assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity." = "Appen antager, at insulinen arbejder aktivt i 6 timer. Du kan vælge mellem forskellige modeller for, hvordan appen måler insulinets maksimale aktivitet.";
 
 /* The short unit display string for international units of insulin */
 "U" = "E";
@@ -96,4 +159,19 @@
 
 /* The long unit display string for international units of insulin per hour */
 "Units/hour" = "Enheder/time";
+
+/* Descriptive text for suspend threshold */
+"When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus." = "Når dit blodsukker forventes at ligge under denne værdi, vil app'en anbefale en basal rate på 0 U/time og vil ikke anbefale en bolus.";
+
+/* Title for workout mode */
+"Workout" = "Træning";
+
+/* Descriptive text for basal rate */
+"Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din basal dosis insulin, er det antal af enheder i timen, som du skal bruge for at dække dit basale insulinbehov.";
+
+/* Descriptive text for carb ratio */
+"Your carb ratio is the number of grams of carbohydrate covered by one unit of insulin." = "Din kulhydrat ratio er antallet af gram kulhydrat dækket af én enhed insulin.";
+
+/* Descriptive text for insulin sensitivity */
+"Your insulin sensitivities refer to the drop in glucose expected from one unit of insulin." = "Din insulinfølsomhed henviser til det fald i blodsukker, der forventes fra én insulinenhed.";
 

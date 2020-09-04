@@ -1,0 +1,12 @@
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Insulin Suspended";
+
+/* Status highlight that a pump is out of insulin. */
+"No Insulin" = "No Insulin";
+
+/* Status highlight that a pump error occurred. */
+"Pump Error" = "Pump Error";
+
+/* Status highlight that an occlusion was detected. */
+"Pump Occlusion" = "Pump Occlusion";
+

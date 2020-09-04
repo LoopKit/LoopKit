@@ -7,6 +7,9 @@
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Koolhydraten";
 
+/* The title text for the glucose correction range schedule */
+"Correction Range" = "Gewenst glucose doelbereik";
+
 /* The title for the cell displaying diagnostic data */
 "Diagnostic" = "Diagnose";
 
@@ -19,9 +22,6 @@
 /* The title of the insulin sensitivity schedule screen
    The title text for the insulin sensitivity schedule */
 "Insulin Sensitivity" = "Correctie bereik";
-
-/* The title text for the glucose target range schedule */
-"Correction Range" = "Gewenst glucose doelbereik";
 
 /* The title text for the pump ID */
 "Pump ID" = "Pomp ID";
