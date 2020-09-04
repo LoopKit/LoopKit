@@ -96,7 +96,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     }
     private let lockedLatestGlucose = Locked<GlucoseSampleValue?>(nil)
 
-    public let cacheStore: PersistenceController
+    private let cacheStore: PersistenceController
     
     static let queryAnchorMetadataKey = "com.loopkit.GlucoseStore.queryAnchor"
 

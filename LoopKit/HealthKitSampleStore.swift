@@ -139,7 +139,7 @@ public class HealthKitSampleStore {
             }
 
             // Clear any existing completion handler (after calling it)
-            observerQueryCompletionHandler = nil
+            callAndUpdateObserverQueryCompletionHandler(newValue: nil)
 
             if let query = observerQuery {
                 log.debug("Executing observerQuery %@", query)
@@ -185,16 +185,32 @@ public class HealthKitSampleStore {
             lockedObserverQueryCompletionHandler.value
         }
         set {
-            var oldValue: HKObserverQueryCompletionHandler?
             lockedObserverQueryCompletionHandler.mutate { handler in
-                oldValue = handler
                 handler = newValue
             }
-
-            oldValue?()
         }
     }
+    
     private let lockedObserverQueryCompletionHandler: Locked<HKObserverQueryCompletionHandler?> = Locked(nil)
+    
+    func callAndUpdateObserverQueryCompletionHandler(newValue: HKObserverQueryCompletionHandler?) {
+
+        var oldValue: HKObserverQueryCompletionHandler?
+        lockedObserverQueryCompletionHandler.mutate { handler in
+            oldValue = handler
+            handler = newValue
+        }
+        
+        if oldValue != nil {
+            log.default("Calling existing observer query completion handler")
+        }
+        if newValue != nil {
+            log.default("Assigning new observer query completion handler")
+        } else {
+            log.default("Clearing observer query completion handler")
+        }
+        oldValue?()
+    }
 
     func queryAnchorDidChange() {
         // Subclasses can override
@@ -206,6 +222,8 @@ public class HealthKitSampleStore {
     ///   - query: The query which triggered the update
     ///   - error: An error during the update, if one occurred
     internal final func observeUpdates(to query: HKObserverQuery, completionHandler: HKObserverQueryCompletionHandler?, error: Error?) {
+        self.log.default("observeUpdates() - HK Notifying of changes.")
+
         if let error = error {
             self.log.error("%@ notified with changes with error: %{public}@", query, String(describing: error))
             completionHandler?()
@@ -213,12 +231,13 @@ public class HealthKitSampleStore {
         }
 
         // Hold the completion handler (calling any existing ones) until our next anchored object query returns
-        self.observerQueryCompletionHandler = completionHandler
+        callAndUpdateObserverQueryCompletionHandler(newValue: completionHandler)
 
         let queryAnchor = self.queryAnchor
+        
         log.default("%@ notified with changes. Fetching from: %{public}@", query, queryAnchor.map(String.init(describing:)) ?? "0")
 
-        let anchoredObjectQuery = createAnchoredObjectQuery(sampleType, queryAnchor == nil ? query.predicate : nil, queryAnchor, HKObjectQueryNoLimit) {  [weak self] (query, newSamples, deletedSamples, anchor, error) in
+        let anchoredObjectQuery = createAnchoredObjectQuery(sampleType, query.predicate, queryAnchor, HKObjectQueryNoLimit) {  [weak self] (query, newSamples, deletedSamples, anchor, error) in
             self?.anchoredObjectQueryResultsHandler(query: query, newSamples: newSamples, deletedSamples: deletedSamples, anchor: anchor, error: error)
         }
 
@@ -226,11 +245,16 @@ public class HealthKitSampleStore {
     }
 
     private final func anchoredObjectQueryResultsHandler(query: HKAnchoredObjectQuery, newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, anchor: HKQueryAnchor?, error: Error?) {
-        log.default("anchoredObjectQuery.resultsHandler: new: %{public}d deleted: %{public}d anchor: %{public}@ error: %{public}@", newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor), String(describing: error))
+        
+        if let error = error {
+            log.error("Error from anchoredObjectQuery: anchor: %{public}@ error: %{public}@", String(describing: anchor), String(describing: error))
+            // We continue here instead of returning, observerQueryCompletionHandler must be called below.
+        } else {
+            log.default("anchoredObjectQuery.resultsHandler: new: %{public}d deleted: %{public}d anchor: %{public}@", newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor))
+        }
 
         guard let anchor = anchor else {
-            // Clear any existing completion handler (after calling it)
-            self.observerQueryCompletionHandler = nil
+            callAndUpdateObserverQueryCompletionHandler(newValue: nil)
             return
         }
 
@@ -241,7 +265,7 @@ public class HealthKitSampleStore {
             }
 
             // Clear any existing completion handler (after calling it)
-            self.observerQueryCompletionHandler = nil
+            self.callAndUpdateObserverQueryCompletionHandler(newValue: nil)
         }
     }
 
