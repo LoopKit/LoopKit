@@ -126,10 +126,6 @@ public final class GlucoseStore: HealthKitSampleStore {
                 self.dataAccessQueue.async {
                     self.queryAnchor = anchor
                     
-                    if !self.authorizationRequired {
-                        self.createQuery()
-                    }
-                    
                     self.updateLatestGlucose()
                 }
             }
@@ -788,7 +784,7 @@ extension GlucoseStore {
                     let object = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
                     object.update(from: sample)
                 }
-                self.cacheStore.save { error = $0 }
+                error = self.cacheStore.save()
             }
 
             guard error == nil else {

@@ -110,33 +110,38 @@ public final class PersistenceController {
         }
     }
 
-    func save(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) {
+    @discardableResult
+    func save(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) -> PersistenceControllerError? {
+        var error: PersistenceControllerError?
+
         self.managedObjectContext.performAndWait {
             guard self.managedObjectContext.hasChanges else {
                 completion?(nil)
                 return
             }
 
-            self.saveInternal(completion)
+            error = self.saveInternal()
+            completion?(error)
         }
+        
+        return error
     }
     
     // Should only be called from managedObjectContext thread
-    internal func saveInternal(_ completion: ((_ error: PersistenceControllerError?) -> Void)? = nil) {
+    internal func saveInternal() -> PersistenceControllerError? {
         guard !self.isReadOnly else {
-            completion?(nil)
-            return
+            return nil
         }
 
         do {
             delegate?.persistenceControllerWillSave(self)
             try self.managedObjectContext.save()
             delegate?.persistenceControllerDidSave(self, error: nil)
-            completion?(nil)
+            return nil
         } catch let saveError as NSError {
             self.log.error("Error while saving context: %{public}@", saveError)
             delegate?.persistenceControllerDidSave(self, error: .coreDataError(saveError))
-            completion?(.coreDataError(saveError))
+            return .coreDataError(saveError)
         }
     }
 
@@ -241,7 +246,7 @@ extension PersistenceController {
                 encoded = nil
             }
             self.updateMetadata(key: key, value: encoded)
-            self.saveInternal()
+            let _ = self.saveInternal()
         }
     }
     

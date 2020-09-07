@@ -297,10 +297,14 @@ extension HealthKitSampleStore {
             return nil
         }
 
+        // Initial predicate is just the date range
         var predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: options)
 
+        // If we don't want samples from the current app, then only query samples NOT from the default HKSource
         if !observeHealthKitSamplesFromCurrentApp {
             predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, NSCompoundPredicate(notPredicateWithSubpredicate: HKQuery.predicateForObjects(from: HKSource.default()))])
+
+        // Othewrise, if we don't want samples from other apps, then only query samples from the default HKSource
         } else if !observeHealthKitSamplesFromOtherApps {
             predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, HKQuery.predicateForObjects(from: HKSource.default())])
         }
@@ -312,10 +316,12 @@ extension HealthKitSampleStore {
 
 // MARK: - Observation
 extension HealthKitSampleStore {
-    internal func createQuery() {
+    private func createQuery() {
+        log.debug("%@ [sampleType: %@]", #function, sampleType)
         log.debug("%@ [observationEnabled: %d]", #function, observationEnabled)
         log.debug("%@ [observeHealthKitSamplesFromCurrentApp: %d]", #function, observeHealthKitSamplesFromCurrentApp)
         log.debug("%@ [observeHealthKitSamplesFromOtherApps: %d]", #function, observeHealthKitSamplesFromOtherApps)
+        log.debug("%@ [observationStart: %@]", #function, String(describing: observationStart))
 
         guard observationEnabled else {
             return

@@ -13,12 +13,14 @@ import HealthKit
 public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
     public typealias RawValue = [String: Any]
 
+    public let date: Date
     public let quantity: HKQuantity
     public let startDate: Date
     public let foodType: String?
     public let absorptionTime: TimeInterval?
 
-    public init(quantity: HKQuantity, startDate: Date, foodType: String?, absorptionTime: TimeInterval?) {
+    public init(date: Date = Date(), quantity: HKQuantity, startDate: Date, foodType: String?, absorptionTime: TimeInterval?) {
+        self.date = date
         self.quantity = quantity
         self.startDate = startDate
         self.foodType = foodType
@@ -27,6 +29,7 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
 
     public init?(rawValue: RawValue) {
         guard
+            let date = rawValue["date"] as? Date,
             let grams = rawValue["grams"] as? Double,
             let startDate = rawValue["startDate"] as? Date
         else {
@@ -34,6 +37,7 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
         }
 
         self.init(
+            date: date,
             quantity: HKQuantity(unit: .gram(), doubleValue: grams),
             startDate: startDate,
             foodType: rawValue["foodType"] as? String,
@@ -43,6 +47,7 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
 
     public var rawValue: RawValue {
         var rawValue: RawValue = [
+            "date": date,
             "grams": quantity.doubleValue(for: .gram()),
             "startDate": startDate
         ]
@@ -51,34 +56,5 @@ public struct NewCarbEntry: CarbEntry, Equatable, RawRepresentable {
         rawValue["absorptionTime"] = absorptionTime
 
         return rawValue
-    }
-}
-
-
-extension NewCarbEntry {
-    func createSample(from oldEntry: StoredCarbEntry? = nil, syncVersion: Int = 1) -> HKQuantitySample {
-        var metadata = [String: Any]()
-
-        metadata[HKMetadataKeyFoodType] = foodType
-        metadata[MetadataKeyAbsorptionTimeMinutes] = absorptionTime
-
-        if let oldEntry = oldEntry, let syncIdentifier = oldEntry.syncIdentifier {
-            metadata[HKMetadataKeySyncIdentifier] = syncIdentifier
-            metadata[HKMetadataKeySyncVersion] = oldEntry.syncVersion + 1
-        } else {
-            // Add a sync identifier to allow for atomic modification if needed
-            metadata[HKMetadataKeySyncIdentifier] = UUID().uuidString
-            metadata[HKMetadataKeySyncVersion] = syncVersion
-        }
-
-        metadata[HKMetadataKeyExternalUUID] = oldEntry?.externalID
-
-        return HKQuantitySample(
-            type: HKObjectType.quantityType(forIdentifier: .dietaryCarbohydrates)!,
-            quantity: quantity,
-            start: startDate,
-            end: endDate,
-            metadata: metadata
-        )
     }
 }

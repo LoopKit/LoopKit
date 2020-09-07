@@ -59,6 +59,13 @@ extension NSManagedObjectContext {
 
 extension NSManagedObjectContext {
 
+    /// Returns the anchor key. The anchor key is a monotonically increasing integer
+    /// that auto-increments on every call to this property. The global value is stored in the first
+    /// peristent store associated with this context.
+    ///
+    /// - Return: The next anchor key for the persistent store associated with this context.
+    public var anchorKey: Int64? { modificationCounter }
+
     /// Returns the modification counter. The modification counter is a monotonically increasing integer
     /// that auto-increments on every call to this property. The global value is stored in the first
     /// peristent store associated with this context.

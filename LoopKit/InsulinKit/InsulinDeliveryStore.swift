@@ -75,10 +75,6 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
                 self.queue.async {
                     self.queryAnchor = anchor
 
-                    if !self.authorizationRequired {
-                        self.createQuery()
-                    }
-                    
                     if self.lastBasalEndDate == nil {
                         self.updateLastBasalEndDate()
                     }

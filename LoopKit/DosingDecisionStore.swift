@@ -283,7 +283,7 @@ extension DosingDecisionStore {
                     object.date = dosingDecisionData.date
                     object.data = dosingDecisionData.data
                 }
-                self.store.save { error = $0 }
+                error = self.store.save()
             }
 
             guard error == nil else {
