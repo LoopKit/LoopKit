@@ -235,7 +235,7 @@ extension PersistenceController: CustomDebugStringConvertible {
 
 extension PersistenceController {
     func storeAnchor(_ anchor: HKQueryAnchor?, key: String) {
-        managedObjectContext.performAndWait {
+        managedObjectContext.perform {
             let encoded: Data?
             if let anchor = anchor {
                 encoded = try? NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true)
@@ -247,6 +247,7 @@ extension PersistenceController {
             }
             self.updateMetadata(key: key, value: encoded)
             let _ = self.saveInternal()
+            self.log.default("Finished storing anchor: %{public}@", String(describing: anchor))
         }
     }
     
@@ -258,8 +259,10 @@ extension PersistenceController {
                 if anchor == nil {
                     self.log.error("Decoding anchor from %{public} failed.", String(describing: encoded))
                 }
+                self.log.default("Loaded anchor: %{public}@", String(describing: anchor))
                 completion(anchor)
             } else {
+                self.log.default("Anchor loaded as nil")
                 completion(nil)
             }
         }
