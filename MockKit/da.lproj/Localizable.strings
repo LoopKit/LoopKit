@@ -11,10 +11,10 @@
 "Delete Service" = "Slet service";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Fejl ved Fortsættelse";
+"Error Resuming" = "Fejl ved fortsættelse";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Fejl ved Udsættelse";
+"Error Suspending" = "Fejl ved udsættelse";
 
 /* Button title to acknowledge error */
 "OK" = "OK";

@@ -5,7 +5,7 @@
 "No Insulin" = "Ingen insulin";
 
 /* Status highlight that a pump error occurred. */
-"Pump Error" = "Pumpe Fejl";
+"Pump Error" = "Pumpe fejl";
 
 /* Status highlight that an occlusion was detected. */
 "Pump Occlusion" = "Pumpen er blokeret";

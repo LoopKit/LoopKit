@@ -8,10 +8,10 @@
 "Authorization Denied" = "Autorisatie geweigerd";
 
 /* Title text for basal rate */
-"Basal Rate" = "Basal Rate";
+"Basal Rate" = "Basaal waardes";
 
 /* Title text for carb ratios */
-"Carb Ratios" = "Carb Ratios";
+"Carb Ratios" = "Koolhydraat ratio's";
 
 /* Recovery instruction for an uncertain bolus failure */
 "Check your pump before retrying" = "Controleer je pomp voordat je het nogmaals probeert";
@@ -29,13 +29,13 @@
 "Connection Failure" = "Verbindingsfout";
 
 /* Title text for glucose target range */
-"Correction Range" = "Correction Range";
+"Correction Range" = "Correctie bereik";
 
 /* Descriptive text for glucose target range */
-"Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin." = "Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin.";
+"Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin." = "Het Correctie bereik is de glucose waarde (of range van waardes) waar Loop naar streeft door uw basale insuline aan te passen.";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Delivery Limits";
+"Delivery Limits" = "Toediening limieten";
 
 /* Generic pump error description */
 "Device Refused" = "Apparaat geweigerd";
@@ -59,10 +59,10 @@
 "g/U" = "g/U";
 
 /* Title text for insulin model */
-"Insulin Model" = "Insulin Model";
+"Insulin Model" = "Insuline model";
 
 /* Title text for insulin sensitivity */
-"Insulin Sensitivities" = "Insulin Sensitivities";
+"Insulin Sensitivities" = "Insuline gevoeligheden";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Ongeldige configuratie";
@@ -71,16 +71,16 @@
 "It is safe to retry" = "Veilig om opnieuw te proberen";
 
 /* Title text for maximum basal rate configuration */
-"Maximum Basal Rate" = "Maximum Basal Rate";
+"Maximum Basal Rate" = "Maximum basaal instelling";
 
 /* Descriptive text for maximum basal rate */
-"Maximum basal rate is the highest temporary basal rate Loop is allowed to set automatically." = "Maximum basal rate is the highest temporary basal rate Loop is allowed to set automatically.";
+"Maximum basal rate is the highest temporary basal rate Loop is allowed to set automatically." = "Maximale basaalstand is de hoogste tijdelijke basaalstand die Loop automatisch mag instellen.";
 
 /* Title text for maximum bolus configuration */
-"Maximum Bolus" = "Maximum Bolus";
+"Maximum Bolus" = "Maximum bolus";
 
 /* Descriptive text for maximum bolus */
-"Maximum bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maximum bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose.";
+"Maximum bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maximale bolus is de hoogste bolus die je kan geven om koolhydraten te dekken of hoge bloedglucose te verlagen.";
 
 /* The short unit display string for milligrams per deciliter per U */
 "mg/dL/U" = "mg/dL/E";
@@ -107,7 +107,7 @@
 "Pre-Meal" = "Pre-Meal";
 
 /* Descriptive text for correction range overrides */
-"Pre-Meal and Workout ranges temporarily adjust your glucose target based on your selected activity." = "Pre-Meal and Workout ranges temporarily adjust your glucose target based on your selected activity.";
+"Pre-Meal and Workout ranges temporarily adjust your glucose target based on your selected activity." = "Pre-Meal en Workout passen tijdelijk uw glucose wenswaarde aan op basis van uw geselecteerde activiteit.";
 
 /* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
 "quantity-and-unit-space" = "%1$@ %2$@";
@@ -125,7 +125,7 @@
 "Rising very fast" = "Zeer snel stijgend";
 
 /* Title text for suspend threshold */
-"Suspend Threshold" = "Suspend Threshold";
+"Suspend Threshold" = "Onderbrekingsdrempel";
 
 /* Description of pre-meal mode */
 "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes. This range can be set anywhere from your suspend threshold on the low end to the top of your regular correction range on the high end." = "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes. This range can be set anywhere from your suspend threshold on the low end to the top of your regular correction range on the high end.";

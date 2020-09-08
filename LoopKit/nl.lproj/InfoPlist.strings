@@ -2,8 +2,8 @@
 "CFBundleName" = "LoopKit";
 
 /* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "Meal data from the Health database is used to determine glucose effects. Glucose data is retrieved from HealthKit for graphing and analysis.";
+"NSHealthShareUsageDescription" = "De maaltijdgegevens uit de gezondheidsdatabase worden gebruikt om glucoseeffecten te bepalen. Glucosegegevens worden opgehaald uit HealthKit voor het berekenen en analyseren.";
 
 /* Privacy - Health Update Usage Description */
-"NSHealthUpdateUsageDescription" = "Carbohydrate meal data entered in the app is stored in the Health database. Glucose data is stored securely in HealthKit.";
+"NSHealthUpdateUsageDescription" = "Koolhydraten van de maaltijd die worden ingevoerd in de app worden opgeslagen in de Gezondheid database. Glucose gegevens worden veilig opgeslagen in HealthKit.";
 

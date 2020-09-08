@@ -1,5 +1,5 @@
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basal rater";
+"Basal Rates" = "Basalrater";
 
 /* The title of the carb ratios schedule screen */
 "Carb Ratios" = "Kulhydrat ratioer";
@@ -8,7 +8,7 @@
 "Carbs" = "Kulhydrater";
 
 /* The title text for the glucose correction range schedule */
-"Correction Range" = "Korrektions interval";
+"Correction Range" = "Korrektionsinterval";
 
 /* The title for the cell displaying diagnostic data */
 "Diagnostic" = "Diagnostisk";

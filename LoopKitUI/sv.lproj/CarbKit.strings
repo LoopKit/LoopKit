@@ -8,7 +8,7 @@
 "bdP-2A-DB8.text" = "Food Type";
 
 /* Class = "UINavigationItem"; title = "Add/Edit Carb Entry"; ObjectID = "bM2-yI-YmX"; */
-"bM2-yI-YmX.title" = "Add/Edit Carb Entry";
+"bM2-yI-YmX.title" = "Lägg till/Ändra kolhydrater";
 
 /* Class = "UILabel"; text = "g"; ObjectID = "D2S-2h-yH6"; */
 "D2S-2h-yH6.text" = "g";
@@ -32,7 +32,7 @@
 "Me5-3D-C34.normalTitle" = "🌮";
 
 /* Class = "UILabel"; text = "Food Type"; ObjectID = "NRZ-dT-iqj"; */
-"NRZ-dT-iqj.text" = "Food Type";
+"NRZ-dT-iqj.text" = "Typ av mat";
 
 /* Class = "UILabel"; text = "HealthKit is not available on this device"; ObjectID = "nXh-BM-MuC"; */
 "nXh-BM-MuC.text" = "HealthKit is not available on this device";
@@ -41,7 +41,7 @@
 "pHI-f4-pJp.text" = "g Total";
 
 /* Class = "UINavigationItem"; title = "Carbohydrates"; ObjectID = "Qgq-n1-hm4"; */
-"Qgq-n1-hm4.title" = "Carbohydrates";
+"Qgq-n1-hm4.title" = "Kolhydrater";
 
 /* Class = "UITextField"; placeholder = "0"; ObjectID = "qU9-hG-hMu"; */
 "qU9-hG-hMu.placeholder" = "0";

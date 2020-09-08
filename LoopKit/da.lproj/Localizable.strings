@@ -8,7 +8,7 @@
 "Authorization Denied" = "Tilladelse nægtet";
 
 /* Title text for basal rate */
-"Basal Rate" = "Basal rater";
+"Basal Rate" = "Basalrater";
 
 /* Title text for carb ratios */
 "Carb Ratios" = "Kulhydrat ratios";
@@ -71,10 +71,10 @@
 "It is safe to retry" = "Det er sikkert at forsøge igen";
 
 /* Title text for maximum basal rate configuration */
-"Maximum Basal Rate" = "Maksimal basaldosis";
+"Maximum Basal Rate" = "Maksimal basalrate";
 
 /* Descriptive text for maximum basal rate */
-"Maximum basal rate is the highest temporary basal rate Loop is allowed to set automatically." = "Maksimum basal dosis, er den højeste midlertidige basal dosis Loop er tilladt at indstille automatisk.";
+"Maximum basal rate is the highest temporary basal rate Loop is allowed to set automatically." = "Maksimum basalrate, er den højeste midlertidige basalrate Loop er tilladt at indstille automatisk.";
 
 /* Title text for maximum bolus configuration */
 "Maximum Bolus" = "Maksimum bolus";
@@ -161,13 +161,13 @@
 "Units/hour" = "Enheder/time";
 
 /* Descriptive text for suspend threshold */
-"When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus." = "Når dit blodsukker forventes at ligge under denne værdi, vil app'en anbefale en basal rate på 0 U/time og vil ikke anbefale en bolus.";
+"When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus." = "Når dit blodsukker forventes at ligge under denne værdi, vil app'en anbefale en basalrate på 0 U/time og vil ikke anbefale en bolus.";
 
 /* Title for workout mode */
 "Workout" = "Træning";
 
 /* Descriptive text for basal rate */
-"Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din basal dosis insulin, er det antal af enheder i timen, som du skal bruge for at dække dit basale insulinbehov.";
+"Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din basalrate insulin, er det antal af enheder i timen, som du skal bruge for at dække dit basale insulinbehov.";
 
 /* Descriptive text for carb ratio */
 "Your carb ratio is the number of grams of carbohydrate covered by one unit of insulin." = "Din kulhydrat ratio er antallet af gram kulhydrat dækket af én enhed insulin.";
