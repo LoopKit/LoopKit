@@ -122,7 +122,7 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
         observerQuery!.updateHandler(observerQuery!, observerQueryCompletionHandler, nil)
 
         wait(for: [anchoredObjectQueryCreationExpectation], timeout: 3)
-
+        
         // Trigger results handler for anchored object query
         let returnedAnchor = HKQueryAnchor(fromValue: 5)
         anchoredObjectQuery!.resultsHandler(anchoredObjectQuery!, [], [], returnedAnchor, nil)
