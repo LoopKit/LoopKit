@@ -34,8 +34,7 @@ public struct StoredCarbEntry: CarbEntry {
 
     // MARK: - Sync state
 
-    public var externalID: String?
-    public var isUploaded: Bool
+    public let externalID: String?
 
     init(sample: HKQuantitySample, createdByCurrentApp: Bool? = nil) {
         self.init(
@@ -48,8 +47,7 @@ public struct StoredCarbEntry: CarbEntry {
             foodType: sample.foodType,
             absorptionTime: sample.absorptionTime,
             createdByCurrentApp: createdByCurrentApp ?? sample.createdByCurrentApp,
-            externalID: sample.externalID,
-            isUploaded: sample.externalID != nil
+            externalID: sample.externalID
         )
     }
 
@@ -63,8 +61,7 @@ public struct StoredCarbEntry: CarbEntry {
         foodType: String?,
         absorptionTime: TimeInterval?,
         createdByCurrentApp: Bool,
-        externalID: String?,
-        isUploaded: Bool
+        externalID: String?
     ) {
         self.sampleUUID = sampleUUID
         self.syncIdentifier = syncIdentifier
@@ -75,7 +72,6 @@ public struct StoredCarbEntry: CarbEntry {
         self.absorptionTime = absorptionTime
         self.createdByCurrentApp = createdByCurrentApp
         self.externalID = externalID
-        self.isUploaded = isUploaded
     }
 }
 
@@ -126,8 +122,7 @@ extension StoredCarbEntry {
             foodType: rawValue["foodType"] as? String,
             absorptionTime: rawValue["absorptionTime"] as? TimeInterval,
             createdByCurrentApp: createdByCurrentApp,
-            externalID: externalID,
-            isUploaded: externalID != nil
+            externalID: externalID
         )
     }
 }
@@ -145,8 +140,7 @@ extension StoredCarbEntry {
             foodType: managedObject.foodType,
             absorptionTime: managedObject.absorptionTime,
             createdByCurrentApp: managedObject.createdByCurrentApp,
-            externalID: managedObject.externalID,
-            isUploaded: (managedObject.uploadState == .uploaded)
+            externalID: managedObject.externalID
         )
     }
 }

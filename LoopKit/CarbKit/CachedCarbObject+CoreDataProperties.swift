@@ -22,7 +22,6 @@ extension CachedCarbObject {
     @NSManaged public var foodType: String?
     @NSManaged public var grams: Double
     @NSManaged public var primitiveStartDate: NSDate?
-    @NSManaged public var primitiveUploadState: NSNumber?
     @NSManaged public var uuid: UUID?
     @NSManaged public var syncIdentifier: String?
     @NSManaged public var syncVersion: Int32

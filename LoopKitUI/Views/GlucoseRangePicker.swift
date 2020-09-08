@@ -39,11 +39,26 @@ public struct GlucoseRangePicker: View {
     ) {
         self._lowerBound = Binding(
             get: { range.wrappedValue.lowerBound },
-            set: { range.wrappedValue = $0...range.wrappedValue.upperBound }
+            set: {
+                if $0 > range.wrappedValue.upperBound {
+                    // Prevent crash if picker gets into state where "lower bound" > "upper bound"
+                    range.wrappedValue = $0...$0
+                }
+                range.wrappedValue = $0...range.wrappedValue.upperBound
+                
+        }
         )
         self._upperBound = Binding(
             get: { range.wrappedValue.upperBound },
-            set: { range.wrappedValue = range.wrappedValue.lowerBound...$0 }
+            set: {
+                if range.wrappedValue.lowerBound > $0 {
+                    // Prevent crash if picker gets into state where "lower bound" > "upper bound"
+                    range.wrappedValue = range.wrappedValue.lowerBound...range.wrappedValue.lowerBound
+                } else {
+                    range.wrappedValue = range.wrappedValue.lowerBound...$0
+                }
+                
+        }
         )
         self.unit = unit
         self.minValue = minValue

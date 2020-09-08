@@ -130,7 +130,7 @@ public struct CorrectionRangeScheduleEditor: View {
                 Text(LocalizedString("You can edit a setting by tapping into any line item.", comment: "Description of how to edit setting"))
                 Text(LocalizedString("You can add different ranges for different times of day by using the ➕.", comment: "Description of how to add a configuration range"))
             }
-            .foregroundColor(.instructionalContent)
+            .foregroundColor(.secondary)
             .font(.subheadline)
             Spacer()
         }
@@ -163,7 +163,7 @@ public struct CorrectionRangeScheduleEditor: View {
     private var confirmationAlertContent: AlertContent {
         AlertContent(
             title: Text("Save Correction Range(s)?", comment: "Alert title for confirming correction ranges outside the recommended range"),
-            message: Text("One or more of the values you have entered are outside of what is generally recommended.", comment: "Alert message for confirming correction ranges outside the recommended range")
+            message: Text(TherapySetting.glucoseTargetRange.guardrailSaveWarningCaption)
         )
     }
 }

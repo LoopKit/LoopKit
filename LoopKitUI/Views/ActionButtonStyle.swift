@@ -30,7 +30,7 @@ public struct ActionButtonStyle: ButtonStyle {
             edgeColor = .clear
         case .destructive:
             fontColor = .white
-            backgroundColor = .destructive
+            backgroundColor = .red
             edgeColor = .clear
         case .secondary:
             fontColor = .accentColor
@@ -52,5 +52,6 @@ public struct ActionButtonStyle: ButtonStyle {
             .padding(configuration.isPressed ? squidge : 0)
             .overlay(RoundedRectangle(cornerRadius: cornerRadius)
                 .stroke(edgeColor))
+            .contentShape(Rectangle())
     }
 }

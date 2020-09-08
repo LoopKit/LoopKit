@@ -37,7 +37,7 @@ class MasterViewController: UITableViewController {
                 if success {
                     // Call the individual authorization methods to trigger query creation
                     dataManager.carbStore.authorize({ _ in })
-                    dataManager.doseStore.insulinDeliveryStore.authorize({ _ in })
+                    dataManager.doseStore.insulinDeliveryStore.authorize(toShare: true, { _ in })
                     dataManager.glucoseStore.authorize({ _ in })
                 }
             }

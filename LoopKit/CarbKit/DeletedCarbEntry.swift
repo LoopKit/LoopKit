@@ -10,15 +10,13 @@ import Foundation
 
 public struct DeletedCarbEntry {
     public let externalID: String?
-    public var isUploaded: Bool
     public let startDate: Date?
     public let uuid: UUID?
     public let syncIdentifier: String?
     public let syncVersion: Int
 
-    public init(externalID: String?, isUploaded: Bool, startDate: Date?, uuid: UUID?, syncIdentifier: String?, syncVersion: Int) {
+    public init(externalID: String?, startDate: Date?, uuid: UUID?, syncIdentifier: String?, syncVersion: Int) {
         self.externalID = externalID
-        self.isUploaded = isUploaded
         self.startDate = startDate
         self.uuid = uuid
         self.syncIdentifier = syncIdentifier
@@ -30,7 +28,6 @@ extension DeletedCarbEntry {
     init(managedObject: DeletedCarbObject) {
         self.init(
             externalID: managedObject.externalID,
-            isUploaded: managedObject.uploadState == .uploaded,
             startDate: managedObject.startDate,
             uuid: managedObject.uuid,
             syncIdentifier: managedObject.syncIdentifier,

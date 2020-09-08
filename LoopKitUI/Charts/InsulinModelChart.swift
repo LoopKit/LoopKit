@@ -96,7 +96,7 @@ extension InsulinModelChart {
         for points in unselectedInsulinModelChartPoints where points.count > 1 {
             unselectedLineModels.append(ChartLineModel.predictionLine(
                 points: points,
-                color: UIColor.secondaryLabelColor,
+                color: UIColor.secondaryLabel,
                 width: 1
             ))
         }

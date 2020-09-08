@@ -45,4 +45,11 @@ public extension CorrectionRangeOverrides.Preset {
             return LocalizedString("Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events. This range can be set anywhere from the top of your regular correction range on the low end to 180 mg/dL (10 mmol/L) on the high end.", comment: "Description of workout mode")
         }
     }
+    
+    var therapySetting: TherapySetting {
+        switch self {
+        case .preMeal: return .preMealCorrectionRangeOverride
+        case .workout: return .workoutCorrectionRangeOverride
+        }
+    }
 }

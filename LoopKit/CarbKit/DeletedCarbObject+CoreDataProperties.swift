@@ -17,7 +17,6 @@ extension DeletedCarbObject {
     }
 
     @NSManaged public var externalID: String?
-    @NSManaged public var primitiveUploadState: NSNumber?
     @NSManaged public var startDate: Date?
     @NSManaged public var uuid: UUID?
     @NSManaged public var syncIdentifier: String?

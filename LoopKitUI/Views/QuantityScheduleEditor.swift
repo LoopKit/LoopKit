@@ -19,6 +19,8 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
         case fractional
     }
 
+    @Environment(\.guidanceColors) var guidanceColors
+    
     var title: Text
     var description: Text
     var initialScheduleItems: [RepeatingScheduleValue<Double>]
@@ -60,7 +62,8 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
                         value: item.value.animation().withUnit(self.unit),
                         unit: self.unit,
                         guardrail: self.guardrail,
-                        selectableValues: self.selectableValues
+                        selectableValues: self.selectableValues,
+                        guidanceColors: self.guidanceColors
                     )
                     .frame(width: availableWidth / 2)
                     // Ensure overlaid unit label is not clipped
@@ -119,7 +122,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
                 Text(LocalizedString("You can edit a setting by tapping into any line item.", comment: "Description of how to edit setting"))
                 Text(LocalizedString("You can add entries for different times of day by using the ➕.", comment: "Description of how to add a range"))
             }
-            .foregroundColor(.instructionalContent)
+            .foregroundColor(.secondary)
             .font(.subheadline)
             Spacer()
         }

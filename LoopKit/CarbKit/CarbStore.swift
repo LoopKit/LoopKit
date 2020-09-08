@@ -180,7 +180,7 @@ public final class CarbStore: HealthKitSampleStore {
      */
     public init(
         healthStore: HKHealthStore,
-        observeHealthKitForCurrentAppOnly: Bool,
+        observeHealthKitSamplesFromOtherApps: Bool = true,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval,
         defaultAbsorptionTimes: DefaultAbsorptionTimes,
@@ -209,7 +209,11 @@ public final class CarbStore: HealthKitSampleStore {
         
         let observationEnabled = observationInterval > 0
 
-        super.init(healthStore: healthStore, observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, type: carbType, observationStart: Date(timeIntervalSinceNow: -self.observationInterval), observationEnabled: observationEnabled)
+        super.init(healthStore: healthStore,
+                   observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
+                   type: carbType,
+                   observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
+                   observationEnabled: observationEnabled)
 
         cacheStore.onReady { (error) in
             guard error == nil else { return }
@@ -252,7 +256,6 @@ public final class CarbStore: HealthKitSampleStore {
                     }
                 }
             }
-            // TODO: Consider resetting uploadState.uploading
         }
     }
 
@@ -314,7 +317,11 @@ extension CarbStore {
     ///   - completion: A closure called once the samples have been retrieved
     ///   - result: An array of samples, in chronological order by startDate
     private func getCarbSamples(start: Date, end: Date? = nil, completion: @escaping (_ result: CarbStoreResult<[StoredCarbEntry]>) -> Void) {
-        let predicate = HKQuery.predicateForSamples(observeHealthKitForCurrentAppOnly: observeHealthKitForCurrentAppOnly, withStart: start, end: end)
+        guard let predicate = predicateForSamples(withStart: start, end: end) else {
+            completion(.success([]))
+            return
+        }
+        
         let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
 
         let query = HKSampleQuery(sampleType: carbType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: sortDescriptors) { (query, samples, error) in
@@ -548,7 +555,6 @@ extension CarbStore {
         cacheStore.managedObjectContext.performAndWait {
             for object in self.cacheStore.managedObjectContext.cachedCarbObjectsWithUUID(oldEntry.sampleUUID) {
                 object.update(from: newEntry)
-                object.uploadState = .notUploaded
             }
 
             self.cacheStore.save()
@@ -985,7 +991,7 @@ extension CarbStore {
                 super.debugDescription,
                 "",
                 "cachedCarbEntries: [",
-                "\tStoredCarbEntry(sampleUUID, syncIdentifier, syncVersion, startDate, quantity, foodType, absorptionTime, createdByCurrentApp, externalID, isUploaded)"
+                "\tStoredCarbEntry(sampleUUID, syncIdentifier, syncVersion, startDate, quantity, foodType, absorptionTime, createdByCurrentApp, externalID)"
             ]
 
             let carbEntries = self.getCachedCarbEntries()
@@ -1002,16 +1008,15 @@ extension CarbStore {
                     String(describing: entry.absorptionTime ?? self.defaultAbsorptionTimes.medium),
                     String(describing: entry.createdByCurrentApp),
                     entry.externalID ?? "",
-                    String(describing: entry.isUploaded),
                 ].joined(separator: ", ")
             }).joined(separator: "\n"))
             report.append("]")
             report.append("")
 
             report.append("deletedCarbEntries: [")
-            report.append("\tDeletedCarbEntry(externalID, isUploaded)")
+            report.append("\tDeletedCarbEntry(externalID)")
             for entry in self.cachedDeletedCarbEntries {
-                report.append("\t\(String(describing: entry.externalID)), \(entry.isUploaded)")
+                report.append("\t\(String(describing: entry.externalID))")
             }
             report.append("]")
             report.append("")

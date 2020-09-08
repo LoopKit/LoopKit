@@ -87,7 +87,7 @@ public extension Guardrail where Value == HKQuantity {
         )
     }
 
-    static func correctionRangeOverridePreset(_ preset: CorrectionRangeOverrides.Preset, correctionRangeScheduleRange: ClosedRange<HKQuantity>) -> Guardrail {
+    static func correctionRangeOverride(for preset: CorrectionRangeOverrides.Preset, correctionRangeScheduleRange: ClosedRange<HKQuantity>) -> Guardrail {
         switch preset {
         case .preMeal:
             return Guardrail(

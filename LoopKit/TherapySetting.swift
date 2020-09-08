@@ -9,7 +9,8 @@
 
 public enum TherapySetting: Int {
     case glucoseTargetRange
-    case correctionRangeOverrides
+    case preMealCorrectionRangeOverride
+    case workoutCorrectionRangeOverride
     case suspendThreshold
     case basalRate
     case deliveryLimits
@@ -26,8 +27,10 @@ public extension TherapySetting {
         switch self {
         case .glucoseTargetRange:
             return LocalizedString("Correction Range", comment: "Title text for glucose target range")
-        case .correctionRangeOverrides:
-            return LocalizedString("Temporary Correction Ranges", comment: "Title text for temporary correction ranges")
+        case .preMealCorrectionRangeOverride:
+            return String(format: LocalizedString("%@ Range", comment: "Format for correction range override therapy setting card"), CorrectionRangeOverrides.Preset.preMeal.title)
+        case .workoutCorrectionRangeOverride:
+            return String(format: LocalizedString("%@ Range", comment: "Format for correction range override therapy setting card"), CorrectionRangeOverrides.Preset.workout.title)
         case .suspendThreshold:
             return LocalizedString("Suspend Threshold", comment: "Title text for suspend threshold")
         case .basalRate:
@@ -47,8 +50,6 @@ public extension TherapySetting {
     
     var smallTitle: String {
         switch self {
-        case .correctionRangeOverrides:
-            return LocalizedString("Temporary Ranges", comment: "Title text for temporary correction ranges")
         default:
             return title
         }
@@ -58,8 +59,10 @@ public extension TherapySetting {
         switch self {
         case .glucoseTargetRange:
             return LocalizedString("Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin.", comment: "Descriptive text for glucose target range")
-        case .correctionRangeOverrides:
-            return LocalizedString("Pre-Meal and Workout ranges temporarily adjust your glucose target based on your selected activity.", comment: "Descriptive text for correction range overrides")
+        case .preMealCorrectionRangeOverride:
+            return LocalizedString("Temporarily lower your glucose target before a meal to impact post-meal glucose spikes.", comment: "Descriptive text for pre-meal correction range override")
+        case .workoutCorrectionRangeOverride:
+            return LocalizedString("Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events.", comment: "Descriptive text for workout correction range override")
         case .suspendThreshold:
             return LocalizedString("When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus.", comment: "Descriptive text for suspend threshold")
         case .basalRate:
@@ -74,6 +77,45 @@ public extension TherapySetting {
             return LocalizedString("Your insulin sensitivities refer to the drop in glucose expected from one unit of insulin.", comment: "Descriptive text for insulin sensitivity")
         case .none:
             return ""
+        }
+    }
+}
+
+// MARK: Guardrails
+public extension TherapySetting {
+    var guardrailCaptionForLowValue: String {
+        switch self {
+        // For schedules & ranges where it's possible for more than 1 to be outside of guardrails
+        case .glucoseTargetRange:
+            return LocalizedString("A value you have entered is lower than what is typically recommended for most people.", comment: "Descriptive text for guardrail low value warning for schedule interface")
+        default:
+            return LocalizedString("The value you have entered is lower than what is typically recommended for most people.", comment: "Descriptive text for guardrail low value warning")
+        }
+    }
+    
+    var guardrailCaptionForHighValue: String {
+        switch self {
+        // For schedules & ranges where it's possible for more than 1 to be outside of guardrails
+        case .glucoseTargetRange:
+            return LocalizedString("A value you have entered is higher than what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning for schedule interface")
+        default:
+            return LocalizedString("The value you have entered is higher than what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning")
+        }
+    }
+    
+    var guardrailCaptionForOutsideValues: String {
+        switch self {
+        case .deliveryLimits:
+            return LocalizedString("The values you have entered are outside of what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning")
+        default:
+            return LocalizedString("Some of the values you have entered are outside of what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning for schedule interface")
+        }
+    }
+    
+    var guardrailSaveWarningCaption: String {
+        switch self {
+        default:
+            return LocalizedString("One or more of the values you have entered is outside of what is typically recommended for most people.", comment: "Descriptive text for saving settings outside the recommended range")
         }
     }
 }

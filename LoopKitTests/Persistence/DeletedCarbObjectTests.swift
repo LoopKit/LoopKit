@@ -53,7 +53,6 @@ class DeletedCarbObjectTests: PersistenceControllerTestCase {
 extension DeletedCarbObject {
     fileprivate func setDefaultValues() {
         externalID = UUID().uuidString
-        uploadState = .notUploaded
         startDate = Date()
     }
 }
