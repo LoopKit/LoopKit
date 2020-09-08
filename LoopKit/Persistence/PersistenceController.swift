@@ -235,7 +235,7 @@ extension PersistenceController: CustomDebugStringConvertible {
 
 extension PersistenceController {
     func storeAnchor(_ anchor: HKQueryAnchor?, key: String) {
-        managedObjectContext.perform {
+        managedObjectContext.performAndWait {
             let encoded: Data?
             if let anchor = anchor {
                 encoded = try? NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true)

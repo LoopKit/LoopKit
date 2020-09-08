@@ -133,8 +133,6 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
         XCTAssertNotNil(glucoseStore.queryAnchor)
 
         cacheStore.managedObjectContext.performAndWait {}
-        sleep(1)
-        
         
         // Create a new glucose store, and ensure it uses the last query anchor
         let newGlucoseStore = GlucoseStore(healthStore: healthStore, cacheStore: cacheStore)
