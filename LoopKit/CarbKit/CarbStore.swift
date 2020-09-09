@@ -238,6 +238,7 @@ public final class CarbStore: HealthKitSampleStore {
             self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.0, adaptiveAbsorptionRateEnabled: true, adaptiveRateStandbyIntervalFraction: 0.2)
         }
 
+        let semaphore = DispatchSemaphore(value: 0)
         cacheStore.onReady { (error) in
             guard error == nil else { return }
             
@@ -246,9 +247,12 @@ public final class CarbStore: HealthKitSampleStore {
                     self.queryAnchor = anchor
             
                     self.migrateLegacyCarbEntryKeys()
+                    
+                    semaphore.signal()
                 }
             }
         }
+        semaphore.wait()
     }
 
     // Migrate modifiedCarbEntries and deletedCarbEntryIDs

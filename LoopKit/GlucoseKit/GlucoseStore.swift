@@ -121,15 +121,19 @@ public final class GlucoseStore: HealthKitSampleStore {
 
         super.init(healthStore: healthStore, observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -self.observationInterval), observationEnabled: observationEnabled)
 
+        
+        let semaphore = DispatchSemaphore(value: 0)
         cacheStore.onReady { (error) in
             cacheStore.fetchAnchor(key: GlucoseStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.dataAccessQueue.async {
                     self.queryAnchor = anchor
                     
                     self.updateLatestGlucose()
+                    semaphore.signal()
                 }
             }
         }
+        semaphore.wait()
     }
 
     // MARK: - HealthKitSampleStore

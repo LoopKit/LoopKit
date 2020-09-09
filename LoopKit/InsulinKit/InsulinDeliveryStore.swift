@@ -70,6 +70,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
             test_currentDate: test_currentDate
         )
 
+        let semaphore = DispatchSemaphore(value: 0)
         cacheStore.onReady { (error) in
             cacheStore.fetchAnchor(key: InsulinDeliveryStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
@@ -78,9 +79,11 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
                     if self.lastBasalEndDate == nil {
                         self.updateLastBasalEndDate()
                     }
+                    semaphore.signal()
                 }
             }
         }
+        semaphore.wait()
     }
     
     // MARK: - HealthKitSampleStore
