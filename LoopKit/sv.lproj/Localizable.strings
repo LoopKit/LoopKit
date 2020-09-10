@@ -1,0 +1,98 @@
+/* Describes a certain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus failed" = "%1$@ E bolus misslyckades";
+
+/* Describes an uncertain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus may not have succeeded" = "%1$@ E bolus kan ha misslyckats";
+
+/* The error description describing when Health sharing was denied */
+"Authorization Denied" = "Auktorisation nekad";
+
+/* Recovery instruction for an uncertain bolus failure */
+"Check your pump before retrying" = "Kontrollera pump och försök igen";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Auktorisation nekad";
+
+/* The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Detta värde kan raderas från Hälsa-appen";
+
+/* Generic pump error description */
+"Communication Failure" = "Kommunikationsfel";
+
+/* Generic pump error description */
+"Connection Failure" = "Anslutningsfel";
+
+/* Generic pump error description */
+"Device Refused" = "Enhet vägrade";
+
+/* Recovery suggestion for a no data error */
+"Ensure carb data exists for the specified date" = "Kontrollera att kolhydratvärde finns";
+
+/* Glucose trend down */
+"Falling" = "Sjunker";
+
+/* Glucose trend down-down */
+"Falling fast" = "Sjunker snabbt";
+
+/* Glucose trend down-down-down */
+"Falling very fast" = "Sjunker väldigt snabbt";
+
+/* Glucose trend flat */
+"Flat" = "Jämnt";
+
+/* The short unit display string for grams per U */
+"g/U" = "g/E";
+
+/* Generic pump error description */
+"Invalid Configuration" = "Ogiltig konfiguration";
+
+/* Recovery instruction for a certain bolus failure */
+"It is safe to retry" = "Det är säkert att försöka igen";
+
+/* The short unit display string for milligrams per deciliter per U */
+"mg/dL/U" = "mg/dl/E";
+
+/* The short unit display string for millimoles per liter */
+"mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per U */
+"mmol/L/U" = "mmol/L/E";
+
+/* Sensor state description for the non-valid state */
+"Needs Attention" = "Kräver uppmärksamhet";
+
+/* Describes an error for no data found in a CarbStore request */
+"No values found" = "Inga värden funna";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
+
+/* The error recovery suggestion when Health sharing was denied */
+"Please re-enable sharing in Health" = "Tillåt delning i Hälsa igen";
+
+/* Glucose trend up */
+"Rising" = "Stiger";
+
+/* Glucose trend up-up */
+"Rising fast" = "Stiger snabbt";
+
+/* Glucose trend up-up-up */
+"Rising very fast" = "Stiger väldigt snabbt";
+
+/* The short unit display string for international units of insulin */
+"U" = "E";
+
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "E/timme";
+
+/* The long unit display string for a singular international unit of insulin */
+"Unit" = "Enhet";
+
+/* The long unit display string for a singular international unit of insulin per hour */
+"Unit/hour" = "Enhet/timme";
+
+/* The long unit display string for international units of insulin */
+"Units" = "Enheter";
+
+/* The long unit display string for international units of insulin per hour */
+"Units/hour" = "Enhet/timme";

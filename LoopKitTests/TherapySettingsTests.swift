@@ -312,7 +312,8 @@ class TherapySettingsTests: XCTestCase {
         XCTAssertEqual("""
         {
           "walsh" : {
-            "actionDuration" : 10
+            "actionDuration" : 10,
+            "delay" : 600
           }
         }
         """, String(data: try encoder.encode(walsh), encoding: .utf8)!)

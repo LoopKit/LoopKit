@@ -1,6 +1,9 @@
 /* The title text for the basal rate schedule */
 "Basal Rates" = "Скорости базала";
 
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "Carb Ratios";
+
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Углеводы";
 
@@ -13,8 +16,12 @@
 /* The title for the cell displaying data generation */
 "Generate Data" = "Генерировать данные";
 
+/* The title of the insulin sensitivity schedule screen
+   The title text for the insulin sensitivity schedule */
+"Insulin Sensitivity" = "Чувствительность";
+
 /* The title text for the glucose target range schedule */
-"Glucose Target Range" = "Целевой диапазон гликемии";
+"Correction Range" = "Диапазон коррекции";
 
 /* The title text for the pump ID */
 "Pump ID" = "Инд номер помпы";

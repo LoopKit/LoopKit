@@ -57,16 +57,23 @@ class GlucoseStoreQueryAnchorTests: XCTestCase {
 class GlucoseStoreQueryTests: PersistenceControllerTestCase {
     
     var glucoseStore: GlucoseStore!
-    var completion: XCTestExpectation!
     var queryAnchor: GlucoseStore.QueryAnchor!
     var limit: Int!
-    
+    var observerQuery: HKObserverQueryMock!
+    var healthStore: HKHealthStoreMock!
+
     override func setUp() {
         super.setUp()
         
-        glucoseStore = GlucoseStore(healthStore: HKHealthStoreMock(),
+        healthStore = HKHealthStoreMock()
+        glucoseStore = GlucoseStore(healthStore: healthStore,
                                     cacheStore: cacheStore)
-        completion = expectation(description: "Completion")
+        
+        let semaphore = DispatchSemaphore(value: 0)
+        cacheStore.onReady { (error) in
+            semaphore.signal()
+        }
+        semaphore.wait()
         queryAnchor = GlucoseStore.QueryAnchor()
         limit = Int.max
     }
@@ -74,13 +81,98 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
     override func tearDown() {
         limit = nil
         queryAnchor = nil
-        completion = nil
         glucoseStore = nil
-        
+        healthStore.lastQuery = nil
+
         super.tearDown()
     }
     
+    func testHKQueryAnchorPersistence() {
+        
+        var observerQuery: HKObserverQueryMock? = nil
+        var anchoredObjectQuery: HKAnchoredObjectQueryMock? = nil
+
+        glucoseStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
+            observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            return observerQuery!
+        }
+        
+        let authorizationCompletion = expectation(description: "authorization completion")
+        glucoseStore.authorize { (result) in
+            authorizationCompletion.fulfill()
+        }
+        
+        waitForExpectations(timeout: 3)
+        
+        XCTAssertNotNil(observerQuery)
+
+        let anchoredObjectQueryCreationExpectation = expectation(description: "anchored object query creation")
+        glucoseStore.createAnchoredObjectQuery = { (sampleType, predicate, anchor, limit, resultsHandler) -> HKAnchoredObjectQuery in
+            anchoredObjectQuery = HKAnchoredObjectQueryMock(type: sampleType, predicate: predicate, anchor: anchor, limit: limit, resultsHandler: resultsHandler)
+            anchoredObjectQueryCreationExpectation.fulfill()
+            return anchoredObjectQuery!
+        }
+
+        let observerQueryCompletionExpectation = expectation(description: "observer query completion")
+
+        let observerQueryCompletionHandler = {
+            observerQueryCompletionExpectation.fulfill()
+        }
+        // This simulates a signal marking the arrival of new HK Data.
+        observerQuery!.updateHandler(observerQuery!, observerQueryCompletionHandler, nil)
+
+        wait(for: [anchoredObjectQueryCreationExpectation], timeout: 3)
+        
+        // Trigger results handler for anchored object query
+        let returnedAnchor = HKQueryAnchor(fromValue: 5)
+        anchoredObjectQuery!.resultsHandler(anchoredObjectQuery!, [], [], returnedAnchor, nil)
+
+        // Wait for observerQueryCompletionExpectation
+        waitForExpectations(timeout: 3)
+
+        XCTAssertNotNil(glucoseStore.queryAnchor)
+
+        cacheStore.managedObjectContext.performAndWait {}
+        
+        // Create a new glucose store, and ensure it uses the last query anchor
+        let newGlucoseStore = GlucoseStore(healthStore: healthStore, cacheStore: cacheStore)
+        
+        let newAuthorizationCompletion = expectation(description: "authorization completion")
+        
+        observerQuery = nil
+        
+        newGlucoseStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
+            observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            return observerQuery!
+        }
+
+        newGlucoseStore.authorize { (result) in
+            newAuthorizationCompletion.fulfill()
+        }
+        waitForExpectations(timeout: 3)
+        
+        anchoredObjectQuery = nil
+
+        let newAnchoredObjectQueryCreationExpectation = expectation(description: "new anchored object query creation")
+        newGlucoseStore.createAnchoredObjectQuery = { (sampleType, predicate, anchor, limit, resultsHandler) -> HKAnchoredObjectQuery in
+            anchoredObjectQuery = HKAnchoredObjectQueryMock(type: sampleType, predicate: predicate, anchor: anchor, limit: limit, resultsHandler: resultsHandler)
+            newAnchoredObjectQueryCreationExpectation.fulfill()
+            return anchoredObjectQuery!
+        }
+        
+        // This simulates a signal marking the arrival of new HK Data.
+        observerQuery!.updateHandler(observerQuery!, {}, nil)
+        
+        wait(for: [newAnchoredObjectQueryCreationExpectation], timeout: 3)
+        
+        // Assert new glucose store is querying with the last anchor that our HealthKit mock returned
+        XCTAssertEqual(returnedAnchor, anchoredObjectQuery?.anchor)
+        
+        anchoredObjectQuery!.resultsHandler(anchoredObjectQuery!, [], [], returnedAnchor, nil)
+    }
+    
     func testEmptyWithDefaultQueryAnchor() {
+        let completion = expectation(description: "Completion")
         glucoseStore.executeGlucoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
@@ -89,7 +181,7 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(anchor.modificationCounter, 0)
                 XCTAssertEqual(data.count, 0)
             }
-            self.completion.fulfill()
+            completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
@@ -97,7 +189,8 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
     
     func testEmptyWithMissingQueryAnchor() {
         queryAnchor = nil
-        
+        let completion = expectation(description: "Completion")
+
         glucoseStore.executeGlucoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
@@ -106,7 +199,7 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(anchor.modificationCounter, 0)
                 XCTAssertEqual(data.count, 0)
             }
-            self.completion.fulfill()
+            completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
@@ -114,7 +207,8 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
     
     func testEmptyWithNonDefaultQueryAnchor() {
         queryAnchor.modificationCounter = 1
-        
+        let completion = expectation(description: "Completion")
+
         glucoseStore.executeGlucoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
@@ -123,13 +217,14 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(anchor.modificationCounter, 1)
                 XCTAssertEqual(data.count, 0)
             }
-            self.completion.fulfill()
+            completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
     
     func testDataWithUnusedQueryAnchor() {
+        let completion = expectation(description: "Completion")
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
         
         addData(withSyncIdentifiers: syncIdentifiers)
@@ -146,13 +241,14 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                     XCTAssertEqual(data[index].syncVersion, index)
                 }
             }
-            self.completion.fulfill()
+            completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
     
     func testDataWithStaleQueryAnchor() {
+        let completion = expectation(description: "Completion")
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
         
         addData(withSyncIdentifiers: syncIdentifiers)
@@ -169,13 +265,15 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[2])
                 XCTAssertEqual(data[0].syncVersion, 2)
             }
-            self.completion.fulfill()
+            completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
     
     func testDataWithCurrentQueryAnchor() {
+        let completion = expectation(description: "Completion")
+        
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
         
         addData(withSyncIdentifiers: syncIdentifiers)
@@ -190,13 +288,15 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(anchor.modificationCounter, 3)
                 XCTAssertEqual(data.count, 0)
             }
-            self.completion.fulfill()
+            completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
 
     func testDataWithLimitZero() {
+        let completion = expectation(description: "Completion")
+
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
 
         addData(withSyncIdentifiers: syncIdentifiers)
@@ -211,13 +311,15 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(anchor.modificationCounter, 0)
                 XCTAssertEqual(data.count, 0)
             }
-            self.completion.fulfill()
+            completion.fulfill()
         }
 
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
 
     func testDataWithLimitCoveredByData() {
+        let completion = expectation(description: "Completion")
+
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
         
         addData(withSyncIdentifiers: syncIdentifiers)
@@ -236,7 +338,7 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(data[1].syncIdentifier, syncIdentifiers[1])
                 XCTAssertEqual(data[1].syncVersion, 1)
             }
-            self.completion.fulfill()
+            completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)

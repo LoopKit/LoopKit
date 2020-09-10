@@ -1,8 +1,8 @@
 language: objective-c
-osx_image: xcode11.3
-xcode_scheme:
-    - LoopKit
-    - LoopKitUI
+osx_image: xcode11.6
+
+before_script:
+    - carthage bootstrap
 script:
    - set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 8' test | xcpretty
    - set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme "LoopKit Example" build -destination 'name=iPhone 8' CODE_SIGNING_ALLOWED=NO | xcpretty

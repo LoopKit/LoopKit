@@ -328,7 +328,7 @@ struct DeliveryLimitsGuardrailWarning: View {
                 case .minimum, .belowRecommended:
                     // ANNA TODO: Ask MLee about this one
                     title = Text("Low Maximum Basal Rate", comment: "Title text for low maximum basal rate warning")
-                    caption = Text("A setting of 0 U/hr means Tidepool Loop will not automatically administer insulin.", comment: "Caption text for low maximum basal rate warning")
+                    caption = Text("A setting of 0 U/hr means Loop will not automatically administer insulin.", comment: "Caption text for low maximum basal rate warning")
                 case .aboveRecommended, .maximum:
                     title = Text("High Maximum Basal Rate", comment: "Title text for high maximum basal rate warning")
                     caption = Text(TherapySetting.deliveryLimits.guardrailCaptionForHighValue)

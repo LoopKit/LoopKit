@@ -177,6 +177,8 @@ public final class CarbStore: HealthKitSampleStore {
 
     private let log = OSLog(category: "CarbStore")
     
+    static let healthKitQueryAnchorMetadataKey = "com.loopkit.CarbStore.hkQueryAnchor"
+    
     var settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
 
     private let provenanceIdentifier: String
@@ -226,21 +228,31 @@ public final class CarbStore: HealthKitSampleStore {
                    observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
                    observationEnabled: observationEnabled)
 
+        // Carb model settings based on the selected absorption model
+        switch self.carbAbsorptionModel {
+        case .linear:
+            self.settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
+        case .nonlinear:
+            self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
+        case .adaptiveRateNonlinear:
+            self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.0, adaptiveAbsorptionRateEnabled: true, adaptiveRateStandbyIntervalFraction: 0.2)
+        }
+
+        let semaphore = DispatchSemaphore(value: 0)
         cacheStore.onReady { (error) in
             guard error == nil else { return }
-
-            self.migrateLegacyCarbEntryKeys()
-
-            // Carb model settings based on the selected absorption model
-            switch self.carbAbsorptionModel {
-            case .linear:
-                self.settings = CarbModelSettings(absorptionModel: LinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
-            case .nonlinear:
-                self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: absorptionTimeOverrun, adaptiveAbsorptionRateEnabled: false)
-            case .adaptiveRateNonlinear:
-                self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.0, adaptiveAbsorptionRateEnabled: true, adaptiveRateStandbyIntervalFraction: 0.2)
+            
+            cacheStore.fetchAnchor(key: CarbStore.healthKitQueryAnchorMetadataKey) { (anchor) in
+                self.queue.async {
+                    self.queryAnchor = anchor
+            
+                    self.migrateLegacyCarbEntryKeys()
+                    
+                    semaphore.signal()
+                }
             }
         }
+        semaphore.wait()
     }
 
     // Migrate modifiedCarbEntries and deletedCarbEntryIDs
@@ -267,14 +279,19 @@ public final class CarbStore: HealthKitSampleStore {
     }
 
     // MARK: - HealthKitSampleStore
+    
+    override func queryAnchorDidChange() {
+        cacheStore.storeAnchor(queryAnchor, key: CarbStore.healthKitQueryAnchorMetadataKey)
+    }
 
-    public override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], error: Error?) {
-        if let error = error {
-            self.delegate?.carbStore(self, didError: .healthStoreError(error))
-            return
-        }
-
+    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
         queue.async {
+            guard anchor != self.queryAnchor else {
+                self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
+                completion(true)
+                return
+            }
+
             var changed = false
             var error: CarbStoreError?
 
@@ -310,6 +327,7 @@ public final class CarbStore: HealthKitSampleStore {
 
             if let error = error {
                 self.delegate?.carbStore(self, didError: error)
+                completion(false)
                 return
             }
 
@@ -317,6 +335,8 @@ public final class CarbStore: HealthKitSampleStore {
             if changed {
                 self.notifyUpdatedCarbData(updateSource: .queriedByHealthKit)
             }
+
+            completion(true)
         }
     }
 }

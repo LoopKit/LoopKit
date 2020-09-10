@@ -46,6 +46,10 @@ extension ExponentialInsulinModelPreset: InsulinModel {
     public var effectDuration: TimeInterval {
         return model.effectDuration
     }
+    
+    public var delay: TimeInterval {
+        return model.delay
+    }
 
     public func percentEffectRemaining(at time: TimeInterval) -> Double {
         return model.percentEffectRemaining(at: time)

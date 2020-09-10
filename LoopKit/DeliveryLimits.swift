@@ -47,7 +47,7 @@ public extension DeliveryLimits.Setting {
     var descriptiveText: String {
         switch self {
         case .maximumBasalRate:
-            return LocalizedString("Maximum basal rate is the highest temporary basal rate Tidepool Loop is allowed to set automatically.", comment: "Descriptive text for maximum basal rate")
+            return LocalizedString("Maximum basal rate is the highest temporary basal rate Loop is allowed to set automatically.", comment: "Descriptive text for maximum basal rate")
         case .maximumBolus:
             return LocalizedString("Maximum bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose.", comment: "Descriptive text for maximum bolus")
         }

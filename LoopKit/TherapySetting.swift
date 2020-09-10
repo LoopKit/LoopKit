@@ -58,7 +58,7 @@ public extension TherapySetting {
     var descriptiveText: String {
         switch self {
         case .glucoseTargetRange:
-            return LocalizedString("Correction range is the glucose value (or range of values) that you want Tidepool Loop to aim for in adjusting your basal insulin.", comment: "Descriptive text for glucose target range")
+            return LocalizedString("Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin.", comment: "Descriptive text for glucose target range")
         case .preMealCorrectionRangeOverride:
             return LocalizedString("Temporarily lower your glucose target before a meal to impact post-meal glucose spikes.", comment: "Descriptive text for pre-meal correction range override")
         case .workoutCorrectionRangeOverride:
@@ -87,9 +87,9 @@ public extension TherapySetting {
         switch self {
         // For schedules & ranges where it's possible for more than 1 to be outside of guardrails
         case .glucoseTargetRange:
-            return LocalizedString("A value you have entered is lower than what Tidepool typically recommends for most people.", comment: "Descriptive text for guardrail low value warning for schedule interface")
+            return LocalizedString("A value you have entered is lower than what is typically recommended for most people.", comment: "Descriptive text for guardrail low value warning for schedule interface")
         default:
-            return LocalizedString("The value you have entered is lower than what Tidepool typically recommends for most people.", comment: "Descriptive text for guardrail low value warning")
+            return LocalizedString("The value you have entered is lower than what is typically recommended for most people.", comment: "Descriptive text for guardrail low value warning")
         }
     }
     
@@ -97,25 +97,25 @@ public extension TherapySetting {
         switch self {
         // For schedules & ranges where it's possible for more than 1 to be outside of guardrails
         case .glucoseTargetRange:
-            return LocalizedString("A value you have entered is higher than what Tidepool typically recommends for most people.", comment: "Descriptive text for guardrail high value warning for schedule interface")
+            return LocalizedString("A value you have entered is higher than what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning for schedule interface")
         default:
-            return LocalizedString("The value you have entered is higher than what Tidepool typically recommends for most people.", comment: "Descriptive text for guardrail high value warning")
+            return LocalizedString("The value you have entered is higher than what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning")
         }
     }
     
     var guardrailCaptionForOutsideValues: String {
         switch self {
         case .deliveryLimits:
-            return LocalizedString("The values you have entered are outside of what Tidepool typically recommends for most people.", comment: "Descriptive text for guardrail high value warning")
+            return LocalizedString("The values you have entered are outside of what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning")
         default:
-            return LocalizedString("Some of the values you have entered are outside of what Tidepool typically recommends for most people.", comment: "Descriptive text for guardrail high value warning for schedule interface")
+            return LocalizedString("Some of the values you have entered are outside of what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning for schedule interface")
         }
     }
     
     var guardrailSaveWarningCaption: String {
         switch self {
         default:
-            return LocalizedString("One or more of the values you have entered is outside of what Tidepool typically recommends for most people.", comment: "Descriptive text for saving settings outside the recommended range")
+            return LocalizedString("One or more of the values you have entered is outside of what is typically recommended for most people.", comment: "Descriptive text for saving settings outside the recommended range")
         }
     }
 }

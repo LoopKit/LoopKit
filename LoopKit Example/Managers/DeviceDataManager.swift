@@ -11,7 +11,7 @@ import HealthKit
 import LoopKit
 
 
-class DeviceDataManager : CarbStoreDelegate {
+class DeviceDataManager {
 
     init() {
         let healthStore = HKHealthStore()
@@ -42,7 +42,6 @@ class DeviceDataManager : CarbStoreDelegate {
         )
         glucoseStore = GlucoseStore(healthStore: healthStore,
                                     cacheStore: cacheStore)
-        carbStore?.delegate = self
     }
 
     // Data stores

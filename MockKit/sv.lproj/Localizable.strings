@@ -1,0 +1,6 @@
+/* The alert title for a resume error */
+"Error Resuming" = "Fel vid återgång";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Fel vid försök till paus";
+

@@ -1,15 +1,29 @@
-
 /* Class = "UILabel"; text = "Authorize access to Health to continue"; ObjectID = "7xi-Om-Y53"; */
 "7xi-Om-Y53.text" = "请在健康应用中给予相应权限以继续";
 
 /* Class = "UIButton"; normalTitle = "Authorize"; ObjectID = "8sx-XB-DRV"; */
 "8sx-XB-DRV.normalTitle" = "授权";
 
+/* Class = "UILabel"; text = "Food Type"; ObjectID = "bdP-2A-DB8"; */
+"bdP-2A-DB8.text" = "食物类型";
+
+/* Class = "UINavigationItem"; title = "Add/Edit Carb Entry"; ObjectID = "bM2-yI-YmX"; */
+"bM2-yI-YmX.title" = "添加/编辑 碳水录入";
+
 /* Class = "UILabel"; text = "g"; ObjectID = "D2S-2h-yH6"; */
 "D2S-2h-yH6.text" = "克";
 
+/* Class = "UIButton"; normalTitle = "🍕"; ObjectID = "dyX-Zv-8wU"; */
+"dyX-Zv-8wU.normalTitle" = "🍕";
+
 /* Class = "UILabel"; text = "Amount Consumed"; ObjectID = "K0S-my-3qL"; */
 "K0S-my-3qL.text" = "已消耗部分";
+
+/* Class = "UILabel"; text = "..."; ObjectID = "lbE-wQ-pFK"; */
+"lbE-wQ-pFK.text" = "...";
+
+/* Class = "UILabel"; text = "Detail"; ObjectID = "m95-PG-bTq"; */
+"m95-PG-bTq.text" = "详情";
 
 /* Class = "UIButton"; normalTitle = "🍽"; ObjectID = "Mde-by-DTA"; */
 "Mde-by-DTA.normalTitle" = "🍽";
@@ -20,11 +34,23 @@
 /* Class = "UILabel"; text = "Food Type"; ObjectID = "NRZ-dT-iqj"; */
 "NRZ-dT-iqj.text" = "食物类型";
 
-/* Class = "UILabel"; text = "g COB"; ObjectID = "QZb-e1-xwb"; */
-"QZb-e1-xwb.text" = "克 活性碳水化合物";
+/* Class = "UILabel"; text = "HealthKit is not available on this device"; ObjectID = "nXh-BM-MuC"; */
+"nXh-BM-MuC.text" = "健康应用不支持该设备";
+
+/* Class = "UILabel"; text = "g Total"; ObjectID = "pHI-f4-pJp"; */
+"pHI-f4-pJp.text" = "克 总计";
 
 /* Class = "UINavigationItem"; title = "Carbohydrates"; ObjectID = "Qgq-n1-hm4"; */
 "Qgq-n1-hm4.title" = "碳水化合物";
+
+/* Class = "UITextField"; placeholder = "0"; ObjectID = "qU9-hG-hMu"; */
+"qU9-hG-hMu.placeholder" = "0";
+
+/* Class = "UILabel"; text = "g COB"; ObjectID = "QZb-e1-xwb"; */
+"QZb-e1-xwb.text" = "克 活性碳水化合物";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "vM9-H7-t3C"; */
+"vM9-H7-t3C.text" = "标题";
 
 /* Class = "UILabel"; text = "..."; ObjectID = "WZV-l9-Ek1"; */
 "WZV-l9-Ek1.text" = "...";
@@ -32,50 +58,3 @@
 /* Class = "UIButton"; normalTitle = "🍭"; ObjectID = "XaD-wV-oiS"; */
 "XaD-wV-oiS.normalTitle" = "🍭";
 
-/* Class = "UILabel"; text = "🍕"; ObjectID = "Zpw-Di-X7C"; */
-"Zpw-Di-X7C.text" = "🍕";
-
-/* Class = "UIButton"; normalTitle = "abc"; ObjectID = "act-DJ-aXh"; */
-"act-DJ-aXh.normalTitle" = "其他";
-
-/* Class = "UINavigationItem"; title = "Add/Edit Carb Entry"; ObjectID = "bM2-yI-YmX"; */
-"bM2-yI-YmX.title" = "添加/编辑 碳水录入";
-
-/* Class = "UILabel"; text = "Food Type"; ObjectID = "bdP-2A-DB8"; */
-"bdP-2A-DB8.text" = "食物类型";
-
-/* Class = "UILabel"; text = "🌮"; ObjectID = "blb-Re-Esx"; */
-"blb-Re-Esx.text" = "🌮";
-
-/* Class = "UILabel"; text = "🍇"; ObjectID = "dug-Vc-f5B"; */
-"dug-Vc-f5B.text" = "🍇";
-
-/* Class = "UIButton"; normalTitle = "🍕"; ObjectID = "dyX-Zv-8wU"; */
-"dyX-Zv-8wU.normalTitle" = "🍕";
-
-/* Class = "UILabel"; text = " 🍭 "; ObjectID = "ez9-lR-yD7"; */
-"ez9-lR-yD7.text" = " 🍭 ";
-
-/* Class = "UILabel"; text = "..."; ObjectID = "lbE-wQ-pFK"; */
-"lbE-wQ-pFK.text" = "...";
-
-/* Class = "UILabel"; text = "Detail"; ObjectID = "m95-PG-bTq"; */
-"m95-PG-bTq.text" = "详情";
-
-/* Class = "UILabel"; text = "⋯ "; ObjectID = "nBf-1A-P2k"; */
-"nBf-1A-P2k.text" = "⋯ ";
-
-/* Class = "UILabel"; text = "HealthKit is not available on this device"; ObjectID = "nXh-BM-MuC"; */
-"nXh-BM-MuC.text" = "健康应用不支持该设备";
-
-/* Class = "UILabel"; text = "g Total"; ObjectID = "pHI-f4-pJp"; */
-"pHI-f4-pJp.text" = "克 总计";
-
-/* Class = "UILabel"; text = "MEDIUM"; ObjectID = "qMe-TA-UCA"; */
-"qMe-TA-UCA.text" = "中等";
-
-/* Class = "UITextField"; placeholder = "0"; ObjectID = "qU9-hG-hMu"; */
-"qU9-hG-hMu.placeholder" = "0";
-
-/* Class = "UILabel"; text = "Title"; ObjectID = "vM9-H7-t3C"; */
-"vM9-H7-t3C.text" = "标题";

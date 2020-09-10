@@ -167,7 +167,7 @@ public final class MockPumpManager: TestingPumpManager {
 
     private func status(for state: MockPumpManagerState) -> PumpManagerStatus {
         return PumpManagerStatus(
-            timeZone: .current,
+            timeZone: .currentFixed,
             device: MockPumpManager.device,
             pumpBatteryChargeRemaining: state.pumpBatteryChargeRemaining,
             basalDeliveryState: basalDeliveryState(for: state),
@@ -192,8 +192,15 @@ public final class MockPumpManager: TestingPumpManager {
             return status(for: self.state)
         }
     }
-
-    private func notifyObservers() {
+    
+    private func notifyStatusObservers(oldStatus: PumpManagerStatus) {
+        let status = self.status
+        delegate.notify { (delegate) in
+            delegate?.pumpManager(self, didUpdate: status, oldStatus: oldStatus)
+        }
+        statusObservers.forEach { (observer) in
+            observer.pumpManager(self, didUpdate: status, oldStatus: oldStatus)
+        }
     }
 
     public var state: MockPumpManagerState {
@@ -204,7 +211,7 @@ public final class MockPumpManager: TestingPumpManager {
             let newStatus = status(for: newValue)
 
             if oldStatus != newStatus {
-                statusObservers.forEach { $0.pumpManager(self, didUpdate: newStatus, oldStatus: oldStatus) }
+                notifyStatusObservers(oldStatus: oldStatus)
             }
 
             stateObservers.forEach { $0.mockPumpManager(self, didUpdate: self.state) }
@@ -275,6 +282,12 @@ public final class MockPumpManager: TestingPumpManager {
 
     public var rawState: RawStateValue {
         return ["state": state.rawValue]
+    }
+    
+    private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
+        self.delegate.notify { (delegate) in
+            delegate?.deviceManager(self, logEventForDeviceIdentifier: "MockId", type: type, message: message, completion: nil)
+        }
     }
 
     public func createBolusProgressReporter(reportingOn dispatchQueue: DispatchQueue) -> DoseProgressReporter? {
@@ -367,6 +380,7 @@ public final class MockPumpManager: TestingPumpManager {
                     completion(.success(DoseEntry(temp)))
                 }
             }
+            logDeviceCommunication("enactTempBasal succeeded", type: .receive)
         }
     }
     
@@ -378,7 +392,7 @@ public final class MockPumpManager: TestingPumpManager {
 
     public func enactBolus(units: Double, at startDate: Date, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
 
-        logDeviceComms(.send, message: "Bolus \(units) U")
+        logDeviceCommunication("enactBolus(\(units), \(startDate))")
 
         if state.bolusEnactmentShouldError {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
@@ -392,11 +406,13 @@ public final class MockPumpManager: TestingPumpManager {
             state.finalizeFinishedDoses()
 
             if let _ = state.unfinalizedBolus {
+                logDeviceCommunication("enactBolus failed: bolusInProgress", type: .error)
                 completion(.failure(PumpManagerError.deviceState(MockPumpManagerError.bolusInProgress)))
                 return
             }
 
             if case .suspended = status.basalDeliveryState {
+                logDeviceCommunication("enactBolus failed: pumpSuspended", type: .error)
                 completion(.failure(PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended)))
                 return
             }
@@ -410,6 +426,7 @@ public final class MockPumpManager: TestingPumpManager {
             
             storeDoses { (error) in
                 completion(.success(dose))
+                self.logDeviceCommunication("enactBolus succeeded", type: .receive)
             }
         }
     }
@@ -459,6 +476,7 @@ public final class MockPumpManager: TestingPumpManager {
             storeDoses { (error) in
                 completion(error)
             }
+            logDeviceCommunication("suspendDelivery succeeded", type: .receive)
         }
     }
 
@@ -477,6 +495,7 @@ public final class MockPumpManager: TestingPumpManager {
             storeDoses { (error) in
                 completion(error)
             }
+            logDeviceCommunication("resumeDelivery succeeded", type: .receive)
         }
     }
 

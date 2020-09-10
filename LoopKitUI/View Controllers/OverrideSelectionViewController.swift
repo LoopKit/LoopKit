@@ -39,7 +39,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = NSLocalizedString("Custom Preset", comment: "The title for the custom preset selection screen")
+        title = LocalizedString("Custom Preset", comment: "The title for the custom preset selection screen")
         collectionView?.backgroundColor = .systemGroupedBackground
         navigationItem.rightBarButtonItems = [saveButton, editButton]
         navigationItem.leftBarButtonItem = cancelButton
@@ -118,10 +118,10 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: OverrideSelectionHeaderView.className, for: indexPath) as! OverrideSelectionHeaderView
             switch section(for: indexPath.section) {
             case .scheduledOverride:
-                header.titleLabel.text = NSLocalizedString("SCHEDULED PRESET", comment: "The section header text for a scheduled custom preset")
+                header.titleLabel.text = LocalizedString("SCHEDULED PRESET", comment: "The section header text for a scheduled custom preset")
             case .presets:
                 if scheduledOverride != nil {
-                    header.titleLabel.text = NSLocalizedString("PRESETS", comment: "The section header text for custom presets")
+                    header.titleLabel.text = LocalizedString("PRESETS", comment: "The section header text for custom presets")
                 } else {
                     header.titleLabel.text?.removeAll()
                 }
@@ -129,7 +129,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
             return header
         case UICollectionView.elementKindSectionFooter:
             let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: OverrideSelectionFooterView.className, for: indexPath) as! OverrideSelectionFooterView
-            footer.textLabel.text = NSLocalizedString("Tap '+' to create a new custom preset.", comment: "Text directing the user to configure their first custom preset")
+            footer.textLabel.text = LocalizedString("Tap '+' to create a new custom preset.", comment: "Text directing the user to configure their first custom preset")
             return footer
         default:
             fatalError("Unexpected supplementary element kind \(kind)")
@@ -158,7 +158,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
 
     public override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let customSymbol = "⋯"
-        let customName = NSLocalizedString("Custom", comment: "The text for a custom preset")
+        let customName = LocalizedString("Custom", comment: "The text for a custom preset")
 
         switch cellContent(for: indexPath) {
         case .scheduledOverride(let override):
@@ -231,7 +231,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
             return ""
         }
 
-        return String(format: NSLocalizedString("%1$@ – %2$@ %3$@", comment: "The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit)"), minTarget, maxTarget, quantityFormatter.string(from: glucoseUnit))
+        return String(format: LocalizedString("%1$@ – %2$@ %3$@", comment: "The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit)"), minTarget, maxTarget, quantityFormatter.string(from: glucoseUnit))
     }
 
     public override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

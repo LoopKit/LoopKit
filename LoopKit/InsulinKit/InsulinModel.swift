@@ -18,8 +18,11 @@ public protocol InsulinModel: CustomDebugStringConvertible {
     ///   - time: The interval after insulin delivery
     func percentEffectRemaining(at time: TimeInterval) -> Double
     
-    /// The expected duration of an insulin dose
+    /// The expected duration, including any effect delay, of an insulin dose, from the time of the dose
     var effectDuration: TimeInterval { get }
+    
+    /// The time after the dose where the effect becomes non-zero
+    var delay: TimeInterval { get }
 }
 
 

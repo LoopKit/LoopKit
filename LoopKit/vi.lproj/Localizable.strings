@@ -1,0 +1,98 @@
+/* Describes a certain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus failed" = "%1$@ U liều bolus bị lỗi";
+
+/* Describes an uncertain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus may not have succeeded" = "%1$@ U liều bolus không thành công";
+
+/* The error description describing when Health sharing was denied */
+"Authorization Denied" = "Cấp quyền bị từ chối";
+
+/* Recovery instruction for an uncertain bolus failure */
+"Check your pump before retrying" = "Kiểm tra lại bơm trước khi thử lại";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Cấp quyền bị từ chối";
+
+/* The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Mẫu này có thể bị xóa khỏi ứng dụng Health";
+
+/* Generic pump error description */
+"Communication Failure" = "Liên lạc thất bại";
+
+/* Generic pump error description */
+"Connection Failure" = "Kết nối thất bại";
+
+/* Generic pump error description */
+"Device Refused" = "Thiết bị bị từ chối";
+
+/* Recovery suggestion for a no data error */
+"Ensure carb data exists for the specified date" = "Đảm bảo dữ liệu carb tồn tại cho ngày cụ thể";
+
+/* Glucose trend down */
+"Falling" = "Đang hạ";
+
+/* Glucose trend down-down */
+"Falling fast" = "Đang hạ nhanh";
+
+/* Glucose trend down-down-down */
+"Falling very fast" = "Đang hạ rất nhanh";
+
+/* Glucose trend flat */
+"Flat" = "Flat";
+
+/* The short unit display string for grams per U */
+"g/U" = "g/U";
+
+/* Generic pump error description */
+"Invalid Configuration" = "Cấu hình không hiệu lực";
+
+/* Recovery instruction for a certain bolus failure */
+"It is safe to retry" = "An toàn để thử lại";
+
+/* The short unit display string for milligrams per deciliter per U */
+"mg/dL/U" = "mg/dL/U";
+
+/* The short unit display string for millimoles per liter */
+"mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per U */
+"mmol/L/U" = "mmol/L/U";
+
+/* Sensor state description for the non-valid state */
+"Needs Attention" = "Cần chú ý";
+
+/* Describes an error for no data found in a CarbStore request */
+"No values found" = "Không tìm thấy giá trị nào";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
+
+/* The error recovery suggestion when Health sharing was denied */
+"Please re-enable sharing in Health" = "Xin hãy cấp quyền chia sẻ lại trong ứng dụng Health";
+
+/* Glucose trend up */
+"Rising" = "Đang tăng";
+
+/* Glucose trend up-up */
+"Rising fast" = "Đang tăng nhanh";
+
+/* Glucose trend up-up-up */
+"Rising very fast" = "Đang tăng rất nhanh";
+
+/* The short unit display string for international units of insulin */
+"U" = "U";
+
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "U/giờ";
+
+/* The long unit display string for a singular international unit of insulin */
+"Unit" = "Unit";
+
+/* The long unit display string for a singular international unit of insulin per hour */
+"Unit/hour" = "Unit/giờ";
+
+/* The long unit display string for international units of insulin */
+"Units" = "Units";
+
+/* The long unit display string for international units of insulin per hour */
+"Units/hour" = "Units/giờ";

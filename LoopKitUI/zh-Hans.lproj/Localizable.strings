@@ -1,8 +1,27 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% 胰岛素";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ 单位剩余在 %2$@";
+
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "吸收时间";
 
-/* The title of the button to add the credentials for a service */
-"Add Account" = "添加账户";
+/* The title for the override emoji activity section */
+"Activity" = "活动";
 
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "确定要删除所有输入的历史数据吗？";
@@ -11,19 +30,37 @@
 "Are you sure you want to delete all reservoir values?" = "确定要删除所有的储药器数据吗？";
 
 /* The title of the button to add the credentials for a service */
-"authentication-button-add" = "添加账户";
+"Add Account" = "添加账户";
 
 /* The title of the button to remove the credentials for a service */
-"authentication-button-delete" = "删除账户";
+"Delete Account" = "删除账户";
+
+/* Describes a percentage decrease in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "基础率,大剂量及追加剂量将以%@%%减少";
+
+/* Describes a percentage increase in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "基础率,大剂量及追加剂量将以%@%%增加";
+
+/* Describes a lack of change in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "基础率,大剂量及追加剂量将不受该设置影响";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "取消";
 
+/* The text for the override cancellation button */
+"Cancel Override" = "取消覆盖";
+
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "取消临时基础率";
+
 /* The title of the view controller to create a new carb entry */
-"carb-entry-title-add" = "添加碳水";
+"Add Carb Entry" = "添加碳水";
 
 /* The title of the view controller to edit an existing carb entry */
-"carb-entry-title-edit" = "编辑碳水";
+"Edit Carb Entry" = "编辑碳水";
+
+/* Footer text for customizing an override from a preset (1: preset name) */
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "将仅会在启用时覆盖该设置,默认设置%@ 不受影响";
 
 /* Carb entry section footer text explaining absorption time */
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "如果吃大餐请选择比较长的吸收时间，或者是以脂肪和蛋白为主的食物。该设置仅为算法的一般原则，具体请根据自身情况调整";
@@ -41,19 +78,40 @@
 "com.loudnate.InsulinKit.totalDateLabel" = "自从 %1$@";
 
 /* The title of the action used to dismiss an error alert */
-"com.loudnate.LoopKit.errorAlertActionTitle" = "好";
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* The title for the override emoji condition section */
+"Condition" = "条件";
 
 /* Title of the setup button to continue */
 "Continue" = "继续";
 
+/* The section footer of correction range schedule */
+"Correction range is the blood glucose range that you would like Loop to correct to." = "校正范围指Loop系统会主动调整胰岛素输注并将血糖保持在该范围内";
+
+/* The text for a custom override */
+"Custom" = "自定义";
+
+/* The title for the custom override entry screen */
+"Custom Override" = "自定义覆盖";
+
 /* Title of the carb entry date picker cell */
 "Date" = "日期";
 
-/* The title of the button to remove the credentials for a service */
-"Delete Account" = "删除账户";
-
 /* Button title to delete all objects */
 "Delete All" = "删除所有";
+
+/* The text for the override duration setting */
+"Duration" = "持续时间";
+
+/* The title for the override editing screen */
+"Edit Override" = "编辑新设置";
+
+/* Footer text for editing an active override (1: preset name) */
+"Editing affects only the active override. The default settings of %@ will not be affected." = "编辑仅会影响正在使用的“覆盖”设置,默认设置%@不受影响";
+
+/* The text for the indefinite override duration setting */
+"Enable Indefinitely" = "一直使用";
 
 /* The detail text describing an enabled setting */
 "Enabled" = "已启用";
@@ -67,6 +125,12 @@
 /* Section title for fast absorbing food */
 "Fast" = "快速";
 
+/* The description shown on the insulin sensitivity schedule interface. */
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "胰岛素敏感系数指每单位胰岛素可以造成的血糖变化.比较小的值意味着当血糖高于目标时需要更多的胰岛素,如果该值设置太小可能会造成严重低血糖,请谨慎设置该参数";
+
+/* Placeholder for maximum value in glucose range */
+"max" = "最大";
+
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "最大基础率限制";
 
@@ -76,14 +140,30 @@
 /* Section title for medium absorbing food */
 "Medium" = "中等";
 
-/* The unit display string for millimoles of glucose per liter */
-"mmol/L" = "毫摩尔/升";
+/* Placeholder for minimum value in glucose range */
+"min" = "分钟";
 
 /* Alert action title to open error help */
 "More Info" = "更多信息";
 
-/* Section title for no-carb food */
+/* The text for the override preset name setting */
+"Name" = "名称";
+
+/* The title for the new override preset entry screen */
+"New Preset" = "新配置";
+
+/* Section title for no-carb food
+   The title for override emoji miscellaneous section */
 "Other" = "其他";
+
+/* The title text for the insulin sensitivity scaling setting */
+"Overall Insulin Needs" = "全部胰岛素需要";
+
+/* The title text for the override presets screen */
+"Override Presets" = "覆盖预设值";
+
+/* Text directing the user to configure override presets */
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "覆盖预设置可以通过”设置”的”配置”来完成";
 
 /* The section title of glucose overrides */
 "Overrides" = "覆盖";
@@ -91,26 +171,57 @@
 /* Title for the pre-meal override range */
 "Pre-Meal" = "餐前模式";
 
+/* The section header text override presets */
+"PRESETS" = "预设";
+
 /* The title of the screen displaying a pump event */
 "Pump Event" = "胰岛素泵事件";
 
-/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
-"quantity-and-unit-space" = "%1$@ %2$@";
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "恢复输注";
 
-/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
-"quantity-and-unit-tight" = "%1$@%2$@";
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "恢复中";
 
-/* The default placeholder string for a credential */
-"Required" = "需要";
+/* The text for the override preset name field placeholder */
+"Running" = "运行中";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "保存";
+
+/* The section header text for a scheduled override */
+"SCHEDULED OVERRIDE" = "计划覆盖";
 
 /* Section title for slow absorbing food */
 "Slow" = "慢";
 
+/* The text for the override start time */
+"Start Time" = "启动时间";
+
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "启动临时寄出";
+
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "暂停输注";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "正在暂停";
+
+/* The text for the override preset symbol setting */
+"Symbol" = "符号";
+
 /* The empty-state text for a configuration value */
 "Tap to set" = "点击设置";
 
+/* The text for the override target range setting */
+"Target Range" = "目标范围";
+
+/* The title for the override selection screen */
+"Temporary Override" = "临时覆盖";
+
 /* The default placeholder string for a credential */
-"text-placeholder-required" = "需要";
+"Required" = "需要";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "最大吸收时间为  %@";
@@ -127,7 +238,8 @@
 /* The unit string for units */
 "Units" = "单位";
 
-/* The default title to use when an entry has none */
+/* Accessibility value for an unknown value
+   The default title to use when an entry has none */
 "Unknown" = "未知";
 
 /* Label indicating validation is occurring */

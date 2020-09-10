@@ -1,8 +1,8 @@
 /* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ E bolus fehlgeschlagen";
+"%1$@ U bolus failed" = "%1$@ IE bolus fehlgeschlagen";
 
 /* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ E bolus wurde wohl nicht abgegeben";
+"%1$@ U bolus may not have succeeded" = "%1$@ IE bolus wurde wohl nicht abgegeben";
 
 /* The error description describing when Health sharing was denied */
 "Authorization Denied" = "Autorisierung verweigert";
@@ -40,14 +40,23 @@
 /* Glucose trend flat */
 "Flat" = "Gleichbleibend";
 
+/* The short unit display string for grams per U */
+"g/U" = "g/IE";
+
 /* Generic pump error description */
 "Invalid Configuration" = "Fehlerhafte Konfiguration";
 
 /* Recovery instruction for a certain bolus failure */
 "It is safe to retry" = "Es ist sicher um es noch mal zu versuchen";
 
-/* The short unit display string for millimoles of glucose per liter */
+/* The short unit display string for milligrams per deciliter per U */
+"mg/dL/U" = "mg/dL/IE";
+
+/* The short unit display string for millimoles per liter */
 "mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per U */
+"mmol/L/U" = "mmol/L/IE";
 
 /* Sensor state description for the non-valid state */
 "Needs Attention" = "Erfordert Aufmerksamkeit";
@@ -61,12 +70,6 @@
 /* The error recovery suggestion when Health sharing was denied */
 "Please re-enable sharing in Health" = "Bitte aktiviere das sharing in Healt erneut";
 
-/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
-"quantity-and-unit-space" = "%1$@ %2$@";
-
-/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
-"quantity-and-unit-tight" = "%1$@%2$@";
-
 /* Glucose trend up */
 "Rising" = "Steigt";
 
@@ -77,8 +80,20 @@
 "Rising very fast" = "Steigt sehr schnell";
 
 /* The short unit display string for international units of insulin */
-"U" = "E";
+"U" = "IE";
+
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "IE/Std.";
+
+/* The long unit display string for a singular international unit of insulin */
+"Unit" = "Einheit";
+
+/* The long unit display string for a singular international unit of insulin per hour */
+"Unit/hour" = "Einheit/Std.";
 
 /* The long unit display string for international units of insulin */
 "Units" = "Einheiten";
+
+/* The long unit display string for international units of insulin per hour */
+"Units/hour" = "Einheiten/Stunde";
 

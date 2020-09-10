@@ -1,5 +1,32 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% normalnej insuliny";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@J";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ jednostek pozostających w %2$@";
+
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Czas absorpcji";
+
+/* The title for the override emoji activity section */
+"Activity" = "Aktywność";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Dodaj konto";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Wprowadź węglowodany";
 
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Czy jesteś pewien, że chcesz usunąć z Loop wszystkie dane historyczne pompy?";
@@ -7,20 +34,26 @@
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Czy jesteś pewien, że chcesz usunąć wszystkie wartości zbiornika?";
 
-/* The title of the button to add the credentials for a service */
-"authentication-button-add" = "Dodaj konto";
+/* Describes a percentage decrease in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Dawka podstawowa, bolus i korygująca dawka insuliny zostały zmniejszone o %@%%.";
 
-/* The title of the button to remove the credentials for a service */
-"authentication-button-delete" = "Usuń konto";
+/* Describes a percentage increase in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "> Dawka podstawowa, bolus i korygująca dawka insuliny zostały zwiększone o %@%%.";
+
+/* Describes a lack of change in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are unaffected." = " Dawka podstawowa, bolus i korygująca dawka insuliny bez zmian.";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Anuluj";
 
-/* The title of the view controller to create a new carb entry */
-"carb-entry-title-add" = "Wprowadź węglowodany";
+/* The text for the override cancellation button */
+"Cancel Override" = "Anuluj pominięcie";
 
-/* The title of the view controller to edit an existing carb entry */
-"carb-entry-title-edit" = "Edytuj wprowadzone węglowodany";
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Anulowanie tymczasowej dawki podstawowej";
+
+/* Footer text for customizing an override from a preset (1: preset name) */
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Zmiany będą obowiązywać wyłącznie podczas tego pominięcia. Domyślne ustawienia %@ nie zostaną zmienione.";
 
 /* Carb entry section footer text explaining absorption time */
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Wybierz dłuższy czas absorpcji dla większych, bogatobiałkowych lub wysokotłuszczowych posiłków. To tylko wskazówka dla algorytmu i nie musi być bardzo dokładna.";
@@ -40,14 +73,44 @@
 /* The title of the action used to dismiss an error alert */
 "com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
 
+/* The title for the override emoji condition section */
+"Condition" = "Warunek";
+
 /* Title of the setup button to continue */
 "Continue" = "Kontynuuj";
+
+/* The section footer of correction range schedule */
+"Correction range is the blood glucose range that you would like Loop to correct to." = "Zakres korekty to zakres stężenia glukozy we krwi, względem którego chcesz skorygować algorytm Loop.";
+
+/* The text for a custom override */
+"Custom" = "Niestandardowe";
+
+/* The title for the custom override entry screen */
+"Custom Override" = "Pominięcie niestandardowe";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Data";
 
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Usuń konto";
+
 /* Button title to delete all objects */
 "Delete All" = "Usuń wszystko";
+
+/* The text for the override duration setting */
+"Duration" = "Czas trwania";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Edytuj wprowadzone węglowodany";
+
+/* The title for the override editing screen */
+"Edit Override" = "Edytuj pominięcie";
+
+/* Footer text for editing an active override (1: preset name) */
+"Editing affects only the active override. The default settings of %@ will not be affected." = " Edycja wpływa wyłącznie na aktywne pominięcie. Domyślne ustawienia %@ nie zostaną zmienione.";
+
+/* The text for the indefinite override duration setting */
+"Enable Indefinitely" = "Włącz na czas nieokreślony";
 
 /* The detail text describing an enabled setting */
 "Enabled" = "Włączony";
@@ -61,6 +124,12 @@
 /* Section title for fast absorbing food */
 "Fast" = "Szybko";
 
+/* The description shown on the insulin sensitivity schedule interface. */
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insulinowrażliwość opisuje, w jaki sposób stężenie glukozy we krwi powinno reagować na 1 jednostkę insuliny. Mniejsze wartości oznaczają podanie większej ilości insuliny w przypadku wartości powyżej zakresu. Zbyt małe wartości mogą spowodować niebezpiecznie niskie stężenie glukozy we krwi.";
+
+/* Placeholder for maximum value in glucose range */
+"max" = "maks.";
+
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Maksymalna dawka podstawowa";
 
@@ -70,39 +139,88 @@
 /* Section title for medium absorbing food */
 "Medium" = "Średnia";
 
-/* The unit display string for millimoles of glucose per liter */
-"mmol/L" = "mmol/L";
+/* Placeholder for minimum value in glucose range */
+"min" = "min.";
 
 /* Alert action title to open error help */
 "More Info" = "Więcej informacji";
 
-/* Section title for no-carb food */
+/* The text for the override preset name setting */
+"Name" = "Nazwa";
+
+/* The title for the new override preset entry screen */
+"New Preset" = "Nowe ustawienie wstępne";
+
+/* Section title for no-carb food
+   The title for override emoji miscellaneous section */
 "Other" = "Inne";
 
+/* The title text for the insulin sensitivity scaling setting */
+"Overall Insulin Needs" = "Ogólne zapotrzebowanie na insulinę";
+
+/* The title text for the override presets screen */
+"Override Presets" = "Wstępne ustawienia pominięcia";
+
+/* Text directing the user to configure override presets */
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Wstępne ustawienia pominięcia można skonfigurować w części „Konfiguracja” na ekranie ustawień.";
+
 /* The section title of glucose overrides */
-"Overrides" = "Nadmiar";
+"Overrides" = "Pominięcia";
 
 /* Title for the pre-meal override range */
 "Pre-Meal" = "Przed posiłkiem";
 
+/* The section header text override presets */
+"PRESETS" = "USTAWIENIA WSTĘPNE";
+
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Zdarzenie pompy";
 
-/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
-"quantity-and-unit-space" = "%1$@ %2$@";
+/* The default placeholder string for a credential */
+"Required" = "Wymagane";
 
-/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
-"quantity-and-unit-tight" = "%1$@%2$@";
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Wznów podawanie";
 
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Wznawianie";
+
+/* The text for the override preset name field placeholder */
+"Running" = "Pracuje";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "Zapisz";
+
+/* The section header text for a scheduled override */
+"SCHEDULED OVERRIDE" = "ZAPLANOWANE POMINIĘCIE";
 
 /* Section title for slow absorbing food */
 "Slow" = "Wolna";
 
+/* The text for the override start time */
+"Start Time" = "Czas rozpoczęcia";
+
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Rozpoczynanie tymczasowej dawki podstawowej";
+
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Wstrzymaj podawanie";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Wstrzymywanie";
+
+/* The text for the override preset symbol setting */
+"Symbol" = "Symbol";
+
 /* The empty-state text for a configuration value */
 "Tap to set" = "Kliknij, aby ustawić";
 
-/* The default placeholder string for a credential */
-"text-placeholder-required" = "Wymagane";
+/* The text for the override target range setting */
+"Target Range" = "Zakres docelowy";
+
+/* The title for the override selection screen */
+"Temporary Override" = "Pominięcie tymczasowe";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Maksymalny czas absorpcji wynosi %@";
@@ -119,7 +237,8 @@
 /* The unit string for units */
 "Units" = "Jednostki";
 
-/* The default title to use when an entry has none */
+/* Accessibility value for an unknown value
+   The default title to use when an entry has none */
 "Unknown" = "Nieznany";
 
 /* Label indicating validation is occurring */

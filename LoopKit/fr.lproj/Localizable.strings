@@ -40,14 +40,23 @@
 /* Glucose trend flat */
 "Flat" = "Stable";
 
+/* The short unit display string for grams per U */
+"g/U" = "g/U";
+
 /* Generic pump error description */
 "Invalid Configuration" = "Configuration non valide";
 
 /* Recovery instruction for a certain bolus failure */
 "It is safe to retry" = "Il est prudent de réessayer";
 
-/* The short unit display string for millimoles of glucose per liter */
+/* The short unit display string for milligrams per deciliter per U */
+"mg/dL/U" = "mg/dL/U";
+
+/* The short unit display string for millimoles per liter */
 "mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per U */
+"mmol/L/U" = "mmol/L/U";
 
 /* Sensor state description for the non-valid state */
 "Needs Attention" = "Nécessite de l'attention";
@@ -61,12 +70,6 @@
 /* The error recovery suggestion when Health sharing was denied */
 "Please re-enable sharing in Health" = "Veuillez réactiver le partage dans l'application Santé";
 
-/* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
-"quantity-and-unit-space" = "%1$@ %2$@";
-
-/* Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit) */
-"quantity-and-unit-tight" = "%1$@%2$@";
-
 /* Glucose trend up */
 "Rising" = "Augmente";
 
@@ -79,6 +82,17 @@
 /* The short unit display string for international units of insulin */
 "U" = "U";
 
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "U/h";
+
+/* The long unit display string for a singular international unit of insulin */
+"Unit" = "Unité";
+
+/* The long unit display string for a singular international unit of insulin per hour */
+"Unit/hour" = "unité / heure";
+
 /* The long unit display string for international units of insulin */
 "Units" = "Unités";
 
+/* The long unit display string for international units of insulin per hour */
+"Units/hour" = "unités / heure";

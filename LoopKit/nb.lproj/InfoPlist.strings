@@ -1,9 +1,0 @@
-/* Bundle name */
-"CFBundleName" = "$(PRODUCT_NAME)";
-
-/* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "Matdata fra Health-databasen brukes til å bestemme blodsukkereffekt. Blodsukkerdata hentes fra HealthKit for opptegning og analyse.";
-
-/* Privacy - Health Update Usage Description */
-"NSHealthUpdateUsageDescription" = "Angitte karbohydrater i matdataene som tastes inn i appen blir lagret i Health-databasen.";
-

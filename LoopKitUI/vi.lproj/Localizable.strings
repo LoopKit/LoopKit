@@ -1,0 +1,252 @@
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ units vẫn còn lúc %2$@";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% của insulin bình thường";
+
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* Title of the carb entry absorption time cell */
+"Absorption Time" = "Thời gian Hấp thụ";
+
+/* The title for the override emoji activity section */
+"Activity" = "Hoạt động";
+
+/* Action sheet confirmation message for pump history deletion */
+"Are you sure you want to delete all history entries?" = "Bạn có chắc muốn xóa hết các dữ liệu cũ?";
+
+/* Action sheet confirmation message for reservoir deletion */
+"Are you sure you want to delete all reservoir values?" = "Bạn có chắc muốn xóa hết mọi giá trị của ngăn chứa insulin?";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Thêm Tài khoản";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Xóa Tài khoản";
+
+/* Describes a percentage decrease in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Liều Basal, bolus, và liều bổ sung đang giảm bằng %@%%.";
+
+/* Describes a percentage increase in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Liều Basal, bolus, và liều bổ sung đang tăng bằng %@%%.";
+
+/* Describes a lack of change in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "Liều Basal, bolus, và liều bổ sung không bị thay đổi.";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Hủy bỏ";
+
+/* The text for the override cancellation button */
+"Cancel Override" = "Hủy Chồng liều";
+
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Đang hủy liều Basal tạm thời";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Khai báo Carb";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Chỉnh sửa Carb";
+
+/* Footer text for customizing an override from a preset (1: preset name) */
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Các thay đổi sẽ chỉ áp dụng thời điểm này khi bạn cho phép chồng liều. Các cài đặt gốc %@ sẽ không bị ảnh hưởng.";
+
+/* Carb entry section footer text explaining absorption time */
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Lựa chọn khoảng thời gian tiêu hóa dài hơn cho các bữa ăn no, hoặc những bữa ăn nhiều chất béo và protein. Đây chỉ là hướng dẫn cho thuật toán Algorithm và không cần phải chính xác.";
+
+/* The format string describing the date of a COB value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.COBDateLabel" = "lúc %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.totalDateLabel" = "từ lúc %1$@";
+
+/* The format string describing the date of an IOB value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.IOBDateLabel" = "lúc %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.totalDateLabel" = "từ lúc %1$@";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* The title for the override emoji condition section */
+"Condition" = "Điều kiện";
+
+/* Title of the setup button to continue */
+"Continue" = "Tiếp tục";
+
+/* The section footer of correction range schedule */
+"Correction range is the blood glucose range that you would like Loop to correct to." = "Phạm vi điều chỉnh là phạm vi của đường huyết mà bạn muốn Loop hướng đến.";
+
+/* The text for a custom override */
+"Custom" = "Thói quen";
+
+/* The title for the custom override entry screen */
+"Custom Override" = "Thói quen Chồng liều";
+
+/* Title of the carb entry date picker cell */
+"Date" = "Ngày";
+
+/* Button title to delete all objects */
+"Delete All" = "Xóa hết";
+
+/* The text for the override duration setting */
+"Duration" = "Khoảng thời gian";
+
+/* The title for the override editing screen */
+"Edit Override" = "Hiệu chỉnh chồng liều";
+
+/* Footer text for editing an active override (1: preset name) */
+"Editing affects only the active override. The default settings of %@ will not be affected." = "Việc hiệu chỉnh chỉ ảnh hưởng đến chồng liều đang hoạt động. Các cài đặt gốc của %@ sẽ không bị ảnh hưởng.";
+
+/* The text for the indefinite override duration setting */
+"Enable Indefinitely" = "Cấp phép không giới hạn";
+
+/* The detail text describing an enabled setting */
+"Enabled" = "Được cấp quyền";
+
+/* The placeholder text instructing users how to enter a maximum bolus */
+"Enter a number of units" = "Nhập số lượng của đơn vị/units";
+
+/* The placeholder text instructing users how to enter a maximum basal rate */
+"Enter a rate in units per hour" = "Nhập tỉ lệ của đơn vị/units trên giờ";
+
+/* Section title for fast absorbing food */
+"Fast" = "Nhanh";
+
+/* The description shown on the insulin sensitivity schedule interface. */
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Độ nhạy của Insulin biểu thị đường huyết của bạn phản ứng với 1 unit insulin. Giá trị phản ứng nhỏ hơn nghĩa là bạn cần thêm insulin để đạt mục tiêu ở trên. Các giá trị quá nhỏ có thể dẫn đến tình trạng hạ đường huyết nghiêm trọng.";
+
+/* Placeholder for maximum value in glucose range */
+"max" = "tối đa";
+
+/* The title text for the maximum basal rate value */
+"Maximum Basal Rate" = "Lượng Basal tối đa";
+
+/* The title text for the maximum bolus value */
+"Maximum Bolus" = "Liều Bolus tối đa";
+
+/* Section title for medium absorbing food */
+"Medium" = "Trung bình";
+
+/* Placeholder for minimum value in glucose range */
+"min" = "tối thiểu";
+
+/* Alert action title to open error help */
+"More Info" = "Thêm thông tin";
+
+/* The text for the override preset name setting */
+"Name" = "Tên";
+
+/* The title for the new override preset entry screen */
+"New Preset" = "Cài đặt mới";
+
+/* Section title for no-carb food
+   The title for override emoji miscellaneous section */
+"Other" = "Khác";
+
+/* The title text for the insulin sensitivity scaling setting */
+"Overall Insulin Needs" = "Nhu cầu Insulin tổng thể";
+
+/* The title text for the override presets screen */
+"Override Presets" = "Cài đặt chồng liều";
+
+/* Text directing the user to configure override presets */
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Cài đặt chồng liều có thể được khai báo dưới mục 'Configuration' của phần cấu hình.";
+
+/* The section title of glucose overrides */
+"Overrides" = "Chồng liều";
+
+/* Title for the pre-meal override range */
+"Pre-Meal" = "Trước bữa ăn";
+
+/* The section header text override presets */
+"PRESETS" = "CÀI ĐẶT SĂN";
+
+/* The title of the screen displaying a pump event */
+"Pump Event" = "Pump Event";
+
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Tiếp tục lại việc tiêm insulin";
+
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Đang tiếp tục lại";
+
+/* The text for the override preset name field placeholder */
+"Running" = "Đang chạy";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "Lưu";
+
+/* The section header text for a scheduled override */
+"SCHEDULED OVERRIDE" = "SCHEDULED OVERRIDE";
+
+/* Section title for slow absorbing food */
+"Slow" = "chậm";
+
+/* The text for the override start time */
+"Start Time" = "Giờ bắt đầu";
+
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Đang bắt đầu liều Basal tạm thời";
+
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Tạm ngưng liều insulin";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Đang tạm ngưng";
+
+/* The text for the override preset symbol setting */
+"Symbol" = "Symbol";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Chạm để cài đặt";
+
+/* The text for the override target range setting */
+"Target Range" = "Phạm vi Mục tiêu";
+
+/* The title for the override selection screen */
+"Temporary Override" = "Chồng liều tạm thời";
+
+/* The default placeholder string for a credential */
+"Required" = "Bắt buộc";
+
+/* Alert body displayed absorption time greater than max (1: maximum absorption time) */
+"The maximum absorption time is %@" = "Thời gian tiêu hóa tối đa là  %@";
+
+/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
+"The maximum allowed amount is %@ grams" = "Khối lượng cho phép tối đa là %@ grams";
+
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "Thời gian trong %1$@%2$@%3$@";
+
+/* The unit string for units per hour */
+"U/hour" = "U/giờ";
+
+/* The unit string for units */
+"Units" = "Units";
+
+/* Accessibility value for an unknown value
+   The default title to use when an entry has none */
+"Unknown" = "Không nhận ra";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Đang kiểm tra";
+
+/* Title of an alert containing a validation warning */
+"Warning" = "Cảnh báo";
+
+/* Title for the workout override range */
+"Workout" = "Workout";

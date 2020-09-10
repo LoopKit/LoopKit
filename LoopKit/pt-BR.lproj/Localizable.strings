@@ -1,0 +1,98 @@
+/* Describes a certain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus failed" = "%1$@ U de bolus falhou";
+
+/* Describes an uncertain bolus failure (1: size of the bolus in units) */
+"%1$@ U bolus may not have succeeded" = "%1$@ U de bolus pode não ter tido sucesso";
+
+/* The error description describing when Health sharing was denied */
+"Authorization Denied" = "Autorização negada";
+
+/* Recovery instruction for an uncertain bolus failure */
+"Check your pump before retrying" = "Verifique sua bomba antes de tentar novamente";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorização negada";
+
+/* The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Este exemplo pode ser excluído do app Saúde";
+
+/* Generic pump error description */
+"Communication Failure" = "Falha de Comunicação";
+
+/* Generic pump error description */
+"Connection Failure" = "Falha na Conexão";
+
+/* Generic pump error description */
+"Device Refused" = "Dispositivo Recusado";
+
+/* Recovery suggestion for a no data error */
+"Ensure carb data exists for the specified date" = "Verifique se os dados de carboidratos existem na data especificada";
+
+/* Glucose trend down */
+"Falling" = "Caindo";
+
+/* Glucose trend down-down */
+"Falling fast" = "Caindo rápido";
+
+/* Glucose trend down-down-down */
+"Falling very fast" = "Caindo muito rápido";
+
+/* Glucose trend flat */
+"Flat" = "Estável";
+
+/* The short unit display string for grams per U */
+"g/U" = "g/U";
+
+/* Generic pump error description */
+"Invalid Configuration" = "Configuração Inválida";
+
+/* Recovery instruction for a certain bolus failure */
+"It is safe to retry" = "É seguro tentar novamente";
+
+/* The short unit display string for milligrams per deciliter per U */
+"mg/dL/U" = "mg/dL/U";
+
+/* The short unit display string for millimoles per liter */
+"mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per U */
+"mmol/L/U" = "mmol/L/U";
+
+/* Sensor state description for the non-valid state */
+"Needs Attention" = "Precisa de Atenção";
+
+/* Describes an error for no data found in a CarbStore request */
+"No values found" = "Nenhum valor encontrado";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
+
+/* The error recovery suggestion when Health sharing was denied */
+"Please re-enable sharing in Health" = "Reative o compartilhamento no app Saúde";
+
+/* Glucose trend up */
+"Rising" = "Subindo";
+
+/* Glucose trend up-up */
+"Rising fast" = "Subindo rápido";
+
+/* Glucose trend up-up-up */
+"Rising very fast" = "Subindo muito rápido";
+
+/* The short unit display string for international units of insulin */
+"U" = "U";
+
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "U/hr";
+
+/* The long unit display string for a singular international unit of insulin */
+"Unit" = "Unidade";
+
+/* The long unit display string for a singular international unit of insulin per hour */
+"Unit/hour" = "Unidade/hora";
+
+/* The long unit display string for international units of insulin */
+"Units" = "Unidades";
+
+/* The long unit display string for international units of insulin per hour */
+"Units/hour" = "Unidades/hora";
