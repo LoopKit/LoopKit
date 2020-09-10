@@ -8,7 +8,7 @@
 "bdP-2A-DB8.text" = "Mattype";
 
 /* Class = "UINavigationItem"; title = "Add/Edit Carb Entry"; ObjectID = "bM2-yI-YmX"; */
-"bM2-yI-YmX.title" = "Legg til/endre karbohydratoppføring";
+"bM2-yI-YmX.title" = "Legg til/endre karbohydrater";
 
 /* Class = "UILabel"; text = "g"; ObjectID = "D2S-2h-yH6"; */
 "D2S-2h-yH6.text" = "g";

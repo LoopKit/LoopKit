@@ -56,7 +56,7 @@
 "Flat" = "Gelijk";
 
 /* The short unit display string for grams per U */
-"g/U" = "g/U";
+"g/U" = "g/E";
 
 /* Title text for insulin model */
 "Insulin Model" = "Insuline model";
@@ -106,9 +106,6 @@
 /* Title for pre-meal mode */
 "Pre-Meal" = "Pre-Meal";
 
-/* Descriptive text for correction range overrides */
-"Pre-Meal and Workout ranges temporarily adjust your glucose target based on your selected activity." = "Pre-Meal en Workout passen tijdelijk uw glucose wenswaarde aan op basis van uw geselecteerde activiteit.";
-
 /* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
 "quantity-and-unit-space" = "%1$@ %2$@";
 
@@ -128,19 +125,13 @@
 "Suspend Threshold" = "Onderbrekingsdrempel";
 
 /* Description of pre-meal mode */
-"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes. This range can be set anywhere from your suspend threshold on the low end to the top of your regular correction range on the high end." = "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes. This range can be set anywhere from your suspend threshold on the low end to the top of your regular correction range on the high end.";
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes. This range can be set anywhere from your suspend threshold on the low end to the top of your regular correction range on the high end." = "Tijdelijk verlagen van uw glucosedoel voor een maaltijd om invloed te hebben op na de maaltijd glucose piek. Dit kan ingesteld worden van je onderbrekingsdrempel tot het maximum van je correctie bereik.";
 
 /* Description of workout mode */
-"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events. This range can be set anywhere from the top of your regular correction range on the low end to 180 mg/dL (10 mmol/L) on the high end." = "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events. This range can be set anywhere from the top of your regular correction range on the low end to 180 mg/dL (10 mmol/L) on the high end.";
-
-/* Title text for temporary correction ranges */
-"Temporary Correction Ranges" = "Temporary Correction Ranges";
-
-/* Title text for temporary correction ranges */
-"Temporary Ranges" = "Temporary Ranges";
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events. This range can be set anywhere from the top of your regular correction range on the low end to 180 mg/dL (10 mmol/L) on the high end." = "Tijdelijk verhogen van uw glucose doel voor, tijdens, of na fysieke activiteit om het risico van lage glucose gebeurtenissen te verminderen. Dit bereik kan overal worden ingesteld vanaf de bovenkant van uw reguliere correctiebereik aan de lage kant tot 180 mg/dL (10 mmol/L) aan de hoge kant.";
 
 /* Descriptive text for insulin model */
-"The app assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity." = "The app assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity.";
+"The app assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity." = "De app gaat ervan uit dat insuline 6 uur actief werkt. Je kan kiezen uit verschillende modellen voor hoe de app omgaat met de piekactiviteit van de insuline.";
 
 /* The short unit display string for international units of insulin */
 "U" = "E";
@@ -149,29 +140,29 @@
 "U/hr" = "E/hr";
 
 /* The long unit display string for a singular international unit of insulin */
-"Unit" = "Unit";
+"Unit" = "Eenheid";
 
 /* The long unit display string for a singular international unit of insulin per hour */
-"Unit/hour" = "Unit/hour";
+"Unit/hour" = "Eenheid/uur";
 
 /* The long unit display string for international units of insulin */
 "Units" = "Eenheden";
 
 /* The long unit display string for international units of insulin per hour */
-"Units/hour" = "Units/hour";
+"Units/hour" = "Eenheid/uur";
 
 /* Descriptive text for suspend threshold */
-"When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus." = "When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus.";
+"When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus." = "Wanneer je glucose wordt voorspeld onder deze waarde te gaan de app adviseert een basaalstand van 0 E/uur en adviseert geen bolus.";
 
 /* Title for workout mode */
-"Workout" = "Workout";
+"Workout" = "Training";
 
 /* Descriptive text for basal rate */
-"Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs.";
+"Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Uw basale snelheid van insuline is het aantal eenheden per uur dat u wilt gebruiken om uw standaard insuline behoeften te dekken.";
 
 /* Descriptive text for carb ratio */
-"Your carb ratio is the number of grams of carbohydrate covered by one unit of insulin." = "Your carb ratio is the number of grams of carbohydrate covered by one unit of insulin.";
+"Your carb ratio is the number of grams of carbohydrate covered by one unit of insulin." = "Jouw koolhydraten verhouding is het aantal gram gram koolhydraten dat gedekt wordt door één eenheid insuline.";
 
 /* Descriptive text for insulin sensitivity */
-"Your insulin sensitivities refer to the drop in glucose expected from one unit of insulin." = "Your insulin sensitivities refer to the drop in glucose expected from one unit of insulin.";
+"Your insulin sensitivities refer to the drop in glucose expected from one unit of insulin." = "Uw insuline gevoeligheden verwijzen naar de verwachte daling in glucose van één eenheid insuline.";
 

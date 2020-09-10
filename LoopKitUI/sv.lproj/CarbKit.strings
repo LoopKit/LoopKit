@@ -1,11 +1,11 @@
 /* Class = "UILabel"; text = "Authorize access to Health to continue"; ObjectID = "7xi-Om-Y53"; */
-"7xi-Om-Y53.text" = "Authorize access to Health to continue";
+"7xi-Om-Y53.text" = "Auktorisera åtkomst till Hälsa för att fortsätta";
 
 /* Class = "UIButton"; normalTitle = "Authorize"; ObjectID = "8sx-XB-DRV"; */
-"8sx-XB-DRV.normalTitle" = "Authorize";
+"8sx-XB-DRV.normalTitle" = "Auktorisera";
 
 /* Class = "UILabel"; text = "Food Type"; ObjectID = "bdP-2A-DB8"; */
-"bdP-2A-DB8.text" = "Food Type";
+"bdP-2A-DB8.text" = "Typ av mat";
 
 /* Class = "UINavigationItem"; title = "Add/Edit Carb Entry"; ObjectID = "bM2-yI-YmX"; */
 "bM2-yI-YmX.title" = "Lägg till/Ändra kolhydrater";
@@ -17,13 +17,13 @@
 "dyX-Zv-8wU.normalTitle" = "🍕";
 
 /* Class = "UILabel"; text = "Amount Consumed"; ObjectID = "K0S-my-3qL"; */
-"K0S-my-3qL.text" = "Amount Consumed";
+"K0S-my-3qL.text" = "Mängd";
 
 /* Class = "UILabel"; text = "..."; ObjectID = "lbE-wQ-pFK"; */
 "lbE-wQ-pFK.text" = "...";
 
 /* Class = "UILabel"; text = "Detail"; ObjectID = "m95-PG-bTq"; */
-"m95-PG-bTq.text" = "Detail";
+"m95-PG-bTq.text" = "Detalj";
 
 /* Class = "UIButton"; normalTitle = "🍽"; ObjectID = "Mde-by-DTA"; */
 "Mde-by-DTA.normalTitle" = "🍽";
@@ -35,10 +35,10 @@
 "NRZ-dT-iqj.text" = "Typ av mat";
 
 /* Class = "UILabel"; text = "HealthKit is not available on this device"; ObjectID = "nXh-BM-MuC"; */
-"nXh-BM-MuC.text" = "HealthKit is not available on this device";
+"nXh-BM-MuC.text" = "HealthKit är inte tillgänglig på den här enheten";
 
 /* Class = "UILabel"; text = "g Total"; ObjectID = "pHI-f4-pJp"; */
-"pHI-f4-pJp.text" = "g Total";
+"pHI-f4-pJp.text" = "g totalt";
 
 /* Class = "UINavigationItem"; title = "Carbohydrates"; ObjectID = "Qgq-n1-hm4"; */
 "Qgq-n1-hm4.title" = "Kolhydrater";
@@ -50,7 +50,7 @@
 "QZb-e1-xwb.text" = "g COB";
 
 /* Class = "UILabel"; text = "Title"; ObjectID = "vM9-H7-t3C"; */
-"vM9-H7-t3C.text" = "Title";
+"vM9-H7-t3C.text" = "Titel";
 
 /* Class = "UILabel"; text = "..."; ObjectID = "WZV-l9-Ek1"; */
 "WZV-l9-Ek1.text" = "...";

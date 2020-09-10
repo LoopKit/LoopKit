@@ -106,9 +106,6 @@
 /* Title for pre-meal mode */
 "Pre-Meal" = "Pre-Meal";
 
-/* Descriptive text for correction range overrides */
-"Pre-Meal and Workout ranges temporarily adjust your glucose target based on your selected activity." = "Pre-Meal and Workout ranges temporarily adjust your glucose target based on your selected activity.";
-
 /* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
 "quantity-and-unit-space" = "%1$@ %2$@";
 
@@ -132,12 +129,6 @@
 
 /* Description of workout mode */
 "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events. This range can be set anywhere from the top of your regular correction range on the low end to 180 mg/dL (10 mmol/L) on the high end." = "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events. This range can be set anywhere from the top of your regular correction range on the low end to 180 mg/dL (10 mmol/L) on the high end.";
-
-/* Title text for temporary correction ranges */
-"Temporary Correction Ranges" = "Temporary Correction Ranges";
-
-/* Title text for temporary correction ranges */
-"Temporary Ranges" = "Temporary Ranges";
 
 /* Descriptive text for insulin model */
 "The app assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity." = "The app assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity.";

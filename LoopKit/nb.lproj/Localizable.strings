@@ -35,7 +35,7 @@
 "Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin." = "Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin.";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Delivery Limits";
+"Delivery Limits" = "Leveringsgrenser";
 
 /* Generic pump error description */
 "Device Refused" = "Enheten nektet";
@@ -71,16 +71,16 @@
 "It is safe to retry" = "Det er trygt å prøve igjen";
 
 /* Title text for maximum basal rate configuration */
-"Maximum Basal Rate" = "Maximum Basal Rate";
+"Maximum Basal Rate" = "Maksimal basalrate";
 
 /* Descriptive text for maximum basal rate */
-"Maximum basal rate is the highest temporary basal rate Loop is allowed to set automatically." = "Maximum basal rate is the highest temporary basal rate Loop is allowed to set automatically.";
+"Maximum basal rate is the highest temporary basal rate Loop is allowed to set automatically." = "Maks basalrate er den høyeste midlertidige basalraten Loop kan angi automatisk.";
 
 /* Title text for maximum bolus configuration */
-"Maximum Bolus" = "Maximum Bolus";
+"Maximum Bolus" = "Maksimal bolus-dose";
 
 /* Descriptive text for maximum bolus */
-"Maximum bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maximum bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose.";
+"Maximum bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maks bolus er den største insulin-dosen som kan leveres på én gang for å dekke karbohydrater eller få ned høyt blodsukker.";
 
 /* The short unit display string for milligrams per deciliter per U */
 "mg/dL/U" = "mg/dL/E";
@@ -106,9 +106,6 @@
 /* Title for pre-meal mode */
 "Pre-Meal" = "Pre-Meal";
 
-/* Descriptive text for correction range overrides */
-"Pre-Meal and Workout ranges temporarily adjust your glucose target based on your selected activity." = "Pre-Meal and Workout ranges temporarily adjust your glucose target based on your selected activity.";
-
 /* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
 "quantity-and-unit-space" = "%1$@ %2$@";
 
@@ -132,12 +129,6 @@
 
 /* Description of workout mode */
 "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events. This range can be set anywhere from the top of your regular correction range on the low end to 180 mg/dL (10 mmol/L) on the high end." = "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events. This range can be set anywhere from the top of your regular correction range on the low end to 180 mg/dL (10 mmol/L) on the high end.";
-
-/* Title text for temporary correction ranges */
-"Temporary Correction Ranges" = "Temporary Correction Ranges";
-
-/* Title text for temporary correction ranges */
-"Temporary Ranges" = "Temporary Ranges";
 
 /* Descriptive text for insulin model */
 "The app assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity." = "The app assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity.";

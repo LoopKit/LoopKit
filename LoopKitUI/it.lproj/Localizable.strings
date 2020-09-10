@@ -71,12 +71,6 @@
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "A value of 0 U/hr means you will be scheduled to receive no basal insulin.";
 
-/* Warning for entering a high setting value in a schedule interface */
-"A value you have chosen is higher than is generally recommended." = "A value you have chosen is higher than is generally recommended.";
-
-/* Warning for entering a low setting value in a schedule interface */
-"A value you have chosen is lower than is generally recommended." = "A value you have chosen is lower than is generally recommended.";
-
 /* No comment provided by engineer. */
 "Above dynamic data" = "Above dynamic data";
 
@@ -382,19 +376,8 @@
 /* The title for the new override preset entry screen */
 "New Preset" = "Nuove impostazioni predefinite";
 
-/* Button to advance to setting editor */
-"Next: Review Setting" = "Next: Review Setting";
-
 /* Title text for the zero basal rate warning */
 "No Basal Insulin" = "No Basal Insulin";
-
-/* Alert message for confirming basal rates outside the recommended range
-   Alert message for confirming carb ratios outside the recommended range
-   Alert message for confirming correction range overrides outside the recommended range
-   Alert message for confirming correction ranges outside the recommended range
-   Alert message for confirming delivery limits outside the recommended range
-   Alert message for confirming insulin sensitivities outside the recommended range */
-"One or more of the values you have entered are outside of what is generally recommended." = "One or more of the values you have entered are outside of what is generally recommended.";
 
 /* Section title for no-carb food
    The title for override emoji miscellaneous section */
@@ -488,9 +471,6 @@
 /* Section title for slow absorbing food */
 "Slow" = "Lento";
 
-/* No comment provided by engineer. */
-"Some of the values you have entered are outside of what is generally recommended." = "Some of the values you have entered are outside of what is generally recommended.";
-
 /* Information about typical maximum basal rates */
 "Some users choose a value 2, 3, or 4 times their highest scheduled basal rate." = "Some users choose a value 2, 3, or 4 times their highest scheduled basal rate.";
 
@@ -551,24 +531,6 @@
 
 /* Information about basal rate scheduling */
 "The schedule starts at midnight and cannot contain a rate of 0 U/hr." = "The schedule starts at midnight and cannot contain a rate of 0 U/hr.";
-
-/* Alert message for confirming a suspend threshold outside the recommended range */
-"The suspend threshold you have entered is outside of what is generally recommended." = "The suspend threshold you have entered is outside of what is generally recommended.";
-
-/* Warning for entering a high setting value */
-"The value you have chosen is higher than is generally recommended." = "The value you have chosen is higher than is generally recommended.";
-
-/* Warning for entering a low setting value */
-"The value you have chosen is lower than is generally recommended." = "The value you have chosen is lower than is generally recommended.";
-
-/* Caption text for high maximum basal rate warning */
-"The value you have entered exceeds %@ times your highest scheduled basal rate of %@ U/hr, which is higher than is generally recommended." = "The value you have entered exceeds %1$@ times your highest scheduled basal rate of %2$@ U/hr, which is higher than is generally recommended.";
-
-/* Warning text for high pre-meal target value */
-"The value you have entered for this range is higher than your usual correction range. It is recommended that your pre-meal range be lower than your usual correction range." = "The value you have entered for this range is higher than your usual correction range. It is recommended that your pre-meal range be lower than your usual correction range.";
-
-/* Caption text for warning where both delivery limits are outside the recommended range */
-"The values you have entered are outside of what is generally recommended." = "The values you have entered are outside of what is generally recommended.";
 
 /* Therapy Settings screen title */
 "Therapy Settings" = "Therapy Settings";

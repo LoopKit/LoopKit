@@ -11,7 +11,7 @@
 "Basal Rate" = "Basalrater";
 
 /* Title text for carb ratios */
-"Carb Ratios" = "Kulhydrat ratios";
+"Carb Ratios" = "Kulhydratforhold";
 
 /* Recovery instruction for an uncertain bolus failure */
 "Check your pump before retrying" = "Check pumpen før du prøver igen";
@@ -26,7 +26,7 @@
 "Communication Failure" = "Kommunikations fejl";
 
 /* Generic pump error description */
-"Connection Failure" = "Forbindelses fejl";
+"Connection Failure" = "Forbindelsesfejl";
 
 /* Title text for glucose target range */
 "Correction Range" = "Korrektions interval";
@@ -35,7 +35,7 @@
 "Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin." = "Korrektionsinterval er den blodsukkerværdi (eller værdiinterval), som du vil have Loop til at sigte efter når din basal insulin justeres.";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Indgivningsgrænser";
+"Delivery Limits" = "Insulin-grænser";
 
 /* Generic pump error description */
 "Device Refused" = "Enhed nægtet";
@@ -44,7 +44,7 @@
 "Ensure carb data exists for the specified date" = "Sørg for at kulhydrat data findes for den angivne dato";
 
 /* Glucose trend down */
-"Falling" = "Falder";
+"Falling" = "Faldende";
 
 /* Glucose trend down-down */
 "Falling fast" = "Falder hurtigt";
@@ -59,10 +59,10 @@
 "g/U" = "g/E";
 
 /* Title text for insulin model */
-"Insulin Model" = "Insulin type";
+"Insulin Model" = "Insulinmodel";
 
 /* Title text for insulin sensitivity */
-"Insulin Sensitivities" = "Insulin følsomheder";
+"Insulin Sensitivities" = "Insulinfølsomheder";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Forkert indstilling";
@@ -80,7 +80,7 @@
 "Maximum Bolus" = "Maksimum bolus";
 
 /* Descriptive text for maximum bolus */
-"Maximum bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksimum bolus er den højeste bolus mængde du kan levere på én gang, som dækker dine kulhydratter eller bringer højt blodsukker ned.";
+"Maximum bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksimum bolus er den højeste bolus mængde du kan levere på én gang, som dækker dine kulhydrater eller bringer højt blodsukker ned.";
 
 /* The short unit display string for milligrams per deciliter per U */
 "mg/dL/U" = "mg/dL/E";
@@ -106,9 +106,6 @@
 /* Title for pre-meal mode */
 "Pre-Meal" = "Før-Måltid";
 
-/* Descriptive text for correction range overrides */
-"Pre-Meal and Workout ranges temporarily adjust your glucose target based on your selected activity." = "Før-måltid og trænings intervaller justere midlertidigt dit blodsukker mål baseret på din valgte aktivitet.";
-
 /* Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit) */
 "quantity-and-unit-space" = "%1$@ %2$@";
 
@@ -133,14 +130,8 @@
 /* Description of workout mode */
 "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events. This range can be set anywhere from the top of your regular correction range on the low end to 180 mg/dL (10 mmol/L) on the high end." = "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events. This range can be set anywhere from the top of your regular correction range on the low end to 180 mg/dL (10 mmol/L) on the high end.";
 
-/* Title text for temporary correction ranges */
-"Temporary Correction Ranges" = "Midlertidige korrektionsinterval";
-
-/* Title text for temporary correction ranges */
-"Temporary Ranges" = "Midlertidige intervaller";
-
 /* Descriptive text for insulin model */
-"The app assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity." = "Appen antager, at insulinen arbejder aktivt i 6 timer. Du kan vælge mellem forskellige modeller for, hvordan appen måler insulinets maksimale aktivitet.";
+"The app assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity." = "Appen antager, at insulinen arbejder aktivt i 6 timer. Du kan vælge mellem forskellige modeller for, hvordan app'en måler insulinets maksimale aktivitet.";
 
 /* The short unit display string for international units of insulin */
 "U" = "E";
