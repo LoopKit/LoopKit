@@ -209,9 +209,9 @@ public struct CorrectionRangeOverridesEditor: View {
         switch preset {
         case .preMeal:
             if let minValue = minValue {
-                return max(minValue, Guardrail.correctionRange.absoluteBounds.lowerBound)...correctionRangeScheduleRange.upperBound
+                return max(minValue, Guardrail.correctionRange.absoluteBounds.lowerBound)...Guardrail.correctionRange.absoluteBounds.upperBound
             } else {
-                return Guardrail.correctionRange.absoluteBounds.lowerBound...correctionRangeScheduleRange.upperBound
+                return Guardrail.correctionRange.absoluteBounds.lowerBound...Guardrail.correctionRange.absoluteBounds.upperBound
             }
         case .workout:
             if let minValue = minValue {
