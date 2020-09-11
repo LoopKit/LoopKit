@@ -46,6 +46,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         let textField = UITextField()
         textField.inputAccessoryView = makeDoneToolbar(for: textField)
         textField.addTarget(context.coordinator, action: #selector(Coordinator.textChanged), for: .editingChanged)
+        textField.addTarget(context.coordinator, action: #selector(Coordinator.editingDidBegin), for: .editingDidBegin)
         return textField
     }
 
@@ -94,6 +95,27 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
 
         @objc fileprivate func textChanged(_ textField: UITextField) {
             parent.text = textField.text ?? ""
+        }
+        
+        @objc fileprivate func editingDidBegin(_ textField: UITextField) {
+            textField.moveCursorToEnd()
+        }
+    }
+}
+
+fileprivate extension UITextField {
+    
+    func moveCursorToEnd() {
+        DispatchQueue.main.async {
+            let newPosition = self.endOfDocument
+            self.selectedTextRange = self.textRange(from: newPosition, to: newPosition)
+        }
+    }
+    
+    func moveCursorToBeginning() {
+        DispatchQueue.main.async {
+            let newPosition = self.beginningOfDocument
+            self.selectedTextRange = self.textRange(from: newPosition, to: newPosition)
         }
     }
 }
