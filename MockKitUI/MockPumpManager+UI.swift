@@ -7,39 +7,57 @@
 //
 
 import Foundation
+import SwiftUI
 import LoopKit
 import LoopKitUI
 import MockKit
 
 
 extension MockPumpManager: PumpManagerUI {
-    public static func setupViewController() -> (UIViewController & CompletionNotifying & PumpManagerSetupViewController) {
+    private var appName: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
+    }
+    
+    public var smallImage: UIImage? { return UIImage(named: "Pump Simulator", in: Bundle(for: MockPumpManagerSettingsViewController.self), compatibleWith: nil) }
+    
+    public static func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying & PumpManagerSetupViewController) {
         return MockPumpManagerSetupViewController.instantiateFromStoryboard()
     }
 
-    public func settingsViewController() -> (UIViewController & CompletionNotifying) {
+    public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
         let settings = MockPumpManagerSettingsViewController(pumpManager: self)
         let nav = SettingsNavigationViewController(rootViewController: settings)
         return nav
     }
-
-    public var smallImage: UIImage? {
-        return UIImage(named: "Simulator Small", in: Bundle(for: MockPumpManagerSettingsViewController.self), compatibleWith: nil)
+    
+    public func deliveryUncertaintyRecoveryViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
+        return DeliveryUncertaintyRecoveryViewController(appName: appName, uncertaintyStartedAt: Date()) {
+            self.state.deliveryCommandsShouldTriggerUncertainDelivery = false
+            self.state.deliveryIsUncertain = false
+        }
     }
 
-    public func hudProvider() -> HUDProvider? {
+    public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider? {
         return MockHUDProvider(pumpManager: self)
     }
 
-    public static func createHUDViews(rawValue: [String : Any]) -> [BaseHUDView] {
-        return MockHUDProvider.createHUDViews(rawValue: rawValue)
+    public static func createHUDView(rawValue: [String : Any]) -> LevelHUDView? {
+        return MockHUDProvider.createHUDView(rawValue: rawValue)
     }
+    
+    
 }
 
 // MARK: - DeliveryLimitSettingsTableViewControllerSyncSource
 extension MockPumpManager {
     public func syncDeliveryLimitSettings(for viewController: DeliveryLimitSettingsTableViewController, completion: @escaping (DeliveryLimitSettingsResult) -> Void) {
-        completion(.success(maximumBasalRatePerHour: viewController.maximumBasalRatePerHour ?? 5.0, maximumBolus: viewController.maximumBolus ?? 25.0))
+        guard let maximumBasalRatePerHour = viewController.maximumBasalRatePerHour,
+            let maximumBolus = viewController.maximumBolus else
+        {
+            completion(.failure(MockPumpManagerError.missingSettings))
+            return
+        }
+        completion(.success(maximumBasalRatePerHour: maximumBasalRatePerHour, maximumBolus: maximumBolus))
     }
 
     public func syncButtonTitle(for viewController: DeliveryLimitSettingsTableViewController) -> String {

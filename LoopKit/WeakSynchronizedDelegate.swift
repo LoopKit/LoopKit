@@ -42,7 +42,7 @@ public class WeakSynchronizedDelegate<Delegate> {
             }
         }
     }
-
+    
     public func notify(_ block: @escaping (_ delegate: Delegate?) -> Void) {
         var delegate: Delegate?
         var queue: DispatchQueue!
@@ -53,6 +53,20 @@ public class WeakSynchronizedDelegate<Delegate> {
         }
 
         queue.async {
+            block(delegate)
+        }
+    }
+    
+    public func notifyDelayed(by interval: TimeInterval, _ block: @escaping (_ delegate: Delegate?) -> Void) {
+        var delegate: Delegate?
+        var queue: DispatchQueue!
+
+        lock.withLock {
+            delegate = _delegate as? Delegate
+            queue = _queue
+        }
+
+        queue.asyncAfter(deadline: .now() + interval) {
             block(delegate)
         }
     }

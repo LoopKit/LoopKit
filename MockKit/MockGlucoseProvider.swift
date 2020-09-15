@@ -75,6 +75,7 @@ extension MockGlucoseProvider {
             date: date,
             quantity: quantity,
             isDisplayOnly: false,
+            wasUserEntered: false,
             syncIdentifier: UUID().uuidString,
             device: MockCGMDataSource.device
         )
@@ -190,6 +191,7 @@ private extension CGMResult {
                     date: sample.date,
                     quantity: transform(sample.quantity),
                     isDisplayOnly: sample.isDisplayOnly,
+                    wasUserEntered: sample.wasUserEntered,
                     syncIdentifier: sample.syncIdentifier,
                     syncVersion: sample.syncVersion,
                     device: sample.device

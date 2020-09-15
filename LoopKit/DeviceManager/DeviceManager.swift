@@ -8,7 +8,9 @@
 import Foundation
 import UserNotifications
 
-public protocol DeviceManagerDelegate {
+public protocol DeviceManagerDelegate: AlertPresenter {
+    // Begin obsolescent code
+    // Note: once all plugins are updated to use the new alert system instead of Notifications, this can be removed.
     func scheduleNotification(for manager: DeviceManager,
                               identifier: String,
                               content: UNNotificationContent,
@@ -16,10 +18,13 @@ public protocol DeviceManagerDelegate {
 
     func clearNotification(for manager: DeviceManager, identifier: String)
     
+    func removeNotificationRequests(for manager: DeviceManager, identifiers: [String])
+    // End obsolescent code
+    
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 }
 
-public protocol DeviceManager: class, CustomDebugStringConvertible {
+public protocol DeviceManager: CustomDebugStringConvertible, AlertResponder, AlertSoundVendor {
     typealias RawStateValue = [String: Any]
 
     /// The identifier of the manager. This should be unique
@@ -34,7 +39,7 @@ public protocol DeviceManager: class, CustomDebugStringConvertible {
     /// The queue on which delegate methods are called
     /// Setting to nil resets to a default provided by the manager
     var delegateQueue: DispatchQueue! { get set }
-
+    
     /// Initializes the manager with its previously-saved state
     ///
     /// Return nil if the saved state is invalid to prevent restoration
@@ -50,5 +55,10 @@ public protocol DeviceManager: class, CustomDebugStringConvertible {
 public extension DeviceManager {
     var localizedTitle: String {
         return type(of: self).localizedTitle
+    }
+    
+    /// Represents a per-device-manager-Type identifier that can uniquely identify a class of this type.
+    var managerIdentifier: String {
+        return Self.managerIdentifier
     }
 }

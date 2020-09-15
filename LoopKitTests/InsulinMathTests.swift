@@ -111,6 +111,7 @@ class InsulinMathTests: XCTestCase {
                 endDate: dateFormatter.date(from: $0["end_at"] as! String)!,
                 value: $0["amount"] as! Double,
                 unit: unit,
+                deliveredUnits: $0["delivered"] as? Double,
                 description: $0["description"] as? String,
                 syncIdentifier: $0["raw"] as? String
             )
@@ -277,6 +278,7 @@ class InsulinMathTests: XCTestCase {
     
     func testInsulinOnBoardLimitsForExponentialModel() {
         let insulinModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75), delay: TimeInterval(minutes: 0))
+        let childModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 65), delay: TimeInterval(minutes: 0))
         
         XCTAssertEqual(1, insulinModel.percentEffectRemaining(at: .minutes(-1)), accuracy: 0.001)
         XCTAssertEqual(1, insulinModel.percentEffectRemaining(at: .minutes(0)), accuracy: 0.001)
@@ -285,6 +287,9 @@ class InsulinMathTests: XCTestCase {
         
         // Test random point
         XCTAssertEqual(0.5110493617156, insulinModel.percentEffectRemaining(at: .minutes(108)), accuracy: 0.001)
+        
+        // Test for child curve
+        XCTAssertEqual(0.6002510111374046, childModel.percentEffectRemaining(at: .minutes(82)), accuracy: 0.001)
 
     }
     
@@ -448,7 +453,6 @@ class InsulinMathTests: XCTestCase {
     func testGlucoseEffectFromBolus() {
         let input = loadDoseFixture("bolus_dose")
         let output = loadGlucoseEffectFixture("effect_from_bolus_output")
-        let insulinSensitivitySchedule = self.insulinSensitivitySchedule
         let insulinModel = WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
 
         measure {
@@ -468,7 +472,6 @@ class InsulinMathTests: XCTestCase {
     func testGlucoseEffectFromShortTempBasal() {
         let input = loadDoseFixture("short_basal_dose")
         let output = loadGlucoseEffectFixture("effect_from_bolus_output")
-        let insulinSensitivitySchedule = self.insulinSensitivitySchedule
         let insulinModel = WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
 
         measure {
@@ -488,7 +491,6 @@ class InsulinMathTests: XCTestCase {
     func testGlucoseEffectFromTempBasal() {
         let input = loadDoseFixture("basal_dose")
         let output = loadGlucoseEffectFixture("effect_from_basal_output")
-        let insulinSensitivitySchedule = self.insulinSensitivitySchedule
         let insulinModel = WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
 
         measure {
@@ -504,11 +506,25 @@ class InsulinMathTests: XCTestCase {
             XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), accuracy: 1.0, String(describing: expected.startDate))
         }
     }
+    
+    func testGlucoseEffectFromTempBasalExponential() {
+        let input = loadDoseFixture("basal_dose_with_delivered")
+        let output = loadGlucoseEffectFixture("effect_from_basal_output_exponential")
+        let insulinModel = ExponentialInsulinModel(actionDuration: 21600.0, peakActivityTime: 4500.0)
+
+        let effects = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+
+        XCTAssertEqual(output.count, effects.count)
+
+        for (expected, calculated) in zip(output, effects) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), accuracy: 1.0, String(describing: expected.startDate))
+        }
+    }
 
     func testGlucoseEffectFromHistory() {
         let input = loadDoseFixture("normalized_doses")
         let output = loadGlucoseEffectFixture("effect_from_history_output")
-        let insulinSensitivitySchedule = self.insulinSensitivitySchedule
         let insulinModel = WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
 
         measure {
@@ -527,7 +543,6 @@ class InsulinMathTests: XCTestCase {
 
     func testGlucoseEffectFromNoDoses() {
         let input: [DoseEntry] = []
-        let insulinSensitivitySchedule = self.insulinSensitivitySchedule
         let insulinModel = WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
 
         let effects = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)

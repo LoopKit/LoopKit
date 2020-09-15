@@ -15,6 +15,11 @@ open class QuantityFormatter {
     public init() {
     }
 
+    public convenience init(for unit: HKUnit) {
+        self.init()
+        setPreferredNumberFormatter(for: unit)
+    }
+
     /// The unit style determines how the unit strings are abbreviated, and spacing between the value and unit
     open var unitStyle: Formatter.UnitStyle = .medium {
         didSet {
@@ -46,7 +51,7 @@ open class QuantityFormatter {
     open func setPreferredNumberFormatter(for unit: HKUnit) {
         numberFormatter.numberStyle = .decimal
         numberFormatter.minimumFractionDigits = unit.preferredFractionDigits
-        numberFormatter.maximumFractionDigits = unit.preferredFractionDigits
+        numberFormatter.maximumFractionDigits = unit.maxFractionDigits
     }
 
     private var hasNumberFormatter = false
@@ -143,6 +148,17 @@ public extension HKUnit {
             return 1
         } else {
             return 0
+        }
+    }
+
+    var maxFractionDigits: Int {
+        switch self {
+        case .internationalUnit(), .internationalUnitsPerHour:
+            return 3
+        case HKUnit.gram().unitDivided(by: .internationalUnit()):
+            return 2
+        default:
+            return preferredFractionDigits
         }
     }
 

@@ -20,6 +20,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
     init(pumpManager: MockPumpManager) {
         self.pumpManager = pumpManager
         super.init(style: .grouped)
+        title = NSLocalizedString("Pump Settings", comment: "Title for Pump simulator settings")
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -31,14 +32,14 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Pump Settings"
-
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
 
         tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.estimatedSectionHeaderHeight = 55
 
+        tableView.register(DateAndDurationTableViewCell.nib(), forCellReuseIdentifier: DateAndDurationTableViewCell.className)
+        tableView.register(SegmentedControlTableViewCell.self, forCellReuseIdentifier: SegmentedControlTableViewCell.className)
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
         tableView.register(BoundSwitchTableViewCell.self, forCellReuseIdentifier: BoundSwitchTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
@@ -68,20 +69,33 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
     private enum Section: Int, CaseIterable {
         case actions = 0
         case settings
+        case statusProgress
         case deletePump
     }
 
     private enum ActionRow: Int, CaseIterable {
         case suspendResume = 0
+        case occlusion
+        case pumpError
     }
 
     private enum SettingsRow: Int, CaseIterable {
-        case reservoirRemaining = 0
+        case deliverableIncrements = 0
+        case reservoirRemaining
         case batteryRemaining
         case tempBasalErrorToggle
         case bolusErrorToggle
+        case bolusCancelErrorToggle
         case suspendErrorToggle
         case resumeErrorToggle
+        case uncertainDeliveryErrorToggle
+        case lastReconciliationDate
+    }
+    
+    private enum StatusProgressRow: Int, CaseIterable {
+        case percentComplete
+        case warningThreshold
+        case criticalThreshold
     }
 
     // MARK: UITableViewDataSource
@@ -96,6 +110,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             return ActionRow.allCases.count
         case .settings:
             return SettingsRow.allCases.count
+        case .statusProgress:
+            return StatusProgressRow.allCases.count
         case .deletePump:
             return 1
         }
@@ -107,6 +123,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             return nil
         case .settings:
             return "Configuration"
+        case .statusProgress:
+            return "Status Progress"
         case .deletePump:
             return " "  // Use an empty string for more dramatic spacing
         }
@@ -120,9 +138,44 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: SuspendResumeTableViewCell.className, for: indexPath) as! SuspendResumeTableViewCell
                 cell.basalDeliveryState = pumpManager.status.basalDeliveryState
                 return cell
+            case .occlusion:
+                let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
+                if pumpManager.state.occlusionDetected {
+                    cell.textLabel?.text = "Resolve Occlusion"
+                } else {
+                    cell.textLabel?.text = "Detect Occlusion"
+                }
+                return cell
+            case .pumpError:
+                let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
+                if pumpManager.state.pumpErrorDetected {
+                    cell.textLabel?.text = "Resolve Pump Error"
+                } else {
+                    cell.textLabel?.text = "Cause Pump Error"
+                }
+                return cell
             }
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
+            case .deliverableIncrements:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SegmentedControlTableViewCell.className, for: indexPath) as! SegmentedControlTableViewCell
+                let possibleDeliverableIncrements = MockPumpManagerState.DeliverableIncrements.allCases
+                cell.textLabel?.text = "Increments"
+                cell.options = possibleDeliverableIncrements.map { increments in
+                    switch increments {
+                    case .omnipod:
+                        return "Pod"
+                    case .medtronicX22:
+                        return "x22"
+                    case .medtronicX23:
+                        return "x23"
+                    }
+                }
+                cell.segmentedControl.selectedSegmentIndex = possibleDeliverableIncrements.firstIndex(of: pumpManager.state.deliverableIncrements)!
+                cell.onSelection { [pumpManager] index in
+                    pumpManager.state.deliverableIncrements = possibleDeliverableIncrements[index]
+                }
+                return cell
             case .reservoirRemaining:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = "Reservoir Remaining"
@@ -143,11 +196,52 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 return switchTableViewCell(for: indexPath, titled: "Error on Temp Basal", boundTo: \.tempBasalEnactmentShouldError)
             case .bolusErrorToggle:
                 return switchTableViewCell(for: indexPath, titled: "Error on Bolus", boundTo: \.bolusEnactmentShouldError)
+            case .bolusCancelErrorToggle:
+                return switchTableViewCell(for: indexPath, titled: "Error on Cancel Bolus", boundTo: \.bolusCancelShouldError)
             case .suspendErrorToggle:
                 return switchTableViewCell(for: indexPath, titled: "Error on Suspend", boundTo: \.deliverySuspensionShouldError)
             case .resumeErrorToggle:
                 return switchTableViewCell(for: indexPath, titled: "Error on Resume", boundTo: \.deliveryResumptionShouldError)
+            case .uncertainDeliveryErrorToggle:
+                return switchTableViewCell(for: indexPath, titled: "Next Delivery Command Uncertain", boundTo: \.deliveryCommandsShouldTriggerUncertainDelivery)
+            case .lastReconciliationDate:
+                let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
+                cell.titleLabel.text = "Last Reconciliation Date"
+                cell.date = pumpManager.lastReconciliation ?? Date()
+                cell.datePicker.maximumDate = Date()
+                cell.datePicker.minimumDate = Date() - .hours(48)
+                cell.datePicker.datePickerMode = .dateAndTime
+                cell.datePicker.isEnabled = true
+                cell.delegate = self
+                return cell
             }
+        case .statusProgress:
+            let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+            switch StatusProgressRow(rawValue: indexPath.row)! {
+            case .percentComplete:
+                cell.textLabel?.text = "Percent Completed"
+                if let percentCompleted = pumpManager.state.progressPercentComplete {
+                    cell.detailTextLabel?.text = "\(Int(round(percentCompleted * 100)))%"
+                } else {
+                    cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
+                }
+            case .warningThreshold:
+                cell.textLabel?.text = "Warning Threshold"
+                if let warningThreshold = pumpManager.state.progressWarningThresholdPercentValue {
+                    cell.detailTextLabel?.text = "\(Int(round(warningThreshold * 100)))%"
+                } else {
+                    cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
+                }
+            case .criticalThreshold:
+                cell.textLabel?.text = "Critical Threshold"
+                if let criticalThreshold = pumpManager.state.progressCriticalThresholdPercentValue {
+                    cell.detailTextLabel?.text = "\(Int(round(criticalThreshold * 100)))%"
+                } else {
+                    cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
+                }
+            }
+            cell.accessoryType = .disclosureIndicator
+            return cell
         case .deletePump:
             let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
             cell.textLabel?.text = "Delete Pump"
@@ -179,9 +273,19 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                     suspendResumeCellTapped(suspendResumeCell)
                 }
                 tableView.deselectRow(at: indexPath, animated: true)
+            case .occlusion:
+                pumpManager.state.occlusionDetected = !pumpManager.state.occlusionDetected
+                tableView.deselectRow(at: indexPath, animated: true)
+                tableView.reloadRows(at: [indexPath], with: .automatic)
+            case .pumpError:
+                pumpManager.state.pumpErrorDetected = !pumpManager.state.pumpErrorDetected
+                tableView.deselectRow(at: indexPath, animated: true)
+                tableView.reloadRows(at: [indexPath], with: .automatic)
             }
         case .settings:
             switch SettingsRow(rawValue: indexPath.row)! {
+            case .deliverableIncrements:
+                break
             case .reservoirRemaining:
                 let vc = TextFieldTableViewController()
                 vc.value = String(format: "%.1f", pumpManager.state.reservoirUnitsRemaining)
@@ -196,9 +300,26 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 vc.indexPath = indexPath
                 vc.percentageDelegate = self
                 show(vc, sender: sender)
-            case .tempBasalErrorToggle, .bolusErrorToggle, .suspendErrorToggle, .resumeErrorToggle:
+            case .tempBasalErrorToggle, .bolusErrorToggle, .bolusCancelErrorToggle, .suspendErrorToggle, .resumeErrorToggle, .uncertainDeliveryErrorToggle:
                 break
+            case .lastReconciliationDate:
+                tableView.deselectRow(at: indexPath, animated: true)
+                tableView.beginUpdates()
+                tableView.endUpdates()
             }
+        case .statusProgress:
+            let vc = PercentageTextFieldTableViewController()
+            vc.indexPath = indexPath
+            vc.percentageDelegate = self
+            switch StatusProgressRow(rawValue: indexPath.row)! {
+            case .percentComplete:
+                vc.percentage = pumpManager.state.progressPercentComplete
+            case .warningThreshold:
+                vc.percentage = pumpManager.state.progressWarningThresholdPercentValue
+            case .criticalThreshold:
+                vc.percentage = pumpManager.state.progressCriticalThresholdPercentValue
+            }
+            show(vc, sender: sender)
         case .deletePump:
             let confirmVC = UIAlertController(pumpDeletionHandler: {
                 self.pumpManager.notifyDelegateOfDeactivation {
@@ -236,6 +357,41 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             }
         }
     }
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        switch Section(rawValue: indexPath.section)! {
+        case .settings:
+            switch SettingsRow(rawValue: indexPath.row)! {
+            case .lastReconciliationDate:
+                
+                let resetAction = UIContextualAction(style: .normal, title:  "Reset") {[weak self] _,_,_ in
+                    self?.pumpManager.testLastReconciliation = nil
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
+                resetAction.backgroundColor = .systemRed
+                return UISwipeActionsConfiguration(actions: [resetAction])
+            default:
+                break
+            }
+        default:
+            break
+        }
+        return nil
+    }
+    
+}
+
+extension MockPumpManagerSettingsViewController: DatePickerTableViewCellDelegate {
+    func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
+        guard let row = tableView.indexPath(for: cell)?.row else { return }
+
+        switch SettingsRow(rawValue: row) {
+        case .lastReconciliationDate?:
+            pumpManager.testLastReconciliation = cell.date
+        default:
+            break
+        }
+    }
 }
 
 extension MockPumpManagerSettingsViewController: PumpManagerStatusObserver {
@@ -270,10 +426,27 @@ extension MockPumpManagerSettingsViewController: TextFieldTableViewControllerDel
 
 extension MockPumpManagerSettingsViewController: PercentageTextFieldTableViewControllerDelegate {
     func percentageTextFieldTableViewControllerDidChangePercentage(_ controller: PercentageTextFieldTableViewController) {
-        guard let indexPath = controller.indexPath else { assertionFailure(); return }
-        assert(indexPath == [Section.settings.rawValue, SettingsRow.batteryRemaining.rawValue])
-        pumpManager.pumpBatteryChargeRemaining = controller.percentage.map { $0.clamped(to: 0...1) }
-        tableView.reloadRows(at: [indexPath], with: .automatic)
+        guard let indexPath = controller.indexPath else {
+            assertionFailure()
+            return
+        }
+
+        switch indexPath {
+        case [Section.settings.rawValue, SettingsRow.batteryRemaining.rawValue]:
+            pumpManager.pumpBatteryChargeRemaining = controller.percentage.map { $0.clamped(to: 0...1) }
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        case [Section.statusProgress.rawValue, StatusProgressRow.percentComplete.rawValue]:
+            pumpManager.state.progressPercentComplete = controller.percentage.map { $0.clamped(to: 0...1) }
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        case [Section.statusProgress.rawValue, StatusProgressRow.warningThreshold.rawValue]:
+            pumpManager.state.progressWarningThresholdPercentValue = controller.percentage.map { $0.clamped(to: 0...1) }
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        case [Section.statusProgress.rawValue, StatusProgressRow.criticalThreshold.rawValue]:
+            pumpManager.state.progressCriticalThresholdPercentValue = controller.percentage.map { $0.clamped(to: 0...1) }
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        default:
+            assertionFailure()
+        }
     }
 }
 

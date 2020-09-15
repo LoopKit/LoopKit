@@ -24,3 +24,13 @@ extension DeviceLogEntry {
     @NSManaged public var timestamp: Date?
 
 }
+
+extension DeviceLogEntry {
+    func update(from entry: StoredDeviceLogEntry) {
+        type = entry.type
+        managerIdentifier = entry.managerIdentifier
+        deviceIdentifier = entry.deviceIdentifier
+        message = entry.message
+        timestamp = entry.timestamp
+    }
+}

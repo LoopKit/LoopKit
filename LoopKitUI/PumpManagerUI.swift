@@ -6,22 +6,25 @@
 //
 
 import UIKit
+import SwiftUI
 import LoopKit
 
-public protocol PumpManagerUI: PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
+public protocol PumpManagerUI: DeviceManagerUI, PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
     
-    static func setupViewController() -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying)
+    // View for initial setup of device.
+    static func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & PumpManagerSetupViewController & CompletionNotifying)
 
-    func settingsViewController() -> (UIViewController & CompletionNotifying)
-    
-    // An image representing the pump configuration
-    var smallImage: UIImage? { get }
-    
+    // View for managing device after initial setup
+    func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying)
+
+    // View for recovering from delivery uncertainty
+    func deliveryUncertaintyRecoveryViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying)
+
     // Returns a class that can provide HUD views
-    func hudProvider() -> HUDProvider?
+    func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider?
     
-    // Instantiates HUD views from the raw state returned by hudViewsRawState
-    static func createHUDViews(rawValue: HUDProvider.HUDViewsRawState) -> [BaseHUDView]
+    // Instantiates HUD view (typically reservoir volume) from the raw state returned by hudViewRawState
+    static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView?
 }
 
 

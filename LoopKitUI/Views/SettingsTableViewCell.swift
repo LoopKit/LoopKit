@@ -37,5 +37,6 @@ public class SettingsTableViewCell: UITableViewCell {
         accessoryType = .none
         textLabel?.text = nil
         detailTextLabel?.text = nil
+        accessoryView = nil
     }
 }

@@ -15,12 +15,14 @@ public struct GlucoseFixtureValue: GlucoseSampleValue {
     public let startDate: Date
     public let quantity: HKQuantity
     public let isDisplayOnly: Bool
+    public let wasUserEntered: Bool
     public let provenanceIdentifier: String
 
-    public init(startDate: Date, quantity: HKQuantity, isDisplayOnly: Bool, provenanceIdentifier: String?) {
+    public init(startDate: Date, quantity: HKQuantity, isDisplayOnly: Bool, wasUserEntered: Bool, provenanceIdentifier: String?) {
         self.startDate = startDate
         self.quantity = quantity
         self.isDisplayOnly = isDisplayOnly
+        self.wasUserEntered = wasUserEntered
         self.provenanceIdentifier = provenanceIdentifier ?? "com.loopkit.LoopKitTests"
     }
 }
@@ -35,6 +37,7 @@ extension GlucoseFixtureValue: Comparable {
         return lhs.startDate == rhs.startDate &&
                lhs.quantity == rhs.quantity &&
                lhs.isDisplayOnly == rhs.isDisplayOnly &&
+               lhs.wasUserEntered == rhs.wasUserEntered &&
                lhs.provenanceIdentifier == rhs.provenanceIdentifier
     }
 }
@@ -69,6 +72,7 @@ class GlucoseMathTests: XCTestCase {
                 startDate: dateFormatter.date(from: $0["date"] as! String)!,
                 quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliter, doubleValue: $0["amount"] as! Double),
                 isDisplayOnly: ($0["display_only"] as? Bool) ?? false,
+                wasUserEntered: ($0["user_entered"] as? Bool) ?? false,
                 provenanceIdentifier: $0["provenance_identifier"] as? String
             )
         }

@@ -158,7 +158,7 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
             RepeatingScheduleValue(startTime: .hours(2), value: 1.8),
             RepeatingScheduleValue(startTime: .hours(5), value: 1.2),
             RepeatingScheduleValue(startTime: .hours(6), value: 2.8),
-            RepeatingScheduleValue(startTime: .hours(8), value: 1.4),
+            RepeatingScheduleValue(startTime: .hours(10), value: 1.4),
             RepeatingScheduleValue(startTime: .hours(20), value: 1.0)
         ])!
 
@@ -206,8 +206,8 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
         let expected = BasalRateSchedule(dailyItems: [
             RepeatingScheduleValue(startTime: .hours(0), value: 1.8),
             RepeatingScheduleValue(startTime: .hours(6), value: 2.1),
-            RepeatingScheduleValue(startTime: .hours(10), value: 1.4),
-            RepeatingScheduleValue(startTime: .hours(18), value: 2.1),
+            RepeatingScheduleValue(startTime: .hours(12), value: 1.4),
+            RepeatingScheduleValue(startTime: .hours(16), value: 2.1),
             RepeatingScheduleValue(startTime: .hours(20), value: 1.5)
         ])!
 
@@ -221,11 +221,8 @@ final class TemporaryScheduleOverrideHistoryTests: XCTestCase {
             RepeatingScheduleValue(startTime: .hours(0), value: 1.8),
             RepeatingScheduleValue(startTime: .hours(4), value: 1.2),
             RepeatingScheduleValue(startTime: .hours(6), value: 1.4),
-            RepeatingScheduleValue(startTime: .hours(20), value: 1.0),
-            RepeatingScheduleValue(startTime: .hours(22), value: 1.5),
+            RepeatingScheduleValue(startTime: .hours(20), value: 1.5),
         ])!
-
-        print(expected)
 
         XCTAssert(historyResolves(to: expected, referenceDateOffset: .hours(6)))
     }

@@ -24,6 +24,7 @@ class PersistenceControllerTests: PersistenceControllerTestCase {
                 glucose.startDate = Date()
                 glucose.provenanceIdentifier = "PersistenceControllerTests"
                 glucose.isDisplayOnly = false
+                glucose.wasUserEntered = false
             }
 
             let predicate = NSPredicate(format: "value < %d", 100)
@@ -51,6 +52,7 @@ class PersistenceControllerTests: PersistenceControllerTestCase {
                 glucose.startDate = Date()
                 glucose.provenanceIdentifier = "PersistenceControllerTests"
                 glucose.isDisplayOnly = false
+                glucose.wasUserEntered = false
             }
 
             try! cacheStore.managedObjectContext.save()

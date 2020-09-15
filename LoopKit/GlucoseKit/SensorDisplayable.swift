@@ -21,6 +21,9 @@ public protocol SensorDisplayable {
 
     /// Returns whether the data is from a locally-connected device
     var isLocal: Bool { get }
+    
+    /// enumerates the glucose value type (e.g., normal, low, high)
+    var glucoseValueType: GlucoseValueType? { get }
 }
 
 

@@ -18,3 +18,5 @@ public struct InsulinValue: TimelineValue, Equatable {
         self.value = value
     }
 }
+
+extension InsulinValue: Codable {}

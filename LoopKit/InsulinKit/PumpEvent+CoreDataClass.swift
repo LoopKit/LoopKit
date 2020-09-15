@@ -103,11 +103,23 @@ class PumpEvent: NSManagedObject {
         }
     }
 
-    override func awakeFromInsert() {
-        super.awakeFromInsert()
+    var hasUpdatedModificationCounter: Bool { changedValues().keys.contains("modificationCounter") }
 
+    func updateModificationCounter() { setPrimitiveValue(managedObjectContext!.modificationCounter!, forKey: "modificationCounter") }
+
+    public override func awakeFromInsert() {
+        super.awakeFromInsert()
+        updateModificationCounter()
         createdAt = Date()
     }
+
+    public override func willSave() {
+        if isUpdated && !hasUpdatedModificationCounter {
+            updateModificationCounter()
+        }
+        super.willSave()
+    }
+
 }
 
 
@@ -178,4 +190,15 @@ extension PumpEvent {
     }
 }
 
-
+extension PumpEvent {
+    func update(from event: PersistedPumpEvent) {
+        createdAt = event.persistedDate
+        date = event.date
+        type = event.type
+        uploaded = event.isUploaded
+        mutable = event.isMutable
+        raw = event.raw
+        title = event.title
+        dose = event.dose
+    }
+}

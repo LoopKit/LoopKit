@@ -86,14 +86,14 @@ extension WalshInsulinModel: Equatable {
 #if swift(>=4)
 extension WalshInsulinModel: Codable {
     enum CodingKeys: String, CodingKey {
-        case actionDuration = "actionDuration"
-        case delay = "delay"
+        case actionDuration
+        case delay
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let actionDuration: Double = try container.decode(Double.self, forKey: .actionDuration)
-        let delay: Double = try container.decode(Double.self, forKey: .delay)
+        let delay: Double = try container.decode(TimeInterval.self, forKey: .delay)
         
         self.init(actionDuration: actionDuration, delay: delay)
     }
@@ -106,3 +106,19 @@ extension WalshInsulinModel: Codable {
 
 }
 #endif
+
+extension WalshInsulinModel: RawRepresentable {
+    public typealias RawValue = [String: Any]
+
+    public init?(rawValue: RawValue) {
+        guard let duration = rawValue["actionDuration"] as? TimeInterval else {
+            return nil
+        }
+
+        self.init(actionDuration: duration)
+    }
+
+    public var rawValue: [String : Any] {
+        return ["actionDuration": self.actionDuration]
+    }
+}
