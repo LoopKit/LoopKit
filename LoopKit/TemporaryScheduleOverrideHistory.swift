@@ -8,10 +8,48 @@
 
 import Foundation
 
-public enum End: Equatable, Hashable {
+public enum End: Equatable, Hashable, Codable {
     case natural
     case early(Date)
     case deleted // Ended before started
+    
+    private enum EndType: String, Decodable {
+        case natural, early, deleted
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case type
+        case date
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let endType = try container.decode(EndType.self, forKey: .type)
+        
+        switch endType {
+        case .natural:
+            self = .natural
+        case .early:
+            let date = try container.decode(Date.self, forKey: .date)
+            self = .early(date)
+        case .deleted:
+            self = .deleted
+        }
+    }
+    // ANNA TODO: create codable tests
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .natural:
+            try container.encode(EndType.natural.rawValue, forKey: .type)
+        case .early(let date):
+            try container.encode(EndType.early.rawValue, forKey: .type)
+            try container.encode(date, forKey: .date)
+        case .deleted:
+            try container.encode(EndType.deleted.rawValue, forKey: .type)
+        }
+    }
 }
 
 private struct OverrideEvent: Equatable {
