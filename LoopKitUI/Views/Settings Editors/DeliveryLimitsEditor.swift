@@ -60,9 +60,9 @@ public struct DeliveryLimitsEditor: View {
         
         self.init(
             value: DeliveryLimits(maximumBasalRate: maxBasal, maximumBolus: maxBolus),
-            supportedBasalRates: viewModel.pumpSupportedIncrements!.basalRates,
+            supportedBasalRates: viewModel.pumpSupportedIncrements!()!.basalRates,
             scheduledBasalRange: viewModel.therapySettings.basalRateSchedule?.valueRange(),
-            supportedBolusVolumes: viewModel.pumpSupportedIncrements!.bolusVolumes,
+            supportedBolusVolumes: viewModel.pumpSupportedIncrements!()!.bolusVolumes,
             onSave: { [weak viewModel] newLimits in
                 viewModel?.saveDeliveryLimits(limits: newLimits)
                 didSave?()

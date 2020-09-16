@@ -211,12 +211,12 @@ extension TherapySettingsView {
 
     private var basalRatesSection: some View {
         section(for: .basalRate) {
-            if self.viewModel.therapySettings.basalRateSchedule != nil && self.viewModel.pumpSupportedIncrements != nil {
+            if self.viewModel.therapySettings.basalRateSchedule != nil && self.viewModel.pumpSupportedIncrements?() != nil {
                 ForEach(self.viewModel.therapySettings.basalRateSchedule!.items, id: \.self) { value in
                     ScheduleValueItem(time: value.startTime,
                                       value: value.value,
                                       unit: .internationalUnitsPerHour,
-                                      guardrail: Guardrail.basalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!.basalRates))
+                                      guardrail: Guardrail.basalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates))
                 }
             }
         }
@@ -233,11 +233,11 @@ extension TherapySettingsView {
         HStack {
             Text(DeliveryLimits.Setting.maximumBasalRate.title)
             Spacer()
-            if self.viewModel.pumpSupportedIncrements != nil {
+            if self.viewModel.pumpSupportedIncrements?() != nil {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
                     unit: .internationalUnitsPerHour,
-                    guardrail: Guardrail.maximumBasalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!.basalRates, scheduledBasalRange: self.viewModel.therapySettings.basalRateSchedule?.valueRange()),
+                    guardrail: Guardrail.maximumBasalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates, scheduledBasalRange: self.viewModel.therapySettings.basalRateSchedule?.valueRange()),
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
@@ -250,11 +250,11 @@ extension TherapySettingsView {
         HStack {
             Text(DeliveryLimits.Setting.maximumBolus.title)
             Spacer()
-            if self.viewModel.pumpSupportedIncrements != nil {
+            if self.viewModel.pumpSupportedIncrements?() != nil {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) },
                     unit: .internationalUnit(),
-                    guardrail: Guardrail.maximumBolus(supportedBolusVolumes: self.viewModel.pumpSupportedIncrements!.bolusVolumes),
+                    guardrail: Guardrail.maximumBolus(supportedBolusVolumes: self.viewModel.pumpSupportedIncrements!()!.bolusVolumes),
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
@@ -473,13 +473,13 @@ private extension TherapySettingsView {
                 }
             }
         case .basalRate:
-            if self.viewModel.pumpSupportedIncrements != nil {
+            if self.viewModel.pumpSupportedIncrements?() != nil {
                 return { goBack in
                     AnyView(BasalRateScheduleEditor(viewModel: self.viewModel, didSave: goBack).environment(\.dismiss, goBack))
                 }
             }
         case .deliveryLimits:
-            if self.viewModel.pumpSupportedIncrements != nil {
+            if self.viewModel.pumpSupportedIncrements?() != nil {
                 return { goBack in
                     AnyView(DeliveryLimitsEditor(viewModel: self.viewModel, didSave: goBack).environment(\.dismiss, goBack))
                 }
@@ -535,9 +535,9 @@ public struct TherapySettingsView_Previews: PreviewProvider {
         TherapySettingsViewModel(mode: mode,
                                  therapySettings: preview_therapySettings,
                                  supportedInsulinModelSettings: SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
-                                 pumpSupportedIncrements: PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
+                                 pumpSupportedIncrements: { PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
                                                                                   bolusVolumes: preview_supportedBolusVolumes,
-                                                                                  maximumBasalScheduleEntryCount: 24),
+                                                                                  maximumBasalScheduleEntryCount: 24) } ,
                                  chartColors: ChartColorPalette(axisLine: .clear, axisLabel: .secondaryLabel, grid: .systemGray3, glucoseTint: .systemTeal, insulinTint: .systemOrange))
     }
 
