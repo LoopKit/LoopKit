@@ -32,7 +32,7 @@
 "Correction Range" = "Målvärde";
 
 /* Descriptive text for glucose target range */
-"Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin." = "Målvärde är det ideala blodsockerintervall du vill att Loop ska hålla dig inom.";
+"Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin." = "Målvärde är det ideala blodsockerintervall som du vill att Loop ska hålla dig inom.";
 
 /* Title text for delivery limits */
 "Delivery Limits" = "Maxdoser";

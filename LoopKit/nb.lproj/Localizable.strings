@@ -152,7 +152,7 @@
 "Units/hour" = "Enheter/time";
 
 /* Descriptive text for suspend threshold */
-"When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus." = "When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus.";
+"When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus." = "Når blodsukkeret er forventet å gå under denne verdien, vil appen anbefale en basalrate på 0 E/time, og vil ikke anbefale bolus.";
 
 /* Title for workout mode */
 "Workout" = "Workout";

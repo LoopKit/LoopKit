@@ -8,7 +8,7 @@
 "Carbs" = "Kulhydrater";
 
 /* The title text for the glucose correction range schedule */
-"Correction Range" = "Korrektionsinterval";
+"Correction Range" = "Korrektionsområde";
 
 /* The title for the cell displaying diagnostic data */
 "Diagnostic" = "Diagnostisk";

@@ -272,7 +272,7 @@
 "For this range, choose the specific glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin." = "Målvärde är det ideala blodsockerintervall som du vill att Loop ska hålla dig inom.";
 
 /* Support button for Therapy Settings */
-"Get help with Therapy Settings" = "Get help with Therapy Settings";
+"Get help with Therapy Settings" = "Få hjälp med behandlingsinställningar";
 
 /* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range */
 "Go Back" = "Gå tillbaka";
@@ -408,7 +408,7 @@
 "PRESETS" = "FÖRINSTÄLLNINGAR";
 
 /* Accessibility label for ProgressIndicatorView when showIndeterminantProgress */
-"Progressing." = "Progressing.";
+"Progressing." = "Behandlas.";
 
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Pumphändelse";
@@ -493,7 +493,7 @@
 "Suspending" = "Pausar";
 
 /* No comment provided by engineer. */
-"Switch Preview State" = "Switch Preview State";
+"Switch Preview State" = "Byt förhandsvisningsläge";
 
 /* The text for the override preset symbol setting */
 "Symbol" = "Symbol";
@@ -533,10 +533,10 @@
 "The schedule starts at midnight and cannot contain a rate of 0 U/hr." = "Schemat startar vid midnatt och får inte innehålla en dos på 0 E/timme.";
 
 /* Therapy Settings screen title */
-"Therapy Settings" = "Therapy Settings";
+"Therapy Settings" = "Behandlingsinställningar";
 
 /* No comment provided by engineer. */
-"Therapy Settings Support Placeholder" = "Therapy Settings Support Placeholder";
+"Therapy Settings Support Placeholder" = "Behandlingsinställningar Support";
 
 /* Subtitle of Fiasp preset */
 "This model assumes peak insulin activity at 55 minutes." = "Denna modell antar en maximal aktivitet vid 55 minuter.";
@@ -622,10 +622,10 @@
 "You can choose how %@ measures the insulin's peak activity according to one of these two insulin models." = "Du kan välja hur %@ mäter insulinets maximala aktivitet enligt en av dessa två insulinmodeller.";
 
 /* Description of how to edit setting */
-"You can edit a setting by tapping into any line item." = "Du kan ändra en inställning genom att trycka på en av raderna.";
+"You can edit a setting by tapping into any line item." = "Du kan ändra en inställning genom att trycka på ett objekt på en av raderna.";
 
 /* Description of how to edit setting */
-"You can edit the setting by tapping into the line item." = "Du kan ändra en inställning genom att trycka på en av raderna.";
+"You can edit the setting by tapping into the line item." = "Du kan ändra en inställning genom att trycka på ett objekt på raden.";
 
 /* Information about basal rates */
 "Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din bassaldos är det antal enheter insulin per timme som krävs för din basala ämnesomsättning.";
@@ -634,7 +634,7 @@
 "Your healthcare provider can help you choose a correction range that's right for you." = "Din vårdgivare kan hjälpa dig att välja ett målvärde som passar dig.";
 
 /* Description of insulin sensitivity factor */
-"Your insulin sensitivity factor (ISF) is the drop in glucose expected from one unit of insulin." = "Insulinkänslighet (ISF) är ett mått på hur mycket din blodsocker sjunker av en enhet insulin.";
+"Your insulin sensitivity factor (ISF) is the drop in glucose expected from one unit of insulin." = "Insulinkänslighet (ISF) är ett mått på hur många enheter din blodsocker sjunker av en enhet insulin.";
 
 /* Information about pre-meal range */
 "Your pre-meal temp adjust range should be the glucose value (or range of values) you want Loop to target by the time you take your first bite of your meal." = "Ditt målvårde för Före måltid bör vara det blodsockervärde (eller målvärde) som du vill att Loop ska rikta in sig på när du tar din första tugga av din måltid.";

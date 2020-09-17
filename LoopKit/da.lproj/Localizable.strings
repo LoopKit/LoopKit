@@ -29,10 +29,10 @@
 "Connection Failure" = "Forbindelsesfejl";
 
 /* Title text for glucose target range */
-"Correction Range" = "Korrektions interval";
+"Correction Range" = "Korrektionsområde";
 
 /* Descriptive text for glucose target range */
-"Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin." = "Korrektionsinterval er den blodsukkerværdi (eller værdiinterval), som du vil have Loop til at sigte efter når din basal insulin justeres.";
+"Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin." = "Korrektionsområde er den blodsukkerværdi (eller værdiinterval), som du vil have Loop til at sigte efter når din basal insulin justeres.";
 
 /* Title text for delivery limits */
 "Delivery Limits" = "Insulin-grænser";
@@ -92,7 +92,7 @@
 "mmol/L/U" = "mmol/L/E";
 
 /* Sensor state description for the non-valid state */
-"Needs Attention" = "Behøver opmærksomhed";
+"Needs Attention" = "Kræver opmærksomhed";
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "Ingen værdier fundet";
@@ -152,7 +152,7 @@
 "Units/hour" = "Enheder/time";
 
 /* Descriptive text for suspend threshold */
-"When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus." = "Når dit blodsukker forventes at ligge under denne værdi, vil app'en anbefale en basalrate på 0 U/time og vil ikke anbefale en bolus.";
+"When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus." = "Når dit blodsukker forventes at ligge under denne værdi, vil Loop anbefale en basalrate på 0 U/time og vil ikke anbefale en bolus.";
 
 /* Title for workout mode */
 "Workout" = "Træning";
@@ -161,7 +161,7 @@
 "Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din basalrate insulin, er det antal af enheder i timen, som du skal bruge for at dække dit basale insulinbehov.";
 
 /* Descriptive text for carb ratio */
-"Your carb ratio is the number of grams of carbohydrate covered by one unit of insulin." = "Din kulhydrat ratio er antallet af gram kulhydrat dækket af én enhed insulin.";
+"Your carb ratio is the number of grams of carbohydrate covered by one unit of insulin." = "Dit kulhydratforhold er antallet af gram kulhydrat dækket af én enhed insulin.";
 
 /* Descriptive text for insulin sensitivity */
 "Your insulin sensitivities refer to the drop in glucose expected from one unit of insulin." = "Din insulinfølsomhed henviser til det fald i blodsukker, der forventes fra én insulinenhed.";
