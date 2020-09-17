@@ -88,7 +88,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         doseStore.insulinDeliveryStore.test_lastBasalEndDate = f("2018-12-12 17:35:58 +0000")
 
         let addPumpEvents1 = expectation(description: "add pumpEvents1")
-        addPumpEvents1.expectedFulfillmentCount = 3
+        addPumpEvents1.expectedFulfillmentCount = 2
         healthStore.setSaveHandler({ (objects, success, error) in
             XCTAssertEqual(1, objects.count)
             let sample = objects.first as! HKQuantitySample
@@ -96,8 +96,10 @@ class DoseStoreTests: PersistenceControllerTestCase {
             XCTAssertNil(error)
             addPumpEvents1.fulfill()
         })
+        let lastBasalEndDateSetExpectation = expectation(description: "last basal end date set")
+        lastBasalEndDateSetExpectation.assertForOverFulfill = false
         doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
-            addPumpEvents1.fulfill()
+            lastBasalEndDateSetExpectation.fulfill()
         }
         doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
@@ -201,9 +203,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
         healthStore.setSaveHandler({ (objects, success, error) in
             XCTFail()
         })
-        doseStore.insulinDeliveryStore.test_lastBasalEndDateDidSet = {
-            XCTFail()
-        }
         doseStore.addPumpEvents(pumpEvents1, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents1.fulfill()

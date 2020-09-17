@@ -12,7 +12,10 @@ import LoopKitUI
 import MockKit
 
 extension MockService: ServiceUI {
-
+    public static var image: UIImage? {
+        return UIImage(systemName: "icloud.and.arrow.up")
+    }
+    
     public static func setupViewController() -> (UIViewController & ServiceSetupNotifying & CompletionNotifying)? {
         return ServiceViewController(rootViewController: MockServiceTableViewController(service: MockService(), for: .create))
     }

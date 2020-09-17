@@ -75,16 +75,16 @@ extension ExponentialInsulinModel: CustomDebugStringConvertible {
 #if swift(>=4)
 extension ExponentialInsulinModel: Decodable {
     enum CodingKeys: String, CodingKey {
-        case actionDuration = "actionDuration"
-        case peakActivityTime = "peakActivityTime"
-        case delay = "delay"
+        case actionDuration
+        case peakActivityTime
+        case delay
     }
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let actionDuration: Double = try container.decode(Double.self, forKey: .actionDuration)
         let peakActivityTime: Double = try container.decode(Double.self, forKey: .peakActivityTime)
-        let delay: Double = try container.decode(Double.self, forKey: .delay)
+        let delay: Double = try container.decode(TimeInterval.self, forKey: .delay)
 
         self.init(actionDuration: actionDuration, peakActivityTime: peakActivityTime, delay: delay)
     }

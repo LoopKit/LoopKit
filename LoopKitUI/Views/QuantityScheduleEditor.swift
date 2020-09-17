@@ -131,7 +131,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
     private var guardrailWarningIfNecessary: some View {
         let crossedThresholds = self.crossedThresholds
         return Group {
-            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings || mode == .legacySettings) {
+            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings) {
                 guardrailWarning(crossedThresholds)
             }
         }
@@ -167,7 +167,7 @@ extension QuantityScheduleEditor {
         confirmationAlertContent: AlertContent,
         @ViewBuilder guardrailWarning: @escaping (_ thresholds: [SafetyClassification.Threshold]) -> ActionAreaContent,
         onSave savingMechanism: SavingMechanism<DailyQuantitySchedule<Double>>,
-        mode: PresentationMode = .legacySettings,
+        mode: PresentationMode = .settings,
         settingType: TherapySetting = .none
     ) {
         self.title = title
@@ -200,7 +200,7 @@ extension QuantityScheduleEditor {
         confirmationAlertContent: AlertContent,
         @ViewBuilder guardrailWarning: @escaping (_ thresholds: [SafetyClassification.Threshold]) -> ActionAreaContent,
         onSave save: @escaping (DailyQuantitySchedule<Double>) -> Void,
-        mode: PresentationMode = .legacySettings,
+        mode: PresentationMode = .settings,
         settingType: TherapySetting = .none
     ) {
         let selectableValues = guardrail.allValues(stridingBy: selectableValueStride, unit: unit)

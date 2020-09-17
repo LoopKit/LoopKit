@@ -28,7 +28,7 @@ public struct BasalRateScheduleEditor: View {
         maximumScheduleEntryCount: Int,
         syncSchedule: PumpManager.SyncSchedule?,
         onSave save: @escaping (BasalRateSchedule) -> Void,
-        mode: PresentationMode = .legacySettings
+        mode: PresentationMode = .settings
     ) {
         self.schedule = schedule.map { schedule in
             DailyQuantitySchedule(
@@ -106,7 +106,7 @@ public struct BasalRateScheduleEditor: View {
     
     private var savingMechanism: SavingMechanism<DailyQuantitySchedule<Double>> {
         switch mode {
-        case .settings, .legacySettings:
+        case .settings:
             return .asynchronous { quantitySchedule, completion in
                 precondition(self.syncSchedule != nil)
                 self.syncSchedule?(quantitySchedule.items) { result in

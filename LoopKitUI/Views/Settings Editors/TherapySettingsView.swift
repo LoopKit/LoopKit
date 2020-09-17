@@ -12,6 +12,8 @@ import LoopKit
 import SwiftUI
 
 public struct TherapySettingsView: View, HorizontalSizeClassOverride {
+    @Environment(\.dismiss) var dismiss
+
     public struct ActionButton {
         public init(localizedString: String, action: @escaping () -> Void) {
             self.localizedString = localizedString
@@ -21,8 +23,6 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
         let action: () -> Void
     }
     
-    @Environment(\.dismiss) var dismiss
-   
     @ObservedObject var viewModel: TherapySettingsViewModel
         
     private let actionButton: ActionButton?
@@ -34,11 +34,9 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
     }
         
     public var body: some View {
-        // TODO: simplify this once 'legacy settings' are factored out
         switch viewModel.mode {
         case .acceptanceFlow: return AnyView(content)
-        case .settings: return AnyView(content)
-        case .legacySettings: return AnyView(navigationViewWrappedContent)
+        case .settings: return AnyView(navigationViewWrappedContent)
         }
     }
     
@@ -77,6 +75,15 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
     private var navigationViewWrappedContent: some View {
         NavigationView {
             content
+                .navigationBarItems(trailing: dismissButton)
+        }
+    }
+    
+    private var dismissButton: some View {
+        Button(action: {
+            self.dismiss()
+        }) {
+            Text("Done").bold()
         }
     }
     
@@ -548,7 +555,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                 .colorScheme(.dark)
                 .previewDevice(PreviewDevice(rawValue: "iPhone XS Max"))
                 .previewDisplayName("XS Max dark (settings)")
-            TherapySettingsView(viewModel: TherapySettingsViewModel(mode: .legacySettings,
+            TherapySettingsView(viewModel: TherapySettingsViewModel(mode: .settings,
                                                                     therapySettings: TherapySettings(),
                                                                     chartColors: ChartColorPalette(axisLine: .clear,
                                                                                                    axisLabel: .secondaryLabel,

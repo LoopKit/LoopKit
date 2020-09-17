@@ -38,9 +38,18 @@ class CachedGlucoseObject: NSManagedObject {
         }
     }
 
+    var hasUpdatedModificationCounter: Bool { changedValues().keys.contains("modificationCounter") }
+
+    func updateModificationCounter() { setPrimitiveValue(managedObjectContext!.modificationCounter!, forKey: "modificationCounter") }
+
+    override func awakeFromInsert() {
+        super.awakeFromInsert()
+        updateModificationCounter()
+    }
+
     override func willSave() {
-        if isInserted || isUpdated {
-            setPrimitiveValue(managedObjectContext!.modificationCounter ?? 0, forKey: "modificationCounter")
+        if isUpdated && !hasUpdatedModificationCounter {
+            updateModificationCounter()
         }
         super.willSave()
     }

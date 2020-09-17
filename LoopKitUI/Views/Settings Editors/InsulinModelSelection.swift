@@ -104,7 +104,6 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         switch mode {
         case .acceptanceFlow: return AnyView(content)
         case .settings: return AnyView(contentWithCancel)
-        case .legacySettings: return AnyView(navigationContent)
         }
     }
     
@@ -124,13 +123,6 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     
     private var cancelButton: some View {
         Button(action: { self.dismiss() } ) { Text("Cancel", comment: "Cancel editing settings button title") }
-    }
-
-    private var navigationContent: some View {
-        NavigationView {
-            content
-                .navigationBarItems(leading: dismissButton)
-        }
     }
     
     private var content: some View {
@@ -296,7 +288,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     }
     
     private func startSaving() {
-        guard mode == .settings || mode == .legacySettings else {
+        guard mode == .settings else {
             self.continueSaving()
             return
         }
@@ -310,9 +302,6 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     
     private func continueSaving() {
         self.save(self.value)
-        if self.mode == .legacySettings {
-            self.dismiss()
-        }
     }
 
     var dismissButton: some View {

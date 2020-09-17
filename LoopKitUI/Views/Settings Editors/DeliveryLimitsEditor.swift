@@ -34,7 +34,7 @@ public struct DeliveryLimitsEditor: View {
         scheduledBasalRange: ClosedRange<Double>?,
         supportedBolusVolumes: [Double],
         onSave save: @escaping (_ deliveryLimits: DeliveryLimits) -> Void,
-        mode: PresentationMode = .legacySettings
+        mode: PresentationMode = .settings
     ) {
         self._value = State(initialValue: value)
         self.initialValue = value
@@ -75,7 +75,6 @@ public struct DeliveryLimitsEditor: View {
         switch mode {
         case .settings: return AnyView(contentWithCancel)
         case .acceptanceFlow: return AnyView(content)
-        case .legacySettings: return AnyView(content)
         }
     }
     
@@ -256,7 +255,7 @@ public struct DeliveryLimitsEditor: View {
     private var guardrailWarningIfNecessary: some View {
         let crossedThresholds = self.crossedThresholds
         return Group {
-            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings || mode == .legacySettings) {
+            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings) {
                 DeliveryLimitsGuardrailWarning(crossedThresholds: crossedThresholds)
             }
         }
@@ -295,7 +294,7 @@ public struct DeliveryLimitsEditor: View {
     }
 
     private func startSaving() {
-        guard mode == .settings || mode == .legacySettings else {
+        guard mode == .settings else {
             self.continueSaving()
             return
         }
@@ -309,9 +308,6 @@ public struct DeliveryLimitsEditor: View {
     
     private func continueSaving() {
         self.save(self.value)
-        if self.mode == .legacySettings {
-            self.dismiss()
-        }
     }
 }
 

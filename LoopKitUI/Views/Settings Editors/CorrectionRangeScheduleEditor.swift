@@ -26,7 +26,7 @@ public struct CorrectionRangeScheduleEditor: View {
         unit: HKUnit,
         minValue: HKQuantity?,
         onSave save: @escaping (GlucoseRangeSchedule) -> Void,
-        mode: PresentationMode = .legacySettings
+        mode: PresentationMode = .settings
     ) {
         self.initialSchedule = schedule
         self._scheduleItems = State(initialValue: schedule?.items ?? [])
@@ -139,7 +139,7 @@ public struct CorrectionRangeScheduleEditor: View {
     var guardrailWarningIfNecessary: some View {
         let crossedThresholds = self.crossedThresholds
         return Group {
-            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings || mode == .legacySettings) {
+            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings) {
                 CorrectionRangeGuardrailWarning(crossedThresholds: crossedThresholds)
             }
         }
