@@ -102,20 +102,3 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         }
     }
 }
-
-fileprivate extension UITextField {
-    
-    func moveCursorToEnd() {
-        DispatchQueue.main.async {
-            let newPosition = self.endOfDocument
-            self.selectedTextRange = self.textRange(from: newPosition, to: newPosition)
-        }
-    }
-    
-    func moveCursorToBeginning() {
-        DispatchQueue.main.async {
-            let newPosition = self.beginningOfDocument
-            self.selectedTextRange = self.textRange(from: newPosition, to: newPosition)
-        }
-    }
-}

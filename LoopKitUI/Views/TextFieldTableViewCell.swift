@@ -65,7 +65,10 @@ public class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
     // MARK: - UITextFieldDelegate
     
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        delegate?.textFieldTableViewCellDidBeginEditing(self)
+        textField.moveCursorToEnd { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.textFieldTableViewCellDidBeginEditing(self)
+        }
     }
     
     public func textFieldDidEndEditing(_ textField: UITextField) {
