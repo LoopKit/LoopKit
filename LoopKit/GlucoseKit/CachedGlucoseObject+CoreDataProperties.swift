@@ -29,3 +29,34 @@ extension CachedGlucoseObject {
     @NSManaged public var modificationCounter: Int64
 
 }
+
+extension CachedGlucoseObject: Encodable {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(uuid, forKey: .uuid)
+        try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
+        try container.encode(syncVersion, forKey: .syncVersion)
+        try container.encode(uploadState.rawValue, forKey: .uploadState)
+        try container.encode(value, forKey: .value)
+        try container.encodeIfPresent(unitString, forKey: .unitString)
+        try container.encode(startDate, forKey: .startDate)
+        try container.encodeIfPresent(provenanceIdentifier, forKey: .provenanceIdentifier)
+        try container.encode(isDisplayOnly, forKey: .isDisplayOnly)
+        try container.encode(wasUserEntered, forKey: .wasUserEntered)
+        try container.encode(modificationCounter, forKey: .modificationCounter)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case uuid
+        case syncIdentifier
+        case syncVersion
+        case uploadState
+        case value
+        case unitString
+        case startDate
+        case provenanceIdentifier
+        case isDisplayOnly
+        case wasUserEntered
+        case modificationCounter
+    }
+}

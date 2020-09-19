@@ -1294,6 +1294,86 @@ extension CarbStore {
     }
 }
 
+// MARK: - Critical Event Log Export
+
+extension CarbStore: CriticalEventLog {
+    private var exportProgressUnitCountPerObject: Int64 { 1 }
+    private var exportFetchLimit: Int { Int(criticalEventLogExportProgressUnitCountPerFetch / exportProgressUnitCountPerObject) }
+
+    public var exportName: String { "Carbs.json" }
+
+    public func exportProgressTotalUnitCount(startDate: Date, endDate: Date? = nil) -> Result<Int64, Error> {
+        var result: Result<Int64, Error>?
+
+        self.cacheStore.managedObjectContext.performAndWait {
+            do {
+                let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
+                request.predicate = self.exportDatePredicate(startDate: startDate, endDate: endDate)
+
+                let objectCount = try self.cacheStore.managedObjectContext.count(for: request)
+                result = .success(Int64(objectCount) * exportProgressUnitCountPerObject)
+            } catch let error {
+                result = .failure(error)
+            }
+        }
+
+        return result!
+    }
+
+    public func export(startDate: Date, endDate: Date, to stream: OutputStream, progress: Progress) -> Error? {
+        let encoder = JSONStreamEncoder(stream: stream)
+        var anchorKey: Int64 = 0
+        var fetching = true
+        var error: Error?
+
+        while fetching && error == nil {
+            self.cacheStore.managedObjectContext.performAndWait {
+                do {
+                    guard !progress.isCancelled else {
+                        throw CriticalEventLogError.cancelled
+                    }
+
+                    let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
+                    request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "anchorKey > %d", anchorKey),
+                                                                                            self.exportDatePredicate(startDate: startDate, endDate: endDate)])
+                    request.sortDescriptors = [NSSortDescriptor(key: "anchorKey", ascending: true)]
+                    request.fetchLimit = self.exportFetchLimit
+
+                    let objects = try self.cacheStore.managedObjectContext.fetch(request)
+                    if objects.isEmpty {
+                        fetching = false
+                        return
+                    }
+
+                    try encoder.encode(objects)
+
+                    anchorKey = objects.last!.anchorKey
+
+                    progress.completedUnitCount += Int64(objects.count) * exportProgressUnitCountPerObject
+                } catch let fetchError {
+                    error = fetchError
+                }
+            }
+        }
+
+        if let closeError = encoder.close(), error == nil {
+            error = closeError
+        }
+
+        return error
+    }
+
+    private func exportDatePredicate(startDate: Date, endDate: Date? = nil) -> NSPredicate {
+        var addedDatePredicate = NSPredicate(format: "addedDate >= %@", startDate as NSDate)
+        var supercededDatePredicate = NSPredicate(format: "supercededDate >= %@", startDate as NSDate)
+        if let endDate = endDate {
+            addedDatePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [addedDatePredicate, NSPredicate(format: "addedDate < %@", endDate as NSDate)])
+            supercededDatePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [supercededDatePredicate, NSPredicate(format: "supercededDate < %@", endDate as NSDate)])
+        }
+        return NSCompoundPredicate(orPredicateWithSubpredicates: [addedDatePredicate, supercededDatePredicate])
+    }
+}
+
 // MARK: - Core Data (Bulk) - TEST ONLY
 
 extension CarbStore {
@@ -1306,8 +1386,6 @@ extension CarbStore {
         queue.async {
             var error: Error?
 
-            let date = Date()
-
             self.cacheStore.managedObjectContext.performAndWait {
                 do {
                     for entry in entries {
@@ -1315,7 +1393,7 @@ extension CarbStore {
 
                         let object = CachedCarbObject(context: self.cacheStore.managedObjectContext)
                         object.create(from: entry,
-                                      on: date,
+                                      on: entry.date,
                                       provenanceIdentifier: self.provenanceIdentifier,
                                       syncIdentifier: syncIdentifier)
                     }
