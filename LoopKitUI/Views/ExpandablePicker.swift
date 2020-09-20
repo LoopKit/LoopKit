@@ -52,7 +52,7 @@ public struct ExpandablePicker: View {
                        }
                     }
                     .pickerStyle(WheelPickerStyle())
-                    .frame(alignment: .center)
+                    .labelsHidden()
                 }
             }
         }
