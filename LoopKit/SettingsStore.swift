@@ -344,7 +344,7 @@ extension SettingsStore {
                     object.data = data
                     object.date = setting.date
                 }
-                self.store.save { error = $0 }
+                error = self.store.save()
             }
 
             guard error == nil else {

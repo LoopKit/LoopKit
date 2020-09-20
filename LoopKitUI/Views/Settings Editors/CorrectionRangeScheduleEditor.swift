@@ -26,7 +26,7 @@ public struct CorrectionRangeScheduleEditor: View {
         unit: HKUnit,
         minValue: HKQuantity?,
         onSave save: @escaping (GlucoseRangeSchedule) -> Void,
-        mode: PresentationMode = .legacySettings
+        mode: PresentationMode = .settings
     ) {
         self.initialSchedule = schedule
         self._scheduleItems = State(initialValue: schedule?.items ?? [])
@@ -130,7 +130,7 @@ public struct CorrectionRangeScheduleEditor: View {
                 Text(LocalizedString("You can edit a setting by tapping into any line item.", comment: "Description of how to edit setting"))
                 Text(LocalizedString("You can add different ranges for different times of day by using the ➕.", comment: "Description of how to add a configuration range"))
             }
-            .foregroundColor(.instructionalContent)
+            .foregroundColor(.secondary)
             .font(.subheadline)
             Spacer()
         }
@@ -139,7 +139,7 @@ public struct CorrectionRangeScheduleEditor: View {
     var guardrailWarningIfNecessary: some View {
         let crossedThresholds = self.crossedThresholds
         return Group {
-            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings || mode == .legacySettings) {
+            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings) {
                 CorrectionRangeGuardrailWarning(crossedThresholds: crossedThresholds)
             }
         }
@@ -163,7 +163,7 @@ public struct CorrectionRangeScheduleEditor: View {
     private var confirmationAlertContent: AlertContent {
         AlertContent(
             title: Text("Save Correction Range(s)?", comment: "Alert title for confirming correction ranges outside the recommended range"),
-            message: Text("One or more of the values you have entered are outside of what is generally recommended.", comment: "Alert message for confirming correction ranges outside the recommended range")
+            message: Text(TherapySetting.glucoseTargetRange.guardrailSaveWarningCaption)
         )
     }
 }

@@ -11,8 +11,9 @@ import HealthKit
 import LoopKit
 
 public struct CorrectionRangeOverridesEditor: View {
-    var initialValue: CorrectionRangeOverrides
-    var unit: HKUnit
+    let initialValue: CorrectionRangeOverrides
+    let preset: CorrectionRangeOverrides.Preset
+    let unit: HKUnit
     var correctionRangeScheduleRange: ClosedRange<HKQuantity>
     var minValue: HKQuantity?
     var save: (_ overrides: CorrectionRangeOverrides) -> Void
@@ -33,18 +34,21 @@ public struct CorrectionRangeOverridesEditor: View {
 
     @State var showingConfirmationAlert = false
     @Environment(\.dismiss) var dismiss
+    @Environment(\.authenticate) var authenticate
 
     public init(
         value: CorrectionRangeOverrides,
+        preset: CorrectionRangeOverrides.Preset,
         unit: HKUnit,
         correctionRangeScheduleRange: ClosedRange<HKQuantity>,
         minValue: HKQuantity?,
         onSave save: @escaping (_ overrides: CorrectionRangeOverrides) -> Void,
         sensitivityOverridesEnabled: Bool,
-        mode: PresentationMode = .legacySettings
+        mode: PresentationMode = .settings
     ) {
         self._value = State(initialValue: value)
         self.initialValue = value
+        self.preset = preset
         self.unit = unit
         self.correctionRangeScheduleRange = correctionRangeScheduleRange
         self.minValue = minValue
@@ -55,6 +59,7 @@ public struct CorrectionRangeOverridesEditor: View {
     
     public init(
         viewModel: TherapySettingsViewModel,
+        preset: CorrectionRangeOverrides.Preset,
         didSave: (() -> Void)? = nil
     ) {
         self.init(
@@ -63,11 +68,18 @@ public struct CorrectionRangeOverridesEditor: View {
                 workout: viewModel.therapySettings.workoutTargetRange,
                 unit: viewModel.therapySettings.glucoseUnit!
             ),
+            preset: preset,
             unit: viewModel.therapySettings.glucoseUnit!,
             correctionRangeScheduleRange: viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange(),
             minValue: viewModel.therapySettings.suspendThreshold?.quantity,
             onSave: { [weak viewModel] overrides in
-                viewModel?.saveCorrectionRangeOverrides(overrides: overrides, unit: viewModel?.therapySettings.glucoseUnit ?? .milligramsPerDeciliter)
+                let glucoseUnit = viewModel?.therapySettings.glucoseUnit ?? .milligramsPerDeciliter
+                switch preset {
+                case .preMeal:
+                    viewModel?.saveCorrectionRangeOverride(preMeal: overrides.preMeal, unit: glucoseUnit)
+                case .workout:
+                    viewModel?.saveCorrectionRangeOverride(workout: overrides.workout, unit: glucoseUnit)
+                }
                 didSave?()
             },
             sensitivityOverridesEnabled: viewModel.sensitivityOverridesEnabled,
@@ -76,15 +88,38 @@ public struct CorrectionRangeOverridesEditor: View {
     }
 
     public var body: some View {
+        switch mode {
+        case .settings: return AnyView(contentWithCancel)
+        case .acceptanceFlow: return AnyView(content)
+        }
+    }
+    
+    private var contentWithCancel: some View {
+        if value == initialValue {
+            return AnyView(content
+                .navigationBarBackButtonHidden(false)
+                .navigationBarItems(leading: EmptyView())
+            )
+        } else {
+            return AnyView(content
+                .navigationBarBackButtonHidden(true)
+                .navigationBarItems(leading: cancelButton)
+            )
+        }
+    }
+    
+    private var cancelButton: some View {
+        Button(action: { self.dismiss() } ) { Text("Cancel", comment: "Cancel editing settings button title") }
+    }
+    
+    private var content: some View {
         ConfigurationPage(
-            title: Text(TherapySetting.correctionRangeOverrides.smallTitle),
+            title: Text(preset.therapySetting.title),
             actionButtonTitle: Text(mode.buttonText),
             actionButtonState: value != initialValue || mode == .acceptanceFlow ? .enabled : .disabled,
             cards: {
-                card(for: .preMeal)
-                if !sensitivityOverridesEnabled {
-                    card(for: .workout)
-                }
+                // TODO: Figure out why I need to explicitly return a CardStack with 1 card here
+                CardStack(cards: [card(for: preset)])
             },
             actionAreaContent: {
                 instructionalContentIfNecessary
@@ -92,7 +127,7 @@ public struct CorrectionRangeOverridesEditor: View {
             },
             action: {
                 if self.crossedThresholds.isEmpty {
-                    self.saveAndDismiss()
+                    self.startSaving()
                 } else {
                     self.showingConfirmationAlert = true
                 }
@@ -107,7 +142,7 @@ public struct CorrectionRangeOverridesEditor: View {
 
     private func card(for preset: CorrectionRangeOverrides.Preset) -> Card {
         Card {
-            SettingDescription(text: description(of: preset), informationalContent: {TherapySetting.correctionRangeOverrides.helpScreen()})
+            SettingDescription(text: description(of: preset), informationalContent: { preset.therapySetting.helpScreen() })
             CorrectionRangeOverridesExpandableSetting(
                 isEditing: Binding(
                     get: { self.presetBeingEdited == preset },
@@ -150,7 +185,7 @@ public struct CorrectionRangeOverridesEditor: View {
     }
     
     private func guardrail(for preset: CorrectionRangeOverrides.Preset) -> Guardrail<HKQuantity> {
-        return Guardrail.correctionRangeOverridePreset(preset, correctionRangeScheduleRange: correctionRangeScheduleRange)
+        return Guardrail.correctionRangeOverride(for: preset, correctionRangeScheduleRange: correctionRangeScheduleRange)
     }
     
     private var instructionalContentIfNecessary: some View {
@@ -164,7 +199,7 @@ public struct CorrectionRangeOverridesEditor: View {
     private var instructionalContent: some View {
         HStack { // to align with guardrail warning, if present
             Text(LocalizedString("You can edit a setting by tapping into any line item.", comment: "Description of how to edit setting"))
-            .foregroundColor(.instructionalContent)
+            .foregroundColor(.secondary)
             .font(.subheadline)
             Spacer()
         }
@@ -174,9 +209,9 @@ public struct CorrectionRangeOverridesEditor: View {
         switch preset {
         case .preMeal:
             if let minValue = minValue {
-                return max(minValue, Guardrail.correctionRange.absoluteBounds.lowerBound)...correctionRangeScheduleRange.upperBound
+                return max(minValue, Guardrail.correctionRange.absoluteBounds.lowerBound)...Guardrail.correctionRange.absoluteBounds.upperBound
             } else {
-                return Guardrail.correctionRange.absoluteBounds.lowerBound...correctionRangeScheduleRange.upperBound
+                return Guardrail.correctionRange.absoluteBounds.lowerBound...Guardrail.correctionRange.absoluteBounds.upperBound
             }
         case .workout:
             if let minValue = minValue {
@@ -194,7 +229,7 @@ public struct CorrectionRangeOverridesEditor: View {
     private var guardrailWarningIfNecessary: some View {
         let crossedThresholds = self.crossedThresholds
         return Group {
-            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings || mode == .legacySettings) {
+            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings) {
                 CorrectionRangeOverridesGuardrailWarning(crossedThresholds: crossedThresholds)
             }
         }
@@ -215,25 +250,37 @@ public struct CorrectionRangeOverridesEditor: View {
 
                 return thresholds.isEmpty ? nil : thresholds
             }
+            .filter { $0.key == preset }
     }
 
     private func confirmationAlert() -> SwiftUI.Alert {
         SwiftUI.Alert(
             title: Text("Save Correction Range Overrides?", comment: "Alert title for confirming correction range overrides outside the recommended range"),
-            message: Text("One or more of the values you have entered are outside of what is generally recommended.", comment: "Alert message for confirming correction range overrides outside the recommended range"),
+            // For the message, preMeal and workout are the same
+            message: Text(TherapySetting.preMealCorrectionRangeOverride.guardrailSaveWarningCaption),
             primaryButton: .cancel(Text("Go Back")),
             secondaryButton: .default(
                 Text("Continue"),
-                action: saveAndDismiss
+                action: startSaving
             )
         )
     }
-
-    private func saveAndDismiss() {
-        save(value)
-        if mode == .legacySettings {
-            dismiss()
+    
+    private func startSaving() {
+        guard mode == .settings else {
+            self.continueSaving()
+            return
         }
+        authenticate(preset.therapySetting.authenticationChallengeDescription) {
+            switch $0 {
+            case .success: self.continueSaving()
+            case .failure: break
+            }
+        }
+    }
+    
+    private func continueSaving() {
+        self.save(self.value)
     }
 
     private func accessibilityIdentifier(for preset: CorrectionRangeOverrides.Preset) -> String {
@@ -282,13 +329,12 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
     var caption: Text? {
         guard
             crossedThresholds.count == 1,
-            let crossedPreMealThresholds = crossedThresholds[.preMeal]
+            let crossedPreMealThresholds = crossedThresholds[.preMeal],
+            crossedPreMealThresholds.allSatisfy({ $0 == .aboveRecommended || $0 == .maximum })
         else {
             return nil
         }
-
-        return crossedPreMealThresholds.allSatisfy { $0 == .aboveRecommended || $0 == .maximum }
-            ? Text("The value you have entered for this range is higher than your usual correction range. It is recommended that your pre-meal range be lower than your usual correction range.", comment: "Warning text for high pre-meal target value")
-            : nil
+        
+        return Text(crossedPreMealThresholds.count > 1 ? TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForOutsideValues : TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForHighValue)
     }
 }

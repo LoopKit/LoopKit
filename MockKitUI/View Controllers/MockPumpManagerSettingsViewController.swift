@@ -20,6 +20,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
     init(pumpManager: MockPumpManager) {
         self.pumpManager = pumpManager
         super.init(style: .grouped)
+        title = NSLocalizedString("Pump Settings", comment: "Title for Pump simulator settings")
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -31,14 +32,13 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Pump Settings"
-
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
 
         tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.estimatedSectionHeaderHeight = 55
 
+        tableView.register(DateAndDurationTableViewCell.nib(), forCellReuseIdentifier: DateAndDurationTableViewCell.className)
         tableView.register(SegmentedControlTableViewCell.self, forCellReuseIdentifier: SegmentedControlTableViewCell.className)
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
         tableView.register(BoundSwitchTableViewCell.self, forCellReuseIdentifier: BoundSwitchTableViewCell.className)
@@ -88,6 +88,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         case bolusCancelErrorToggle
         case suspendErrorToggle
         case resumeErrorToggle
+        case uncertainDeliveryErrorToggle
+        case lastReconciliationDate
     }
     
     private enum StatusProgressRow: Int, CaseIterable {
@@ -200,6 +202,18 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 return switchTableViewCell(for: indexPath, titled: "Error on Suspend", boundTo: \.deliverySuspensionShouldError)
             case .resumeErrorToggle:
                 return switchTableViewCell(for: indexPath, titled: "Error on Resume", boundTo: \.deliveryResumptionShouldError)
+            case .uncertainDeliveryErrorToggle:
+                return switchTableViewCell(for: indexPath, titled: "Next Delivery Command Uncertain", boundTo: \.deliveryCommandsShouldTriggerUncertainDelivery)
+            case .lastReconciliationDate:
+                let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
+                cell.titleLabel.text = "Last Reconciliation Date"
+                cell.date = pumpManager.lastReconciliation ?? Date()
+                cell.datePicker.maximumDate = Date()
+                cell.datePicker.minimumDate = Date() - .hours(48)
+                cell.datePicker.datePickerMode = .dateAndTime
+                cell.datePicker.isEnabled = true
+                cell.delegate = self
+                return cell
             }
         case .statusProgress:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -286,8 +300,12 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 vc.indexPath = indexPath
                 vc.percentageDelegate = self
                 show(vc, sender: sender)
-            case .tempBasalErrorToggle, .bolusErrorToggle, .bolusCancelErrorToggle, .suspendErrorToggle, .resumeErrorToggle:
+            case .tempBasalErrorToggle, .bolusErrorToggle, .bolusCancelErrorToggle, .suspendErrorToggle, .resumeErrorToggle, .uncertainDeliveryErrorToggle:
                 break
+            case .lastReconciliationDate:
+                tableView.deselectRow(at: indexPath, animated: true)
+                tableView.beginUpdates()
+                tableView.endUpdates()
             }
         case .statusProgress:
             let vc = PercentageTextFieldTableViewController()
@@ -337,6 +355,41 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                     }
                 }
             }
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        switch Section(rawValue: indexPath.section)! {
+        case .settings:
+            switch SettingsRow(rawValue: indexPath.row)! {
+            case .lastReconciliationDate:
+                
+                let resetAction = UIContextualAction(style: .normal, title:  "Reset") {[weak self] _,_,_ in
+                    self?.pumpManager.testLastReconciliation = nil
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
+                resetAction.backgroundColor = .systemRed
+                return UISwipeActionsConfiguration(actions: [resetAction])
+            default:
+                break
+            }
+        default:
+            break
+        }
+        return nil
+    }
+    
+}
+
+extension MockPumpManagerSettingsViewController: DatePickerTableViewCellDelegate {
+    func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell) {
+        guard let row = tableView.indexPath(for: cell)?.row else { return }
+
+        switch SettingsRow(rawValue: row) {
+        case .lastReconciliationDate?:
+            pumpManager.testLastReconciliation = cell.date
+        default:
+            break
         }
     }
 }

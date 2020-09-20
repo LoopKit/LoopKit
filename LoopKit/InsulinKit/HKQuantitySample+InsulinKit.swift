@@ -200,8 +200,9 @@ extension HKQuantitySample {
             unit: unit,
             deliveredUnits: deliveredUnits,
             description: nil,
-            syncIdentifier: metadata?[HKMetadataKeySyncIdentifier] as? String,
             scheduledBasalRate: scheduledBasalRate,
+            syncIdentifier: syncIdentifier,
+            scheduledBasalRate: scheduledBasalRate
             insulinModelSetting: insulinModelSetting
         )
     }

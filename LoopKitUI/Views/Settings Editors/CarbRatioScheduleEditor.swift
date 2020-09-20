@@ -23,8 +23,8 @@ public struct CarbRatioScheduleEditor: View {
 
     public init(
         schedule: CarbRatioSchedule?,
-        mode: PresentationMode = .legacySettings,
-        onSave save: @escaping (CarbRatioSchedule) -> Void
+        onSave save: @escaping (CarbRatioSchedule) -> Void,
+        mode: PresentationMode = .settings
     ) {
         // CarbRatioSchedule stores only the gram unit.
         // For consistency across display & computation, convert to "real" g/U units.
@@ -37,8 +37,22 @@ public struct CarbRatioScheduleEditor: View {
         self.mode = mode
         self.save = save
     }
+    
+    public init(
+        viewModel: TherapySettingsViewModel,
+        didSave: (() -> Void)? = nil
+    ) {
+        self.init(
+            schedule: viewModel.therapySettings.carbRatioSchedule,
+            onSave: { [weak viewModel] in
+                viewModel?.saveCarbRatioSchedule(carbRatioSchedule: $0)
+                didSave?()
+            },
+            mode: viewModel.mode
+        )
+    }
 
-    public var body: some View {
+    public var body: some View  {
         QuantityScheduleEditor(
             title: Text(TherapySetting.carbRatio.title),
             description: description,
@@ -66,7 +80,7 @@ public struct CarbRatioScheduleEditor: View {
     private var confirmationAlertContent: AlertContent {
         AlertContent(
             title: Text("Save Carb Ratios?", comment: "Alert title for confirming carb ratios outside the recommended range"),
-            message: Text("One or more of the values you have entered are outside of what is generally recommended.", comment: "Alert message for confirming carb ratios outside the recommended range")
+            message: Text(TherapySetting.carbRatio.guardrailSaveWarningCaption)
         )
     }
 }

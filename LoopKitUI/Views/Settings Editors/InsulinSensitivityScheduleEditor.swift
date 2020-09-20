@@ -19,7 +19,7 @@ public struct InsulinSensitivityScheduleEditor: View {
 
     public init(
         schedule: InsulinSensitivitySchedule?,
-        mode: PresentationMode = .legacySettings,
+        mode: PresentationMode = .settings,
         glucoseUnit: HKUnit,
         onSave save: @escaping (InsulinSensitivitySchedule) -> Void
     ) {
@@ -34,6 +34,21 @@ public struct InsulinSensitivityScheduleEditor: View {
         self.glucoseUnit = glucoseUnit
         self.save = save
         self.mode = mode
+    }
+    
+    public init(
+        viewModel: TherapySettingsViewModel,
+        didSave: (() -> Void)? = nil
+    ) {
+        self.init(
+            schedule: viewModel.therapySettings.insulinSensitivitySchedule,
+            mode: viewModel.mode,
+            glucoseUnit: viewModel.therapySettings.glucoseUnit!,
+            onSave: { [weak viewModel] in
+                viewModel?.saveInsulinSensitivitySchedule(insulinSensitivitySchedule: $0)
+                didSave?()
+            }
+        )
     }
 
     public var body: some View {
@@ -81,7 +96,7 @@ public struct InsulinSensitivityScheduleEditor: View {
     private var confirmationAlertContent: AlertContent {
         AlertContent(
             title: Text("Save Insulin Sensitivities?", comment: "Alert title for confirming insulin sensitivities outside the recommended range"),
-            message: Text("One or more of the values you have entered are outside of what is generally recommended.", comment: "Alert message for confirming insulin sensitivities outside the recommended range")
+            message: Text(TherapySetting.insulinSensitivity.guardrailSaveWarningCaption)
         )
     }
 }

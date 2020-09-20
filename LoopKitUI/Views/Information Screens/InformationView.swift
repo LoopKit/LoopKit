@@ -38,7 +38,7 @@ struct InformationView<InformationalContent: View> : View {
     ) {
         self.init(
             title: title,
-            buttonText: Text(LocalizedString("Next: Review Setting", comment: "Button to advance to setting editor")),
+            buttonText: Text(LocalizedString("Continue", comment: "Button to advance to setting editor")),
             informationalContent: informationalContent,
             onExit: onExit,
             mode: mode
@@ -57,7 +57,7 @@ struct InformationView<InformationalContent: View> : View {
         switch mode {
         case .acceptanceFlow:
             return AnyView(bodyWithBottomButton)
-        case .settings, .legacySettings:
+        case .settings:
             return AnyView(bodyWithCancelButton)
         }
     }

@@ -29,7 +29,7 @@ extension UIAlertController {
             }).joined(separator: "\n")
 
             if messageWithRecovery.isEmpty {
-                message = String(describing: error)
+                message = error.localizedDescription
             } else {
                 message = messageWithRecovery
             }

@@ -251,8 +251,6 @@ public final class CarbEntryTableViewController: UITableViewController {
             }
 
             cell.detailTextLabel?.text = detailText
-
-            cell.accessoryType = entry.isUploaded ? .checkmark : .none
         }
         return cell
     }

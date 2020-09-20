@@ -22,12 +22,14 @@ public struct MockPumpManagerState {
     public var bolusCancelShouldError: Bool
     public var deliverySuspensionShouldError: Bool
     public var deliveryResumptionShouldError: Bool
+    public var deliveryCommandsShouldTriggerUncertainDelivery: Bool
     public var maximumBolus: Double
     public var maximumBasalRatePerHour: Double
     public var suspendState: SuspendState
     public var pumpBatteryChargeRemaining: Double?
     public var occlusionDetected: Bool = false
     public var pumpErrorDetected: Bool = false
+    public var deliveryIsUncertain: Bool = false
 
     public var unfinalizedBolus: UnfinalizedDose?
     public var unfinalizedTempBasal: UnfinalizedDose?
@@ -109,12 +111,14 @@ extension MockPumpManagerState: RawRepresentable {
         self.bolusCancelShouldError = rawValue["bolusCancelShouldError"] as? Bool ?? false
         self.deliverySuspensionShouldError = rawValue["deliverySuspensionShouldError"] as? Bool ?? false
         self.deliveryResumptionShouldError = rawValue["deliveryResumptionShouldError"] as? Bool ?? false
+        self.deliveryCommandsShouldTriggerUncertainDelivery = rawValue["deliveryCommandsShouldTriggerUncertainDelivery"] as? Bool ?? false
         self.maximumBolus = rawValue["maximumBolus"] as? Double ?? 25.0
         self.maximumBasalRatePerHour = rawValue["maximumBasalRatePerHour"] as? Double ?? 5.0
         self.pumpBatteryChargeRemaining = rawValue["pumpBatteryChargeRemaining"] as? Double ?? nil
         self.occlusionDetected = rawValue["occlusionDetected"] as? Bool ?? false
         self.pumpErrorDetected = rawValue["pumpErrorDetected"] as? Bool ?? false
-        
+        self.deliveryIsUncertain = rawValue["deliveryIsUncertain"] as? Bool ?? false
+
         self.progressPercentComplete = rawValue["progressPercentComplete"] as? Double
         self.progressWarningThresholdPercentValue = rawValue["progressWarningThresholdPercentValue"] as? Double
         self.progressCriticalThresholdPercentValue = rawValue["progressCriticalThresholdPercentValue"] as? Double
@@ -167,6 +171,14 @@ extension MockPumpManagerState: RawRepresentable {
 
         if deliveryResumptionShouldError {
             raw["deliveryResumptionShouldError"] = true
+        }
+        
+        if deliveryCommandsShouldTriggerUncertainDelivery {
+            raw["deliveryCommandsShouldTriggerUncertainDelivery"] = true
+        }
+
+        if deliveryIsUncertain {
+            raw["deliveryIsUncertain"] = true
         }
 
         raw["finalizedDoses"] = finalizedDoses.map( { $0.rawValue })

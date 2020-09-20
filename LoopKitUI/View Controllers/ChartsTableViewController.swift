@@ -22,7 +22,7 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
 
         let gestureRecognizer = UILongPressGestureRecognizer()
         gestureRecognizer.delegate = self
-        gestureRecognizer.minimumPressDuration = 0.1
+        gestureRecognizer.minimumPressDuration = 0.3
         gestureRecognizer.addTarget(self, action: #selector(handlePan(_:)))
         charts.gestureRecognizer = gestureRecognizer
     }

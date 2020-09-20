@@ -11,12 +11,22 @@ import SwiftUI
 
 extension TherapySetting {
     
+    public var authenticationChallengeDescription: String {
+        switch self {
+        default:
+            // Currently, this is the same no matter what the setting is.
+            return LocalizedString("Authenticate to save therapy setting", comment: "Authentication hint string for therapy settings")
+        }
+    }
+    
     public func helpScreen() -> some View {
         switch self {
         case .glucoseTargetRange:
             return AnyView(CorrectionRangeInformationView(onExit: nil, mode: .settings))
-        case .correctionRangeOverrides:
-            return AnyView(CorrectionRangeOverrideInformationView(onExit: nil, mode: .settings))
+        case .preMealCorrectionRangeOverride:
+            return AnyView(CorrectionRangeOverrideInformationView(preset: .preMeal, onExit: nil, mode: .settings))
+        case .workoutCorrectionRangeOverride:
+            return AnyView(CorrectionRangeOverrideInformationView(preset: .workout, onExit: nil, mode: .settings))
         case .suspendThreshold:
             return AnyView(SuspendThresholdInformationView(onExit: nil, mode: .settings))
         case .basalRate:

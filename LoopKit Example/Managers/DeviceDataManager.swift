@@ -19,13 +19,13 @@ class DeviceDataManager {
 
         carbStore = CarbStore(
             healthStore: healthStore,
-            observeHealthKitForCurrentAppOnly: false,
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
             observationInterval: .hours(24),
             carbRatioSchedule: carbRatioSchedule,
-            insulinSensitivitySchedule: insulinSensitivitySchedule
+            insulinSensitivitySchedule: insulinSensitivitySchedule,
+            provenanceIdentifier: HKSource.default().bundleIdentifier
         )
         let insulinModelSetting: InsulinModelSettings?
         if let actionDuration = insulinActionDuration {
@@ -36,14 +36,12 @@ class DeviceDataManager {
         }
         doseStore = DoseStore(
             healthStore: healthStore,
-            observeHealthKitForCurrentAppOnly: false,
             cacheStore: cacheStore,
             defaultInsulinModelSetting: insulinModelSetting,
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule
         )
         glucoseStore = GlucoseStore(healthStore: healthStore,
-                                    observeHealthKitForCurrentAppOnly: false,
                                     cacheStore: cacheStore)
     }
 

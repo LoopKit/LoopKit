@@ -8,42 +8,59 @@
 
 import SwiftUI
 
+// ANNA FIXME: adapt bolus view for this
+
 public struct ExpandableDatePicker: View {
-    @State var date: Date = Date()
+    @State var dateShouldExpand = false
+    @Binding var date: Date
+    let placeholderText: String
     let pickerRange: ClosedRange<Date>
-    let text: String
-    var onUpdate: (Date) -> Void
+    @State var userDidTap: Bool = false
     
     public init (
-        with date: Date,
+        with date: Binding<Date>,
         pickerRange: ClosedRange<Date>? = nil,
-        text: String = "",
-        onUpdate: @escaping (Date) -> Void
+        placeholderText: String = ""
     ) {
+        _date = date
+        self.placeholderText = placeholderText
+        
         let today = Date()
-        self.pickerRange = pickerRange ?? today.addingTimeInterval(-.hours(6))...today.addingTimeInterval(.hours(6))
-        self.text = text
-        self.onUpdate = onUpdate
-        self.date = date
+        self.pickerRange = pickerRange ?? today.addingTimeInterval(-.hours(24))...today
     }
     
     public var body: some View {
-        ZStack(alignment: .topLeading) {
-            // ANNA TOOD: fix buggy animations
-            DatePicker(
-                "",
-                selection: $date.onChange(onUpdate),
-                in: Date().addingTimeInterval(-.hours(6))...Date().addingTimeInterval(.hours(6)),
-                displayedComponents: [.date, .hourAndMinute]
-            )
-            .pickerStyle(WheelPickerStyle())
-            Text(text)
+        VStack(spacing: 0) {
+            HStack {
+                dateFieldText
+                Spacer()
+            }
+            .padding()
+            .frame(minWidth: 0, maxWidth: .infinity).onTapGesture {
+                self.userDidTap = true
+                // Hack to refresh binding
+                self.date = Date(timeInterval: 0, since: self.date)
+                self.dateShouldExpand.toggle()
+            }
+            if dateShouldExpand {
+                DatePicker("", selection: $date, in: pickerRange, displayedComponents: .date)
+                .labelsHidden()
+            }
+        }
+    }
+    
+    private var dateFieldText: some View {
+        if userDidTap {
+            return Text(dateFormatter.string(from: date))
+            // Show the placeholder text if user hasn't interacted with picker
+        } else {
+            return Text(placeholderText).foregroundColor(Color(UIColor.lightGray))
         }
     }
     
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd, H:mm"
+        formatter.dateStyle = .medium
         formatter.timeZone = TimeZone.current
         return formatter
     }

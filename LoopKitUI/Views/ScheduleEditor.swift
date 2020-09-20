@@ -10,7 +10,6 @@ import SwiftUI
 import HealthKit
 import LoopKit
 
-
 enum SavingMechanism<Value> {
     case synchronous((_ value: Value) -> Void)
     case asynchronous((_ value: Value, _ completion: @escaping (Error?) -> Void) -> Void)
@@ -75,6 +74,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     @State private var presentedAlert: PresentedAlert?
 
     @Environment(\.dismiss) var dismiss
+    @Environment(\.authenticate) var authenticate
 
     init(
         title: Text,
@@ -88,7 +88,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         @ViewBuilder valuePicker: @escaping (_ item: Binding<RepeatingScheduleValue<Value>>, _ availableWidth: CGFloat) -> ValuePicker,
         @ViewBuilder actionAreaContent: () -> ActionAreaContent,
         savingMechanism: SavingMechanism<[RepeatingScheduleValue<Value>]>,
-        mode: PresentationMode = .legacySettings,
+        mode: PresentationMode = .settings,
         therapySettingType: TherapySetting = .none
     ) {
         self.title = title
@@ -108,7 +108,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
 
     var body: some View {
         ZStack {
-            setupConfigurationPage
+            configurationPage
             .disabled(isSyncing || isAddingNewItem)
             .zIndex(0)
 
@@ -138,26 +138,31 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         }
     }
     
-    private var setupConfigurationPage: some View {
+    private var configurationPage: some View {
         switch mode {
-        case .legacySettings:
-            return AnyView(wrappedPage)
-        case .acceptanceFlow, .settings:
-            return AnyView(configurationPage)
+        case .acceptanceFlow:
+            return AnyView(page)
+        case .settings:
+            return AnyView(pageWithCancel)
         }
     }
-    
-    private var wrappedPage: some View {
-        NavigationView {
-            configurationPage
-            .navigationBarItems(
-                leading: cancelButton, // add in cancel button if modal
-                trailing: trailingNavigationItems
+        
+    private var pageWithCancel: some View {
+        switch saveButtonState {
+        case .disabled, .loading:
+            return AnyView(page
+                .navigationBarBackButtonHidden(false)
+                .navigationBarItems(leading: EmptyView(), trailing: trailingNavigationItems)
+            )
+        case .enabled:
+            return AnyView(page
+                .navigationBarBackButtonHidden(true)
+                .navigationBarItems(leading: cancelButton, trailing: trailingNavigationItems)
             )
         }
     }
     
-    private var configurationPage: some View {
+    private var page: some View {
         ConfigurationPage(
             title: title,
             actionButtonTitle: Text(mode.buttonText),
@@ -182,7 +187,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                 case .required(let alertContent):
                     self.presentedAlert = .saveConfirmation(alertContent)
                 case .notRequired:
-                    self.beginSaving()
+                    self.startSaving()
                 }
             }
         )
@@ -305,7 +310,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     }
 
     var cancelButton: some View {
-        return Button(action: dismiss, label: { Text("Cancel") })
+        Button(action: { self.dismiss() } ) { Text("Cancel", comment: "Cancel editing settings button title") }
     }
 
     var editButton: some View {
@@ -351,13 +356,25 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         .disabled(tableDeletionState != .disabled || scheduleItems.count >= scheduleItemLimit)
     }
 
-    private func beginSaving() {
+    private func startSaving() {
+        guard mode == .settings else {
+            self.continueSaving()
+            return
+        }
+        
+        authenticate(therapySettingType.authenticationChallengeDescription) {
+            switch $0 {
+            case .success: self.continueSaving()
+            case .failure: break
+            }
+        }
+    }
+    
+    private func continueSaving() {
+
         switch savingMechanism {
         case .synchronous(let save):
             save(scheduleItems)
-            if mode == .legacySettings {
-                dismiss()
-            }
         case .asynchronous(let save):
             withAnimation {
                 self.editingIndex = nil
@@ -371,8 +388,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                             self.isSyncing = false
                         }
                         self.presentedAlert = .saveError(error)
-                    } else if self.mode == .legacySettings {
-                        self.dismiss()
                     }
                 }
             }
@@ -388,7 +403,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                 primaryButton: .cancel(Text("Go Back", comment: "Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range")),
                 secondaryButton: .default(
                     Text("Continue", comment: "Button text to confirm saving from alert popup when some schedule values are outside the recommended range"),
-                    action: beginSaving
+                    action: startSaving
                 )
             )
         case .saveError(let error):

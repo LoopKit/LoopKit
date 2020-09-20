@@ -17,12 +17,13 @@ public struct SuspendThresholdEditor: View {
     var maxValue: HKQuantity?
     var save: (_ suspendThreshold: HKQuantity) -> Void
     let mode: PresentationMode
-
+    
     @State private var userDidTap: Bool = false
     @State var value: HKQuantity
     @State var isEditing = false
     @State var showingConfirmationAlert = false
     @Environment(\.dismiss) var dismiss
+    @Environment(\.authenticate) var authenticate
 
     let guardrail = Guardrail.suspendThreshold
 
@@ -31,7 +32,7 @@ public struct SuspendThresholdEditor: View {
         unit: HKUnit,
         maxValue: HKQuantity?,
         onSave save: @escaping (_ suspendThreshold: HKQuantity) -> Void,
-        mode: PresentationMode = .legacySettings
+        mode: PresentationMode = .settings
     ) {
         self._value = State(initialValue: value ?? Self.defaultValue(for: unit))
         self.initialValue = value
@@ -77,6 +78,31 @@ public struct SuspendThresholdEditor: View {
     }
 
     public var body: some View {
+        switch mode {
+        case .settings: return AnyView(contentWithCancel)
+        case .acceptanceFlow: return AnyView(content)
+        }
+    }
+    
+    private var contentWithCancel: some View {
+        if value == initialValue {
+            return AnyView(content
+                .navigationBarBackButtonHidden(false)
+                .navigationBarItems(leading: EmptyView())
+            )
+        } else {
+            return AnyView(content
+                .navigationBarBackButtonHidden(true)
+                .navigationBarItems(leading: cancelButton)
+            )
+        }
+    }
+    
+    private var cancelButton: some View {
+        Button(action: { self.dismiss() } ) { Text("Cancel", comment: "Cancel editing settings button title") }
+    }
+    
+    private var content: some View {
         ConfigurationPage(
             title: Text(TherapySetting.suspendThreshold.title),
             actionButtonTitle: Text(mode.buttonText),
@@ -122,7 +148,7 @@ public struct SuspendThresholdEditor: View {
             },
             action: {
                 if self.warningThreshold == nil {
-                    self.saveAndDismiss()
+                    self.startSaving()
                 } else {
                     self.showingConfirmationAlert = true
                 }
@@ -150,7 +176,7 @@ public struct SuspendThresholdEditor: View {
     private var instructionalContent: some View {
         HStack { // to align with guardrail warning, if present
             Text(LocalizedString("You can edit the setting by tapping into the line item.", comment: "Description of how to edit setting"))
-            .foregroundColor(.instructionalContent)
+            .foregroundColor(.secondary)
             .font(.subheadline)
             Spacer()
         }
@@ -172,20 +198,30 @@ public struct SuspendThresholdEditor: View {
     private func confirmationAlert() -> SwiftUI.Alert {
         SwiftUI.Alert(
             title: Text("Save Suspend Threshold?", comment: "Alert title for confirming a suspend threshold outside the recommended range"),
-            message: Text("The suspend threshold you have entered is outside of what is generally recommended.", comment: "Alert message for confirming a suspend threshold outside the recommended range"),
+            message: Text(TherapySetting.suspendThreshold.guardrailSaveWarningCaption),
             primaryButton: .cancel(Text("Go Back")),
             secondaryButton: .default(
                 Text("Continue"),
-                action: saveAndDismiss
+                action: startSaving
             )
         )
     }
-
-    private func saveAndDismiss() {
-        save(value)
-        if mode == .legacySettings {
-            dismiss()
+    
+    private func startSaving() {
+        guard mode == .settings else {
+            self.continueSaving()
+            return
         }
+        authenticate(TherapySetting.suspendThreshold.authenticationChallengeDescription) {
+            switch $0 {
+            case .success: self.continueSaving()
+            case .failure: break
+            }
+        }
+    }
+    
+    private func continueSaving() {
+        self.save(self.value)
     }
 }
 

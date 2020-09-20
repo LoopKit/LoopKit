@@ -7,8 +7,12 @@
 //
 
 import LoopKit
+import SwiftUI
 
 public protocol ServiceUI: Service {
+    
+    /// The image for this type of service.
+    static var image: UIImage? { get }
 
     /// Provides a view controller to create and configure a new service, if needed.
     ///
@@ -18,6 +22,14 @@ public protocol ServiceUI: Service {
     /// Provides a view controller to configure an existing service.
     ///
     /// - Returns: A view controller to configure an existing service.
-    func settingsViewController() -> (UIViewController & ServiceSettingsNotifying & CompletionNotifying)
+    func settingsViewController(chartColors: ChartColorPalette, carbTintColor: Color, glucoseTintColor: Color, guidanceColors: GuidanceColors, insulinTintColor: Color) -> (UIViewController & ServiceSettingsNotifying & CompletionNotifying)
 
+}
+
+public extension ServiceUI {
+
+    // Default
+    static var image: UIImage? { nil }
+    
+    var image: UIImage? { return type(of: self).image }
 }

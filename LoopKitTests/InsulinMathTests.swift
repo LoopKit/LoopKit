@@ -115,6 +115,7 @@ class InsulinMathTests: XCTestCase {
                 endDate: dateFormatter.date(from: $0["end_at"] as! String)!,
                 value: $0["amount"] as! Double,
                 unit: unit,
+                deliveredUnits: $0["delivered"] as? Double,
                 description: $0["description"] as? String,
                 syncIdentifier: $0["raw"] as? String,
                 insulinModelSetting: InsulinModelSettings(model: insulinModel ?? model)
@@ -539,6 +540,21 @@ class InsulinMathTests: XCTestCase {
 
         let effects = input.glucoseEffects(defaultModel: model,
         longestEffectDuration: model.effectDuration, insulinSensitivity: insulinSensitivitySchedule)
+
+        XCTAssertEqual(output.count, effects.count)
+
+        for (expected, calculated) in zip(output, effects) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), accuracy: 1.0, String(describing: expected.startDate))
+        }
+    }
+    
+    func testGlucoseEffectFromTempBasalExponential() {
+        let input = loadDoseFixture("basal_dose_with_delivered")
+        let output = loadGlucoseEffectFixture("effect_from_basal_output_exponential")
+        let insulinModel = ExponentialInsulinModel(actionDuration: 21600.0, peakActivityTime: 4500.0)
+
+        let effects = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(output.count, effects.count)
 

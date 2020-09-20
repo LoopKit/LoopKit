@@ -21,6 +21,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         self.cgmManager = cgmManager
         self.glucoseUnit = glucoseUnit
         super.init(style: .grouped)
+        title = NSLocalizedString("CGM Settings", comment: "Title for CGM simulator settings")
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -29,8 +30,6 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        title = "CGM Settings"
 
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44

@@ -52,13 +52,41 @@ public final class CarbEntryEditViewController: UITableViewController {
         }
     }
 
-    fileprivate var quantity: HKQuantity?
+    fileprivate var lastEntryDate: Date?
 
-    fileprivate var date = Date()
+    fileprivate func updateLastEntryDate() { lastEntryDate = Date() }
 
-    fileprivate var foodType: String?
+    fileprivate var quantity: HKQuantity? {
+        didSet {
+            if quantity != oldValue {
+                updateLastEntryDate()
+            }
+        }
+    }
 
-    fileprivate var absorptionTime: TimeInterval?
+    fileprivate var date = Date() {
+        didSet {
+            if date != oldValue {
+                updateLastEntryDate()
+            }
+        }
+    }
+
+    fileprivate var foodType: String? {
+        didSet {
+            if foodType != oldValue {
+                updateLastEntryDate()
+            }
+        }
+    }
+
+    fileprivate var absorptionTime: TimeInterval? {
+        didSet {
+            if absorptionTime != oldValue {
+                updateLastEntryDate()
+            }
+        }
+    }
 
     fileprivate var absorptionTimeWasEdited = false
 
@@ -69,7 +97,8 @@ public final class CarbEntryEditViewController: UITableViewController {
     private var shouldBeginEditingFoodType = false
 
     public var updatedCarbEntry: NewCarbEntry? {
-        if  let quantity = quantity,
+        if  let lastEntryDate = lastEntryDate,
+            let quantity = quantity,
             let absorptionTime = absorptionTime ?? defaultAbsorptionTimes?.medium
         {
             if let o = originalCarbEntry, o.quantity == quantity && o.startDate == date && o.foodType == foodType && o.absorptionTime == absorptionTime {
@@ -77,11 +106,11 @@ public final class CarbEntryEditViewController: UITableViewController {
             }
             
             return NewCarbEntry(
+                date: lastEntryDate,
                 quantity: quantity,
                 startDate: date,
                 foodType: foodType,
-                absorptionTime: absorptionTime,
-                externalID: originalCarbEntry?.externalID
+                absorptionTime: absorptionTime
             )
         } else {
             return nil
@@ -255,6 +284,7 @@ public final class CarbEntryEditViewController: UITableViewController {
 
     public override func restoreUserActivityState(_ activity: NSUserActivity) {
         if let entry = activity.newCarbEntry {
+            lastEntryDate = entry.date
             quantity = entry.quantity
             date = entry.startDate
 
@@ -305,7 +335,7 @@ extension CarbEntryEditViewController: TextFieldTableViewCellDelegate {
         tableView.endUpdates()
     }
 
-    public func textFieldTableViewCellDidEndEditing(_ cell: TextFieldTableViewCell) {
+    public func textFieldTableViewCellDidChangeEditing(_ cell: TextFieldTableViewCell) {
         guard let row = tableView.indexPath(for: cell)?.row else { return }
 
         switch Row(rawValue: row) {
@@ -320,6 +350,10 @@ extension CarbEntryEditViewController: TextFieldTableViewCellDelegate {
         default:
             break
         }
+    }
+
+    public func textFieldTableViewCellDidEndEditing(_ cell: TextFieldTableViewCell) {
+        textFieldTableViewCellDidChangeEditing(cell)
     }
 }
 
@@ -387,11 +421,13 @@ extension CarbEntryEditViewController: EmojiInputControllerDelegate {
             return
         }
 
-        let lastAbsorptionTime = self.absorptionTime
-        self.absorptionTime = orderedAbsorptionTimes[section]
-
-        if let cell = tableView.cellForRow(at: IndexPath(row: Row.absorptionTime.rawValue, section: 0)) as? DateAndDurationTableViewCell {
-            cell.duration = max(lastAbsorptionTime ?? 0, orderedAbsorptionTimes[section])
+        if absorptionTime == nil {
+            // only adjust the absorption time if it wasn't already set.
+            absorptionTime = orderedAbsorptionTimes[section]
+            
+            if let cell = tableView.cellForRow(at: IndexPath(row: Row.absorptionTime.rawValue, section: 0)) as? DateAndDurationTableViewCell {
+                cell.duration = orderedAbsorptionTimes[section]
+            }
         }
     }
 }
