@@ -200,9 +200,8 @@ extension HKQuantitySample {
             unit: unit,
             deliveredUnits: deliveredUnits,
             description: nil,
-            scheduledBasalRate: scheduledBasalRate,
             syncIdentifier: syncIdentifier,
-            scheduledBasalRate: scheduledBasalRate
+            scheduledBasalRate: scheduledBasalRate,
             insulinModelSetting: insulinModelSetting
         )
     }
