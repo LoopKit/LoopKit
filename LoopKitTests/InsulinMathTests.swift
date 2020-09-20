@@ -550,17 +550,17 @@ class InsulinMathTests: XCTestCase {
     }
     
     func testGlucoseEffectFromTempBasalExponential() {
-        let input = loadDoseFixture("basal_dose_with_delivered")
+        let input = loadDoseFixture("basal_dose_with_delivered", insulinModel: exponentialModel)
         let output = loadGlucoseEffectFixture("effect_from_basal_output_exponential")
-        let insulinModel = ExponentialInsulinModel(actionDuration: 21600.0, peakActivityTime: 4500.0)
 
-        let effects = input.glucoseEffects(defaultModel: insulinModel, longestEffectDuration: insulinModel.effectDuration, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(defaultModel: exponentialModel, longestEffectDuration: exponentialModel.effectDuration, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(output.count, effects.count)
 
         for (expected, calculated) in zip(output, effects) {
             XCTAssertEqual(expected.startDate, calculated.startDate)
             XCTAssertEqual(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), accuracy: 1.0, String(describing: expected.startDate))
+            print(expected.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter), calculated.quantity.doubleValue(for: HKUnit.milligramsPerDeciliter))
         }
     }
 
@@ -1044,8 +1044,7 @@ class InsulinMathTests: XCTestCase {
             cachedDoseEntries.appendedUnion(with: normalizedDoseEntries.filterDateRange(cachedDoseEntries.lastBasalEndDate, nil)),
             "Filtering has the same outcome"
         )
-
-        let insulinModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75))
+        
         let date = f("2018-07-16 03:40:00 +0000")
 
         XCTAssertEqual(
