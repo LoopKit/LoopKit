@@ -759,7 +759,7 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
         let healthStore = HKHealthStoreMock()
-        let exponentialInsulinModel: InsulinModel = ExponentialInsulinModel(actionDuration: 21600.0, peakActivityTime: 4500.0)
+        let exponentialInsulinModel: InsulinModel = ExponentialInsulinModelPreset.humalogNovologAdult
         let startDate = dateFormatter.date(from: "2015-07-13T12:00:00")!
 
         doseStore = DoseStore(
@@ -767,7 +767,7 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
             observeHealthKitSamplesFromOtherApps: false,
             cacheStore: cacheStore,
             observationEnabled: false,
-            insulinModel: exponentialInsulinModel,
+            defaultInsulinModelSetting: InsulinModelSettings(model: exponentialInsulinModel),
             basalProfile: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1.0)]),
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             overrideHistory: TemporaryScheduleOverrideHistory(),

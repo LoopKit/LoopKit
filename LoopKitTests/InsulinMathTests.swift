@@ -554,7 +554,7 @@ class InsulinMathTests: XCTestCase {
         let output = loadGlucoseEffectFixture("effect_from_basal_output_exponential")
         let insulinModel = ExponentialInsulinModel(actionDuration: 21600.0, peakActivityTime: 4500.0)
 
-        let effects = input.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(defaultModel: insulinModel, longestEffectDuration: insulinModel.effectDuration, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(output.count, effects.count)
 
