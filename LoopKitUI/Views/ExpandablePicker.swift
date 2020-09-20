@@ -11,11 +11,12 @@ import SwiftUI
 public struct ExpandablePicker: View {
     @State var pickerShouldExpand = false
     @State var pickerIndex: Int = 0 // initializing with zero so it doesn't error
+    @State var hasAppearedForFirstTime: Bool = false // so we don't re-initialize picker if we shouldn't
     let initialPickerIndex: Int
     var onUpdate: (Int) -> Void
     let label: String
-    
     let items: [String]
+    
     
     public init (
         with items: [String],
@@ -42,7 +43,8 @@ public struct ExpandablePicker: View {
                 self.pickerShouldExpand.toggle()
             }
             .onAppear {
-                self.pickerIndex = self.initialPickerIndex
+                self.pickerIndex = !self.hasAppearedForFirstTime ? self.initialPickerIndex : self.pickerIndex
+                self.hasAppearedForFirstTime = true
             }
             if pickerShouldExpand {
                 HStack(alignment: .center) {
