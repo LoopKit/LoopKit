@@ -55,6 +55,8 @@
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="hasLoopKitOrigin" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="modelDuration" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO"/>
+        <attribute name="modelType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="programmedTempBasalRate" optional="YES" attributeType="Double" usesScalarValueType="NO" elementID="scheduledTempBasalRate"/>
         <attribute name="provenanceIdentifier" attributeType="String"/>
         <attribute name="reason" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
@@ -160,11 +162,11 @@
     <elements>
         <element name="CachedCarbObject" positionX="-63" positionY="72" width="128" height="283"/>
         <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="208"/>
-        <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="208"/>
+        <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="238"/>
         <element name="DosingDecisionObject" positionX="-63" positionY="126" width="128" height="88"/>
+        <element name="OutsideDoseEvent" positionX="-54" positionY="144" width="128" height="268"/>
         <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="268"/>
         <element name="Reservoir" positionX="-63" positionY="-18" width="128" height="105"/>
         <element name="SettingsObject" positionX="-63" positionY="126" width="128" height="88"/>
-        <element name="OutsideDoseEvent" positionX="-54" positionY="144" width="128" height="268"/>
     </elements>
 </model>
