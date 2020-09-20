@@ -87,7 +87,7 @@
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
-    <entity name="OutsideDoseEvent" representedClassName=".PumpEvent" syncable="YES" codeGenerationType="class">
+    <entity name="OutsideDoseEvent" representedClassName=".OutsideDoseEvent" syncable="YES">
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="deliveredUnits" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
@@ -158,9 +158,9 @@
         <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="208"/>
         <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="208"/>
         <element name="DosingDecisionObject" positionX="-63" positionY="126" width="128" height="88"/>
+        <element name="OutsideDoseEvent" positionX="-63" positionY="135" width="128" height="238"/>
         <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="238"/>
         <element name="Reservoir" positionX="-63" positionY="-18" width="128" height="105"/>
         <element name="SettingsObject" positionX="-63" positionY="126" width="128" height="88"/>
-        <element name="OutsideDoseEvent" positionX="-63" positionY="135" width="128" height="238"/>
     </elements>
 </model>
