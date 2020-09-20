@@ -45,14 +45,14 @@ public struct ExpandablePicker: View {
                 self.pickerIndex = self.initialPickerIndex
             }
             if pickerShouldExpand {
-                HStack {
-                    Picker(selection: $pickerIndex.onChange(onUpdate), label: Text("")) {
-                        ForEach(0 ..< items.count) {
+                HStack(alignment: .center) {
+                    Picker(selection: self.$pickerIndex.onChange(self.onUpdate), label: Text("")) {
+                        ForEach(0 ..< self.items.count) {
                             Text(self.items[$0])
                        }
                     }
                     .pickerStyle(WheelPickerStyle())
-                    .frame(maxWidth: 300, alignment: .center)
+                    .frame(alignment: .center)
                 }
             }
         }
