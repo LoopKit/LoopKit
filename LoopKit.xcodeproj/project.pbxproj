@@ -762,7 +762,7 @@
 		E9CDA72A24E3A4F60049B0D5 /* PersistedOutsideDoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CDA72924E3A4F60049B0D5 /* PersistedOutsideDoseEvent.swift */; };
 		E9CDA72B24E3A4F60049B0D5 /* PersistedOutsideDoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CDA72924E3A4F60049B0D5 /* PersistedOutsideDoseEvent.swift */; };
 		E9D95F6524C7BC400079F47D /* PresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D95F6424C7BC400079F47D /* PresentationMode.swift */; };
-		E9DFB92524E43CF500468917 /* ExpandableDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92424E43CF500468917 /* ExpandableDatePicker.swift */; };
+		E9DFB92524E43CF500468917 /* ExpandableDateListPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92424E43CF500468917 /* ExpandableDateListPicker.swift */; };
 		E9DFB92C24E634E800468917 /* ExpandablePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92B24E634E800468917 /* ExpandablePicker.swift */; };
 		E9DFB92E24E8A75C00468917 /* iob_from_multiple_curves_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9DFB92D24E8A75C00468917 /* iob_from_multiple_curves_output.json */; };
 		E9DFB93024E8CA8500468917 /* LegacyInsulinDeliveryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92F24E8CA8500468917 /* LegacyInsulinDeliveryTableViewController.swift */; };
@@ -1519,7 +1519,7 @@
 		E9CDA72924E3A4F60049B0D5 /* PersistedOutsideDoseEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistedOutsideDoseEvent.swift; sourceTree = "<group>"; };
 		E9CDA72C24E3FFAC0049B0D5 /* Modelv3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv3.xcdatamodel; sourceTree = "<group>"; };
 		E9D95F6424C7BC400079F47D /* PresentationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationMode.swift; sourceTree = "<group>"; };
-		E9DFB92424E43CF500468917 /* ExpandableDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDatePicker.swift; sourceTree = "<group>"; };
+		E9DFB92424E43CF500468917 /* ExpandableDateListPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDateListPicker.swift; sourceTree = "<group>"; };
 		E9DFB92B24E634E800468917 /* ExpandablePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandablePicker.swift; sourceTree = "<group>"; };
 		E9DFB92D24E8A75C00468917 /* iob_from_multiple_curves_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = iob_from_multiple_curves_output.json; sourceTree = "<group>"; };
 		E9DFB92F24E8CA8500468917 /* LegacyInsulinDeliveryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyInsulinDeliveryTableViewController.swift; sourceTree = "<group>"; };
@@ -1871,7 +1871,7 @@
 				89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */,
 				E9086B3424B3A8820062F5C8 /* ChartContainerView.swift */,
 				89186C0A24BFD6DB0003D0F3 /* DurationPicker.swift */,
-				E9DFB92424E43CF500468917 /* ExpandableDatePicker.swift */,
+				E9DFB92424E43CF500468917 /* ExpandableDateListPicker.swift */,
 				E9DFB92B24E634E800468917 /* ExpandablePicker.swift */,
 			);
 			path = Views;
@@ -3178,7 +3178,7 @@
 				89E7E61024D11AB600591386 /* OrientationLock.swift in Sources */,
 				89B0B2AA2453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift in Sources */,
 				898B4E75246CCAB50053C484 /* Binding.swift in Sources */,
-				E9DFB92524E43CF500468917 /* ExpandableDatePicker.swift in Sources */,
+				E9DFB92524E43CF500468917 /* ExpandableDateListPicker.swift in Sources */,
 				892155182245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.swift in Sources */,
 				892155132245C516009112BC /* SegmentedGaugeBarView.swift in Sources */,
 				E9077D2A24ACDE2C0066A88D /* CorrectionRangeInformationView.swift in Sources */,
