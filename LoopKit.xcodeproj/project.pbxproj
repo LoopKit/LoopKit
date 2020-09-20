@@ -4598,7 +4598,7 @@
 				E9C6911825180A4E009F9999 /* Modelv2.xcdatamodel */,
 				E9C6911925180A4E009F9999 /* Model.xcdatamodel */,
 			);
-			currentVersion = E9C6911725180A4E009F9999 /* Modelv3.xcdatamodel */;
+			currentVersion = E9C6911B25180A65009F9999 /* Modelv4.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

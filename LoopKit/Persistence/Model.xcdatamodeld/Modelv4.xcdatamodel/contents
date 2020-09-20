@@ -93,6 +93,8 @@
         <attribute name="deliveredUnits" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="doseType" optional="YES" attributeType="String"/>
         <attribute name="duration" attributeType="Double" minValueString="0" defaultValueString="0.0" usesScalarValueType="NO"/>
+        <attribute name="modelDuration" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO"/>
+        <attribute name="modelType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="mutable" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="raw" optional="YES" attributeType="Binary"/>
@@ -113,6 +115,8 @@
         <attribute name="deliveredUnits" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="doseType" optional="YES" attributeType="String"/>
         <attribute name="duration" attributeType="Double" minValueString="0" defaultValueString="0.0" usesScalarValueType="NO"/>
+        <attribute name="modelDuration" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="NO"/>
+        <attribute name="modelType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="mutable" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="raw" optional="YES" attributeType="Binary"/>
@@ -158,9 +162,9 @@
         <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="208"/>
         <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="208"/>
         <element name="DosingDecisionObject" positionX="-63" positionY="126" width="128" height="88"/>
-        <element name="OutsideDoseEvent" positionX="-63" positionY="135" width="128" height="238"/>
-        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="238"/>
+        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="268"/>
         <element name="Reservoir" positionX="-63" positionY="-18" width="128" height="105"/>
         <element name="SettingsObject" positionX="-63" positionY="126" width="128" height="88"/>
+        <element name="OutsideDoseEvent" positionX="-54" positionY="144" width="128" height="268"/>
     </elements>
 </model>
