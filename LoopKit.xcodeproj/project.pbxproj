@@ -99,7 +99,6 @@
 		4322B78E202FA2B30002837D /* InsulinMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEDF1C7294D50073BE78 /* InsulinMath.swift */; };
 		4322B78F202FA2B30002837D /* InsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */; };
 		4322B790202FA2B30002837D /* InsulinValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DFE2811CB1FB8500EFBE95 /* InsulinValue.swift */; };
-		4322B791202FA2B70002837D /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */; };
 		4322B792202FA3CC0002837D /* carb_effect_from_history_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FE441C7291A60073BE78 /* carb_effect_from_history_input.json */; };
 		4322B793202FA3CC0002837D /* carb_effect_from_history_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FE451C7291A60073BE78 /* carb_effect_from_history_output.json */; };
 		4322B794202FA3CC0002837D /* carb_entry_input.json in Resources */ = {isa = PBXBuildFile; fileRef = C17F4CB21EE9B6DF005079B1 /* carb_entry_input.json */; };
@@ -574,7 +573,6 @@
 		A9E6758322713F4700E25293 /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEE1C7290350073BE78 /* HKUnit.swift */; };
 		A9E6758422713F4700E25293 /* NewCarbEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE5B1C7291D80073BE78 /* NewCarbEntry.swift */; };
 		A9E6758522713F4700E25293 /* GlucoseMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE861C72934C0073BE78 /* GlucoseMath.swift */; };
-		A9E6758622713F4700E25293 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */; };
 		A9E6758722713F4700E25293 /* CarbEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE4A1C7291BD0073BE78 /* CarbEntry.swift */; };
 		A9E6758822713F4700E25293 /* HealthKitSampleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDED1C7290350073BE78 /* HealthKitSampleStore.swift */; };
 		A9E6758B22713F4700E25293 /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434570431FE605E30089C4DC /* OSLog.swift */; };
@@ -757,6 +755,7 @@
 		E96DCB5824AEF50F007117BC /* SuspendThresholdInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */; };
 		E96DCB5A24AF74AC007117BC /* SuspendThresholdEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */; };
 		E96DCB5E24AF7DC7007117BC /* BasalRatesInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5D24AF7DC7007117BC /* BasalRatesInformationView.swift */; };
+		E9C6911A25180A4E009F9999 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E9C6911625180A4E009F9999 /* Model.xcdatamodeld */; };
 		E9CDA72724E3A4BA0049B0D5 /* OutsideDoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CDA72624E3A4BA0049B0D5 /* OutsideDoseEvent.swift */; };
 		E9CDA72824E3A4BA0049B0D5 /* OutsideDoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CDA72624E3A4BA0049B0D5 /* OutsideDoseEvent.swift */; };
 		E9CDA72A24E3A4F60049B0D5 /* PersistedOutsideDoseEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CDA72924E3A4F60049B0D5 /* PersistedOutsideDoseEvent.swift */; };
@@ -1170,7 +1169,6 @@
 		43D8FEDC1C7294D50073BE78 /* DoseEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseEntry.swift; sourceTree = "<group>"; };
 		43D8FEDD1C7294D50073BE78 /* DoseStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseStore.swift; sourceTree = "<group>"; };
 		43D8FEDF1C7294D50073BE78 /* InsulinMath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinMath.swift; sourceTree = "<group>"; };
-		43D8FEE11C7294D50073BE78 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		43D8FEE21C7294D50073BE78 /* PersistenceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		43D8FEE31C7294D50073BE78 /* Reservoir.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reservoir.swift; sourceTree = "<group>"; };
 		43D8FEE41C7294D50073BE78 /* Reservoir+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Reservoir+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -1387,7 +1385,6 @@
 		A912BE2A245B9E8600CBE199 /* SettingsObject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsObject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A919889B2354E5EB00B75EEE /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		A919889E2355016B00B75EEE /* DosingDecisionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DosingDecisionStore.swift; sourceTree = "<group>"; };
-		A91A601823CD01B000C0E8A1 /* Modelv2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv2.xcdatamodel; sourceTree = "<group>"; };
 		A91A601923CD023800C0E8A1 /* Modelv2.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv2.xcmappingmodel; sourceTree = "<group>"; };
 		A9498D6E23386C0B00DAA9B9 /* TempBasalRecommendation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalRecommendation.swift; sourceTree = "<group>"; };
 		A9498D7123386C3200DAA9B9 /* LoggingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggingService.swift; sourceTree = "<group>"; };
@@ -1412,7 +1409,6 @@
 		A971C8A123C6B17D0099BEFC /* SettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStoreTests.swift; sourceTree = "<group>"; };
 		A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DosingDecisionStoreTests.swift; sourceTree = "<group>"; };
 		A991161323426A0A00A4B2E9 /* ServiceSetupNotifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSetupNotifying.swift; sourceTree = "<group>"; };
-		A996FB6924F089F900864646 /* Modelv3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv3.xcdatamodel; sourceTree = "<group>"; };
 		A99C7372233990D400C80963 /* TempBasalRecommendationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempBasalRecommendationTests.swift; sourceTree = "<group>"; };
 		A99C7374233993FE00C80963 /* DiagnosticLogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticLogTests.swift; sourceTree = "<group>"; };
 		A99C73762339A67A00C80963 /* GlucoseThresholdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseThresholdTests.swift; sourceTree = "<group>"; };
@@ -1515,9 +1511,12 @@
 		E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdInformationView.swift; sourceTree = "<group>"; };
 		E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdEditor.swift; sourceTree = "<group>"; };
 		E96DCB5D24AF7DC7007117BC /* BasalRatesInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalRatesInformationView.swift; sourceTree = "<group>"; };
+		E9C6911725180A4E009F9999 /* Modelv3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv3.xcdatamodel; sourceTree = "<group>"; };
+		E9C6911825180A4E009F9999 /* Modelv2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv2.xcdatamodel; sourceTree = "<group>"; };
+		E9C6911925180A4E009F9999 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		E9C6911B25180A65009F9999 /* Modelv4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv4.xcdatamodel; sourceTree = "<group>"; };
 		E9CDA72624E3A4BA0049B0D5 /* OutsideDoseEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutsideDoseEvent.swift; sourceTree = "<group>"; };
 		E9CDA72924E3A4F60049B0D5 /* PersistedOutsideDoseEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistedOutsideDoseEvent.swift; sourceTree = "<group>"; };
-		E9CDA72C24E3FFAC0049B0D5 /* Modelv3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv3.xcdatamodel; sourceTree = "<group>"; };
 		E9D95F6424C7BC400079F47D /* PresentationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationMode.swift; sourceTree = "<group>"; };
 		E9DFB92424E43CF500468917 /* ExpandableDateListPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDateListPicker.swift; sourceTree = "<group>"; };
 		E9DFB92B24E634E800468917 /* ExpandablePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandablePicker.swift; sourceTree = "<group>"; };
@@ -1887,7 +1886,7 @@
 				43CF0B3E2030FD0D002A66DE /* UploadState.swift */,
 				A9BD318724F45C0100994B83 /* Modelv3.xcmappingmodel */,
 				A91A601923CD023800C0E8A1 /* Modelv2.xcmappingmodel */,
-				43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */,
+				E9C6911625180A4E009F9999 /* Model.xcdatamodeld */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -3384,7 +3383,6 @@
 				4322B779202FA2790002837D /* NewCarbEntry.swift in Sources */,
 				898C896A24D4BF11002FA994 /* Guardrail+Settings.swift in Sources */,
 				4322B76E202FA26B0002837D /* GlucoseMath.swift in Sources */,
-				4322B791202FA2B70002837D /* Model.xcdatamodeld in Sources */,
 				891A3FDB224BEC0D00378B27 /* CarbSensitivitySchedule.swift in Sources */,
 				4322B773202FA2790002837D /* CarbEntry.swift in Sources */,
 				43D8FDFC1C7290350073BE78 /* HealthKitSampleStore.swift in Sources */,
@@ -3497,6 +3495,7 @@
 				A9498D7823386C3300DAA9B9 /* LoggingService.swift in Sources */,
 				1D096C0224C24C220078B6B5 /* InsulinModelSettings.swift in Sources */,
 				433BC7AA20538D4C000B1200 /* CachedGlucoseObject+CoreDataClass.swift in Sources */,
+				E9C6911A25180A4E009F9999 /* Model.xcdatamodeld in Sources */,
 				4322B786202FA2AF0002837D /* WalshInsulinModel.swift in Sources */,
 				4378B64B1ED61965000AE785 /* GlucoseEffectVelocity.swift in Sources */,
 				A9D77A2F242E8BDE0009F62C /* BolusRecommendation.swift in Sources */,
@@ -3672,7 +3671,6 @@
 				A9E6758322713F4700E25293 /* HKUnit.swift in Sources */,
 				A9E6758422713F4700E25293 /* NewCarbEntry.swift in Sources */,
 				A9E6758522713F4700E25293 /* GlucoseMath.swift in Sources */,
-				A9E6758622713F4700E25293 /* Model.xcdatamodeld in Sources */,
 				A9E6758722713F4700E25293 /* CarbEntry.swift in Sources */,
 				A9E6758822713F4700E25293 /* HealthKitSampleStore.swift in Sources */,
 				89AE223D228BCB0B00BDFD85 /* Collection.swift in Sources */,
@@ -4582,19 +4580,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				A996FB6924F089F900864646 /* Modelv3.xcdatamodel */,
-				E9CDA72C24E3FFAC0049B0D5 /* Modelv3.xcdatamodel */,
-				A91A601823CD01B000C0E8A1 /* Modelv2.xcdatamodel */,
-				43D8FEE11C7294D50073BE78 /* Model.xcdatamodel */,
-			);
-			currentVersion = E9CDA72C24E3FFAC0049B0D5 /* Modelv3.xcdatamodel */;
-			path = Model.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
 		C17F39BF23CD24A000FA1113 /* DeviceLog.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
@@ -4602,6 +4587,19 @@
 			);
 			currentVersion = C17F39C023CD24A000FA1113 /* DeviceCommsLog.xcdatamodel */;
 			path = DeviceLog.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		E9C6911625180A4E009F9999 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E9C6911B25180A65009F9999 /* Modelv4.xcdatamodel */,
+				E9C6911725180A4E009F9999 /* Modelv3.xcdatamodel */,
+				E9C6911825180A4E009F9999 /* Modelv2.xcdatamodel */,
+				E9C6911925180A4E009F9999 /* Model.xcdatamodel */,
+			);
+			currentVersion = E9C6911725180A4E009F9999 /* Modelv3.xcdatamodel */;
+			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
