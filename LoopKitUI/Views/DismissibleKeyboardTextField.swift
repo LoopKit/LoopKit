@@ -101,7 +101,11 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         }
         
         @objc fileprivate func editingDidBegin(_ textField: UITextField) {
-            textField.moveCursorToEnd()
+            // Even though we are likely already on .main, we still need to queue this cursor (selection) change in
+            // order for it to work
+            DispatchQueue.main.async {
+                textField.moveCursorToEnd()
+            }
         }
     }
 }

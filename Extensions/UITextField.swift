@@ -10,26 +10,20 @@ import UIKit
 
 extension UITextField {
     
-    func selectAll(completion: (() -> Void)? = nil) {
-        DispatchQueue.main.async {
-            self.selectedTextRange = self.textRange(from: self.beginningOfDocument, to: self.endOfDocument)
-            completion?()
-        }
+    func selectAll() {
+        dispatchPrecondition(condition: .onQueue(.main))
+        self.selectedTextRange = self.textRange(from: self.beginningOfDocument, to: self.endOfDocument)
     }
 
-    func moveCursorToEnd(completion: (() -> Void)? = nil) {
-        DispatchQueue.main.async {
-            let newPosition = self.endOfDocument
-            self.selectedTextRange = self.textRange(from: newPosition, to: newPosition)
-            completion?()
-        }
+    func moveCursorToEnd() {
+        dispatchPrecondition(condition: .onQueue(.main))
+        let newPosition = self.endOfDocument
+        self.selectedTextRange = self.textRange(from: newPosition, to: newPosition)
     }
     
-    func moveCursorToBeginning(completion: (() -> Void)? = nil) {
-        DispatchQueue.main.async {
-            let newPosition = self.beginningOfDocument
-            self.selectedTextRange = self.textRange(from: newPosition, to: newPosition)
-            completion?()
-        }
+    func moveCursorToBeginning() {
+        dispatchPrecondition(condition: .onQueue(.main))
+        let newPosition = self.beginningOfDocument
+        self.selectedTextRange = self.textRange(from: newPosition, to: newPosition)
     }
 }

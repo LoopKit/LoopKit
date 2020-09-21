@@ -65,8 +65,11 @@ public class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
     // MARK: - UITextFieldDelegate
     
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.moveCursorToEnd { [weak self] in
+        // Even though we are likely already on .main, we still need to queue this cursor (selection) change in
+        // order for it to work
+        DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            self.textField.moveCursorToEnd()
             self.delegate?.textFieldTableViewCellDidBeginEditing(self)
         }
     }
