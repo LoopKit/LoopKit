@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-// ANNA FIXME: adapt bolus view for this
-
 public struct ExpandableDateListPicker: View {
     @State var date: Date = Date()
     let pickerRange: ClosedRange<Date>
@@ -31,7 +29,7 @@ public struct ExpandableDateListPicker: View {
     
     public var body: some View {
         ZStack(alignment: .topLeading) {
-            // ANNA TODO: fix buggy animations
+            // FIXME: fix buggy animations
             DatePicker(
                 "",
                 selection: $date.onChange(onUpdate),

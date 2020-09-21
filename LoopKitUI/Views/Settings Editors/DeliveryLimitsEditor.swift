@@ -326,7 +326,6 @@ struct DeliveryLimitsGuardrailWarning: View {
             case .maximumBasalRate:
                 switch threshold {
                 case .minimum, .belowRecommended:
-                    // ANNA TODO: Ask MLee about this one
                     title = Text("Low Maximum Basal Rate", comment: "Title text for low maximum basal rate warning")
                     caption = Text("A setting of 0 U/hr means Loop will not automatically administer insulin.", comment: "Caption text for low maximum basal rate warning")
                 case .aboveRecommended, .maximum:
