@@ -1,5 +1,5 @@
 //
-//  GlucoseValueType.swift
+//  GlucoseRangeCategory.swift
 //  LoopKit
 //
 //  Created by Nathaniel Hamming on 2020-06-23.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum GlucoseValueType: Int, CaseIterable {
+public enum GlucoseRangeCategory: Int, CaseIterable {
     case belowRange
     case urgentLow
     case low

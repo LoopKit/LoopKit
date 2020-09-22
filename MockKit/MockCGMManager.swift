@@ -10,7 +10,7 @@ import HealthKit
 import LoopKit
 import LoopTestingKit
 
-public struct MockCGMState: SensorDisplayable {
+public struct MockCGMState: GlucoseDisplayable {
     public var isStateValid: Bool
 
     public var trendType: GlucoseTrend?
@@ -19,7 +19,7 @@ public struct MockCGMState: SensorDisplayable {
         return true
     }
     
-    public var glucoseValueType: GlucoseValueType?
+    public var glucoseRangeCategory: GlucoseRangeCategory?
 
     public let unit: HKUnit = .milligramsPerDeciliter
     
@@ -156,7 +156,7 @@ public struct MockCGMState: SensorDisplayable {
     
     public init(isStateValid: Bool = true,
                 trendType: GlucoseTrend? = nil,
-                glucoseValueType: GlucoseValueType? = nil,
+                glucoseRangeCategory: GlucoseRangeCategory? = nil,
                 urgentLowGlucoseThresholdValue: Double = 55,
                 lowGlucoseThresholdValue: Double = 80,
                 highGlucoseThresholdValue: Double = 200,
@@ -169,7 +169,7 @@ public struct MockCGMState: SensorDisplayable {
     {
         self.isStateValid = isStateValid
         self.trendType = trendType
-        self.glucoseValueType = glucoseValueType
+        self.glucoseRangeCategory = glucoseRangeCategory
         self.urgentLowGlucoseThresholdValue = urgentLowGlucoseThresholdValue
         self.lowGlucoseThresholdValue = lowGlucoseThresholdValue
         self.highGlucoseThresholdValue = highGlucoseThresholdValue
@@ -259,7 +259,7 @@ public final class MockCGMManager: TestingCGMManager {
         public let backgroundContent: Alert.Content
     }
     let alerts: [Alert.AlertIdentifier: MockAlert] = [
-        submarine.identifier: submarine, buzz.identifier: buzz, critical.identifier: critical
+        submarine.identifier: submarine, buzz.identifier: buzz, critical.identifier: critical, signalLoss.identifier: signalLoss
     ]
     
     public static let submarine = MockAlert(sound: .sound(name: "sub.caf"), identifier: "submarine",
@@ -271,6 +271,10 @@ public final class MockCGMManager: TestingCGMManager {
     public static let buzz = MockAlert(sound: .vibrate, identifier: "buzz",
                                        foregroundContent: Alert.Content(title: "Alert: FG Title", body: "FG bzzzt", acknowledgeActionButtonLabel: "Buzz"),
                                        backgroundContent: Alert.Content(title: "Alert: BG Title", body: "BG bzzzt", acknowledgeActionButtonLabel: "Buzz"))
+    public static let signalLoss = MockAlert(sound: .sound(name: "critical.caf"),
+                                             identifier: "signalLoss",
+                                             foregroundContent: Alert.Content(title: "Signal Loss", body: "CGM simulator signal loss", acknowledgeActionButtonLabel: "Dismiss"),
+                                             backgroundContent: Alert.Content(title: "Signal Loss", body: "CGM simulator signal loss", acknowledgeActionButtonLabel: "Dismiss"))
 
     public var mockSensorState: MockCGMState {
         didSet {
@@ -280,10 +284,10 @@ public final class MockCGMManager: TestingCGMManager {
         }
     }
 
-    public var sensorState: SensorDisplayable? {
+    public var glucoseDisplay: GlucoseDisplayable? {
         return mockSensorState
     }
-
+    
     public var testingDevice: HKDevice {
         return MockCGMDataSource.device
     }
@@ -377,23 +381,27 @@ public final class MockCGMManager: TestingCGMManager {
         if case .newData(let samples) = result,
             let currentValue = samples.first
         {
-            switch currentValue.quantity {
-            case ...mockSensorState.cgmLowerLimit:
-                mockSensorState.glucoseValueType = .belowRange
-            case mockSensorState.cgmLowerLimit..<mockSensorState.urgentLowGlucoseThreshold:
-                mockSensorState.glucoseValueType = .urgentLow
-            case mockSensorState.urgentLowGlucoseThreshold..<mockSensorState.lowGlucoseThreshold:
-                mockSensorState.glucoseValueType = .low
-            case mockSensorState.lowGlucoseThreshold..<mockSensorState.highGlucoseThreshold:
-                mockSensorState.glucoseValueType = .normal
-            case mockSensorState.highGlucoseThreshold..<mockSensorState.cgmUpperLimit:
-                mockSensorState.glucoseValueType = .high
-            default:
-                mockSensorState.glucoseValueType = .aboveRange
-            }
+            mockSensorState.glucoseRangeCategory = glucoseRangeCategory(for: currentValue.quantitySample)
         }
         self.delegate.notify { delegate in
             delegate?.cgmManager(self, didUpdateWith: result)
+        }
+    }
+    
+    public func glucoseRangeCategory(for glucose: GlucoseSampleValue) -> GlucoseRangeCategory? {
+        switch glucose.quantity {
+        case ...mockSensorState.cgmLowerLimit:
+            return glucose.wasUserEntered ? .urgentLow : .belowRange
+        case mockSensorState.cgmLowerLimit..<mockSensorState.urgentLowGlucoseThreshold:
+            return .urgentLow
+        case mockSensorState.urgentLowGlucoseThreshold..<mockSensorState.lowGlucoseThreshold:
+            return .low
+        case mockSensorState.lowGlucoseThreshold..<mockSensorState.highGlucoseThreshold:
+            return .normal
+        case mockSensorState.highGlucoseThreshold..<mockSensorState.cgmUpperLimit:
+            return .high
+        default:
+            return glucose.wasUserEntered ? .high : .aboveRange
         }
     }
 
@@ -476,8 +484,16 @@ extension MockCGMManager {
                                        sound: alert.sound))
         }
 
-        // updating the status report
-        mockSensorState.cgmStatusHighlight = MockCGMStatusHighlight(localizedMessage: alert.foregroundContent.title, alertIdentifier: alert.identifier)
+        // updating the status highlight
+        setStatusHighlight(MockCGMStatusHighlight(localizedMessage: alert.foregroundContent.title, alertIdentifier: alert.identifier))
+    }
+    
+    public func issueSignalLossAlert() {
+        issueAlert(identifier: MockCGMManager.signalLoss.identifier, trigger: .immediate, delay: nil)
+    }
+    
+    public func retractSignalLossAlert() {
+        retractAlert(identifier: MockCGMManager.signalLoss.identifier)
     }
     
     public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) {
@@ -487,8 +503,25 @@ extension MockCGMManager {
 
     public func retractAlert(identifier: Alert.AlertIdentifier) {
         delegate.notify { $0?.retractAlert(identifier: Alert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: identifier)) }
-        // updating the status report
-        mockSensorState.cgmStatusHighlight = nil
+        
+        // updating the status highlight
+        if  mockSensorState.cgmStatusHighlight?.alertIdentifier == identifier {
+            setStatusHighlight(nil)
+        }
+    }
+    
+    public func setStatusHighlight(_ statusHighlight: MockCGMStatusHighlight?) {
+        mockSensorState.cgmStatusHighlight = statusHighlight
+        
+        if statusHighlight == nil,
+            case .signalLoss = dataSource.model
+        {
+            // restore signal loss status highlight
+            issueSignalLossAlert()
+        }
+
+        // trigger display of the status highlight
+        sendCGMResult(.noData)
     }
     
     private func registerBackgroundTask() {
@@ -540,8 +573,8 @@ extension MockCGMState: RawRepresentable {
             self.trendType = GlucoseTrend(rawValue: trendTypeRawValue)
         }
         
-        if let glucoseValueTypeRawValue = rawValue["glucoseValueType"] as? GlucoseValueType.RawValue {
-            self.glucoseValueType = GlucoseValueType(rawValue: glucoseValueTypeRawValue)
+        if let glucoseRangeCategoryRawValue = rawValue["glucoseRangeCategory"] as? GlucoseRangeCategory.RawValue {
+            self.glucoseRangeCategory = GlucoseRangeCategory(rawValue: glucoseRangeCategoryRawValue)
         }
         
         if let localizedMessage = rawValue["localizedMessage"] as? String,
@@ -574,8 +607,8 @@ extension MockCGMState: RawRepresentable {
             rawValue["trendType"] = trendType.rawValue
         }
         
-        if let glucoseValueType = glucoseValueType {
-            rawValue["glucoseValueType"] = glucoseValueType.rawValue
+        if let glucoseRangeCategory = glucoseRangeCategory {
+            rawValue["glucoseRangeCategory"] = glucoseRangeCategory.rawValue
         }
         
         if let cgmStatusHighlight = cgmStatusHighlight {
@@ -611,7 +644,7 @@ extension MockCGMState: CustomDebugStringConvertible {
         * cgmLowerLimitValue: \(cgmLowerLimitValue)
         * cgmUpperLimitValue: \(cgmUpperLimitValue)
         * highGlucoseThresholdValue: \(highGlucoseThresholdValue)
-        * glucoseValueType: \(glucoseValueType as Any)
+        * glucoseRangeCategory: \(glucoseRangeCategory as Any)
         * cgmStatusHighlight: \(cgmStatusHighlight as Any)
         * cgmLifecycleProgress: \(cgmLifecycleProgress as Any)
         * progressWarningThresholdPercentValue: \(progressWarningThresholdPercentValue as Any)
