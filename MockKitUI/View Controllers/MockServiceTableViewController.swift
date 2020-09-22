@@ -210,7 +210,7 @@ final class MockServiceTableViewController: UITableViewController {
                 show(MockServiceHistoryViewController.init(mockService: service), sender: tableView.cellForRow(at: indexPath))
             case .clearHistory:
                 let alert = UIAlertController(clearHistoryHandler: {
-                    self.service.history = []
+                    self.service.clearHistory()
                 })
                 present(alert, animated: true) {
                     tableView.deselectRow(at: indexPath, animated: true)

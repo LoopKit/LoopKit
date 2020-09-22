@@ -23,7 +23,13 @@ public final class MockService: Service {
     
     public var analytics: Bool
     
-    public var history: [String]
+    public let maxHistoryItems = 1000
+    
+    private var lockedHistory = Locked<[String]>([])
+    
+    public var history: [String] {
+        lockedHistory.value
+    }
     
     private var dateFormatter = ISO8601DateFormatter()
     
@@ -31,16 +37,12 @@ public final class MockService: Service {
         self.remoteData = true
         self.logging = true
         self.analytics = true
-        
-        self.history = []
     }
     
     public init?(rawState: RawStateValue) {
         self.remoteData = rawState["remoteData"] as? Bool ?? false
         self.logging = rawState["logging"] as? Bool ?? false
         self.analytics = rawState["analytics"] as? Bool ?? false
-        
-        self.history = []
     }
     
     public var rawState: RawStateValue {
@@ -59,9 +61,18 @@ public final class MockService: Service {
     
     public func completeDelete() {}
     
+    public func clearHistory() {
+        lockedHistory.value = []
+    }
+    
     private func record(_ message: String) {
-        let timestamp = dateFormatter.string(from: Date())
-        history.append("\(timestamp): \(message)")
+        let timestamp = self.dateFormatter.string(from: Date())
+        lockedHistory.mutate { history in
+            history.append("\(timestamp): \(message)")
+            if history.count > self.maxHistoryItems {
+                history.removeFirst(history.count - self.maxHistoryItems)
+            }
+        }
     }
     
 }
