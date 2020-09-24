@@ -181,6 +181,22 @@ public final class CarbStore: HealthKitSampleStore {
     
     var settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
 
+    public var absorptionModel: CarbAbsorptionComputable {
+        return settings.absorptionModel
+    }
+
+    public var initialAbsorptionTimeOverrun: Double {
+        return settings.initialAbsorptionTimeOverrun
+    }
+    
+    public var adaptiveAbsorptionRateEnabled: Bool {
+        return settings.adaptiveAbsorptionRateEnabled
+    }
+    
+    public var adaptiveRateStandbyIntervalFraction: Double {
+        return settings.adaptiveRateStandbyIntervalFraction
+    }
+    
     private let provenanceIdentifier: String
 
     /**
