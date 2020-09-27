@@ -264,6 +264,9 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
                 cell.titleLabel.text = LocalizedString("Start Time", comment: "The text for the override start time")
                 cell.datePicker.datePickerMode = .dateAndTime
+                if #available(iOS 14.0, *) {
+                    cell.datePicker.preferredDatePickerStyle = .wheels
+                }
                 cell.datePicker.minimumDate = min(startDate, Date())
                 cell.date = startDate
                 cell.delegate = self
