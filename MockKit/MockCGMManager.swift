@@ -288,6 +288,10 @@ public final class MockCGMManager: TestingCGMManager {
         return mockSensorState
     }
     
+    public var hasValidSensorSession: Bool {
+        return mockSensorState.isStateValid
+    }
+    
     public var testingDevice: HKDevice {
         return MockCGMDataSource.device
     }

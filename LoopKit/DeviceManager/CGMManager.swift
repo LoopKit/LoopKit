@@ -66,6 +66,9 @@ public protocol CGMManager: DeviceManager {
     var shouldSyncToRemoteService: Bool { get }
 
     var glucoseDisplay: GlucoseDisplayable? { get }
+    
+    // Return false if no sensor active, or in a state where no future data is expected without user intervention
+    var hasValidSensorSession: Bool { get }
 
     /// The representation of the device for use in HealthKit
     var device: HKDevice? { get }
