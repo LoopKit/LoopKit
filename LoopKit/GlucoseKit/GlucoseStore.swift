@@ -286,6 +286,7 @@ extension GlucoseStore {
         dataAccessQueue.async {
             self.purgeCachedGlucoseObjects(matching: cachePredicate)
             self.healthStore.deleteObjects(of: self.glucoseType, predicate: healthKitPredicate, withCompletion: completion)
+            self.updateLatestGlucose()
         }
     }
 
@@ -474,6 +475,8 @@ extension GlucoseStore {
 
                 if let lastObject = objects.first {
                     self.latestGlucose = StoredGlucoseSample(managedObject: lastObject)
+                } else {
+                    self.latestGlucose = nil
                 }
             } catch let error {
                 self.log.error("Unable to fetch latest glucose object: %@", String(describing: error))

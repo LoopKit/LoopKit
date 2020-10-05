@@ -18,6 +18,15 @@ public struct MockCGMDataSource {
         case sineCurve(parameters: SineCurveParameters)
         case noData
         case signalLoss
+        
+        public var isValidSession: Bool {
+            switch self {
+            case .noData:
+                return false
+            default:
+                return true
+            }
+        }
     }
 
     public struct Effects {
@@ -69,6 +78,10 @@ public struct MockCGMDataSource {
     private var lastFetchedData = Locked(Date.distantPast)
 
     public var dataPointFrequency: MeasurementFrequency
+    
+    public var isValidSession: Bool {
+        return model.isValidSession
+    }
     
     public init(
         model: Model,

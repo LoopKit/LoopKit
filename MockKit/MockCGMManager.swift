@@ -289,7 +289,7 @@ public final class MockCGMManager: TestingCGMManager {
     }
     
     public var hasValidSensorSession: Bool {
-        return mockSensorState.isStateValid
+        return dataSource.isValidSession
     }
     
     public var testingDevice: HKDevice {
