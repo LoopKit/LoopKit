@@ -19,6 +19,14 @@ public enum CGMResult {
     case error(Error)
 }
 
+public struct CGMManagerStatus {
+    // Return false if no sensor active, or in a state where no future data is expected without user intervention
+    public var hasValidSensorSession: Bool
+    
+    public init(hasValidSensorSession: Bool) {
+        self.hasValidSensorSession = hasValidSensorSession
+    }
+}
 
 public protocol CGMManagerDelegate: DeviceManagerDelegate {
     /// Asks the delegate for a date with which to filter incoming glucose data
@@ -49,6 +57,12 @@ public protocol CGMManagerDelegate: DeviceManagerDelegate {
     /// - Parameter manager: The manager instance
     /// - Returns: The unique prefix for the credential store
     func credentialStoragePrefix(for manager: CGMManager) -> String
+    
+    /// Notifies the delegate of a change in status
+    ///
+    /// - Parameter manager: The manager instance
+    /// - Parameter status: The new, updated status
+    func cgmManager(_ manager: CGMManager, didUpdate status: CGMManagerStatus)
 }
 
 
@@ -67,11 +81,11 @@ public protocol CGMManager: DeviceManager {
 
     var glucoseDisplay: GlucoseDisplayable? { get }
     
-    // Return false if no sensor active, or in a state where no future data is expected without user intervention
-    var hasValidSensorSession: Bool { get }
-
     /// The representation of the device for use in HealthKit
     var device: HKDevice? { get }
+
+    /// The current status of the cgm
+    var status: CGMManagerStatus { get }
 
     /// Performs a manual fetch of glucose data from the device, if necessary
     ///

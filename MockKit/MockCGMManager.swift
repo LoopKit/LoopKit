@@ -288,8 +288,8 @@ public final class MockCGMManager: TestingCGMManager {
         return mockSensorState
     }
     
-    public var hasValidSensorSession: Bool {
-        return dataSource.isValidSession
+    public var status: CGMManagerStatus {
+        return CGMManagerStatus(hasValidSensorSession: dataSource.isValidSession)
     }
     
     public var testingDevice: HKDevice {
@@ -324,6 +324,7 @@ public final class MockCGMManager: TestingCGMManager {
         didSet {
             delegate.notify { (delegate) in
                 delegate?.cgmManagerDidUpdateState(self)
+                delegate?.cgmManager(self, didUpdate: self.status)
             }
         }
     }
