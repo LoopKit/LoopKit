@@ -543,6 +543,7 @@
 		A95A1D892460F8930079378D /* PumpManagerStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D882460F8930079378D /* PumpManagerStatusTests.swift */; };
 		A95A1D8B2460FD620079378D /* BolusRecommendationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D8A2460FD620079378D /* BolusRecommendationTests.swift */; };
 		A95A1D8D246101760079378D /* DoseEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D8C246101760079378D /* DoseEntryTests.swift */; };
+		A963B278252CE2510062AA12 /* StoredCarbEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A963B277252CE2510062AA12 /* StoredCarbEntryTests.swift */; };
 		A967D94924F99B6A00CDDF8A /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A967D94824F99B6A00CDDF8A /* OutputStream.swift */; };
 		A967D94A24F99B6A00CDDF8A /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A967D94824F99B6A00CDDF8A /* OutputStream.swift */; };
 		A971C89F23C68B030099BEFC /* GlucoseStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */; };
@@ -1416,6 +1417,7 @@
 		A95A1D882460F8930079378D /* PumpManagerStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerStatusTests.swift; sourceTree = "<group>"; };
 		A95A1D8A2460FD620079378D /* BolusRecommendationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BolusRecommendationTests.swift; sourceTree = "<group>"; };
 		A95A1D8C246101760079378D /* DoseEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseEntryTests.swift; sourceTree = "<group>"; };
+		A963B277252CE2510062AA12 /* StoredCarbEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredCarbEntryTests.swift; sourceTree = "<group>"; };
 		A967D94824F99B6A00CDDF8A /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
 		A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseStoreTests.swift; sourceTree = "<group>"; };
 		A971C8A123C6B17D0099BEFC /* SettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStoreTests.swift; sourceTree = "<group>"; };
@@ -2158,6 +2160,7 @@
 				43D8FE1C1C72906E0073BE78 /* QuantityScheduleTests.swift */,
 				A99C73782339ACDC00C80963 /* ServiceTests.swift */,
 				A971C8A123C6B17D0099BEFC /* SettingsStoreTests.swift */,
+				A963B277252CE2510062AA12 /* StoredCarbEntryTests.swift */,
 				A9DF02C624F6FD1700B7C988 /* StoredInsulinModelTests.swift */,
 				A99C7372233990D400C80963 /* TempBasalRecommendationTests.swift */,
 				891A3FD02249948A00378B27 /* TemporaryScheduleOverrideHistoryTests.swift */,
@@ -3565,6 +3568,7 @@
 				891A3FD32249990900378B27 /* DailyValueSchedule.swift in Sources */,
 				434C5FA0209ABD4700B2FD1A /* QuantityFormatterTests.swift in Sources */,
 				A95A1D892460F8930079378D /* PumpManagerStatusTests.swift in Sources */,
+				A963B278252CE2510062AA12 /* StoredCarbEntryTests.swift in Sources */,
 				A9DF02C724F6FD1700B7C988 /* StoredInsulinModelTests.swift in Sources */,
 				A95A1D8D246101760079378D /* DoseEntryTests.swift in Sources */,
 				43D8FE1E1C72906E0073BE78 /* NSDateTests.swift in Sources */,

@@ -13,7 +13,7 @@ import HealthKit
 public protocol GlucoseValue: SampleValue {
 }
 
-struct SimpleGlucoseValue: Equatable, GlucoseValue {
+public struct SimpleGlucoseValue: Equatable, GlucoseValue {
     public let startDate: Date
     public let endDate: Date
     public let quantity: HKQuantity
