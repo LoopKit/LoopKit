@@ -85,7 +85,7 @@ public protocol CGMManager: DeviceManager {
     var device: HKDevice? { get }
 
     /// The current status of the cgm
-    var status: CGMManagerStatus { get }
+    var cgmStatus: CGMManagerStatus { get }
 
     /// Performs a manual fetch of glucose data from the device, if necessary
     ///
