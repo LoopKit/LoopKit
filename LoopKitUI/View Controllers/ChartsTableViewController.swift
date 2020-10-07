@@ -25,6 +25,16 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
         gestureRecognizer.minimumPressDuration = 0.3
         gestureRecognizer.addTarget(self, action: #selector(handlePan(_:)))
         charts.gestureRecognizer = gestureRecognizer
+        
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { [weak self] _ in
+            guard let self = self else { return }
+            
+            if self.visible {
+                DispatchQueue.main.async {
+                    self.reloadData()
+                }
+            }
+        }
     }
 
     open override func didReceiveMemoryWarning() {

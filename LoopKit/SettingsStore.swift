@@ -187,7 +187,7 @@ public struct StoredSettings {
     public let maximumBolus: Double?
     public let suspendThreshold: GlucoseThreshold?
     public let deviceToken: String?
-    public let insulinModel: InsulinModel?
+    public let insulinModel: StoredInsulinModel?
     public let basalRateSchedule: BasalRateSchedule?
     public let insulinSensitivitySchedule: InsulinSensitivitySchedule?
     public let carbRatioSchedule: CarbRatioSchedule?
@@ -206,7 +206,7 @@ public struct StoredSettings {
                 maximumBolus: Double? = nil,
                 suspendThreshold: GlucoseThreshold? = nil,
                 deviceToken: String? = nil,
-                insulinModel: InsulinModel? = nil,
+                insulinModel: StoredInsulinModel? = nil,
                 basalRateSchedule: BasalRateSchedule? = nil,
                 insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
                 carbRatioSchedule: CarbRatioSchedule? = nil,
@@ -231,25 +231,6 @@ public struct StoredSettings {
         self.bloodGlucoseUnit = bloodGlucoseUnit
         self.syncIdentifier = syncIdentifier
     }
-
-    public struct InsulinModel: Codable, Equatable {
-        public enum ModelType: String, Codable {
-            case fiasp
-            case rapidAdult
-            case rapidChild
-            case walsh
-        }
-        
-        public let modelType: ModelType
-        public let actionDuration: TimeInterval
-        public let peakActivity: TimeInterval?
-
-        public init(modelType: ModelType, actionDuration: TimeInterval, peakActivity: TimeInterval? = nil) {
-            self.modelType = modelType
-            self.actionDuration = actionDuration
-            self.peakActivity = peakActivity
-        }
-    }
 }
 
 extension StoredSettings: Codable {
@@ -271,7 +252,7 @@ extension StoredSettings: Codable {
                   maximumBolus: try container.decodeIfPresent(Double.self, forKey: .maximumBolus),
                   suspendThreshold: try container.decodeIfPresent(GlucoseThreshold.self, forKey: .suspendThreshold),
                   deviceToken: try container.decodeIfPresent(String.self, forKey: .deviceToken),
-                  insulinModel: try container.decodeIfPresent(InsulinModel.self, forKey: .insulinModel),
+                  insulinModel: try container.decodeIfPresent(StoredInsulinModel.self, forKey: .insulinModel),
                   basalRateSchedule: try container.decodeIfPresent(BasalRateSchedule.self, forKey: .basalRateSchedule),
                   insulinSensitivitySchedule: try container.decodeIfPresent(InsulinSensitivitySchedule.self, forKey: .insulinSensitivitySchedule),
                   carbRatioSchedule: try container.decodeIfPresent(CarbRatioSchedule.self, forKey: .carbRatioSchedule),
@@ -320,6 +301,84 @@ extension StoredSettings: Codable {
         case carbRatioSchedule
         case bloodGlucoseUnit
         case syncIdentifier
+    }
+}
+
+// MARK: - Critical Event Log Export
+
+extension SettingsStore: CriticalEventLog {
+    private var exportProgressUnitCountPerObject: Int64 { 11 }
+    private var exportFetchLimit: Int { Int(criticalEventLogExportProgressUnitCountPerFetch / exportProgressUnitCountPerObject) }
+
+    public var exportName: String { "Settings.json" }
+
+    public func exportProgressTotalUnitCount(startDate: Date, endDate: Date? = nil) -> Result<Int64, Error> {
+        var result: Result<Int64, Error>?
+
+        self.store.managedObjectContext.performAndWait {
+            do {
+                let request: NSFetchRequest<SettingsObject> = SettingsObject.fetchRequest()
+                request.predicate = self.exportDatePredicate(startDate: startDate, endDate: endDate)
+
+                let objectCount = try self.store.managedObjectContext.count(for: request)
+                result = .success(Int64(objectCount) * exportProgressUnitCountPerObject)
+            } catch let error {
+                result = .failure(error)
+            }
+        }
+
+        return result!
+    }
+
+    public func export(startDate: Date, endDate: Date, to stream: OutputStream, progress: Progress) -> Error? {
+        let encoder = JSONStreamEncoder(stream: stream)
+        var modificationCounter: Int64 = 0
+        var fetching = true
+        var error: Error?
+
+        while fetching && error == nil {
+            self.store.managedObjectContext.performAndWait {
+                do {
+                    guard !progress.isCancelled else {
+                        throw CriticalEventLogError.cancelled
+                    }
+
+                    let request: NSFetchRequest<SettingsObject> = SettingsObject.fetchRequest()
+                    request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "modificationCounter > %d", modificationCounter),
+                                                                                            self.exportDatePredicate(startDate: startDate, endDate: endDate)])
+                    request.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+                    request.fetchLimit = self.exportFetchLimit
+
+                    let objects = try self.store.managedObjectContext.fetch(request)
+                    if objects.isEmpty {
+                        fetching = false
+                        return
+                    }
+
+                    try encoder.encode(objects)
+
+                    modificationCounter = objects.last!.modificationCounter
+
+                    progress.completedUnitCount += Int64(objects.count) * exportProgressUnitCountPerObject
+                } catch let fetchError {
+                    error = fetchError
+                }
+            }
+        }
+
+        if let closeError = encoder.close(), error == nil {
+            error = closeError
+        }
+
+        return error
+    }
+
+    private func exportDatePredicate(startDate: Date, endDate: Date? = nil) -> NSPredicate {
+        var predicate = NSPredicate(format: "date >= %@", startDate as NSDate)
+        if let endDate = endDate {
+            predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, NSPredicate(format: "date < %@", endDate as NSDate)])
+        }
+        return predicate
     }
 }
 

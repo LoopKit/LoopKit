@@ -70,6 +70,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case constant = 0
         case sineCurve
         case noData
+        case signalLoss
         case frequency
     }
     
@@ -183,6 +184,11 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .noData:
                 cell.textLabel?.text = "No Data"
                 if case .noData = cgmManager.dataSource.model {
+                    cell.accessoryType = .checkmark
+                }
+            case .signalLoss:
+                cell.textLabel?.text = "Signal Loss"
+                if case .signalLoss = cgmManager.dataSource.model {
                     cell.accessoryType = .checkmark
                 }
             case .frequency:
@@ -336,6 +342,11 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 show(vc, sender: sender)
             case .noData:
                 cgmManager.dataSource.model = .noData
+                cgmManager.retractSignalLossAlert()
+                tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
+            case .signalLoss:
+                cgmManager.dataSource.model = .signalLoss
+                cgmManager.issueSignalLossAlert()
                 tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
             case .frequency:
                 let vc = MeasurementFrequencyTableViewController()
@@ -488,6 +499,7 @@ extension MockCGMManagerSettingsViewController: GlucoseEntryTableViewControllerD
             case .constant:
                 if let glucose = controller.glucose {
                     cgmManager.dataSource.model = .constant(glucose)
+                    cgmManager.retractSignalLossAlert()
                     tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
                 }
             default:
@@ -528,6 +540,7 @@ extension MockCGMManagerSettingsViewController: SineCurveParametersTableViewCont
     func sineCurveParametersTableViewControllerDidUpdateParameters(_ controller: SineCurveParametersTableViewController) {
         if let parameters = controller.parameters {
             cgmManager.dataSource.model = .sineCurve(parameters: parameters)
+            cgmManager.retractSignalLossAlert()
             tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
         }
     }

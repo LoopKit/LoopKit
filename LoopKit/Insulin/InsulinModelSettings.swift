@@ -118,7 +118,7 @@ extension InsulinModelSettings: RawRepresentable {
 }
 
 public extension InsulinModelSettings {
-    init(from storedSettingsInsulinModel: StoredSettings.InsulinModel) {
+    init(from storedSettingsInsulinModel: StoredInsulinModel) {
         switch storedSettingsInsulinModel.modelType {
         case .fiasp:
             self = .exponentialPreset(.fiasp)
@@ -132,9 +132,9 @@ public extension InsulinModelSettings {
     }
 }
 
-public extension StoredSettings.InsulinModel {
+public extension StoredInsulinModel {
     init(_ insulinModelSettings: InsulinModelSettings) {       
-        var modelType: StoredSettings.InsulinModel.ModelType
+        var modelType: StoredInsulinModel.ModelType
         var actionDuration: TimeInterval
         var peakActivity: TimeInterval?
         

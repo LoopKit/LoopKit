@@ -771,6 +771,84 @@ extension NSManagedObjectContext {
     }
 }
 
+// MARK: - Critical Event Log Export
+
+extension GlucoseStore: CriticalEventLog {
+    private var exportProgressUnitCountPerObject: Int64 { 1 }
+    private var exportFetchLimit: Int { Int(criticalEventLogExportProgressUnitCountPerFetch / exportProgressUnitCountPerObject) }
+
+    public var exportName: String { "Glucoses.json" }
+
+    public func exportProgressTotalUnitCount(startDate: Date, endDate: Date? = nil) -> Result<Int64, Error> {
+        var result: Result<Int64, Error>?
+
+        self.cacheStore.managedObjectContext.performAndWait {
+            do {
+                let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+                request.predicate = self.exportDatePredicate(startDate: startDate, endDate: endDate)
+
+                let objectCount = try self.cacheStore.managedObjectContext.count(for: request)
+                result = .success(Int64(objectCount) * exportProgressUnitCountPerObject)
+            } catch let error {
+                result = .failure(error)
+            }
+        }
+
+        return result!
+    }
+
+    public func export(startDate: Date, endDate: Date, to stream: OutputStream, progress: Progress) -> Error? {
+        let encoder = JSONStreamEncoder(stream: stream)
+        var modificationCounter: Int64 = 0
+        var fetching = true
+        var error: Error?
+
+        while fetching && error == nil {
+            self.cacheStore.managedObjectContext.performAndWait {
+                do {
+                    guard !progress.isCancelled else {
+                        throw CriticalEventLogError.cancelled
+                    }
+
+                    let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+                    request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "modificationCounter > %d", modificationCounter),
+                                                                                            self.exportDatePredicate(startDate: startDate, endDate: endDate)])
+                    request.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+                    request.fetchLimit = self.exportFetchLimit
+
+                    let objects = try self.cacheStore.managedObjectContext.fetch(request)
+                    if objects.isEmpty {
+                        fetching = false
+                        return
+                    }
+
+                    try encoder.encode(objects)
+
+                    modificationCounter = objects.last!.modificationCounter
+
+                    progress.completedUnitCount += Int64(objects.count) * exportProgressUnitCountPerObject
+                } catch let fetchError {
+                    error = fetchError
+                }
+            }
+        }
+
+        if let closeError = encoder.close(), error == nil {
+            error = closeError
+        }
+
+        return error
+    }
+
+    private func exportDatePredicate(startDate: Date, endDate: Date? = nil) -> NSPredicate {
+        var predicate = NSPredicate(format: "startDate >= %@", startDate as NSDate)
+        if let endDate = endDate {
+            predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, NSPredicate(format: "startDate < %@", endDate as NSDate)])
+        }
+        return predicate
+    }
+}
+
 // MARK: - Core Data (Bulk) - TEST ONLY
 
 extension GlucoseStore {
