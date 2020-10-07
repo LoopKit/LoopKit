@@ -8,17 +8,17 @@
 
 import CoreData
 
-class DosingDecisionObject: NSManagedObject {
+public class DosingDecisionObject: NSManagedObject {
     var hasUpdatedModificationCounter: Bool { changedValues().keys.contains("modificationCounter") }
 
     func updateModificationCounter() { setPrimitiveValue(managedObjectContext!.modificationCounter!, forKey: "modificationCounter") }
 
-    override func awakeFromInsert() {
+    public override func awakeFromInsert() {
         super.awakeFromInsert()
         updateModificationCounter()
     }
 
-    override func willSave() {
+    public override func willSave() {
         if isUpdated && !hasUpdatedModificationCounter {
             updateModificationCounter()
         }

@@ -55,14 +55,23 @@ public struct DeliveryLimitsEditor: View {
            didSave: (() -> Void)? = nil
     ) {
         precondition(viewModel.pumpSupportedIncrements != nil)
-        let maxBasal = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: viewModel.therapySettings.maximumBasalRatePerHour!)
-        let maxBolus = HKQuantity(unit: .internationalUnit(), doubleValue: viewModel.therapySettings.maximumBolus!)
+        
+        var maxBasal: HKQuantity?
+        if let maximumBasalRatePerHour = viewModel.therapySettings.maximumBasalRatePerHour {
+            maxBasal = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: maximumBasalRatePerHour)
+        }
+
+        var maxBolus: HKQuantity?
+
+        if let maximumBolus = viewModel.therapySettings.maximumBolus {
+            maxBolus = HKQuantity(unit: .internationalUnit(), doubleValue: maximumBolus)
+        }
         
         self.init(
             value: DeliveryLimits(maximumBasalRate: maxBasal, maximumBolus: maxBolus),
-            supportedBasalRates: viewModel.pumpSupportedIncrements!.basalRates,
+            supportedBasalRates: viewModel.pumpSupportedIncrements!()!.basalRates,
             scheduledBasalRange: viewModel.therapySettings.basalRateSchedule?.valueRange(),
-            supportedBolusVolumes: viewModel.pumpSupportedIncrements!.bolusVolumes,
+            supportedBolusVolumes: viewModel.pumpSupportedIncrements!()!.bolusVolumes,
             onSave: { [weak viewModel] newLimits in
                 viewModel?.saveDeliveryLimits(limits: newLimits)
                 didSave?()
@@ -167,7 +176,7 @@ public struct DeliveryLimitsEditor: View {
                 expandedContent: {
                     FractionalQuantityPicker(
                         value: Binding(
-                            get: { self.value.maximumBasalRate ?? self.maximumBasalRateGuardrail.recommendedBounds.upperBound },
+                            get: { self.value.maximumBasalRate ?? self.maximumBasalRateGuardrail.startingSuggestion ?? self.maximumBasalRateGuardrail.recommendedBounds.upperBound },
                             set: { newValue in
                                 withAnimation {
                                     self.value.maximumBasalRate = newValue
@@ -217,7 +226,7 @@ public struct DeliveryLimitsEditor: View {
                 expandedContent: {
                     FractionalQuantityPicker(
                         value: Binding(
-                            get: { self.value.maximumBolus ?? self.maximumBolusGuardrail.recommendedBounds.upperBound },
+                            get: { self.value.maximumBolus ?? self.maximumBolusGuardrail.startingSuggestion ?? self.maximumBolusGuardrail.recommendedBounds.upperBound },
                             set: { newValue in
                                 withAnimation {
                                     self.value.maximumBolus = newValue

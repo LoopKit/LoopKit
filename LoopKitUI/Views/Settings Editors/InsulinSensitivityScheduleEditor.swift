@@ -43,7 +43,7 @@ public struct InsulinSensitivityScheduleEditor: View {
         self.init(
             schedule: viewModel.therapySettings.insulinSensitivitySchedule,
             mode: viewModel.mode,
-            glucoseUnit: viewModel.therapySettings.glucoseUnit!,
+            glucoseUnit: viewModel.glucoseUnit,
             onSave: { [weak viewModel] in
                 viewModel?.saveInsulinSensitivitySchedule(insulinSensitivitySchedule: $0)
                 didSave?()
@@ -59,7 +59,7 @@ public struct InsulinSensitivityScheduleEditor: View {
             unit: sensitivityUnit,
             guardrail: .insulinSensitivity,
             selectableValueStride: stride,
-            defaultFirstScheduleItemValue: Guardrail.insulinSensitivity.absoluteBounds.upperBound,
+            defaultFirstScheduleItemValue: Guardrail.insulinSensitivity.startingSuggestion ?? Guardrail.insulinSensitivity.absoluteBounds.upperBound,
             confirmationAlertContent: confirmationAlertContent,
             guardrailWarning: InsulinSensitivityGuardrailWarning.init(crossedThresholds:),
             onSave: {

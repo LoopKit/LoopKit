@@ -86,6 +86,9 @@
         <attribute name="data" attributeType="Binary"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <fetchIndex name="byDateIndex">
+            <fetchIndexElement property="date" type="Binary" order="ascending"/>
+        </fetchIndex>
     </entity>
     <entity name="PumpEvent" representedClassName=".PumpEvent" syncable="YES">
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>

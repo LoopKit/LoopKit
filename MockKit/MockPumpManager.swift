@@ -313,26 +313,34 @@ public final class MockPumpManager: TestingPumpManager {
         statusObservers.removeElement(observer)
     }
 
-    public func assertCurrentPumpData() {
-
-        state.finalizeFinishedDoses()
-
-        storeDoses { (error) in
-            self.delegate.notify { (delegate) in
-                delegate?.pumpManagerRecommendsLoop(self)
-            }
-
-            guard error == nil else {
-                return
-            }
-
-            DispatchQueue.main.async {
-                let totalInsulinUsage = self.state.finalizedDoses.reduce(into: 0 as Double) { total, dose in
-                    total += dose.units
+    public func ensureCurrentPumpData(completion: (() -> Void)? = nil) {
+        // Change this to artificially increase the delay fetching the current pump data
+        let fetchDelay = 0
+        DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(fetchDelay)) {
+            
+            self.state.finalizeFinishedDoses()
+            
+            self.storeDoses { (error) in
+                self.delegate.notify { (delegate) in
+                    delegate?.pumpManagerRecommendsLoop(self)
                 }
-
-                self.state.finalizedDoses = []
-                self.state.reservoirUnitsRemaining -= totalInsulinUsage
+                
+                guard error == nil else {
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    let totalInsulinUsage = self.state.finalizedDoses.reduce(into: 0 as Double) { total, dose in
+                        total += dose.units
+                    }
+                    
+                    self.state.finalizedDoses = []
+                    self.state.reservoirUnitsRemaining -= totalInsulinUsage
+                    
+                    DispatchQueue.global().async {
+                        completion?()
+                    }
+                }
             }
         }
     }

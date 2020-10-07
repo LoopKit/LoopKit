@@ -46,6 +46,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         let textField = UITextField()
         textField.inputAccessoryView = makeDoneToolbar(for: textField)
         textField.addTarget(context.coordinator, action: #selector(Coordinator.textChanged), for: .editingChanged)
+        textField.addTarget(context.coordinator, action: #selector(Coordinator.editingDidBegin), for: .editingDidBegin)
         return textField
     }
 
@@ -70,8 +71,11 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         textField.autocorrectionType = autocorrectionType
 
         if shouldBecomeFirstResponder && !context.coordinator.didBecomeFirstResponder {
-            textField.becomeFirstResponder()
-            context.coordinator.didBecomeFirstResponder = true
+            // See https://developer.apple.com/documentation/uikit/uiresponder/1621113-becomefirstresponder for why
+            // we check the window property here (otherwise it might crash)
+            if textField.window != nil && textField.becomeFirstResponder() {
+                context.coordinator.didBecomeFirstResponder = true
+            }
         } else if !shouldBecomeFirstResponder && context.coordinator.didBecomeFirstResponder {
             context.coordinator.didBecomeFirstResponder = false
         }
@@ -94,6 +98,14 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
 
         @objc fileprivate func textChanged(_ textField: UITextField) {
             parent.text = textField.text ?? ""
+        }
+        
+        @objc fileprivate func editingDidBegin(_ textField: UITextField) {
+            // Even though we are likely already on .main, we still need to queue this cursor (selection) change in
+            // order for it to work
+            DispatchQueue.main.async {
+                textField.moveCursorToEnd()
+            }
         }
     }
 }

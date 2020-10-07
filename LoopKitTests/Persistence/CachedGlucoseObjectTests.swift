@@ -94,6 +94,84 @@ class CachedGlucoseObjectTests: PersistenceControllerTestCase {
 
 }
 
+class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
+    func testEncodable() throws {
+        cacheStore.managedObjectContext.performAndWait {
+            let cachedGlucoseObject = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+            cachedGlucoseObject.uuid = UUID(uuidString: "2A67A303-5203-4CB8-8263-79498265368E")!
+            cachedGlucoseObject.syncIdentifier = "7723A0EE-F6D5-46E0-BBFE-1DEEBF8ED6F2"
+            cachedGlucoseObject.syncVersion = 2
+            cachedGlucoseObject.uploadState = .notUploaded
+            cachedGlucoseObject.value = 98.7
+            cachedGlucoseObject.unitString = "mg/dL"
+            cachedGlucoseObject.startDate = dateFormatter.date(from: "2020-05-14T22:38:14Z")!
+            cachedGlucoseObject.provenanceIdentifier = "238E41EA-9576-4981-A1A4-51E10228584F"
+            cachedGlucoseObject.isDisplayOnly = false
+            cachedGlucoseObject.wasUserEntered = true
+            cachedGlucoseObject.modificationCounter = 123
+            try! assertCachedGlucoseObjectEncodable(cachedGlucoseObject, encodesJSON: """
+{
+  "isDisplayOnly" : false,
+  "modificationCounter" : 123,
+  "provenanceIdentifier" : "238E41EA-9576-4981-A1A4-51E10228584F",
+  "startDate" : "2020-05-14T22:38:14Z",
+  "syncIdentifier" : "7723A0EE-F6D5-46E0-BBFE-1DEEBF8ED6F2",
+  "syncVersion" : 2,
+  "unitString" : "mg/dL",
+  "uploadState" : 0,
+  "uuid" : "2A67A303-5203-4CB8-8263-79498265368E",
+  "value" : 98.700000000000003,
+  "wasUserEntered" : true
+}
+"""
+            )
+        }
+    }
+
+    func testEncodableOptional() throws {
+        cacheStore.managedObjectContext.performAndWait {
+            let cachedGlucoseObject = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+            cachedGlucoseObject.syncVersion = 1
+            cachedGlucoseObject.value = 87.6
+            cachedGlucoseObject.startDate = dateFormatter.date(from: "2020-05-14T22:38:14Z")!
+            cachedGlucoseObject.isDisplayOnly = true
+            cachedGlucoseObject.wasUserEntered = false
+            cachedGlucoseObject.modificationCounter = 234
+            try! assertCachedGlucoseObjectEncodable(cachedGlucoseObject, encodesJSON: """
+{
+  "isDisplayOnly" : true,
+  "modificationCounter" : 234,
+  "startDate" : "2020-05-14T22:38:14Z",
+  "syncVersion" : 1,
+  "uploadState" : 0,
+  "value" : 87.599999999999994,
+  "wasUserEntered" : false
+}
+"""
+            )
+        }
+    }
+
+    private func assertCachedGlucoseObjectEncodable(_ original: CachedGlucoseObject, encodesJSON string: String) throws {
+        let data = try encoder.encode(original)
+        XCTAssertEqual(String(data: data, encoding: .utf8), string)
+    }
+
+    private let dateFormatter = ISO8601DateFormatter()
+
+    private let encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        encoder.dateEncodingStrategy = .iso8601
+        return encoder
+    }()
+
+    private let decoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
+}
 
 extension CachedGlucoseObject {
     fileprivate func setDefaultValues() {

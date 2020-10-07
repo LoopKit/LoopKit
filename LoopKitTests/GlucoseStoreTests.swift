@@ -365,3 +365,93 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
     }
 
 }
+
+class GlucoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
+    var glucoseStore: GlucoseStore!
+    var outputStream: MockOutputStream!
+    var progress: Progress!
+    
+    override func setUp() {
+        super.setUp()
+
+        let samples = [StoredGlucoseSample(sampleUUID: UUID(uuidString: "28CF3948-0B3D-4B12-8BFE-14986B0E6784")!, syncIdentifier: "18CF3948-0B3D-4B12-8BFE-14986B0E6784", syncVersion: 1, startDate: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 111), isDisplayOnly: false, wasUserEntered: false, provenanceIdentifier: "org.loopkit.Test.1"),
+                       StoredGlucoseSample(sampleUUID: UUID(uuidString: "D86DEB61-68E9-464E-9DD5-96A9CB445FD3")!, syncIdentifier: "C86DEB61-68E9-464E-9DD5-96A9CB445FD3", syncVersion: 2, startDate: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 112), isDisplayOnly: false, wasUserEntered: false, provenanceIdentifier: "org.loopkit.Test.2"),
+                       StoredGlucoseSample(sampleUUID: UUID(uuidString: "3B03D96C-6F5D-4140-99CD-80C3E64D6010")!, syncIdentifier: "2B03D96C-6F5D-4140-99CD-80C3E64D6010", syncVersion: 3, startDate: dateFormatter.date(from: "2100-01-02T03:04:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 113), isDisplayOnly: false, wasUserEntered: false, provenanceIdentifier: "org.loopkit.Test.3"),
+                       StoredGlucoseSample(sampleUUID: UUID(uuidString: "0F1C4F01-3558-4FB2-957E-FA1522C4735E")!, syncIdentifier: "FF1C4F01-3558-4FB2-957E-FA1522C4735E", syncVersion: 4, startDate: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 114), isDisplayOnly: false, wasUserEntered: false, provenanceIdentifier: "org.loopkit.Test.4"),
+                       StoredGlucoseSample(sampleUUID: UUID(uuidString: "81B699D7-0E8F-4B13-B7A1-E7751EB78E74")!, syncIdentifier: "71B699D7-0E8F-4B13-B7A1-E7751EB78E74", syncVersion: 5, startDate: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 115), isDisplayOnly: false, wasUserEntered: false, provenanceIdentifier: "org.loopkit.Test.5")]
+
+        glucoseStore = GlucoseStore(healthStore: HKHealthStoreMock(), cacheStore: cacheStore)
+
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        glucoseStore.addGlucoseSamples(samples: samples) { error in
+            XCTAssertNil(error)
+            dispatchGroup.leave()
+        }
+        dispatchGroup.wait()
+
+        outputStream = MockOutputStream()
+        progress = Progress()
+    }
+
+    override func tearDown() {
+        glucoseStore = nil
+
+        super.tearDown()
+    }
+    
+    func testExportProgressTotalUnitCount() {
+        switch glucoseStore.exportProgressTotalUnitCount(startDate: dateFormatter.date(from: "2100-01-02T03:03:00Z")!,
+                                                         endDate: dateFormatter.date(from: "2100-01-02T03:09:00Z")!) {
+        case .failure(let error):
+            XCTFail("Unexpected failure: \(error)")
+        case .success(let progressTotalUnitCount):
+            XCTAssertEqual(progressTotalUnitCount, 3 * 1)
+        }
+    }
+    
+    func testExportProgressTotalUnitCountEmpty() {
+        switch glucoseStore.exportProgressTotalUnitCount(startDate: dateFormatter.date(from: "2100-01-02T03:00:00Z")!,
+                                                         endDate: dateFormatter.date(from: "2100-01-02T03:01:00Z")!) {
+        case .failure(let error):
+            XCTFail("Unexpected failure: \(error)")
+        case .success(let progressTotalUnitCount):
+            XCTAssertEqual(progressTotalUnitCount, 0)
+        }
+    }
+
+    func testExport() {
+        XCTAssertNil(glucoseStore.export(startDate: dateFormatter.date(from: "2100-01-02T03:03:00Z")!,
+                                         endDate: dateFormatter.date(from: "2100-01-02T03:09:00Z")!,
+                                         to: outputStream,
+                                         progress: progress))
+        XCTAssertEqual(outputStream.string, """
+[
+{"isDisplayOnly":false,"modificationCounter":1,"provenanceIdentifier":"org.loopkit.Test.1","startDate":"2100-01-02T03:08:00.000Z","syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784","syncVersion":1,"unitString":"mg/dL","uploadState":0,"uuid":"28CF3948-0B3D-4B12-8BFE-14986B0E6784","value":111,"wasUserEntered":false},
+{"isDisplayOnly":false,"modificationCounter":3,"provenanceIdentifier":"org.loopkit.Test.3","startDate":"2100-01-02T03:04:00.000Z","syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010","syncVersion":3,"unitString":"mg/dL","uploadState":0,"uuid":"3B03D96C-6F5D-4140-99CD-80C3E64D6010","value":113,"wasUserEntered":false},
+{"isDisplayOnly":false,"modificationCounter":4,"provenanceIdentifier":"org.loopkit.Test.4","startDate":"2100-01-02T03:06:00.000Z","syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E","syncVersion":4,"unitString":"mg/dL","uploadState":0,"uuid":"0F1C4F01-3558-4FB2-957E-FA1522C4735E","value":114,"wasUserEntered":false}
+]
+"""
+        )
+        XCTAssertEqual(progress.completedUnitCount, 3 * 1)
+    }
+
+    func testExportEmpty() {
+        XCTAssertNil(glucoseStore.export(startDate: dateFormatter.date(from: "2100-01-02T03:00:00Z")!,
+                                         endDate: dateFormatter.date(from: "2100-01-02T03:01:00Z")!,
+                                         to: outputStream,
+                                         progress: progress))
+        XCTAssertEqual(outputStream.string, "[]")
+        XCTAssertEqual(progress.completedUnitCount, 0)
+    }
+
+    func testExportCancelled() {
+        progress.cancel()
+        XCTAssertEqual(glucoseStore.export(startDate: dateFormatter.date(from: "2100-01-02T03:03:00Z")!,
+                                           endDate: dateFormatter.date(from: "2100-01-02T03:09:00Z")!,
+                                           to: outputStream,
+                                           progress: progress) as? CriticalEventLogError, CriticalEventLogError.cancelled)
+    }
+
+    private let dateFormatter = ISO8601DateFormatter()
+}
