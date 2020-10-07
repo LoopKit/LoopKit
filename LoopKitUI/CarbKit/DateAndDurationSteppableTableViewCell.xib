@@ -17,7 +17,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="R2S-Ub-M7W">
-                        <rect key="frame" x="15" y="11" width="345" height="32"/>
+                        <rect key="frame" x="15" y="11" width="350" height="32"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lrl-hk-6Uj">
                                 <rect key="frame" x="0.0" y="0.0" width="36" height="32"/>
@@ -26,7 +26,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="d1M-nk-qhn">
-                                <rect key="frame" x="223" y="0.0" width="122" height="32"/>
+                                <rect key="frame" x="228" y="0.0" width="122" height="32"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ote-tm-pgI">
                                         <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
@@ -34,7 +34,7 @@
                                             <constraint firstAttribute="width" secondItem="ote-tm-pgI" secondAttribute="height" multiplier="1:1" id="V86-CD-dmV"/>
                                         </constraints>
                                         <color key="tintColor" name="accent"/>
-                                        <inset key="contentEdgeInsets" minX="3" minY="3" maxX="3" maxY="3"/>
+                                        <inset key="contentEdgeInsets" minX="1" minY="2" maxX="2" maxY="2"/>
                                         <state key="normal" image="minus.circle.fill" catalog="system">
                                             <color key="titleColor" name="accent"/>
                                         </state>
@@ -54,7 +54,7 @@
                                             <constraint firstAttribute="width" secondItem="Lpk-PK-o2M" secondAttribute="height" multiplier="1:1" id="nS6-5o-8tF"/>
                                         </constraints>
                                         <color key="tintColor" name="accent"/>
-                                        <inset key="contentEdgeInsets" minX="3" minY="3" maxX="3" maxY="3"/>
+                                        <inset key="contentEdgeInsets" minX="1" minY="2" maxX="2" maxY="2"/>
                                         <state key="normal" image="plus.circle.fill" catalog="system"/>
                                         <connections>
                                             <action selector="incrementTime:" destination="g8V-eF-Mfe" eventType="touchUpInside" id="c1E-S8-3Rs"/>
@@ -94,7 +94,7 @@
                     <constraint firstItem="uHg-qt-dX0" firstAttribute="top" secondItem="R2S-Ub-M7W" secondAttribute="bottom" constant="4" id="Fb5-66-uiW"/>
                     <constraint firstAttribute="bottomMargin" secondItem="uHg-qt-dX0" secondAttribute="bottom" priority="750" constant="-8" id="U4P-Ys-AuD"/>
                     <constraint firstItem="R2S-Ub-M7W" firstAttribute="leading" secondItem="5ZV-xx-TUU" secondAttribute="leadingMargin" id="VSV-R2-CjN"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="R2S-Ub-M7W" secondAttribute="trailing" id="fmT-fS-Gar"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="R2S-Ub-M7W" secondAttribute="trailing" constant="-5" id="fmT-fS-Gar"/>
                     <constraint firstItem="R2S-Ub-M7W" firstAttribute="top" secondItem="5ZV-xx-TUU" secondAttribute="topMargin" id="kfl-01-9t8"/>
                 </constraints>
             </tableViewCellContentView>
