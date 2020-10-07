@@ -21,10 +21,12 @@ public class TherapySettingsViewModel: ObservableObject {
     private let didSave: SaveCompletion?
 
     private let initialTherapySettings: TherapySettings
-    let pumpSupportedIncrements: PumpSupportedIncrements?
-    let syncPumpSchedule: PumpManager.SyncSchedule?
+    let pumpSupportedIncrements: (() -> PumpSupportedIncrements?)?
+    let syncPumpSchedule: (() -> PumpManager.SyncSchedule?)?
     let sensitivityOverridesEnabled: Bool
     public var prescription: Prescription?
+    
+    var glucoseUnit: HKUnit
 
     lazy private var cancellables = Set<AnyCancellable>()
     
@@ -32,15 +34,17 @@ public class TherapySettingsViewModel: ObservableObject {
 
     public init(mode: PresentationMode,
                 therapySettings: TherapySettings,
+                glucoseUnit: HKUnit,
                 supportedInsulinModelSettings: SupportedInsulinModelSettings = SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
-                pumpSupportedIncrements: PumpSupportedIncrements? = nil,
-                syncPumpSchedule: PumpManager.SyncSchedule? = nil,
+                pumpSupportedIncrements: (() -> PumpSupportedIncrements?)? = nil,
+                syncPumpSchedule: (() -> PumpManager.SyncSchedule?)? = nil,
                 sensitivityOverridesEnabled: Bool = false,
                 prescription: Prescription? = nil,
                 chartColors: ChartColorPalette,
                 didSave: SaveCompletion? = nil) {
         self.mode = mode
         self.therapySettings = therapySettings
+        self.glucoseUnit = glucoseUnit
         self.initialTherapySettings = therapySettings
         self.pumpSupportedIncrements = pumpSupportedIncrements
         self.syncPumpSchedule = syncPumpSchedule
@@ -49,6 +53,8 @@ public class TherapySettingsViewModel: ObservableObject {
         self.supportedInsulinModelSettings = supportedInsulinModelSettings
         self.chartColors = chartColors
         self.didSave = didSave
+        
+        
     }
     
     var deliveryLimits: DeliveryLimits {

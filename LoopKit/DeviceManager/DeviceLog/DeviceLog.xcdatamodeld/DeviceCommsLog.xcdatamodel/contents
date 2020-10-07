@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15400" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Entry" representedClassName=".DeviceLogEntry" syncable="YES">
         <attribute name="deviceIdentifier" optional="YES" attributeType="String"/>
         <attribute name="managerIdentifier" attributeType="String"/>
         <attribute name="message" attributeType="String"/>
+        <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="type" attributeType="String"/>
+        <fetchIndex name="byTimestampIndex">
+            <fetchIndexElement property="timestamp" type="Binary" order="ascending"/>
+        </fetchIndex>
     </entity>
     <elements>
-        <element name="Entry" positionX="-36" positionY="9" width="128" height="118"/>
+        <element name="Entry" positionX="-36" positionY="9" width="128" height="133"/>
     </elements>
 </model>

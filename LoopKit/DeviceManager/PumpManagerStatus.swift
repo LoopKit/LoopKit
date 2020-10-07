@@ -98,8 +98,8 @@ extension PumpManagerStatus: Codable {
         self.pumpBatteryChargeRemaining = try container.decodeIfPresent(Double.self, forKey: .pumpBatteryChargeRemaining)
         self.basalDeliveryState = try container.decode(BasalDeliveryState.self, forKey: .basalDeliveryState)
         self.bolusState = try container.decode(BolusState.self, forKey: .bolusState)
-        self.pumpStatusHighlight = try container.decode(PumpStatusHighlight.self, forKey: .pumpStatusHighlight)
-        self.pumpLifecycleProgress = try container.decode(PumpLifecycleProgress.self, forKey: .pumpLifecycleProgress)
+        self.pumpStatusHighlight = try container.decodeIfPresent(PumpStatusHighlight.self, forKey: .pumpStatusHighlight)
+        self.pumpLifecycleProgress = try container.decodeIfPresent(PumpLifecycleProgress.self, forKey: .pumpLifecycleProgress)
         self.deliveryIsUncertain = try container.decode(Bool.self, forKey: .deliveryIsUncertain)
     }
 
@@ -110,8 +110,8 @@ extension PumpManagerStatus: Codable {
         try container.encodeIfPresent(pumpBatteryChargeRemaining, forKey: .pumpBatteryChargeRemaining)
         try container.encode(basalDeliveryState, forKey: .basalDeliveryState)
         try container.encode(bolusState, forKey: .bolusState)
-        try container.encode(pumpStatusHighlight, forKey: .pumpStatusHighlight)
-        try container.encode(pumpLifecycleProgress, forKey: .pumpLifecycleProgress)
+        try container.encodeIfPresent(pumpStatusHighlight, forKey: .pumpStatusHighlight)
+        try container.encodeIfPresent(pumpLifecycleProgress, forKey: .pumpLifecycleProgress)
         try container.encode(deliveryIsUncertain, forKey: .deliveryIsUncertain)
     }
 

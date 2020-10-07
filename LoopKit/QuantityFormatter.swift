@@ -97,15 +97,20 @@ open class QuantityFormatter {
     ///
     /// - Parameters:
     ///   - quantity: The quantity
-    ///   - unit: The value. An exception is thrown if `quantity` is not compatible with the unit.
+    ///   - unit: The unit. An exception is thrown if `quantity` is not compatible with the unit.
+    ///   - includeUnit: Whether or not to include the unit in the returned string
     /// - Returns: A localized string, or nil if `numberFormatter` is unable to format the quantity value
-    open func string(from quantity: HKQuantity, for unit: HKUnit) -> String? {
+    open func string(from quantity: HKQuantity, for unit: HKUnit, includeUnit: Bool = true) -> String? {
         let value = quantity.doubleValue(for: unit)
+
+        if !includeUnit {
+            return numberFormatter.string(from: value)
+        }
 
         if let foundationUnit = unit.foundationUnit, unit.usesMeasurementFormatterForMeasurement {
             return measurementFormatter.string(from: Measurement(value: value, unit: foundationUnit))
-        }
-
+        }        
+        
         return numberFormatter.string(from: value, unit: string(from: unit, forValue: value), style: unitStyle)
     }
 

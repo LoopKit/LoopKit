@@ -9,7 +9,6 @@
 import os.log
 import Foundation
 import CoreData
-import UserNotifications
 
 public protocol DosingDecisionStoreDelegate: AnyObject {
     /**
@@ -168,7 +167,7 @@ public struct StoredDosingDecision {
     public let recommendedTempBasal: TempBasalRecommendationWithDate?
     public let recommendedBolus: BolusRecommendationWithDate?
     public let pumpManagerStatus: PumpManagerStatus?
-    public let notificationSettings: UNNotificationSettings?
+    public let notificationSettings: NotificationSettings?
     public let deviceSettings: DeviceSettings?
     public let errors: [Error]?
     public let syncIdentifier: String
@@ -185,7 +184,7 @@ public struct StoredDosingDecision {
                 recommendedTempBasal: TempBasalRecommendationWithDate? = nil,
                 recommendedBolus: BolusRecommendationWithDate? = nil,
                 pumpManagerStatus: PumpManagerStatus? = nil,
-                notificationSettings: UNNotificationSettings? = nil,
+                notificationSettings: NotificationSettings? = nil,
                 deviceSettings: DeviceSettings? = nil,
                 errors: [Error]? = nil,
                 syncIdentifier: String = UUID().uuidString) {
@@ -262,6 +261,77 @@ public struct StoredDosingDecision {
             case charging
             case full
         }
+    }
+}
+
+// MARK: - Critical Event Log Export
+
+extension DosingDecisionStore {
+    private var exportProgressUnitCountPerObject: Int64 { 33 }
+    private var exportFetchLimit: Int { Int(criticalEventLogExportProgressUnitCountPerFetch / exportProgressUnitCountPerObject) }
+
+    public func exportProgressTotalUnitCount(startDate: Date, endDate: Date? = nil) -> Result<Int64, Error> {
+        var result: Result<Int64, Error>?
+
+        self.store.managedObjectContext.performAndWait {
+            do {
+                let request: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
+                request.predicate = self.exportDatePredicate(startDate: startDate, endDate: endDate)
+
+                let objectCount = try self.store.managedObjectContext.count(for: request)
+                result = .success(Int64(objectCount) * exportProgressUnitCountPerObject)
+            } catch let error {
+                result = .failure(error)
+            }
+        }
+
+        return result!
+    }
+
+    public func export(startDate: Date, endDate: Date, using encoder: @escaping ([DosingDecisionObject]) throws -> Void, progress: Progress) -> Error? {
+        var modificationCounter: Int64 = 0
+        var fetching = true
+        var error: Error?
+
+        while fetching && error == nil {
+            self.store.managedObjectContext.performAndWait {
+                do {
+                    guard !progress.isCancelled else {
+                        throw CriticalEventLogError.cancelled
+                    }
+
+                    let request: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
+                    request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "modificationCounter > %d", modificationCounter),
+                                                                                            self.exportDatePredicate(startDate: startDate, endDate: endDate)])
+                    request.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+                    request.fetchLimit = self.exportFetchLimit
+
+                    let objects = try self.store.managedObjectContext.fetch(request)
+                    if objects.isEmpty {
+                        fetching = false
+                        return
+                    }
+
+                    try encoder(objects)
+
+                    modificationCounter = objects.last!.modificationCounter
+
+                    progress.completedUnitCount += Int64(objects.count) * exportProgressUnitCountPerObject
+                } catch let fetchError {
+                    error = fetchError
+                }
+            }
+        }
+
+        return error
+    }
+
+    private func exportDatePredicate(startDate: Date, endDate: Date? = nil) -> NSPredicate {
+        var predicate = NSPredicate(format: "date >= %@", startDate as NSDate)
+        if let endDate = endDate {
+            predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, NSPredicate(format: "date < %@", endDate as NSDate)])
+        }
+        return predicate
     }
 }
 

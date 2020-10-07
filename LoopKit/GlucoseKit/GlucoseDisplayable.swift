@@ -1,5 +1,5 @@
 //
-//  SensorDisplayable.swift
+//  GlucoseDisplayable.swift
 //  Loop
 //
 //  Created by Nate Racklyeft on 8/2/16.
@@ -9,7 +9,7 @@
 import Foundation
 
 
-public protocol SensorDisplayable {
+public protocol GlucoseDisplayable {
     /// Returns whether the current state is valid
     var isStateValid: Bool { get }
 
@@ -23,11 +23,11 @@ public protocol SensorDisplayable {
     var isLocal: Bool { get }
     
     /// enumerates the glucose value type (e.g., normal, low, high)
-    var glucoseValueType: GlucoseValueType? { get }
+    var glucoseRangeCategory: GlucoseRangeCategory? { get }
 }
 
 
-extension SensorDisplayable {
+extension GlucoseDisplayable {
     public var stateDescription: String {
         if isStateValid {
             return LocalizedString("OK", comment: "Sensor state description for the valid state")

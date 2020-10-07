@@ -84,12 +84,10 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
            viewModel: TherapySettingsViewModel,
            didSave: (() -> Void)? = nil
     ) {
-        precondition(viewModel.therapySettings.glucoseUnit != nil)
-        precondition(viewModel.therapySettings.insulinModelSettings != nil)
         self.init(
-            value: viewModel.therapySettings.insulinModelSettings!,
+            value: viewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.humalogNovologAdult),
             insulinSensitivitySchedule: viewModel.therapySettings.insulinSensitivitySchedule,
-            glucoseUnit: viewModel.therapySettings.glucoseUnit!,
+            glucoseUnit: viewModel.glucoseUnit,
             supportedModelSettings: viewModel.supportedInsulinModelSettings,
             chartColors: viewModel.chartColors,
             onSave: { [weak viewModel] insulinModelSettings in

@@ -9,21 +9,23 @@
 import HealthKit
 
 public extension Guardrail where Value == HKQuantity {
-    static let correctionRange = Guardrail(absoluteBounds: 60...180, recommendedBounds: 70...120, unit: .milligramsPerDeciliter)
+    static let correctionRange = Guardrail(absoluteBounds: 60...180, recommendedBounds: 70...120, startingSuggestion: 100, unit: .milligramsPerDeciliter)
 
     static let insulinSensitivity = Guardrail(
         absoluteBounds: 10...500,
         recommendedBounds: 16...399,
+        startingSuggestion: 50,
         unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit())
     )
 
     static let carbRatio = Guardrail(
         absoluteBounds: 1...150,
         recommendedBounds: 3.0.nextUp...28.0.nextDown,
+        startingSuggestion: 15,
         unit: .gramsPerUnit
     )
 
-    static let suspendThreshold = Guardrail(absoluteBounds: 54...180, recommendedBounds: 71...120, unit: .milligramsPerDeciliter)
+    static let suspendThreshold = Guardrail(absoluteBounds: 54...180, recommendedBounds: 71...120, startingSuggestion: 80, unit: .milligramsPerDeciliter)
 
     static func maxSuspendThresholdValue(correctionRangeSchedule: GlucoseRangeSchedule?, preMealTargetRange: DoubleRange?, workoutTargetRange: DoubleRange?, unit: HKUnit) -> HKQuantity? {
 
@@ -44,6 +46,7 @@ public extension Guardrail where Value == HKQuantity {
         return Guardrail(
             absoluteBounds: supportedBasalRates.first!...supportedBasalRates.last!,
             recommendedBounds: recommendedLowerBound...supportedBasalRates.last!,
+            startingSuggestion: 0,
             unit: .internationalUnitsPerHour
         )
     }
@@ -71,6 +74,7 @@ public extension Guardrail where Value == HKQuantity {
         return Guardrail(
             absoluteBounds: supportedBasalRates.first!...supportedBasalRates.last!,
             recommendedBounds: recommendedLowerBound...recommendedUpperBound,
+            startingSuggestion: 3,
             unit: .internationalUnitsPerHour
         )
     }
@@ -83,6 +87,7 @@ public extension Guardrail where Value == HKQuantity {
         return Guardrail(
             absoluteBounds: supportedBolusVolumes.first!...supportedBolusVolumes.last!,
             recommendedBounds: recommendedLowerBound...recommendedUpperBound,
+            startingSuggestion: 5,
             unit: .internationalUnit()
         )
     }
