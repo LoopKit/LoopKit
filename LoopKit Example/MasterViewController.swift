@@ -37,7 +37,7 @@ class MasterViewController: UITableViewController {
                 if success {
                     // Call the individual authorization methods to trigger query creation
                     dataManager.carbStore.authorize({ _ in })
-                    dataManager.doseStore.insulinDeliveryStore.authorize({ _ in })
+                    dataManager.doseStore.insulinDeliveryStore.authorize(toShare: true, { _ in })
                     dataManager.glucoseStore.authorize({ _ in })
                 }
             }
@@ -281,7 +281,7 @@ class MasterViewController: UITableViewController {
                     }
 
                     group.enter()
-                    dataManager.glucoseStore.addGlucose(NewGlucoseSample(date: Date(), quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 101), isDisplayOnly: false, syncIdentifier: UUID().uuidString), completion: { (result) in
+                    dataManager.glucoseStore.addGlucose(NewGlucoseSample(date: Date(), quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 101), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: UUID().uuidString), completion: { (result) in
                         group.leave()
                     })
 

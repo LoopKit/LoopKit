@@ -15,6 +15,11 @@ open class QuantityFormatter {
     public init() {
     }
 
+    public convenience init(for unit: HKUnit) {
+        self.init()
+        setPreferredNumberFormatter(for: unit)
+    }
+
     /// The unit style determines how the unit strings are abbreviated, and spacing between the value and unit
     open var unitStyle: Formatter.UnitStyle = .medium {
         didSet {
@@ -46,7 +51,7 @@ open class QuantityFormatter {
     open func setPreferredNumberFormatter(for unit: HKUnit) {
         numberFormatter.numberStyle = .decimal
         numberFormatter.minimumFractionDigits = unit.preferredFractionDigits
-        numberFormatter.maximumFractionDigits = unit.preferredFractionDigits
+        numberFormatter.maximumFractionDigits = unit.maxFractionDigits
     }
 
     private var hasNumberFormatter = false
@@ -92,15 +97,20 @@ open class QuantityFormatter {
     ///
     /// - Parameters:
     ///   - quantity: The quantity
-    ///   - unit: The value. An exception is thrown if `quantity` is not compatible with the unit.
+    ///   - unit: The unit. An exception is thrown if `quantity` is not compatible with the unit.
+    ///   - includeUnit: Whether or not to include the unit in the returned string
     /// - Returns: A localized string, or nil if `numberFormatter` is unable to format the quantity value
-    open func string(from quantity: HKQuantity, for unit: HKUnit) -> String? {
+    open func string(from quantity: HKQuantity, for unit: HKUnit, includeUnit: Bool = true) -> String? {
         let value = quantity.doubleValue(for: unit)
+
+        if !includeUnit {
+            return numberFormatter.string(from: value)
+        }
 
         if let foundationUnit = unit.foundationUnit, unit.usesMeasurementFormatterForMeasurement {
             return measurementFormatter.string(from: Measurement(value: value, unit: foundationUnit))
-        }
-
+        }        
+        
         return numberFormatter.string(from: value, unit: string(from: unit, forValue: value), style: unitStyle)
     }
 
@@ -143,6 +153,17 @@ public extension HKUnit {
             return 1
         } else {
             return 0
+        }
+    }
+
+    var maxFractionDigits: Int {
+        switch self {
+        case .internationalUnit(), .internationalUnitsPerHour:
+            return 3
+        case HKUnit.gram().unitDivided(by: .internationalUnit()):
+            return 2
+        default:
+            return preferredFractionDigits
         }
     }
 

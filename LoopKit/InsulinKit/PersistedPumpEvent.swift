@@ -28,6 +28,26 @@ public struct PersistedPumpEvent {
     public let type: PumpEventType?
     /// Whether the pump event is marked mutable
     public let isMutable: Bool
+
+    public init(date: Date,
+                persistedDate: Date,
+                dose: DoseEntry?,
+                isUploaded: Bool,
+                objectIDURL: URL,
+                raw: Data?,
+                title: String?,
+                type: PumpEventType?,
+                isMutable: Bool) {
+        self.date = date
+        self.persistedDate = persistedDate
+        self.dose = dose
+        self.isUploaded = isUploaded
+        self.objectIDURL = objectIDURL
+        self.raw = raw
+        self.title = title
+        self.type = type
+        self.isMutable = isMutable
+    }
 }
 
 

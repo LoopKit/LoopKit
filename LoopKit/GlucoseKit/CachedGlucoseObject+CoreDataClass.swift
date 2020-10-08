@@ -37,6 +37,22 @@ class CachedGlucoseObject: NSManagedObject {
             primitiveUploadState = NSNumber(value: newValue.rawValue)
         }
     }
+
+    var hasUpdatedModificationCounter: Bool { changedValues().keys.contains("modificationCounter") }
+
+    func updateModificationCounter() { setPrimitiveValue(managedObjectContext!.modificationCounter!, forKey: "modificationCounter") }
+
+    override func awakeFromInsert() {
+        super.awakeFromInsert()
+        updateModificationCounter()
+    }
+
+    override func willSave() {
+        if isUpdated && !hasUpdatedModificationCounter {
+            updateModificationCounter()
+        }
+        super.willSave()
+    }
 }
 
 
@@ -50,5 +66,6 @@ extension CachedGlucoseObject {
         startDate = sample.startDate
         provenanceIdentifier = sample.provenanceIdentifier
         isDisplayOnly = sample.isDisplayOnly
+        wasUserEntered = sample.wasUserEntered
     }
 }

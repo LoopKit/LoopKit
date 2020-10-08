@@ -68,6 +68,8 @@ public final class TemporaryScheduleOverrideHistory {
     }
     
     private var modificationCounter: Int
+    
+    public var relevantTimeWindow: TimeInterval = TimeInterval.hours(10)
 
     public weak var delegate: TemporaryScheduleOverrideHistoryDelegate?
 
@@ -165,10 +167,9 @@ public final class TemporaryScheduleOverrideHistory {
     }
 
     private func relevantPeriod(relativeTo referenceDate: Date) -> DateInterval {
-        let window = CarbStore.defaultMaximumAbsorptionTimeInterval
         return DateInterval(
-            start: referenceDate.addingTimeInterval(-window),
-            end: referenceDate.addingTimeInterval(window)
+            start: referenceDate.addingTimeInterval(-relevantTimeWindow),
+            end: referenceDate.addingTimeInterval(relevantTimeWindow)
         )
     }
 
@@ -268,11 +269,7 @@ extension OverrideEvent: RawRepresentable {
 
         self.override = override
         
-        if let modificationCounter = rawValue["modificationCounter"] as? Int {
-            self.modificationCounter = modificationCounter
-        } else {
-            self.modificationCounter = 0
-        }
+        self.modificationCounter = rawValue["modificationCounter"] as? Int ?? 0
         
         if let isDeleted = rawValue["isDeleted"] as? Bool, isDeleted {
             self.end = .deleted

@@ -75,6 +75,7 @@ extension MockGlucoseProvider {
             date: date,
             quantity: quantity,
             isDisplayOnly: false,
+            wasUserEntered: false,
             syncIdentifier: UUID().uuidString,
             device: MockCGMDataSource.device
         )
@@ -190,6 +191,7 @@ private extension CGMResult {
                     date: sample.date,
                     quantity: transform(sample.quantity),
                     isDisplayOnly: sample.isDisplayOnly,
+                    wasUserEntered: sample.wasUserEntered,
                     syncIdentifier: sample.syncIdentifier,
                     syncVersion: sample.syncVersion,
                     device: sample.device
@@ -207,6 +209,8 @@ private extension MockCGMDataSource.Model {
         case .sineCurve(parameters: let parameters):
             return .sineCurve(parameters: parameters)
         case .noData:
+            return .noData
+        case .signalLoss:
             return .noData
         }
     }

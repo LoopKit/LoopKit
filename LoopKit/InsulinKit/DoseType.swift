@@ -9,7 +9,7 @@ import Foundation
 
 
 /// A general set of ways insulin can be delivered by a pump
-public enum DoseType: String {
+public enum DoseType: String, CaseIterable {
     case basal
     case bolus
     case resume
@@ -17,6 +17,7 @@ public enum DoseType: String {
     case tempBasal
 }
 
+extension DoseType: Codable {}
 
 /// Compatibility transform to PumpEventType
 extension DoseType {

@@ -36,6 +36,25 @@ public enum GlucoseTrend: Int, CaseIterable {
             return "⇊"
         }
     }
+    
+    public var arrows: String {
+        switch self {
+        case .upUpUp:
+            return "↑↑"
+        case .upUp:
+            return "↑"
+        case .up:
+            return "↗︎"
+        case .flat:
+            return "→"
+        case .down:
+            return "↘︎"
+        case .downDown:
+            return "↓"
+        case .downDownDown:
+            return "↓↓"
+        }
+    }
 
     public var localizedDescription: String {
         switch self {

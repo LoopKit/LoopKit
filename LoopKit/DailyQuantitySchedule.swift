@@ -71,6 +71,24 @@ public struct DailyQuantitySchedule<T: RawRepresentable>: DailySchedule {
     }
 }
 
+extension DailyQuantitySchedule: Codable where T: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.unit = HKUnit(from: try container.decode(String.self, forKey: .unit))
+        self.valueSchedule = try container.decode(DailyValueSchedule<T>.self, forKey: .valueSchedule)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(unit.unitString, forKey: .unit)
+        try container.encode(valueSchedule, forKey: .valueSchedule)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case unit
+        case valueSchedule
+    }
+}
 
 extension DailyQuantitySchedule: CustomDebugStringConvertible {
     public var debugDescription: String {

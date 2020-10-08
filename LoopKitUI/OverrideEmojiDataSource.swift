@@ -47,17 +47,17 @@ private final class OverrideEmojiDataSource: EmojiDataSource {
     init() {
         sections = [
             EmojiSection(
-                title: LocalizedString("Activity", comment: "The title for the override emoji activity section"),
+                title: LocalizedString("Activity", comment: "The title for the custom preset emoji activity section"),
                 items: type(of: self).activity,
                 indexSymbol: " 🏃‍♀️ "
             ),
             EmojiSection(
-                title: LocalizedString("Condition", comment: "The title for the override emoji condition section"),
+                title: LocalizedString("Condition", comment: "The title for the custom preset emoji condition section"),
                 items: type(of: self).condition,
                 indexSymbol: "🤒"
             ),
             EmojiSection(
-                title: LocalizedString("Other", comment: "The title for override emoji miscellaneous section"),
+                title: LocalizedString("Other", comment: "The title for custom preset emoji miscellaneous section"),
                 items: type(of: self).other,
                 indexSymbol: "⋯ "
             )

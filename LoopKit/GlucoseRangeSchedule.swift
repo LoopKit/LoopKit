@@ -52,6 +52,7 @@ extension DoubleRange: Equatable {
 
 extension DoubleRange: Hashable {}
 
+extension DoubleRange: Codable {}
 
 /// Defines a daily schedule of glucose ranges
 public struct GlucoseRangeSchedule: DailySchedule, Equatable {
@@ -67,13 +68,13 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         /// Initializes a new override
         ///
         /// - Parameters:
+        ///   - value: The value to return when active
         ///   - start: The date at which the override starts
         ///   - end: The date at which the override ends, or nil for an indefinite override
-        ///   - value: The value to return when active
-        public init(start: Date, end: Date?, value: DoubleRange) {
+        public init(value: DoubleRange, start: Date, end: Date? = nil) {
+            self.value = value
             self.start = start
             self.end = end ?? .distantFuture
-            self.value = value
         }
 
         public var activeDates: DateInterval {
@@ -164,7 +165,26 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
     public var rawValue: RawValue {
         return rangeSchedule.rawValue
     }
+
+    public func minLowerBound() -> HKQuantity {
+        let minDoubleValue = items.lazy.map { $0.value.minValue }.min()!
+        return HKQuantity(unit: unit, doubleValue: minDoubleValue)
+    }
+
+    public func scheduleRange() -> ClosedRange<HKQuantity> {
+        let minDoubleValue = items.lazy.map { $0.value.minValue }.min()!
+        let lowerBound = HKQuantity(unit: unit, doubleValue: minDoubleValue)
+
+        let maxDoubleValue = items.lazy.map { $0.value.maxValue }.max()!
+        let upperBound = HKQuantity(unit: unit, doubleValue: maxDoubleValue)
+
+        return lowerBound...upperBound
+    }
 }
+
+extension GlucoseRangeSchedule: Codable {}
+
+extension GlucoseRangeSchedule.Override: Codable {}
 
 extension DoubleRange {
     public func quantityRange(for unit: HKUnit) -> ClosedRange<HKQuantity> {
@@ -175,7 +195,13 @@ extension DoubleRange {
 }
 
 extension ClosedRange where Bound == HKQuantity {
-    func doubleRange(for unit: HKUnit) -> DoubleRange {
+    public func doubleRange(for unit: HKUnit) -> DoubleRange {
         return DoubleRange(minValue: lowerBound.doubleValue(for: unit), maxValue: upperBound.doubleValue(for: unit))
+    }
+}
+
+public extension DoubleRange {
+    init(_ val: ClosedRange<Double>) {
+        self.init(minValue: val.lowerBound, maxValue: val.upperBound)
     }
 }

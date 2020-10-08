@@ -20,7 +20,7 @@ public enum CGMResult {
 }
 
 
-public protocol CGMManagerDelegate: class, DeviceManagerDelegate {
+public protocol CGMManagerDelegate: DeviceManagerDelegate {
     /// Asks the delegate for a date with which to filter incoming glucose data
     ///
     /// - Parameter manager: The manager instance
@@ -43,6 +43,12 @@ public protocol CGMManagerDelegate: class, DeviceManagerDelegate {
     ///
     /// - Parameter manager: The manager instance
     func cgmManagerDidUpdateState(_ manager: CGMManager)
+    
+    /// Asks the delegate for credential store prefix to avoid namespace conflicts
+    ///
+    /// - Parameter manager: The manager instance
+    /// - Returns: The unique prefix for the credential store
+    func credentialStoragePrefix(for manager: CGMManager) -> String
 }
 
 
@@ -59,7 +65,7 @@ public protocol CGMManager: DeviceManager {
 
     var shouldSyncToRemoteService: Bool { get }
 
-    var sensorState: SensorDisplayable? { get }
+    var glucoseDisplay: GlucoseDisplayable? { get }
 
     /// The representation of the device for use in HealthKit
     var device: HKDevice? { get }

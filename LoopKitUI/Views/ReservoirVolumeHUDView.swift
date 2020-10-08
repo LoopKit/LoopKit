@@ -72,6 +72,6 @@ public final class ReservoirVolumeHUDView: LevelHUDView, NibLoadable {
     public override func tintColorDidChange() {
         super.tintColorDidChange()
 
-        volumeLabel.tintColor = tintColor
+        volumeLabel.textColor = tintColor
     }
 }
