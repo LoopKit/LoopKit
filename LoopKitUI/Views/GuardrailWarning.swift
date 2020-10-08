@@ -78,7 +78,8 @@ public struct GuardrailWarning: View {
                         return Text(TherapySetting.glucoseTargetRange.guardrailCaptionForHighValue)
                 }
             } else {
-                return Text("Some of the values you have entered are outside of what Tidepool typically recommends for most people.")
+                // ANNA TODO: figure out this one
+                return Text("Some of the values you have entered are outside of what is typically recommended for most people.")
             }
         }
     }
