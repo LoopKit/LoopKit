@@ -79,7 +79,7 @@ public struct GuardrailWarning: View {
                 }
             } else {
                 // ANNA TODO: figure out this one
-                return Text("Some of the values you have entered are outside of what Tidepool typically recommends for most people.")
+                return Text("Some of the values you have entered are outside of what is typically recommended for most people.")
             }
         }
     }
