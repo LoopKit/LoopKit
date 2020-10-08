@@ -170,7 +170,44 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
         
         anchoredObjectQuery!.resultsHandler(anchoredObjectQuery!, [], [], returnedAnchor, nil)
     }
-    
+
+    func testLatestGlucoseIsSetAfterStoreAndClearedAfterPurge() {
+        let storeCompletion = expectation(description: "Storage completion")
+        let storedQuantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
+        let device = HKDevice(name: "Unit Test Mock CGM",
+            manufacturer: "Device Manufacturer",
+            model: "Device Model",
+            hardwareVersion: "Device Hardware Version",
+            firmwareVersion: "Device Firmware Version",
+            softwareVersion: "Device Software Version",
+            localIdentifier: "Device Local Identifier",
+            udiDeviceIdentifier: "Device UDI Device Identifier")
+        let sample = NewGlucoseSample(date: Date(), quantity: storedQuantity, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "random", device: device)
+        glucoseStore.addGlucose(sample) { (result) in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let value):
+                XCTAssertEqual(storedQuantity, value.quantity)
+            }
+            storeCompletion.fulfill()
+        }
+        wait(for: [storeCompletion], timeout: 2)
+        XCTAssertEqual(storedQuantity, self.glucoseStore.latestGlucose?.quantity)
+
+        let purgeCompletion = expectation(description: "Storage completion")
+        
+        let predicate = HKQuery.predicateForObjects(from: [device])
+        glucoseStore.purgeGlucoseSamples(matchingCachePredicate: nil, healthKitPredicate: predicate) { (_, _, error) in
+            if let error = error {
+                XCTFail("Unexpected failure: \(error)")
+            }
+            purgeCompletion.fulfill()
+        }
+        wait(for: [purgeCompletion], timeout: 2)
+        XCTAssertNil(self.glucoseStore.latestGlucose)
+    }
+
     func testEmptyWithDefaultQueryAnchor() {
         let completion = expectation(description: "Completion")
         glucoseStore.executeGlucoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in

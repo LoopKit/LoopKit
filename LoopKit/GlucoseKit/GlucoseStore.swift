@@ -285,8 +285,12 @@ extension GlucoseStore {
     public func purgeGlucoseSamples(matchingCachePredicate cachePredicate: NSPredicate?, healthKitPredicate: NSPredicate, completion: @escaping (_ success: Bool, _ count: Int, _ error: Error?) -> Void) {
         dataAccessQueue.async {
             self.purgeCachedGlucoseObjects(matching: cachePredicate)
-            self.healthStore.deleteObjects(of: self.glucoseType, predicate: healthKitPredicate, withCompletion: completion)
-            self.updateLatestGlucose()
+            self.healthStore.deleteObjects(of: self.glucoseType, predicate: healthKitPredicate) { (success, count, error) in
+                self.dataAccessQueue.async {
+                    self.updateLatestGlucose()
+                    completion(success, count, error)
+                }
+            }
         }
     }
 

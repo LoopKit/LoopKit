@@ -8,7 +8,7 @@
 import HealthKit
 
 
-/// Describes the result of a CGM manager operation
+/// Describes the result of CGM manager operations to fetch and report sensor readings.
 ///
 /// - noData: No new data was available or retrieved
 /// - newData: New glucose data was received and stored
@@ -61,7 +61,8 @@ public protocol CGMManagerDelegate: DeviceManagerDelegate {
     /// Notifies the delegate of a change in status
     ///
     /// - Parameter manager: The manager instance
-    /// - Parameter status: The new, updated status
+    /// - Parameter status: The new, updated status. Status includes properties associated with the manager, transmitter, or sensor,
+    ///                     that are not part of an individual sensor reading.
     func cgmManager(_ manager: CGMManager, didUpdate status: CGMManagerStatus)
 }
 
