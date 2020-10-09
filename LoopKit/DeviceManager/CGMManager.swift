@@ -13,7 +13,7 @@ import HealthKit
 /// - noData: No new data was available or retrieved
 /// - newData: New glucose data was received and stored
 /// - error: An error occurred while receiving or store data
-public enum CGMResult {
+public enum CGMReadingResult {
     case noData
     case newData([NewGlucoseSample])
     case error(Error)
@@ -40,7 +40,7 @@ public protocol CGMManagerDelegate: DeviceManagerDelegate {
     /// - Parameters:
     ///   - manager: The manager instance
     ///   - result: The result of the update
-    func cgmManager(_ manager: CGMManager, didUpdateWith result: CGMResult) -> Void
+    func cgmManager(_ manager: CGMManager, hasNew readingResult: CGMReadingResult) -> Void
 
     /// Informs the delegate that the manager is deactivating and should be deleted
     ///
@@ -92,7 +92,7 @@ public protocol CGMManager: DeviceManager {
     ///
     /// - Parameters:
     ///   - completion: A closure called when operation has completed
-    func fetchNewDataIfNeeded(_ completion: @escaping (CGMResult) -> Void) -> Void
+    func fetchNewDataIfNeeded(_ completion: @escaping (CGMReadingResult) -> Void) -> Void
 }
 
 

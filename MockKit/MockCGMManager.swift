@@ -382,14 +382,14 @@ public final class MockCGMManager: TestingCGMManager {
         }
     }
 
-    private func sendCGMResult(_ result: CGMResult) {
+    private func sendCGMReadingResult(_ result: CGMReadingResult) {
         if case .newData(let samples) = result,
             let currentValue = samples.first
         {
             mockSensorState.glucoseRangeCategory = glucoseRangeCategory(for: currentValue.quantitySample)
         }
         self.delegate.notify { delegate in
-            delegate?.cgmManager(self, didUpdateWith: result)
+            delegate?.cgmManager(self, hasNew: result)
         }
     }
     
@@ -410,7 +410,7 @@ public final class MockCGMManager: TestingCGMManager {
         }
     }
 
-    public func fetchNewDataIfNeeded(_ completion: @escaping (CGMResult) -> Void) {
+    public func fetchNewDataIfNeeded(_ completion: @escaping (CGMReadingResult) -> Void) {
         logDeviceComms(.send, message: "Fetch new data")
         dataSource.fetchNewData { (result) in
             switch result {
@@ -437,7 +437,7 @@ public final class MockCGMManager: TestingCGMManager {
             case .noData:
                 self.logDeviceComms(.receive, message: "Backfill empty")
             }
-            self.sendCGMResult(result)
+            self.sendCGMReadingResult(result)
         }
     }
     
@@ -450,7 +450,7 @@ public final class MockCGMManager: TestingCGMManager {
         glucoseUpdateTimer = Timer.scheduledTimer(withTimeInterval: dataSource.dataPointFrequency.frequency, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             self.fetchNewDataIfNeeded() { result in
-                self.sendCGMResult(result)
+                self.sendCGMReadingResult(result)
             }
         }
     }
@@ -459,7 +459,7 @@ public final class MockCGMManager: TestingCGMManager {
         guard !samples.isEmpty else { return }
         var samples = samples
         samples.mutateEach { $0.device = device }
-        sendCGMResult(CGMResult.newData(samples))
+        sendCGMReadingResult(CGMReadingResult.newData(samples))
     }
 }
 
@@ -526,7 +526,7 @@ extension MockCGMManager {
         }
 
         // trigger display of the status highlight
-        sendCGMResult(.noData)
+        sendCGMReadingResult(.noData)
     }
     
     private func registerBackgroundTask() {
