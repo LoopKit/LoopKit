@@ -43,7 +43,7 @@ struct NewScheduleItemEditor<Value, ValuePicker: View>: View {
             ModalHeaderButtonBar(
                 leading: { cancelButton },
                 center: {
-                    Text("New Entry", comment: "Title for mini-modal to add a new schedule entry")
+                    Text(LocalizedString("New Entry", comment: "Title for mini-modal to add a new schedule entry"))
                         .font(.headline)
                 },
                 trailing: { addButton }
@@ -80,7 +80,7 @@ struct NewScheduleItemEditor<Value, ValuePicker: View>: View {
                     self.isPresented = false
                 }
             }, label: {
-                Text("Add", comment: "Button text to confirm adding a new schedule item")
+                Text(LocalizedString("Add", comment: "Button text to confirm adding a new schedule item"))
             }
         )
     }
@@ -92,7 +92,7 @@ struct NewScheduleItemEditor<Value, ValuePicker: View>: View {
                     self.isPresented = false
                 }
             }, label: {
-                Text("Cancel", comment: "Button text to cancel adding a new schedule item")
+                Text(LocalizedString("Cancel", comment: "Button text to cancel adding a new schedule item"))
             }
         )
     }

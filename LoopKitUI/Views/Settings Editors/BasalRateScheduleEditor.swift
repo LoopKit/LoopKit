@@ -99,7 +99,7 @@ public struct BasalRateScheduleEditor: View {
 
     private var confirmationAlertContent: AlertContent {
         AlertContent(
-            title: Text("Save Basal Rates?", comment: "Alert title for confirming basal rates outside the recommended range"),
+            title: Text(LocalizedString("Save Basal Rates?", comment: "Alert title for confirming basal rates outside the recommended range")),
             message: Text(TherapySetting.basalRate.guardrailSaveWarningCaption)
         )
     }
@@ -140,7 +140,7 @@ private struct BasalRateGuardrailWarning: View {
 
         let caption = self.isZeroUnitRateSelectable && crossedThresholds.allSatisfy({ $0 == .minimum })
             // ANNA TODO: ask MLee about this one
-            ? Text("A value of 0 U/hr means you will be scheduled to receive no basal insulin.", comment: "Warning text for basal rate of 0 U/hr")
+            ? Text(LocalizedString("A value of 0 U/hr means you will be scheduled to receive no basal insulin.", comment: "Warning text for basal rate of 0 U/hr"))
             : nil
 
         return GuardrailWarning(
@@ -153,17 +153,17 @@ private struct BasalRateGuardrailWarning: View {
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
         case .minimum where isZeroUnitRateSelectable:
-            return Text("No Basal Insulin", comment: "Title text for the zero basal rate warning")
+            return Text(LocalizedString("No Basal Insulin", comment: "Title text for the zero basal rate warning"))
         case .minimum, .belowRecommended:
-            return Text("Low Basal Rate", comment: "Title text for the low basal rate warning")
+            return Text(LocalizedString("Low Basal Rate", comment: "Title text for the low basal rate warning"))
         case .aboveRecommended, .maximum:
-            return Text("High Basal Rate", comment: "Title text for the high basal rate warning")
+            return Text(LocalizedString("High Basal Rate", comment: "Title text for the high basal rate warning"))
         }
     }
 
     private var multipleWarningTitle: Text {
         isZeroUnitRateSelectable && crossedThresholds.allSatisfy({ $0 == .minimum })
-            ? Text("No Basal Insulin", comment: "Title text for the zero basal rate warning")
-            : Text("Basal Rates", comment: "Title text for multi-value basal rate warning")
+            ? Text(LocalizedString("No Basal Insulin", comment: "Title text for the zero basal rate warning"))
+            : Text(LocalizedString("Basal Rates", comment: "Title text for multi-value basal rate warning"))
     }
 }

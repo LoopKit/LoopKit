@@ -86,7 +86,7 @@ struct Deletable<Content: View>: View {
                     }
 
                 if tableDeletionState.indexAwaitingDeletionConfirmation == index {
-                    Text("Delete")
+                    Text(LocalizedString("Delete", comment: "Test for table cell delete button"))
                         .lineLimit(1)
                         .foregroundColor(.white)
                         .background(
