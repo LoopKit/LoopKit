@@ -83,7 +83,7 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
         Button(action: {
             self.dismiss()
         }) {
-            Text("Done").bold()
+            Text(LocalizedString("Done", comment: "Text for dismiss button")).bold()
         }
     }
     

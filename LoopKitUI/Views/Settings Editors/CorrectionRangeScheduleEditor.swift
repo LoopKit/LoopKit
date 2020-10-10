@@ -161,7 +161,7 @@ public struct CorrectionRangeScheduleEditor: View {
 
     private var confirmationAlertContent: AlertContent {
         AlertContent(
-            title: Text("Save Correction Range(s)?", comment: "Alert title for confirming correction ranges outside the recommended range"),
+            title: Text(LocalizedString("Save Correction Range(s)?", comment: "Alert title for confirming correction ranges outside the recommended range")),
             message: Text(TherapySetting.glucoseTargetRange.guardrailSaveWarningCaption)
         )
     }
@@ -181,13 +181,13 @@ private struct CorrectionRangeGuardrailWarning: View {
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
         case .minimum, .belowRecommended:
-            return Text("Low Correction Value", comment: "Title text for the low correction value warning")
+            return Text(LocalizedString("Low Correction Value", comment: "Title text for the low correction value warning"))
         case .aboveRecommended, .maximum:
-            return Text("High Correction Value", comment: "Title text for the high correction value warning")
+            return Text(LocalizedString("High Correction Value", comment: "Title text for the high correction value warning"))
         }
     }
 
     private var multipleWarningTitle: Text {
-        Text("Correction Values", comment: "Title text for multi-value correction value warning")
+        Text(LocalizedString("Correction Values", comment: "Title text for multi-value correction value warning"))
     }
 }

@@ -97,7 +97,7 @@ public struct SuspendThresholdEditor: View {
     }
     
     private var cancelButton: some View {
-        Button(action: { self.dismiss() } ) { Text("Cancel", comment: "Cancel editing settings button title") }
+        Button(action: { self.dismiss() } ) { Text(LocalizedString("Cancel", comment: "Cancel editing settings button title")) }
     }
     
     private var content: some View {
@@ -195,11 +195,11 @@ public struct SuspendThresholdEditor: View {
 
     private func confirmationAlert() -> SwiftUI.Alert {
         SwiftUI.Alert(
-            title: Text("Save Suspend Threshold?", comment: "Alert title for confirming a suspend threshold outside the recommended range"),
+            title: Text(LocalizedString("Save Suspend Threshold?", comment: "Alert title for confirming a suspend threshold outside the recommended range")),
             message: Text(TherapySetting.suspendThreshold.guardrailSaveWarningCaption),
-            primaryButton: .cancel(Text("Go Back")),
+            primaryButton: .cancel(Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert"))),
             secondaryButton: .default(
-                Text("Continue"),
+                Text(LocalizedString("Continue", comment: "Text for continue action on confirmation alert")),
                 action: startSaving
             )
         )
@@ -233,9 +233,9 @@ struct SuspendThresholdGuardrailWarning: View {
     private var title: Text {
         switch safetyClassificationThreshold {
         case .minimum, .belowRecommended:
-            return Text("Low Suspend Threshold", comment: "Title text for the low suspend threshold warning")
+            return Text(LocalizedString("Low Suspend Threshold", comment: "Title text for the low suspend threshold warning"))
         case .aboveRecommended, .maximum:
-            return Text("High Suspend Threshold", comment: "Title text for the high suspend threshold warning")
+            return Text(LocalizedString("High Suspend Threshold", comment: "Title text for the high suspend threshold warning"))
         }
     }
 }
