@@ -13,6 +13,7 @@ import LoopKit
 
 public protocol OverrideSelectionViewControllerDelegate: AnyObject {
     func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didUpdatePresets presets: [TemporaryScheduleOverridePreset])
+    func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didConfirmPreset preset: TemporaryScheduleOverridePreset)
     func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didConfirmOverride override: TemporaryScheduleOverride)
     func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didCancelOverride override: TemporaryScheduleOverride)
 }
@@ -254,8 +255,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
                 editOverrideVC.delegate = self
                 show(editOverrideVC, sender: collectionView.cellForItem(at: indexPath))
             case .preset(let preset):
-                let override = preset.createOverride(enactTrigger: .local)
-                delegate?.overrideSelectionViewController(self, didConfirmOverride: override)
+                delegate?.overrideSelectionViewController(self, didConfirmPreset: preset)
                 dismiss(animated: true)
             case .customOverride:
                 let customOverrideVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit)
