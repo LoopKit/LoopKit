@@ -355,6 +355,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                     }
                 }
             }
+        default:
+            break
         }
     }
     

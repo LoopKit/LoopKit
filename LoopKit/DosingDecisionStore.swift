@@ -160,7 +160,7 @@ public struct StoredDosingDecision {
     public let carbsOnBoard: CarbValue?
     public let scheduleOverride: TemporaryScheduleOverride?
     public let glucoseTargetRangeSchedule: GlucoseRangeSchedule?
-    public let glucoseTargetRangeScheduleApplyingOverrideIfActive: GlucoseRangeSchedule?
+    public let effectiveGlucoseTargetRangeSchedule: GlucoseRangeSchedule?
     public let predictedGlucose: [PredictedGlucoseValue]?
     public let predictedGlucoseIncludingPendingInsulin: [PredictedGlucoseValue]?
     public let lastReservoirValue: LastReservoirValue?
@@ -181,7 +181,7 @@ public struct StoredDosingDecision {
                 carbsOnBoard: CarbValue? = nil,
                 scheduleOverride: TemporaryScheduleOverride? = nil,
                 glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
-                glucoseTargetRangeScheduleApplyingOverrideIfActive: GlucoseRangeSchedule? = nil,
+                effectiveGlucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
                 predictedGlucose: [PredictedGlucoseValue]? = nil,
                 predictedGlucoseIncludingPendingInsulin: [PredictedGlucoseValue]? = nil,
                 lastReservoirValue: LastReservoirValue? = nil,
@@ -201,7 +201,7 @@ public struct StoredDosingDecision {
         self.carbsOnBoard = carbsOnBoard
         self.scheduleOverride = scheduleOverride
         self.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
-        self.glucoseTargetRangeScheduleApplyingOverrideIfActive = glucoseTargetRangeScheduleApplyingOverrideIfActive
+        self.effectiveGlucoseTargetRangeSchedule = effectiveGlucoseTargetRangeSchedule
         self.predictedGlucose = predictedGlucose
         self.predictedGlucoseIncludingPendingInsulin = predictedGlucoseIncludingPendingInsulin
         self.lastReservoirValue = lastReservoirValue

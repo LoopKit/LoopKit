@@ -112,7 +112,7 @@ public final class MockPumpManager: TestingPumpManager {
         if let bolus = state.unfinalizedBolus, !bolus.finished {
             return .inProgress(DoseEntry(bolus))
         } else {
-            return .none
+            return .noBolus
         }
     }
     
