@@ -230,32 +230,38 @@ public struct CorrectionRangeOverridesEditor: View {
         let crossedThresholds = self.crossedThresholds
         return Group {
             if !crossedThresholds.isEmpty && (userDidTap || mode == .settings) {
-                CorrectionRangeOverridesGuardrailWarning(crossedThresholds: crossedThresholds)
+                CorrectionRangeOverridesGuardrailWarning(crossedThresholds: crossedThresholds, preset: preset)
             }
         }
     }
 
-    private var crossedThresholds: [CorrectionRangeOverrides.Preset: [SafetyClassification.Threshold]] {
-        value.ranges
-            .compactMapValuesWithKeys { preset, range in
-                let guardrail = self.guardrail(for: preset)
-                let thresholds: [SafetyClassification.Threshold] = [range.lowerBound, range.upperBound].compactMap { bound in
-                    switch guardrail.classification(for: bound) {
-                    case .withinRecommendedRange:
-                        return nil
-                    case .outsideRecommendedRange(let threshold):
-                        return threshold
-                    }
-                }
-
-                return thresholds.isEmpty ? nil : thresholds
+    private var crossedThresholds: [SafetyClassification.Threshold] {
+        guard let range = value.ranges[preset] else { return [] }
+        
+        let guardrail = self.guardrail(for: preset)
+        let thresholds: [SafetyClassification.Threshold] = [range.lowerBound, range.upperBound].compactMap { bound in
+            switch guardrail.classification(for: bound) {
+            case .withinRecommendedRange:
+                return nil
+            case .outsideRecommendedRange(let threshold):
+                return threshold
             }
-            .filter { $0.key == preset }
+        }
+        
+        return thresholds
     }
 
     private func confirmationAlert() -> SwiftUI.Alert {
-        SwiftUI.Alert(
-            title: Text("Save Correction Range Overrides?", comment: "Alert title for confirming correction range overrides outside the recommended range"),
+        let title: Text
+        switch preset {
+        case .preMeal:
+            title = Text("Save Pre-Meal Range?", comment: "Alert title for confirming pre-meal range overrides outside the recommended range")
+        case .workout:
+            title = Text("Save Workout Range?", comment: "Alert title for confirming workout range overrides outside the recommended range")
+        }
+        
+        return SwiftUI.Alert(
+            title: title,
             // For the message, preMeal and workout are the same
             message: Text(TherapySetting.preMealCorrectionRangeOverride.guardrailSaveWarningCaption),
             primaryButton: .cancel(Text("Go Back")),
@@ -294,20 +300,21 @@ public struct CorrectionRangeOverridesEditor: View {
 }
 
 private struct CorrectionRangeOverridesGuardrailWarning: View {
-    var crossedThresholds: [CorrectionRangeOverrides.Preset: [SafetyClassification.Threshold]]
-
+    var crossedThresholds: [SafetyClassification.Threshold]
+    var preset: CorrectionRangeOverrides.Preset
+    
     var body: some View {
         assert(!crossedThresholds.isEmpty)
         return GuardrailWarning(
             title: title,
-            thresholds: Array(crossedThresholds.values.flatMap { $0 }),
+            thresholds: crossedThresholds,
             caption: caption
         )
     }
 
     private var title: Text {
-        if crossedThresholds.count == 1, crossedThresholds.values.first!.count == 1 {
-            return singularWarningTitle(for: crossedThresholds.values.first!.first!)
+        if crossedThresholds.count == 1 {
+            return singularWarningTitle(for: crossedThresholds.first!)
         } else {
             return multipleWarningTitle
         }
@@ -316,25 +323,39 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
         case .minimum, .belowRecommended:
-            return Text("Low Correction Value", comment: "Title text for the low correction value warning")
+            switch preset {
+            case .preMeal:
+                return Text("Low Pre-Meal Value", comment: "Title text for the low pre-meal value warning")
+            case .workout:
+                return Text("Low Workout Value", comment: "Title text for the low workout value warning")
+            }
         case .aboveRecommended, .maximum:
-            return Text("High Correction Value", comment: "Title text for the high correction value warning")
+            switch preset {
+            case .preMeal:
+                return Text("High Pre-Meal Value", comment: "Title text for the low pre-meal value warning")
+            case .workout:
+                return Text("High Workout Value", comment: "Title text for the high workout value warning")
+            }
         }
     }
 
     private var multipleWarningTitle: Text {
-        Text("Correction Values", comment: "Title text for multi-value correction value warning")
+        switch preset {
+        case .preMeal:
+            return Text("Pre-Meal Values", comment: "Title text for multi-value pre-meal value warning")
+        case .workout:
+            return Text("Workout Values", comment: "Title text for multi-value workout value warning")
+        }
     }
 
     var caption: Text? {
         guard
-            crossedThresholds.count == 1,
-            let crossedPreMealThresholds = crossedThresholds[.preMeal],
-            crossedPreMealThresholds.allSatisfy({ $0 == .aboveRecommended || $0 == .maximum })
+            preset == .preMeal,
+            crossedThresholds.allSatisfy({ $0 == .aboveRecommended || $0 == .maximum })
         else {
             return nil
         }
         
-        return Text(crossedPreMealThresholds.count > 1 ? TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForOutsideValues : TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForHighValue)
+        return Text(crossedThresholds.count > 1 ? TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForOutsideValues : TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForHighValue)
     }
 }
