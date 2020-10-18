@@ -49,7 +49,25 @@ public struct OverrideSelectionHistory: View {
         }()
     }
     
+    // Style conditionally based on iOS so we get a grouped list style
     public var body: some View {
+        #if swift(>=5.2)
+            if #available(iOS 14.0, *) {
+                bodyContents
+                .listStyle(InsetGroupedListStyle())
+            } else {
+                bodyContents
+                .listStyle(GroupedListStyle())
+                .environment(\.horizontalSizeClass, .regular)
+            }
+        #else
+            bodyContents
+            .listStyle(GroupedListStyle())
+            .environment(\.horizontalSizeClass, .regular)
+        #endif
+    }
+    
+    private var bodyContents: some View {
         List {
             ForEach(model.overrides, id: \.self) { override in
                 Group {
@@ -65,8 +83,6 @@ public struct OverrideSelectionHistory: View {
                 }
             }
         }
-        .listStyle(GroupedListStyle())
-        .environment(\.horizontalSizeClass, .regular)
         .navigationBarTitle(Text(LocalizedString("Override History", comment: "Title for override history view")), displayMode: .large)
     }
     
