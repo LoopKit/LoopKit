@@ -66,10 +66,10 @@ public struct CorrectionRangeOverridesEditor: View {
             value: CorrectionRangeOverrides(
                 preMeal: viewModel.therapySettings.preMealTargetRange,
                 workout: viewModel.therapySettings.workoutTargetRange,
-                unit: viewModel.therapySettings.glucoseUnit!
+                unit: viewModel.glucoseUnit
             ),
             preset: preset,
-            unit: viewModel.therapySettings.glucoseUnit!,
+            unit: viewModel.glucoseUnit,
             correctionRangeScheduleRange: viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange(),
             minValue: viewModel.therapySettings.suspendThreshold?.quantity,
             onSave: { [weak viewModel] overrides in
@@ -109,7 +109,7 @@ public struct CorrectionRangeOverridesEditor: View {
     }
     
     private var cancelButton: some View {
-        Button(action: { self.dismiss() } ) { Text("Cancel", comment: "Cancel editing settings button title") }
+        Button(action: { self.dismiss() } ) { Text(LocalizedString("Cancel", comment: "Cancel editing settings button title")) }
     }
     
     private var content: some View {
@@ -255,12 +255,12 @@ public struct CorrectionRangeOverridesEditor: View {
 
     private func confirmationAlert() -> SwiftUI.Alert {
         SwiftUI.Alert(
-            title: Text("Save Correction Range Overrides?", comment: "Alert title for confirming correction range overrides outside the recommended range"),
+            title: Text(LocalizedString("Save Correction Range Overrides?", comment: "Alert title for confirming correction range overrides outside the recommended range")),
             // For the message, preMeal and workout are the same
             message: Text(TherapySetting.preMealCorrectionRangeOverride.guardrailSaveWarningCaption),
-            primaryButton: .cancel(Text("Go Back")),
+            primaryButton: .cancel(Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert"))),
             secondaryButton: .default(
-                Text("Continue"),
+                Text(LocalizedString("Continue", comment: "Text for continue action on confirmation alert")),
                 action: startSaving
             )
         )
@@ -316,14 +316,14 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
         case .minimum, .belowRecommended:
-            return Text("Low Correction Value", comment: "Title text for the low correction value warning")
+            return Text(LocalizedString("Low Correction Value", comment: "Title text for the low correction value warning"))
         case .aboveRecommended, .maximum:
-            return Text("High Correction Value", comment: "Title text for the high correction value warning")
+            return Text(LocalizedString("High Correction Value", comment: "Title text for the high correction value warning"))
         }
     }
 
     private var multipleWarningTitle: Text {
-        Text("Correction Values", comment: "Title text for multi-value correction value warning")
+        Text(LocalizedString("Correction Values", comment: "Title text for multi-value correction value warning"))
     }
 
     var caption: Text? {

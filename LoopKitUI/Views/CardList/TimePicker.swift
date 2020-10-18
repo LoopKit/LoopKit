@@ -38,7 +38,7 @@ public struct TimePicker: View {
     }
 
     public var body: some View {
-        Picker(selection: $offsetFromMidnight, label: Text("Time")) {
+        Picker(selection: $offsetFromMidnight, label: Text(LocalizedString("Time", comment: "Label for offset from midnight picker"))) {
             ForEach(allValues, id: \.self) { time in
                 self.text(for: time)
             }

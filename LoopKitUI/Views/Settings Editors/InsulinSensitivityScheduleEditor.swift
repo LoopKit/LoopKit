@@ -43,7 +43,7 @@ public struct InsulinSensitivityScheduleEditor: View {
         self.init(
             schedule: viewModel.therapySettings.insulinSensitivitySchedule,
             mode: viewModel.mode,
-            glucoseUnit: viewModel.therapySettings.glucoseUnit!,
+            glucoseUnit: viewModel.glucoseUnit,
             onSave: { [weak viewModel] in
                 viewModel?.saveInsulinSensitivitySchedule(insulinSensitivitySchedule: $0)
                 didSave?()
@@ -59,7 +59,7 @@ public struct InsulinSensitivityScheduleEditor: View {
             unit: sensitivityUnit,
             guardrail: .insulinSensitivity,
             selectableValueStride: stride,
-            defaultFirstScheduleItemValue: Guardrail.insulinSensitivity.absoluteBounds.upperBound,
+            defaultFirstScheduleItemValue: Guardrail.insulinSensitivity.startingSuggestion ?? Guardrail.insulinSensitivity.absoluteBounds.upperBound,
             confirmationAlertContent: confirmationAlertContent,
             guardrailWarning: InsulinSensitivityGuardrailWarning.init(crossedThresholds:),
             onSave: {
@@ -95,7 +95,7 @@ public struct InsulinSensitivityScheduleEditor: View {
 
     private var confirmationAlertContent: AlertContent {
         AlertContent(
-            title: Text("Save Insulin Sensitivities?", comment: "Alert title for confirming insulin sensitivities outside the recommended range"),
+            title: Text(LocalizedString("Save Insulin Sensitivities?", comment: "Alert title for confirming insulin sensitivities outside the recommended range")),
             message: Text(TherapySetting.insulinSensitivity.guardrailSaveWarningCaption)
         )
     }
@@ -115,13 +115,13 @@ private struct InsulinSensitivityGuardrailWarning: View {
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
         case .minimum, .belowRecommended:
-            return Text("Low Insulin Sensitivity", comment: "Title text for the low insulin sensitivity warning")
+            return Text(LocalizedString("Low Insulin Sensitivity", comment: "Title text for the low insulin sensitivity warning"))
         case .aboveRecommended, .maximum:
-            return Text("High Insulin Sensitivity", comment: "Title text for the high insulin sensitivity warning")
+            return Text(LocalizedString("High Insulin Sensitivity", comment: "Title text for the high insulin sensitivity warning"))
         }
     }
 
     private var multipleWarningTitle: Text {
-        Text("Insulin Sensitivities", comment: "Title text for multi-value insulin sensitivity warning")
+        Text(LocalizedString("Insulin Sensitivities", comment: "Title text for multi-value insulin sensitivity warning"))
     }
 }

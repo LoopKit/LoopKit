@@ -210,6 +210,8 @@ private extension MockCGMDataSource.Model {
             return .sineCurve(parameters: parameters)
         case .noData:
             return .noData
+        case .signalLoss:
+            return .noData
         }
     }
 }

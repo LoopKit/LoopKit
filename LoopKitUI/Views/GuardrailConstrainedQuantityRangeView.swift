@@ -66,7 +66,7 @@ public struct GuardrailConstrainedQuantityRangeView: View {
                     forceDisableAnimations: forceDisableAnimations
                 )
             } else {
-                Text("min", comment: "Placeholder for quantity range lower bound")
+                Text(LocalizedString("min", comment: "Placeholder for quantity range lower bound"))
                     .foregroundColor(Color(.tertiaryLabel))
             }
         }
@@ -85,7 +85,7 @@ public struct GuardrailConstrainedQuantityRangeView: View {
                 )
             } else {
                 HStack {
-                    Text("max", comment: "Placeholder for quantity range upper bound")
+                    Text(LocalizedString("max", comment: "Placeholder for quantity range upper bound"))
                         .foregroundColor(Color(.tertiaryLabel))
 
                     Text(unit.shortLocalizedUnitString())

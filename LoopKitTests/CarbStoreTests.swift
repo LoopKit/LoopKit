@@ -67,8 +67,8 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                                 self.carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1))) { result in
                                     getCarbEntriesCompletion.fulfill()
                                     switch result {
-                                    case .failure:
-                                        XCTFail("Unexpected failure")
+                                    case .failure(let error):
+                                        XCTFail("Unexpected failure: \(error)")
                                     case .success(let entries):
                                         XCTAssertEqual(entries.count, 3)
 
@@ -188,8 +188,8 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                         carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1))) { result in
                             getCarbEntriesCompletion.fulfill()
                             switch result {
-                            case .failure:
-                                XCTFail("Unexpected failure")
+                            case .failure(let error):
+                                XCTFail("Unexpected failure: \(error)")
                             case .success(let entries):
                                 XCTAssertEqual(entries.count, 1)
 
@@ -357,8 +357,8 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                         carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1))) { result in
                             getCarbEntriesCompletion.fulfill()
                             switch result {
-                            case .failure:
-                                XCTFail("Unexpected failure")
+                            case .failure(let error):
+                                XCTFail("Unexpected failure: \(error)")
                             case .success(let entries):
                                 XCTAssertEqual(entries.count, 1)
 
@@ -513,8 +513,8 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                         carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1))) { result in
                             getCarbEntriesCompletion.fulfill()
                             switch result {
-                            case .failure:
-                                XCTFail("Unexpected failure")
+                            case .failure(let error):
+                                XCTFail("Unexpected failure: \(error)")
                             case .success(let entries):
                                 XCTAssertEqual(entries.count, 0)
                             }
@@ -745,8 +745,8 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                         carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1))) { result in
                             getCarbEntriesCompletion.fulfill()
                             switch result {
-                            case .failure:
-                                XCTFail("Unexpected failure")
+                            case .failure(let error):
+                                XCTFail("Unexpected failure: \(error)")
                             case .success(let entries):
                                 XCTAssertEqual(entries.count, 0)
                             }
@@ -783,8 +783,8 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                                 self.carbStore.getSyncCarbObjects(start: Date().addingTimeInterval(-.minutes(1))) { result in
                                     getSyncCarbObjectsCompletion.fulfill()
                                     switch result {
-                                    case .failure:
-                                        XCTFail("Unexpected failure")
+                                    case .failure(let error):
+                                        XCTFail("Unexpected failure: \(error)")
                                     case .success(let objects):
                                         XCTAssertEqual(objects.count, 3)
 
@@ -909,8 +909,8 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                         self.carbStore.getCarbEntries(start: Date().addingTimeInterval(-.minutes(1))) { result in
                             getCarbEntriesCompletion.fulfill()
                             switch result {
-                            case .failure:
-                                XCTFail("Unexpected failure")
+                            case .failure(let error):
+                                XCTFail("Unexpected failure: \(error)")
                             case .success(let entries):
                                 XCTAssertEqual(entries.count, 3)
                                 for index in 0..<3 {
@@ -1233,4 +1233,100 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
         return UUID().uuidString
     }
     
+}
+
+class CarbStoreCriticalEventLogTests: PersistenceControllerTestCase {
+    var carbStore: CarbStore!
+    var outputStream: MockOutputStream!
+    var progress: Progress!
+    
+    override func setUp() {
+        super.setUp()
+
+        let objects = [SyncCarbObject(absorptionTime: nil, createdByCurrentApp: true, foodType: nil, grams: 11, startDate: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, uuid: nil, provenanceIdentifier: nil, syncIdentifier: nil, syncVersion: nil, userCreatedDate: nil, userUpdatedDate: nil, userDeletedDate: nil, operation: .create, addedDate: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, supercededDate: nil),
+                       SyncCarbObject(absorptionTime: nil, createdByCurrentApp: true, foodType: nil, grams: 12, startDate: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, uuid: nil, provenanceIdentifier: nil, syncIdentifier: nil, syncVersion: nil, userCreatedDate: nil, userUpdatedDate: nil, userDeletedDate: nil, operation: .create, addedDate: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, supercededDate: nil),
+                       SyncCarbObject(absorptionTime: nil, createdByCurrentApp: true, foodType: nil, grams: 13, startDate: dateFormatter.date(from: "2100-01-02T03:04:00Z")!, uuid: nil, provenanceIdentifier: nil, syncIdentifier: nil, syncVersion: nil, userCreatedDate: nil, userUpdatedDate: nil, userDeletedDate: nil, operation: .create, addedDate: dateFormatter.date(from: "2100-01-02T02:04:00Z")!, supercededDate: dateFormatter.date(from: "2100-01-02T03:04:00Z")!),
+                       SyncCarbObject(absorptionTime: nil, createdByCurrentApp: true, foodType: nil, grams: 14, startDate: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, uuid: nil, provenanceIdentifier: nil, syncIdentifier: nil, syncVersion: nil, userCreatedDate: nil, userUpdatedDate: nil, userDeletedDate: nil, operation: .create, addedDate: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, supercededDate: nil),
+                       SyncCarbObject(absorptionTime: nil, createdByCurrentApp: true, foodType: nil, grams: 15, startDate: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, uuid: nil, provenanceIdentifier: nil, syncIdentifier: nil, syncVersion: nil, userCreatedDate: nil, userUpdatedDate: nil, userDeletedDate: nil, operation: .create, addedDate: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, supercededDate: nil)]
+
+        carbStore = CarbStore(
+            healthStore: HKHealthStoreMock(),
+            cacheStore: cacheStore,
+            cacheLength: .hours(24),
+            defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
+            observationInterval: 0,
+            provenanceIdentifier: Bundle.main.bundleIdentifier!)
+
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        carbStore.setSyncCarbObjects(objects) { error in
+            XCTAssertNil(error)
+            dispatchGroup.leave()
+        }
+        dispatchGroup.wait()
+
+        outputStream = MockOutputStream()
+        progress = Progress()
+    }
+
+    override func tearDown() {
+        carbStore = nil
+
+        super.tearDown()
+    }
+    
+    func testExportProgressTotalUnitCount() {
+        switch carbStore.exportProgressTotalUnitCount(startDate: dateFormatter.date(from: "2100-01-02T03:03:00Z")!,
+                                                      endDate: dateFormatter.date(from: "2100-01-02T03:09:00Z")!) {
+        case .failure(let error):
+            XCTFail("Unexpected failure: \(error)")
+        case .success(let progressTotalUnitCount):
+            XCTAssertEqual(progressTotalUnitCount, 3 * 1)
+        }
+    }
+    
+    func testExportProgressTotalUnitCountEmpty() {
+        switch carbStore.exportProgressTotalUnitCount(startDate: dateFormatter.date(from: "2100-01-02T03:00:00Z")!,
+                                                      endDate: dateFormatter.date(from: "2100-01-02T03:01:00Z")!) {
+        case .failure(let error):
+            XCTFail("Unexpected failure: \(error)")
+        case .success(let progressTotalUnitCount):
+            XCTAssertEqual(progressTotalUnitCount, 0)
+        }
+    }
+
+    func testExport() {
+        XCTAssertNil(carbStore.export(startDate: dateFormatter.date(from: "2100-01-02T03:03:00Z")!,
+                                      endDate: dateFormatter.date(from: "2100-01-02T03:09:00Z")!,
+                                      to: outputStream,
+                                      progress: progress))
+        XCTAssertEqual(outputStream.string, """
+[
+{"addedDate":"2100-01-02T03:08:00.000Z","anchorKey":1,"createdByCurrentApp":true,"grams":11,"operation":0,"startDate":"2100-01-02T03:08:00.000Z"},
+{"addedDate":"2100-01-02T02:04:00.000Z","anchorKey":3,"createdByCurrentApp":true,"grams":13,"operation":0,"startDate":"2100-01-02T03:04:00.000Z","supercededDate":"2100-01-02T03:04:00.000Z"},
+{"addedDate":"2100-01-02T03:06:00.000Z","anchorKey":4,"createdByCurrentApp":true,"grams":14,"operation":0,"startDate":"2100-01-02T03:06:00.000Z"}
+]
+"""
+        )
+        XCTAssertEqual(progress.completedUnitCount, 3 * 1)
+    }
+
+    func testExportEmpty() {
+        XCTAssertNil(carbStore.export(startDate: dateFormatter.date(from: "2100-01-02T03:00:00Z")!,
+                                      endDate: dateFormatter.date(from: "2100-01-02T03:01:00Z")!,
+                                      to: outputStream,
+                                      progress: progress))
+        XCTAssertEqual(outputStream.string, "[]")
+        XCTAssertEqual(progress.completedUnitCount, 0)
+    }
+
+    func testExportCancelled() {
+        progress.cancel()
+        XCTAssertEqual(carbStore.export(startDate: dateFormatter.date(from: "2100-01-02T03:03:00Z")!,
+                                        endDate: dateFormatter.date(from: "2100-01-02T03:09:00Z")!,
+                                        to: outputStream,
+                                        progress: progress) as? CriticalEventLogError, CriticalEventLogError.cancelled)
+    }
+
+    private let dateFormatter = ISO8601DateFormatter()
 }
