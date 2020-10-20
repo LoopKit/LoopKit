@@ -22,11 +22,6 @@ public protocol GlucoseStoreDelegate: AnyObject {
     
 }
 
-public enum GlucoseStoreResult<T> {
-    case success(T)
-    case failure(Error)
-}
-
 /**
  Manages storage, retrieval, and calculation of glucose data.
  
@@ -51,7 +46,7 @@ public enum GlucoseStoreResult<T> {
  */
 public final class GlucoseStore: HealthKitSampleStore {
 
-    /// Notification posted when glucose samples were changed, either via add/replace/delete methods or from HealthKit
+    /// Notification posted when glucose samples were changed, either via direct add or from HealthKit
     public static let glucoseSamplesDidChange = NSNotification.Name(rawValue: "com.loopkit.GlucoseStore.glucoseSamplesDidChange")
     
     public weak var delegate: GlucoseStoreDelegate?
@@ -81,7 +76,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     /// The interval to observe HealthKit data to populate the cache
     public let observationInterval: TimeInterval
 
-    private let dataAccessQueue = DispatchQueue(label: "com.loudnate.GlucoseKit.dataAccessQueue", qos: .utility)
+    private let queue = DispatchQueue(label: "com.loopkit.GlucoseStore.queue", qos: .utility)
 
     private let log = OSLog(category: "GlucoseStore")
 
@@ -98,9 +93,9 @@ public final class GlucoseStore: HealthKitSampleStore {
 
     private let cacheStore: PersistenceController
     
-    static let healthKitQueryAnchorMetadataKey = "com.loopkit.GlucoseStore.hkQueryAnchor"
+    private let provenanceIdentifier: String
 
-    private let startAfterDatePredicate = NSPredicate(format: "startDate >= $start")
+    static let healthKitQueryAnchorMetadataKey = "com.loopkit.GlucoseStore.hkQueryAnchor"
 
     public init(
         healthStore: HKHealthStore,
@@ -109,7 +104,8 @@ public final class GlucoseStore: HealthKitSampleStore {
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 60 /* minutes */ * 60 /* seconds */,
         momentumDataInterval: TimeInterval = 15 /* minutes */ * 60 /* seconds */,
-        observationInterval: TimeInterval? = nil
+        observationInterval: TimeInterval? = nil,
+        provenanceIdentifier: String
     ) {
         let cacheLength = max(cacheLength, momentumDataInterval, observationInterval ?? 0)
 
@@ -118,17 +114,28 @@ public final class GlucoseStore: HealthKitSampleStore {
         
         self.cacheLength = cacheLength
         self.observationInterval = observationInterval ?? cacheLength
+        self.provenanceIdentifier = provenanceIdentifier
 
-        super.init(healthStore: healthStore, observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps, type: glucoseType, observationStart: Date(timeIntervalSinceNow: -self.observationInterval), observationEnabled: observationEnabled)
-
+        super.init(healthStore: healthStore,
+                   observeHealthKitSamplesFromCurrentApp: false,
+                   observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
+                   type: glucoseType,
+                   observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
+                   observationEnabled: observationEnabled)
         
         let semaphore = DispatchSemaphore(value: 0)
         cacheStore.onReady { (error) in
+            guard error == nil else {
+                semaphore.signal()
+                return
+            }
+
             cacheStore.fetchAnchor(key: GlucoseStore.healthKitQueryAnchorMetadataKey) { (anchor) in
-                self.dataAccessQueue.async {
+                self.queue.async {
                     self.queryAnchor = anchor
                     
                     self.updateLatestGlucose()
+
                     semaphore.signal()
                 }
             }
@@ -143,511 +150,493 @@ public final class GlucoseStore: HealthKitSampleStore {
     }
 
     override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
-        dataAccessQueue.async {
+        queue.async {
             guard anchor != self.queryAnchor else {
                 self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
                 completion(true)
                 return
             }
 
-            var newestSampleStartDateAddedByExternalSource: Date?
-            var samplesAddedByExternalSourceWithinManagedDataInterval = false
-            var cacheChanged = false
+            var changed = false
+            var error: Error?
 
-            // Added samples
-            let samples = ((added as? [HKQuantitySample]) ?? []).filterDateRange(self.earliestCacheDate, nil)
-
-            for sample in samples {
-                if sample.sourceRevision.source != .default() {
-                    newestSampleStartDateAddedByExternalSource = max(sample.startDate, newestSampleStartDateAddedByExternalSource  ?? .distantPast)
-                    if let managedDataInterval = self.managedDataInterval, sample.startDate.timeIntervalSinceNow > -managedDataInterval {
-                        samplesAddedByExternalSourceWithinManagedDataInterval = true
+            self.cacheStore.managedObjectContext.performAndWait {
+                do {
+                    // Add new samples
+                    if let samples = added as? [HKQuantitySample] {
+                        for sample in samples {
+                            if try self.addGlucoseSample(for: sample) {
+                                self.log.debug("Saved sample %@ into cache from HKAnchoredObjectQuery", sample.uuid.uuidString)
+                                changed = true
+                            } else {
+                                self.log.default("Sample %@ from HKAnchoredObjectQuery already present in cache", sample.uuid.uuidString)
+                            }
+                        }
                     }
+
+                    // Delete deleted samples
+                    let count = try self.deleteGlucoseSamples(withUUIDs: deleted.map { $0.uuid })
+                    if count > 0 {
+                        self.log.debug("Deleted %d samples from cache from HKAnchoredObjectQuery", count)
+                        changed = true
+                    }
+
+                    if changed {
+                        error = self.cacheStore.save()
+                    }
+                } catch let coreDataError {
+                    error = coreDataError
                 }
             }
 
-            switch self.addCachedObjects(for: samples) {
-            case .success(let didCreate):
-                cacheChanged = didCreate
-            case .failure(let error):
-                self.log.error("Samples added to HK could not added to cache: %{public}@", String(describing: error))
+            if error != nil {
                 completion(false)
                 return
             }
 
-            // Deleted samples
-            self.log.debug("Starting deletion of %d samples", deleted.count)
-            switch self.deleteCachedObjects(forSampleUUIDs: deleted.map({ $0.uuid })) {
-            case .success(let cacheDeletedCount):
-                if cacheDeletedCount > 0 {
-                    cacheChanged = true
-                }
-                self.log.debug("Finished deletion: HK delete count = %d, cache delete count = %d", deleted.count, cacheDeletedCount)
-            case .failure(let error):
-                self.log.error("Samples deleted from HK could not be deleted from cache: %{public}@", String(describing: error))
-                completion(false)
+            if !changed {
+                completion(true)
                 return
             }
 
-            if let startDate = newestSampleStartDateAddedByExternalSource {
-                self.purgeOldGlucoseSamples(includingManagedDataBefore: startDate)
+            // Purge expired managed data from HealthKit
+            if let newestStartDate = added.map({ $0.startDate }).max() {
+                self.purgeExpiredManagedDataFromHealthKit(before: newestStartDate)
             }
 
-            if cacheChanged {
-                self.updateLatestGlucose()
-            }
-
-            if samplesAddedByExternalSourceWithinManagedDataInterval {
-                NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: UpdateSource.queriedByHealthKit.rawValue])
-            }
-
+            self.notifyUpdatedGlucoseData(updateSource: .queriedByHealthKit)
             completion(true)
         }
     }
 }
 
+// MARK: - Fetching
+
 extension GlucoseStore {
-    /// Add new glucose values to HealthKit.
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+    /// Retrieves glucose samples within the specified date range.
     ///
     /// - Parameters:
-    ///   - glucose: A glucose sample to save
-    ///   - completion: A closure called after the save completes
-    ///   - result: The saved glucose value
-    public func addGlucose(_ glucose: NewGlucoseSample, completion: @escaping (_ result: GlucoseStoreResult<GlucoseValue>) -> Void) {
-        addGlucose([glucose]) { (result) in
-            switch result {
-            case .success(let values):
-                completion(.success(values.first!))
-            case .failure(let error):
-                completion(.failure(error))
-            }
+    ///   - start: The earliest date of glucose samples to retrieve, if provided.
+    ///   - end: The latest date of glucose samples to retrieve, if provided.
+    ///   - completion: A closure called once the glucose samples have been retrieved.
+    ///   - result: An array of glucose samples, in chronological order by startDate, or error.
+    public func getGlucoseSamples(start: Date? = nil, end: Date? = nil, completion: @escaping (_ result: Result<[StoredGlucoseSample], Error>) -> Void) {
+        queue.async {
+            completion(self.getGlucoseSamples(start: start, end: end))
         }
     }
 
-    /// Add new glucose values to HealthKit.
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-    ///
-    /// - Parameters:
-    ///   - values: An array of glucose samples to save
-    ///   - completion: A closure called after the save completes
-    ///   - result: The saved glucose values
-    public func addGlucose(_ values: [NewGlucoseSample], completion: @escaping (_ result: GlucoseStoreResult<[GlucoseValue]>) -> Void) {
-        guard values.count > 0 else {
-            completion(.success([]))
-            return
-        }
+    private func getGlucoseSamples(start: Date? = nil, end: Date? = nil) -> Result<[StoredGlucoseSample], Error> {
+        dispatchPrecondition(condition: .onQueue(queue))
 
-        var glucose: [HKQuantitySample] = []
-
-        // this isn't great that we're blocking the calling thread here?
-        cacheStore.managedObjectContext.performAndWait {
-            glucose = values.compactMap {
-                guard self.cacheStore.managedObjectContext.cachedGlucoseObjectsWithSyncIdentifier($0.syncIdentifier, fetchLimit: 1).count == 0 else {
-                    log.default("Skipping adding glucose value due to existing cached syncIdentifier: %{public}@", $0.syncIdentifier)
-                    return nil
-                }
-
-                return $0.quantitySample
-            }
-        }
-
-        delegate?.glucoseStoreHasUpdatedGlucoseData(self)
-
-        healthStore.save(glucose) { (completed, error) in
-            self.dataAccessQueue.async {
-                if let error = error {
-                    completion(.failure(error))
-                } else if completed {
-                    self.addCachedObjects(for: glucose)
-                    self.purgeOldGlucoseSamples(includingManagedDataBefore: nil)
-                    self.updateLatestGlucose()
-
-                    completion(.success(glucose))
-                    NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: UpdateSource.changedInApp.rawValue])
-
-                } else {
-                    assertionFailure()
-                }
-            }
-        }
-    }
-
-
-    /// Deletes glucose samples from both the CoreData cache and from HealthKit.
-    ///
-    /// - Parameters:
-    ///   - cachePredicate: The predicate to use in matching CoreData glucose objects, or `nil` to match all.
-    ///   - healthKitPredicate: The predicate to use in matching HealthKit glucose objects.
-    ///   - completion: The completion handler for the result of the HealthKit object deletion.
-    public func purgeGlucoseSamples(matchingCachePredicate cachePredicate: NSPredicate?, healthKitPredicate: NSPredicate, completion: @escaping (_ success: Bool, _ count: Int, _ error: Error?) -> Void) {
-        dataAccessQueue.async {
-            self.purgeCachedGlucoseObjects(matching: cachePredicate)
-            self.healthStore.deleteObjects(of: self.glucoseType, predicate: healthKitPredicate, withCompletion: completion)
-        }
-    }
-
-    /**
-     Cleans the in-memory and managed HealthKit caches.
-     
-     *This method should only be called from the `dataAccessQueue`*
-     */
-    private func purgeOldGlucoseSamples(includingManagedDataBefore managedDataDate: Date?) {
-        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
-
-        let cachePredicate = NSPredicate(format: "startDate < %@", earliestCacheDate as NSDate)
-        purgeCachedGlucoseObjects(matching: cachePredicate)
-
-        if let managedDataDate = managedDataDate, let managedDataInterval = managedDataInterval {
-            let end = min(Date(timeIntervalSinceNow: -managedDataInterval), managedDataDate)
-
-            let predicate = HKQuery.predicateForSamples(withStart: Date(timeIntervalSinceNow: -maxPurgeInterval), end: end)
-
-            healthStore.deleteObjects(of: glucoseType, predicate: predicate) { (success, count, error) -> Void in
-                // error is expected and ignored if protected data is unavailable
-                if success {
-                    self.log.debug("Successfully purged %d HealthKit objects older than %{public}@", count, String(describing: end))
-                }
-            }
-        }
-    }
-
-    /// Retrieves glucose values from either HealthKit or the in-memory cache.
-    ///
-    /// - Parameters:
-    ///   - start: The earliest date of values to retrieve
-    ///   - end: The latest date of values to retrieve, if provided
-    ///   - completion: A closure called once the values have been retrieved
-    ///   - samples: An array of glucose values, in chronological order by startDate
-    public func getCachedGlucoseSamples(start: Date, end: Date? = nil, completion: @escaping (_ samples: [StoredGlucoseSample]) -> Void) {
-        #if os(iOS)
-        // If we're within our observation duration, skip the HealthKit query
-        guard start <= earliestObservationDate else {
-            self.dataAccessQueue.async {
-                let objects = self.getCachedGlucoseObjects(start: start, end: end)
-                completion(objects)
-            }
-            return
-        }
-        #endif
-
-        getGlucoseSamples(start: start, end: end) { (result) in
-            switch result {
-            case .success(let samples):
-                completion(samples)
-            case .failure:
-                // Expected when database is inaccessible
-                self.dataAccessQueue.async {
-                    let objects = self.getCachedGlucoseObjects(start: start, end: end)
-                    completion(objects)
-                }
-            }
-        }
-    }
-
-    /// Retrieves glucose values from HealthKit within the specified date range
-    ///
-    /// - Parameters:
-    ///   - start: The earliest date of values to retrieve
-    ///   - end: The latest date of values to retrieve, if provided
-    ///   - completion: A closure called once the values have been retrieved
-    ///   - result: An array of glucose values, in chronological order by startDate
-    public func getGlucoseSamples(start: Date, end: Date? = nil, completion: @escaping (_ result: GlucoseStoreResult<[StoredGlucoseSample]>) -> Void) {
-        guard let predicate = predicateForSamples(withStart: start, end: end) else {
-            completion(.success([]))
-            return
-        }
-
-        let sortDescriptors = [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)]
-
-        let query = HKSampleQuery(sampleType: glucoseType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: sortDescriptors) { (_, samples, error) -> Void in
-            if let error = error {
-                completion(.failure(error))
-            } else {
-                let samples = samples as? [HKQuantitySample] ?? []
-                completion(.success(samples.map { StoredGlucoseSample(sample: $0) }))
-            }
-        }
-
-        healthStore.execute(query)
-    }
-}
-
-
-// MARK: - Core Data
-extension GlucoseStore {
-    @discardableResult
-    private func addCachedObjects(for samples: [HKQuantitySample]) -> Result<Bool,Error> {
-        return addCachedObjects(for: samples.map { StoredGlucoseSample(sample: $0) })
-    }
-
-    /// Creates new cached glucose objects from samples if they're not already cached and within the cache interval
-    ///
-    /// - Parameter samples: The samples to cache
-    /// - Returns: Result. If successful, bool indicates if any objects were created. Otherwise, failure returns error.
-    @discardableResult
-    private func addCachedObjects(for samples: [StoredGlucoseSample]) -> Result<Bool,Error> {
-        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
-
-        var created = false
-        var storageError: Error? = nil
-        
-        cacheStore.managedObjectContext.performAndWait {
-            for sample in samples {
-                guard
-                    sample.startDate.timeIntervalSinceNow > -self.cacheLength,
-                    self.cacheStore.managedObjectContext.cachedGlucoseObjectsWithUUID(sample.sampleUUID, fetchLimit: 1).count == 0
-                else {
-                    continue
-                }
-
-                let object = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
-                object.update(from: sample)
-                created = true
-            }
-
-            if created {
-                self.cacheStore.save { (error) in
-                    storageError = error
-                }
-            }
-        }
-        
-        if let error = storageError {
-            return .failure(error)
-        } else {
-            return .success(created)
-        }
-    }
-
-    private func getCachedGlucoseObjects(start: Date, end: Date? = nil) -> [StoredGlucoseSample] {
-        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
-        let predicate: NSPredicate
-
-        if let end = end {
-            predicate = NSPredicate(format: "startDate >= %@ AND startDate <= %@", start as NSDate, end as NSDate)
-        } else {
-            predicate = NSPredicate(format: "startDate >= %@", start as NSDate)
-        }
-
-        return getCachedGlucoseObjects(matching: predicate)
-    }
-
-    /// Fetches glucose samples from the cache that match the given predicate
-    ///
-    /// - Parameters:
-    ///   - predicate: The predicate to apply to the objects
-    ///   - isChronological: The sort order of the objects by startDate
-    /// - Returns: An array of glucose samples, in order by startDate
-    private func getCachedGlucoseObjects(matching predicate: NSPredicate? = nil, isChronological: Bool = true) -> [StoredGlucoseSample] {
-        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
         var samples: [StoredGlucoseSample] = []
+        var error: Error?
 
         cacheStore.managedObjectContext.performAndWait {
-            let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
-            request.predicate = predicate
-            request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: isChronological)]
-
             do {
-                let objects = try self.cacheStore.managedObjectContext.fetch(request)
-                samples = objects.map { StoredGlucoseSample(managedObject: $0) }
-            } catch let error {
-                self.log.error("Error fetching CachedGlucoseSamples: %@", String(describing: error))
+                samples = try self.getCachedGlucoseObjects(start: start, end: end).map { StoredGlucoseSample(managedObject: $0) }
+            } catch let coreDataError {
+                error = coreDataError
             }
         }
 
-        return samples
+        if let error = error {
+            return .failure(error)
+        }
+
+        return .success(samples)
+    }
+
+    private func getCachedGlucoseObjects(start: Date? = nil, end: Date? = nil) throws -> [CachedGlucoseObject] {
+        dispatchPrecondition(condition: .onQueue(queue))
+
+        var predicates: [NSPredicate] = []
+        if let start = start {
+            predicates.append(NSPredicate(format: "startDate >= %@", start as NSDate))
+        }
+        if let end = end {
+            predicates.append(NSPredicate(format: "startDate < %@", end as NSDate))
+        }
+
+        let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+        request.predicate = (predicates.count > 1) ? NSCompoundPredicate(andPredicateWithSubpredicates: predicates) : predicates.first
+        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+
+        return try self.cacheStore.managedObjectContext.fetch(request)
     }
 
     private func updateLatestGlucose() {
-        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
+        dispatchPrecondition(condition: .onQueue(queue))
 
         cacheStore.managedObjectContext.performAndWait {
-            let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
-            request.fetchLimit = 1
+            var latestGlucose: StoredGlucoseSample?
 
             do {
-                let objects = try self.cacheStore.managedObjectContext.fetch(request)
+                let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+                request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
+                request.fetchLimit = 1
 
-                if let lastObject = objects.first {
-                    self.latestGlucose = StoredGlucoseSample(managedObject: lastObject)
-                }
+                let objects = try self.cacheStore.managedObjectContext.fetch(request)
+                latestGlucose = objects.first.map { StoredGlucoseSample(managedObject: $0) }
             } catch let error {
                 self.log.error("Unable to fetch latest glucose object: %@", String(describing: error))
             }
+
+            self.latestGlucose = latestGlucose
         }
     }
-    
-    private func deleteCachedObjects(forSampleUUIDs uuids: [UUID], batchSize: Int = 500) -> Result<Int,Error> {
-        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
+}
 
-        var deleted = 0
+// MARK: - Modification
 
+extension GlucoseStore {
+    /// Add glucose samples to store.
+    ///
+    /// - Parameters:
+    ///   - newSamples: The new glucose samples to add to the store.
+    ///   - completion: A closure called once the glucose samples have been stored.
+    ///   - result: An array of glucose samples that were stored, or error.
+    public func addGlucoseSamples(_ samples: [NewGlucoseSample], completion: @escaping (_ result: Result<[StoredGlucoseSample], Error>) -> Void) {
+        guard !samples.isEmpty else {
+            completion(.success([]))
+            return
+        }
+
+        queue.async {
+            var storedSamples: [StoredGlucoseSample] = []
+            var error: Error?
+
+            self.cacheStore.managedObjectContext.performAndWait {
+                do {
+                    // Filter samples to ensure no existing sample with matching sync identifier for our provenance identifier
+                    let samples: [NewGlucoseSample] = try samples.compactMap { sample in
+                        let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+                        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", self.provenanceIdentifier),
+                                                                                                NSPredicate(format: "syncIdentifier == %@", sample.syncIdentifier)])
+                        request.fetchLimit = 1
+
+                        guard try self.cacheStore.managedObjectContext.count(for: request) == 0 else {
+                            self.log.default("Skipping adding glucose sample due to existing cached sync identifier: %{public}@", sample.syncIdentifier)
+                            return nil
+                        }
+
+                        return sample
+                    }
+                    guard !samples.isEmpty else {
+                        return
+                    }
+
+                    let objects: [CachedGlucoseObject] = samples.map { sample in
+                        let object = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
+                        object.create(from: sample, provenanceIdentifier: self.provenanceIdentifier)
+                        return object
+                    }
+
+                    error = self.cacheStore.save()
+                    if error != nil {
+                        return
+                    }
+
+                    self.saveSamplesToHealthKit(samples, objects: objects)
+
+                    storedSamples = objects.map { StoredGlucoseSample(managedObject: $0) }
+                } catch let coreDataError {
+                    error = coreDataError
+                }
+            }
+
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            self.notifyUpdatedGlucoseData(updateSource: .changedInApp)
+            completion(.success(storedSamples))
+        }
+    }
+
+    private func saveSamplesToHealthKit(_ samples: [NewGlucoseSample], objects: [CachedGlucoseObject]) {
+        dispatchPrecondition(condition: .onQueue(queue))
+
+        guard !samples.isEmpty else {
+            return
+        }
+
+        let quantitySamples = samples.map { $0.quantitySample }
+        var error: Error?
+
+        // Save objects to HealthKit, log any errors, but do not fail
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        self.healthStore.save(quantitySamples) { (_, healthKitError) in
+            error = healthKitError
+            dispatchGroup.leave()
+        }
+        dispatchGroup.wait()
+
+        if let error = error {
+            self.log.error("Error saving HealthKit objects: %@", String(describing: error))
+            return
+        }
+
+        // Update Core Data with the changes, log any errors, but do not fail
+        for (object, quantitySample) in zip(objects, quantitySamples) {
+            object.uuid = quantitySample.uuid
+        }
+        if let error = self.cacheStore.save() {
+            self.log.error("Error updating CachedGlucoseObjects after saving HealthKit objects: %@", String(describing: error))
+            objects.forEach { $0.uuid = nil }
+        }
+    }
+
+    private func addGlucoseSample(for sample: HKQuantitySample) throws -> Bool {
+        dispatchPrecondition(condition: .onQueue(queue))
+
+        // Are there any objects matching the UUID?
+        let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+        request.predicate = NSPredicate(format: "uuid == %@", sample.uuid as NSUUID)
+        request.fetchLimit = 1
+
+        let count = try cacheStore.managedObjectContext.count(for: request)
+        guard count == 0 else {
+            return false
+        }
+
+        // Add an object for this UUID
+        let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+        object.create(from: sample)
+
+        return true
+    }
+
+    private func deleteGlucoseSamples(withUUIDs uuids: [UUID], batchSize: Int = 500) throws -> Int {
+        dispatchPrecondition(condition: .onQueue(queue))
+
+        var count = 0
         for batch in uuids.chunked(into: batchSize) {
-            let result = self.purgeCachedGlucoseObjects(matching: NSPredicate(format: "uuid IN %@", batch.map { $0 as NSUUID }))
-            switch result {
-            case .failure(let error):
-                return .failure(error)
-            case .success(let count):
-                deleted += count
-            }
+            let predicate = NSPredicate(format: "uuid IN %@", batch.map { $0 as NSUUID })
+            count += try cacheStore.managedObjectContext.purgeObjects(of: CachedGlucoseObject.self, matching: predicate)
         }
+        return count
+    }
+}
 
-        return .success(deleted)
+// MARK: - Watch Synchronization
+
+extension GlucoseStore {
+
+    /// Get glucose samples in main app to deliver to Watch extension
+    public func getSyncGlucoseSamples(start: Date? = nil, end: Date? = nil, completion: @escaping (_ result: Result<[StoredGlucoseSample], Error>) -> Void) {
+        queue.async {
+            var samples: [StoredGlucoseSample] = []
+            var error: Error?
+
+            self.cacheStore.managedObjectContext.performAndWait {
+                do {
+                    samples = try self.getCachedGlucoseObjects(start: start, end: end).map { StoredGlucoseSample(managedObject: $0) }
+                } catch let coreDataError {
+                    error = coreDataError
+                }
+            }
+
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            completion(.success(samples))
+        }
     }
 
-    private func deleteCachedObject(forSampleUUID uuid: UUID) -> Bool {
-        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
+    /// Store glucose samples in Watch extension
+    public func setSyncGlucoseSamples(_ objects: [StoredGlucoseSample], completion: @escaping (Error?) -> Void) {
+        queue.async {
+            var error: Error?
 
-        var deleted = false
+            self.cacheStore.managedObjectContext.performAndWait {
+                guard !objects.isEmpty else {
+                    return
+                }
 
-        cacheStore.managedObjectContext.performAndWait {
-            for object in self.cacheStore.managedObjectContext.cachedGlucoseObjectsWithUUID(uuid) {
+                objects.forEach {
+                    let object = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
+                    object.update(from: $0)
+                }
 
-                self.cacheStore.managedObjectContext.delete(object)
-                deleted = true
+                error = self.cacheStore.save()
             }
 
-            if deleted {
-                self.cacheStore.save()
+            if let error = error {
+                completion(error)
+                return
             }
+
+            self.notifyUpdatedGlucoseData(updateSource: .changedInApp)
+            completion(nil)
         }
-
-        return deleted
     }
+}
 
+// MARK: - Cache Management
+
+extension GlucoseStore {
     public var earliestCacheDate: Date {
         return Date(timeIntervalSinceNow: -cacheLength)
     }
 
-    private var earliestObservationDate: Date {
-        return Date(timeIntervalSinceNow: -observationInterval)
+    /// Purge all glucose samples from the glucose store and HealthKit (matching the specified device predicate).
+    ///
+    /// - Parameters:
+    ///   - healthKitPredicate: The predicate to use in matching HealthKit glucose objects.
+    ///   - completion: The completion handler returning any error.
+    public func purgeAllGlucoseSamples(healthKitPredicate: NSPredicate, completion: @escaping (Error?) -> Void) {
+        queue.async {
+            let storeError = self.purgeCachedGlucoseObjects()
+            self.healthStore.deleteObjects(of: self.glucoseType, predicate: healthKitPredicate) { _, _, healthKitError in
+                self.queue.async {
+                    if let error = storeError ?? healthKitError {
+                        completion(error)
+                        return
+                    }
+
+                    self.notifyUpdatedGlucoseData(updateSource: .changedInApp)
+                    completion(nil)
+                }
+            }
+        }
     }
 
-    public func purgeCachedGlucoseObjects(before date: Date, completion: @escaping (Error?) -> Void) {
-        dataAccessQueue.async {
-            let result = self.purgeCachedGlucoseObjects(matching: NSPredicate(format: "startDate < %@", date as NSDate))
-            
-            switch result {
-            case .failure(let error):
+    private func purgeExpiredCachedGlucoseObjects() {
+        purgeCachedGlucoseObjects(before: earliestCacheDate)
+    }
+
+    /// Purge cached glucose objects from the glucose store.
+    ///
+    /// - Parameters:
+    ///   - date: Purge cached glucose objects with start date before this date.
+    ///   - completion: The completion handler returning any error.
+    public func purgeCachedGlucoseObjects(before date: Date? = nil, completion: @escaping (Error?) -> Void) {
+        queue.async {
+            if let error = self.purgeCachedGlucoseObjects(before: date) {
                 completion(error)
-            case .success:
-                self.delegate?.glucoseStoreHasUpdatedGlucoseData(self)
-                completion(nil)
+                return
             }
+            self.notifyUpdatedGlucoseData(updateSource: .changedInApp)
+            completion(nil)
         }
     }
 
     @discardableResult
-    private func purgeCachedGlucoseObjects(matching predicate: NSPredicate?) -> GlucoseStoreResult<Int> {
-        dispatchPrecondition(condition: .onQueue(dataAccessQueue))
-        
-        var result: GlucoseStoreResult<Int> = .success(0)
+    private func purgeCachedGlucoseObjects(before date: Date? = nil) -> Error? {
+        dispatchPrecondition(condition: .onQueue(queue))
+
+        var error: Error?
 
         cacheStore.managedObjectContext.performAndWait {
             do {
+                var predicate: NSPredicate?
+                if let date = date {
+                    predicate = NSPredicate(format: "startDate < %@", date as NSDate)
+                }
                 let count = try cacheStore.managedObjectContext.purgeObjects(of: CachedGlucoseObject.self, matching: predicate)
                 self.log.default("Purged %d CachedGlucoseObjects", count)
-                result = .success(count)
-            } catch let error {
+            } catch let coreDataError {
                 self.log.error("Unable to purge CachedGlucoseObjects: %{public}@", String(describing: error))
-                result = .failure(error)
+                error = coreDataError
             }
         }
-        return result
+
+        return error
+    }
+
+    private func purgeExpiredManagedDataFromHealthKit(before date: Date) {
+        dispatchPrecondition(condition: .onQueue(queue))
+
+        guard let managedDataInterval = managedDataInterval else {
+            return
+        }
+
+        let end = min(Date(timeIntervalSinceNow: -managedDataInterval), date)
+        let predicate = HKQuery.predicateForSamples(withStart: Date(timeIntervalSinceNow: -maxPurgeInterval), end: end)
+        healthStore.deleteObjects(of: glucoseType, predicate: predicate) { (success, count, error) -> Void in
+            // error is expected and ignored if protected data is unavailable
+            if success {
+                self.log.debug("Successfully purged %d HealthKit objects older than %{public}@", count, String(describing: end))
+            }
+        }
+    }
+
+    private func notifyUpdatedGlucoseData(updateSource: UpdateSource) {
+        dispatchPrecondition(condition: .onQueue(queue))
+
+        self.updateLatestGlucose()
+        self.purgeExpiredCachedGlucoseObjects()
+
+        NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: updateSource.rawValue])
+        delegate?.glucoseStoreHasUpdatedGlucoseData(self)
     }
 }
 
-
 // MARK: - Math
+
 extension GlucoseStore {
-    /**
-     Calculates the momentum effect for recent glucose values
-
-     The duration of effect data returned is determined by the `momentumDataInterval`, and the delta between data points is 5 minutes.
-
-     This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-
-     - Parameters:
-        - completion: A closure called once the calculation has completed. The closure takes two arguments:
-        - effects: The calculated effect values, or an empty array if the glucose data isn't suitable for momentum calculation.
-     */
-    public func getRecentMomentumEffect(_ completion: @escaping (_ effects: [GlucoseEffect]) -> Void) {
-        getCachedGlucoseSamples(start: Date(timeIntervalSinceNow: -momentumDataInterval)) { (samples) in
-            let effects = samples.linearMomentumEffect(
-                duration: self.momentumDataInterval,
-                delta: TimeInterval(minutes: 5)
-            )
-            completion(effects)
-        }
-    }
-
-    /// Calculates the a change in glucose values between the specified date interval.
-    /// 
-    /// Values within the date interval must not include a calibration, and the returned change 
-    /// values will be from the same source.
+    /// Calculates the momentum effect for recent glucose values.
+    ///
+    /// The duration of effect data returned is determined by the `momentumDataInterval`, and the delta between data points is 5 minutes.
+    ///
+    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
     ///
     /// - Parameters:
-    ///   - start: The earliest date to include. The earliest supported date when the Health database is unavailable is determined by `cacheLength`.
-    ///   - end: The latest date to include
-    ///   - completion: A closure called once the calculation has completed
-    ///   - change: A tuple of the first and last glucose values describing the change, if computable.
-    public func getGlucoseChange(start: Date, end: Date? = nil, completion: @escaping (_ change: (GlucoseValue, GlucoseValue)?) -> Void) {
-        getCachedGlucoseSamples(start: start, end: end) { (samples) in
-            let change: (GlucoseValue, GlucoseValue)?
-
-            if let provenanceIdentifier = samples.last?.provenanceIdentifier {
-                // Enforce a single source
-                let samples = samples.filterAfterCalibration().filter { $0.provenanceIdentifier == provenanceIdentifier }
-
-                if samples.count > 1,
-                    let first = samples.first,
-                    let last = samples.last,
-                    first.startDate < last.startDate
-                {
-                    change = (first, last)
-                } else {
-                    change = nil
-                }
-            } else {
-                change = nil
+    ///   - completion: A closure called once the calculation has completed.
+    ///   - result: The calculated effect values, or an empty array if the glucose data isn't suitable for momentum calculation, or error.
+    public func getRecentMomentumEffect(_ completion: @escaping (_ result: Result<[GlucoseEffect], Error>) -> Void) {
+        getGlucoseSamples(start: Date(timeIntervalSinceNow: -momentumDataInterval)) { (result) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success(let samples):
+                let effects = samples.linearMomentumEffect(
+                    duration: self.momentumDataInterval,
+                    delta: TimeInterval(minutes: 5)
+                )
+                completion(.success(effects))
             }
-
-            completion(change)
         }
     }
 
     /// Calculates a timeline of effect velocity (glucose/time) observed in glucose that counteract the specified effects.
     ///
     /// - Parameters:
-    ///   - start: The earliest date of glucose values to include
-    ///   - end: The latest date of glucose values to include, if provided
-    ///   - effects: Glucose effects to be countered, in chronological order
-    ///   - completion: A closure called once the values have been retrieved
-    ///   - effects: An array of velocities describing the change in glucose samples compared to the specified effects
-    public func getCounteractionEffects(start: Date, end: Date? = nil, to effects: [GlucoseEffect], _ completion: @escaping (_ effects: [GlucoseEffectVelocity]) -> Void) {
-        getCachedGlucoseSamples(start: start, end: end) { (samples) in
-            completion(self.counteractionEffects(for: samples, to: effects))
+    ///   - start: The earliest date of glucose samples to include.
+    ///   - end: The latest date of glucose samples to include, if provided.
+    ///   - effects: Glucose effects to be countered, in chronological order, and counteraction effects calculated.
+    ///   - completion: A closure called once the glucose samples have been retrieved and counteraction effects calculated.
+    ///   - result: An array of glucose effect velocities describing the change in glucose samples compared to the specified glucose effects, or error.
+    public func getCounteractionEffects(start: Date, end: Date? = nil, to effects: [GlucoseEffect], _ completion: @escaping (_ result: Result<[GlucoseEffectVelocity], Error>) -> Void) {
+        getGlucoseSamples(start: start, end: end) { (result) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success(let samples):
+                completion(.success(self.counteractionEffects(for: samples, to: effects)))
+            }
         }
     }
 
     /// Calculates a timeline of effect velocity (glucose/time) observed in glucose that counteract the specified effects.
     ///
     /// - Parameter:
-    ///   - samples: The observed timeline of samples
+    ///   - samples: The observed timeline of samples.
     ///   - effects: An array of velocities describing the change in glucose samples compared to the specified effects
     public func counteractionEffects<Sample: GlucoseSampleValue>(for samples: [Sample], to effects: [GlucoseEffect]) -> [GlucoseEffectVelocity] {
         samples.counteractionEffects(to: effects)
     }
 }
 
+// MARK: - Remote Data Service Query
+
 extension GlucoseStore {
-
     public struct QueryAnchor: RawRepresentable {
-
         public typealias RawValue = [String: Any]
 
         internal var modificationCounter: Int64
@@ -676,7 +665,7 @@ extension GlucoseStore {
     }
 
     public func executeGlucoseQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (GlucoseQueryResult) -> Void) {
-        dataAccessQueue.async {
+        queue.async {
             var queryAnchor = queryAnchor ?? QueryAnchor()
             var queryResult = [StoredGlucoseSample]()
             var queryError: Error?
@@ -712,62 +701,6 @@ extension GlucoseStore {
 
             completion(.success(queryAnchor, queryResult))
         }
-    }
-
-}
-
-extension GlucoseStore {
-    /// Generates a diagnostic report about the current state
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-    ///
-    /// - parameter completionHandler: A closure called once the report has been generated. The closure takes a single argument of the report string.
-    public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
-        dataAccessQueue.async {
-            var report: [String] = [
-                "## GlucoseStore",
-                "",
-                "* latestGlucoseValue: \(String(reflecting: self.latestGlucose))",
-                "* managedDataInterval: \(self.managedDataInterval ?? 0)",
-                "* cacheLength: \(self.cacheLength)",
-                "* momentumDataInterval: \(self.momentumDataInterval)",
-                "* observationInterval: \(self.observationInterval)",
-                super.debugDescription,
-                "",
-                "### cachedGlucoseSamples",
-            ]
-
-            for sample in self.getCachedGlucoseObjects() {
-                report.append(String(describing: sample))
-            }
-
-            report.append("")
-
-            completionHandler(report.joined(separator: "\n"))
-        }
-    }
-}
-
-extension NSManagedObjectContext {
-    fileprivate func cachedGlucoseObjectsWithUUID(_ uuid: UUID, fetchLimit: Int? = nil) -> [CachedGlucoseObject] {
-        let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
-        if let limit = fetchLimit {
-            request.fetchLimit = limit
-        }
-        request.predicate = NSPredicate(format: "uuid == %@", uuid as NSUUID)
-        request.sortDescriptors = [NSSortDescriptor(key: "uuid", ascending: true)]
-
-        return (try? fetch(request)) ?? []
-    }
-
-    fileprivate func cachedGlucoseObjectsWithSyncIdentifier(_ syncIdentifier: String, fetchLimit: Int? = nil) -> [CachedGlucoseObject] {
-        let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
-        if let limit = fetchLimit {
-            request.fetchLimit = limit
-        }
-        request.predicate = NSPredicate(format: "syncIdentifier == %@", syncIdentifier)
-
-        return (try? fetch(request)) ?? []
     }
 }
 
@@ -852,19 +785,19 @@ extension GlucoseStore: CriticalEventLog {
 // MARK: - Core Data (Bulk) - TEST ONLY
 
 extension GlucoseStore {
-    public func addGlucoseSamples(samples: [StoredGlucoseSample], completion: @escaping (Error?) -> Void) {
+    public func addNewGlucoseSamples(samples: [NewGlucoseSample], completion: @escaping (Error?) -> Void) {
         guard !samples.isEmpty else {
             completion(nil)
             return
         }
 
-        dataAccessQueue.async {
+        queue.async {
             var error: Error?
 
             self.cacheStore.managedObjectContext.performAndWait {
                 for sample in samples {
                     let object = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
-                    object.update(from: sample)
+                    object.create(from: sample, provenanceIdentifier: self.provenanceIdentifier)
                 }
                 error = self.cacheStore.save()
             }
@@ -877,6 +810,43 @@ extension GlucoseStore {
             self.log.info("Added %d CachedGlucoseObjects", samples.count)
             self.delegate?.glucoseStoreHasUpdatedGlucoseData(self)
             completion(nil)
+        }
+    }
+}
+
+extension GlucoseStore {
+    /// Generates a diagnostic report about the current state.
+    ///
+    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+    ///
+    /// - parameter completionHandler: A closure called once the report has been generated. The closure takes a single argument of the report string.
+    public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
+        queue.async {
+            var report: [String] = [
+                "## GlucoseStore",
+                "",
+                "* latestGlucoseValue: \(String(reflecting: self.latestGlucose))",
+                "* managedDataInterval: \(self.managedDataInterval ?? 0)",
+                "* cacheLength: \(self.cacheLength)",
+                "* momentumDataInterval: \(self.momentumDataInterval)",
+                "* observationInterval: \(self.observationInterval)",
+                super.debugDescription,
+                "",
+                "### cachedGlucoseSamples",
+            ]
+
+            switch self.getGlucoseSamples(start: Date(timeIntervalSinceNow: -.hours(24))) {
+            case .failure(let error):
+                report.append("Error: \(error)")
+            case .success(let samples):
+                for sample in samples {
+                    report.append(String(describing: sample))
+                }
+            }
+
+            report.append("")
+
+            completionHandler(report.joined(separator: "\n"))
         }
     }
 }

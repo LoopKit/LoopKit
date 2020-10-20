@@ -11,8 +11,7 @@ import HealthKit
 import CoreData
 @testable import LoopKit
 
-class GlucoseStoreQueryAnchorTests: XCTestCase {
-    
+class GlucoseStoreRemoteDataServiceQueryAnchorTests: XCTestCase {
     var rawValue: GlucoseStore.QueryAnchor.RawValue = [
         "modificationCounter": Int64(123)
     ]
@@ -51,29 +50,28 @@ class GlucoseStoreQueryAnchorTests: XCTestCase {
         XCTAssertEqual(rawValue.count, 1)
         XCTAssertEqual(rawValue["modificationCounter"] as? Int64, Int64(123))
     }
-    
 }
 
-class GlucoseStoreQueryTests: PersistenceControllerTestCase {
-    
+class GlucoseStoreRemoteDataServiceQueryTests: PersistenceControllerTestCase {
+    var healthStore: HKHealthStoreMock!
     var glucoseStore: GlucoseStore!
+    var completion: XCTestExpectation!
     var queryAnchor: GlucoseStore.QueryAnchor!
     var limit: Int!
-    var observerQuery: HKObserverQueryMock!
-    var healthStore: HKHealthStoreMock!
 
     override func setUp() {
         super.setUp()
         
         healthStore = HKHealthStoreMock()
         glucoseStore = GlucoseStore(healthStore: healthStore,
-                                    cacheStore: cacheStore)
-        
+                                    cacheStore: cacheStore,
+                                    provenanceIdentifier: Bundle.main.bundleIdentifier!)
         let semaphore = DispatchSemaphore(value: 0)
         cacheStore.onReady { (error) in
             semaphore.signal()
         }
         semaphore.wait()
+        completion = expectation(description: "Completion")
         queryAnchor = GlucoseStore.QueryAnchor()
         limit = Int.max
     }
@@ -81,98 +79,14 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
     override func tearDown() {
         limit = nil
         queryAnchor = nil
+        completion = nil
         glucoseStore = nil
-        healthStore.lastQuery = nil
+        healthStore = nil
 
         super.tearDown()
     }
-    
-    func testHKQueryAnchorPersistence() {
-        
-        var observerQuery: HKObserverQueryMock? = nil
-        var anchoredObjectQuery: HKAnchoredObjectQueryMock? = nil
 
-        glucoseStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
-            observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
-            return observerQuery!
-        }
-        
-        let authorizationCompletion = expectation(description: "authorization completion")
-        glucoseStore.authorize { (result) in
-            authorizationCompletion.fulfill()
-        }
-        
-        waitForExpectations(timeout: 3)
-        
-        XCTAssertNotNil(observerQuery)
-
-        let anchoredObjectQueryCreationExpectation = expectation(description: "anchored object query creation")
-        glucoseStore.createAnchoredObjectQuery = { (sampleType, predicate, anchor, limit, resultsHandler) -> HKAnchoredObjectQuery in
-            anchoredObjectQuery = HKAnchoredObjectQueryMock(type: sampleType, predicate: predicate, anchor: anchor, limit: limit, resultsHandler: resultsHandler)
-            anchoredObjectQueryCreationExpectation.fulfill()
-            return anchoredObjectQuery!
-        }
-
-        let observerQueryCompletionExpectation = expectation(description: "observer query completion")
-
-        let observerQueryCompletionHandler = {
-            observerQueryCompletionExpectation.fulfill()
-        }
-        // This simulates a signal marking the arrival of new HK Data.
-        observerQuery!.updateHandler(observerQuery!, observerQueryCompletionHandler, nil)
-
-        wait(for: [anchoredObjectQueryCreationExpectation], timeout: 3)
-        
-        // Trigger results handler for anchored object query
-        let returnedAnchor = HKQueryAnchor(fromValue: 5)
-        anchoredObjectQuery!.resultsHandler(anchoredObjectQuery!, [], [], returnedAnchor, nil)
-
-        // Wait for observerQueryCompletionExpectation
-        waitForExpectations(timeout: 3)
-
-        XCTAssertNotNil(glucoseStore.queryAnchor)
-
-        cacheStore.managedObjectContext.performAndWait {}
-        
-        // Create a new glucose store, and ensure it uses the last query anchor
-        let newGlucoseStore = GlucoseStore(healthStore: healthStore, cacheStore: cacheStore)
-        
-        let newAuthorizationCompletion = expectation(description: "authorization completion")
-        
-        observerQuery = nil
-        
-        newGlucoseStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
-            observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
-            return observerQuery!
-        }
-
-        newGlucoseStore.authorize { (result) in
-            newAuthorizationCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 3)
-        
-        anchoredObjectQuery = nil
-
-        let newAnchoredObjectQueryCreationExpectation = expectation(description: "new anchored object query creation")
-        newGlucoseStore.createAnchoredObjectQuery = { (sampleType, predicate, anchor, limit, resultsHandler) -> HKAnchoredObjectQuery in
-            anchoredObjectQuery = HKAnchoredObjectQueryMock(type: sampleType, predicate: predicate, anchor: anchor, limit: limit, resultsHandler: resultsHandler)
-            newAnchoredObjectQueryCreationExpectation.fulfill()
-            return anchoredObjectQuery!
-        }
-        
-        // This simulates a signal marking the arrival of new HK Data.
-        observerQuery!.updateHandler(observerQuery!, {}, nil)
-        
-        wait(for: [newAnchoredObjectQueryCreationExpectation], timeout: 3)
-        
-        // Assert new glucose store is querying with the last anchor that our HealthKit mock returned
-        XCTAssertEqual(returnedAnchor, anchoredObjectQuery?.anchor)
-        
-        anchoredObjectQuery!.resultsHandler(anchoredObjectQuery!, [], [], returnedAnchor, nil)
-    }
-    
     func testEmptyWithDefaultQueryAnchor() {
-        let completion = expectation(description: "Completion")
         glucoseStore.executeGlucoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
@@ -181,7 +95,7 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(anchor.modificationCounter, 0)
                 XCTAssertEqual(data.count, 0)
             }
-            completion.fulfill()
+            self.completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
@@ -189,7 +103,6 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
     
     func testEmptyWithMissingQueryAnchor() {
         queryAnchor = nil
-        let completion = expectation(description: "Completion")
 
         glucoseStore.executeGlucoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
@@ -199,7 +112,7 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(anchor.modificationCounter, 0)
                 XCTAssertEqual(data.count, 0)
             }
-            completion.fulfill()
+            self.completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
@@ -207,7 +120,6 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
     
     func testEmptyWithNonDefaultQueryAnchor() {
         queryAnchor.modificationCounter = 1
-        let completion = expectation(description: "Completion")
 
         glucoseStore.executeGlucoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
@@ -217,14 +129,13 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(anchor.modificationCounter, 1)
                 XCTAssertEqual(data.count, 0)
             }
-            completion.fulfill()
+            self.completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
     
     func testDataWithUnusedQueryAnchor() {
-        let completion = expectation(description: "Completion")
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
         
         addData(withSyncIdentifiers: syncIdentifiers)
@@ -241,14 +152,13 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                     XCTAssertEqual(data[index].syncVersion, index)
                 }
             }
-            completion.fulfill()
+            self.completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
     
     func testDataWithStaleQueryAnchor() {
-        let completion = expectation(description: "Completion")
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
         
         addData(withSyncIdentifiers: syncIdentifiers)
@@ -265,15 +175,13 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[2])
                 XCTAssertEqual(data[0].syncVersion, 2)
             }
-            completion.fulfill()
+            self.completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
     
     func testDataWithCurrentQueryAnchor() {
-        let completion = expectation(description: "Completion")
-        
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
         
         addData(withSyncIdentifiers: syncIdentifiers)
@@ -288,15 +196,13 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(anchor.modificationCounter, 3)
                 XCTAssertEqual(data.count, 0)
             }
-            completion.fulfill()
+            self.completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
 
     func testDataWithLimitZero() {
-        let completion = expectation(description: "Completion")
-
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
 
         addData(withSyncIdentifiers: syncIdentifiers)
@@ -311,15 +217,13 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(anchor.modificationCounter, 0)
                 XCTAssertEqual(data.count, 0)
             }
-            completion.fulfill()
+            self.completion.fulfill()
         }
 
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
 
     func testDataWithLimitCoveredByData() {
-        let completion = expectation(description: "Completion")
-
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
         
         addData(withSyncIdentifiers: syncIdentifiers)
@@ -338,7 +242,7 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
                 XCTAssertEqual(data[1].syncIdentifier, syncIdentifiers[1])
                 XCTAssertEqual(data[1].syncVersion, 1)
             }
-            completion.fulfill()
+            self.completion.fulfill()
         }
         
         wait(for: [completion], timeout: 2, enforceOrder: true)
@@ -349,12 +253,12 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
             for (index, syncIdentifier) in syncIdentifiers.enumerated() {
                 let cachedGlucoseObject = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
                 cachedGlucoseObject.uuid = UUID()
+                cachedGlucoseObject.provenanceIdentifier = syncIdentifier
                 cachedGlucoseObject.syncIdentifier = syncIdentifier
-                cachedGlucoseObject.syncVersion = Int32(index)
+                cachedGlucoseObject.syncVersion = index
                 cachedGlucoseObject.value = 123
                 cachedGlucoseObject.unitString = HKUnit.milligramsPerDeciliter.unitString
                 cachedGlucoseObject.startDate = Date()
-                cachedGlucoseObject.provenanceIdentifier = syncIdentifier
                 self.cacheStore.save()
             }
         }
@@ -363,10 +267,9 @@ class GlucoseStoreQueryTests: PersistenceControllerTestCase {
     private func generateSyncIdentifier() -> String {
         return UUID().uuidString
     }
-
 }
 
-class GlucoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
+class GlucoseStoreCriticalEventLogExportTests: PersistenceControllerTestCase {
     var glucoseStore: GlucoseStore!
     var outputStream: MockOutputStream!
     var progress: Progress!
@@ -374,17 +277,19 @@ class GlucoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
 
-        let samples = [StoredGlucoseSample(sampleUUID: UUID(uuidString: "28CF3948-0B3D-4B12-8BFE-14986B0E6784")!, syncIdentifier: "18CF3948-0B3D-4B12-8BFE-14986B0E6784", syncVersion: 1, startDate: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 111), isDisplayOnly: false, wasUserEntered: false, provenanceIdentifier: "org.loopkit.Test.1"),
-                       StoredGlucoseSample(sampleUUID: UUID(uuidString: "D86DEB61-68E9-464E-9DD5-96A9CB445FD3")!, syncIdentifier: "C86DEB61-68E9-464E-9DD5-96A9CB445FD3", syncVersion: 2, startDate: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 112), isDisplayOnly: false, wasUserEntered: false, provenanceIdentifier: "org.loopkit.Test.2"),
-                       StoredGlucoseSample(sampleUUID: UUID(uuidString: "3B03D96C-6F5D-4140-99CD-80C3E64D6010")!, syncIdentifier: "2B03D96C-6F5D-4140-99CD-80C3E64D6010", syncVersion: 3, startDate: dateFormatter.date(from: "2100-01-02T03:04:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 113), isDisplayOnly: false, wasUserEntered: false, provenanceIdentifier: "org.loopkit.Test.3"),
-                       StoredGlucoseSample(sampleUUID: UUID(uuidString: "0F1C4F01-3558-4FB2-957E-FA1522C4735E")!, syncIdentifier: "FF1C4F01-3558-4FB2-957E-FA1522C4735E", syncVersion: 4, startDate: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 114), isDisplayOnly: false, wasUserEntered: false, provenanceIdentifier: "org.loopkit.Test.4"),
-                       StoredGlucoseSample(sampleUUID: UUID(uuidString: "81B699D7-0E8F-4B13-B7A1-E7751EB78E74")!, syncIdentifier: "71B699D7-0E8F-4B13-B7A1-E7751EB78E74", syncVersion: 5, startDate: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 115), isDisplayOnly: false, wasUserEntered: false, provenanceIdentifier: "org.loopkit.Test.5")]
+        let samples = [NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 111), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "18CF3948-0B3D-4B12-8BFE-14986B0E6784", syncVersion: 1),
+                       NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 112), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "C86DEB61-68E9-464E-9DD5-96A9CB445FD3", syncVersion: 2),
+                       NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:04:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 113), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "2B03D96C-6F5D-4140-99CD-80C3E64D6010", syncVersion: 3),
+                       NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 114), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "FF1C4F01-3558-4FB2-957E-FA1522C4735E", syncVersion: 4),
+                       NewGlucoseSample(date: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 115), isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "71B699D7-0E8F-4B13-B7A1-E7751EB78E74", syncVersion: 5)]
 
-        glucoseStore = GlucoseStore(healthStore: HKHealthStoreMock(), cacheStore: cacheStore)
+        glucoseStore = GlucoseStore(healthStore: HKHealthStoreMock(),
+                                    cacheStore: cacheStore,
+                                    provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
         let dispatchGroup = DispatchGroup()
         dispatchGroup.enter()
-        glucoseStore.addGlucoseSamples(samples: samples) { error in
+        glucoseStore.addNewGlucoseSamples(samples: samples) { error in
             XCTAssertNil(error)
             dispatchGroup.leave()
         }
@@ -427,9 +332,9 @@ class GlucoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
                                          progress: progress))
         XCTAssertEqual(outputStream.string, """
 [
-{"isDisplayOnly":false,"modificationCounter":1,"provenanceIdentifier":"org.loopkit.Test.1","startDate":"2100-01-02T03:08:00.000Z","syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784","syncVersion":1,"unitString":"mg/dL","uploadState":0,"uuid":"28CF3948-0B3D-4B12-8BFE-14986B0E6784","value":111,"wasUserEntered":false},
-{"isDisplayOnly":false,"modificationCounter":3,"provenanceIdentifier":"org.loopkit.Test.3","startDate":"2100-01-02T03:04:00.000Z","syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010","syncVersion":3,"unitString":"mg/dL","uploadState":0,"uuid":"3B03D96C-6F5D-4140-99CD-80C3E64D6010","value":113,"wasUserEntered":false},
-{"isDisplayOnly":false,"modificationCounter":4,"provenanceIdentifier":"org.loopkit.Test.4","startDate":"2100-01-02T03:06:00.000Z","syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E","syncVersion":4,"unitString":"mg/dL","uploadState":0,"uuid":"0F1C4F01-3558-4FB2-957E-FA1522C4735E","value":114,"wasUserEntered":false}
+{"isDisplayOnly":false,"modificationCounter":1,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:08:00.000Z","syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784","syncVersion":1,"unitString":"mg/dL","value":111,"wasUserEntered":false},
+{"isDisplayOnly":false,"modificationCounter":3,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:04:00.000Z","syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010","syncVersion":3,"unitString":"mg/dL","value":113,"wasUserEntered":false},
+{"isDisplayOnly":false,"modificationCounter":4,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:06:00.000Z","syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E","syncVersion":4,"unitString":"mg/dL","value":114,"wasUserEntered":false}
 ]
 """
         )

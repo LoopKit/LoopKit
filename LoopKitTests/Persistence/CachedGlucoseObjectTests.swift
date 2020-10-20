@@ -6,10 +6,107 @@
 //
 
 import XCTest
+import HealthKit
 @testable import LoopKit
 
 class CachedGlucoseObjectTests: PersistenceControllerTestCase {
+    func testSyncVersionGet() {
+        cacheStore.managedObjectContext.performAndWait {
+            let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+            object.primitiveSyncVersion = NSNumber(integerLiteral: 3)
+            XCTAssertEqual(object.syncVersion, 3)
+        }
+    }
 
+    func testSyncVersionGetNil() {
+        cacheStore.managedObjectContext.performAndWait {
+            let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+            object.primitiveSyncVersion = nil
+            XCTAssertNil(object.syncVersion)
+        }
+    }
+
+    func testSyncVersionSet() {
+        cacheStore.managedObjectContext.performAndWait {
+            let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+            object.syncVersion = 5
+            XCTAssertEqual(object.primitiveSyncVersion, NSNumber(integerLiteral: 5))
+        }
+    }
+
+    func testSyncVersionSetNil() {
+        cacheStore.managedObjectContext.performAndWait {
+            let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+            object.syncVersion = nil
+            XCTAssertNil(object.primitiveSyncVersion)
+        }
+    }
+}
+
+class CachedGlucoseObjectModificationTests: PersistenceControllerTestCase {
+    func testHasUpdatedModificationCounter() {
+        cacheStore.managedObjectContext.performAndWait {
+            let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+            object.setDefaultValues()
+            XCTAssertTrue(object.hasUpdatedModificationCounter)
+            try! cacheStore.managedObjectContext.save()
+            XCTAssertFalse(object.hasUpdatedModificationCounter)
+        }
+    }
+
+    func testUpdateModificationCounter() {
+        cacheStore.managedObjectContext.performAndWait {
+            let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+            object.modificationCounter = -1
+            object.updateModificationCounter()
+            XCTAssertNotEqual(object.modificationCounter, -1)
+        }
+    }
+
+    func testAwakeFromInsertUpdatesModificationCounter() {
+        func testHasUpdatedModificationCounter() {
+            cacheStore.managedObjectContext.performAndWait {
+                let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+                XCTAssertTrue(object.hasUpdatedModificationCounter)
+            }
+        }
+    }
+
+    func testWillSaveUpdatesModificationCounter() {
+        func testHasUpdatedModificationCounter() {
+            cacheStore.managedObjectContext.performAndWait {
+                let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+                XCTAssertTrue(object.hasUpdatedModificationCounter)
+                object.setDefaultValues()
+                object.modificationCounter = -1
+                try! cacheStore.managedObjectContext.save()
+                XCTAssertEqual(object.modificationCounter, -1)
+                object.uuid = UUID()
+                try! cacheStore.managedObjectContext.save()
+                XCTAssertNotEqual(object.modificationCounter, -1)
+            }
+        }
+    }
+
+    func testWillSaveDoesNotUpdateModificationCounterIfManuallyUpdated() {
+        func testHasUpdatedModificationCounter() {
+            cacheStore.managedObjectContext.performAndWait {
+                let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+                XCTAssertTrue(object.hasUpdatedModificationCounter)
+                object.setDefaultValues()
+                object.modificationCounter = -1
+                try! cacheStore.managedObjectContext.save()
+                XCTAssertEqual(object.modificationCounter, -1)
+                object.uuid = UUID()
+                object.modificationCounter = -2
+                try! cacheStore.managedObjectContext.save()
+                XCTAssertEqual(object.modificationCounter, -2)
+            }
+        }
+    }
+}
+
+class CachedGlucoseObjectConstraintTests: PersistenceControllerTestCase {
     func testUUIDUniqueConstraint() {
         cacheStore.managedObjectContext.performAndWait {
             let uuid = UUID()
@@ -91,7 +188,17 @@ class CachedGlucoseObjectTests: PersistenceControllerTestCase {
             XCTAssertEqual(2, objects.count)
         }
     }
+}
 
+class CachedGlucoseObjectQuantityTests: PersistenceControllerTestCase {
+    func testQuantity() throws {
+        cacheStore.managedObjectContext.performAndWait {
+            let cachedGlucoseObject = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+            cachedGlucoseObject.value = 123.45
+            cachedGlucoseObject.unitString = HKUnit.milligramsPerDeciliter.unitString
+            XCTAssertEqual(cachedGlucoseObject.quantity, HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.45))
+        }
+    }
 }
 
 class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
@@ -99,13 +206,12 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
         cacheStore.managedObjectContext.performAndWait {
             let cachedGlucoseObject = CachedGlucoseObject(context: cacheStore.managedObjectContext)
             cachedGlucoseObject.uuid = UUID(uuidString: "2A67A303-5203-4CB8-8263-79498265368E")!
+            cachedGlucoseObject.provenanceIdentifier = "238E41EA-9576-4981-A1A4-51E10228584F"
             cachedGlucoseObject.syncIdentifier = "7723A0EE-F6D5-46E0-BBFE-1DEEBF8ED6F2"
             cachedGlucoseObject.syncVersion = 2
-            cachedGlucoseObject.uploadState = .notUploaded
             cachedGlucoseObject.value = 98.7
-            cachedGlucoseObject.unitString = "mg/dL"
+            cachedGlucoseObject.unitString = HKUnit.milligramsPerDeciliter.unitString
             cachedGlucoseObject.startDate = dateFormatter.date(from: "2020-05-14T22:38:14Z")!
-            cachedGlucoseObject.provenanceIdentifier = "238E41EA-9576-4981-A1A4-51E10228584F"
             cachedGlucoseObject.isDisplayOnly = false
             cachedGlucoseObject.wasUserEntered = true
             cachedGlucoseObject.modificationCounter = 123
@@ -118,7 +224,6 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
   "syncIdentifier" : "7723A0EE-F6D5-46E0-BBFE-1DEEBF8ED6F2",
   "syncVersion" : 2,
   "unitString" : "mg/dL",
-  "uploadState" : 0,
   "uuid" : "2A67A303-5203-4CB8-8263-79498265368E",
   "value" : 98.700000000000003,
   "wasUserEntered" : true
@@ -131,8 +236,9 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
     func testEncodableOptional() throws {
         cacheStore.managedObjectContext.performAndWait {
             let cachedGlucoseObject = CachedGlucoseObject(context: cacheStore.managedObjectContext)
-            cachedGlucoseObject.syncVersion = 1
+            cachedGlucoseObject.provenanceIdentifier = "238E41EA-9576-4981-A1A4-51E10228584F"
             cachedGlucoseObject.value = 87.6
+            cachedGlucoseObject.unitString = HKUnit.milligramsPerDeciliter.unitString
             cachedGlucoseObject.startDate = dateFormatter.date(from: "2020-05-14T22:38:14Z")!
             cachedGlucoseObject.isDisplayOnly = true
             cachedGlucoseObject.wasUserEntered = false
@@ -141,9 +247,9 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
 {
   "isDisplayOnly" : true,
   "modificationCounter" : 234,
+  "provenanceIdentifier" : "238E41EA-9576-4981-A1A4-51E10228584F",
   "startDate" : "2020-05-14T22:38:14Z",
-  "syncVersion" : 1,
-  "uploadState" : 0,
+  "unitString" : "mg/dL",
   "value" : 87.599999999999994,
   "wasUserEntered" : false
 }
@@ -165,21 +271,18 @@ class CachedGlucoseObjectEncodableTests: PersistenceControllerTestCase {
         encoder.dateEncodingStrategy = .iso8601
         return encoder
     }()
-
-    private let decoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        return decoder
-    }()
 }
 
 extension CachedGlucoseObject {
     fileprivate func setDefaultValues() {
-        provenanceIdentifier = "CachedGlucoseObjectTests"
-        startDate = Date()
-        uuid = UUID()
-        syncIdentifier = uuid!.uuidString
-        unitString = "mg/dL"
-        value = 99
+        self.uuid = UUID()
+        self.provenanceIdentifier = "CachedGlucoseObjectTests"
+        self.syncIdentifier = UUID().uuidString
+        self.syncVersion = 2
+        self.value = 99.9
+        self.unitString = HKUnit.milligramsPerDeciliter.unitString
+        self.startDate = Date()
+        self.isDisplayOnly = false
+        self.wasUserEntered = false
     }
 }
