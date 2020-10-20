@@ -698,6 +698,8 @@
 		B46B62AF23FF0BF6001E69BA /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62AE23FF0BF6001E69BA /* SectionHeader.swift */; };
 		B46B62B123FF0CA6001E69BA /* DescriptiveText.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62B023FF0CA6001E69BA /* DescriptiveText.swift */; };
 		B46B62B323FF0E62001E69BA /* SelectableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62B223FF0E62001E69BA /* SelectableLabel.swift */; };
+		B46FA3F3253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_output.json in Resources */ = {isa = PBXBuildFile; fileRef = B46FA3F1253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_output.json */; };
+		B46FA3F4253F00DD00D993E2 /* momentum_effect_impossible_rising_glucose_input.json in Resources */ = {isa = PBXBuildFile; fileRef = B46FA3F2253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_input.json */; };
 		B4A2AAB1240830A30066563F /* LabeledTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A2AAB0240830A30066563F /* LabeledTextField.swift */; };
 		B4A2AAB3240832350066563F /* MultipleSelectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A2AAB2240832350066563F /* MultipleSelectionList.swift */; };
 		B4AA27F224C1ECDC001B8AFA /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AA27F124C1ECDC001B8AFA /* UIColor.swift */; };
@@ -1467,6 +1469,8 @@
 		B46B62AE23FF0BF6001E69BA /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
 		B46B62B023FF0CA6001E69BA /* DescriptiveText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptiveText.swift; sourceTree = "<group>"; };
 		B46B62B223FF0E62001E69BA /* SelectableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableLabel.swift; sourceTree = "<group>"; };
+		B46FA3F1253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = momentum_effect_impossible_rising_glucose_output.json; sourceTree = "<group>"; };
+		B46FA3F2253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = momentum_effect_impossible_rising_glucose_input.json; sourceTree = "<group>"; };
 		B4A2AAB0240830A30066563F /* LabeledTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledTextField.swift; sourceTree = "<group>"; };
 		B4A2AAB2240832350066563F /* MultipleSelectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleSelectionList.swift; sourceTree = "<group>"; };
 		B4AA27F124C1ECDC001B8AFA /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -2256,6 +2260,8 @@
 				4303C48B1E29DD4200ADEDC8 /* momentum_effect_duplicate_glucose_input.json */,
 				43D8FE9E1C7293FA0073BE78 /* momentum_effect_falling_glucose_input.json */,
 				43D8FE9F1C7293FA0073BE78 /* momentum_effect_falling_glucose_output.json */,
+				B46FA3F2253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_input.json */,
+				B46FA3F1253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_output.json */,
 				43DC87B51C8A9567005BC30D /* momentum_effect_incomplete_glucose_input.json */,
 				43C27D921E3C4E7D00613CE1 /* momentum_effect_mixed_provenance_glucose_input.json */,
 				435D2927205F3C750026F401 /* momentum_effect_rising_glucose_double_entries_input.json */,
@@ -2988,6 +2994,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4322B795202FA3CC0002837D /* carbs_on_board_output.json in Resources */,
+				B46FA3F4253F00DD00D993E2 /* momentum_effect_impossible_rising_glucose_input.json in Resources */,
 				4322B7A0202FA3CC0002837D /* ice_slow_absorption.json in Resources */,
 				437874BE202FDD2D00A3D8B9 /* iob_from_bolus_180min_output.json in Resources */,
 				4322B7A6202FA3D20002837D /* momentum_effect_falling_glucose_output.json in Resources */,
@@ -3080,6 +3087,7 @@
 				437874CE202FDD2D00A3D8B9 /* reconcile_resume_before_rewind_input.json in Resources */,
 				4322B79E202FA3CC0002837D /* ice_35_min_partial_output.json in Resources */,
 				435D292B205F46180026F401 /* counteraction_effect_falling_glucose_almost_duplicates_output.json in Resources */,
+				B46FA3F3253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_output.json in Resources */,
 				E9E5E56824D362E900B5DFFE /* dynamic_glucose_effect_fully_observed_output.json in Resources */,
 				4322B7AC202FA3D20002837D /* momentum_effect_stable_glucose_output.json in Resources */,
 				437874BC202FDD2D00A3D8B9 /* effect_from_history_output.json in Resources */,
