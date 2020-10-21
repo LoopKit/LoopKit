@@ -435,11 +435,7 @@ extension GlucoseStore {
                 do {
                     let objects = try self.cacheStore.managedObjectContext.fetch(request)
                     let samples = objects.map { StoredGlucoseSample(managedObject: $0) }
-                    if samples.count > 0 {
-                        completion(.success(samples[0]))
-                    } else {
-                        completion(.success(nil))
-                    }
+                    completion(.success(samples.first))
                 } catch let error {
                     self.log.error("Error in getLatestCGMGlucose: %@", String(describing: error))
                     completion(.failure(error))
