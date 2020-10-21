@@ -179,6 +179,16 @@ class TemporaryScheduleOverrideTests: XCTestCase {
 
         XCTAssert(overridden.equals(expected, accuracy: epsilon))
     }
+    
+    func testDurationIsInfinite() {
+        let tempOverride = TemporaryScheduleOverride(context: .legacyWorkout,
+                                                     settings: .init(unit: .milligramsPerDeciliter, targetRange: DoubleRange(minValue: 120, maxValue: 150)),
+                                                     startDate: Date(),
+                                                     duration: .indefinite,
+                                                     enactTrigger: .local,
+                                                     syncIdentifier: UUID())
+        XCTAssertTrue(tempOverride.duration.isInfinite)
+    }
 
     func testOverrideScheduleAnnotatingReservoirSplitsDose() {
         let schedule = BasalRateSchedule(dailyItems: [
