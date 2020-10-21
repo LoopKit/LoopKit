@@ -40,11 +40,13 @@ public struct NewGlucoseSample: Equatable {
 extension NewGlucoseSample {
     public var quantitySample: HKQuantitySample {
         var metadata: [String: Any] = [
-            MetadataKeyGlucoseIsDisplayOnly: isDisplayOnly,
             HKMetadataKeySyncIdentifier: syncIdentifier,
             HKMetadataKeySyncVersion: syncVersion,
         ]
 
+        if isDisplayOnly {
+            metadata[MetadataKeyGlucoseIsDisplayOnly] = true
+        }
         if wasUserEntered {
             metadata[HKMetadataKeyWasUserEntered] = true
         }

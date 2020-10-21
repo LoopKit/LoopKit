@@ -68,7 +68,7 @@ extension CachedCarbObject {
 extension CachedCarbObject {
 
     // Loop
-    func create(from entry: NewCarbEntry, on date: Date = Date(), provenanceIdentifier: String, syncIdentifier: String, syncVersion: Int = 1) {
+    func create(from entry: NewCarbEntry, provenanceIdentifier: String, syncIdentifier: String, syncVersion: Int = 1, on date: Date = Date()) {
         self.absorptionTime = entry.absorptionTime
         self.createdByCurrentApp = true
         self.foodType = entry.foodType
@@ -218,7 +218,7 @@ extension CachedCarbObject {
 // MARK: - HealthKit Synchronization
 
 extension CachedCarbObject {
-    func createSample() -> HKQuantitySample {
+    var quantitySample: HKQuantitySample {
         var metadata = [String: Any]()
 
         metadata[HKMetadataKeyFoodType] = foodType

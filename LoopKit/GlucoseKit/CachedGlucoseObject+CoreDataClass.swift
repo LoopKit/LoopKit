@@ -12,29 +12,16 @@ import HealthKit
 
 
 class CachedGlucoseObject: NSManagedObject {
-    var startDate: Date! {
+    var syncVersion: Int? {
         get {
-            willAccessValue(forKey: "startDate")
-            defer { didAccessValue(forKey: "startDate") }
-            return primitiveStartDate! as Date
+            willAccessValue(forKey: "syncVersion")
+            defer { didAccessValue(forKey: "syncVersion") }
+            return primitiveSyncVersion?.intValue
         }
         set {
-            willChangeValue(forKey: "startDate")
-            defer { didChangeValue(forKey: "startDate") }
-            primitiveStartDate = newValue as NSDate
-        }
-    }
-
-    var uploadState: UploadState {
-        get {
-            willAccessValue(forKey: "uploadState")
-            defer { didAccessValue(forKey: "uploadState") }
-            return UploadState(rawValue: primitiveUploadState!.intValue)!
-        }
-        set {
-            willChangeValue(forKey: "uploadState")
-            defer { didChangeValue(forKey: "uploadState") }
-            primitiveUploadState = NSNumber(value: newValue.rawValue)
+            willChangeValue(forKey: "syncVersion")
+            defer { didChangeValue(forKey: "syncVersion") }
+            primitiveSyncVersion = newValue != nil ? NSNumber(value: newValue!) : nil
         }
     }
 
@@ -55,17 +42,57 @@ class CachedGlucoseObject: NSManagedObject {
     }
 }
 
+// MARK: - Helpers
+
+extension CachedGlucoseObject {
+    var quantity: HKQuantity { HKQuantity(unit: HKUnit(from: unitString), doubleValue: value) }
+}
+
+// MARK: - Operations
+
+extension CachedGlucoseObject {
+
+    // Loop
+    func create(from sample: NewGlucoseSample, provenanceIdentifier: String) {
+        self.uuid = nil
+        self.provenanceIdentifier = provenanceIdentifier
+        self.syncIdentifier = sample.syncIdentifier
+        self.syncVersion = sample.syncVersion
+        self.value = sample.quantity.doubleValue(for: .milligramsPerDeciliter)
+        self.unitString = HKUnit.milligramsPerDeciliter.unitString
+        self.startDate = sample.date
+        self.isDisplayOnly = sample.isDisplayOnly
+        self.wasUserEntered = sample.wasUserEntered
+    }
+
+    // HealthKit
+    func create(from sample: HKQuantitySample) {
+        precondition(!sample.createdByCurrentApp)
+
+        self.uuid = sample.uuid
+        self.provenanceIdentifier = sample.provenanceIdentifier
+        self.syncIdentifier = sample.syncIdentifier
+        self.syncVersion = sample.syncVersion
+        self.value = sample.quantity.doubleValue(for: .milligramsPerDeciliter)
+        self.unitString = HKUnit.milligramsPerDeciliter.unitString
+        self.startDate = sample.startDate
+        self.isDisplayOnly = sample.isDisplayOnly
+        self.wasUserEntered = sample.wasUserEntered
+    }
+}
+
+// MARK: - Watch Synchronization
 
 extension CachedGlucoseObject {
     func update(from sample: StoredGlucoseSample) {
-        uuid = sample.sampleUUID
-        syncIdentifier = sample.syncIdentifier
-        syncVersion = Int32(sample.syncVersion)
-        value = sample.quantity.doubleValue(for: .milligramsPerDeciliter)
-        unitString = HKUnit.milligramsPerDeciliter.unitString
-        startDate = sample.startDate
-        provenanceIdentifier = sample.provenanceIdentifier
-        isDisplayOnly = sample.isDisplayOnly
-        wasUserEntered = sample.wasUserEntered
+        self.uuid = sample.uuid
+        self.provenanceIdentifier = sample.provenanceIdentifier
+        self.syncIdentifier = sample.syncIdentifier
+        self.syncVersion = sample.syncVersion
+        self.value = sample.quantity.doubleValue(for: .milligramsPerDeciliter)
+        self.unitString = HKUnit.milligramsPerDeciliter.unitString
+        self.startDate = sample.startDate
+        self.isDisplayOnly = sample.isDisplayOnly
+        self.wasUserEntered = sample.wasUserEntered
     }
 }
