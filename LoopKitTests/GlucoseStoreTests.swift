@@ -11,6 +11,70 @@ import HealthKit
 import CoreData
 @testable import LoopKit
 
+
+class GlucoseStoreTests: PersistenceControllerTestCase {
+    var healthStore: HKHealthStoreMock!
+    var glucoseStore: GlucoseStore!
+
+    override func setUp() {
+        super.setUp()
+        
+        healthStore = HKHealthStoreMock()
+        glucoseStore = GlucoseStore(healthStore: healthStore,
+                                    cacheStore: cacheStore,
+                                    provenanceIdentifier: Bundle.main.bundleIdentifier!)
+        let semaphore = DispatchSemaphore(value: 0)
+        cacheStore.onReady { (error) in
+            semaphore.signal()
+        }
+        semaphore.wait()
+    }
+    
+    override func tearDown() {
+        glucoseStore = nil
+        healthStore = nil
+
+        super.tearDown()
+    }
+    
+    func testLatestGlucoseIsSetAfterStoreAndClearedAfterPurge() {
+        let storeCompletion = expectation(description: "Storage completion")
+        let storedQuantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
+        let device = HKDevice(name: "Unit Test Mock CGM",
+            manufacturer: "Device Manufacturer",
+            model: "Device Model",
+            hardwareVersion: "Device Hardware Version",
+            firmwareVersion: "Device Firmware Version",
+            softwareVersion: "Device Software Version",
+            localIdentifier: "Device Local Identifier",
+            udiDeviceIdentifier: "Device UDI Device Identifier")
+        let sample = NewGlucoseSample(date: Date(), quantity: storedQuantity, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "random", device: device)
+        glucoseStore.addGlucoseSamples([sample]) { (result) in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let samples):
+                XCTAssertEqual(storedQuantity, samples.first!.quantity)
+            }
+            storeCompletion.fulfill()
+        }
+        wait(for: [storeCompletion], timeout: 2)
+        XCTAssertEqual(storedQuantity, self.glucoseStore.latestGlucose?.quantity)
+
+        let purgeCompletion = expectation(description: "Storage completion")
+        
+        let predicate = HKQuery.predicateForObjects(from: [device])
+        glucoseStore.purgeAllGlucoseSamples(healthKitPredicate: predicate) { (error) in
+            if let error = error {
+                XCTFail("Unexpected failure: \(error)")
+            }
+            purgeCompletion.fulfill()
+        }
+        wait(for: [purgeCompletion], timeout: 2)
+        XCTAssertNil(self.glucoseStore.latestGlucose)
+    }
+}
+
 class GlucoseStoreRemoteDataServiceQueryAnchorTests: XCTestCase {
     var rawValue: GlucoseStore.QueryAnchor.RawValue = [
         "modificationCounter": Int64(123)
@@ -84,43 +148,6 @@ class GlucoseStoreRemoteDataServiceQueryTests: PersistenceControllerTestCase {
         healthStore = nil
 
         super.tearDown()
-    }
-
-    func testLatestGlucoseIsSetAfterStoreAndClearedAfterPurge() {
-        let storeCompletion = expectation(description: "Storage completion")
-        let storedQuantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
-        let device = HKDevice(name: "Unit Test Mock CGM",
-            manufacturer: "Device Manufacturer",
-            model: "Device Model",
-            hardwareVersion: "Device Hardware Version",
-            firmwareVersion: "Device Firmware Version",
-            softwareVersion: "Device Software Version",
-            localIdentifier: "Device Local Identifier",
-            udiDeviceIdentifier: "Device UDI Device Identifier")
-        let sample = NewGlucoseSample(date: Date(), quantity: storedQuantity, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: "random", device: device)
-        glucoseStore.addGlucose(sample) { (result) in
-            switch result {
-            case .failure(let error):
-                XCTFail("Unexpected failure: \(error)")
-            case .success(let value):
-                XCTAssertEqual(storedQuantity, value.quantity)
-            }
-            storeCompletion.fulfill()
-        }
-        wait(for: [storeCompletion], timeout: 2)
-        XCTAssertEqual(storedQuantity, self.glucoseStore.latestGlucose?.quantity)
-
-        let purgeCompletion = expectation(description: "Storage completion")
-        
-        let predicate = HKQuery.predicateForObjects(from: [device])
-        glucoseStore.purgeGlucoseSamples(matchingCachePredicate: nil, healthKitPredicate: predicate) { (_, _, error) in
-            if let error = error {
-                XCTFail("Unexpected failure: \(error)")
-            }
-            purgeCompletion.fulfill()
-        }
-        wait(for: [purgeCompletion], timeout: 2)
-        XCTAssertNil(self.glucoseStore.latestGlucose)
     }
 
     func testEmptyWithDefaultQueryAnchor() {
