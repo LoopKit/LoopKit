@@ -419,6 +419,30 @@ extension GlucoseStore {
         }
         return count
     }
+    
+    ///
+    /// - Parameters:
+    ///   - since: Only consider glucose valid after or at this date
+    /// - Returns: The latest CGM glucose, if available in the time period specified
+    public func getLatestCGMGlucose(since: Date, completion: @escaping (_ result: Result<StoredGlucoseSample?, Error>) -> Void) {
+        queue.async {
+            self.cacheStore.managedObjectContext.performAndWait {
+                let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+                request.predicate = NSPredicate(format: "startDate >= %@ AND wasUserEntered == NO", since as NSDate)
+                request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
+                request.fetchLimit = 1
+
+                do {
+                    let objects = try self.cacheStore.managedObjectContext.fetch(request)
+                    let samples = objects.map { StoredGlucoseSample(managedObject: $0) }
+                    completion(.success(samples.first))
+                } catch let error {
+                    self.log.error("Error in getLatestCGMGlucose: %@", String(describing: error))
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Watch Synchronization
@@ -498,7 +522,7 @@ extension GlucoseStore {
                         completion(error)
                         return
                     }
-
+                    self.updateLatestGlucose()
                     self.notifyUpdatedGlucoseData(updateSource: .changedInApp)
                     completion(nil)
                 }

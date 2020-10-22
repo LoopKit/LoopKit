@@ -18,6 +18,15 @@ public struct MockCGMDataSource {
         case sineCurve(parameters: SineCurveParameters)
         case noData
         case signalLoss
+        
+        public var isValidSession: Bool {
+            switch self {
+            case .noData:
+                return false
+            default:
+                return true
+            }
+        }
     }
 
     public struct Effects {
@@ -70,6 +79,10 @@ public struct MockCGMDataSource {
 
     public var dataPointFrequency: MeasurementFrequency
     
+    public var isValidSession: Bool {
+        return model.isValidSession
+    }
+    
     public init(
         model: Model,
         effects: Effects = .init(),
@@ -81,7 +94,7 @@ public struct MockCGMDataSource {
         self.dataPointFrequency = dataPointFrequency
     }
 
-    func fetchNewData(_ completion: @escaping (CGMResult) -> Void) {
+    func fetchNewData(_ completion: @escaping (CGMReadingResult) -> Void) {
         let now = Date()
         // Give 5% wiggle room for producing data points
         let bufferedFrequency = dataPointFrequency.frequency - 0.05 * dataPointFrequency.frequency
@@ -94,7 +107,7 @@ public struct MockCGMDataSource {
         glucoseProvider.fetchData(at: now, completion: completion)
     }
 
-    func backfillData(from interval: DateInterval, completion: @escaping (CGMResult) -> Void) {
+    func backfillData(from interval: DateInterval, completion: @escaping (CGMReadingResult) -> Void) {
         lastFetchedData.value = interval.end
         let request = MockGlucoseProvider.BackfillRequest(datingBack: interval.duration, dataPointFrequency: dataPointFrequency.frequency)
         glucoseProvider.backfill(request, endingAt: interval.end, completion: completion)
