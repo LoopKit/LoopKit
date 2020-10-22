@@ -250,6 +250,9 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
       }
     ],
     "preMealOverride" : {
+      "actualEnd" : {
+        "type" : "natural"
+      },
       "context" : "preMeal",
       "duration" : "indefinite",
       "enactTrigger" : "local",
@@ -268,6 +271,9 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
       "minValue" : 80
     },
     "scheduleOverride" : {
+      "actualEnd" : {
+        "type" : "natural"
+      },
       "context" : "preMeal",
       "duration" : {
         "finite" : {
@@ -804,6 +810,9 @@ class StoredSettingsCodableTests: XCTestCase {
     }
   ],
   "preMealOverride" : {
+    "actualEnd" : {
+      "type" : "natural"
+    },
     "context" : "preMeal",
     "duration" : "indefinite",
     "enactTrigger" : "local",
@@ -822,6 +831,9 @@ class StoredSettingsCodableTests: XCTestCase {
     "minValue" : 80
   },
   "scheduleOverride" : {
+    "actualEnd" : {
+      "type" : "natural"
+    },
     "context" : "preMeal",
     "duration" : {
       "finite" : {
