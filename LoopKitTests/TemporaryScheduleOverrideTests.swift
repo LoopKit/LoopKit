@@ -418,3 +418,67 @@ private extension TemporaryScheduleOverride.Duration {
         }
     }
 }
+
+class TemporaryOverrideEndCodableTests: XCTestCase {
+    let dateFormatter = ISO8601DateFormatter.localTimeDate()
+    
+    private func date(at time: String) -> Date {
+        return dateFormatter.date(from: "2019-01-01T\(time):00")!
+    }
+    
+    func testCodableOverrideEarlyEnd() throws {
+        let end = End.early(date(at: "02:00"))
+        try assertEndCodable(end, encodesJSON: """
+{
+  "end" : {
+    "date" : 568026000,
+    "type" : "early"
+  }
+}
+"""
+        )
+    }
+    
+    func testCodableOverrideNaturalEnd() throws {
+        let end = End.natural
+        try assertEndCodable(end, encodesJSON: """
+{
+  "end" : {
+    "type" : "natural"
+  }
+}
+"""
+        )
+    }
+    
+    func testCodableOverrideDeleted() throws {
+        let end = End.deleted
+        try assertEndCodable(end, encodesJSON: """
+{
+  "end" : {
+    "type" : "deleted"
+  }
+}
+"""
+        )
+    }
+    
+    private func assertEndCodable(_ original: End, encodesJSON string: String) throws {
+        let data = try encoder.encode(TestContainer(end: original))
+        XCTAssertEqual(String(data: data, encoding: .utf8), string)
+        let decoded = try decoder.decode(TestContainer.self, from: data)
+        XCTAssertEqual(decoded.end, original)
+    }
+
+    private let encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        return encoder
+    }()
+
+    private let decoder = JSONDecoder()
+
+    private struct TestContainer: Codable, Equatable {
+        let end: End
+    }
+}

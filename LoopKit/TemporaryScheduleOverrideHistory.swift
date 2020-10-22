@@ -36,7 +36,6 @@ public enum End: Equatable, Hashable, Codable {
             self = .deleted
         }
     }
-    // ANNA TODO: create codable tests
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
