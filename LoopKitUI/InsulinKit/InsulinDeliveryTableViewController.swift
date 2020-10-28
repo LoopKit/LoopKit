@@ -16,17 +16,32 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
 
     @IBOutlet var needsConfigurationMessageView: ErrorBackgroundView!
 
-    @IBOutlet weak var iobValueLabel: UILabel!
+    @IBOutlet weak var iobValueLabel: UILabel! {
+        didSet {
+            iobValueLabel.textColor = headerValueLabelColor
+        }
+    }
 
     @IBOutlet weak var iobDateLabel: UILabel!
 
-    @IBOutlet weak var totalValueLabel: UILabel!
+    @IBOutlet weak var totalValueLabel: UILabel! {
+        didSet {
+            totalValueLabel.textColor = headerValueLabelColor
+        }
+    }
 
     @IBOutlet weak var totalDateLabel: UILabel!
 
-    @IBOutlet weak var dataSourceSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var dataSourceSegmentedControl: UISegmentedControl! {
+        didSet {
+            let titleFont = UIFont.systemFont(ofSize: 15, weight: .semibold)
+            dataSourceSegmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: titleFont], for: .normal)
+            dataSourceSegmentedControl.setTitle(NSLocalizedString("Event History", comment: "Segmented button title for insulin delivery log event history"), forSegmentAt: 0)
+            dataSourceSegmentedControl.setTitle(NSLocalizedString("Reservoir", comment: "Segmented button title for insulin delivery log reservoir history"), forSegmentAt: 1)
+        }
+    }
 
-    public var enableDeleteAllButton: Bool = true
+    public var enableEntryDeletion: Bool = true
     
     public var doseStore: DoseStore? {
         didSet {
@@ -47,6 +62,8 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
             }
         }
     }
+    
+    public var headerValueLabelColor: UIColor = .label
 
     private var updateTimer: Timer? {
         willSet {
@@ -108,7 +125,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
     public override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
 
-        if editing && enableDeleteAllButton {
+        if editing && enableEntryDeletion {
             let item = UIBarButtonItem(
                 title: LocalizedString("Delete All", comment: "Button title to delete all objects"),
                 style: .plain,
@@ -138,8 +155,8 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
     }
 
     private enum DataSourceSegment: Int {
-        case reservoir = 0
-        case history
+        case history = 0
+        case reservoir
     }
 
     private enum Values {
@@ -159,7 +176,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 count = values.count
             }
 
-            if count > 0 {
+            if count > 0 && enableEntryDeletion {
                 navigationItem.rightBarButtonItem = self.editButtonItem
             }
         }
@@ -270,7 +287,6 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                         self.totalDateLabel.text = nil
                     case .success(let result):
                         self.totalValueLabel.text = NumberFormatter.localizedString(from: NSNumber(value: result.value), number: .none)
-
                         self.totalDateLabel.text = String(format: LocalizedString("com.loudnate.InsulinKit.totalDateLabel", value: "since %1$@", comment: "The format string describing the starting date of a total value. The first format argument is the localized date."), DateFormatter.localizedString(from: result.startDate, dateStyle: .none, timeStyle: .short))
                     }
                 }
@@ -364,7 +380,8 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 let volume = NumberFormatter.localizedString(from: NSNumber(value: entry.unitVolume), number: .decimal)
                 let time = timeFormatter.string(from: entry.startDate)
 
-                cell.textLabel?.text = "\(volume) U"
+                cell.textLabel?.text = String(format: NSLocalizedString("%1$@ U", comment: "Reservoir entry (1: volume value)"), volume)
+                cell.textLabel?.textColor = .label
                 cell.detailTextLabel?.text = time
                 cell.accessoryType = .none
                 cell.selectionStyle = .none
@@ -372,7 +389,12 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 let entry = values[indexPath.row]
                 let time = timeFormatter.string(from: entry.date)
 
-                cell.textLabel?.text = entry.title ?? LocalizedString("Unknown", comment: "The default title to use when an entry has none")
+                if let attributedText = entry.dose?.localizedAttributedDescription {
+                    cell.textLabel?.attributedText = attributedText
+                } else {
+                    cell.textLabel?.text = LocalizedString("Unknown", comment: "The default description to use when an entry has no dose description")
+                }
+                
                 cell.detailTextLabel?.text = time
                 cell.accessoryType = entry.isUploaded ? .checkmark : .none
                 cell.selectionStyle = .default
@@ -383,7 +405,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
     }
 
     public override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        return enableEntryDeletion
     }
 
     public override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -473,5 +495,50 @@ fileprivate extension UIAlertController {
             title: LocalizedString("Cancel", comment: "The title of the cancel action in an action sheet"),
             style: .cancel
         ))
+    }
+}
+
+extension DoseEntry {
+
+    fileprivate var numberFormatter: NumberFormatter {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.maximumFractionDigits = DoseEntry.unitsPerHour.maxFractionDigits
+        return numberFormatter
+    }
+
+    fileprivate var localizedAttributedDescription: NSAttributedString? {
+        let font = UIFont.preferredFont(forTextStyle: .body)
+
+        switch type {
+        case .basal, .bolus, .tempBasal:
+            let unitString = type == .bolus ? DoseEntry.units.shortLocalizedUnitString() : DoseEntry.unitsPerHour.shortLocalizedUnitString()
+            let value: Double = type == .bolus ? (deliveredUnits ?? programmedUnits) : unitsPerHour
+
+            let description = String(format: NSLocalizedString("%1$@: <b>%2$@</b> %3$@", comment: "Description of a basal, bolus, or temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)"), type.localizedDescription, numberFormatter.string(from: value) ?? "?", unitString)
+            let descriptionWithFont = String(format:"<style>body{font-family: '-apple-system', '\(font.fontName)'; font-size: \(font.pointSize);}</style>%@", description)
+
+            guard let attributedDescription = try? NSMutableAttributedString(data: Data(descriptionWithFont.utf8), options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil) else {
+                return nil
+            }
+
+            attributedDescription.enumerateAttribute(.font, in: NSRange(location: 0, length: attributedDescription.length)) { value, range, stop in
+                // bold font items have a dominate colour
+                if let font = value as? UIFont,
+                   font.fontDescriptor.symbolicTraits.contains(.traitBold)
+                {
+                    attributedDescription.addAttributes([.foregroundColor: UIColor.label], range: range)
+                } else {
+                    attributedDescription.addAttributes([.foregroundColor: UIColor.secondaryLabel], range: range)
+                }
+            }
+
+            return attributedDescription
+        case .suspend, .resume:
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: font,
+                .foregroundColor: UIColor.secondaryLabel
+            ]
+            return NSAttributedString(string: type.localizedDescription, attributes: attributes)
+        }
     }
 }
