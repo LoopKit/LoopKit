@@ -19,6 +19,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
     var autocapitalizationType: UITextAutocapitalizationType
     var autocorrectionType: UITextAutocorrectionType
     var shouldBecomeFirstResponder: Bool
+    var maxLength: Int?
 
     public init(
         text: Binding<String>,
@@ -29,7 +30,8 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         keyboardType: UIKeyboardType = .default,
         autocapitalizationType: UITextAutocapitalizationType = .sentences,
         autocorrectionType: UITextAutocorrectionType = .default,
-        shouldBecomeFirstResponder: Bool = false
+        shouldBecomeFirstResponder: Bool = false,
+        maxLength: Int? = nil
     ) {
         self._text = text
         self.placeholder = placeholder
@@ -40,6 +42,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         self.autocapitalizationType = autocapitalizationType
         self.autocorrectionType = autocorrectionType
         self.shouldBecomeFirstResponder = shouldBecomeFirstResponder
+        self.maxLength = maxLength
     }
 
     public func makeUIView(context: Context) -> UITextField {
@@ -47,6 +50,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         textField.inputAccessoryView = makeDoneToolbar(for: textField)
         textField.addTarget(context.coordinator, action: #selector(Coordinator.textChanged), for: .editingChanged)
         textField.addTarget(context.coordinator, action: #selector(Coordinator.editingDidBegin), for: .editingDidBegin)
+        textField.delegate = context.coordinator
         return textField
     }
 
@@ -82,18 +86,20 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
     }
 
     public func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+        Coordinator(self, maxLength: maxLength)
     }
 
-    public final class Coordinator {
+    public final class Coordinator: NSObject {
         var parent: DismissibleKeyboardTextField
+        let maxLength: Int?
 
         // Track in the coordinator to ensure the text field only becomes first responder once,
         // rather than on every state change.
         var didBecomeFirstResponder = false
 
-        init(_ parent: DismissibleKeyboardTextField) {
+        init(_ parent: DismissibleKeyboardTextField, maxLength: Int?) {
             self.parent = parent
+            self.maxLength = maxLength
         }
 
         @objc fileprivate func textChanged(_ textField: UITextField) {
@@ -107,5 +113,17 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
                 textField.moveCursorToEnd()
             }
         }
+    }
+}
+
+extension DismissibleKeyboardTextField.Coordinator: UITextFieldDelegate {
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let maxLength = maxLength else {
+            return true
+        }
+        let currentString: NSString = (textField.text ?? "") as NSString
+        let newString: NSString =
+            currentString.replacingCharacters(in: range, with: string) as NSString
+        return newString.length <= maxLength
     }
 }
