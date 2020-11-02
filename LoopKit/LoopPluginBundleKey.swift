@@ -1,5 +1,5 @@
 //
-//  LoopPlugin.swift
+//  LoopPluginBundleKey.swift
 //  LoopKit
 //
 //  Created by Pete Schwamb on 7/24/19.
@@ -15,5 +15,5 @@ public enum LoopPluginBundleKey: String {
     case cgmManagerIdentifier = "com.loopkit.Loop.CGMManagerIdentifier"
     case serviceDisplayName = "com.loopkit.Loop.ServiceDisplayName"
     case serviceIdentifier = "com.loopkit.Loop.ServiceIdentifier"
+    case extensionIdentifier = "com.loopkit.Loop.ExtensionIdentifier"
 }
-

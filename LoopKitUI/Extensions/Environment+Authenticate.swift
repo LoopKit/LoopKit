@@ -10,10 +10,11 @@ import LocalAuthentication
 import SwiftUI
 
 public typealias AuthenticationChallenge = (_ description: String, _ completion: @escaping (Result<Void, Error>) -> Void) -> Void
+
 fileprivate struct UnknownError: Swift.Error { }
 
-private struct AuthenticationChallengeKey: EnvironmentKey {
-    static let defaultValue: AuthenticationChallenge = { authenticationChallengeDescription, completion in
+public struct LocalAuthentication {
+    public static let deviceOwnerCheck: AuthenticationChallenge = { authenticationChallengeDescription, completion in
         let context = LAContext()
         var error: NSError?
         if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
@@ -30,6 +31,10 @@ private struct AuthenticationChallengeKey: EnvironmentKey {
             completion(.success(()))
         }
     }
+}
+
+private struct AuthenticationChallengeKey: EnvironmentKey {
+    static let defaultValue: AuthenticationChallenge = LocalAuthentication.deviceOwnerCheck
 }
 
 extension EnvironmentValues {

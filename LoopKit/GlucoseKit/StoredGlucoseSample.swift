@@ -7,14 +7,14 @@
 
 import HealthKit
 
-
-public struct StoredGlucoseSample: GlucoseSampleValue {
-    public let sampleUUID: UUID
+public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
+    public let uuid: UUID?
 
     // MARK: - HealthKit Sync Support
 
-    public let syncIdentifier: String
-    public let syncVersion: Int
+    public let provenanceIdentifier: String
+    public let syncIdentifier: String?
+    public let syncVersion: Int?
 
     // MARK: - SampleValue
 
@@ -25,69 +25,49 @@ public struct StoredGlucoseSample: GlucoseSampleValue {
 
     public let isDisplayOnly: Bool
     public let wasUserEntered: Bool
-    public let provenanceIdentifier: String
 
     public init(sample: HKQuantitySample) {
         self.init(
-            sampleUUID: sample.uuid,
+            uuid: sample.uuid,
+            provenanceIdentifier: sample.provenanceIdentifier,
             syncIdentifier: sample.syncIdentifier,
-            syncVersion: sample.syncVersion ?? 1,
+            syncVersion: sample.syncVersion,
             startDate: sample.startDate,
             quantity: sample.quantity,
             isDisplayOnly: sample.isDisplayOnly,
-            wasUserEntered: sample.wasUserEntered,
-            provenanceIdentifier: sample.provenanceIdentifier
-        )
+            wasUserEntered: sample.wasUserEntered)
     }
 
     public init(
-        sampleUUID: UUID,
+        uuid: UUID?,
+        provenanceIdentifier: String,
         syncIdentifier: String?,
-        syncVersion: Int,
+        syncVersion: Int?,
         startDate: Date,
         quantity: HKQuantity,
         isDisplayOnly: Bool,
-        wasUserEntered: Bool,
-        provenanceIdentifier: String
-    ) {
-        self.sampleUUID = sampleUUID
-        self.syncIdentifier = syncIdentifier ?? sampleUUID.uuidString
+        wasUserEntered: Bool) {
+        self.uuid = uuid
+        self.provenanceIdentifier = provenanceIdentifier
+        self.syncIdentifier = syncIdentifier
         self.syncVersion = syncVersion
         self.startDate = startDate
         self.quantity = quantity
         self.isDisplayOnly = isDisplayOnly
         self.wasUserEntered = wasUserEntered
-        self.provenanceIdentifier = provenanceIdentifier
     }
 }
-
-
-extension StoredGlucoseSample: Equatable, Hashable, Comparable {
-    public static func <(lhs: StoredGlucoseSample, rhs: StoredGlucoseSample) -> Bool {
-        return lhs.startDate < rhs.startDate
-    }
-
-    public static func ==(lhs: StoredGlucoseSample, rhs: StoredGlucoseSample) -> Bool {
-        return lhs.sampleUUID == rhs.sampleUUID
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(sampleUUID)
-    }
-}
-
 
 extension StoredGlucoseSample {
     init(managedObject: CachedGlucoseObject) {
         self.init(
-            sampleUUID: managedObject.uuid!,
+            uuid: managedObject.uuid,
+            provenanceIdentifier: managedObject.provenanceIdentifier,
             syncIdentifier: managedObject.syncIdentifier,
-            syncVersion: Int(managedObject.syncVersion),
+            syncVersion: managedObject.syncVersion,
             startDate: managedObject.startDate,
-            quantity: HKQuantity(unit: HKUnit(from: managedObject.unitString!), doubleValue: managedObject.value),
+            quantity: managedObject.quantity,
             isDisplayOnly: managedObject.isDisplayOnly,
-            wasUserEntered: managedObject.wasUserEntered,
-            provenanceIdentifier: managedObject.provenanceIdentifier!
-        )
+            wasUserEntered: managedObject.wasUserEntered)
     }
 }

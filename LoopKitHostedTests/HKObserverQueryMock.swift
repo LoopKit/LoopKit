@@ -1,6 +1,6 @@
 //
 //  HKObserverQueryMock.swift
-//  LoopKit
+//  LoopKitHostedTests
 //
 //  Created by Pete Schwamb on 9/2/20.
 //  Copyright © 2020 LoopKit Authors. All rights reserved.

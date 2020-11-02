@@ -290,4 +290,19 @@ class GlucoseMathTests: XCTestCase {
 
         XCTAssertEqual(output.count, effects.count)
     }
+    
+    func testMomentumEffectWithVelocityLimit() {
+        let input = loadInputFixture("momentum_effect_impossible_rising_glucose_input")
+        let output = loadOutputFixture("momentum_effect_impossible_rising_glucose_output")
+
+        let effects = input.linearMomentumEffect()
+        let unit = HKUnit.milligramsPerDeciliter
+
+        XCTAssertEqual(output.count, effects.count)
+
+        for (expected, calculated) in zip(output, effects) {
+            XCTAssertEqual(expected.startDate, calculated.startDate)
+            XCTAssertEqual(expected.quantity.doubleValue(for: unit), calculated.quantity.doubleValue(for: unit), accuracy: Double(Float.ulpOfOne))
+        }
+    }
 }

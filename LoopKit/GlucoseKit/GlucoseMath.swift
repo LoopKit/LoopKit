@@ -87,10 +87,12 @@ extension BidirectionalCollection where Element: GlucoseSampleValue, Index == In
     /// - Parameters:
     ///   - duration: The duration of the effects
     ///   - delta: The time differential for the returned values
+    ///   - velocityMaximum: The limit on how fast the momentum effect can rise. Defaults to 4 mg/dL/min based on physiological rates
     /// - Returns: An array of glucose effects
     func linearMomentumEffect(
         duration: TimeInterval = TimeInterval(minutes: 30),
-        delta: TimeInterval = TimeInterval(minutes: 5)
+        delta: TimeInterval = TimeInterval(minutes: 5),
+        velocityMaximum: HKQuantity = HKQuantity(unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .minute()), doubleValue: 4.0)
     ) -> [GlucoseEffect] {
         guard
             self.count > 2,  // Linear regression isn't much use without 3 or more entries.
@@ -114,13 +116,16 @@ extension BidirectionalCollection where Element: GlucoseSampleValue, Index == In
             return []
         }
 
+        let limitedSlope = Swift.min(slope, velocityMaximum.doubleValue(for: unit.unitDivided(by: .second())))
+        
         var date = startDate
         var values = [GlucoseEffect]()
-
+        
         repeat {
-            let value = Swift.max(0, date.timeIntervalSince(lastSample.startDate)) * slope
-
-            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
+            let value = Swift.max(0, date.timeIntervalSince(lastSample.startDate)) * limitedSlope
+            let momentumEffect = GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value))
+            
+            values.append(momentumEffect)
             date = date.addingTimeInterval(delta)
         } while date <= endDate
 

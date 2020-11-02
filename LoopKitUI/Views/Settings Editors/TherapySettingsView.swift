@@ -56,10 +56,10 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
                 if !viewModel.sensitivityOverridesEnabled {
                     workoutCorrectionRangeSection
                 }
+                carbRatioSection
                 basalRatesSection
                 deliveryLimitsSection
                 insulinModelSection
-                carbRatioSection
                 insulinSensitivitiesSection
             }
             lastItem

@@ -288,6 +288,10 @@ public final class MockCGMManager: TestingCGMManager {
         return mockSensorState
     }
     
+    public var cgmStatus: CGMManagerStatus {
+        return CGMManagerStatus(hasValidSensorSession: dataSource.isValidSession)
+    }
+    
     public var testingDevice: HKDevice {
         return MockCGMDataSource.device
     }
@@ -320,6 +324,7 @@ public final class MockCGMManager: TestingCGMManager {
         didSet {
             delegate.notify { (delegate) in
                 delegate?.cgmManagerDidUpdateState(self)
+                delegate?.cgmManager(self, didUpdate: self.cgmStatus)
             }
         }
     }
@@ -377,14 +382,31 @@ public final class MockCGMManager: TestingCGMManager {
         }
     }
 
-    private func sendCGMResult(_ result: CGMResult) {
+    private func sendCGMReadingResult(_ result: CGMReadingResult) {
         if case .newData(let samples) = result,
             let currentValue = samples.first
         {
             mockSensorState.glucoseRangeCategory = glucoseRangeCategory(for: currentValue.quantitySample)
         }
         self.delegate.notify { delegate in
-            delegate?.cgmManager(self, didUpdateWith: result)
+            delegate?.cgmManager(self, hasNew: result)
+        }
+    }
+    
+    public func glucoseRangeCategory(for glucose: GlucoseSampleValue) -> GlucoseRangeCategory? {
+        switch glucose.quantity {
+        case ...mockSensorState.cgmLowerLimit:
+            return glucose.wasUserEntered ? .urgentLow : .belowRange
+        case mockSensorState.cgmLowerLimit..<mockSensorState.urgentLowGlucoseThreshold:
+            return .urgentLow
+        case mockSensorState.urgentLowGlucoseThreshold..<mockSensorState.lowGlucoseThreshold:
+            return .low
+        case mockSensorState.lowGlucoseThreshold..<mockSensorState.highGlucoseThreshold:
+            return .normal
+        case mockSensorState.highGlucoseThreshold..<mockSensorState.cgmUpperLimit:
+            return .high
+        default:
+            return glucose.wasUserEntered ? .high : .aboveRange
         }
     }
     
@@ -405,7 +427,7 @@ public final class MockCGMManager: TestingCGMManager {
         }
     }
 
-    public func fetchNewDataIfNeeded(_ completion: @escaping (CGMResult) -> Void) {
+    public func fetchNewDataIfNeeded(_ completion: @escaping (CGMReadingResult) -> Void) {
         logDeviceComms(.send, message: "Fetch new data")
         dataSource.fetchNewData { (result) in
             switch result {
@@ -432,7 +454,7 @@ public final class MockCGMManager: TestingCGMManager {
             case .noData:
                 self.logDeviceComms(.receive, message: "Backfill empty")
             }
-            self.sendCGMResult(result)
+            self.sendCGMReadingResult(result)
         }
     }
     
@@ -445,7 +467,7 @@ public final class MockCGMManager: TestingCGMManager {
         glucoseUpdateTimer = Timer.scheduledTimer(withTimeInterval: dataSource.dataPointFrequency.frequency, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             self.fetchNewDataIfNeeded() { result in
-                self.sendCGMResult(result)
+                self.sendCGMReadingResult(result)
             }
         }
     }
@@ -454,7 +476,7 @@ public final class MockCGMManager: TestingCGMManager {
         guard !samples.isEmpty else { return }
         var samples = samples
         samples.mutateEach { $0.device = device }
-        sendCGMResult(CGMResult.newData(samples))
+        sendCGMReadingResult(CGMReadingResult.newData(samples))
     }
 }
 
@@ -521,7 +543,11 @@ extension MockCGMManager {
         }
 
         // trigger display of the status highlight
+<<<<<<< HEAD
         sendCGMResult(.noData)
+=======
+        sendCGMReadingResult(.noData)
+>>>>>>> tidepool/dev
     }
     
     private func registerBackgroundTask() {

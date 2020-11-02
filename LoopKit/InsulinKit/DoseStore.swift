@@ -1165,7 +1165,8 @@ extension DoseStore {
                 // Return the larger of the two bounding values, for the scenario when a bolus
                 // was scheduled between the two values; we want to return the later, larger value
                 guard let maxValue = closest.max(by: { return $0.value < $1.value }) else {
-                    completion(.failure(.fetchError(description: "No values found", recoverySuggestion: "Ensure insulin data exists for the specified date")))
+                    // If we have no iob values in the store, and did not encounter an error, return 0
+                    completion(.success(InsulinValue(startDate: date, value: 0)))
                     return
                 }
 
