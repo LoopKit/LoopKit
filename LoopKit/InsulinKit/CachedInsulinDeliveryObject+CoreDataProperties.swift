@@ -17,15 +17,15 @@ extension CachedInsulinDeliveryObject {
     }
 
     @NSManaged public var uuid: UUID?
-    @NSManaged public var provenanceIdentifier: String?
+    @NSManaged public var provenanceIdentifier: String
     @NSManaged public var hasLoopKitOrigin: Bool
-    @NSManaged public var startDate: Date?
-    @NSManaged public var endDate: Date?
+    @NSManaged public var startDate: Date
+    @NSManaged public var endDate: Date
     @NSManaged public var syncIdentifier: String?
     @NSManaged public var value: Double
     @NSManaged public var primitiveScheduledBasalRate: NSNumber?
     @NSManaged public var primitiveProgrammedTempBasalRate: NSNumber?
     @NSManaged public var primitiveReason: NSNumber?
-    @NSManaged public var createdAt: Date?
+    @NSManaged public var createdAt: Date
 
 }

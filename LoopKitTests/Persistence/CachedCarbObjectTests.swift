@@ -113,7 +113,20 @@ class CachedCarbObjectEncodableTests: PersistenceControllerTestCase {
 
 extension CachedCarbObject {
     fileprivate func setDefaultValues() {
-        createdByCurrentApp = true
-        startDate = Date()
+        self.absorptionTime = .hours(3)
+        self.createdByCurrentApp = true
+        self.foodType = "Breakfast"
+        self.grams = 45.6
+        self.startDate = Date()
+        self.uuid = UUID()
+        self.provenanceIdentifier = "CachedCarbObjectTests"
+        self.syncIdentifier = UUID().uuidString
+        self.syncVersion = 1
+        self.userCreatedDate = Date()
+        self.userUpdatedDate = nil
+        self.userDeletedDate = nil
+        self.operation = .create
+        self.addedDate = Date()
+        self.supercededDate = nil
     }
 }

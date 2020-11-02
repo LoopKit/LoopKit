@@ -33,7 +33,6 @@
 		1DE35E7A24ABEC720086F9AE /* DeviceManagerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE35E7924ABEC720086F9AE /* DeviceManagerUI.swift */; };
 		1DECC3F52513F98D00F4056E /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DECC3F42513F98D00F4056E /* UITextField.swift */; };
 		1DEE227724A676A300693C32 /* HKHealthStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437AFF1E203A763F008C4892 /* HKHealthStoreMock.swift */; };
-		1DEE229724A676A300693C32 /* DoseStoreHKFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEE226124A6642300693C32 /* DoseStoreHKFilterTests.swift */; };
 		1DEE229D24A676A300693C32 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		1DEF977524C62F8400D630CB /* SupportedInsulinModelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEF977424C62F8400D630CB /* SupportedInsulinModelSettings.swift */; };
 		1DFB99D6245CB2E900DCC8C9 /* AlertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFB99D5245CB2E900DCC8C9 /* AlertTests.swift */; };
@@ -558,6 +557,7 @@
 		A98ED5FC25312ED100FD8F70 /* HKAnchoredObjectQueryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E703612500390B00DAB534 /* HKAnchoredObjectQueryMock.swift */; };
 		A98ED5FE253132A400FD8F70 /* CarbStoreHKQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98ED5FD253132A400FD8F70 /* CarbStoreHKQueryTests.swift */; };
 		A991161423426A0A00A4B2E9 /* ServiceSetupNotifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = A991161323426A0A00A4B2E9 /* ServiceSetupNotifying.swift */; };
+		A994B884254241B10039B108 /* InsulinDeliveryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A994B883254241B10039B108 /* InsulinDeliveryStoreTests.swift */; };
 		A99C7373233990D400C80963 /* TempBasalRecommendationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C7372233990D400C80963 /* TempBasalRecommendationTests.swift */; };
 		A99C7375233993FE00C80963 /* DiagnosticLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C7374233993FE00C80963 /* DiagnosticLogTests.swift */; };
 		A99C73772339A67A00C80963 /* GlucoseThresholdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C73762339A67A00C80963 /* GlucoseThresholdTests.swift */; };
@@ -926,9 +926,8 @@
 		1DD1964D248AE88000420876 /* HorizontalSizeClassOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSizeClassOverride.swift; sourceTree = "<group>"; };
 		1DE35E7924ABEC720086F9AE /* DeviceManagerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManagerUI.swift; sourceTree = "<group>"; };
 		1DECC3F42513F98D00F4056E /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
-		1DEE226124A6642300693C32 /* DoseStoreHKFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseStoreHKFilterTests.swift; sourceTree = "<group>"; };
 		1DEE230124A676A300693C32 /* LoopKitHostedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoopKitHostedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1DEE230224A676A300693C32 /* LoopKitHostedTests.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = LoopKitHostedTests.plist; path = /Users/rick/code/LoopWorkspace/Common/LoopKit/LoopKitHostedTests/LoopKitHostedTests.plist; sourceTree = "<absolute>"; };
+		1DEE230224A676A300693C32 /* LoopKitHostedTests.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = LoopKitHostedTests.plist; sourceTree = "<group>"; };
 		1DEF977424C62F8400D630CB /* SupportedInsulinModelSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedInsulinModelSettings.swift; sourceTree = "<group>"; };
 		1DFB99D5245CB2E900DCC8C9 /* AlertTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertTests.swift; sourceTree = "<group>"; };
 		1F50C321212B20D300C18FAB /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/CarbKit.strings; sourceTree = "<group>"; };
@@ -1432,6 +1431,7 @@
 		A987CD4524A5893500439ADC /* JSONStreamEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONStreamEncoder.swift; sourceTree = "<group>"; };
 		A98ED5FD253132A400FD8F70 /* CarbStoreHKQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbStoreHKQueryTests.swift; sourceTree = "<group>"; };
 		A991161323426A0A00A4B2E9 /* ServiceSetupNotifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSetupNotifying.swift; sourceTree = "<group>"; };
+		A994B883254241B10039B108 /* InsulinDeliveryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinDeliveryStoreTests.swift; sourceTree = "<group>"; };
 		A996FB6924F089F900864646 /* Modelv3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv3.xcdatamodel; sourceTree = "<group>"; };
 		A99C7372233990D400C80963 /* TempBasalRecommendationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempBasalRecommendationTests.swift; sourceTree = "<group>"; };
 		A99C7374233993FE00C80963 /* DiagnosticLogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticLogTests.swift; sourceTree = "<group>"; };
@@ -1674,10 +1674,10 @@
 				A9E068142534EB6B00BDAB59 /* Persistence */,
 				1DEE230224A676A300693C32 /* LoopKitHostedTests.plist */,
 				A98ED5FD253132A400FD8F70 /* CarbStoreHKQueryTests.swift */,
-				1DEE226124A6642300693C32 /* DoseStoreHKFilterTests.swift */,
 				A9E0681725350ECC00BDAB59 /* GlucoseStoreTests.swift */,
 				C1E703612500390B00DAB534 /* HKAnchoredObjectQueryMock.swift */,
 				C1E7035E25001EA500DAB534 /* HKObserverQueryMock.swift */,
+				A994B883254241B10039B108 /* InsulinDeliveryStoreTests.swift */,
 			);
 			path = LoopKitHostedTests;
 			sourceTree = "<group>";
@@ -3189,9 +3189,9 @@
 				1DEE227724A676A300693C32 /* HKHealthStoreMock.swift in Sources */,
 				A9E1E6AD24E1D8590073CA39 /* CacheStore.swift in Sources */,
 				C1A3F5BE24AA6EE200329152 /* NSTimeInterval.swift in Sources */,
+				A994B884254241B10039B108 /* InsulinDeliveryStoreTests.swift in Sources */,
 				A9E0681825350ECC00BDAB59 /* GlucoseStoreTests.swift in Sources */,
 				A9E1E6AE24E1D8860073CA39 /* NSManagedObjectContext.swift in Sources */,
-				1DEE229724A676A300693C32 /* DoseStoreHKFilterTests.swift in Sources */,
 				A98ED5FB25312E3200FD8F70 /* HKObserverQueryMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -38,7 +38,8 @@ class DeviceDataManager {
             cacheStore: cacheStore,
             insulinModel: insulinModel,
             basalProfile: basalRateSchedule,
-            insulinSensitivitySchedule: insulinSensitivitySchedule
+            insulinSensitivitySchedule: insulinSensitivitySchedule,
+            provenanceIdentifier: HKSource.default().bundleIdentifier
         )
         glucoseStore = GlucoseStore(healthStore: healthStore,
                                     cacheStore: cacheStore,

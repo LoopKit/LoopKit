@@ -12,21 +12,21 @@ import HealthKit
 import os.log
 
 public protocol GlucoseStoreDelegate: AnyObject {
-    
+
     /**
      Informs the delegate that the glucose store has updated glucose data.
-     
+
      - Parameter glucoseStore: The glucose store that has updated glucose data.
      */
     func glucoseStoreHasUpdatedGlucoseData(_ glucoseStore: GlucoseStore)
-    
+
 }
 
 /**
  Manages storage, retrieval, and calculation of glucose data.
- 
+
  There are three tiers of storage:
- 
+
  * Persistant cache, stored in Core Data, used to ensure access if the app is suspended and re-launched while the Health database
  * is protected and to provide data for upload to remote data services. Backfilled from HealthKit data up to observation interval.
 ```
@@ -48,7 +48,7 @@ public final class GlucoseStore: HealthKitSampleStore {
 
     /// Notification posted when glucose samples were changed, either via direct add or from HealthKit
     public static let glucoseSamplesDidChange = NSNotification.Name(rawValue: "com.loopkit.GlucoseStore.glucoseSamplesDidChange")
-    
+
     public weak var delegate: GlucoseStoreDelegate?
 
     private let glucoseType = HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!
@@ -92,7 +92,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     private let lockedLatestGlucose = Locked<GlucoseSampleValue?>(nil)
 
     private let cacheStore: PersistenceController
-    
+
     private let provenanceIdentifier: String
 
     static let healthKitQueryAnchorMetadataKey = "com.loopkit.GlucoseStore.hkQueryAnchor"
@@ -111,7 +111,7 @@ public final class GlucoseStore: HealthKitSampleStore {
 
         self.cacheStore = cacheStore
         self.momentumDataInterval = momentumDataInterval
-        
+
         self.cacheLength = cacheLength
         self.observationInterval = observationInterval ?? cacheLength
         self.provenanceIdentifier = provenanceIdentifier
@@ -122,7 +122,7 @@ public final class GlucoseStore: HealthKitSampleStore {
                    type: glucoseType,
                    observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
                    observationEnabled: observationEnabled)
-        
+
         let semaphore = DispatchSemaphore(value: 0)
         cacheStore.onReady { (error) in
             guard error == nil else {
@@ -133,7 +133,7 @@ public final class GlucoseStore: HealthKitSampleStore {
             cacheStore.fetchAnchor(key: GlucoseStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
                     self.queryAnchor = anchor
-                    
+
                     self.updateLatestGlucose()
 
                     semaphore.signal()
@@ -144,7 +144,7 @@ public final class GlucoseStore: HealthKitSampleStore {
     }
 
     // MARK: - HealthKitSampleStore
-    
+
     override func queryAnchorDidChange() {
         cacheStore.storeAnchor(queryAnchor, key: GlucoseStore.healthKitQueryAnchorMetadataKey)
     }
@@ -181,9 +181,11 @@ public final class GlucoseStore: HealthKitSampleStore {
                         changed = true
                     }
 
-                    if changed {
-                        error = self.cacheStore.save()
+                    guard changed else {
+                        return
                     }
+
+                    error = self.cacheStore.save()
                 } catch let coreDataError {
                     error = coreDataError
                 }
@@ -204,7 +206,7 @@ public final class GlucoseStore: HealthKitSampleStore {
                 self.purgeExpiredManagedDataFromHealthKit(before: newestStartDate)
             }
 
-            self.notifyUpdatedGlucoseData(updateSource: .queriedByHealthKit)
+            self.handleUpdatedGlucoseData(updateSource: .queriedByHealthKit)
             completion(true)
         }
     }
@@ -350,7 +352,7 @@ extension GlucoseStore {
                 return
             }
 
-            self.notifyUpdatedGlucoseData(updateSource: .changedInApp)
+            self.handleUpdatedGlucoseData(updateSource: .changedInApp)
             completion(.success(storedSamples))
         }
     }
@@ -419,7 +421,7 @@ extension GlucoseStore {
         }
         return count
     }
-    
+
     ///
     /// - Parameters:
     ///   - since: Only consider glucose valid after or at this date
@@ -495,7 +497,7 @@ extension GlucoseStore {
                 return
             }
 
-            self.notifyUpdatedGlucoseData(updateSource: .changedInApp)
+            self.handleUpdatedGlucoseData(updateSource: .changedInApp)
             completion(nil)
         }
     }
@@ -522,8 +524,8 @@ extension GlucoseStore {
                         completion(error)
                         return
                     }
-                    self.updateLatestGlucose()
-                    self.notifyUpdatedGlucoseData(updateSource: .changedInApp)
+
+                    self.handleUpdatedGlucoseData(updateSource: .changedInApp)
                     completion(nil)
                 }
             }
@@ -545,7 +547,7 @@ extension GlucoseStore {
                 completion(error)
                 return
             }
-            self.notifyUpdatedGlucoseData(updateSource: .changedInApp)
+            self.handleUpdatedGlucoseData(updateSource: .changedInApp)
             completion(nil)
         }
     }
@@ -590,11 +592,11 @@ extension GlucoseStore {
         }
     }
 
-    private func notifyUpdatedGlucoseData(updateSource: UpdateSource) {
+    private func handleUpdatedGlucoseData(updateSource: UpdateSource) {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        self.updateLatestGlucose()
         self.purgeExpiredCachedGlucoseObjects()
+        self.updateLatestGlucose()
 
         NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: updateSource.rawValue])
         delegate?.glucoseStoreHasUpdatedGlucoseData(self)
@@ -837,6 +839,8 @@ extension GlucoseStore {
         }
     }
 }
+
+// MARK: - Issue Report
 
 extension GlucoseStore {
     /// Generates a diagnostic report about the current state.

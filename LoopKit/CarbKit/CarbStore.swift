@@ -322,9 +322,11 @@ public final class CarbStore: HealthKitSampleStore {
                         }
                     }
 
-                    if changed {
-                        error = CarbStoreError(error: self.cacheStore.save())
+                    guard changed else {
+                        return
                     }
+
+                    error = CarbStoreError(error: self.cacheStore.save())
                 } catch let coreDataError {
                     error = .coreDataError(coreDataError)
                 }
@@ -336,18 +338,19 @@ public final class CarbStore: HealthKitSampleStore {
                 return
             }
 
-            // Notify listeners only if a meaningful change was made
-            if changed {
-                self.notifyUpdatedCarbData(updateSource: .queriedByHealthKit)
+            if !changed {
+                completion(true)
+                return
             }
 
+            self.handleUpdatedCarbData(updateSource: .queriedByHealthKit)
             completion(true)
         }
     }
 }
 
-
 // MARK: - Fetching
+
 extension CarbStore {
     /// Retrieves carb entries within the specified date range
     ///
@@ -454,6 +457,7 @@ extension CarbStore {
 }
 
 // MARK: - Modification
+
 extension CarbStore {
     public func addCarbEntry(_ entry: NewCarbEntry, completion: @escaping (_ result: CarbStoreResult<StoredCarbEntry>) -> Void) {
         queue.async {
@@ -490,7 +494,7 @@ extension CarbStore {
 
             completion(.success(storedEntry!))
 
-            self.notifyUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData(updateSource: .changedInApp)
         }
     }
 
@@ -539,7 +543,7 @@ extension CarbStore {
 
             completion(.success(storedEntry!))
 
-            self.notifyUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData(updateSource: .changedInApp)
         }
     }
 
@@ -567,6 +571,7 @@ extension CarbStore {
         object.uuid = quantitySample.uuid
         if let error = self.cacheStore.save() {
             self.log.error("Error updating CachedCarbObject after saving HealthKit object: %@", String(describing: error))
+            object.uuid = nil
         }
     }
 
@@ -612,7 +617,7 @@ extension CarbStore {
 
             completion(.success(true))
 
-            self.notifyUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData(updateSource: .changedInApp)
         }
     }
 
@@ -726,6 +731,7 @@ extension CarbStore {
 }
 
 // MARK: - Watch Synchronization
+
 extension CarbStore {
 
     /// Get carb objects in main app to deliver to Watch extension
@@ -776,7 +782,7 @@ extension CarbStore {
 
             completion(error)
 
-            self.notifyUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData(updateSource: .changedInApp)
         }
     }
 }
@@ -841,7 +847,7 @@ extension CarbStore {
                 return
             }
 
-            self.notifyUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData(updateSource: .changedInApp)
             completion(nil)
         }
     }
@@ -868,7 +874,7 @@ extension CarbStore {
         return error
     }
 
-    private func notifyUpdatedCarbData(updateSource: UpdateSource) {
+    private func handleUpdatedCarbData(updateSource: UpdateSource) {
         dispatchPrecondition(condition: .onQueue(queue))
 
         purgeExpiredCachedCarbObjects()
@@ -896,8 +902,8 @@ extension CarbStore {
     }
 }
 
-
 // MARK: - Math
+
 extension CarbStore {
     /// The longest expected absorption time interval for carbohydrates. Defaults to 8 hours.
     public var maximumAbsorptionTimeInterval: TimeInterval {
@@ -1136,78 +1142,7 @@ extension CarbStore {
     }
 }
 
-
-extension CarbStore {
-    /// Generates a diagnostic report about the current state
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-    ///
-    /// - parameter completionHandler: A closure called once the report has been generated. The closure takes a single argument of the report string.
-    public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
-        queue.async {
-            
-            var carbAbsorptionModel: String
-            switch self.carbAbsorptionModel {
-            case .linear:
-                carbAbsorptionModel = "Linear"
-            case .nonlinear:
-                carbAbsorptionModel = "Nonlinear"
-            case .adaptiveRateNonlinear:
-                carbAbsorptionModel = "Nonlinear with Adaptive Rate for Remaining Carbs"
-            }
-            
-            var report: [String] = [
-                "## CarbStore",
-                "",
-                "* carbRatioSchedule: \(self.carbRatioSchedule?.debugDescription ?? "")",
-                "* carbRatioScheduleApplyingOverrideHistory: \(self.carbRatioScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
-                "* cacheLength: \(self.cacheLength)",
-                "* defaultAbsorptionTimes: \(self.defaultAbsorptionTimes)",
-                "* observationInterval: \(self.observationInterval)",
-                "* insulinSensitivitySchedule: \(self.insulinSensitivitySchedule?.debugDescription ?? "")",
-                "* insulinSensitivityScheduleApplyingOverrideHistory: \(self.insulinSensitivityScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
-                "* overrideHistory: \(self.overrideHistory.map(String.init(describing:)) ?? "nil")",
-                "* carbSensitivitySchedule: \(self.carbSensitivitySchedule?.debugDescription ?? "nil")",
-                "* delay: \(self.delay)",
-                "* delta: \(self.delta)",
-                "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",
-                "* carbAbsorptionModel: \(carbAbsorptionModel)",
-                "* Carb absorption model settings: \(self.settings)",
-                super.debugDescription,
-                "",
-                "cachedCarbEntries:"
-            ]
-
-            switch self.getCarbEntries() {
-            case .failure(let error):
-                report.append("Error: \(error)")
-            case .success(let entries):
-                report.append("[")
-                report.append("\tStoredCarbEntry(uuid, provenanceIdentifier, syncIdentifier, syncVersion, startDate, quantity, foodType, absorptionTime, createdByCurrentApp, userCreatedDate, userUpdatedDate)")
-                report.append(entries.map({ (entry) -> String in
-                    return [
-                        "\t",
-                        entry.uuid?.uuidString ?? "",
-                        entry.provenanceIdentifier ?? "",
-                        entry.syncIdentifier ?? "",
-                        entry.syncVersion != nil ? String(describing: entry.syncVersion) : "",
-                        String(describing: entry.startDate),
-                        String(describing: entry.quantity),
-                        entry.foodType ?? "",
-                        String(describing: entry.absorptionTime ?? self.defaultAbsorptionTimes.medium),
-                        String(describing: entry.createdByCurrentApp),
-                        entry.userCreatedDate != nil ? String(describing: entry.userCreatedDate) : "",
-                        entry.userUpdatedDate != nil ? String(describing: entry.userUpdatedDate) : "",
-                        ].joined(separator: ", ")
-                }).joined(separator: "\n"))
-                report.append("]")
-                report.append("")
-            }
-
-            completionHandler(report.joined(separator: "\n"))
-        }
-    }
-}
+// MARK: - Remote Data Service Query
 
 extension CarbStore {
     public struct QueryAnchor: RawRepresentable {
@@ -1406,6 +1341,80 @@ extension CarbStore {
             self.log.info("Added %d CachedCarbObjects", entries.count)
             self.delegate?.carbStoreHasUpdatedCarbData(self)
             completion(nil)
+        }
+    }
+}
+
+// MARK: - Issue Report
+
+extension CarbStore {
+    /// Generates a diagnostic report about the current state
+    ///
+    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+    ///
+    /// - parameter completionHandler: A closure called once the report has been generated. The closure takes a single argument of the report string.
+    public func generateDiagnosticReport(_ completionHandler: @escaping (_ report: String) -> Void) {
+        queue.async {
+
+            var carbAbsorptionModel: String
+            switch self.carbAbsorptionModel {
+            case .linear:
+                carbAbsorptionModel = "Linear"
+            case .nonlinear:
+                carbAbsorptionModel = "Nonlinear"
+            case .adaptiveRateNonlinear:
+                carbAbsorptionModel = "Nonlinear with Adaptive Rate for Remaining Carbs"
+            }
+
+            var report: [String] = [
+                "## CarbStore",
+                "",
+                "* carbRatioSchedule: \(self.carbRatioSchedule?.debugDescription ?? "")",
+                "* carbRatioScheduleApplyingOverrideHistory: \(self.carbRatioScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
+                "* cacheLength: \(self.cacheLength)",
+                "* defaultAbsorptionTimes: \(self.defaultAbsorptionTimes)",
+                "* observationInterval: \(self.observationInterval)",
+                "* insulinSensitivitySchedule: \(self.insulinSensitivitySchedule?.debugDescription ?? "")",
+                "* insulinSensitivityScheduleApplyingOverrideHistory: \(self.insulinSensitivityScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
+                "* overrideHistory: \(self.overrideHistory.map(String.init(describing:)) ?? "nil")",
+                "* carbSensitivitySchedule: \(self.carbSensitivitySchedule?.debugDescription ?? "nil")",
+                "* delay: \(self.delay)",
+                "* delta: \(self.delta)",
+                "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",
+                "* carbAbsorptionModel: \(carbAbsorptionModel)",
+                "* Carb absorption model settings: \(self.settings)",
+                super.debugDescription,
+                "",
+                "cachedCarbEntries:"
+            ]
+
+            switch self.getCarbEntries() {
+            case .failure(let error):
+                report.append("Error: \(error)")
+            case .success(let entries):
+                report.append("[")
+                report.append("\tStoredCarbEntry(uuid, provenanceIdentifier, syncIdentifier, syncVersion, startDate, quantity, foodType, absorptionTime, createdByCurrentApp, userCreatedDate, userUpdatedDate)")
+                report.append(entries.map({ (entry) -> String in
+                    return [
+                        "\t",
+                        entry.uuid?.uuidString ?? "",
+                        entry.provenanceIdentifier ?? "",
+                        entry.syncIdentifier ?? "",
+                        entry.syncVersion != nil ? String(describing: entry.syncVersion) : "",
+                        String(describing: entry.startDate),
+                        String(describing: entry.quantity),
+                        entry.foodType ?? "",
+                        String(describing: entry.absorptionTime ?? self.defaultAbsorptionTimes.medium),
+                        String(describing: entry.createdByCurrentApp),
+                        entry.userCreatedDate != nil ? String(describing: entry.userCreatedDate) : "",
+                        entry.userUpdatedDate != nil ? String(describing: entry.userUpdatedDate) : "",
+                    ].joined(separator: ", ")
+                }).joined(separator: "\n"))
+                report.append("]")
+                report.append("")
+            }
+
+            completionHandler(report.joined(separator: "\n"))
         }
     }
 }
