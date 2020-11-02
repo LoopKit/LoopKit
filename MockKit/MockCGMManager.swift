@@ -392,24 +392,7 @@ public final class MockCGMManager: TestingCGMManager {
             delegate?.cgmManager(self, hasNew: result)
         }
     }
-    
-    public func glucoseRangeCategory(for glucose: GlucoseSampleValue) -> GlucoseRangeCategory? {
-        switch glucose.quantity {
-        case ...mockSensorState.cgmLowerLimit:
-            return glucose.wasUserEntered ? .urgentLow : .belowRange
-        case mockSensorState.cgmLowerLimit..<mockSensorState.urgentLowGlucoseThreshold:
-            return .urgentLow
-        case mockSensorState.urgentLowGlucoseThreshold..<mockSensorState.lowGlucoseThreshold:
-            return .low
-        case mockSensorState.lowGlucoseThreshold..<mockSensorState.highGlucoseThreshold:
-            return .normal
-        case mockSensorState.highGlucoseThreshold..<mockSensorState.cgmUpperLimit:
-            return .high
-        default:
-            return glucose.wasUserEntered ? .high : .aboveRange
-        }
-    }
-    
+        
     public func glucoseRangeCategory(for glucose: GlucoseSampleValue) -> GlucoseRangeCategory? {
         switch glucose.quantity {
         case ...mockSensorState.cgmLowerLimit:
@@ -543,11 +526,7 @@ extension MockCGMManager {
         }
 
         // trigger display of the status highlight
-<<<<<<< HEAD
-        sendCGMResult(.noData)
-=======
         sendCGMReadingResult(.noData)
->>>>>>> tidepool/dev
     }
     
     private func registerBackgroundTask() {

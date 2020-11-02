@@ -32,7 +32,6 @@
 		1DD3DEB624451C3300BD8E40 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* Alert.swift */; };
 		1DE35E7A24ABEC720086F9AE /* DeviceManagerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE35E7924ABEC720086F9AE /* DeviceManagerUI.swift */; };
 		1DECC3F52513F98D00F4056E /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DECC3F42513F98D00F4056E /* UITextField.swift */; };
-		1DEE226F24A676A300693C32 /* GlucoseStoreHKFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEE226024A6642300693C32 /* GlucoseStoreHKFilterTests.swift */; };
 		1DEE227724A676A300693C32 /* HKHealthStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437AFF1E203A763F008C4892 /* HKHealthStoreMock.swift */; };
 		1DEE229724A676A300693C32 /* DoseStoreHKFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEE226124A6642300693C32 /* DoseStoreHKFilterTests.swift */; };
 		1DEE229D24A676A300693C32 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
@@ -579,7 +578,6 @@
 		A9DF02C924F724D900B7C988 /* CriticalEventLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DF02C824F724D900B7C988 /* CriticalEventLogTests.swift */; };
 		A9DF02CF24F732FC00B7C988 /* JSONStreamEncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DF02CE24F732FC00B7C988 /* JSONStreamEncoderTests.swift */; };
 		A9DF02D124F7449E00B7C988 /* PersistentDeviceLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DF02D024F7449E00B7C988 /* PersistentDeviceLogTests.swift */; };
-		A9DF02D224F748BF00B7C988 /* CriticalEventLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DF02C824F724D900B7C988 /* CriticalEventLogTests.swift */; };
 		A9DF02D324F762DC00B7C988 /* CarbStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437AFF192039F149008C4892 /* CarbStoreTests.swift */; };
 		A9E068112534D87800BDAB59 /* StoredGlucoseSampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E068102534D87800BDAB59 /* StoredGlucoseSampleTests.swift */; };
 		A9E068162534EB8200BDAB59 /* CachedGlucoseObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E068152534EB8200BDAB59 /* CachedGlucoseObjectTests.swift */; };
@@ -2050,6 +2048,7 @@
 				892A5D35222F03CB008961AB /* LoopTestingKit */,
 				43BA718D202020140058961E /* Frameworks */,
 				43D8FDCC1C728FDF0073BE78 /* Products */,
+				C1332E5425508A4800D60D7E /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2536,6 +2535,14 @@
 				B42A7471235885B600247B03 /* LoopNotificationUserInfoKey.swift */,
 			);
 			path = Notification;
+			sourceTree = "<group>";
+		};
+		C1332E5425508A4800D60D7E /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				1DEE226024A6642300693C32 /* GlucoseStoreHKFilterTests.swift */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		C17F39BD23CD239000FA1113 /* DeviceManager */ = {
@@ -3188,10 +3195,7 @@
 			files = (
 				A98ED5FC25312ED100FD8F70 /* HKAnchoredObjectQueryMock.swift in Sources */,
 				A9E1E6AC24E1D7EC0073CA39 /* PersistenceControllerTestCase.swift in Sources */,
-				A9DF02D224F748BF00B7C988 /* CriticalEventLogTests.swift in Sources */,
-				1DEE226F24A676A300693C32 /* GlucoseStoreHKFilterTests.swift in Sources */,
 				A98ED5FE253132A400FD8F70 /* CarbStoreHKQueryTests.swift in Sources */,
-				A9DF02D224F748BF00B7C988 /* CriticalEventLogTests.swift in Sources */,
 				A9E068162534EB8200BDAB59 /* CachedGlucoseObjectTests.swift in Sources */,
 				1DEE227724A676A300693C32 /* HKHealthStoreMock.swift in Sources */,
 				A9E1E6AD24E1D8590073CA39 /* CacheStore.swift in Sources */,
@@ -3534,7 +3538,7 @@
 				A9E1E6A924E1B6700073CA39 /* SyncCarbObject.swift in Sources */,
 				43CF0B3F2030FD0D002A66DE /* UploadState.swift in Sources */,
 				A933DB8824BF956F009B417A /* CriticalEventLog.swift in Sources */,
-				C16DA83F22E8D88F008624C2 /* LoopPlugin.swift in Sources */,
+				C16DA83F22E8D88F008624C2 /* LoopPluginBundleKey.swift in Sources */,
 				C16DA83F22E8D88F008624C2 /* LoopPluginBundleKey.swift in Sources */,
 				C1F8403923DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift in Sources */,
 				433BC7AD20538FCA000B1200 /* StoredGlucoseSample.swift in Sources */,
