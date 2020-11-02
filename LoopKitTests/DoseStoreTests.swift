@@ -770,7 +770,7 @@ class DoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
         doseStore = DoseStore(healthStore: HKHealthStoreMock(),
                               cacheStore: cacheStore,
                               observationEnabled: false,
-                              insulinModel: insulinModel,
+                              defaultInsulinModelSetting: InsulinModelSettings(model: insulinModel),
                               basalProfile: basalProfile,
                               insulinSensitivitySchedule: insulinSensitivitySchedule)
         XCTAssertNil(doseStore.addPumpEvents(events: events))
