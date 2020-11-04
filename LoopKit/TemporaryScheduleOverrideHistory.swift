@@ -60,10 +60,6 @@ private struct OverrideEvent: Equatable {
         self.override = override
         self.modificationCounter = modificationCounter
     }
-
-    var actualEndDate: Date {
-        return override.actualEndDate
-    }
 }
 
 
@@ -161,7 +157,7 @@ public final class TemporaryScheduleOverrideHistory {
             recentEvents.formIndex(before: &index)
             
             if recentEvents[index].override.actualEnd != .deleted {
-                if recentEvents[index].actualEndDate > date {
+                if recentEvents[index].override.actualEndDate > date {
                     if recentEvents[index].override.startDate > date {
                         recentEvents[index].override.actualEnd = .deleted
                     } else {
@@ -211,7 +207,7 @@ public final class TemporaryScheduleOverrideHistory {
         let period = relevantPeriod(relativeTo: referenceDate)
         var recentEvents = self.recentEvents
         recentEvents.removeAll(where: { event in
-            event.actualEndDate < period.start || event.override.startDate > period.end
+            event.override.actualEndDate < period.start || event.override.startDate > period.end
         })
 
         if recentEvents != self.recentEvents {
