@@ -83,26 +83,3 @@ public struct OverrideViewCell: View {
         .frame(width: 12.0, height: 12.0)
     }
 }
-
-struct SegmentedGaugeBar: UIViewRepresentable {
-    var insulinNeedsScaler: Double
-    
-    init(insulinNeedsScaler: Double) {
-        self.insulinNeedsScaler = insulinNeedsScaler
-    }
-    
-    func makeUIView(context: Context) -> SegmentedGaugeBarView {
-        let view = SegmentedGaugeBarView()
-        view.backgroundColor = .white
-        view.numberOfSegments = 2
-        // These values correspond with the storyboard values for the current SegmentedGaugeBarView
-        view.startColor = .lightenedInsulin
-        view.endColor = .darkenedInsulin
-        view.borderWidth = 1
-        view.borderColor = .systemGray
-        view.progress = insulinNeedsScaler
-        return view
-    }
-    
-    func updateUIView(_ view: SegmentedGaugeBarView, context: Context) { }
-}
