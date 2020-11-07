@@ -9,6 +9,9 @@
 import SwiftUI
 
 public struct OverrideViewCell: View {
+    @Environment(\.lightenedInsulinTintColor) private var lightInsulin
+    @Environment(\.darkenedInsulinTintColor) private var darkInsulin
+    
     static let symbolWidth: CGFloat = 40
     
     var symbolLabel: Text
@@ -68,7 +71,7 @@ public struct OverrideViewCell: View {
             HStack {
                 Group {
                     if self.insulinNeedsScaleFactor != nil {
-                        SegmentedGaugeBar(insulinNeedsScaler: self.insulinNeedsScaleFactor!)
+                        SegmentedGaugeBar(insulinNeedsScaler: self.insulinNeedsScaleFactor!, startColor: lightInsulin, endColor: darkInsulin)
                         .frame(minHeight: 12)
                     }
                 }

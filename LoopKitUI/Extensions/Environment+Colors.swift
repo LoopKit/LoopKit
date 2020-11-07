@@ -51,3 +51,25 @@ public extension EnvironmentValues {
         set { self[InsulinTintColorKey.self] = newValue }
     }
 }
+
+private struct LightInsulinTintColorKey: EnvironmentKey {
+    static let defaultValue: UIColor = .lightenedInsulin
+}
+
+public extension EnvironmentValues {
+    var lightenedInsulinTintColor: UIColor {
+        get { self[LightInsulinTintColorKey.self] }
+        set { self[LightInsulinTintColorKey.self] = newValue }
+    }
+}
+
+private struct DarkInsulinTintColorKey: EnvironmentKey {
+    static let defaultValue: UIColor = .darkenedInsulin
+}
+
+public extension EnvironmentValues {
+    var darkenedInsulinTintColor: UIColor {
+        get { self[DarkInsulinTintColorKey.self] }
+        set { self[DarkInsulinTintColorKey.self] = newValue }
+    }
+}
