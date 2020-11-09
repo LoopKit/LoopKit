@@ -63,15 +63,25 @@ public class DosingDecisionStore {
     private func purgeDosingDecisionObjects(before date: Date, completion: ((Error?) -> Void)? = nil) {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
 
-        do {
-            let count = try self.store.managedObjectContext.purgeObjects(of: DosingDecisionObject.self, matching: NSPredicate(format: "date < %@", date as NSDate))
-            self.log.info("Purged %d DosingDecisionObjects", count)
-            self.delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
-            completion?(nil)
-        } catch let error {
-            self.log.error("Unable to purge DosingDecisionObjects: %{public}@", String(describing: error))
-            completion?(error)
+        var purgeError: Error?
+
+        store.managedObjectContext.performAndWait {
+            do {
+                let count = try self.store.managedObjectContext.purgeObjects(of: DosingDecisionObject.self, matching: NSPredicate(format: "date < %@", date as NSDate))
+                self.log.info("Purged %d DosingDecisionObjects", count)
+            } catch let error {
+                self.log.error("Unable to purge DosingDecisionObjects: %{public}@", String(describing: error))
+                purgeError = error
+            }
         }
+
+        if let purgeError = purgeError {
+            completion?(purgeError)
+            return
+        }
+
+        delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
+        completion?(nil)
     }
 }
 

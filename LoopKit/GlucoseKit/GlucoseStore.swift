@@ -295,7 +295,7 @@ extension GlucoseStore {
     /// Add glucose samples to store.
     ///
     /// - Parameters:
-    ///   - newSamples: The new glucose samples to add to the store.
+    ///   - samples: The new glucose samples to add to the store.
     ///   - completion: A closure called once the glucose samples have been stored.
     ///   - result: An array of glucose samples that were stored, or error.
     public func addGlucoseSamples(_ samples: [NewGlucoseSample], completion: @escaping (_ result: Result<[StoredGlucoseSample], Error>) -> Void) {
@@ -310,8 +310,14 @@ extension GlucoseStore {
 
             self.cacheStore.managedObjectContext.performAndWait {
                 do {
-                    // Filter samples to ensure no existing sample with matching sync identifier for our provenance identifier
+                    // Filter samples to ensure no duplicate sync identifiers nor existing sample with matching sync identifier for our provenance identifier
+                    var syncIdentifiers = Set<String>()
                     let samples: [NewGlucoseSample] = try samples.compactMap { sample in
+                        guard syncIdentifiers.insert(sample.syncIdentifier).inserted else {
+                            self.log.default("Skipping adding glucose sample due to duplicate sync identifier: %{public}@", sample.syncIdentifier)
+                            return nil
+                        }
+
                         let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
                         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", self.provenanceIdentifier),
                                                                                                 NSPredicate(format: "syncIdentifier == %@", sample.syncIdentifier)])

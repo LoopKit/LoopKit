@@ -289,7 +289,7 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
 
     func testAddGlucoseSamples() {
         let addGlucoseSamples1Completion = expectation(description: "addGlucoseSamples1")
-        glucoseStore.addGlucoseSamples([sample1, sample2, sample3]) { result in
+        glucoseStore.addGlucoseSamples([sample1, sample2, sample3, sample1, sample2, sample3]) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
