@@ -420,7 +420,7 @@ extension MockPumpManagerSettingsViewController: TextFieldTableViewControllerDel
         guard let indexPath = controller.indexPath else { assertionFailure(); return }
         assert(indexPath == [Section.settings.rawValue, SettingsRow.reservoirRemaining.rawValue])
         if let value = controller.value.flatMap(Double.init) {
-            pumpManager.state.reservoirUnitsRemaining = value
+            pumpManager.state.reservoirUnitsRemaining = max(value, 0)
         }
         tableView.reloadRows(at: [indexPath], with: .automatic)
     }
