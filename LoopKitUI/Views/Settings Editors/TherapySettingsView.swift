@@ -152,29 +152,27 @@ extension TherapySettingsView {
     
     private var suspendThresholdSection: some View {
         section(for: .suspendThreshold, header: viewModel.prescription == nil ? AnyView(Spacer()) : AnyView(EmptyView())) {
-            if self.glucoseUnit != nil {
-                HStack {
-                    Spacer()
-                    GuardrailConstrainedQuantityView(
-                        value: self.viewModel.therapySettings.suspendThreshold?.quantity,
-                        unit: self.glucoseUnit!,
-                        guardrail: .suspendThreshold,
-                        isEditing: false,
-                        // Workaround for strange animation behavior on appearance
-                        forceDisableAnimations: true
-                    )
-                }
+            HStack {
+                Spacer()
+                GuardrailConstrainedQuantityView(
+                    value: self.viewModel.therapySettings.suspendThreshold?.quantity,
+                    unit: self.glucoseUnit,
+                    guardrail: .suspendThreshold,
+                    isEditing: false,
+                    // Workaround for strange animation behavior on appearance
+                    forceDisableAnimations: true
+                )
             }
         }
     }
     
     private var correctionRangeSection: some View {
         section(for: .glucoseTargetRange) {
-            if self.glucoseUnit != nil && self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
-                ForEach(self.viewModel.therapySettings.glucoseTargetRangeSchedule!.items, id: \.self) { value in
+            if let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
+                ForEach(schedule.items, id: \.self) { value in
                     ScheduleRangeItem(time: value.startTime,
                                       range: value.value,
-                                      unit: self.glucoseUnit!,
+                                      unit: schedule.unit,
                                       guardrail: .correctionRange)
                 }
             }
@@ -183,11 +181,11 @@ extension TherapySettingsView {
     
     private var preMealCorrectionRangeSection: some View {
         section(for: .preMealCorrectionRangeOverride) {
-            if self.glucoseUnit != nil && self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
+            if self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
                 CorrectionRangeOverridesRangeItem(
                     preMealTargetRange: self.viewModel.therapySettings.preMealTargetRange,
                     workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange,
-                    unit: self.glucoseUnit!,
+                    unit: self.glucoseUnit,
                     preset: CorrectionRangeOverrides.Preset.preMeal,
                     correctionRangeScheduleRange: self.viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
                 )
@@ -197,11 +195,11 @@ extension TherapySettingsView {
     
     private var workoutCorrectionRangeSection: some View {
         section(for: .workoutCorrectionRangeOverride) {
-            if self.glucoseUnit != nil && self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
+            if self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
                 CorrectionRangeOverridesRangeItem(
                     preMealTargetRange: self.viewModel.therapySettings.preMealTargetRange,
                     workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange,
-                    unit: self.glucoseUnit!,
+                    unit: self.glucoseUnit,
                     preset: CorrectionRangeOverrides.Preset.workout,
                     correctionRangeScheduleRange: self.viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
                 )
@@ -295,11 +293,11 @@ extension TherapySettingsView {
     
     private var insulinSensitivitiesSection: some View {
         section(for: .insulinSensitivity) {
-            if self.viewModel.therapySettings.insulinSensitivitySchedule != nil && self.sensitivityUnit != nil {
+            if self.viewModel.therapySettings.insulinSensitivitySchedule != nil {
                 ForEach(self.viewModel.therapySettings.insulinSensitivitySchedule!.items, id: \.self) { value in
                     ScheduleValueItem(time: value.startTime,
                                       value: value.value,
-                                      unit: self.sensitivityUnit!,
+                                      unit: self.sensitivityUnit,
                                       guardrail: Guardrail.insulinSensitivity)
                 }
             }
@@ -318,12 +316,12 @@ extension TherapySettingsView {
 // MARK: Utilities
 extension TherapySettingsView {
     
-    private var glucoseUnit: HKUnit? {
-        viewModel.therapySettings.glucoseTargetRangeSchedule?.unit
+    private var glucoseUnit: HKUnit {
+        viewModel.glucoseUnit
     }
     
-    private var sensitivityUnit: HKUnit? {
-        glucoseUnit?.unitDivided(by: .internationalUnit())
+    private var sensitivityUnit: HKUnit {
+        glucoseUnit.unitDivided(by: .internationalUnit())
     }
     
     private func section<Content>(for therapySetting: TherapySetting,

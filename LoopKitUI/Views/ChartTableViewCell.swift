@@ -16,10 +16,18 @@ public final class ChartTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel?
 
     @IBOutlet weak var subtitleLabel: UILabel?
+   
+    @IBOutlet weak var rightArrowHint: UIImageView!
 
+    public var doesNavigate: Bool = true {
+        didSet {
+            rightArrowHint.isHidden = !doesNavigate
+        }
+    }
+    
     public override func prepareForReuse() {
         super.prepareForReuse()
-
+        doesNavigate = true
         chartContentView.chartGenerator = nil
     }
 

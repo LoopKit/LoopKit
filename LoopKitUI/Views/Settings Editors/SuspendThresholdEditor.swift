@@ -195,7 +195,7 @@ public struct SuspendThresholdEditor: View {
 
     private func confirmationAlert() -> SwiftUI.Alert {
         SwiftUI.Alert(
-            title: Text(LocalizedString("Save Suspend Threshold?", comment: "Alert title for confirming a suspend threshold outside the recommended range")),
+            title: Text(LocalizedString("Save Glucose Safety Limit?", comment: "Alert title for confirming a glucose safety limit outside the recommended range")),
             message: Text(TherapySetting.suspendThreshold.guardrailSaveWarningCaption),
             primaryButton: .cancel(Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert"))),
             secondaryButton: .default(
@@ -233,9 +233,9 @@ struct SuspendThresholdGuardrailWarning: View {
     private var title: Text {
         switch safetyClassificationThreshold {
         case .minimum, .belowRecommended:
-            return Text(LocalizedString("Low Suspend Threshold", comment: "Title text for the low suspend threshold warning"))
+            return Text(LocalizedString("Low Glucose Safety Limit", comment: "Title text for the low glucose safety limit warning"))
         case .aboveRecommended, .maximum:
-            return Text(LocalizedString("High Suspend Threshold", comment: "Title text for the high suspend threshold warning"))
+            return Text(LocalizeString("High Glucose Safety Limit", comment: "Title text for the high glucose safety limit warning"))
         }
     }
 }
