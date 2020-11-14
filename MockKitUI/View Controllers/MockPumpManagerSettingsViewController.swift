@@ -211,6 +211,11 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 cell.datePicker.maximumDate = Date()
                 cell.datePicker.minimumDate = Date() - .hours(48)
                 cell.datePicker.datePickerMode = .dateAndTime
+                #if swift(>=5.2)
+                    if #available(iOS 14.0, *) {
+                        cell.datePicker.preferredDatePickerStyle = .wheels
+                    }
+                #endif
                 cell.datePicker.isEnabled = true
                 cell.delegate = self
                 return cell
