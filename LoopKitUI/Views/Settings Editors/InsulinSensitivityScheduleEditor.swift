@@ -43,7 +43,7 @@ public struct InsulinSensitivityScheduleEditor: View {
         self.init(
             schedule: viewModel.therapySettings.insulinSensitivitySchedule,
             mode: viewModel.mode,
-            glucoseUnit: viewModel.glucoseUnit,
+            glucoseUnit: viewModel.therapySettings.glucoseUnit!,
             onSave: { [weak viewModel] in
                 viewModel?.saveInsulinSensitivitySchedule(insulinSensitivitySchedule: $0)
                 didSave?()

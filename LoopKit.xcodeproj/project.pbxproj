@@ -578,6 +578,7 @@
 		A9DF02C924F724D900B7C988 /* CriticalEventLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DF02C824F724D900B7C988 /* CriticalEventLogTests.swift */; };
 		A9DF02CF24F732FC00B7C988 /* JSONStreamEncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DF02CE24F732FC00B7C988 /* JSONStreamEncoderTests.swift */; };
 		A9DF02D124F7449E00B7C988 /* PersistentDeviceLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DF02D024F7449E00B7C988 /* PersistentDeviceLogTests.swift */; };
+		A9DF02D224F748BF00B7C988 /* CriticalEventLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DF02C824F724D900B7C988 /* CriticalEventLogTests.swift */; };
 		A9DF02D324F762DC00B7C988 /* CarbStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437AFF192039F149008C4892 /* CarbStoreTests.swift */; };
 		A9E068112534D87800BDAB59 /* StoredGlucoseSampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E068102534D87800BDAB59 /* StoredGlucoseSampleTests.swift */; };
 		A9E068162534EB8200BDAB59 /* CachedGlucoseObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E068152534EB8200BDAB59 /* CachedGlucoseObjectTests.swift */; };
@@ -727,7 +728,6 @@
 		C17F39D123CE34FD00FA1113 /* StoredDeviceLogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17F39CF23CE34B100FA1113 /* StoredDeviceLogEntry.swift */; };
 		C1814B84225B9ED5008D2D8E /* LoopNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */; };
 		C1814B8C226371DF008D2D8E /* WeakSynchronizedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */; };
-		C186089E252A9C96008215DB /* ModelV1toV3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = C186089D252A9C96008215DB /* ModelV1toV3.xcmappingmodel */; };
 		C188B83422CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C188B83322CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift */; };
 		C1A174EC23DEAD670034DF11 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C1A174ED23DEAD6A0034DF11 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
@@ -1498,7 +1498,6 @@
 		C17F4CB21EE9B6DF005079B1 /* carb_entry_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = carb_entry_input.json; sourceTree = "<group>"; };
 		C1814B83225B9ED5008D2D8E /* LoopNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopNotificationCategory.swift; sourceTree = "<group>"; };
 		C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakSynchronizedDelegate.swift; sourceTree = "<group>"; };
-		C186089D252A9C96008215DB /* ModelV1toV3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = ModelV1toV3.xcmappingmodel; sourceTree = "<group>"; };
 		C188B83322CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinSensitivityScheduleViewController.swift; sourceTree = "<group>"; };
 		C1ABE38D2245CFCD00570E82 /* UnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
 		C1CBF61B1EEA2A1E001E4851 /* ice_1_hour_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_1_hour_input.json; sourceTree = "<group>"; };
@@ -1909,7 +1908,6 @@
 				43D8FEE21C7294D50073BE78 /* PersistenceController.swift */,
 				433BC7B020562705000B1200 /* UpdateSource.swift */,
 				43CF0B3E2030FD0D002A66DE /* UploadState.swift */,
-				C186089D252A9C96008215DB /* ModelV1toV3.xcmappingmodel */,
 				A9BD318724F45C0100994B83 /* Modelv3.xcmappingmodel */,
 				A91A601923CD023800C0E8A1 /* Modelv2.xcmappingmodel */,
 				43D8FEE01C7294D50073BE78 /* Model.xcdatamodeld */,
@@ -2047,7 +2045,6 @@
 				892A5D35222F03CB008961AB /* LoopTestingKit */,
 				43BA718D202020140058961E /* Frameworks */,
 				43D8FDCC1C728FDF0073BE78 /* Products */,
-				C1332E5425508A4800D60D7E /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -2534,14 +2531,6 @@
 				B42A7471235885B600247B03 /* LoopNotificationUserInfoKey.swift */,
 			);
 			path = Notification;
-			sourceTree = "<group>";
-		};
-		C1332E5425508A4800D60D7E /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				1DEE226024A6642300693C32 /* GlucoseStoreHKFilterTests.swift */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		C17F39BD23CD239000FA1113 /* DeviceManager */ = {
@@ -3195,6 +3184,7 @@
 				A98ED5FC25312ED100FD8F70 /* HKAnchoredObjectQueryMock.swift in Sources */,
 				A9E1E6AC24E1D7EC0073CA39 /* PersistenceControllerTestCase.swift in Sources */,
 				A98ED5FE253132A400FD8F70 /* CarbStoreHKQueryTests.swift in Sources */,
+				A9DF02D224F748BF00B7C988 /* CriticalEventLogTests.swift in Sources */,
 				A9E068162534EB8200BDAB59 /* CachedGlucoseObjectTests.swift in Sources */,
 				1DEE227724A676A300693C32 /* HKHealthStoreMock.swift in Sources */,
 				A9E1E6AD24E1D8590073CA39 /* CacheStore.swift in Sources */,
@@ -3526,7 +3516,6 @@
 				4322B78E202FA2B30002837D /* InsulinMath.swift in Sources */,
 				C17F39D023CE34B100FA1113 /* StoredDeviceLogEntry.swift in Sources */,
 				43B17C89208EEC0B00AC27E9 /* HealthStoreUnitCache.swift in Sources */,
-				C186089E252A9C96008215DB /* ModelV1toV3.xcmappingmodel in Sources */,
 				A912BE29245B9CD500CBE199 /* SettingsObject+CoreDataClass.swift in Sources */,
 				89AE222E228BC68000BDFD85 /* DoseProgressReporter.swift in Sources */,
 				4322B775202FA2790002837D /* CarbStatus.swift in Sources */,
@@ -3537,7 +3526,6 @@
 				A9E1E6A924E1B6700073CA39 /* SyncCarbObject.swift in Sources */,
 				43CF0B3F2030FD0D002A66DE /* UploadState.swift in Sources */,
 				A933DB8824BF956F009B417A /* CriticalEventLog.swift in Sources */,
-				C16DA83F22E8D88F008624C2 /* LoopPluginBundleKey.swift in Sources */,
 				C16DA83F22E8D88F008624C2 /* LoopPluginBundleKey.swift in Sources */,
 				C1F8403923DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift in Sources */,
 				433BC7AD20538FCA000B1200 /* StoredGlucoseSample.swift in Sources */,

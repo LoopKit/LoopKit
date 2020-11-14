@@ -66,10 +66,10 @@ public struct CorrectionRangeOverridesEditor: View {
             value: CorrectionRangeOverrides(
                 preMeal: viewModel.therapySettings.preMealTargetRange,
                 workout: viewModel.therapySettings.workoutTargetRange,
-                unit: viewModel.glucoseUnit
+                unit: viewModel.therapySettings.glucoseUnit!
             ),
             preset: preset,
-            unit: viewModel.glucoseUnit,
+            unit: viewModel.therapySettings.glucoseUnit!,
             correctionRangeScheduleRange: viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange(),
             minValue: viewModel.therapySettings.suspendThreshold?.quantity,
             onSave: { [weak viewModel] overrides in

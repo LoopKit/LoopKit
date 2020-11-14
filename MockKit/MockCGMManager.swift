@@ -392,7 +392,7 @@ public final class MockCGMManager: TestingCGMManager {
             delegate?.cgmManager(self, hasNew: result)
         }
     }
-        
+    
     public func glucoseRangeCategory(for glucose: GlucoseSampleValue) -> GlucoseRangeCategory? {
         switch glucose.quantity {
         case ...mockSensorState.cgmLowerLimit:

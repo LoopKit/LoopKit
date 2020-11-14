@@ -46,19 +46,22 @@ public struct SuspendThresholdEditor: View {
            viewModel: TherapySettingsViewModel,
            didSave: (() -> Void)? = nil
     ) {
+        let unit = viewModel.therapySettings.glucoseUnit ?? viewModel.preferredGlucoseUnit
         self.init(
             value: viewModel.therapySettings.suspendThreshold?.quantity,
-            unit: viewModel.glucoseUnit,
+            unit: unit,
             maxValue: Guardrail.maxSuspendThresholdValue(
                 correctionRangeSchedule: viewModel.therapySettings.glucoseTargetRangeSchedule,
                 preMealTargetRange: viewModel.therapySettings.preMealTargetRange,
                 workoutTargetRange: viewModel.therapySettings.workoutTargetRange,
-                unit: viewModel.glucoseUnit
+                unit: unit
             ),
             onSave: { [weak viewModel] newValue in
-                let newThreshold = GlucoseThreshold(unit: viewModel!.glucoseUnit, value: newValue.doubleValue(for: viewModel!.glucoseUnit))
-                viewModel?.saveSuspendThreshold(value: newThreshold)
-                didSave?()
+                if let viewModel = viewModel {
+                    let newThreshold = GlucoseThreshold(unit: viewModel.preferredGlucoseUnit, value: newValue.doubleValue(for: viewModel.preferredGlucoseUnit))
+                    viewModel.saveSuspendThreshold(value: newThreshold)
+                    didSave?()
+                }
             },
             mode: viewModel.mode
         )
@@ -235,7 +238,7 @@ struct SuspendThresholdGuardrailWarning: View {
         case .minimum, .belowRecommended:
             return Text(LocalizedString("Low Glucose Safety Limit", comment: "Title text for the low glucose safety limit warning"))
         case .aboveRecommended, .maximum:
-            return Text(LocalizeString("High Glucose Safety Limit", comment: "Title text for the high glucose safety limit warning"))
+            return Text(LocalizedString("High Glucose Safety Limit", comment: "Title text for the high glucose safety limit warning"))
         }
     }
 }

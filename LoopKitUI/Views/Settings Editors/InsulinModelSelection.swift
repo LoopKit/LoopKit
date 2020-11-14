@@ -87,7 +87,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         self.init(
             value: viewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.humalogNovologAdult),
             insulinSensitivitySchedule: viewModel.therapySettings.insulinSensitivitySchedule,
-            glucoseUnit: viewModel.glucoseUnit,
+            glucoseUnit: viewModel.therapySettings.insulinSensitivitySchedule?.unit ?? viewModel.preferredGlucoseUnit,
             supportedModelSettings: viewModel.supportedInsulinModelSettings,
             chartColors: viewModel.chartColors,
             onSave: { [weak viewModel] insulinModelSettings in
