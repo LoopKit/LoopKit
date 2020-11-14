@@ -244,6 +244,7 @@ extension TherapySettingsView {
                 )
             }
         }
+        .accessibilityElement(children: .combine)
     }
     
     private var maxBolusItem: some View {
@@ -261,6 +262,7 @@ extension TherapySettingsView {
                 )
             }
         }
+        .accessibilityElement(children: .combine)
     }
         
     private var insulinModelSection: some View {
@@ -276,6 +278,7 @@ extension TherapySettingsView {
                         .foregroundColor(.secondary)
                         .padding(.bottom, 8)
                 }
+                .accessibilityElement(children: .combine)
             }
         }
     }
