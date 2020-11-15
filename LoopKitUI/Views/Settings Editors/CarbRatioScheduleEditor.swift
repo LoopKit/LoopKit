@@ -20,6 +20,7 @@ public struct CarbRatioScheduleEditor: View {
     private var schedule: DailyQuantitySchedule<Double>?
     private var mode: PresentationMode
     private var save: (CarbRatioSchedule) -> Void
+    @Environment(\.appName) private var appName
 
     public init(
         schedule: CarbRatioSchedule?,
@@ -74,7 +75,7 @@ public struct CarbRatioScheduleEditor: View {
     }
 
     private var description: Text {
-        Text(TherapySetting.carbRatio.descriptiveText)
+        Text(TherapySetting.carbRatio.descriptiveText(appName: appName))
     }
 
     private var confirmationAlertContent: AlertContent {

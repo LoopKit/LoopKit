@@ -55,7 +55,7 @@ public extension TherapySetting {
         }
     }
     
-    var descriptiveText: String {
+    func descriptiveText(appName: String) -> String {
         switch self {
         case .glucoseTargetRange:
             return LocalizedString("Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin.", comment: "Descriptive text for glucose target range")
@@ -64,7 +64,7 @@ public extension TherapySetting {
         case .workoutCorrectionRangeOverride:
             return LocalizedString("Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events.", comment: "Descriptive text for workout correction range override")
         case .suspendThreshold:
-            return LocalizedString("Tidepool Loop will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours.", comment: "Descriptive text for glucose safety limit")
+            return String(format: LocalizedString("%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours.", comment: "Descriptive format string for glucose safety limit (1: app name)"), appName)
         case .basalRate:
             return LocalizedString("Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs.", comment: "Descriptive text for basal rate")
         case .deliveryLimits:

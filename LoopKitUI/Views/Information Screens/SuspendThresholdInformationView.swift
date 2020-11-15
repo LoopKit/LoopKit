@@ -14,7 +14,8 @@ public struct SuspendThresholdInformationView: View {
     var mode: PresentationMode
     
     @Environment(\.presentationMode) var presentationMode
-    
+    @Environment(\.appName) private var appName
+
     public init(
         onExit: (() -> Void)?,
         mode: PresentationMode = .acceptanceFlow
@@ -34,7 +35,7 @@ public struct SuspendThresholdInformationView: View {
     
     private var text: some View {
         VStack(alignment: .leading, spacing: 25) {
-            Text(TherapySetting.suspendThreshold.descriptiveText)
+            Text(TherapySetting.suspendThreshold.descriptiveText(appName: appName))
         }
         .accentColor(.secondary)
         .foregroundColor(.accentColor)

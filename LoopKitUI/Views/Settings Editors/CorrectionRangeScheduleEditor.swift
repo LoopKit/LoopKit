@@ -19,7 +19,9 @@ public struct CorrectionRangeScheduleEditor: View {
     var save: (GlucoseRangeSchedule) -> Void
     let guardrail = Guardrail.correctionRange
     let mode: PresentationMode
+    @Environment(\.appName) private var appName
     @State private var userDidTap: Bool = false
+
     
     public init(
         schedule: GlucoseRangeSchedule?,
@@ -108,7 +110,7 @@ public struct CorrectionRangeScheduleEditor: View {
     }
 
     var description: Text {
-        Text(TherapySetting.glucoseTargetRange.descriptiveText)
+        Text(TherapySetting.glucoseTargetRange.descriptiveText(appName: appName))
     }
 
     var saveConfirmation: SaveConfirmation {

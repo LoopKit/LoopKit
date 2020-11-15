@@ -19,6 +19,7 @@ public struct BasalRateScheduleEditor: View {
     var syncSchedule: PumpManager.SyncSchedule?
     var save: (BasalRateSchedule) -> Void
     let mode: PresentationMode
+    @Environment(\.appName) private var appName
 
     /// - Precondition: `supportedBasalRates` is nonempty and sorted in ascending order.
     public init(
@@ -94,7 +95,7 @@ public struct BasalRateScheduleEditor: View {
     }
     
     private var description: Text {
-        Text(TherapySetting.basalRate.descriptiveText)
+        Text(TherapySetting.basalRate.descriptiveText(appName: appName))
     }
 
     private var confirmationAlertContent: AlertContent {

@@ -24,6 +24,7 @@ public struct SuspendThresholdEditor: View {
     @State var showingConfirmationAlert = false
     @Environment(\.dismiss) var dismiss
     @Environment(\.authenticate) var authenticate
+    @Environment(\.appName) private var appName
 
     let guardrail = Guardrail.suspendThreshold
 
@@ -163,7 +164,7 @@ public struct SuspendThresholdEditor: View {
     }
 
     var description: Text {
-        Text(TherapySetting.suspendThreshold.descriptiveText)
+        Text(TherapySetting.suspendThreshold.descriptiveText(appName: appName))
     }
     
     private var instructionalContentIfNecessary: some View {

@@ -13,6 +13,7 @@ import SwiftUI
 
 public struct TherapySettingsView: View, HorizontalSizeClassOverride {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.appName) private var appName
 
     public struct ActionButton {
         public init(localizedString: String, action: @escaping () -> Void) {
@@ -333,7 +334,7 @@ extension TherapySettingsView {
         SectionWithTapToEdit(isEnabled: viewModel.mode != .acceptanceFlow,
                              header: EmptyView(),
                              title: therapySetting.title,
-                             descriptiveText: therapySetting.descriptiveText,
+                             descriptiveText: therapySetting.descriptiveText(appName: appName),
                              destination: screen(for: therapySetting),
                              content: content)
     }
@@ -344,7 +345,7 @@ extension TherapySettingsView {
         SectionWithTapToEdit(isEnabled: viewModel.mode != .acceptanceFlow,
                              header: header,
                              title: therapySetting.title,
-                             descriptiveText: therapySetting.descriptiveText,
+                             descriptiveText: therapySetting.descriptiveText(appName: appName),
                              destination: screen(for: therapySetting),
                              content: content)
     }

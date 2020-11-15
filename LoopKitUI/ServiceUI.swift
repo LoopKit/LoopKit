@@ -10,6 +10,12 @@ import LoopKit
 import SwiftUI
 import HealthKit
 
+public protocol SupportInfoProvider {
+    var pumpStatus: PumpManagerStatus? { get }
+    var cgmDevice: HKDevice? { get }
+    func generateIssueReport(completion: @escaping (String) -> Void)
+}
+
 public protocol ServiceUI: Service {
     
     /// The image for this type of service.
@@ -24,7 +30,11 @@ public protocol ServiceUI: Service {
     ///
     /// - Returns: A view controller to configure an existing service.
     func settingsViewController(currentTherapySettings: TherapySettings, preferredGlucoseUnit: HKUnit, chartColors: ChartColorPalette, carbTintColor: Color, glucoseTintColor: Color, guidanceColors: GuidanceColors, insulinTintColor: Color) -> (UIViewController & ServiceSettingsNotifying & CompletionNotifying)
-
+    
+    /// Provides a view controller to configure an existing service.
+    ///
+    /// - Returns: A view that will be used in a support menu for providing user support
+    func supportMenuItem(supportInfoProvider: SupportInfoProvider, urlHandler: @escaping (URL) -> Void) -> AnyView?
 }
 
 public extension ServiceUI {

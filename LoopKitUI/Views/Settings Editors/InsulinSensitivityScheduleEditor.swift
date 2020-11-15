@@ -16,6 +16,7 @@ public struct InsulinSensitivityScheduleEditor: View {
     private var glucoseUnit: HKUnit
     private var save: (InsulinSensitivitySchedule) -> Void
     private var mode: PresentationMode
+    @Environment(\.appName) private var appName
 
     public init(
         schedule: InsulinSensitivitySchedule?,
@@ -72,7 +73,7 @@ public struct InsulinSensitivityScheduleEditor: View {
     }
 
     private var description: Text {
-        Text(TherapySetting.insulinSensitivity.descriptiveText)
+        Text(TherapySetting.insulinSensitivity.descriptiveText(appName: appName))
     }
 
     private var sensitivityUnit: HKUnit {
