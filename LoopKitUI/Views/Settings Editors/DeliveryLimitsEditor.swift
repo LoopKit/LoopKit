@@ -12,14 +12,14 @@ import LoopKit
 
 
 public struct DeliveryLimitsEditor: View {
-    var initialValue: DeliveryLimits
-    var supportedBasalRates: [Double]
-    var selectableBasalRates: [Double]
-    var scheduledBasalRange: ClosedRange<Double>?
-    var supportedBolusVolumes: [Double]
-    var save: (_ deliveryLimits: DeliveryLimits) -> Void
+    let initialValue: DeliveryLimits
+    let supportedBasalRates: [Double]
+    let selectableBasalRates: [Double]
+    let scheduledBasalRange: ClosedRange<Double>?
+    let supportedBolusVolumes: [Double]
+    let save: (_ deliveryLimits: DeliveryLimits) -> Void
     let mode: PresentationMode
-
+    
     @State var value: DeliveryLimits
     @State private var userDidTap: Bool = false
     @State var settingBeingEdited: DeliveryLimits.Setting?
@@ -28,26 +28,33 @@ public struct DeliveryLimitsEditor: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.authenticate) var authenticate
 
+    private let lowestCarbRatio: Double?
+
     public init(
         value: DeliveryLimits,
         supportedBasalRates: [Double],
         scheduledBasalRange: ClosedRange<Double>?,
         supportedBolusVolumes: [Double],
+        lowestCarbRatio: Double?,
         onSave save: @escaping (_ deliveryLimits: DeliveryLimits) -> Void,
         mode: PresentationMode = .settings
     ) {
         self._value = State(initialValue: value)
         self.initialValue = value
         self.supportedBasalRates = supportedBasalRates
+        let basalGuardrail = Guardrail.maximumBasalRate(supportedBasalRates: supportedBasalRates, scheduledBasalRange: scheduledBasalRange, lowestCarbRatio: lowestCarbRatio)
         if let maximumScheduledBasalRate = scheduledBasalRange?.upperBound {
             self.selectableBasalRates = Array(supportedBasalRates.drop(while: { $0 < maximumScheduledBasalRate }))
+                .filter { basalGuardrail.absoluteBounds.contains(HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)) }
         } else {
             self.selectableBasalRates = supportedBasalRates
+                .filter { basalGuardrail.absoluteBounds.contains(HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)) }
         }
         self.scheduledBasalRange = scheduledBasalRange
         self.supportedBolusVolumes = supportedBolusVolumes
         self.save = save
         self.mode = mode
+        self.lowestCarbRatio = lowestCarbRatio
     }
     
     public init(
@@ -63,6 +70,7 @@ public struct DeliveryLimitsEditor: View {
             supportedBasalRates: viewModel.pumpSupportedIncrements!()!.basalRates,
             scheduledBasalRange: viewModel.therapySettings.basalRateSchedule?.valueRange(),
             supportedBolusVolumes: viewModel.pumpSupportedIncrements!()!.bolusVolumes,
+            lowestCarbRatio: viewModel.therapySettings.carbRatioSchedule?.lowestValue(),
             onSave: { [weak viewModel] newLimits in
                 viewModel?.saveDeliveryLimits(limits: newLimits)
                 didSave?()
@@ -137,7 +145,7 @@ public struct DeliveryLimitsEditor: View {
     }
 
     var maximumBasalRateGuardrail: Guardrail<HKQuantity> {
-        return Guardrail.maximumBasalRate(supportedBasalRates: supportedBasalRates, scheduledBasalRange: scheduledBasalRange)
+        return Guardrail.maximumBasalRate(supportedBasalRates: supportedBasalRates, scheduledBasalRange: scheduledBasalRange, lowestCarbRatio: lowestCarbRatio)
     }
 
     var maximumBasalRateCard: Card {

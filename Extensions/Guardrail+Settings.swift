@@ -79,59 +79,67 @@ public extension Guardrail where Value == HKQuantity {
         recommendedBounds: 16...399,
         unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit())
     )
-
+ 
     static let carbRatio = Guardrail(
-        absoluteBounds: 1...150,
-        recommendedBounds: 3.0.nextUp...28.0.nextDown,
+        absoluteBounds: 2...150,
+        recommendedBounds: 4...28,
         unit: .gramsPerUnit
     )
 
     static func basalRate(supportedBasalRates: [Double]) -> Guardrail {
-        let recommendedLowerBound = supportedBasalRates.first == 0
-            ? supportedBasalRates.dropFirst().first!
-            : supportedBasalRates.first!
+        let scheduledBasalRateAbsoluteRange = 0.05...30.0
+        let allowedBasalRates = supportedBasalRates.filter { scheduledBasalRateAbsoluteRange.contains($0) }
         return Guardrail(
-            absoluteBounds: supportedBasalRates.first!...supportedBasalRates.last!,
-            recommendedBounds: recommendedLowerBound...supportedBasalRates.last!,
+            absoluteBounds: allowedBasalRates.first!...allowedBasalRates.last!,
+            recommendedBounds: allowedBasalRates.first!...allowedBasalRates.last!,
             unit: .internationalUnitsPerHour
         )
-    }
-
-    static var recommendedMaximumScheduledBasalScaleFactor: Double {
-        return 6
     }
 
     static func maximumBasalRate(
         supportedBasalRates: [Double],
         scheduledBasalRange: ClosedRange<Double>?,
+        lowestCarbRatio: Double?,
         maximumBasalRatePrecision decimalPlaces: Int = 3
     ) -> Guardrail {
-        let minimumSupportedBasalRate = supportedBasalRates.first!
-        let recommendedLowerBound = minimumSupportedBasalRate == 0 ? supportedBasalRates.dropFirst().first! : minimumSupportedBasalRate
+        
+        let maximumUpperBound = 70.0 / (lowestCarbRatio ?? carbRatio.absoluteBounds.lowerBound.doubleValue(for: .gramsPerUnit))
+        let absoluteUpperBound = maximumUpperBound.matchingOrTruncatedValue(from: supportedBasalRates, withinDecimalPlaces: decimalPlaces)
+
+        let recommendedHighScheduledBasalScaleFactor = 6.4
+        let recommendedLowScheduledBasalScaleFactor = 2.1
+
+        let recommendedLowerBound: Double
         let recommendedUpperBound: Double
-        if let maximumScheduledBasalRate = scheduledBasalRange?.upperBound {
-            let scaledMaximumScheduledBasalRate = (recommendedMaximumScheduledBasalScaleFactor * maximumScheduledBasalRate).matchingOrTruncatedValue(from: supportedBasalRates, withinDecimalPlaces: decimalPlaces)
-            recommendedUpperBound = maximumScheduledBasalRate == 0
-                ? recommendedLowerBound
-                : scaledMaximumScheduledBasalRate
+        if let highestScheduledBasalRate = scheduledBasalRange?.upperBound {
+            recommendedLowerBound = (recommendedLowScheduledBasalScaleFactor * highestScheduledBasalRate).matchingOrTruncatedValue(from: supportedBasalRates, withinDecimalPlaces: decimalPlaces)
+            recommendedUpperBound = (recommendedHighScheduledBasalScaleFactor * highestScheduledBasalRate).matchingOrTruncatedValue(from: supportedBasalRates, withinDecimalPlaces: decimalPlaces)
+            
+            let absoluteBounds = highestScheduledBasalRate...absoluteUpperBound
+            let recommendedBounds = (recommendedLowerBound...recommendedUpperBound).clamped(to: absoluteBounds)
+            return Guardrail(
+                absoluteBounds: absoluteBounds,
+                recommendedBounds: recommendedBounds,
+                unit: .internationalUnitsPerHour
+            )
+
         } else {
-            recommendedUpperBound = supportedBasalRates.last!
+            return Guardrail(
+                absoluteBounds: supportedBasalRates.first!...absoluteUpperBound,
+                recommendedBounds:  supportedBasalRates.first!...absoluteUpperBound,
+                unit: .internationalUnitsPerHour
+            )
         }
-        return Guardrail(
-            absoluteBounds: supportedBasalRates.first!...supportedBasalRates.last!,
-            recommendedBounds: recommendedLowerBound...recommendedUpperBound,
-            unit: .internationalUnitsPerHour
-        )
     }
 
     static func maximumBolus(supportedBolusVolumes: [Double]) -> Guardrail {
+        let maxBolusThresholdUnits: Double = 30
         let maxBolusWarningThresholdUnits: Double = 20
-        let minimumSupportedBolusVolume = supportedBolusVolumes.first!
-        let recommendedLowerBound = minimumSupportedBolusVolume == 0 ? supportedBolusVolumes.dropFirst().first! : minimumSupportedBolusVolume
-        let recommendedUpperBound = min(maxBolusWarningThresholdUnits.nextDown, supportedBolusVolumes.last!)
+        let supportedBolusVolumes = supportedBolusVolumes.filter { $0 > 0 && $0 <= maxBolusThresholdUnits }
+        let recommendedUpperBound = supportedBolusVolumes.last { $0 < maxBolusWarningThresholdUnits }
         return Guardrail(
             absoluteBounds: supportedBolusVolumes.first!...supportedBolusVolumes.last!,
-            recommendedBounds: recommendedLowerBound...recommendedUpperBound,
+            recommendedBounds: supportedBolusVolumes.dropFirst().first!...recommendedUpperBound!,
             unit: .internationalUnit()
         )
     }

@@ -239,8 +239,10 @@ extension TherapySettingsView {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
                     unit: .internationalUnitsPerHour,
-                    guardrail: Guardrail.maximumBasalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates,
-                                                          scheduledBasalRange: self.viewModel.therapySettings.basalRateSchedule?.valueRange()),
+                    guardrail: Guardrail.maximumBasalRate(
+                        supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates,
+                        scheduledBasalRange: self.viewModel.therapySettings.basalRateSchedule?.valueRange(),
+                        lowestCarbRatio: self.viewModel.therapySettings.carbRatioSchedule?.lowestValue()),
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true

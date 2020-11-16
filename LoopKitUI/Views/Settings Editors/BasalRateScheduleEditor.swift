@@ -49,6 +49,10 @@ public struct BasalRateScheduleEditor: View {
         self.syncSchedule = syncSchedule
         self.save = save
         self.mode = mode
+        
+        self.supportedBasalRates.removeAll(where: {
+            !self.guardrail.absoluteBounds.contains(HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0))
+        })
     }
     
     public init(
