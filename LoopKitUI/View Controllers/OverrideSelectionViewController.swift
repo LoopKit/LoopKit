@@ -10,6 +10,8 @@ import UIKit
 import HealthKit
 import LoopKit
 import SwiftUI
+import Intents
+import os.log
 
 
 public protocol OverrideSelectionViewControllerDelegate: AnyObject {
@@ -490,6 +492,14 @@ extension OverrideSelectionViewController: OverridePresetCollectionViewCellDeleg
         }
 
         presets.remove(at: indexPath.row)
+        if let name = cell.nameLabel.text {
+            INInteraction.delete(with: name) { (error) in
+                if let error = error {
+                    os_log(.error, "Failed to delete intent: %{public}@", String(describing: error))
+                }
+            }
+        }
+        
         collectionView.deleteItems(at: [indexPath])
     }
 }
