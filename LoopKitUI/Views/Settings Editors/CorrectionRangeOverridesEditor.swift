@@ -13,6 +13,7 @@ import LoopKit
 public struct CorrectionRangeOverridesEditor: View {
     let initialValue: CorrectionRangeOverrides
     let preset: CorrectionRangeOverrides.Preset
+    let suspendThreshold: GlucoseThreshold?
     let unit: HKUnit
     var correctionRangeScheduleRange: ClosedRange<HKQuantity>
     var minValue: HKQuantity?
@@ -36,7 +37,7 @@ public struct CorrectionRangeOverridesEditor: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.authenticate) var authenticate
 
-    public init(
+    fileprivate init(
         value: CorrectionRangeOverrides,
         preset: CorrectionRangeOverrides.Preset,
         unit: HKUnit,
@@ -44,6 +45,7 @@ public struct CorrectionRangeOverridesEditor: View {
         minValue: HKQuantity?,
         onSave save: @escaping (_ overrides: CorrectionRangeOverrides) -> Void,
         sensitivityOverridesEnabled: Bool,
+        suspendThreshold: GlucoseThreshold?,
         mode: PresentationMode = .settings
     ) {
         self._value = State(initialValue: value)
@@ -54,6 +56,7 @@ public struct CorrectionRangeOverridesEditor: View {
         self.minValue = minValue
         self.save = save
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
+        self.suspendThreshold = suspendThreshold
         self.mode = mode
     }
     
@@ -83,6 +86,7 @@ public struct CorrectionRangeOverridesEditor: View {
                 didSave?()
             },
             sensitivityOverridesEnabled: viewModel.sensitivityOverridesEnabled,
+            suspendThreshold: viewModel.therapySettings.suspendThreshold,
             mode: viewModel.mode
         )
     }
@@ -154,6 +158,7 @@ public struct CorrectionRangeOverridesEditor: View {
                 value: $value,
                 preset: preset,
                 unit: unit,
+                suspendThreshold: suspendThreshold,
                 correctionRangeScheduleRange: correctionRangeScheduleRange,
                 expandedContent: {
                     GlucoseRangePicker(
@@ -185,7 +190,8 @@ public struct CorrectionRangeOverridesEditor: View {
     }
     
     private func guardrail(for preset: CorrectionRangeOverrides.Preset) -> Guardrail<HKQuantity> {
-        return Guardrail.correctionRangeOverride(for: preset, correctionRangeScheduleRange: correctionRangeScheduleRange)
+        return Guardrail.correctionRangeOverride(for: preset, correctionRangeScheduleRange: correctionRangeScheduleRange,
+                                                 suspendThreshold: suspendThreshold)
     }
     
     private var instructionalContentIfNecessary: some View {
@@ -206,20 +212,7 @@ public struct CorrectionRangeOverridesEditor: View {
     }
 
     private func selectableBounds(for preset: CorrectionRangeOverrides.Preset) -> ClosedRange<HKQuantity> {
-        switch preset {
-        case .preMeal:
-            if let minValue = minValue {
-                return max(minValue, Guardrail.correctionRange.absoluteBounds.lowerBound)...Guardrail.correctionRange.absoluteBounds.upperBound
-            } else {
-                return Guardrail.correctionRange.absoluteBounds.lowerBound...Guardrail.correctionRange.absoluteBounds.upperBound
-            }
-        case .workout:
-            if let minValue = minValue {
-                return max(minValue, correctionRangeScheduleRange.upperBound)...Guardrail.correctionRange.absoluteBounds.upperBound
-            } else {
-                return correctionRangeScheduleRange.upperBound...Guardrail.correctionRange.absoluteBounds.upperBound
-            }
-        }
+        guardrail(for: preset).absoluteBounds
     }
 
     private func initiallySelectedValue(for preset: CorrectionRangeOverrides.Preset) -> ClosedRange<HKQuantity> {

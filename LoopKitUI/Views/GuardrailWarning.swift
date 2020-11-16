@@ -75,7 +75,7 @@ public struct GuardrailWarning: View {
                 case .minimum, .belowRecommended:
                     return Text(TherapySetting.glucoseTargetRange.guardrailCaptionForLowValue)
                 case .aboveRecommended, .maximum:
-                        return Text(TherapySetting.glucoseTargetRange.guardrailCaptionForHighValue)
+                    return Text(TherapySetting.glucoseTargetRange.guardrailCaptionForHighValue)
                 }
             } else {
                 // ANNA TODO: figure out this one

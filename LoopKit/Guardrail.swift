@@ -33,10 +33,8 @@ public struct Guardrail<Value: Comparable> {
     }
 
     public func classification(for value: Value) -> SafetyClassification {
-        precondition(absoluteBounds.contains(value), "Only values within the domain can be classified")
-
         switch value {
-        case absoluteBounds.lowerBound where absoluteBounds.lowerBound != recommendedBounds.lowerBound:
+        case ...absoluteBounds.lowerBound where absoluteBounds.lowerBound != recommendedBounds.lowerBound:
             return .outsideRecommendedRange(.minimum)
         case ..<recommendedBounds.lowerBound:
             return .outsideRecommendedRange(.belowRecommended)
@@ -44,7 +42,7 @@ public struct Guardrail<Value: Comparable> {
             return .withinRecommendedRange
         case ..<absoluteBounds.upperBound:
             return .outsideRecommendedRange(.aboveRecommended)
-        case absoluteBounds.upperBound:
+        case absoluteBounds.upperBound...:
             return .outsideRecommendedRange(.maximum)
         default:
             preconditionFailure("Unreachable")
