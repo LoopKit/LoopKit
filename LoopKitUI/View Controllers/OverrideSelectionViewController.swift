@@ -210,6 +210,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         case .history:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OverrideHistoryCollectionViewCell.className, for: indexPath) as! OverrideHistoryCollectionViewCell
             cell.titleLabel.text = historyLabel
+            cell.titleLabel.accessibilityLabel = historyLabel
             if isEditingPresets {
                 cell.applyOverlayToFade(animated: false)
             }
