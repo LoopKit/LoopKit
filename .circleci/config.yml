@@ -75,7 +75,7 @@ jobs:
             unset LLVM_TARGET_TRIPLE_SUFFIX
 
             if ! cmp -s Cartfile.Resolved Carthage/Cartfile.resolved; then
-                time /usr/local/bin/carthage bootstrap --project-directory "$SRCROOT" --platform ios,watchos --cache-builds --verbose
+                time ./Scripts/carthage.sh bootstrap --project-directory "$SRCROOT" --platform ios,watchos --cache-builds --verbose
                 cp Cartfile.resolved Carthage
             else
                 echo "Carthage: not bootstrapping"
