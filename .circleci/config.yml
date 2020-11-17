@@ -52,7 +52,7 @@ jobs:
   build-example:
     working_directory: *project_directory
     macos:
-      xcode: 11.5.0
+      xcode: 12.2.0
     steps:
       - checkout
       - run:
