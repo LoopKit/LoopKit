@@ -13,6 +13,7 @@ import HealthKit
 public protocol SupportInfoProvider {
     var pumpStatus: PumpManagerStatus? { get }
     var cgmDevice: HKDevice? { get }
+    var localizedAppNameAndVersion: String { get }
     func generateIssueReport(completion: @escaping (String) -> Void)
 }
 
