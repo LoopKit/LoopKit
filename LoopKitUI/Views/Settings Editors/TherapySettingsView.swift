@@ -190,7 +190,8 @@ extension TherapySettingsView {
                     workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange,
                     unit: glucoseUnit,
                     preset: CorrectionRangeOverrides.Preset.preMeal,
-                    correctionRangeScheduleRange: schedule.scheduleRange()
+                    suspendThreshold: self.viewModel.therapySettings.suspendThreshold,
+                    correctionRangeScheduleRange: self.viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
                 )
             }
         }
@@ -204,6 +205,7 @@ extension TherapySettingsView {
                     workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange,
                     unit: glucoseUnit,
                     preset: CorrectionRangeOverrides.Preset.workout,
+                    suspendThreshold: self.viewModel.therapySettings.suspendThreshold,
                     correctionRangeScheduleRange: self.viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
                 )
             }
@@ -238,7 +240,10 @@ extension TherapySettingsView {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
                     unit: .internationalUnitsPerHour,
-                    guardrail: Guardrail.maximumBasalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates, scheduledBasalRange: self.viewModel.therapySettings.basalRateSchedule?.valueRange()),
+                    guardrail: Guardrail.maximumBasalRate(
+                        supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates,
+                        scheduledBasalRange: self.viewModel.therapySettings.basalRateSchedule?.valueRange(),
+                        lowestCarbRatio: self.viewModel.therapySettings.carbRatioSchedule?.lowestValue()),
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
@@ -390,6 +395,7 @@ struct CorrectionRangeOverridesRangeItem: View {
     let workoutTargetRange: DoubleRange?
     let unit: HKUnit
     let preset: CorrectionRangeOverrides.Preset
+    let suspendThreshold: GlucoseThreshold?
     let correctionRangeScheduleRange: ClosedRange<HKQuantity>
     
     public var body: some View {
@@ -402,6 +408,7 @@ struct CorrectionRangeOverridesRangeItem: View {
             )),
             preset: preset,
             unit: unit,
+            suspendThreshold: suspendThreshold,
             correctionRangeScheduleRange: correctionRangeScheduleRange,
             expandedContent: { EmptyView() })
     }

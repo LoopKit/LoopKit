@@ -23,7 +23,7 @@ public struct CorrectionRangeScheduleEditor: View {
     @State private var userDidTap: Bool = false
 
     
-    public init(
+    fileprivate init(
         schedule: GlucoseRangeSchedule?,
         unit: HKUnit,
         minValue: HKQuantity?,
@@ -45,7 +45,7 @@ public struct CorrectionRangeScheduleEditor: View {
         self.init(
             schedule: viewModel.therapySettings.glucoseTargetRangeSchedule,
             unit: viewModel.therapySettings.glucoseTargetRangeSchedule?.unit ?? viewModel.preferredGlucoseUnit,
-            minValue: viewModel.therapySettings.suspendThreshold?.quantity,
+            minValue: Guardrail.minCorrectionRangeValue(suspendThreshold: viewModel.therapySettings.suspendThreshold),
             onSave: { [weak viewModel] newSchedule in
                 didSave?()
                 viewModel?.saveCorrectionRange(range: newSchedule)

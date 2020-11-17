@@ -35,10 +35,8 @@ public struct Guardrail<Value: Comparable> {
     }
 
     public func classification(for value: Value) -> SafetyClassification {
-        precondition(absoluteBounds.contains(value), "Only values within the domain can be classified")
-
         switch value {
-        case absoluteBounds.lowerBound where absoluteBounds.lowerBound != recommendedBounds.lowerBound:
+        case ...absoluteBounds.lowerBound where absoluteBounds.lowerBound != recommendedBounds.lowerBound:
             return .outsideRecommendedRange(.minimum)
         case ..<recommendedBounds.lowerBound:
             return .outsideRecommendedRange(.belowRecommended)
@@ -46,7 +44,7 @@ public struct Guardrail<Value: Comparable> {
             return .withinRecommendedRange
         case ..<absoluteBounds.upperBound:
             return .outsideRecommendedRange(.aboveRecommended)
-        case absoluteBounds.upperBound:
+        case absoluteBounds.upperBound...:
             return .outsideRecommendedRange(.maximum)
         default:
             preconditionFailure("Unreachable")
@@ -61,7 +59,7 @@ extension Guardrail where Value: Strideable {
 }
 
 extension Guardrail where Value == HKQuantity {
-    public init(absoluteBounds: ClosedRange<Double>, recommendedBounds: ClosedRange<Double>, startingSuggestion: Double?, unit: HKUnit) {
+    public init(absoluteBounds: ClosedRange<Double>, recommendedBounds: ClosedRange<Double>, unit: HKUnit, startingSuggestion: Double? = nil) {
         let absoluteBoundsWithUnit = HKQuantity(unit: unit, doubleValue: absoluteBounds.lowerBound)...HKQuantity(unit: unit, doubleValue: absoluteBounds.upperBound)
         let recommendedBoundsWithUnit = HKQuantity(unit: unit, doubleValue: recommendedBounds.lowerBound)...HKQuantity(unit: unit, doubleValue: recommendedBounds.upperBound)
         let startingSuggestionQuantity: HKQuantity?

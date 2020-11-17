@@ -17,11 +17,15 @@ public final class ChartTableViewCell: UITableViewCell {
 
     @IBOutlet weak var subtitleLabel: UILabel?
    
-    @IBOutlet weak var rightArrowHint: UIImageView!
+    @IBOutlet weak var rightArrowHint: UIImageView? {
+        didSet {
+            rightArrowHint?.isHidden = !doesNavigate
+        }
+    }
 
     public var doesNavigate: Bool = true {
         didSet {
-            rightArrowHint.isHidden = !doesNavigate
+            rightArrowHint?.isHidden = !doesNavigate
         }
     }
     
