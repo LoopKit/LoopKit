@@ -269,8 +269,11 @@ public final class MockPumpManager: TestingPumpManager {
     private var stateObservers = WeakSynchronizedSet<MockPumpManagerStateObserver>()
 
     public init() {
+        let deliverableIncrements: MockPumpManagerState.DeliverableIncrements = .medtronicX22
         state = MockPumpManagerState(
-            deliverableIncrements: .medtronicX22,
+            deliverableIncrements: deliverableIncrements,
+            supportedBolusVolumes: deliverableIncrements.supportedBolusVolumes ?? [],
+            supportedBasalRates: deliverableIncrements.supportedBasalRates ?? [],
             reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity,
             tempBasalEnactmentShouldError: false,
             bolusEnactmentShouldError: false,

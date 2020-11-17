@@ -81,6 +81,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
 
     private enum SettingsRow: Int, CaseIterable {
         case deliverableIncrements = 0
+        case supportedBasalRates
+        case supportedBolusVolumes
         case reservoirRemaining
         case batteryRemaining
         case tempBasalErrorToggle
@@ -169,11 +171,30 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                         return "x22"
                     case .medtronicX23:
                         return "x23"
+                    case .custom:
+                        return "Custom"
                     }
                 }
                 cell.segmentedControl.selectedSegmentIndex = possibleDeliverableIncrements.firstIndex(of: pumpManager.state.deliverableIncrements)!
                 cell.onSelection { [pumpManager] index in
                     pumpManager.state.deliverableIncrements = possibleDeliverableIncrements[index]
+                    tableView.reloadRows(at: [IndexPath(row: SettingsRow.supportedBasalRates.rawValue, section: Section.settings.rawValue), IndexPath(row: SettingsRow.supportedBolusVolumes.rawValue, section: Section.settings.rawValue)], with: .automatic)
+                }
+                return cell
+            case .supportedBasalRates:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = "Basal Rates"
+                cell.detailTextLabel?.text = pumpManager.state.supportedBasalRatesDescription
+                if pumpManager.state.deliverableIncrements == .custom {
+                    cell.accessoryType = .disclosureIndicator
+                }
+                return cell
+            case .supportedBolusVolumes:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = "Bolus Volumes"
+                cell.detailTextLabel?.text = pumpManager.state.supportedBolusVolumesDescription
+                if pumpManager.state.deliverableIncrements == .custom {
+                    cell.accessoryType = .disclosureIndicator
                 }
                 return cell
             case .reservoirRemaining:
@@ -283,8 +304,29 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 tableView.reloadRows(at: [indexPath], with: .automatic)
             }
         case .settings:
+            tableView.deselectRow(at: indexPath, animated: true)
             switch SettingsRow(rawValue: indexPath.row)! {
             case .deliverableIncrements:
+                break
+            case .supportedBasalRates:
+                if pumpManager.state.deliverableIncrements == .custom, pumpManager.state.supportedBasalRates.indices.contains(1) {
+                    let basalRates = pumpManager.state.supportedBasalRates
+                    let vc = SupportedRangeTableViewController(minValue: basalRates.first!, maxValue: basalRates.last!, stepSize: basalRates[1] - basalRates.first!)
+                    vc.title = "Supported Basal Rates"
+                    vc.indexPath = indexPath
+                    vc.delegate = self
+                    show(vc, sender: sender)
+                }
+                break
+            case .supportedBolusVolumes:
+                if pumpManager.state.deliverableIncrements == .custom, pumpManager.state.supportedBolusVolumes.indices.contains(1) {
+                    let bolusVolumes = pumpManager.state.supportedBolusVolumes
+                    let vc = SupportedRangeTableViewController(minValue: bolusVolumes.first!, maxValue: bolusVolumes.last!, stepSize: bolusVolumes[1] - bolusVolumes.first!)
+                    vc.title = "Supported Bolus Volumes"
+                    vc.indexPath = indexPath
+                    vc.delegate = self
+                    show(vc, sender: sender)
+                }
                 break
             case .reservoirRemaining:
                 let vc = TextFieldTableViewController()
@@ -493,5 +535,30 @@ private extension UIAlertController {
             style: .default,
             handler: nil
         ))
+    }
+}
+
+extension MockPumpManagerSettingsViewController: SupportedRangeTableViewControllerDelegate {
+    func supportedRangeDidUpdate(_ controller: SupportedRangeTableViewController) {
+        guard let indexPath = controller.indexPath else {
+            assertionFailure()
+            return
+        }
+
+        let rangeMin = Int(controller.minValue/controller.stepSize)
+        let rangeMax = Int(controller.maxValue/controller.stepSize)
+        let rangeStep = 1/controller.stepSize
+        let values: [Double] = (rangeMin...rangeMax).map { Double($0) / rangeStep }
+        
+        switch indexPath {
+        case [Section.settings.rawValue, SettingsRow.supportedBasalRates.rawValue]:
+            pumpManager.state.supportedBasalRates = values
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        case [Section.settings.rawValue, SettingsRow.supportedBolusVolumes.rawValue]:
+            pumpManager.state.supportedBolusVolumes = values
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        default:
+            assertionFailure()
+        }
     }
 }

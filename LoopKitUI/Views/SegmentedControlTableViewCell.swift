@@ -41,7 +41,7 @@ open class SegmentedControlTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             segmentedControl.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
             segmentedControl.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            segmentedControl.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5),
+            segmentedControl.leadingAnchor.constraint(equalTo: textLabel?.trailingAnchor ?? contentView.leadingAnchor)
         ])
     }
 

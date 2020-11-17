@@ -474,6 +474,15 @@ extension MockCGMManager {
     public func getSounds() -> [Alert.Sound] {
         return alerts.map { $1.sound }
     }
+
+    public var hasRetractableAlert: Bool {
+        // signal loss alerts can only be removed by switching the CGM data source
+        return currentAlertIdentifier != nil && currentAlertIdentifier != MockCGMManager.signalLoss.identifier
+    }
+
+    public var currentAlertIdentifier: Alert.AlertIdentifier? {
+        return mockSensorState.cgmStatusHighlight?.alertIdentifier
+    }
     
     public func issueAlert(identifier: Alert.AlertIdentifier, trigger: Alert.Trigger, delay: TimeInterval?) {
         guard let alert = alerts[identifier] else {
@@ -504,6 +513,12 @@ extension MockCGMManager {
     public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) {
         endBackgroundTask()
         self.logDeviceComms(.delegateResponse, message: "\(#function): Alert \(alertIdentifier) acknowledged.")
+    }
+
+    public func retractCurrentAlert() {
+        guard hasRetractableAlert, let identifier = currentAlertIdentifier else { return }
+
+        retractAlert(identifier: identifier)
     }
 
     public func retractAlert(identifier: Alert.AlertIdentifier) {
