@@ -21,6 +21,9 @@ public protocol ServiceUI: Service {
     
     /// The image for this type of service.
     static var image: UIImage? { get }
+    
+    /// Indicates whether this service provides onboarding (configuring therapy settings)
+    static var providesOnboarding: Bool { get }
 
     /// Provides a view controller to create and configure a new service, if needed.
     ///
@@ -39,9 +42,5 @@ public protocol ServiceUI: Service {
 }
 
 public extension ServiceUI {
-
-    // Default
-    static var image: UIImage? { nil }
-    
     var image: UIImage? { return type(of: self).image }
 }
