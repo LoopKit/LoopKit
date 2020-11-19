@@ -191,7 +191,7 @@ extension TherapySettingsView {
                     unit: glucoseUnit,
                     preset: CorrectionRangeOverrides.Preset.preMeal,
                     suspendThreshold: self.viewModel.therapySettings.suspendThreshold,
-                    correctionRangeScheduleRange: self.viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
+                    correctionRangeScheduleRange: schedule.scheduleRange()
                 )
             }
         }
@@ -199,14 +199,14 @@ extension TherapySettingsView {
     
     private var workoutCorrectionRangeSection: some View {
         section(for: .workoutCorrectionRangeOverride) {
-            if let glucoseUnit = self.glucoseUnit, self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
+            if let glucoseUnit = self.glucoseUnit, let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
                 CorrectionRangeOverridesRangeItem(
                     preMealTargetRange: self.viewModel.therapySettings.preMealTargetRange,
                     workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange,
                     unit: glucoseUnit,
                     preset: CorrectionRangeOverrides.Preset.workout,
                     suspendThreshold: self.viewModel.therapySettings.suspendThreshold,
-                    correctionRangeScheduleRange: self.viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
+                    correctionRangeScheduleRange: schedule.scheduleRange()
                 )
             }
         }
