@@ -23,7 +23,7 @@ public extension Guardrail where Value == HKQuantity {
         .min()!
     }
 
-    static let correctionRange = Guardrail(absoluteBounds: 87...180, recommendedBounds: 101...115, unit: .milligramsPerDeciliter)
+    static let correctionRange = Guardrail(absoluteBounds: 87...180, recommendedBounds: 100...115, unit: .milligramsPerDeciliter)
 
     static func minCorrectionRangeValue(suspendThreshold: GlucoseThreshold?) -> HKQuantity {
         return [
@@ -37,7 +37,9 @@ public extension Guardrail where Value == HKQuantity {
     fileprivate static func workoutCorrectionRange(correctionRangeScheduleRange: ClosedRange<HKQuantity>,
                                                    suspendThreshold: GlucoseThreshold?) -> Guardrail<HKQuantity> {
         // Static "unconstrained" constant values before applying constraints
-        let workoutCorrectionRange = Guardrail(absoluteBounds: 85...250, recommendedBounds: 101...180, unit: .milligramsPerDeciliter)
+        let workoutCorrectionRange = Guardrail(absoluteBounds: 85...250,
+                                               recommendedBounds: correctionRange.recommendedBounds.lowerBound.doubleValue(for: .milligramsPerDeciliter)...180,
+                                               unit: .milligramsPerDeciliter)
         
         let absoluteLowerBound = [
             workoutCorrectionRange.absoluteBounds.lowerBound,
