@@ -125,11 +125,22 @@ public extension Guardrail where Value == HKQuantity {
 
         } else {
             return Guardrail(
-                absoluteBounds: supportedBasalRates.first!...absoluteUpperBound,
-                recommendedBounds:  supportedBasalRates.first!...absoluteUpperBound,
+                absoluteBounds: supportedBasalRates.drop { $0 <= 0 }.first!...absoluteUpperBound,
+                recommendedBounds:  supportedBasalRates.drop { $0 <= 0 }.first!...absoluteUpperBound,
                 unit: .internationalUnitsPerHour
             )
         }
+    }
+    
+    static func selectableMaxBasalRates(supportedBasalRates: [Double],
+                                     scheduledBasalRange: ClosedRange<Double>?,
+                                     lowestCarbRatio: Double?,
+                                     maximumBasalRatePrecision decimalPlaces: Int = 3) -> [Double] {
+        let basalGuardrail = Guardrail.maximumBasalRate(supportedBasalRates: supportedBasalRates, scheduledBasalRange: scheduledBasalRange, lowestCarbRatio: lowestCarbRatio)
+        let maximumScheduledBasalRate = scheduledBasalRange?.upperBound ?? -Double.infinity
+        return supportedBasalRates
+            .drop { $0 < maximumScheduledBasalRate }
+            .filter { basalGuardrail.absoluteBounds.contains(HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)) }
     }
 
     static func maximumBolus(supportedBolusVolumes: [Double]) -> Guardrail {
@@ -142,5 +153,12 @@ public extension Guardrail where Value == HKQuantity {
             recommendedBounds: supportedBolusVolumes.dropFirst().first!...recommendedUpperBound!,
             unit: .internationalUnit()
         )
+    }
+    
+    static func selectableBolusVolumes(supportedBolusVolumes: [Double]) -> [Double] {
+        let guardrail = Guardrail.maximumBolus(supportedBolusVolumes: supportedBolusVolumes)
+        return supportedBolusVolumes.filter {
+            guardrail.absoluteBounds.contains(HKQuantity(unit: .internationalUnit(), doubleValue: $0))
+        }
     }
 }
