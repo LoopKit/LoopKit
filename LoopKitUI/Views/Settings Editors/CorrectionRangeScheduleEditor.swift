@@ -18,7 +18,7 @@ public struct CorrectionRangeScheduleEditor: View {
     var minValue: HKQuantity?
     var save: (GlucoseRangeSchedule) -> Void
     let guardrail = Guardrail.correctionRange
-    let mode: PresentationMode
+    let mode: SettingsPresentationMode
     @State private var userDidTap: Bool = false
     
     fileprivate init(
@@ -26,7 +26,7 @@ public struct CorrectionRangeScheduleEditor: View {
         unit: HKUnit,
         minValue: HKQuantity?,
         onSave save: @escaping (GlucoseRangeSchedule) -> Void,
-        mode: PresentationMode = .settings
+        mode: SettingsPresentationMode = .settings
     ) {
         self.initialSchedule = schedule
         self._scheduleItems = State(initialValue: schedule?.items ?? [])

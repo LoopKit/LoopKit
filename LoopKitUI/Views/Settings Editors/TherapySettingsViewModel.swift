@@ -14,7 +14,7 @@ import SwiftUI
 public class TherapySettingsViewModel: ObservableObject {
     public typealias SaveCompletion = (TherapySetting, TherapySettings) -> Void
     
-    public let mode: PresentationMode
+    public let mode: SettingsPresentationMode
     
     @Published public var therapySettings: TherapySettings
     public var supportedInsulinModelSettings: SupportedInsulinModelSettings
@@ -30,7 +30,7 @@ public class TherapySettingsViewModel: ObservableObject {
     
     public let chartColors: ChartColorPalette
 
-    public init(mode: PresentationMode,
+    public init(mode: SettingsPresentationMode,
                 therapySettings: TherapySettings,
                 supportedInsulinModelSettings: SupportedInsulinModelSettings = SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                 pumpSupportedIncrements: (() -> PumpSupportedIncrements?)? = nil,

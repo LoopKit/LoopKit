@@ -11,21 +11,21 @@ import LoopKit
 
 public struct CorrectionRangeInformationView: View {
     var onExit: (() -> Void)?
-    var mode: PresentationMode
+    var mode: SettingsPresentationMode
     
     @Environment(\.presentationMode) var presentationMode
     
-    public init(onExit: (() -> Void)?, mode: PresentationMode = .acceptanceFlow) {
+    public init(onExit: (() -> Void)? = nil, mode: SettingsPresentationMode = .acceptanceFlow) {
         self.onExit = onExit
         self.mode = mode
     }
     
     public var body: some View {
-        InformationView(
-            title: Text(TherapySetting.glucoseTargetRange.title),
-            informationalContent: {text},
-            onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
-            mode: mode
+        GlucoseTherapySettingInformationView(
+            therapySetting: .glucoseTargetRange,
+            onExit: onExit,
+            mode: mode,
+            text: AnyView(text)
         )
     }
     
@@ -38,5 +38,23 @@ public struct CorrectionRangeInformationView: View {
             Text(LocalizedString("Your healthcare provider can help you choose a correction range that's right for you.", comment: "Disclaimer"))
         }
         .foregroundColor(.secondary)
+    }
+}
+
+struct CorrectionRangeInformationView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            CorrectionRangeInformationView()
+        }
+        .colorScheme(.light)
+        .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
+        .previewDisplayName("SE light")
+        NavigationView {
+            CorrectionRangeInformationView()
+        }
+        .preferredColorScheme(.dark)
+        .colorScheme(.dark)
+        .previewDevice(PreviewDevice(rawValue: "iPhone 11 Pro Max"))
+        .previewDisplayName("11 Pro dark")
     }
 }

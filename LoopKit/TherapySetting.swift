@@ -7,7 +7,7 @@
 //
 
 
-public enum TherapySetting: Int {
+public enum TherapySetting: String {
     case glucoseTargetRange
     case preMealCorrectionRangeOverride
     case workoutCorrectionRangeOverride

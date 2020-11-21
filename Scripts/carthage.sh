@@ -5,6 +5,8 @@
 # carthage.sh
 # Usage example: ./carthage.sh build --platform iOS
 
+echo "This script exists due to an issue with Carthage.  The script comes from https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323"
+
 set -euo pipefail
 
 xcconfig=$(mktemp /tmp/static.xcconfig.XXXXXX)

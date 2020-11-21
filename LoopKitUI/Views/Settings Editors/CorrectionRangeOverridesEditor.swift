@@ -19,7 +19,7 @@ public struct CorrectionRangeOverridesEditor: View {
     var minValue: HKQuantity?
     var save: (_ overrides: CorrectionRangeOverrides) -> Void
     var sensitivityOverridesEnabled: Bool
-    var mode: PresentationMode
+    var mode: SettingsPresentationMode
 
     @State private var userDidTap: Bool = false
 
@@ -46,7 +46,7 @@ public struct CorrectionRangeOverridesEditor: View {
         onSave save: @escaping (_ overrides: CorrectionRangeOverrides) -> Void,
         sensitivityOverridesEnabled: Bool,
         suspendThreshold: GlucoseThreshold?,
-        mode: PresentationMode = .settings
+        mode: SettingsPresentationMode = .settings
     ) {
         self._value = State(initialValue: value)
         self.initialValue = value

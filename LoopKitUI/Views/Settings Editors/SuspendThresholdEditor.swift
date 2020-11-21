@@ -16,7 +16,7 @@ public struct SuspendThresholdEditor: View {
     var unit: HKUnit
     var maxValue: HKQuantity?
     var save: (_ suspendThreshold: HKQuantity) -> Void
-    let mode: PresentationMode
+    let mode: SettingsPresentationMode
     
     @State private var userDidTap: Bool = false
     @State var value: HKQuantity
@@ -32,7 +32,7 @@ public struct SuspendThresholdEditor: View {
         unit: HKUnit,
         maxValue: HKQuantity?,
         onSave save: @escaping (_ suspendThreshold: HKQuantity) -> Void,
-        mode: PresentationMode = .settings
+        mode: SettingsPresentationMode = .settings
     ) {
         self._value = State(initialValue: value ?? Self.defaultValue(for: unit))
         self.initialValue = value

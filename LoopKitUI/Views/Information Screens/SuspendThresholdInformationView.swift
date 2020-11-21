@@ -6,37 +6,47 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
+import HealthKit
 import SwiftUI
 import LoopKit
 
 public struct SuspendThresholdInformationView: View {
     var onExit: (() -> Void)?
-    var mode: PresentationMode
+    var mode: SettingsPresentationMode
+    var preferredUnit: HKUnit = HKUnit.milligramsPerDeciliter
     
     @Environment(\.presentationMode) var presentationMode
     
     public init(
-        onExit: (() -> Void)?,
-        mode: PresentationMode = .acceptanceFlow
+        onExit: (() -> Void)? = nil,
+        mode: SettingsPresentationMode = .acceptanceFlow
     ){
         self.onExit = onExit
         self.mode = mode
     }
     
     public var body: some View {
-        InformationView(
-            title: Text(TherapySetting.suspendThreshold.title),
-            informationalContent: {text},
-            onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
-            mode: mode
-        )
+        GlucoseTherapySettingInformationView(therapySetting: .suspendThreshold,
+                                             preferredUnit: preferredUnit,
+                                             onExit: onExit,
+                                             mode: mode)
     }
-    
-    private var text: some View {
-        VStack(alignment: .leading, spacing: 25) {
-            Text(TherapySetting.suspendThreshold.descriptiveText)
+}
+
+struct SuspendThresholdInformationView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            SuspendThresholdInformationView()
         }
-        .accentColor(.secondary)
-        .foregroundColor(.accentColor)
+        .colorScheme(.light)
+        .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
+        .previewDisplayName("SE light")
+        NavigationView {
+            SuspendThresholdInformationView()
+        }
+        .preferredColorScheme(.dark)
+        .colorScheme(.dark)
+        .previewDevice(PreviewDevice(rawValue: "iPhone 11 Pro Max"))
+        .previewDisplayName("11 Pro dark")
     }
 }

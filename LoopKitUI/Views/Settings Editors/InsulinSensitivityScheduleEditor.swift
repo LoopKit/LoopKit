@@ -15,11 +15,11 @@ public struct InsulinSensitivityScheduleEditor: View {
     private var schedule: DailyQuantitySchedule<Double>?
     private var glucoseUnit: HKUnit
     private var save: (InsulinSensitivitySchedule) -> Void
-    private var mode: PresentationMode
+    private var mode: SettingsPresentationMode
 
     public init(
         schedule: InsulinSensitivitySchedule?,
-        mode: PresentationMode = .settings,
+        mode: SettingsPresentationMode = .settings,
         glucoseUnit: HKUnit,
         onSave save: @escaping (InsulinSensitivitySchedule) -> Void
     ) {

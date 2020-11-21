@@ -18,13 +18,13 @@ fileprivate extension HKUnit {
 
 public struct CarbRatioScheduleEditor: View {
     private var schedule: DailyQuantitySchedule<Double>?
-    private var mode: PresentationMode
+    private var mode: SettingsPresentationMode
     private var save: (CarbRatioSchedule) -> Void
 
     public init(
         schedule: CarbRatioSchedule?,
         onSave save: @escaping (CarbRatioSchedule) -> Void,
-        mode: PresentationMode = .settings
+        mode: SettingsPresentationMode = .settings
     ) {
         // CarbRatioSchedule stores only the gram unit.
         // For consistency across display & computation, convert to "real" g/U units.

@@ -11,11 +11,11 @@ import LoopKit
 
 public struct BasalRatesInformationView: View {
     var onExit: (() -> Void)?
-    var mode: PresentationMode
+    var mode: SettingsPresentationMode
     
     @Environment(\.presentationMode) var presentationMode
     
-    public init(onExit: (() -> Void)?, mode: PresentationMode = .acceptanceFlow) {
+    public init(onExit: (() -> Void)?, mode: SettingsPresentationMode = .acceptanceFlow) {
         self.onExit = onExit
         self.mode = mode
     }

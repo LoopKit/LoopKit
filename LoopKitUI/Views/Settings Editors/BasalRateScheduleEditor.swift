@@ -18,7 +18,7 @@ public struct BasalRateScheduleEditor: View {
     var maximumScheduleEntryCount: Int
     var syncSchedule: PumpManager.SyncSchedule?
     var save: (BasalRateSchedule) -> Void
-    let mode: PresentationMode
+    let mode: SettingsPresentationMode
 
     /// - Precondition: `supportedBasalRates` is nonempty and sorted in ascending order.
     public init(
@@ -28,7 +28,7 @@ public struct BasalRateScheduleEditor: View {
         maximumScheduleEntryCount: Int,
         syncSchedule: PumpManager.SyncSchedule?,
         onSave save: @escaping (BasalRateSchedule) -> Void,
-        mode: PresentationMode = .settings
+        mode: SettingsPresentationMode = .settings
     ) {
         self.schedule = schedule.map { schedule in
             DailyQuantitySchedule(

@@ -538,7 +538,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
     static let preview_supportedBasalRates = [0.2, 0.5, 0.75, 1.0]
     static let preview_supportedBolusVolumes = [5.0, 10.0, 15.0]
 
-    static func preview_viewModel(mode: PresentationMode) -> TherapySettingsViewModel {
+    static func preview_viewModel(mode: SettingsPresentationMode) -> TherapySettingsViewModel {
         TherapySettingsViewModel(mode: mode,
                                  therapySettings: preview_therapySettings,
                                  supportedInsulinModelSettings: SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),

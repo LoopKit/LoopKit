@@ -19,7 +19,7 @@ public struct DeliveryLimitsEditor: View {
     let supportedBolusVolumes: [Double]
     let selectableBolusVolumes: [Double]
     let save: (_ deliveryLimits: DeliveryLimits) -> Void
-    let mode: PresentationMode
+    let mode: SettingsPresentationMode
     
     @State var value: DeliveryLimits
     @State private var userDidTap: Bool = false
@@ -38,7 +38,7 @@ public struct DeliveryLimitsEditor: View {
         supportedBolusVolumes: [Double],
         lowestCarbRatio: Double?,
         onSave save: @escaping (_ deliveryLimits: DeliveryLimits) -> Void,
-        mode: PresentationMode = .settings
+        mode: SettingsPresentationMode = .settings
     ) {
         self._value = State(initialValue: value)
         self.initialValue = value

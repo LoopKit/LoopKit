@@ -1,5 +1,5 @@
 //
-//  PresentationMode.swift
+//  SettingsPresentationMode.swift
 //  LoopKitUI
 //
 //  Created by Anna Quinlan on 7/21/20.
@@ -7,14 +7,14 @@
 //
 
 /// Represents the different modes that settings screens might be represented in
-public enum PresentationMode {
+public enum SettingsPresentationMode {
     /// Presentation is in the onboarding acceptance flow
     case acceptanceFlow
     /// Presentation is under the settings ("gear icon") screen
     case settings
 }
 
-extension PresentationMode {
+extension SettingsPresentationMode {
     /// Text for the button at the bottom of the settings screen
     var buttonText: String {
         switch self {
