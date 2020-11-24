@@ -220,7 +220,7 @@ public final class CarbStore: HealthKitSampleStore {
         self.provenanceIdentifier = provenanceIdentifier
         
         let observationEnabled = observationInterval > 0
-        
+
         super.init(healthStore: healthStore,
                    observeHealthKitSamplesFromCurrentApp: false,
                    observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,

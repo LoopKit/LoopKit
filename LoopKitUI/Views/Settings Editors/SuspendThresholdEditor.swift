@@ -57,11 +57,12 @@ public struct SuspendThresholdEditor: View {
                 workoutTargetRange: viewModel.therapySettings.workoutTargetRange?.quantityRange(for: unit)
             ),
             onSave: { [weak viewModel] newValue in
-                if let viewModel = viewModel {
-                    let newThreshold = GlucoseThreshold(unit: viewModel.preferredGlucoseUnit, value: newValue.doubleValue(for: viewModel.preferredGlucoseUnit))
-                    viewModel.saveSuspendThreshold(value: newThreshold)
-                    didSave?()
+                guard let viewModel = viewModel else {
+                    return
                 }
+                let newThreshold = GlucoseThreshold(unit: viewModel.preferredGlucoseUnit, value: newValue.doubleValue(for: viewModel.preferredGlucoseUnit))
+                viewModel.saveSuspendThreshold(value: newThreshold)
+                didSave?()
             },
             mode: viewModel.mode
         )

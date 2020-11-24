@@ -302,13 +302,11 @@ extension TherapySettingsView {
     private var insulinSensitivitiesSection: some View {
         section(for: .insulinSensitivity) {
             if let sensitivityUnit = self.sensitivityUnit, let schedule = self.viewModel.therapySettings.insulinSensitivitySchedule {
-                if self.viewModel.therapySettings.insulinSensitivitySchedule != nil {
-                    ForEach(schedule.items, id: \.self) { value in
-                        ScheduleValueItem(time: value.startTime,
-                                          value: value.value,
-                                          unit: sensitivityUnit,
-                                          guardrail: Guardrail.insulinSensitivity)
-                    }
+                ForEach(schedule.items, id: \.self) { value in
+                    ScheduleValueItem(time: value.startTime,
+                                      value: value.value,
+                                      unit: sensitivityUnit,
+                                      guardrail: Guardrail.insulinSensitivity)
                 }
             }
         }

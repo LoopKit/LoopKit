@@ -142,11 +142,12 @@ public extension Guardrail where Value == HKQuantity {
         let maxBolusWarningThresholdUnits: Double = 20
         let supportedBolusVolumes = supportedBolusVolumes.filter { $0 > 0 && $0 <= maxBolusThresholdUnits }
         let recommendedUpperBound = supportedBolusVolumes.last { $0 < maxBolusWarningThresholdUnits }
+        let recommendedBounds = supportedBolusVolumes.dropFirst().first!...recommendedUpperBound!
         return Guardrail(
             absoluteBounds: supportedBolusVolumes.first!...supportedBolusVolumes.last!,
-            recommendedBounds: supportedBolusVolumes.dropFirst().first!...recommendedUpperBound!,
+            recommendedBounds: recommendedBounds,
             unit: .internationalUnit(),
-            startingSuggestion: 5
+            startingSuggestion: 5.clamped(to: recommendedBounds)
         )
     }
 }

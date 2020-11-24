@@ -29,6 +29,9 @@ public struct Guardrail<Value: Comparable> {
     public init(absoluteBounds: ClosedRange<Value>, recommendedBounds: ClosedRange<Value>, startingSuggestion: Value? = nil) {
         precondition(absoluteBounds.lowerBound <= recommendedBounds.lowerBound, "The minimum value must be less than or equal to the smallest recommended value")
         precondition(absoluteBounds.upperBound >= recommendedBounds.upperBound, "The maximum value must be greater than or equal to the greatest recommended value")
+        if let startingSuggestion = startingSuggestion {
+            precondition(recommendedBounds.contains(startingSuggestion))
+        }
         self.absoluteBounds = absoluteBounds
         self.recommendedBounds = recommendedBounds
         self.startingSuggestion = startingSuggestion
