@@ -95,7 +95,7 @@ public extension Guardrail where Value == HKQuantity {
             absoluteBounds: allowedBasalRates.first!...allowedBasalRates.last!,
             recommendedBounds: allowedBasalRates.first!...allowedBasalRates.last!,
             unit: .internationalUnitsPerHour,
-            startingSuggestion: 0
+            startingSuggestion: allowedBasalRates.first!
         )
     }
 
@@ -127,11 +127,12 @@ public extension Guardrail where Value == HKQuantity {
             )
 
         } else {
+            let bounds = supportedBasalRates.first!...absoluteUpperBound
             return Guardrail(
-                absoluteBounds: supportedBasalRates.first!...absoluteUpperBound,
-                recommendedBounds:  supportedBasalRates.first!...absoluteUpperBound,
+                absoluteBounds: bounds,
+                recommendedBounds: bounds,
                 unit: .internationalUnitsPerHour,
-                startingSuggestion: 3
+                startingSuggestion: 3.clamped(to: bounds)
             )
         }
     }
