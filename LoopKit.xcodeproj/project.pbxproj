@@ -6,11 +6,27 @@
 	objectVersion = 48;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		1D81903A25687FF2004D1BEC /* Cartfile */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 1D81903D25687FF2004D1BEC /* Build configuration list for PBXAggregateTarget "Cartfile" */;
+			buildPhases = (
+				1D81905025688014004D1BEC /* Homebrew & Carthage Setup */,
+				1D8190512568805E004D1BEC /* Carthage Bootstrap */,
+			);
+			dependencies = (
+			);
+			name = Cartfile;
+			productName = Cartfile;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		1D096BFA24C242300078B6B5 /* CheckmarkListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */; };
 		1D096C0224C24C220078B6B5 /* InsulinModelSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D096BFF24C24C220078B6B5 /* InsulinModelSettings.swift */; };
 		1D096C0324C24C220078B6B5 /* ExponentialInsulinModelPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D096C0024C24C220078B6B5 /* ExponentialInsulinModelPreset.swift */; };
 		1D096C0524C624F70078B6B5 /* InsulinModelSettings+LoopKitUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D096C0424C624F70078B6B5 /* InsulinModelSettings+LoopKitUI.swift */; };
+		1D1438B825633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1438B725633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift */; };
 		1D1A019E24B678BF0077D86E /* TherapySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */; };
 		1D1FCE2324BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2224BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift */; };
 		1D1FCE2524BD42EF000300A8 /* TherapySettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2424BD42EF000300A8 /* TherapySettingsViewModel.swift */; };
@@ -22,6 +38,7 @@
 		1D498E4724D892B0000627F2 /* Environment+Authenticate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D498E4624D892B0000627F2 /* Environment+Authenticate.swift */; };
 		1D60355E24D39ED10095DC2A /* Environment+AppName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D60355D24D39ED10095DC2A /* Environment+AppName.swift */; };
 		1D640FF724525228008F9755 /* sub.caf in Resources */ = {isa = PBXBuildFile; fileRef = 1D640FF524524284008F9755 /* sub.caf */; };
+		1D67E79D2563001800A82ED6 /* InformationScreens.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D67E79C2563001800A82ED6 /* InformationScreens.xcassets */; };
 		1D6EAB9124C12C090081249D /* PumpSupportedIncrements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6EAB9024C12C090081249D /* PumpSupportedIncrements.swift */; };
 		1D841AAD24577EE10069DBFF /* AlertSoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D841AAC24577EE10069DBFF /* AlertSoundPlayer.swift */; };
 		1DA649AB2445174400F61E75 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* Alert.swift */; };
@@ -779,7 +796,7 @@
 		E96DCB5824AEF50F007117BC /* SuspendThresholdInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */; };
 		E96DCB5A24AF74AC007117BC /* SuspendThresholdEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */; };
 		E96DCB5E24AF7DC7007117BC /* BasalRatesInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5D24AF7DC7007117BC /* BasalRatesInformationView.swift */; };
-		E9D95F6524C7BC400079F47D /* PresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D95F6424C7BC400079F47D /* PresentationMode.swift */; };
+		E9D95F6524C7BC400079F47D /* SettingsPresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D95F6424C7BC400079F47D /* SettingsPresentationMode.swift */; };
 		E9DFB92524E43CF500468917 /* ExpandableDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92424E43CF500468917 /* ExpandableDatePicker.swift */; };
 		E9E5E56524D362E900B5DFFE /* dynamic_glucose_effect_none_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56124D362E800B5DFFE /* dynamic_glucose_effect_none_observed_output.json */; };
 		E9E5E56624D362E900B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */; };
@@ -788,6 +805,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1D81905225688079004D1BEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1D81903A25687FF2004D1BEC;
+			remoteInfo = Cartfile;
+		};
 		1DEE226A24A676A300693C32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
@@ -909,6 +933,7 @@
 		1D096BFF24C24C220078B6B5 /* InsulinModelSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModelSettings.swift; sourceTree = "<group>"; };
 		1D096C0024C24C220078B6B5 /* ExponentialInsulinModelPreset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModelPreset.swift; sourceTree = "<group>"; };
 		1D096C0424C624F70078B6B5 /* InsulinModelSettings+LoopKitUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InsulinModelSettings+LoopKitUI.swift"; sourceTree = "<group>"; };
+		1D1438B725633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseTherapySettingInformationView.swift; sourceTree = "<group>"; };
 		1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TherapySettingsView.swift; sourceTree = "<group>"; };
 		1D1FCE2224BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesExpandableSetting.swift; sourceTree = "<group>"; };
 		1D1FCE2424BD42EF000300A8 /* TherapySettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TherapySettingsViewModel.swift; sourceTree = "<group>"; };
@@ -920,6 +945,7 @@
 		1D498E4624D892B0000627F2 /* Environment+Authenticate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Environment+Authenticate.swift"; sourceTree = "<group>"; };
 		1D60355D24D39ED10095DC2A /* Environment+AppName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Environment+AppName.swift"; sourceTree = "<group>"; };
 		1D640FF524524284008F9755 /* sub.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sub.caf; sourceTree = "<group>"; };
+		1D67E79C2563001800A82ED6 /* InformationScreens.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = InformationScreens.xcassets; sourceTree = "<group>"; };
 		1D6EAB9024C12C090081249D /* PumpSupportedIncrements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpSupportedIncrements.swift; sourceTree = "<group>"; };
 		1D841AAC24577EE10069DBFF /* AlertSoundPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertSoundPlayer.swift; sourceTree = "<group>"; };
 		1DA649AA2445174400F61E75 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
@@ -1554,7 +1580,7 @@
 		E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdInformationView.swift; sourceTree = "<group>"; };
 		E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdEditor.swift; sourceTree = "<group>"; };
 		E96DCB5D24AF7DC7007117BC /* BasalRatesInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalRatesInformationView.swift; sourceTree = "<group>"; };
-		E9D95F6424C7BC400079F47D /* PresentationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationMode.swift; sourceTree = "<group>"; };
+		E9D95F6424C7BC400079F47D /* SettingsPresentationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresentationMode.swift; sourceTree = "<group>"; };
 		E9DFB92424E43CF500468917 /* ExpandableDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDatePicker.swift; sourceTree = "<group>"; };
 		E9E5E56124D362E800B5DFFE /* dynamic_glucose_effect_none_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_none_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_never_fully_observed_output.json; sourceTree = "<group>"; };
@@ -1806,101 +1832,101 @@
 		4369F090208B0D68000E3E45 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E9086B3024B3A7270062F5C8 /* ChartTableViewCell.swift */,
-				C1E4B303242E98E900E70CCB /* ProgressView.swift */,
-				C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */,
+				893C9F8A2447DBC100CD4185 /* CardList */,
+				E9077D2824ACD5AA0066A88D /* Information Screens */,
+				E916F56724AD31F900BE3547 /* Settings Editors */,
+				892A5DAD2231E185008961AB /* HUDAssets.xcassets */,
+				B4C004B2241085DB00B40429 /* ActionButton.swift */,
+				89AF78C524482268002B4FCC /* ActionButtonStyle.swift */,
+				C1E4B307242E995200E70CCB /* ActivityIndicator.swift */,
+				89BE75CA2464BC2000B145D9 /* AlertContent.swift */,
 				43F5035821059AF7009FA89A /* AuthenticationTableViewCell.swift */,
 				43F5035921059AF7009FA89A /* AuthenticationTableViewCell.xib */,
-				892A5D63222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.swift */,
-				892A5D62222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.xib */,
 				898E6E64224179300019E459 /* BaseHUDView.swift */,
 				898E6E66224179300019E459 /* BatteryLevelHUDView.swift */,
 				898E6E65224179300019E459 /* BatteryLevelHUDView.xib */,
+				E9086B3424B3A8820062F5C8 /* ChartContainerView.swift */,
+				E9086B3024B3A7270062F5C8 /* ChartTableViewCell.swift */,
+				1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */,
+				89627B172441168900BEB424 /* ConfigurationPage.swift */,
+				8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */,
 				43D8FE591C7291D80073BE78 /* DatePickerTableViewCell.swift */,
 				895FE07922011F0B00FCF18A /* DecimalTextFieldTableViewCell.xib */,
+				89904031245B5CA500F1C0A2 /* Deletable.swift */,
+				B46B62B023FF0CA6001E69BA /* DescriptiveText.swift */,
+				89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */,
 				895FE07B22011F0C00FCF18A /* DoubleRangeTableViewCell.swift */,
 				895FE07222011F0B00FCF18A /* DoubleRangeTableViewCell.xib */,
+				89186C0A24BFD6DB0003D0F3 /* DurationPicker.swift */,
 				895FE07322011F0B00FCF18A /* EmojiDataSource.swift */,
 				895FE07A22011F0C00FCF18A /* EmojiInputCell.swift */,
 				895FE07E22011F0C00FCF18A /* EmojiInputHeaderView.swift */,
+				E9DFB92424E43CF500468917 /* ExpandableDatePicker.swift */,
+				899012C0246F1D8F007B88BA /* ExpandableSetting.swift */,
+				89653C7F2473527100E1BAA5 /* FractionalQuantityPicker.swift */,
 				43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */,
 				43177D071D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib */,
+				898B4E76246DAE280053C484 /* GlucoseRangePicker.swift */,
 				43D8FE071C7290530073BE78 /* GlucoseRangeTableViewCell.swift */,
 				43D8FE081C7290530073BE78 /* GlucoseRangeTableViewCell.xib */,
-				892A5DAD2231E185008961AB /* HUDAssets.xcassets */,
+				89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */,
+				898B4E7D246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift */,
+				89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */,
+				89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */,
+				B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */,
+				B4C004B3241085DB00B40429 /* GuidePage.swift */,
+				B46B62A623FEFE4D001E69BA /* InstructionList.swift */,
+				892155162245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.swift */,
+				892155172245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.xib */,
+				B46B62AC23FF0A87001E69BA /* LabeledDateView.swift */,
+				B46B62A823FF05F8001E69BA /* LabeledNumberInput.swift */,
+				B4A2AAB0240830A30066563F /* LabeledTextField.swift */,
 				895FE07522011F0B00FCF18A /* LabeledTextFieldTableViewCell.swift */,
 				895FE07D22011F0C00FCF18A /* LabeledTextFieldTableViewCell.xib */,
+				B46B62AA23FF0822001E69BA /* LabeledValueView.swift */,
 				892A5DB02231E191008961AB /* LevelHUDView.swift */,
 				892A5DB12231E191008961AB /* LevelMaskView.swift */,
 				892A5DAF2231E191008961AB /* LoadingTableViewCell.swift */,
+				89BE75C024649C2E00B145D9 /* ModalHeaderButtonBar.swift */,
+				B4A2AAB2240832350066563F /* MultipleSelectionList.swift */,
+				89BE75C424649C8100B145D9 /* NewScheduleItemEditor.swift */,
 				895FE07422011F0B00FCF18A /* OverridePresetCollectionViewCell.swift */,
 				895FE07622011F0B00FCF18A /* OverrideSelectionFooterView.swift */,
 				895FE07C22011F0C00FCF18A /* OverrideSelectionHeaderView.swift */,
 				4369F08E208859E6000E3E45 /* PaddedTextField.swift */,
+				C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */,
+				C1E4B303242E98E900E70CCB /* ProgressView.swift */,
+				89AC9DCA24529927004A6B8A /* QuantityPicker.swift */,
+				89FC688B245A2D670075CF59 /* QuantityScheduleEditor.swift */,
 				43D8FE0A1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift */,
 				43D8FE0B1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib */,
 				892A5DB62231E19F008961AB /* ReservoirVolumeHUDView.swift */,
 				892A5DB52231E19F008961AB /* ReservoirVolumeHUDView.xib */,
+				89BE75C224649C4C00B145D9 /* RoundedCorners.swift */,
+				89FC688D245A2D680075CF59 /* ScheduleEditor.swift */,
+				89FC688C245A2D680075CF59 /* ScheduleItemPicker.swift */,
+				89FC688E245A2D680075CF59 /* ScheduleItemView.swift */,
+				B46B62AE23FF0BF6001E69BA /* SectionHeader.swift */,
 				89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */,
+				892155142245C57E009112BC /* SegmentedGaugeBarLayer.swift */,
+				892155122245C516009112BC /* SegmentedGaugeBarView.swift */,
+				B46B62B223FF0E62001E69BA /* SelectableLabel.swift */,
+				892A5D63222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.swift */,
+				892A5D62222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.xib */,
+				89F6E310244A1AAB00CB9E15 /* SettingDescription.swift */,
 				432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */,
 				432CF86820D76B320066B889 /* SetupButton.swift */,
 				432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */,
 				898E6E6D2241ED9F0019E459 /* SuspendResumeTableViewCell.swift */,
 				432CF86C20D76C470066B889 /* SwitchTableViewCell.swift */,
+				B41A60AE23D1DB5B00636320 /* TableViewTitleLabel.swift */,
 				4369F093208BA001000E3E45 /* TextButtonTableViewCell.swift */,
 				434FF1F01CF29451000DB779 /* TextFieldTableViewCell.swift */,
 				434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */,
-				43F5034E210599DF009FA89A /* ValidatingIndicatorView.swift */,
-				892155122245C516009112BC /* SegmentedGaugeBarView.swift */,
 				89CC35D32403450E008FB633 /* ThumbView.swift */,
-				892155142245C57E009112BC /* SegmentedGaugeBarLayer.swift */,
-				892155162245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.swift */,
-				892155172245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.xib */,
-				8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */,
-				B41A60AE23D1DB5B00636320 /* TableViewTitleLabel.swift */,
-				B46B62A623FEFE4D001E69BA /* InstructionList.swift */,
-				B46B62A823FF05F8001E69BA /* LabeledNumberInput.swift */,
-				B46B62AA23FF0822001E69BA /* LabeledValueView.swift */,
-				B46B62AC23FF0A87001E69BA /* LabeledDateView.swift */,
-				B46B62AE23FF0BF6001E69BA /* SectionHeader.swift */,
-				B46B62B023FF0CA6001E69BA /* DescriptiveText.swift */,
-				B46B62B223FF0E62001E69BA /* SelectableLabel.swift */,
-				B4A2AAB0240830A30066563F /* LabeledTextField.swift */,
-				B4A2AAB2240832350066563F /* MultipleSelectionList.swift */,
-				B4C004B3241085DB00B40429 /* GuidePage.swift */,
-				B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */,
-				B4C004B2241085DB00B40429 /* ActionButton.swift */,
-				C1E4B307242E995200E70CCB /* ActivityIndicator.swift */,
-				89AF78C524482268002B4FCC /* ActionButtonStyle.swift */,
-				893C9F8A2447DBC100CD4185 /* CardList */,
-				89627B172441168900BEB424 /* ConfigurationPage.swift */,
-				89F6E310244A1AAB00CB9E15 /* SettingDescription.swift */,
-				89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */,
-				89AC9DCA24529927004A6B8A /* QuantityPicker.swift */,
-				89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */,
-				89CAB37024CB4DEC009EE3CE /* WarningView.swift */,
 				89AC9DCC24529D9B004A6B8A /* TimePicker.swift */,
-				89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */,
-				898B4E7D246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift */,
-				89FC688B245A2D670075CF59 /* QuantityScheduleEditor.swift */,
-				89FC688D245A2D680075CF59 /* ScheduleEditor.swift */,
-				89BE75C024649C2E00B145D9 /* ModalHeaderButtonBar.swift */,
-				89FC688C245A2D680075CF59 /* ScheduleItemPicker.swift */,
-				898B4E76246DAE280053C484 /* GlucoseRangePicker.swift */,
-				89FC688E245A2D680075CF59 /* ScheduleItemView.swift */,
-				89BE75C224649C4C00B145D9 /* RoundedCorners.swift */,
-				89BE75C424649C8100B145D9 /* NewScheduleItemEditor.swift */,
-				89BE75CA2464BC2000B145D9 /* AlertContent.swift */,
-				89904031245B5CA500F1C0A2 /* Deletable.swift */,
-				899012C0246F1D8F007B88BA /* ExpandableSetting.swift */,
-				89653C7F2473527100E1BAA5 /* FractionalQuantityPicker.swift */,
-				E916F56724AD31F900BE3547 /* Settings Editors */,
-				E9077D2824ACD5AA0066A88D /* Information Screens */,
-				1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */,
-				89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */,
-				E9086B3424B3A8820062F5C8 /* ChartContainerView.swift */,
-				89186C0A24BFD6DB0003D0F3 /* DurationPicker.swift */,
-				E9DFB92424E43CF500468917 /* ExpandableDatePicker.swift */,
+				43F5034E210599DF009FA89A /* ValidatingIndicatorView.swift */,
+				89CAB37024CB4DEC009EE3CE /* WarningView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2574,15 +2600,17 @@
 		E9077D2824ACD5AA0066A88D /* Information Screens */ = {
 			isa = PBXGroup;
 			children = (
-				E9077D2624ACD59F0066A88D /* InformationView.swift */,
+				1D67E79C2563001800A82ED6 /* InformationScreens.xcassets */,
+				E96DCB5D24AF7DC7007117BC /* BasalRatesInformationView.swift */,
+				E93C86B124D080E00073089B /* CarbRatioInformationView.swift */,
 				E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */,
 				E916F56E24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift */,
-				E949E38E24B3711E00024DA0 /* InsulinModelInformationView.swift */,
-				E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */,
-				E96DCB5D24AF7DC7007117BC /* BasalRatesInformationView.swift */,
 				E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */,
-				E93C86B124D080E00073089B /* CarbRatioInformationView.swift */,
+				E9077D2624ACD59F0066A88D /* InformationView.swift */,
+				E949E38E24B3711E00024DA0 /* InsulinModelInformationView.swift */,
 				E93C86B524D08CAD0073089B /* InsulinSensitivityInformationView.swift */,
+				E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */,
+				1D1438B725633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift */,
 			);
 			path = "Information Screens";
 			sourceTree = "<group>";
@@ -2623,7 +2651,7 @@
 				1D1FCE2A24BE704A000300A8 /* TherapySetting+Settings.swift */,
 				1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */,
 				1D1FCE2424BD42EF000300A8 /* TherapySettingsViewModel.swift */,
-				E9D95F6424C7BC400079F47D /* PresentationMode.swift */,
+				E9D95F6424C7BC400079F47D /* SettingsPresentationMode.swift */,
 				E93C869F24C8F6E00073089B /* InsulinModelSelection.swift */,
 			);
 			path = "Settings Editors";
@@ -2764,6 +2792,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				1D81905325688079004D1BEC /* PBXTargetDependency */,
 			);
 			name = LoopKit;
 			productName = LoopKit;
@@ -2875,6 +2904,10 @@
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "LoopKit Authors";
 				TargetAttributes = {
+					1D81903A25687FF2004D1BEC = {
+						CreatedOnToolsVersion = 12.2;
+						ProvisioningStyle = Automatic;
+					};
 					1DEE226824A676A300693C32 = {
 						TestTargetID = 430157F61C7EC03B00B64B63;
 					};
@@ -2953,6 +2986,7 @@
 				89D2047121CC7BD7001238CC /* MockKit */,
 				89D2048E21CC7C12001238CC /* MockKitUI */,
 				892A5D33222F03CB008961AB /* LoopTestingKit */,
+				1D81903A25687FF2004D1BEC /* Cartfile */,
 			);
 		};
 /* End PBXProject section */
@@ -2987,6 +3021,7 @@
 				892A5DAE2231E185008961AB /* HUDAssets.xcassets in Resources */,
 				43BA719720203EF30058961E /* CarbKit.storyboard in Resources */,
 				43BA7173201E492E0058961E /* DateAndDurationTableViewCell.xib in Resources */,
+				1D67E79D2563001800A82ED6 /* InformationScreens.xcassets in Resources */,
 				43BA7164201E49130058961E /* InsulinKit.storyboard in Resources */,
 				895FE08A22011F0C00FCF18A /* LabeledTextFieldTableViewCell.xib in Resources */,
 				892155192245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.xib in Resources */,
@@ -3161,6 +3196,42 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1D81905025688014004D1BEC /* Homebrew & Carthage Setup */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Homebrew & Carthage Setup";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if ! [ -x \"$(command -v brew)\" ]; then\n    # Install Homebrew\n    ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\"\nfi\n\nif brew ls carthage > /dev/null; then\n    brew upgrade carthage || echo \"Continuing…\"\nelse\n    brew install carthage\nfi\n";
+		};
+		1D8190512568805E004D1BEC /* Carthage Bootstrap */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Carthage Bootstrap";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Bootstrapping Carthage dependencies...\"\nunset LLVM_TARGET_TRIPLE_SUFFIX\n\nif ! cmp -s Cartfile.Resolved Carthage/Cartfile.resolved; then\n    time ./Scripts/carthage.sh bootstrap --project-directory \"$SRCROOT\" --platform ios --cache-builds --verbose || exit 1\n    cp Cartfile.resolved Carthage\nelse\n    echo \"Carthage: not bootstrapping\"\nfi\n";
+		};
 		E9D95F9B24C8BB3D0079F47D /* Copy Frameworks with Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3226,6 +3297,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D1438B825633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift in Sources */,
 				898E6E6E2241ED9F0019E459 /* SuspendResumeTableViewCell.swift in Sources */,
 				B4C004D12416961300B40429 /* GuidePage.swift in Sources */,
 				898B4E7E246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift in Sources */,
@@ -3369,7 +3441,7 @@
 				43BA717B201EE6A40058961E /* NibLoadable.swift in Sources */,
 				E916F56F24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift in Sources */,
 				89BE75C124649C2E00B145D9 /* ModalHeaderButtonBar.swift in Sources */,
-				E9D95F6524C7BC400079F47D /* PresentationMode.swift in Sources */,
+				E9D95F6524C7BC400079F47D /* SettingsPresentationMode.swift in Sources */,
 				89186C0524BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift in Sources */,
 				89F6E315244A1AB600CB9E15 /* GlucoseValuePicker.swift in Sources */,
 				E9086B3124B3A7270062F5C8 /* ChartTableViewCell.swift in Sources */,
@@ -3864,6 +3936,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1D81905325688079004D1BEC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1D81903A25687FF2004D1BEC /* Cartfile */;
+			targetProxy = 1D81905225688079004D1BEC /* PBXContainerItemProxy */;
+		};
 		1DEE226924A676A300693C32 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
@@ -4042,6 +4119,22 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1D81903B25687FF2004D1BEC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1D81903C25687FF2004D1BEC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		1DEE22FF24A676A300693C32 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -4534,6 +4627,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1D81903D25687FF2004D1BEC /* Build configuration list for PBXAggregateTarget "Cartfile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D81903B25687FF2004D1BEC /* Debug */,
+				1D81903C25687FF2004D1BEC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1DEE22FE24A676A300693C32 /* Build configuration list for PBXNativeTarget "LoopKitHostedTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

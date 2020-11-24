@@ -60,6 +60,22 @@ class GuardrailTests: XCTestCase {
         }
     }
     
+    func testCorrectionRange() {
+        let guardrail = Guardrail.correctionRange
+        let expectedAndTest: [(SafetyClassification, Double)] = [
+            (SafetyClassification.withinRecommendedRange, 100),
+            (SafetyClassification.withinRecommendedRange, 115),
+            (SafetyClassification.outsideRecommendedRange(.belowRecommended), 100.nextDown),
+            (SafetyClassification.outsideRecommendedRange(.aboveRecommended), 115.nextUp),
+            (SafetyClassification.outsideRecommendedRange(.maximum), 180),
+            (SafetyClassification.outsideRecommendedRange(.minimum), 87),
+        ]
+        
+        for test in expectedAndTest {
+            XCTAssertEqual(test.0, guardrail.classification(for: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: test.1)), "for \(test.1)")
+        }
+    }
+    
     func testWorkoutCorrectionRange() {
         let correctionRangeInputs = [ 70...80, 70...85, 70...90 ]
         let suspendThresholdInputs: [Double?] = [ nil, 81, 91 ]
@@ -178,11 +194,26 @@ class GuardrailTests: XCTestCase {
     }
     
     func testMaxBasalRateGuardrailNoScheduledBasalRates() {
-        let supportedBasalRates = [0.0, 1.0]
+        let supportedBasalRates = [0, 0.05, 1.0]
         let lowestCarbRatio = 10.0
         let guardrail = Guardrail.maximumBasalRate(supportedBasalRates: supportedBasalRates, scheduledBasalRange: nil, lowestCarbRatio: lowestCarbRatio)
-        XCTAssertEqual(guardrail.absoluteBounds.range(withUnit: .internationalUnitsPerHour), 0.0...1.0)
-        XCTAssertEqual(guardrail.recommendedBounds.range(withUnit: .internationalUnitsPerHour), 0.0...1.0)
+        XCTAssertEqual(guardrail.absoluteBounds.range(withUnit: .internationalUnitsPerHour), 0.05...1.0)
+        XCTAssertEqual(guardrail.recommendedBounds.range(withUnit: .internationalUnitsPerHour), 0.05...1.0)
+    }
+    
+    func testSelectableBasalRatesGuardrail() {
+        let supportedBasalRates = [0, 0.05, 1.0]
+        let scheduledBasalRange = 0.05...0.78125
+        let lowestCarbRatio = 10.0
+        let selectableMaxBasalRates = Guardrail.selectableMaxBasalRates(supportedBasalRates: supportedBasalRates, scheduledBasalRange: scheduledBasalRange, lowestCarbRatio: lowestCarbRatio)
+        XCTAssertEqual([1.0], selectableMaxBasalRates)
+    }
+    
+    func testSelectableBasalRatesGuardrailNoScheduledBasalRates() {
+        let supportedBasalRates = [0, 0.05, 1.0]
+        let lowestCarbRatio = 10.0
+        let selectableMaxBasalRates = Guardrail.selectableMaxBasalRates(supportedBasalRates: supportedBasalRates, scheduledBasalRange: nil, lowestCarbRatio: lowestCarbRatio)
+        XCTAssertEqual([0.05, 1.0], selectableMaxBasalRates)
     }
     
     func testMaxBolusGuardrailInsideLimits() {
@@ -218,6 +249,12 @@ class GuardrailTests: XCTestCase {
         let guardrail = Guardrail.maximumBolus(supportedBolusVolumes: supportedBolusVolumes)
         XCTAssertEqual(guardrail.absoluteBounds.range(withUnit: .internationalUnit()), 0.05...30.0)
         XCTAssertEqual(guardrail.recommendedBounds.range(withUnit: .internationalUnit()), 1.0...20.0.nextDown)
+    }
+    
+    func testSelectableBolusVolumes() {
+        let supportedBolusVolumes = [0.0, 0.05, 1.0, 2.0, 30.nextUp]
+        let selectableBolusVolumes = Guardrail.selectableBolusVolumes(supportedBolusVolumes: supportedBolusVolumes)
+        XCTAssertEqual([0.05, 1.0, 2.0], selectableBolusVolumes)
     }
 }
 

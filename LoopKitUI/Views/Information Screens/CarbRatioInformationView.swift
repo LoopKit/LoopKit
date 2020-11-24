@@ -11,14 +11,14 @@ import LoopKit
 
 public struct CarbRatioInformationView: View {
     var onExit: (() -> Void)?
-    var mode: PresentationMode
+    var mode: SettingsPresentationMode
     
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.appName) private var appName
 
     public init(
         onExit: (() -> Void)?,
-        mode: PresentationMode = .acceptanceFlow
+        mode: SettingsPresentationMode = .acceptanceFlow
     ){
         self.onExit = onExit
         self.mode = mode

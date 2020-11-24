@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 #
-# This script exists due to an issue with Carthage.  The script comes from https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323 
+# This script exists due to an issue with Carthage.  The script comes from https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323
 
 # carthage.sh
 # Usage example: ./carthage.sh build --platform iOS
+
+echo "This script exists due to an issue with Carthage.  The script comes from https://github.com/Carthage/Carthage/issues/3019#issuecomment-665136323"
 
 set -euo pipefail
 
