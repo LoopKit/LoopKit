@@ -9,6 +9,27 @@
 import XCTest
 @testable import LoopKit
 
+extension TimeZone {
+    static var fixtureTimeZone: TimeZone {
+        return TimeZone(secondsFromGMT: 25200)! // -0700
+    }
+    
+    static var utcTimeZone: TimeZone {
+        return TimeZone(secondsFromGMT: 0)!
+    }
+}
+
+extension ISO8601DateFormatter {
+    static func fixtureFormatter(timeZone: TimeZone = .fixtureTimeZone) -> Self {
+        let formatter = self.init()
+
+        formatter.formatOptions = .withInternetDateTime
+        formatter.formatOptions.subtract(.withTimeZone)
+        formatter.timeZone = timeZone
+
+        return formatter
+    }
+}
 
 class TemporaryScheduleOverrideTests: XCTestCase {
 
@@ -430,7 +451,7 @@ private extension TemporaryScheduleOverride.Duration {
 }
 
 class TemporaryOverrideEndCodableTests: XCTestCase {
-    let dateFormatter = ISO8601DateFormatter.localTimeDate()
+    var dateFormatter = ISO8601DateFormatter.fixtureFormatter()
     
     private func date(at time: String) -> Date {
         return dateFormatter.date(from: "2019-01-01T\(time):00")!
@@ -441,7 +462,7 @@ class TemporaryOverrideEndCodableTests: XCTestCase {
         try assertEndCodable(end, encodesJSON: """
 {
   "end" : {
-    "date" : 568026000,
+    "date" : 567975600,
     "type" : "early"
   }
 }
