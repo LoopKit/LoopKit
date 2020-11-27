@@ -9,10 +9,14 @@
 import UIKit
 import HealthKit
 import LoopKit
+import SwiftUI
+import Intents
+import os.log
 
 
 public protocol OverrideSelectionViewControllerDelegate: AnyObject {
     func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didUpdatePresets presets: [TemporaryScheduleOverridePreset])
+    func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didConfirmPreset preset: TemporaryScheduleOverridePreset)
     func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didConfirmOverride override: TemporaryScheduleOverride)
     func overrideSelectionViewController(_ vc: OverrideSelectionViewController, didCancelOverride override: TemporaryScheduleOverride)
 }
@@ -28,6 +32,8 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
             delegate?.overrideSelectionViewController(self, didUpdatePresets: presets)
         }
     }
+    
+    public var overrideHistory: [TemporaryScheduleOverride] = []
 
     public weak var delegate: OverrideSelectionViewControllerDelegate?
 
@@ -74,6 +80,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         case scheduledOverride(TemporaryScheduleOverride)
         case preset(TemporaryScheduleOverridePreset)
         case customOverride
+        case history
     }
 
     private func cellContent(for indexPath: IndexPath) -> CellContent {
@@ -86,15 +93,17 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         case .presets:
             if presets.indices.contains(indexPath.row) {
                 return .preset(presets[indexPath.row])
-            } else {
+            } else if indexPathOfCustomOverride().row == indexPath.row {
                 return .customOverride
+            } else {
+                return .history
             }
         }
     }
 
     private func indexPathOfCustomOverride() -> IndexPath {
         let section = sections.firstIndex(of: .presets)!
-        let row = self.collectionView(collectionView, numberOfItemsInSection: section) - 1
+        let row = self.collectionView(collectionView, numberOfItemsInSection: section) - 2
         return IndexPath(row: row, section: section)
     }
 
@@ -107,8 +116,8 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         case .scheduledOverride:
             return 1
         case .presets:
-            // +1 for custom override
-            return presets.count + 1 
+            // +1 for custom override and +1 for history
+            return presets.count + 2
         }
     }
 
@@ -159,6 +168,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
     public override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let customSymbol = "⋯"
         let customName = LocalizedString("Custom", comment: "The text for a custom preset")
+        let historyLabel = LocalizedString("History", comment: "The text for the override history")
 
         switch cellContent(for: indexPath) {
         case .scheduledOverride(let override):
@@ -194,6 +204,15 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         case .customOverride:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomOverrideCollectionViewCell.className, for: indexPath) as! CustomOverrideCollectionViewCell
             cell.titleLabel.text = customName
+            if isEditingPresets {
+                cell.applyOverlayToFade(animated: false)
+            }
+
+            return cell
+        case .history:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OverrideHistoryCollectionViewCell.className, for: indexPath) as! OverrideHistoryCollectionViewCell
+            cell.titleLabel.text = historyLabel
+            cell.titleLabel.accessibilityLabel = historyLabel
             if isEditingPresets {
                 cell.applyOverlayToFade(animated: false)
             }
@@ -237,7 +256,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
     public override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if isEditingPresets {
             switch cellContent(for: indexPath) {
-            case .scheduledOverride, .customOverride:
+            case .scheduledOverride, .customOverride, .history:
                 break
             case .preset(let preset):
                 let editVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit)
@@ -254,14 +273,22 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
                 editOverrideVC.delegate = self
                 show(editOverrideVC, sender: collectionView.cellForItem(at: indexPath))
             case .preset(let preset):
-                let override = preset.createOverride(enactTrigger: .local)
-                delegate?.overrideSelectionViewController(self, didConfirmOverride: override)
+                delegate?.overrideSelectionViewController(self, didConfirmPreset: preset)
                 dismiss(animated: true)
             case .customOverride:
                 let customOverrideVC = AddEditOverrideTableViewController(glucoseUnit: glucoseUnit)
                 customOverrideVC.inputMode = .customOverride
                 customOverrideVC.delegate = self
                 show(customOverrideVC, sender: collectionView.cellForItem(at: indexPath))
+            case .history:
+                let model = OverrideHistoryViewModel(
+                    overrides: overrideHistory,
+                    glucoseUnit: glucoseUnit
+                )
+                let overrideHistoryView = OverrideSelectionHistory(model: model)
+                let hostedView = UIHostingController(rootView: overrideHistoryView)
+                hostedView.title = LocalizedString("Override History", comment: "Title for override history view") // Hack to fix animations
+                navigationController?.pushViewController(hostedView, animated: true)
             }
         }
     }
@@ -338,7 +365,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
         }
 
         switch cellContent(for: indexPath) {
-        case .scheduledOverride, .customOverride:
+        case .scheduledOverride, .customOverride, .history:
             return false
         case .preset:
             return true
@@ -390,7 +417,7 @@ extension OverrideSelectionViewController: UICollectionViewDelegateFlowLayout {
         switch cellContent(for: indexPath) {
         case .scheduledOverride, .preset:
             height = 76
-        case .customOverride:
+        case .customOverride, .history:
             height = 52
         }
 
@@ -465,6 +492,14 @@ extension OverrideSelectionViewController: OverridePresetCollectionViewCellDeleg
         }
 
         presets.remove(at: indexPath.row)
+        if let name = cell.nameLabel.text {
+            INInteraction.delete(with: name) { (error) in
+                if let error = error {
+                    os_log(.error, "Failed to delete intent: %{public}@", String(describing: error))
+                }
+            }
+        }
+        
         collectionView.deleteItems(at: [indexPath])
     }
 }
