@@ -788,6 +788,8 @@
 		E93E865E24DC797A00FF40C8 /* basal_dose_with_delivered.json in Resources */ = {isa = PBXBuildFile; fileRef = E93E865D24DC797A00FF40C8 /* basal_dose_with_delivered.json */; };
 		E93E866024DC82A600FF40C8 /* dose_history_with_delivered_units.json in Resources */ = {isa = PBXBuildFile; fileRef = E93E865F24DC82A500FF40C8 /* dose_history_with_delivered_units.json */; };
 		E93E866224DC87AE00FF40C8 /* effect_from_history_exponential_delivered_units_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E93E866124DC87AE00FF40C8 /* effect_from_history_exponential_delivered_units_output.json */; };
+		E93E866424DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93E866324DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift */; };
+		E93E866A24DD05FA00FF40C8 /* OverrideSelectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93E866924DD05FA00FF40C8 /* OverrideSelectionHistory.swift */; };
 		E94141CE24C8F2950096C326 /* ExponentialInsulinModelPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D096C0024C24C220078B6B5 /* ExponentialInsulinModelPreset.swift */; };
 		E94141D024C8F31C0096C326 /* DeliveryLimitsEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94141CF24C8F31C0096C326 /* DeliveryLimitsEditor.swift */; };
 		E949E38924AFC82F00024DA0 /* DeliveryLimitsInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */; };
@@ -796,22 +798,18 @@
 		E96DCB5824AEF50F007117BC /* SuspendThresholdInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */; };
 		E96DCB5A24AF74AC007117BC /* SuspendThresholdEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */; };
 		E96DCB5E24AF7DC7007117BC /* BasalRatesInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5D24AF7DC7007117BC /* BasalRatesInformationView.swift */; };
+		E99A132E2557548300D3F5B3 /* SegmentedGaugeBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99A132D2557548300D3F5B3 /* SegmentedGaugeBar.swift */; };
+		E9C58A6E24DA65E400487A17 /* HistoricalOverrideDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C58A6D24DA65E400487A17 /* HistoricalOverrideDetailView.swift */; };
 		E9D95F6524C7BC400079F47D /* SettingsPresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D95F6424C7BC400079F47D /* SettingsPresentationMode.swift */; };
 		E9DFB92524E43CF500468917 /* ExpandableDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92424E43CF500468917 /* ExpandableDatePicker.swift */; };
 		E9E5E56524D362E900B5DFFE /* dynamic_glucose_effect_none_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56124D362E800B5DFFE /* dynamic_glucose_effect_none_observed_output.json */; };
 		E9E5E56624D362E900B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */; };
 		E9E5E56724D362E900B5DFFE /* dynamic_glucose_effect_partially_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56324D362E800B5DFFE /* dynamic_glucose_effect_partially_observed_output.json */; };
 		E9E5E56824D362E900B5DFFE /* dynamic_glucose_effect_fully_observed_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9E5E56424D362E900B5DFFE /* dynamic_glucose_effect_fully_observed_output.json */; };
+		E9E5E56A24D5CCE800B5DFFE /* OverrideViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		1D81905225688079004D1BEC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1D81903A25687FF2004D1BEC;
-			remoteInfo = Cartfile;
-		};
 		1DEE226A24A676A300693C32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
@@ -1184,7 +1182,7 @@
 		43D8FE4C1C7291BD0073BE78 /* CarbStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarbStore.swift; sourceTree = "<group>"; };
 		43D8FE4D1C7291BD0073BE78 /* HKQuantitySample+CarbKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HKQuantitySample+CarbKit.swift"; sourceTree = "<group>"; };
 		43D8FE4E1C7291BD0073BE78 /* StoredCarbEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoredCarbEntry.swift; sourceTree = "<group>"; };
-		43D8FE561C7291D80073BE78 /* CarbEntryEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CarbEntryEditViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		43D8FE561C7291D80073BE78 /* CarbEntryEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CarbEntryEditViewController.swift; sourceTree = "<group>"; };
 		43D8FE571C7291D80073BE78 /* CarbEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = CarbEntryTableViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		43D8FE591C7291D80073BE78 /* DatePickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerTableViewCell.swift; sourceTree = "<group>"; };
 		43D8FE5A1C7291D80073BE78 /* DecimalTextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecimalTextFieldTableViewCell.swift; sourceTree = "<group>"; };
@@ -1573,6 +1571,8 @@
 		E93E865D24DC797A00FF40C8 /* basal_dose_with_delivered.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = basal_dose_with_delivered.json; sourceTree = "<group>"; };
 		E93E865F24DC82A500FF40C8 /* dose_history_with_delivered_units.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dose_history_with_delivered_units.json; sourceTree = "<group>"; };
 		E93E866124DC87AE00FF40C8 /* effect_from_history_exponential_delivered_units_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = effect_from_history_exponential_delivered_units_output.json; sourceTree = "<group>"; };
+		E93E866324DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideHistoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		E93E866924DD05FA00FF40C8 /* OverrideSelectionHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideSelectionHistory.swift; sourceTree = "<group>"; };
 		E94141CF24C8F31C0096C326 /* DeliveryLimitsEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimitsEditor.swift; sourceTree = "<group>"; };
 		E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimitsInformationView.swift; sourceTree = "<group>"; };
 		E949E38E24B3711E00024DA0 /* InsulinModelInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinModelInformationView.swift; sourceTree = "<group>"; };
@@ -1580,12 +1580,15 @@
 		E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdInformationView.swift; sourceTree = "<group>"; };
 		E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdEditor.swift; sourceTree = "<group>"; };
 		E96DCB5D24AF7DC7007117BC /* BasalRatesInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasalRatesInformationView.swift; sourceTree = "<group>"; };
+		E99A132D2557548300D3F5B3 /* SegmentedGaugeBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedGaugeBar.swift; sourceTree = "<group>"; };
+		E9C58A6D24DA65E400487A17 /* HistoricalOverrideDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalOverrideDetailView.swift; sourceTree = "<group>"; };
 		E9D95F6424C7BC400079F47D /* SettingsPresentationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresentationMode.swift; sourceTree = "<group>"; };
 		E9DFB92424E43CF500468917 /* ExpandableDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDatePicker.swift; sourceTree = "<group>"; };
 		E9E5E56124D362E800B5DFFE /* dynamic_glucose_effect_none_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_none_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_never_fully_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56324D362E800B5DFFE /* dynamic_glucose_effect_partially_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_partially_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56424D362E900B5DFFE /* dynamic_glucose_effect_fully_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_fully_observed_output.json; sourceTree = "<group>"; };
+		E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1793,6 +1796,7 @@
 				E93BA06524A39DBC00C5D7E6 /* DismissibleHostingController.swift */,
 				E9086B2824B39EDC0062F5C8 /* ChartsTableViewController.swift */,
 				E9086B2C24B3A4AC0062F5C8 /* ChartsManager.swift */,
+				E9C58A6D24DA65E400487A17 /* HistoricalOverrideDetailView.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -1833,45 +1837,32 @@
 			isa = PBXGroup;
 			children = (
 				893C9F8A2447DBC100CD4185 /* CardList */,
-				E9077D2824ACD5AA0066A88D /* Information Screens */,
-				E916F56724AD31F900BE3547 /* Settings Editors */,
 				892A5DAD2231E185008961AB /* HUDAssets.xcassets */,
 				B4C004B2241085DB00B40429 /* ActionButton.swift */,
 				89AF78C524482268002B4FCC /* ActionButtonStyle.swift */,
 				C1E4B307242E995200E70CCB /* ActivityIndicator.swift */,
-				89BE75CA2464BC2000B145D9 /* AlertContent.swift */,
+				E93E866924DD05FA00FF40C8 /* OverrideSelectionHistory.swift */,
 				43F5035821059AF7009FA89A /* AuthenticationTableViewCell.swift */,
 				43F5035921059AF7009FA89A /* AuthenticationTableViewCell.xib */,
 				898E6E64224179300019E459 /* BaseHUDView.swift */,
 				898E6E66224179300019E459 /* BatteryLevelHUDView.swift */,
 				898E6E65224179300019E459 /* BatteryLevelHUDView.xib */,
-				E9086B3424B3A8820062F5C8 /* ChartContainerView.swift */,
 				E9086B3024B3A7270062F5C8 /* ChartTableViewCell.swift */,
-				1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */,
 				89627B172441168900BEB424 /* ConfigurationPage.swift */,
 				8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */,
 				43D8FE591C7291D80073BE78 /* DatePickerTableViewCell.swift */,
 				895FE07922011F0B00FCF18A /* DecimalTextFieldTableViewCell.xib */,
-				89904031245B5CA500F1C0A2 /* Deletable.swift */,
 				B46B62B023FF0CA6001E69BA /* DescriptiveText.swift */,
-				89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */,
 				895FE07B22011F0C00FCF18A /* DoubleRangeTableViewCell.swift */,
 				895FE07222011F0B00FCF18A /* DoubleRangeTableViewCell.xib */,
-				89186C0A24BFD6DB0003D0F3 /* DurationPicker.swift */,
 				895FE07322011F0B00FCF18A /* EmojiDataSource.swift */,
 				895FE07A22011F0C00FCF18A /* EmojiInputCell.swift */,
 				895FE07E22011F0C00FCF18A /* EmojiInputHeaderView.swift */,
-				E9DFB92424E43CF500468917 /* ExpandableDatePicker.swift */,
-				899012C0246F1D8F007B88BA /* ExpandableSetting.swift */,
-				89653C7F2473527100E1BAA5 /* FractionalQuantityPicker.swift */,
 				43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */,
 				43177D071D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib */,
-				898B4E76246DAE280053C484 /* GlucoseRangePicker.swift */,
 				43D8FE071C7290530073BE78 /* GlucoseRangeTableViewCell.swift */,
 				43D8FE081C7290530073BE78 /* GlucoseRangeTableViewCell.xib */,
 				89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */,
-				898B4E7D246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift */,
-				89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */,
 				89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */,
 				B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */,
 				B4C004B3241085DB00B40429 /* GuidePage.swift */,
@@ -1887,9 +1878,7 @@
 				892A5DB02231E191008961AB /* LevelHUDView.swift */,
 				892A5DB12231E191008961AB /* LevelMaskView.swift */,
 				892A5DAF2231E191008961AB /* LoadingTableViewCell.swift */,
-				89BE75C024649C2E00B145D9 /* ModalHeaderButtonBar.swift */,
 				B4A2AAB2240832350066563F /* MultipleSelectionList.swift */,
-				89BE75C424649C8100B145D9 /* NewScheduleItemEditor.swift */,
 				895FE07422011F0B00FCF18A /* OverridePresetCollectionViewCell.swift */,
 				895FE07622011F0B00FCF18A /* OverrideSelectionFooterView.swift */,
 				895FE07C22011F0C00FCF18A /* OverrideSelectionHeaderView.swift */,
@@ -1897,15 +1886,10 @@
 				C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */,
 				C1E4B303242E98E900E70CCB /* ProgressView.swift */,
 				89AC9DCA24529927004A6B8A /* QuantityPicker.swift */,
-				89FC688B245A2D670075CF59 /* QuantityScheduleEditor.swift */,
 				43D8FE0A1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift */,
 				43D8FE0B1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib */,
 				892A5DB62231E19F008961AB /* ReservoirVolumeHUDView.swift */,
 				892A5DB52231E19F008961AB /* ReservoirVolumeHUDView.xib */,
-				89BE75C224649C4C00B145D9 /* RoundedCorners.swift */,
-				89FC688D245A2D680075CF59 /* ScheduleEditor.swift */,
-				89FC688C245A2D680075CF59 /* ScheduleItemPicker.swift */,
-				89FC688E245A2D680075CF59 /* ScheduleItemView.swift */,
 				B46B62AE23FF0BF6001E69BA /* SectionHeader.swift */,
 				89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */,
 				892155142245C57E009112BC /* SegmentedGaugeBarLayer.swift */,
@@ -1927,6 +1911,30 @@
 				89AC9DCC24529D9B004A6B8A /* TimePicker.swift */,
 				43F5034E210599DF009FA89A /* ValidatingIndicatorView.swift */,
 				89CAB37024CB4DEC009EE3CE /* WarningView.swift */,
+				89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */,
+				898B4E7D246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift */,
+				89FC688B245A2D670075CF59 /* QuantityScheduleEditor.swift */,
+				89FC688D245A2D680075CF59 /* ScheduleEditor.swift */,
+				89BE75C024649C2E00B145D9 /* ModalHeaderButtonBar.swift */,
+				89FC688C245A2D680075CF59 /* ScheduleItemPicker.swift */,
+				898B4E76246DAE280053C484 /* GlucoseRangePicker.swift */,
+				89FC688E245A2D680075CF59 /* ScheduleItemView.swift */,
+				89BE75C224649C4C00B145D9 /* RoundedCorners.swift */,
+				89BE75C424649C8100B145D9 /* NewScheduleItemEditor.swift */,
+				89BE75CA2464BC2000B145D9 /* AlertContent.swift */,
+				89904031245B5CA500F1C0A2 /* Deletable.swift */,
+				899012C0246F1D8F007B88BA /* ExpandableSetting.swift */,
+				89653C7F2473527100E1BAA5 /* FractionalQuantityPicker.swift */,
+				E916F56724AD31F900BE3547 /* Settings Editors */,
+				E9077D2824ACD5AA0066A88D /* Information Screens */,
+				1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */,
+				89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */,
+				E9086B3424B3A8820062F5C8 /* ChartContainerView.swift */,
+				89186C0A24BFD6DB0003D0F3 /* DurationPicker.swift */,
+				E9DFB92424E43CF500468917 /* ExpandableDatePicker.swift */,
+				E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */,
+				E93E866324DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift */,
+				E99A132D2557548300D3F5B3 /* SegmentedGaugeBar.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2792,7 +2800,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				1D81905325688079004D1BEC /* PBXTargetDependency */,
 			);
 			name = LoopKit;
 			productName = LoopKit;
@@ -3301,6 +3308,7 @@
 				898E6E6E2241ED9F0019E459 /* SuspendResumeTableViewCell.swift in Sources */,
 				B4C004D12416961300B40429 /* GuidePage.swift in Sources */,
 				898B4E7E246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift in Sources */,
+				E93E866A24DD05FA00FF40C8 /* OverrideSelectionHistory.swift in Sources */,
 				898E6E69224179310019E459 /* BatteryLevelHUDView.swift in Sources */,
 				89E7E61024D11AB600591386 /* OrientationLock.swift in Sources */,
 				89B0B2AA2453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift in Sources */,
@@ -3342,6 +3350,7 @@
 				432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */,
 				898B4E7B246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift in Sources */,
 				898E6E6A224179530019E459 /* BasalScheduleTableViewController.swift in Sources */,
+				E9E5E56A24D5CCE800B5DFFE /* OverrideViewCell.swift in Sources */,
 				892A5DB42231E191008961AB /* LevelMaskView.swift in Sources */,
 				892A5DA02231E130008961AB /* CompletionNotifying.swift in Sources */,
 				E93C86A424C8F79C0073089B /* ChartLineModel+LoopKitUI.swift in Sources */,
@@ -3391,6 +3400,7 @@
 				432CF86B20D76B9C0066B889 /* SetupIndicatorView.swift in Sources */,
 				898E6E722241EDC10019E459 /* DateAndDurationTableViewController.swift in Sources */,
 				43BA716D201E49220058961E /* DatePickerTableViewCell.swift in Sources */,
+				E9C58A6E24DA65E400487A17 /* HistoricalOverrideDetailView.swift in Sources */,
 				895FE08222011F0C00FCF18A /* LabeledTextFieldTableViewCell.swift in Sources */,
 				B43DA44224D9CD8500CAFF4E /* Environment+Colors.swift in Sources */,
 				892A5DB22231E191008961AB /* LoadingTableViewCell.swift in Sources */,
@@ -3445,6 +3455,7 @@
 				89186C0524BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift in Sources */,
 				89F6E315244A1AB600CB9E15 /* GlucoseValuePicker.swift in Sources */,
 				E9086B3124B3A7270062F5C8 /* ChartTableViewCell.swift in Sources */,
+				E93E866424DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift in Sources */,
 				895FE08122011F0C00FCF18A /* OverridePresetCollectionViewCell.swift in Sources */,
 				43FB60E320DCB9E0002B996B /* PumpManagerUI.swift in Sources */,
 				89186C0B24BFD6DB0003D0F3 /* DurationPicker.swift in Sources */,
@@ -3476,6 +3487,7 @@
 				43BA716B201E49220058961E /* CarbEntryValidationNavigationDelegate.swift in Sources */,
 				89AF78C02447E285002B4FCC /* CardStackBuilder.swift in Sources */,
 				43BA7185201EE7090058961E /* DailyValueScheduleTableViewController.swift in Sources */,
+				E99A132E2557548300D3F5B3 /* SegmentedGaugeBar.swift in Sources */,
 				892A5DB32231E191008961AB /* LevelHUDView.swift in Sources */,
 				B41A60B223D1DBC700636320 /* UIFont.swift in Sources */,
 				B41A60AF23D1DB5B00636320 /* TableViewTitleLabel.swift in Sources */,
@@ -3936,11 +3948,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		1D81905325688079004D1BEC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1D81903A25687FF2004D1BEC /* Cartfile */;
-			targetProxy = 1D81905225688079004D1BEC /* PBXContainerItemProxy */;
-		};
 		1DEE226924A676A300693C32 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
@@ -4173,6 +4180,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = "LoopKit Example/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.LoopKitExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4194,6 +4202,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = "LoopKit Example/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.LoopKitExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4224,6 +4233,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LoopKitUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitUI;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -4255,6 +4265,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LoopKitUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitUI;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -4401,6 +4412,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4426,6 +4438,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4467,6 +4480,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = MockKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKit;
 				PRODUCT_NAME = MockKit;
@@ -4498,6 +4512,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LoopTestingKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKit;
 				PRODUCT_NAME = MockKit;
@@ -4514,6 +4529,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = MockKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKitUI;
 				PRODUCT_NAME = MockKitUI;
@@ -4532,6 +4548,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = MockKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKitUI;
 				PRODUCT_NAME = MockKitUI;
@@ -4549,6 +4566,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = MockKitUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKit;
 				PRODUCT_NAME = LoopTestingKit;
@@ -4568,6 +4586,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = MockKitUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKit;
 				PRODUCT_NAME = LoopTestingKit;

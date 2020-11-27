@@ -16,7 +16,7 @@ extension GlucoseRangeSchedule {
         }
 
         let doubleRange = targetRange.doubleRange(for: unit)
-        let rangeOverride = GlucoseRangeSchedule.Override(value: doubleRange, start: override.startDate, end: override.endDate)
+        let rangeOverride = GlucoseRangeSchedule.Override(value: doubleRange, start: override.startDate, end: override.scheduledEndDate)
         return GlucoseRangeSchedule(rangeSchedule: rangeSchedule, override: rangeOverride)
     }
 }

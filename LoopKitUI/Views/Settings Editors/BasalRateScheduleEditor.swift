@@ -144,7 +144,6 @@ private struct BasalRateGuardrailWarning: View {
         assert(!crossedThresholds.isEmpty)
 
         let caption = self.isZeroUnitRateSelectable && crossedThresholds.allSatisfy({ $0 == .minimum })
-            // ANNA TODO: ask MLee about this one
             ? Text(LocalizedString("A value of 0 U/hr means you will be scheduled to receive no basal insulin.", comment: "Warning text for basal rate of 0 U/hr"))
             : nil
 
