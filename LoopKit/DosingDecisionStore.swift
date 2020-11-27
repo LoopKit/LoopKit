@@ -63,15 +63,25 @@ public class DosingDecisionStore {
     private func purgeDosingDecisionObjects(before date: Date, completion: ((Error?) -> Void)? = nil) {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
 
-        do {
-            let count = try self.store.managedObjectContext.purgeObjects(of: DosingDecisionObject.self, matching: NSPredicate(format: "date < %@", date as NSDate))
-            self.log.info("Purged %d DosingDecisionObjects", count)
-            self.delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
-            completion?(nil)
-        } catch let error {
-            self.log.error("Unable to purge DosingDecisionObjects: %{public}@", String(describing: error))
-            completion?(error)
+        var purgeError: Error?
+
+        store.managedObjectContext.performAndWait {
+            do {
+                let count = try self.store.managedObjectContext.purgeObjects(of: DosingDecisionObject.self, matching: NSPredicate(format: "date < %@", date as NSDate))
+                self.log.info("Purged %d DosingDecisionObjects", count)
+            } catch let error {
+                self.log.error("Unable to purge DosingDecisionObjects: %{public}@", String(describing: error))
+                purgeError = error
+            }
         }
+
+        if let purgeError = purgeError {
+            completion?(purgeError)
+            return
+        }
+
+        delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
+        completion?(nil)
     }
 }
 
@@ -160,12 +170,16 @@ public struct StoredDosingDecision {
     public let carbsOnBoard: CarbValue?
     public let scheduleOverride: TemporaryScheduleOverride?
     public let glucoseTargetRangeSchedule: GlucoseRangeSchedule?
-    public let glucoseTargetRangeScheduleApplyingOverrideIfActive: GlucoseRangeSchedule?
+    public let effectiveGlucoseTargetRangeSchedule: GlucoseRangeSchedule?
     public let predictedGlucose: [PredictedGlucoseValue]?
     public let predictedGlucoseIncludingPendingInsulin: [PredictedGlucoseValue]?
     public let lastReservoirValue: LastReservoirValue?
+    public let manualGlucose: SimpleGlucoseValue?
+    public let originalCarbEntry: StoredCarbEntry?
+    public let carbEntry: StoredCarbEntry?
     public let recommendedTempBasal: TempBasalRecommendationWithDate?
     public let recommendedBolus: BolusRecommendationWithDate?
+    public let requestedBolus: Double?
     public let pumpManagerStatus: PumpManagerStatus?
     public let notificationSettings: NotificationSettings?
     public let deviceSettings: DeviceSettings?
@@ -177,12 +191,16 @@ public struct StoredDosingDecision {
                 carbsOnBoard: CarbValue? = nil,
                 scheduleOverride: TemporaryScheduleOverride? = nil,
                 glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
-                glucoseTargetRangeScheduleApplyingOverrideIfActive: GlucoseRangeSchedule? = nil,
+                effectiveGlucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
                 predictedGlucose: [PredictedGlucoseValue]? = nil,
                 predictedGlucoseIncludingPendingInsulin: [PredictedGlucoseValue]? = nil,
                 lastReservoirValue: LastReservoirValue? = nil,
+                manualGlucose: SimpleGlucoseValue? = nil,
+                originalCarbEntry: StoredCarbEntry? = nil,
+                carbEntry: StoredCarbEntry? = nil,
                 recommendedTempBasal: TempBasalRecommendationWithDate? = nil,
                 recommendedBolus: BolusRecommendationWithDate? = nil,
+                requestedBolus: Double? = nil,
                 pumpManagerStatus: PumpManagerStatus? = nil,
                 notificationSettings: NotificationSettings? = nil,
                 deviceSettings: DeviceSettings? = nil,
@@ -193,12 +211,16 @@ public struct StoredDosingDecision {
         self.carbsOnBoard = carbsOnBoard
         self.scheduleOverride = scheduleOverride
         self.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
-        self.glucoseTargetRangeScheduleApplyingOverrideIfActive = glucoseTargetRangeScheduleApplyingOverrideIfActive
+        self.effectiveGlucoseTargetRangeSchedule = effectiveGlucoseTargetRangeSchedule
         self.predictedGlucose = predictedGlucose
         self.predictedGlucoseIncludingPendingInsulin = predictedGlucoseIncludingPendingInsulin
         self.lastReservoirValue = lastReservoirValue
+        self.manualGlucose = manualGlucose
+        self.originalCarbEntry = originalCarbEntry
+        self.carbEntry = carbEntry
         self.recommendedTempBasal = recommendedTempBasal
         self.recommendedBolus = recommendedBolus
+        self.requestedBolus = requestedBolus
         self.pumpManagerStatus = pumpManagerStatus
         self.notificationSettings = notificationSettings
         self.deviceSettings = deviceSettings

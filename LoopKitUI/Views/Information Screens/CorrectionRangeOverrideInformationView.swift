@@ -12,7 +12,7 @@ import SwiftUI
 public struct CorrectionRangeOverrideInformationView: View {
     let preset: CorrectionRangeOverrides.Preset
     var onExit: (() -> Void)?
-    let mode: PresentationMode
+    let mode: SettingsPresentationMode
     
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.carbTintColor) var carbTintColor
@@ -20,8 +20,8 @@ public struct CorrectionRangeOverrideInformationView: View {
     
     public init(
         preset: CorrectionRangeOverrides.Preset,
-        onExit: (() -> Void)?,
-        mode: PresentationMode = .acceptanceFlow
+        onExit: (() -> Void)? = nil,
+        mode: SettingsPresentationMode = .acceptanceFlow
     ) {
         self.preset = preset
         self.onExit = onExit
@@ -29,15 +29,11 @@ public struct CorrectionRangeOverrideInformationView: View {
     }
     
     public var body: some View {
-        InformationView(
-            title: Text(preset.therapySetting.title),
-            informationalContent: {
-                VStack (alignment: .leading, spacing: 20) {
-                    section(for: preset)
-                }
-            },
-            onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
-            mode: mode
+        GlucoseTherapySettingInformationView(
+            therapySetting: preset.therapySetting,
+            onExit: onExit,
+            mode: mode,
+            text: AnyView(section(for: preset))
         )
     }
     
@@ -84,8 +80,38 @@ public struct CorrectionRangeOverrideInformationView: View {
         }
     }
     
-    
     private func icon(for preset: CorrectionRangeOverrides.Preset) -> some View {
         return preset.icon(usingCarbTintColor: carbTintColor, orGlucoseTintColor: glucoseTintColor)
+    }
+}
+
+struct CorrectionRangeOverrideInformationView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            CorrectionRangeOverrideInformationView(preset: .preMeal)
+        }
+        .colorScheme(.light)
+        .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
+        .previewDisplayName("Pre-Meal SE light")
+        NavigationView {
+            CorrectionRangeOverrideInformationView(preset: .workout)
+        }
+        .colorScheme(.light)
+        .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
+        .previewDisplayName("Workout SE light")
+        NavigationView {
+            CorrectionRangeOverrideInformationView(preset: .preMeal)
+        }
+        .preferredColorScheme(.dark)
+        .colorScheme(.dark)
+        .previewDevice(PreviewDevice(rawValue: "iPhone 11 Pro Max"))
+        .previewDisplayName("Pre-Meal 11 Pro dark")
+        NavigationView {
+            CorrectionRangeOverrideInformationView(preset: .workout)
+        }
+        .preferredColorScheme(.dark)
+        .colorScheme(.dark)
+        .previewDevice(PreviewDevice(rawValue: "iPhone 11 Pro Max"))
+        .previewDisplayName("Workout 11 Pro dark")
     }
 }

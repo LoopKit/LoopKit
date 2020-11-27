@@ -11,13 +11,13 @@ import LoopKit
 
 public struct InsulinSensitivityInformationView: View {
     var onExit: (() -> Void)?
-    var mode: PresentationMode
+    var mode: SettingsPresentationMode
     
     @Environment(\.presentationMode) var presentationMode
     
     public init(
         onExit: (() -> Void)?,
-        mode: PresentationMode = .acceptanceFlow
+        mode: SettingsPresentationMode = .acceptanceFlow
     ){
         self.onExit = onExit
         self.mode = mode

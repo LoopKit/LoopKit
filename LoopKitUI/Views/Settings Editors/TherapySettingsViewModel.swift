@@ -14,7 +14,7 @@ import SwiftUI
 public class TherapySettingsViewModel: ObservableObject {
     public typealias SaveCompletion = (TherapySetting, TherapySettings) -> Void
     
-    public let mode: PresentationMode
+    public let mode: SettingsPresentationMode
     
     @Published public var therapySettings: TherapySettings
     public var supportedInsulinModelSettings: SupportedInsulinModelSettings
@@ -26,15 +26,15 @@ public class TherapySettingsViewModel: ObservableObject {
     let sensitivityOverridesEnabled: Bool
     public var prescription: Prescription?
     
-    var glucoseUnit: HKUnit
+    let preferredGlucoseUnit: HKUnit
 
     lazy private var cancellables = Set<AnyCancellable>()
     
     public let chartColors: ChartColorPalette
 
-    public init(mode: PresentationMode,
+    public init(mode: SettingsPresentationMode,
                 therapySettings: TherapySettings,
-                glucoseUnit: HKUnit,
+                preferredGlucoseUnit: HKUnit,
                 supportedInsulinModelSettings: SupportedInsulinModelSettings = SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                 pumpSupportedIncrements: (() -> PumpSupportedIncrements?)? = nil,
                 syncPumpSchedule: (() -> PumpManager.SyncSchedule?)? = nil,
@@ -44,8 +44,8 @@ public class TherapySettingsViewModel: ObservableObject {
                 didSave: SaveCompletion? = nil) {
         self.mode = mode
         self.therapySettings = therapySettings
-        self.glucoseUnit = glucoseUnit
         self.initialTherapySettings = therapySettings
+        self.preferredGlucoseUnit = preferredGlucoseUnit
         self.pumpSupportedIncrements = pumpSupportedIncrements
         self.syncPumpSchedule = syncPumpSchedule
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
@@ -53,8 +53,6 @@ public class TherapySettingsViewModel: ObservableObject {
         self.supportedInsulinModelSettings = supportedInsulinModelSettings
         self.chartColors = chartColors
         self.didSave = didSave
-        
-        
     }
     
     var deliveryLimits: DeliveryLimits {

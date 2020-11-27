@@ -80,6 +80,53 @@ extension StoredCarbEntry {
     }
 }
 
+extension StoredCarbEntry: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(uuid: try container.decodeIfPresent(UUID.self, forKey: .uuid),
+                  provenanceIdentifier: try container.decodeIfPresent(String.self, forKey: .provenanceIdentifier),
+                  syncIdentifier: try container.decodeIfPresent(String.self, forKey: .syncIdentifier),
+                  syncVersion: try container.decodeIfPresent(Int.self, forKey: .syncVersion),
+                  startDate: try container.decode(Date.self, forKey: .startDate),
+                  quantity: HKQuantity(unit: .gram(), doubleValue: try container.decode(Double.self, forKey: .quantity)),
+                  foodType: try container.decodeIfPresent(String.self, forKey: .foodType),
+                  absorptionTime: try container.decodeIfPresent(TimeInterval.self, forKey: .absorptionTime),
+                  createdByCurrentApp: try container.decode(Bool.self, forKey: .createdByCurrentApp),
+                  userCreatedDate: try container.decodeIfPresent(Date.self, forKey: .userCreatedDate),
+                  userUpdatedDate: try container.decodeIfPresent(Date.self, forKey: .userUpdatedDate)
+        )
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(uuid, forKey: .uuid)
+        try container.encodeIfPresent(provenanceIdentifier, forKey: .provenanceIdentifier)
+        try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
+        try container.encodeIfPresent(syncVersion, forKey: .syncVersion)
+        try container.encode(startDate, forKey: .startDate)
+        try container.encode(quantity.doubleValue(for: .gram()), forKey: .quantity)
+        try container.encodeIfPresent(foodType, forKey: .foodType)
+        try container.encodeIfPresent(absorptionTime, forKey: .absorptionTime)
+        try container.encode(createdByCurrentApp, forKey: .createdByCurrentApp)
+        try container.encodeIfPresent(userCreatedDate, forKey: .userCreatedDate)
+        try container.encodeIfPresent(userUpdatedDate, forKey: .userUpdatedDate)
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case uuid
+        case provenanceIdentifier
+        case syncIdentifier
+        case syncVersion
+        case startDate
+        case quantity
+        case foodType
+        case absorptionTime
+        case createdByCurrentApp
+        case userCreatedDate
+        case userUpdatedDate
+    }
+}
+
 // MARK: - DEPRECATED - Used only for migration
 
 extension StoredCarbEntry {

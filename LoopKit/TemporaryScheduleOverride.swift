@@ -39,6 +39,10 @@ public struct TemporaryScheduleOverride: Hashable {
         public var isFinite: Bool {
             return timeInterval.isFinite
         }
+        
+        public var isInfinite: Bool {
+            return timeInterval.isInfinite
+        }
 
         public static func < (lhs: Duration, rhs: Duration) -> Bool {
             return lhs.timeInterval < rhs.timeInterval

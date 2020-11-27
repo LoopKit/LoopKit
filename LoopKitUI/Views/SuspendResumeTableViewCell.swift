@@ -13,6 +13,7 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
     public enum Action {
         case suspend
         case resume
+        case inoperable
     }
     
     public var shownAction: Action {
@@ -21,6 +22,8 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
             return .suspend
         case .suspended, .resuming:
             return .resume
+        case .none:
+            return .inoperable
         }
     }
 
@@ -38,6 +41,8 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
             self.textLabel?.text = LocalizedString("Starting Temp Basal", comment: "Title text for suspend resume button when temp basal starting")
         case .cancelingTempBasal:
             self.textLabel?.text = LocalizedString("Canceling Temp Basal", comment: "Title text for suspend resume button when temp basal canceling")
+        case .none:
+            self.textLabel?.text = LocalizedString("Pump Inoperable", comment: "Title text for suspend resume button when the basal delivery state is not set")
         }
     }
 
@@ -53,7 +58,7 @@ public class SuspendResumeTableViewCell: TextButtonTableViewCell {
         self.isEnabled = !self.isLoading
     }
     
-    public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState = .active(Date()) {
+    public var basalDeliveryState: PumpManagerStatus.BasalDeliveryState? = .active(Date()) {
         didSet {
             updateTextLabel()
             updateLoadingState()

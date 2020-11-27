@@ -15,6 +15,21 @@ public enum DoseType: String, CaseIterable {
     case resume
     case suspend
     case tempBasal
+    
+    public var localizedDescription: String {
+        switch self {
+        case .basal:
+            return NSLocalizedString("Basal", comment: "Title for basal dose type")
+        case .bolus:
+            return NSLocalizedString("Bolus", comment: "Title for bolus dose type")
+        case .tempBasal:
+            return NSLocalizedString("Temp Basal", comment: "Title for temp basal dose type")
+        case .suspend:
+            return NSLocalizedString("Suspended", comment: "Title for suspend dose type")
+        case .resume:
+            return NSLocalizedString("Resumed", comment: "Title for resume dose type")
+        }
+    }
 }
 
 extension DoseType: Codable {}

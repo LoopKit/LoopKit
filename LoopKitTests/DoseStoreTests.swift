@@ -12,6 +12,35 @@ import HealthKit
 
 class DoseStoreTests: PersistenceControllerTestCase {
 
+    func testEmptyDoseStoreReturnsZeroInsulinOnBoard() {
+        // 1. Create a DoseStore
+        let healthStore = HKHealthStoreMock()
+
+        let doseStore = DoseStore(
+            healthStore: healthStore,
+            cacheStore: cacheStore,
+            observationEnabled: false,
+            insulinModel: WalshInsulinModel(actionDuration: .hours(4)),
+            basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
+            insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
+            syncVersion: 1,
+            provenanceIdentifier: Bundle.main.bundleIdentifier!
+        )
+        
+        let queryFinishedExpectation = expectation(description: "query finished")
+        
+        doseStore.insulinOnBoard(at: Date()) { (result) in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected error: \(error)")
+            case .success(let value):
+                XCTAssertEqual(0, value.value)
+            }
+            queryFinishedExpectation.fulfill()
+        }
+        waitForExpectations(timeout: 3)
+    }
+    
     func testPumpEventTypeDoseMigration() {
         cacheStore.managedObjectContext.performAndWait {
             let event = PumpEvent(entity: PumpEvent.entity(), insertInto: cacheStore.managedObjectContext)
@@ -73,6 +102,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
             syncVersion: 1,
+            provenanceIdentifier: Bundle.main.bundleIdentifier!,
 
             // Set the current date
             test_currentDate: f("2018-12-12 18:07:14 +0000")
@@ -184,6 +214,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
             syncVersion: 1,
+            provenanceIdentifier: Bundle.main.bundleIdentifier!,
 
             // Set the current date (5 minutes later)
             test_currentDate: f("2018-11-29 11:04:27 +0000")
@@ -374,7 +405,8 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
                               observationEnabled: false,
                               insulinModel: insulinModel,
                               basalProfile: basalProfile,
-                              insulinSensitivitySchedule: insulinSensitivitySchedule)
+                              insulinSensitivitySchedule: insulinSensitivitySchedule,
+                              provenanceIdentifier: Bundle.main.bundleIdentifier!)
         completion = expectation(description: "Completion")
         queryAnchor = DoseStore.QueryAnchor()
         limit = Int.max
@@ -772,7 +804,8 @@ class DoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
                               observationEnabled: false,
                               insulinModel: insulinModel,
                               basalProfile: basalProfile,
-                              insulinSensitivitySchedule: insulinSensitivitySchedule)
+                              insulinSensitivitySchedule: insulinSensitivitySchedule,
+                              provenanceIdentifier: Bundle.main.bundleIdentifier!)
         XCTAssertNil(doseStore.addPumpEvents(events: events))
 
         outputStream = MockOutputStream()
@@ -865,6 +898,7 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
             basalProfile: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1.0)]),
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             overrideHistory: TemporaryScheduleOverrideHistory(),
+            provenanceIdentifier: Bundle.main.bundleIdentifier!,
             test_currentDate: startDate
         )
     }

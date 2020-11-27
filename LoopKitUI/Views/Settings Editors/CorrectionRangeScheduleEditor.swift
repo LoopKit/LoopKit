@@ -18,15 +18,16 @@ public struct CorrectionRangeScheduleEditor: View {
     var minValue: HKQuantity?
     var save: (GlucoseRangeSchedule) -> Void
     let guardrail = Guardrail.correctionRange
-    let mode: PresentationMode
+    let mode: SettingsPresentationMode
+    @Environment(\.appName) private var appName
     @State private var userDidTap: Bool = false
     
-    public init(
+    fileprivate init(
         schedule: GlucoseRangeSchedule?,
         unit: HKUnit,
         minValue: HKQuantity?,
         onSave save: @escaping (GlucoseRangeSchedule) -> Void,
-        mode: PresentationMode = .settings
+        mode: SettingsPresentationMode = .settings
     ) {
         self.initialSchedule = schedule
         self._scheduleItems = State(initialValue: schedule?.items ?? [])
@@ -42,8 +43,8 @@ public struct CorrectionRangeScheduleEditor: View {
     ) {
         self.init(
             schedule: viewModel.therapySettings.glucoseTargetRangeSchedule,
-            unit: viewModel.glucoseUnit,
-            minValue: viewModel.therapySettings.suspendThreshold?.quantity,
+            unit: viewModel.therapySettings.glucoseTargetRangeSchedule?.unit ?? viewModel.preferredGlucoseUnit,
+            minValue: Guardrail.minCorrectionRangeValue(suspendThreshold: viewModel.therapySettings.suspendThreshold),
             onSave: { [weak viewModel] newSchedule in
                 viewModel?.saveCorrectionRange(range: newSchedule)
                 didSave?()
@@ -108,7 +109,7 @@ public struct CorrectionRangeScheduleEditor: View {
     }
 
     var description: Text {
-        Text(TherapySetting.glucoseTargetRange.descriptiveText)
+        Text(TherapySetting.glucoseTargetRange.descriptiveText(appName: appName))
     }
 
     var saveConfirmation: SaveConfirmation {

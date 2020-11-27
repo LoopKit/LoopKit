@@ -17,12 +17,12 @@ class PersistenceControllerTests: PersistenceControllerTestCase {
             for value in stride(from: 95, to: 105, by: 1) {
                 let glucose = CachedGlucoseObject(context: cacheStore.managedObjectContext)
                 glucose.uuid = UUID()
+                glucose.provenanceIdentifier = "PersistenceControllerTests"
                 glucose.syncIdentifier = "foo\(value)"
                 glucose.syncVersion = 1
                 glucose.value = Double(value)
                 glucose.unitString = HKUnit.milligramsPerDeciliter.unitString
                 glucose.startDate = Date()
-                glucose.provenanceIdentifier = "PersistenceControllerTests"
                 glucose.isDisplayOnly = false
                 glucose.wasUserEntered = false
             }
@@ -45,12 +45,12 @@ class PersistenceControllerTests: PersistenceControllerTestCase {
             for value in stride(from: 95, to: 105, by: 1) {
                 let glucose = CachedGlucoseObject(context: cacheStore.managedObjectContext)
                 glucose.uuid = UUID()
+                glucose.provenanceIdentifier = "PersistenceControllerTests"
                 glucose.syncIdentifier = "foo\(value)"
                 glucose.syncVersion = 1
                 glucose.value = Double(value)
                 glucose.unitString = HKUnit.milligramsPerDeciliter.unitString
                 glucose.startDate = Date()
-                glucose.provenanceIdentifier = "PersistenceControllerTests"
                 glucose.isDisplayOnly = false
                 glucose.wasUserEntered = false
             }

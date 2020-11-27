@@ -20,7 +20,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     let insulinSensitivitySchedule: InsulinSensitivitySchedule
     let glucoseUnit: HKUnit
     let supportedModelSettings: SupportedInsulinModelSettings
-    let mode: PresentationMode
+    let mode: SettingsPresentationMode
     let save: (_ insulinModelSettings: InsulinModelSettings) -> Void
     let chartManager: ChartsManager
 
@@ -51,7 +51,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         supportedModelSettings: SupportedInsulinModelSettings,
         chartColors: ChartColorPalette,
         onSave save: @escaping (_ insulinModelSettings: InsulinModelSettings) -> Void,
-        mode: PresentationMode
+        mode: SettingsPresentationMode
     ){
         self._value = State(initialValue: value)
         self.initialValue = value
@@ -87,7 +87,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         self.init(
             value: viewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.humalogNovologAdult),
             insulinSensitivitySchedule: viewModel.therapySettings.insulinSensitivitySchedule,
-            glucoseUnit: viewModel.glucoseUnit,
+            glucoseUnit: viewModel.therapySettings.insulinSensitivitySchedule?.unit ?? viewModel.preferredGlucoseUnit,
             supportedModelSettings: viewModel.supportedInsulinModelSettings,
             chartColors: viewModel.chartColors,
             onSave: { [weak viewModel] insulinModelSettings in
