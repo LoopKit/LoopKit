@@ -510,29 +510,20 @@ extension DoseEntry {
         let font = UIFont.preferredFont(forTextStyle: .body)
 
         switch type {
-        case .basal, .bolus, .tempBasal:
-            let unitString = type == .bolus ? DoseEntry.units.shortLocalizedUnitString() : DoseEntry.unitsPerHour.shortLocalizedUnitString()
-            let value: Double = type == .bolus ? (deliveredUnits ?? programmedUnits) : unitsPerHour
-
-            let description = String(format: NSLocalizedString("%1$@: <b>%2$@</b> %3$@", comment: "Description of a basal, bolus, or temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)"), type.localizedDescription, numberFormatter.string(from: value) ?? "?", unitString)
-            let descriptionWithFont = String(format:"<style>body{font-family: '-apple-system', '\(font.fontName)'; font-size: \(font.pointSize);}</style>%@", description)
-
-            guard let attributedDescription = try? NSMutableAttributedString(data: Data(descriptionWithFont.utf8), options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil) else {
-                return nil
+        case .bolus:
+            let description: String
+            if let deliveredUnits = deliveredUnits,
+               deliveredUnits != programmedUnits
+            {
+                description = String(format: NSLocalizedString("Interrupted %1$@: <b>%2$@</b> %3$@ (of %4$@)", comment: "Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit, 4: programmed value (? if no value))"), type.localizedDescription, numberFormatter.string(from: deliveredUnits) ?? "?", DoseEntry.units.shortLocalizedUnitString(), numberFormatter.string(from: programmedUnits) ?? "?")
+            } else {
+                description = String(format: NSLocalizedString("%1$@: <b>%2$@</b> %3$@", comment: "Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)"), type.localizedDescription, numberFormatter.string(from: programmedUnits) ?? "?", DoseEntry.units.shortLocalizedUnitString())
             }
 
-            attributedDescription.enumerateAttribute(.font, in: NSRange(location: 0, length: attributedDescription.length)) { value, range, stop in
-                // bold font items have a dominate colour
-                if let font = value as? UIFont,
-                   font.fontDescriptor.symbolicTraits.contains(.traitBold)
-                {
-                    attributedDescription.addAttributes([.foregroundColor: UIColor.label], range: range)
-                } else {
-                    attributedDescription.addAttributes([.foregroundColor: UIColor.secondaryLabel], range: range)
-                }
-            }
-
-            return attributedDescription
+            return createAttributedDescription(from: description, with: font)
+        case .basal, .tempBasal:
+            let description = String(format: NSLocalizedString("%1$@: <b>%2$@</b> %3$@", comment: "Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)"), type.localizedDescription, numberFormatter.string(from: unitsPerHour) ?? "?", DoseEntry.unitsPerHour.shortLocalizedUnitString())
+            return createAttributedDescription(from: description, with: font)
         case .suspend, .resume:
             let attributes: [NSAttributedString.Key: Any] = [
                 .font: font,
@@ -540,5 +531,26 @@ extension DoseEntry {
             ]
             return NSAttributedString(string: type.localizedDescription, attributes: attributes)
         }
+    }
+
+    fileprivate func createAttributedDescription(from description: String, with font: UIFont) -> NSAttributedString? {
+        let descriptionWithFont = String(format:"<style>body{font-family: '-apple-system', '\(font.fontName)'; font-size: \(font.pointSize);}</style>%@", description)
+
+        guard let attributedDescription = try? NSMutableAttributedString(data: Data(descriptionWithFont.utf8), options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil) else {
+            return nil
+        }
+
+        attributedDescription.enumerateAttribute(.font, in: NSRange(location: 0, length: attributedDescription.length)) { value, range, stop in
+            // bold font items have a dominate colour
+            if let font = value as? UIFont,
+               font.fontDescriptor.symbolicTraits.contains(.traitBold)
+            {
+                attributedDescription.addAttributes([.foregroundColor: UIColor.label], range: range)
+            } else {
+                attributedDescription.addAttributes([.foregroundColor: UIColor.secondaryLabel], range: range)
+            }
+        }
+
+        return attributedDescription
     }
 }
