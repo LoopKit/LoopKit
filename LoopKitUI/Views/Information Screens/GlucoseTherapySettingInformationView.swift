@@ -18,7 +18,8 @@ public struct GlucoseTherapySettingInformationView: View {
     let preferredUnit: HKUnit
     
     @Environment(\.presentationMode) var presentationMode
-    
+    @Environment(\.appName) var appName
+
     public init(
         therapySetting: TherapySetting,
         preferredUnit: HKUnit? = nil,
@@ -54,7 +55,7 @@ public struct GlucoseTherapySettingInformationView: View {
     
     private var defaultText: some View {
         VStack(alignment: .leading, spacing: 25) {
-            Text(therapySetting.descriptiveText)
+            Text(therapySetting.descriptiveText(appName: appName))
         }
         .accentColor(.secondary)
         .foregroundColor(.accentColor)

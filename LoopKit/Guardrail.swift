@@ -24,12 +24,17 @@ public enum SafetyClassification: Equatable {
 public struct Guardrail<Value: Comparable> {
     public let absoluteBounds: ClosedRange<Value>
     public let recommendedBounds: ClosedRange<Value>
+    public let startingSuggestion: Value?
 
-    public init(absoluteBounds: ClosedRange<Value>, recommendedBounds: ClosedRange<Value>) {
+    public init(absoluteBounds: ClosedRange<Value>, recommendedBounds: ClosedRange<Value>, startingSuggestion: Value? = nil) {
         precondition(absoluteBounds.lowerBound <= recommendedBounds.lowerBound, "The minimum value must be less than or equal to the smallest recommended value")
         precondition(absoluteBounds.upperBound >= recommendedBounds.upperBound, "The maximum value must be greater than or equal to the greatest recommended value")
+        if let startingSuggestion = startingSuggestion {
+            precondition(recommendedBounds.contains(startingSuggestion))
+        }
         self.absoluteBounds = absoluteBounds
         self.recommendedBounds = recommendedBounds
+        self.startingSuggestion = startingSuggestion
     }
 
     public func classification(for value: Value) -> SafetyClassification {
@@ -57,10 +62,16 @@ extension Guardrail where Value: Strideable {
 }
 
 extension Guardrail where Value == HKQuantity {
-    public init(absoluteBounds: ClosedRange<Double>, recommendedBounds: ClosedRange<Double>, unit: HKUnit) {
+    public init(absoluteBounds: ClosedRange<Double>, recommendedBounds: ClosedRange<Double>, unit: HKUnit, startingSuggestion: Double? = nil) {
         let absoluteBoundsWithUnit = HKQuantity(unit: unit, doubleValue: absoluteBounds.lowerBound)...HKQuantity(unit: unit, doubleValue: absoluteBounds.upperBound)
         let recommendedBoundsWithUnit = HKQuantity(unit: unit, doubleValue: recommendedBounds.lowerBound)...HKQuantity(unit: unit, doubleValue: recommendedBounds.upperBound)
-        self.init(absoluteBounds: absoluteBoundsWithUnit, recommendedBounds: recommendedBoundsWithUnit)
+        let startingSuggestionQuantity: HKQuantity?
+        if let startingSuggestion = startingSuggestion {
+            startingSuggestionQuantity = HKQuantity(unit: unit, doubleValue: startingSuggestion)
+        } else {
+            startingSuggestionQuantity = nil
+        }
+        self.init(absoluteBounds: absoluteBoundsWithUnit, recommendedBounds: recommendedBoundsWithUnit, startingSuggestion: startingSuggestionQuantity)
     }
 
     public func allQuantities(stridingBy increment: HKQuantity, unit: HKUnit) -> [HKQuantity] {

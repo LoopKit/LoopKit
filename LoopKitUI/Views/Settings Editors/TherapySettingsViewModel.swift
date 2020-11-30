@@ -25,6 +25,8 @@ public class TherapySettingsViewModel: ObservableObject {
     let syncPumpSchedule: (() -> PumpManager.SyncSchedule?)?
     let sensitivityOverridesEnabled: Bool
     public var prescription: Prescription?
+    
+    let preferredGlucoseUnit: HKUnit
 
     lazy private var cancellables = Set<AnyCancellable>()
     
@@ -32,6 +34,7 @@ public class TherapySettingsViewModel: ObservableObject {
 
     public init(mode: SettingsPresentationMode,
                 therapySettings: TherapySettings,
+                preferredGlucoseUnit: HKUnit,
                 supportedInsulinModelSettings: SupportedInsulinModelSettings = SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                 pumpSupportedIncrements: (() -> PumpSupportedIncrements?)? = nil,
                 syncPumpSchedule: (() -> PumpManager.SyncSchedule?)? = nil,
@@ -42,6 +45,7 @@ public class TherapySettingsViewModel: ObservableObject {
         self.mode = mode
         self.therapySettings = therapySettings
         self.initialTherapySettings = therapySettings
+        self.preferredGlucoseUnit = preferredGlucoseUnit
         self.pumpSupportedIncrements = pumpSupportedIncrements
         self.syncPumpSchedule = syncPumpSchedule
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled

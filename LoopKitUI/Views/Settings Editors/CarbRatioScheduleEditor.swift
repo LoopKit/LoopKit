@@ -20,6 +20,7 @@ public struct CarbRatioScheduleEditor: View {
     private var schedule: DailyQuantitySchedule<Double>?
     private var mode: SettingsPresentationMode
     private var save: (CarbRatioSchedule) -> Void
+    @Environment(\.appName) private var appName
 
     public init(
         schedule: CarbRatioSchedule?,
@@ -61,7 +62,7 @@ public struct CarbRatioScheduleEditor: View {
             guardrail: .carbRatio,
             selectableValueStride: HKQuantity(unit: .realCarbRatioScheduleUnit, doubleValue: 0.01),
             quantitySelectionMode: .fractional,
-            defaultFirstScheduleItemValue: Guardrail.carbRatio.absoluteBounds.upperBound,
+            defaultFirstScheduleItemValue: Guardrail.carbRatio.startingSuggestion ?? Guardrail.carbRatio.recommendedBounds.upperBound,
             confirmationAlertContent: confirmationAlertContent,
             guardrailWarning: CarbRatioGuardrailWarning.init(crossedThresholds:),
             onSave: {
@@ -74,12 +75,12 @@ public struct CarbRatioScheduleEditor: View {
     }
 
     private var description: Text {
-        Text(TherapySetting.carbRatio.descriptiveText)
+        Text(TherapySetting.carbRatio.descriptiveText(appName: appName))
     }
 
     private var confirmationAlertContent: AlertContent {
         AlertContent(
-            title: Text("Save Carb Ratios?", comment: "Alert title for confirming carb ratios outside the recommended range"),
+            title: Text(LocalizedString("Save Carb Ratios?", comment: "Alert title for confirming carb ratios outside the recommended range")),
             message: Text(TherapySetting.carbRatio.guardrailSaveWarningCaption)
         )
     }
@@ -99,13 +100,13 @@ private struct CarbRatioGuardrailWarning: View {
     private func singularWarningTitle(for threshold: SafetyClassification.Threshold) -> Text {
         switch threshold {
         case .minimum, .belowRecommended:
-            return Text("Low Carb Ratio", comment: "Title text for the low carb ratio warning")
+            return Text(LocalizedString("Low Carb Ratio", comment: "Title text for the low carb ratio warning"))
         case .aboveRecommended, .maximum:
-            return Text("High Carb Ratio", comment: "Title text for the high carb ratio warning")
+            return Text(LocalizedString("High Carb Ratio", comment: "Title text for the high carb ratio warning"))
         }
     }
 
     private var multipleWarningTitle: Text {
-        Text("Carb Ratios", comment: "Title text for multi-value carb ratio warning")
+        Text(LocalizedString("Carb Ratios", comment: "Title text for multi-value carb ratio warning"))
     }
 }

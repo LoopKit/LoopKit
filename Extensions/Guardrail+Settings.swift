@@ -9,7 +9,7 @@
 import HealthKit
 
 public extension Guardrail where Value == HKQuantity {
-    static let suspendThreshold = Guardrail(absoluteBounds: 67...110, recommendedBounds: 74...80, unit: .milligramsPerDeciliter)
+    static let suspendThreshold = Guardrail(absoluteBounds: 67...110, recommendedBounds: 74...80, unit: .milligramsPerDeciliter, startingSuggestion: 80)
 
     static func maxSuspendThresholdValue(correctionRangeSchedule: GlucoseRangeSchedule?, preMealTargetRange: ClosedRange<HKQuantity>?, workoutTargetRange: ClosedRange<HKQuantity>?) -> HKQuantity {
 
@@ -23,7 +23,7 @@ public extension Guardrail where Value == HKQuantity {
         .min()!
     }
 
-    static let correctionRange = Guardrail(absoluteBounds: 87...180, recommendedBounds: 100...115, unit: .milligramsPerDeciliter)
+    static let correctionRange = Guardrail(absoluteBounds: 87...180, recommendedBounds: 100...115, unit: .milligramsPerDeciliter, startingSuggestion: 100)
 
     static func minCorrectionRangeValue(suspendThreshold: GlucoseThreshold?) -> HKQuantity {
         return [
@@ -79,13 +79,15 @@ public extension Guardrail where Value == HKQuantity {
     static let insulinSensitivity = Guardrail(
         absoluteBounds: 10...500,
         recommendedBounds: 16...399,
-        unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit())
+        unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()),
+        startingSuggestion: 50
     )
  
     static let carbRatio = Guardrail(
         absoluteBounds: 2...150,
         recommendedBounds: 4...28,
-        unit: .gramsPerUnit
+        unit: .gramsPerUnit,
+        startingSuggestion: 15
     )
 
     static func basalRate(supportedBasalRates: [Double]) -> Guardrail {
@@ -94,7 +96,8 @@ public extension Guardrail where Value == HKQuantity {
         return Guardrail(
             absoluteBounds: allowedBasalRates.first!...allowedBasalRates.last!,
             recommendedBounds: allowedBasalRates.first!...allowedBasalRates.last!,
-            unit: .internationalUnitsPerHour
+            unit: .internationalUnitsPerHour,
+            startingSuggestion: allowedBasalRates.first!
         )
     }
 
@@ -126,10 +129,12 @@ public extension Guardrail where Value == HKQuantity {
             )
 
         } else {
+            let bounds = supportedBasalRates.drop { $0 <= 0 }.first!...absoluteUpperBound
             return Guardrail(
-                absoluteBounds: supportedBasalRates.drop { $0 <= 0 }.first!...absoluteUpperBound,
-                recommendedBounds:  supportedBasalRates.drop { $0 <= 0 }.first!...absoluteUpperBound,
-                unit: .internationalUnitsPerHour
+                absoluteBounds: bounds,
+                recommendedBounds: bounds,
+                unit: .internationalUnitsPerHour,
+                startingSuggestion: 3.clamped(to: bounds)
             )
         }
     }
@@ -150,10 +155,12 @@ public extension Guardrail where Value == HKQuantity {
         let maxBolusWarningThresholdUnits: Double = 20
         let supportedBolusVolumes = supportedBolusVolumes.filter { $0 > 0 && $0 <= maxBolusThresholdUnits }
         let recommendedUpperBound = supportedBolusVolumes.last { $0 < maxBolusWarningThresholdUnits }
+        let recommendedBounds = supportedBolusVolumes.dropFirst().first!...recommendedUpperBound!
         return Guardrail(
             absoluteBounds: supportedBolusVolumes.first!...supportedBolusVolumes.last!,
-            recommendedBounds: supportedBolusVolumes.dropFirst().first!...recommendedUpperBound!,
-            unit: .internationalUnit()
+            recommendedBounds: recommendedBounds,
+            unit: .internationalUnit(),
+            startingSuggestion: 5.clamped(to: recommendedBounds)
         )
     }
     

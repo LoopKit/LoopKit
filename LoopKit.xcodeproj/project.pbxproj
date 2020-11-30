@@ -739,6 +739,7 @@
 		C164A56422F21081000E3FA5 /* MockPumpManagerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */; };
 		C16DA83F22E8D88F008624C2 /* LoopPluginBundleKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16DA83E22E8D88F008624C2 /* LoopPluginBundleKey.swift */; };
 		C16DA84522E9330A008624C2 /* LoopUIPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */; };
+		C17B02092564502A004188F1 /* Modelv1v3.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = C17B020825645029004188F1 /* Modelv1v3.xcmappingmodel */; };
 		C17F39C123CD24A000FA1113 /* DeviceLog.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C17F39BF23CD24A000FA1113 /* DeviceLog.xcdatamodeld */; };
 		C17F39C723CD256000FA1113 /* PersistentDeviceLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17F39C623CD256000FA1113 /* PersistentDeviceLog.swift */; };
 		C17F39C923CD269200FA1113 /* DeviceLogEntryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17F39C823CD269200FA1113 /* DeviceLogEntryType.swift */; };
@@ -753,6 +754,7 @@
 		C1A174EC23DEAD670034DF11 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C1A174ED23DEAD6A0034DF11 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
 		C1A3F5BE24AA6EE200329152 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
+		C1B9E127256C1E91008E8B84 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5DBB2231E20C008961AB /* Comparable.swift */; };
 		C1E0EEF624EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E0EEF524EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift */; };
 		C1E4B305242E98E900E70CCB /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B303242E98E900E70CCB /* ProgressView.swift */; };
 		C1E4B306242E98E900E70CCB /* ProgressIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */; };
@@ -1533,6 +1535,7 @@
 		C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerState.swift; sourceTree = "<group>"; };
 		C16DA83E22E8D88F008624C2 /* LoopPluginBundleKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopPluginBundleKey.swift; sourceTree = "<group>"; };
 		C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopUIPlugin.swift; sourceTree = "<group>"; };
+		C17B020825645029004188F1 /* Modelv1v3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv1v3.xcmappingmodel; sourceTree = "<group>"; };
 		C17F39C023CD24A000FA1113 /* DeviceCommsLog.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DeviceCommsLog.xcdatamodel; sourceTree = "<group>"; };
 		C17F39C623CD256000FA1113 /* PersistentDeviceLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDeviceLog.swift; sourceTree = "<group>"; };
 		C17F39C823CD269200FA1113 /* DeviceLogEntryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLogEntryType.swift; sourceTree = "<group>"; };
@@ -1953,6 +1956,7 @@
 		437874B4202FDC8300A3D8B9 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				C17B020825645029004188F1 /* Modelv1v3.xcmappingmodel */,
 				A9BD318124F4548900994B83 /* Modelv3EntityMigrationPolicy.swift */,
 				434113AC20F287DC00D05747 /* NSManagedObjectContext.swift */,
 				43D8FEE21C7294D50073BE78 /* PersistenceController.swift */,
@@ -3651,6 +3655,7 @@
 				434C5F9C2098352500B2FD1A /* QuantityFormatter.swift in Sources */,
 				43F503642106C78C009FA89A /* ServiceAuthentication.swift in Sources */,
 				89F53E9422B4328E0024A67C /* MutableCollection.swift in Sources */,
+				C1B9E127256C1E91008E8B84 /* Comparable.swift in Sources */,
 				433BC7A720523DB7000B1200 /* NewGlucoseSample.swift in Sources */,
 				4322B78E202FA2B30002837D /* InsulinMath.swift in Sources */,
 				C17F39D023CE34B100FA1113 /* StoredDeviceLogEntry.swift in Sources */,
@@ -3660,6 +3665,7 @@
 				4322B775202FA2790002837D /* CarbStatus.swift in Sources */,
 				4322B787202FA2B30002837D /* DoseEntry.swift in Sources */,
 				43CB51B2211EB1A400DB9B4A /* NSUserActivity+CarbKit.swift in Sources */,
+				C17B02092564502A004188F1 /* Modelv1v3.xcmappingmodel in Sources */,
 				A9BD318824F45C0100994B83 /* Modelv3.xcmappingmodel in Sources */,
 				434113AB20F171CB00D05747 /* CachedInsulinDeliveryObject+CoreDataProperties.swift in Sources */,
 				A9E1E6A924E1B6700073CA39 /* SyncCarbObject.swift in Sources */,

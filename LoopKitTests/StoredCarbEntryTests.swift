@@ -13,7 +13,7 @@ import HealthKit
 class StoredCarbEntryCodableTests: XCTestCase {
     func testCodable() throws {
         let storedCarbEntry = StoredCarbEntry(uuid: UUID(uuidString: "18CF3948-0B3D-4B12-8BFE-14986B0E6784")!,
-                                              provenanceIdentifier: "org.tidepool.Loop",
+                                              provenanceIdentifier: "com.loopkit.loop",
                                               syncIdentifier: "2B03D96C-6F5D-4140-99CD-80C3E64D6010",
                                               syncVersion: 2,
                                               startDate: dateFormatter.date(from: "2020-01-02T03:00:23Z")!,
@@ -28,7 +28,7 @@ class StoredCarbEntryCodableTests: XCTestCase {
   "absorptionTime" : 18000,
   "createdByCurrentApp" : true,
   "foodType" : "Pizza",
-  "provenanceIdentifier" : "org.tidepool.Loop",
+  "provenanceIdentifier" : "com.loopkit.loop",
   "quantity" : 19,
   "startDate" : "2020-01-02T03:00:23Z",
   "syncIdentifier" : "2B03D96C-6F5D-4140-99CD-80C3E64D6010",

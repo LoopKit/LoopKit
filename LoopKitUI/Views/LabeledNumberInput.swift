@@ -37,10 +37,10 @@ public struct LabeledNumberInput: View {
         )
     }
     
-    public init(value: Binding<Double?>, label: String, placeholder: String = NSLocalizedString("Value", comment: "Placeholder text until value is entered") , allowFractions: Bool = false) {
+    public init(value: Binding<Double?>, label: String, placeholder: String? = nil, allowFractions: Bool = false) {
         _value = value
         self.label = label
-        self.placeholder = placeholder
+        self.placeholder = placeholder ?? LocalizedString("Value", comment: "Placeholder text until value is entered")
         self.allowFractions = allowFractions
     }
         
@@ -52,7 +52,7 @@ public struct LabeledNumberInput: View {
                     .multilineTextAlignment(.trailing)
                     .keyboardType(self.allowFractions ? .decimalPad : .numberPad)
                     .frame(width: geometry.size.width/2, alignment: .trailing)
-                    .accessibility(label: Text("Enter value"))
+                    .accessibility(label: Text(String(format: LocalizedString("Enter %1$@ value", comment: "Format string for accessibility label for value entry. (1: value label)"), label)))
                 Text(self.label)
                     .font(.footnote)
                     .multilineTextAlignment(.leading)

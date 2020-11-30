@@ -57,8 +57,14 @@ public struct DeliveryLimitsEditor: View {
            didSave: (() -> Void)? = nil
     ) {
         precondition(viewModel.pumpSupportedIncrements != nil)
-        let maxBasal = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: viewModel.therapySettings.maximumBasalRatePerHour!)
-        let maxBolus = HKQuantity(unit: .internationalUnit(), doubleValue: viewModel.therapySettings.maximumBolus!)
+        
+        let maxBasal = viewModel.therapySettings.maximumBasalRatePerHour.map {
+            HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)
+        }
+
+        let maxBolus = viewModel.therapySettings.maximumBolus.map {
+            HKQuantity(unit: .internationalUnit(), doubleValue: $0)
+        }
         
         self.init(
             value: DeliveryLimits(maximumBasalRate: maxBasal, maximumBolus: maxBolus),
@@ -96,7 +102,7 @@ public struct DeliveryLimitsEditor: View {
     }
     
     private var cancelButton: some View {
-        Button(action: { self.dismiss() } ) { Text("Cancel", comment: "Cancel editing settings button title") }
+        Button(action: { self.dismiss() } ) { Text(LocalizedString("Cancel", comment: "Cancel editing settings button title")) }
     }
     
     private var content: some View {
@@ -170,7 +176,7 @@ public struct DeliveryLimitsEditor: View {
                 expandedContent: {
                     FractionalQuantityPicker(
                         value: Binding(
-                            get: { self.value.maximumBasalRate ?? self.maximumBasalRateGuardrail.recommendedBounds.upperBound },
+                            get: { self.value.maximumBasalRate ?? self.maximumBasalRateGuardrail.startingSuggestion ?? self.maximumBasalRateGuardrail.recommendedBounds.upperBound },
                             set: { newValue in
                                 withAnimation {
                                     self.value.maximumBasalRate = newValue
@@ -220,7 +226,7 @@ public struct DeliveryLimitsEditor: View {
                 expandedContent: {
                     FractionalQuantityPicker(
                         value: Binding(
-                            get: { self.value.maximumBolus ?? self.maximumBolusGuardrail.recommendedBounds.upperBound },
+                            get: { self.value.maximumBolus ?? self.maximumBolusGuardrail.startingSuggestion ?? self.maximumBolusGuardrail.recommendedBounds.upperBound },
                             set: { newValue in
                                 withAnimation {
                                     self.value.maximumBolus = newValue
@@ -286,11 +292,11 @@ public struct DeliveryLimitsEditor: View {
 
     private func confirmationAlert() -> SwiftUI.Alert {
         SwiftUI.Alert(
-            title: Text("Save Delivery Limits?", comment: "Alert title for confirming delivery limits outside the recommended range"),
+            title: Text(LocalizedString("Save Delivery Limits?", comment: "Alert title for confirming delivery limits outside the recommended range")),
             message: Text(TherapySetting.deliveryLimits.guardrailSaveWarningCaption),
-            primaryButton: .cancel(Text("Go Back")),
+            primaryButton: .cancel(Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert"))),
             secondaryButton: .default(
-                Text("Continue"),
+                Text(LocalizedString("Continue", comment: "Text for continue action on confirmation alert")),
                 action: startSaving
             )
         )
@@ -329,28 +335,19 @@ struct DeliveryLimitsGuardrailWarning: View {
             case .maximumBasalRate:
                 switch threshold {
                 case .minimum, .belowRecommended:
-                    // ANNA TODO: Ask MLee about this one
-                    title = Text("Low Maximum Basal Rate", comment: "Title text for low maximum basal rate warning")
-                    if value.maximumBasalRate?.doubleValue(for: .internationalUnitsPerHour) == 0 {
-                        caption = Text("A setting of 0 U/hr means Loop will not automatically administer insulin.", comment: "Caption text for low maximum basal rate warning")
-                    } else {
-                        caption = Text(TherapySetting.deliveryLimits.guardrailCaptionForLowValue)
-                    }
+                    title = Text(LocalizedString("Low Maximum Basal Rate", comment: "Title text for low maximum basal rate warning"))
+                    caption = Text(TherapySetting.deliveryLimits.guardrailCaptionForLowValue)
                 case .aboveRecommended, .maximum:
-                    title = Text("High Maximum Basal Rate", comment: "Title text for high maximum basal rate warning")
+                    title = Text(LocalizedString("High Maximum Basal Rate", comment: "Title text for high maximum basal rate warning"))
                     caption = Text(TherapySetting.deliveryLimits.guardrailCaptionForHighValue)
                 }
             case .maximumBolus:
                 switch threshold {
                 case .minimum, .belowRecommended:
-                    title = Text("Low Maximum Bolus", comment: "Title text for low maximum bolus warning")
-                    if value.maximumBolus?.doubleValue(for: .internationalUnit()) == 0 {
-                        caption = Text("A setting of 0 U means you will not be able to bolus.", comment: "Caption text for zero maximum bolus setting warning")
-                    } else {
-                        caption = Text(TherapySetting.deliveryLimits.guardrailCaptionForLowValue)
-                    }
+                    title = Text(LocalizedString("Low Maximum Bolus", comment: "Title text for low maximum bolus warning"))
+                    caption = Text(TherapySetting.deliveryLimits.guardrailCaptionForLowValue)
                 case .aboveRecommended, .maximum:
-                    title = Text("High Maximum Bolus", comment: "Title text for high maximum bolus warning")
+                    title = Text(LocalizedString("High Maximum Bolus", comment: "Title text for high maximum bolus warning"))
                     caption = nil
                 }
             }
@@ -358,7 +355,7 @@ struct DeliveryLimitsGuardrailWarning: View {
             return GuardrailWarning(title: title, threshold: threshold, caption: caption)
         case 2:
             return GuardrailWarning(
-                title: Text("Delivery Limits"),
+                title: Text(LocalizedString("Delivery Limits", comment: "Title text for crossed thresholds guardrail warning")),
                 thresholds: Array(crossedThresholds.values),
                 caption: Text(TherapySetting.deliveryLimits.guardrailCaptionForOutsideValues)
             )

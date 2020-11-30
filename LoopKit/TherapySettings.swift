@@ -34,6 +34,21 @@ public struct TherapySettings: Equatable, Codable {
         return glucoseTargetRangeSchedule?.unit
     }
     
+    public var isComplete: Bool {
+        return
+            glucoseTargetRangeSchedule != nil &&
+            /* Premeal and workout targets are optional */
+            //preMealTargetRange != nil &&
+            //workoutTargetRange != nil &&
+            maximumBasalRatePerHour != nil &&
+            maximumBolus != nil &&
+            suspendThreshold != nil &&
+            insulinSensitivitySchedule != nil &&
+            carbRatioSchedule != nil &&
+            basalRateSchedule != nil &&
+            insulinModelSettings != nil
+    }
+    
     public init(
         glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
         preMealTargetRange: DoubleRange? = nil,

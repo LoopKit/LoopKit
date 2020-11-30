@@ -310,7 +310,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     }
 
     var cancelButton: some View {
-        Button(action: { self.dismiss() } ) { Text("Cancel", comment: "Cancel editing settings button title") }
+        Button(action: { self.dismiss() } ) { Text(LocalizedString("Cancel", comment: "Cancel editing settings button title")) }
     }
 
     var editButton: some View {
@@ -321,7 +321,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                 }
             },
             label: {
-                Text("Edit")
+                Text(LocalizedString("Edit", comment: "Text for edit button"))
             }
         )
         .disabled(scheduleItems.count == 1)
@@ -335,7 +335,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                 }
             },
             label: {
-                Text("Done").bold()
+                Text(LocalizedString("Done", comment: "Text for done button")).bold()
             }
         )
     }
@@ -400,15 +400,15 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             return Alert(
                 title: content.title,
                 message: content.message,
-                primaryButton: .cancel(Text("Go Back", comment: "Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range")),
+                primaryButton: .cancel(Text(LocalizedString("Go Back", comment: "Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range"))),
                 secondaryButton: .default(
-                    Text("Continue", comment: "Button text to confirm saving from alert popup when some schedule values are outside the recommended range"),
+                    Text(LocalizedString("Continue", comment: "Button text to confirm saving from alert popup when some schedule values are outside the recommended range")),
                     action: startSaving
                 )
             )
         case .saveError(let error):
             return Alert(
-                title: Text("Unable to Save", comment: "Alert title when error occurs while saving a schedule"),
+                title: Text(LocalizedString("Unable to Save", comment: "Alert title when error occurs while saving a schedule")),
                 message: Text(error.localizedDescription)
             )
         }

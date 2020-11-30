@@ -1125,7 +1125,7 @@ extension DoseStore {
             case .failure(let error):
                 completion(.failure(.persistenceError(description: error.localizedDescription, recoverySuggestion: nil)))
             case .success(let insulinDeliveryDoses):
-                let filteredStart = max(insulinDeliveryDoses.lastBasalEndDate ?? start, start)
+                let filteredStart = max(self.lastPumpEventsReconciliation ?? start, start)
 
                 self.persistenceController.managedObjectContext.perform {
                     do {

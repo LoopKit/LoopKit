@@ -113,7 +113,7 @@ public struct CorrectionRangeOverridesEditor: View {
     }
     
     private var cancelButton: some View {
-        Button(action: { self.dismiss() } ) { Text("Cancel", comment: "Cancel editing settings button title") }
+        Button(action: { self.dismiss() } ) { Text(LocalizedString("Cancel", comment: "Cancel editing settings button title")) }
     }
     
     private var content: some View {
@@ -248,18 +248,18 @@ public struct CorrectionRangeOverridesEditor: View {
         let title: Text
         switch preset {
         case .preMeal:
-            title = Text("Save Pre-Meal Range?", comment: "Alert title for confirming pre-meal range overrides outside the recommended range")
+            title = Text(LocalizedString("Save Pre-Meal Range?", comment: "Alert title for confirming pre-meal range overrides outside the recommended range"))
         case .workout:
-            title = Text("Save Workout Range?", comment: "Alert title for confirming workout range overrides outside the recommended range")
+            title = Text(LocalizedString("Save Workout Range?", comment: "Alert title for confirming workout range overrides outside the recommended range"))
         }
         
         return SwiftUI.Alert(
             title: title,
             // For the message, preMeal and workout are the same
             message: Text(TherapySetting.preMealCorrectionRangeOverride.guardrailSaveWarningCaption),
-            primaryButton: .cancel(Text("Go Back")),
+            primaryButton: .cancel(Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert"))),
             secondaryButton: .default(
-                Text("Continue"),
+                Text(LocalizedString("Continue", comment: "Text for continue action on confirmation alert")),
                 action: startSaving
             )
         )
@@ -318,16 +318,16 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
         case .minimum, .belowRecommended:
             switch preset {
             case .preMeal:
-                return Text("Low Pre-Meal Value", comment: "Title text for the low pre-meal value warning")
+                return Text(LocalizedString("Low Pre-Meal Value", comment: "Title text for the low pre-meal value warning"))
             case .workout:
-                return Text("Low Workout Value", comment: "Title text for the low workout value warning")
+                return Text(LocalizedString("Low Workout Value", comment: "Title text for the low workout value warning"))
             }
         case .aboveRecommended, .maximum:
             switch preset {
             case .preMeal:
-                return Text("High Pre-Meal Value", comment: "Title text for the low pre-meal value warning")
+                return Text(LocalizedString("High Pre-Meal Value", comment: "Title text for the low pre-meal value warning"))
             case .workout:
-                return Text("High Workout Value", comment: "Title text for the high workout value warning")
+                return Text(LocalizedString("High Workout Value", comment: "Title text for the high workout value warning"))
             }
         }
     }
@@ -335,9 +335,9 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
     private var multipleWarningTitle: Text {
         switch preset {
         case .preMeal:
-            return Text("Pre-Meal Values", comment: "Title text for multi-value pre-meal value warning")
+            return Text(LocalizedString("Pre-Meal Values", comment: "Title text for multi-value pre-meal value warning"))
         case .workout:
-            return Text("Workout Values", comment: "Title text for multi-value workout value warning")
+            return Text(LocalizedString("Workout Values", comment: "Title text for multi-value workout value warning"))
         }
     }
 

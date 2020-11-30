@@ -24,6 +24,7 @@ public struct SuspendThresholdEditor: View {
     @State var showingConfirmationAlert = false
     @Environment(\.dismiss) var dismiss
     @Environment(\.authenticate) var authenticate
+    @Environment(\.appName) private var appName
 
     let guardrail = Guardrail.suspendThreshold
 
@@ -46,8 +47,7 @@ public struct SuspendThresholdEditor: View {
            viewModel: TherapySettingsViewModel,
            didSave: (() -> Void)? = nil
     ) {
-        precondition(viewModel.therapySettings.glucoseUnit != nil)
-        let unit = viewModel.therapySettings.glucoseUnit!
+        let unit = viewModel.therapySettings.glucoseUnit ?? viewModel.preferredGlucoseUnit
         self.init(
             value: viewModel.therapySettings.suspendThreshold?.quantity,
             unit: unit,
@@ -57,8 +57,11 @@ public struct SuspendThresholdEditor: View {
                 workoutTargetRange: viewModel.therapySettings.workoutTargetRange?.quantityRange(for: unit)
             ),
             onSave: { [weak viewModel] newValue in
-                let newThreshold = GlucoseThreshold(unit: viewModel!.therapySettings.glucoseUnit!, value: newValue.doubleValue(for: viewModel!.therapySettings.glucoseUnit!))
-                viewModel?.saveSuspendThreshold(value: newThreshold)
+                guard let viewModel = viewModel else {
+                    return
+                }
+                let newThreshold = GlucoseThreshold(unit: viewModel.preferredGlucoseUnit, value: newValue.doubleValue(for: viewModel.preferredGlucoseUnit))
+                viewModel.saveSuspendThreshold(value: newThreshold)
                 didSave?()
             },
             mode: viewModel.mode
@@ -98,7 +101,7 @@ public struct SuspendThresholdEditor: View {
     }
     
     private var cancelButton: some View {
-        Button(action: { self.dismiss() } ) { Text("Cancel", comment: "Cancel editing settings button title") }
+        Button(action: { self.dismiss() } ) { Text(LocalizedString("Cancel", comment: "Cancel editing settings button title")) }
     }
     
     private var content: some View {
@@ -161,7 +164,7 @@ public struct SuspendThresholdEditor: View {
     }
 
     var description: Text {
-        Text(TherapySetting.suspendThreshold.descriptiveText)
+        Text(TherapySetting.suspendThreshold.descriptiveText(appName: appName))
     }
     
     private var instructionalContentIfNecessary: some View {
@@ -196,11 +199,11 @@ public struct SuspendThresholdEditor: View {
 
     private func confirmationAlert() -> SwiftUI.Alert {
         SwiftUI.Alert(
-            title: Text("Save Glucose Safety Limit?", comment: "Alert title for confirming a glucose safety limit outside the recommended range"),
+            title: Text(LocalizedString("Save Glucose Safety Limit?", comment: "Alert title for confirming a glucose safety limit outside the recommended range")),
             message: Text(TherapySetting.suspendThreshold.guardrailSaveWarningCaption),
-            primaryButton: .cancel(Text("Go Back")),
+            primaryButton: .cancel(Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert"))),
             secondaryButton: .default(
-                Text("Continue"),
+                Text(LocalizedString("Continue", comment: "Text for continue action on confirmation alert")),
                 action: startSaving
             )
         )
@@ -234,9 +237,9 @@ struct SuspendThresholdGuardrailWarning: View {
     private var title: Text {
         switch safetyClassificationThreshold {
         case .minimum, .belowRecommended:
-            return Text("Low Glucose Safety Limit", comment: "Title text for the low glucose safety limit warning")
+            return Text(LocalizedString("Low Glucose Safety Limit", comment: "Title text for the low glucose safety limit warning"))
         case .aboveRecommended, .maximum:
-            return Text("High Glucose Safety Limit", comment: "Title text for the high glucose safety limit warning")
+            return Text(LocalizedString("High Glucose Safety Limit", comment: "Title text for the high glucose safety limit warning"))
         }
     }
 }
