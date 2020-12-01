@@ -515,7 +515,7 @@ extension DoseEntry {
             if let deliveredUnits = deliveredUnits,
                deliveredUnits != programmedUnits
             {
-                description = String(format: NSLocalizedString("Interrupted %1$@: <b>%2$@</b> %3$@ (of %4$@)", comment: "Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit, 4: programmed value (? if no value))"), type.localizedDescription, numberFormatter.string(from: deliveredUnits) ?? "?", DoseEntry.units.shortLocalizedUnitString(), numberFormatter.string(from: programmedUnits) ?? "?")
+                description = String(format: NSLocalizedString("Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@", comment: "Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: programmed value (? if no value), 4: unit)"), type.localizedDescription, numberFormatter.string(from: deliveredUnits) ?? "?", numberFormatter.string(from: programmedUnits) ?? "?", DoseEntry.units.shortLocalizedUnitString())
             } else {
                 description = String(format: NSLocalizedString("%1$@: <b>%2$@</b> %3$@", comment: "Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)"), type.localizedDescription, numberFormatter.string(from: programmedUnits) ?? "?", DoseEntry.units.shortLocalizedUnitString())
             }
