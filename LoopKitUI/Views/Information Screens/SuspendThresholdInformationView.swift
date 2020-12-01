@@ -16,7 +16,8 @@ public struct SuspendThresholdInformationView: View {
     var preferredUnit: HKUnit = HKUnit.milligramsPerDeciliter
     
     @Environment(\.presentationMode) var presentationMode
-    
+    @Environment(\.appName) var appName
+
     public init(
         onExit: (() -> Void)? = nil,
         mode: SettingsPresentationMode = .acceptanceFlow
@@ -29,7 +30,8 @@ public struct SuspendThresholdInformationView: View {
         GlucoseTherapySettingInformationView(therapySetting: .suspendThreshold,
                                              preferredUnit: preferredUnit,
                                              onExit: onExit,
-                                             mode: mode)
+                                             mode: mode,
+                                             appName: appName)
     }
 }
 

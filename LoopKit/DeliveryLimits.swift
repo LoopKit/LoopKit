@@ -44,12 +44,12 @@ public extension DeliveryLimits.Setting {
         }
     }
     
-    var descriptiveText: String {
+    func localizedDescriptiveText(appName: String) -> String {
         switch self {
         case .maximumBasalRate:
-            return LocalizedString("Maximum basal rate is the highest temporary basal rate Loop is allowed to set automatically.", comment: "Descriptive text for maximum basal rate")
+            return String(format: LocalizedString("Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set automatically.", comment: "Descriptive text for maximum basal rate (1: app name)"), appName)
         case .maximumBolus:
-            return LocalizedString("Maximum bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose.", comment: "Descriptive text for maximum bolus")
+            return LocalizedString("Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose.", comment: "Descriptive text for maximum bolus")
         }
     }
 }
