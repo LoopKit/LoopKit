@@ -809,13 +809,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		1D81905225688079004D1BEC /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1D81903A25687FF2004D1BEC;
-			remoteInfo = Cartfile;
-		};
 		1DEE226A24A676A300693C32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
@@ -2829,7 +2822,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				1D81905325688079004D1BEC /* PBXTargetDependency */,
 			);
 			name = LoopKit;
 			productName = LoopKit;
@@ -4013,11 +4005,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		1D81905325688079004D1BEC /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1D81903A25687FF2004D1BEC /* Cartfile */;
-			targetProxy = 1D81905225688079004D1BEC /* PBXContainerItemProxy */;
-		};
 		1DEE226924A676A300693C32 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
@@ -4706,6 +4693,25 @@
 			};
 			name = Release;
 		};
+		C16C6E022576B4B7003052EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = MockKitTests;
+			};
+			name = Debug;
+		};
+		C16C6E032576B4B7003052EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				PRODUCT_NAME = MockKitTests;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -4811,8 +4817,8 @@
 		B4CEE2EA257129780093111B /* Build configuration list for PBXNativeTarget "MockKitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B4CEE2E8257129780093111B /* Debug */,
-				B4CEE2E9257129780093111B /* Release */,
+				C16C6E022576B4B7003052EF /* Debug */,
+				C16C6E032576B4B7003052EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
