@@ -107,7 +107,7 @@ extension TherapySettings {
             glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
             preMealTargetRange: DoubleRange(minValue: 80.0, maxValue: 90.0),
             workoutTargetRange: DoubleRange(minValue: 140.0, maxValue: 160.0),
-            maximumBasalRatePerHour: 5,
+            maximumBasalRatePerHour: 1,
             maximumBolus: 10,
             suspendThreshold: GlucoseThreshold(unit: .milligramsPerDeciliter, value: 75),
             insulinSensitivitySchedule: insulinSensitivitySchedule,
