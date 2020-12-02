@@ -2206,6 +2206,7 @@
 				891A3FD6224BE62100378B27 /* DailyValueScheduleTests.swift */,
 				A99C7374233993FE00C80963 /* DiagnosticLogTests.swift */,
 				A95A1D8C246101760079378D /* DoseEntryTests.swift */,
+				B4CEE2A4256E91290093111B /* DoseProgressTests.swift */,
 				43A067121F245A2F00E9E90F /* DoseStoreTests.swift */,
 				A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */,
 				43D8FE991C7293D00073BE78 /* GlucoseMathTests.swift */,
@@ -2234,7 +2235,6 @@
 				E93C86AF24CF7C470073089B /* TherapySettingsTests.swift */,
 				C1E7035C24FFFA5C00DAB534 /* CollectionTests.swift */,
 				A985465025144ABA0099C1A6 /* NotificationSettingsTests.swift */,
-				B4CEE2A4256E91290093111B /* DoseProgressTests.swift */,
 			);
 			path = LoopKitTests;
 			sourceTree = "<group>";
@@ -4205,25 +4205,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		1DC9237E25758E52004F132A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = MockKitTests;
-			};
-			name = Debug;
-		};
-		1DC9237F25758E52004F132A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				PRODUCT_NAME = MockKitTests;
 			};
 			name = Release;
 		};
