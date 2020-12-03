@@ -72,7 +72,7 @@ public extension TherapySetting {
         case .insulinModel:
             return String(format: LocalizedString("%1$@ assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity.", comment: "Descriptive text for insulin model (1: app name)"), appName)
         case .carbRatio:
-            return LocalizedString("Your Carb Ratio is the number of grams of carbohydrate covered by one unit of insulin.", comment: "Descriptive text for carb ratio")
+            return LocalizedString("Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin.", comment: "Descriptive text for carb ratio")
         case .insulinSensitivity:
             return LocalizedString("Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin.", comment: "Descriptive text for insulin sensitivity")
         case .none:

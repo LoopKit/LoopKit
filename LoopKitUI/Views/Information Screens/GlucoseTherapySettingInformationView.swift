@@ -96,7 +96,7 @@ fileprivate extension TherapySetting {
     }
 
     func lowHighText(lowerBoundString: String, upperBoundString: String) -> String {
-        return String(format: LocalizedString("It can be set as low as %1$@. It can be set as high as %2$@",
+        return String(format: LocalizedString("It can be set as low as %1$@. It can be set as high as %2$@.",
                                               comment: "Guardrail info text format"), lowerBoundString, upperBoundString)
     }
 }
