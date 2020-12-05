@@ -100,7 +100,7 @@ public struct CorrectionRangeScheduleEditor: View {
     var defaultFirstScheduleItemValue: DoubleRange {
         switch unit {
         case .milligramsPerDeciliter:
-            return DoubleRange(minValue: 100, maxValue: 120)
+            return DoubleRange(minValue: 100, maxValue: 115)
         case .millimolesPerLiter:
             return DoubleRange(minValue: 5.6, maxValue: 6.7)
         default:

@@ -36,6 +36,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
 
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.className)
         tableView.register(TextButtonTableViewCell.self, forCellReuseIdentifier: TextButtonTableViewCell.className)
+        tableView.register(BoundSwitchTableViewCell.self, forCellReuseIdentifier: BoundSwitchTableViewCell.className)
 
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped(_:)))
         self.navigationItem.setRightBarButton(button, animated: false)
@@ -75,6 +76,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
     }
     
     private enum GlucoseThresholds: Int, CaseIterable {
+        case enableAlerting
         case cgmLowerLimit
         case urgentLowGlucoseThreshold
         case lowGlucoseThreshold
@@ -200,6 +202,15 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case .glucoseThresholds:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
             switch GlucoseThresholds(rawValue: indexPath.row)! {
+            case .enableAlerting:
+                let cell = tableView.dequeueReusableCell(withIdentifier: BoundSwitchTableViewCell.className, for: indexPath) as! BoundSwitchTableViewCell
+                cell.textLabel?.text = "Glucose Value Alerting"
+                cell.switch?.isOn = cgmManager.mockSensorState.glucoseAlertingEnabled
+                cell.onToggle = { [unowned cgmManager] isOn in
+                    cgmManager.mockSensorState.glucoseAlertingEnabled = isOn
+                }
+                cell.selectionStyle = .none
+                return cell
             case .cgmLowerLimit:
                 cell.textLabel?.text = "CGM Lower Limit"
                 cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.cgmLowerLimit, for: glucoseUnit)
@@ -360,6 +371,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             vc.indexPath = indexPath
             vc.glucoseEntryDelegate = self
             switch GlucoseThresholds(rawValue: indexPath.row)! {
+            case .enableAlerting:
+                return
             case .cgmLowerLimit:
                 vc.title = "CGM Lower Limit"
                 vc.contextHelp = "The glucose value that marks the lower limit of the CGM. Any value at or below this value is presented at `LOW`. This value must be lower than the urgent low threshold. If not, it will be set to 1 below the urgent low glucose threshold."
@@ -527,6 +540,8 @@ extension MockCGMManagerSettingsViewController: GlucoseEntryTableViewControllerD
                     cgmManager.mockSensorState.highGlucoseThreshold = glucose
                 case .cgmUpperLimit:
                     cgmManager.mockSensorState.cgmUpperLimit = glucose
+                default:
+                    assertionFailure()
                 }
             }
         default:

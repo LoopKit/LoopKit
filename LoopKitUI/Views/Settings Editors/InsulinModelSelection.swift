@@ -10,7 +10,7 @@ import HealthKit
 import SwiftUI
 import LoopKit
 
-public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
+public struct InsulinModelSelection: View {
     @Environment(\.appName) private var appName   
     @Environment(\.dismiss) var dismiss
     @Environment(\.authenticate) var authenticate
@@ -136,7 +136,6 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             .padding(.bottom)
             .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5))
         }
-        .environment(\.horizontalSizeClass, horizontalOverride)
         .navigationBarTitle(Text(TherapySetting.insulinModel.title), displayMode: .large)
         .supportedInterfaceOrientations(.portrait)
         .edgesIgnoringSafeArea(.bottom)
@@ -203,7 +202,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             }
             .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
         }
-        .listStyle(GroupedListStyle())
+        .insetGroupedListStyle()
     }
 
     var insulinModelSettingDescription: Text {

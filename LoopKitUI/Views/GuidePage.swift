@@ -32,8 +32,7 @@ public struct GuidePage<Content, ActionAreaContent>: View where Content: View, A
                     self.content
                 }
             }
-            .environment(\.horizontalSizeClass, self.horizontalSizeClass)
-            .listStyle(GroupedListStyle())
+            .insetGroupedListStyle()
             VStack {
                 self.actionAreaContent
             }

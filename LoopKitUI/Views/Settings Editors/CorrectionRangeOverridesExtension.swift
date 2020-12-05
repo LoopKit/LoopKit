@@ -22,7 +22,7 @@ extension CorrectionRangeOverrides.Preset {
     }
         
     private func icon(named name: String, tinted color: Color) -> some View {
-        Image(frameworkImage: name)
+        Image(name)
             .renderingMode(.template)
             .foregroundColor(color)
     }

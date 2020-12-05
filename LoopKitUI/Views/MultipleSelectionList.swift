@@ -25,8 +25,7 @@ public struct MultipleSelectionList<Item>: View where Item: Hashable {
                                        selectedItems: self.$selectedItems,
                                        itemToDisplayableString: self.itemToDisplayableString)
         }
-        .listStyle(GroupedListStyle())
-        .environment(\.horizontalSizeClass, .regular)
+        .insetGroupedListStyle()
     }
 }
 

@@ -28,6 +28,7 @@ public struct DeliveryLimitsEditor: View {
     @State var showingConfirmationAlert = false
     @Environment(\.dismiss) var dismiss
     @Environment(\.authenticate) var authenticate
+    @Environment(\.appName) var appName
 
     private let lowestCarbRatio: Double?
 
@@ -151,7 +152,8 @@ public struct DeliveryLimitsEditor: View {
 
     var maximumBasalRateCard: Card {
         Card {
-            SettingDescription(text: Text(DeliveryLimits.Setting.maximumBasalRate.descriptiveText), informationalContent: { TherapySetting.deliveryLimits.helpScreen() })
+            SettingDescription(text: Text(DeliveryLimits.Setting.maximumBasalRate.localizedDescriptiveText(appName: appName)),
+                               informationalContent: { TherapySetting.deliveryLimits.helpScreen() })
             ExpandableSetting(
                 isEditing: Binding(
                     get: { self.settingBeingEdited == .maximumBasalRate },
@@ -200,8 +202,8 @@ public struct DeliveryLimitsEditor: View {
 
     var maximumBolusCard: Card {
         Card {
-            SettingDescription(
-                text: Text(DeliveryLimits.Setting.maximumBolus.descriptiveText), informationalContent: { TherapySetting.deliveryLimits.helpScreen() })
+            SettingDescription(text: Text(DeliveryLimits.Setting.maximumBolus.localizedDescriptiveText(appName: appName)),
+                               informationalContent: { TherapySetting.deliveryLimits.helpScreen() })
             ExpandableSetting(
                 isEditing: Binding(
                     get: { self.settingBeingEdited == .maximumBolus },

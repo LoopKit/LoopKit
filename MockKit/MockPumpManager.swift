@@ -71,6 +71,21 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
 
+    public var currentBasalRate: HKQuantity? {
+        switch status.basalDeliveryState {
+        case .suspending, .suspended(_):
+            return HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0)
+        case .tempBasal(let dose):
+            return HKQuantity(unit: .internationalUnitsPerHour, doubleValue: dose.unitsPerHour)
+        case .none:
+            return nil
+        default:
+            guard let scheduledBasalRate = state.basalRateSchedule?.value(at: Date()) else { return nil }
+
+            return HKQuantity(unit: .internationalUnitsPerHour, doubleValue: scheduledBasalRate)
+        }
+    }
+
     public var supportedBolusVolumes: [Double] {
         return state.supportedBolusVolumes
     }
@@ -97,9 +112,12 @@ public final class MockPumpManager: TestingPumpManager {
         return testLastReconciliation ?? Date()
     }
 
-    private func basalDeliveryState(for state: MockPumpManagerState) -> PumpManagerStatus.BasalDeliveryState {
+    private func basalDeliveryState(for state: MockPumpManagerState) -> PumpManagerStatus.BasalDeliveryState? {
         if case .suspended(let date) = state.suspendState {
             return .suspended(date)
+        }
+        if state.occlusionDetected || state.pumpErrorDetected || state.pumpBatteryChargeRemaining == 0 || state.reservoirUnitsRemaining == 0 {
+            return nil
         }
         if let temp = state.unfinalizedTempBasal, !temp.finished {
             return .tempBasal(DoseEntry(temp))
@@ -137,14 +155,14 @@ public final class MockPumpManager: TestingPumpManager {
             return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Error", comment: "Status highlight that a pump error occurred."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
-        } else if case .suspended = state.suspendState {
-            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
-                                                         imageName: "pause.circle.fill",
-                                                         state: .warning)
         } else if pumpBatteryChargeRemaining == 0 {
             return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Battery Dead", comment: "Status highlight that pump has a dead battery."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
+        } else if case .suspended = state.suspendState {
+            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
+                                                         imageName: "pause.circle.fill",
+                                                         state: .warning)
         }
         
         return nil
@@ -560,6 +578,8 @@ public final class MockPumpManager: TestingPumpManager {
     public func setMaximumTempBasalRate(_ rate: Double) { }
 
     public func syncBasalRateSchedule(items scheduleItems: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
+        state.basalRateSchedule = BasalRateSchedule(dailyItems: scheduleItems, timeZone: self.status.timeZone)
+
         DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(500)) {
             completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: self.status.timeZone)!))
         }

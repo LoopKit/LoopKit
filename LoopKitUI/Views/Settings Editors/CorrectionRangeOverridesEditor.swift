@@ -352,3 +352,16 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
         return Text(crossedThresholds.count > 1 ? TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForOutsideValues : TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForHighValue)
     }
 }
+
+public extension CorrectionRangeOverrides.Preset {
+    
+    var descriptiveText: String {
+        switch self {
+        case .preMeal:
+            return LocalizedString("Temporarily lower your glucose target before a meal to impact post-meal glucose spikes.", comment: "Description of pre-meal mode")
+        case .workout:
+            return LocalizedString("Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events.", comment: "Description of workout mode")
+        }
+    }
+
+}
