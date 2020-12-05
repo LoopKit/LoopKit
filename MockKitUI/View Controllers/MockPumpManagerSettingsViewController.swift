@@ -67,7 +67,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
     // MARK: - Data Source
 
     private enum Section: Int, CaseIterable {
-        case actions = 0
+        case basalRate = 0
+        case actions
         case settings
         case statusProgress
         case deletePump
@@ -108,6 +109,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
+        case .basalRate:
+            return 1
         case .actions:
             return ActionRow.allCases.count
         case .settings:
@@ -121,6 +124,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
+        case .basalRate:
+            return nil
         case .actions:
             return nil
         case .settings:
@@ -134,6 +139,16 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch Section(rawValue: indexPath.section)! {
+        case .basalRate:
+            let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+            cell.textLabel?.text = "Current Basal Rate"
+            if let currentBasalRate = pumpManager.currentBasalRate {
+                cell.detailTextLabel?.text = quantityFormatter.string(from: currentBasalRate, for: HKUnit.internationalUnit().unitDivided(by: .hour()))
+            } else {
+                cell.detailTextLabel?.text = "—"
+            }
+            cell.isUserInteractionEnabled = false
+            return cell
         case .actions:
             switch ActionRow(rawValue: indexPath.row)! {
             case .suspendResume:
@@ -374,6 +389,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             present(confirmVC, animated: true) {
                 tableView.deselectRow(at: indexPath, animated: true)
             }
+        default:
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
 
@@ -446,6 +463,8 @@ extension MockPumpManagerSettingsViewController: PumpManagerStatusObserver {
         {
             suspendResumeTableViewCell.basalDeliveryState = status.basalDeliveryState
         }
+        
+        tableView.reloadSections([Section.basalRate.rawValue], with: .automatic)
     }
 }
 

@@ -14,7 +14,8 @@ public struct DeliveryLimitsInformationView: View {
     var mode: SettingsPresentationMode
     
     @Environment(\.presentationMode) var presentationMode
-    
+    @Environment(\.appName) var appName
+
     public init(onExit: (() -> Void)?, mode: SettingsPresentationMode = .acceptanceFlow) {
         self.onExit = onExit
         self.mode = mode
@@ -37,16 +38,16 @@ public struct DeliveryLimitsInformationView: View {
     }
     
     private var deliveryLimitDescription: some View {
-        Text(LocalizedString("Delivery limits are safety guardrails for your insulin delivery.", comment: "Information about delivery limits"))
+        Text(LocalizedString("Delivery Limits are safety guardrails for your insulin delivery.", comment: "Information about delivery limits"))
         .foregroundColor(.secondary)
     }
     
     private var maxBasalDescription: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text(LocalizedString("Maximum basal rate", comment: "Maximum basal rate title"))
+            Text(DeliveryLimits.Setting.maximumBasalRate.title)
             .font(.headline)
             VStack(alignment: .leading, spacing: 20) {
-                Text(LocalizedString("Maximum basal rate is the maximum automatically adjusted basal rate that Loop is allowed to enact to help reach your correction range.", comment: "Information about maximum basal rate"))
+                Text(LocalizedString("Maximum Basal Rate is the maximum automatically adjusted basal rate that \(appName) is allowed to enact to help reach your correction range.", comment: "Information about maximum basal rate"))
                 Text(LocalizedString("Some users choose a value 2, 3, or 4 times their highest scheduled basal rate.", comment: "Information about typical maximum basal rates"))
                 Text(LocalizedString("Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable.", comment: "Disclaimer"))
             }
@@ -56,9 +57,9 @@ public struct DeliveryLimitsInformationView: View {
     
     private var maxBolusDescription: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text(LocalizedString("Maximum bolus", comment: "Maximum bolus title"))
+            Text(DeliveryLimits.Setting.maximumBolus.title)
             .font(.headline)
-            Text(LocalizedString("Maximum bolus is the highest bolus amount that you will allow Loop to recommend at one time to cover carbs or bring down high glucose.", comment: "Information about maximum bolus"))
+            Text(LocalizedString("Maximum Bolus is the highest bolus amount that you will allow \(appName) to recommend at one time to cover carbs or bring down high glucose.", comment: "Information about maximum bolus"))
             .foregroundColor(.secondary)
         }
     }

@@ -34,7 +34,7 @@ public struct InsulinSensitivityInformationView: View {
     
     private var text: some View {
         VStack(alignment: .leading, spacing: 25) {
-            Text(LocalizedString("Your insulin sensitivity factor (ISF) is the drop in glucose expected from one unit of insulin.", comment: "Description of insulin sensitivity factor"))
+            Text(LocalizedString("Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin.", comment: "Description of insulin sensitivity factor"))
             Text(LocalizedString("You can add different insulin sensitivities for different times of day by using the ➕.", comment: "Description of how to add a ratio"))
         }
         .accentColor(.secondary)

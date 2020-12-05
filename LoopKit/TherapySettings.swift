@@ -81,7 +81,7 @@ extension TherapySettings {
         let glucoseTargetRangeSchedule =  GlucoseRangeSchedule(
             rangeSchedule: DailyQuantitySchedule(unit: .milligramsPerDeciliter,
                 dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: DoubleRange(minValue: 100.0, maxValue: 110.0)),
-                             RepeatingScheduleValue(startTime: .hours(8), value: DoubleRange(minValue: 90.0, maxValue: 100.0)),
+                             RepeatingScheduleValue(startTime: .hours(8), value: DoubleRange(minValue: 105.0, maxValue: 115.0)),
                              RepeatingScheduleValue(startTime: .hours(21), value: DoubleRange(minValue: 100.0, maxValue: 110.0))],
                 timeZone: timeZone)!,
             override: GlucoseRangeSchedule.Override(value: DoubleRange(minValue: 80.0, maxValue: 90.0),
@@ -99,10 +99,8 @@ extension TherapySettings {
             timeZone: timeZone)!
         let carbRatioSchedule = CarbRatioSchedule(
             unit: .gram(),
-                                                  
             dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 10.0)],
             timeZone: timeZone)!
-        
         return TherapySettings(
             glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
             preMealTargetRange: DoubleRange(minValue: 80.0, maxValue: 90.0),

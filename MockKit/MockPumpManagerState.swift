@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import LoopKit
 
 public struct MockPumpManagerState {
     public enum DeliverableIncrements: String, CaseIterable {
@@ -114,7 +115,7 @@ public struct MockPumpManagerState {
     
     public var supportedBolusVolumes: [Double]
     public var supportedBolusVolumesDescription: String {
-        guard let bolusVolumesDescription = deliverableIncrements.basalRateDescription else {
+        guard let bolusVolumesDescription = deliverableIncrements.bolusVolumesDescription else {
             guard let minBolusVolume = supportedBolusVolumes.first, let maxBolusVolume = supportedBolusVolumes.last, supportedBolusVolumes.indices.contains(1) else {
                 return "–"
             }
@@ -133,7 +134,8 @@ public struct MockPumpManagerState {
         }
         return basalRatesDescription
     }
-    
+
+    public var basalRateSchedule: BasalRateSchedule?
     public var reservoirUnitsRemaining: Double
     public var tempBasalEnactmentShouldError: Bool
     public var bolusEnactmentShouldError: Bool
@@ -205,7 +207,11 @@ extension MockPumpManagerState: RawRepresentable {
         self.progressPercentComplete = rawValue["progressPercentComplete"] as? Double
         self.progressWarningThresholdPercentValue = rawValue["progressWarningThresholdPercentValue"] as? Double
         self.progressCriticalThresholdPercentValue = rawValue["progressCriticalThresholdPercentValue"] as? Double
-        
+
+        if let rawBasalRateSchedule = rawValue["basalRateSchedule"] as? BasalRateSchedule.RawValue {
+            self.basalRateSchedule = BasalRateSchedule(rawValue: rawBasalRateSchedule)
+        }
+
         if let rawUnfinalizedBolus = rawValue["unfinalizedBolus"] as? UnfinalizedDose.RawValue {
             self.unfinalizedBolus = UnfinalizedDose(rawValue: rawUnfinalizedBolus)
         }
@@ -236,6 +242,7 @@ extension MockPumpManagerState: RawRepresentable {
             "reservoirUnitsRemaining": reservoirUnitsRemaining,
         ]
 
+        raw["basalRateSchedule"] = basalRateSchedule?.rawValue
         raw["suspendState"] = suspendState.rawValue
 
         if tempBasalEnactmentShouldError {
@@ -294,6 +301,7 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
         * supportedBolusVolumes: \(supportedBolusVolumes)
         * supportedBasalRates: \(supportedBasalRates)
         * reservoirUnitsRemaining: \(reservoirUnitsRemaining)
+        * basalRateSchedule: \(basalRateSchedule as Any)
         * tempBasalEnactmentShouldError: \(tempBasalEnactmentShouldError)
         * bolusEnactmentShouldError: \(bolusEnactmentShouldError)
         * bolusCancelShouldError: \(bolusCancelShouldError)
