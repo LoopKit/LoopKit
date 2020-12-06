@@ -110,6 +110,7 @@ class CachedInsulinDeliveryObject: NSManagedObject {
             defer { didChangeValue(forKey: "modelType") }
             primitiveModelType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
         }
+    }
 }
 
 // MARK: - Helpers
@@ -196,7 +197,6 @@ extension CachedInsulinDeliveryObject {
             insulinModelSetting: insulinModelSetting
         )
     }
-}
 
     func update(from sample: HKQuantitySample) {
         uuid = sample.uuid
