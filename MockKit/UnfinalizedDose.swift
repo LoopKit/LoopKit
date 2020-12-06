@@ -21,6 +21,13 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
 
     private let dateFormatter = ISO8601DateFormatter()
 
+    private let insulinFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 3
+        return formatter
+    }()
+
     fileprivate var uniqueKey: Data {
         return "\(doseType) \(scheduledUnits ?? units) \(dateFormatter.string(from: startTime))".data(using: .utf8)!
     }
@@ -125,11 +132,18 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
     }
 
     public var description: String {
+        let unitsStr = insulinFormatter.string(from: NSNumber(value:units)) ?? "?"
         switch doseType {
         case .bolus:
-            return "Bolus units:\(units) startTime:\(startTime) duration:\(String(describing: duration))"
+            if let scheduledUnits = scheduledUnits,
+               let scheduledUnitsStr = insulinFormatter.string(from: NSNumber(value:scheduledUnits))
+            {
+                return "Interrupted Bolus units:\(unitsStr) (\(scheduledUnitsStr) scheduled) startTime:\(startTime) duration:\(String(describing: duration))"
+            } else {
+                return "Bolus units:\(unitsStr) startTime:\(startTime) duration:\(String(describing: duration))"
+            }
         case .tempBasal:
-            return "TempBasal rate:\(scheduledTempRate ?? rate) units:\(units) startTime:\(startTime) duration:\(String(describing: duration))"
+            return "Temp Basal rate:\(scheduledTempRate ?? rate) units:\(unitsStr) startTime:\(startTime) duration:\(String(describing: duration))"
         case .suspend, .resume:
             return "\(doseType) startTime:\(startTime)"
         }
@@ -217,7 +231,7 @@ extension DoseEntry {
     init (_ dose: UnfinalizedDose) {
         switch dose.doseType {
         case .bolus:
-            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.units, unit: .units)
+            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledUnits ?? dose.units, unit: .units, deliveredUnits: dose.finalizedUnits)
         case .tempBasal:
             self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledTempRate ?? dose.rate, unit: .unitsPerHour, deliveredUnits: dose.finalizedUnits)
         case .suspend:

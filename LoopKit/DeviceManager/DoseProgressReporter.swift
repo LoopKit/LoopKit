@@ -14,7 +14,7 @@ public struct DoseProgress {
     public let percentComplete: Double
 
     public var isComplete: Bool {
-        return percentComplete >= 1.0
+        return percentComplete >= 1.0 || fabs(percentComplete - 1.0) <= Double.ulpOfOne
     }
 
     public init(deliveredUnits: Double, percentComplete: Double) {

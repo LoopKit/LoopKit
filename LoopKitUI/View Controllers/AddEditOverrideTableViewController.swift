@@ -39,6 +39,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         case customizePresetOverride(TemporaryScheduleOverridePreset)   // Defining an override relative to an existing preset
         case customOverride                                             // Defining a one-off custom override
         case editOverride(TemporaryScheduleOverride)                    // Editing an active override
+        case viewOverride(TemporaryScheduleOverride)                    // Viewing an override
     }
 
     public enum DismissalMode {
@@ -80,6 +81,18 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 duration = override.duration
                 enactTrigger = override.enactTrigger
                 syncIdentifier = override.syncIdentifier
+            case .viewOverride(let override):
+                if case .preset(let preset) = override.context {
+                    symbol = preset.symbol
+                    name = preset.name
+                } else {
+                    symbol = nil
+                    name = nil
+                }
+                configure(with: override.settings)
+                startDate = override.startDate
+                duration = override.duration
+                syncIdentifier = override.syncIdentifier
             }
         }
     }
@@ -112,7 +125,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         switch inputMode {
         case .newPreset, .editPreset:
             return true
-        case .customizePresetOverride, .customOverride, .editOverride:
+        case .customizePresetOverride, .customOverride, .editOverride, .viewOverride:
             return false
         }
     }
@@ -165,6 +178,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         case insulinNeeds
         case targetRange
         case startDate
+        case endDate
         case durationFiniteness
         case duration
     }
@@ -173,6 +187,8 @@ public final class AddEditOverrideTableViewController: UITableViewController {
         var rows: [PropertyRow] = {
             if isConfiguringPreset {
                 return [.symbol, .name, .insulinNeeds, .targetRange, .durationFiniteness]
+            } else if case let .viewOverride(override) = inputMode, override.hasFinished() {
+                return [.insulinNeeds, .targetRange, .startDate, .endDate]
             } else {
                 return [.insulinNeeds, .targetRange, .startDate, .durationFiniteness]
             }
@@ -273,6 +289,16 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 cell.date = startDate
                 cell.delegate = self
                 return cell
+            case .endDate:
+                guard case let .viewOverride(override) = inputMode else {
+                    fatalError("endDate should only be used when viewing override history")
+                }
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
+                cell.titleLabel.text = LocalizedString("End Time", comment: "The text for the override start time")
+                cell.datePicker.datePickerMode = .dateAndTime
+                cell.date = override.actualEndDate
+                return cell
             case .durationFiniteness:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SwitchTableViewCell.className, for: indexPath) as! SwitchTableViewCell
                 cell.selectionStyle = .none
@@ -284,11 +310,19 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
                 cell.titleLabel.text = LocalizedString("Duration", comment: "The text for the custom preset duration setting")
                 cell.datePicker.datePickerMode = .countDownTimer
-                cell.datePicker.minuteInterval = 15
                 guard case .finite(let duration) = duration else {
                     preconditionFailure("Duration should only be selectable when duration is finite")
                 }
-                cell.duration = duration
+                // Use the actual duration if we're retrospectively viewing overrides
+                if case let .viewOverride(override) = inputMode {
+                    cell.titleLabel.text = LocalizedString("Active Duration", comment: "The text for the override history duration")
+                    cell.datePicker.minuteInterval = 1
+                    cell.duration = override.actualEndDate.timeIntervalSince(override.startDate)
+                } else {
+                    cell.titleLabel.text = LocalizedString("Duration", comment: "The text for the override duration setting")
+                    cell.datePicker.minuteInterval = 15
+                    cell.duration = duration
+                }
                 cell.maximumDuration = .hours(24)
                 cell.delegate = self
                 return cell
@@ -334,7 +368,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
             case .indefinite:
                 duration = .finite(.defaultOverrideDuration)
             }
-        case .editOverride(let override):
+        case .editOverride(let override), .viewOverride(let override):
             if case .preset(let preset) = override.context,
                 case .finite(let interval) = preset.duration {
                 duration = .finite(interval)
@@ -432,6 +466,8 @@ extension AddEditOverrideTableViewController {
                 title = LocalizedString("Custom Preset", comment: "The title for the custom preset entry screen")
             case .editOverride:
                 title = LocalizedString("Edit", comment: "The title for the enabled custom preset editing screen")
+            case .viewOverride:
+                title = LocalizedString("View Override", comment: "The title for the override editing screen")
             }
         }
     }
@@ -441,7 +477,8 @@ extension AddEditOverrideTableViewController {
         case .newPreset, .editPreset, .editOverride:
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(save))
         case .customizePresetOverride, .customOverride:
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: LocalizedString("Enable", comment: "The button text for enabling a custom preset"), style: .done, target: self, action: #selector(save))
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: LocalizedString("Enable", comment: "The button text for enabling a temporary override"), style: .done, target: self, action: #selector(save))
+        case .viewOverride: break
         }
 
         updateSaveButtonEnabled()
@@ -506,7 +543,7 @@ extension AddEditOverrideTableViewController {
                 duration: duration
             )
             context = .preset(customizedPreset)
-        case .editOverride(let override):
+        case .editOverride(let override), .viewOverride(let override):
             context = override.context
         case .customOverride:
             context = .custom
@@ -525,6 +562,8 @@ extension AddEditOverrideTableViewController {
                 return configuredPreset != nil
             case .customizePresetOverride, .customOverride, .editOverride:
                 return configuredOverride != nil
+            case .viewOverride:
+                return false
             }
         }()
     }
@@ -543,6 +582,7 @@ extension AddEditOverrideTableViewController {
                 break
             }
             delegate?.addEditOverrideTableViewController(self, didSaveOverride: configuredOverride)
+        case .viewOverride: break
         }
         dismiss()
     }
@@ -558,7 +598,7 @@ extension AddEditOverrideTableViewController {
             switch inputMode {
             case .newPreset, .customizePresetOverride, .customOverride:
                 dismiss(with: .dismissModal)
-            case .editPreset, .editOverride:
+            case .editPreset, .editOverride, .viewOverride:
                 dismiss(with: .popViewController)
             }
         }

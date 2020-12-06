@@ -10,9 +10,7 @@ import Foundation
 import CoreData
 import HealthKit
 
-
 class CachedInsulinDeliveryObject: NSManagedObject {
-
     var reason: HKInsulinDeliveryReason! {
         get {
             willAccessValue(forKey: "reason")
@@ -112,15 +110,9 @@ class CachedInsulinDeliveryObject: NSManagedObject {
             defer { didChangeValue(forKey: "modelType") }
             primitiveModelType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
         }
-    }
-
-    override func awakeFromInsert() {
-        super.awakeFromInsert()
-
-        createdAt = Date()
-    }
 }
 
+// MARK: - Helpers
 
 extension CachedInsulinDeliveryObject {
     var insulinModelSetting: InsulinModelSettings? {
@@ -162,10 +154,6 @@ extension CachedInsulinDeliveryObject {
     }
     
     var dose: DoseEntry! {
-        guard let startDate = startDate else {
-            return nil
-        }
-
         let type: DoseType
 
         switch reason! {
@@ -208,6 +196,7 @@ extension CachedInsulinDeliveryObject {
             insulinModelSetting: insulinModelSetting
         )
     }
+}
 
     func update(from sample: HKQuantitySample) {
         uuid = sample.uuid
@@ -222,5 +211,19 @@ extension CachedInsulinDeliveryObject {
         value = sample.quantity.doubleValue(for: .internationalUnit())
         provenanceIdentifier = sample.provenanceIdentifier
         insulinModelSetting = sample.insulinModelSetting
+    }
+
+    func create(fromExisting sample: HKQuantitySample, on date: Date = Date()) {
+        self.uuid = sample.uuid
+        self.provenanceIdentifier = sample.provenanceIdentifier
+        self.hasLoopKitOrigin = sample.hasLoopKitOrigin
+        self.startDate = sample.startDate
+        self.endDate = sample.endDate
+        self.syncIdentifier = sample.syncIdentifier ?? sample.uuid.uuidString // External doses might not have a syncIdentifier, so use the UUID
+        self.value = sample.quantity.doubleValue(for: .internationalUnit())
+        self.scheduledBasalRate = sample.scheduledBasalRate
+        self.programmedTempBasalRate = sample.programmedTempBasalRate
+        self.reason = sample.insulinDeliveryReason
+        self.createdAt = date
     }
 }

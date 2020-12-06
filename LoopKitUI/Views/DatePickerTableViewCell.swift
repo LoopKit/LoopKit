@@ -31,6 +31,7 @@ open class DatePickerTableViewCell: UITableViewCell {
             } else {
                 datePicker.setDate(newValue, animated: true)
             }
+            dateChanged(datePicker)
             updateDateLabel()
         }
     }

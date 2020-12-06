@@ -15,11 +15,12 @@ public struct InsulinSensitivityScheduleEditor: View {
     private var schedule: DailyQuantitySchedule<Double>?
     private var glucoseUnit: HKUnit
     private var save: (InsulinSensitivitySchedule) -> Void
-    private var mode: PresentationMode
+    private var mode: SettingsPresentationMode
+    @Environment(\.appName) private var appName
 
     public init(
         schedule: InsulinSensitivitySchedule?,
-        mode: PresentationMode = .settings,
+        mode: SettingsPresentationMode = .settings,
         glucoseUnit: HKUnit,
         onSave save: @escaping (InsulinSensitivitySchedule) -> Void
     ) {
@@ -43,7 +44,7 @@ public struct InsulinSensitivityScheduleEditor: View {
         self.init(
             schedule: viewModel.therapySettings.insulinSensitivitySchedule,
             mode: viewModel.mode,
-            glucoseUnit: viewModel.glucoseUnit,
+            glucoseUnit: viewModel.therapySettings.glucoseUnit!,
             onSave: { [weak viewModel] in
                 viewModel?.saveInsulinSensitivitySchedule(insulinSensitivitySchedule: $0)
                 didSave?()
@@ -59,7 +60,7 @@ public struct InsulinSensitivityScheduleEditor: View {
             unit: sensitivityUnit,
             guardrail: .insulinSensitivity,
             selectableValueStride: stride,
-            defaultFirstScheduleItemValue: Guardrail.insulinSensitivity.startingSuggestion ?? Guardrail.insulinSensitivity.absoluteBounds.upperBound,
+            defaultFirstScheduleItemValue: Guardrail.insulinSensitivity.startingSuggestion ?? Guardrail.insulinSensitivity.recommendedBounds.upperBound,
             confirmationAlertContent: confirmationAlertContent,
             guardrailWarning: InsulinSensitivityGuardrailWarning.init(crossedThresholds:),
             onSave: {
@@ -72,7 +73,7 @@ public struct InsulinSensitivityScheduleEditor: View {
     }
 
     private var description: Text {
-        Text(TherapySetting.insulinSensitivity.descriptiveText)
+        Text(TherapySetting.insulinSensitivity.descriptiveText(appName: appName))
     }
 
     private var sensitivityUnit: HKUnit {

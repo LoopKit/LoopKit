@@ -10,7 +10,7 @@ import HealthKit
 import SwiftUI
 import LoopKit
 
-public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
+public struct InsulinModelSelection: View {
     @Environment(\.appName) private var appName   
     @Environment(\.dismiss) var dismiss
     @Environment(\.authenticate) var authenticate
@@ -20,7 +20,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     let insulinSensitivitySchedule: InsulinSensitivitySchedule
     let glucoseUnit: HKUnit
     let supportedModelSettings: SupportedInsulinModelSettings
-    let mode: PresentationMode
+    let mode: SettingsPresentationMode
     let save: (_ insulinModelSettings: InsulinModelSettings) -> Void
     let chartManager: ChartsManager
 
@@ -51,7 +51,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         supportedModelSettings: SupportedInsulinModelSettings,
         chartColors: ChartColorPalette,
         onSave save: @escaping (_ insulinModelSettings: InsulinModelSettings) -> Void,
-        mode: PresentationMode
+        mode: SettingsPresentationMode
     ){
         self._value = State(initialValue: value)
         self.initialValue = value
@@ -87,7 +87,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         self.init(
             value: viewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.humalogNovologAdult),
             insulinSensitivitySchedule: viewModel.therapySettings.insulinSensitivitySchedule,
-            glucoseUnit: viewModel.glucoseUnit,
+            glucoseUnit: viewModel.therapySettings.insulinSensitivitySchedule?.unit ?? viewModel.preferredGlucoseUnit,
             supportedModelSettings: viewModel.supportedInsulinModelSettings,
             chartColors: viewModel.chartColors,
             onSave: { [weak viewModel] insulinModelSettings in
@@ -136,7 +136,6 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             .padding(.bottom)
             .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5))
         }
-        .environment(\.horizontalSizeClass, horizontalOverride)
         .navigationBarTitle(Text(TherapySetting.insulinModel.title), displayMode: .large)
         .supportedInterfaceOrientations(.portrait)
         .edgesIgnoringSafeArea(.bottom)
@@ -203,7 +202,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             }
             .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
         }
-        .listStyle(GroupedListStyle())
+        .insetGroupedListStyle()
     }
 
     var insulinModelSettingDescription: Text {

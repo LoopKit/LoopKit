@@ -61,7 +61,7 @@ public struct GuardrailConstrainedQuantityView: View {
                         .foregroundColor(warningColor)
                         .fixedSize(horizontal: true, vertical: false)
                 } else {
-                    Text("—")
+                    Text("–")
                         .foregroundColor(.secondary)
                 }
             }
@@ -71,6 +71,7 @@ public struct GuardrailConstrainedQuantityView: View {
                     .foregroundColor(Color(.secondaryLabel))
             }
         }
+        .accessibilityElement(children: .combine)
         .onAppear { self.hasAppeared = true }
         .animation(animation)
     }

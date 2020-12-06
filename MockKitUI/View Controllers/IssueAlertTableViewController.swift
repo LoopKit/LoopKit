@@ -22,9 +22,9 @@ final class IssueAlertTableViewController: UITableViewController {
         case delayed
         case repeating
         case issueLater
-        case retract
         case buzz
         case critical
+        case retract // should be kept at the bottom of the list
 
         var description: String {
             switch self {
@@ -116,7 +116,7 @@ final class IssueAlertTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
         cell.textLabel?.text = String(describing: AlertRow(rawValue: indexPath.row)!)
         cell.textLabel?.textAlignment = .center
-        cell.isEnabled = true
+        cell.isEnabled = AlertRow(rawValue: indexPath.row)! == .retract && !cgmManager.hasRetractableAlert ? false : true
         return cell
     }
     
@@ -126,11 +126,11 @@ final class IssueAlertTableViewController: UITableViewController {
         let row = AlertRow(rawValue: indexPath.row)!
         switch row {
         case .retract:
-            cgmManager.retractAlert(identifier: row.identifier)
+            cgmManager.retractCurrentAlert()
         default:
             cgmManager.issueAlert(identifier: row.identifier, trigger: row.trigger, delay: row.delayBeforeIssue)
         }
         tableView.deselectRow(at: indexPath, animated: true)
+        tableView.reloadRows(at: [IndexPath(row: AlertRow.retract.rawValue, section: indexPath.section)], with: .automatic)
     }
-
 }

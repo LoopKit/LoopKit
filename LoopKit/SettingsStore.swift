@@ -67,15 +67,25 @@ public class SettingsStore {
     private func purgeSettingsObjects(before date: Date, completion: ((Error?) -> Void)? = nil) {
         dispatchPrecondition(condition: .onQueue(dataAccessQueue))
 
-        do {
-            let count = try self.store.managedObjectContext.purgeObjects(of: SettingsObject.self, matching: NSPredicate(format: "date < %@", date as NSDate))
-            self.log.info("Purged %d SettingsObjects", count)
-            self.delegate?.settingsStoreHasUpdatedSettingsData(self)
-            completion?(nil)
-        } catch let error {
-            self.log.error("Unable to purge SettingsObjects: %{public}@", String(describing: error))
-            completion?(error)
+        var purgeError: Error?
+
+        store.managedObjectContext.performAndWait {
+            do {
+                let count = try self.store.managedObjectContext.purgeObjects(of: SettingsObject.self, matching: NSPredicate(format: "date < %@", date as NSDate))
+                self.log.info("Purged %d SettingsObjects", count)
+            } catch let error {
+                self.log.error("Unable to purge SettingsObjects: %{public}@", String(describing: error))
+                purgeError = error
+            }
         }
+
+        if let purgeError = purgeError {
+            completion?(purgeError)
+            return
+        }
+
+        delegate?.settingsStoreHasUpdatedSettingsData(self)
+        completion?(nil)
     }
 
     private static var encoder: PropertyListEncoder = {

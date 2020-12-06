@@ -49,7 +49,9 @@ public struct DoseEntry: TimelineValue, Equatable {
 
 
 extension DoseEntry {
-    static let unitsPerHour = HKUnit.internationalUnit().unitDivided(by: .hour())
+    public static var units = HKUnit.internationalUnit()
+    
+    public static let unitsPerHour = HKUnit.internationalUnit().unitDivided(by: .hour())
 
     private var hours: Double {
         return endDate.timeIntervalSince(startDate).hours

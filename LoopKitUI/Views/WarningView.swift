@@ -50,6 +50,7 @@ public struct WarningView: View {
                       .fixedSize(horizontal: false, vertical: true)
                       .animation(nil)
               }
+              .accessibilityElement(children: .combine)
 
               Spacer()
           }

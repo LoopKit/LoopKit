@@ -41,7 +41,7 @@ extension MockPumpManager: PumpManagerUI {
         return MockHUDProvider(pumpManager: self)
     }
 
-    public static func createHUDView(rawValue: [String : Any]) -> LevelHUDView? {
+    public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {
         return MockHUDProvider.createHUDView(rawValue: rawValue)
     }
     
@@ -76,7 +76,14 @@ extension MockPumpManager {
 // MARK: - BasalScheduleTableViewControllerSyncSource
 extension MockPumpManager {
     public func syncScheduleValues(for viewController: BasalScheduleTableViewController, completion: @escaping (SyncBasalScheduleResult<Double>) -> Void) {
-        completion(.success(scheduleItems: viewController.scheduleItems, timeZone: .currentFixed))
+        syncBasalRateSchedule(items: viewController.scheduleItems) { result in
+            switch result {
+            case .success(let schedule):
+                completion(.success(scheduleItems: schedule.items, timeZone: schedule.timeZone))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 
     public func syncButtonTitle(for viewController: BasalScheduleTableViewController) -> String {

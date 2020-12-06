@@ -75,10 +75,9 @@ public struct GuardrailWarning: View {
                 case .minimum, .belowRecommended:
                     return Text(TherapySetting.glucoseTargetRange.guardrailCaptionForLowValue)
                 case .aboveRecommended, .maximum:
-                        return Text(TherapySetting.glucoseTargetRange.guardrailCaptionForHighValue)
+                    return Text(TherapySetting.glucoseTargetRange.guardrailCaptionForHighValue)
                 }
             } else {
-                // ANNA TODO: figure out this one
                 return Text(LocalizedString("Some of the values you have entered are outside of what is typically recommended for most people.", comment: "Caption for guardrail warning when more than one threshold is crossed"))
             }
         }

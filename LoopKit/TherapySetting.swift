@@ -7,7 +7,7 @@
 //
 
 
-public enum TherapySetting: Int {
+public enum TherapySetting: String {
     case glucoseTargetRange
     case preMealCorrectionRangeOverride
     case workoutCorrectionRangeOverride
@@ -32,7 +32,7 @@ public extension TherapySetting {
         case .workoutCorrectionRangeOverride:
             return String(format: LocalizedString("%@ Range", comment: "Format for correction range override therapy setting card"), CorrectionRangeOverrides.Preset.workout.title)
         case .suspendThreshold:
-            return LocalizedString("Suspend Threshold", comment: "Title text for suspend threshold")
+            return LocalizedString("Glucose Safety Limit", comment: "Title text for glucose safety limit")
         case .basalRate:
             return LocalizedString("Basal Rates", comment: "Title text for basal rates")
         case .deliveryLimits:
@@ -55,26 +55,26 @@ public extension TherapySetting {
         }
     }
     
-    var descriptiveText: String {
+    func descriptiveText(appName: String) -> String {
         switch self {
         case .glucoseTargetRange:
-            return LocalizedString("Correction range is the glucose value (or range of values) that you want Loop to aim for in adjusting your basal insulin.", comment: "Descriptive text for glucose target range")
+            return String(format: LocalizedString("Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses.", comment: "Descriptive text for glucose target range (1: app name)"), appName)
         case .preMealCorrectionRangeOverride:
             return LocalizedString("Temporarily lower your glucose target before a meal to impact post-meal glucose spikes.", comment: "Descriptive text for pre-meal correction range override")
         case .workoutCorrectionRangeOverride:
             return LocalizedString("Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events.", comment: "Descriptive text for workout correction range override")
         case .suspendThreshold:
-            return LocalizedString("When your glucose is predicted to go below this value, the app will recommend a basal rate of 0 U/hr and will not recommend a bolus.", comment: "Descriptive text for suspend threshold")
+            return String(format: LocalizedString("%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours.", comment: "Descriptive format string for glucose safety limit (1: app name)"), appName)
         case .basalRate:
-            return LocalizedString("Your basal rate of insulin is the number of units per hour that you want to use to cover your background insulin needs.", comment: "Descriptive text for basal rate")
+            return LocalizedString("Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs.", comment: "Descriptive text for basal rate")
         case .deliveryLimits:
-            return "\(DeliveryLimits.Setting.maximumBasalRate.descriptiveText)\n\n\(DeliveryLimits.Setting.maximumBolus.descriptiveText)"
+            return "\(DeliveryLimits.Setting.maximumBasalRate.localizedDescriptiveText(appName: appName))\n\n\(DeliveryLimits.Setting.maximumBolus.localizedDescriptiveText(appName: appName))"
         case .insulinModel:
-            return LocalizedString("The app assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity.", comment: "Descriptive text for insulin model")
+            return String(format: LocalizedString("%1$@ assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity.", comment: "Descriptive text for insulin model (1: app name)"), appName)
         case .carbRatio:
-            return LocalizedString("Your carb ratio is the number of grams of carbohydrate covered by one unit of insulin.", comment: "Descriptive text for carb ratio")
+            return LocalizedString("Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin.", comment: "Descriptive text for carb ratio")
         case .insulinSensitivity:
-            return LocalizedString("Your insulin sensitivities refer to the drop in glucose expected from one unit of insulin.", comment: "Descriptive text for insulin sensitivity")
+            return LocalizedString("Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin.", comment: "Descriptive text for insulin sensitivity")
         case .none:
             return ""
         }

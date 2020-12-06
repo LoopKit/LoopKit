@@ -40,14 +40,14 @@ struct MockGlucoseProvider {
         }
     }
 
-    /// Given a date, asynchronously produce the CGMResult at that date.
-    private let fetchDataAt: (_ date: Date, _ completion: @escaping (CGMResult) -> Void) -> Void
+    /// Given a date, asynchronously produce the CGMReadingResult at that date.
+    private let fetchDataAt: (_ date: Date, _ completion: @escaping (CGMReadingResult) -> Void) -> Void
 
-    func fetchData(at date: Date, completion: @escaping (CGMResult) -> Void) {
+    func fetchData(at date: Date, completion: @escaping (CGMReadingResult) -> Void) {
         fetchDataAt(date, completion)
     }
 
-    func backfill(_ backfill: BackfillRequest, endingAt date: Date, completion: @escaping (CGMResult) -> Void) {
+    func backfill(_ backfill: BackfillRequest, endingAt date: Date, completion: @escaping (CGMReadingResult) -> Void) {
         let dataPointDates = (0...backfill.dataPointCount).map { offset in
             return date.addingTimeInterval(-backfill.dataPointFrequency * Double(offset))
         }
@@ -59,7 +59,7 @@ struct MockGlucoseProvider {
                     return []
                 }
             }
-            let result: CGMResult = allSamples.isEmpty ? .noData : .newData(allSamples)
+            let result: CGMReadingResult = allSamples.isEmpty ? .noData : .newData(allSamples)
             completion(result)
         }
     }
@@ -165,7 +165,7 @@ extension MockGlucoseProvider {
         }
     }
 
-    private func mapResult(_ transform: @escaping (CGMResult) -> CGMResult) -> MockGlucoseProvider {
+    private func mapResult(_ transform: @escaping (CGMReadingResult) -> CGMReadingResult) -> MockGlucoseProvider {
         return MockGlucoseProvider { date, completion in
             self.fetchData(at: date) { result in
                 completion(transform(result))
@@ -180,8 +180,8 @@ extension MockGlucoseProvider {
     }
 }
 
-private extension CGMResult {
-    func mapGlucoseQuantities(_ transform: (HKQuantity) -> HKQuantity) -> CGMResult {
+private extension CGMReadingResult {
+    func mapGlucoseQuantities(_ transform: (HKQuantity) -> HKQuantity) -> CGMReadingResult {
         guard case .newData(let samples) = self else {
             return self
         }

@@ -106,14 +106,19 @@ public class PersistentDeviceLog {
     }
 
     public func purgeLogEntries(before date: Date, completion: ((Error?) -> Void)? = nil) {
-        do {
-            let count = try managedObjectContext.purgeObjects(of: DeviceLogEntry.self, matching: NSPredicate(format: "timestamp < %@", date as NSDate))
-            log.info("Purged %d DeviceLogEntries", count)
-            completion?(nil)
-        } catch let error {
-            log.error("Unable to purge DeviceLogEntries: %{public}@", String(describing: error))
-            completion?(error)
+        var purgeError: Error?
+
+        managedObjectContext.performAndWait {
+            do {
+                let count = try managedObjectContext.purgeObjects(of: DeviceLogEntry.self, matching: NSPredicate(format: "timestamp < %@", date as NSDate))
+                log.info("Purged %d DeviceLogEntries", count)
+            } catch let error {
+                log.error("Unable to purge DeviceLogEntries: %{public}@", String(describing: error))
+                purgeError = error
+            }
         }
+
+        completion?(purgeError)
     }
 }
 

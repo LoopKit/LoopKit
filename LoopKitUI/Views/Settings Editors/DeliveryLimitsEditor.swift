@@ -12,14 +12,15 @@ import LoopKit
 
 
 public struct DeliveryLimitsEditor: View {
-    var initialValue: DeliveryLimits
-    var supportedBasalRates: [Double]
-    var selectableBasalRates: [Double]
-    var scheduledBasalRange: ClosedRange<Double>?
-    var supportedBolusVolumes: [Double]
-    var save: (_ deliveryLimits: DeliveryLimits) -> Void
-    let mode: PresentationMode
-
+    let initialValue: DeliveryLimits
+    let supportedBasalRates: [Double]
+    let selectableMaxBasalRates: [Double]
+    let scheduledBasalRange: ClosedRange<Double>?
+    let supportedBolusVolumes: [Double]
+    let selectableBolusVolumes: [Double]
+    let save: (_ deliveryLimits: DeliveryLimits) -> Void
+    let mode: SettingsPresentationMode
+    
     @State var value: DeliveryLimits
     @State private var userDidTap: Bool = false
     @State var settingBeingEdited: DeliveryLimits.Setting?
@@ -27,27 +28,29 @@ public struct DeliveryLimitsEditor: View {
     @State var showingConfirmationAlert = false
     @Environment(\.dismiss) var dismiss
     @Environment(\.authenticate) var authenticate
+    @Environment(\.appName) var appName
+
+    private let lowestCarbRatio: Double?
 
     public init(
         value: DeliveryLimits,
         supportedBasalRates: [Double],
         scheduledBasalRange: ClosedRange<Double>?,
         supportedBolusVolumes: [Double],
+        lowestCarbRatio: Double?,
         onSave save: @escaping (_ deliveryLimits: DeliveryLimits) -> Void,
-        mode: PresentationMode = .settings
+        mode: SettingsPresentationMode = .settings
     ) {
         self._value = State(initialValue: value)
         self.initialValue = value
         self.supportedBasalRates = supportedBasalRates
-        if let maximumScheduledBasalRate = scheduledBasalRange?.upperBound {
-            self.selectableBasalRates = Array(supportedBasalRates.drop(while: { $0 < maximumScheduledBasalRate }))
-        } else {
-            self.selectableBasalRates = supportedBasalRates
-        }
+        self.selectableMaxBasalRates = Guardrail.selectableMaxBasalRates(supportedBasalRates: supportedBasalRates, scheduledBasalRange: scheduledBasalRange, lowestCarbRatio: lowestCarbRatio)
         self.scheduledBasalRange = scheduledBasalRange
         self.supportedBolusVolumes = supportedBolusVolumes
+        self.selectableBolusVolumes = Guardrail.selectableBolusVolumes(supportedBolusVolumes: supportedBolusVolumes)
         self.save = save
         self.mode = mode
+        self.lowestCarbRatio = lowestCarbRatio
     }
     
     public init(
@@ -56,15 +59,12 @@ public struct DeliveryLimitsEditor: View {
     ) {
         precondition(viewModel.pumpSupportedIncrements != nil)
         
-        var maxBasal: HKQuantity?
-        if let maximumBasalRatePerHour = viewModel.therapySettings.maximumBasalRatePerHour {
-            maxBasal = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: maximumBasalRatePerHour)
+        let maxBasal = viewModel.therapySettings.maximumBasalRatePerHour.map {
+            HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)
         }
 
-        var maxBolus: HKQuantity?
-
-        if let maximumBolus = viewModel.therapySettings.maximumBolus {
-            maxBolus = HKQuantity(unit: .internationalUnit(), doubleValue: maximumBolus)
+        let maxBolus = viewModel.therapySettings.maximumBolus.map {
+            HKQuantity(unit: .internationalUnit(), doubleValue: $0)
         }
         
         self.init(
@@ -72,6 +72,7 @@ public struct DeliveryLimitsEditor: View {
             supportedBasalRates: viewModel.pumpSupportedIncrements!()!.basalRates,
             scheduledBasalRange: viewModel.therapySettings.basalRateSchedule?.valueRange(),
             supportedBolusVolumes: viewModel.pumpSupportedIncrements!()!.bolusVolumes,
+            lowestCarbRatio: viewModel.therapySettings.carbRatioSchedule?.lowestValue(),
             onSave: { [weak viewModel] newLimits in
                 viewModel?.saveDeliveryLimits(limits: newLimits)
                 didSave?()
@@ -146,12 +147,13 @@ public struct DeliveryLimitsEditor: View {
     }
 
     var maximumBasalRateGuardrail: Guardrail<HKQuantity> {
-        return Guardrail.maximumBasalRate(supportedBasalRates: supportedBasalRates, scheduledBasalRange: scheduledBasalRange)
+        return Guardrail.maximumBasalRate(supportedBasalRates: supportedBasalRates, scheduledBasalRange: scheduledBasalRange, lowestCarbRatio: lowestCarbRatio)
     }
 
     var maximumBasalRateCard: Card {
         Card {
-            SettingDescription(text: Text(DeliveryLimits.Setting.maximumBasalRate.descriptiveText), informationalContent: { TherapySetting.deliveryLimits.helpScreen() })
+            SettingDescription(text: Text(DeliveryLimits.Setting.maximumBasalRate.localizedDescriptiveText(appName: appName)),
+                               informationalContent: { TherapySetting.deliveryLimits.helpScreen() })
             ExpandableSetting(
                 isEditing: Binding(
                     get: { self.settingBeingEdited == .maximumBasalRate },
@@ -185,7 +187,7 @@ public struct DeliveryLimitsEditor: View {
                         ),
                         unit: .internationalUnitsPerHour,
                         guardrail: self.maximumBasalRateGuardrail,
-                        selectableValues: self.selectableBasalRates,
+                        selectableValues: self.selectableMaxBasalRates,
                         usageContext: .independent
                     )
                     .accessibility(identifier: "max_basal_picker")
@@ -200,8 +202,8 @@ public struct DeliveryLimitsEditor: View {
 
     var maximumBolusCard: Card {
         Card {
-            SettingDescription(
-                text: Text(DeliveryLimits.Setting.maximumBolus.descriptiveText), informationalContent: { TherapySetting.deliveryLimits.helpScreen() })
+            SettingDescription(text: Text(DeliveryLimits.Setting.maximumBolus.localizedDescriptiveText(appName: appName)),
+                               informationalContent: { TherapySetting.deliveryLimits.helpScreen() })
             ExpandableSetting(
                 isEditing: Binding(
                     get: { self.settingBeingEdited == .maximumBolus },
@@ -235,7 +237,7 @@ public struct DeliveryLimitsEditor: View {
                         ),
                         unit: .internationalUnit(),
                         guardrail: self.maximumBolusGuardrail,
-                        selectableValues: self.supportedBolusVolumes,
+                        selectableValues: self.selectableBolusVolumes,
                         usageContext: .independent
                     )
                     .accessibility(identifier: "max_bolus_picker")
@@ -265,7 +267,7 @@ public struct DeliveryLimitsEditor: View {
         let crossedThresholds = self.crossedThresholds
         return Group {
             if !crossedThresholds.isEmpty && (userDidTap || mode == .settings) {
-                DeliveryLimitsGuardrailWarning(crossedThresholds: crossedThresholds)
+                DeliveryLimitsGuardrailWarning(crossedThresholds: crossedThresholds, value: value)
             }
         }
     }
@@ -322,8 +324,8 @@ public struct DeliveryLimitsEditor: View {
 
 
 struct DeliveryLimitsGuardrailWarning: View {
-    var crossedThresholds: [DeliveryLimits.Setting: SafetyClassification.Threshold]
-
+    let crossedThresholds: [DeliveryLimits.Setting: SafetyClassification.Threshold]
+    let value: DeliveryLimits
     var body: some View {
         switch crossedThresholds.count {
         case 0:
@@ -335,9 +337,8 @@ struct DeliveryLimitsGuardrailWarning: View {
             case .maximumBasalRate:
                 switch threshold {
                 case .minimum, .belowRecommended:
-                    // ANNA TODO: Ask MLee about this one
                     title = Text(LocalizedString("Low Maximum Basal Rate", comment: "Title text for low maximum basal rate warning"))
-                    caption = Text(LocalizedString("A setting of 0 U/hr means Loop will not automatically administer insulin.", comment: "Caption text for low maximum basal rate warning"))
+                    caption = Text(TherapySetting.deliveryLimits.guardrailCaptionForLowValue)
                 case .aboveRecommended, .maximum:
                     title = Text(LocalizedString("High Maximum Basal Rate", comment: "Title text for high maximum basal rate warning"))
                     caption = Text(TherapySetting.deliveryLimits.guardrailCaptionForHighValue)
@@ -346,7 +347,7 @@ struct DeliveryLimitsGuardrailWarning: View {
                 switch threshold {
                 case .minimum, .belowRecommended:
                     title = Text(LocalizedString("Low Maximum Bolus", comment: "Title text for low maximum bolus warning"))
-                    caption = Text(LocalizedString("A setting of 0 U means you will not be able to bolus.", comment: "Caption text for zero maximum bolus setting warning"))
+                    caption = Text(TherapySetting.deliveryLimits.guardrailCaptionForLowValue)
                 case .aboveRecommended, .maximum:
                     title = Text(LocalizedString("High Maximum Bolus", comment: "Title text for high maximum bolus warning"))
                     caption = nil

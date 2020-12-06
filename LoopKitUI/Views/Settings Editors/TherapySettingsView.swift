@@ -11,8 +11,9 @@ import HealthKit
 import LoopKit
 import SwiftUI
 
-public struct TherapySettingsView: View, HorizontalSizeClassOverride {
+public struct TherapySettingsView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.appName) private var appName
 
     public struct ActionButton {
         public init(localizedString: String, action: @escaping () -> Void) {
@@ -56,20 +57,19 @@ public struct TherapySettingsView: View, HorizontalSizeClassOverride {
                 if !viewModel.sensitivityOverridesEnabled {
                     workoutCorrectionRangeSection
                 }
+                carbRatioSection
                 basalRatesSection
                 deliveryLimitsSection
                 insulinModelSection
-                carbRatioSection
                 insulinSensitivitiesSection
             }
             lastItem
         }
-        .listStyle(GroupedListStyle())
+        .insetGroupedListStyle()
         .onAppear() {
             UITableView.appearance().separatorStyle = .singleLine // Add lines between rows
         }
         .navigationBarTitle(Text(LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")), displayMode: .large)
-        .environment(\.horizontalSizeClass, horizontalOverride)
     }
     
     private var navigationViewWrappedContent: some View {
@@ -152,12 +152,12 @@ extension TherapySettingsView {
     
     private var suspendThresholdSection: some View {
         section(for: .suspendThreshold, header: viewModel.prescription == nil ? AnyView(Spacer()) : AnyView(EmptyView())) {
-            if self.glucoseUnit != nil {
+            if let glucoseUnit = self.glucoseUnit {
                 HStack {
                     Spacer()
                     GuardrailConstrainedQuantityView(
                         value: self.viewModel.therapySettings.suspendThreshold?.quantity,
-                        unit: self.glucoseUnit!,
+                        unit: glucoseUnit,
                         guardrail: .suspendThreshold,
                         isEditing: false,
                         // Workaround for strange animation behavior on appearance
@@ -170,11 +170,11 @@ extension TherapySettingsView {
     
     private var correctionRangeSection: some View {
         section(for: .glucoseTargetRange) {
-            if self.glucoseUnit != nil && self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
-                ForEach(self.viewModel.therapySettings.glucoseTargetRangeSchedule!.items, id: \.self) { value in
+            if let glucoseUnit = self.glucoseUnit, let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
+                ForEach(schedule.items, id: \.self) { value in
                     ScheduleRangeItem(time: value.startTime,
                                       range: value.value,
-                                      unit: self.glucoseUnit!,
+                                      unit: glucoseUnit,
                                       guardrail: .correctionRange)
                 }
             }
@@ -183,13 +183,14 @@ extension TherapySettingsView {
     
     private var preMealCorrectionRangeSection: some View {
         section(for: .preMealCorrectionRangeOverride) {
-            if self.glucoseUnit != nil && self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
+            if let glucoseUnit = self.glucoseUnit, let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
                 CorrectionRangeOverridesRangeItem(
                     preMealTargetRange: self.viewModel.therapySettings.preMealTargetRange,
                     workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange,
-                    unit: self.glucoseUnit!,
+                    unit: glucoseUnit,
                     preset: CorrectionRangeOverrides.Preset.preMeal,
-                    correctionRangeScheduleRange: self.viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
+                    suspendThreshold: self.viewModel.therapySettings.suspendThreshold,
+                    correctionRangeScheduleRange: schedule.scheduleRange()
                 )
             }
         }
@@ -197,13 +198,14 @@ extension TherapySettingsView {
     
     private var workoutCorrectionRangeSection: some View {
         section(for: .workoutCorrectionRangeOverride) {
-            if self.glucoseUnit != nil && self.viewModel.therapySettings.glucoseTargetRangeSchedule != nil {
+            if let glucoseUnit = self.glucoseUnit, let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
                 CorrectionRangeOverridesRangeItem(
                     preMealTargetRange: self.viewModel.therapySettings.preMealTargetRange,
                     workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange,
-                    unit: self.glucoseUnit!,
+                    unit: glucoseUnit,
                     preset: CorrectionRangeOverrides.Preset.workout,
-                    correctionRangeScheduleRange: self.viewModel.therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
+                    suspendThreshold: self.viewModel.therapySettings.suspendThreshold,
+                    correctionRangeScheduleRange: schedule.scheduleRange()
                 )
             }
         }
@@ -237,13 +239,17 @@ extension TherapySettingsView {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
                     unit: .internationalUnitsPerHour,
-                    guardrail: Guardrail.maximumBasalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates, scheduledBasalRange: self.viewModel.therapySettings.basalRateSchedule?.valueRange()),
+                    guardrail: Guardrail.maximumBasalRate(
+                        supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates,
+                        scheduledBasalRange: self.viewModel.therapySettings.basalRateSchedule?.valueRange(),
+                        lowestCarbRatio: self.viewModel.therapySettings.carbRatioSchedule?.lowestValue()),
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
                 )
             }
         }
+        .accessibilityElement(children: .combine)
     }
     
     private var maxBolusItem: some View {
@@ -261,6 +267,7 @@ extension TherapySettingsView {
                 )
             }
         }
+        .accessibilityElement(children: .combine)
     }
         
     private var insulinModelSection: some View {
@@ -276,6 +283,7 @@ extension TherapySettingsView {
                         .foregroundColor(.secondary)
                         .padding(.bottom, 8)
                 }
+                .accessibilityElement(children: .combine)
             }
         }
     }
@@ -295,11 +303,11 @@ extension TherapySettingsView {
     
     private var insulinSensitivitiesSection: some View {
         section(for: .insulinSensitivity) {
-            if self.viewModel.therapySettings.insulinSensitivitySchedule != nil && self.sensitivityUnit != nil {
-                ForEach(self.viewModel.therapySettings.insulinSensitivitySchedule!.items, id: \.self) { value in
+            if let sensitivityUnit = self.sensitivityUnit, let schedule = self.viewModel.therapySettings.insulinSensitivitySchedule {
+                ForEach(schedule.items, id: \.self) { value in
                     ScheduleValueItem(time: value.startTime,
                                       value: value.value,
-                                      unit: self.sensitivityUnit!,
+                                      unit: sensitivityUnit,
                                       guardrail: Guardrail.insulinSensitivity)
                 }
             }
@@ -331,7 +339,7 @@ extension TherapySettingsView {
         SectionWithTapToEdit(isEnabled: viewModel.mode != .acceptanceFlow,
                              header: EmptyView(),
                              title: therapySetting.title,
-                             descriptiveText: therapySetting.descriptiveText,
+                             descriptiveText: therapySetting.descriptiveText(appName: appName),
                              destination: screen(for: therapySetting),
                              content: content)
     }
@@ -342,7 +350,7 @@ extension TherapySettingsView {
         SectionWithTapToEdit(isEnabled: viewModel.mode != .acceptanceFlow,
                              header: header,
                              title: therapySetting.title,
-                             descriptiveText: therapySetting.descriptiveText,
+                             descriptiveText: therapySetting.descriptiveText(appName: appName),
                              destination: screen(for: therapySetting),
                              content: content)
     }
@@ -387,6 +395,7 @@ struct CorrectionRangeOverridesRangeItem: View {
     let workoutTargetRange: DoubleRange?
     let unit: HKUnit
     let preset: CorrectionRangeOverrides.Preset
+    let suspendThreshold: GlucoseThreshold?
     let correctionRangeScheduleRange: ClosedRange<HKQuantity>
     
     public var body: some View {
@@ -399,6 +408,7 @@ struct CorrectionRangeOverridesRangeItem: View {
             )),
             preset: preset,
             unit: unit,
+            suspendThreshold: suspendThreshold,
             correctionRangeScheduleRange: correctionRangeScheduleRange,
             expandedContent: { EmptyView() })
     }
@@ -414,6 +424,13 @@ struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where 
 
     @State var isActive: Bool = false
     
+    private func onFinish() {
+        // Dispatching here fixes an issue on iOS 14.2 where schedule editors do not dismiss. It does not fix iOS 14.0 and 14.1
+        DispatchQueue.main.async {
+            self.isActive = false
+        }
+    }
+
     public var body: some View {
         Section(header: header) {
             VStack(alignment: .leading) {
@@ -424,7 +441,7 @@ struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where 
                 ZStack(alignment: .leading) {
                     DescriptiveText(label: descriptiveText)
                     if isEnabled {
-                        NavigationLink(destination: destination({ self.isActive = false }), isActive: $isActive) {
+                        NavigationLink(destination: destination(onFinish), isActive: $isActive) {
                             EmptyView()
                         }
                     }
@@ -531,10 +548,10 @@ public struct TherapySettingsView_Previews: PreviewProvider {
     static let preview_supportedBasalRates = [0.2, 0.5, 0.75, 1.0]
     static let preview_supportedBolusVolumes = [5.0, 10.0, 15.0]
 
-    static func preview_viewModel(mode: PresentationMode) -> TherapySettingsViewModel {
+    static func preview_viewModel(mode: SettingsPresentationMode) -> TherapySettingsViewModel {
         TherapySettingsViewModel(mode: mode,
                                  therapySettings: preview_therapySettings,
-                                 glucoseUnit: HKUnit.milligramsPerDeciliter,
+                                 preferredGlucoseUnit: .milligramsPerDeciliter,
                                  supportedInsulinModelSettings: SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                                  pumpSupportedIncrements: { PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
                                                                                   bolusVolumes: preview_supportedBolusVolumes,
@@ -558,7 +575,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                 .previewDisplayName("XS Max dark (settings)")
             TherapySettingsView(viewModel: TherapySettingsViewModel(mode: .settings,
                                                                     therapySettings: TherapySettings(),
-                                                                    glucoseUnit: HKUnit.milligramsPerDeciliter,
+                                                                    preferredGlucoseUnit: .milligramsPerDeciliter,
                                                                     chartColors: ChartColorPalette(axisLine: .clear,
                                                                                                    axisLabel: .secondaryLabel,
                                                                                                    grid: .systemGray3,

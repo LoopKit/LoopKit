@@ -34,7 +34,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
     var confirmationAlertContent: AlertContent
     var guardrailWarning: (_ crossedThresholds: [SafetyClassification.Threshold]) -> ActionAreaContent
     var savingMechanism: SavingMechanism<DailyQuantitySchedule<Double>>
-    var mode: PresentationMode
+    var mode: SettingsPresentationMode
     var settingType: TherapySetting
     
     @State private var userDidTap: Bool = false
@@ -167,7 +167,7 @@ extension QuantityScheduleEditor {
         confirmationAlertContent: AlertContent,
         @ViewBuilder guardrailWarning: @escaping (_ thresholds: [SafetyClassification.Threshold]) -> ActionAreaContent,
         onSave savingMechanism: SavingMechanism<DailyQuantitySchedule<Double>>,
-        mode: PresentationMode = .settings,
+        mode: SettingsPresentationMode = .settings,
         settingType: TherapySetting = .none
     ) {
         self.title = title
@@ -200,7 +200,7 @@ extension QuantityScheduleEditor {
         confirmationAlertContent: AlertContent,
         @ViewBuilder guardrailWarning: @escaping (_ thresholds: [SafetyClassification.Threshold]) -> ActionAreaContent,
         onSave save: @escaping (DailyQuantitySchedule<Double>) -> Void,
-        mode: PresentationMode = .settings,
+        mode: SettingsPresentationMode = .settings,
         settingType: TherapySetting = .none
     ) {
         let selectableValues = guardrail.allValues(stridingBy: selectableValueStride, unit: unit)
