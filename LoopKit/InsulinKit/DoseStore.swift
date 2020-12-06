@@ -864,7 +864,7 @@ extension DoseStore {
         }
 
         self.persistenceController.save { (error) -> Void in
-            self.insulinDeliveryStore.addReconciledDoses(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
+            self.insulinDeliveryStore.addDoseEntries(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
                 switch result {
                 case .success:
                     completion(nil)

@@ -197,20 +197,23 @@ extension CachedInsulinDeliveryObject {
             insulinModelSetting: insulinModelSetting
         )
     }
+}
 
-    func update(from sample: HKQuantitySample) {
-        uuid = sample.uuid
-        startDate = sample.startDate
-        endDate = sample.endDate
-        reason = sample.insulinDeliveryReason
-        // External doses might not have a syncIdentifier, so use the UUID
-        syncIdentifier = sample.syncIdentifier ?? sample.uuid.uuidString
-        scheduledBasalRate = sample.scheduledBasalRate
-        programmedTempBasalRate = sample.programmedTempBasalRate
-        hasLoopKitOrigin = sample.hasLoopKitOrigin
-        value = sample.quantity.doubleValue(for: .internationalUnit())
-        provenanceIdentifier = sample.provenanceIdentifier
-        insulinModelSetting = sample.insulinModelSetting
+extension CachedInsulinDeliveryObject {
+    func create(fromNew sample: HKQuantitySample, provenanceIdentifier: String, on date: Date = Date()) {
+        precondition(sample.syncIdentifier != nil)
+
+        self.uuid = nil
+        self.provenanceIdentifier = provenanceIdentifier
+        self.hasLoopKitOrigin = true
+        self.startDate = sample.startDate
+        self.endDate = sample.endDate
+        self.syncIdentifier = sample.syncIdentifier!
+        self.value = sample.quantity.doubleValue(for: .internationalUnit())
+        self.scheduledBasalRate = sample.scheduledBasalRate
+        self.programmedTempBasalRate = sample.programmedTempBasalRate
+        self.reason = sample.insulinDeliveryReason
+        self.createdAt = date
     }
 
     func create(fromExisting sample: HKQuantitySample, on date: Date = Date()) {
