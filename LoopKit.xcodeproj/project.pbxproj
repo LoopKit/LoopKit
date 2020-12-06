@@ -1577,6 +1577,7 @@
 		E916F56824AD32F000BE3547 /* CorrectionRangeOverridesEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesEditor.swift; sourceTree = "<group>"; };
 		E916F56E24AE2FFE00BE3547 /* CorrectionRangeOverrideInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverrideInformationView.swift; sourceTree = "<group>"; };
 		E92094EE257C5FFB004D6192 /* SettingsPresentationMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPresentationMode.swift; sourceTree = "<group>"; };
+		E9291366257D71880014116A /* Modelv4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv4.xcdatamodel; sourceTree = "<group>"; };
 		E93BA06524A39DBC00C5D7E6 /* DismissibleHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissibleHostingController.swift; sourceTree = "<group>"; };
 		E93C869F24C8F6E00073089B /* InsulinModelSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinModelSelection.swift; sourceTree = "<group>"; };
 		E93C86A124C8F7550073089B /* InsulinModelChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinModelChart.swift; sourceTree = "<group>"; };
@@ -1605,7 +1606,6 @@
 		E9C6911725180A4E009F9999 /* Modelv3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv3.xcdatamodel; sourceTree = "<group>"; };
 		E9C6911825180A4E009F9999 /* Modelv2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv2.xcdatamodel; sourceTree = "<group>"; };
 		E9C6911925180A4E009F9999 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		E9C6911B25180A65009F9999 /* Modelv4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv4.xcdatamodel; sourceTree = "<group>"; };
 		E9CDA72624E3A4BA0049B0D5 /* OutsideDoseEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutsideDoseEvent.swift; sourceTree = "<group>"; };
 		E9CDA72924E3A4F60049B0D5 /* PersistedOutsideDoseEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistedOutsideDoseEvent.swift; sourceTree = "<group>"; };
 		E9DFB92B24E634E800468917 /* ExpandablePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandablePicker.swift; sourceTree = "<group>"; };
@@ -4922,12 +4922,12 @@
 		E9C6911625180A4E009F9999 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				E9C6911B25180A65009F9999 /* Modelv4.xcdatamodel */,
+				E9291366257D71880014116A /* Modelv4.xcdatamodel */,
 				E9C6911725180A4E009F9999 /* Modelv3.xcdatamodel */,
 				E9C6911825180A4E009F9999 /* Modelv2.xcdatamodel */,
 				E9C6911925180A4E009F9999 /* Model.xcdatamodel */,
 			);
-			currentVersion = E9C6911B25180A65009F9999 /* Modelv4.xcdatamodel */;
+			currentVersion = E9291366257D71880014116A /* Modelv4.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
