@@ -54,7 +54,7 @@ extension CachedGlucoseObject {
 
     // Loop
     func create(from sample: NewGlucoseSample, provenanceIdentifier: String) {
-        self.uuid = nil
+        self.uuid = UUID()
         self.provenanceIdentifier = provenanceIdentifier
         self.syncIdentifier = sample.syncIdentifier
         self.syncVersion = sample.syncVersion
