@@ -20,7 +20,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
             healthStore: healthStore,
             cacheStore: cacheStore,
             observationEnabled: false,
-            insulinModel: WalshInsulinModel(actionDuration: .hours(4)),
+            defaultInsulinModelSetting: InsulinModelSettings(model: WalshInsulinModel(actionDuration: .hours(4))),
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
             syncVersion: 1,
