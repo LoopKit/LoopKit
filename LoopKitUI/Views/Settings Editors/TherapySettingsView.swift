@@ -435,12 +435,14 @@ struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where 
                 Text(title)
                     .bold()
                 Spacer()
-                ZStack(alignment: .leading) {
+                HStack {
                     DescriptiveText(label: descriptiveText)
                     if isEnabled {
+                        Spacer()
                         NavigationLink(destination: destination(onFinish), isActive: $isActive) {
                             EmptyView()
                         }
+                        .frame(width: 10, alignment: .trailing)
                     }
                 }
                 Spacer()

@@ -139,9 +139,11 @@ public struct CorrectionRangeOverridesEditor: View {
         )
         .alert(isPresented: $showingConfirmationAlert, content: confirmationAlert)
         .navigationBarTitle("", displayMode: .inline)
-        .onTapGesture {
-            self.userDidTap = true
-        }
+        .simultaneousGesture(TapGesture().onEnded {
+            withAnimation {
+                self.userDidTap = true
+            }
+        })
     }
 
     private func card(for preset: CorrectionRangeOverrides.Preset) -> Card {

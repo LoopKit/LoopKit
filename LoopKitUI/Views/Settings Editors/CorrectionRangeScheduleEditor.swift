@@ -92,9 +92,11 @@ public struct CorrectionRangeScheduleEditor: View {
             mode: mode,
             therapySettingType: .glucoseTargetRange
         )
-        .onTapGesture {
-            self.userDidTap = true
-        }
+        .simultaneousGesture(TapGesture().onEnded {
+            withAnimation {
+                self.userDidTap = true
+            }
+        })
     }
 
     var defaultFirstScheduleItemValue: DoubleRange {
