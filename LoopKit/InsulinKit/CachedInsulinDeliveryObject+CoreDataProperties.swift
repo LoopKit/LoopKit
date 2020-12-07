@@ -29,4 +29,5 @@ extension CachedInsulinDeliveryObject {
     @NSManaged public var createdAt: Date?
     @NSManaged public var primitiveModelDuration: NSNumber?
     @NSManaged public var primitiveModelType: NSNumber?
+    @NSManaged public var isLogged: Bool
 }

@@ -395,6 +395,26 @@ extension InsulinDeliveryStore {
         return true
     }
 
+    func deleteDose(with uuidToDelete: UUID, _ completion: @escaping (String?) -> Void) {
+        queue.async {
+            var errorString: String? = nil
+            self.cacheStore.managedObjectContext.performAndWait {
+                do {
+                    let count = try self.deleteDoseEntries(withUUIDs: [uuidToDelete])
+                    guard count > 0 else {
+                        errorString = "Cannot find CachedInsulinDeliveryObject to delete"
+                        return
+                    }
+                    self.cacheStore.save()
+                } catch let error {
+                    errorString = "Error deleting CachedInsulinDeliveryObject: " + error.localizedDescription
+                    return
+                }
+            }
+            completion(errorString)
+        }
+    }
+
     private func deleteDoseEntries(withUUIDs uuids: [UUID], batchSize: Int = 500) throws -> Int {
         dispatchPrecondition(condition: .onQueue(queue))
 

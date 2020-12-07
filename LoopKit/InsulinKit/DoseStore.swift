@@ -844,27 +844,33 @@ extension DoseStore {
      - parameter completion: A closure called after the doses are saved. The closure takes a single argument:
      - parameter error: An error object explaining why the doses could not be saved.
      */
-    public func logOutsideDoseEvents(_ doses: [DoseEntry], completion: @escaping (_ error: Error?) -> Void) {
+    public func logOutsideDose(_ doses: [DoseEntry], completion: @escaping (_ error: Error?) -> Void) {
         guard doses.count > 0 else {
             completion(nil)
             return
         }
         persistenceController.managedObjectContext.perform {
             for dose in doses {
-                let object = OutsideDoseEvent(context: self.persistenceController.managedObjectContext)
-
-                object.date = dose.startDate
-                object.raw = Data(UUID().uuidString.utf8)
-                object.title = "Logged Dose: \(String(describing: dose.programmedUnits)) \(String(describing: dose.unit)) on \(String(describing: dose.startDate))"
-                object.type = PumpEventType.loggedDose
-                // Logged doses cannot be changed
-                object.mutable = false
-                object.dose = dose
+                let object = CachedInsulinDeliveryObject(context: self.persistenceController.managedObjectContext)
+                let uuid = UUID()
+                
+                object.startDate = dose.startDate
+                object.endDate = dose.endDate
+                object.insulinModelSetting = dose.insulinModelSetting
+                object.uuid = uuid
+                object.hasLoopKitOrigin = true
+                object.isLogged = true
+                object.provenanceIdentifier = uuid.uuidString
+                object.syncIdentifier = dose.syncIdentifier
+                object.value = dose.value
+                object.scheduledBasalRate = dose.scheduledBasalRate
+                object.reason = HKInsulinDeliveryReason.bolus
+                object.createdAt = self.currentDate()
             }
         }
 
         self.persistenceController.save { (error) -> Void in
-            self.insulinDeliveryStore.addDoseEntries(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
+            self.insulinDeliveryStore.addDoseEntries(doses, from: nil, syncVersion: self.syncVersion) { (result) in
                 switch result {
                 case .success:
                     completion(nil)
@@ -880,25 +886,20 @@ extension DoseStore {
     /// Deletes one particular logged dose event from the store
     ///
     /// - Parameter completion: A closure called after the event deleted. This closure takes a single argument:
-    /// - Parameter error: An error explaining why the deletion failed
-    public func deleteOutsideDoseEvent(_ event: PersistedOutsideDoseEvent, completion: @escaping (_ error: DoseStoreError?) -> Void) {
-        persistenceController.managedObjectContext.perform {
-
-            if  let objectID = self.persistenceController.managedObjectContext.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: event.objectIDURL),
-                let object = try? self.persistenceController.managedObjectContext.existingObject(with: objectID)
-            {
-                self.persistenceController.managedObjectContext.delete(object)
-            }
-
-            // Reset the latest query date to the newest PumpEvent
-            let request: NSFetchRequest<OutsideDoseEvent> = OutsideDoseEvent.fetchRequest()
-            request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
-            request.predicate = NSPredicate(format: "mutable != true")
-            request.fetchLimit = 1
-
-            self.persistenceController.save { (error) in
-                completion(DoseStoreError(error: error))
+    /// - Parameter success: True if dose was successfully deleted
+    public func deleteOutsideDose(_ dose: PersistedOutsideDose, completion: @escaping (_ error: DoseStoreError?) -> Void) {
+        guard let uuid = dose.uuid else {
+            self.log.error("Unable to delete PersistedOutsideDose: no UUID")
+            completion(DoseStoreError.fetchError(description: "Unable to delete dose: identifier is missing", recoverySuggestion: "File an issue report in Github"))
+            return
+        }
+        
+        insulinDeliveryStore.deleteDose(with: uuid) { (error) in
+            if let error = error {
+                completion(DoseStoreError.persistenceError(description: error, recoverySuggestion: nil))
+            } else {
                 NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
+                completion(nil)
             }
         }
     }
@@ -907,11 +908,11 @@ extension DoseStore {
     ///
     /// - Parameter completion: A closure called after all the events are deleted. This closure takes a single argument:
     /// - Parameter error: An error explaining why the deletion failed
-    public func deleteAllOutsideDoseEvents(_ completion: @escaping (_ error: DoseStoreError?) -> Void) {
+    public func deleteAllOutsideDoses(_ completion: @escaping (_ error: DoseStoreError?) -> Void) {
         self.persistenceController.managedObjectContext.perform {
             do {
                 self.log.info("Deleting all outside dose events")
-                try self.purgeOutsideDoseEvents()
+                try self.purgeOutsideDoses()
 
                 self.persistenceController.save { (error) in
 
@@ -932,9 +933,11 @@ extension DoseStore {
      *This method should only be called from within a managed object context block.*
      - throws: PersistenceController.PersistenceControllerError.coreDataError if the delete request failed
      */
-    private func purgeOutsideDoseEvents(matching predicate: NSPredicate? = nil) throws {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: OutsideDoseEvent.entity().name!)
-        fetchRequest.predicate = predicate
+    private func purgeOutsideDoses() throws {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: CachedInsulinDeliveryObject.entity().name!)
+        // Only delete logged doses
+        let typePredicate = NSPredicate(format: "isLogged == true")
+        fetchRequest.predicate = typePredicate
 
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         deleteRequest.resultType = .resultTypeObjectIDs
@@ -1056,11 +1059,11 @@ extension DoseStore {
     /// - Parameter startDate: The earliest outside dose event date to include
     /// - Returns: An array of logged dose managed objects, in reverse-chronological order
     /// - Throws: An error describing the failure to fetch objects
-    public func getLoggedDoses(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<[PersistedOutsideDoseEvent]>) -> Void) {
+    public func getLoggedDoses(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<[PersistedOutsideDose]>) -> Void) {
         persistenceController.managedObjectContext.perform {
             do {
                 let events = try self.getLoggedDoses(
-                    matching: NSPredicate(format: "date >= %@", startDate as NSDate),
+                    matching: NSPredicate(format: "startDate >= %@", startDate as NSDate),
                     chronological: false
                 )
 
@@ -1084,10 +1087,13 @@ extension DoseStore {
     ///   - chronological: Whether to return the objects in chronological or reverse-chronological order
     /// - Returns: An array of pump events in the specified order by date
     /// - Throws: An error describing the failure to fetch objects
-    private func getLoggedDoses(matching predicate: NSPredicate, chronological: Bool, limit: Int? = nil) throws -> [PersistedOutsideDoseEvent] {
-        let request: NSFetchRequest<OutsideDoseEvent> = OutsideDoseEvent.fetchRequest()
-        request.predicate = predicate
-        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: chronological)]
+    private func getLoggedDoses(matching predicate: NSPredicate, chronological: Bool, limit: Int? = nil) throws -> [PersistedOutsideDose] {
+        let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
+
+        let sourcePredicate = NSPredicate(format: "isLogged == true")
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, sourcePredicate])
+        request.predicate = compoundPredicate
+        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: chronological)]
 
         if let limit = limit {
             request.fetchLimit = limit
@@ -1097,14 +1103,8 @@ extension DoseStore {
             return try persistenceController.managedObjectContext.fetch(request).sorted(by: { (lhs, rhs) -> Bool in
                 let (first, second) = chronological ? (lhs, rhs) : (rhs, lhs)
 
-                if  first.startDate == second.startDate,
-                    let firstType = first.type, let secondType = second.type
-                {
-                    return firstType.sortOrder < secondType.sortOrder
-                } else {
-                    return first.startDate < second.startDate
-                }
-            }).compactMap{ $0.persistedOutsideDoseEvent }
+                return first.startDate < second.startDate
+            }).compactMap{ $0.persistedOutsideDose }
         } catch let fetchError as NSError {
             throw DoseStoreError.fetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
         }
