@@ -23,6 +23,9 @@ let MetadataKeyInsulinModelType = "com.loopkit.InsulinKit.MetadataKeyInsulinMode
 /// Defines the insulin curve duration, if the insulin curve is a Walsh model
 let MetadataKeyInsulinModelDuration = "com.loopkit.InsulinKit.MetadataKeyInsulinModelDuration"
 
+/// Defines the source of the data, including if a dose was logged or from device history
+let MetadataKeyProvenanceIdentifier = "com.loopkit.InsulinKit.MetadataKeyProvenanceIdentifier"
+
 public enum CachedInsulinModel: Int {
     case none = 0
     case exponentialAdult
@@ -32,7 +35,7 @@ public enum CachedInsulinModel: Int {
 }
 
 extension HKQuantitySample {
-    convenience init?(type: HKQuantityType, unit: HKUnit, dose: DoseEntry, device: HKDevice?, syncVersion: Int = 1) {
+    convenience init?(type: HKQuantityType, unit: HKUnit, dose: DoseEntry, device: HKDevice?, provenanceIdentifier: String, syncVersion: Int = 1) {
         let units = dose.unitsInDeliverableIncrements
 
         guard let syncIdentifier = dose.syncIdentifier else {
@@ -44,7 +47,8 @@ extension HKQuantitySample {
             HKMetadataKeySyncIdentifier: syncIdentifier,
             MetadataKeyHasLoopKitOrigin: true,
             MetadataKeyInsulinModelType: CachedInsulinModel.none.rawValue,
-            MetadataKeyInsulinModelDuration: 0
+            MetadataKeyInsulinModelDuration: 0,
+            MetadataKeyProvenanceIdentifier: provenanceIdentifier
         ]
 
         switch dose.type {
@@ -123,6 +127,10 @@ extension HKQuantitySample {
 
     var programmedTempBasalRate: HKQuantity? {
         return metadata?[MetadataKeyProgrammedTempBasalRate] as? HKQuantity
+    }
+
+    var loopSpecificProvenanceIdentifier: String {
+        return metadata?[MetadataKeyProvenanceIdentifier] as? String ?? provenanceIdentifier
     }
     
     var insulinModelSetting: InsulinModelSettings? {

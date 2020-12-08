@@ -269,7 +269,7 @@ extension InsulinDeliveryStore {
     ///   - syncVersion: The sync version used for the new dose entries.
     ///   - completion: A closure called once the dose entries have been stored.
     ///   - result: Success or error.
-    func addDoseEntries(_ entries: [DoseEntry], from device: HKDevice?, syncVersion: Int, completion: @escaping (_ result: Result<Void, Error>) -> Void) {
+    func addDoseEntries(_ entries: [DoseEntry], from device: HKDevice?, syncVersion: Int, provenanceIdentifier: String? = nil, completion: @escaping (_ result: Result<Void, Error>) -> Void) {
         guard !entries.isEmpty else {
             completion(.success(()))
             return
@@ -278,6 +278,7 @@ extension InsulinDeliveryStore {
         queue.async {
             var changed = false
             var error: Error?
+            let identifier = provenanceIdentifier ?? self.provenanceIdentifier
 
             self.cacheStore.managedObjectContext.performAndWait {
                 do {
@@ -297,7 +298,7 @@ extension InsulinDeliveryStore {
                             return nil
                         }
 
-                        return HKQuantitySample(type: self.insulinType, unit: HKUnit.internationalUnit(), dose: entry, device: device, syncVersion: syncVersion)
+                        return HKQuantitySample(type: self.insulinType, unit: HKUnit.internationalUnit(), dose: entry, device: device, provenanceIdentifier: identifier, syncVersion: syncVersion)
                     }
 
                     changed = !quantitySamples.isEmpty
@@ -307,7 +308,7 @@ extension InsulinDeliveryStore {
 
                     let objects: [CachedInsulinDeliveryObject] = quantitySamples.map { quantitySample in
                         let object = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
-                        object.create(fromNew: quantitySample, provenanceIdentifier: self.provenanceIdentifier, on: self.currentDate())
+                        object.create(fromNew: quantitySample, on: self.currentDate())
                         return object
                     }
 

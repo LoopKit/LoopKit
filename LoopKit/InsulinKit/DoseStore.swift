@@ -868,27 +868,9 @@ extension DoseStore {
             completion(nil)
             return
         }
-        persistenceController.managedObjectContext.perform {
-            for dose in doses {
-                let object = CachedInsulinDeliveryObject(context: self.persistenceController.managedObjectContext)
-                let uuid = UUID()
-                
-                object.startDate = dose.startDate
-                object.endDate = dose.endDate
-                object.insulinModelSetting = dose.insulinModelSetting
-                object.uuid = uuid
-                object.hasLoopKitOrigin = true
-                object.provenanceIdentifier = "org.loopkit.provenance.manualEntry"
-                object.syncIdentifier = dose.syncIdentifier
-                object.value = dose.value
-                object.scheduledBasalRate = dose.scheduledBasalRate
-                object.reason = HKInsulinDeliveryReason.bolus
-                object.createdAt = self.currentDate()
-            }
-        }
 
         self.persistenceController.save { (error) -> Void in
-            self.insulinDeliveryStore.addDoseEntries(doses, from: nil, syncVersion: self.syncVersion) { (result) in
+            self.insulinDeliveryStore.addDoseEntries(doses, from: nil, syncVersion: self.syncVersion, provenanceIdentifier: "org.loopkit.provenance.manualEntry") { (result) in
                 switch result {
                 case .success:
                     completion(nil)

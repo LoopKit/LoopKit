@@ -213,11 +213,11 @@ extension CachedInsulinDeliveryObject {
 }
 
 extension CachedInsulinDeliveryObject {
-    func create(fromNew sample: HKQuantitySample, provenanceIdentifier: String, on date: Date = Date()) {
+    func create(fromNew sample: HKQuantitySample, on date: Date = Date()) {
         precondition(sample.syncIdentifier != nil)
 
         self.uuid = nil
-        self.provenanceIdentifier = provenanceIdentifier
+        self.provenanceIdentifier = sample.loopSpecificProvenanceIdentifier
         self.hasLoopKitOrigin = true
         self.startDate = sample.startDate
         self.endDate = sample.endDate
@@ -225,13 +225,14 @@ extension CachedInsulinDeliveryObject {
         self.value = sample.quantity.doubleValue(for: .internationalUnit())
         self.scheduledBasalRate = sample.scheduledBasalRate
         self.programmedTempBasalRate = sample.programmedTempBasalRate
+        self.insulinModelSetting = sample.insulinModelSetting
         self.reason = sample.insulinDeliveryReason
         self.createdAt = date
     }
 
     func create(fromExisting sample: HKQuantitySample, on date: Date = Date()) {
         self.uuid = sample.uuid
-        self.provenanceIdentifier = sample.provenanceIdentifier
+        self.provenanceIdentifier = sample.loopSpecificProvenanceIdentifier
         self.hasLoopKitOrigin = sample.hasLoopKitOrigin
         self.startDate = sample.startDate
         self.endDate = sample.endDate
@@ -239,6 +240,7 @@ extension CachedInsulinDeliveryObject {
         self.value = sample.quantity.doubleValue(for: .internationalUnit())
         self.scheduledBasalRate = sample.scheduledBasalRate
         self.programmedTempBasalRate = sample.programmedTempBasalRate
+        self.insulinModelSetting = sample.insulinModelSetting
         self.reason = sample.insulinDeliveryReason
         self.createdAt = date
     }
