@@ -111,6 +111,19 @@ class CachedInsulinDeliveryObject: NSManagedObject {
             primitiveModelType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
         }
     }
+    
+    var automaticallyIssued: Bool? {
+        get {
+            willAccessValue(forKey: "automaticallyIssued")
+            defer { didAccessValue(forKey: "automaticallyIssued") }
+            return primativeAutomaticallyIssued?.boolValue
+        }
+        set {
+            willChangeValue(forKey: "automaticallyIssued")
+            defer { didChangeValue(forKey: "automaticallyIssued") }
+            primativeAutomaticallyIssued = newValue as NSNumber?
+        }
+    }
 }
 
 // MARK: - Helpers

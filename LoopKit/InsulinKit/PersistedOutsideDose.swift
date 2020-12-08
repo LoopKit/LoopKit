@@ -21,7 +21,7 @@ public struct PersistedOutsideDose {
 
 extension CachedInsulinDeliveryObject {
     var persistedOutsideDose: PersistedOutsideDose? {
-        guard isLogged else {
+        guard provenanceIdentifier == "org.loopkit.provenance.manualEntry" else {
             return nil
         }
         

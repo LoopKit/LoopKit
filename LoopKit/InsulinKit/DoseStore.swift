@@ -859,8 +859,7 @@ extension DoseStore {
                 object.insulinModelSetting = dose.insulinModelSetting
                 object.uuid = uuid
                 object.hasLoopKitOrigin = true
-                object.isLogged = true
-                object.provenanceIdentifier = uuid.uuidString
+                object.provenanceIdentifier = "org.loopkit.provenance.manualEntry"
                 object.syncIdentifier = dose.syncIdentifier
                 object.value = dose.value
                 object.scheduledBasalRate = dose.scheduledBasalRate
@@ -936,7 +935,7 @@ extension DoseStore {
     private func purgeOutsideDoses() throws {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: CachedInsulinDeliveryObject.entity().name!)
         // Only delete logged doses
-        let typePredicate = NSPredicate(format: "isLogged == true")
+        let typePredicate = NSPredicate(format: "provenanceIdentifier == 'org.loopkit.provenance.manualEntry'")
         fetchRequest.predicate = typePredicate
 
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
@@ -1090,7 +1089,7 @@ extension DoseStore {
     private func getLoggedDoses(matching predicate: NSPredicate, chronological: Bool, limit: Int? = nil) throws -> [PersistedOutsideDose] {
         let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
 
-        let sourcePredicate = NSPredicate(format: "isLogged == true")
+        let sourcePredicate = NSPredicate(format: "provenanceIdentifier == 'org.loopkit.provenance.manualEntry'")
         let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, sourcePredicate])
         request.predicate = compoundPredicate
         request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: chronological)]
