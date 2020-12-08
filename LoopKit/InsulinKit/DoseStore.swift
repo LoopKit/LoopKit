@@ -102,7 +102,23 @@ public final class DoseStore {
     }
     private let lockedInsulinModelSetting: Locked<InsulinModelSettings?>
     
+    // The longest effect duration in the doses within the DoseStore
     public var longestEffectDuration: TimeInterval
+
+    public var rapidActingInsulinModelSetting: InsulinModelSettings {
+        get {
+            return lockedRapidActingModelSetting.value
+        }
+        set {
+            // Only set if it's a 'rapid-acting' model
+            if case .exponentialPreset(let model) = newValue, case .fiasp = model {
+                return
+            }
+            lockedRapidActingModelSetting.value = newValue
+        }
+        
+    }
+    private let lockedRapidActingModelSetting: Locked<InsulinModelSettings>
 
     /// A history of recently applied schedule overrides.
     private let overrideHistory: TemporaryScheduleOverrideHistory?
@@ -205,6 +221,7 @@ public final class DoseStore {
     ///   - cacheStore: The cache store for reading & writing short-term intermediate data
     ///   - observationEnabled: Whether the store should observe changes from HealthKit
     ///   - defaultInsulinModelSetting: The model of insulin effect over time
+    ///   - rapidActingInsulinModelSetting: The rapid-acting insulin model to use
     ///   - basalProfile: The daily schedule of basal insulin rates
     ///   - insulinSensitivitySchedule: The daily schedule of insulin sensitivity (ISF)
     ///   - syncVersion: A version number for determining resolution in de-duplication
@@ -216,6 +233,7 @@ public final class DoseStore {
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
         defaultInsulinModelSetting: InsulinModelSettings?,
+        rapidActingInsulinModelSetting: InsulinModelSettings?,
         basalProfile: BasalRateSchedule?,
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
         overrideHistory: TemporaryScheduleOverrideHistory? = nil,
@@ -241,6 +259,7 @@ public final class DoseStore {
         self.syncVersion = syncVersion
         self.lockedLastPumpEventsReconciliation = Locked(lastPumpEventsReconciliation)
         self.longestEffectDuration = defaultInsulinModelSetting?.model.effectDuration ?? .hours(24)
+        self.lockedRapidActingModelSetting = Locked(rapidActingInsulinModelSetting ?? InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)!)
 
         self.pumpEventQueryAfterDate = cacheStartDate
 
@@ -1473,6 +1492,7 @@ extension DoseStore {
             "## DoseStore",
             "",
             "* defaultInsulinModel: \(String(reflecting: defaultInsulinModelSetting?.model))",
+            "* rapidActingInsulinModelSetting: \(String(reflecting: rapidActingInsulinModelSetting.model))",
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
             "* basalProfileApplyingOverrideHistory \(basalProfileApplyingOverrideHistory?.debugDescription ?? "nil")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
