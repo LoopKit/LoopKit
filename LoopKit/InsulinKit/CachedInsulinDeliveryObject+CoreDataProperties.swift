@@ -27,7 +27,6 @@ extension CachedInsulinDeliveryObject {
     @NSManaged public var primitiveProgrammedTempBasalRate: NSNumber?
     @NSManaged public var primitiveReason: NSNumber?
     @NSManaged public var createdAt: Date?
-    @NSManaged public var primitiveModelDuration: NSNumber?
-    @NSManaged public var primitiveModelType: NSNumber?
+    @NSManaged public var primitiveInsulinModelCategory: NSNumber?
     @NSManaged public var primativeAutomaticallyIssued: NSNumber?
 }

@@ -80,7 +80,7 @@ public final class DoseStore {
 
     private let log = OSLog(category: "DoseStore")
 
-    public var defaultInsulinModelSetting: InsulinModelSettings? {
+    public var pumpInsulinModelSetting: InsulinModelSettings? {
         get {
             return lockedInsulinModelSetting.value
         }
@@ -93,7 +93,7 @@ public final class DoseStore {
                 self.validateReservoirContinuity()
             }
 
-            if let effectDuration = defaultInsulinModelSetting?.model.effectDuration {
+            if let effectDuration = pumpInsulinModelSetting?.model.effectDuration {
                 let longestPossibleDuration = max(self.longestEffectDuration, effectDuration)
                 insulinDeliveryStore.observationStart = Date(timeIntervalSinceNow: -longestPossibleDuration)
                 longestEffectDuration = longestPossibleDuration
@@ -101,6 +101,9 @@ public final class DoseStore {
         }
     }
     private let lockedInsulinModelSetting: Locked<InsulinModelSettings?>
+    private var pumpInsulinModelCategory: InsulinModelCategory? {
+        return pumpInsulinModelSetting?.insulinModelCategory
+    }
     
     // The longest effect duration in the doses within the DoseStore
     public var longestEffectDuration: TimeInterval
@@ -220,7 +223,7 @@ public final class DoseStore {
     ///   - observeHealthKitSamplesFromOtherApps: Whether or not this Store should read HealthKit data written by other apps
     ///   - cacheStore: The cache store for reading & writing short-term intermediate data
     ///   - observationEnabled: Whether the store should observe changes from HealthKit
-    ///   - defaultInsulinModelSetting: The model of insulin effect over time
+    ///   - pumpInsulinModelSetting: The model of insulin effect over time for insulin doses delivered by the pump
     ///   - rapidActingInsulinModelSetting: The rapid-acting insulin model to use
     ///   - basalProfile: The daily schedule of basal insulin rates
     ///   - insulinSensitivitySchedule: The daily schedule of insulin sensitivity (ISF)
@@ -232,7 +235,7 @@ public final class DoseStore {
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
-        defaultInsulinModelSetting: InsulinModelSettings?,
+        pumpInsulinModelSetting: InsulinModelSettings?,
         rapidActingInsulinModelSetting: InsulinModelSettings?,
         basalProfile: BasalRateSchedule?,
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
@@ -250,7 +253,7 @@ public final class DoseStore {
             provenanceIdentifier: provenanceIdentifier,
             test_currentDate: test_currentDate
         )
-        self.lockedInsulinModelSetting = Locked(defaultInsulinModelSetting)
+        self.lockedInsulinModelSetting = Locked(pumpInsulinModelSetting)
         self.lockedInsulinSensitivitySchedule = Locked(insulinSensitivitySchedule)
         self.lockedBasalProfile = Locked(basalProfile)
         self.overrideHistory = overrideHistory
@@ -258,7 +261,7 @@ public final class DoseStore {
         self.cacheLength = cacheLength
         self.syncVersion = syncVersion
         self.lockedLastPumpEventsReconciliation = Locked(lastPumpEventsReconciliation)
-        self.longestEffectDuration = defaultInsulinModelSetting?.model.effectDuration ?? .hours(24)
+        self.longestEffectDuration = pumpInsulinModelSetting?.model.effectDuration ?? .hours(24)
         self.lockedRapidActingModelSetting = Locked(rapidActingInsulinModelSetting ?? InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)!)
 
         self.pumpEventQueryAfterDate = cacheStartDate
@@ -755,8 +758,8 @@ extension DoseStore {
                 object.title = event.title
                 object.type = event.type
                 object.mutable = event.isMutable
-                if let defaultInsulinModelSetting = self.defaultInsulinModelSetting {
-                    object.dose = event.dose?.annotateDoseWithInsulinModel(modelSetting: defaultInsulinModelSetting)
+                if let category = self.pumpInsulinModelCategory {
+                    object.dose = event.dose?.annotateDoseWithInsulinModelCategoryIfNeeded(defaultCategory: category)
                 } else {
                     object.dose = event.dose
                 }
@@ -1047,8 +1050,8 @@ extension DoseStore {
             var reconciledDoses = doses.overlayBasalSchedule(basalSchedule, startingAt: startingAt, endingAt: endingAt, insertingBasalEntries: !self.pumpRecordsBasalProfileStartEvents)
 
             // Annotate doses with the default insulin model before saving to keep track of insulin models if settings are changed
-            if let modelSetting = self.defaultInsulinModelSetting {
-                reconciledDoses = reconciledDoses.annotatedWithInsulinModel(modelSetting: modelSetting)
+            if let category = self.pumpInsulinModelCategory {
+                reconciledDoses = reconciledDoses.annotatedWithInsulinModelCategoryIfNeeded(defaultCategory: category)
             }
             completion(.success(reconciledDoses))
         }
@@ -1377,20 +1380,21 @@ extension DoseStore {
     ///   - completion: A closure called once the values have been retrieved
     ///   - result: An array of insulin values, in chronological order
     public func getInsulinOnBoardValues(start: Date, end: Date? = nil, basalDosingEnd: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[InsulinValue]>) -> Void) {
-        guard let defaultInsulinModel = self.defaultInsulinModelSetting?.model else {
+        guard let defaultInsulinModel = self.pumpInsulinModelSetting?.model else {
             completion(.failure(.configurationError))
             return
         }
 
         // To properly know IOB at startDate, we need to go back another DIA hours
         let doseStart = start.addingTimeInterval(-longestEffectDuration)
+        let insulinModelInfo = InsulinModelInfo(defaultInsulinModel: defaultInsulinModel, rapidActingModel: rapidActingInsulinModelSetting.model)
         getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
             switch result {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
                 let trimmedDoses = doses.map { $0.trimmed(to: basalDosingEnd) }
-                let insulinOnBoard = trimmedDoses.insulinOnBoard(defaultModel: defaultInsulinModel, longestEffectDuration: self.longestEffectDuration)
+                let insulinOnBoard = trimmedDoses.insulinOnBoard(insulinModelInfo: insulinModelInfo, longestEffectDuration: self.longestEffectDuration)
                 completion(.success(insulinOnBoard.filterDateRange(start, end)))
             }
         }
@@ -1407,7 +1411,7 @@ extension DoseStore {
     ///   - completion: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completion: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
-        guard let defaultInsulinModel = self.defaultInsulinModelSetting?.model,
+        guard let defaultInsulinModel = self.pumpInsulinModelSetting?.model,
               let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory
         else {
             completion(.failure(.configurationError))
@@ -1416,6 +1420,7 @@ extension DoseStore {
 
         // To properly know glucose effects at startDate, we need to go back another DIA hours
         let doseStart = start.addingTimeInterval(-longestEffectDuration)
+        let insulinModelInfo = InsulinModelInfo(defaultInsulinModel: defaultInsulinModel, rapidActingModel: rapidActingInsulinModelSetting.model)
         getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
             switch result {
             case .failure(let error):
@@ -1428,9 +1433,9 @@ extension DoseStore {
                     return dose.trimmed(to: basalDosingEnd)
                 }
                 // Update the longest effect duration based on the doses retrieved
-                self.longestEffectDuration = trimmedDoses.compactMap({ $0.insulinModelSetting?.model.effectDuration }).max() ?? self.longestEffectDuration
+                self.longestEffectDuration = trimmedDoses.compactMap({ insulinModelInfo.insulinModel(for: $0.insulinModelCategory).effectDuration }).max() ?? self.longestEffectDuration
 
-                let glucoseEffects = trimmedDoses.glucoseEffects(defaultModel: defaultInsulinModel, longestEffectDuration: self.longestEffectDuration, insulinSensitivity: insulinSensitivitySchedule)
+                let glucoseEffects = trimmedDoses.glucoseEffects(insulinModelInfo: insulinModelInfo, longestEffectDuration: self.longestEffectDuration, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             }
         }
@@ -1473,8 +1478,8 @@ extension DoseStore {
         var report: [String] = [
             "## DoseStore",
             "",
-            "* defaultInsulinModel: \(String(reflecting: defaultInsulinModelSetting?.model))",
-            "* rapidActingInsulinModelSetting: \(String(reflecting: rapidActingInsulinModelSetting.model))",
+            "* pumpInsulinModel: \(String(reflecting: pumpInsulinModelSetting?.model))",
+            "* rapidActingInsulinModel: \(String(reflecting: rapidActingInsulinModelSetting.model))",
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
             "* basalProfileApplyingOverrideHistory \(basalProfileApplyingOverrideHistory?.debugDescription ?? "nil")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
