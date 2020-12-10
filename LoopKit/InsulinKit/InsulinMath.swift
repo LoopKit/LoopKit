@@ -326,7 +326,7 @@ extension DoseEntry {
         
         let netTempBasalDoses = self.annotated(with: basalRateSchedule)
 
-        return netTempBasalDoses.glucoseEffects(insulinModelInfo: InsulinModelInfo(defaultInsulinModel: insulinModel), longestEffectDuration: insulinModel.effectDuration, insulinSensitivity: insulinSensitivity)
+        return netTempBasalDoses.glucoseEffects(insulinModelInfo: InsulinModelInformation(defaultInsulinModel: insulinModel), longestEffectDuration: insulinModel.effectDuration, insulinSensitivity: insulinSensitivity)
     }
 
     fileprivate var resolvingDelivery: DoseEntry {
@@ -501,7 +501,7 @@ extension Collection where Element == DoseEntry {
      - returns: A sequence of insulin amount remaining
      */
     func insulinOnBoard(
-        insulinModelInfo: InsulinModelInfo,
+        insulinModelInfo: InsulinModelInformation,
         longestEffectDuration: TimeInterval,
         from start: Date? = nil,
         to end: Date? = nil,
@@ -537,7 +537,7 @@ extension Collection where Element == DoseEntry {
     ///   - delta: The interval between returned effects
     /// - Returns: An array of glucose effects for the duration of the doses
     public func glucoseEffects(
-        insulinModelInfo: InsulinModelInfo,
+        insulinModelInfo: InsulinModelInformation,
         longestEffectDuration: TimeInterval,
         insulinSensitivity: InsulinSensitivitySchedule,
         from start: Date? = nil,

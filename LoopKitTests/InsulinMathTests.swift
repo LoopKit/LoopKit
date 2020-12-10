@@ -38,14 +38,14 @@ class InsulinMathTests: XCTestCase {
     
     private let modelCategory: InsulinModelCategory = .rapidActing
     
-    private let modelInfo = InsulinModelInfo(
+    private let modelInfo = InsulinModelInformation(
         defaultInsulinModel: WalshInsulinModel(actionDuration: TimeInterval(hours: 4)),
         rapidActingModel: WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
     )
     
     private let exponentialModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75))
     
-    private let exponentialModelInfo = InsulinModelInfo(
+    private let exponentialModelInfo = InsulinModelInformation(
         defaultInsulinModel: ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75)),
         rapidActingModel: ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75))
     )
@@ -355,7 +355,7 @@ class InsulinMathTests: XCTestCase {
             let input = loadDoseFixture("bolus_dose", insulinModel: insulinModel)
             let output = loadInsulinValueFixture("iob_from_bolus_\(Int(actionDuration.minutes))min_output")
 
-            let insulinModelInfo = InsulinModelInfo(defaultInsulinModel: insulinModel, rapidActingModel: insulinModel)
+            let insulinModelInfo = InsulinModelInformation(defaultInsulinModel: insulinModel, rapidActingModel: insulinModel)
             let iob = input.insulinOnBoard(insulinModelInfo: insulinModelInfo, longestEffectDuration: insulinModel.effectDuration)
 
             XCTAssertEqual(output.count, iob.count)
@@ -394,9 +394,8 @@ class InsulinMathTests: XCTestCase {
             DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:32:51 +0000"), endDate: f("2018-05-15 15:02:51 +0000"), value: 1.8999999999999999, unit: .unitsPerHour, syncIdentifier: "16017360074f12", scheduledBasalRate: nil),
             DoseEntry(type: .bolus, startDate: f("2018-05-15 14:52:51 +0000"), endDate: f("2018-05-15 15:52:51 +0000"), value: 0.9, unit: .units, syncIdentifier: "01004a004a006d006e22354312", scheduledBasalRate: nil, insulinModelCategory: .rapidActing),
         ]
-        
-        // ANNA TODO: is this realistic?
-        let mixedModelInfo = InsulinModelInfo(defaultInsulinModel: exponentialModel, rapidActingModel: child)
+
+        let mixedModelInfo = InsulinModelInformation(defaultInsulinModel: exponentialModel, rapidActingModel: child)
         let iobWithModel = dosesWithModel.insulinOnBoard(insulinModelInfo: mixedModelInfo, longestEffectDuration: exponentialModel.effectDuration)
 
         XCTAssertEqual(iobWithoutModel.count, iobWithModel.count)

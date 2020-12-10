@@ -25,8 +25,8 @@ public enum InsulinModelCategory: Int, Codable {
     }
 }
 
-// ANNA TODO: better way to do this??
-public class InsulinModelInfo {
+// Used to keep track of insulin model information for the purposes of matching an InsulinModelCategory with the appropriate InsulinModel
+public class InsulinModelInformation {
     let defaultInsulinModel: InsulinModel
     let rapidActingModel: InsulinModel
     

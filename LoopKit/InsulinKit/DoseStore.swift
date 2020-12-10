@@ -1387,7 +1387,7 @@ extension DoseStore {
 
         // To properly know IOB at startDate, we need to go back another DIA hours
         let doseStart = start.addingTimeInterval(-longestEffectDuration)
-        let insulinModelInfo = InsulinModelInfo(defaultInsulinModel: defaultInsulinModel, rapidActingModel: rapidActingInsulinModelSetting.model)
+        let insulinModelInfo = InsulinModelInformation(defaultInsulinModel: defaultInsulinModel, rapidActingModel: rapidActingInsulinModelSetting.model)
         getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
             switch result {
             case .failure(let error):
@@ -1420,7 +1420,7 @@ extension DoseStore {
 
         // To properly know glucose effects at startDate, we need to go back another DIA hours
         let doseStart = start.addingTimeInterval(-longestEffectDuration)
-        let insulinModelInfo = InsulinModelInfo(defaultInsulinModel: defaultInsulinModel, rapidActingModel: rapidActingInsulinModelSetting.model)
+        let insulinModelInfo = InsulinModelInformation(defaultInsulinModel: defaultInsulinModel, rapidActingModel: rapidActingInsulinModelSetting.model)
         getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
             switch result {
             case .failure(let error):
