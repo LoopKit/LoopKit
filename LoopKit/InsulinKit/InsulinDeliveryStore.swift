@@ -278,7 +278,6 @@ extension InsulinDeliveryStore {
         queue.async {
             var changed = false
             var error: Error?
-            let identifier = provenanceIdentifier ?? self.provenanceIdentifier
 
             self.cacheStore.managedObjectContext.performAndWait {
                 do {
@@ -298,7 +297,7 @@ extension InsulinDeliveryStore {
                             return nil
                         }
 
-                        return HKQuantitySample(type: self.insulinType, unit: HKUnit.internationalUnit(), dose: entry, device: device, provenanceIdentifier: identifier, syncVersion: syncVersion)
+                        return HKQuantitySample(type: self.insulinType, unit: HKUnit.internationalUnit(), dose: entry, device: device, provenanceIdentifier: provenanceIdentifier ?? self.provenanceIdentifier, syncVersion: syncVersion)
                     }
 
                     changed = !quantitySamples.isEmpty

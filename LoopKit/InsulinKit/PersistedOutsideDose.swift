@@ -25,8 +25,6 @@ extension CachedInsulinDeliveryObject {
             return nil
         }
         
-        print(dose)
-        
         return PersistedOutsideDose(
             date: startDate,
             persistedDate: createdAt,

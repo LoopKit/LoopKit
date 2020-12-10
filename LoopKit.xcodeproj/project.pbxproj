@@ -817,6 +817,7 @@
 		E9E5E56A24D5CCE800B5DFFE /* OverrideViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */; };
 		E9F54F5E25802D5E0034795E /* InsulinModelCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F54F5D25802D5E0034795E /* InsulinModelCategory.swift */; };
 		E9F54FBA258052130034795E /* InsulinModelCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F54F5D25802D5E0034795E /* InsulinModelCategory.swift */; };
+		E9F54FC62581C50D0034795E /* ExpandableDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F54FC52581C50C0034795E /* ExpandableDatePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1627,6 +1628,7 @@
 		E9E5E56424D362E900B5DFFE /* dynamic_glucose_effect_fully_observed_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dynamic_glucose_effect_fully_observed_output.json; sourceTree = "<group>"; };
 		E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideViewCell.swift; sourceTree = "<group>"; };
 		E9F54F5D25802D5E0034795E /* InsulinModelCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinModelCategory.swift; sourceTree = "<group>"; };
+		E9F54FC52581C50C0034795E /* ExpandableDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDatePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1981,6 +1983,7 @@
 				E93E866324DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift */,
 				E99A132D2557548300D3F5B3 /* SegmentedGaugeBar.swift */,
 				E9DFB92B24E634E800468917 /* ExpandablePicker.swift */,
+				E9F54FC52581C50C0034795E /* ExpandableDatePicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3583,6 +3586,7 @@
 				B43DA43F24D49AA400CAFF4E /* GuidanceColors.swift in Sources */,
 				43BA716B201E49220058961E /* CarbEntryValidationNavigationDelegate.swift in Sources */,
 				89AF78C02447E285002B4FCC /* CardStackBuilder.swift in Sources */,
+				E9F54FC62581C50D0034795E /* ExpandableDatePicker.swift in Sources */,
 				43BA7185201EE7090058961E /* DailyValueScheduleTableViewController.swift in Sources */,
 				E99A132E2557548300D3F5B3 /* SegmentedGaugeBar.swift in Sources */,
 				892A5DB32231E191008961AB /* LevelHUDView.swift in Sources */,

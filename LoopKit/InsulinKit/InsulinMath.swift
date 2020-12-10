@@ -325,7 +325,7 @@ extension DoseEntry {
         }
         
         let netTempBasalDoses = self.annotated(with: basalRateSchedule)
-        // Assume that temp basals will be delivered by the pump
+
         return netTempBasalDoses.glucoseEffects(insulinModelInfo: InsulinModelInfo(defaultInsulinModel: insulinModel), longestEffectDuration: insulinModel.effectDuration, insulinSensitivity: insulinSensitivity)
     }
 

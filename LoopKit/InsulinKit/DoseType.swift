@@ -40,7 +40,7 @@ extension DoseType {
         switch pumpEventType {
         case .basal:
             self = .basal
-        case .bolus, .loggedDose:
+        case .bolus:
             self = .bolus
         case .resume:
             self = .resume
