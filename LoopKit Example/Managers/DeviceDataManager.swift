@@ -38,6 +38,7 @@ class DeviceDataManager {
             healthStore: healthStore,
             cacheStore: cacheStore,
             pumpInsulinModelSetting: insulinModelSetting,
+            rapidActingInsulinModelSetting: insulinModelSetting ?? InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult),
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier

@@ -25,7 +25,7 @@ public enum InsulinModelCategory: Int, Codable {
     }
 }
 
-// Used to keep track of insulin model information for the purposes of matching an InsulinModelCategory with the appropriate InsulinModel
+// Used to keep track of insulin model information for the purposes of matching an InsulinModelCategory with the appropriate InsulinModel based on settings informaton
 public class InsulinModelInformation {
     let defaultInsulinModel: InsulinModel
     let rapidActingModel: InsulinModel
