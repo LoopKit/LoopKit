@@ -19,6 +19,7 @@ class QuantityFormatterTests: XCTestCase {
         formatter = QuantityFormatter()
         formatter.locale = Locale(identifier: "en_US")
         formatter.unitStyle = .medium
+        formatter.avoidLineBreaking = false
     }
 
     func testInsulin() {
@@ -122,5 +123,47 @@ class QuantityFormatterTests: XCTestCase {
         XCTAssertEqual("5.5 millimoles per liter", formatter.string(from: HKQuantity(unit: unit, doubleValue: 5.5), for: unit)!)
         XCTAssertEqual("0.0 millimoles per liter", formatter.string(from: HKQuantity(unit: unit, doubleValue: 0), for: unit)!)
         XCTAssertEqual("1.0 millimoles per liter", formatter.string(from: HKQuantity(unit: unit, doubleValue: 1), for: unit)!)
+    }
+    
+    func testAvoidLineBreaking() {
+        formatter.avoidLineBreaking = true
+        XCTAssertEqual("U", formatter.string(from: HKUnit.internationalUnit()))
+        XCTAssertEqual("10\u{00a0}U", formatter.string(from: HKQuantity(unit: HKUnit.internationalUnit(), doubleValue: 10), for: HKUnit.internationalUnit())!)
+        formatter.unitStyle = .short
+        XCTAssertEqual("10\u{2060}U", formatter.string(from: HKQuantity(unit: HKUnit.internationalUnit(), doubleValue: 10), for: HKUnit.internationalUnit())!)
+        formatter.unitStyle = .long
+        XCTAssertEqual("Units", formatter.string(from: HKUnit.internationalUnit()))
+        XCTAssertEqual("10 Units", formatter.string(from: HKQuantity(unit: HKUnit.internationalUnit(), doubleValue: 10), for: HKUnit.internationalUnit())!)
+        
+        formatter.unitStyle = .medium
+        formatter.setPreferredNumberFormatter(for: HKUnit.milligramsPerDeciliter)
+        XCTAssertEqual("mg\u{2060}/\u{2060}dL", formatter.string(from: HKUnit.milligramsPerDeciliter))
+        XCTAssertEqual("60\u{00a0}mg\u{2060}/\u{2060}dL", formatter.string(from: HKQuantity(unit: HKUnit.milligramsPerDeciliter, doubleValue: 60), for: HKUnit.milligramsPerDeciliter)!)
+        XCTAssertEqual("180\u{00a0}mg\u{2060}/\u{2060}dL", formatter.string(from: HKQuantity(unit: HKUnit.milligramsPerDeciliter, doubleValue: 180), for: HKUnit.milligramsPerDeciliter)!)
+        formatter.unitStyle = .short
+        XCTAssertEqual("mg\u{2060}/\u{2060}dL", formatter.string(from: HKUnit.milligramsPerDeciliter))
+        XCTAssertEqual("60\u{2060}mg\u{2060}/\u{2060}dL", formatter.string(from: HKQuantity(unit: HKUnit.milligramsPerDeciliter, doubleValue: 60), for: HKUnit.milligramsPerDeciliter)!)
+        XCTAssertEqual("180\u{2060}mg\u{2060}/\u{2060}dL", formatter.string(from: HKQuantity(unit: HKUnit.milligramsPerDeciliter, doubleValue: 180), for: HKUnit.milligramsPerDeciliter)!)
+        formatter.unitStyle = .long
+        XCTAssertEqual("milligrams per deciliter", formatter.string(from:  HKUnit.milligramsPerDeciliter))
+        XCTAssertEqual("180 milligrams per deciliter", formatter.string(from: HKQuantity(unit: HKUnit.milligramsPerDeciliter, doubleValue: 180), for: HKUnit.milligramsPerDeciliter)!)
+        XCTAssertEqual("0 milligrams per deciliter", formatter.string(from: HKQuantity(unit: HKUnit.milligramsPerDeciliter, doubleValue: 0), for: HKUnit.milligramsPerDeciliter)!)
+        XCTAssertEqual("1 milligrams per deciliter", formatter.string(from: HKQuantity(unit: HKUnit.milligramsPerDeciliter, doubleValue: 1), for: HKUnit.milligramsPerDeciliter)!)
+        
+        formatter.unitStyle = .medium
+        formatter.setPreferredNumberFormatter(for: HKUnit.millimolesPerLiter)
+        XCTAssertEqual("mmol\u{2060}/\u{2060}L", formatter.string(from: HKUnit.millimolesPerLiter))
+        XCTAssertEqual("6.0\u{00a0}mmol\u{2060}/\u{2060}L", formatter.string(from: HKQuantity(unit: HKUnit.millimolesPerLiter, doubleValue: 6), for: HKUnit.millimolesPerLiter)!)
+        XCTAssertEqual("7.8\u{00a0}mmol\u{2060}/\u{2060}L", formatter.string(from: HKQuantity(unit: HKUnit.millimolesPerLiter, doubleValue: 7.84), for: HKUnit.millimolesPerLiter)!)
+        XCTAssertEqual("12.0\u{00a0}mmol\u{2060}/\u{2060}L", formatter.string(from: HKQuantity(unit: HKUnit.millimolesPerLiter, doubleValue: 12), for: HKUnit.millimolesPerLiter)!)
+        formatter.unitStyle = .short
+        XCTAssertEqual("mmol\u{2060}/\u{2060}L", formatter.string(from: HKUnit.millimolesPerLiter))
+        XCTAssertEqual("6.0\u{2060}mmol\u{2060}/\u{2060}L", formatter.string(from: HKQuantity(unit: HKUnit.millimolesPerLiter, doubleValue: 6), for: HKUnit.millimolesPerLiter)!)
+        XCTAssertEqual("7.8\u{2060}mmol\u{2060}/\u{2060}L", formatter.string(from: HKQuantity(unit: HKUnit.millimolesPerLiter, doubleValue: 7.8), for: HKUnit.millimolesPerLiter)!)
+        formatter.unitStyle = .long
+        XCTAssertEqual("millimoles per liter", formatter.string(from: HKUnit.millimolesPerLiter))
+        XCTAssertEqual("5.5 millimoles per liter", formatter.string(from: HKQuantity(unit: HKUnit.millimolesPerLiter, doubleValue: 5.5), for: HKUnit.millimolesPerLiter)!)
+        XCTAssertEqual("0.0 millimoles per liter", formatter.string(from: HKQuantity(unit: HKUnit.millimolesPerLiter, doubleValue: 0), for: HKUnit.millimolesPerLiter)!)
+        XCTAssertEqual("1.0 millimoles per liter", formatter.string(from: HKQuantity(unit: HKUnit.millimolesPerLiter, doubleValue: 1), for: HKUnit.millimolesPerLiter)!)
     }
 }
