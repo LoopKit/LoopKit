@@ -5,6 +5,7 @@
 //  Created by Anna Quinlan on 8/12/20.
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
+
 import SwiftUI
 
 public struct ExpandableDatePicker: View {
@@ -13,7 +14,7 @@ public struct ExpandableDatePicker: View {
     let placeholderText: String
     let pickerRange: ClosedRange<Date>
     @State var userDidTap: Bool = false
-
+    
     public init (
         with date: Binding<Date>,
         pickerRange: ClosedRange<Date>? = nil,
@@ -21,11 +22,11 @@ public struct ExpandableDatePicker: View {
     ) {
         _date = date
         self.placeholderText = placeholderText
-
+        
         let today = Date()
         self.pickerRange = pickerRange ?? today.addingTimeInterval(-.hours(24))...today
     }
-
+    
     public var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -45,7 +46,7 @@ public struct ExpandableDatePicker: View {
             }
         }
     }
-
+    
     private var dateFieldText: some View {
         if userDidTap {
             return Text(dateFormatter.string(from: date))
@@ -54,7 +55,7 @@ public struct ExpandableDatePicker: View {
             return Text(placeholderText).foregroundColor(Color(UIColor.lightGray))
         }
     }
-
+    
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium

@@ -888,6 +888,7 @@ extension DoseStore {
 
     /// Deletes one particular logged dose event from the store
     ///
+    /// - Parameter dose: Dose to delete.
     /// - Parameter completion: A closure called after the event deleted. This closure takes a single argument:
     /// - Parameter success: True if dose was successfully deleted
     public func deleteOutsideDose(_ dose: PersistedOutsideDose, completion: @escaping (_ error: DoseStoreError?) -> Void) {
