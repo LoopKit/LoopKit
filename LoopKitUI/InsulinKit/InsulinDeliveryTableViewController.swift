@@ -392,7 +392,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 if let attributedText = entry.dose?.localizedAttributedDescription {
                     cell.textLabel?.attributedText = attributedText
                 } else {
-                    cell.textLabel?.text = LocalizedString("Unknown", comment: "The default description to use when an entry has no dose description")
+                    cell.textLabel?.text = entry.title
                 }
                 
                 cell.detailTextLabel?.text = time
