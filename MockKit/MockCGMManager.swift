@@ -254,7 +254,16 @@ extension MockCGMLifecycleProgress: RawRepresentable {
 public final class MockCGMManager: TestingCGMManager {
     
     public static let managerIdentifier = "MockCGMManager"
+
+    public var managerIdentifier: String {
+        return MockCGMManager.managerIdentifier
+    }
+    
     public static let localizedTitle = "CGM Simulator"
+    
+    public var localizedTitle: String {
+        return MockCGMManager.localizedTitle
+    }
 
     public struct MockAlert {
         public let sound: Alert.Sound

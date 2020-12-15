@@ -27,12 +27,9 @@ public protocol DeviceManagerDelegate: AlertPresenter {
 public protocol DeviceManager: CustomDebugStringConvertible, AlertResponder, AlertSoundVendor {
     typealias RawStateValue = [String: Any]
 
-    /// The identifier of the manager. This should be unique
-    static var managerIdentifier: String { get }
-
-    /// A title describing this type of manager
-    static var localizedTitle: String { get }
-
+    /// A unique identifier for this manager
+    var managerIdentifier: String { get }
+    
     /// A title describing this manager
     var localizedTitle: String { get }
 
@@ -49,16 +46,4 @@ public protocol DeviceManager: CustomDebugStringConvertible, AlertResponder, Ale
 
     /// The current, serializable state of the manager
     var rawState: RawStateValue { get }
-}
-
-
-public extension DeviceManager {
-    var localizedTitle: String {
-        return type(of: self).localizedTitle
-    }
-    
-    /// Represents a per-device-manager-Type identifier that can uniquely identify a class of this type.
-    var managerIdentifier: String {
-        return Self.managerIdentifier
-    }
 }

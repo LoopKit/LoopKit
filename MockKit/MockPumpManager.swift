@@ -42,8 +42,17 @@ public enum MockPumpManagerError: LocalizedError {
 public final class MockPumpManager: TestingPumpManager {
 
     public static let managerIdentifier = "MockPumpManager"
+
+    public var managerIdentifier: String {
+        return MockPumpManager.managerIdentifier
+    }
+    
     public static let localizedTitle = "Insulin Pump Simulator"
     
+    public var localizedTitle: String {
+        return MockPumpManager.localizedTitle
+    }
+
     private static let device = HKDevice(
         name: MockPumpManager.managerIdentifier,
         manufacturer: nil,

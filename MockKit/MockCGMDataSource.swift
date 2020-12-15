@@ -51,7 +51,7 @@ public struct MockCGMDataSource {
     }
 
     static let device = HKDevice(
-        name: MockCGMManager.managerIdentifier,
+        name: "MockCGMManager",
         manufacturer: nil,
         model: nil,
         hardwareVersion: nil,
