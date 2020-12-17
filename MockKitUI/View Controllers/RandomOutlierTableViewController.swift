@@ -146,7 +146,7 @@ final class RandomOutlierTableViewController: UITableViewController {
 
 extension RandomOutlierTableViewController: PercentageTextFieldTableViewControllerDelegate {
     func percentageTextFieldTableViewControllerDidChangePercentage(_ controller: PercentageTextFieldTableViewController) {
-        chance = controller.percentage?.clamped(to: 0...100)
+        chance = controller.percentage?.clamped(to: 0...1)
         tableView.reloadRows(at: [[0, Row.chance.rawValue]], with: .automatic)
     }
 }
@@ -157,3 +157,4 @@ extension RandomOutlierTableViewController: GlucoseEntryTableViewControllerDeleg
         tableView.reloadRows(at: [[0, Row.delta.rawValue]], with: .automatic)
     }
 }
+

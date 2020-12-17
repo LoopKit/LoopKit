@@ -596,9 +596,7 @@ extension MockCGMManagerSettingsViewController: PercentageTextFieldTableViewCont
         case .effects:
             switch EffectsRow(rawValue: indexPath.row)! {
             case .error:
-                if let chance = controller.percentage {
-                    cgmManager.dataSource.effects.randomErrorChance = chance.clamped(to: 0...100)
-                }
+                cgmManager.dataSource.effects.randomErrorChance = controller.percentage?.clamped(to: 0...1)
             default:
                 assertionFailure()
             }
