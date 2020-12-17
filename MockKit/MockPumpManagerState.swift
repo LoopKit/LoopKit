@@ -164,6 +164,43 @@ public struct MockPumpManagerState {
         return finalizedDoses + [unfinalizedTempBasal, unfinalizedBolus].compactMap {$0}
     }
 
+    public init(deliverableIncrements: DeliverableIncrements = .medtronicX22,
+                reservoirUnitsRemaining: Double = 200.0,
+                tempBasalEnactmentShouldError: Bool = false,
+                bolusEnactmentShouldError: Bool = false,
+                bolusCancelShouldError: Bool = false,
+                deliverySuspensionShouldError: Bool = false,
+                deliveryResumptionShouldError: Bool = false,
+                deliveryCommandsShouldTriggerUncertainDelivery: Bool = false,
+                maximumBolus: Double = 25.0,
+                maximumBasalRatePerHour: Double = 5.0,
+                suspendState: SuspendState = .resumed(Date()),
+                pumpBatteryChargeRemaining: Double? = 1,
+                unfinalizedBolus: UnfinalizedDose? = nil,
+                unfinalizedTempBasal: UnfinalizedDose? = nil,
+                finalizedDoses: [UnfinalizedDose] = [],
+                progressWarningThresholdPercentValue: Double? = 0.75,
+                progressCriticalThresholdPercentValue: Double? = 0.9)
+    {
+        self.deliverableIncrements = deliverableIncrements
+        self.supportedBolusVolumes = deliverableIncrements.supportedBolusVolumes ?? []
+        self.supportedBasalRates = deliverableIncrements.supportedBasalRates ?? []
+        self.reservoirUnitsRemaining = reservoirUnitsRemaining
+        self.tempBasalEnactmentShouldError = tempBasalEnactmentShouldError
+        self.bolusEnactmentShouldError = bolusEnactmentShouldError
+        self.bolusCancelShouldError = bolusCancelShouldError
+        self.deliverySuspensionShouldError = deliverySuspensionShouldError
+        self.deliveryResumptionShouldError = deliveryResumptionShouldError
+        self.deliveryCommandsShouldTriggerUncertainDelivery = deliveryCommandsShouldTriggerUncertainDelivery
+        self.maximumBolus = maximumBolus
+        self.maximumBasalRatePerHour = maximumBasalRatePerHour
+        self.suspendState = suspendState
+        self.pumpBatteryChargeRemaining = pumpBatteryChargeRemaining
+        self.finalizedDoses = finalizedDoses
+        self.progressWarningThresholdPercentValue = progressWarningThresholdPercentValue
+        self.progressCriticalThresholdPercentValue = progressCriticalThresholdPercentValue
+    }
+
     public mutating func finalizeFinishedDoses() {
         if let bolus = unfinalizedBolus, bolus.finished {
             finalizedDoses.append(bolus)
