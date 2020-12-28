@@ -18,7 +18,7 @@ let MetadataKeyProgrammedTempBasalRate = "com.loopkit.InsulinKit.MetadataKeyProg
 let MetadataKeyHasLoopKitOrigin = "HasLoopKitOrigin"
 
 /// Defines the insulin curve type to use to evaluate the dose's activity
-let MetadataKeyInsulinModelCategory = "com.loopkit.InsulinKit.MetadataKeyInsulinModelCategory"
+let MetadataKeyInsulinType = "com.loopkit.InsulinKit.MetadataKeyInsulinType"
 
 /// Defines the source of the data, including if a dose was logged or from device history
 let MetadataKeyProvenanceIdentifier = "com.loopkit.InsulinKit.MetadataKeyProvenanceIdentifier"
@@ -35,7 +35,7 @@ extension HKQuantitySample {
             HKMetadataKeySyncVersion: syncVersion,
             HKMetadataKeySyncIdentifier: syncIdentifier,
             MetadataKeyHasLoopKitOrigin: true,
-            MetadataKeyInsulinModelCategory: InsulinModelCategory.none.rawValue,
+            MetadataKeyInsulinType: InsulinType.none.rawValue,
             MetadataKeyProvenanceIdentifier: provenanceIdentifier
         ]
 
@@ -66,7 +66,7 @@ extension HKQuantitySample {
             return nil
         }
         
-        metadata[MetadataKeyInsulinModelCategory] = dose.insulinModelCategory?.rawValue
+        metadata[MetadataKeyInsulinType] = dose.insulinType?.rawValue
 
         self.init(
             type: type,
@@ -106,12 +106,12 @@ extension HKQuantitySample {
         return metadata?[MetadataKeyProvenanceIdentifier] as? String ?? provenanceIdentifier
     }
     
-    var insulinModelCategory: InsulinModelCategory? {
-        guard let rawType = metadata?[MetadataKeyInsulinModelCategory] as? Int else {
+    var insulinType: InsulinType? {
+        guard let rawType = metadata?[MetadataKeyInsulinType] as? Int else {
             return nil
         }
         
-        return InsulinModelCategory(rawValue: rawType)
+        return InsulinType(rawValue: rawType)
     }
 
     /// Returns a DoseEntry representation of the sample.
@@ -166,7 +166,7 @@ extension HKQuantitySample {
             description: nil,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinModelCategory: insulinModelCategory
+            insulinType: insulinType
         )
     }
 }

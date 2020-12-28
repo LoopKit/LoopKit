@@ -83,19 +83,19 @@ class CachedInsulinDeliveryObject: NSManagedObject {
         }
     }
 
-    var insulinModelCategory: InsulinModelCategory? {
+    var insulinType: InsulinType? {
         get {
-            willAccessValue(forKey: "insulinModelCategory")
-            defer { didAccessValue(forKey: "insulinModelCategory") }
-            guard let category = primitiveInsulinModelCategory else {
+            willAccessValue(forKey: "insulinType")
+            defer { didAccessValue(forKey: "insulinType") }
+            guard let type = primitiveInsulinType else {
                 return nil
             }
-            return InsulinModelCategory(rawValue: category.intValue)
+            return InsulinType(rawValue: type.intValue)
         }
         set {
-            willChangeValue(forKey: "insulinModelCategory")
-            defer { didChangeValue(forKey: "insulinModelCategory") }
-            primitiveInsulinModelCategory = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
+            willChangeValue(forKey: "insulinType")
+            defer { didChangeValue(forKey: "insulinType") }
+            primitiveInsulinType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
         }
     }
     
@@ -156,7 +156,7 @@ extension CachedInsulinDeliveryObject {
             description: nil,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinModelCategory: insulinModelCategory
+            insulinType: insulinType
         )
     }
 }
@@ -174,7 +174,7 @@ extension CachedInsulinDeliveryObject {
         self.value = sample.quantity.doubleValue(for: .internationalUnit())
         self.scheduledBasalRate = sample.scheduledBasalRate
         self.programmedTempBasalRate = sample.programmedTempBasalRate
-        self.insulinModelCategory = sample.insulinModelCategory
+        self.insulinType = sample.insulinType
         self.reason = sample.insulinDeliveryReason
         self.createdAt = date
     }
@@ -189,7 +189,7 @@ extension CachedInsulinDeliveryObject {
         self.value = sample.quantity.doubleValue(for: .internationalUnit())
         self.scheduledBasalRate = sample.scheduledBasalRate
         self.programmedTempBasalRate = sample.programmedTempBasalRate
-        self.insulinModelCategory = sample.insulinModelCategory
+        self.insulinType = sample.insulinType
         self.reason = sample.insulinDeliveryReason
         self.createdAt = date
     }

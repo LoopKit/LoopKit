@@ -33,7 +33,7 @@ class PumpEventEncodableTests: PersistenceControllerTestCase {
   "deliveredUnits" : 0.56000000000000005,
   "doseType" : "tempBasal",
   "duration" : 1800,
-  "insulinModelCategory" : 0,
+  "insulinType" : 0,
   "modificationCounter" : 123,
   "mutable" : true,
   "raw" : "MTIzNDU2Nzg5MA==",
@@ -62,7 +62,7 @@ class PumpEventEncodableTests: PersistenceControllerTestCase {
   "createdAt" : "2020-05-13T22:33:48Z",
   "date" : "2020-05-13T22:38:14Z",
   "duration" : 3600,
-  "insulinModelCategory" : 0,
+  "insulinType" : 0,
   "modificationCounter" : 234,
   "mutable" : false,
   "uploaded" : true

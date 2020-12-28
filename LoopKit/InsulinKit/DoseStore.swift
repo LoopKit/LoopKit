@@ -101,8 +101,8 @@ public final class DoseStore {
         }
     }
     private let lockedInsulinModelSetting: Locked<InsulinModelSettings?>
-    private var pumpInsulinModelCategory: InsulinModelCategory? {
-        return pumpInsulinModelSetting?.insulinModelCategory
+    private var pumpInsulinType: InsulinType? {
+        return pumpInsulinModelSetting?.insulinType
     }
     
     // The longest effect duration in the doses within the DoseStore
@@ -758,8 +758,8 @@ extension DoseStore {
                 object.title = event.title
                 object.type = event.type
                 object.mutable = event.isMutable
-                if let category = self.pumpInsulinModelCategory {
-                    object.dose = event.dose?.annotateDoseWithInsulinModelCategoryIfNeeded(defaultCategory: category)
+                if let type = self.pumpInsulinType {
+                    object.dose = event.dose?.annotateDoseWithInsulinTypeIfNeeded(defaultType: type)
                 } else {
                     object.dose = event.dose
                 }
@@ -1051,8 +1051,8 @@ extension DoseStore {
             var reconciledDoses = doses.overlayBasalSchedule(basalSchedule, startingAt: startingAt, endingAt: endingAt, insertingBasalEntries: !self.pumpRecordsBasalProfileStartEvents)
 
             // Annotate doses with the default insulin model before saving to keep track of insulin models if settings are changed
-            if let category = self.pumpInsulinModelCategory {
-                reconciledDoses = reconciledDoses.annotatedWithInsulinModelCategoryIfNeeded(defaultCategory: category)
+            if let type = self.pumpInsulinType {
+                reconciledDoses = reconciledDoses.annotatedWithInsulinTypeIfNeeded(defaultType: type)
             }
             completion(.success(reconciledDoses))
         }
@@ -1434,7 +1434,7 @@ extension DoseStore {
                     return dose.trimmed(to: basalDosingEnd)
                 }
                 // Update the longest effect duration based on the doses retrieved
-                self.longestEffectDuration = trimmedDoses.compactMap({ insulinModelInfo.insulinModel(for: $0.insulinModelCategory).effectDuration }).max() ?? self.longestEffectDuration
+                self.longestEffectDuration = trimmedDoses.compactMap({ insulinModelInfo.insulinModel(for: $0.insulinType).effectDuration }).max() ?? self.longestEffectDuration
 
                 let glucoseEffects = trimmedDoses.glucoseEffects(insulinModelInfo: insulinModelInfo, longestEffectDuration: self.longestEffectDuration, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))

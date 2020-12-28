@@ -36,7 +36,7 @@ class InsulinMathTests: XCTestCase {
     
     private let model = WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
     
-    private let modelCategory: InsulinModelCategory = .rapidActing
+    private let modelCategory: InsulinType = .rapidActing
     
     private let modelInfo = InsulinModelInformation(
         defaultInsulinModel: WalshInsulinModel(actionDuration: TimeInterval(hours: 4)),
@@ -130,7 +130,7 @@ class InsulinMathTests: XCTestCase {
                 deliveredUnits: $0["delivered"] as? Double,
                 description: $0["description"] as? String,
                 syncIdentifier: $0["raw"] as? String,
-                insulinModelCategory: categoryFor(insulinModel: insulinModel ?? model)
+                insulinType: typeFor(insulinModel: insulinModel ?? model)
             )
 
             if let scheduled = $0["scheduled"] as? Double {
@@ -169,7 +169,7 @@ class InsulinMathTests: XCTestCase {
         return BasalRateSchedule(dailyItems: items, timeZone: fixtureTimeZone)!
     }
     
-    private func categoryFor(insulinModel: InsulinModel) -> InsulinModelCategory? {
+    private func typeFor(insulinModel: InsulinModel) -> InsulinType? {
         if let exponential = insulinModel as? ExponentialInsulinModelPreset, case .fiasp = exponential {
             return .fiasp
         }
@@ -389,10 +389,10 @@ class InsulinMathTests: XCTestCase {
 
         let dosesWithModel = [
             DoseEntry(type: .basal, startDate: f("2018-05-15 14:42:36 +0000"), endDate: f("2018-05-16 14:42:36 +0000"), value: 0.84999999999999998, unit: .unitsPerHour, syncIdentifier: "7b02646a070f120e2200", scheduledBasalRate: nil),
-            DoseEntry(type: .bolus, startDate: f("2018-05-15 14:44:46 +0000"), endDate: f("2018-05-15 14:44:46 +0000"), value: 0.9, unit: .units, syncIdentifier: "01004a004a006d006e22354312", scheduledBasalRate: nil, insulinModelCategory: .fiasp),
+            DoseEntry(type: .bolus, startDate: f("2018-05-15 14:44:46 +0000"), endDate: f("2018-05-15 14:44:46 +0000"), value: 0.9, unit: .units, syncIdentifier: "01004a004a006d006e22354312", scheduledBasalRate: nil, insulinType: .fiasp),
             DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:42:36 +0000"), endDate: f("2018-05-15 14:42:36 +0000"), value: 0.0, unit: .unitsPerHour, syncIdentifier: "1600646a074f12", scheduledBasalRate: nil),
             DoseEntry(type: .tempBasal, startDate: f("2018-05-15 14:32:51 +0000"), endDate: f("2018-05-15 15:02:51 +0000"), value: 1.8999999999999999, unit: .unitsPerHour, syncIdentifier: "16017360074f12", scheduledBasalRate: nil),
-            DoseEntry(type: .bolus, startDate: f("2018-05-15 14:52:51 +0000"), endDate: f("2018-05-15 15:52:51 +0000"), value: 0.9, unit: .units, syncIdentifier: "01004a004a006d006e22354312", scheduledBasalRate: nil, insulinModelCategory: .rapidActing),
+            DoseEntry(type: .bolus, startDate: f("2018-05-15 14:52:51 +0000"), endDate: f("2018-05-15 15:52:51 +0000"), value: 0.9, unit: .units, syncIdentifier: "01004a004a006d006e22354312", scheduledBasalRate: nil, insulinType: .rapidActing),
         ]
 
         let mixedModelInfo = InsulinModelInformation(defaultInsulinModel: exponentialModel, rapidActingModel: child)

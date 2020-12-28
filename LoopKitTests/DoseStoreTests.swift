@@ -850,9 +850,9 @@ class DoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
                                       progress: progress))
         XCTAssertEqual(outputStream.string, """
 [
-{"createdAt":"2100-01-02T03:00:00.000Z","date":"2100-01-02T03:08:00.000Z","duration":0,"insulinModelCategory":0,"modificationCounter":1,"mutable":false,"uploaded":false},
-{"createdAt":"2100-01-02T03:00:00.000Z","date":"2100-01-02T03:04:00.000Z","duration":0,"insulinModelCategory":0,"modificationCounter":3,"mutable":false,"uploaded":false},
-{"createdAt":"2100-01-02T03:00:00.000Z","date":"2100-01-02T03:06:00.000Z","duration":0,"insulinModelCategory":0,"modificationCounter":4,"mutable":false,"uploaded":false}
+{"createdAt":"2100-01-02T03:00:00.000Z","date":"2100-01-02T03:08:00.000Z","duration":0,"insulinType":0,"modificationCounter":1,"mutable":false,"uploaded":false},
+{"createdAt":"2100-01-02T03:00:00.000Z","date":"2100-01-02T03:04:00.000Z","duration":0,"insulinType":0,"modificationCounter":3,"mutable":false,"uploaded":false},
+{"createdAt":"2100-01-02T03:00:00.000Z","date":"2100-01-02T03:06:00.000Z","duration":0,"insulinType":0,"modificationCounter":4,"mutable":false,"uploaded":false}
 ]
 """
         )

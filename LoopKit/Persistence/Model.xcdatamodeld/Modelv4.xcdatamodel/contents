@@ -55,7 +55,7 @@
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="hasLoopKitOrigin" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="insulinModelCategory" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="insulinType" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="programmedTempBasalRate" optional="YES" attributeType="Double" usesScalarValueType="NO" elementID="scheduledTempBasalRate"/>
         <attribute name="provenanceIdentifier" attributeType="String"/>
         <attribute name="reason" attributeType="Integer 16" usesScalarValueType="NO"/>
@@ -97,7 +97,7 @@
         <attribute name="deliveredUnits" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="doseType" optional="YES" attributeType="String"/>
         <attribute name="duration" attributeType="Double" minValueString="0" defaultValueString="0.0" usesScalarValueType="NO"/>
-        <attribute name="insulinModelCategory" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
+        <attribute name="insulinType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO"/>
         <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="mutable" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="raw" optional="YES" attributeType="Binary"/>
