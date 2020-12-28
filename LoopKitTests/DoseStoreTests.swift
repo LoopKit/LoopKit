@@ -20,7 +20,8 @@ class DoseStoreTests: PersistenceControllerTestCase {
             healthStore: healthStore,
             cacheStore: cacheStore,
             observationEnabled: false,
-            defaultInsulinModelSetting: InsulinModelSettings(model: WalshInsulinModel(actionDuration: .hours(4))),
+            pumpInsulinModelSetting: InsulinModelSettings(model: WalshInsulinModel(actionDuration: .hours(4))),
+            rapidActingInsulinModelSetting: InsulinModelSettings(model: WalshInsulinModel(actionDuration: .hours(4)))!,
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
             syncVersion: 1,
@@ -98,7 +99,8 @@ class DoseStoreTests: PersistenceControllerTestCase {
             healthStore: healthStore,
             cacheStore: cacheStore,
             observationEnabled: false,
-            defaultInsulinModelSetting: InsulinModelSettings(model: WalshInsulinModel(actionDuration: .hours(4))),
+            pumpInsulinModelSetting: InsulinModelSettings(model: WalshInsulinModel(actionDuration: .hours(4))),
+            rapidActingInsulinModelSetting: InsulinModelSettings(model: WalshInsulinModel(actionDuration: .hours(4)))!,
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
             syncVersion: 1,
@@ -210,7 +212,8 @@ class DoseStoreTests: PersistenceControllerTestCase {
             healthStore: healthStore,
             cacheStore: cacheStore,
             observationEnabled: false,
-            defaultInsulinModelSetting: InsulinModelSettings(model: WalshInsulinModel(actionDuration: .hours(4))),
+            pumpInsulinModelSetting: InsulinModelSettings(model: WalshInsulinModel(actionDuration: .hours(4))),
+            rapidActingInsulinModelSetting: InsulinModelSettings(model: WalshInsulinModel(actionDuration: .hours(4)))!,
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
             syncVersion: 1,
@@ -403,7 +406,8 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         doseStore = DoseStore(healthStore: HKHealthStoreMock(),
                               cacheStore: cacheStore,
                               observationEnabled: false,
-                              defaultInsulinModelSetting: InsulinModelSettings(model: insulinModel),
+                              pumpInsulinModelSetting: InsulinModelSettings(model: insulinModel),
+                              rapidActingInsulinModelSetting: InsulinModelSettings(model: insulinModel),
                               basalProfile: basalProfile,
                               insulinSensitivitySchedule: insulinSensitivitySchedule,
                               provenanceIdentifier: Bundle.main.bundleIdentifier!)
@@ -802,7 +806,8 @@ class DoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
         doseStore = DoseStore(healthStore: HKHealthStoreMock(),
                               cacheStore: cacheStore,
                               observationEnabled: false,
-                              defaultInsulinModelSetting: InsulinModelSettings(model: insulinModel),
+                              pumpInsulinModelSetting: InsulinModelSettings(model: insulinModel),
+                              rapidActingInsulinModelSetting: InsulinModelSettings(model: insulinModel),
                               basalProfile: basalProfile,
                               insulinSensitivitySchedule: insulinSensitivitySchedule,
                               provenanceIdentifier: Bundle.main.bundleIdentifier!)
@@ -845,9 +850,9 @@ class DoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
                                       progress: progress))
         XCTAssertEqual(outputStream.string, """
 [
-{"createdAt":"2100-01-02T03:00:00.000Z","date":"2100-01-02T03:08:00.000Z","duration":0,"modificationCounter":1,"mutable":false,"uploaded":false},
-{"createdAt":"2100-01-02T03:00:00.000Z","date":"2100-01-02T03:04:00.000Z","duration":0,"modificationCounter":3,"mutable":false,"uploaded":false},
-{"createdAt":"2100-01-02T03:00:00.000Z","date":"2100-01-02T03:06:00.000Z","duration":0,"modificationCounter":4,"mutable":false,"uploaded":false}
+{"createdAt":"2100-01-02T03:00:00.000Z","date":"2100-01-02T03:08:00.000Z","duration":0,"insulinModelCategory":0,"modificationCounter":1,"mutable":false,"uploaded":false},
+{"createdAt":"2100-01-02T03:00:00.000Z","date":"2100-01-02T03:04:00.000Z","duration":0,"insulinModelCategory":0,"modificationCounter":3,"mutable":false,"uploaded":false},
+{"createdAt":"2100-01-02T03:00:00.000Z","date":"2100-01-02T03:06:00.000Z","duration":0,"insulinModelCategory":0,"modificationCounter":4,"mutable":false,"uploaded":false}
 ]
 """
         )
@@ -894,7 +899,8 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
             observeHealthKitSamplesFromOtherApps: false,
             cacheStore: cacheStore,
             observationEnabled: false,
-            defaultInsulinModelSetting: InsulinModelSettings(model: exponentialInsulinModel),
+            pumpInsulinModelSetting: InsulinModelSettings(model: exponentialInsulinModel),
+            rapidActingInsulinModelSetting: InsulinModelSettings(model: exponentialInsulinModel),
             basalProfile: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1.0)]),
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             overrideHistory: TemporaryScheduleOverrideHistory(),

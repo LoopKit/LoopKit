@@ -82,33 +82,33 @@ class CachedInsulinDeliveryObject: NSManagedObject {
             primitiveProgrammedTempBasalRate = NSNumber(value: rate)
         }
     }
-    
-    var modelDuration: Double? {
-        get {
-            willAccessValue(forKey: "modelDuration")
-            defer { didAccessValue(forKey: "modelDuration") }
-            return primitiveModelDuration?.doubleValue
-        }
-        set {
-            willChangeValue(forKey: "modelDuration")
-            defer { didChangeValue(forKey: "modelDuration") }
-            primitiveModelDuration = newValue != nil ? NSNumber(value: newValue!) : nil
-        }
-    }
 
-    private var modelType: CachedInsulinModel? {
+    var insulinModelCategory: InsulinModelCategory? {
         get {
-            willAccessValue(forKey: "modelType")
-            defer { didAccessValue(forKey: "modelType") }
-            guard let type = primitiveModelType else {
+            willAccessValue(forKey: "insulinModelCategory")
+            defer { didAccessValue(forKey: "insulinModelCategory") }
+            guard let category = primitiveInsulinModelCategory else {
                 return nil
             }
-            return CachedInsulinModel(rawValue: type.intValue)
+            return InsulinModelCategory(rawValue: category.intValue)
         }
         set {
-            willChangeValue(forKey: "modelType")
-            defer { didChangeValue(forKey: "modelType") }
-            primitiveModelType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
+            willChangeValue(forKey: "insulinModelCategory")
+            defer { didChangeValue(forKey: "insulinModelCategory") }
+            primitiveInsulinModelCategory = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
+        }
+    }
+    
+    var automaticallyIssued: Bool? {
+        get {
+            willAccessValue(forKey: "automaticallyIssued")
+            defer { didAccessValue(forKey: "automaticallyIssued") }
+            return primativeAutomaticallyIssued?.boolValue
+        }
+        set {
+            willChangeValue(forKey: "automaticallyIssued")
+            defer { didChangeValue(forKey: "automaticallyIssued") }
+            primativeAutomaticallyIssued = newValue as NSNumber?
         }
     }
 }
@@ -116,44 +116,6 @@ class CachedInsulinDeliveryObject: NSManagedObject {
 // MARK: - Helpers
 
 extension CachedInsulinDeliveryObject {
-    var insulinModelSetting: InsulinModelSettings? {
-        get {
-            switch modelType {
-            case .exponentialAdult:
-                return InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)
-            case .exponentialChild:
-                return InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologChild)
-            case .fiasp:
-                return InsulinModelSettings(model: ExponentialInsulinModelPreset.fiasp)
-            case .walsh:
-                guard let duration = modelDuration else {
-                    return nil
-                }
-                return InsulinModelSettings(model: WalshInsulinModel(actionDuration: duration))
-            default:
-                return nil
-            }
-        }
-        set {
-            switch newValue {
-            case .none:
-                modelType = CachedInsulinModel.none
-            case .exponentialPreset(let preset):
-                switch preset {
-                case .humalogNovologAdult:
-                    modelType = .exponentialAdult
-                case .humalogNovologChild:
-                    modelType = .exponentialChild
-                case .fiasp:
-                    modelType = .fiasp
-                }
-            case .walsh(let model):
-                modelType = .walsh
-                modelDuration = model.actionDuration
-            }
-        }
-    }
-    
     var dose: DoseEntry! {
         let type: DoseType
 
@@ -194,17 +156,17 @@ extension CachedInsulinDeliveryObject {
             description: nil,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinModelSetting: insulinModelSetting
+            insulinModelCategory: insulinModelCategory
         )
     }
 }
 
 extension CachedInsulinDeliveryObject {
-    func create(fromNew sample: HKQuantitySample, provenanceIdentifier: String, on date: Date = Date()) {
+    func create(fromNew sample: HKQuantitySample, on date: Date = Date()) {
         precondition(sample.syncIdentifier != nil)
 
         self.uuid = nil
-        self.provenanceIdentifier = provenanceIdentifier
+        self.provenanceIdentifier = sample.loopSpecificProvenanceIdentifier
         self.hasLoopKitOrigin = true
         self.startDate = sample.startDate
         self.endDate = sample.endDate
@@ -212,13 +174,14 @@ extension CachedInsulinDeliveryObject {
         self.value = sample.quantity.doubleValue(for: .internationalUnit())
         self.scheduledBasalRate = sample.scheduledBasalRate
         self.programmedTempBasalRate = sample.programmedTempBasalRate
+        self.insulinModelCategory = sample.insulinModelCategory
         self.reason = sample.insulinDeliveryReason
         self.createdAt = date
     }
 
     func create(fromExisting sample: HKQuantitySample, on date: Date = Date()) {
         self.uuid = sample.uuid
-        self.provenanceIdentifier = sample.provenanceIdentifier
+        self.provenanceIdentifier = sample.loopSpecificProvenanceIdentifier
         self.hasLoopKitOrigin = sample.hasLoopKitOrigin
         self.startDate = sample.startDate
         self.endDate = sample.endDate
@@ -226,6 +189,7 @@ extension CachedInsulinDeliveryObject {
         self.value = sample.quantity.doubleValue(for: .internationalUnit())
         self.scheduledBasalRate = sample.scheduledBasalRate
         self.programmedTempBasalRate = sample.programmedTempBasalRate
+        self.insulinModelCategory = sample.insulinModelCategory
         self.reason = sample.insulinDeliveryReason
         self.createdAt = date
     }

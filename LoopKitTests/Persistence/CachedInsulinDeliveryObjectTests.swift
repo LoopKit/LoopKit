@@ -184,7 +184,8 @@ class CachedInsulinDeliveryObjectOperationsTests: PersistenceControllerTestCase 
             HKMetadataKeyInsulinDeliveryReason: HKInsulinDeliveryReason.basal.rawValue,
             MetadataKeyHasLoopKitOrigin: true,
             MetadataKeyScheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.0),
-            MetadataKeyProgrammedTempBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.5)
+            MetadataKeyProgrammedTempBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.5),
+            MetadataKeyProvenanceIdentifier: Bundle.main.bundleIdentifier!
         ]
         let sample = HKQuantitySample(type: HKQuantityType.quantityType(forIdentifier: .insulinDelivery)!,
                                       quantity: HKQuantity(unit: .internationalUnit(), doubleValue: 0.75),
@@ -193,7 +194,7 @@ class CachedInsulinDeliveryObjectOperationsTests: PersistenceControllerTestCase 
                                       metadata: metadata)
         cacheStore.managedObjectContext.performAndWait {
             let object = CachedInsulinDeliveryObject(context: cacheStore.managedObjectContext)
-            object.create(fromNew: sample, provenanceIdentifier: Bundle.main.bundleIdentifier!, on: dateFormatter.date(from: "2020-01-02T03:34:06Z")!)
+            object.create(fromNew: sample, on: dateFormatter.date(from: "2020-01-02T03:34:06Z")!)
             XCTAssertNil(object.uuid)
             XCTAssertEqual(object.provenanceIdentifier, Bundle.main.bundleIdentifier!)
             XCTAssertEqual(object.hasLoopKitOrigin, true)
