@@ -51,19 +51,19 @@ class PumpEvent: NSManagedObject {
         }
     }
     
-    var insulinModelCategory: InsulinModelCategory? {
+    var insulinType: InsulinType? {
         get {
-            willAccessValue(forKey: "insulinModelCategory")
-            defer { didAccessValue(forKey: "insulinModelCategory") }
-            guard let category = primitiveInsulinModelCategory else {
+            willAccessValue(forKey: "insulinType")
+            defer { didAccessValue(forKey: "insulinType") }
+            guard let type = primitiveInsulinType else {
                 return nil
             }
-            return InsulinModelCategory(rawValue: category.intValue)
+            return InsulinType(rawValue: type.intValue)
         }
         set {
-            willChangeValue(forKey: "insulinModelCategory")
-            defer { didChangeValue(forKey: "insulinModelCategory") }
-            primitiveInsulinModelCategory = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
+            willChangeValue(forKey: "insulinType")
+            defer { didChangeValue(forKey: "insulinType") }
+            primitiveInsulinType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
         }
     }
 
@@ -176,7 +176,7 @@ extension PumpEvent {
                 unit: unit,
                 deliveredUnits: deliveredUnits,
                 syncIdentifier: syncIdentifier,
-                insulinModelCategory: insulinModelCategory
+                insulinType: insulinType
             )
         }
         set {
@@ -190,7 +190,7 @@ extension PumpEvent {
             value = entry.value
             unit = entry.unit
             deliveredUnits = entry.deliveredUnits
-            insulinModelCategory = entry.insulinModelCategory
+            insulinType = entry.insulinType
         }
     }
 

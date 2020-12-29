@@ -114,7 +114,7 @@ extension DoseEntry {
             description: description,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinModelCategory: insulinModelCategory
+            insulinType: insulinType
         )
     }
 }
@@ -285,8 +285,8 @@ extension DoseEntry {
     ///
     /// - Parameter modelSetting: The insulin model preset to annotate the dose with.
     /// - Returns: A dose annotated with the insulin model
-    func annotateDoseWithInsulinModelCategoryIfNeeded(defaultCategory: InsulinModelCategory) -> DoseEntry {
-        guard insulinModelCategory == nil else {
+    func annotateDoseWithInsulinTypeIfNeeded(defaultType: InsulinType) -> DoseEntry {
+        guard insulinType == nil else {
             return self
         }
 
@@ -300,7 +300,7 @@ extension DoseEntry {
             description: description,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinModelCategory: defaultCategory
+            insulinType: defaultType
         )
     }
 }
@@ -348,7 +348,7 @@ extension DoseEntry {
                 return self
             }
         }
-        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinModelCategory: insulinModelCategory)
+        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinType: insulinType)
     }
 }
 
@@ -391,7 +391,7 @@ extension Collection where Element == DoseEntry {
                         unit: suspend.unit,
                         description: suspend.description ?? dose.description,
                         syncIdentifier: suspend.syncIdentifier,
-                        insulinModelCategory: suspend.insulinModelCategory
+                        insulinType: suspend.insulinType
                     ))
 
                     lastSuspend = nil
@@ -408,7 +408,7 @@ extension Collection where Element == DoseEntry {
                                 description: last.description,
                                 // We intentionally use the resume's identifier, as the basal entry has already been entered
                                 syncIdentifier: dose.syncIdentifier,
-                                insulinModelCategory: last.insulinModelCategory
+                                insulinType: last.insulinType
                             )
                         } else {
                             lastBasal = nil
@@ -425,7 +425,7 @@ extension Collection where Element == DoseEntry {
                         unit: last.unit,
                         description: last.description,
                         syncIdentifier: last.syncIdentifier,
-                        insulinModelCategory: last.insulinModelCategory
+                        insulinType: last.insulinType
                     ))
 
                     if last.endDate <= dose.startDate {
@@ -466,12 +466,12 @@ extension Collection where Element == DoseEntry {
     ///
     /// - Parameter defaultCategory: an insulin model category to annotate the doses with (if they do not currently have one)
     /// - Returns: An array of annotated dose entries
-    func annotatedWithInsulinModelCategoryIfNeeded(defaultCategory: InsulinModelCategory) -> [DoseEntry] {
+    func annotatedWithInsulinTypeIfNeeded(defaultType: InsulinType) -> [DoseEntry] {
         var annotatedDoses: [DoseEntry] = []
 
         for dose in self {
             annotatedDoses.append(
-                dose.annotateDoseWithInsulinModelCategoryIfNeeded(defaultCategory: defaultCategory)
+                dose.annotateDoseWithInsulinTypeIfNeeded(defaultType: defaultType)
             )
         }
 
@@ -516,7 +516,7 @@ extension Collection where Element == DoseEntry {
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
-                return value + dose.insulinOnBoard(at: date, model: insulinModelInfo.insulinModel(for: dose.insulinModelCategory), delta: delta)
+                return value + dose.insulinOnBoard(at: date, model: insulinModelInfo.insulinModel(for: dose.insulinType), delta: delta)
             }
 
             values.append(InsulinValue(startDate: date, value: value))
@@ -556,7 +556,7 @@ extension Collection where Element == DoseEntry {
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
-                return value + dose.glucoseEffect(at: date, model: insulinModelInfo.insulinModel(for: dose.insulinModelCategory), insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delta: delta)
+                return value + dose.glucoseEffect(at: date, model: insulinModelInfo.insulinModel(for: dose.insulinType), insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delta: delta)
             }
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))

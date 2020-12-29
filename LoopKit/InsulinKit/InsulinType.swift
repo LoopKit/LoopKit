@@ -1,5 +1,5 @@
 //
-//  InsulinModelCategory.swift
+//  InsulinType.swift
 //  LoopKit
 //
 //  Created by Anna Quinlan on 12/8/20.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum InsulinModelCategory: Int, Codable {
+public enum InsulinType: Int, Codable {
     case none = 0
     case rapidActing
     case fiasp
@@ -25,7 +25,7 @@ public enum InsulinModelCategory: Int, Codable {
     }
 }
 
-// Used to keep track of insulin model information for the purposes of matching an InsulinModelCategory with the appropriate InsulinModel based on settings informaton
+// Used to keep track of insulin model information for the purposes of matching an InsulinType with the appropriate InsulinModel based on settings informaton
 public class InsulinModelInformation {
     let defaultInsulinModel: InsulinModel
     let rapidActingModel: InsulinModel
@@ -35,12 +35,12 @@ public class InsulinModelInformation {
         self.rapidActingModel = rapidActingModel ?? ExponentialInsulinModelPreset.humalogNovologAdult
     }
     
-    func insulinModel(for category: InsulinModelCategory?) -> InsulinModel {
-        guard let category = category else {
+    func insulinModel(for type: InsulinType?) -> InsulinModel {
+        guard let type = type else {
             return defaultInsulinModel
         }
         
-        switch category {
+        switch type {
         case .none:
             return defaultInsulinModel
         case .rapidActing:
@@ -52,7 +52,7 @@ public class InsulinModelInformation {
 }
 
 extension InsulinModelSettings {
-    var insulinModelCategory: InsulinModelCategory {
+    var insulinType: InsulinType {
         switch self {
         case .exponentialPreset(let model):
             switch model {

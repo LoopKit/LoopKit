@@ -18,7 +18,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     public let unit: DoseUnit
     public let deliveredUnits: Double?
     public let description: String?
-    public let insulinModelCategory: InsulinModelCategory?
+    public let insulinType: InsulinType?
     internal(set) public var syncIdentifier: String?
 
     /// The scheduled basal rate during this dose entry
@@ -33,7 +33,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     }
 
     // If the insulin model field is nil, it's assumed that the model is the type of insulin the pump dispenses
-    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinModelCategory: InsulinModelCategory? = nil) {
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinType: InsulinType? = nil) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
@@ -43,7 +43,7 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.description = description
         self.syncIdentifier = syncIdentifier
         self.scheduledBasalRate = scheduledBasalRate
-        self.insulinModelCategory = insulinModelCategory
+        self.insulinType = insulinType
     }
 }
 
@@ -154,7 +154,7 @@ extension DoseEntry: Codable {
         self.deliveredUnits = try container.decodeIfPresent(Double.self, forKey: .deliveredUnits)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.syncIdentifier = try container.decodeIfPresent(String.self, forKey: .syncIdentifier)
-        self.insulinModelCategory = try container.decodeIfPresent(InsulinModelCategory.self, forKey: .insulinModelCategory)
+        self.insulinType = try container.decodeIfPresent(InsulinType.self, forKey: .insulinType)
         if let scheduledBasalRate = try container.decodeIfPresent(Double.self, forKey: .scheduledBasalRate),
             let scheduledBasalRateUnit = try container.decodeIfPresent(String.self, forKey: .scheduledBasalRateUnit) {
             self.scheduledBasalRate = HKQuantity(unit: HKUnit(from: scheduledBasalRateUnit), doubleValue: scheduledBasalRate)
@@ -171,7 +171,7 @@ extension DoseEntry: Codable {
         try container.encodeIfPresent(deliveredUnits, forKey: .deliveredUnits)
         try container.encodeIfPresent(description, forKey: .description)
         try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
-        try container.encodeIfPresent(insulinModelCategory, forKey: .insulinModelCategory)
+        try container.encodeIfPresent(insulinType, forKey: .insulinType)
         if let scheduledBasalRate = scheduledBasalRate {
             try container.encode(scheduledBasalRate.doubleValue(for: DoseEntry.unitsPerHour), forKey: .scheduledBasalRate)
             try container.encode(DoseEntry.unitsPerHour.unitString, forKey: .scheduledBasalRateUnit)
@@ -189,6 +189,6 @@ extension DoseEntry: Codable {
         case syncIdentifier
         case scheduledBasalRate
         case scheduledBasalRateUnit
-        case insulinModelCategory
+        case insulinType
     }
 }
