@@ -40,7 +40,7 @@ public enum MockPumpManagerError: LocalizedError {
 }
 
 public final class MockPumpManager: TestingPumpManager {
-
+    
     public static let managerIdentifier = "MockPumpManager"
     public static let localizedTitle = "Insulin Pump Simulator"
     
@@ -110,6 +110,10 @@ public final class MockPumpManager: TestingPumpManager {
     
     public var lastReconciliation: Date? {
         return testLastReconciliation ?? Date()
+    }
+    
+    public var insulinType: InsulinType? {
+        return state.insulinType
     }
 
     private func basalDeliveryState(for state: MockPumpManagerState) -> PumpManagerStatus.BasalDeliveryState? {
@@ -307,7 +311,8 @@ public final class MockPumpManager: TestingPumpManager {
             unfinalizedTempBasal: nil,
             finalizedDoses: [],
             progressWarningThresholdPercentValue: 0.75,
-            progressCriticalThresholdPercentValue: 0.9)
+            progressCriticalThresholdPercentValue: 0.9,
+            insulinType: .aspart)
     }
 
     public init?(rawState: RawStateValue) {

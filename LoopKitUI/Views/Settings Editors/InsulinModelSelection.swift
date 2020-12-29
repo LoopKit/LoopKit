@@ -234,19 +234,19 @@ public struct InsulinModelSelection: View {
     }
 
     private var selectedInsulinModelValues: [GlucoseValue] {
-        oneUnitBolusEffectPrediction(using: value.model)
+        oneUnitBolusEffectPrediction(using: value)
     }
 
     private var unselectedInsulinModelValues: [[GlucoseValue]] {
         selectableInsulinModelSettings
             .filter { $0 != value }
-            .map { oneUnitBolusEffectPrediction(using: $0.model) }
+            .map { oneUnitBolusEffectPrediction(using: $0) }
     }
 
-    private func oneUnitBolusEffectPrediction(using model: InsulinModel) -> [GlucoseValue] {
-        let bolus = DoseEntry(type: .bolus, startDate: chartManager.startDate, value: 1, unit: .units)
+    private func oneUnitBolusEffectPrediction(using modelSettings: InsulinModelSettings) -> [GlucoseValue] {
+        let bolus = DoseEntry(type: .bolus, startDate: chartManager.startDate, value: 1, unit: .units, insulinType: .aspart)
         let startingGlucoseSample = HKQuantitySample(type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!, quantity: startingGlucoseQuantity, start: chartManager.startDate, end: chartManager.startDate)
-        let effects = [bolus].glucoseEffects(insulinModelInfo: InsulinModelInformation(defaultInsulinModel: model), longestEffectDuration: model.effectDuration, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = [bolus].glucoseEffects(insulinModelSettings: modelSettings, insulinSensitivity: insulinSensitivitySchedule)
         return LoopMath.predictGlucose(startingAt: startingGlucoseSample, effects: effects)
     }
 

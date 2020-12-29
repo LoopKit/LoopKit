@@ -315,7 +315,7 @@ extension DoseEntry {
     ///   - basalRateSchedule: The schedule of basal rates
     /// - Returns: An array of glucose effects for the duration of the temp basal dose plus the duration of insulin action
     public func tempBasalGlucoseEffects(
-        insulinModel: InsulinModel,
+        insulinModelSettings: InsulinModelSettings,
         insulinSensitivity: InsulinSensitivitySchedule,
         basalRateSchedule: BasalRateSchedule
         ) -> [GlucoseEffect] {
@@ -326,7 +326,7 @@ extension DoseEntry {
         
         let netTempBasalDoses = self.annotated(with: basalRateSchedule)
 
-        return netTempBasalDoses.glucoseEffects(insulinModelInfo: InsulinModelInformation(defaultInsulinModel: insulinModel), longestEffectDuration: insulinModel.effectDuration, insulinSensitivity: insulinSensitivity)
+        return netTempBasalDoses.glucoseEffects(insulinModelSettings: insulinModelSettings, insulinSensitivity: insulinSensitivity)
     }
 
     fileprivate var resolvingDelivery: DoseEntry {
@@ -462,22 +462,6 @@ extension Collection where Element == DoseEntry {
         return annotatedDoses
     }
     
-    /// Annotates a sequence of dose entries with the specified insulin model category, if needed.
-    ///
-    /// - Parameter defaultCategory: an insulin model category to annotate the doses with (if they do not currently have one)
-    /// - Returns: An array of annotated dose entries
-    func annotatedWithInsulinTypeIfNeeded(defaultType: InsulinType) -> [DoseEntry] {
-        var annotatedDoses: [DoseEntry] = []
-
-        for dose in self {
-            annotatedDoses.append(
-                dose.annotateDoseWithInsulinTypeIfNeeded(defaultType: defaultType)
-            )
-        }
-
-        return annotatedDoses
-    }
-
     /**
      Calculates the total insulin delivery for a collection of doses
 
@@ -501,13 +485,12 @@ extension Collection where Element == DoseEntry {
      - returns: A sequence of insulin amount remaining
      */
     func insulinOnBoard(
-        insulinModelInfo: InsulinModelInformation,
-        longestEffectDuration: TimeInterval,
+        insulinModelSettings: InsulinModelSettings,
         from start: Date? = nil,
         to end: Date? = nil,
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [InsulinValue] {
-        guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: longestEffectDuration, delta: delta) else {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: insulinModelSettings.longestEffectDuration, delta: delta) else {
             return []
         }
 
@@ -516,7 +499,7 @@ extension Collection where Element == DoseEntry {
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
-                return value + dose.insulinOnBoard(at: date, model: insulinModelInfo.insulinModel(for: dose.insulinType), delta: delta)
+                return value + dose.insulinOnBoard(at: date, model: insulinModelSettings.model(for: dose.insulinType), delta: delta)
             }
 
             values.append(InsulinValue(startDate: date, value: value))
@@ -537,8 +520,7 @@ extension Collection where Element == DoseEntry {
     ///   - delta: The interval between returned effects
     /// - Returns: An array of glucose effects for the duration of the doses
     public func glucoseEffects(
-        insulinModelInfo: InsulinModelInformation,
-        longestEffectDuration: TimeInterval,
+        insulinModelSettings: InsulinModelSettings,
         insulinSensitivity: InsulinSensitivitySchedule,
         from start: Date? = nil,
         to end: Date? = nil,
@@ -546,7 +528,7 @@ extension Collection where Element == DoseEntry {
     ) -> [GlucoseEffect] {
         guard let (start, end) = LoopMath.simulationDateRangeForSamples(self.filter({ entry in
             entry.netBasalUnits != 0
-        }), from: start, to: end, duration: longestEffectDuration, delta: delta) else {
+        }), from: start, to: end, duration: insulinModelSettings.longestEffectDuration, delta: delta) else {
             return []
         }
 
@@ -556,7 +538,7 @@ extension Collection where Element == DoseEntry {
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
-                return value + dose.glucoseEffect(at: date, model: insulinModelInfo.insulinModel(for: dose.insulinType), insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delta: delta)
+                return value + dose.glucoseEffect(at: date, model: insulinModelSettings.model(for: dose.insulinType), insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delta: delta)
             }
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
@@ -616,7 +598,8 @@ extension Collection where Element == DoseEntry {
                                 endDate: end,
                                 value: scheduled.value,
                                 unit: .unitsPerHour,
-                                syncIdentifier: syncIdentifier
+                                syncIdentifier: syncIdentifier,
+                                insulinType: lastBasal.insulinType
                             ))
                         }
                     }

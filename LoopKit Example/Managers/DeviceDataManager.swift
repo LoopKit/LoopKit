@@ -38,7 +38,6 @@ class DeviceDataManager {
             healthStore: healthStore,
             cacheStore: cacheStore,
             pumpInsulinModelSetting: insulinModelSetting,
-            rapidActingInsulinModelSetting: insulinModelSetting ?? InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult),
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
@@ -80,7 +79,7 @@ class DeviceDataManager {
 
             if let duration = insulinActionDuration {
                 let model = WalshInsulinModel(actionDuration: duration)
-                doseStore.pumpInsulinModelSetting = InsulinModelSettings(model: model)
+                doseStore.insulinModelSettings = InsulinModelSettings(model: model)
             }
         }
     }

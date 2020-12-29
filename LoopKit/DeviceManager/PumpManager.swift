@@ -96,6 +96,9 @@ public protocol PumpManager: DeviceManager {
     /// The most-recent status
     var status: PumpManagerStatus { get }
     
+    /// The type of insulin this pump is delivering, nil if pump is in a state where insulin type is unknown; i.e. between reservoirs, or pod changes
+    var insulinType: InsulinType? { get }
+    
     /// Adds an observer of changes in PumpManagerStatus
     ///
     /// Observers are held by weak reference.

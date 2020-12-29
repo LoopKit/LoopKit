@@ -35,10 +35,9 @@ extension HKQuantitySample {
             HKMetadataKeySyncVersion: syncVersion,
             HKMetadataKeySyncIdentifier: syncIdentifier,
             MetadataKeyHasLoopKitOrigin: true,
-            MetadataKeyInsulinType: InsulinType.none.rawValue,
             MetadataKeyProvenanceIdentifier: provenanceIdentifier
         ]
-
+        
         switch dose.type {
         case .basal, .tempBasal, .suspend:
             // Ignore 0-duration basal entries
@@ -66,7 +65,9 @@ extension HKQuantitySample {
             return nil
         }
         
-        metadata[MetadataKeyInsulinType] = dose.insulinType?.rawValue
+        if let insulinType = dose.insulinType {
+            metadata[MetadataKeyInsulinType] = insulinType.healthKitRepresentation
+        }
 
         self.init(
             type: type,
@@ -107,11 +108,11 @@ extension HKQuantitySample {
     }
     
     var insulinType: InsulinType? {
-        guard let rawType = metadata?[MetadataKeyInsulinType] as? Int else {
+        guard let rawType = metadata?[MetadataKeyInsulinType] as? String else {
             return nil
         }
         
-        return InsulinType(rawValue: rawType)
+        return InsulinType(healthKitRepresentation: rawType)
     }
 
     /// Returns a DoseEntry representation of the sample.
@@ -145,7 +146,7 @@ extension HKQuantitySample {
         let value: Double
         let unit: DoseUnit
         let deliveredUnits: Double?
-
+        
         if let programmedRate = programmedTempBasalRate {
             value = programmedRate.doubleValue(for: .internationalUnitsPerHour)
             unit = .unitsPerHour
@@ -168,5 +169,42 @@ extension HKQuantitySample {
             scheduledBasalRate: scheduledBasalRate,
             insulinType: insulinType
         )
+    }
+}
+
+enum InsulinTypeHealthKitRepresentation: String {
+    case aspart = "Insulin aspart"
+    case lispro = "Insulin lispro"
+    case glulisine = "Insulin gluisine"
+    case fiasp = "Fiasp"
+}
+
+extension InsulinType {
+    var healthKitRepresentation: String {
+        switch self {
+        case .aspart:
+            return InsulinTypeHealthKitRepresentation.aspart.rawValue
+        case .lispro:
+            return InsulinTypeHealthKitRepresentation.lispro.rawValue
+        case .glulisine:
+            return InsulinTypeHealthKitRepresentation.glulisine.rawValue
+        case .fiasp:
+            return InsulinTypeHealthKitRepresentation.fiasp.rawValue
+        }
+    }
+    
+    init?(healthKitRepresentation: String) {
+        switch healthKitRepresentation {
+        case InsulinTypeHealthKitRepresentation.aspart.rawValue:
+            self = .aspart
+        case InsulinTypeHealthKitRepresentation.lispro.rawValue:
+            self = .lispro
+        case InsulinTypeHealthKitRepresentation.glulisine.rawValue:
+            self = .glulisine
+        case InsulinTypeHealthKitRepresentation.fiasp.rawValue:
+            self = .fiasp
+        default:
+            return nil
+        }
     }
 }
