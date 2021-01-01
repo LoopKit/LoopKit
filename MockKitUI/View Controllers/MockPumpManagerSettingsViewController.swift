@@ -360,7 +360,9 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 break
             case .insulinType:
                 let view = InsulinTypeChooserView(initialValue: pumpManager.state.insulinType, supportedInsulinTypes: InsulinType.allCases, mode: .detail) { (newType) in
-                    self.pumpManager.state.insulinType = newType
+                    if let insulinType = newType {
+                        self.pumpManager.state.insulinType = insulinType
+                    }
                 }
                 let vc = DismissibleHostingController(rootView: view) {
                     tableView.reloadRows(at: [indexPath], with: .automatic)

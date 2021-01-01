@@ -19,18 +19,18 @@ public struct InsulinTypeChooserView: View {
     @Environment(\.appName) private var appName
     @Environment(\.dismiss) var dismiss
     
-    @State private var insulinType: InsulinType {
+    @State private var insulinType: InsulinType? {
         didSet {
             didChange(insulinType)
         }
     }
     
-    private var didChange: (InsulinType) -> Void
+    private var didChange: (InsulinType?) -> Void
     
     let supportedInsulinTypes: [InsulinType]
     let mode: InsulinTypeChooserViewMode
     
-    public init(initialValue: InsulinType, supportedInsulinTypes: [InsulinType], mode: InsulinTypeChooserViewMode, didChange: @escaping (InsulinType) -> Void) {
+    public init(initialValue: InsulinType, supportedInsulinTypes: [InsulinType], mode: InsulinTypeChooserViewMode, didChange: @escaping (InsulinType?) -> Void) {
         self.supportedInsulinTypes = supportedInsulinTypes
         self.mode = mode
         self.didChange = didChange
@@ -55,32 +55,20 @@ public struct InsulinTypeChooserView: View {
                     .padding(4)
                     .padding(.top, 4)
 
-                CheckmarkListItem(
-                    title: Text(InsulinType.novolog.title),
-                    description: Text(InsulinType.novolog.description),
-                    isSelected: isSelected(.novolog)
-                )
-                .padding(.vertical, 4)
-
-                CheckmarkListItem(
-                    title: Text(InsulinType.humalog.title),
-                    description: Text(InsulinType.humalog.description),
-                    isSelected: isSelected(.humalog)
-                )
-                .padding(.vertical, 4)
-                
-                CheckmarkListItem(
-                    title: Text(InsulinType.apidra.title),
-                    description: Text(InsulinType.apidra.description),
-                    isSelected: isSelected(.apidra)
-                )
-                .padding(.vertical, 4)
-                
-                if supportedInsulinTypes.contains(.fiasp) {
+                ForEach(supportedInsulinTypes, id: \.self) { insulinType in
                     CheckmarkListItem(
-                        title: Text(InsulinType.fiasp.title),
-                        description: Text(InsulinType.fiasp.description),
-                        isSelected: isSelected(.fiasp)
+                        title: Text(insulinType.title),
+                        description: Text(insulinType.description),
+                        isSelected: Binding(
+                            get: { self.insulinType == insulinType },
+                            set: { isSelected in
+                                if isSelected {
+                                    withAnimation {
+                                        self.insulinType = insulinType
+                                    }
+                                }
+                            }
+                        )
                     )
                     .padding(.vertical, 4)
                 }
