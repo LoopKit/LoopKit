@@ -12,7 +12,12 @@ public enum InsulinModelSettings: Equatable {
     public static let validWalshModelDurationRange = TimeInterval(hours: 2)...TimeInterval(hours: 8)
     
     public var longestEffectDuration: TimeInterval {
-        return .hours(6) + .minutes(10)
+        switch self {
+        case .exponentialPreset(let model):
+            return model.effectDuration
+        case .walsh(let model):
+            return model.effectDuration
+        }
     }
 
     public func model(for type: InsulinType?) -> InsulinModel {

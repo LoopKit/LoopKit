@@ -173,21 +173,21 @@ extension HKQuantitySample {
 }
 
 enum InsulinTypeHealthKitRepresentation: String {
-    case aspart = "Insulin aspart"
-    case lispro = "Insulin lispro"
-    case glulisine = "Insulin gluisine"
+    case novolog = "Novolog"
+    case humalog = "Humalog"
+    case apidra = "Apidra"
     case fiasp = "Fiasp"
 }
 
 extension InsulinType {
     var healthKitRepresentation: String {
         switch self {
-        case .aspart:
-            return InsulinTypeHealthKitRepresentation.aspart.rawValue
-        case .lispro:
-            return InsulinTypeHealthKitRepresentation.lispro.rawValue
-        case .glulisine:
-            return InsulinTypeHealthKitRepresentation.glulisine.rawValue
+        case .novolog:
+            return InsulinTypeHealthKitRepresentation.novolog.rawValue
+        case .humalog:
+            return InsulinTypeHealthKitRepresentation.humalog.rawValue
+        case .apidra:
+            return InsulinTypeHealthKitRepresentation.apidra.rawValue
         case .fiasp:
             return InsulinTypeHealthKitRepresentation.fiasp.rawValue
         }
@@ -195,12 +195,12 @@ extension InsulinType {
     
     init?(healthKitRepresentation: String) {
         switch healthKitRepresentation {
-        case InsulinTypeHealthKitRepresentation.aspart.rawValue:
-            self = .aspart
-        case InsulinTypeHealthKitRepresentation.lispro.rawValue:
-            self = .lispro
-        case InsulinTypeHealthKitRepresentation.glulisine.rawValue:
-            self = .glulisine
+        case InsulinTypeHealthKitRepresentation.novolog.rawValue:
+            self = .novolog
+        case InsulinTypeHealthKitRepresentation.humalog.rawValue:
+            self = .humalog
+        case InsulinTypeHealthKitRepresentation.apidra.rawValue:
+            self = .apidra
         case InsulinTypeHealthKitRepresentation.fiasp.rawValue:
             self = .fiasp
         default:

@@ -312,7 +312,7 @@ public final class MockPumpManager: TestingPumpManager {
             finalizedDoses: [],
             progressWarningThresholdPercentValue: 0.75,
             progressCriticalThresholdPercentValue: 0.9,
-            insulinType: .aspart)
+            insulinType: .novolog)
     }
 
     public init?(rawState: RawStateValue) {
@@ -399,7 +399,7 @@ public final class MockPumpManager: TestingPumpManager {
 
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
         logDeviceComms(.send, message: "Temp Basal \(unitsPerHour) U/hr Duration:\(duration.hours)")
-
+        
         if state.tempBasalEnactmentShouldError || state.pumpBatteryChargeRemaining == 0 {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
             logDeviceComms(.error, message: "Temp Basal failed with error \(error)")
@@ -431,12 +431,12 @@ public final class MockPumpManager: TestingPumpManager {
 
             if duration < .ulpOfOne {
                 // Cancel temp basal
-                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration)
+                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType)
                 storeDoses { (error) in
                     completion(.success(DoseEntry(temp)))
                 }
             } else {
-                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration)
+                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType)
                 state.unfinalizedTempBasal = temp
                 storeDoses { (error) in
                     completion(.success(DoseEntry(temp)))
@@ -488,7 +488,7 @@ public final class MockPumpManager: TestingPumpManager {
             }
             
             
-            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute))
+            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute), insulinType: state.insulinType)
             let dose = DoseEntry(bolus)
             state.unfinalizedBolus = bolus
             
@@ -566,7 +566,7 @@ public final class MockPumpManager: TestingPumpManager {
             completion(error)
         } else {
             let resumeDate = Date()
-            let resume = UnfinalizedDose(resumeStartTime: resumeDate)
+            let resume = UnfinalizedDose(resumeStartTime: resumeDate, insulinType: state.insulinType)
             self.state.finalizedDoses.append(resume)
             self.state.suspendState = .resumed(resumeDate)
             storeDoses { (error) in

@@ -734,6 +734,7 @@ extension DoseStore {
                 object.title = event.title
                 object.type = event.type
                 object.mutable = event.isMutable
+                object.dose = event.dose
             }
 
             // Only change pumpEventQueryAfterDate if we received new finalized records.

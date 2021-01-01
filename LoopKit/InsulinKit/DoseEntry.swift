@@ -28,8 +28,8 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.init(type: .suspend, startDate: suspendDate, value: 0, unit: .units)
     }
 
-    public init(resumeDate: Date) {
-        self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units)
+    public init(resumeDate: Date, insulinType: InsulinType? = nil) {
+        self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units, insulinType: insulinType)
     }
 
     // If the insulin model field is nil, it's assumed that the model is the type of insulin the pump dispenses

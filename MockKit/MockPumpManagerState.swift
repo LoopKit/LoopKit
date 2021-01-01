@@ -237,7 +237,7 @@ extension MockPumpManagerState: RawRepresentable {
         if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue, let insulinType = InsulinType(rawValue: rawInsulinType) {
             self.insulinType = insulinType
         } else {
-            self.insulinType = .aspart
+            self.insulinType = .novolog
         }
     }
 
