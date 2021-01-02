@@ -755,7 +755,7 @@
 		C1A3F5BE24AA6EE200329152 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		C1B9E127256C1E91008E8B84 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5DBB2231E20C008961AB /* Comparable.swift */; };
 		C1DD512B259FD8A600DE27AE /* InsulinTypeChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1742345259CD3ED00399C9D /* InsulinTypeChooser.swift */; };
-		C1DD515B259FE3AB00DE27AE /* InsulinTypeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DD515A259FE3AB00DE27AE /* InsulinTypeSetting.swift */; };
+		C1DD517825A016E700DE27AE /* InsulinTypeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DD515A259FE3AB00DE27AE /* InsulinTypeSetting.swift */; };
 		C1E0EEF624EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E0EEF524EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift */; };
 		C1E4B305242E98E900E70CCB /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B303242E98E900E70CCB /* ProgressView.swift */; };
 		C1E4B306242E98E900E70CCB /* ProgressIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */; };
@@ -1935,6 +1935,7 @@
 				892155162245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.swift */,
 				892155172245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.xib */,
 				C1742345259CD3ED00399C9D /* InsulinTypeChooser.swift */,
+				C1DD515A259FE3AB00DE27AE /* InsulinTypeSetting.swift */,
 				B46B62AC23FF0A87001E69BA /* LabeledDateView.swift */,
 				B46B62A823FF05F8001E69BA /* LabeledNumberInput.swift */,
 				B4A2AAB0240830A30066563F /* LabeledTextField.swift */,
@@ -2041,7 +2042,6 @@
 			children = (
 				439706E822D2E94800C81566 /* BoundSwitchTableViewCell.swift */,
 				C1E0EEF524EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift */,
-				C1DD515A259FE3AB00DE27AE /* InsulinTypeSetting.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3526,6 +3526,7 @@
 				E9077D2724ACD59F0066A88D /* InformationView.swift in Sources */,
 				E94141D024C8F31C0096C326 /* DeliveryLimitsEditor.swift in Sources */,
 				43F89C9F22BDFB10006BB54E /* UIActivityIndicatorView.swift in Sources */,
+				C1DD517825A016E700DE27AE /* InsulinTypeSetting.swift in Sources */,
 				892ADE002446C858007CE08C /* Card.swift in Sources */,
 				89653C8424738D2B00E1BAA5 /* BasalRateScheduleEditor.swift in Sources */,
 				898B4E77246DAE280053C484 /* GlucoseRangePicker.swift in Sources */,
@@ -3891,7 +3892,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				892A5D2E222EF69A008961AB /* MockHUDProvider.swift in Sources */,
-				C1DD515B259FE3AB00DE27AE /* InsulinTypeSetting.swift in Sources */,
 				89D204B721CC7F34001238CC /* MockPumpManagerSetupViewController.swift in Sources */,
 				439706E922D2E94800C81566 /* BoundSwitchTableViewCell.swift in Sources */,
 				89D204B421CC7E74001238CC /* MockCGMManager+UI.swift in Sources */,

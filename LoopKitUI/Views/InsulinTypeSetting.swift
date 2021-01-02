@@ -8,21 +8,21 @@
 
 import SwiftUI
 import LoopKit
-import LoopKitUI
 
-struct InsulinTypeSetting: View {
+public struct InsulinTypeSetting: View {
     
     @State private var insulinType: InsulinType
     private var supportedInsulinTypes: [InsulinType]
     private var didChange: (InsulinType) -> Void
     
-    init(initialValue: InsulinType, supportedInsulinTypes: [InsulinType], didChange: @escaping (InsulinType) -> Void) {
+    
+    public init(initialValue: InsulinType, supportedInsulinTypes: [InsulinType], didChange: @escaping (InsulinType) -> Void) {
         self._insulinType = State(initialValue: initialValue)
         self.supportedInsulinTypes = supportedInsulinTypes
         self.didChange = didChange
     }
     
-    var body: some View {
+    public var body: some View {
         List {
             Section {
                 InsulinTypeChooser(insulinType: insulinTypeBinding, supportedInsulinTypes: supportedInsulinTypes)
