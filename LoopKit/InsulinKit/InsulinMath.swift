@@ -281,15 +281,11 @@ extension DoseEntry {
         return doses
     }
     
-    /// Annotates a dose with an insulin model curve, defaulting to the insulin type that the pump dispenses.
+    /// Annotates a dose with the specified insulin type.
     ///
     /// - Parameter modelSetting: The insulin model preset to annotate the dose with.
     /// - Returns: A dose annotated with the insulin model
-    func annotateDoseWithInsulinTypeIfNeeded(defaultType: InsulinType) -> DoseEntry {
-        guard insulinType == nil else {
-            return self
-        }
-
+    public func annotated(with insulinType: InsulinType) -> DoseEntry {
         return DoseEntry(
             type: type,
             startDate: startDate,
@@ -300,7 +296,7 @@ extension DoseEntry {
             description: description,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinType: defaultType
+            insulinType: insulinType
         )
     }
 }
