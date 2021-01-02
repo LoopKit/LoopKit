@@ -218,6 +218,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 return cell
             case .insulinType:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.prepareForReuse()
                 cell.textLabel?.text = "Insulin Type"
                 cell.detailTextLabel?.text = pumpManager.state.insulinType.brandName
                 cell.accessoryType = .disclosureIndicator
@@ -359,10 +360,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 }
                 break
             case .insulinType:
-                let view = InsulinTypeChooserView(initialValue: pumpManager.state.insulinType, supportedInsulinTypes: InsulinType.allCases, mode: .detail) { (newType) in
-                    if let insulinType = newType {
-                        self.pumpManager.state.insulinType = insulinType
-                    }
+                let view = InsulinTypeSetting(initialValue: pumpManager.state.insulinType, supportedInsulinTypes: InsulinType.allCases) { (newType) in
+                    self.pumpManager.state.insulinType = newType
                 }
                 let vc = DismissibleHostingController(rootView: view) {
                     tableView.reloadRows(at: [indexPath], with: .automatic)
