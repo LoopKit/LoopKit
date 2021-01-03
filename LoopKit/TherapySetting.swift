@@ -38,7 +38,7 @@ public extension TherapySetting {
         case .deliveryLimits:
             return LocalizedString("Delivery Limits", comment: "Title text for delivery limits")
         case .insulinModel:
-            return LocalizedString("Insulin Model", comment: "Title text for insulin model")
+            return LocalizedString("Fast Acting Insulin Model", comment: "Title text for fast acting insulin model")
         case .carbRatio:
             return LocalizedString("Carb Ratios", comment: "Title text for carb ratios")
         case .insulinSensitivity:

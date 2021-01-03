@@ -22,20 +22,33 @@ public struct InsulinTypeChooser: View {
 
     public var body: some View {
         ForEach(supportedInsulinTypes, id: \.self) { insulinType in
-            CheckmarkListItem(
-                title: Text(insulinType.title),
-                description: Text(insulinType.description),
-                isSelected: Binding(
-                    get: { self.insulinType == insulinType },
-                    set: { isSelected in
-                        if isSelected {
-                            withAnimation {
-                                self.insulinType = insulinType
+            HStack {
+                ZStack {
+                    Image(frameworkImage: "vial")
+                        .resizable()
+                        .scaledToFit()
+                    Image(frameworkImage: "vial_fg")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.red)
+                }
+                .frame(height: 80)
+                CheckmarkListItem(
+                    title: Text(insulinType.title),
+                    description: Text(insulinType.description),
+                    isSelected: Binding(
+                        get: { self.insulinType == insulinType },
+                        set: { isSelected in
+                            if isSelected {
+                                withAnimation {
+                                    self.insulinType = insulinType
+                                }
                             }
                         }
-                    }
+                    )
                 )
-            )
+            }
             .padding(.vertical, 4)
         }
     }
@@ -44,5 +57,11 @@ public struct InsulinTypeChooser: View {
 struct InsulinTypeChooser_Previews: PreviewProvider {
     static var previews: some View {
         InsulinTypeChooser(insulinType: .constant(.novolog), supportedInsulinTypes: InsulinType.allCases)
+    }
+}
+
+extension InsulinType {
+    var image: UIImage? {
+        return UIImage(frameworkImage: "vial")?.withTintColor(.red)
     }
 }
