@@ -49,7 +49,7 @@ public enum InsulinType: Int, Codable, CaseIterable {
         case .apidra:
             return LocalizedString("Apidra (insulin glulisine) is a fast-acting insulin made by Sanofi-aventis ", comment: "Description for apidra insulin type")
         case .fiasp:
-            return LocalizedString("Fiasp is a mealtime insulin aspart formulation in which the addition of nicotinamide (vitamin B3) made by Novo Nordisk", comment: "Description for fiasp insulin type")
+            return LocalizedString("Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk", comment: "Description for fiasp insulin type")
         }
     }
 }

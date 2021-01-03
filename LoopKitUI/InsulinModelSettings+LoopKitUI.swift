@@ -31,9 +31,9 @@ public extension InsulinModelSettings {
 public extension ExponentialInsulinModelPreset {
     var title: String {
         switch self {
-        case .humalogNovologAdult:
+        case .rapidActingAdult:
             return LocalizedString("Rapid-Acting – Adults", comment: "Title of insulin model preset - rapid acting adult")
-        case .humalogNovologChild:
+        case .rapidActingChild:
             return LocalizedString("Rapid-Acting – Children", comment: "Title of insulin model preset - rapid acting children")
         case .fiasp:
             return LocalizedString("Fiasp", comment: "Title of insulin model preset - fiasp")
@@ -42,9 +42,9 @@ public extension ExponentialInsulinModelPreset {
 
     var subtitle: String {
         switch self {
-        case .humalogNovologAdult:
+        case .rapidActingAdult:
             return LocalizedString("This model assumes peak insulin activity at 75 minutes.", comment: "Subtitle of Rapid-Acting – Adult preset")
-        case .humalogNovologChild:
+        case .rapidActingChild:
             return LocalizedString("This model assumes peak insulin activity at 65 minutes.", comment: "Subtitle of Rapid-Acting – Children preset")
         case .fiasp:
             return LocalizedString("This model assumes peak insulin activity at 55 minutes.", comment: "Subtitle of Fiasp preset")

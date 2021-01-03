@@ -40,7 +40,7 @@ class InsulinMathTests: XCTestCase {
     
     private let exponentialModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75))
     
-    let insulinModelSettings = InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)!
+    let insulinModelSettings = InsulinModelSettings(model: ExponentialInsulinModelPreset.rapidActingAdult)!
     let walshModelSettings = InsulinModelSettings(model: WalshInsulinModel(actionDuration: TimeInterval(hours: 4)))!
 
     
@@ -377,7 +377,7 @@ class InsulinMathTests: XCTestCase {
             DoseEntry(type: .bolus, startDate: f("2018-05-15 14:52:51 +0000"), endDate: f("2018-05-15 15:52:51 +0000"), value: 0.9, unit: .units, syncIdentifier: "01004a004a006d006e22354312", scheduledBasalRate: nil, insulinType: .novolog),
         ]
 
-        let insulinModelSettings = InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologChild)!
+        let insulinModelSettings = InsulinModelSettings(model: ExponentialInsulinModelPreset.rapidActingChild)!
         let iobWithModel = dosesWithModel.insulinOnBoard(insulinModelSettings: insulinModelSettings)
 
         XCTAssertEqual(iobWithoutModel.count, iobWithModel.count)
