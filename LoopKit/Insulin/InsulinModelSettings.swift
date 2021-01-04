@@ -105,9 +105,9 @@ extension InsulinModelSettings: RawRepresentable {
             }
             
             switch modelRaw {
-            case "humalogNovologAdult":
+            case "rapidActingAdult":
                 self = .exponentialPreset(ExponentialInsulinModelPreset.rapidActingAdult)
-            case "humalogNovologChild":
+            case "rapidActingChild":
                 self = .exponentialPreset(ExponentialInsulinModelPreset.rapidActingChild)
             default:
                 return nil
