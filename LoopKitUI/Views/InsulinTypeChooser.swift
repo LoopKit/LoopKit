@@ -24,16 +24,17 @@ public struct InsulinTypeChooser: View {
         ForEach(supportedInsulinTypes, id: \.self) { insulinType in
             HStack {
                 ZStack {
-                    Image(frameworkImage: "vial")
-                        .resizable()
-                        .scaledToFit()
-                    Image(frameworkImage: "vial_fg")
+                    Image(frameworkImage: "vial_color")
                         .renderingMode(.template)
                         .resizable()
                         .scaledToFit()
-                        .foregroundColor(.red)
+                        .foregroundColor(Color(frameworkColor: insulinType.brandName))
+                    Image(frameworkImage: "vial")
+                        .resizable()
+                        .scaledToFit()
                 }
-                .frame(height: 80)
+                .padding([.trailing])
+                .frame(height: 70)
                 CheckmarkListItem(
                     title: Text(insulinType.title),
                     description: Text(insulinType.description),

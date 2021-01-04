@@ -756,6 +756,7 @@
 		C1B9E127256C1E91008E8B84 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5DBB2231E20C008961AB /* Comparable.swift */; };
 		C1DD512B259FD8A600DE27AE /* InsulinTypeChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1742345259CD3ED00399C9D /* InsulinTypeChooser.swift */; };
 		C1DD517825A016E700DE27AE /* InsulinTypeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DD515A259FE3AB00DE27AE /* InsulinTypeSetting.swift */; };
+		C1DE4C2125A253BD007065F8 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE4C2025A253BD007065F8 /* Color.swift */; };
 		C1E0EEF624EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E0EEF524EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift */; };
 		C1E4B305242E98E900E70CCB /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B303242E98E900E70CCB /* ProgressView.swift */; };
 		C1E4B306242E98E900E70CCB /* ProgressIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */; };
@@ -1558,6 +1559,7 @@
 		C1DB55B41F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_doses_exponential_output.json; sourceTree = "<group>"; };
 		C1DB55B61F2EACD500C483A2 /* iob_from_bolus_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_bolus_exponential_output.json; sourceTree = "<group>"; };
 		C1DD515A259FE3AB00DE27AE /* InsulinTypeSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinTypeSetting.swift; sourceTree = "<group>"; };
+		C1DE4C2025A253BD007065F8 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		C1E0EEF524EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryUncertaintyRecoveryView.swift; sourceTree = "<group>"; };
 		C1E4B303242E98E900E70CCB /* ProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressIndicatorView.swift; sourceTree = "<group>"; };
@@ -2625,6 +2627,7 @@
 				1D97A33B256F11E00042737E /* View+InsetGroupedListStyle.swift */,
 				89CAB36E24C9ECCA009EE3CE /* View+KeyboardAware.swift */,
 				1DC9240E2575EF9A004F132A /* QuantityFormatter+Guardrails.swift */,
+				C1DE4C2025A253BD007065F8 /* Color.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3477,6 +3480,7 @@
 				895FE08022011F0C00FCF18A /* EmojiDataSource.swift in Sources */,
 				432CF86920D76B320066B889 /* SetupButton.swift in Sources */,
 				E9DFB93024E8CA8500468917 /* LegacyInsulinDeliveryTableViewController.swift in Sources */,
+				C1DE4C2125A253BD007065F8 /* Color.swift in Sources */,
 				898E6E702241EDB70019E459 /* PercentageTextFieldTableViewController.swift in Sources */,
 				89CAB36D24C9EC98009EE3CE /* Keyboard.swift in Sources */,
 				1DEF977524C62F8400D630CB /* SupportedInsulinModelSettings.swift in Sources */,
