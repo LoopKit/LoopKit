@@ -754,6 +754,9 @@
 		C1A174ED23DEAD6A0034DF11 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
 		C1A3F5BE24AA6EE200329152 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		C1B9E127256C1E91008E8B84 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5DBB2231E20C008961AB /* Comparable.swift */; };
+		C1DD512B259FD8A600DE27AE /* InsulinTypeChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1742345259CD3ED00399C9D /* InsulinTypeChooser.swift */; };
+		C1DD517825A016E700DE27AE /* InsulinTypeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DD515A259FE3AB00DE27AE /* InsulinTypeSetting.swift */; };
+		C1DE4C2125A253BD007065F8 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE4C2025A253BD007065F8 /* Color.swift */; };
 		C1E0EEF624EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E0EEF524EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift */; };
 		C1E4B305242E98E900E70CCB /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B303242E98E900E70CCB /* ProgressView.swift */; };
 		C1E4B306242E98E900E70CCB /* ProgressIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */; };
@@ -1539,6 +1542,7 @@
 		C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerState.swift; sourceTree = "<group>"; };
 		C16DA83E22E8D88F008624C2 /* LoopPluginBundleKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopPluginBundleKey.swift; sourceTree = "<group>"; };
 		C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopUIPlugin.swift; sourceTree = "<group>"; };
+		C1742345259CD3ED00399C9D /* InsulinTypeChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinTypeChooser.swift; sourceTree = "<group>"; };
 		C17B020825645029004188F1 /* Modelv1v3.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv1v3.xcmappingmodel; sourceTree = "<group>"; };
 		C17F39C023CD24A000FA1113 /* DeviceCommsLog.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DeviceCommsLog.xcdatamodel; sourceTree = "<group>"; };
 		C17F39C623CD256000FA1113 /* PersistentDeviceLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentDeviceLog.swift; sourceTree = "<group>"; };
@@ -1554,6 +1558,8 @@
 		C1DB55B21F2E964400C483A2 /* ExponentialInsulinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModel.swift; sourceTree = "<group>"; };
 		C1DB55B41F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_doses_exponential_output.json; sourceTree = "<group>"; };
 		C1DB55B61F2EACD500C483A2 /* iob_from_bolus_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_bolus_exponential_output.json; sourceTree = "<group>"; };
+		C1DD515A259FE3AB00DE27AE /* InsulinTypeSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinTypeSetting.swift; sourceTree = "<group>"; };
+		C1DE4C2025A253BD007065F8 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		C1E0EEF524EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryUncertaintyRecoveryView.swift; sourceTree = "<group>"; };
 		C1E4B303242E98E900E70CCB /* ProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressIndicatorView.swift; sourceTree = "<group>"; };
@@ -1884,39 +1890,54 @@
 		4369F090208B0D68000E3E45 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				893C9F8A2447DBC100CD4185 /* CardList */,
-				892A5DAD2231E185008961AB /* HUDAssets.xcassets */,
 				B4C004B2241085DB00B40429 /* ActionButton.swift */,
 				89AF78C524482268002B4FCC /* ActionButtonStyle.swift */,
 				C1E4B307242E995200E70CCB /* ActivityIndicator.swift */,
-				E93E866924DD05FA00FF40C8 /* OverrideSelectionHistory.swift */,
+				89BE75CA2464BC2000B145D9 /* AlertContent.swift */,
 				43F5035821059AF7009FA89A /* AuthenticationTableViewCell.swift */,
 				43F5035921059AF7009FA89A /* AuthenticationTableViewCell.xib */,
 				898E6E64224179300019E459 /* BaseHUDView.swift */,
 				898E6E66224179300019E459 /* BatteryLevelHUDView.swift */,
 				898E6E65224179300019E459 /* BatteryLevelHUDView.xib */,
+				893C9F8A2447DBC100CD4185 /* CardList */,
+				E9086B3424B3A8820062F5C8 /* ChartContainerView.swift */,
 				E9086B3024B3A7270062F5C8 /* ChartTableViewCell.swift */,
+				1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */,
 				89627B172441168900BEB424 /* ConfigurationPage.swift */,
 				8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */,
 				43D8FE591C7291D80073BE78 /* DatePickerTableViewCell.swift */,
 				895FE07922011F0B00FCF18A /* DecimalTextFieldTableViewCell.xib */,
+				89904031245B5CA500F1C0A2 /* Deletable.swift */,
 				B46B62B023FF0CA6001E69BA /* DescriptiveText.swift */,
+				89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */,
 				895FE07B22011F0C00FCF18A /* DoubleRangeTableViewCell.swift */,
 				895FE07222011F0B00FCF18A /* DoubleRangeTableViewCell.xib */,
+				89186C0A24BFD6DB0003D0F3 /* DurationPicker.swift */,
 				895FE07322011F0B00FCF18A /* EmojiDataSource.swift */,
 				895FE07A22011F0C00FCF18A /* EmojiInputCell.swift */,
 				895FE07E22011F0C00FCF18A /* EmojiInputHeaderView.swift */,
+				E9F54FC52581C50C0034795E /* ExpandableDatePicker.swift */,
+				E9DFB92B24E634E800468917 /* ExpandablePicker.swift */,
+				899012C0246F1D8F007B88BA /* ExpandableSetting.swift */,
+				89653C7F2473527100E1BAA5 /* FractionalQuantityPicker.swift */,
 				43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */,
 				43177D071D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib */,
+				898B4E76246DAE280053C484 /* GlucoseRangePicker.swift */,
 				43D8FE071C7290530073BE78 /* GlucoseRangeTableViewCell.swift */,
 				43D8FE081C7290530073BE78 /* GlucoseRangeTableViewCell.xib */,
 				89F6E313244A1AB600CB9E15 /* GlucoseValuePicker.swift */,
+				898B4E7D246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift */,
+				89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */,
 				89F6E312244A1AB500CB9E15 /* GuardrailWarning.swift */,
 				B4C004B4241085DC00B40429 /* GuideNavigationButton.swift */,
 				B4C004B3241085DB00B40429 /* GuidePage.swift */,
+				892A5DAD2231E185008961AB /* HUDAssets.xcassets */,
+				E9077D2824ACD5AA0066A88D /* Information Screens */,
 				B46B62A623FEFE4D001E69BA /* InstructionList.swift */,
 				892155162245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.swift */,
 				892155172245FBEF009112BC /* InsulinSensitivityScalingTableViewCell.xib */,
+				C1742345259CD3ED00399C9D /* InsulinTypeChooser.swift */,
+				C1DD515A259FE3AB00DE27AE /* InsulinTypeSetting.swift */,
 				B46B62AC23FF0A87001E69BA /* LabeledDateView.swift */,
 				B46B62A823FF05F8001E69BA /* LabeledNumberInput.swift */,
 				B4A2AAB0240830A30066563F /* LabeledTextField.swift */,
@@ -1926,26 +1947,38 @@
 				892A5DB02231E191008961AB /* LevelHUDView.swift */,
 				892A5DB12231E191008961AB /* LevelMaskView.swift */,
 				892A5DAF2231E191008961AB /* LoadingTableViewCell.swift */,
+				89BE75C024649C2E00B145D9 /* ModalHeaderButtonBar.swift */,
 				B4A2AAB2240832350066563F /* MultipleSelectionList.swift */,
+				89BE75C424649C8100B145D9 /* NewScheduleItemEditor.swift */,
+				E93E866324DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift */,
 				895FE07422011F0B00FCF18A /* OverridePresetCollectionViewCell.swift */,
 				895FE07622011F0B00FCF18A /* OverrideSelectionFooterView.swift */,
 				895FE07C22011F0C00FCF18A /* OverrideSelectionHeaderView.swift */,
+				E93E866924DD05FA00FF40C8 /* OverrideSelectionHistory.swift */,
+				E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */,
 				4369F08E208859E6000E3E45 /* PaddedTextField.swift */,
 				C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */,
 				C1E4B303242E98E900E70CCB /* ProgressView.swift */,
 				89AC9DCA24529927004A6B8A /* QuantityPicker.swift */,
+				89FC688B245A2D670075CF59 /* QuantityScheduleEditor.swift */,
 				43D8FE0A1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.swift */,
 				43D8FE0B1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib */,
 				892A5DB62231E19F008961AB /* ReservoirVolumeHUDView.swift */,
 				892A5DB52231E19F008961AB /* ReservoirVolumeHUDView.xib */,
+				89BE75C224649C4C00B145D9 /* RoundedCorners.swift */,
+				89FC688D245A2D680075CF59 /* ScheduleEditor.swift */,
+				89FC688C245A2D680075CF59 /* ScheduleItemPicker.swift */,
+				89FC688E245A2D680075CF59 /* ScheduleItemView.swift */,
 				B46B62AE23FF0BF6001E69BA /* SectionHeader.swift */,
 				89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */,
+				E99A132D2557548300D3F5B3 /* SegmentedGaugeBar.swift */,
 				892155142245C57E009112BC /* SegmentedGaugeBarLayer.swift */,
 				892155122245C516009112BC /* SegmentedGaugeBarView.swift */,
 				B46B62B223FF0E62001E69BA /* SelectableLabel.swift */,
 				892A5D63222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.swift */,
 				892A5D62222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.xib */,
 				89F6E310244A1AAB00CB9E15 /* SettingDescription.swift */,
+				E916F56724AD31F900BE3547 /* Settings Editors */,
 				432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */,
 				432CF86820D76B320066B889 /* SetupButton.swift */,
 				432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */,
@@ -1959,31 +1992,6 @@
 				89AC9DCC24529D9B004A6B8A /* TimePicker.swift */,
 				43F5034E210599DF009FA89A /* ValidatingIndicatorView.swift */,
 				89CAB37024CB4DEC009EE3CE /* WarningView.swift */,
-				89B0B2A92453C0AB0063D4A7 /* GuardrailConstraintedQuantityView.swift */,
-				898B4E7D246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift */,
-				89FC688B245A2D670075CF59 /* QuantityScheduleEditor.swift */,
-				89FC688D245A2D680075CF59 /* ScheduleEditor.swift */,
-				89BE75C024649C2E00B145D9 /* ModalHeaderButtonBar.swift */,
-				89FC688C245A2D680075CF59 /* ScheduleItemPicker.swift */,
-				898B4E76246DAE280053C484 /* GlucoseRangePicker.swift */,
-				89FC688E245A2D680075CF59 /* ScheduleItemView.swift */,
-				89BE75C224649C4C00B145D9 /* RoundedCorners.swift */,
-				89BE75C424649C8100B145D9 /* NewScheduleItemEditor.swift */,
-				89BE75CA2464BC2000B145D9 /* AlertContent.swift */,
-				89904031245B5CA500F1C0A2 /* Deletable.swift */,
-				899012C0246F1D8F007B88BA /* ExpandableSetting.swift */,
-				89653C7F2473527100E1BAA5 /* FractionalQuantityPicker.swift */,
-				E916F56724AD31F900BE3547 /* Settings Editors */,
-				E9077D2824ACD5AA0066A88D /* Information Screens */,
-				1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */,
-				89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */,
-				E9086B3424B3A8820062F5C8 /* ChartContainerView.swift */,
-				89186C0A24BFD6DB0003D0F3 /* DurationPicker.swift */,
-				E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */,
-				E93E866324DCFB6D00FF40C8 /* OverrideHistoryCollectionViewCell.swift */,
-				E99A132D2557548300D3F5B3 /* SegmentedGaugeBar.swift */,
-				E9DFB92B24E634E800468917 /* ExpandablePicker.swift */,
-				E9F54FC52581C50C0034795E /* ExpandableDatePicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2619,6 +2627,7 @@
 				1D97A33B256F11E00042737E /* View+InsetGroupedListStyle.swift */,
 				89CAB36E24C9ECCA009EE3CE /* View+KeyboardAware.swift */,
 				1DC9240E2575EF9A004F132A /* QuantityFormatter+Guardrails.swift */,
+				C1DE4C2025A253BD007065F8 /* Color.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3442,6 +3451,7 @@
 				B429D66E24BF7255003E1B4A /* UIImage.swift in Sources */,
 				B46B62A923FF05F8001E69BA /* LabeledNumberInput.swift in Sources */,
 				892155152245C57E009112BC /* SegmentedGaugeBarLayer.swift in Sources */,
+				C1DD512B259FD8A600DE27AE /* InsulinTypeChooser.swift in Sources */,
 				E9086B2D24B3A4AC0062F5C8 /* ChartsManager.swift in Sources */,
 				E9086B4824B5405E0062F5C8 /* ChartAxisValueDoubleUnit.swift in Sources */,
 				B429D66C24BF7204003E1B4A /* GlucoseTrend.swift in Sources */,
@@ -3470,6 +3480,7 @@
 				895FE08022011F0C00FCF18A /* EmojiDataSource.swift in Sources */,
 				432CF86920D76B320066B889 /* SetupButton.swift in Sources */,
 				E9DFB93024E8CA8500468917 /* LegacyInsulinDeliveryTableViewController.swift in Sources */,
+				C1DE4C2125A253BD007065F8 /* Color.swift in Sources */,
 				898E6E702241EDB70019E459 /* PercentageTextFieldTableViewController.swift in Sources */,
 				89CAB36D24C9EC98009EE3CE /* Keyboard.swift in Sources */,
 				1DEF977524C62F8400D630CB /* SupportedInsulinModelSettings.swift in Sources */,
@@ -3519,6 +3530,7 @@
 				E9077D2724ACD59F0066A88D /* InformationView.swift in Sources */,
 				E94141D024C8F31C0096C326 /* DeliveryLimitsEditor.swift in Sources */,
 				43F89C9F22BDFB10006BB54E /* UIActivityIndicatorView.swift in Sources */,
+				C1DD517825A016E700DE27AE /* InsulinTypeSetting.swift in Sources */,
 				892ADE002446C858007CE08C /* Card.swift in Sources */,
 				89653C8424738D2B00E1BAA5 /* BasalRateScheduleEditor.swift in Sources */,
 				898B4E77246DAE280053C484 /* GlucoseRangePicker.swift in Sources */,

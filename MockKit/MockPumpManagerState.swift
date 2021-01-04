@@ -160,6 +160,8 @@ public struct MockPumpManagerState {
     public var progressWarningThresholdPercentValue: Double?
     public var progressCriticalThresholdPercentValue: Double?
     
+    public var insulinType: InsulinType
+    
     public var dosesToStore: [UnfinalizedDose] {
         return finalizedDoses + [unfinalizedTempBasal, unfinalizedBolus].compactMap {$0}
     }
@@ -231,6 +233,12 @@ extension MockPumpManagerState: RawRepresentable {
         } else {
             self.suspendState = .resumed(Date())
         }
+        
+        if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue, let insulinType = InsulinType(rawValue: rawInsulinType) {
+            self.insulinType = insulinType
+        } else {
+            self.insulinType = .novolog
+        }
     }
 
     public var rawValue: RawValue {
@@ -240,6 +248,7 @@ extension MockPumpManagerState: RawRepresentable {
             "supportedBolusVolumes": supportedBolusVolumes,
             "supportedBasalRates": supportedBasalRates,
             "reservoirUnitsRemaining": reservoirUnitsRemaining,
+            "insulinType": insulinType.rawValue
         ]
 
         raw["basalRateSchedule"] = basalRateSchedule?.rawValue

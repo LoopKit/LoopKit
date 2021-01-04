@@ -42,7 +42,7 @@ public struct InsulinModelInformationView: View {
     
     private var modelPeakInfo: some View {
         VStack (alignment: .leading, spacing: 20) {
-            Text(LocalizedString("You can choose how \(appName) measures the insulin's peak activity according to one of these two insulin models.", comment: "Information about insulin model"))
+            Text(LocalizedString("You can choose how \(appName) measures rapid acting insulin's peak activity according to one of these two insulin models.", comment: "Information about insulin model"))
             HStack(spacing: 10) {
                 bulletCircle
                 Text(LocalizedString("The rapid-acting adult model assumes peak activity at 75 minutes.", comment: "Information about adult insulin model"))

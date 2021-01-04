@@ -8,61 +8,48 @@
 
 import Foundation
 
-public enum InsulinType: Int, Codable {
-    case none = 0
-    case rapidActing
+public enum InsulinType: Int, Codable, CaseIterable {
+    case novolog
+    case humalog
+    case apidra
     case fiasp
     
     public var title: String {
         switch self {
-        case .none:
-            return LocalizedString("No Associated Model", comment: "No insulin model")
-        case .rapidActing:
-            return LocalizedString("Rapid Acting", comment: "Rapid acting insulin model")
+        case .novolog:
+            return LocalizedString("Novolog (insulin aspart)", comment: "Title for Novolog insulin type")
+        case .humalog:
+            return LocalizedString("Humalog (insulin lispro)", comment: "Title for Humalog insulin type")
+        case .apidra:
+            return LocalizedString("Apidra (insulin glulisine)", comment: "Title for Apidra insulin type")
         case .fiasp:
-            return LocalizedString("Fiasp", comment: "Fiasp insulin model")
+            return LocalizedString("Fiasp", comment: "Title for Fiasp insulin type")
         }
-    }
-}
-
-// Used to keep track of insulin model information for the purposes of matching an InsulinType with the appropriate InsulinModel based on settings informaton
-public class InsulinModelInformation {
-    let defaultInsulinModel: InsulinModel
-    let rapidActingModel: InsulinModel
-    
-    public init (defaultInsulinModel: InsulinModel, rapidActingModel: InsulinModel? = nil) {
-        self.defaultInsulinModel = defaultInsulinModel
-        self.rapidActingModel = rapidActingModel ?? ExponentialInsulinModelPreset.humalogNovologAdult
     }
     
-    func insulinModel(for type: InsulinType?) -> InsulinModel {
-        guard let type = type else {
-            return defaultInsulinModel
-        }
-        
-        switch type {
-        case .none:
-            return defaultInsulinModel
-        case .rapidActing:
-            return rapidActingModel
-        case .fiasp:
-            return ExponentialInsulinModelPreset.fiasp
-        }
-    }
-}
-
-extension InsulinModelSettings {
-    var insulinType: InsulinType {
+    public var brandName: String {
         switch self {
-        case .exponentialPreset(let model):
-            switch model {
-            case .fiasp:
-                return .fiasp
-            default:
-                return .rapidActing
-            }
-        case .walsh:
-            return .rapidActing
+        case .novolog:
+            return LocalizedString("Novolog", comment: "Brand name for novolog insulin type")
+        case .humalog:
+            return LocalizedString("Humalog", comment: "Brand name for humalog insulin type")
+        case .apidra:
+            return LocalizedString("Apidra", comment: "Brand name for apidra insulin type")
+        case .fiasp:
+            return LocalizedString("Fiasp", comment: "Brand name for fiasp insulin type")
+        }
+    }
+    
+    public var description: String {
+        switch self {
+        case .novolog:
+            return LocalizedString("NovoLog (insulin aspart) is a fast-acting insulin made by Novo Nordisk", comment: "Description for novolog insulin type")
+        case .humalog:
+            return LocalizedString("Humalog (insulin lispro) is a fast-acting insulin made by Eli Lilly", comment: "Description for humalog insulin type")
+        case .apidra:
+            return LocalizedString("Apidra (insulin glulisine) is a fast-acting insulin made by Sanofi-aventis ", comment: "Description for apidra insulin type")
+        case .fiasp:
+            return LocalizedString("Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk", comment: "Description for fiasp insulin type")
         }
     }
 }
