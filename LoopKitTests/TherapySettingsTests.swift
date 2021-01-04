@@ -239,7 +239,7 @@ class TherapySettingsTests: XCTestCase {
         }
       },
       "insulinModelSettings" : {
-        "exponential" : "humalogNovologAdult"
+        "exponential" : "rapidActingAdult"
       },
       "insulinSensitivitySchedule" : {
         "unit" : "mg/dL",
