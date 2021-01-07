@@ -168,7 +168,7 @@ public extension HKUnit {
         case .internationalUnit(), .internationalUnitsPerHour:
             return 3
         case HKUnit.gram().unitDivided(by: .internationalUnit()):
-            return 2
+            return 1
         default:
             return preferredFractionDigits
         }
