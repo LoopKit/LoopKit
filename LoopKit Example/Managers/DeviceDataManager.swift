@@ -27,16 +27,17 @@ class DeviceDataManager {
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
         )
-        let insulinModel: WalshInsulinModel?
+        let insulinModelSetting: InsulinModelSettings?
         if let actionDuration = insulinActionDuration {
-            insulinModel = WalshInsulinModel(actionDuration: actionDuration)
+            let insulinModel = WalshInsulinModel(actionDuration: actionDuration)
+            insulinModelSetting = InsulinModelSettings(model: insulinModel)
         } else {
-            insulinModel = nil
+            insulinModelSetting = nil
         }
         doseStore = DoseStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
-            insulinModel: insulinModel,
+            pumpInsulinModelSetting: insulinModelSetting,
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
@@ -77,7 +78,8 @@ class DeviceDataManager {
             UserDefaults.standard.insulinActionDuration = insulinActionDuration
 
             if let duration = insulinActionDuration {
-                doseStore.insulinModel = WalshInsulinModel(actionDuration: duration)
+                let model = WalshInsulinModel(actionDuration: duration)
+                doseStore.insulinModelSettings = InsulinModelSettings(model: model)
             }
         }
     }

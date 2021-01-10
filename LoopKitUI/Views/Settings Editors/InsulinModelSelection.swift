@@ -85,7 +85,7 @@ public struct InsulinModelSelection: View {
            didSave: (() -> Void)? = nil
     ) {
         self.init(
-            value: viewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.humalogNovologAdult),
+            value: viewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.rapidActingAdult),
             insulinSensitivitySchedule: viewModel.therapySettings.insulinSensitivitySchedule,
             glucoseUnit: viewModel.therapySettings.insulinSensitivitySchedule?.unit ?? viewModel.preferredGlucoseUnit,
             supportedModelSettings: viewModel.supportedInsulinModelSettings,
@@ -164,17 +164,17 @@ public struct InsulinModelSelection: View {
                     .frame(height: 170)
 
                     CheckmarkListItem(
-                        title: Text(InsulinModelSettings.exponentialPreset(.humalogNovologAdult).title),
-                        description: Text(InsulinModelSettings.exponentialPreset(.humalogNovologAdult).subtitle),
-                        isSelected: isSelected(.exponentialPreset(.humalogNovologAdult))
+                        title: Text(InsulinModelSettings.exponentialPreset(.rapidActingAdult).title),
+                        description: Text(InsulinModelSettings.exponentialPreset(.rapidActingAdult).subtitle),
+                        isSelected: isSelected(.exponentialPreset(.rapidActingAdult))
                     )
                     .padding(.vertical, 4)
                 }
 
                 CheckmarkListItem(
-                    title: Text(InsulinModelSettings.exponentialPreset(.humalogNovologChild).title),
-                    description: Text(InsulinModelSettings.exponentialPreset(.humalogNovologChild).subtitle),
-                    isSelected: isSelected(.exponentialPreset(.humalogNovologChild))
+                    title: Text(InsulinModelSettings.exponentialPreset(.rapidActingChild).title),
+                    description: Text(InsulinModelSettings.exponentialPreset(.rapidActingChild).subtitle),
+                    isSelected: isSelected(.exponentialPreset(.rapidActingChild))
                 )
                 .padding(.vertical, 4)
                 .padding(.bottom, supportedModelSettings.fiaspModelEnabled ? 0 : 4)
@@ -209,7 +209,7 @@ public struct InsulinModelSelection: View {
         let spellOutFormatter = NumberFormatter()
         spellOutFormatter.numberStyle = .spellOut
         let modelCountString = spellOutFormatter.string(from: selectableInsulinModelSettings.count as NSNumber)!
-        return Text(String(format: LocalizedString("%1$@ assumes insulin is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity.", comment: "Insulin model setting description (1: app name) (2: number of models)"), appName, modelCountString))
+        return Text(String(format: LocalizedString("For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity.", comment: "Insulin model setting description (1: app name) (2: number of models)"), appName, modelCountString))
     }
 
     var insulinModelChart: InsulinModelChart {
@@ -218,8 +218,8 @@ public struct InsulinModelSelection: View {
 
     var selectableInsulinModelSettings: [InsulinModelSettings] {
         var options: [InsulinModelSettings] =  [
-            .exponentialPreset(.humalogNovologAdult),
-            .exponentialPreset(.humalogNovologChild)
+            .exponentialPreset(.rapidActingAdult),
+            .exponentialPreset(.rapidActingChild)
         ]
 
         if supportedModelSettings.fiaspModelEnabled {
@@ -234,19 +234,19 @@ public struct InsulinModelSelection: View {
     }
 
     private var selectedInsulinModelValues: [GlucoseValue] {
-        oneUnitBolusEffectPrediction(using: value.model)
+        oneUnitBolusEffectPrediction(using: value)
     }
 
     private var unselectedInsulinModelValues: [[GlucoseValue]] {
         selectableInsulinModelSettings
             .filter { $0 != value }
-            .map { oneUnitBolusEffectPrediction(using: $0.model) }
+            .map { oneUnitBolusEffectPrediction(using: $0) }
     }
 
-    private func oneUnitBolusEffectPrediction(using model: InsulinModel) -> [GlucoseValue] {
-        let bolus = DoseEntry(type: .bolus, startDate: chartManager.startDate, value: 1, unit: .units)
+    private func oneUnitBolusEffectPrediction(using modelSettings: InsulinModelSettings) -> [GlucoseValue] {
+        let bolus = DoseEntry(type: .bolus, startDate: chartManager.startDate, value: 1, unit: .units, insulinType: .novolog)
         let startingGlucoseSample = HKQuantitySample(type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!, quantity: startingGlucoseQuantity, start: chartManager.startDate, end: chartManager.startDate)
-        let effects = [bolus].glucoseEffects(insulinModel: model, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = [bolus].glucoseEffects(insulinModelSettings: modelSettings, insulinSensitivity: insulinSensitivitySchedule)
         return LoopMath.predictGlucose(startingAt: startingGlucoseSample, effects: effects)
     }
 

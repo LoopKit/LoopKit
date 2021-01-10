@@ -20,12 +20,12 @@ extension MockPumpManager: PumpManagerUI {
     
     public var smallImage: UIImage? { return UIImage(named: "Pump Simulator", in: Bundle(for: MockPumpManagerSettingsViewController.self), compatibleWith: nil) }
     
-    public static func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying & PumpManagerSetupViewController) {
+    public static func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) -> (UIViewController & CompletionNotifying & PumpManagerSetupViewController) {
         return MockPumpManagerSetupViewController.instantiateFromStoryboard()
     }
 
-    public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
-        let settings = MockPumpManagerSettingsViewController(pumpManager: self)
+    public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) -> (UIViewController & CompletionNotifying) {
+        let settings = MockPumpManagerSettingsViewController(pumpManager: self, supportedInsulinTypes: allowedInsulinTypes)
         let nav = SettingsNavigationViewController(rootViewController: settings)
         return nav
     }
@@ -37,8 +37,8 @@ extension MockPumpManager: PumpManagerUI {
         }
     }
 
-    public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider? {
-        return MockHUDProvider(pumpManager: self)
+    public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors, allowedInsulinTypes: [InsulinType]) -> HUDProvider? {
+        return MockHUDProvider(pumpManager: self, allowedInsulinTypes: allowedInsulinTypes)
     }
 
     public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {

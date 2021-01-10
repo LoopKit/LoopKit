@@ -10,13 +10,31 @@ public enum InsulinModelSettings: Equatable {
     case walsh(WalshInsulinModel)
 
     public static let validWalshModelDurationRange = TimeInterval(hours: 2)...TimeInterval(hours: 8)
-
-    public var model: InsulinModel {
+    
+    public var longestEffectDuration: TimeInterval {
         switch self {
         case .exponentialPreset(let model):
-            return model
+            return model.effectDuration
         case .walsh(let model):
-            return model
+            return model.effectDuration
+        }
+    }
+
+    public func model(for type: InsulinType?) -> InsulinModel {
+        guard let type = type else {
+            return ExponentialInsulinModelPreset.rapidActingAdult
+        }
+        
+        switch type {
+        case .fiasp:
+            return ExponentialInsulinModelPreset.fiasp
+        default:
+            switch self {
+            case .exponentialPreset(let model):
+                return model
+            case .walsh(let model):
+                return model
+            }
         }
     }
 
@@ -78,13 +96,23 @@ extension InsulinModelSettings: RawRepresentable {
 
         switch type {
         case .exponentialPreset:
-            guard let modelRaw = rawValue["model"] as? ExponentialInsulinModelPreset.RawValue,
-                let model = ExponentialInsulinModelPreset(rawValue: modelRaw)
-            else {
+            guard let modelRaw = rawValue["model"] as? ExponentialInsulinModelPreset.RawValue else {
+                return nil
+            }
+            
+            if let model = ExponentialInsulinModelPreset(rawValue: modelRaw) {
+                self = .exponentialPreset(model)
+            }
+            
+            switch modelRaw {
+            case "rapidActingAdult":
+                self = .exponentialPreset(ExponentialInsulinModelPreset.rapidActingAdult)
+            case "rapidActingChild":
+                self = .exponentialPreset(ExponentialInsulinModelPreset.rapidActingChild)
+            default:
                 return nil
             }
 
-            self = .exponentialPreset(model)
         case .walsh:
             guard let modelRaw = rawValue["model"] as? WalshInsulinModel.RawValue,
                 let model = WalshInsulinModel(rawValue: modelRaw)
@@ -123,9 +151,9 @@ public extension InsulinModelSettings {
         case .fiasp:
             self = .exponentialPreset(.fiasp)
         case .rapidAdult:
-            self = .exponentialPreset(.humalogNovologAdult)
+            self = .exponentialPreset(.rapidActingAdult)
         case .rapidChild:
-            self = .exponentialPreset(.humalogNovologChild)
+            self = .exponentialPreset(.rapidActingChild)
         case .walsh:
             self = .walsh(WalshInsulinModel(actionDuration: storedSettingsInsulinModel.actionDuration))
         }
@@ -141,9 +169,9 @@ public extension StoredInsulinModel {
         switch insulinModelSettings {
         case .exponentialPreset(let preset):
             switch preset {
-            case .humalogNovologAdult:
+            case .rapidActingAdult:
                 modelType = .rapidAdult
-            case .humalogNovologChild:
+            case .rapidActingChild:
                 modelType = .rapidChild
             case .fiasp:
                 modelType = .fiasp

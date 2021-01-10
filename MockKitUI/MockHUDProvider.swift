@@ -25,7 +25,7 @@ final class MockHUDProvider: NSObject, HUDProvider {
 
     private weak var batteryView: BatteryLevelHUDView?
 
-    init(pumpManager: MockPumpManager) {
+    init(pumpManager: MockPumpManager, allowedInsulinTypes: [InsulinType]) {
         self.pumpManager = pumpManager
         self.lastPumpManagerStatus = pumpManager.status
         super.init()
