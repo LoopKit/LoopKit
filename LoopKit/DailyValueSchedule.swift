@@ -91,12 +91,13 @@ extension DailySchedule where T: Comparable {
 
 public struct DailyValueSchedule<T>: DailySchedule {
     let referenceTimeInterval: TimeInterval
-    let repeatInterval = TimeInterval(hours: 24)
+    let repeatInterval: TimeInterval
 
     public let items: [RepeatingScheduleValue<T>]
     public var timeZone: TimeZone
 
     public init?(dailyItems: [RepeatingScheduleValue<T>], timeZone: TimeZone? = nil) {
+        self.repeatInterval = TimeInterval(hours: 24)
         self.items = dailyItems.sorted { $0.startTime < $1.startTime }
         self.timeZone = timeZone ?? TimeZone.currentFixed
 
