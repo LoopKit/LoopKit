@@ -39,13 +39,14 @@ public struct SectionHeader: View {
     }
 }
 
+fileprivate struct HorizontalSizeClassOverrideHelper: HorizontalSizeClassOverride {}
 public extension SectionHeader.Style {
     
-    static let `default`: SectionHeader.Style  = {
+    static let `default`: SectionHeader.Style = {
         if #available(iOSApplicationExtension 14.0, *) {
             return .regular
         } else {
-            return .tight
+            return HorizontalSizeClassOverrideHelper().horizontalOverride == .compact ? .regular : .tight
         }
     }()
 }

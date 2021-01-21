@@ -21,8 +21,16 @@ fileprivate struct CustomInsetGroupedListStyle: ViewModifier, HorizontalSizeClas
 
     @ViewBuilder func body(content: Content) -> some View {
         if #available(iOSApplicationExtension 14.0, *) {
-            content
-                .listStyle(InsetGroupedListStyle())
+            // For compact sizes (e.g. iPod Touch), don't inset, in order to more efficiently utilize limited real estate
+            if horizontalOverride == .compact {
+                content
+                    .listStyle(GroupedListStyle())
+                    .environment(\.horizontalSizeClass, horizontalOverride)
+            } else {
+                content
+                    .listStyle(InsetGroupedListStyle())
+                    .environment(\.horizontalSizeClass, horizontalOverride)
+            }
         } else {
             // Fallback on earlier versions
             content
