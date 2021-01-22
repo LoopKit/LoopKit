@@ -166,4 +166,46 @@ class QuantityFormatterTests: XCTestCase {
         XCTAssertEqual("0.0 millimoles per liter", formatter.string(from: HKQuantity(unit: HKUnit.millimolesPerLiter, doubleValue: 0), for: HKUnit.millimolesPerLiter)!)
         XCTAssertEqual("1.0 millimoles per liter", formatter.string(from: HKQuantity(unit: HKUnit.millimolesPerLiter, doubleValue: 1), for: HKUnit.millimolesPerLiter)!)
     }
+
+    func testUnitRounding() {
+        let value = 1.2345
+        var unit: HKUnit = .milligramsPerDeciliter
+        XCTAssertEqual(unit.round(value: value), 1)
+
+        unit = unit.unitDivided(by: .internationalUnit())
+        XCTAssertEqual(unit.round(value: value), 1)
+
+        unit = unit.unitDivided(by: .minute())
+        XCTAssertEqual(unit.round(value: value), 1)
+
+        unit = .millimolesPerLiter
+        XCTAssertEqual(unit.round(value: value), 1.2)
+
+        unit = HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit())
+        XCTAssertEqual(unit.round(value: value), 1.2)
+
+        unit = HKUnit.millimolesPerLiter.unitDivided(by: .minute())
+        XCTAssertEqual(unit.round(value: value), 1.2)
+    }
+
+    func testQuantityRounding() {
+        let value = 1.2345
+        var unit: HKUnit = .milligramsPerDeciliter
+        XCTAssertEqual(HKQuantity(unit: unit, doubleValue: value).doubleValue(for: unit, withRounding: true), 1)
+
+        unit = unit.unitDivided(by: .internationalUnit())
+        XCTAssertEqual(HKQuantity(unit: unit, doubleValue: value).doubleValue(for: unit, withRounding: true), 1)
+
+        unit = unit.unitDivided(by: .minute())
+        XCTAssertEqual(HKQuantity(unit: unit, doubleValue: value).doubleValue(for: unit, withRounding: true), 1)
+
+        unit = .millimolesPerLiter
+        XCTAssertEqual(HKQuantity(unit: unit, doubleValue: value).doubleValue(for: unit, withRounding: true), 1.2)
+
+        unit = HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit())
+        XCTAssertEqual(HKQuantity(unit: unit, doubleValue: value).doubleValue(for: unit, withRounding: true), 1.2)
+
+        unit = HKUnit.millimolesPerLiter.unitDivided(by: .minute())
+        XCTAssertEqual(HKQuantity(unit: unit, doubleValue: value).doubleValue(for: unit, withRounding: true), 1.2)
+    }
 }

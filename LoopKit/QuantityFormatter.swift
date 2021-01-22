@@ -145,6 +145,17 @@ open class QuantityFormatter {
     }
 }
 
+public extension HKQuantity {
+    func doubleValue(for unit: HKUnit, withRounding: Bool) -> Double {
+        var value = self.doubleValue(for: unit)
+        if withRounding {
+            value = unit.round(value: value)
+        }
+
+        return value
+    }
+}
+
 
 public extension HKUnit {
     var usesMassFormatterForUnitString: Bool {
@@ -156,10 +167,19 @@ public extension HKUnit {
     }
 
     var preferredFractionDigits: Int {
-        if self == HKUnit.millimolesPerLiter || self == HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()) {
+        if self == HKUnit.millimolesPerLiter || self == HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()) || self == HKUnit.millimolesPerLiter.unitDivided(by: .minute()) {
             return 1
         } else {
             return 0
+        }
+    }
+
+    func round(value: Double) -> Double {
+        if preferredFractionDigits == 0 {
+            return value.rounded()
+        } else {
+            let scaleFactor = Double(10 * preferredFractionDigits)
+            return (value * scaleFactor).rounded() / scaleFactor
         }
     }
 

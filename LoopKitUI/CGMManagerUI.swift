@@ -9,14 +9,14 @@ import HealthKit
 import SwiftUI
 import LoopKit
 
-public protocol CGMManagerUI: CGMManager, DeviceManagerUI {
+public protocol CGMManagerUI: CGMManager, DeviceManagerUI, PreferredGlucoseUnitObserver {
     /// Provides a view controller for setting up and configuring the manager if needed.
     ///
     /// If this method returns nil, it's expected that `init?(rawState: [:])` creates a non-nil manager
     static func setupViewController(glucoseTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CGMManagerSetupViewController & CompletionNotifying)?
 
-    func settingsViewController(for glucoseUnit: HKUnit, glucoseTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying)
-    
+    func settingsViewController(for glucoseUnit: HKUnit, glucoseTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying & PreferredGlucoseUnitObserver)
+
     /// a message from the cgm that needs to be brought to the user's attention in the status bar
     var cgmStatusHighlight: DeviceStatusHighlight? { get }
     
@@ -30,6 +30,11 @@ public protocol CGMManagerUI: CGMManager, DeviceManagerUI {
 extension CGMManagerUI {
     public func glucoseRangeCategory(for glucose: GlucoseSampleValue) -> GlucoseRangeCategory? {
         return nil
+    }
+
+    /// When conformance to the PreferredGlucoseUnitObserver is desired, use this function to be notified when the user preferred glucose unit changes
+    public func preferredGlucoseUnitDidChange(to preferredGlucoseUnit: HKUnit) {
+        // optional
     }
 }
 
