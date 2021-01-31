@@ -40,7 +40,7 @@ public struct PersistedPumpEvent {
                 title: String?,
                 type: PumpEventType?,
                 isMutable: Bool,
-                automatic: Bool?) {
+                automatic: Bool? = nil) {
         self.date = date
         self.persistedDate = persistedDate
         self.dose = dose

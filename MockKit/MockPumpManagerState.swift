@@ -307,8 +307,7 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
     public var debugDescription: String {
         return """
         ## MockPumpManagerState
-        * supportedBolusVolumes: \(supportedBolusVolumes)
-        * supportedBasalRates: \(supportedBasalRates)
+        * deliverableIncrements: \(deliverableIncrements)
         * reservoirUnitsRemaining: \(reservoirUnitsRemaining)
         * basalRateSchedule: \(basalRateSchedule as Any)
         * tempBasalEnactmentShouldError: \(tempBasalEnactmentShouldError)
