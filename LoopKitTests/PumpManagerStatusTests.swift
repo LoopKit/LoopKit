@@ -134,6 +134,7 @@ class PumpManagerStatusBasalDeliveryStateCodableTests: XCTestCase {
   "basalDeliveryState" : {
     "tempBasal" : {
       "dose" : {
+        "automatic" : null,
         "deliveredUnits" : 0.5,
         "description" : "Temporary Basal",
         "endDate" : "2020-05-14T13:43:14Z",
@@ -251,6 +252,7 @@ class PumpManagerStatusBolusStateCodableTests: XCTestCase {
   "bolusState" : {
     "inProgress" : {
       "dose" : {
+        "automatic" : null,
         "deliveredUnits" : 1,
         "description" : "Bolus",
         "endDate" : "2020-05-14T22:38:16Z",
