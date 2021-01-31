@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H15" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20C69" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CachedCarbObject" representedClassName=".CachedCarbObject" syncable="YES">
         <attribute name="absorptionTime" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="addedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -92,6 +92,7 @@
         </fetchIndex>
     </entity>
     <entity name="PumpEvent" representedClassName=".PumpEvent" syncable="YES">
+        <attribute name="automatic" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="deliveredUnits" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
@@ -143,7 +144,7 @@
         <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="193"/>
         <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="238"/>
         <element name="DosingDecisionObject" positionX="-63" positionY="126" width="128" height="88"/>
-        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="253"/>
+        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="254"/>
         <element name="Reservoir" positionX="-63" positionY="-18" width="128" height="105"/>
         <element name="SettingsObject" positionX="-63" positionY="126" width="128" height="88"/>
     </elements>
