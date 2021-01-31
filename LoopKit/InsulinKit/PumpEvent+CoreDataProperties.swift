@@ -30,6 +30,7 @@ extension PumpEvent {
     @NSManaged var title: String?
     @NSManaged var modificationCounter: Int64
     @NSManaged var primitiveInsulinType: NSNumber?
+    @NSManaged var primitiveAutomatic: NSNumber?
 }
 
 extension PumpEvent: Encodable {

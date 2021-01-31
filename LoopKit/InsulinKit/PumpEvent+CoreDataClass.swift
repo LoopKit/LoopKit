@@ -105,6 +105,20 @@ class PumpEvent: NSManagedObject {
             primitiveValue = newValue != nil ? NSNumber(value: newValue!) : nil
         }
     }
+    
+    var automatic: Bool? {
+        get {
+            willAccessValue(forKey: "automatic")
+            defer { didAccessValue(forKey: "automatic") }
+            return primitiveAutomatic?.boolValue
+        }
+        set {
+            willChangeValue(forKey: "automatic")
+            defer { didChangeValue(forKey: "automatic") }
+            primitiveAutomatic = newValue != nil ? NSNumber(booleanLiteral: newValue!) : nil
+        }
+    }
+
 
     var deliveredUnits: Double? {
         get {
@@ -176,7 +190,8 @@ extension PumpEvent {
                 unit: unit,
                 deliveredUnits: deliveredUnits,
                 syncIdentifier: syncIdentifier,
-                insulinType: insulinType
+                insulinType: insulinType,
+                automatic: automatic
             )
         }
         set {
@@ -191,6 +206,7 @@ extension PumpEvent {
             unit = entry.unit
             deliveredUnits = entry.deliveredUnits
             insulinType = entry.insulinType
+            automatic = entry.automatic
         }
     }
 
@@ -217,5 +233,6 @@ extension PumpEvent {
         raw = event.raw
         title = event.title
         dose = event.dose
+        automatic = event.automatic
     }
 }

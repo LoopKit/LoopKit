@@ -23,6 +23,9 @@ let MetadataKeyInsulinType = "com.loopkit.InsulinKit.MetadataKeyInsulinType"
 /// Defines the source of the data, including if a dose was logged or from device history
 let MetadataKeyProvenanceIdentifier = "com.loopkit.InsulinKit.MetadataKeyProvenanceIdentifier"
 
+/// Flag indicating whether this dose was issued automatically or if a user issued it manually.
+let MetadataKeyAutomaticallyIssued = "com.loopkit.InsulinKit.MetadataKeyAutomaticallyIssued"
+
 extension HKQuantitySample {
     convenience init?(type: HKQuantityType, unit: HKUnit, dose: DoseEntry, device: HKDevice?, provenanceIdentifier: String, syncVersion: Int = 1) {
         let units = dose.unitsInDeliverableIncrements
@@ -68,6 +71,10 @@ extension HKQuantitySample {
         if let insulinType = dose.insulinType {
             metadata[MetadataKeyInsulinType] = insulinType.healthKitRepresentation
         }
+        
+        if let automatic = dose.automatic {
+            metadata[MetadataKeyAutomaticallyIssued] = automatic
+        }
 
         self.init(
             type: type,
@@ -105,6 +112,10 @@ extension HKQuantitySample {
 
     var loopSpecificProvenanceIdentifier: String {
         return metadata?[MetadataKeyProvenanceIdentifier] as? String ?? provenanceIdentifier
+    }
+    
+    var automaticallyIssued: Bool? {
+        return metadata?[MetadataKeyAutomaticallyIssued] as? Bool
     }
     
     var insulinType: InsulinType? {
@@ -167,7 +178,8 @@ extension HKQuantitySample {
             description: nil,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinType: insulinType
+            insulinType: insulinType,
+            automatic: automaticallyIssued
         )
     }
 }

@@ -103,12 +103,12 @@ class CachedInsulinDeliveryObject: NSManagedObject {
         get {
             willAccessValue(forKey: "automaticallyIssued")
             defer { didAccessValue(forKey: "automaticallyIssued") }
-            return primativeAutomaticallyIssued?.boolValue
+            return primitiveAutomaticallyIssued?.boolValue
         }
         set {
             willChangeValue(forKey: "automaticallyIssued")
             defer { didChangeValue(forKey: "automaticallyIssued") }
-            primativeAutomaticallyIssued = newValue as NSNumber?
+            primitiveAutomaticallyIssued = newValue != nil ? NSNumber(booleanLiteral: newValue!) : nil
         }
     }
 }
@@ -156,7 +156,8 @@ extension CachedInsulinDeliveryObject {
             description: nil,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinType: insulinType
+            insulinType: insulinType,
+            automatic: automaticallyIssued
         )
     }
 }
@@ -175,6 +176,7 @@ extension CachedInsulinDeliveryObject {
         self.scheduledBasalRate = sample.scheduledBasalRate
         self.programmedTempBasalRate = sample.programmedTempBasalRate
         self.insulinType = sample.insulinType
+        self.automaticallyIssued = sample.automaticallyIssued
         self.reason = sample.insulinDeliveryReason
         self.createdAt = date
     }
@@ -190,6 +192,7 @@ extension CachedInsulinDeliveryObject {
         self.scheduledBasalRate = sample.scheduledBasalRate
         self.programmedTempBasalRate = sample.programmedTempBasalRate
         self.insulinType = sample.insulinType
+        self.automaticallyIssued = sample.automaticallyIssued
         self.reason = sample.insulinDeliveryReason
         self.createdAt = date
     }
