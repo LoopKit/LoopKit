@@ -764,6 +764,7 @@
 		C1E4B308242E995200E70CCB /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B307242E995200E70CCB /* ActivityIndicator.swift */; };
 		C1E4B30A242E99A800E70CCB /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E4B309242E99A800E70CCB /* Image.swift */; };
 		C1E7035D24FFFA5C00DAB534 /* CollectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1E7035C24FFFA5C00DAB534 /* CollectionTests.swift */; };
+		C1E84B8525C62FB100623C08 /* Modelv1v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = C1E84B8425C62FB100623C08 /* Modelv1v4.xcmappingmodel */; };
 		C1F8403923DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C1F8403A23DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
 		C1F8B1E2223C3CC000DD66CF /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
@@ -1570,6 +1571,7 @@
 		C1E7035C24FFFA5C00DAB534 /* CollectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTests.swift; sourceTree = "<group>"; };
 		C1E7035E25001EA500DAB534 /* HKObserverQueryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObserverQueryMock.swift; sourceTree = "<group>"; };
 		C1E703612500390B00DAB534 /* HKAnchoredObjectQueryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKAnchoredObjectQueryMock.swift; sourceTree = "<group>"; };
+		C1E84B8425C62FB100623C08 /* Modelv1v4.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv1v4.xcmappingmodel; sourceTree = "<group>"; };
 		C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceLogEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceLogEntry+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E9077D2624ACD59F0066A88D /* InformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationView.swift; sourceTree = "<group>"; };
@@ -2001,6 +2003,7 @@
 		437874B4202FDC8300A3D8B9 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
+				C1E84B8425C62FB100623C08 /* Modelv1v4.xcmappingmodel */,
 				C17B020825645029004188F1 /* Modelv1v3.xcmappingmodel */,
 				A9BD318124F4548900994B83 /* Modelv3EntityMigrationPolicy.swift */,
 				434113AC20F287DC00D05747 /* NSManagedObjectContext.swift */,
@@ -3643,6 +3646,7 @@
 				4322B76E202FA26B0002837D /* GlucoseMath.swift in Sources */,
 				891A3FDB224BEC0D00378B27 /* CarbSensitivitySchedule.swift in Sources */,
 				4322B773202FA2790002837D /* CarbEntry.swift in Sources */,
+				C1E84B8525C62FB100623C08 /* Modelv1v4.xcmappingmodel in Sources */,
 				43D8FDFC1C7290350073BE78 /* HealthKitSampleStore.swift in Sources */,
 				A9498D7E23386C3300DAA9B9 /* GlucoseThreshold.swift in Sources */,
 				434570441FE605E30089C4DC /* OSLog.swift in Sources */,
