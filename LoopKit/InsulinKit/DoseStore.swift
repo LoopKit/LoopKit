@@ -1433,7 +1433,7 @@ extension DoseStore {
         var queryError: Error?
 
         guard limit > 0 else {
-            completion(.success(queryAnchor, queryResult))
+            completion(.success(queryAnchor, []))
             return
         }
 
@@ -1473,7 +1473,7 @@ extension DoseStore {
         var queryError: Error?
 
         guard limit > 0 else {
-            completion(.success(queryAnchor, queryResult))
+            completion(.success(queryAnchor, []))
             return
         }
 

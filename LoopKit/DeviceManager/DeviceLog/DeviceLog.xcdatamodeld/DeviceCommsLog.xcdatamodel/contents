@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="20C69" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Entry" representedClassName=".DeviceLogEntry" syncable="YES">
         <attribute name="deviceIdentifier" optional="YES" attributeType="String"/>
         <attribute name="managerIdentifier" attributeType="String"/>
@@ -10,8 +10,11 @@
         <fetchIndex name="byTimestampIndex">
             <fetchIndexElement property="timestamp" type="Binary" order="ascending"/>
         </fetchIndex>
+        <fetchIndex name="byModificationCounter">
+            <fetchIndexElement property="modificationCounter" type="Binary" order="ascending"/>
+        </fetchIndex>
     </entity>
     <elements>
-        <element name="Entry" positionX="-36" positionY="9" width="128" height="133"/>
+        <element name="Entry" positionX="-36" positionY="9" width="128" height="119"/>
     </elements>
 </model>

@@ -147,11 +147,11 @@ extension SettingsStore {
     public func executeSettingsQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (SettingsQueryResult) -> Void) {
         dataAccessQueue.async {
             var queryAnchor = queryAnchor ?? QueryAnchor()
-            var queryResult = [StoredSettings]()
+            var queryResult = [StoredSettingsData]()
             var queryError: Error?
 
             guard limit > 0 else {
-                completion(.success(queryAnchor, queryResult))
+                completion(.success(queryAnchor, []))
                 return
             }
 
@@ -167,7 +167,7 @@ extension SettingsStore {
                     if let modificationCounter = stored.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
                         queryAnchor.modificationCounter = modificationCounter
                     }
-                    queryResult.append(contentsOf: stored.compactMap { self.decodeSettings(fromData: $0.data) })
+                    queryResult.append(contentsOf: stored.compactMap { StoredSettingsData(date: $0.date, data: $0.data) })
                 } catch let error {
                     queryError = error
                     return
@@ -179,8 +179,22 @@ extension SettingsStore {
                 return
             }
 
-            completion(.success(queryAnchor, queryResult))
+            // Decoding a large number of settings can be very CPU intensive and may take considerable wall clock time.
+            // Do not block SettingsStore dataAccessQueue. Perform work and callback in global utility queue.
+            DispatchQueue.global(qos: .utility).async {
+                completion(.success(queryAnchor, queryResult.compactMap { self.decodeSettings(fromData: $0.data) }))
+            }
         }
+    }
+}
+
+public struct StoredSettingsData {
+    public let date: Date
+    public let data: Data
+
+    public init(date: Date, data: Data) {
+        self.date = date
+        self.data = data
     }
 }
 
