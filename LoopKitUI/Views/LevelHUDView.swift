@@ -10,7 +10,7 @@ import UIKit
 
 open class LevelHUDView: BaseHUDView {
 
-    @IBOutlet private weak var levelMaskView: LevelMaskView!
+    @IBOutlet public weak var levelMaskView: LevelMaskView!
 
     override open func awakeFromNib() {
         super.awakeFromNib()
@@ -25,7 +25,7 @@ open class LevelHUDView: BaseHUDView {
         updateColor()
     }
         
-    private func updateColor() {
+    open func updateColor() {
         levelMaskView.tintColor = nil
 
         switch level {
