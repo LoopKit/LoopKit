@@ -100,7 +100,7 @@ public struct GlucoseRangePicker: View {
                 isUnitLabelVisible: false
             )
             // Ensure the selectable picker values update when either bound changes
-            .id(lowerBound...upperBound)
+            //.id(lowerBound...upperBound)
             .frame(width: availableWidth / 3.5)
             .overlay(
                 Text(separator)
@@ -120,7 +120,7 @@ public struct GlucoseRangePicker: View {
                 bounds: upperBoundRange
             )
             // Ensure the selectable picker values update when either bound changes
-            .id(lowerBound...upperBound)
+            //.id(lowerBound...upperBound)
             .frame(width: availableWidth / 3.5)
             .padding(.trailing, unitLabelWidth)
             .clipped()
