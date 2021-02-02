@@ -123,7 +123,7 @@ public struct FractionalQuantityPicker: View {
                 colorForValue: colorForWhole
             )
             // Ensure whole picker color updates when fraction updates
-            .id(whole + fraction)
+            //.id(whole + fraction)
             .frame(width: availableWidth / 3.5)
             .overlay(
                 Text(separator)
@@ -143,7 +143,7 @@ public struct FractionalQuantityPicker: View {
                 colorForValue: colorForFraction
             )
             // Ensure fractional picker values update when whole value updates
-            .id(whole + fraction)
+            //.id(whole + fraction)
             .frame(width: availableWidth / 3.5)
             .padding(.trailing, spacing + unitLabelWidth)
             .clipped()
