@@ -15,6 +15,7 @@ import HealthKit
 /// - error: An error occurred while receiving or store data
 public enum CGMReadingResult {
     case noData
+    case unreliableData
     case newData([NewGlucoseSample])
     case error(Error)
 }

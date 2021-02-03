@@ -72,6 +72,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case sineCurve
         case noData
         case signalLoss
+        case unreliableData
         case frequency
     }
     
@@ -191,6 +192,11 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .signalLoss:
                 cell.textLabel?.text = "Signal Loss"
                 if case .signalLoss = cgmManager.dataSource.model {
+                    cell.accessoryType = .checkmark
+                }
+            case .unreliableData:
+                cell.textLabel?.text = "Unreliable Data"
+                if case .unreliableData = cgmManager.dataSource.model {
                     cell.accessoryType = .checkmark
                 }
             case .frequency:
@@ -358,6 +364,9 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .signalLoss:
                 cgmManager.dataSource.model = .signalLoss
                 cgmManager.issueSignalLossAlert()
+                tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
+            case .unreliableData:
+                cgmManager.dataSource.model = .unreliableData
                 tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
             case .frequency:
                 let vc = MeasurementFrequencyTableViewController()

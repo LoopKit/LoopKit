@@ -432,6 +432,8 @@ public final class MockCGMManager: TestingCGMManager {
                 self.logDeviceComms(.error, message: "Error fetching new data: \(error)")
             case .newData(let samples):
                 self.logDeviceComms(.receive, message: "New data received: \(samples)")
+            case .unreliableData:
+                self.logDeviceComms(.receive, message: "Unreliable data received")
             case .noData:
                 self.logDeviceComms(.receive, message: "No new data")
             }
@@ -448,6 +450,8 @@ public final class MockCGMManager: TestingCGMManager {
                 self.logDeviceComms(.error, message: "Backfill error: \(error)")
             case .newData(let samples):
                 self.logDeviceComms(.receive, message: "Backfill data: \(samples)")
+            case .unreliableData:
+                self.logDeviceComms(.receive, message: "Backfill data unreliable")
             case .noData:
                 self.logDeviceComms(.receive, message: "Backfill empty")
             }

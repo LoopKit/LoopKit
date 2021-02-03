@@ -18,6 +18,7 @@ public struct MockCGMDataSource {
         case sineCurve(parameters: SineCurveParameters)
         case noData
         case signalLoss
+        case unreliableData
         
         public var isValidSession: Bool {
             switch self {
@@ -142,10 +143,11 @@ extension MockCGMDataSource.Model: RawRepresentable {
     public typealias RawValue = [String: Any]
 
     private enum Kind: String {
-        case constant = "constant"
-        case sineCurve = "sineCurve"
-        case noData = "noData"
-        case signalLoss = "signalLoss"
+        case constant
+        case sineCurve
+        case noData
+        case signalLoss
+        case unreliableData
     }
 
     private static let unit = HKUnit.milligramsPerDeciliter
@@ -188,6 +190,8 @@ extension MockCGMDataSource.Model: RawRepresentable {
             self = .noData
         case .signalLoss:
             self = .signalLoss
+        case .unreliableData:
+            self = .unreliableData
         }
     }
 
@@ -203,7 +207,7 @@ extension MockCGMDataSource.Model: RawRepresentable {
             rawValue["amplitude"] = amplitude.doubleValue(for: unit)
             rawValue["period"] = period
             rawValue["referenceDate"] = referenceDate.timeIntervalSince1970
-        case .noData, .signalLoss:
+        case .noData, .signalLoss, .unreliableData:
             break
         }
 
@@ -220,6 +224,8 @@ extension MockCGMDataSource.Model: RawRepresentable {
             return .noData
         case .signalLoss:
             return .signalLoss
+        case .unreliableData:
+            return .unreliableData
         }
     }
 }
