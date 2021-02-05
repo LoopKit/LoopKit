@@ -11,27 +11,27 @@ import SwiftUI
 
 public protocol DeviceOrientationController: AnyObject {
     var supportedInterfaceOrientations: UIInterfaceOrientationMask { get set }
+    func setOriginallySupportedInferfaceOrientations()
 }
 
-/// A class whose lifetime defines the application's supported interface orientations.
-///
 /// Use the `supportedInterfaceOrientations` modifier on a SwiftUI view to lock its orientation.
 /// To function, `OrientationLock.deviceOrientationController` must be assigned prior to use.
 public final class OrientationLock {
-    private let originalSupportedInterfaceOrientations: UIInterfaceOrientationMask
-
     /// The global controller for device orientation.
     /// The property must be assigned prior to instantiating any OrientationLock.
     public static weak var deviceOrientationController: DeviceOrientationController?
 
     fileprivate init(_ supportedInterfaceOrientations: UIInterfaceOrientationMask) {
-        assert(Self.deviceOrientationController != nil, "OrientationLock.deviceOrientationController must be assigned prior to constructing an OrientationLock")
-        originalSupportedInterfaceOrientations = Self.deviceOrientationController?.supportedInterfaceOrientations ?? .allButUpsideDown
-        Self.deviceOrientationController?.supportedInterfaceOrientations = supportedInterfaceOrientations
-    }
+        guard let deviceOrientationController = Self.deviceOrientationController else {
+            assertionFailure("OrientationLock.deviceOrientationController must be assigned prior to constructing an OrientationLock")
+            return
+        }
 
-    deinit {
-        Self.deviceOrientationController?.supportedInterfaceOrientations = originalSupportedInterfaceOrientations
+        deviceOrientationController.supportedInterfaceOrientations = supportedInterfaceOrientations
+    }
+    
+    func setOriginallySupportedInferfaceOrientations() {
+        Self.deviceOrientationController?.setOriginallySupportedInferfaceOrientations()
     }
 }
 
@@ -53,5 +53,9 @@ private struct OrientationLocked<Content: View>: View {
         self.content = content
     }
 
-    var body: some View { content }
+    // when view disappears, it reverts to the originally support orientations
+    var body: some View {
+        content
+            .onDisappear { orientationLock.setOriginallySupportedInferfaceOrientations() }
+    }
 }
