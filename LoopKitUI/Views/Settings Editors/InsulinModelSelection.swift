@@ -26,24 +26,6 @@ public struct InsulinModelSelection: View {
 
     static let defaultInsulinSensitivitySchedule = InsulinSensitivitySchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue<Double>(startTime: 0, value: 40)])!
     
-    static let defaultWalshInsulinModelDuration = TimeInterval(hours: 6)
-
-    var walshActionDuration: Binding<TimeInterval> {
-        Binding(
-            get: {
-                if case .walsh(let walshModel) = self.value {
-                    return walshModel.actionDuration
-                } else {
-                    return Self.defaultWalshInsulinModelDuration
-                }
-            },
-            set: { newValue in
-                precondition(InsulinModelSettings.validWalshModelDurationRange.contains(newValue))
-                self.value = .walsh(WalshInsulinModel(actionDuration: newValue))
-            }
-        )
-    }
-    
     public init(
         value: InsulinModelSettings,
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
@@ -177,28 +159,8 @@ public struct InsulinModelSelection: View {
                     isSelected: isSelected(.exponentialPreset(.rapidActingChild))
                 )
                 .padding(.vertical, 4)
-                .padding(.bottom, supportedModelSettings.fiaspModelEnabled ? 0 : 4)
+                .padding(.bottom, 4)
 
-                if supportedModelSettings.fiaspModelEnabled {
-                    CheckmarkListItem(
-                        title: Text(InsulinModelSettings.exponentialPreset(.fiasp).title),
-                        description: Text(InsulinModelSettings.exponentialPreset(.fiasp).subtitle),
-                        isSelected: isSelected(.exponentialPreset(.fiasp))
-                    )
-                    .padding(.vertical, 4)
-                }
-
-                if supportedModelSettings.walshModelEnabled {
-                    DurationBasedCheckmarkListItem(
-                        title: Text(WalshInsulinModel.title),
-                        description: Text(WalshInsulinModel.subtitle),
-                        isSelected: isWalshModelSelected,
-                        duration: walshActionDuration,
-                        validDurationRange: InsulinModelSettings.validWalshModelDurationRange
-                    )
-                    .padding(.vertical, 4)
-                    .padding(.bottom, 4)
-                }
             }
             .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
         }
@@ -221,14 +183,6 @@ public struct InsulinModelSelection: View {
             .exponentialPreset(.rapidActingAdult),
             .exponentialPreset(.rapidActingChild)
         ]
-
-        if supportedModelSettings.fiaspModelEnabled {
-            options.append(.exponentialPreset(.fiasp))
-        }
-
-        if supportedModelSettings.walshModelEnabled {
-            options.append(.walsh(WalshInsulinModel(actionDuration: walshActionDuration.wrappedValue)))
-        }
 
         return options
     }
@@ -272,19 +226,6 @@ public struct InsulinModelSelection: View {
         )
     }
 
-    private var isWalshModelSelected: Binding<Bool> {
-        Binding(
-            get: { self.value.model is WalshInsulinModel },
-            set: { isSelected in
-                if isSelected {
-                    withAnimation {
-                        self.value = .walsh(WalshInsulinModel(actionDuration: self.walshActionDuration.wrappedValue))
-                    }
-                }
-            }
-        )
-    }
-    
     private func startSaving() {
         guard mode == .settings else {
             self.continueSaving()
