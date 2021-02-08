@@ -29,7 +29,16 @@ public struct CGMManagerStatus {
     }
 }
 
-public protocol CGMManagerDelegate: DeviceManagerDelegate {
+public protocol CGMManagerStatusObserver: AnyObject {
+    /// Notifies observers of changes in CGMManagerStatus
+    ///
+    /// - Parameter manager: The manager instance
+    /// - Parameter status: The new, updated status. Status includes properties associated with the manager, transmitter, or sensor,
+    ///                     that are not part of an individual sensor reading.
+    func cgmManager(_ manager: CGMManager, didUpdate status: CGMManagerStatus)
+}
+
+public protocol CGMManagerDelegate: DeviceManagerDelegate, CGMManagerStatusObserver {
     /// Asks the delegate for a date with which to filter incoming glucose data
     ///
     /// - Parameter manager: The manager instance
@@ -58,13 +67,6 @@ public protocol CGMManagerDelegate: DeviceManagerDelegate {
     /// - Parameter manager: The manager instance
     /// - Returns: The unique prefix for the credential store
     func credentialStoragePrefix(for manager: CGMManager) -> String
-    
-    /// Notifies the delegate of a change in status
-    ///
-    /// - Parameter manager: The manager instance
-    /// - Parameter status: The new, updated status. Status includes properties associated with the manager, transmitter, or sensor,
-    ///                     that are not part of an individual sensor reading.
-    func cgmManager(_ manager: CGMManager, didUpdate status: CGMManagerStatus)
 }
 
 
@@ -86,14 +88,30 @@ public protocol CGMManager: DeviceManager {
     /// The representation of the device for use in HealthKit
     var device: HKDevice? { get }
 
-    /// The current status of the cgm
-    var cgmStatus: CGMManagerStatus { get }
+    /// The current status of the cgm manager
+    var cgmManagerStatus: CGMManagerStatus { get }
 
     /// Performs a manual fetch of glucose data from the device, if necessary
     ///
     /// - Parameters:
     ///   - completion: A closure called when operation has completed
     func fetchNewDataIfNeeded(_ completion: @escaping (CGMReadingResult) -> Void) -> Void
+
+    /// Adds an observer of changes in CGMManagerStatus
+    ///
+    /// Observers are held by weak reference.
+    ///
+    /// - Parameters:
+    ///   - observer: The observing object
+    ///   - queue: The queue on which the observer methods should be called
+    func addStatusObserver(_ observer: CGMManagerStatusObserver, queue: DispatchQueue)
+
+    /// Removes an observer of changes in CGMManagerStatus
+    ///
+    /// Since observers are held weakly, calling this method is not required when the observer is deallocated
+    ///
+    /// - Parameter observer: The observing object
+    func removeStatusObserver(_ observer: CGMManagerStatusObserver)
 }
 
 
@@ -111,5 +129,13 @@ public extension CGMManager {
             self.cgmManagerDelegate?.cgmManagerWantsDeletion(self)
             completion()
         }
+    }
+    
+    func addStatusObserver(_ observer: CGMManagerStatusObserver, queue: DispatchQueue) {
+        // optional since a CGM manager may not support status observers
+    }
+
+    func removeStatusObserver(_ observer: CGMManagerStatusObserver) {
+        // optional since a CGM manager may not support status observers
     }
 }
