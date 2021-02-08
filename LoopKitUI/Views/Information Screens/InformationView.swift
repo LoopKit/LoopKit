@@ -13,14 +13,14 @@ struct InformationView<InformationalContent: View> : View {
     var title: Text
     var buttonText: Text
     var onExit: (() -> Void)
-    let mode: PresentationMode
+    let mode: SettingsPresentationMode
     
     init(
         title: Text,
         buttonText: Text,
         @ViewBuilder informationalContent: () -> InformationalContent,
         onExit: @escaping () -> Void,
-        mode: PresentationMode
+        mode: SettingsPresentationMode
     ) {
         self.title = title
         self.buttonText = buttonText
@@ -34,7 +34,7 @@ struct InformationView<InformationalContent: View> : View {
         title: Text,
         @ViewBuilder informationalContent: () -> InformationalContent,
         onExit: @escaping () -> Void,
-        mode: PresentationMode = .acceptanceFlow
+        mode: SettingsPresentationMode = .acceptanceFlow
     ) {
         self.init(
             title: title,

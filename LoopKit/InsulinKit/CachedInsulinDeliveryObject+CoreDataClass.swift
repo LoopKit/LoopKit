@@ -10,9 +10,7 @@ import Foundation
 import CoreData
 import HealthKit
 
-
 class CachedInsulinDeliveryObject: NSManagedObject {
-
     var reason: HKInsulinDeliveryReason! {
         get {
             willAccessValue(forKey: "reason")
@@ -85,20 +83,40 @@ class CachedInsulinDeliveryObject: NSManagedObject {
         }
     }
 
-    override func awakeFromInsert() {
-        super.awakeFromInsert()
-
-        createdAt = Date()
+    var insulinType: InsulinType? {
+        get {
+            willAccessValue(forKey: "insulinType")
+            defer { didAccessValue(forKey: "insulinType") }
+            guard let type = primitiveInsulinType else {
+                return nil
+            }
+            return InsulinType(rawValue: type.intValue)
+        }
+        set {
+            willChangeValue(forKey: "insulinType")
+            defer { didChangeValue(forKey: "insulinType") }
+            primitiveInsulinType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
+        }
+    }
+    
+    var automaticallyIssued: Bool? {
+        get {
+            willAccessValue(forKey: "automaticallyIssued")
+            defer { didAccessValue(forKey: "automaticallyIssued") }
+            return primitiveAutomaticallyIssued?.boolValue
+        }
+        set {
+            willChangeValue(forKey: "automaticallyIssued")
+            defer { didChangeValue(forKey: "automaticallyIssued") }
+            primitiveAutomaticallyIssued = newValue != nil ? NSNumber(booleanLiteral: newValue!) : nil
+        }
     }
 }
 
+// MARK: - Helpers
 
 extension CachedInsulinDeliveryObject {
     var dose: DoseEntry! {
-        guard let startDate = startDate else {
-            return nil
-        }
-
         let type: DoseType
 
         switch reason! {
@@ -137,21 +155,45 @@ extension CachedInsulinDeliveryObject {
             deliveredUnits: deliveredUnits,
             description: nil,
             syncIdentifier: syncIdentifier,
-            scheduledBasalRate: scheduledBasalRate
+            scheduledBasalRate: scheduledBasalRate,
+            insulinType: insulinType,
+            automatic: automaticallyIssued
         )
     }
+}
 
-    func update(from sample: HKQuantitySample) {
-        uuid = sample.uuid
-        startDate = sample.startDate
-        endDate = sample.endDate
-        reason = sample.insulinDeliveryReason
-        // External doses might not have a syncIdentifier, so use the UUID
-        syncIdentifier = sample.syncIdentifier ?? sample.uuid.uuidString
-        scheduledBasalRate = sample.scheduledBasalRate
-        programmedTempBasalRate = sample.programmedTempBasalRate
-        hasLoopKitOrigin = sample.hasLoopKitOrigin
-        value = sample.quantity.doubleValue(for: .internationalUnit())
-        provenanceIdentifier = sample.provenanceIdentifier
+extension CachedInsulinDeliveryObject {
+    func create(fromNew sample: HKQuantitySample, on date: Date = Date()) {
+        precondition(sample.syncIdentifier != nil)
+
+        self.uuid = nil
+        self.provenanceIdentifier = sample.loopSpecificProvenanceIdentifier
+        self.hasLoopKitOrigin = true
+        self.startDate = sample.startDate
+        self.endDate = sample.endDate
+        self.syncIdentifier = sample.syncIdentifier!
+        self.value = sample.quantity.doubleValue(for: .internationalUnit())
+        self.scheduledBasalRate = sample.scheduledBasalRate
+        self.programmedTempBasalRate = sample.programmedTempBasalRate
+        self.insulinType = sample.insulinType
+        self.automaticallyIssued = sample.automaticallyIssued
+        self.reason = sample.insulinDeliveryReason
+        self.createdAt = date
+    }
+
+    func create(fromExisting sample: HKQuantitySample, on date: Date = Date()) {
+        self.uuid = sample.uuid
+        self.provenanceIdentifier = sample.loopSpecificProvenanceIdentifier
+        self.hasLoopKitOrigin = sample.hasLoopKitOrigin
+        self.startDate = sample.startDate
+        self.endDate = sample.endDate
+        self.syncIdentifier = sample.syncIdentifier ?? sample.uuid.uuidString // External doses might not have a syncIdentifier, so use the UUID
+        self.value = sample.quantity.doubleValue(for: .internationalUnit())
+        self.scheduledBasalRate = sample.scheduledBasalRate
+        self.programmedTempBasalRate = sample.programmedTempBasalRate
+        self.insulinType = sample.insulinType
+        self.automaticallyIssued = sample.automaticallyIssued
+        self.reason = sample.insulinDeliveryReason
+        self.createdAt = date
     }
 }

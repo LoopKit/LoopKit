@@ -10,7 +10,7 @@ import HealthKit
 import SwiftUI
 import LoopKit
 
-public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
+public struct InsulinModelSelection: View {
     @Environment(\.appName) private var appName   
     @Environment(\.dismiss) var dismiss
     @Environment(\.authenticate) var authenticate
@@ -20,29 +20,11 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
     let insulinSensitivitySchedule: InsulinSensitivitySchedule
     let glucoseUnit: HKUnit
     let supportedModelSettings: SupportedInsulinModelSettings
-    let mode: PresentationMode
+    let mode: SettingsPresentationMode
     let save: (_ insulinModelSettings: InsulinModelSettings) -> Void
     let chartManager: ChartsManager
 
     static let defaultInsulinSensitivitySchedule = InsulinSensitivitySchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue<Double>(startTime: 0, value: 40)])!
-    
-    static let defaultWalshInsulinModelDuration = TimeInterval(hours: 6)
-
-    var walshActionDuration: Binding<TimeInterval> {
-        Binding(
-            get: {
-                if case .walsh(let walshModel) = self.value {
-                    return walshModel.actionDuration
-                } else {
-                    return Self.defaultWalshInsulinModelDuration
-                }
-            },
-            set: { newValue in
-                precondition(InsulinModelSettings.validWalshModelDurationRange.contains(newValue))
-                self.value = .walsh(WalshInsulinModel(actionDuration: newValue))
-            }
-        )
-    }
     
     public init(
         value: InsulinModelSettings,
@@ -51,7 +33,7 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         supportedModelSettings: SupportedInsulinModelSettings,
         chartColors: ChartColorPalette,
         onSave save: @escaping (_ insulinModelSettings: InsulinModelSettings) -> Void,
-        mode: PresentationMode
+        mode: SettingsPresentationMode
     ){
         self._value = State(initialValue: value)
         self.initialValue = value
@@ -85,9 +67,9 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
            didSave: (() -> Void)? = nil
     ) {
         self.init(
-            value: viewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.humalogNovologAdult),
+            value: viewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.rapidActingAdult),
             insulinSensitivitySchedule: viewModel.therapySettings.insulinSensitivitySchedule,
-            glucoseUnit: viewModel.glucoseUnit,
+            glucoseUnit: viewModel.therapySettings.insulinSensitivitySchedule?.unit ?? viewModel.preferredGlucoseUnit,
             supportedModelSettings: viewModel.supportedInsulinModelSettings,
             chartColors: viewModel.chartColors,
             onSave: { [weak viewModel] insulinModelSettings in
@@ -136,7 +118,6 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
             .padding(.bottom)
             .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5))
         }
-        .environment(\.horizontalSizeClass, horizontalOverride)
         .navigationBarTitle(Text(TherapySetting.insulinModel.title), displayMode: .large)
         .supportedInterfaceOrientations(.portrait)
         .edgesIgnoringSafeArea(.bottom)
@@ -165,52 +146,32 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
                     .frame(height: 170)
 
                     CheckmarkListItem(
-                        title: Text(InsulinModelSettings.exponentialPreset(.humalogNovologAdult).title),
-                        description: Text(InsulinModelSettings.exponentialPreset(.humalogNovologAdult).subtitle),
-                        isSelected: isSelected(.exponentialPreset(.humalogNovologAdult))
+                        title: Text(InsulinModelSettings.exponentialPreset(.rapidActingAdult).title),
+                        description: Text(InsulinModelSettings.exponentialPreset(.rapidActingAdult).subtitle),
+                        isSelected: isSelected(.exponentialPreset(.rapidActingAdult))
                     )
                     .padding(.vertical, 4)
                 }
 
                 CheckmarkListItem(
-                    title: Text(InsulinModelSettings.exponentialPreset(.humalogNovologChild).title),
-                    description: Text(InsulinModelSettings.exponentialPreset(.humalogNovologChild).subtitle),
-                    isSelected: isSelected(.exponentialPreset(.humalogNovologChild))
+                    title: Text(InsulinModelSettings.exponentialPreset(.rapidActingChild).title),
+                    description: Text(InsulinModelSettings.exponentialPreset(.rapidActingChild).subtitle),
+                    isSelected: isSelected(.exponentialPreset(.rapidActingChild))
                 )
                 .padding(.vertical, 4)
-                .padding(.bottom, supportedModelSettings.fiaspModelEnabled ? 0 : 4)
+                .padding(.bottom, 4)
 
-                if supportedModelSettings.fiaspModelEnabled {
-                    CheckmarkListItem(
-                        title: Text(InsulinModelSettings.exponentialPreset(.fiasp).title),
-                        description: Text(InsulinModelSettings.exponentialPreset(.fiasp).subtitle),
-                        isSelected: isSelected(.exponentialPreset(.fiasp))
-                    )
-                    .padding(.vertical, 4)
-                }
-
-                if supportedModelSettings.walshModelEnabled {
-                    DurationBasedCheckmarkListItem(
-                        title: Text(WalshInsulinModel.title),
-                        description: Text(WalshInsulinModel.subtitle),
-                        isSelected: isWalshModelSelected,
-                        duration: walshActionDuration,
-                        validDurationRange: InsulinModelSettings.validWalshModelDurationRange
-                    )
-                    .padding(.vertical, 4)
-                    .padding(.bottom, 4)
-                }
             }
             .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
         }
-        .listStyle(GroupedListStyle())
+        .insetGroupedListStyle()
     }
 
     var insulinModelSettingDescription: Text {
         let spellOutFormatter = NumberFormatter()
         spellOutFormatter.numberStyle = .spellOut
         let modelCountString = spellOutFormatter.string(from: selectableInsulinModelSettings.count as NSNumber)!
-        return Text(String(format: LocalizedString("%1$@ assumes insulin is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity.", comment: "Insulin model setting description (1: app name) (2: number of models)"), appName, modelCountString))
+        return Text(String(format: LocalizedString("For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity.", comment: "Insulin model setting description (1: app name) (2: number of models)"), appName, modelCountString))
     }
 
     var insulinModelChart: InsulinModelChart {
@@ -219,35 +180,27 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
 
     var selectableInsulinModelSettings: [InsulinModelSettings] {
         var options: [InsulinModelSettings] =  [
-            .exponentialPreset(.humalogNovologAdult),
-            .exponentialPreset(.humalogNovologChild)
+            .exponentialPreset(.rapidActingAdult),
+            .exponentialPreset(.rapidActingChild)
         ]
-
-        if supportedModelSettings.fiaspModelEnabled {
-            options.append(.exponentialPreset(.fiasp))
-        }
-
-        if supportedModelSettings.walshModelEnabled {
-            options.append(.walsh(WalshInsulinModel(actionDuration: walshActionDuration.wrappedValue)))
-        }
 
         return options
     }
 
     private var selectedInsulinModelValues: [GlucoseValue] {
-        oneUnitBolusEffectPrediction(using: value.model)
+        oneUnitBolusEffectPrediction(using: value)
     }
 
     private var unselectedInsulinModelValues: [[GlucoseValue]] {
         selectableInsulinModelSettings
             .filter { $0 != value }
-            .map { oneUnitBolusEffectPrediction(using: $0.model) }
+            .map { oneUnitBolusEffectPrediction(using: $0) }
     }
 
-    private func oneUnitBolusEffectPrediction(using model: InsulinModel) -> [GlucoseValue] {
-        let bolus = DoseEntry(type: .bolus, startDate: chartManager.startDate, value: 1, unit: .units)
+    private func oneUnitBolusEffectPrediction(using modelSettings: InsulinModelSettings) -> [GlucoseValue] {
+        let bolus = DoseEntry(type: .bolus, startDate: chartManager.startDate, value: 1, unit: .units, insulinType: .novolog)
         let startingGlucoseSample = HKQuantitySample(type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!, quantity: startingGlucoseQuantity, start: chartManager.startDate, end: chartManager.startDate)
-        let effects = [bolus].glucoseEffects(insulinModel: model, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = [bolus].glucoseEffects(insulinModelSettings: modelSettings, insulinSensitivity: insulinSensitivitySchedule)
         return LoopMath.predictGlucose(startingAt: startingGlucoseSample, effects: effects)
     }
 
@@ -273,19 +226,6 @@ public struct InsulinModelSelection: View, HorizontalSizeClassOverride {
         )
     }
 
-    private var isWalshModelSelected: Binding<Bool> {
-        Binding(
-            get: { self.value.model is WalshInsulinModel },
-            set: { isSelected in
-                if isSelected {
-                    withAnimation {
-                        self.value = .walsh(WalshInsulinModel(actionDuration: self.walshActionDuration.wrappedValue))
-                    }
-                }
-            }
-        )
-    }
-    
     private func startSaving() {
         guard mode == .settings else {
             self.continueSaving()

@@ -16,7 +16,7 @@ public struct SuspendThresholdEditor: View {
     var unit: HKUnit
     var maxValue: HKQuantity?
     var save: (_ suspendThreshold: HKQuantity) -> Void
-    let mode: PresentationMode
+    let mode: SettingsPresentationMode
     
     @State private var userDidTap: Bool = false
     @State var value: HKQuantity
@@ -24,6 +24,7 @@ public struct SuspendThresholdEditor: View {
     @State var showingConfirmationAlert = false
     @Environment(\.dismiss) var dismiss
     @Environment(\.authenticate) var authenticate
+    @Environment(\.appName) private var appName
 
     let guardrail = Guardrail.suspendThreshold
 
@@ -32,7 +33,7 @@ public struct SuspendThresholdEditor: View {
         unit: HKUnit,
         maxValue: HKQuantity?,
         onSave save: @escaping (_ suspendThreshold: HKQuantity) -> Void,
-        mode: PresentationMode = .settings
+        mode: SettingsPresentationMode = .settings
     ) {
         self._value = State(initialValue: value ?? Self.defaultValue(for: unit))
         self.initialValue = value
@@ -46,18 +47,21 @@ public struct SuspendThresholdEditor: View {
            viewModel: TherapySettingsViewModel,
            didSave: (() -> Void)? = nil
     ) {
+        let unit = viewModel.therapySettings.glucoseUnit ?? viewModel.preferredGlucoseUnit
         self.init(
             value: viewModel.therapySettings.suspendThreshold?.quantity,
-            unit: viewModel.glucoseUnit,
+            unit: unit,
             maxValue: Guardrail.maxSuspendThresholdValue(
                 correctionRangeSchedule: viewModel.therapySettings.glucoseTargetRangeSchedule,
-                preMealTargetRange: viewModel.therapySettings.preMealTargetRange,
-                workoutTargetRange: viewModel.therapySettings.workoutTargetRange,
-                unit: viewModel.glucoseUnit
+                preMealTargetRange: viewModel.therapySettings.preMealTargetRange?.quantityRange(for: unit),
+                workoutTargetRange: viewModel.therapySettings.workoutTargetRange?.quantityRange(for: unit)
             ),
             onSave: { [weak viewModel] newValue in
-                let newThreshold = GlucoseThreshold(unit: viewModel!.glucoseUnit, value: newValue.doubleValue(for: viewModel!.glucoseUnit))
-                viewModel?.saveSuspendThreshold(value: newThreshold)
+                guard let viewModel = viewModel else {
+                    return
+                }
+                let newThreshold = GlucoseThreshold(unit: viewModel.preferredGlucoseUnit, value: newValue.doubleValue(for: viewModel.preferredGlucoseUnit))
+                viewModel.saveSuspendThreshold(value: newThreshold)
                 didSave?()
             },
             mode: viewModel.mode
@@ -160,7 +164,7 @@ public struct SuspendThresholdEditor: View {
     }
 
     var description: Text {
-        Text(TherapySetting.suspendThreshold.descriptiveText)
+        Text(TherapySetting.suspendThreshold.descriptiveText(appName: appName))
     }
     
     private var instructionalContentIfNecessary: some View {
@@ -195,7 +199,7 @@ public struct SuspendThresholdEditor: View {
 
     private func confirmationAlert() -> SwiftUI.Alert {
         SwiftUI.Alert(
-            title: Text(LocalizedString("Save Suspend Threshold?", comment: "Alert title for confirming a suspend threshold outside the recommended range")),
+            title: Text(LocalizedString("Save Glucose Safety Limit?", comment: "Alert title for confirming a glucose safety limit outside the recommended range")),
             message: Text(TherapySetting.suspendThreshold.guardrailSaveWarningCaption),
             primaryButton: .cancel(Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert"))),
             secondaryButton: .default(
@@ -233,9 +237,9 @@ struct SuspendThresholdGuardrailWarning: View {
     private var title: Text {
         switch safetyClassificationThreshold {
         case .minimum, .belowRecommended:
-            return Text(LocalizedString("Low Suspend Threshold", comment: "Title text for the low suspend threshold warning"))
+            return Text(LocalizedString("Low Glucose Safety Limit", comment: "Title text for the low glucose safety limit warning"))
         case .aboveRecommended, .maximum:
-            return Text(LocalizedString("High Suspend Threshold", comment: "Title text for the high suspend threshold warning"))
+            return Text(LocalizedString("High Glucose Safety Limit", comment: "Title text for the high glucose safety limit warning"))
         }
     }
 }

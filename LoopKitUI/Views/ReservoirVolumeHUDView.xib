@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17126"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,39 +14,37 @@
             <rect key="frame" x="0.0" y="0.0" width="42" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <view clipsSubviews="YES" contentMode="center" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="sSE-Jz-j8k">
-                    <rect key="frame" x="0.0" y="5" width="42" height="34"/>
+                <view clipsSubviews="YES" contentMode="center" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="8Wy-Sh-GU2">
+                    <rect key="frame" x="0.0" y="3" width="42" height="38"/>
                     <subviews>
-                        <view contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="UOD-1q-wHA" customClass="LevelMaskView" customModule="LoopKitUI">
-                            <rect key="frame" x="10" y="5" width="22" height="29"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="29" id="gdu-Kp-mV8"/>
-                            </constraints>
+                        <view contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="gdW-RC-gEQ" customClass="LevelMaskView" customModule="LoopKitUI">
+                            <rect key="frame" x="7" y="2.5" width="28" height="29.5"/>
                             <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="image" keyPath="maskImage" value="reservoir_mask"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="maskImage" value="pod_reservoir_mask"/>
                             </userDefinedRuntimeAttributes>
                         </view>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" image="reservoir" translatesAutoresizingMaskIntoConstraints="NO" id="zcH-tM-6Pm">
-                            <rect key="frame" x="10" y="0.0" width="22" height="34"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" image="pod_reservoir" translatesAutoresizingMaskIntoConstraints="NO" id="SBs-52-9Ml">
+                            <rect key="frame" x="7.5" y="1" width="27" height="36"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="22" id="27G-w5-6JR"/>
-                                <constraint firstAttribute="height" constant="34" id="iHS-ze-rHu"/>
+                                <constraint firstAttribute="height" constant="36" id="oSP-cc-UGI"/>
+                                <constraint firstAttribute="width" constant="27" id="ylV-k9-8QN"/>
                             </constraints>
                         </imageView>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="UOD-1q-wHA" firstAttribute="centerX" secondItem="zcH-tM-6Pm" secondAttribute="centerX" id="2qh-7U-U7N"/>
-                        <constraint firstItem="UOD-1q-wHA" firstAttribute="width" secondItem="zcH-tM-6Pm" secondAttribute="width" id="PWW-DH-nVr"/>
-                        <constraint firstItem="zcH-tM-6Pm" firstAttribute="centerX" secondItem="sSE-Jz-j8k" secondAttribute="centerX" id="WDC-Uo-EVH"/>
-                        <constraint firstItem="UOD-1q-wHA" firstAttribute="top" secondItem="zcH-tM-6Pm" secondAttribute="top" constant="5" id="hKN-SU-NsT"/>
-                        <constraint firstItem="zcH-tM-6Pm" firstAttribute="centerY" secondItem="sSE-Jz-j8k" secondAttribute="centerY" id="orx-zV-Uqu"/>
-                        <constraint firstAttribute="height" constant="34" id="r0H-AZ-Q6h"/>
+                        <constraint firstItem="SBs-52-9Ml" firstAttribute="centerX" secondItem="8Wy-Sh-GU2" secondAttribute="centerX" id="03L-OO-uVc"/>
+                        <constraint firstItem="SBs-52-9Ml" firstAttribute="centerY" secondItem="8Wy-Sh-GU2" secondAttribute="centerY" id="7U6-2T-1wD"/>
+                        <constraint firstItem="gdW-RC-gEQ" firstAttribute="height" secondItem="SBs-52-9Ml" secondAttribute="height" multiplier="0.819444" id="AH7-6X-Gmk"/>
+                        <constraint firstItem="gdW-RC-gEQ" firstAttribute="top" secondItem="SBs-52-9Ml" secondAttribute="top" constant="1.5" id="Ffs-dC-322"/>
+                        <constraint firstItem="gdW-RC-gEQ" firstAttribute="centerX" secondItem="SBs-52-9Ml" secondAttribute="centerX" id="oDl-GG-u5A"/>
+                        <constraint firstAttribute="height" constant="38" id="olt-s8-seh"/>
+                        <constraint firstItem="gdW-RC-gEQ" firstAttribute="leading" secondItem="SBs-52-9Ml" secondAttribute="leading" constant="-0.5" id="trC-QK-8g7"/>
                     </constraints>
                 </view>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="44U" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g9J-nS-4US">
-                    <rect key="frame" x="11" y="14.5" width="20.5" height="11"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="44U" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Li-Fa-L6E">
+                    <rect key="frame" x="11" y="9.5" width="20.5" height="11"/>
                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="9"/>
-                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" systemColor="systemBlueColor"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
@@ -52,22 +52,25 @@
                 <bool key="isElement" value="YES"/>
             </accessibility>
             <constraints>
-                <constraint firstItem="sSE-Jz-j8k" firstAttribute="width" secondItem="Fgu-h0-N6n" secondAttribute="width" id="587-U6-odp"/>
-                <constraint firstItem="sSE-Jz-j8k" firstAttribute="centerY" secondItem="Fgu-h0-N6n" secondAttribute="centerY" id="7BA-aC-c4z"/>
-                <constraint firstItem="g9J-nS-4US" firstAttribute="centerX" secondItem="sSE-Jz-j8k" secondAttribute="centerX" id="ADM-vN-GBJ"/>
-                <constraint firstItem="g9J-nS-4US" firstAttribute="centerY" secondItem="sSE-Jz-j8k" secondAttribute="centerY" constant="-2" id="NeR-1T-w3W"/>
-                <constraint firstItem="sSE-Jz-j8k" firstAttribute="centerX" secondItem="Fgu-h0-N6n" secondAttribute="centerX" id="VWt-od-IHu"/>
+                <constraint firstItem="1Li-Fa-L6E" firstAttribute="centerX" secondItem="8Wy-Sh-GU2" secondAttribute="centerX" id="NBh-f2-CSa"/>
+                <constraint firstItem="8Wy-Sh-GU2" firstAttribute="width" secondItem="Fgu-h0-N6n" secondAttribute="width" id="Uvj-SW-7kR"/>
+                <constraint firstItem="1Li-Fa-L6E" firstAttribute="centerY" secondItem="8Wy-Sh-GU2" secondAttribute="centerY" constant="-7" id="bpz-B1-aFe"/>
+                <constraint firstItem="8Wy-Sh-GU2" firstAttribute="centerY" secondItem="Fgu-h0-N6n" secondAttribute="centerY" id="uQK-09-773"/>
+                <constraint firstItem="8Wy-Sh-GU2" firstAttribute="centerX" secondItem="Fgu-h0-N6n" secondAttribute="centerX" id="y0x-aG-Cjj"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="levelMaskView" destination="UOD-1q-wHA" id="nsX-iI-myz"/>
-                <outlet property="volumeLabel" destination="g9J-nS-4US" id="5ki-bV-jMd"/>
+                <outlet property="levelMaskView" destination="gdW-RC-gEQ" id="fWh-lY-58j"/>
+                <outlet property="volumeLabel" destination="1Li-Fa-L6E" id="mPW-rC-N7A"/>
             </connections>
             <point key="canvasLocation" x="-12.800000000000001" y="-136.28185907046478"/>
         </view>
     </objects>
     <resources>
-        <image name="reservoir" width="28" height="44"/>
-        <image name="reservoir_mask" width="28" height="39"/>
+        <image name="pod_reservoir" width="24" height="33"/>
+        <image name="pod_reservoir_mask" width="24" height="27"/>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

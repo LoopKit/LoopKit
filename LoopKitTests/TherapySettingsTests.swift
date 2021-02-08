@@ -83,7 +83,7 @@ class TherapySettingsTests: XCTestCase {
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             carbRatioSchedule: carbRatioSchedule,
             basalRateSchedule: basalRateSchedule,
-            insulinModelSettings: InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)
+            insulinModelSettings: InsulinModelSettings(model: ExponentialInsulinModelPreset.rapidActingAdult)
         )
     }
 
@@ -239,7 +239,7 @@ class TherapySettingsTests: XCTestCase {
         }
       },
       "insulinModelSettings" : {
-        "exponential" : "humalogNovologAdult"
+        "exponential" : "rapidActingAdult"
       },
       "insulinSensitivitySchedule" : {
         "unit" : "mg/dL",
@@ -295,18 +295,18 @@ class TherapySettingsTests: XCTestCase {
     """
     
     func testInsulinModelEncoding() throws {
-        let adult = InsulinModelSettings.exponentialPreset(.humalogNovologAdult)
-        let child = InsulinModelSettings.exponentialPreset(.humalogNovologChild)
+        let adult = InsulinModelSettings.exponentialPreset(.rapidActingAdult)
+        let child = InsulinModelSettings.exponentialPreset(.rapidActingChild)
         let walsh = InsulinModelSettings.walsh(WalshInsulinModel(actionDuration: 10))
         
         XCTAssertEqual("""
         {
-          "exponential" : "humalogNovologAdult"
+          "exponential" : "rapidActingAdult"
         }
         """, String(data: try encoder.encode(adult), encoding: .utf8)!)
         XCTAssertEqual("""
         {
-          "exponential" : "humalogNovologChild"
+          "exponential" : "rapidActingChild"
         }
         """, String(data: try encoder.encode(child), encoding: .utf8)!)
         XCTAssertEqual("""

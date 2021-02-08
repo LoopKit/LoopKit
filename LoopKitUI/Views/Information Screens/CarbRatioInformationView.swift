@@ -11,13 +11,14 @@ import LoopKit
 
 public struct CarbRatioInformationView: View {
     var onExit: (() -> Void)?
-    var mode: PresentationMode
+    var mode: SettingsPresentationMode
     
     @Environment(\.presentationMode) var presentationMode
-    
+    @Environment(\.appName) private var appName
+
     public init(
         onExit: (() -> Void)?,
-        mode: PresentationMode = .acceptanceFlow
+        mode: SettingsPresentationMode = .acceptanceFlow
     ){
         self.onExit = onExit
         self.mode = mode
@@ -34,7 +35,7 @@ public struct CarbRatioInformationView: View {
     
     private var text: some View {
         VStack(alignment: .leading, spacing: 25) {
-            Text(TherapySetting.carbRatio.descriptiveText)
+            Text(TherapySetting.carbRatio.descriptiveText(appName: appName))
             Text(LocalizedString("You can add different carb ratios for different times of day by using the ➕.", comment: "Description of how to add a ratio"))
         }
         .accentColor(.secondary)

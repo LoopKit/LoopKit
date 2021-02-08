@@ -9,7 +9,7 @@
 import SwiftUI
 
 public struct LabeledValueView: View {
-    public static let NoValueString: String = "—"
+    public static let NoValueString: String = "–"
     var label: String
     var value: String?
     var highlightValue: Bool

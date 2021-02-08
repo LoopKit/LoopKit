@@ -18,6 +18,7 @@ public struct CorrectionRangeOverridesExpandableSetting<ExpandedContent: View>: 
     @Binding var value: CorrectionRangeOverrides
     let preset: CorrectionRangeOverrides.Preset
     let unit: HKUnit
+    let suspendThreshold: GlucoseThreshold?
     var correctionRangeScheduleRange: ClosedRange<HKQuantity>
     var expandedContent: () -> ExpandedContent
 
@@ -44,6 +45,6 @@ public struct CorrectionRangeOverridesExpandableSetting<ExpandedContent: View>: 
     }
 
     private func guardrail(for preset: CorrectionRangeOverrides.Preset) -> Guardrail<HKQuantity> {
-        return Guardrail.correctionRangeOverride(for: preset, correctionRangeScheduleRange: correctionRangeScheduleRange)
+        return Guardrail.correctionRangeOverride(for: preset, correctionRangeScheduleRange: correctionRangeScheduleRange, suspendThreshold: suspendThreshold)
     }
 }

@@ -8,10 +8,12 @@
 
 import SwiftUI
 
+@available(iOS, obsoleted: 14.0)
 public protocol HorizontalSizeClassOverride {
     var horizontalOverride: UserInterfaceSizeClass { get }
 }
 
+@available(iOS, obsoleted: 14.0)
 public extension HorizontalSizeClassOverride {
     var horizontalOverride: UserInterfaceSizeClass {
         if UIScreen.main.bounds.height <= 640 {

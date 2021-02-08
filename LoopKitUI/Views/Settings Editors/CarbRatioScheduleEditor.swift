@@ -18,13 +18,14 @@ fileprivate extension HKUnit {
 
 public struct CarbRatioScheduleEditor: View {
     private var schedule: DailyQuantitySchedule<Double>?
-    private var mode: PresentationMode
+    private var mode: SettingsPresentationMode
     private var save: (CarbRatioSchedule) -> Void
+    @Environment(\.appName) private var appName
 
     public init(
         schedule: CarbRatioSchedule?,
         onSave save: @escaping (CarbRatioSchedule) -> Void,
-        mode: PresentationMode = .settings
+        mode: SettingsPresentationMode = .settings
     ) {
         // CarbRatioSchedule stores only the gram unit.
         // For consistency across display & computation, convert to "real" g/U units.
@@ -61,7 +62,7 @@ public struct CarbRatioScheduleEditor: View {
             guardrail: .carbRatio,
             selectableValueStride: HKQuantity(unit: .realCarbRatioScheduleUnit, doubleValue: 0.01),
             quantitySelectionMode: .fractional,
-            defaultFirstScheduleItemValue: Guardrail.carbRatio.startingSuggestion ?? Guardrail.carbRatio.absoluteBounds.upperBound,
+            defaultFirstScheduleItemValue: Guardrail.carbRatio.startingSuggestion ?? Guardrail.carbRatio.recommendedBounds.upperBound,
             confirmationAlertContent: confirmationAlertContent,
             guardrailWarning: CarbRatioGuardrailWarning.init(crossedThresholds:),
             onSave: {
@@ -74,7 +75,7 @@ public struct CarbRatioScheduleEditor: View {
     }
 
     private var description: Text {
-        Text(TherapySetting.carbRatio.descriptiveText)
+        Text(TherapySetting.carbRatio.descriptiveText(appName: appName))
     }
 
     private var confirmationAlertContent: AlertContent {

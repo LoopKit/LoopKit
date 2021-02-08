@@ -17,6 +17,8 @@ extension MockService: ServiceUI {
         return UIImage(systemName: "icloud.and.arrow.up")
     }
     
+    public static var providesOnboarding: Bool { return false }
+    
     public static func setupViewController(currentTherapySettings: TherapySettings, preferredGlucoseUnit: HKUnit, chartColors: ChartColorPalette, carbTintColor: Color, glucoseTintColor: Color, guidanceColors: GuidanceColors, insulinTintColor: Color) -> (UIViewController & ServiceSetupNotifying & CompletionNotifying)? {
         return ServiceViewController(rootViewController: MockServiceTableViewController(service: MockService(), for: .create))
     }
@@ -25,4 +27,7 @@ extension MockService: ServiceUI {
       return ServiceViewController(rootViewController: MockServiceTableViewController(service: self, for: .update))
     }
     
+    public func supportMenuItem(supportInfoProvider: SupportInfoProvider, urlHandler: @escaping (URL) -> Void) -> AnyView? {
+        return nil
+    }
 }

@@ -80,26 +80,22 @@ public final class DoseStore {
 
     private let log = OSLog(category: "DoseStore")
 
-    public var insulinModel: InsulinModel? {
+    public var insulinModelSettings: InsulinModelSettings? {
         get {
-            return lockedInsulinModel.value
+            return lockedInsulinModelSettings.value
         }
         set {
-            lockedInsulinModel.value = newValue
+            lockedInsulinModelSettings.value = newValue
 
             persistenceController.managedObjectContext.perform {
                 self.pumpEventQueryAfterDate = max(self.pumpEventQueryAfterDate, self.cacheStartDate)
 
                 self.validateReservoirContinuity()
             }
-
-            if let effectDuration = insulinModel?.effectDuration {
-                insulinDeliveryStore.observationStart = Date(timeIntervalSinceNow: -effectDuration)
-            }
         }
     }
-    private let lockedInsulinModel: Locked<InsulinModel?>
-
+    private let lockedInsulinModelSettings: Locked<InsulinModelSettings?>
+    
     /// A history of recently applied schedule overrides.
     private let overrideHistory: TemporaryScheduleOverrideHistory?
 
@@ -200,7 +196,7 @@ public final class DoseStore {
     ///   - observeHealthKitSamplesFromOtherApps: Whether or not this Store should read HealthKit data written by other apps
     ///   - cacheStore: The cache store for reading & writing short-term intermediate data
     ///   - observationEnabled: Whether the store should observe changes from HealthKit
-    ///   - insulinModel: The model of insulin effect over time
+    ///   - insulinModelSettings: A factory for producing insulin models based on insulin type
     ///   - basalProfile: The daily schedule of basal insulin rates
     ///   - insulinSensitivitySchedule: The daily schedule of insulin sensitivity (ISF)
     ///   - syncVersion: A version number for determining resolution in de-duplication
@@ -211,12 +207,13 @@ public final class DoseStore {
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
-        insulinModel: InsulinModel?,
+        insulinModelSettings: InsulinModelSettings?,
         basalProfile: BasalRateSchedule?,
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
         overrideHistory: TemporaryScheduleOverrideHistory? = nil,
         syncVersion: Int = 1,
         lastPumpEventsReconciliation: Date? = nil,
+        provenanceIdentifier: String,
         test_currentDate: Date? = nil
     ) {
         self.insulinDeliveryStore = InsulinDeliveryStore(
@@ -224,10 +221,11 @@ public final class DoseStore {
             observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
             cacheStore: cacheStore,
             observationEnabled: observationEnabled,
+            provenanceIdentifier: provenanceIdentifier,
             test_currentDate: test_currentDate
         )
-        self.lockedInsulinModel = Locked(insulinModel)
         self.lockedInsulinSensitivitySchedule = Locked(insulinSensitivitySchedule)
+        self.lockedInsulinModelSettings = Locked(insulinModelSettings)
         self.lockedBasalProfile = Locked(basalProfile)
         self.overrideHistory = overrideHistory
         self.persistenceController = cacheStore
@@ -400,31 +398,36 @@ extension DoseStore {
     /// - Returns: The array of reservoir data used in the calculation
     @discardableResult
     private func validateReservoirContinuity(at date: Date? = nil) -> [Reservoir] {
+        guard let insulinModelSettings = insulinModelSettings else {
+            self.areReservoirValuesValid = false
+            self.lastStoredReservoirValue = nil
+            return []
+        }
+
         let date = date ?? currentDate()
 
-        if let insulinModel = insulinModel {
-            // Consider any entries longer than 30 minutes, or with a value of 0, to be unreliable
-            let maximumInterval = TimeInterval(minutes: 30)
-            let continuityStartDate = date.addingTimeInterval(-insulinModel.effectDuration)
+        // Consider any entries longer than 30 minutes, or with a value of 0, to be unreliable
+        let maximumInterval = TimeInterval(minutes: 30)
+        
+        let continuityStartDate = date.addingTimeInterval(-insulinModelSettings.longestEffectDuration)
 
-            if  let recentReservoirObjects = try? self.getReservoirObjects(since: continuityStartDate - maximumInterval),
-                let oldestRelevantReservoirObject = recentReservoirObjects.last
-            {
-                // Verify reservoir timestamps are continuous
-                let areReservoirValuesContinuous = recentReservoirObjects.reversed().isContinuous(
-                    from: continuityStartDate,
-                    to: date,
-                    within: maximumInterval
-                )
-                
-                // also make sure prime events don't exist withing the insulin action duration
-                let primeEventExistsWithinInsulinActionDuration = (lastRecordedPrimeEventDate ?? .distantPast) >= oldestRelevantReservoirObject.startDate
+        if  let recentReservoirObjects = try? self.getReservoirObjects(since: continuityStartDate - maximumInterval),
+            let oldestRelevantReservoirObject = recentReservoirObjects.last
+        {
+            // Verify reservoir timestamps are continuous
+            let areReservoirValuesContinuous = recentReservoirObjects.reversed().isContinuous(
+                from: continuityStartDate,
+                to: date,
+                within: maximumInterval
+            )
+            
+            // also make sure prime events don't exist withing the insulin action duration
+            let primeEventExistsWithinInsulinActionDuration = (lastRecordedPrimeEventDate ?? .distantPast) >= oldestRelevantReservoirObject.startDate
 
-                self.areReservoirValuesValid = areReservoirValuesContinuous && !primeEventExistsWithinInsulinActionDuration
-                self.lastStoredReservoirValue = recentReservoirObjects.first?.storedReservoirValue
+            self.areReservoirValuesValid = areReservoirValuesContinuous && !primeEventExistsWithinInsulinActionDuration
+            self.lastStoredReservoirValue = recentReservoirObjects.first?.storedReservoirValue
 
-                return recentReservoirObjects
-            }
+            return recentReservoirObjects
         }
 
         self.areReservoirValuesValid = false
@@ -756,7 +759,7 @@ extension DoseStore {
                     self.delegate?.doseStoreHasUpdatedPumpEventData(self)
                 }
 
-                self.syncPumpEventsToHealthStore() { _ in
+                self.syncPumpEventsToInsulinDeliveryStore() { _ in
                     completion(DoseStoreError(error: error))
                     NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
                 }
@@ -802,9 +805,9 @@ extension DoseStore {
     /// - Parameter completion: A closure called after all the events are deleted. This closure takes a single argument:
     /// - Parameter error: An error explaining why the deletion failed
     public func deleteAllPumpEvents(_ completion: @escaping (_ error: DoseStoreError?) -> Void) {
-        syncPumpEventsToHealthStore { (error) in
+        syncPumpEventsToInsulinDeliveryStore { (error) in
             if let error = error {
-                self.log.error("Error performing final HealthKit sync before deleteAllPumpEvents: %{public}@", String(describing: error))
+                self.log.error("Error performing final sync to insulin delivery store before deleteAllPumpEvents: %{public}@", String(describing: error))
             }
 
             self.persistenceController.managedObjectContext.perform {
@@ -829,31 +832,129 @@ extension DoseStore {
         }
     }
 
+    /**
+     Adds and persists external dose entries
+     - parameter doses: An array of dose entries to add.
+     - parameter completion: A closure called after the doses are saved. The closure takes a single argument:
+     - parameter error: An error object explaining why the doses could not be saved.
+     */
+    public func logOutsideDose(_ doses: [DoseEntry], completion: @escaping (_ error: Error?) -> Void) {
+        guard doses.count > 0 else {
+            completion(nil)
+            return
+        }
+
+        self.persistenceController.save { (error) -> Void in
+            self.insulinDeliveryStore.addDoseEntries(doses, from: nil, syncVersion: self.syncVersion, provenanceIdentifier: "org.loopkit.provenance.manualEntry") { (result) in
+                switch result {
+                case .success:
+                    completion(nil)
+                    NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
+                case .failure(let error):
+                    self.log.error("Error adding logged dose: %{public}@", String(describing: error))
+                    completion(error)
+                }
+            }
+        }
+    }
+
+    /// Deletes one particular logged dose event from the store
+    ///
+    /// - Parameter dose: Dose to delete.
+    /// - Parameter completion: A closure called after the event deleted. This closure takes a single argument:
+    /// - Parameter success: True if dose was successfully deleted
+    public func deleteOutsideDose(_ dose: PersistedOutsideDose, completion: @escaping (_ error: DoseStoreError?) -> Void) {
+        guard let uuid = dose.uuid else {
+            self.log.error("Unable to delete PersistedOutsideDose: no UUID")
+            completion(DoseStoreError.fetchError(description: "Unable to delete dose: identifier is missing", recoverySuggestion: "File an issue report in Github"))
+            return
+        }
+        
+        insulinDeliveryStore.deleteDose(with: uuid) { (error) in
+            if let error = error {
+                completion(DoseStoreError.persistenceError(description: error, recoverySuggestion: nil))
+            } else {
+                NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
+                completion(nil)
+            }
+        }
+    }
+
+    /// Deletes all outside/external dose events
+    ///
+    /// - Parameter completion: A closure called after all the events are deleted. This closure takes a single argument:
+    /// - Parameter error: An error explaining why the deletion failed
+    public func deleteAllOutsideDoses(_ completion: @escaping (_ error: DoseStoreError?) -> Void) {
+        self.persistenceController.managedObjectContext.perform {
+            do {
+                self.log.info("Deleting all outside dose events")
+                try self.purgeOutsideDoses()
+
+                self.persistenceController.save { (error) in
+
+                    completion(DoseStoreError(error: error))
+                    NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
+                }
+            } catch let error as PersistenceController.PersistenceControllerError {
+                completion(DoseStoreError(error: error))
+            } catch {
+                assertionFailure()
+            }
+        }
+    }
+
+    /**
+     Removes logged doses older than the recency predicate
+     
+     *This method should only be called from within a managed object context block.*
+     - throws: PersistenceController.PersistenceControllerError.coreDataError if the delete request failed
+     */
+    private func purgeOutsideDoses() throws {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: CachedInsulinDeliveryObject.entity().name!)
+        // Only delete logged doses
+        let typePredicate = NSPredicate(format: "provenanceIdentifier == 'org.loopkit.provenance.manualEntry'")
+        fetchRequest.predicate = typePredicate
+
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        deleteRequest.resultType = .resultTypeObjectIDs
+
+        do {
+            if let result = try persistenceController.managedObjectContext.execute(deleteRequest) as? NSBatchDeleteResult,
+                let objectIDs = result.result as? [NSManagedObjectID],
+                objectIDs.count > 0
+            {
+                let changes = [NSDeletedObjectsKey: objectIDs]
+                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [persistenceController.managedObjectContext])
+                persistenceController.managedObjectContext.refreshAllObjects()
+            }
+        } catch let error as NSError {
+            throw PersistenceController.PersistenceControllerError.coreDataError(error)
+        }
+    }
 
 
-    /// Attempts to store doses from pump events to Health
-    private func syncPumpEventsToHealthStore(completion: @escaping (_ error: Error?) -> Void) {
+    /// Attempts to store doses from pump events to insulin delivery store
+    private func syncPumpEventsToInsulinDeliveryStore(completion: @escaping (_ error: Error?) -> Void) {
         insulinDeliveryStore.getLastBasalEndDate { (result) in
             switch result {
             case .success(let date):
                 // Limit the query behavior to 24 hours
                 let date = max(date, self.recentStartDate)
-                self.savePumpEventsToHealthStore(after: date, completion: completion)
+                self.savePumpEventsToInsulinDeliveryStore(after: date, completion: completion)
             case .failure(let error):
-                // Failures are expected when the health database is protected
                 completion(error)
             }
         }
     }
 
-    /// Processes and saves dose events on or after the given date to Health
+    /// Processes and saves dose events on or after the given date to insulin delivery store
     ///
     /// - Parameters:
     ///   - start: The date on and after which to include doses
     ///   - completion: A closure called on completion
     ///   - error: An error if one ocurred during processing or saving
-    private func savePumpEventsToHealthStore(after start: Date, completion: @escaping (_ error: Error?) -> Void) {
-        getPumpEventDoseEntriesForSavingToHealthStore(startingAt: start) { (result) in
+    private func savePumpEventsToInsulinDeliveryStore(after start: Date, completion: @escaping (_ error: Error?) -> Void) {
+        getPumpEventDoseEntriesForSavingToInsulinDeliveryStore(startingAt: start) { (result) in
             switch result {
             case .success(let doses):
                 guard doses.count > 0 else {
@@ -862,10 +963,10 @@ extension DoseStore {
                 }
 
                 for dose in doses {
-                    self.log.debug("Adding dose to HealthKit: %@", String(describing: dose))
+                    self.log.debug("Adding dose to insulin delivery store: %@", String(describing: dose))
                 }
 
-                self.insulinDeliveryStore.addReconciledDoses(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
+                self.insulinDeliveryStore.addDoseEntries(doses, from: self.device, syncVersion: self.syncVersion) { (result) in
                     switch result {
                     case .success:
                         completion(nil)
@@ -887,8 +988,8 @@ extension DoseStore {
     ///   - start: The date on and after which to include doses
     ///   - completion: A closure called on completion
     ///   - result: The doses along with schedule basal
-    private func getPumpEventDoseEntriesForSavingToHealthStore(startingAt: Date, completion: @escaping (_ result: DoseStoreResult<[DoseEntry]>) -> Void) {
-        // Can't store to HealthKit if we don't know end of reconciled range, or if we already have doses after the end
+    private func getPumpEventDoseEntriesForSavingToInsulinDeliveryStore(startingAt: Date, completion: @escaping (_ result: DoseStoreResult<[DoseEntry]>) -> Void) {
+        // Can't store to insulin delivery store if we don't know end of reconciled range, or if we already have doses after the end
         guard let endingAt = lastPumpEventsReconciliation, endingAt > startingAt else {
             completion(.success([]))
             return
@@ -897,9 +998,9 @@ extension DoseStore {
         self.persistenceController.managedObjectContext.perform {
             let doses: [DoseEntry]
             do {
-                doses = try self.getNormalizedPumpEventDoseEntriesForSavingToHealthStore(basalStart: startingAt, end: self.currentDate())
+                doses = try self.getNormalizedPumpEventDoseEntriesForSavingToInsulinDeliveryStore(basalStart: startingAt, end: self.currentDate())
             } catch let error as DoseStoreError {
-                self.log.error("Error while fetching doses to add to HealthKit: %{public}@", String(describing: error))
+                self.log.error("Error while fetching doses to add to insulin delivery store: %{public}@", String(describing: error))
                 completion(.failure(error))
                 return
             } catch {
@@ -914,13 +1015,69 @@ extension DoseStore {
             }
 
             guard let basalSchedule = self.basalProfileApplyingOverrideHistory else {
-                self.log.error("Can't save %d doses to HealthKit because no basal profile is configured", doses.count)
+                self.log.error("Can't save %d doses to insulin delivery store because no basal profile is configured", doses.count)
                 completion(.failure(DoseStoreError.configurationError))
                 return
             }
 
             let reconciledDoses = doses.overlayBasalSchedule(basalSchedule, startingAt: startingAt, endingAt: endingAt, insertingBasalEntries: !self.pumpRecordsBasalProfileStartEvents)
             completion(.success(reconciledDoses))
+        }
+    }
+    
+    /// *This method should only be called from within a managed object context block.*
+    ///
+    /// - Parameter startDate: The earliest outside dose event date to include
+    /// - Returns: An array of logged dose managed objects, in reverse-chronological order
+    /// - Throws: An error describing the failure to fetch objects
+    public func getLoggedDoses(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<[PersistedOutsideDose]>) -> Void) {
+        persistenceController.managedObjectContext.perform {
+            do {
+                let events = try self.getLoggedDoses(
+                    matching: NSPredicate(format: "startDate >= %@", startDate as NSDate),
+                    chronological: false
+                )
+
+                completion(.success(events))
+            } catch let error as DoseStoreError {
+                completion(.failure(error))
+            } catch {
+                assertionFailure()
+            }
+        }
+
+
+    }
+
+    /// *This method should only be called from within a managed object context block.*
+    ///
+    /// Objects are ordered by date using the DoseType sort ordering as a tiebreaker for stability
+    ///
+    /// - Parameters:
+    ///   - predicate: The predicate to apply to the objects
+    ///   - chronological: Whether to return the objects in chronological or reverse-chronological order
+    /// - Returns: An array of pump events in the specified order by date
+    /// - Throws: An error describing the failure to fetch objects
+    private func getLoggedDoses(matching predicate: NSPredicate, chronological: Bool, limit: Int? = nil) throws -> [PersistedOutsideDose] {
+        let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
+
+        let sourcePredicate = NSPredicate(format: "provenanceIdentifier == 'org.loopkit.provenance.manualEntry'")
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, sourcePredicate])
+        request.predicate = compoundPredicate
+        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: chronological)]
+
+        if let limit = limit {
+            request.fetchLimit = limit
+        }
+
+        do {
+            return try persistenceController.managedObjectContext.fetch(request).sorted(by: { (lhs, rhs) -> Bool in
+                let (first, second) = chronological ? (lhs, rhs) : (rhs, lhs)
+
+                return first.startDate < second.startDate
+            }).compactMap{ $0.persistedOutsideDose }
+        } catch let fetchError as NSError {
+            throw DoseStoreError.fetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
         }
     }
 
@@ -1039,7 +1196,7 @@ extension DoseStore {
     ///   - end: The latest dose end date to include
     /// - Returns: An array of doses from pump events
     /// - Throws: An error describing the failure to fetch objects
-    private func getNormalizedPumpEventDoseEntriesForSavingToHealthStore(basalStart: Date, end: Date) throws -> [DoseEntry] {
+    private func getNormalizedPumpEventDoseEntriesForSavingToInsulinDeliveryStore(basalStart: Date, end: Date) throws -> [DoseEntry] {
         guard let basalProfile = self.basalProfileApplyingOverrideHistory else {
             throw DoseStoreError.configurationError
         }
@@ -1119,28 +1276,33 @@ extension DoseStore {
     ///   - completion: A closure called once the entries have been retrieved
     ///   - result: An array of dose entries, in chronological order by startDate
     public func getNormalizedDoseEntries(start: Date, end: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[DoseEntry]>) -> Void) {
-        insulinDeliveryStore.getCachedDoses(start: start, end: end, isChronological: true) { (insulinDeliveryDoses) in
-            let filteredStart = max(insulinDeliveryDoses.lastBasalEndDate ?? start, start)
+        insulinDeliveryStore.getDoseEntries(start: start, end: end) { (result) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(.persistenceError(description: error.localizedDescription, recoverySuggestion: nil)))
+            case .success(let insulinDeliveryDoses):
+                let filteredStart = max(self.lastPumpEventsReconciliation ?? start, start)
 
-            self.persistenceController.managedObjectContext.perform {
-                do {
-                    let doses: [DoseEntry]
+                self.persistenceController.managedObjectContext.perform {
+                    do {
+                        let doses: [DoseEntry]
 
-                    // Reservoir data is used only if it's continuous and the pumpmanager hasn't reconciled since the last reservoir reading
-                    if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {
-                        let reservoirDoses = try self.getNormalizedReservoirDoseEntries(start: filteredStart, end: end)
-                        let endOfReservoirData = self.lastStoredReservoirValue?.endDate ?? .distantPast
-                        let mutableDoses = try self.getNormalizedMutablePumpEventDoseEntries(start: endOfReservoirData)
-                        doses = insulinDeliveryDoses + reservoirDoses.map({ $0.trimmed(from: filteredStart) }) + mutableDoses
-                    } else {
-                        // Includes mutable doses.
-                        doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
+                        // Reservoir data is used only if it's continuous and the pumpmanager hasn't reconciled since the last reservoir reading
+                        if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {
+                            let reservoirDoses = try self.getNormalizedReservoirDoseEntries(start: filteredStart, end: end)
+                            let endOfReservoirData = self.lastStoredReservoirValue?.endDate ?? .distantPast
+                            let mutableDoses = try self.getNormalizedMutablePumpEventDoseEntries(start: endOfReservoirData)
+                            doses = insulinDeliveryDoses + reservoirDoses.map({ $0.trimmed(from: filteredStart) }) + mutableDoses
+                        } else {
+                            // Includes mutable doses.
+                            doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
+                        }
+                        completion(.success(doses))
+                    } catch let error as DoseStoreError {
+                        completion(.failure(error))
+                    } catch {
+                        assertionFailure()
                     }
-                    completion(.success(doses))
-                } catch let error as DoseStoreError {
-                    completion(.failure(error))
-                } catch {
-                    assertionFailure()
                 }
             }
         }
@@ -1165,7 +1327,8 @@ extension DoseStore {
                 // Return the larger of the two bounding values, for the scenario when a bolus
                 // was scheduled between the two values; we want to return the later, larger value
                 guard let maxValue = closest.max(by: { return $0.value < $1.value }) else {
-                    completion(.failure(.fetchError(description: "No values found", recoverySuggestion: "Ensure insulin data exists for the specified date")))
+                    // If we have no iob values in the store, and did not encounter an error, return 0
+                    completion(.success(InsulinValue(startDate: date, value: 0)))
                     return
                 }
 
@@ -1185,20 +1348,21 @@ extension DoseStore {
     ///   - completion: A closure called once the values have been retrieved
     ///   - result: An array of insulin values, in chronological order
     public func getInsulinOnBoardValues(start: Date, end: Date? = nil, basalDosingEnd: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[InsulinValue]>) -> Void) {
-        guard let insulinModel = self.insulinModel else {
+        
+        guard let insulinModelSettings = insulinModelSettings else {
             completion(.failure(.configurationError))
             return
         }
 
         // To properly know IOB at startDate, we need to go back another DIA hours
-        let doseStart = start.addingTimeInterval(-insulinModel.effectDuration)
+        let doseStart = start.addingTimeInterval(-insulinModelSettings.longestEffectDuration)
         getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
             switch result {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
                 let trimmedDoses = doses.map { $0.trimmed(to: basalDosingEnd) }
-                let insulinOnBoard = trimmedDoses.insulinOnBoard(model: insulinModel)
+                let insulinOnBoard = trimmedDoses.insulinOnBoard(insulinModelSettings: insulinModelSettings)
                 completion(.success(insulinOnBoard.filterDateRange(start, end)))
             }
         }
@@ -1215,15 +1379,16 @@ extension DoseStore {
     ///   - completion: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completion: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
-        guard let insulinModel = self.insulinModel,
-              let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory
+        guard
+            let insulinModelSettings = self.insulinModelSettings,
+            let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory
         else {
             completion(.failure(.configurationError))
             return
         }
 
         // To properly know glucose effects at startDate, we need to go back another DIA hours
-        let doseStart = start.addingTimeInterval(-insulinModel.effectDuration)
+        let doseStart = start.addingTimeInterval(-insulinModelSettings.longestEffectDuration)
         getNormalizedDoseEntries(start: doseStart, end: end) { (result) in
             switch result {
             case .failure(let error):
@@ -1235,7 +1400,8 @@ extension DoseStore {
                     }
                     return dose.trimmed(to: basalDosingEnd)
                 }
-                let glucoseEffects = trimmedDoses.glucoseEffects(insulinModel: insulinModel, insulinSensitivity: insulinSensitivitySchedule)
+
+                let glucoseEffects = trimmedDoses.glucoseEffects(insulinModelSettings: insulinModelSettings, insulinSensitivity: insulinSensitivitySchedule)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             }
         }
@@ -1278,7 +1444,7 @@ extension DoseStore {
         var report: [String] = [
             "## DoseStore",
             "",
-            "* insulinModel: \(String(reflecting: insulinModel))",
+            "* insulinModelSettings: \(String(reflecting: insulinModelSettings))",
             "* basalProfile: \(basalProfile?.debugDescription ?? "")",
             "* basalProfileApplyingOverrideHistory \(basalProfileApplyingOverrideHistory?.debugDescription ?? "nil")",
             "* insulinSensitivitySchedule: \(insulinSensitivitySchedule?.debugDescription ?? "")",
@@ -1354,7 +1520,7 @@ extension DoseStore {
                             }
                         }
 
-                        self.getPumpEventDoseEntriesForSavingToHealthStore(startingAt: firstPumpEventDate, completion: { (result) in
+                        self.getPumpEventDoseEntriesForSavingToInsulinDeliveryStore(startingAt: firstPumpEventDate, completion: { (result) in
 
                             report.append("")
                             report.append("### getNormalizedPumpEventDoseEntriesOverlaidWithBasalEntries")
@@ -1368,13 +1534,28 @@ extension DoseStore {
                                     report.append("* \(entry)")
                                 }
                             }
-
-                            self.insulinDeliveryStore.generateDiagnosticReport { (result) in
+                            
+                            self.getLoggedDoses(since: firstPumpEventDate) { (result) in
                                 report.append("")
-                                report.append(result)
+                                report.append("### getLoggedDoses")
 
-                                report.append("")
-                                completion(report.joined(separator: "\n"))
+                                switch result {
+                                case .failure(let error):
+                                    report.append("Error: \(error)")
+                                case .success(let entries):
+                                    report.append("")
+                                    for entry in entries {
+                                        report.append("* \(entry)")
+                                    }
+                                }
+                                
+                                self.insulinDeliveryStore.generateDiagnosticReport { (result) in
+                                    report.append("")
+                                    report.append(result)
+
+                                    report.append("")
+                                    completion(report.joined(separator: "\n"))
+                                }
                             }
                         })
                     }

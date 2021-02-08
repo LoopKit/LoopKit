@@ -48,7 +48,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     var valuePicker: (_ item: Binding<RepeatingScheduleValue<Value>>, _ availableWidth: CGFloat) -> ValuePicker
     var actionAreaContent: ActionAreaContent
     var savingMechanism: SavingMechanism<[RepeatingScheduleValue<Value>]>
-    var mode: PresentationMode
+    var mode: SettingsPresentationMode
     var therapySettingType: TherapySetting
     
     @State var editingIndex: Int?
@@ -88,7 +88,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         @ViewBuilder valuePicker: @escaping (_ item: Binding<RepeatingScheduleValue<Value>>, _ availableWidth: CGFloat) -> ValuePicker,
         @ViewBuilder actionAreaContent: () -> ActionAreaContent,
         savingMechanism: SavingMechanism<[RepeatingScheduleValue<Value>]>,
-        mode: PresentationMode = .settings,
+        mode: SettingsPresentationMode = .settings,
         therapySettingType: TherapySetting = .none
     ) {
         self.title = title

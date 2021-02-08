@@ -18,7 +18,8 @@ public struct BasalRateScheduleEditor: View {
     var maximumScheduleEntryCount: Int
     var syncSchedule: PumpManager.SyncSchedule?
     var save: (BasalRateSchedule) -> Void
-    let mode: PresentationMode
+    let mode: SettingsPresentationMode
+    @Environment(\.appName) private var appName
 
     /// - Precondition: `supportedBasalRates` is nonempty and sorted in ascending order.
     public init(
@@ -28,7 +29,7 @@ public struct BasalRateScheduleEditor: View {
         maximumScheduleEntryCount: Int,
         syncSchedule: PumpManager.SyncSchedule?,
         onSave save: @escaping (BasalRateSchedule) -> Void,
-        mode: PresentationMode = .settings
+        mode: SettingsPresentationMode = .settings
     ) {
         self.schedule = schedule.map { schedule in
             DailyQuantitySchedule(
@@ -49,6 +50,10 @@ public struct BasalRateScheduleEditor: View {
         self.syncSchedule = syncSchedule
         self.save = save
         self.mode = mode
+        
+        self.supportedBasalRates.removeAll(where: {
+            !self.guardrail.absoluteBounds.contains(HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0))
+        })
     }
     
     public init(
@@ -94,7 +99,7 @@ public struct BasalRateScheduleEditor: View {
     }
     
     private var description: Text {
-        Text(TherapySetting.basalRate.descriptiveText)
+        Text(TherapySetting.basalRate.descriptiveText(appName: appName))
     }
 
     private var confirmationAlertContent: AlertContent {
@@ -139,7 +144,6 @@ private struct BasalRateGuardrailWarning: View {
         assert(!crossedThresholds.isEmpty)
 
         let caption = self.isZeroUnitRateSelectable && crossedThresholds.allSatisfy({ $0 == .minimum })
-            // ANNA TODO: ask MLee about this one
             ? Text(LocalizedString("A value of 0 U/hr means you will be scheduled to receive no basal insulin.", comment: "Warning text for basal rate of 0 U/hr"))
             : nil
 
