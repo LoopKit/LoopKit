@@ -311,6 +311,8 @@ public final class MockPumpManager: TestingPumpManager {
         return ["state": state.rawValue]
     }
     
+    public let isOnboarded = true   // No distinction between created and onboarded
+
     private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
         self.delegate.notify { (delegate) in
             delegate?.deviceManager(self, logEventForDeviceIdentifier: "MockId", type: type, message: message, completion: nil)

@@ -57,7 +57,7 @@ final class MockServiceTableViewController: UITableViewController {
         case .create:
             service.completeCreate()
             if let serviceViewController = navigationController as? ServiceViewController {
-                serviceViewController.notifyServiceCreated(service)
+                serviceViewController.notifyServiceCreatedAndOnboarded(service)
             }
         case .update:
             service.completeUpdate()
@@ -69,9 +69,6 @@ final class MockServiceTableViewController: UITableViewController {
     private func confirmDeletion(completion: (() -> Void)? = nil) {
         let alert = UIAlertController(serviceDeletionHandler: {
             self.service.completeDelete()
-            if let serviceViewController = self.navigationController as? ServiceViewController {
-                serviceViewController.notifyServiceDeleted(self.service)
-            }
             self.notifyComplete()
         })
 

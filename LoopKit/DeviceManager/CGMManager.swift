@@ -7,7 +7,6 @@
 
 import HealthKit
 
-
 /// Describes the result of CGM manager operations to fetch and report sensor readings.
 ///
 /// - noData: No new data was available or retrieved

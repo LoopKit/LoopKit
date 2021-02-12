@@ -20,24 +20,24 @@ extension MockPumpManager: PumpManagerUI {
     
     public var smallImage: UIImage? { return UIImage(named: "Pump Simulator", in: Bundle(for: MockPumpManagerSettingsViewController.self), compatibleWith: nil) }
     
-    public static func setupViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying & PumpManagerSetupViewController)? {
-        return nil
+    public static func setupViewController(initialSettings settings: PumpManagerSetupSettings, colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI> {
+        return .createdAndOnboarded(MockPumpManager())
     }
 
-    public func settingsViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
+    public func settingsViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying) {
         let settings = MockPumpManagerSettingsViewController(pumpManager: self)
-        let nav = SettingsNavigationViewController(rootViewController: settings)
+        let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav
     }
     
-    public func deliveryUncertaintyRecoveryViewController(insulinTintColor: Color, guidanceColors: GuidanceColors) -> (UIViewController & CompletionNotifying) {
+    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & CompletionNotifying) {
         return DeliveryUncertaintyRecoveryViewController(appName: appName, uncertaintyStartedAt: Date()) {
             self.state.deliveryCommandsShouldTriggerUncertainDelivery = false
             self.state.deliveryIsUncertain = false
         }
     }
 
-    public func hudProvider(insulinTintColor: Color, guidanceColors: GuidanceColors) -> HUDProvider? {
+    public func hudProvider(colorPalette: LoopUIColorPalette) -> HUDProvider? {
         return MockHUDProvider(pumpManager: self)
     }
 

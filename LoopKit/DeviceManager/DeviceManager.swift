@@ -46,4 +46,7 @@ public protocol DeviceManager: CustomDebugStringConvertible, AlertResponder, Ale
 
     /// The current, serializable state of the manager
     var rawState: RawStateValue { get }
+
+    /// Is the device manager onboarded and ready for use?
+    var isOnboarded: Bool { get }
 }

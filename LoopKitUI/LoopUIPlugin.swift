@@ -18,7 +18,10 @@ public protocol ServiceUIPlugin {
     var serviceType: ServiceUI.Type? { get }
 }
 
-public protocol LoopUIPlugin: PumpManagerUIPlugin, CGMManagerUIPlugin {}
+public protocol OnboardingUIPlugin {
+    var onboardingType: OnboardingUI.Type? { get }
+}
 
-// TODO: Remove LoopUIPlugin after updating OmniKitPlugin and MinimedKitPlugin in rileylink_ios to explicitly
-// use PumpManagerUIPlugin and/or CGMManagerUIPlugin rather than LoopUIPlugin
+public protocol SupportUIPlugin {
+    var support: SupportUI { get }
+}
