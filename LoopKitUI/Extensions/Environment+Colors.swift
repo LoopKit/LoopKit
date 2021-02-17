@@ -8,6 +8,21 @@
 
 import SwiftUI
 
+private struct ColorPaletteKey: EnvironmentKey {
+    static let defaultValue: LoopUIColorPalette = LoopUIColorPalette(guidanceColors: GuidanceColorsKey.defaultValue,
+                                                                     carbTintColor: CarbTintColorKey.defaultValue,
+                                                                     glucoseTintColor: GlucoseTintColorKey.defaultValue,
+                                                                     insulinTintColor: InsulinTintColorKey.defaultValue,
+                                                                     chartColorPalette: ChartColorPaletteKey.defaultValue)
+}
+
+public extension EnvironmentValues {
+    var colorPalette: LoopUIColorPalette {
+        get { self[ColorPaletteKey.self] }
+        set { self[ColorPaletteKey.self] = newValue }
+    }
+}
+
 private struct GuidanceColorsKey: EnvironmentKey {
     static let defaultValue: GuidanceColors = GuidanceColors()
 }
@@ -49,5 +64,20 @@ public extension EnvironmentValues {
     var insulinTintColor: Color {
         get { self[InsulinTintColorKey.self] }
         set { self[InsulinTintColorKey.self] = newValue }
+    }
+}
+
+private struct ChartColorPaletteKey: EnvironmentKey {
+    static let defaultValue: ChartColorPalette = ChartColorPalette(axisLine: .clear,
+                                                                   axisLabel: .secondaryLabel,
+                                                                   grid: .systemGray3,
+                                                                   glucoseTint: .systemTeal,
+                                                                   insulinTint: .orange)
+}
+
+public extension EnvironmentValues {
+    var chartColorPalette: ChartColorPalette {
+        get { self[ChartColorPaletteKey.self] }
+        set { self[ChartColorPaletteKey.self] = newValue }
     }
 }
