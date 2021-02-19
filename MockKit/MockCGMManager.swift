@@ -112,6 +112,8 @@ public struct MockCGMState: GlucoseDisplayable {
     
     public var cgmStatusHighlight: MockCGMStatusHighlight?
     
+    public var cgmStatusBadge: MockCGMStatusBadge?
+    
     public var cgmLifecycleProgress: MockCGMLifecycleProgress? {
         didSet {
             if cgmLifecycleProgress != oldValue {
@@ -135,6 +137,8 @@ public struct MockCGMState: GlucoseDisplayable {
             }
         }
     }
+    
+    public var cgmBatteryChargeRemaining: Double? = 1
     
     private mutating func setProgressColor() {
         guard var cgmLifecycleProgress = cgmLifecycleProgress else {
@@ -213,6 +217,41 @@ public struct MockCGMStatusHighlight: DeviceStatusHighlight {
     }
     
     public var alertIdentifier: Alert.AlertIdentifier
+}
+
+public struct MockCGMStatusBadge: DeviceStatusBadge {
+    public var image: UIImage? {
+        return badgeType.image
+    }
+    
+    public var state: DeviceStatusBadgeState {
+        switch badgeType {
+        case .lowBattery:
+            return .critical
+        case .calibrationRequested:
+            return .warning
+        }
+    }
+    
+    public var badgeType: MockCGMStatusBadgeType
+    
+    public enum MockCGMStatusBadgeType: Int, CaseIterable {
+        case lowBattery
+        case calibrationRequested
+        
+        var image: UIImage? {
+            switch self {
+            case .lowBattery:
+                return UIImage(frameworkImage: "battery.circle.fill")
+            case .calibrationRequested:
+                return UIImage(frameworkImage: "drop.circle.fill")
+            }
+        }
+    }
+    
+    init(badgeType: MockCGMStatusBadgeType) {
+        self.badgeType = badgeType
+    }
 }
 
 public struct MockCGMLifecycleProgress: DeviceLifecycleProgress, Equatable {
@@ -633,6 +672,45 @@ extension MockCGMManager {
     }
 }
 
+//MARK: Device Status Badge stuff
+
+extension MockCGMManager {
+    public func requestCalibration(_ requestCalibration: Bool) {
+        mockSensorState.cgmStatusBadge = requestCalibration ? MockCGMStatusBadge(badgeType: .calibrationRequested) : nil
+        checkAndSetBatteryBadge()
+    }
+    
+    public var cgmBatteryChargeRemaining: Double? {
+        get {
+            return mockSensorState.cgmBatteryChargeRemaining
+        }
+        set {
+            mockSensorState.cgmBatteryChargeRemaining = newValue
+            checkAndSetBatteryBadge()
+        }
+    }
+    
+    public var isCalibrationRequested: Bool {
+        return mockSensorState.cgmStatusBadge?.badgeType == .calibrationRequested
+    }
+    
+    private func checkAndSetBatteryBadge() {
+        // calibration badge is the highest priority
+        guard mockSensorState.cgmStatusBadge?.badgeType != .calibrationRequested else {
+            return
+        }
+        
+        guard let cgmBatteryChargeRemaining = mockSensorState.cgmBatteryChargeRemaining,
+              cgmBatteryChargeRemaining > 0.5 else
+        {
+            mockSensorState.cgmStatusBadge = MockCGMStatusBadge(badgeType: .lowBattery)
+            return
+        }
+        
+        mockSensorState.cgmStatusBadge = nil
+    }
+}
+
 extension MockCGMManager {
     public var debugDescription: String {
         return """
@@ -680,12 +758,19 @@ extension MockCGMState: RawRepresentable {
             self.cgmStatusHighlight = MockCGMStatusHighlight(localizedMessage: localizedMessage, alertIdentifier: alertIdentifier)
         }
         
+        if let statusBadgeTypeRawValue = rawValue["statusBadgeType"] as? MockCGMStatusBadge.MockCGMStatusBadgeType.RawValue,
+           let statusBadgeType = MockCGMStatusBadge.MockCGMStatusBadgeType(rawValue: statusBadgeTypeRawValue)
+        {
+            self.cgmStatusBadge = MockCGMStatusBadge(badgeType: statusBadgeType)
+        }
+        
         if let cgmLifecycleProgressRawValue = rawValue["cgmLifecycleProgress"] as? MockCGMLifecycleProgress.RawValue {
             self.cgmLifecycleProgress = MockCGMLifecycleProgress(rawValue: cgmLifecycleProgressRawValue)
         }
         
         self.progressWarningThresholdPercentValue = rawValue["progressWarningThresholdPercentValue"] as? Double
         self.progressCriticalThresholdPercentValue = rawValue["progressCriticalThresholdPercentValue"] as? Double
+        self.cgmBatteryChargeRemaining = rawValue["cgmBatteryChargeRemaining"] as? Double
         
         setProgressColor()
     }
@@ -714,6 +799,10 @@ extension MockCGMState: RawRepresentable {
             rawValue["alertIdentifier"] = cgmStatusHighlight.alertIdentifier
         }
         
+        if let cgmStatusBadgeType = cgmStatusBadge?.badgeType {
+            rawValue["statusBadgeType"] = cgmStatusBadgeType.rawValue
+        }
+        
         if let cgmLifecycleProgress = cgmLifecycleProgress {
             rawValue["cgmLifecycleProgress"] = cgmLifecycleProgress.rawValue
         }
@@ -725,7 +814,11 @@ extension MockCGMState: RawRepresentable {
         if let progressCriticalThresholdPercentValue = progressCriticalThresholdPercentValue {
             rawValue["progressCriticalThresholdPercentValue"] = progressCriticalThresholdPercentValue
         }
-
+        
+        if let cgmBatteryChargeRemaining = cgmBatteryChargeRemaining {
+            rawValue["cgmBatteryChargeRemaining"] = cgmBatteryChargeRemaining
+        }
+        
         return rawValue
     }
 }
@@ -745,9 +838,11 @@ extension MockCGMState: CustomDebugStringConvertible {
         * highGlucoseThresholdValue: \(highGlucoseThresholdValue)
         * glucoseRangeCategory: \(glucoseRangeCategory as Any)
         * cgmStatusHighlight: \(cgmStatusHighlight as Any)
+        * cgmStatusBadge: \(cgmStatusBadge as Any)
         * cgmLifecycleProgress: \(cgmLifecycleProgress as Any)
         * progressWarningThresholdPercentValue: \(progressWarningThresholdPercentValue as Any)
         * progressCriticalThresholdPercentValue: \(progressCriticalThresholdPercentValue as Any)
+        * cgmBatteryChargeRemaining: \(cgmBatteryChargeRemaining as Any)
         """
     }
 }

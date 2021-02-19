@@ -28,6 +28,10 @@ extension MockCGMManager: CGMManagerUI {
         return nav
     }
 
+    public var cgmStatusBadge: DeviceStatusBadge? {
+        return self.mockSensorState.cgmStatusBadge
+    }
+    
     public var cgmStatusHighlight: DeviceStatusHighlight? {
         return self.mockSensorState.cgmStatusHighlight
     }

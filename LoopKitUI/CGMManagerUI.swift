@@ -35,6 +35,9 @@ public protocol CGMManagerUI: CGMManager, DeviceManagerUI, PreferredGlucoseUnitO
     /// - Returns: A view controller to configure an existing CGM manager.
     func settingsViewController(for preferredGlucoseUnit: HKUnit, colorPalette: LoopUIColorPalette) -> (UIViewController & CGMManagerOnboardNotifying & PreferredGlucoseUnitObserver & CompletionNotifying)
 
+    /// a badge from the cgm that needs to be brought to the user's attention in the status bar
+    var cgmStatusBadge: DeviceStatusBadge? { get }
+    
     /// a message from the cgm that needs to be brought to the user's attention in the status bar
     var cgmStatusHighlight: DeviceStatusHighlight? { get }
 

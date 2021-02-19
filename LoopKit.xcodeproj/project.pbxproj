@@ -728,6 +728,9 @@
 		B46B62B323FF0E62001E69BA /* SelectableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62B223FF0E62001E69BA /* SelectableLabel.swift */; };
 		B46FA3F3253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_output.json in Resources */ = {isa = PBXBuildFile; fileRef = B46FA3F1253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_output.json */; };
 		B46FA3F4253F00DD00D993E2 /* momentum_effect_impossible_rising_glucose_input.json in Resources */ = {isa = PBXBuildFile; fileRef = B46FA3F2253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_input.json */; };
+		B47ECFC025DC22620024A54D /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47ECF8725DC20810024A54D /* UIImage.swift */; };
+		B47ECFD625DC22D20024A54D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B47ECFD525DC22D20024A54D /* Assets.xcassets */; };
+		B47ECFE225DC3EFC0024A54D /* DeviceStatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47ECFE125DC3EFC0024A54D /* DeviceStatusBadge.swift */; };
 		B485718F25B9FBDF0048A2A2 /* CGMManagerSettingsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B1162125AF398B006428DE /* CGMManagerSettingsNavigationController.swift */; };
 		B4A2AAB1240830A30066563F /* LabeledTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A2AAB0240830A30066563F /* LabeledTextField.swift */; };
 		B4A2AAB3240832350066563F /* MultipleSelectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A2AAB2240832350066563F /* MultipleSelectionList.swift */; };
@@ -1522,6 +1525,9 @@
 		B46B62B223FF0E62001E69BA /* SelectableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableLabel.swift; sourceTree = "<group>"; };
 		B46FA3F1253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = momentum_effect_impossible_rising_glucose_output.json; sourceTree = "<group>"; };
 		B46FA3F2253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = momentum_effect_impossible_rising_glucose_input.json; sourceTree = "<group>"; };
+		B47ECF8725DC20810024A54D /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		B47ECFD525DC22D20024A54D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B47ECFE125DC3EFC0024A54D /* DeviceStatusBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusBadge.swift; sourceTree = "<group>"; };
 		B4A2AAB0240830A30066563F /* LabeledTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledTextField.swift; sourceTree = "<group>"; };
 		B4A2AAB2240832350066563F /* MultipleSelectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleSelectionList.swift; sourceTree = "<group>"; };
 		B4AA27F124C1ECDC001B8AFA /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -1715,6 +1721,7 @@
 			isa = PBXGroup;
 			children = (
 				1D640FF424524274008F9755 /* Sounds */,
+				B47ECFD525DC22D20024A54D /* Assets.xcassets */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -2539,6 +2546,7 @@
 			isa = PBXGroup;
 			children = (
 				89DC540C21B75AE7005A1CE0 /* Collection.swift */,
+				B47ECF8725DC20810024A54D /* UIImage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2622,6 +2630,7 @@
 				4352A73B20DECF0600CAC200 /* CGMManager.swift */,
 				B4102D3124ABB068005D460B /* DeviceLifecycleProgress.swift */,
 				4379CFE221102A4100AADC79 /* DeviceManager.swift */,
+				B47ECFE125DC3EFC0024A54D /* DeviceStatusBadge.swift */,
 				B42C94FD24A2A2B000857C73 /* DeviceStatusHighlight.swift */,
 				89AC792C224C781100B8E9BA /* DoseProgressReporter.swift */,
 				89AC792D224C781100B8E9BA /* DoseProgressTimerEstimator.swift */,
@@ -3242,6 +3251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D640FF724525228008F9755 /* sub.caf in Resources */,
+				B47ECFD625DC22D20024A54D /* Assets.xcassets in Resources */,
 				1D25C22E246A2A1A00E87FA0 /* critical.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3608,6 +3618,7 @@
 				4322B77D202FA2AF0002837D /* NewPumpEvent.swift in Sources */,
 				434113AA20F171CB00D05747 /* CachedInsulinDeliveryObject+CoreDataClass.swift in Sources */,
 				432CF86F20D76CCF0066B889 /* GlucoseTrend.swift in Sources */,
+				B47ECFE225DC3EFC0024A54D /* DeviceStatusBadge.swift in Sources */,
 				43FB60E920DCBE64002B996B /* PumpManagerStatus.swift in Sources */,
 				4322B774202FA2790002837D /* CarbMath.swift in Sources */,
 				4322B78B202FA2B30002837D /* ExponentialInsulinModel.swift in Sources */,
@@ -3836,6 +3847,7 @@
 				C164A56022F14C73000E3FA5 /* UnfinalizedDose.swift in Sources */,
 				89D204C421CC803C001238CC /* HKUnit.swift in Sources */,
 				89D204A921CC7C8F001238CC /* MockPumpManager.swift in Sources */,
+				B47ECFC025DC22620024A54D /* UIImage.swift in Sources */,
 				89ADE138226BF51D0067222B /* NSData.swift in Sources */,
 				A9498D8D23386CD800DAA9B9 /* MockService.swift in Sources */,
 				89D204AA21CC7C8F001238CC /* MockGlucoseProvider.swift in Sources */,

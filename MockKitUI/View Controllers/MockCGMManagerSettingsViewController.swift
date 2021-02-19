@@ -61,6 +61,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case model = 0
         case glucoseThresholds
         case effects
+        case cgmStatus
         case history
         case alerts
         case lifecycleProgress
@@ -90,6 +91,11 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case lowOutlier
         case highOutlier
         case error
+    }
+    
+    private enum CGMStatusRow: Int, CaseIterable {
+        case batteryRemaining = 0
+        case requestCalibration
     }
 
     private enum HistoryRow: Int, CaseIterable {
@@ -121,6 +127,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return GlucoseThresholds.allCases.count
         case .effects:
             return EffectsRow.allCases.count
+        case .cgmStatus:
+            return CGMStatusRow.allCases.count
         case .history:
             return HistoryRow.allCases.count
         case .alerts:
@@ -140,6 +148,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return "Glucose Thresholds"
         case .effects:
             return "Effects"
+        case .cgmStatus:
+            return "CGM Status"
         case .history:
             return "History"
         case .alerts:
@@ -275,6 +285,26 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             }
 
             cell.accessoryType = .disclosureIndicator
+            return cell
+        case .cgmStatus:
+            let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+            switch CGMStatusRow(rawValue: indexPath.row)! {
+            case .batteryRemaining:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.textLabel?.text = "Battery Remaining"
+                if let remainingCharge = cgmManager.cgmBatteryChargeRemaining {
+                    cell.detailTextLabel?.text = "\(Int(round(remainingCharge * 100)))%"
+                } else {
+                    cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
+                }
+                cell.accessoryType = .disclosureIndicator
+                return cell
+            case .requestCalibration:
+                cell.textLabel?.text = "Request Calibration"
+                if cgmManager.isCalibrationRequested {
+                    cell.accessoryType = .checkmark
+                }
+            }
             return cell
         case .history:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
@@ -437,6 +467,18 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 vc.indexPath = indexPath
                 vc.percentageDelegate = self
                 show(vc, sender: sender)
+            }
+        case .cgmStatus:
+            switch CGMStatusRow(rawValue: indexPath.row)! {
+            case .batteryRemaining:
+                let vc = PercentageTextFieldTableViewController()
+                vc.percentage = cgmManager.cgmBatteryChargeRemaining
+                vc.indexPath = indexPath
+                vc.percentageDelegate = self
+                show(vc, sender: sender)
+            case .requestCalibration:
+                cgmManager.requestCalibration(!cgmManager.isCalibrationRequested)
+                tableView.reloadRows(at: [indexPath], with: .automatic)
             }
         case .history:
             switch HistoryRow(rawValue: indexPath.row)! {
@@ -606,6 +648,15 @@ extension MockCGMManagerSettingsViewController: PercentageTextFieldTableViewCont
             switch EffectsRow(rawValue: indexPath.row)! {
             case .error:
                 cgmManager.dataSource.effects.randomErrorChance = controller.percentage?.clamped(to: 0...1)
+            default:
+                assertionFailure()
+            }
+        case .cgmStatus:
+            switch CGMStatusRow(rawValue: indexPath.row)! {
+            case .batteryRemaining:
+                if let batteryRemaining = controller.percentage.map({ $0.clamped(to: 0...1) }) {
+                    cgmManager.cgmBatteryChargeRemaining = batteryRemaining
+                }
             default:
                 assertionFailure()
             }
