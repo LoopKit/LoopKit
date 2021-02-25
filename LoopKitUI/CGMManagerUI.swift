@@ -19,7 +19,21 @@ public struct CGMManagerDescriptor {
     }
 }
 
-public protocol CGMManagerUI: CGMManager, DeviceManagerUI, PreferredGlucoseUnitObserver {
+public protocol CGMStatusIndicator {
+    /// a message from the cgm that needs to be brought to the user's attention in the status bar
+    var cgmStatusHighlight: DeviceStatusHighlight? { get }
+
+    /// the completed percent of the progress bar to display in the status bar
+    var cgmLifecycleProgress: DeviceLifecycleProgress? { get }
+
+    /// a badge from the cgm that needs to be brought to the user's attention in the status bar
+    var cgmStatusBadge: DeviceStatusBadge? { get }
+
+    /// gets the range category of a glucose sample using the CGM manager managed glucose thresholds
+    func glucoseRangeCategory(for glucose: GlucoseSampleValue) -> GlucoseRangeCategory?
+}
+
+public protocol CGMManagerUI: CGMManager, DeviceManagerUI, PreferredGlucoseUnitObserver, CGMStatusIndicator {
     /// Create and onboard a new CGM manager.
     ///
     /// - Parameters:
@@ -34,18 +48,6 @@ public protocol CGMManagerUI: CGMManager, DeviceManagerUI, PreferredGlucoseUnitO
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: A view controller to configure an existing CGM manager.
     func settingsViewController(for preferredGlucoseUnit: HKUnit, colorPalette: LoopUIColorPalette) -> (UIViewController & CGMManagerOnboardNotifying & PreferredGlucoseUnitObserver & CompletionNotifying)
-
-    /// a badge from the cgm that needs to be brought to the user's attention in the status bar
-    var cgmStatusBadge: DeviceStatusBadge? { get }
-    
-    /// a message from the cgm that needs to be brought to the user's attention in the status bar
-    var cgmStatusHighlight: DeviceStatusHighlight? { get }
-
-    /// the completed percent of the progress bar to display in the status bar
-    var cgmLifecycleProgress: DeviceLifecycleProgress? { get }
-
-    /// gets the range category of a glucose sample using the CGM manager managed glucose thresholds
-    func glucoseRangeCategory(for glucose: GlucoseSampleValue) -> GlucoseRangeCategory?
 }
 
 extension CGMManagerUI {
