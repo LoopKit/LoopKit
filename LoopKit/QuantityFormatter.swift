@@ -156,7 +156,6 @@ public extension HKQuantity {
     }
 }
 
-
 public extension HKUnit {
     var usesMassFormatterForUnitString: Bool {
         return self == .gram()

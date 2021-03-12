@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Combine
 import HealthKit
 
 public class DisplayGlucoseUnitObservable: ObservableObject {

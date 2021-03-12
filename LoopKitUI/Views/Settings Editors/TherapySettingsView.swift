@@ -12,6 +12,7 @@ import LoopKit
 import SwiftUI
 
 public struct TherapySettingsView: View {
+    @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
     @Environment(\.dismiss) var dismiss
     @Environment(\.appName) private var appName
 
@@ -23,7 +24,7 @@ public struct TherapySettingsView: View {
         let localizedString: String
         let action: () -> Void
     }
-    
+
     @ObservedObject var viewModel: TherapySettingsViewModel
         
     private let actionButton: ActionButton?
@@ -152,25 +153,24 @@ extension TherapySettingsView {
     
     private var suspendThresholdSection: some View {
         section(for: .suspendThreshold, header: viewModel.prescription == nil ? AnyView(Spacer()) : AnyView(EmptyView())) {
-            if let glucoseUnit = self.glucoseUnit {
-                HStack {
-                    Spacer()
-                    GuardrailConstrainedQuantityView(
-                        value: self.viewModel.therapySettings.suspendThreshold?.quantity,
-                        unit: glucoseUnit,
-                        guardrail: .suspendThreshold,
-                        isEditing: false,
-                        // Workaround for strange animation behavior on appearance
-                        forceDisableAnimations: true
-                    )
-                }
+            HStack {
+                Spacer()
+                GuardrailConstrainedQuantityView(
+                    value: self.viewModel.suspendThreshold?.quantity,
+                    unit: glucoseUnit,
+                    guardrail: .suspendThreshold,
+                    isEditing: false,
+                    // Workaround for strange animation behavior on appearance
+                    forceDisableAnimations: true
+                )
             }
         }
     }
     
     private var correctionRangeSection: some View {
         section(for: .glucoseTargetRange) {
-            if let glucoseUnit = self.glucoseUnit, let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
+            if let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule
+            {
                 ForEach(schedule.items, id: \.self) { value in
                     ScheduleRangeItem(time: value.startTime,
                                       range: value.value,
@@ -183,14 +183,13 @@ extension TherapySettingsView {
     
     private var preMealCorrectionRangeSection: some View {
         section(for: .preMealCorrectionRangeOverride) {
-            if let glucoseUnit = self.glucoseUnit, let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
+            if let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
                 CorrectionRangeOverridesRangeItem(
-                    //TODO when updating this therapy settings editor, allow HKQuantity range
                     preMealTargetRange: self.viewModel.therapySettings.preMealTargetRange?.doubleRange(for: glucoseUnit),
                     workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange?.doubleRange(for: glucoseUnit),
                     unit: glucoseUnit,
                     preset: CorrectionRangeOverrides.Preset.preMeal,
-                    suspendThreshold: self.viewModel.therapySettings.suspendThreshold,
+                    suspendThreshold: self.viewModel.suspendThreshold,
                     correctionRangeScheduleRange: schedule.scheduleRange()
                 )
             }
@@ -199,14 +198,13 @@ extension TherapySettingsView {
     
     private var workoutCorrectionRangeSection: some View {
         section(for: .workoutCorrectionRangeOverride) {
-            if let glucoseUnit = self.glucoseUnit, let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
+            if let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
                 CorrectionRangeOverridesRangeItem(
-                    //TODO when updating this therapy settings editor, allow HKQuantity range
                     preMealTargetRange: self.viewModel.therapySettings.preMealTargetRange?.doubleRange(for: glucoseUnit),
                     workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange?.doubleRange(for: glucoseUnit),
                     unit: glucoseUnit,
                     preset: CorrectionRangeOverrides.Preset.workout,
-                    suspendThreshold: self.viewModel.therapySettings.suspendThreshold,
+                    suspendThreshold: self.viewModel.suspendThreshold,
                     correctionRangeScheduleRange: schedule.scheduleRange()
                 )
             }
@@ -325,12 +323,12 @@ extension TherapySettingsView {
 // MARK: Utilities
 extension TherapySettingsView {
     
-    private var glucoseUnit: HKUnit? {
-        viewModel.therapySettings.glucoseTargetRangeSchedule?.unit
+    private var glucoseUnit: HKUnit {
+        displayGlucoseUnitObservable.displayGlucoseUnit
     }
     
-    private var sensitivityUnit: HKUnit? {
-        glucoseUnit?.unitDivided(by: .internationalUnit())
+    private var sensitivityUnit: HKUnit {
+        glucoseUnit.unitDivided(by: .internationalUnit())
     }
     
     private func section<Content>(for therapySetting: TherapySetting,
@@ -339,7 +337,7 @@ extension TherapySettingsView {
                              header: EmptyView(),
                              title: therapySetting.title,
                              descriptiveText: therapySetting.descriptiveText(appName: appName),
-                             destination: screen(for: therapySetting),
+                             destination: viewModel.screen(for: therapySetting),
                              content: content)
     }
 
@@ -350,7 +348,7 @@ extension TherapySettingsView {
                              header: header,
                              title: therapySetting.title,
                              descriptiveText: therapySetting.descriptiveText(appName: appName),
-                             destination: screen(for: therapySetting),
+                             destination: viewModel.screen(for: therapySetting),
                              content: content)
     }
 }
@@ -460,58 +458,6 @@ struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where 
     }
 }
 
-// MARK: Navigation
-
-private extension TherapySettingsView {
-    
-    func screen(for setting: TherapySetting) -> (_ dismiss: @escaping () -> Void) -> AnyView {
-        switch setting {
-        case .suspendThreshold:
-            return { dismiss in
-                AnyView(SuspendThresholdEditor(therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .glucoseTargetRange:
-            return { dismiss in
-                AnyView(CorrectionRangeScheduleEditor(viewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .preMealCorrectionRangeOverride:
-            return { dismiss in
-                AnyView(CorrectionRangeOverridesEditor(viewModel: viewModel, preset: .preMeal, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .workoutCorrectionRangeOverride:
-            return { dismiss in
-                AnyView(CorrectionRangeOverridesEditor(viewModel: viewModel, preset: .workout, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .basalRate:
-            precondition(viewModel.pumpSupportedIncrements?() != nil)
-            return { dismiss in
-                AnyView(BasalRateScheduleEditor(viewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .deliveryLimits:
-            precondition(viewModel.pumpSupportedIncrements?() != nil)
-            return { dismiss in
-                AnyView(DeliveryLimitsEditor(viewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .insulinModel:
-            precondition(self.viewModel.therapySettings.insulinModelSettings != nil)
-            return { dismiss in
-                AnyView(InsulinModelSelection(viewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .carbRatio:
-            return { dismiss in
-                AnyView(CarbRatioScheduleEditor(viewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .insulinSensitivity:
-            return { dismiss in
-                return AnyView(InsulinSensitivityScheduleEditor(viewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .none:
-            break
-        }
-        return { _ in AnyView(Text("\(setting.title)")) }
-    }
-}
-
 // MARK: Previews
 
 public struct TherapySettingsView_Previews: PreviewProvider {
@@ -552,10 +498,12 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (onboarding)")
+                .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
             TherapySettingsView(viewModel: preview_viewModel(mode: .settings))
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (settings)")
+                .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
             TherapySettingsView(viewModel: preview_viewModel(mode: .settings))
                 .colorScheme(.dark)
                 .previewDevice(PreviewDevice(rawValue: "iPhone XS Max"))
@@ -570,6 +518,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (Empty TherapySettings)")
+                .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .millimolesPerLiter))
         }
     }
 }

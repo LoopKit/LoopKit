@@ -85,7 +85,7 @@ public protocol OnboardingUI {
     ///   - cgmManagerProvider: The provider of CGM Manager functionality.
     ///   - pumpManagerProvider: The provider of Pump Manager functionality.
     ///   - serviceProvider: The provider of Service functionality.
-    ///   - preferredGlucoseUnit: The preferred glucose unit.
+    ///   - displayGlucoseUnitObservable: The glucose unit to use for display.
     ///   - colorPalette: The colors to use in any UI,
     /// - Returns: A view controller to create and configure a new onboarding.
     func onboardingViewController(cgmManagerProvider: CGMManagerProvider,

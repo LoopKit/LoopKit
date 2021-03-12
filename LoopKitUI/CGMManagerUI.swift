@@ -44,7 +44,7 @@ public protocol CGMManagerUI: CGMManager, DeviceManagerUI, DisplayGlucoseUnitObs
     /// Configure settings for an existing CGM manager.
     ///
     /// - Parameters:
-    ///     - preferredGlucoseUnit: The preferred glucose units to use.
+    ///     - displayGlucoseUnitObservable: The glucose units to use for display.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: A view controller to configure an existing CGM manager.
     func settingsViewController(for displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, colorPalette: LoopUIColorPalette) -> (UIViewController & CGMManagerOnboardNotifying & CompletionNotifying)

@@ -53,12 +53,16 @@ public class TherapySettingsViewModel: ObservableObject {
         return DeliveryLimits(maximumBasalRate: therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
                               maximumBolus: therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) } )
     }
-    
+
+    var suspendThreshold: GlucoseThreshold? {
+        return therapySettings.suspendThreshold
+    }
+
     /// Reset to initial
     public func reset() {
         therapySettings = initialTherapySettings
     }
-    
+
     public func saveCorrectionRange(range: GlucoseRangeSchedule) {
         therapySettings.glucoseTargetRangeSchedule = range
         didSave?(TherapySetting.glucoseTargetRange, therapySettings)
@@ -73,9 +77,9 @@ public class TherapySettingsViewModel: ObservableObject {
         therapySettings.workoutTargetRange = workout
         didSave?(TherapySetting.workoutCorrectionRangeOverride, therapySettings)
     }
-    
-    public func saveSuspendThreshold(value: GlucoseThreshold) {
-        therapySettings.suspendThreshold = value
+
+    public func saveSuspendThreshold(quantity: HKQuantity, withDisplayGlucoseUnit displayGlucoseUnit: HKUnit) {
+        therapySettings.suspendThreshold = GlucoseThreshold(unit: displayGlucoseUnit, value: quantity.doubleValue(for: displayGlucoseUnit))
         didSave?(TherapySetting.suspendThreshold, therapySettings)
     }
     
@@ -103,5 +107,59 @@ public class TherapySettingsViewModel: ObservableObject {
     public func saveInsulinSensitivitySchedule(insulinSensitivitySchedule: InsulinSensitivitySchedule) {
         therapySettings.insulinSensitivitySchedule = insulinSensitivitySchedule
         didSave?(TherapySetting.insulinSensitivity, therapySettings)
+    }
+}
+
+// MARK: Navigation
+
+extension TherapySettingsViewModel {
+
+    func screen(for setting: TherapySetting) -> (_ dismiss: @escaping () -> Void) -> AnyView {
+        switch setting {
+        case .suspendThreshold:
+            return { dismiss in
+                AnyView(SuspendThresholdEditor(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .glucoseTargetRange:
+            return { dismiss in
+                AnyView(CorrectionRangeScheduleEditor(viewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .preMealCorrectionRangeOverride:
+            return { dismiss in
+                AnyView(CorrectionRangeOverridesEditor(viewModel: self, preset: .preMeal, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .workoutCorrectionRangeOverride:
+            return { dismiss in
+                AnyView(CorrectionRangeOverridesEditor(viewModel: self, preset: .workout, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .basalRate:
+            precondition(self.pumpSupportedIncrements?() != nil)
+            return { dismiss in
+                AnyView(BasalRateScheduleEditor(viewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .deliveryLimits:
+            if self.pumpSupportedIncrements?() != nil {
+                return { dismiss in
+                    AnyView(DeliveryLimitsEditor(viewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
+                }
+            }
+        case .insulinModel:
+            if self.therapySettings.insulinModelSettings != nil {
+                return { dismiss in
+                    AnyView(InsulinModelSelection(viewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
+                }
+            }
+        case .carbRatio:
+            return { dismiss in
+                AnyView(CarbRatioScheduleEditor(viewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .insulinSensitivity:
+            return { dismiss in
+                return AnyView(InsulinSensitivityScheduleEditor(viewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .none:
+            break
+        }
+        return { _ in AnyView(Text("\(setting.title)")) }
     }
 }
