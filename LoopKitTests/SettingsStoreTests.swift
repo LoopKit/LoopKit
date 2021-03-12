@@ -628,9 +628,9 @@ class SettingsStoreCriticalEventLogTests: PersistenceControllerTestCase {
                                           progress: progress))
         XCTAssertEqual(outputStream.string, """
 [
-{"data":{"date":"2100-01-02T03:08:00.000Z","dosingEnabled":false,"syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784"},"date":"2100-01-02T03:08:00.000Z","modificationCounter":1},
-{"data":{"date":"2100-01-02T03:04:00.000Z","dosingEnabled":false,"syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010"},"date":"2100-01-02T03:04:00.000Z","modificationCounter":3},
-{"data":{"date":"2100-01-02T03:06:00.000Z","dosingEnabled":false,"syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E"},"date":"2100-01-02T03:06:00.000Z","modificationCounter":4}
+{"data":{"bloodGlucoseUnit":"mg/dL","date":"2100-01-02T03:08:00.000Z","dosingEnabled":false,"syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784"},"date":"2100-01-02T03:08:00.000Z","modificationCounter":1},
+{"data":{"bloodGlucoseUnit":"mg/dL","date":"2100-01-02T03:04:00.000Z","dosingEnabled":false,"syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010"},"date":"2100-01-02T03:04:00.000Z","modificationCounter":3},
+{"data":{"bloodGlucoseUnit":"mg/dL","date":"2100-01-02T03:06:00.000Z","dosingEnabled":false,"syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E"},"date":"2100-01-02T03:06:00.000Z","modificationCounter":4}
 ]
 """
         )
@@ -915,8 +915,8 @@ fileprivate extension StoredSettings {
                                                                                override: GlucoseRangeSchedule.Override(value: DoubleRange(minValue: 105.0, maxValue: 115.0),
                                                                                                                        start: dateFormatter.date(from: "2020-05-14T12:48:15Z")!,
                                                                                                                        end: dateFormatter.date(from: "2020-05-14T14:48:15Z")!)),
-                              preMealTargetRange: DoubleRange(minValue: 80.0, maxValue: 90.0),
-                              workoutTargetRange: DoubleRange(minValue: 150.0, maxValue: 160.0),
+                              preMealTargetRange: DoubleRange(minValue: 80.0, maxValue: 90.0).quantityRange(for: .milligramsPerDeciliter),
+                              workoutTargetRange: DoubleRange(minValue: 150.0, maxValue: 160.0).quantityRange(for: .milligramsPerDeciliter),
                               overridePresets: [TemporaryScheduleOverridePreset(id: UUID(uuidString: "2A67A303-5203-4CB8-8263-79498265368E")!,
                                                                                 symbol: "🍎",
                                                                                 name: "Apple",

@@ -38,6 +38,17 @@ public struct GlucoseThreshold: Equatable, RawRepresentable {
             "units": unit.unitString
         ]
     }
+
+    public func convertTo(unit: HKUnit) -> GlucoseThreshold? {
+        guard unit != self.unit else {
+            return self
+        }
+
+        let convertedValue = self.quantity.doubleValue(for: unit)
+
+        return GlucoseThreshold(unit: unit,
+                                value: convertedValue)
+    }
 }
 
 extension GlucoseThreshold: Codable {
