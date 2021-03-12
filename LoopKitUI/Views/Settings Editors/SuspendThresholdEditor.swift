@@ -44,27 +44,29 @@ public struct SuspendThresholdEditor: View {
     }
     
     public init(
-           viewModel: TherapySettingsViewModel,
-           didSave: (() -> Void)? = nil
+        therapySettingsViewModel: TherapySettingsViewModel,
+        didSave: (() -> Void)? = nil
     ) {
-        let unit = viewModel.therapySettings.glucoseUnit ?? viewModel.preferredGlucoseUnit
+        //TODO display glucose unit will be available in the environment. Will be updated when the editor is updated to support both glucose unit
+        let displayGlucoseUnit = HKUnit.milligramsPerDeciliter
         self.init(
-            value: viewModel.therapySettings.suspendThreshold?.quantity,
-            unit: unit,
+            value: therapySettingsViewModel.therapySettings.suspendThreshold?.quantity,
+            unit: displayGlucoseUnit,
             maxValue: Guardrail.maxSuspendThresholdValue(
-                correctionRangeSchedule: viewModel.therapySettings.glucoseTargetRangeSchedule,
-                preMealTargetRange: viewModel.therapySettings.preMealTargetRange?.quantityRange(for: unit),
-                workoutTargetRange: viewModel.therapySettings.workoutTargetRange?.quantityRange(for: unit)
+                correctionRangeSchedule: therapySettingsViewModel.therapySettings.glucoseTargetRangeSchedule,
+                preMealTargetRange: therapySettingsViewModel.therapySettings.preMealTargetRange?.quantityRange(for: displayGlucoseUnit),
+                workoutTargetRange: therapySettingsViewModel.therapySettings.workoutTargetRange?.quantityRange(for: displayGlucoseUnit)
             ),
-            onSave: { [weak viewModel] newValue in
-                guard let viewModel = viewModel else {
+            onSave: { [weak therapySettingsViewModel] newValue in
+                guard let therapySettingsViewModel = therapySettingsViewModel else {
                     return
                 }
-                let newThreshold = GlucoseThreshold(unit: viewModel.preferredGlucoseUnit, value: newValue.doubleValue(for: viewModel.preferredGlucoseUnit))
-                viewModel.saveSuspendThreshold(value: newThreshold)
+
+                let newThreshold = GlucoseThreshold(unit: displayGlucoseUnit, value: newValue.doubleValue(for: displayGlucoseUnit))
+                therapySettingsViewModel.saveSuspendThreshold(value: newThreshold)
                 didSave?()
             },
-            mode: viewModel.mode
+            mode: therapySettingsViewModel.mode
         )
     }
 

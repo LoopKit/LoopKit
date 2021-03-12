@@ -68,7 +68,7 @@ public protocol OnboardingNotifying: AnyObject {
     var onboardingDelegate: OnboardingDelegate? { get set }
 }
 
-public typealias OnboardingViewController = (OnboardingNotifying & CGMManagerCreateNotifying & CGMManagerOnboardNotifying & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & ServiceCreateNotifying & ServiceOnboardNotifying & CompletionNotifying & PreferredGlucoseUnitObserver)
+public typealias OnboardingViewController = (OnboardingNotifying & CGMManagerCreateNotifying & CGMManagerOnboardNotifying & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & ServiceCreateNotifying & ServiceOnboardNotifying & CompletionNotifying)
 
 public protocol OnboardingUI {
     /// The unique identifier of this type of onboarding.
@@ -91,6 +91,6 @@ public protocol OnboardingUI {
     func onboardingViewController(cgmManagerProvider: CGMManagerProvider,
                                   pumpManagerProvider: PumpManagerProvider,
                                   serviceProvider: ServiceProvider,
-                                  preferredGlucoseUnit: HKUnit,
+                                  displayGlucoseUnitObservable: DisplayGlucoseUnitObservable,
                                   colorPalette: LoopUIColorPalette) -> (UIViewController & OnboardingViewController)
 }

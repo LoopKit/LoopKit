@@ -84,10 +84,12 @@ public struct InsulinModelSelection: View {
            viewModel: TherapySettingsViewModel,
            didSave: (() -> Void)? = nil
     ) {
+        //TODO display glucose unit will be available in the environment. Will be updated when the editor is updated to support both glucose unit
+        let displayGlucoseUnit = HKUnit.milligramsPerDeciliter
         self.init(
             value: viewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.humalogNovologAdult),
             insulinSensitivitySchedule: viewModel.therapySettings.insulinSensitivitySchedule,
-            glucoseUnit: viewModel.therapySettings.insulinSensitivitySchedule?.unit ?? viewModel.preferredGlucoseUnit,
+            glucoseUnit: displayGlucoseUnit,
             supportedModelSettings: viewModel.supportedInsulinModelSettings,
             chartColors: viewModel.chartColors,
             onSave: { [weak viewModel] insulinModelSettings in

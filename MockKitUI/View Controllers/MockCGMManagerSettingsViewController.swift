@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Combine
 import HealthKit
 import LoopKit
 import LoopKitUI
@@ -15,13 +16,24 @@ import MockKit
 final class MockCGMManagerSettingsViewController: UITableViewController {
     let cgmManager: MockCGMManager
 
-    private var glucoseUnit: HKUnit
+    private let displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
 
-    init(cgmManager: MockCGMManager, glucoseUnit: HKUnit) {
+    private lazy var cancellables = Set<AnyCancellable>()
+
+    private var glucoseUnit: HKUnit {
+        displayGlucoseUnitObservable.displayGlucoseUnit
+    }
+
+    init(cgmManager: MockCGMManager, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable) {
         self.cgmManager = cgmManager
-        self.glucoseUnit = glucoseUnit
+        self.displayGlucoseUnitObservable = displayGlucoseUnitObservable
+
         super.init(style: .grouped)
         title = NSLocalizedString("CGM Settings", comment: "Title for CGM simulator settings")
+
+        displayGlucoseUnitObservable.$displayGlucoseUnit
+            .sink { [weak self] _ in self?.tableView.reloadData() }
+            .store(in: &cancellables)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -715,12 +727,5 @@ private extension UIAlertController {
 
         let cancel = "Cancel"
         addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
-    }
-}
-
-extension MockCGMManagerSettingsViewController: PreferredGlucoseUnitObserver {
-    func preferredGlucoseUnitDidChange(to preferredGlucoseUnit: HKUnit) {
-        self.glucoseUnit = preferredGlucoseUnit
-        tableView.reloadData()
     }
 }

@@ -1,5 +1,5 @@
 //
-//  PreferredGlucoseUnitObserver.swift
+//  DisplayGlucoseUnitObserver.swift
 //  LoopKitUI
 //
 //  Created by Nathaniel Hamming on 2021-01-13.
@@ -9,6 +9,6 @@
 import Foundation
 import HealthKit
 
-public protocol PreferredGlucoseUnitObserver {
-    func preferredGlucoseUnitDidChange(to preferredGlucoseUnit: HKUnit)
+public protocol DisplayGlucoseUnitObserver {
+    func displayGlucoseUnitDidChange(to displayGlucoseUnit: HKUnit)
 }
