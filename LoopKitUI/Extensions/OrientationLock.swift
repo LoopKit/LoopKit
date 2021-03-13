@@ -11,7 +11,7 @@ import SwiftUI
 
 public protocol DeviceOrientationController: AnyObject {
     var supportedInterfaceOrientations: UIInterfaceOrientationMask { get set }
-    func setOriginallySupportedInferfaceOrientations()
+    func setDefaultSupportedInferfaceOrientations()
 }
 
 /// Use the `supportedInterfaceOrientations` modifier on a SwiftUI view to lock its orientation.
@@ -30,8 +30,8 @@ public final class OrientationLock {
         deviceOrientationController.supportedInterfaceOrientations = supportedInterfaceOrientations
     }
     
-    func setOriginallySupportedInferfaceOrientations() {
-        Self.deviceOrientationController?.setOriginallySupportedInferfaceOrientations()
+    func setDefaultSupportedInferfaceOrientations() {
+        Self.deviceOrientationController?.setDefaultSupportedInferfaceOrientations()
     }
 }
 
@@ -56,6 +56,6 @@ private struct OrientationLocked<Content: View>: View {
     // when view disappears, it reverts to the originally support orientations
     var body: some View {
         content
-            .onDisappear { orientationLock.setOriginallySupportedInferfaceOrientations() }
+            .onDisappear { orientationLock.setDefaultSupportedInferfaceOrientations() }
     }
 }

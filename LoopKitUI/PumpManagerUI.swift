@@ -36,22 +36,24 @@ public protocol PumpManagerUI: DeviceManagerUI, PumpManager, DeliveryLimitSettin
     ///
     /// - Parameters:
     ///     - settings: Settings used to configure the pump manager.
+    ///     - bluetoothProvider: The provider of Bluetooth functionality.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: Either a conforming view controller to create and onboard the pump manager or a newly created and onboarded pump manager.
-    static func setupViewController(initialSettings settings: PumpManagerSetupSettings, colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI>
+    static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI>
 
     /// Configure settings for an existing pump manager.
     ///
     /// - Parameters:
+    ///     - bluetoothProvider: The provider of Bluetooth functionality.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: A view controller to configure an existing pump manager.
-    func settingsViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying)
+    func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying)
 
     // View for recovering from delivery uncertainty
     func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & CompletionNotifying)
 
     // Returns a class that can provide HUD views
-    func hudProvider(colorPalette: LoopUIColorPalette) -> HUDProvider?
+    func hudProvider(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> HUDProvider?
 
     // Instantiates HUD view (typically reservoir volume) from the raw state returned by hudViewRawState
     static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView?

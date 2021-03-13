@@ -37,17 +37,19 @@ public protocol CGMManagerUI: CGMManager, DeviceManagerUI, DisplayGlucoseUnitObs
     /// Create and onboard a new CGM manager.
     ///
     /// - Parameters:
+    ///     - bluetoothProvider: The provider of Bluetooth functionality.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: Either a conforming view controller to create and onboard the CGM manager or a newly created and onboarded CGM manager.
-    static func setupViewController(colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & CGMManagerCreateNotifying & CGMManagerOnboardNotifying & CompletionNotifying, CGMManagerUI>
+    static func setupViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & CGMManagerCreateNotifying & CGMManagerOnboardNotifying & CompletionNotifying, CGMManagerUI>
 
     /// Configure settings for an existing CGM manager.
     ///
     /// - Parameters:
     ///     - displayGlucoseUnitObservable: The glucose units to use for display.
+    ///     - bluetoothProvider: The provider of Bluetooth functionality.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: A view controller to configure an existing CGM manager.
-    func settingsViewController(for displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, colorPalette: LoopUIColorPalette) -> (UIViewController & CGMManagerOnboardNotifying & CompletionNotifying)
+    func settingsViewController(for displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> (UIViewController & CGMManagerOnboardNotifying & CompletionNotifying)
 }
 
 extension CGMManagerUI {

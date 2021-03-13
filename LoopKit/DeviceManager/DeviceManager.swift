@@ -8,7 +8,7 @@
 import Foundation
 import UserNotifications
 
-public protocol DeviceManagerDelegate: AlertPresenter {
+public protocol DeviceManagerDelegate: AlertIssuer {
     // Begin obsolescent code
     // Note: once all plugins are updated to use the new alert system instead of Notifications, this can be removed.
     func scheduleNotification(for manager: DeviceManager,
