@@ -161,7 +161,7 @@ extension DoseEntry: Codable {
             let scheduledBasalRateUnit = try container.decodeIfPresent(String.self, forKey: .scheduledBasalRateUnit) {
             self.scheduledBasalRate = HKQuantity(unit: HKUnit(from: scheduledBasalRateUnit), doubleValue: scheduledBasalRate)
         }
-        self.automatic = try container.decode(Bool.self, forKey: .automatic)
+        self.automatic = try container.decodeIfPresent(Bool.self, forKey: .automatic)
     }
 
     public func encode(to encoder: Encoder) throws {
