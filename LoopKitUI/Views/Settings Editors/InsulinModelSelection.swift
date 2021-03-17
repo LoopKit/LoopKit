@@ -81,22 +81,22 @@ public struct InsulinModelSelection: View {
     }
 
     public init(
-           viewModel: TherapySettingsViewModel,
-           didSave: (() -> Void)? = nil
+        therapySettingsViewModel: TherapySettingsViewModel,
+        didSave: (() -> Void)? = nil
     ) {
         //TODO display glucose unit will be available in the environment. Will be updated when the editor is updated to support both glucose unit
         let displayGlucoseUnit = HKUnit.milligramsPerDeciliter
         self.init(
-            value: viewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.humalogNovologAdult),
-            insulinSensitivitySchedule: viewModel.therapySettings.insulinSensitivitySchedule,
+            value: therapySettingsViewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.humalogNovologAdult),
+            insulinSensitivitySchedule: therapySettingsViewModel.therapySettings.insulinSensitivitySchedule,
             glucoseUnit: displayGlucoseUnit,
-            supportedModelSettings: viewModel.supportedInsulinModelSettings,
-            chartColors: viewModel.chartColors,
-            onSave: { [weak viewModel] insulinModelSettings in
-                viewModel?.saveInsulinModel(insulinModelSettings: insulinModelSettings)
+            supportedModelSettings: therapySettingsViewModel.supportedInsulinModelSettings,
+            chartColors: therapySettingsViewModel.chartColors,
+            onSave: { [weak therapySettingsViewModel] insulinModelSettings in
+                therapySettingsViewModel?.saveInsulinModel(insulinModelSettings: insulinModelSettings)
                 didSave?()
             },
-            mode: viewModel.mode
+            mode: therapySettingsViewModel.mode
         )
     }
 

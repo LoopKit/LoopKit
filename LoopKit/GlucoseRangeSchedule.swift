@@ -42,7 +42,6 @@ extension DoubleRange: RawRepresentable {
     }
 }
 
-
 extension DoubleRange: Equatable {
     public static func ==(lhs: DoubleRange, rhs: DoubleRange) -> Bool {
         return abs(lhs.minValue - rhs.minValue) < .ulpOfOne &&
@@ -213,6 +212,10 @@ extension DoubleRange {
 extension ClosedRange where Bound == HKQuantity {
     public func doubleRange(for unit: HKUnit) -> DoubleRange {
         return DoubleRange(minValue: lowerBound.doubleValue(for: unit), maxValue: upperBound.doubleValue(for: unit))
+    }
+
+    public func glucoseRange(for unit: HKUnit) -> GlucoseRange {
+        GlucoseRange(range: self.doubleRange(for: unit), unit: unit)
     }
 }
 

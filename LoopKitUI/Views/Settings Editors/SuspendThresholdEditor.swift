@@ -25,6 +25,10 @@ public struct SuspendThresholdEditor: View {
     @State var isEditing = false
     @State var showingConfirmationAlert = false
 
+    private var initialValue: HKQuantity? {
+        viewModel.suspendThreshold
+    }
+
     public init(
         therapySettingsViewModel: TherapySettingsViewModel,
         didSave: (() -> Void)? = nil
@@ -54,7 +58,7 @@ public struct SuspendThresholdEditor: View {
     }
     
     private var contentWithCancel: some View {
-        if value == viewModel.suspendThreshold {
+        if value == initialValue {
             return AnyView(content
                 .navigationBarBackButtonHidden(false)
                 .navigationBarItems(leading: EmptyView())
@@ -150,7 +154,7 @@ public struct SuspendThresholdEditor: View {
     }
 
     private var saveButtonState: ConfigurationPageActionButtonState {
-        viewModel.suspendThreshold == nil || value != viewModel.suspendThreshold || viewModel.mode == .acceptanceFlow ? .enabled : .disabled
+        initialValue == nil || value != initialValue || viewModel.mode == .acceptanceFlow ? .enabled : .disabled
     }
 
     private var warningThreshold: SafetyClassification.Threshold? {

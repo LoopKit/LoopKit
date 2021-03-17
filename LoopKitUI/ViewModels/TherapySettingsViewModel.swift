@@ -48,7 +48,7 @@ public class TherapySettingsViewModel: ObservableObject {
         self.chartColors = chartColors
         self.didSave = didSave
     }
-    
+
     var deliveryLimits: DeliveryLimits {
         return DeliveryLimits(maximumBasalRate: therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
                               maximumBolus: therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) } )
@@ -56,6 +56,16 @@ public class TherapySettingsViewModel: ObservableObject {
 
     var suspendThreshold: GlucoseThreshold? {
         return therapySettings.suspendThreshold
+    }
+
+    var correctionRangeOverrides: CorrectionRangeOverrides {
+        return CorrectionRangeOverrides(preMeal: therapySettings.correctionRangeOverrides?.preMeal,
+                                        workout: therapySettings.correctionRangeOverrides?.workout)
+    }
+
+    var correctionRangeScheduleRange: ClosedRange<HKQuantity> {
+        precondition(therapySettings.glucoseTargetRangeSchedule != nil)
+        return therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
     }
 
     /// Reset to initial
@@ -68,14 +78,15 @@ public class TherapySettingsViewModel: ObservableObject {
         didSave?(TherapySetting.glucoseTargetRange, therapySettings)
     }
         
-    public func saveCorrectionRangeOverride(preMeal: ClosedRange<HKQuantity>?) {
-        therapySettings.preMealTargetRange = preMeal
-        didSave?(TherapySetting.preMealCorrectionRangeOverride, therapySettings)
-    }
-    
-    public func saveCorrectionRangeOverride(workout: ClosedRange<HKQuantity>?) {
-        therapySettings.workoutTargetRange = workout
-        didSave?(TherapySetting.workoutCorrectionRangeOverride, therapySettings)
+    public func saveCorrectionRangeOverride(preset: CorrectionRangeOverrides.Preset,
+                                            correctionRangeOverrides: CorrectionRangeOverrides) {
+        therapySettings.correctionRangeOverrides = correctionRangeOverrides
+        switch preset {
+        case .preMeal:
+            didSave?(TherapySetting.preMealCorrectionRangeOverride, therapySettings)
+        case .workout:
+            didSave?(TherapySetting.workoutCorrectionRangeOverride, therapySettings)
+        }
     }
 
     public func saveSuspendThreshold(quantity: HKQuantity, withDisplayGlucoseUnit displayGlucoseUnit: HKUnit) {
@@ -122,40 +133,38 @@ extension TherapySettingsViewModel {
             }
         case .glucoseTargetRange:
             return { dismiss in
-                AnyView(CorrectionRangeScheduleEditor(viewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(CorrectionRangeScheduleEditor(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
             }
         case .preMealCorrectionRangeOverride:
             return { dismiss in
-                AnyView(CorrectionRangeOverridesEditor(viewModel: self, preset: .preMeal, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(CorrectionRangeOverridesEditor(therapySettingsViewModel: self, preset: .preMeal, didSave: dismiss).environment(\.dismiss, dismiss))
             }
         case .workoutCorrectionRangeOverride:
             return { dismiss in
-                AnyView(CorrectionRangeOverridesEditor(viewModel: self, preset: .workout, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(CorrectionRangeOverridesEditor(therapySettingsViewModel: self, preset: .workout, didSave: dismiss).environment(\.dismiss, dismiss))
             }
         case .basalRate:
             precondition(self.pumpSupportedIncrements?() != nil)
             return { dismiss in
-                AnyView(BasalRateScheduleEditor(viewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(BasalRateScheduleEditor(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
             }
         case .deliveryLimits:
-            if self.pumpSupportedIncrements?() != nil {
-                return { dismiss in
-                    AnyView(DeliveryLimitsEditor(viewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
-                }
+            precondition(self.pumpSupportedIncrements?() != nil)
+            return { dismiss in
+                AnyView(DeliveryLimitsEditor(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
             }
         case .insulinModel:
-            if self.therapySettings.insulinModelSettings != nil {
-                return { dismiss in
-                    AnyView(InsulinModelSelection(viewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
-                }
+            precondition(self.therapySettings.insulinModelSettings != nil)
+            return { dismiss in
+                AnyView(InsulinModelSelection(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
             }
         case .carbRatio:
             return { dismiss in
-                AnyView(CarbRatioScheduleEditor(viewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(CarbRatioScheduleEditor(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
             }
         case .insulinSensitivity:
             return { dismiss in
-                return AnyView(InsulinSensitivityScheduleEditor(viewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
+                return AnyView(InsulinSensitivityScheduleEditor(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
             }
         case .none:
             break

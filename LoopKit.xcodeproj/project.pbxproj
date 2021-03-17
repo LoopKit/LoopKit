@@ -721,6 +721,11 @@
 		B43DA43F24D49AA400CAFF4E /* GuidanceColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43DA43E24D49AA400CAFF4E /* GuidanceColors.swift */; };
 		B43DA44224D9CD8500CAFF4E /* Environment+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45AF6EF24D4355A00EEAA4D /* Environment+Colors.swift */; };
 		B455F31825FBEC5F000ED456 /* SuspendThresholdEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F2A125FBE985000ED456 /* SuspendThresholdEditorViewModel.swift */; };
+		B455F35625FC0284000ED456 /* CorrectionRangeOverridesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F35525FC0284000ED456 /* CorrectionRangeOverridesTests.swift */; };
+		B455F3A425FF7FF0000ED456 /* CorrectionRangeOverridesEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F3A325FF7FF0000ED456 /* CorrectionRangeOverridesEditorViewModel.swift */; };
+		B455F4D32600DA0B000ED456 /* GlucoseRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F4D22600DA0B000ED456 /* GlucoseRange.swift */; };
+		B455F4DF2600E0A8000ED456 /* GlucoseRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F4DE2600E0A8000ED456 /* GlucoseRangeTests.swift */; };
+		B455F4FE2600E5EE000ED456 /* GlucoseRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F4D22600DA0B000ED456 /* GlucoseRange.swift */; };
 		B45774352562CCC6004B9466 /* SupportedRangeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45774342562CCC6004B9466 /* SupportedRangeTableViewController.swift */; };
 		B46B62A723FEFE4D001E69BA /* InstructionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62A623FEFE4D001E69BA /* InstructionList.swift */; };
 		B46B62A923FF05F8001E69BA /* LabeledNumberInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62A823FF05F8001E69BA /* LabeledNumberInput.swift */; };
@@ -1522,6 +1527,10 @@
 		B42C950C24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasurementFrequencyTableViewController.swift; sourceTree = "<group>"; };
 		B43DA43E24D49AA400CAFF4E /* GuidanceColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidanceColors.swift; sourceTree = "<group>"; };
 		B455F2A125FBE985000ED456 /* SuspendThresholdEditorViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SuspendThresholdEditorViewModel.swift; path = LoopKitUI/ViewModels/SuspendThresholdEditorViewModel.swift; sourceTree = SOURCE_ROOT; };
+		B455F35525FC0284000ED456 /* CorrectionRangeOverridesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesTests.swift; sourceTree = "<group>"; };
+		B455F3A325FF7FF0000ED456 /* CorrectionRangeOverridesEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesEditorViewModel.swift; sourceTree = "<group>"; };
+		B455F4D22600DA0B000ED456 /* GlucoseRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseRange.swift; sourceTree = "<group>"; };
+		B455F4DE2600E0A8000ED456 /* GlucoseRangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseRangeTests.swift; sourceTree = "<group>"; };
 		B45774342562CCC6004B9466 /* SupportedRangeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportedRangeTableViewController.swift; sourceTree = "<group>"; };
 		B45AF6EF24D4355A00EEAA4D /* Environment+Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Environment+Colors.swift"; sourceTree = "<group>"; };
 		B46B62A623FEFE4D001E69BA /* InstructionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionList.swift; sourceTree = "<group>"; };
@@ -2176,6 +2185,7 @@
 				43C9805B212D216A003B5D17 /* GlucoseChange.swift */,
 				43D8FDEA1C7290350073BE78 /* GlucoseEffect.swift */,
 				4378B64A1ED61965000AE785 /* GlucoseEffectVelocity.swift */,
+				B455F4D22600DA0B000ED456 /* GlucoseRange.swift */,
 				43D8FDEB1C7290350073BE78 /* GlucoseRangeSchedule.swift */,
 				43D8FDEC1C7290350073BE78 /* GlucoseSchedule.swift */,
 				A9498D7423386C3200DAA9B9 /* GlucoseThreshold.swift */,
@@ -2236,6 +2246,7 @@
 				437AFF192039F149008C4892 /* CarbStoreTests.swift */,
 				A95A1D842460CAD50079378D /* CarbValueTests.swift */,
 				C1E7035C24FFFA5C00DAB534 /* CollectionTests.swift */,
+				B455F35525FC0284000ED456 /* CorrectionRangeOverridesTests.swift */,
 				A9DF02C824F724D900B7C988 /* CriticalEventLogTests.swift */,
 				A9BFA03D245CCCB9001E4AE3 /* DailyQuantityScheduleTests.swift */,
 				891A3FD6224BE62100378B27 /* DailyValueScheduleTests.swift */,
@@ -2245,6 +2256,7 @@
 				43A067121F245A2F00E9E90F /* DoseStoreTests.swift */,
 				A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */,
 				43D8FE991C7293D00073BE78 /* GlucoseMathTests.swift */,
+				B455F4DE2600E0A8000ED456 /* GlucoseRangeTests.swift */,
 				B46E095625F7E5910025A04D /* GlucoseRangeScheduleTests.swift */,
 				A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */,
 				A99C73762339A67A00C80963 /* GlucoseThresholdTests.swift */,
@@ -2640,8 +2652,10 @@
 		B4D4C20B25F95A6700DA809D /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				B455F3A325FF7FF0000ED456 /* CorrectionRangeOverridesEditorViewModel.swift */,
 				B4D4C20C25F95A8700DA809D /* DisplayGlucoseUnitObservable.swift */,
 				B455F2A125FBE985000ED456 /* SuspendThresholdEditorViewModel.swift */,
+				1D1FCE2424BD42EF000300A8 /* TherapySettingsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -2733,7 +2747,6 @@
 				E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */,
 				1D1FCE2A24BE704A000300A8 /* TherapySetting+Settings.swift */,
 				1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */,
-				1D1FCE2424BD42EF000300A8 /* TherapySettingsViewModel.swift */,
 			);
 			path = "Settings Editors";
 			sourceTree = "<group>";
@@ -3577,6 +3590,7 @@
 				892A5DBC2231E20C008961AB /* Comparable.swift in Sources */,
 				898E6E6C224194060019E459 /* UIColor.swift in Sources */,
 				43BA717D201EE7090058961E /* GlucoseRangeTableViewCell.swift in Sources */,
+				B455F3A425FF7FF0000ED456 /* CorrectionRangeOverridesEditorViewModel.swift in Sources */,
 				89BE75CB2464BC2000B145D9 /* AlertContent.swift in Sources */,
 				43BA7184201EE7090058961E /* TextFieldTableViewController.swift in Sources */,
 				1D1A019E24B678BF0077D86E /* TherapySettingsView.swift in Sources */,
@@ -3630,6 +3644,7 @@
 				4322B779202FA2790002837D /* NewCarbEntry.swift in Sources */,
 				898C896A24D4BF11002FA994 /* Guardrail+Settings.swift in Sources */,
 				4322B76E202FA26B0002837D /* GlucoseMath.swift in Sources */,
+				B455F4D32600DA0B000ED456 /* GlucoseRange.swift in Sources */,
 				4322B791202FA2B70002837D /* Model.xcdatamodeld in Sources */,
 				891A3FDB224BEC0D00378B27 /* CarbSensitivitySchedule.swift in Sources */,
 				4322B773202FA2790002837D /* CarbEntry.swift in Sources */,
@@ -3809,6 +3824,7 @@
 				437874B5202FDD1200A3D8B9 /* DoseStoreTests.swift in Sources */,
 				A985465125144ABA0099C1A6 /* NotificationSettingsTests.swift in Sources */,
 				A99C7375233993FE00C80963 /* DiagnosticLogTests.swift in Sources */,
+				B455F4DF2600E0A8000ED456 /* GlucoseRangeTests.swift in Sources */,
 				4322B76C202F9ECD0002837D /* CarbMathTests.swift in Sources */,
 				434113B520F2BDB500D05747 /* CachedInsulinDeliveryObjectTests.swift in Sources */,
 				43D8FE1F1C72906E0073BE78 /* QuantityScheduleTests.swift in Sources */,
@@ -3823,6 +3839,7 @@
 				A971C8A223C6B17D0099BEFC /* SettingsStoreTests.swift in Sources */,
 				C1E7035D24FFFA5C00DAB534 /* CollectionTests.swift in Sources */,
 				1DFB99D6245CB2E900DCC8C9 /* AlertTests.swift in Sources */,
+				B455F35625FC0284000ED456 /* CorrectionRangeOverridesTests.swift in Sources */,
 				4303C4941E2D665F00ADEDC8 /* TimeZone.swift in Sources */,
 				898C897124D4C0E4002FA994 /* GuardrailTests.swift in Sources */,
 				A9DF02CF24F732FC00B7C988 /* JSONStreamEncoderTests.swift in Sources */,
@@ -3998,6 +4015,7 @@
 				89AE2231228BC68100BDFD85 /* DoseProgressTimerEstimator.swift in Sources */,
 				A9E675B422713F4700E25293 /* CachedCarbObject+CoreDataProperties.swift in Sources */,
 				A9E675B522713F4700E25293 /* AbsorbedCarbValue.swift in Sources */,
+				B455F4FE2600E5EE000ED456 /* GlucoseRange.swift in Sources */,
 				A9BD318924F45C0100994B83 /* Modelv3.xcmappingmodel in Sources */,
 				A9E675B622713F4700E25293 /* LocalizedString.swift in Sources */,
 				A9E675B722713F4700E25293 /* NSManagedObjectContext.swift in Sources */,

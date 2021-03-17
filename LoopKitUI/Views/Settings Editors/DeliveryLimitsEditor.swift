@@ -54,30 +54,30 @@ public struct DeliveryLimitsEditor: View {
     }
     
     public init(
-           viewModel: TherapySettingsViewModel,
-           didSave: (() -> Void)? = nil
+        therapySettingsViewModel: TherapySettingsViewModel,
+        didSave: (() -> Void)? = nil
     ) {
-        precondition(viewModel.pumpSupportedIncrements != nil)
+        precondition(therapySettingsViewModel.pumpSupportedIncrements != nil)
         
-        let maxBasal = viewModel.therapySettings.maximumBasalRatePerHour.map {
+        let maxBasal = therapySettingsViewModel.therapySettings.maximumBasalRatePerHour.map {
             HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)
         }
 
-        let maxBolus = viewModel.therapySettings.maximumBolus.map {
+        let maxBolus = therapySettingsViewModel.therapySettings.maximumBolus.map {
             HKQuantity(unit: .internationalUnit(), doubleValue: $0)
         }
         
         self.init(
             value: DeliveryLimits(maximumBasalRate: maxBasal, maximumBolus: maxBolus),
-            supportedBasalRates: viewModel.pumpSupportedIncrements!()!.basalRates,
-            scheduledBasalRange: viewModel.therapySettings.basalRateSchedule?.valueRange(),
-            supportedBolusVolumes: viewModel.pumpSupportedIncrements!()!.bolusVolumes,
-            lowestCarbRatio: viewModel.therapySettings.carbRatioSchedule?.lowestValue(),
-            onSave: { [weak viewModel] newLimits in
-                viewModel?.saveDeliveryLimits(limits: newLimits)
+            supportedBasalRates: therapySettingsViewModel.pumpSupportedIncrements!()!.basalRates,
+            scheduledBasalRange: therapySettingsViewModel.therapySettings.basalRateSchedule?.valueRange(),
+            supportedBolusVolumes: therapySettingsViewModel.pumpSupportedIncrements!()!.bolusVolumes,
+            lowestCarbRatio: therapySettingsViewModel.therapySettings.carbRatioSchedule?.lowestValue(),
+            onSave: { [weak therapySettingsViewModel] newLimits in
+                therapySettingsViewModel?.saveDeliveryLimits(limits: newLimits)
                 didSave?()
             },
-            mode: viewModel.mode
+            mode: therapySettingsViewModel.mode
         )
     }
 
