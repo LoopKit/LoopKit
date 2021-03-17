@@ -19,10 +19,11 @@ public protocol DeviceStatusHighlight {
     var state: DeviceStatusHighlightState { get }
 }
 
-public enum DeviceStatusHighlightState: String, Codable {
+public typealias DeviceStatusHighlightState = DeviceStatusElementState
+
+public enum DeviceStatusElementState: String, Codable {
     case critical
     case normalCGM
     case normalPump
     case warning
 }
-

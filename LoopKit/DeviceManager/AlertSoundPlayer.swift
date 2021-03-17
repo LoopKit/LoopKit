@@ -17,6 +17,7 @@ import os.log
 public protocol AlertSoundPlayer {
     func vibrate()
     func play(url: URL)
+    func stopAll()
 }
 
 public class DeviceAVSoundPlayer: AlertSoundPlayer {
@@ -66,6 +67,14 @@ public class DeviceAVSoundPlayer: AlertSoundPlayer {
             }
         }
     }
+    
+    public func stopAll() {
+        DispatchQueue.main.async {
+            for soundEffect in self.players {
+                soundEffect.stop()
+            }
+        }
+    }
 }
 
 public extension DeviceAVSoundPlayer {
@@ -80,6 +89,7 @@ public extension DeviceAVSoundPlayer {
         default:
             if let baseURL = baseURL {
                 if let name = sound.filename {
+                    self.stopAll()
                     self.play(url: baseURL.appendingPathComponent(name))
                 } else {
                     log.default("No file to play for %@", "\(sound)")

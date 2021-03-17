@@ -112,6 +112,8 @@ public struct MockCGMState: GlucoseDisplayable {
     
     public var cgmStatusHighlight: MockCGMStatusHighlight?
     
+    public var cgmStatusBadge: MockCGMStatusBadge?
+    
     public var cgmLifecycleProgress: MockCGMLifecycleProgress? {
         didSet {
             if cgmLifecycleProgress != oldValue {
@@ -135,6 +137,8 @@ public struct MockCGMState: GlucoseDisplayable {
             }
         }
     }
+    
+    public var cgmBatteryChargeRemaining: Double? = 1
     
     private mutating func setProgressColor() {
         guard var cgmLifecycleProgress = cgmLifecycleProgress else {
@@ -215,6 +219,41 @@ public struct MockCGMStatusHighlight: DeviceStatusHighlight {
     public var alertIdentifier: Alert.AlertIdentifier
 }
 
+public struct MockCGMStatusBadge: DeviceStatusBadge {
+    public var image: UIImage? {
+        return badgeType.image
+    }
+    
+    public var state: DeviceStatusBadgeState {
+        switch badgeType {
+        case .lowBattery:
+            return .critical
+        case .calibrationRequested:
+            return .warning
+        }
+    }
+    
+    public var badgeType: MockCGMStatusBadgeType
+    
+    public enum MockCGMStatusBadgeType: Int, CaseIterable {
+        case lowBattery
+        case calibrationRequested
+        
+        var image: UIImage? {
+            switch self {
+            case .lowBattery:
+                return UIImage(frameworkImage: "battery.circle.fill")
+            case .calibrationRequested:
+                return UIImage(frameworkImage: "drop.circle.fill")
+            }
+        }
+    }
+    
+    init(badgeType: MockCGMStatusBadgeType) {
+        self.badgeType = badgeType
+    }
+}
+
 public struct MockCGMLifecycleProgress: DeviceLifecycleProgress, Equatable {
     public var percentComplete: Double
     
@@ -254,7 +293,16 @@ extension MockCGMLifecycleProgress: RawRepresentable {
 public final class MockCGMManager: TestingCGMManager {
     
     public static let managerIdentifier = "MockCGMManager"
+
+    public var managerIdentifier: String {
+        return MockCGMManager.managerIdentifier
+    }
+    
     public static let localizedTitle = "CGM Simulator"
+    
+    public var localizedTitle: String {
+        return MockCGMManager.localizedTitle
+    }
 
     public struct MockAlert {
         public let sound: Alert.Sound
@@ -282,9 +330,7 @@ public final class MockCGMManager: TestingCGMManager {
 
     public var mockSensorState: MockCGMState {
         didSet {
-            delegate.notify { (delegate) in
-                delegate?.cgmManagerDidUpdateState(self)
-            }
+            self.notifyStatusObservers(cgmManagerStatus: self.cgmManagerStatus)
         }
     }
 
@@ -292,7 +338,7 @@ public final class MockCGMManager: TestingCGMManager {
         return mockSensorState
     }
     
-    public var cgmStatus: CGMManagerStatus {
+    public var cgmManagerStatus: CGMManagerStatus {
         return CGMManagerStatus(hasValidSensorSession: dataSource.isValidSession)
     }
     
@@ -326,10 +372,7 @@ public final class MockCGMManager: TestingCGMManager {
 
     public var dataSource: MockCGMDataSource {
         didSet {
-            delegate.notify { (delegate) in
-                delegate?.cgmManagerDidUpdateState(self)
-                delegate?.cgmManager(self, didUpdate: self.cgmStatus)
-            }
+            self.notifyStatusObservers(cgmManagerStatus: self.cgmManagerStatus)
         }
     }
 
@@ -337,6 +380,34 @@ public final class MockCGMManager: TestingCGMManager {
 
     private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 
+    public init() {
+        self.mockSensorState = MockCGMState(isStateValid: true, trendType: nil)
+        self.dataSource = MockCGMDataSource(model: .noData)
+        setupGlucoseUpdateTimer()
+    }
+
+    // MARK: Handling CGM Manager Status observers
+    
+    private var statusObservers = WeakSynchronizedSet<CGMManagerStatusObserver>()
+
+    public func addStatusObserver(_ observer: CGMManagerStatusObserver, queue: DispatchQueue) {
+        statusObservers.insert(observer, queue: queue)
+    }
+
+    public func removeStatusObserver(_ observer: CGMManagerStatusObserver) {
+        statusObservers.removeElement(observer)
+    }
+    
+    private func notifyStatusObservers(cgmManagerStatus: CGMManagerStatus) {
+        delegate.notify { delegate in
+            delegate?.cgmManagerDidUpdateState(self)
+            delegate?.cgmManager(self, didUpdate: self.cgmManagerStatus)
+        }
+        statusObservers.forEach { observer in
+            observer.cgmManager(self, didUpdate: cgmManagerStatus)
+        }
+    }
+    
     public init?(rawState: RawStateValue) {
         if let mockSensorStateRawValue = rawState["mockSensorState"] as? MockCGMState.RawValue,
             let mockSensorState = MockCGMState(rawValue: mockSensorStateRawValue) {
@@ -365,6 +436,8 @@ public final class MockCGMManager: TestingCGMManager {
             "dataSource": dataSource.rawValue
         ]
     }
+
+    public let isOnboarded = true   // No distinction between created and onboarded
 
     public let appURL: URL? = nil
 
@@ -423,6 +496,8 @@ public final class MockCGMManager: TestingCGMManager {
                 self.logDeviceComms(.error, message: "Error fetching new data: \(error)")
             case .newData(let samples):
                 self.logDeviceComms(.receive, message: "New data received: \(samples)")
+            case .unreliableData:
+                self.logDeviceComms(.receive, message: "Unreliable data received")
             case .noData:
                 self.logDeviceComms(.receive, message: "No new data")
             }
@@ -439,6 +514,8 @@ public final class MockCGMManager: TestingCGMManager {
                 self.logDeviceComms(.error, message: "Backfill error: \(error)")
             case .newData(let samples):
                 self.logDeviceComms(.receive, message: "Backfill data: \(samples)")
+            case .unreliableData:
+                self.logDeviceComms(.receive, message: "Backfill data unreliable")
             case .noData:
                 self.logDeviceComms(.receive, message: "Backfill empty")
             }
@@ -544,9 +621,6 @@ extension MockCGMManager {
             // restore signal loss status highlight
             issueSignalLossAlert()
         }
-
-        // trigger display of the status highlight
-        sendCGMReadingResult(.noData)
     }
     
     private func registerBackgroundTask() {
@@ -598,6 +672,45 @@ extension MockCGMManager {
     }
 }
 
+//MARK: Device Status Badge stuff
+
+extension MockCGMManager {
+    public func requestCalibration(_ requestCalibration: Bool) {
+        mockSensorState.cgmStatusBadge = requestCalibration ? MockCGMStatusBadge(badgeType: .calibrationRequested) : nil
+        checkAndSetBatteryBadge()
+    }
+    
+    public var cgmBatteryChargeRemaining: Double? {
+        get {
+            return mockSensorState.cgmBatteryChargeRemaining
+        }
+        set {
+            mockSensorState.cgmBatteryChargeRemaining = newValue
+            checkAndSetBatteryBadge()
+        }
+    }
+    
+    public var isCalibrationRequested: Bool {
+        return mockSensorState.cgmStatusBadge?.badgeType == .calibrationRequested
+    }
+    
+    private func checkAndSetBatteryBadge() {
+        // calibration badge is the highest priority
+        guard mockSensorState.cgmStatusBadge?.badgeType != .calibrationRequested else {
+            return
+        }
+        
+        guard let cgmBatteryChargeRemaining = mockSensorState.cgmBatteryChargeRemaining,
+              cgmBatteryChargeRemaining > 0.5 else
+        {
+            mockSensorState.cgmStatusBadge = MockCGMStatusBadge(badgeType: .lowBattery)
+            return
+        }
+        
+        mockSensorState.cgmStatusBadge = nil
+    }
+}
+
 extension MockCGMManager {
     public var debugDescription: String {
         return """
@@ -645,12 +758,19 @@ extension MockCGMState: RawRepresentable {
             self.cgmStatusHighlight = MockCGMStatusHighlight(localizedMessage: localizedMessage, alertIdentifier: alertIdentifier)
         }
         
+        if let statusBadgeTypeRawValue = rawValue["statusBadgeType"] as? MockCGMStatusBadge.MockCGMStatusBadgeType.RawValue,
+           let statusBadgeType = MockCGMStatusBadge.MockCGMStatusBadgeType(rawValue: statusBadgeTypeRawValue)
+        {
+            self.cgmStatusBadge = MockCGMStatusBadge(badgeType: statusBadgeType)
+        }
+        
         if let cgmLifecycleProgressRawValue = rawValue["cgmLifecycleProgress"] as? MockCGMLifecycleProgress.RawValue {
             self.cgmLifecycleProgress = MockCGMLifecycleProgress(rawValue: cgmLifecycleProgressRawValue)
         }
         
         self.progressWarningThresholdPercentValue = rawValue["progressWarningThresholdPercentValue"] as? Double
         self.progressCriticalThresholdPercentValue = rawValue["progressCriticalThresholdPercentValue"] as? Double
+        self.cgmBatteryChargeRemaining = rawValue["cgmBatteryChargeRemaining"] as? Double
         
         setProgressColor()
     }
@@ -679,6 +799,10 @@ extension MockCGMState: RawRepresentable {
             rawValue["alertIdentifier"] = cgmStatusHighlight.alertIdentifier
         }
         
+        if let cgmStatusBadgeType = cgmStatusBadge?.badgeType {
+            rawValue["statusBadgeType"] = cgmStatusBadgeType.rawValue
+        }
+        
         if let cgmLifecycleProgress = cgmLifecycleProgress {
             rawValue["cgmLifecycleProgress"] = cgmLifecycleProgress.rawValue
         }
@@ -690,7 +814,11 @@ extension MockCGMState: RawRepresentable {
         if let progressCriticalThresholdPercentValue = progressCriticalThresholdPercentValue {
             rawValue["progressCriticalThresholdPercentValue"] = progressCriticalThresholdPercentValue
         }
-
+        
+        if let cgmBatteryChargeRemaining = cgmBatteryChargeRemaining {
+            rawValue["cgmBatteryChargeRemaining"] = cgmBatteryChargeRemaining
+        }
+        
         return rawValue
     }
 }
@@ -710,9 +838,11 @@ extension MockCGMState: CustomDebugStringConvertible {
         * highGlucoseThresholdValue: \(highGlucoseThresholdValue)
         * glucoseRangeCategory: \(glucoseRangeCategory as Any)
         * cgmStatusHighlight: \(cgmStatusHighlight as Any)
+        * cgmStatusBadge: \(cgmStatusBadge as Any)
         * cgmLifecycleProgress: \(cgmLifecycleProgress as Any)
         * progressWarningThresholdPercentValue: \(progressWarningThresholdPercentValue as Any)
         * progressCriticalThresholdPercentValue: \(progressCriticalThresholdPercentValue as Any)
+        * cgmBatteryChargeRemaining: \(cgmBatteryChargeRemaining as Any)
         """
     }
 }

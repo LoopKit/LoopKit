@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import HealthKit
 import LoopKit
 
 class TherapySettingsTests: XCTestCase {
@@ -75,8 +76,8 @@ class TherapySettingsTests: XCTestCase {
         
         return TherapySettings(
             glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
-            preMealTargetRange: DoubleRange(minValue: 80.0, maxValue: 90.0),
-            workoutTargetRange: DoubleRange(minValue: 130.0, maxValue: 140.0),
+            preMealTargetRange: DoubleRange(minValue: 80.0, maxValue: 90.0).quantityRange(for: .milligramsPerDeciliter),
+            workoutTargetRange: DoubleRange(minValue: 130.0, maxValue: 140.0).quantityRange(for: .milligramsPerDeciliter),
             maximumBasalRatePerHour: 3,
             maximumBolus: 5,
             suspendThreshold: GlucoseThreshold(unit: .milligramsPerDeciliter, value: 80),
@@ -130,6 +131,7 @@ class TherapySettingsTests: XCTestCase {
           "identifier" : "America/Los_Angeles"
         }
       },
+      "bloodGlucoseUnit" : "mg/dL",
       "carbRatioSchedule" : {
         "unit" : "g",
         "valueSchedule" : {
@@ -324,16 +326,15 @@ class TherapySettingsTests: XCTestCase {
         let data = try encoder.encode(original)
         XCTAssertEqual(encodedString, String(data: data, encoding: .utf8)!)
     }
-    
+
     func testTherapySettingDecoding() throws {
         let data = encodedString.data(using: .utf8)!
         let decoded = try decoder.decode(TherapySettings.self, from: data)
         let expected = getTherapySettings()
-        
+
         XCTAssertEqual(expected, decoded)
-        
+
         XCTAssertEqual(decoded.basalRateSchedule, expected.basalRateSchedule)
-        XCTAssertEqual(decoded.glucoseUnit, expected.glucoseUnit)
         XCTAssertEqual(decoded.insulinSensitivitySchedule, expected.insulinSensitivitySchedule)
         XCTAssertEqual(decoded.preMealTargetRange, expected.preMealTargetRange)
         XCTAssertEqual(decoded.workoutTargetRange, expected.workoutTargetRange)

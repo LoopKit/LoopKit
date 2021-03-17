@@ -53,13 +53,17 @@ public final class MockService: Service {
         ]
     }
     
+    public let isOnboarded = true   // No distinction between created and onboarded
+
     public func completeCreate() {}
     
     public func completeUpdate() {
         serviceDelegate?.serviceDidUpdateState(self)
     }
     
-    public func completeDelete() {}
+    public func completeDelete() {
+        serviceDelegate?.serviceWantsDeletion(self)
+    }
     
     public func clearHistory() {
         lockedHistory.value = []

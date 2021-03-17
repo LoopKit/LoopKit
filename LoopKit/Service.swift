@@ -7,24 +7,21 @@
 //
 
 public protocol ServiceDelegate: AnyObject {
-
-    /// Informs the delegate that the state of the specified service was updated and the
-    /// delegate should persist the service.
+    /// Informs the delegate that the state of the specified service was updated and the delegate should persist the service. May
+    /// be invoked prior to the service completing setup.
     ///
     /// - Parameters:
-    ///     - service: The service whose state was updated.
+    ///     - service: The service that updated state.
     func serviceDidUpdateState(_ service: Service)
 
-    /// Informs the delegate that the service has new settings that should be saved
-    /// to Loop
+    /// Informs the delegate that the service wants deletion.
     ///
     /// - Parameters:
-    ///     - settings: The settings object containing the new settings.
-    func serviceHasNewTherapySettings(_ settings: TherapySettings)
+    ///     - service: The service that wants deletion.
+    func serviceWantsDeletion(_ service: Service)
 }
 
 public protocol Service: AnyObject {
-
     typealias RawStateValue = [String: Any]
 
     /// The unique identifier of this type of service.
@@ -45,12 +42,11 @@ public protocol Service: AnyObject {
     /// The current, serializable state of the service.
     var rawState: RawStateValue { get }
 
+    /// Is the service onboarded and ready for use?
+    var isOnboarded: Bool { get }
 }
 
 public extension Service {
-
     var serviceIdentifier: String { return type(of: self).serviceIdentifier }
-
     var localizedTitle: String { return type(of: self).localizedTitle }
-
 }

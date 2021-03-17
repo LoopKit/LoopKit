@@ -1183,7 +1183,7 @@ extension CarbStore {
             var queryError: Error?
 
             guard limit > 0 else {
-                completion(.success(queryAnchor, queryCreatedResult, queryUpdatedResult, queryDeletedResult))
+                completion(.success(queryAnchor, [], [], []))
                 return
             }
 

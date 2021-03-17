@@ -37,7 +37,7 @@ public struct GuidePage<Content, ActionAreaContent>: View where Content: View, A
                 self.actionAreaContent
             }
             .padding(self.horizontalSizeClass == .regular ? .bottom : [])
-            .background(Color(UIColor.systemBackground).shadow(radius: 5))
+            .background(Color(UIColor.secondarySystemGroupedBackground).shadow(radius: 5))
         }
         .edgesIgnoringSafeArea(.bottom)
     }

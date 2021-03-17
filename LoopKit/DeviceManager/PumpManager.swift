@@ -8,7 +8,6 @@
 import Foundation
 import HealthKit
 
-
 public enum PumpManagerResult<T> {
     case success(T)
     case failure(PumpManagerError)

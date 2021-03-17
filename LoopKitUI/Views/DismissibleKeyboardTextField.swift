@@ -20,6 +20,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
     var autocorrectionType: UITextAutocorrectionType
     var shouldBecomeFirstResponder: Bool
     var maxLength: Int?
+    var doneButtonColor: UIColor
 
     public init(
         text: Binding<String>,
@@ -31,7 +32,8 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         autocapitalizationType: UITextAutocapitalizationType = .sentences,
         autocorrectionType: UITextAutocorrectionType = .default,
         shouldBecomeFirstResponder: Bool = false,
-        maxLength: Int? = nil
+        maxLength: Int? = nil,
+        doneButtonColor: UIColor = .blue
     ) {
         self._text = text
         self.placeholder = placeholder
@@ -43,6 +45,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         self.autocorrectionType = autocorrectionType
         self.shouldBecomeFirstResponder = shouldBecomeFirstResponder
         self.maxLength = maxLength
+        self.doneButtonColor = doneButtonColor
     }
 
     public func makeUIView(context: Context) -> UITextField {
@@ -58,7 +61,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: textField, action: #selector(UITextField.resignFirstResponder))
-        doneButton.tintColor = textColor
+        doneButton.tintColor = doneButtonColor
         toolbar.items = [flexibleSpace, doneButton]
         toolbar.sizeToFit()
         return toolbar

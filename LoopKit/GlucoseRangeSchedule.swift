@@ -180,6 +180,22 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
 
         return lowerBound...upperBound
     }
+
+    public func convertTo(unit: HKUnit) -> GlucoseRangeSchedule? {
+        guard unit != self.unit else {
+            return self
+        }
+
+        let convertedDailyItems: [RepeatingScheduleValue<DoubleRange>] = rangeSchedule.items.map {
+            RepeatingScheduleValue(startTime: $0.startTime,
+                                   value: $0.value.quantityRange(for: self.unit).doubleRange(for: unit)
+            )
+        }
+
+        return GlucoseRangeSchedule(unit: unit,
+                                    dailyItems: convertedDailyItems,
+                                    timeZone: timeZone)
+    }
 }
 
 extension GlucoseRangeSchedule: Codable {}

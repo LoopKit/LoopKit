@@ -42,8 +42,17 @@ public enum MockPumpManagerError: LocalizedError {
 public final class MockPumpManager: TestingPumpManager {
     
     public static let managerIdentifier = "MockPumpManager"
+
+    public var managerIdentifier: String {
+        return MockPumpManager.managerIdentifier
+    }
+    
     public static let localizedTitle = "Insulin Pump Simulator"
     
+    public var localizedTitle: String {
+        return MockPumpManager.localizedTitle
+    }
+
     private static let device = HKDevice(
         name: MockPumpManager.managerIdentifier,
         manufacturer: nil,
@@ -292,41 +301,23 @@ public final class MockPumpManager: TestingPumpManager {
     private var stateObservers = WeakSynchronizedSet<MockPumpManagerStateObserver>()
 
     public init() {
-        let deliverableIncrements: MockPumpManagerState.DeliverableIncrements = .medtronicX22
-        state = MockPumpManagerState(
-            deliverableIncrements: deliverableIncrements,
-            supportedBolusVolumes: deliverableIncrements.supportedBolusVolumes ?? [],
-            supportedBasalRates: deliverableIncrements.supportedBasalRates ?? [],
-            reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity,
-            tempBasalEnactmentShouldError: false,
-            bolusEnactmentShouldError: false,
-            bolusCancelShouldError: false,
-            deliverySuspensionShouldError: false,
-            deliveryResumptionShouldError: false,
-            deliveryCommandsShouldTriggerUncertainDelivery: false,
-            maximumBolus: 25.0,
-            maximumBasalRatePerHour: 5.0,
-            suspendState: .resumed(Date()),
-            pumpBatteryChargeRemaining: 1,
-            unfinalizedBolus: nil,
-            unfinalizedTempBasal: nil,
-            finalizedDoses: [],
-            progressWarningThresholdPercentValue: 0.75,
-            progressCriticalThresholdPercentValue: 0.9,
-            insulinType: .novolog)
+        state = MockPumpManagerState(reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity)
     }
 
     public init?(rawState: RawStateValue) {
-        guard let state = (rawState["state"] as? MockPumpManagerState.RawValue).flatMap(MockPumpManagerState.init(rawValue:)) else {
-            return nil
+        if let state = (rawState["state"] as? MockPumpManagerState.RawValue).flatMap(MockPumpManagerState.init(rawValue:)) {
+            self.state = state
+        } else {
+            self.state = MockPumpManagerState(reservoirUnitsRemaining: MockPumpManager.pumpReservoirCapacity)
         }
-        self.state = state
     }
 
     public var rawState: RawStateValue {
         return ["state": state.rawValue]
     }
     
+    public let isOnboarded = true   // No distinction between created and onboarded
+
     private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
         self.delegate.notify { (delegate) in
             delegate?.deviceManager(self, logEventForDeviceIdentifier: "MockId", type: type, message: message, completion: nil)

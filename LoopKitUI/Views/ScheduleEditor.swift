@@ -168,14 +168,10 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             actionButtonTitle: Text(mode.buttonText),
             actionButtonState: saveButtonState,
             cards: {
-                // TODO: Remove conditional when Swift 5.3 ships
-                // https://bugs.swift.org/browse/SR-11628
-                if true {
-                    Card {
-                        SettingDescription(text: description, informationalContent: {self.therapySettingType.helpScreen()})
-                        Splat(Array(scheduleItems.enumerated()), id: \.element.startTime) { index, item in
-                            self.itemView(for: item, at: index)
-                        }
+                Card {
+                    SettingDescription(text: description, informationalContent: {self.therapySettingType.helpScreen()})
+                    Splat(Array(scheduleItems.enumerated()), id: \.element.startTime) { index, item in
+                        self.itemView(for: item, at: index)
                     }
                 }
             },

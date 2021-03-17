@@ -112,6 +112,14 @@ extension MockGlucoseProvider {
     fileprivate static var noData: MockGlucoseProvider {
         return MockGlucoseProvider { _, completion in completion(.noData) }
     }
+    
+    fileprivate static var signalLoss: MockGlucoseProvider {
+        return MockGlucoseProvider { _, _ in }
+    }
+    
+    fileprivate static var unreliableData: MockGlucoseProvider {
+        return MockGlucoseProvider { _, completion in completion(.unreliableData) }
+    }
 
     fileprivate static func error(_ error: Error) -> MockGlucoseProvider {
         return MockGlucoseProvider { _, completion in completion(.error(error)) }
@@ -211,7 +219,9 @@ private extension MockCGMDataSource.Model {
         case .noData:
             return .noData
         case .signalLoss:
-            return .noData
+            return .signalLoss
+        case .unreliableData:
+            return .unreliableData
         }
     }
 }

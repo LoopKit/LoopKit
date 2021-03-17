@@ -12,7 +12,7 @@ import LoopKitUI
 import MockKit
 
 
-final class MockPumpManagerSetupViewController: UINavigationController, PumpManagerSetupViewController, CompletionNotifying {
+final class MockPumpManagerSetupViewController: UINavigationController, PumpManagerCreateNotifying, PumpManagerOnboardNotifying, CompletionNotifying {
 
     static func instantiateFromStoryboard() -> MockPumpManagerSetupViewController {
         return UIStoryboard(name: "MockPumpManager", bundle: Bundle(for: MockPumpManagerSetupViewController.self)).instantiateInitialViewController() as! MockPumpManagerSetupViewController
@@ -26,9 +26,11 @@ final class MockPumpManagerSetupViewController: UINavigationController, PumpMana
 
     let pumpManager = MockPumpManager()
 
-    weak var setupDelegate: PumpManagerSetupViewControllerDelegate?
+    public weak var pumpManagerCreateDelegate: PumpManagerCreateDelegate?
 
-    weak var completionDelegate: CompletionDelegate?
+    public weak var pumpManagerOnboardDelegate: PumpManagerOnboardDelegate?
+
+    public weak var completionDelegate: CompletionDelegate?
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +47,13 @@ final class MockPumpManagerSetupViewController: UINavigationController, PumpMana
     }
 
     func completeSetup() {
-        setupDelegate?.pumpManagerSetupViewController(self, didSetUpPumpManager: pumpManager)
+        pumpManagerCreateDelegate?.pumpManagerCreateNotifying(didCreatePumpManager: pumpManager)
+
+        let settings = PumpManagerSetupSettings(maxBasalRateUnitsPerHour: maxBasalRateUnitsPerHour,
+                                           maxBolusUnits: maxBolusUnits,
+                                           basalSchedule: basalSchedule)
+        pumpManagerOnboardDelegate?.pumpManagerOnboardNotifying(didOnboardPumpManager: pumpManager, withFinalSettings: settings)
+        
         completionDelegate?.completionNotifyingDidComplete(self)
     }
 
@@ -80,4 +88,3 @@ extension MockPumpManagerSetupViewController: SetupTableViewControllerDelegate {
         completionDelegate?.completionNotifyingDidComplete(self)
     }
 }
-
