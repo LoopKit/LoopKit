@@ -23,8 +23,8 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
     
     var title: Text
     var description: Text
-    var initialScheduleItems: [RepeatingScheduleValue<Double>]
-    @State var scheduleItems: [RepeatingScheduleValue<Double>]
+    var initialScheduleItems: [RepeatingScheduleValue<HKQuantity>]
+    @State var scheduleItems: [RepeatingScheduleValue<HKQuantity>]
     var unit: HKUnit
     var selectableValues: [Double]
     var quantitySelectionMode: QuantitySelectionMode
@@ -45,36 +45,36 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
             description: description,
             scheduleItems: $scheduleItems,
             initialScheduleItems: initialScheduleItems,
-            defaultFirstScheduleItemValue: defaultFirstScheduleItemValue.doubleValue(for: unit),
+            defaultFirstScheduleItemValue: defaultFirstScheduleItemValue,
             scheduleItemLimit: scheduleItemLimit,
             saveConfirmation: saveConfirmation,
             valueContent: { value, isEditing in
                 GuardrailConstrainedQuantityView(
-                    value: HKQuantity(unit: self.unit, doubleValue: value),
-                    unit: self.unit,
-                    guardrail: self.guardrail,
+                    value: value,
+                    unit: unit,
+                    guardrail: guardrail,
                     isEditing: isEditing
                 )
             },
             valuePicker: { item, availableWidth in
-                if self.quantitySelectionMode == .whole {
+                if quantitySelectionMode == .whole {
                     QuantityPicker(
-                        value: item.value.animation().withUnit(self.unit),
-                        unit: self.unit,
-                        guardrail: self.guardrail,
-                        selectableValues: self.selectableValues,
-                        guidanceColors: self.guidanceColors
+                        value: item.value.animation(),
+                        unit: unit,
+                        guardrail: guardrail,
+                        selectableValues: selectableValues,
+                        guidanceColors: guidanceColors
                     )
                     .frame(width: availableWidth / 2)
                     // Ensure overlaid unit label is not clipped
-                    .padding(.trailing, self.unitLabelWidth + self.unitLabelSpacing)
+                    .padding(.trailing, unitLabelWidth + unitLabelSpacing)
                     .clipped()
                 } else {
                     FractionalQuantityPicker(
-                        value: item.value.animation().withUnit(self.unit),
-                        unit: self.unit,
-                        guardrail: self.guardrail,
-                        selectableValues: self.selectableValues,
+                        value: item.value.animation(),
+                        unit: unit,
+                        guardrail: guardrail,
+                        selectableValues: selectableValues,
                         usageContext: .component(availableWidth: availableWidth)
                     )
                 }
@@ -83,15 +83,15 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
                 instructionalContentIfNecessary
                 guardrailWarningIfNecessary
             },
-            savingMechanism: savingMechanism.pullback { items in
-                DailyQuantitySchedule(unit: self.unit, dailyItems: items)!
+            savingMechanism: savingMechanism.pullback { quantities in
+                DailyQuantitySchedule(unit: unit, dailyQuantities: quantities)!
             },
             mode: mode,
             therapySettingType: settingType
         )
         .simultaneousGesture(TapGesture().onEnded {
             withAnimation {
-                self.userDidTap = true
+                userDidTap = true
             }
         })
     }
@@ -141,7 +141,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
 
     private var crossedThresholds: [SafetyClassification.Threshold] {
         scheduleItems.lazy
-            .map { HKQuantity(unit: self.unit, doubleValue: $0.value) }
+            .map { $0.value }
             .compactMap { quantity in
                 switch guardrail.classification(for: quantity) {
                 case .withinRecommendedRange:
@@ -174,8 +174,8 @@ extension QuantityScheduleEditor {
     ) {
         self.title = title
         self.description = description
-        self.initialScheduleItems = schedule?.items ?? []
-        self._scheduleItems = State(initialValue: schedule?.items ?? [])
+        self.initialScheduleItems = schedule?.quantities(using: unit) ?? []
+        self._scheduleItems = State(initialValue: schedule?.quantities(using: unit) ?? [])
         self.unit = unit
         self.quantitySelectionMode = quantitySelectionMode
         self.selectableValues = selectableValues

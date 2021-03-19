@@ -128,8 +128,38 @@ public extension DailyQuantitySchedule where T == Double {
     func lowestValue() -> Double? {
         return valueSchedule.items.min(by: { $0.value < $1.value } )?.value
     }
-}
 
+    var quantities: [RepeatingScheduleValue<HKQuantity>] {
+        return self.items.map {
+            RepeatingScheduleValue<HKQuantity>(startTime: $0.startTime,
+                                               value: HKQuantity(unit: unit, doubleValue: $0.value))
+        }
+    }
+    
+    func quantities(using unit: HKUnit) -> [RepeatingScheduleValue<HKQuantity>] {
+        return self.items.map {
+            RepeatingScheduleValue<HKQuantity>(startTime: $0.startTime,
+                                               value: HKQuantity(unit: unit, doubleValue: $0.value))
+        }
+    }
+    
+    init?(unit: HKUnit,
+          dailyQuantities: [RepeatingScheduleValue<HKQuantity>],
+          timeZone: TimeZone? = nil)
+    {
+        guard let valueSchedule = DailyValueSchedule(
+                dailyItems: dailyQuantities.map {
+                    RepeatingScheduleValue(startTime: $0.startTime, value: $0.value.doubleValue(for: unit))
+                },
+                timeZone: timeZone) else
+        {
+            return nil
+        }
+        
+        self.unit = unit
+        self.valueSchedule = valueSchedule
+    }
+}
 
 extension DailyQuantitySchedule: Equatable where T: Equatable {
     public static func == (lhs: DailyQuantitySchedule<T>, rhs: DailyQuantitySchedule<T>) -> Bool {

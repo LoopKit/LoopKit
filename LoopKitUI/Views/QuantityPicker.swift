@@ -59,7 +59,7 @@ public struct QuantityPicker: View {
         self.init(
             value: value,
             unit: unit,
-            selectableValues: selectableValues,
+            selectableValues: selectableValues.map { unit.roundForPicker(value: $0) },
             formatter: formatter,
             isUnitLabelVisible: isUnitLabelVisible,
             colorForValue: { value in
@@ -92,7 +92,7 @@ public struct QuantityPicker: View {
     private var selectedValue: Binding<Double> {
         Binding(
             get: {
-                value.doubleValue(for: unit, withRounding: true)
+                unit.roundForPicker(value: value.doubleValue(for: unit))
             },
             set: { newValue in
                 self.value = HKQuantity(unit: unit, doubleValue: newValue)

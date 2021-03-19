@@ -28,7 +28,7 @@ public struct TherapySettingsView: View {
     @ObservedObject var viewModel: TherapySettingsViewModel
         
     private let actionButton: ActionButton?
-        
+
     public init(viewModel: TherapySettingsViewModel,
                 actionButton: ActionButton? = nil) {
         self.viewModel = viewModel
@@ -166,7 +166,7 @@ extension TherapySettingsView {
             }
         }
     }
-    
+
     private var correctionRangeSection: some View {
         section(for: .glucoseTargetRange) {
             if let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule
@@ -220,7 +220,7 @@ extension TherapySettingsView {
                     ScheduleValueItem(time: value.startTime,
                                       value: value.value,
                                       unit: .internationalUnitsPerHour,
-                                      guardrail: Guardrail.basalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates))
+                                      guardrail: .basalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates))
                 }
             }
         }
@@ -241,7 +241,7 @@ extension TherapySettingsView {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
                     unit: .internationalUnitsPerHour,
-                    guardrail: Guardrail.maximumBasalRate(
+                    guardrail: .maximumBasalRate(
                         supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates,
                         scheduledBasalRange: self.viewModel.therapySettings.basalRateSchedule?.valueRange(),
                         lowestCarbRatio: self.viewModel.therapySettings.carbRatioSchedule?.lowestValue()),
@@ -261,7 +261,7 @@ extension TherapySettingsView {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) },
                     unit: .internationalUnit(),
-                    guardrail: Guardrail.maximumBolus(supportedBolusVolumes: self.viewModel.pumpSupportedIncrements!()!.bolusVolumes),
+                    guardrail: .maximumBolus(supportedBolusVolumes: self.viewModel.pumpSupportedIncrements!()!.bolusVolumes),
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
@@ -294,7 +294,7 @@ extension TherapySettingsView {
                     ScheduleValueItem(time: value.startTime,
                                       value: value.value,
                                       unit: .gramsPerUnit,
-                                      guardrail: Guardrail.carbRatio)
+                                      guardrail: .carbRatio)
                 }
             }
         }
@@ -302,12 +302,12 @@ extension TherapySettingsView {
     
     private var insulinSensitivitiesSection: some View {
         section(for: .insulinSensitivity) {
-            if let sensitivityUnit = self.sensitivityUnit, let schedule = self.viewModel.therapySettings.insulinSensitivitySchedule {
+            if let schedule = viewModel.insulinSensitivitySchedule?.schedule(for: glucoseUnit) {
                 ForEach(schedule.items, id: \.self) { value in
                     ScheduleValueItem(time: value.startTime,
                                       value: value.value,
                                       unit: sensitivityUnit,
-                                      guardrail: Guardrail.insulinSensitivity)
+                                      guardrail: .insulinSensitivity)
                 }
             }
         }

@@ -12,64 +12,45 @@ import LoopKit
 
 
 public struct InsulinSensitivityScheduleEditor: View {
-    private var schedule: DailyQuantitySchedule<Double>?
-    private var glucoseUnit: HKUnit
-    private var save: (InsulinSensitivitySchedule) -> Void
-    private var mode: SettingsPresentationMode
+    @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
     @Environment(\.appName) private var appName
 
-    public init(
-        schedule: InsulinSensitivitySchedule?,
-        mode: SettingsPresentationMode = .settings,
-        glucoseUnit: HKUnit,
-        onSave save: @escaping (InsulinSensitivitySchedule) -> Void
-    ) {
-        // InsulinSensitivitySchedule stores only the glucose unit.
-        // For consistency across display & computation, convert to "real" <glucose unit>/U units.
-        self.schedule = schedule.map { schedule in
-            DailyQuantitySchedule(
-                unit: glucoseUnit.unitDivided(by: .internationalUnit()),
-                dailyItems: schedule.items
-            )!
-        }
-        self.glucoseUnit = glucoseUnit
-        self.save = save
-        self.mode = mode
+    let viewModel: InsulinSensitivityScheduleEditorViewModel
+
+    var displayGlucoseUnit: HKUnit {
+        displayGlucoseUnitObservable.displayGlucoseUnit
     }
-    
+
     public init(
         therapySettingsViewModel: TherapySettingsViewModel,
         didSave: (() -> Void)? = nil
     ) {
-        //TEMPORARY in LOOP-2385 the display unit is provided in the environment
-        let displayGlucoseUnit = HKUnit.milligramsPerDeciliter
-        self.init(
-            schedule: therapySettingsViewModel.therapySettings.insulinSensitivitySchedule,
-            mode: therapySettingsViewModel.mode,
-            glucoseUnit: displayGlucoseUnit,
-            onSave: { [weak therapySettingsViewModel] in
-                therapySettingsViewModel?.saveInsulinSensitivitySchedule(insulinSensitivitySchedule: $0)
-                didSave?()
-            }
-        )
+        self.viewModel = InsulinSensitivityScheduleEditorViewModel(
+            therapySettingsViewModel: therapySettingsViewModel,
+            didSave: didSave)
     }
 
     public var body: some View {
         QuantityScheduleEditor(
             title: Text(TherapySetting.insulinSensitivity.title),
             description: description,
-            schedule: schedule,
+            schedule: viewModel.insulinSensitivitySchedule?.schedule(for: displayGlucoseUnit),
             unit: sensitivityUnit,
             guardrail: .insulinSensitivity,
             selectableValueStride: stride,
             defaultFirstScheduleItemValue: Guardrail.insulinSensitivity.startingSuggestion ?? Guardrail.insulinSensitivity.recommendedBounds.upperBound,
             confirmationAlertContent: confirmationAlertContent,
             guardrailWarning: InsulinSensitivityGuardrailWarning.init(crossedThresholds:),
-            onSave: {
-                // Convert back to the expected glucose-unit-only schedule.
-                self.save(DailyQuantitySchedule(unit: self.glucoseUnit, dailyItems: $0.items)!)
+            onSave: { insulinSensitivitySchedulePerU in
+                // the sensitivity units are passed as the units to display `/U`
+                // need to go back to displayGlucoseUnit. This does not affect the value
+                // force unwrapping since dailyItems are already validated
+                let insulinSensitivitySchedule = InsulinSensitivitySchedule(unit: displayGlucoseUnit,
+                                                                            dailyItems: insulinSensitivitySchedulePerU.items,
+                                                                            timeZone: insulinSensitivitySchedulePerU.timeZone)!
+                viewModel.saveInsulinSensitivitySchedule(insulinSensitivitySchedule)
             },
-            mode: mode,
+            mode: viewModel.mode,
             settingType: .insulinSensitivity
         )
     }
@@ -79,12 +60,12 @@ public struct InsulinSensitivityScheduleEditor: View {
     }
 
     private var sensitivityUnit: HKUnit {
-         glucoseUnit.unitDivided(by: .internationalUnit())
+        displayGlucoseUnit.unitDivided(by: .internationalUnit())
     }
 
     private var stride: HKQuantity {
         let doubleValue: Double
-        switch glucoseUnit {
+        switch displayGlucoseUnit {
         case .milligramsPerDeciliter:
             doubleValue = 1
         case .millimolesPerLiter:

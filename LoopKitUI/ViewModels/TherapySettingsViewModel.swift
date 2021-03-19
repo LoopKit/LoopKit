@@ -68,6 +68,10 @@ public class TherapySettingsViewModel: ObservableObject {
         return therapySettings.glucoseTargetRangeSchedule!.scheduleRange()
     }
 
+    var insulinSensitivitySchedule: InsulinSensitivitySchedule? {
+        return therapySettings.insulinSensitivitySchedule
+    }
+
     /// Reset to initial
     public func reset() {
         therapySettings = initialTherapySettings
