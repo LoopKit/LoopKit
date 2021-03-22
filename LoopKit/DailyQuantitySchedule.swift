@@ -161,6 +161,25 @@ public extension DailyQuantitySchedule where T == Double {
     }
 }
 
+public extension DailyQuantitySchedule where T == DoubleRange {
+    init?(unit: HKUnit,
+          dailyQuantities: [RepeatingScheduleValue<ClosedRange<HKQuantity>>],
+          timeZone: TimeZone? = nil)
+    {
+        guard let valueSchedule = DailyValueSchedule(
+                dailyItems: dailyQuantities.map {
+                    RepeatingScheduleValue(startTime: $0.startTime, value: $0.value.doubleRange(for: unit))
+                },
+                timeZone: timeZone) else
+        {
+            return nil
+        }
+
+        self.unit = unit
+        self.valueSchedule = valueSchedule
+    }
+}
+
 extension DailyQuantitySchedule: Equatable where T: Equatable {
     public static func == (lhs: DailyQuantitySchedule<T>, rhs: DailyQuantitySchedule<T>) -> Bool {
         return lhs.valueSchedule == rhs.valueSchedule && lhs.unit.unitString == rhs.unit.unitString

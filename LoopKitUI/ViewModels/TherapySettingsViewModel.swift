@@ -58,6 +58,14 @@ public class TherapySettingsViewModel: ObservableObject {
         return therapySettings.suspendThreshold
     }
 
+    var glucoseTargetRangeSchedule: GlucoseRangeSchedule? {
+        return therapySettings.glucoseTargetRangeSchedule
+    }
+
+    func glucoseTargetRangeSchedule(for glucoseUnit: HKUnit) -> GlucoseRangeSchedule? {
+        return glucoseTargetRangeSchedule?.schedule(for: glucoseUnit)
+    }
+
     var correctionRangeOverrides: CorrectionRangeOverrides {
         return CorrectionRangeOverrides(preMeal: therapySettings.correctionRangeOverrides?.preMeal,
                                         workout: therapySettings.correctionRangeOverrides?.workout)
@@ -70,6 +78,10 @@ public class TherapySettingsViewModel: ObservableObject {
 
     var insulinSensitivitySchedule: InsulinSensitivitySchedule? {
         return therapySettings.insulinSensitivitySchedule
+    }
+
+    func insulinSensitivitySchedule(for glucoseUnit: HKUnit) -> InsulinSensitivitySchedule? {
+        return insulinSensitivitySchedule?.schedule(for: glucoseUnit)
     }
 
     /// Reset to initial

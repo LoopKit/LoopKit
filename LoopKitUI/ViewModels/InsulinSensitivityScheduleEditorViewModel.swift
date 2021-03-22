@@ -11,11 +11,12 @@ import HealthKit
 import LoopKit
 
 struct InsulinSensitivityScheduleEditorViewModel {
-    var saveInsulinSensitivitySchedule: (_ insulinSensitivitySchedule: InsulinSensitivitySchedule) -> Void
 
     let mode: SettingsPresentationMode
 
     let insulinSensitivitySchedule: InsulinSensitivitySchedule?
+
+    var saveInsulinSensitivitySchedule: (_ insulinSensitivitySchedule: InsulinSensitivitySchedule) -> Void
 
     init(therapySettingsViewModel: TherapySettingsViewModel,
          didSave: (() -> Void)? = nil)

@@ -169,7 +169,7 @@ extension TherapySettingsView {
 
     private var correctionRangeSection: some View {
         section(for: .glucoseTargetRange) {
-            if let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule
+            if let schedule = self.viewModel.glucoseTargetRangeSchedule(for: glucoseUnit)
             {
                 ForEach(schedule.items, id: \.self) { value in
                     ScheduleRangeItem(time: value.startTime,
@@ -184,7 +184,7 @@ extension TherapySettingsView {
     private var preMealCorrectionRangeSection: some View {
         section(for: .preMealCorrectionRangeOverride) {
             if let correctionRangeOverrides = self.viewModel.correctionRangeOverrides,
-               let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule
+               let schedule = self.viewModel.glucoseTargetRangeSchedule
             {
                 CorrectionRangeOverridesRangeItem(
                     value: correctionRangeOverrides,
@@ -200,7 +200,7 @@ extension TherapySettingsView {
     private var workoutCorrectionRangeSection: some View {
         section(for: .workoutCorrectionRangeOverride) {
             if let correctionRangeOverrides = self.viewModel.correctionRangeOverrides,
-               let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule
+               let schedule = self.viewModel.glucoseTargetRangeSchedule
             {
                 CorrectionRangeOverridesRangeItem(
                     value: correctionRangeOverrides,
@@ -302,7 +302,7 @@ extension TherapySettingsView {
     
     private var insulinSensitivitiesSection: some View {
         section(for: .insulinSensitivity) {
-            if let schedule = viewModel.insulinSensitivitySchedule?.schedule(for: glucoseUnit) {
+            if let schedule = viewModel.insulinSensitivitySchedule(for: glucoseUnit) {
                 ForEach(schedule.items, id: \.self) { value in
                     ScheduleValueItem(time: value.startTime,
                                       value: value.value,

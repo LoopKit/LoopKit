@@ -148,6 +148,13 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         return rangeSchedule.items
     }
 
+    public var quantityRanges: [RepeatingScheduleValue<ClosedRange<HKQuantity>>] {
+        return self.items.map {
+            RepeatingScheduleValue<ClosedRange<HKQuantity>>(startTime: $0.startTime,
+                                                            value: $0.value.quantityRange(for: unit))
+        }
+    }
+
     public var timeZone: TimeZone {
         get {
             return rangeSchedule.timeZone
@@ -180,7 +187,7 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         return lowerBound...upperBound
     }
 
-    public func convertTo(unit: HKUnit) -> GlucoseRangeSchedule? {
+    private func convertTo(unit: HKUnit) -> GlucoseRangeSchedule? {
         guard unit != self.unit else {
             return self
         }
@@ -194,6 +201,11 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         return GlucoseRangeSchedule(unit: unit,
                                     dailyItems: convertedDailyItems,
                                     timeZone: timeZone)
+    }
+
+    public func schedule(for glucoseUnit: HKUnit) -> GlucoseRangeSchedule? {
+        precondition(glucoseUnit == .millimolesPerLiter || glucoseUnit == .milligramsPerDeciliter)
+        return self.convertTo(unit: glucoseUnit)
     }
 }
 

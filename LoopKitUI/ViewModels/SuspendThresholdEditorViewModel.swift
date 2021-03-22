@@ -11,29 +11,26 @@ import HealthKit
 import LoopKit
 
 struct SuspendThresholdEditorViewModel {
-    var suspendThreshold: HKQuantity?
+    let guardrail = Guardrail.suspendThreshold
 
-    var suspendThresholdUnit: HKUnit
+    let suspendThreshold: HKQuantity?
 
-    let glucoseTargetRangeSchedule: GlucoseRangeSchedule?
+    let suspendThresholdUnit: HKUnit
 
-    var maxSuspendThresholdValue: HKQuantity
+    let maxSuspendThresholdValue: HKQuantity
 
     let mode: SettingsPresentationMode
 
     var saveSuspendThreshold: (_ suspendThreshold: HKQuantity, _ displayGlucoseUnit: HKUnit) -> Void
-
-    let guardrail = Guardrail.suspendThreshold
 
     public init(therapySettingsViewModel: TherapySettingsViewModel,
                 didSave: (() -> Void)? = nil)
     {
         self.suspendThreshold = therapySettingsViewModel.suspendThreshold?.quantity
         self.suspendThresholdUnit = therapySettingsViewModel.suspendThreshold?.unit ?? .milligramsPerDeciliter
-        self.glucoseTargetRangeSchedule = therapySettingsViewModel.therapySettings.glucoseTargetRangeSchedule
 
         self.maxSuspendThresholdValue = Guardrail.maxSuspendThresholdValue(
-            correctionRangeSchedule: glucoseTargetRangeSchedule,
+            correctionRangeSchedule: therapySettingsViewModel.glucoseTargetRangeSchedule,
             preMealTargetRange: therapySettingsViewModel.correctionRangeOverrides.preMeal,
             workoutTargetRange: therapySettingsViewModel.correctionRangeOverrides.workout)
         
