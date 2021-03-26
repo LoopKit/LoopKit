@@ -105,7 +105,9 @@ public protocol ServiceProvider: AnyObject {
     func setupService(withIdentifier identifier: String) -> Result<SetupUIResult<UIViewController & ServiceCreateNotifying & ServiceOnboardNotifying & CompletionNotifying, Service>, Error>
 }
 
-public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, ServiceProvider {}
+public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, ServiceProvider {
+    var allowSkipOnboarding: Bool { get }   // NOTE: SKIP ONBOARDING - DEBUG AND TEST ONLY
+}
 
 public protocol OnboardingDelegate: AnyObject {
     /// Informs the delegate that the state of the onboarding was updated and the delegate should persist the onboarding. May

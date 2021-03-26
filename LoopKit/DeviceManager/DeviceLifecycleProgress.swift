@@ -18,6 +18,7 @@ public protocol DeviceLifecycleProgress {
 
 public enum DeviceLifecycleProgressState: String, Codable {
     case critical
+    case dimmed
     case normalCGM
     case normalPump
     case warning

@@ -204,17 +204,50 @@ class GlucoseRangeScheduleTests: XCTestCase {
         XCTAssertEqual(glucoseRangeSchedule!.quantityRange(at: inDay2Hours), HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 130.0)...HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 150.0))
     }
 
-    func testConvertTo() {
+    func testScheduleFor() {
         let glucoseRangeScheduleMGDL = GlucoseRangeSchedule(
             unit: .milligramsPerDeciliter,
             dailyItems:  [
                 RepeatingScheduleValue(startTime: 0, value: DoubleRange(minValue: 75.0, maxValue: 90.0))
             ])
-        let glucoseRangeScheduleMMOLL = glucoseRangeScheduleMGDL?.convertTo(unit: .millimolesPerLiter)
+        let glucoseRangeScheduleMMOLL = glucoseRangeScheduleMGDL?.schedule(for: .millimolesPerLiter)
         let expected = DoubleRange(minValue: 75.0, maxValue: 90.0).quantityRange(for: .milligramsPerDeciliter).doubleRange(for: .millimolesPerLiter)
 
         XCTAssertNotNil(glucoseRangeScheduleMMOLL)
         XCTAssertEqual(glucoseRangeScheduleMMOLL!.unit, .millimolesPerLiter)
         XCTAssertEqual(glucoseRangeScheduleMMOLL!.rangeSchedule.items[0].value, expected)
     }
+
+    func testInitializeClosedHKQuantityRange() throws {
+        let dailyItems = [
+            RepeatingScheduleValue(startTime: 0, value: DoubleRange(minValue: 75.0, maxValue: 90.0)),
+            RepeatingScheduleValue(startTime: 3000, value: DoubleRange(minValue: 100.0, maxValue: 120.0)),
+            RepeatingScheduleValue(startTime: 6000, value: DoubleRange(minValue: 130.0, maxValue: 150.0))
+        ]
+        let dailyQuantities = dailyItems.map {
+            RepeatingScheduleValue(startTime: $0.startTime,
+                                   value: $0.value.quantityRange(for: .milligramsPerDeciliter))
+        }
+        let rangeSchedule = DailyQuantitySchedule(
+            unit: .milligramsPerDeciliter,
+            dailyQuantities: dailyQuantities)!
+        let glucoseTargetRangeSchedule = GlucoseRangeSchedule(rangeSchedule: rangeSchedule)
+
+        XCTAssertEqual(glucoseTargetRangeSchedule.rangeSchedule, rangeSchedule)
+    }
+
+    func testQuantityRanges() throws {
+        let dailyItems = [
+            RepeatingScheduleValue(startTime: 0, value: DoubleRange(minValue: 75.0, maxValue: 90.0)),
+            RepeatingScheduleValue(startTime: 3000, value: DoubleRange(minValue: 100.0, maxValue: 120.0)),
+            RepeatingScheduleValue(startTime: 6000, value: DoubleRange(minValue: 130.0, maxValue: 150.0))
+        ]
+        let dailyQuantities = dailyItems.map {
+            RepeatingScheduleValue(startTime: $0.startTime,
+                                   value: $0.value.quantityRange(for: .milligramsPerDeciliter))
+        }
+        let glucoseTargetRangeSchedule = GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: dailyItems)!
+        XCTAssertEqual(glucoseTargetRangeSchedule.quantityRanges, dailyQuantities)
+    }
 }
+

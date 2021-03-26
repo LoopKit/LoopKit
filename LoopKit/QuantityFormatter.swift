@@ -149,7 +149,7 @@ public extension HKQuantity {
     func doubleValue(for unit: HKUnit, withRounding: Bool) -> Double {
         var value = self.doubleValue(for: unit)
         if withRounding {
-            value = unit.round(value: value)
+            value = unit.round(value: value, fractionalDigits: unit.maxFractionDigits)
         }
 
         return value
@@ -166,20 +166,50 @@ public extension HKUnit {
     }
 
     var preferredFractionDigits: Int {
-        if self == HKUnit.millimolesPerLiter || self == HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()) || self == HKUnit.millimolesPerLiter.unitDivided(by: .minute()) {
+        switch self {
+        case .millimolesPerLiter,
+             HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()),
+             HKUnit.millimolesPerLiter.unitDivided(by: .minute()):
             return 1
-        } else {
+        default:
             return 0
         }
     }
 
-    func round(value: Double) -> Double {
-        if preferredFractionDigits == 0 {
+    var pickerFractionDigits: Int {
+        switch self {
+        case .internationalUnit(), .internationalUnitsPerHour:
+            return 2
+        case HKUnit.gram().unitDivided(by: .internationalUnit()):
+            return 1
+        case .millimolesPerLiter,
+             HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()),
+             HKUnit.millimolesPerLiter.unitDivided(by: .minute()):
+            return 1
+        default:
+            return 0
+        }
+    }
+
+    func round(value: Double, fractionalDigits: Int) -> Double {
+        if fractionalDigits == 0 {
             return value.rounded()
         } else {
-            let scaleFactor = Double(10 * preferredFractionDigits)
+            let scaleFactor = Double(10 * fractionalDigits)
             return (value * scaleFactor).rounded() / scaleFactor
         }
+    }
+
+    func round(value: Double) -> Double {
+        return roundForPreferredDigits(value: value)
+    }
+
+    func roundForPreferredDigits(value: Double) -> Double {
+        return round(value: value, fractionalDigits: preferredFractionDigits)
+    }
+
+    func roundForPicker(value: Double) -> Double {
+        return round(value: value, fractionalDigits: pickerFractionDigits)
     }
 
     var maxFractionDigits: Int {

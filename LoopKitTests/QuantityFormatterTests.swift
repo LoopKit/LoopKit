@@ -170,22 +170,22 @@ class QuantityFormatterTests: XCTestCase {
     func testUnitRounding() {
         let value = 1.2345
         var unit: HKUnit = .milligramsPerDeciliter
-        XCTAssertEqual(unit.round(value: value), 1)
+        XCTAssertEqual(unit.roundForPreferredDigits(value: value), 1)
 
         unit = unit.unitDivided(by: .internationalUnit())
-        XCTAssertEqual(unit.round(value: value), 1)
+        XCTAssertEqual(unit.roundForPreferredDigits(value: value), 1)
 
         unit = unit.unitDivided(by: .minute())
-        XCTAssertEqual(unit.round(value: value), 1)
+        XCTAssertEqual(unit.roundForPreferredDigits(value: value), 1)
 
         unit = .millimolesPerLiter
-        XCTAssertEqual(unit.round(value: value), 1.2)
+        XCTAssertEqual(unit.roundForPreferredDigits(value: value), 1.2)
 
         unit = HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit())
-        XCTAssertEqual(unit.round(value: value), 1.2)
+        XCTAssertEqual(unit.roundForPreferredDigits(value: value), 1.2)
 
         unit = HKUnit.millimolesPerLiter.unitDivided(by: .minute())
-        XCTAssertEqual(unit.round(value: value), 1.2)
+        XCTAssertEqual(unit.roundForPreferredDigits(value: value), 1.2)
     }
 
     func testQuantityRounding() {

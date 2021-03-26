@@ -60,7 +60,7 @@ public struct FractionalQuantityPicker: View {
             if pair.0.last != whole {
                 pair.0.append(whole)
             }
-            pair.1[whole, default: []].append(selectableValue.fraction)
+            pair.1[whole, default: []].append(unit.roundForPicker(value: selectableValue.fraction))
         }
 
         self._whole = Binding(
