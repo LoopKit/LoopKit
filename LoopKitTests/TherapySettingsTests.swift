@@ -73,11 +73,14 @@ class TherapySettingsTests: XCTestCase {
                          RepeatingScheduleValue(startTime: .hours(18), value: 8.0),
                          RepeatingScheduleValue(startTime: .hours(21), value: 10.0)],
             timeZone: timeZone)!
-        
+        let correctionRangeOverrides = CorrectionRangeOverrides(
+            preMeal: DoubleRange(minValue: 80.0, maxValue: 90.0),
+            workout: DoubleRange(minValue: 130.0, maxValue: 140.0),
+            unit: .milligramsPerDeciliter)
+
         return TherapySettings(
             glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
-            preMealTargetRange: DoubleRange(minValue: 80.0, maxValue: 90.0).quantityRange(for: .milligramsPerDeciliter),
-            workoutTargetRange: DoubleRange(minValue: 130.0, maxValue: 140.0).quantityRange(for: .milligramsPerDeciliter),
+            correctionRangeOverrides: correctionRangeOverrides,
             maximumBasalRatePerHour: 3,
             maximumBolus: 5,
             suspendThreshold: GlucoseThreshold(unit: .milligramsPerDeciliter, value: 80),
@@ -131,7 +134,6 @@ class TherapySettingsTests: XCTestCase {
           "identifier" : "America/Los_Angeles"
         }
       },
-      "bloodGlucoseUnit" : "mg/dL",
       "carbRatioSchedule" : {
         "unit" : "g",
         "valueSchedule" : {
@@ -173,6 +175,22 @@ class TherapySettingsTests: XCTestCase {
           "repeatInterval" : 86400,
           "timeZone" : {
             "identifier" : "America/Los_Angeles"
+          }
+        }
+      },
+      "correctionRangeOverrides" : {
+        "preMealRange" : {
+          "bloodGlucoseUnit" : "mg/dL",
+          "range" : {
+            "maxValue" : 90,
+            "minValue" : 80
+          }
+        },
+        "workoutRange" : {
+          "bloodGlucoseUnit" : "mg/dL",
+          "range" : {
+            "maxValue" : 140,
+            "minValue" : 130
           }
         }
       },
@@ -281,17 +299,9 @@ class TherapySettingsTests: XCTestCase {
       },
       "maximumBasalRatePerHour" : 3,
       "maximumBolus" : 5,
-      "preMealTargetRange" : {
-        "maxValue" : 90,
-        "minValue" : 80
-      },
       "suspendThreshold" : {
         "unit" : "mg/dL",
         "value" : 80
-      },
-      "workoutTargetRange" : {
-        "maxValue" : 140,
-        "minValue" : 130
       }
     }
     """
@@ -336,8 +346,7 @@ class TherapySettingsTests: XCTestCase {
 
         XCTAssertEqual(decoded.basalRateSchedule, expected.basalRateSchedule)
         XCTAssertEqual(decoded.insulinSensitivitySchedule, expected.insulinSensitivitySchedule)
-        XCTAssertEqual(decoded.preMealTargetRange, expected.preMealTargetRange)
-        XCTAssertEqual(decoded.workoutTargetRange, expected.workoutTargetRange)
+        XCTAssertEqual(decoded.correctionRangeOverrides, expected.correctionRangeOverrides)
         XCTAssertEqual(decoded.maximumBolus, expected.maximumBolus)
         XCTAssertEqual(decoded.maximumBasalRatePerHour, expected.maximumBasalRatePerHour)
         XCTAssertEqual(decoded.suspendThreshold, expected.suspendThreshold)

@@ -58,7 +58,7 @@ public struct GlucoseValuePicker: View {
                 through: bounds.upperBound.doubleValue(for: unit, withRounding: true),
                 by: stride.doubleValue(for: unit, withRounding: true)
             )
-        ).map { unit.round(value: $0) }
+        )
     }
 
     private var stride: HKQuantity {

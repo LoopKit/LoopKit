@@ -81,9 +81,9 @@ extension Guardrail where Value == HKQuantity {
 
     public func allValues(stridingBy increment: HKQuantity, unit: HKUnit) -> [Double] {
         Array(stride(
-            from: absoluteBounds.lowerBound.doubleValue(for: unit),
-            through: absoluteBounds.upperBound.doubleValue(for: unit),
-            by: increment.doubleValue(for: unit)
+            from: absoluteBounds.lowerBound.doubleValue(for: unit, withRounding: true),
+            through: absoluteBounds.upperBound.doubleValue(for: unit, withRounding: true),
+            by: increment.doubleValue(for: unit, withRounding: true)
         ))
     }
 }

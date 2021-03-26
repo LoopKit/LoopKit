@@ -2,7 +2,7 @@
 //  InsulinSensitivityScheduleTests.swift
 //  LoopKitTests
 //
-//  Created by Nathaniel Hamming on 2021-03-09.
+//  Created by Nathaniel Hamming on 2021-03-18.
 //  Copyright © 2021 LoopKit Authors. All rights reserved.
 //
 
@@ -13,7 +13,7 @@ import HealthKit
 
 class InsulinSensitivityScheduleTests: XCTestCase {
 
-    func testConvertTo() {
+    func testScheduleFor() {
         let value1 = 15.0
         let value2 = 40.0
         let insulinSensitivityScheduleMGDL = InsulinSensitivitySchedule(
@@ -30,6 +30,6 @@ class InsulinSensitivityScheduleTests: XCTestCase {
                 RepeatingScheduleValue(startTime: 1000,
                                        value: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: value2).doubleValue(for: .millimolesPerLiter))
             ])
-        XCTAssertEqual(insulinSensitivityScheduleMGDL!.convertTo(unit: .millimolesPerLiter), insulinSensitivityScheduleMMOLL!)
+        XCTAssertEqual(insulinSensitivityScheduleMGDL!.schedule(for: .millimolesPerLiter), insulinSensitivityScheduleMMOLL!)
     }
 }

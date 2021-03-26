@@ -265,6 +265,30 @@ class GuardrailTests: XCTestCase {
         let selectableBolusVolumes = Guardrail.selectableBolusVolumes(supportedBolusVolumes: supportedBolusVolumes)
         XCTAssertEqual([0.05, 1.0, 2.0], selectableBolusVolumes)
     }
+
+    func testAllValuesOfQuantity() {
+        var guardrail = Guardrail.carbRatio
+        var allValues = guardrail.allValues(
+            stridingBy: HKQuantity(unit: .gramsPerUnit, doubleValue: 0.1),
+            unit: .gramsPerUnit)
+        var expectedValues = Array(stride(
+            from: guardrail.absoluteBounds.lowerBound.doubleValue(for: .gramsPerUnit, withRounding: true),
+            through: guardrail.absoluteBounds.upperBound.doubleValue(for: .gramsPerUnit, withRounding: true),
+            by: 0.1
+        ))
+        XCTAssertEqual(allValues, expectedValues)
+
+        guardrail = Guardrail.insulinSensitivity
+        allValues = guardrail.allValues(
+            stridingBy: HKQuantity(unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()), doubleValue: 1),
+            unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()))
+        expectedValues = Array(stride(
+            from: guardrail.absoluteBounds.lowerBound.doubleValue(for: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()), withRounding: true),
+            through: guardrail.absoluteBounds.upperBound.doubleValue(for: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()), withRounding: true),
+            by: 1
+        ))
+        XCTAssertEqual(allValues, expectedValues)
+    }
 }
 
 fileprivate extension ClosedRange where Bound == HKQuantity {

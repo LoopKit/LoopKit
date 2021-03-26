@@ -57,20 +57,20 @@ public struct BasalRateScheduleEditor: View {
     }
     
     public init(
-        viewModel: TherapySettingsViewModel,
+        therapySettingsViewModel: TherapySettingsViewModel,
         didSave: (() -> Void)? = nil
     ) {
         self.init(
-            schedule: viewModel.therapySettings.basalRateSchedule,
-            supportedBasalRates: viewModel.pumpSupportedIncrements!()!.basalRates ,
-            maximumBasalRate: viewModel.therapySettings.maximumBasalRatePerHour,
-            maximumScheduleEntryCount: viewModel.pumpSupportedIncrements!()!.maximumBasalScheduleEntryCount,
-            syncSchedule: viewModel.syncPumpSchedule?(),
-            onSave: { [weak viewModel] newBasalRates in
-                viewModel?.saveBasalRates(basalRates: newBasalRates)
+            schedule: therapySettingsViewModel.therapySettings.basalRateSchedule,
+            supportedBasalRates: therapySettingsViewModel.pumpSupportedIncrements!()!.basalRates ,
+            maximumBasalRate: therapySettingsViewModel.therapySettings.maximumBasalRatePerHour,
+            maximumScheduleEntryCount: therapySettingsViewModel.pumpSupportedIncrements!()!.maximumBasalScheduleEntryCount,
+            syncSchedule: therapySettingsViewModel.syncPumpSchedule?(),
+            onSave: { [weak therapySettingsViewModel] newBasalRates in
+                therapySettingsViewModel?.saveBasalRates(basalRates: newBasalRates)
                 didSave?()
             },
-            mode: viewModel.mode
+            mode: therapySettingsViewModel.mode
         )
     }
 
