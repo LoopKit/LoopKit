@@ -123,6 +123,13 @@ public protocol OnboardingDelegate: AnyObject {
     ///     - onboarding: The onboarding that has new therapy settings.
     ///     - therapySettings: The new therapy settings.
     func onboarding(_ onboarding: OnboardingUI, hasNewTherapySettings therapySettings: TherapySettings)
+
+    /// Informs the delegate that onboarding has new dosing enabled that should be persisted.
+    ///
+    /// - Parameters:
+    ///     - onboarding: The onboarding that has new dosing enabled.
+    ///     - isClosedLoop: The new dosing enabled.
+    func onboarding(_ onboarding: OnboardingUI, hasNewDosingEnabled dosingEnabled: Bool)
 }
 
 public typealias OnboardingViewController = (CGMManagerCreateNotifying & CGMManagerOnboardNotifying & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & ServiceCreateNotifying & ServiceOnboardNotifying & CompletionNotifying)
