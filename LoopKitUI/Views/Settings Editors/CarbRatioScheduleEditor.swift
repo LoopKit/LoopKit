@@ -60,7 +60,7 @@ public struct CarbRatioScheduleEditor: View {
             schedule: schedule,
             unit: .realCarbRatioScheduleUnit,
             guardrail: .carbRatio,
-            selectableValueStride: HKQuantity(unit: .realCarbRatioScheduleUnit, doubleValue: 0.01),
+            selectableValueStride: HKQuantity(unit: .realCarbRatioScheduleUnit, doubleValue: 0.1),
             quantitySelectionMode: .fractional,
             defaultFirstScheduleItemValue: Guardrail.carbRatio.startingSuggestion ?? Guardrail.carbRatio.recommendedBounds.upperBound,
             confirmationAlertContent: confirmationAlertContent,

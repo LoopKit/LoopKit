@@ -8,32 +8,28 @@
 
 import HealthKit
 
-public struct TherapySettings: Equatable, Codable {
-    
+public struct TherapySettings: Equatable {
+
     public var glucoseTargetRangeSchedule: GlucoseRangeSchedule?
 
-    public var preMealTargetRange: DoubleRange?
+    public var preMealTargetRange: ClosedRange<HKQuantity>?
 
-    public var workoutTargetRange: DoubleRange?
+    public var workoutTargetRange: ClosedRange<HKQuantity>?
 
     public var maximumBasalRatePerHour: Double?
 
     public var maximumBolus: Double?
 
     public var suspendThreshold: GlucoseThreshold?
-    
+
     public var insulinSensitivitySchedule: InsulinSensitivitySchedule?
-    
+
     public var carbRatioSchedule: CarbRatioSchedule?
     
     public var basalRateSchedule: BasalRateSchedule?
     
     public var insulinModelSettings: InsulinModelSettings?
-    
-    public var glucoseUnit: HKUnit? {
-        return glucoseTargetRangeSchedule?.unit
-    }
-    
+
     public var isComplete: Bool {
         return
             glucoseTargetRangeSchedule != nil &&
@@ -51,8 +47,8 @@ public struct TherapySettings: Equatable, Codable {
     
     public init(
         glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
-        preMealTargetRange: DoubleRange? = nil,
-        workoutTargetRange: DoubleRange? = nil,
+        preMealTargetRange: ClosedRange<HKQuantity>? = nil,
+        workoutTargetRange: ClosedRange<HKQuantity>? = nil,
         maximumBasalRatePerHour: Double? = nil,
         maximumBolus: Double? = nil,
         suspendThreshold: GlucoseThreshold? = nil,
@@ -71,6 +67,66 @@ public struct TherapySettings: Equatable, Codable {
         self.carbRatioSchedule = carbRatioSchedule
         self.basalRateSchedule = basalRateSchedule
         self.insulinModelSettings = insulinModelSettings
+    }
+}
+
+extension TherapySettings: Codable {
+    fileprivate static let codingGlucoseUnit: HKUnit = .milligramsPerDeciliter
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        let bloodGlucoseUnit = HKUnit(from: try container.decode(String.self, forKey: .bloodGlucoseUnit))
+        let glucoseTargetRangeSchedule = try container.decodeIfPresent(GlucoseRangeSchedule.self, forKey: .glucoseTargetRangeSchedule)
+        let preMealTargetRange = try container.decodeIfPresent(DoubleRange.self, forKey: .preMealTargetRange)?.quantityRange(for: bloodGlucoseUnit)
+        let workoutTargetRange = try container.decodeIfPresent(DoubleRange.self, forKey: .workoutTargetRange)?.quantityRange(for: bloodGlucoseUnit)
+        let maximumBasalRatePerHour = try container.decodeIfPresent(Double.self, forKey: .maximumBasalRatePerHour)
+        let maximumBolus = try container.decodeIfPresent(Double.self, forKey: .maximumBolus)
+        let suspendThreshold = try container.decodeIfPresent(GlucoseThreshold.self, forKey: .suspendThreshold)
+        let insulinSensitivitySchedule = try container.decodeIfPresent(InsulinSensitivitySchedule.self, forKey: .insulinSensitivitySchedule)
+        let carbRatioSchedule = try container.decodeIfPresent(CarbRatioSchedule.self, forKey: .carbRatioSchedule)
+        let basalRateSchedule = try container.decodeIfPresent(BasalRateSchedule.self, forKey: .basalRateSchedule)
+        let insulinModelSettings = try container.decodeIfPresent(InsulinModelSettings.self, forKey: .insulinModelSettings)
+
+        self.init(glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
+                  preMealTargetRange: preMealTargetRange,
+                  workoutTargetRange: workoutTargetRange,
+                  maximumBasalRatePerHour: maximumBasalRatePerHour,
+                  maximumBolus: maximumBolus,
+                  suspendThreshold: suspendThreshold,
+                  insulinSensitivitySchedule: insulinSensitivitySchedule,
+                  carbRatioSchedule: carbRatioSchedule,
+                  basalRateSchedule: basalRateSchedule,
+                  insulinModelSettings: insulinModelSettings)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(TherapySettings.codingGlucoseUnit.unitString, forKey: .bloodGlucoseUnit)
+        try container.encodeIfPresent(glucoseTargetRangeSchedule, forKey: .glucoseTargetRangeSchedule)
+        try container.encodeIfPresent(preMealTargetRange?.doubleRange(for: TherapySettings.codingGlucoseUnit), forKey: .preMealTargetRange)
+        try container.encodeIfPresent(workoutTargetRange?.doubleRange(for: TherapySettings.codingGlucoseUnit), forKey: .workoutTargetRange)
+        try container.encodeIfPresent(maximumBasalRatePerHour, forKey: .maximumBasalRatePerHour)
+        try container.encodeIfPresent(maximumBolus, forKey: .maximumBolus)
+        try container.encodeIfPresent(suspendThreshold, forKey: .suspendThreshold)
+        try container.encodeIfPresent(insulinSensitivitySchedule, forKey: .insulinSensitivitySchedule)
+        try container.encodeIfPresent(carbRatioSchedule, forKey: .carbRatioSchedule)
+        try container.encodeIfPresent(basalRateSchedule, forKey: .basalRateSchedule)
+        try container.encodeIfPresent(insulinModelSettings, forKey: .insulinModelSettings)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case bloodGlucoseUnit
+        case glucoseTargetRangeSchedule
+        case preMealTargetRange
+        case workoutTargetRange
+        case maximumBasalRatePerHour
+        case maximumBolus
+        case suspendThreshold
+        case insulinSensitivitySchedule
+        case carbRatioSchedule
+        case basalRateSchedule
+        case insulinModelSettings
     }
 }
 
@@ -103,8 +159,8 @@ extension TherapySettings {
             timeZone: timeZone)!
         return TherapySettings(
             glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
-            preMealTargetRange: DoubleRange(minValue: 80.0, maxValue: 90.0),
-            workoutTargetRange: DoubleRange(minValue: 140.0, maxValue: 160.0),
+            preMealTargetRange: DoubleRange(minValue: 80.0, maxValue: 90.0).quantityRange(for: .milligramsPerDeciliter),
+            workoutTargetRange: DoubleRange(minValue: 140.0, maxValue: 160.0).quantityRange(for: .milligramsPerDeciliter),
             maximumBasalRatePerHour: 5,
             maximumBolus: 10,
             suspendThreshold: GlucoseThreshold(unit: .milligramsPerDeciliter, value: 75),

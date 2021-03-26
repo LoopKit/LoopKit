@@ -6,17 +6,28 @@
 //
 
 import UIKit
+import Combine
 import HealthKit
 
 /// Abstract class providing boilerplate setup for chart-based table view controllers
 open class ChartsTableViewController: UITableViewController, UIGestureRecognizerDelegate {
 
-    public var preferredGlucoseUnit: HKUnit?
+    public var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable? {
+        didSet {
+            guard let displayGlucoseUnitObservable = displayGlucoseUnitObservable else { return }
+
+            displayGlucoseUnitObservable.$displayGlucoseUnit
+                .sink { [weak self] displayGlucoseUnit in self?.unitPreferencesDidChange(to: displayGlucoseUnit) }
+                .store(in: &cancellables)
+        }
+    }
+
+    private lazy var cancellables = Set<AnyCancellable>()
 
     open override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let unit = preferredGlucoseUnit {
+        if let unit = displayGlucoseUnitObservable?.displayGlucoseUnit {
             self.charts.setGlucoseUnit(unit)
         }
 

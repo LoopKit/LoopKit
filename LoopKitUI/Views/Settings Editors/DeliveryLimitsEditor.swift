@@ -129,9 +129,11 @@ public struct DeliveryLimitsEditor: View {
         )
         .alert(isPresented: $showingConfirmationAlert, content: confirmationAlert)
         .navigationBarTitle("", displayMode: .inline)
-        .onTapGesture {
-            self.userDidTap = true
-        }
+        .simultaneousGesture(TapGesture().onEnded {
+            withAnimation {
+                self.userDidTap = true
+            }
+        })
     }
 
     var saveButtonState: ConfigurationPageActionButtonState {

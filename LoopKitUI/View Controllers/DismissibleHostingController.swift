@@ -16,22 +16,39 @@ public class DismissibleHostingController: UIHostingController<AnyView> {
 
     private var onDisappear: () -> Void = {}
 
+    public convenience init<Content: View> (
+        rootView: Content,
+        dismissalMode: DismissalMode = .modalDismiss,
+        isModalInPresentation: Bool = true,
+        onDisappear: @escaping () -> Void = {},
+        colorPalette: LoopUIColorPalette
+    ) {
+        self.init(rootView: rootView,
+                  dismissalMode: dismissalMode,
+                  isModalInPresentation: isModalInPresentation,
+                  onDisappear: onDisappear,
+                  guidanceColors: colorPalette.guidanceColors,
+                  carbTintColor: colorPalette.carbTintColor,
+                  glucoseTintColor: colorPalette.glucoseTintColor,
+                  insulinTintColor: colorPalette.insulinTintColor)
+    }
+
     public convenience init<Content: View>(
         rootView: Content,
         dismissalMode: DismissalMode = .modalDismiss,
         isModalInPresentation: Bool = true,
         onDisappear: @escaping () -> Void = {},
+        guidanceColors: GuidanceColors = GuidanceColors(),
         carbTintColor: Color = .green,
         glucoseTintColor: Color = Color(.systemTeal),
-        guidanceColors: GuidanceColors = GuidanceColors(),
         insulinTintColor: Color = .orange
     ) {
         // Delay initialization of dismissal closure pushed into SwiftUI Environment until after calling the designated initializer
         var dismiss = {}
         self.init(rootView: AnyView(rootView.environment(\.dismiss, { dismiss() })
+            .environment(\.guidanceColors, guidanceColors)
             .environment(\.carbTintColor, carbTintColor)
             .environment(\.glucoseTintColor, glucoseTintColor)
-            .environment(\.guidanceColors, guidanceColors)
             .environment(\.insulinTintColor, insulinTintColor)))
 
         switch dismissalMode {

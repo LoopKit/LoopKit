@@ -41,9 +41,11 @@ public struct CorrectionRangeScheduleEditor: View {
            viewModel: TherapySettingsViewModel,
            didSave: (() -> Void)? = nil
     ) {
+        //TODO display glucose unit will be available in the environment. Will be updated when the editor is updated to support both glucose unit 
+        let displayGlucoseUnit = HKUnit.milligramsPerDeciliter
         self.init(
             schedule: viewModel.therapySettings.glucoseTargetRangeSchedule,
-            unit: viewModel.therapySettings.glucoseTargetRangeSchedule?.unit ?? viewModel.preferredGlucoseUnit,
+            unit: displayGlucoseUnit,
             minValue: Guardrail.minCorrectionRangeValue(suspendThreshold: viewModel.therapySettings.suspendThreshold),
             onSave: { [weak viewModel] newSchedule in
                 viewModel?.saveCorrectionRange(range: newSchedule)
@@ -92,9 +94,11 @@ public struct CorrectionRangeScheduleEditor: View {
             mode: mode,
             therapySettingType: .glucoseTargetRange
         )
-        .onTapGesture {
-            self.userDidTap = true
-        }
+        .simultaneousGesture(TapGesture().onEnded {
+            withAnimation {
+                self.userDidTap = true
+            }
+        })
     }
 
     var defaultFirstScheduleItemValue: DoubleRange {

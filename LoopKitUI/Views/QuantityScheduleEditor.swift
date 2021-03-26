@@ -89,9 +89,11 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
             mode: mode,
             therapySettingType: settingType
         )
-        .onTapGesture {
-            self.userDidTap = true
-        }
+        .simultaneousGesture(TapGesture().onEnded {
+            withAnimation {
+                self.userDidTap = true
+            }
+        })
     }
 
     private var saveConfirmation: SaveConfirmation {

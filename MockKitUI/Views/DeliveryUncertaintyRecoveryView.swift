@@ -59,7 +59,7 @@ struct DeliveryUncertaintyRecoveryView_Previews: PreviewProvider {
 // Wrapper to provide a CompletionNotifying ViewController
 class DeliveryUncertaintyRecoveryViewController: UIHostingController<AnyView>, CompletionNotifying {
     
-    var completionDelegate: CompletionDelegate?
+    public weak var completionDelegate: CompletionDelegate?
     
     init(appName: String, uncertaintyStartedAt: Date, recoverCommsTapped: @escaping () -> Void) {
         

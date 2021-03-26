@@ -15,6 +15,7 @@ public struct NotificationSettings: Codable, Equatable {
         case denied
         case authorized
         case provisional
+        case ephemeral
         case unknown
 
         public init(_ authorizationStatus: UNAuthorizationStatus) {
@@ -27,6 +28,8 @@ public struct NotificationSettings: Codable, Equatable {
                 self = .authorized
             case .provisional:
                 self = .provisional
+            case .ephemeral:
+                self = .ephemeral
             @unknown default:
                 self = .unknown
             }

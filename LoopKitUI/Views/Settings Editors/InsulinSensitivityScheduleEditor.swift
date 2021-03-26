@@ -41,10 +41,12 @@ public struct InsulinSensitivityScheduleEditor: View {
         viewModel: TherapySettingsViewModel,
         didSave: (() -> Void)? = nil
     ) {
+        //TEMPORARY in LOOP-2385 the display unit is provided in the environment
+        let displayGlucoseUnit = HKUnit.milligramsPerDeciliter
         self.init(
             schedule: viewModel.therapySettings.insulinSensitivitySchedule,
             mode: viewModel.mode,
-            glucoseUnit: viewModel.therapySettings.glucoseUnit!,
+            glucoseUnit: displayGlucoseUnit,
             onSave: { [weak viewModel] in
                 viewModel?.saveInsulinSensitivitySchedule(insulinSensitivitySchedule: $0)
                 didSave?()

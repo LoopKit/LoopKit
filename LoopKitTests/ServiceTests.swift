@@ -48,4 +48,6 @@ fileprivate class TestService: Service {
 
     var rawState: RawStateValue { return [:] }
 
+    var isOnboarded = true
+
 }

@@ -12,3 +12,21 @@ import HealthKit
 
 public typealias GlucoseSchedule = SingleQuantitySchedule
 public typealias InsulinSensitivitySchedule = GlucoseSchedule
+
+public extension InsulinSensitivitySchedule {
+    func convertTo(unit: HKUnit) -> InsulinSensitivitySchedule? {
+        guard unit != self.unit else {
+            return self
+        }
+
+        let convertedDailyItems: [RepeatingScheduleValue<Double>] = self.items.map {
+            RepeatingScheduleValue(startTime: $0.startTime,
+                                   value: HKQuantity(unit: self.unit, doubleValue: $0.value).doubleValue(for: unit)
+            )
+        }
+
+        return InsulinSensitivitySchedule(unit: unit,
+                                          dailyItems: convertedDailyItems,
+                                          timeZone: timeZone)
+    }
+}

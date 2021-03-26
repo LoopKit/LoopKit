@@ -79,10 +79,10 @@ class GuardrailTests: XCTestCase {
     func testWorkoutCorrectionRange() {
         let correctionRangeInputs = [ 70...80, 70...85, 70...90 ]
         let suspendThresholdInputs: [Double?] = [ nil, 81, 91 ]
-        let expectedLow: [Double] = [ 85, 85, 91,
-                                      85, 85, 91,
+        let expectedLow: [Double] = [ 87, 87, 91,
+                                      87, 87, 91,
                                       90, 90, 91 ]
-        let expectedMin: [Double] = [ 85, 85, 91, 85, 85, 91, 85, 85, 91 ]
+        let expectedMin: [Double] = [ 87, 87, 91, 87, 87, 91, 87, 87, 91 ]
 
         var index = 0
         for correctionRange in correctionRangeInputs {

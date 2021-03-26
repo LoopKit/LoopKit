@@ -8,8 +8,8 @@
 
 import Foundation
 
-/// Protocol that describes any class that presents Alerts.
-public protocol AlertPresenter: class {
+/// Protocol that describes any class that issues and retract Alerts.
+public protocol AlertIssuer: class {
     /// Issue (post) the given alert, according to its trigger schedule.
     func issueAlert(_ alert: Alert)
     /// Retract any alerts with the given identifier.  This includes both pending and delivered alerts.
