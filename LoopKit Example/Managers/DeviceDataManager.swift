@@ -37,7 +37,7 @@ class DeviceDataManager {
         doseStore = DoseStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
-            pumpInsulinModelSetting: insulinModelSetting,
+            insulinModelSettings: insulinModelSetting,
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
