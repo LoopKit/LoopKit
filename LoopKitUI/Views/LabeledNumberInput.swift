@@ -10,9 +10,10 @@ import SwiftUI
 
 public struct LabeledNumberInput: View {
     @Binding var value: Double?
-    var label: String
-    var placeholder: String
-    var allowFractions: Bool
+    let font: Font
+    let label: String
+    let placeholder: String
+    let allowFractions: Bool
     
     private var numberFormatter: NumberFormatter {
         let numberFormatter = NumberFormatter()
@@ -37,8 +38,9 @@ public struct LabeledNumberInput: View {
         )
     }
     
-    public init(value: Binding<Double?>, label: String, placeholder: String? = nil, allowFractions: Bool = false) {
+    public init(value: Binding<Double?>, font: Font = .largeTitle, label: String, placeholder: String? = nil, allowFractions: Bool = false) {
         _value = value
+        self.font = font
         self.label = label
         self.placeholder = placeholder ?? LocalizedString("Value", comment: "Placeholder text until value is entered")
         self.allowFractions = allowFractions
@@ -48,7 +50,7 @@ public struct LabeledNumberInput: View {
         GeometryReader { geometry in
             HStack(alignment: .bottom, spacing: 5) {
                 TextField(self.placeholder, text: self.valueString)
-                    .font(.largeTitle)
+                    .font(font)
                     .multilineTextAlignment(.trailing)
                     .keyboardType(self.allowFractions ? .decimalPad : .numberPad)
                     .frame(width: geometry.size.width/2, alignment: .trailing)
