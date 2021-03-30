@@ -414,10 +414,25 @@ struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where 
     let title: String
     let descriptiveText: String
     let destination: (_ goBack: @escaping () -> Void) -> NavigationDestination
-    let content: () -> Content
+    let content: Content
 
     @State var isActive: Bool = false
-    
+
+    init(isEnabled: Bool,
+         header: Header,
+         title: String,
+         descriptiveText: String,
+         destination: @escaping (@escaping () -> Void) -> NavigationDestination,
+         content: () -> Content)
+    {
+        self.isEnabled = isEnabled
+        self.header = header
+        self.title = title
+        self.descriptiveText = descriptiveText
+        self.destination = destination
+        self.content = content()
+    }
+
     private func onFinish() {
         // Dispatching here fixes an issue on iOS 14.2 where schedule editors do not dismiss. It does not fix iOS 14.0 and 14.1
         DispatchQueue.main.async {
@@ -444,7 +459,7 @@ struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where 
                 }
                 Spacer()
             }
-            content()
+            content
         }
         .contentShape(Rectangle()) // make the whole card tappable
         .highPriorityGesture(
