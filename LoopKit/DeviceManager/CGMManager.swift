@@ -23,8 +23,11 @@ public struct CGMManagerStatus {
     // Return false if no sensor active, or in a state where no future data is expected without user intervention
     public var hasValidSensorSession: Bool
 
-    public init(hasValidSensorSession: Bool) {
+    public var lastCommunicationDate: Date?
+    
+    public init(hasValidSensorSession: Bool, lastCommunicationDate: Date? = nil) {
         self.hasValidSensorSession = hasValidSensorSession
+        self.lastCommunicationDate = lastCommunicationDate
     }
 }
 
