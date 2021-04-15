@@ -36,16 +36,21 @@ public struct CardListSection: View {
 
 /// Displays a list of cards similar to a `List` with an inset grouped style,
 /// but without the baggage of `UITableViewCell` resizing, enabling cells to expand smoothly.
-struct CardList: View {
-    enum Style {
+public struct CardList: View {
+    public enum Style {
         case simple(CardStack)
         case sectioned([CardListSection])
     }
 
     var title: Text
     var style: Style
+    
+    public init(title: Text, style: Style) {
+        self.title = title
+        self.style = style
+    }
 
-    var body: some View {
+    public var body: some View {
         ScrollView {
             VStack(spacing: 4) {
                 titleText

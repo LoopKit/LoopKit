@@ -11,6 +11,10 @@ import SwiftUI
 
 public struct CardStack: View {
     var cards: [Card?]
+    
+    public init(cards: [Card?]) {
+        self.cards = cards
+    }
 
     public var body: some View {
         VStack {
