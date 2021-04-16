@@ -21,6 +21,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
     var shouldBecomeFirstResponder: Bool
     var maxLength: Int?
     var doneButtonColor: UIColor
+    var isDismissible: Bool
 
     public init(
         text: Binding<String>,
@@ -33,7 +34,8 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         autocorrectionType: UITextAutocorrectionType = .default,
         shouldBecomeFirstResponder: Bool = false,
         maxLength: Int? = nil,
-        doneButtonColor: UIColor = .blue
+        doneButtonColor: UIColor = .blue,
+        isDismissible: Bool = true
     ) {
         self._text = text
         self.placeholder = placeholder
@@ -46,11 +48,12 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         self.shouldBecomeFirstResponder = shouldBecomeFirstResponder
         self.maxLength = maxLength
         self.doneButtonColor = doneButtonColor
+        self.isDismissible = isDismissible
     }
 
     public func makeUIView(context: Context) -> UITextField {
         let textField = UITextField()
-        textField.inputAccessoryView = makeDoneToolbar(for: textField)
+        textField.inputAccessoryView = isDismissible ? makeDoneToolbar(for: textField) : nil
         textField.addTarget(context.coordinator, action: #selector(Coordinator.textChanged), for: .editingChanged)
         textField.addTarget(context.coordinator, action: #selector(Coordinator.editingDidBegin), for: .editingDidBegin)
         textField.delegate = context.coordinator
