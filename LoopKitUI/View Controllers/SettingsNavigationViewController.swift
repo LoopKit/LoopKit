@@ -18,22 +18,22 @@ open class SettingsNavigationViewController: UINavigationController, CompletionN
 
 }
 
-open class CGMManagerSettingsNavigationViewController: SettingsNavigationViewController, CGMManagerOnboardNotifying {
+open class CGMManagerSettingsNavigationViewController: SettingsNavigationViewController, CGMManagerOnboarding {
 
-    open weak var cgmManagerOnboardDelegate: CGMManagerOnboardDelegate?
+    open weak var cgmManagerOnboardingDelegate: CGMManagerOnboardingDelegate?
 
     open func notifySetup(cgmManager: CGMManagerUI) {
-        cgmManagerOnboardDelegate?.cgmManagerOnboardNotifying(didOnboardCGMManager: cgmManager)
+        cgmManagerOnboardingDelegate?.cgmManagerOnboarding(didOnboardCGMManager: cgmManager)
     }
 
 }
 
-open class PumpManagerSettingsNavigationViewController: SettingsNavigationViewController, PumpManagerOnboardNotifying {
+open class PumpManagerSettingsNavigationViewController: SettingsNavigationViewController, PumpManagerOnboarding {
 
-    open weak var pumpManagerOnboardDelegate: PumpManagerOnboardDelegate?
+    open weak var pumpManagerOnboardingDelegate: PumpManagerOnboardingDelegate?
 
     open func notifySetup(pumpManager: PumpManagerUI, withFinalSettings settings: PumpManagerSetupSettings) {
-        pumpManagerOnboardDelegate?.pumpManagerOnboardNotifying(didOnboardPumpManager: pumpManager, withFinalSettings: settings)
+        pumpManagerOnboardingDelegate?.pumpManagerOnboarding(didOnboardPumpManager: pumpManager, withFinalSettings: settings)
     }
 
 }

@@ -549,7 +549,7 @@
 		A9498D8023386C3300DAA9B9 /* RemoteDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7523386C3300DAA9B9 /* RemoteDataService.swift */; };
 		A9498D8223386C3300DAA9B9 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7623386C3300DAA9B9 /* Service.swift */; };
 		A9498D8423386C3300DAA9B9 /* DiagnosticLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7723386C3300DAA9B9 /* DiagnosticLog.swift */; };
-		A9498D8823386CAF00DAA9B9 /* ServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8623386CAF00DAA9B9 /* ServiceViewController.swift */; };
+		A9498D8823386CAF00DAA9B9 /* ServiceNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8623386CAF00DAA9B9 /* ServiceNavigationController.swift */; };
 		A9498D8B23386CC700DAA9B9 /* ServiceUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8A23386CC700DAA9B9 /* ServiceUI.swift */; };
 		A9498D8D23386CD800DAA9B9 /* MockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8C23386CD700DAA9B9 /* MockService.swift */; };
 		A9498D8F23386CE800DAA9B9 /* MockServiceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8E23386CE800DAA9B9 /* MockServiceTableViewController.swift */; };
@@ -1468,7 +1468,7 @@
 		A9498D7523386C3300DAA9B9 /* RemoteDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDataService.swift; sourceTree = "<group>"; };
 		A9498D7623386C3300DAA9B9 /* Service.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		A9498D7723386C3300DAA9B9 /* DiagnosticLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiagnosticLog.swift; sourceTree = "<group>"; };
-		A9498D8623386CAF00DAA9B9 /* ServiceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceViewController.swift; sourceTree = "<group>"; };
+		A9498D8623386CAF00DAA9B9 /* ServiceNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceNavigationController.swift; sourceTree = "<group>"; };
 		A9498D8A23386CC700DAA9B9 /* ServiceUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceUI.swift; sourceTree = "<group>"; };
 		A9498D8C23386CD700DAA9B9 /* MockService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockService.swift; sourceTree = "<group>"; };
 		A9498D8E23386CE800DAA9B9 /* MockServiceTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockServiceTableViewController.swift; sourceTree = "<group>"; };
@@ -1845,7 +1845,7 @@
 				895FE08C22011F4800FCF18A /* OverrideSelectionViewController.swift */,
 				898E6E6F2241EDB70019E459 /* PercentageTextFieldTableViewController.swift */,
 				43FB60E620DCBC55002B996B /* RadioSelectionTableViewController.swift */,
-				A9498D8623386CAF00DAA9B9 /* ServiceViewController.swift */,
+				A9498D8623386CAF00DAA9B9 /* ServiceNavigationController.swift */,
 				892A5D992231E0E3008961AB /* SettingsNavigationViewController.swift */,
 				43FB60E420DCBA02002B996B /* SetupTableViewController.swift */,
 				43D8FE0C1C7290530073BE78 /* SingleValueScheduleTableViewController.swift */,
@@ -3493,7 +3493,7 @@
 				89653C822473592600E1BAA5 /* CarbRatioScheduleEditor.swift in Sources */,
 				1D1FCE2B24BE704A000300A8 /* TherapySetting+Settings.swift in Sources */,
 				4369F08F208859E6000E3E45 /* PaddedTextField.swift in Sources */,
-				A9498D8823386CAF00DAA9B9 /* ServiceViewController.swift in Sources */,
+				A9498D8823386CAF00DAA9B9 /* ServiceNavigationController.swift in Sources */,
 				892A5D9E2231E122008961AB /* StateColorPalette.swift in Sources */,
 				895FE08022011F0C00FCF18A /* EmojiDataSource.swift in Sources */,
 				432CF86920D76B320066B889 /* SetupButton.swift in Sources */,

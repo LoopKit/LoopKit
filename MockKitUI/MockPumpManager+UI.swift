@@ -20,11 +20,18 @@ extension MockPumpManager: PumpManagerUI {
     
     public var smallImage: UIImage? { return UIImage(named: "Pump Simulator", in: Bundle(for: MockPumpManagerSettingsViewController.self), compatibleWith: nil) }
     
-    public static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI> {
-        return .createdAndOnboarded(MockPumpManager())
+    public static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
+        let mockPumpManager = MockPumpManager()
+        if let maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour {
+            mockPumpManager.setMaximumTempBasalRate(maxBasalRateUnitsPerHour)
+        }
+        if let basalSchedule = settings.basalSchedule {
+            mockPumpManager.syncBasalRateSchedule(items: basalSchedule.items, completion: { _ in })
+        }
+        return .createdAndOnboarded(mockPumpManager)
     }
 
-    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying) {
+    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> PumpManagerViewController {
         let settings = MockPumpManagerSettingsViewController(pumpManager: self)
         let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav
