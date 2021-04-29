@@ -26,6 +26,10 @@ public protocol DeviceManagerDelegate: AlertIssuer {
     var allowDebugFeatures: Bool { get }   // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
 }
 
+public extension DeviceManagerDelegate {
+    var allowDebugFeatures: Bool { return false }
+}
+
 public protocol DeviceManager: CustomDebugStringConvertible, AlertResponder, AlertSoundVendor {
     typealias RawStateValue = [String: Any]
 
