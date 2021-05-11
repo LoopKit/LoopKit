@@ -57,6 +57,7 @@ public struct BasalRateScheduleEditor: View {
     }
     
     public init(
+        mode: SettingsPresentationMode,
         therapySettingsViewModel: TherapySettingsViewModel,
         didSave: (() -> Void)? = nil
     ) {
@@ -70,7 +71,7 @@ public struct BasalRateScheduleEditor: View {
                 therapySettingsViewModel?.saveBasalRates(basalRates: newBasalRates)
                 didSave?()
             },
-            mode: therapySettingsViewModel.mode
+            mode: mode
         )
     }
 

@@ -13,6 +13,7 @@ import SwiftUI
 
 public struct TherapySettingsView: View {
     @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    @Environment(\.chartColorPalette) var chartColorPalette
     @Environment(\.dismiss) var dismiss
     @Environment(\.appName) private var appName
 
@@ -25,18 +26,22 @@ public struct TherapySettingsView: View {
         let action: () -> Void
     }
 
+    private let mode: SettingsPresentationMode
+
     @ObservedObject var viewModel: TherapySettingsViewModel
         
     private let actionButton: ActionButton?
 
-    public init(viewModel: TherapySettingsViewModel,
+    public init(mode: SettingsPresentationMode,
+                viewModel: TherapySettingsViewModel,
                 actionButton: ActionButton? = nil) {
+        self.mode = mode
         self.viewModel = viewModel
         self.actionButton = actionButton
     }
         
     public var body: some View {
-        switch viewModel.mode {
+        switch mode {
         case .acceptanceFlow: return AnyView(content)
         case .settings: return AnyView(navigationViewWrappedContent)
         }
@@ -45,10 +50,10 @@ public struct TherapySettingsView: View {
     private var content: some View {
         List {
             Group {
-                if viewModel.mode == .acceptanceFlow && viewModel.prescription != nil {
+                if mode == .acceptanceFlow && viewModel.prescription != nil {
                     // At start of acceptance flow
                     prescriptionSection
-                } else if viewModel.mode == .acceptanceFlow && viewModel.prescription == nil {
+                } else if mode == .acceptanceFlow && viewModel.prescription == nil {
                     // At end of acceptance flow
                     summaryHeaderSection
                 }
@@ -70,13 +75,13 @@ public struct TherapySettingsView: View {
         .onAppear() {
             UITableView.appearance().separatorStyle = .singleLine // Add lines between rows
         }
-        .navigationBarTitle(Text(LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")), displayMode: .large)
     }
     
     private var navigationViewWrappedContent: some View {
         NavigationView {
             content
                 .navigationBarItems(trailing: dismissButton)
+                .navigationBarTitle(Text(LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")), displayMode: .large)
         }
     }
     
@@ -89,7 +94,7 @@ public struct TherapySettingsView: View {
     }
     
     @ViewBuilder private var lastItem: some View {
-        if viewModel.mode == .acceptanceFlow {
+        if mode == .acceptanceFlow {
             if actionButton != nil {
                 Button(action: actionButton!.action) {
                     Text(actionButton!.localizedString)
@@ -322,6 +327,55 @@ extension TherapySettingsView {
     }
 }
 
+// MARK: Navigation
+
+extension TherapySettingsView {
+
+    func screen(for setting: TherapySetting) -> (_ dismiss: @escaping () -> Void) -> AnyView {
+        switch setting {
+        case .suspendThreshold:
+            return { dismiss in
+                AnyView(SuspendThresholdEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .glucoseTargetRange:
+            return { dismiss in
+                AnyView(CorrectionRangeScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .preMealCorrectionRangeOverride:
+            return { dismiss in
+                AnyView(CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .workoutCorrectionRangeOverride:
+            return { dismiss in
+                AnyView(CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .workout, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .basalRate:
+            return { dismiss in
+                AnyView(BasalRateScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .deliveryLimits:
+            return { dismiss in
+                AnyView(DeliveryLimitsEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .insulinModel:
+            return { dismiss in
+                AnyView(InsulinModelSelection(mode: mode, therapySettingsViewModel: viewModel, chartColors: chartColorPalette, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .carbRatio:
+            return { dismiss in
+                AnyView(CarbRatioScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .insulinSensitivity:
+            return { dismiss in
+                AnyView(InsulinSensitivityScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
+            }
+        case .none:
+            break
+        }
+        return { _ in AnyView(Text("\(setting.title)")) }
+    }
+}
+
 // MARK: Utilities
 extension TherapySettingsView {
     
@@ -335,22 +389,22 @@ extension TherapySettingsView {
     
     private func section<Content>(for therapySetting: TherapySetting,
                                   @ViewBuilder content: @escaping () -> Content) -> some View where Content: View {
-        SectionWithTapToEdit(isEnabled: viewModel.mode != .acceptanceFlow,
+        SectionWithTapToEdit(isEnabled: mode != .acceptanceFlow,
                              header: EmptyView(),
                              title: therapySetting.title,
                              descriptiveText: therapySetting.descriptiveText(appName: appName),
-                             destination: viewModel.screen(for: therapySetting),
+                             destination: screen(for: therapySetting),
                              content: content)
     }
 
     private func section<Content, Header>(for therapySetting: TherapySetting,
                                           header: Header,
                                           @ViewBuilder content: @escaping () -> Content) -> some View where Content: View, Header: View {
-        SectionWithTapToEdit(isEnabled: viewModel.mode != .acceptanceFlow,
+        SectionWithTapToEdit(isEnabled: mode != .acceptanceFlow,
                              header: header,
                              title: therapySetting.title,
                              descriptiveText: therapySetting.descriptiveText(appName: appName),
-                             destination: viewModel.screen(for: therapySetting),
+                             destination: screen(for: therapySetting),
                              content: content)
     }
 }
@@ -494,39 +548,31 @@ public struct TherapySettingsView_Previews: PreviewProvider {
     static let preview_supportedBasalRates = [0.2, 0.5, 0.75, 1.0]
     static let preview_supportedBolusVolumes = [5.0, 10.0, 15.0]
 
-    static func preview_viewModel(mode: SettingsPresentationMode) -> TherapySettingsViewModel {
-        TherapySettingsViewModel(mode: mode,
-                                 therapySettings: preview_therapySettings,
+    static func preview_viewModel() -> TherapySettingsViewModel {
+        TherapySettingsViewModel(therapySettings: preview_therapySettings,
                                  supportedInsulinModelSettings: SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                                  pumpSupportedIncrements: { PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
                                                                                   bolusVolumes: preview_supportedBolusVolumes,
-                                                                                  maximumBasalScheduleEntryCount: 24) } ,
-                                 chartColors: ChartColorPalette(axisLine: .clear, axisLabel: .secondaryLabel, grid: .systemGray3, glucoseTint: .systemTeal, insulinTint: .systemOrange))
+                                                                                  maximumBasalScheduleEntryCount: 24) })
     }
 
     public static var previews: some View {
         Group {
-            TherapySettingsView(viewModel: preview_viewModel(mode: .acceptanceFlow))
+            TherapySettingsView(mode: .acceptanceFlow, viewModel: preview_viewModel())
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (onboarding)")
                 .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
-            TherapySettingsView(viewModel: preview_viewModel(mode: .settings))
+            TherapySettingsView(mode: .settings, viewModel: preview_viewModel())
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (settings)")
                 .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
-            TherapySettingsView(viewModel: preview_viewModel(mode: .settings))
+            TherapySettingsView(mode: .settings, viewModel: preview_viewModel())
                 .colorScheme(.dark)
                 .previewDevice(PreviewDevice(rawValue: "iPhone XS Max"))
                 .previewDisplayName("XS Max dark (settings)")
-            TherapySettingsView(viewModel: TherapySettingsViewModel(mode: .settings,
-                                                                    therapySettings: TherapySettings(),
-                                                                    chartColors: ChartColorPalette(axisLine: .clear,
-                                                                                                   axisLabel: .secondaryLabel,
-                                                                                                   grid: .systemGray3,
-                                                                                                   glucoseTint: .systemTeal,
-                                                                                                   insulinTint: .systemOrange)))
+            TherapySettingsView(mode: .settings, viewModel: TherapySettingsViewModel(therapySettings: TherapySettings()))
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (Empty TherapySettings)")

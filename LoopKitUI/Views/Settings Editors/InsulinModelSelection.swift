@@ -81,7 +81,9 @@ public struct InsulinModelSelection: View {
     }
 
     public init(
+        mode: SettingsPresentationMode,
         therapySettingsViewModel: TherapySettingsViewModel,
+        chartColors: ChartColorPalette,
         didSave: (() -> Void)? = nil
     ) {
         //TODO display glucose unit will be available in the environment. Will be updated when the editor is updated to support both glucose unit
@@ -91,19 +93,22 @@ public struct InsulinModelSelection: View {
             insulinSensitivitySchedule: therapySettingsViewModel.therapySettings.insulinSensitivitySchedule,
             glucoseUnit: displayGlucoseUnit,
             supportedModelSettings: therapySettingsViewModel.supportedInsulinModelSettings,
-            chartColors: therapySettingsViewModel.chartColors,
+            chartColors: chartColors,
             onSave: { [weak therapySettingsViewModel] insulinModelSettings in
                 therapySettingsViewModel?.saveInsulinModel(insulinModelSettings: insulinModelSettings)
                 didSave?()
             },
-            mode: therapySettingsViewModel.mode
+            mode: mode
         )
     }
 
     public var body: some View {
         switch mode {
-        case .acceptanceFlow: return AnyView(content)
-        case .settings: return AnyView(contentWithCancel)
+        case .acceptanceFlow:
+            content
+        case .settings:
+            contentWithCancel
+                .navigationBarTitle(Text(TherapySetting.insulinModel.title), displayMode: .large)
         }
     }
     
@@ -138,7 +143,6 @@ public struct InsulinModelSelection: View {
             .padding(.bottom)
             .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5))
         }
-        .navigationBarTitle(Text(TherapySetting.insulinModel.title), displayMode: .large)
         .supportedInterfaceOrientations(.portrait)
         .edgesIgnoringSafeArea(.bottom)
     }
