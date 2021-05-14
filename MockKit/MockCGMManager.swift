@@ -8,6 +8,7 @@
 
 import HealthKit
 import LoopKit
+import LoopKitUI // TODO: DeviceStatusBadge and UIBackgroundTask references should live in MockKitUI
 import LoopTestingKit
 
 public struct MockCGMState: GlucoseDisplayable {

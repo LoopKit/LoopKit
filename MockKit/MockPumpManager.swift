@@ -146,7 +146,7 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
     
-    private func pumpStatusHighlight(for state: MockPumpManagerState) -> PumpManagerStatus.PumpStatusHighlight? {
+    public func buildPumpStatusHighlight(for state: MockPumpManagerState) -> PumpManagerStatus.PumpStatusHighlight? {
         if state.deliveryIsUncertain {
             return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Comms Issue", comment: "Status highlight that delivery is uncertain."),
                                                          imageName: "exclamationmark.circle.fill",
@@ -177,7 +177,7 @@ public final class MockPumpManager: TestingPumpManager {
         return nil
     }
     
-    private func pumpLifecycleProgress(for state: MockPumpManagerState) -> PumpManagerStatus.PumpLifecycleProgress? {
+    public func buildPumpLifecycleProgress(for state: MockPumpManagerState) -> PumpManagerStatus.PumpLifecycleProgress? {
         guard let progressPercentComplete = state.progressPercentComplete else {
             return nil
         }
@@ -198,16 +198,19 @@ public final class MockPumpManager: TestingPumpManager {
         return PumpManagerStatus.PumpLifecycleProgress(percentComplete: progressPercentComplete,
                                                        progressState: progressState)
     }
+    
+    public var isClockOffset: Bool {
+        let now = Date()
+        return TimeZone.current.secondsFromGMT(for: now) != state.timeZone.secondsFromGMT(for: now)
+    }
 
     private func status(for state: MockPumpManagerState) -> PumpManagerStatus {
         return PumpManagerStatus(
-            timeZone: .currentFixed,
+            timeZone: state.timeZone,
             device: MockPumpManager.device,
             pumpBatteryChargeRemaining: state.pumpBatteryChargeRemaining,
             basalDeliveryState: basalDeliveryState(for: state),
             bolusState: bolusState(for: state),
-            pumpStatusHighlight: pumpStatusHighlight(for: state),
-            pumpLifecycleProgress: pumpLifecycleProgress(for: state),
             deliveryIsUncertain: state.deliveryIsUncertain
         )
     }

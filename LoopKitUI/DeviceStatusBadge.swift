@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import LoopKit
 
 public protocol DeviceStatusBadge {
     

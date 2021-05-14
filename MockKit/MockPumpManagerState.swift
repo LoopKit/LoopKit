@@ -160,6 +160,8 @@ public struct MockPumpManagerState {
     public var progressWarningThresholdPercentValue: Double?
     public var progressCriticalThresholdPercentValue: Double?
     
+    public var timeZone: TimeZone
+    
     public var dosesToStore: [UnfinalizedDose] {
         return finalizedDoses + [unfinalizedTempBasal, unfinalizedBolus].compactMap {$0}
     }
@@ -199,6 +201,7 @@ public struct MockPumpManagerState {
         self.finalizedDoses = finalizedDoses
         self.progressWarningThresholdPercentValue = progressWarningThresholdPercentValue
         self.progressCriticalThresholdPercentValue = progressCriticalThresholdPercentValue
+        self.timeZone = .currentFixed
     }
 
     public mutating func finalizeFinishedDoses() {
@@ -268,6 +271,12 @@ extension MockPumpManagerState: RawRepresentable {
         } else {
             self.suspendState = .resumed(Date())
         }
+        
+        if let timeZoneOffset = rawValue["timeZone"] as? Int {
+            self.timeZone = TimeZone(secondsFromGMT: timeZoneOffset) ?? .currentFixed
+        } else {
+            self.timeZone = .currentFixed
+        }
     }
 
     public var rawValue: RawValue {
@@ -277,6 +286,7 @@ extension MockPumpManagerState: RawRepresentable {
             "supportedBolusVolumes": supportedBolusVolumes,
             "supportedBasalRates": supportedBasalRates,
             "reservoirUnitsRemaining": reservoirUnitsRemaining,
+            "timeZone": timeZone.secondsFromGMT()
         ]
 
         raw["basalRateSchedule"] = basalRateSchedule?.rawValue

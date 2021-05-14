@@ -21,18 +21,11 @@ class PumpManagerStatusCodableTests: XCTestCase {
                               softwareVersion: "2.3.4",
                               localIdentifier: "Locally Identified",
                               udiDeviceIdentifier: "U0D1I2")
-        let pumpStatusHighlight = PumpManagerStatus.PumpStatusHighlight(localizedMessage: "Test message",
-                                                                        imageName: "test.image",
-                                                                        state: .normalPump)
-        let pumpLifecycleProgress = PumpManagerStatus.PumpLifecycleProgress(percentComplete: 0.5,
-                                                                            progressState: .warning)
         try assertPumpManagerStatusCodable(PumpManagerStatus(timeZone: TimeZone(identifier: "America/Los_Angeles")!,
                                                              device: device,
                                                              pumpBatteryChargeRemaining: 0.75,
                                                              basalDeliveryState: .active(dateFormatter.date(from: "2020-05-14T15:56:09Z")!),
                                                              bolusState: .noBolus,
-                                                             pumpStatusHighlight: pumpStatusHighlight,
-                                                             pumpLifecycleProgress: pumpLifecycleProgress,
                                                              deliveryIsUncertain: true),
                                            encodesJSON: """
 {
@@ -54,15 +47,6 @@ class PumpManagerStatusCodableTests: XCTestCase {
     "udiDeviceIdentifier" : "U0D1I2"
   },
   "pumpBatteryChargeRemaining" : 0.75,
-  "pumpLifecycleProgress" : {
-    "percentComplete" : 0.5,
-    "progressState" : "warning"
-  },
-  "pumpStatusHighlight" : {
-    "imageName" : "test.image",
-    "localizedMessage" : "Test message",
-    "state" : "normalPump"
-  },
   "timeZone" : {
     "identifier" : "America/Los_Angeles"
   }

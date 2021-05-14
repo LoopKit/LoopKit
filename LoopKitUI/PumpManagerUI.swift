@@ -31,9 +31,20 @@ public struct PumpManagerSetupSettings {
     }
 }
 
+public protocol PumpStatusIndicator {
+    /// a message from the pump that needs to be brought to the user's attention in the status bar
+    var pumpStatusHighlight: DeviceStatusHighlight? { get }
+
+    /// the completed percent of the progress bar to display in the status bar
+    var pumpLifecycleProgress: DeviceLifecycleProgress? { get }
+
+    /// a badge from the pump that needs to be brought to the user's attention in the status bar
+    var pumpStatusBadge: DeviceStatusBadge? { get }
+}
+
 public typealias PumpManagerViewController = (UIViewController & PumpManagerOnboarding & CompletionNotifying)
 
-public protocol PumpManagerUI: DeviceManagerUI, PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
+public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
     /// Create and onboard a new pump manager.
     ///
     /// - Parameters:

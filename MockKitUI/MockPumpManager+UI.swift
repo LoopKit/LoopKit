@@ -105,3 +105,37 @@ extension MockPumpManager {
         return false
     }
 }
+
+public enum MockPumpStatusBadge: DeviceStatusBadge {
+    case timeSyncNeeded
+    
+    public var image: UIImage? {
+        switch self {
+        case .timeSyncNeeded:
+            return UIImage(systemName: "clock.fill")
+        }
+    }
+    
+    public var state: DeviceStatusBadgeState {
+        switch self {
+        case .timeSyncNeeded:
+            return .warning
+        }
+    }
+}
+
+
+// MARK: - PumpStatusIndicator
+extension MockPumpManager {
+    public var pumpStatusHighlight: DeviceStatusHighlight? {
+        return buildPumpStatusHighlight(for: state)
+    }
+
+    public var pumpLifecycleProgress: DeviceLifecycleProgress? {
+        return buildPumpLifecycleProgress(for: state)
+    }
+
+    public var pumpStatusBadge: DeviceStatusBadge? {
+        return isClockOffset ? MockPumpStatusBadge.timeSyncNeeded : nil
+    }
+}

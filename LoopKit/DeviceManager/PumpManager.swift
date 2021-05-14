@@ -13,7 +13,7 @@ public enum PumpManagerResult<T> {
     case failure(PumpManagerError)
 }
 
-public protocol PumpManagerStatusObserver: class {
+public protocol PumpManagerStatusObserver: AnyObject {
     func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus)
 }
 

@@ -8,7 +8,7 @@
 
 
 // Defines the authentication for a service
-public protocol ServiceAuthentication: class {
+public protocol ServiceAuthentication: AnyObject {
     // The title of the service
     var title: String { get }
 
