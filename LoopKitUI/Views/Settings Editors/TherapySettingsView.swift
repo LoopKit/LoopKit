@@ -489,7 +489,8 @@ struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where 
 
     private func onFinish() {
         // Dispatching here fixes an issue on iOS 14.2 where schedule editors do not dismiss. It does not fix iOS 14.0 and 14.1
-        DispatchQueue.main.async {
+        // Added a delay, since recently a similar issue was encountered in a plugin where a delay was also needed. Still uncertain why.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.isActive = false
         }
     }
