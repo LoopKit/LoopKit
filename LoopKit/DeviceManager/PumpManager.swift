@@ -50,6 +50,15 @@ public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObs
 
 
 public protocol PumpManager: DeviceManager {
+    /// The maximum number of scheduled basal rates in a single day supported by the pump. Used during onboarding by therapy settings.
+    static var onboardingMaximumBasalScheduleEntryCount: Int { get }
+
+    /// All user-selectable basal rates, in Units per Hour. Must be non-empty. Used during onboarding by therapy settings.
+    static var onboardingSupportedBasalRates: [Double] { get }
+
+    /// All user-selectable bolus volumes, in Units. Must be non-empty. Used during onboarding by therapy settings.
+    static var onboardingSupportedBolusVolumes: [Double] { get }
+
     /// Rounds a basal rate in U/hr to a rate supported by this pump.
     ///
     /// - Parameters:

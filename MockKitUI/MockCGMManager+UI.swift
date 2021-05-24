@@ -16,6 +16,8 @@ import MockKit
 
 extension MockCGMManager: CGMManagerUI {
 
+    public static var onboardingImage: UIImage? { return UIImage(named: "CGM Simulator", in: Bundle(for: MockCGMManagerSettingsViewController.self), compatibleWith: nil) }
+
     public var smallImage: UIImage? { return UIImage(named: "CGM Simulator", in: Bundle(for: MockCGMManagerSettingsViewController.self), compatibleWith: nil) }
 
     public static func setupViewController(bluetoothProvider: BluetoothProvider, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, colorPalette: LoopUIColorPalette) -> SetupUIResult<CGMManagerViewController, CGMManagerUI> {

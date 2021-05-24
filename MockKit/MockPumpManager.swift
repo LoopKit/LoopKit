@@ -53,6 +53,18 @@ public final class MockPumpManager: TestingPumpManager {
         return MockPumpManager.localizedTitle
     }
 
+    public static var onboardingMaximumBasalScheduleEntryCount: Int {
+        return 48
+    }
+
+    public static var onboardingSupportedBasalRates: [Double] {
+        MockPumpManagerState.DeliverableIncrements.medtronicX22.supportedBasalRates!
+    }
+
+    public static var onboardingSupportedBolusVolumes: [Double] {
+        MockPumpManagerState.DeliverableIncrements.medtronicX22.supportedBolusVolumes!
+    }
+
     private static let device = HKDevice(
         name: MockPumpManager.managerIdentifier,
         manufacturer: nil,

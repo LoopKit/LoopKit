@@ -69,6 +69,13 @@ public protocol CGMManagerProvider: AnyObject {
     /// The descriptor list of available CGM managers.
     var availableCGMManagers: [CGMManagerDescriptor] { get }
 
+    /// An image for the CGM manager with the specified identifier.
+    ///
+    /// - Parameters:
+    ///     - identifier: The identifier of the CGM manager.
+    /// - Returns: An image for the CGM manager with the specified identifier.
+    func imageForCGMManager(withIdentifier identifier: String) -> UIImage?
+
     /// Onboard the CGM manager with the specified identifier.
     ///
     /// - Parameters:
@@ -83,6 +90,20 @@ public protocol PumpManagerProvider: AnyObject {
 
     /// The descriptor list of available pump managers.
     var availablePumpManagers: [PumpManagerDescriptor] { get }
+
+    /// An image for the pump manager with the specified identifier.
+    ///
+    /// - Parameters:
+    ///     - identifier: The identifier of the pump manager.
+    /// - Returns: An image for the pump manager with the specified identifier.
+    func imageForPumpManager(withIdentifier identifier: String) -> UIImage?
+
+    /// An supported increments for the pump manager with the specified identifier.
+    ///
+    /// - Parameters:
+    ///     - identifier: The identifier of the pump manager.
+    /// - Returns: An supported increments for the pump manager with the specified identifier.
+    func supportedIncrementsForPumpManager(withIdentifier identifier: String) -> PumpSupportedIncrements?
 
     /// Onboard the pump manager with the specified identifier.
     ///
