@@ -33,11 +33,7 @@ final class MockPumpManagerSetupViewController: UINavigationController, PumpMana
     override public func viewDidLoad() {
         super.viewDidLoad()
 
-        if #available(iOSApplicationExtension 13.0, iOS 13.0, *) {
-            view.backgroundColor = .systemBackground
-        } else {
-            view.backgroundColor = .white
-        }
+        view.backgroundColor = .systemBackground
         
         navigationBar.shadowImage = UIImage()
 
