@@ -52,7 +52,7 @@ public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager
     ///     - bluetoothProvider: The provider of Bluetooth functionality.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: Either a conforming view controller to create and onboard the pump manager or a newly created and onboarded pump manager.
-    static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> SetupUIResult<PumpManagerViewController, PumpManagerUI>
+    static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> SetupUIResult<PumpManagerViewController, PumpManagerUI>
 
     /// Configure settings for an existing pump manager.
     ///
@@ -60,10 +60,10 @@ public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager
     ///     - bluetoothProvider: The provider of Bluetooth functionality.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: A view controller to configure an existing pump manager.
-    func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> PumpManagerViewController
+    func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> PumpManagerViewController
 
     // View for recovering from delivery uncertainty
-    func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & CompletionNotifying)
+    func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> (UIViewController & CompletionNotifying)
 
     // Returns a class that can provide HUD views
     func hudProvider(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> HUDProvider?

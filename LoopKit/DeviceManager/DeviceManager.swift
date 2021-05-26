@@ -22,12 +22,6 @@ public protocol DeviceManagerDelegate: AlertIssuer {
     // End obsolescent code
     
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
-    
-    var allowDebugFeatures: Bool { get }   // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
-}
-
-public extension DeviceManagerDelegate {
-    var allowDebugFeatures: Bool { return false }
 }
 
 public protocol DeviceManager: CustomDebugStringConvertible, AlertResponder, AlertSoundVendor {
