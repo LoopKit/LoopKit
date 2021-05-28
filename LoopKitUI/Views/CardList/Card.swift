@@ -42,6 +42,7 @@ import SwiftUI
 /// ```
 public struct Card: View {
     var parts: [AnyView?]
+    var backgroundColor: Color = Color(.secondarySystemGroupedBackground)
 
     public var body: some View {
         VStack {
@@ -63,9 +64,18 @@ public struct Card: View {
         }
         .frame(maxWidth: .infinity)
         .padding()
-        .background(CardBackground())
+        .background(CardBackground(color: backgroundColor))
         .padding(.horizontal)
     }
+}
+
+extension Card {
+    init(_ other: Self, backgroundColor: Color? = nil) {
+        self.parts = other.parts
+        self.backgroundColor = backgroundColor ?? other.backgroundColor
+    }
+
+    func backgroundColor(_ color: Color?) -> Self { Self(self, backgroundColor: color) }
 }
 
 extension Card {
@@ -122,9 +132,11 @@ extension Card {
 }
 
 private struct CardBackground: View {
+    var color: Color = Color(.secondarySystemGroupedBackground)
+
     var body: some View {
         RoundedRectangle(cornerRadius: 10)
-            .foregroundColor(Color(.secondarySystemGroupedBackground))
+            .foregroundColor(color)
     }
 }
 

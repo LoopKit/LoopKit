@@ -108,7 +108,7 @@ public struct InsulinModelSelection: View {
             content
         case .settings:
             contentWithCancel
-                .navigationBarTitle(Text(TherapySetting.insulinModel.title), displayMode: .large)
+                .navigationBarTitleDisplayMode(.inline)
         }
     }
     
@@ -132,7 +132,8 @@ public struct InsulinModelSelection: View {
     
     private var content: some View {
         VStack(spacing: 0) {
-            list
+            CardList(title: Text(LocalizedString("Insulin Model", comment: "Title text for insulin model")),
+                     style: .simple(CardStack(cards: [card])))
             Button(action: { self.startSaving() }) {
                 Text(mode.buttonText)
                     .actionButtonStyle(.primary)
@@ -147,8 +148,8 @@ public struct InsulinModelSelection: View {
         .edgesIgnoringSafeArea(.bottom)
     }
     
-    private var list: some View {
-        List {
+    private var card: Card {
+        Card {
             Section {
                 SettingDescription(
                     text: insulinModelSettingDescription,
@@ -175,8 +176,10 @@ public struct InsulinModelSelection: View {
                         isSelected: isSelected(.exponentialPreset(.humalogNovologAdult))
                     )
                     .padding(.vertical, 4)
+                    .contentShape(Rectangle())
                 }
 
+                SectionDivider()
                 CheckmarkListItem(
                     title: Text(InsulinModelSettings.exponentialPreset(.humalogNovologChild).title),
                     description: Text(InsulinModelSettings.exponentialPreset(.humalogNovologChild).subtitle),
@@ -184,17 +187,21 @@ public struct InsulinModelSelection: View {
                 )
                 .padding(.vertical, 4)
                 .padding(.bottom, supportedModelSettings.fiaspModelEnabled ? 0 : 4)
+                .contentShape(Rectangle())
 
                 if supportedModelSettings.fiaspModelEnabled {
+                    SectionDivider()
                     CheckmarkListItem(
                         title: Text(InsulinModelSettings.exponentialPreset(.fiasp).title),
                         description: Text(InsulinModelSettings.exponentialPreset(.fiasp).subtitle),
                         isSelected: isSelected(.exponentialPreset(.fiasp))
                     )
                     .padding(.vertical, 4)
+                    .contentShape(Rectangle())
                 }
 
                 if supportedModelSettings.walshModelEnabled {
+                    SectionDivider()
                     DurationBasedCheckmarkListItem(
                         title: Text(WalshInsulinModel.title),
                         description: Text(WalshInsulinModel.subtitle),
@@ -204,11 +211,11 @@ public struct InsulinModelSelection: View {
                     )
                     .padding(.vertical, 4)
                     .padding(.bottom, 4)
+                    .contentShape(Rectangle())
                 }
             }
             .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
         }
-        .insetGroupedListStyle()
     }
 
     var insulinModelSettingDescription: Text {
@@ -323,5 +330,12 @@ fileprivate extension HKUnit {
         } else {
             return 5.5
         }
+    }
+}
+
+fileprivate struct SectionDivider: View {
+    var body: some View {
+        Divider()
+            .padding(.trailing, -16)
     }
 }

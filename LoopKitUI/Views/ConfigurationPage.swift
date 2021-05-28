@@ -21,7 +21,7 @@ public struct ConfigurationPage<ActionAreaContent: View>: View {
     var title: Text
     var actionButtonTitle: Text
     var actionButtonState: ActionButtonState
-    var cardListStyle: CardList.Style
+    var cardListStyle: CardListStyle
     var actionAreaContent: ActionAreaContent
     var action: () -> Void
 

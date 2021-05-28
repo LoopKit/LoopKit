@@ -144,6 +144,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         switch mode {
         case .acceptanceFlow:
             page
+                .navigationBarBackButtonHidden(true)
                 .navigationBarItems(leading: backButton, trailing: trailingNavigationItems)
         case .settings:
             pageWithCancel

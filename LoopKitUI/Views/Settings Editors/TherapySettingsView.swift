@@ -42,68 +42,101 @@ public struct TherapySettingsView: View {
         
     public var body: some View {
         switch mode {
-        case .acceptanceFlow: return AnyView(content)
-        case .settings: return AnyView(navigationViewWrappedContent)
+        case .acceptanceFlow:
+            content
+        case .settings:
+            navigationViewWrappedContent
         }
     }
     
     private var content: some View {
-        List {
-            Group {
-                if mode == .acceptanceFlow && viewModel.prescription != nil {
-                    // At start of acceptance flow
-                    prescriptionSection
-                } else if mode == .acceptanceFlow && viewModel.prescription == nil {
-                    // At end of acceptance flow
-                    summaryHeaderSection
-                }
-                suspendThresholdSection
-                correctionRangeSection
-                preMealCorrectionRangeSection
-                if !viewModel.sensitivityOverridesEnabled {
-                    workoutCorrectionRangeSection
-                }
-                carbRatioSection
-                basalRatesSection
-                deliveryLimitsSection
-                insulinModelSection
-                insulinSensitivitiesSection
-            }
-            lastItem
+        CardList(title: cardListTitle, style: .sectioned(cardListSections), trailer: cardListTrailer)
+    }
+
+    private var cardListTitle: Text? { mode == .acceptanceFlow ? Text(therapySettingsTitle) : nil }
+
+    private var therapySettingsTitle: String {
+        return LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")
+    }
+
+    private var cardListSections: [CardListSection] {
+        var cardListSections: [CardListSection] = []
+
+        cardListSections.append(therapySettingsCardListSection)
+        if mode == .settings {
+            cardListSections.append(supportCardListSection)
         }
-        .insetGroupedListStyle()
-        .onAppear() {
-            UITableView.appearance().separatorStyle = .singleLine // Add lines between rows
-        }
+
+        return cardListSections
     }
     
+    private var therapySettingsCardListSection: CardListSection {
+        CardListSection {
+            therapySettingsCardStack
+                .spacing(20)
+        }
+    }
+
+    private var therapySettingsCardStack: CardStack {
+        var cards: [Card] = []
+
+        if mode == .acceptanceFlow {
+            if viewModel.prescription != nil {
+                cards.append(prescriptionSection)
+            } else {
+                cards.append(summaryHeaderSection)
+            }
+        }
+        cards.append(suspendThresholdSection)
+        cards.append(correctionRangeSection)
+        cards.append(preMealCorrectionRangeSection)
+        if !viewModel.sensitivityOverridesEnabled {
+            cards.append(workoutCorrectionRangeSection)
+        }
+        cards.append(carbRatioSection)
+        cards.append(basalRatesSection)
+        cards.append(deliveryLimitsSection)
+        cards.append(insulinModelSection)
+        cards.append(insulinSensitivitiesSection)
+
+        return CardStack(cards: cards)
+    }
+    
+    private var supportCardListSection: CardListSection {
+        CardListSection(title: Text(LocalizedString("Support", comment: "Title for support section"))) {
+            supportSection
+        }
+    }
+
     private var navigationViewWrappedContent: some View {
         NavigationView {
-            content
-                .navigationBarItems(trailing: dismissButton)
-                .navigationBarTitle(Text(LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")), displayMode: .large)
+            ZStack {
+                Color(.systemGroupedBackground)
+                    .edgesIgnoringSafeArea(.all)
+                content
+                    .navigationBarItems(trailing: dismissButton)
+                    .navigationBarTitle(therapySettingsTitle, displayMode: .large)
+            }
         }
     }
     
     private var dismissButton: some View {
-        Button(action: {
-            self.dismiss()
-        }) {
-            Text(LocalizedString("Done", comment: "Text for dismiss button")).bold()
+        Button(action: dismiss) {
+            Text(LocalizedString("Done", comment: "Text for dismiss button"))
+                .bold()
         }
     }
     
-    @ViewBuilder private var lastItem: some View {
+    @ViewBuilder
+    private var cardListTrailer: some View {
         if mode == .acceptanceFlow {
-            if actionButton != nil {
-                Button(action: actionButton!.action) {
-                    Text(actionButton!.localizedString)
+            if let actionButton = actionButton {
+                Button(action: actionButton.action) {
+                    Text(actionButton.localizedString)
                 }
                 .buttonStyle(ActionButtonStyle(.primary))
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .padding()
             }
-        } else {
-            supportSection
         }
     }
 }
@@ -111,35 +144,36 @@ public struct TherapySettingsView: View {
 // MARK: Sections
 extension TherapySettingsView {
     
-    private var prescriptionSection: some View {
-        Section(header: Spacer()) {
-            VStack(alignment: .leading) {
-                Spacer()
-                Text(LocalizedString("Prescription", comment: "title for prescription section"))
-                    .bold()
-                Spacer()
-                DescriptiveText(label: prescriptionDescriptiveText)
+    private var prescriptionSection: Card {
+        Card {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(LocalizedString("Prescription", comment: "title for prescription section"))
+                        .bold()
+                    Spacer()
+                    DescriptiveText(label: prescriptionDescriptiveText)
+                }
                 Spacer()
             }
         }
     }
     
-    private var summaryHeaderSection: some View {
-        Section(header: Spacer()) {
+    private var summaryHeaderSection: Card {
+        Card {
             VStack(alignment: .leading) {
-                Spacer()
                 Text(LocalizedString("Review and Save Settings", comment: "title for summary description section"))
                     .bold()
                     .foregroundColor(.white)
                 Spacer()
                 VStack (alignment: .leading, spacing: 10) {
                     DescriptiveText(label: summaryHeaderReviewText, color: .white)
+                        .fixedSize(horizontal: false, vertical: true)
                     DescriptiveText(label: summaryHeaderEditText, color: .white)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                Spacer()
             }
         }
-        .listRowBackground(Color.accentColor)
+        .backgroundColor(Color.accentColor)
     }
     
     private var summaryHeaderReviewText: String {
@@ -151,13 +185,17 @@ extension TherapySettingsView {
     }
     
     private var prescriptionDescriptiveText: String {
-        String(format: LocalizedString("Submitted by %1$@, %2$@", comment: "Format for prescription descriptive text (1: providerName, 2: datePrescribed)"),
-               viewModel.prescription!.providerName,
-               DateFormatter.localizedString(from: viewModel.prescription!.datePrescribed, dateStyle: .short, timeStyle: .none))
+        guard let prescription = viewModel.prescription else {
+            return ""
+        }
+        return String(format: LocalizedString("Submitted by %1$@, %2$@", comment: "Format for prescription descriptive text (1: providerName, 2: datePrescribed)"),
+                      prescription.providerName,
+                      DateFormatter.localizedString(from: prescription.datePrescribed, dateStyle: .short, timeStyle: .none))
     }
-    
-    private var suspendThresholdSection: some View {
-        section(for: .suspendThreshold, header: viewModel.prescription == nil ? AnyView(Spacer()) : AnyView(EmptyView())) {
+
+    private var suspendThresholdSection: Card {
+        card(for: .suspendThreshold) {
+            SectionDivider()
             HStack {
                 Spacer()
                 GuardrailConstrainedQuantityView(
@@ -172,13 +210,17 @@ extension TherapySettingsView {
         }
     }
 
-    private var correctionRangeSection: some View {
-        section(for: .glucoseTargetRange) {
-            if let schedule = self.viewModel.glucoseTargetRangeSchedule(for: glucoseUnit)
+    private var correctionRangeSection: Card {
+        card(for: .glucoseTargetRange) {
+            if let items = self.viewModel.glucoseTargetRangeSchedule(for: glucoseUnit)?.items
             {
-                ForEach(schedule.items, id: \.self) { value in
-                    ScheduleRangeItem(time: value.startTime,
-                                      range: value.value,
+                SectionDivider()
+                ForEach(items.indices) { index in
+                    if index > 0 {
+                        SettingsDivider()
+                    }
+                    ScheduleRangeItem(time: items[index].startTime,
+                                      range: items[index].value,
                                       unit: glucoseUnit,
                                       guardrail: .correctionRange)
                 }
@@ -186,11 +228,12 @@ extension TherapySettingsView {
         }
     }
     
-    private var preMealCorrectionRangeSection: some View {
-        section(for: .preMealCorrectionRangeOverride) {
+    private var preMealCorrectionRangeSection: Card {
+        card(for: .preMealCorrectionRangeOverride) {
             if let correctionRangeOverrides = self.viewModel.correctionRangeOverrides,
                let schedule = self.viewModel.glucoseTargetRangeSchedule
             {
+                SectionDivider()
                 CorrectionRangeOverridesRangeItem(
                     value: correctionRangeOverrides,
                     displayGlucoseUnit: glucoseUnit,
@@ -202,11 +245,12 @@ extension TherapySettingsView {
         }
     }
     
-    private var workoutCorrectionRangeSection: some View {
-        section(for: .workoutCorrectionRangeOverride) {
+    private var workoutCorrectionRangeSection: Card {
+        card(for: .workoutCorrectionRangeOverride) {
             if let correctionRangeOverrides = self.viewModel.correctionRangeOverrides,
                let schedule = self.viewModel.glucoseTargetRangeSchedule
             {
+                SectionDivider()
                 CorrectionRangeOverridesRangeItem(
                     value: correctionRangeOverrides,
                     displayGlucoseUnit: glucoseUnit,
@@ -218,22 +262,28 @@ extension TherapySettingsView {
         }
     }
 
-    private var basalRatesSection: some View {
-        section(for: .basalRate) {
-            if self.viewModel.therapySettings.basalRateSchedule != nil && self.viewModel.pumpSupportedIncrements?() != nil {
-                ForEach(self.viewModel.therapySettings.basalRateSchedule!.items, id: \.self) { value in
-                    ScheduleValueItem(time: value.startTime,
-                                      value: value.value,
+    private var basalRatesSection: Card {
+        card(for: .basalRate) {
+            if let items = viewModel.therapySettings.basalRateSchedule?.items, let supportedBasalRates = viewModel.pumpSupportedIncrements?()?.basalRates {
+                SectionDivider()
+                ForEach(items.indices) { index in
+                    if index > 0 {
+                        SettingsDivider()
+                    }
+                    ScheduleValueItem(time: items[index].startTime,
+                                      value:  items[index].value,
                                       unit: .internationalUnitsPerHour,
-                                      guardrail: .basalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates))
+                                      guardrail: .basalRate(supportedBasalRates: supportedBasalRates))
                 }
             }
         }
     }
     
-    private var deliveryLimitsSection: some View {
-        section(for: .deliveryLimits) {
+    private var deliveryLimitsSection: Card {
+        card(for: .deliveryLimits) {
+            SectionDivider()
             self.maxBasalRateItem
+            SettingsDivider()
             self.maxBolusItem
         }
     }
@@ -242,12 +292,12 @@ extension TherapySettingsView {
         HStack {
             Text(DeliveryLimits.Setting.maximumBasalRate.title)
             Spacer()
-            if self.viewModel.pumpSupportedIncrements?() != nil {
+            if let basalRates = self.viewModel.pumpSupportedIncrements?()?.basalRates {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
                     unit: .internationalUnitsPerHour,
                     guardrail: .maximumBasalRate(
-                        supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates,
+                        supportedBasalRates: basalRates,
                         scheduledBasalRange: self.viewModel.therapySettings.basalRateSchedule?.valueRange(),
                         lowestCarbRatio: self.viewModel.therapySettings.carbRatioSchedule?.lowestValue()),
                     isEditing: false,
@@ -262,11 +312,11 @@ extension TherapySettingsView {
         HStack {
             Text(DeliveryLimits.Setting.maximumBolus.title)
             Spacer()
-            if self.viewModel.pumpSupportedIncrements?() != nil {
+            if let bolusVolumes = self.viewModel.pumpSupportedIncrements?()?.bolusVolumes {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) },
                     unit: .internationalUnit(),
-                    guardrail: .maximumBolus(supportedBolusVolumes: self.viewModel.pumpSupportedIncrements!()!.bolusVolumes),
+                    guardrail: .maximumBolus(supportedBolusVolumes: bolusVolumes),
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
@@ -275,29 +325,42 @@ extension TherapySettingsView {
         }
     }
         
-    private var insulinModelSection: some View {
-        section(for: .insulinModel) {
-            if self.viewModel.therapySettings.insulinModelSettings != nil {
-                // Spacing and paddings here is my best guess based on the design...
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(self.viewModel.therapySettings.insulinModelSettings!.title)
-                        .font(.body)
-                        .padding(.top, 5)
-                    Text(self.viewModel.therapySettings.insulinModelSettings!.subtitle)
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                        .padding(.bottom, 8)
+    private var insulinModelSection: Card {
+        card(for: .insulinModel) {
+            if let insulinModelSettings = self.viewModel.therapySettings.insulinModelSettings {
+                SectionDivider()
+                HStack {
+                    // Spacing and paddings here is my best guess based on the design...
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(insulinModelSettings.title)
+                            .font(.body)
+                            .padding(.top, 5)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Text(insulinModelSettings.subtitle)
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                            .padding(.bottom, 8)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    Spacer()
+                    Image(systemName: "checkmark")
+                        .font(Font.system(.title2).weight(.semibold))
+                        .foregroundColor(.accentColor)
                 }
             }
         }
     }
 
-    private var carbRatioSection: some View {
-        section(for: .carbRatio) {
-            if self.viewModel.therapySettings.carbRatioSchedule != nil {
-                ForEach(self.viewModel.therapySettings.carbRatioSchedule!.items, id: \.self) { value in
-                    ScheduleValueItem(time: value.startTime,
-                                      value: value.value,
+    private var carbRatioSection: Card {
+        card(for: .carbRatio) {
+            if let items = viewModel.therapySettings.carbRatioSchedule?.items {
+                SectionDivider()
+                ForEach(items.indices) { index in
+                    if index > 0 {
+                        SettingsDivider()
+                    }
+                    ScheduleValueItem(time: items[index].startTime,
+                                      value: items[index].value,
                                       unit: .gramsPerUnit,
                                       guardrail: .carbRatio)
                 }
@@ -305,12 +368,16 @@ extension TherapySettingsView {
         }
     }
     
-    private var insulinSensitivitiesSection: some View {
-        section(for: .insulinSensitivity) {
-            if let schedule = viewModel.insulinSensitivitySchedule(for: glucoseUnit) {
-                ForEach(schedule.items, id: \.self) { value in
-                    ScheduleValueItem(time: value.startTime,
-                                      value: value.value,
+    private var insulinSensitivitiesSection: Card {
+        card(for: .insulinSensitivity) {
+            if let items = viewModel.insulinSensitivitySchedule(for: glucoseUnit)?.items {
+                SectionDivider()
+                ForEach(items.indices) { index in
+                    if index > 0 {
+                        SettingsDivider()
+                    }
+                    ScheduleValueItem(time: items[index].startTime,
+                                      value: items[index].value,
                                       unit: sensitivityUnit,
                                       guardrail: .insulinSensitivity)
                 }
@@ -319,11 +386,17 @@ extension TherapySettingsView {
     }
     
     private var supportSection: some View {
-        Section(header: SectionHeader(label: LocalizedString("Support", comment: "Title for support section"))) {
+        Section {
             NavigationLink(destination: Text("Therapy Settings Support Placeholder")) {
-                Text("Get help with Therapy Settings", comment: "Support button for Therapy Settings")
+                HStack {
+                    Text("Get help with Therapy Settings", comment: "Support button for Therapy Settings")
+                        .foregroundColor(.primary)
+                    Spacer()
+                    Disclosure()
+                }
             }
         }
+        .contentShape(Rectangle())
     }
 }
 
@@ -387,25 +460,14 @@ extension TherapySettingsView {
         glucoseUnit.unitDivided(by: .internationalUnit())
     }
     
-    private func section<Content>(for therapySetting: TherapySetting,
-                                  @ViewBuilder content: @escaping () -> Content) -> some View where Content: View {
-        SectionWithTapToEdit(isEnabled: mode != .acceptanceFlow,
-                             header: EmptyView(),
-                             title: therapySetting.title,
-                             descriptiveText: therapySetting.descriptiveText(appName: appName),
-                             destination: screen(for: therapySetting),
-                             content: content)
-    }
-
-    private func section<Content, Header>(for therapySetting: TherapySetting,
-                                          header: Header,
-                                          @ViewBuilder content: @escaping () -> Content) -> some View where Content: View, Header: View {
-        SectionWithTapToEdit(isEnabled: mode != .acceptanceFlow,
-                             header: header,
-                             title: therapySetting.title,
-                             descriptiveText: therapySetting.descriptiveText(appName: appName),
-                             destination: screen(for: therapySetting),
-                             content: content)
+    private func card<Content>(for therapySetting: TherapySetting, @ViewBuilder content: @escaping () -> Content) -> Card where Content: View {
+        Card {
+            SectionWithTapToEdit(isEnabled: mode != .acceptanceFlow,
+                                 title: therapySetting.title,
+                                 descriptiveText: therapySetting.descriptiveText(appName: appName),
+                                 destination: screen(for: therapySetting),
+                                 content: content)
+        }
     }
 }
 
@@ -462,9 +524,8 @@ struct CorrectionRangeOverridesRangeItem: View {
     }
 }
 
-struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where Header: View, Content: View, NavigationDestination: View  {
+struct SectionWithTapToEdit<Content, NavigationDestination>: View where Content: View, NavigationDestination: View  {
     let isEnabled: Bool
-    let header: Header
     let title: String
     let descriptiveText: String
     let destination: (_ goBack: @escaping () -> Void) -> NavigationDestination
@@ -473,14 +534,12 @@ struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where 
     @State var isActive: Bool = false
 
     init(isEnabled: Bool,
-         header: Header,
          title: String,
          descriptiveText: String,
          destination: @escaping (@escaping () -> Void) -> NavigationDestination,
          content: () -> Content)
     {
         self.isEnabled = isEnabled
-        self.header = header
         self.title = title
         self.descriptiveText = descriptiveText
         self.destination = destination
@@ -496,18 +555,18 @@ struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where 
     }
 
     public var body: some View {
-        Section(header: header) {
+        Section {
             VStack(alignment: .leading) {
-                Spacer()
                 Text(title)
                     .bold()
                 Spacer()
                 HStack {
                     DescriptiveText(label: descriptiveText)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer()
                     if isEnabled {
-                        Spacer()
                         NavigationLink(destination: destination(onFinish), isActive: $isActive) {
-                            EmptyView()
+                            Disclosure()
                         }
                         .frame(width: 10, alignment: .trailing)
                     }
@@ -579,5 +638,29 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                 .previewDisplayName("SE light (Empty TherapySettings)")
                 .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .millimolesPerLiter))
         }
+    }
+}
+
+fileprivate struct SectionDivider: View {
+    var body: some View {
+        Divider()
+            .padding(.trailing, -16)
+    }
+}
+
+fileprivate struct SettingsDivider: View {
+    var body: some View {
+        Divider()
+            .padding(.trailing, -8)
+    }
+}
+
+fileprivate struct Disclosure: View {
+    var body: some View {
+        Image(systemName: "chevron.right")
+            .imageScale(.small)
+            .font(.headline)
+            .foregroundColor(.secondary)
+            .opacity(0.5)
     }
 }
