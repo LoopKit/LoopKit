@@ -72,7 +72,7 @@ public class DismissibleHostingController: UIHostingController<AnyView> {
     }
 
     public override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewWillDisappear(animated)
         onDisappear()
     }
 }
