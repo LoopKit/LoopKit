@@ -12,7 +12,7 @@ import LoopKit
 
 public struct CorrectionRangeOverridesEditor: View {
     @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
 
     let mode: SettingsPresentationMode

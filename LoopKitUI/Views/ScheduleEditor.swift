@@ -73,7 +73,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
 
     @State private var presentedAlert: PresentedAlert?
 
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
     @Environment(\.presentationMode) var presentationMode
 

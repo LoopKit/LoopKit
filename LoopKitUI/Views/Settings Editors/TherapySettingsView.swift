@@ -14,7 +14,7 @@ import SwiftUI
 public struct TherapySettingsView: View {
     @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
     @Environment(\.chartColorPalette) var chartColorPalette
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismissAction) var dismissAction
     @Environment(\.appName) private var appName
 
     public struct ActionButton {
@@ -121,7 +121,7 @@ public struct TherapySettingsView: View {
     }
     
     private var dismissButton: some View {
-        Button(action: dismiss) {
+        Button(action: dismissAction) {
             Text(LocalizedString("Done", comment: "Text for dismiss button"))
                 .bold()
         }
@@ -408,39 +408,39 @@ extension TherapySettingsView {
         switch setting {
         case .suspendThreshold:
             return { dismiss in
-                AnyView(SuspendThresholdEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(SuspendThresholdEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismissAction))
             }
         case .glucoseTargetRange:
             return { dismiss in
-                AnyView(CorrectionRangeScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(CorrectionRangeScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismissAction))
             }
         case .preMealCorrectionRangeOverride:
             return { dismiss in
-                AnyView(CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss).environment(\.dismissAction, dismissAction))
             }
         case .workoutCorrectionRangeOverride:
             return { dismiss in
-                AnyView(CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .workout, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .workout, didSave: dismiss).environment(\.dismissAction, dismissAction))
             }
         case .basalRate:
             return { dismiss in
-                AnyView(BasalRateScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(BasalRateScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismissAction))
             }
         case .deliveryLimits:
             return { dismiss in
-                AnyView(DeliveryLimitsEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(DeliveryLimitsEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismissAction))
             }
         case .insulinModel:
             return { dismiss in
-                AnyView(InsulinModelSelection(mode: mode, therapySettingsViewModel: viewModel, chartColors: chartColorPalette, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(InsulinModelSelection(mode: mode, therapySettingsViewModel: viewModel, chartColors: chartColorPalette, didSave: dismiss).environment(\.dismissAction, dismissAction))
             }
         case .carbRatio:
             return { dismiss in
-                AnyView(CarbRatioScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(CarbRatioScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismissAction))
             }
         case .insulinSensitivity:
             return { dismiss in
-                AnyView(InsulinSensitivityScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismiss, dismiss))
+                AnyView(InsulinSensitivityScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismissAction))
             }
         case .none:
             break

@@ -10,7 +10,7 @@ import SwiftUI
 import LoopKitUI
 
 struct DeliveryUncertaintyRecoveryView: View, HorizontalSizeClassOverride {
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismissAction) private var dismiss
 
     let appName: String
     let uncertaintyStartedAt: Date
@@ -69,7 +69,7 @@ class DeliveryUncertaintyRecoveryViewController: UIHostingController<AnyView>, C
             recoverCommsTapped()
             dismiss()
         }
-        .environment(\.dismiss, { dismiss() })
+        .environment(\.dismissAction, { dismiss() })
         
         super.init(rootView: AnyView(view))
         

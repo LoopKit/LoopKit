@@ -14,7 +14,7 @@ import LoopKit
 public struct SuspendThresholdEditor: View {
     @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
 
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
     @Environment(\.appName) private var appName
 

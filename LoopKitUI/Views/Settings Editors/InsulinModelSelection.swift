@@ -12,7 +12,7 @@ import LoopKit
 
 public struct InsulinModelSelection: View {
     @Environment(\.appName) private var appName   
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
 
     let initialValue: InsulinModelSettings

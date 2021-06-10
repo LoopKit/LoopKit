@@ -45,7 +45,7 @@ public class DismissibleHostingController: UIHostingController<AnyView> {
     ) {
         // Delay initialization of dismissal closure pushed into SwiftUI Environment until after calling the designated initializer
         var dismiss = {}
-        self.init(rootView: AnyView(rootView.environment(\.dismiss, { dismiss() })
+        self.init(rootView: AnyView(rootView.environment(\.dismissAction, { dismiss() })
             .environment(\.guidanceColors, guidanceColors)
             .environment(\.carbTintColor, carbTintColor)
             .environment(\.glucoseTintColor, glucoseTintColor)
