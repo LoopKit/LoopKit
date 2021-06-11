@@ -10,6 +10,7 @@ import HealthKit
 /// Describes the result of CGM manager operations to fetch and report sensor readings.
 ///
 /// - noData: No new data was available or retrieved
+/// - unreliableData: New glucose data was received, but is not reliable enough to use for therapy
 /// - newData: New glucose data was received and stored
 /// - error: An error occurred while receiving or store data
 public enum CGMReadingResult {
@@ -22,9 +23,12 @@ public enum CGMReadingResult {
 public struct CGMManagerStatus {
     // Return false if no sensor active, or in a state where no future data is expected without user intervention
     public var hasValidSensorSession: Bool
+
+    public var lastCommunicationDate: Date?
     
-    public init(hasValidSensorSession: Bool) {
+    public init(hasValidSensorSession: Bool, lastCommunicationDate: Date? = nil) {
         self.hasValidSensorSession = hasValidSensorSession
+        self.lastCommunicationDate = lastCommunicationDate
     }
 }
 
@@ -90,7 +94,14 @@ public protocol CGMManager: DeviceManager {
     /// The current status of the cgm manager
     var cgmManagerStatus: CGMManagerStatus { get }
 
-    /// Performs a manual fetch of glucose data from the device, if necessary
+
+    /// Implementations of this function must call the `completion` block, with the appropriate `CGMReadingResult`
+    /// according to the current available data.
+    /// - If there is new unreliable data, return `.unreliableData`
+    /// - If there is no new data and the current data is unreliable, return `.unreliableData`
+    /// - If there is new reliable data, return `.newData` with the data samples
+    /// - If there is no new data and the current data is reliable, return `.noData`
+    /// - If there is an error, return `.error` with the appropriate error.
     ///
     /// - Parameters:
     ///   - completion: A closure called when operation has completed
@@ -111,6 +122,11 @@ public protocol CGMManager: DeviceManager {
     ///
     /// - Parameter observer: The observing object
     func removeStatusObserver(_ observer: CGMManagerStatusObserver)
+
+    /// Requests that the manager completes its deletion process
+    ///
+    /// - Parameter completion: Action to take after the CGM manager is deleted
+    func delete(completion: @escaping () -> Void)
 }
 
 
@@ -136,5 +152,10 @@ public extension CGMManager {
 
     func removeStatusObserver(_ observer: CGMManagerStatusObserver) {
         // optional since a CGM manager may not support status observers
+    }
+
+    /// Override this default behaviour if the CGM Manager needs to complete tasks before being deleted
+    func delete(completion: @escaping () -> Void) {
+        notifyDelegateOfDeletion(completion: completion)
     }
 }

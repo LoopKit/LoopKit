@@ -12,7 +12,7 @@ import LoopKit
 
 public struct InsulinModelSelection: View {
     @Environment(\.appName) private var appName   
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
 
     let initialValue: InsulinModelSettings
@@ -63,7 +63,9 @@ public struct InsulinModelSelection: View {
     }
 
     public init(
+        mode: SettingsPresentationMode,
         therapySettingsViewModel: TherapySettingsViewModel,
+        chartColors: ChartColorPalette,
         didSave: (() -> Void)? = nil
     ) {
         //TODO display glucose unit will be available in the environment. Will be updated when the editor is updated to support both glucose unit
@@ -73,19 +75,22 @@ public struct InsulinModelSelection: View {
             insulinSensitivitySchedule: therapySettingsViewModel.therapySettings.insulinSensitivitySchedule,
             glucoseUnit: displayGlucoseUnit,
             supportedModelSettings: therapySettingsViewModel.supportedInsulinModelSettings,
-            chartColors: therapySettingsViewModel.chartColors,
+            chartColors: chartColors,
             onSave: { [weak therapySettingsViewModel] insulinModelSettings in
                 therapySettingsViewModel?.saveInsulinModel(insulinModelSettings: insulinModelSettings)
                 didSave?()
             },
-            mode: therapySettingsViewModel.mode
+            mode: mode
         )
     }
 
     public var body: some View {
         switch mode {
-        case .acceptanceFlow: return AnyView(content)
-        case .settings: return AnyView(contentWithCancel)
+        case .acceptanceFlow:
+            content
+        case .settings:
+            contentWithCancel
+                .navigationBarTitleDisplayMode(.inline)
         }
     }
     
@@ -109,7 +114,8 @@ public struct InsulinModelSelection: View {
     
     private var content: some View {
         VStack(spacing: 0) {
-            list
+            CardList(title: Text(LocalizedString("Insulin Model", comment: "Title text for insulin model")),
+                     style: .simple(CardStack(cards: [card])))
             Button(action: { self.startSaving() }) {
                 Text(mode.buttonText)
                     .actionButtonStyle(.primary)
@@ -120,13 +126,12 @@ public struct InsulinModelSelection: View {
             .padding(.bottom)
             .background(Color(.secondarySystemGroupedBackground).shadow(radius: 5))
         }
-        .navigationBarTitle(Text(TherapySetting.insulinModel.title), displayMode: .large)
         .supportedInterfaceOrientations(.portrait)
         .edgesIgnoringSafeArea(.bottom)
     }
     
-    private var list: some View {
-        List {
+    private var card: Card {
+        Card {
             Section {
                 SettingDescription(
                     text: insulinModelSettingDescription,
@@ -153,8 +158,10 @@ public struct InsulinModelSelection: View {
                         isSelected: isSelected(.exponentialPreset(.rapidActingAdult))
                     )
                     .padding(.vertical, 4)
+                    .contentShape(Rectangle())
                 }
 
+                SectionDivider()
                 CheckmarkListItem(
                     title: Text(InsulinModelSettings.exponentialPreset(.rapidActingChild).title),
                     description: Text(InsulinModelSettings.exponentialPreset(.rapidActingChild).subtitle),
@@ -162,11 +169,9 @@ public struct InsulinModelSelection: View {
                 )
                 .padding(.vertical, 4)
                 .padding(.bottom, 4)
-
             }
             .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
         }
-        .insetGroupedListStyle()
     }
 
     var insulinModelSettingDescription: Text {
@@ -260,5 +265,12 @@ fileprivate extension HKUnit {
         } else {
             return 5.5
         }
+    }
+}
+
+fileprivate struct SectionDivider: View {
+    var body: some View {
+        Divider()
+            .padding(.trailing, -16)
     }
 }

@@ -12,9 +12,10 @@ import LoopKit
 
 public struct CorrectionRangeOverridesEditor: View {
     @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
 
+    let mode: SettingsPresentationMode
     let viewModel: CorrectionRangeOverridesEditorViewModel
 
     @State private var userDidTap: Bool = false
@@ -44,10 +45,12 @@ public struct CorrectionRangeOverridesEditor: View {
     }
     
     public init(
+        mode: SettingsPresentationMode,
         therapySettingsViewModel: TherapySettingsViewModel,
         preset: CorrectionRangeOverrides.Preset,
         didSave: (() -> Void)? = nil
     ) {
+        self.mode = mode
         let viewModel = CorrectionRangeOverridesEditorViewModel(
             therapySettingsViewModel: therapySettingsViewModel,
             preset: preset,
@@ -57,9 +60,12 @@ public struct CorrectionRangeOverridesEditor: View {
     }
 
     public var body: some View {
-        switch viewModel.mode {
-        case .settings: return AnyView(contentWithCancel)
-        case .acceptanceFlow: return AnyView(content)
+        switch mode {
+        case .acceptanceFlow:
+            content
+        case .settings:
+            contentWithCancel
+                .navigationBarTitle("", displayMode: .inline)
         }
     }
     
@@ -84,8 +90,8 @@ public struct CorrectionRangeOverridesEditor: View {
     private var content: some View {
         ConfigurationPage(
             title: Text(preset.therapySetting.title),
-            actionButtonTitle: Text(viewModel.mode.buttonText),
-            actionButtonState: value != initialValue || viewModel.mode == .acceptanceFlow ? .enabled : .disabled,
+            actionButtonTitle: Text(mode.buttonText),
+            actionButtonState: value != initialValue || mode == .acceptanceFlow ? .enabled : .disabled,
             cards: {
                 // TODO: Figure out why I need to explicitly return a CardStack with 1 card here
                 CardStack(cards: [card(for: preset)])
@@ -103,7 +109,6 @@ public struct CorrectionRangeOverridesEditor: View {
             }
         )
         .alert(isPresented: $showingConfirmationAlert, content: confirmationAlert)
-        .navigationBarTitle("", displayMode: .inline)
         .simultaneousGesture(TapGesture().onEnded {
             withAnimation {
                 self.userDidTap = true
@@ -159,7 +164,7 @@ public struct CorrectionRangeOverridesEditor: View {
 
     private var instructionalContentIfNecessary: some View {
         return Group {
-            if viewModel.mode == .acceptanceFlow && !userDidTap {
+            if mode == .acceptanceFlow && !userDidTap {
                 instructionalContent
             }
         }
@@ -185,7 +190,7 @@ public struct CorrectionRangeOverridesEditor: View {
     private var guardrailWarningIfNecessary: some View {
         let crossedThresholds = self.crossedThresholds
         return Group {
-            if !crossedThresholds.isEmpty && (userDidTap || viewModel.mode == .settings) {
+            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings) {
                 CorrectionRangeOverridesGuardrailWarning(crossedThresholds: crossedThresholds, preset: preset)
             }
         }
@@ -229,7 +234,7 @@ public struct CorrectionRangeOverridesEditor: View {
     }
     
     private func startSaving() {
-        guard viewModel.mode == .settings else {
+        guard mode == .settings else {
             self.continueSaving()
             return
         }

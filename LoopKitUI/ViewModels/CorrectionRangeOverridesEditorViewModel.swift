@@ -20,8 +20,6 @@ struct CorrectionRangeOverridesEditorViewModel {
 
     let preset: CorrectionRangeOverrides.Preset
 
-    let mode: SettingsPresentationMode
-
     let guardrail: Guardrail<HKQuantity>
 
     var saveCorrectionRangeOverride: (_ correctionRangeOverrides: CorrectionRangeOverrides) -> Void
@@ -38,7 +36,6 @@ struct CorrectionRangeOverridesEditorViewModel {
             correctionRangeScheduleRange: therapySettingsViewModel.correctionRangeScheduleRange,
             suspendThreshold: therapySettingsViewModel.suspendThreshold)
         self.preset = preset
-        self.mode = therapySettingsViewModel.mode
 
         self.saveCorrectionRangeOverride = { [weak therapySettingsViewModel] correctionRangeOverrides in
             guard let therapySettingsViewModel = therapySettingsViewModel else {

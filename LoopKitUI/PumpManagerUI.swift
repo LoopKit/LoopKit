@@ -31,7 +31,20 @@ public struct PumpManagerSetupSettings {
     }
 }
 
-public protocol PumpManagerUI: DeviceManagerUI, PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
+public protocol PumpStatusIndicator {
+    /// a message from the pump that needs to be brought to the user's attention in the status bar
+    var pumpStatusHighlight: DeviceStatusHighlight? { get }
+
+    /// the completed percent of the progress bar to display in the status bar
+    var pumpLifecycleProgress: DeviceLifecycleProgress? { get }
+
+    /// a badge from the pump that needs to be brought to the user's attention in the status bar
+    var pumpStatusBadge: DeviceStatusBadge? { get }
+}
+
+public typealias PumpManagerViewController = (UIViewController & PumpManagerOnboarding & CompletionNotifying)
+
+public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
     /// Create and onboard a new pump manager.
     ///
     /// - Parameters:
@@ -40,7 +53,7 @@ public protocol PumpManagerUI: DeviceManagerUI, PumpManager, DeliveryLimitSettin
     ///     - colorPalette: Color palette to use for any UI.
     ///     - allowedInsulinTypes: Types that the caller allows to be selected.
     /// - Returns: Either a conforming view controller to create and onboard the pump manager or a newly created and onboarded pump manager.
-    static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI>
+    static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI>
 
     /// Configure settings for an existing pump manager.
     ///
@@ -48,10 +61,10 @@ public protocol PumpManagerUI: DeviceManagerUI, PumpManager, DeliveryLimitSettin
     ///     - bluetoothProvider: The provider of Bluetooth functionality.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: A view controller to configure an existing pump manager.
-    func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying)
+    func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> PumpManagerViewController
 
     // View for recovering from delivery uncertainty
-    func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & CompletionNotifying)
+    func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> (UIViewController & CompletionNotifying)
 
     // Returns a class that can provide HUD views
     func hudProvider(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> HUDProvider?
@@ -60,28 +73,21 @@ public protocol PumpManagerUI: DeviceManagerUI, PumpManager, DeliveryLimitSettin
     static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView?
 }
 
-public protocol PumpManagerCreateDelegate: AnyObject {
+public protocol PumpManagerOnboardingDelegate: AnyObject {
     /// Informs the delegate that the specified pump manager was created.
     ///
     /// - Parameters:
     ///     - pumpManager: The pump manager created.
-    func pumpManagerCreateNotifying(didCreatePumpManager pumpManager: PumpManagerUI)
-}
+    func pumpManagerOnboarding(didCreatePumpManager pumpManager: PumpManagerUI)
 
-public protocol PumpManagerCreateNotifying {
-    /// Delegate to notify about pump manager creation.
-    var pumpManagerCreateDelegate: PumpManagerCreateDelegate? { get set }
-}
-
-public protocol PumpManagerOnboardDelegate: AnyObject {
     /// Informs the delegate that the specified pump manager was onboarded.
     ///
     /// - Parameters:
     ///     - pumpManager: The pump manager onboarded.
-    func pumpManagerOnboardNotifying(didOnboardPumpManager pumpManager: PumpManagerUI, withFinalSettings settings: PumpManagerSetupSettings)
+    func pumpManagerOnboarding(didOnboardPumpManager pumpManager: PumpManagerUI, withFinalSettings settings: PumpManagerSetupSettings)
 }
 
-public protocol PumpManagerOnboardNotifying {
+public protocol PumpManagerOnboarding {
     /// Delegate to notify about pump manager onboarding.
-    var pumpManagerOnboardDelegate: PumpManagerOnboardDelegate? { get set }
+    var pumpManagerOnboardingDelegate: PumpManagerOnboardingDelegate? { get set }
 }

@@ -20,6 +20,7 @@ public struct ActionButton: ViewModifier {
         case secondary
         case destructive
         case deactivated
+        case plain
     }
     
     init(_ style: ButtonType = .primary) {
@@ -39,6 +40,10 @@ public struct ActionButton: ViewModifier {
         case .deactivated:
             fontColor = .white
             backgroundColor = .gray
+            edgeColor = .clear
+        case .plain:
+            fontColor = .accentColor
+            backgroundColor = .clear
             edgeColor = .clear
         }
     }

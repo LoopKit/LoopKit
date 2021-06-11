@@ -23,12 +23,8 @@ public struct SectionHeader: View {
     }
     
     public var body: some View {
-        if #available(iOSApplicationExtension 14.0, *) {
-            // iOS 14 puts section headers in all-caps by default.  This un-does that.
-            content.textCase(nil)
-        } else {
-            content
-        }
+        // iOS 14 puts section headers in all-caps by default.  This un-does that.
+        content.textCase(nil)
     }
     
     @ViewBuilder private var content: some View {
@@ -43,11 +39,7 @@ fileprivate struct HorizontalSizeClassOverrideHelper: HorizontalSizeClassOverrid
 public extension SectionHeader.Style {
     
     static let `default`: SectionHeader.Style = {
-        if #available(iOSApplicationExtension 14.0, *) {
-            return .regular
-        } else {
-            return HorizontalSizeClassOverrideHelper().horizontalOverride == .compact ? .regular : .tight
-        }
+        return .regular
     }()
 }
 

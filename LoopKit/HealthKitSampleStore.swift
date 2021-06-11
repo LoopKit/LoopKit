@@ -109,10 +109,11 @@ public class HealthKitSampleStore {
     ///
     /// - Parameters:
     ///   - toShare: Whether to request write authorization. Defaults to true.
+    ///   - read: Whether to request read authorization. Defaults to true.
     ///   - completion: A closure called after the authorization is completed
     ///   - result: The authorization result
-    public func authorize(toShare: Bool = true, _ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
-        healthStore.requestAuthorization(toShare: toShare ? [sampleType] : [], read: [sampleType]) { (completed, error) -> Void in
+    public func authorize(toShare: Bool = true, read: Bool = true, _ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
+        healthStore.requestAuthorization(toShare: toShare ? [sampleType] : [], read: read ? [sampleType] : []) { (completed, error) -> Void in
             if completed && !self.sharingDenied {
                 self.log.default("Authorize completed: creating HK query")
                 self.createQuery()

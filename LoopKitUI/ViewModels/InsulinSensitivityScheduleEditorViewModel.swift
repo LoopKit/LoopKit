@@ -12,8 +12,6 @@ import LoopKit
 
 struct InsulinSensitivityScheduleEditorViewModel {
 
-    let mode: SettingsPresentationMode
-
     let insulinSensitivitySchedule: InsulinSensitivitySchedule?
 
     var saveInsulinSensitivitySchedule: (_ insulinSensitivitySchedule: InsulinSensitivitySchedule) -> Void
@@ -21,7 +19,6 @@ struct InsulinSensitivityScheduleEditorViewModel {
     init(therapySettingsViewModel: TherapySettingsViewModel,
          didSave: (() -> Void)? = nil)
     {
-        self.mode = therapySettingsViewModel.mode
         self.insulinSensitivitySchedule = therapySettingsViewModel.insulinSensitivitySchedule
         self.saveInsulinSensitivitySchedule = { [weak therapySettingsViewModel] insulinSensitivitySchedule in
             guard let therapySettingsViewModel = therapySettingsViewModel else {

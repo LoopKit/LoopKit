@@ -26,7 +26,7 @@ public struct DeliveryLimitsEditor: View {
     @State var settingBeingEdited: DeliveryLimits.Setting?
 
     @State var showingConfirmationAlert = false
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
     @Environment(\.appName) var appName
 
@@ -54,6 +54,7 @@ public struct DeliveryLimitsEditor: View {
     }
     
     public init(
+        mode: SettingsPresentationMode,
         therapySettingsViewModel: TherapySettingsViewModel,
         didSave: (() -> Void)? = nil
     ) {
@@ -77,14 +78,17 @@ public struct DeliveryLimitsEditor: View {
                 therapySettingsViewModel?.saveDeliveryLimits(limits: newLimits)
                 didSave?()
             },
-            mode: therapySettingsViewModel.mode
+            mode: mode
         )
     }
 
     public var body: some View {
         switch mode {
-        case .settings: return AnyView(contentWithCancel)
-        case .acceptanceFlow: return AnyView(content)
+        case .acceptanceFlow:
+            content
+        case .settings:
+            contentWithCancel
+                .navigationBarTitle("", displayMode: .inline)
         }
     }
     
@@ -128,7 +132,6 @@ public struct DeliveryLimitsEditor: View {
             }
         )
         .alert(isPresented: $showingConfirmationAlert, content: confirmationAlert)
-        .navigationBarTitle("", displayMode: .inline)
         .simultaneousGesture(TapGesture().onEnded {
             withAnimation {
                 self.userDidTap = true

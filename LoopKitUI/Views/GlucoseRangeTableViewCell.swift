@@ -39,33 +39,25 @@ class GlucoseRangeTableViewCell: UITableViewCell {
     @IBOutlet weak var minValueTextField: UITextField! {
         didSet {
             // Setting this color in code because the nib isn't being applied correctly
-            if #available(iOSApplicationExtension 13.0, *) {
-                minValueTextField.textColor = .label
-            }
+            minValueTextField.textColor = .label
         }
     }
     @IBOutlet weak var separatorLabel: UILabel! {
         didSet {
             // Setting this color in code because the nib isn't being applied correctly
-            if #available(iOSApplicationExtension 13.0, *) {
-                separatorLabel.textColor = .secondaryLabel
-            }
+            separatorLabel.textColor = .secondaryLabel
         }
     }
     @IBOutlet weak var maxValueTextField: UITextField! {
         didSet {
             // Setting this color in code because the nib isn't being applied correctly
-            if #available(iOSApplicationExtension 13.0, *) {
-                maxValueTextField.textColor = .label
-            }
+            maxValueTextField.textColor = .label
         }
     }
     @IBOutlet weak var unitLabel: UILabel! {
         didSet {
             // Setting this color in code because the nib isn't being applied correctly
-            if #available(iOSApplicationExtension 13.0, *) {
-                unitLabel.textColor = .secondaryLabel
-            }
+            unitLabel.textColor = .secondaryLabel
         }
     }
 

@@ -23,7 +23,7 @@ public enum CarbAbsorptionModel {
     case adaptiveRateNonlinear
 }
 
-public protocol CarbStoreDelegate: class {
+public protocol CarbStoreDelegate: AnyObject {
 
     /**
      Informs the delegate that the carb store has updated carb data.

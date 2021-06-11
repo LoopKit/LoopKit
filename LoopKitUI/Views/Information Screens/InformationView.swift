@@ -46,36 +46,49 @@ struct InformationView<InformationalContent: View> : View {
     }
     
     var body: some View {
-        ScrollView {
-            bodyWithCancelButtonIfNeeded
-            .navigationBarTitle(title, displayMode: .large)
-            .padding()
+        GeometryReader { geometry in
+            ScrollView {
+                bodyForMode
+                    .padding()
+                    .frame(minHeight: geometry.size.height)
+            }
         }
     }
-    
-    private var bodyWithCancelButtonIfNeeded: some View {
+
+    @ViewBuilder
+    private var bodyForMode: some View {
         switch mode {
         case .acceptanceFlow:
-            return AnyView(bodyWithBottomButton)
+            bodyForAcceptanceFlow
         case .settings:
-            return AnyView(bodyWithCancelButton)
+            bodyForSettings
         }
     }
     
-    private var bodyWithBottomButton: some View {
+    private var bodyForAcceptanceFlow: some View {
         VStack(alignment: .leading, spacing: 20) {
+            titleView
+            Divider()
             informationalContent
             Spacer()
             nextPageButton
         }
     }
     
-    private var bodyWithCancelButton: some View {
+    private var bodyForSettings: some View {
         VStack(alignment: .leading, spacing: 20) {
             informationalContent
             Spacer()
         }
         .navigationBarItems(trailing: cancelButton)
+        .navigationBarTitle(title, displayMode: .large)
+    }
+
+    private var titleView: some View {
+        title
+            .font(.largeTitle)
+            .bold()
+            .fixedSize(horizontal: false, vertical: true)
     }
     
     private var cancelButton: some View {

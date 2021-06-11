@@ -33,23 +33,26 @@ public protocol CGMStatusIndicator {
     func glucoseRangeCategory(for glucose: GlucoseSampleValue) -> GlucoseRangeCategory?
 }
 
+public typealias CGMManagerViewController = (UIViewController & CGMManagerOnboarding & CompletionNotifying)
+
 public protocol CGMManagerUI: CGMManager, DeviceManagerUI, DisplayGlucoseUnitObserver, CGMStatusIndicator {
     /// Create and onboard a new CGM manager.
     ///
     /// - Parameters:
     ///     - bluetoothProvider: The provider of Bluetooth functionality.
+    ///     - displayGlucoseUnitObservable: The glucose units to use for display.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: Either a conforming view controller to create and onboard the CGM manager or a newly created and onboarded CGM manager.
-    static func setupViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & CGMManagerCreateNotifying & CGMManagerOnboardNotifying & CompletionNotifying, CGMManagerUI>
+    static func setupViewController(bluetoothProvider: BluetoothProvider, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> SetupUIResult<CGMManagerViewController, CGMManagerUI>
 
     /// Configure settings for an existing CGM manager.
     ///
     /// - Parameters:
-    ///     - displayGlucoseUnitObservable: The glucose units to use for display.
     ///     - bluetoothProvider: The provider of Bluetooth functionality.
+    ///     - displayGlucoseUnitObservable: The glucose units to use for display.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: A view controller to configure an existing CGM manager.
-    func settingsViewController(for displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> (UIViewController & CGMManagerOnboardNotifying & CompletionNotifying)
+    func settingsViewController(bluetoothProvider: BluetoothProvider, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> CGMManagerViewController
 }
 
 extension CGMManagerUI {
@@ -63,28 +66,21 @@ extension CGMManagerUI {
     }
 }
 
-public protocol CGMManagerCreateDelegate: AnyObject {
-    /// Informs the delegate that the specified cgm manager was created.
+public protocol CGMManagerOnboardingDelegate: AnyObject {
+    /// Informs the delegate that the specified CGM manager was created.
     ///
     /// - Parameters:
-    ///     - cgmManager: The cgm manager created.
-    func cgmManagerCreateNotifying(didCreateCGMManager cgmManager: CGMManagerUI)
-}
+    ///     - cgmManager: The CGM manager created.
+    func cgmManagerOnboarding(didCreateCGMManager cgmManager: CGMManagerUI)
 
-public protocol CGMManagerCreateNotifying {
-    /// Delegate to notify about cgm manager creation.
-    var cgmManagerCreateDelegate: CGMManagerCreateDelegate? { get set }
-}
-
-public protocol CGMManagerOnboardDelegate: AnyObject {
-    /// Informs the delegate that the specified cgm manager was onboarded.
+    /// Informs the delegate that the specified CGM manager was onboarded.
     ///
     /// - Parameters:
-    ///     - cgmManager: The cgm manager onboarded.
-    func cgmManagerOnboardNotifying(didOnboardCGMManager cgmManager: CGMManagerUI)
+    ///     - cgmManager: The CGM manager onboarded.
+    func cgmManagerOnboarding(didOnboardCGMManager cgmManager: CGMManagerUI)
 }
 
-public protocol CGMManagerOnboardNotifying {
-    /// Delegate to notify about cgm manager onboarding.
-    var cgmManagerOnboardDelegate: CGMManagerOnboardDelegate? { get set }
+public protocol CGMManagerOnboarding {
+    /// Delegate to notify about CGM manager onboarding.
+    var cgmManagerOnboardingDelegate: CGMManagerOnboardingDelegate? { get set }
 }

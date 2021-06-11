@@ -19,8 +19,6 @@ struct SuspendThresholdEditorViewModel {
 
     let maxSuspendThresholdValue: HKQuantity
 
-    let mode: SettingsPresentationMode
-
     var saveSuspendThreshold: (_ suspendThreshold: HKQuantity, _ displayGlucoseUnit: HKUnit) -> Void
 
     public init(therapySettingsViewModel: TherapySettingsViewModel,
@@ -34,7 +32,6 @@ struct SuspendThresholdEditorViewModel {
             preMealTargetRange: therapySettingsViewModel.correctionRangeOverrides.preMeal,
             workoutTargetRange: therapySettingsViewModel.correctionRangeOverrides.workout)
         
-        self.mode = therapySettingsViewModel.mode
         self.saveSuspendThreshold = { [weak therapySettingsViewModel] suspendThreshold, displayGlucoseUnit in
             guard let therapySettingsViewModel = therapySettingsViewModel else {
                 return

@@ -13,19 +13,29 @@ public enum BolusRecommendationNotice {
     case glucoseBelowSuspendThreshold(minGlucose: GlucoseValue)
     case currentGlucoseBelowTarget(glucose: GlucoseValue)
     case predictedGlucoseBelowTarget(minGlucose: GlucoseValue)
+    case predictedGlucoseInRange
 }
 
 extension BolusRecommendationNotice: Codable {
     public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodableKeys.self)
-        if let glucoseBelowSuspendThreshold = try container.decodeIfPresent(GlucoseBelowSuspendThreshold.self, forKey: .glucoseBelowSuspendThreshold) {
-            self = .glucoseBelowSuspendThreshold(minGlucose: glucoseBelowSuspendThreshold.minGlucose)
-        } else if let currentGlucoseBelowTarget = try container.decodeIfPresent(CurrentGlucoseBelowTarget.self, forKey: .currentGlucoseBelowTarget) {
-            self = .currentGlucoseBelowTarget(glucose: currentGlucoseBelowTarget.glucose)
-        } else if let predictedGlucoseBelowTarget = try container.decodeIfPresent(PredictedGlucoseBelowTarget.self, forKey: .predictedGlucoseBelowTarget) {
-            self = .predictedGlucoseBelowTarget(minGlucose: predictedGlucoseBelowTarget.minGlucose)
+        if let string = try? decoder.singleValueContainer().decode(String.self) {
+            switch string {
+            case CodableKeys.predictedGlucoseInRange.rawValue:
+                self = .predictedGlucoseInRange
+            default:
+                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
+            }
         } else {
-            throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
+            let container = try decoder.container(keyedBy: CodableKeys.self)
+            if let glucoseBelowSuspendThreshold = try container.decodeIfPresent(GlucoseBelowSuspendThreshold.self, forKey: .glucoseBelowSuspendThreshold) {
+                self = .glucoseBelowSuspendThreshold(minGlucose: glucoseBelowSuspendThreshold.minGlucose)
+            } else if let currentGlucoseBelowTarget = try container.decodeIfPresent(CurrentGlucoseBelowTarget.self, forKey: .currentGlucoseBelowTarget) {
+                self = .currentGlucoseBelowTarget(glucose: currentGlucoseBelowTarget.glucose)
+            } else if let predictedGlucoseBelowTarget = try container.decodeIfPresent(PredictedGlucoseBelowTarget.self, forKey: .predictedGlucoseBelowTarget) {
+                self = .predictedGlucoseBelowTarget(minGlucose: predictedGlucoseBelowTarget.minGlucose)
+            } else {
+                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
+            }
         }
     }
 
@@ -40,6 +50,9 @@ extension BolusRecommendationNotice: Codable {
         case .predictedGlucoseBelowTarget(let minGlucose):
             var container = encoder.container(keyedBy: CodableKeys.self)
             try container.encode(PredictedGlucoseBelowTarget(minGlucose: SimpleGlucoseValue(minGlucose)), forKey: .predictedGlucoseBelowTarget)
+        case .predictedGlucoseInRange:
+            var container = encoder.singleValueContainer()
+            try container.encode(CodableKeys.predictedGlucoseInRange.rawValue)
         }
     }
 
@@ -59,6 +72,7 @@ extension BolusRecommendationNotice: Codable {
         case glucoseBelowSuspendThreshold
         case currentGlucoseBelowTarget
         case predictedGlucoseBelowTarget
+        case predictedGlucoseInRange
     }
 }
 
