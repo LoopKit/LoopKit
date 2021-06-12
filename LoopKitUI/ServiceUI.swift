@@ -19,6 +19,8 @@ public struct ServiceDescriptor {
     }
 }
 
+public typealias ServiceViewController = (UIViewController & ServiceOnboarding & CompletionNotifying)
+
 public protocol ServiceUI: Service {
     /// The image for this type of service.
     static var image: UIImage? { get }
@@ -28,42 +30,35 @@ public protocol ServiceUI: Service {
     /// - Parameters:
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: Either a conforming view controller to create and onboard the service or a newly created and onboarded service.
-    static func setupViewController(colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & ServiceCreateNotifying & ServiceOnboardNotifying & CompletionNotifying, ServiceUI>
+    static func setupViewController(colorPalette: LoopUIColorPalette) -> SetupUIResult<ServiceViewController, ServiceUI>
 
     /// Configure settings for an existing service.
     ///
     /// - Parameters:
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: A view controller to configure an existing service.
-    func settingsViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & ServiceOnboardNotifying & CompletionNotifying)
+    func settingsViewController(colorPalette: LoopUIColorPalette) -> ServiceViewController
 }
 
 public extension ServiceUI {
     var image: UIImage? { return type(of: self).image }
 }
 
-public protocol ServiceCreateDelegate: AnyObject {
+public protocol ServiceOnboardingDelegate: AnyObject {
     /// Informs the delegate that the specified service was created.
     ///
     /// - Parameters:
     ///     - service: The service created.
-    func serviceCreateNotifying(didCreateService service: Service)
-}
+    func serviceOnboarding(didCreateService service: Service)
 
-public protocol ServiceCreateNotifying {
-    /// Delegate to notify about service creation.
-    var serviceCreateDelegate: ServiceCreateDelegate? { get set }
-}
-
-public protocol ServiceOnboardDelegate: AnyObject {
     /// Informs the delegate that the specified service was onboarded.
     ///
     /// - Parameters:
     ///     - service: The service onboarded.
-    func serviceOnboardNotifying(didOnboardService service: Service)
+    func serviceOnboarding(didOnboardService service: Service)
 }
 
-public protocol ServiceOnboardNotifying {
+public protocol ServiceOnboarding {
     /// Delegate to notify about service onboarding.
-    var serviceOnboardDelegate: ServiceOnboardDelegate? { get set }
+    var serviceOnboardingDelegate: ServiceOnboardingDelegate? { get set }
 }

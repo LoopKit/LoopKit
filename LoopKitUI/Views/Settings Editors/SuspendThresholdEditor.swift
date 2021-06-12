@@ -14,10 +14,11 @@ import LoopKit
 public struct SuspendThresholdEditor: View {
     @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
 
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
     @Environment(\.appName) private var appName
 
+    let mode: SettingsPresentationMode
     let viewModel: SuspendThresholdEditorViewModel
 
     @State private var userDidTap: Bool = false
@@ -30,9 +31,11 @@ public struct SuspendThresholdEditor: View {
     }
 
     public init(
+        mode: SettingsPresentationMode,
         therapySettingsViewModel: TherapySettingsViewModel,
         didSave: (() -> Void)? = nil
     ) {
+        self.mode = mode
         let viewModel = SuspendThresholdEditorViewModel(therapySettingsViewModel: therapySettingsViewModel,
                                                         didSave: didSave)
         self._value = State(initialValue: viewModel.suspendThreshold ?? Self.defaultValue(for: viewModel.suspendThresholdUnit))
@@ -51,9 +54,12 @@ public struct SuspendThresholdEditor: View {
     }
 
     public var body: some View {
-        switch viewModel.mode {
-        case .settings: return AnyView(contentWithCancel)
-        case .acceptanceFlow: return AnyView(content)
+        switch mode {
+        case .acceptanceFlow:
+            content
+        case .settings:
+            contentWithCancel
+                .navigationBarTitle("", displayMode: .inline)
         }
     }
     
@@ -78,7 +84,7 @@ public struct SuspendThresholdEditor: View {
     private var content: some View {
         ConfigurationPage(
             title: Text(TherapySetting.suspendThreshold.title),
-            actionButtonTitle: Text(viewModel.mode.buttonText),
+            actionButtonTitle: Text(mode.buttonText),
             actionButtonState: saveButtonState,
             cards: {
                 Card {
@@ -111,7 +117,7 @@ public struct SuspendThresholdEditor: View {
             },
             actionAreaContent: {
                 instructionalContentIfNecessary
-                if warningThreshold != nil && (userDidTap || viewModel.mode != .acceptanceFlow) {
+                if warningThreshold != nil && (userDidTap || mode != .acceptanceFlow) {
                     SuspendThresholdGuardrailWarning(safetyClassificationThreshold: warningThreshold!)
                 }
             },
@@ -124,7 +130,6 @@ public struct SuspendThresholdEditor: View {
             }
         )
         .alert(isPresented: $showingConfirmationAlert, content: confirmationAlert)
-        .navigationBarTitle("", displayMode: .inline)
         .simultaneousGesture(TapGesture().onEnded {
             withAnimation {
                 self.userDidTap = true
@@ -138,7 +143,7 @@ public struct SuspendThresholdEditor: View {
     
     private var instructionalContentIfNecessary: some View {
         return Group {
-            if viewModel.mode == .acceptanceFlow && !userDidTap {
+            if mode == .acceptanceFlow && !userDidTap {
                 instructionalContent
             }
         }
@@ -154,7 +159,7 @@ public struct SuspendThresholdEditor: View {
     }
 
     private var saveButtonState: ConfigurationPageActionButtonState {
-        initialValue == nil || value != initialValue || viewModel.mode == .acceptanceFlow ? .enabled : .disabled
+        initialValue == nil || value != initialValue || mode == .acceptanceFlow ? .enabled : .disabled
     }
 
     private var warningThreshold: SafetyClassification.Threshold? {
@@ -179,7 +184,7 @@ public struct SuspendThresholdEditor: View {
     }
     
     private func startSaving() {
-        guard viewModel.mode == .settings else {
+        guard mode == .settings else {
             self.continueSaving()
             return
         }
@@ -215,13 +220,8 @@ struct SuspendThresholdGuardrailWarning: View {
 
 struct SuspendThresholdView_Previews: PreviewProvider {
     static var previews: some View {
-        let therapySettingsViewModel = TherapySettingsViewModel(mode: .settings,
-                                                                therapySettings: TherapySettings(),
-                                                                chartColors: ChartColorPalette(axisLine: .clear,
-                                                                                               axisLabel: .secondaryLabel,
-                                                                                               grid: .systemGray3,
-                                                                                               glucoseTint: .systemTeal,
-                                                                                               insulinTint: .systemOrange))
-        return SuspendThresholdEditor(therapySettingsViewModel: therapySettingsViewModel).environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
+        let therapySettingsViewModel = TherapySettingsViewModel(therapySettings: TherapySettings())
+        return SuspendThresholdEditor(mode: .settings, therapySettingsViewModel: therapySettingsViewModel, didSave: nil)
+            .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
     }
 }

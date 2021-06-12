@@ -2,11 +2,9 @@
 //  UIImage.swift
 //  MockKitUI
 //
-//  Created by Nathaniel Hamming on 2021-02-16.
+//  Created by Pete Schwamb on 5/11/21.
 //  Copyright © 2021 LoopKit Authors. All rights reserved.
 //
-
-// TODO: UIKit should not be in MockKit
 
 import UIKit
 

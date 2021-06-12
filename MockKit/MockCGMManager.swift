@@ -8,6 +8,7 @@
 
 import HealthKit
 import LoopKit
+import LoopKitUI // TODO: DeviceStatusBadge and UIBackgroundTask references should live in MockKitUI
 import LoopTestingKit
 
 public struct MockCGMState: GlucoseDisplayable {
@@ -339,8 +340,10 @@ public final class MockCGMManager: TestingCGMManager {
     }
     
     public var cgmManagerStatus: CGMManagerStatus {
-        return CGMManagerStatus(hasValidSensorSession: dataSource.isValidSession)
+        return CGMManagerStatus(hasValidSensorSession: dataSource.isValidSession, lastCommunicationDate: lastCommunicationDate)
     }
+
+    private var lastCommunicationDate: Date? = nil
     
     public var testingDevice: HKDevice {
         return MockCGMDataSource.device
@@ -489,16 +492,20 @@ public final class MockCGMManager: TestingCGMManager {
     }
 
     public func fetchNewDataIfNeeded(_ completion: @escaping (CGMReadingResult) -> Void) {
+        let now = Date()
         logDeviceComms(.send, message: "Fetch new data")
         dataSource.fetchNewData { (result) in
             switch result {
             case .error(let error):
                 self.logDeviceComms(.error, message: "Error fetching new data: \(error)")
             case .newData(let samples):
+                self.lastCommunicationDate = now
                 self.logDeviceComms(.receive, message: "New data received: \(samples)")
             case .unreliableData:
+                self.lastCommunicationDate = now
                 self.logDeviceComms(.receive, message: "Unreliable data received")
             case .noData:
+                self.lastCommunicationDate = now
                 self.logDeviceComms(.receive, message: "No new data")
             }
             completion(result)

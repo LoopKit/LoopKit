@@ -14,8 +14,6 @@ import SwiftUI
 public class TherapySettingsViewModel: ObservableObject {
     public typealias SaveCompletion = (TherapySetting, TherapySettings) -> Void
     
-    public let mode: SettingsPresentationMode
-    
     @Published public var therapySettings: TherapySettings
     public var supportedInsulinModelSettings: SupportedInsulinModelSettings
     private let didSave: SaveCompletion?
@@ -25,19 +23,14 @@ public class TherapySettingsViewModel: ObservableObject {
     let syncPumpSchedule: (() -> PumpManager.SyncSchedule?)?
     let sensitivityOverridesEnabled: Bool
     public var prescription: Prescription?
-    
-    public let chartColors: ChartColorPalette
 
-    public init(mode: SettingsPresentationMode,
-                therapySettings: TherapySettings,
+    public init(therapySettings: TherapySettings,
                 supportedInsulinModelSettings: SupportedInsulinModelSettings = SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                 pumpSupportedIncrements: (() -> PumpSupportedIncrements?)? = nil,
                 syncPumpSchedule: (() -> PumpManager.SyncSchedule?)? = nil,
                 sensitivityOverridesEnabled: Bool = false,
                 prescription: Prescription? = nil,
-                chartColors: ChartColorPalette,
                 didSave: SaveCompletion? = nil) {
-        self.mode = mode
         self.therapySettings = therapySettings
         self.initialTherapySettings = therapySettings
         self.pumpSupportedIncrements = pumpSupportedIncrements
@@ -45,7 +38,6 @@ public class TherapySettingsViewModel: ObservableObject {
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
         self.prescription = prescription
         self.supportedInsulinModelSettings = supportedInsulinModelSettings
-        self.chartColors = chartColors
         self.didSave = didSave
     }
 
@@ -134,57 +126,5 @@ public class TherapySettingsViewModel: ObservableObject {
     public func saveInsulinSensitivitySchedule(insulinSensitivitySchedule: InsulinSensitivitySchedule) {
         therapySettings.insulinSensitivitySchedule = insulinSensitivitySchedule
         didSave?(TherapySetting.insulinSensitivity, therapySettings)
-    }
-}
-
-// MARK: Navigation
-
-extension TherapySettingsViewModel {
-
-    func screen(for setting: TherapySetting) -> (_ dismiss: @escaping () -> Void) -> AnyView {
-        switch setting {
-        case .suspendThreshold:
-            return { dismiss in
-                AnyView(SuspendThresholdEditor(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .glucoseTargetRange:
-            return { dismiss in
-                AnyView(CorrectionRangeScheduleEditor(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .preMealCorrectionRangeOverride:
-            return { dismiss in
-                AnyView(CorrectionRangeOverridesEditor(therapySettingsViewModel: self, preset: .preMeal, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .workoutCorrectionRangeOverride:
-            return { dismiss in
-                AnyView(CorrectionRangeOverridesEditor(therapySettingsViewModel: self, preset: .workout, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .basalRate:
-            precondition(self.pumpSupportedIncrements?() != nil)
-            return { dismiss in
-                AnyView(BasalRateScheduleEditor(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .deliveryLimits:
-            precondition(self.pumpSupportedIncrements?() != nil)
-            return { dismiss in
-                AnyView(DeliveryLimitsEditor(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .insulinModel:
-            precondition(self.therapySettings.insulinModelSettings != nil)
-            return { dismiss in
-                AnyView(InsulinModelSelection(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .carbRatio:
-            return { dismiss in
-                AnyView(CarbRatioScheduleEditor(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .insulinSensitivity:
-            return { dismiss in
-                return AnyView(InsulinSensitivityScheduleEditor(therapySettingsViewModel: self, didSave: dismiss).environment(\.dismiss, dismiss))
-            }
-        case .none:
-            break
-        }
-        return { _ in AnyView(Text("\(setting.title)")) }
     }
 }

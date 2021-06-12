@@ -17,12 +17,12 @@ extension MockService: ServiceUI {
         return UIImage(systemName: "icloud.and.arrow.up")
     }
     
-    public static func setupViewController(colorPalette: LoopUIColorPalette) -> SetupUIResult<UIViewController & ServiceCreateNotifying & ServiceOnboardNotifying & CompletionNotifying, ServiceUI> {
-        return .userInteractionRequired(ServiceViewController(rootViewController: MockServiceTableViewController(service: MockService(), for: .create)))
+    public static func setupViewController(colorPalette: LoopUIColorPalette) -> SetupUIResult<ServiceViewController, ServiceUI> {
+        return .userInteractionRequired(ServiceNavigationController(rootViewController: MockServiceTableViewController(service: MockService(), for: .create)))
     }
 
-    public func settingsViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & ServiceOnboardNotifying & CompletionNotifying) {
-      return ServiceViewController(rootViewController: MockServiceTableViewController(service: self, for: .update))
+    public func settingsViewController(colorPalette: LoopUIColorPalette) -> ServiceViewController {
+      return ServiceNavigationController(rootViewController: MockServiceTableViewController(service: self, for: .update))
     }
     
     public func supportMenuItem(supportInfoProvider: SupportInfoProvider, urlHandler: @escaping (URL) -> Void) -> AnyView? {

@@ -72,6 +72,15 @@ class BolusRecommendationNoticeCodableTests: XCTestCase {
         )
     }
 
+    func testCodablePredictedGlucoseInRange() throws {
+        try assertBolusRecommendationNoticeCodable(.predictedGlucoseInRange, encodesJSON: """
+{
+  "bolusRecommendationNotice" : "predictedGlucoseInRange"
+}
+"""
+        )
+    }
+
     private func assertBolusRecommendationNoticeCodable(_ original: BolusRecommendationNotice, encodesJSON string: String) throws {
         let data = try encoder.encode(TestContainer(bolusRecommendationNotice: original))
         XCTAssertEqual(String(data: data, encoding: .utf8), string)
@@ -108,6 +117,8 @@ extension BolusRecommendationNotice: Equatable {
             return lhsGlucoseValue.startDate == rhsGlucoseValue.startDate &&
                 lhsGlucoseValue.endDate == rhsGlucoseValue.endDate &&
                 lhsGlucoseValue.quantity == rhsGlucoseValue.quantity
+        case (.predictedGlucoseInRange, .predictedGlucoseInRange):
+            return true
         default:
             return false
         }

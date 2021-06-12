@@ -152,7 +152,7 @@ public final class DoseStore {
     public let insulinDeliveryStore: InsulinDeliveryStore
 
     /// The HealthKit sample type managed by this store
-    public var sampleType: HKSampleType? {
+    public var sampleType: HKSampleType {
         return insulinDeliveryStore.sampleType
     }
 

@@ -60,6 +60,8 @@ public protocol HealthStoreAuthorizationProvider: AnyObject {
     func authorizeHealthStore(_ completion: @escaping (HealthStoreAuthorization) -> Void)
 }
 
+public typealias OnboardingResult = SetupUIResult
+
 public protocol CGMManagerProvider: AnyObject {
     /// The active CGM manager.
     var activeCGMManager: CGMManager? { get }
@@ -67,12 +69,19 @@ public protocol CGMManagerProvider: AnyObject {
     /// The descriptor list of available CGM managers.
     var availableCGMManagers: [CGMManagerDescriptor] { get }
 
-    /// Setup the CGM manager with the specified identifier.
+    /// An image for the CGM manager with the specified identifier.
     ///
     /// - Parameters:
-    ///     - identifier: The identifier of the CGM manager to setup.
-    /// - Returns: Either a conforming view controller to create and setup the CGM manager, a newly created and setup CGM manager, or an error.
-    func setupCGMManager(withIdentifier identifier: String) -> Result<SetupUIResult<UIViewController & CGMManagerCreateNotifying & CGMManagerOnboardNotifying & CompletionNotifying, CGMManager>, Error>
+    ///     - identifier: The identifier of the CGM manager.
+    /// - Returns: An image for the CGM manager with the specified identifier.
+    func imageForCGMManager(withIdentifier identifier: String) -> UIImage?
+
+    /// Onboard the CGM manager with the specified identifier.
+    ///
+    /// - Parameters:
+    ///     - identifier: The identifier of the CGM manager to onboard.
+    /// - Returns: Either a conforming view controller to onboard the CGM manager, a newly onboarded CGM manager, or an error.
+    func onboardCGMManager(withIdentifier identifier: String) -> Result<OnboardingResult<CGMManagerViewController, CGMManager>, Error>
 }
 
 public protocol PumpManagerProvider: AnyObject {
@@ -82,12 +91,26 @@ public protocol PumpManagerProvider: AnyObject {
     /// The descriptor list of available pump managers.
     var availablePumpManagers: [PumpManagerDescriptor] { get }
 
-    /// Setup the pump manager with the specified identifier.
+    /// An image for the pump manager with the specified identifier.
     ///
     /// - Parameters:
-    ///     - identifier: The identifier of the pump manager to setup.
-    /// - Returns: Either a conforming view controller to create and setup the pump manager, a newly created and setup pump manager, or an error.
-    func setupPumpManager(withIdentifier identifier: String, initialSettings settings: PumpManagerSetupSettings) -> Result<SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManager>, Error>
+    ///     - identifier: The identifier of the pump manager.
+    /// - Returns: An image for the pump manager with the specified identifier.
+    func imageForPumpManager(withIdentifier identifier: String) -> UIImage?
+
+    /// An supported increments for the pump manager with the specified identifier.
+    ///
+    /// - Parameters:
+    ///     - identifier: The identifier of the pump manager.
+    /// - Returns: An supported increments for the pump manager with the specified identifier.
+    func supportedIncrementsForPumpManager(withIdentifier identifier: String) -> PumpSupportedIncrements?
+
+    /// Onboard the pump manager with the specified identifier.
+    ///
+    /// - Parameters:
+    ///     - identifier: The identifier of the pump manager to onboard.
+    /// - Returns: Either a conforming view controller to onboard the pump manager, a newly onboarded pump manager, or an error.
+    func onboardPumpManager(withIdentifier identifier: String, initialSettings settings: PumpManagerSetupSettings) -> Result<OnboardingResult<PumpManagerViewController, PumpManager>, Error>
 }
 
 public protocol ServiceProvider: AnyObject {
@@ -97,16 +120,16 @@ public protocol ServiceProvider: AnyObject {
     /// The descriptor list of available services.
     var availableServices: [ServiceDescriptor] { get }
 
-    /// Setup the setup with the specified identifier.
+    /// Onboard the service with the specified identifier.
     ///
     /// - Parameters:
-    ///     - identifier: The identifier of the setup to setup.
-    /// - Returns: Either a conforming view controller to create and setup the service, a newly created and setup service, or an error.
-    func setupService(withIdentifier identifier: String) -> Result<SetupUIResult<UIViewController & ServiceCreateNotifying & ServiceOnboardNotifying & CompletionNotifying, Service>, Error>
+    ///     - identifier: The identifier of the service to onboard.
+    /// - Returns: Either a conforming view controller to onboard the service, a newly onboarded service, or an error.
+    func onboardService(withIdentifier identifier: String) -> Result<OnboardingResult<ServiceViewController, Service>, Error>
 }
 
 public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, ServiceProvider {
-    var allowSkipOnboarding: Bool { get }   // NOTE: SKIP ONBOARDING - DEBUG AND TEST ONLY
+    var allowDebugFeatures: Bool { get }   // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
 }
 
 public protocol OnboardingDelegate: AnyObject {
@@ -123,9 +146,16 @@ public protocol OnboardingDelegate: AnyObject {
     ///     - onboarding: The onboarding that has new therapy settings.
     ///     - therapySettings: The new therapy settings.
     func onboarding(_ onboarding: OnboardingUI, hasNewTherapySettings therapySettings: TherapySettings)
+
+    /// Informs the delegate that onboarding has new dosing enabled that should be persisted.
+    ///
+    /// - Parameters:
+    ///     - onboarding: The onboarding that has new dosing enabled.
+    ///     - isClosedLoop: The new dosing enabled.
+    func onboarding(_ onboarding: OnboardingUI, hasNewDosingEnabled dosingEnabled: Bool)
 }
 
-public typealias OnboardingViewController = (CGMManagerCreateNotifying & CGMManagerOnboardNotifying & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & ServiceCreateNotifying & ServiceOnboardNotifying & CompletionNotifying)
+public typealias OnboardingViewController = (UIViewController & CGMManagerOnboarding & PumpManagerOnboarding & ServiceOnboarding & CompletionNotifying)
 
 public protocol OnboardingUI: AnyObject {
     typealias RawState = [String: Any]
@@ -160,7 +190,5 @@ public protocol OnboardingUI: AnyObject {
     ///   - displayGlucoseUnitObservable: The glucose unit to use for display.
     ///   - colorPalette: The colors to use in any UI,
     /// - Returns: A view controller to create and configure a new onboarding.
-    func onboardingViewController(onboardingProvider: OnboardingProvider,
-                                  displayGlucoseUnitObservable: DisplayGlucoseUnitObservable,
-                                  colorPalette: LoopUIColorPalette) -> (UIViewController & OnboardingViewController)
+    func onboardingViewController(onboardingProvider: OnboardingProvider, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, colorPalette: LoopUIColorPalette) -> OnboardingViewController
 }

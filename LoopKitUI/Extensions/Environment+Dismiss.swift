@@ -15,7 +15,7 @@ private struct PresentationDismissalKey: EnvironmentKey {
 
 
 extension EnvironmentValues {
-    public var dismiss: () -> Void {
+    public var dismissAction: () -> Void {
         get { self[PresentationDismissalKey.self] }
         set { self[PresentationDismissalKey.self] = newValue }
     }

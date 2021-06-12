@@ -73,8 +73,9 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
 
     @State private var presentedAlert: PresentedAlert?
 
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
+    @Environment(\.presentationMode) var presentationMode
 
     init(
         title: Text,
@@ -138,12 +139,16 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         }
     }
     
+    @ViewBuilder
     private var configurationPage: some View {
         switch mode {
         case .acceptanceFlow:
-            return AnyView(page)
+            page
+                .navigationBarBackButtonHidden(true)
+                .navigationBarItems(leading: backButton, trailing: trailingNavigationItems)
         case .settings:
-            return AnyView(pageWithCancel)
+            pageWithCancel
+                .navigationBarTitle("", displayMode: .inline)
         }
     }
         
@@ -188,10 +193,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             }
         )
         .alert(item: $presentedAlert, content: alert(for:))
-        .navigationBarTitle("", displayMode: .inline)
-        .navigationBarItems(
-            trailing: trailingNavigationItems
-        )
     }
 
     private var saveButtonState: ConfigurationPageActionButtonState {
@@ -304,6 +305,21 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             addButton
         }
     }
+
+    private var backButton: some View {
+        Button(action: { presentationMode.wrappedValue.dismiss() }) {
+            HStack {
+                Image(systemName: "chevron.left")
+                    .resizable()
+                    .frame(width: 12, height: 20)
+                Text(backButtonTitle)
+                    .fontWeight(.regular)
+            }
+            .offset(x: -6, y: 0)
+        }
+    }
+
+    private var backButtonTitle: String { LocalizedString("Back", comment: "Back navigation button title") }
 
     var cancelButton: some View {
         Button(action: { self.dismiss() } ) { Text(LocalizedString("Cancel", comment: "Cancel editing settings button title")) }

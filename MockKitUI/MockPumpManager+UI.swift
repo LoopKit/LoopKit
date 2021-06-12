@@ -19,19 +19,28 @@ extension MockPumpManager: PumpManagerUI {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
     }
     
+    public static var onboardingImage: UIImage? { return UIImage(named: "Pump Simulator", in: Bundle(for: MockPumpManagerSettingsViewController.self), compatibleWith: nil) }
+
     public var smallImage: UIImage? { return UIImage(named: "Pump Simulator", in: Bundle(for: MockPumpManagerSettingsViewController.self), compatibleWith: nil) }
     
-    public static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<UIViewController & PumpManagerCreateNotifying & PumpManagerOnboardNotifying & CompletionNotifying, PumpManagerUI> {
-        return .createdAndOnboarded(MockPumpManager())
+    public static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
+        let mockPumpManager = MockPumpManager()
+        if let maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour {
+            mockPumpManager.setMaximumTempBasalRate(maxBasalRateUnitsPerHour)
+        }
+        if let basalSchedule = settings.basalSchedule {
+            mockPumpManager.syncBasalRateSchedule(items: basalSchedule.items, completion: { _ in })
+        }
+        return .createdAndOnboarded(mockPumpManager)
     }
 
-    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> (UIViewController & PumpManagerOnboardNotifying & CompletionNotifying) {
+    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> PumpManagerViewController {
         let settings = MockPumpManagerSettingsViewController(pumpManager: self, supportedInsulinTypes: allowedInsulinTypes)
         let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav
     }
     
-    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette) -> (UIViewController & CompletionNotifying) {
+    public func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> (UIViewController & CompletionNotifying) {
         return DeliveryUncertaintyRecoveryViewController(appName: appName, uncertaintyStartedAt: Date()) {
             self.state.deliveryCommandsShouldTriggerUncertainDelivery = false
             self.state.deliveryIsUncertain = false
@@ -97,5 +106,39 @@ extension MockPumpManager {
 
     public func basalScheduleTableViewControllerIsReadOnly(_ viewController: BasalScheduleTableViewController) -> Bool {
         return false
+    }
+}
+
+public enum MockPumpStatusBadge: DeviceStatusBadge {
+    case timeSyncNeeded
+    
+    public var image: UIImage? {
+        switch self {
+        case .timeSyncNeeded:
+            return UIImage(systemName: "clock.fill")
+        }
+    }
+    
+    public var state: DeviceStatusBadgeState {
+        switch self {
+        case .timeSyncNeeded:
+            return .warning
+        }
+    }
+}
+
+
+// MARK: - PumpStatusIndicator
+extension MockPumpManager {
+    public var pumpStatusHighlight: DeviceStatusHighlight? {
+        return buildPumpStatusHighlight(for: state)
+    }
+
+    public var pumpLifecycleProgress: DeviceLifecycleProgress? {
+        return buildPumpLifecycleProgress(for: state)
+    }
+
+    public var pumpStatusBadge: DeviceStatusBadge? {
+        return isClockOffset ? MockPumpStatusBadge.timeSyncNeeded : nil
     }
 }

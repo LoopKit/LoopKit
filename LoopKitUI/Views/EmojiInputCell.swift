@@ -25,11 +25,7 @@ class EmojiInputCell: UICollectionViewCell, IdentifiableClass {
     private func updateSelectionState() {
         let highlightColor: UIColor
 
-        if #available(iOSApplicationExtension 13.0, *) {
-            highlightColor = .tertiarySystemFill
-        } else {
-            highlightColor = .white
-        }
+        highlightColor = .tertiarySystemFill
 
         backgroundColor = isSelected || isHighlighted ? highlightColor : nil
     }

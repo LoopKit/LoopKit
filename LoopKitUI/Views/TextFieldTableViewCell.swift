@@ -29,9 +29,7 @@ public class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
     @IBOutlet public weak var unitLabel: UILabel? {
         didSet {
             // Setting this color in code because the nib isn't being applied correctly
-            if #available(iOSApplicationExtension 13.0, *) {
-                unitLabel?.textColor = .secondaryLabel
-            }
+            unitLabel?.textColor = .secondaryLabel
         }
     }
 
@@ -41,9 +39,7 @@ public class TextFieldTableViewCell: UITableViewCell, UITextFieldDelegate {
             textField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
 
             // Setting this color in code because the nib isn't being applied correctly
-            if #available(iOSApplicationExtension 13.0, *) {
-                textField.textColor = .label
-            }
+            textField.textColor = .label
         }
     }
 

@@ -15,6 +15,7 @@ public struct InsulinSensitivityScheduleEditor: View {
     @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
     @Environment(\.appName) private var appName
 
+    let mode: SettingsPresentationMode
     let viewModel: InsulinSensitivityScheduleEditorViewModel
 
     var displayGlucoseUnit: HKUnit {
@@ -22,9 +23,11 @@ public struct InsulinSensitivityScheduleEditor: View {
     }
 
     public init(
+        mode: SettingsPresentationMode,
         therapySettingsViewModel: TherapySettingsViewModel,
         didSave: (() -> Void)? = nil
     ) {
+        self.mode = mode
         self.viewModel = InsulinSensitivityScheduleEditorViewModel(
             therapySettingsViewModel: therapySettingsViewModel,
             didSave: didSave)
@@ -50,7 +53,7 @@ public struct InsulinSensitivityScheduleEditor: View {
                                                                             timeZone: insulinSensitivitySchedulePerU.timeZone)!
                 viewModel.saveInsulinSensitivitySchedule(insulinSensitivitySchedule)
             },
-            mode: viewModel.mode,
+            mode: mode,
             settingType: .insulinSensitivity
         )
     }

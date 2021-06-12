@@ -15,6 +15,7 @@ public struct CorrectionRangeScheduleEditor: View {
     @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
     @Environment(\.appName) private var appName
 
+    let mode: SettingsPresentationMode
     let viewModel: CorrectionRangeScheduleEditorViewModel
 
     @State var scheduleItems: [RepeatingScheduleValue<ClosedRange<HKQuantity>>]
@@ -30,9 +31,11 @@ public struct CorrectionRangeScheduleEditor: View {
     }
 
     public init(
+        mode: SettingsPresentationMode,
         therapySettingsViewModel: TherapySettingsViewModel,
         didSave: (() -> Void)? = nil
     ) {
+        self.mode = mode
         self._scheduleItems = State(initialValue: therapySettingsViewModel.glucoseTargetRangeSchedule?.quantityRanges ?? [])
         self.viewModel = CorrectionRangeScheduleEditorViewModel(
             therapySettingsViewModel: therapySettingsViewModel,
@@ -84,7 +87,7 @@ public struct CorrectionRangeScheduleEditor: View {
                     override: initialSchedule?.override)
                 viewModel.saveGlucoseTargetRangeSchedule(glucoseTargetRangeSchedule)
             },
-            mode: viewModel.mode,
+            mode: mode,
             therapySettingType: .glucoseTargetRange
         )
         .simultaneousGesture(TapGesture().onEnded {
@@ -115,7 +118,7 @@ public struct CorrectionRangeScheduleEditor: View {
     
     var instructionalContentIfNecessary: some View {
         return Group {
-            if viewModel.mode == .acceptanceFlow && !userDidTap {
+            if mode == .acceptanceFlow && !userDidTap {
                 instructionalContent
             }
         }
@@ -136,7 +139,7 @@ public struct CorrectionRangeScheduleEditor: View {
     var guardrailWarningIfNecessary: some View {
         let crossedThresholds = self.crossedThresholds
         return Group {
-            if !crossedThresholds.isEmpty && (userDidTap || viewModel.mode == .settings) {
+            if !crossedThresholds.isEmpty && (userDidTap || mode == .settings) {
                 CorrectionRangeGuardrailWarning(crossedThresholds: crossedThresholds)
             }
         }

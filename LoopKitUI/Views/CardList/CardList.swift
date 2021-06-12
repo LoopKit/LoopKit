@@ -10,63 +10,84 @@ import SwiftUI
 
 
 public struct CardListSection: View {
-    var title: Text
+    var title: Text?
     var stack: CardStack
 
-    public init(title: Text, @CardStackBuilder cards: () -> CardStack) {
+    public init(title: Text? = nil, @CardStackBuilder cards: () -> CardStack) {
         self.title = title
         self.stack = cards()
     }
 
     public var body: some View {
         VStack(spacing: 6) {
-            HStack {
-                title
-                    .font(Font(UIFont.preferredFont(forTextStyle: .title3)))
-                    .bold()
-                Spacer()
+            if let title = title {
+                HStack {
+                    title
+                        .font(Font(UIFont.preferredFont(forTextStyle: .title3)))
+                        .bold()
+                    Spacer()
+                }
+                .padding(.leading)
             }
-            .padding(.leading)
-
             stack
         }
     }
 }
 
+public enum CardListStyle {
+    case simple(CardStack)
+    case sectioned([CardListSection])
+}
 
 /// Displays a list of cards similar to a `List` with an inset grouped style,
 /// but without the baggage of `UITableViewCell` resizing, enabling cells to expand smoothly.
-struct CardList: View {
-    enum Style {
-        case simple(CardStack)
-        case sectioned([CardListSection])
+public struct CardList<Trailer: View>: View {
+    var title: Text?
+    var style: CardListStyle
+    var trailer: Trailer?
+    
+    public init(title: Text? = nil, style: CardListStyle, trailer: Trailer) {
+        self.title = title
+        self.style = style
+        self.trailer = trailer
     }
 
-    var title: Text
-    var style: Style
+    public init(title: Text? = nil, style: CardListStyle) where Trailer == EmptyView {
+        self.title = title
+        self.style = style
+        self.trailer = nil
+    }
 
-    var body: some View {
+    public var body: some View {
         ScrollView {
             VStack(spacing: 4) {
                 titleText
                     .fixedSize(horizontal: false, vertical: true)
 
                 cards
+                if let trailer = trailer {
+                    trailer
+                }
             }
         }
         .background(Color(.systemGroupedBackground))
     }
 
+    @ViewBuilder
     private var titleText: some View {
-        HStack {
-            title
-                .font(.largeTitle)
-                .bold()
+        if let title = title {
+            HStack {
+                title
+                    .font(.largeTitle)
+                    .bold()
+                Spacer()
+            }
+            .padding()
+            .padding(.bottom, 4)
+            .background(Color(.systemGroupedBackground))
+        } else {
             Spacer()
         }
-        .padding()
-        .padding(.bottom, 4)
-        .background(Color(.systemGroupedBackground))
     }
 
     private var cards: some View {

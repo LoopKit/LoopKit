@@ -56,8 +56,8 @@ final class MockServiceTableViewController: UITableViewController {
         switch operation {
         case .create:
             service.completeCreate()
-            if let serviceViewController = navigationController as? ServiceViewController {
-                serviceViewController.notifyServiceCreatedAndOnboarded(service)
+            if let serviceNavigationController = navigationController as? ServiceNavigationController {
+                serviceNavigationController.notifyServiceCreatedAndOnboarded(service)
             }
         case .update:
             service.completeUpdate()
@@ -76,8 +76,8 @@ final class MockServiceTableViewController: UITableViewController {
     }
 
     private func notifyComplete() {
-        if let serviceViewController = navigationController as? ServiceViewController {
-            serviceViewController.notifyComplete()
+        if let serviceNavigationController = navigationController as? ServiceNavigationController {
+            serviceNavigationController.notifyComplete()
         }
     }
 

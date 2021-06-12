@@ -14,8 +14,6 @@ struct CorrectionRangeScheduleEditorViewModel {
 
     let guardrail = Guardrail.correctionRange
 
-    let mode: SettingsPresentationMode
-
     let glucoseTargetRangeSchedule: GlucoseRangeSchedule?
 
     let minValue: HKQuantity?
@@ -25,7 +23,6 @@ struct CorrectionRangeScheduleEditorViewModel {
     init(therapySettingsViewModel: TherapySettingsViewModel,
          didSave: (() -> Void)? = nil)
     {
-        self.mode = therapySettingsViewModel.mode
         self.glucoseTargetRangeSchedule = therapySettingsViewModel.glucoseTargetRangeSchedule
         self.minValue = Guardrail.minCorrectionRangeValue(suspendThreshold: therapySettingsViewModel.suspendThreshold)
         self.saveGlucoseTargetRangeSchedule = { [weak therapySettingsViewModel] glucoseTargetRangeSchedule in
