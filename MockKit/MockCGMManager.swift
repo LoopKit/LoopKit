@@ -423,7 +423,7 @@ public final class MockCGMManager: TestingCGMManager {
             let dataSource = MockCGMDataSource(rawValue: dataSourceRawValue) {
             self.dataSource = dataSource
         } else {
-            self.dataSource = MockCGMDataSource(model: .noData)
+            self.dataSource = MockCGMDataSource(model: .sineCurve(parameters: (baseGlucose: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 110), amplitude: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 20), period: TimeInterval(hours: 6), referenceDate: Date())))
         }
 
         setupGlucoseUpdateTimer()
