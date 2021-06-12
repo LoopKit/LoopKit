@@ -228,8 +228,6 @@ public final class MockPumpManager: TestingPumpManager {
             basalDeliveryState: basalDeliveryState(for: state),
             bolusState: bolusState(for: state),
             insulinType: state.insulinType,
-            pumpStatusHighlight: pumpStatusHighlight(for: state),
-            pumpLifecycleProgress: pumpLifecycleProgress(for: state),
             deliveryIsUncertain: state.deliveryIsUncertain
         )
     }
