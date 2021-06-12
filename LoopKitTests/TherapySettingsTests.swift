@@ -348,7 +348,7 @@ fileprivate extension TherapySettings {
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             carbRatioSchedule: carbRatioSchedule,
             basalRateSchedule: basalRateSchedule,
-            insulinModelSettings: InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)
+            insulinModelSettings: InsulinModelSettings(model: ExponentialInsulinModelPreset.rapidActingAdult)
         )
     }
 }

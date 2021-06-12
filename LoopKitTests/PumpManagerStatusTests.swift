@@ -27,8 +27,6 @@ class PumpManagerStatusCodableTests: XCTestCase {
                                                              basalDeliveryState: .active(dateFormatter.date(from: "2020-05-14T15:56:09Z")!),
                                                              bolusState: .noBolus,
                                                              insulinType: .novolog,
-                                                             pumpStatusHighlight: pumpStatusHighlight,
-                                                             pumpLifecycleProgress: pumpLifecycleProgress,
                                                              deliveryIsUncertain: true),
                                            encodesJSON: """
 {
