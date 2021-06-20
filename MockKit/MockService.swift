@@ -150,4 +150,7 @@ extension MockService: RemoteDataService {
         completion(.success(false))
     }
     
+    public func validatePushNotificationSource(_ notification: [String : AnyObject]) -> Bool {
+        return true
+    }
 }
