@@ -140,8 +140,8 @@ public protocol PumpManager: DeviceManager {
     ///   - units: The number of units to deliver
     ///   - startDate: The date the bolus command was originally set
     ///   - completion: A closure called after the command is complete
-    ///   - result: A DoseEntry or an error describing why the command failed
-    func enactBolus(units: Double, at startDate: Date, completion: @escaping (_ result: PumpManagerResult<DoseEntry>) -> Void)
+    ///   - error: An optional error describing why the command failed
+    func enactBolus(units: Double, at startDate: Date, completion: @escaping (_ error: PumpManagerError?) -> Void)
 
     /// Cancels the current, in progress, bolus.
     ///
@@ -156,8 +156,8 @@ public protocol PumpManager: DeviceManager {
     ///   - unitsPerHour: The temporary basal rate to set
     ///   - duration: The duration of the temporary basal rate.
     ///   - completion: A closure called after the command is complete
-    ///   - result: A DoseEntry or an error describing why the command failed
-    func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (_ result: PumpManagerResult<DoseEntry>) -> Void)
+    ///   - error: An optional error describing why the command failed
+    func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (_ error: PumpManagerError?) -> Void)
 
     /// Send a command to the pump to suspend delivery
     ///
@@ -173,12 +173,6 @@ public protocol PumpManager: DeviceManager {
     ///   - error: An error describing why the command failed
     func resumeDelivery(completion: @escaping (_ error: Error?) -> Void)
     
-    /// Notifies the PumpManager of a change in the user's preference for maximum basal rate.
-    ///
-    /// - Parameters:
-    ///   - rate: The maximum rate the pumpmanager should expect to receive in an enactTempBasal command.
-    func setMaximumTempBasalRate(_ rate: Double)
-
     typealias SyncSchedule = (_ items: [RepeatingScheduleValue<Double>], _ completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) -> Void
 
     /// Sync the schedule of basal rates to the pump, annotating the result with the proper time zone.

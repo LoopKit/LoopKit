@@ -83,7 +83,7 @@ public protocol PumpManagerOnboardingDelegate: AnyObject {
     ///
     /// - Parameters:
     ///     - pumpManager: The pump manager onboarded.
-    func pumpManagerOnboarding(didOnboardPumpManager pumpManager: PumpManagerUI, withFinalSettings settings: PumpManagerSetupSettings)
+    func pumpManagerOnboarding(didOnboardPumpManager pumpManager: PumpManagerUI)
 }
 
 public protocol PumpManagerOnboarding {

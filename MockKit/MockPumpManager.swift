@@ -399,29 +399,29 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
 
-    public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
+    public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
         logDeviceComms(.send, message: "Temp Basal \(unitsPerHour) U/hr Duration:\(duration.hours)")
 
         if state.tempBasalEnactmentShouldError || state.pumpBatteryChargeRemaining == 0 {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
             logDeviceComms(.error, message: "Temp Basal failed with error \(error)")
-            completion(.failure(error))
+            completion(error)
         } else if state.deliveryCommandsShouldTriggerUncertainDelivery {
             state.deliveryIsUncertain = true
             logDeviceComms(.error, message: "Uncertain delivery for temp basal")
-            completion(.failure(PumpManagerError.uncertainDelivery))
+            completion(.uncertainDelivery)
         } else if state.occlusionDetected || state.pumpErrorDetected {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpError)
             logDeviceComms(.error, message: "Temp Basal failed because the pump is in an error state")
-            completion(.failure(error))
+            completion(error)
         } else if case .suspended = state.suspendState {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended)
             logDeviceComms(.error, message: "Temp Basal failed because inulin delivery is suspended")
-            completion(.failure(error))
+            completion(error)
         } else if state.reservoirUnitsRemaining == 0 {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended)
             logDeviceComms(.error, message: "Temp Basal failed because there is no insulin in the reservoir")
-            completion(.failure(error))
+            completion(error)
         } else {
             let now = Date()
             if let temp = state.unfinalizedTempBasal, temp.finishTime.compare(now) == .orderedDescending {
@@ -433,15 +433,14 @@ public final class MockPumpManager: TestingPumpManager {
 
             if duration < .ulpOfOne {
                 // Cancel temp basal
-                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration)
                 storeDoses { (error) in
-                    completion(.success(DoseEntry(temp)))
+                    completion(nil)
                 }
             } else {
                 let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration)
                 state.unfinalizedTempBasal = temp
                 storeDoses { (error) in
-                    completion(.success(DoseEntry(temp)))
+                    completion(nil)
                 }
             }
             logDeviceCommunication("enactTempBasal succeeded", type: .receive)
@@ -454,50 +453,49 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
 
-    public func enactBolus(units: Double, at startDate: Date, completion: @escaping (PumpManagerResult<DoseEntry>) -> Void) {
+    public func enactBolus(units: Double, at startDate: Date, completion: @escaping (PumpManagerError?) -> Void) {
 
         logDeviceCommunication("enactBolus(\(units), \(startDate))")
 
         if state.bolusEnactmentShouldError || state.pumpBatteryChargeRemaining == 0 {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
             logDeviceComms(.error, message: "Bolus failed with error \(error)")
-            completion(.failure(error))
+            completion(error)
         } else if state.deliveryCommandsShouldTriggerUncertainDelivery {
             state.deliveryIsUncertain = true
             logDeviceComms(.error, message: "Uncertain delivery for bolus")
-            completion(.failure(PumpManagerError.uncertainDelivery))
+            completion(PumpManagerError.uncertainDelivery)
         } else if state.occlusionDetected || state.pumpErrorDetected {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpError)
             logDeviceComms(.error, message: "Bolus failed because the pump is in an error state")
-            completion(.failure(error))
+            completion(error)
         } else if state.reservoirUnitsRemaining == 0 {
             let error = PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended)
             logDeviceComms(.error, message: "Bolus failed because there is no insulin in the reservoir")
-            completion(.failure(error))
+            completion(error)
         } else {
             state.finalizeFinishedDoses()
 
             if let _ = state.unfinalizedBolus {
                 logDeviceCommunication("enactBolus failed: bolusInProgress", type: .error)
-                completion(.failure(PumpManagerError.deviceState(MockPumpManagerError.bolusInProgress)))
+                completion(PumpManagerError.deviceState(MockPumpManagerError.bolusInProgress))
                 return
             }
 
             if case .suspended = status.basalDeliveryState {
                 logDeviceCommunication("enactBolus failed: pumpSuspended", type: .error)
-                completion(.failure(PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended)))
+                completion(PumpManagerError.deviceState(MockPumpManagerError.pumpSuspended))
                 return
             }
             
             
             let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute))
-            let dose = DoseEntry(bolus)
             state.unfinalizedBolus = bolus
             
             logDeviceComms(.receive, message: "Bolus accepted")
             
             storeDoses { (error) in
-                completion(.success(dose))
+                completion(nil)
                 self.logDeviceCommunication("enactBolus succeeded", type: .receive)
             }
         }
