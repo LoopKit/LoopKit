@@ -215,7 +215,7 @@ extension TherapySettingsView {
             if let items = self.viewModel.glucoseTargetRangeSchedule(for: glucoseUnit)?.items
             {
                 SectionDivider()
-                ForEach(items.indices) { index in
+                ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
                         SettingsDivider()
                     }
@@ -266,7 +266,7 @@ extension TherapySettingsView {
         card(for: .basalRate) {
             if let items = viewModel.therapySettings.basalRateSchedule?.items, let supportedBasalRates = viewModel.pumpSupportedIncrements?()?.basalRates {
                 SectionDivider()
-                ForEach(items.indices) { index in
+                ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
                         SettingsDivider()
                     }
@@ -355,7 +355,7 @@ extension TherapySettingsView {
         card(for: .carbRatio) {
             if let items = viewModel.therapySettings.carbRatioSchedule?.items {
                 SectionDivider()
-                ForEach(items.indices) { index in
+                ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
                         SettingsDivider()
                     }
@@ -372,7 +372,7 @@ extension TherapySettingsView {
         card(for: .insulinSensitivity) {
             if let items = viewModel.insulinSensitivitySchedule(for: glucoseUnit)?.items {
                 SectionDivider()
-                ForEach(items.indices) { index in
+                ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
                         SettingsDivider()
                     }
