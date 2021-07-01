@@ -33,7 +33,7 @@ public struct WarningView: View {
     public var body: some View {
         HStack {
               VStack(alignment: .leading) {
-                  HStack(alignment: .firstTextBaseline) {
+                  HStack(alignment: .center) {
                       Image(systemName: "exclamationmark.triangle.fill")
                           .foregroundColor(warningColor)
 
@@ -43,6 +43,7 @@ public struct WarningView: View {
                           .fixedSize()
                           .animation(nil)
                   }
+                  .padding(.bottom, 2)
 
                   caption
                       .font(.callout)

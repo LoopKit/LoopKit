@@ -16,7 +16,7 @@ import SwiftUI
 /// - An instance of `Splat` is unrolled into a dynamic number of components within one card.
 ///
 /// Any number of components (individual or splatted) can be sequenced and combined into a single card.
-@_functionBuilder
+@resultBuilder
 public struct CardBuilder {
     public typealias Component = Card
 

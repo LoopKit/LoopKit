@@ -9,7 +9,7 @@
 import UIKit
 
 
-public protocol DateAndDurationTableViewControllerDelegate: class {
+public protocol DateAndDurationTableViewControllerDelegate: AnyObject {
     func dateAndDurationTableViewControllerDidChangeDate(_ controller: DateAndDurationTableViewController)
 }
 

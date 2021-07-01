@@ -12,7 +12,7 @@ import SwiftUI
 /// Constructs an array of `Card` views from arbitrary `View` instances.
 ///
 /// A multi-component card can be constructed using one of `Card`'s initializers.
-@_functionBuilder
+@resultBuilder
 public struct CardStackBuilder {
     public typealias Component = CardStack
 

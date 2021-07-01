@@ -16,7 +16,7 @@ import LoopKitUI
 import MockKit
 
 
-protocol SupportedRangeTableViewControllerDelegate: class {
+protocol SupportedRangeTableViewControllerDelegate: AnyObject {
     func supportedRangeDidUpdate(_ controller: SupportedRangeTableViewController)
 }
 

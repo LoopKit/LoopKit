@@ -16,26 +16,31 @@ public struct GuardrailWarning: View {
         case oneOrMore([SafetyClassification.Threshold])
     }
 
+    private var therapySetting: TherapySetting
     private var title: Text
     private var crossedThresholds: CrossedThresholds
     private var captionOverride: Text?
 
     public init(
+        therapySetting: TherapySetting,
         title: Text,
         threshold: SafetyClassification.Threshold,
         caption: Text? = nil
     ) {
+        self.therapySetting = therapySetting
         self.title = title
         self.crossedThresholds = .one(threshold)
         self.captionOverride = caption
     }
 
     public init(
+        therapySetting: TherapySetting,
         title: Text,
         thresholds: [SafetyClassification.Threshold],
         caption: Text? = nil
     ) {
         precondition(!thresholds.isEmpty)
+        self.therapySetting = therapySetting
         self.title = title
         self.crossedThresholds = .oneOrMore(thresholds)
         self.captionOverride = caption
@@ -61,27 +66,27 @@ public struct GuardrailWarning: View {
 
         switch crossedThresholds {
         case .one(let threshold):
-            // Chose to use premeal range override because it's not a schedule
-            switch threshold {
-            case .minimum, .belowRecommended:
-                return Text(TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForLowValue)
-            case .aboveRecommended, .maximum:
-                return Text(TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForHighValue)
-            }
+            return captionForThreshold(threshold)
         case .oneOrMore(let thresholds):
-            // Chose to use correction range because it's a schedule
-            if thresholds.count == 1 {
-                switch thresholds.first! {
-                case .minimum, .belowRecommended:
-                    return Text(TherapySetting.glucoseTargetRange.guardrailCaptionForLowValue)
-                case .aboveRecommended, .maximum:
-                    return Text(TherapySetting.glucoseTargetRange.guardrailCaptionForHighValue)
-                }
+            if thresholds.count == 1, let threshold = thresholds.first {
+                return captionForThreshold(threshold)
             } else {
-                // ANNA TODO: figure out this one
-                return Text(LocalizedString("Some of the values you have entered are outside of what is typically recommended for most people.", comment: "Caption for guardrail warning when more than one threshold is crossed"))
+                return captionForThresholds()
             }
         }
+    }
+
+    private func captionForThreshold(_ threshold: SafetyClassification.Threshold) -> Text {
+        switch threshold {
+        case .minimum, .belowRecommended:
+            return Text(therapySetting.guardrailCaptionForLowValue)
+        case .aboveRecommended, .maximum:
+            return Text(therapySetting.guardrailCaptionForHighValue)
+        }
+    }
+
+    private func captionForThresholds() -> Text {
+        return Text(therapySetting.guardrailCaptionForOutsideValues)
     }
 }
 

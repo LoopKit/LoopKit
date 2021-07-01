@@ -52,7 +52,7 @@ jobs:
   test:
     working_directory: *project_directory
     macos:
-      xcode: 12.2.0
+      xcode: 12.5.0
     steps:
       - checkout
       - restore_cache: *carthage_restore_cache
@@ -69,7 +69,7 @@ jobs:
   build-example:
     working_directory: *project_directory
     macos:
-      xcode: 12.2.0
+      xcode: 12.5.0
     steps:
       - checkout
       - restore_cache: *carthage_restore_cache

@@ -11,7 +11,7 @@ import HealthKit
 import LoopKit
 
 
-public protocol GlucoseEntryTableViewControllerDelegate: class {
+public protocol GlucoseEntryTableViewControllerDelegate: AnyObject {
     func glucoseEntryTableViewControllerDidChangeGlucose(_ controller: GlucoseEntryTableViewController)
 }
 

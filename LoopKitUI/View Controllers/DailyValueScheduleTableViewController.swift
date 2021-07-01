@@ -10,7 +10,7 @@ import UIKit
 import LoopKit
 
 
-public protocol DailyValueScheduleTableViewControllerDelegate: class {
+public protocol DailyValueScheduleTableViewControllerDelegate: AnyObject {
     func dailyValueScheduleTableViewControllerWillFinishUpdating(_ controller: DailyValueScheduleTableViewController)
 }
 

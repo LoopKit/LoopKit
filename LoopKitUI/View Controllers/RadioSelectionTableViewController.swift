@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol RadioSelectionTableViewControllerDelegate: class {
+public protocol RadioSelectionTableViewControllerDelegate: AnyObject {
     func radioSelectionTableViewControllerDidChangeSelectedIndex(_ controller: RadioSelectionTableViewController)
 }
 
