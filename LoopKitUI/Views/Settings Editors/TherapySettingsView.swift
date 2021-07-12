@@ -484,6 +484,7 @@ struct ScheduleRangeItem: View {
                          isEditing: .constant(false),
                          valueContent: {
                             GuardrailConstrainedQuantityRangeView(range: range.quantityRange(for: unit), unit: unit, guardrail: guardrail, isEditing: false)
+                                .padding(.leading, 10)
                          },
                          expandedContent: { EmptyView() })
     }
@@ -500,6 +501,7 @@ struct ScheduleValueItem: View {
                          isEditing: .constant(false),
                          valueContent: {
                             GuardrailConstrainedQuantityView(value: HKQuantity(unit: unit, doubleValue: value), unit: unit, guardrail: guardrail, isEditing: false)
+                                .padding(.leading, 10)
                          },
                          expandedContent: { EmptyView() })
     }
