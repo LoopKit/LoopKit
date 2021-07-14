@@ -16,7 +16,7 @@ public enum SyncBasalScheduleResult<T: RawRepresentable> {
 }
 
 
-public protocol BasalScheduleTableViewControllerSyncSource: class {
+public protocol BasalScheduleTableViewControllerSyncSource: AnyObject {
     func syncScheduleValues(for viewController: BasalScheduleTableViewController, completion: @escaping (_ result: SyncBasalScheduleResult<Double>) -> Void)
 
     func syncButtonTitle(for viewController: BasalScheduleTableViewController) -> String

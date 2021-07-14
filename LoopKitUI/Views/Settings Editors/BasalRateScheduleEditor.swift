@@ -149,6 +149,7 @@ private struct BasalRateGuardrailWarning: View {
             : nil
 
         return GuardrailWarning(
+            therapySetting: .basalRate,
             title: crossedThresholds.count == 1 ? singularWarningTitle(for: crossedThresholds.first!) : multipleWarningTitle,
             thresholds: crossedThresholds,
             caption: caption

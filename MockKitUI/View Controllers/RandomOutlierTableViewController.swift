@@ -13,7 +13,7 @@ import LoopKitUI
 import MockKit
 
 
-protocol RandomOutlierTableViewControllerDelegate: class {
+protocol RandomOutlierTableViewControllerDelegate: AnyObject {
     func randomOutlierTableViewControllerDidChangeOutlier(_ controller: RandomOutlierTableViewController)
 }
 

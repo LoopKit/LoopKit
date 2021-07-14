@@ -13,7 +13,7 @@ import LoopKitUI
 import MockKit
 
 
-protocol SineCurveParametersTableViewControllerDelegate: class {
+protocol SineCurveParametersTableViewControllerDelegate: AnyObject {
     func sineCurveParametersTableViewControllerDidUpdateParameters(_ controller: SineCurveParametersTableViewController)
 }
 

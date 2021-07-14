@@ -62,7 +62,7 @@ extension AuthenticationTableViewCell: CredentialOptionPickerDelegate {
 }
 
 
-protocol CredentialOptionPickerDelegate: class {
+protocol CredentialOptionPickerDelegate: AnyObject {
     func credentialOptionDataSourceDidUpdateValue(_ picker: CredentialOptionPicker)
 }
 
