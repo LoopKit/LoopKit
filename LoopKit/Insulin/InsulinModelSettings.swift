@@ -20,8 +20,6 @@ public enum InsulinModelSettings: Equatable {
             switch self {
             case .exponentialPreset(let model):
                 return model
-            default:
-                return ExponentialInsulinModelPreset.rapidActingAdult
             }
         }
         
