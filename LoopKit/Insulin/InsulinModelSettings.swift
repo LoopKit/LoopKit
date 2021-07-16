@@ -7,22 +7,22 @@
 
 public enum InsulinModelSettings: Equatable {
     case exponentialPreset(ExponentialInsulinModelPreset)
-    case walsh(WalshInsulinModel)
 
-    public static let validWalshModelDurationRange = TimeInterval(hours: 2)...TimeInterval(hours: 8)
-    
     public var longestEffectDuration: TimeInterval {
         switch self {
         case .exponentialPreset(let model):
-            return model.effectDuration
-        case .walsh(let model):
             return model.effectDuration
         }
     }
 
     public func model(for type: InsulinType?) -> InsulinModel {
         guard let type = type else {
-            return ExponentialInsulinModelPreset.rapidActingAdult
+            switch self {
+            case .exponentialPreset(let model):
+                return model
+            default:
+                return ExponentialInsulinModelPreset.rapidActingAdult
+            }
         }
         
         switch type {
@@ -32,8 +32,6 @@ public enum InsulinModelSettings: Equatable {
             switch self {
             case .exponentialPreset(let model):
                 return model
-            case .walsh(let model):
-                return model
             }
         }
     }
@@ -42,8 +40,6 @@ public enum InsulinModelSettings: Equatable {
         switch model {
         case let model as ExponentialInsulinModelPreset:
             self = .exponentialPreset(model)
-        case let model as WalshInsulinModel:
-            self = .walsh(model)
         default:
             return nil
         }
@@ -57,8 +53,7 @@ extension InsulinModelSettings: Codable {
             let exponential =  try container.decode(ExponentialInsulinModelPreset.self, forKey: .exponential)
             self = .exponentialPreset(exponential)
         } catch {
-            let walsh =  try container.decode(WalshInsulinModel.self, forKey: .walsh)
-            self = .walsh(walsh)
+            self = .exponentialPreset(ExponentialInsulinModelPreset.rapidActingAdult)
         }
     }
     
@@ -67,14 +62,11 @@ extension InsulinModelSettings: Codable {
         switch self {
         case .exponentialPreset(let model):
             try container.encode(model, forKey: .exponential)
-        case .walsh(let model):
-            try container.encode(model, forKey: .walsh)
         }
     }
     
     private enum CodingKeys: String, CodingKey {
         case exponential
-        case walsh
     }
 }
 
@@ -112,15 +104,8 @@ extension InsulinModelSettings: RawRepresentable {
             default:
                 return nil
             }
-
-        case .walsh:
-            guard let modelRaw = rawValue["model"] as? WalshInsulinModel.RawValue,
-                let model = WalshInsulinModel(rawValue: modelRaw)
-            else {
-                return nil
-            }
-
-            self = .walsh(model)
+        default:
+            return nil
         }
     }
 
@@ -131,32 +116,12 @@ extension InsulinModelSettings: RawRepresentable {
                 "type": InsulinModelType.exponentialPreset.rawValue,
                 "model": model.rawValue
             ]
-        case .walsh(let model):
-            return [
-                "type": InsulinModelType.walsh.rawValue,
-                "model": model.rawValue
-            ]
         }
     }
 
     private enum InsulinModelType: String {
         case exponentialPreset
         case walsh
-    }
-}
-
-public extension InsulinModelSettings {
-    init(from storedSettingsInsulinModel: StoredInsulinModel) {
-        switch storedSettingsInsulinModel.modelType {
-        case .fiasp:
-            self = .exponentialPreset(.fiasp)
-        case .rapidAdult:
-            self = .exponentialPreset(.rapidActingAdult)
-        case .rapidChild:
-            self = .exponentialPreset(.rapidActingChild)
-        case .walsh:
-            self = .walsh(WalshInsulinModel(actionDuration: storedSettingsInsulinModel.actionDuration))
-        }
     }
 }
 
@@ -178,9 +143,6 @@ public extension StoredInsulinModel {
             }
             actionDuration = preset.actionDuration
             peakActivity = preset.peakActivity
-        case .walsh(let model):
-            modelType = .walsh
-            actionDuration = model.actionDuration
         }
         
         self.init(modelType: modelType, actionDuration: actionDuration, peakActivity: peakActivity)

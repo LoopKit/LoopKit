@@ -13,7 +13,6 @@ public struct StoredInsulinModel: Codable, Equatable {
         case fiasp
         case rapidAdult
         case rapidChild
-        case walsh
     }
 
     public let modelType: ModelType

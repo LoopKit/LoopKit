@@ -21,16 +21,18 @@ public struct InsulinModelSelection: View {
 
     private let initialValue: InsulinModelSettings
     private let insulinSensitivitySchedule: InsulinSensitivitySchedule
-    private let supportedInsulinModelSettings: SupportedInsulinModelSettings
     private let mode: SettingsPresentationMode
     private let save: (_ insulinModelSettings: InsulinModelSettings) -> Void
 
     static let defaultInsulinSensitivitySchedule = InsulinSensitivitySchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue<Double>(startTime: 0, value: 40)])!
     
+    private var displayGlucoseUnit: HKUnit {
+        displayGlucoseUnitObservable.displayGlucoseUnit
+    }
+    
     public init(
         value: InsulinModelSettings,
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
-        supportedInsulinModelSettings: SupportedInsulinModelSettings,
         chartColors: ChartColorPalette,
         onSave save: @escaping (_ insulinModelSettings: InsulinModelSettings) -> Void,
         mode: SettingsPresentationMode
@@ -39,7 +41,6 @@ public struct InsulinModelSelection: View {
         self.initialValue = value
         self.insulinSensitivitySchedule = insulinSensitivitySchedule ?? Self.defaultInsulinSensitivitySchedule
         self.save = save
-        self.supportedInsulinModelSettings = supportedInsulinModelSettings
         self.mode = mode
 
         let chartManager = ChartsManager(
@@ -68,7 +69,6 @@ public struct InsulinModelSelection: View {
         self.init(
             value: therapySettingsViewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.rapidActingAdult),
             insulinSensitivitySchedule: therapySettingsViewModel.therapySettings.insulinSensitivitySchedule,
-            supportedInsulinModelSettings: therapySettingsViewModel.supportedInsulinModelSettings,
             chartColors: chartColors,
             onSave: { [weak therapySettingsViewModel] insulinModelSettings in
                 therapySettingsViewModel?.saveInsulinModel(insulinModelSettings: insulinModelSettings)

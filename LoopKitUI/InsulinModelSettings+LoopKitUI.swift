@@ -13,15 +13,11 @@ public extension InsulinModelSettings {
         switch self {
         case .exponentialPreset(let model):
             return model.title
-        case .walsh(let model):
-            return model.title
         }
     }
     var subtitle: String {
         switch self {
         case .exponentialPreset(let model):
-            return model.subtitle
-        case .walsh(let model):
             return model.subtitle
         }
     }

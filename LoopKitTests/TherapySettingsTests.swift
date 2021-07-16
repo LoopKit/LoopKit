@@ -244,7 +244,6 @@ class TherapySettingsCodableTests: XCTestCase {
     func testInsulinModelEncoding() throws {
         let adult = InsulinModelSettings.exponentialPreset(.rapidActingAdult)
         let child = InsulinModelSettings.exponentialPreset(.rapidActingChild)
-        let walsh = InsulinModelSettings.walsh(WalshInsulinModel(actionDuration: 10))
         
         XCTAssertEqual("""
         {
@@ -256,14 +255,6 @@ class TherapySettingsCodableTests: XCTestCase {
           "exponential" : "rapidActingChild"
         }
         """, String(data: try encoder.encode(child), encoding: .utf8)!)
-        XCTAssertEqual("""
-        {
-          "walsh" : {
-            "actionDuration" : 10,
-            "delay" : 600
-          }
-        }
-        """, String(data: try encoder.encode(walsh), encoding: .utf8)!)
     }
 
     func testTherapySettingEncoding() throws {

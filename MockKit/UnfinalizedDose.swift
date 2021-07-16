@@ -74,7 +74,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         return units
     }
 
-    init(bolusAmount: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType, automatic: Bool) {
+    init(bolusAmount: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType?, automatic: Bool) {
         self.doseType = .bolus
         self.units = bolusAmount
         self.startTime = startTime
@@ -84,7 +84,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.automatic = automatic
     }
 
-    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType) {
+    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType?) {
         self.doseType = .tempBasal
         self.units = tempBasalRate * duration.hours
         self.startTime = startTime
@@ -103,7 +103,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.automatic = false
     }
 
-    init(resumeStartTime: Date, insulinType: InsulinType) {
+    init(resumeStartTime: Date, insulinType: InsulinType?) {
         self.doseType = .resume
         self.units = 0
         self.startTime = resumeStartTime

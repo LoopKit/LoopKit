@@ -615,7 +615,6 @@ public struct TherapySettingsView_Previews: PreviewProvider {
 
     static func preview_viewModel() -> TherapySettingsViewModel {
         TherapySettingsViewModel(therapySettings: preview_therapySettings,
-                                 supportedInsulinModelSettings: SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                                  pumpSupportedIncrements: { PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
                                                                                   bolusVolumes: preview_supportedBolusVolumes,
                                                                                   maximumBasalScheduleEntryCount: 24) })
