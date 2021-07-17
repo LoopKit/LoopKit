@@ -110,8 +110,8 @@ public class TherapySettingsViewModel: ObservableObject {
         didSave?(TherapySetting.deliveryLimits, therapySettings)
     }
     
-    public func saveInsulinModel(insulinModelSettings: InsulinModelSettings) {
-        therapySettings.insulinModelSettings = insulinModelSettings
+    public func saveInsulinModel(insulinModelPreset: ExponentialInsulinModelPreset) {
+        therapySettings.defaultRapidActingModel = insulinModelPreset
         didSave?(TherapySetting.insulinModel, therapySettings)
     }
     

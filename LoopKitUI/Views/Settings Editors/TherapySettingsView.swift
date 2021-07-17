@@ -329,16 +329,16 @@ extension TherapySettingsView {
         
     private var insulinModelSection: Card {
         card(for: .insulinModel) {
-            if let insulinModelSettings = self.viewModel.therapySettings.insulinModelSettings {
+            if let insulinModelPreset = self.viewModel.therapySettings.defaultRapidActingModel {
                 SectionDivider()
                 HStack {
                     // Spacing and paddings here is my best guess based on the design...
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(insulinModelSettings.title)
+                        Text(insulinModelPreset.title)
                             .font(.body)
                             .padding(.top, 5)
                             .fixedSize(horizontal: false, vertical: true)
-                        Text(insulinModelSettings.subtitle)
+                        Text(insulinModelPreset.subtitle)
                             .font(.footnote)
                             .foregroundColor(.secondary)
                             .padding(.bottom, 8)

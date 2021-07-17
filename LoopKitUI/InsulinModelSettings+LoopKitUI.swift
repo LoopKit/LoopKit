@@ -7,23 +7,6 @@
 
 import LoopKit
 
-
-public extension InsulinModelSettings {
-    var title: String {
-        switch self {
-        case .exponentialPreset(let model):
-            return model.title
-        }
-    }
-    var subtitle: String {
-        switch self {
-        case .exponentialPreset(let model):
-            return model.subtitle
-        }
-    }
-}
-
-
 public extension ExponentialInsulinModelPreset {
     var title: String {
         switch self {

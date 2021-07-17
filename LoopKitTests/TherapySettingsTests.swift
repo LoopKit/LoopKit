@@ -137,6 +137,7 @@ class TherapySettingsCodableTests: XCTestCase {
           }
         }
       },
+      "defaultRapidActingModel" : "rapidActingAdult",
       "glucoseTargetRangeSchedule" : {
         "rangeSchedule" : {
           "unit" : "mg/dL",
@@ -193,9 +194,6 @@ class TherapySettingsCodableTests: XCTestCase {
           }
         }
       },
-      "insulinModelSettings" : {
-        "exponential" : "rapidActingAdult"
-      },
       "insulinSensitivitySchedule" : {
         "unit" : "mg/dL",
         "valueSchedule" : {
@@ -242,18 +240,14 @@ class TherapySettingsCodableTests: XCTestCase {
     """
     
     func testInsulinModelEncoding() throws {
-        let adult = InsulinModelSettings.exponentialPreset(.rapidActingAdult)
-        let child = InsulinModelSettings.exponentialPreset(.rapidActingChild)
+        let adult = ExponentialInsulinModelPreset.rapidActingAdult
+        let child = ExponentialInsulinModelPreset.rapidActingChild
         
         XCTAssertEqual("""
-        {
-          "exponential" : "rapidActingAdult"
-        }
+        "rapidActingAdult"
         """, String(data: try encoder.encode(adult), encoding: .utf8)!)
         XCTAssertEqual("""
-        {
-          "exponential" : "rapidActingChild"
-        }
+        "rapidActingChild"
         """, String(data: try encoder.encode(child), encoding: .utf8)!)
     }
 
@@ -277,7 +271,7 @@ class TherapySettingsCodableTests: XCTestCase {
         XCTAssertEqual(decoded.maximumBasalRatePerHour, expected.maximumBasalRatePerHour)
         XCTAssertEqual(decoded.suspendThreshold, expected.suspendThreshold)
         XCTAssertEqual(decoded.carbRatioSchedule, expected.carbRatioSchedule)
-        XCTAssertEqual(decoded.insulinModelSettings, expected.insulinModelSettings)
+        XCTAssertEqual(decoded.defaultRapidActingModel, expected.defaultRapidActingModel)
         XCTAssertEqual(decoded.glucoseTargetRangeSchedule, expected.glucoseTargetRangeSchedule)
     }
 }
@@ -339,7 +333,7 @@ fileprivate extension TherapySettings {
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             carbRatioSchedule: carbRatioSchedule,
             basalRateSchedule: basalRateSchedule,
-            insulinModelSettings: InsulinModelSettings(model: ExponentialInsulinModelPreset.rapidActingAdult)
+            defaultRapidActingModel: ExponentialInsulinModelPreset.rapidActingAdult
         )
     }
 }

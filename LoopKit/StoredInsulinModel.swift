@@ -25,3 +25,25 @@ public struct StoredInsulinModel: Codable, Equatable {
         self.peakActivity = peakActivity
     }
 }
+
+public extension StoredInsulinModel {
+    init(_ preset: ExponentialInsulinModelPreset) {
+        var modelType: StoredInsulinModel.ModelType
+        var actionDuration: TimeInterval
+        var peakActivity: TimeInterval?
+        
+        switch preset {
+        case .rapidActingAdult:
+            modelType = .rapidAdult
+        case .rapidActingChild:
+            modelType = .rapidChild
+        case .fiasp:
+            modelType = .fiasp
+        }
+        actionDuration = preset.actionDuration
+        peakActivity = preset.peakActivity
+        
+        self.init(modelType: modelType, actionDuration: actionDuration, peakActivity: peakActivity)
+    }
+}
+
