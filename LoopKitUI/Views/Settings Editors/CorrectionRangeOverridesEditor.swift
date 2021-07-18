@@ -267,10 +267,9 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
     var body: some View {
         assert(!crossedThresholds.isEmpty)
         return GuardrailWarning(
+            therapySetting: preset == .preMeal ? .preMealCorrectionRangeOverride : .workoutCorrectionRangeOverride,
             title: title,
-            thresholds: crossedThresholds,
-            caption: caption
-        )
+            thresholds: crossedThresholds)
     }
 
     private var title: Text {
@@ -307,17 +306,6 @@ private struct CorrectionRangeOverridesGuardrailWarning: View {
         case .workout:
             return Text(LocalizedString("Workout Values", comment: "Title text for multi-value workout value warning"))
         }
-    }
-
-    var caption: Text? {
-        guard
-            preset == .preMeal,
-            crossedThresholds.allSatisfy({ $0 == .aboveRecommended || $0 == .maximum })
-        else {
-            return nil
-        }
-        
-        return Text(crossedThresholds.count > 1 ? TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForOutsideValues : TherapySetting.preMealCorrectionRangeOverride.guardrailCaptionForHighValue)
     }
 }
 

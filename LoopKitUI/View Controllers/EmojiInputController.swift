@@ -119,7 +119,7 @@ public class EmojiInputController: UIInputViewController, UICollectionViewDataSo
 }
 
 
-public protocol EmojiInputControllerDelegate: class {
+public protocol EmojiInputControllerDelegate: AnyObject {
     func emojiInputControllerDidAdvanceToStandardInputMode(_ controller: EmojiInputController)
 
     func emojiInputControllerDidSelectItemInSection(_ section: Int)

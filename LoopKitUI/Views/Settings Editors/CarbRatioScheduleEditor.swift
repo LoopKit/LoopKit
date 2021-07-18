@@ -93,6 +93,7 @@ private struct CarbRatioGuardrailWarning: View {
     var body: some View {
         assert(!crossedThresholds.isEmpty)
         return GuardrailWarning(
+            therapySetting: .carbRatio,
             title: crossedThresholds.count == 1 ? singularWarningTitle(for: crossedThresholds.first!) : multipleWarningTitle,
             thresholds: crossedThresholds
         )

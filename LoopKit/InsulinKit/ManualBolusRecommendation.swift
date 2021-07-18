@@ -14,6 +14,7 @@ public enum BolusRecommendationNotice {
     case currentGlucoseBelowTarget(glucose: GlucoseValue)
     case predictedGlucoseBelowTarget(minGlucose: GlucoseValue)
     case predictedGlucoseInRange
+    case allGlucoseBelowTarget(minGlucose: GlucoseValue)
 }
 
 extension BolusRecommendationNotice: Codable {
@@ -33,6 +34,8 @@ extension BolusRecommendationNotice: Codable {
                 self = .currentGlucoseBelowTarget(glucose: currentGlucoseBelowTarget.glucose)
             } else if let predictedGlucoseBelowTarget = try container.decodeIfPresent(PredictedGlucoseBelowTarget.self, forKey: .predictedGlucoseBelowTarget) {
                 self = .predictedGlucoseBelowTarget(minGlucose: predictedGlucoseBelowTarget.minGlucose)
+            } else if let allGlucoseBelowTarget = try container.decodeIfPresent(AllGlucoseBelowTarget.self, forKey: .allGlucoseBelowTarget) {
+                self = .allGlucoseBelowTarget(minGlucose: allGlucoseBelowTarget.minGlucose)
             } else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "invalid enumeration"))
             }
@@ -53,6 +56,9 @@ extension BolusRecommendationNotice: Codable {
         case .predictedGlucoseInRange:
             var container = encoder.singleValueContainer()
             try container.encode(CodableKeys.predictedGlucoseInRange.rawValue)
+        case .allGlucoseBelowTarget(minGlucose: let minGlucose):
+            var container = encoder.container(keyedBy: CodableKeys.self)
+            try container.encode(AllGlucoseBelowTarget(minGlucose: SimpleGlucoseValue(minGlucose)), forKey: .allGlucoseBelowTarget)
         }
     }
 
@@ -68,11 +74,16 @@ extension BolusRecommendationNotice: Codable {
         let minGlucose: SimpleGlucoseValue
     }
 
+    private struct AllGlucoseBelowTarget: Codable {
+        let minGlucose: SimpleGlucoseValue
+    }
+
     private enum CodableKeys: String, CodingKey {
         case glucoseBelowSuspendThreshold
         case currentGlucoseBelowTarget
         case predictedGlucoseBelowTarget
         case predictedGlucoseInRange
+        case allGlucoseBelowTarget
     }
 }
 

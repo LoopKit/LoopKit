@@ -11,21 +11,22 @@ import LoopKit
 
 public struct InsulinTypeSetting: View {
     
-    @State private var insulinType: InsulinType
+    @State private var insulinType: InsulinType?
     private var supportedInsulinTypes: [InsulinType]
-    private var didChange: (InsulinType) -> Void
+    private var allowUnsetInsulinType: Bool
+    private var didChange: (InsulinType?) -> Void
     
-    
-    public init(initialValue: InsulinType, supportedInsulinTypes: [InsulinType], didChange: @escaping (InsulinType) -> Void) {
+    public init(initialValue: InsulinType?, supportedInsulinTypes: [InsulinType], allowUnsetInsulinType: Bool, didChange: @escaping (InsulinType?) -> Void) {
         self._insulinType = State(initialValue: initialValue)
         self.supportedInsulinTypes = supportedInsulinTypes
+        self.allowUnsetInsulinType = allowUnsetInsulinType
         self.didChange = didChange
     }
     
     public var body: some View {
         List {
             Section {
-                InsulinTypeChooser(insulinType: insulinTypeBinding, supportedInsulinTypes: supportedInsulinTypes)
+                InsulinTypeChooser(insulinType: insulinTypeBinding, supportedInsulinTypes: supportedInsulinTypes, allowUnsetInsulinType: allowUnsetInsulinType)
             }
             .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
         }
@@ -33,7 +34,7 @@ public struct InsulinTypeSetting: View {
 
     }
     
-    private var insulinTypeBinding: Binding<InsulinType> {
+    private var insulinTypeBinding: Binding<InsulinType?> {
         Binding(
             get: { self.insulinType },
             set: { newValue in
@@ -46,7 +47,7 @@ public struct InsulinTypeSetting: View {
 
 struct InsulinTypeSetting_Previews: PreviewProvider {
     static var previews: some View {
-        InsulinTypeSetting(initialValue: .humalog, supportedInsulinTypes: InsulinType.allCases) { (newType) in
+        InsulinTypeSetting(initialValue: .humalog, supportedInsulinTypes: InsulinType.allCases, allowUnsetInsulinType: false) { (newType) in
             
         }
     }

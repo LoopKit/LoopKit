@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol GlucoseRangeTableViewCellDelegate: class {
+protocol GlucoseRangeTableViewCellDelegate: AnyObject {
     func glucoseRangeTableViewCellDidUpdate(_ cell: GlucoseRangeTableViewCell)
 }
 

@@ -11,7 +11,7 @@ import LoopKit
 import LoopKitUI
 import MockKit
 
-protocol MeasurementFrequencyTableViewControllerDelegate: class {
+protocol MeasurementFrequencyTableViewControllerDelegate: AnyObject {
     func measurementFrequencyTableViewControllerDidChangeFrequency(_ controller: MeasurementFrequencyTableViewController)
 }
 

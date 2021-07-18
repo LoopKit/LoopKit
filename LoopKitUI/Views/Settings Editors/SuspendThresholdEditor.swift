@@ -205,7 +205,7 @@ struct SuspendThresholdGuardrailWarning: View {
     var safetyClassificationThreshold: SafetyClassification.Threshold
 
     var body: some View {
-        GuardrailWarning(title: title, threshold: safetyClassificationThreshold)
+        GuardrailWarning(therapySetting: .suspendThreshold, title: title, threshold: safetyClassificationThreshold)
     }
 
     private var title: Text {

@@ -306,12 +306,15 @@ extension DoseEntry {
     /// Use case: predict glucose effects of zero temping
     ///
     /// - Parameters:
+    ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
+    ///   - longestEffectDuration: The longest duration that a dose could be active.
     ///   - defaultInsulinModelSetting: The model of insulin activity over time
     ///   - insulinSensitivity: The schedule of glucose effect per unit of insulin
     ///   - basalRateSchedule: The schedule of basal rates
     /// - Returns: An array of glucose effects for the duration of the temp basal dose plus the duration of insulin action
     public func tempBasalGlucoseEffects(
-        insulinModelSettings: InsulinModelSettings,
+        insulinModelProvider: InsulinModelProvider,
+        longestEffectDuration: TimeInterval,
         insulinSensitivity: InsulinSensitivitySchedule,
         basalRateSchedule: BasalRateSchedule
         ) -> [GlucoseEffect] {
@@ -322,7 +325,7 @@ extension DoseEntry {
         
         let netTempBasalDoses = self.annotated(with: basalRateSchedule)
 
-        return netTempBasalDoses.glucoseEffects(insulinModelSettings: insulinModelSettings, insulinSensitivity: insulinSensitivity)
+        return netTempBasalDoses.glucoseEffects(insulinModelProvider: insulinModelProvider, longestEffectDuration: longestEffectDuration, insulinSensitivity: insulinSensitivity)
     }
 
     fileprivate var resolvingDelivery: DoseEntry {
@@ -472,6 +475,7 @@ extension Collection where Element == DoseEntry {
     /**
      Calculates the timeline of insulin remaining for a collection of doses
 
+     - parameter insulinModelProvider:  A factory that can provide an insulin model given an insulin type
      - parameter defaultModel:          The default model of insulin activity over time, normally the insulin type dispensed by the pump
      - parameter longestEffectDuration: The longest duration that a dose could be active.
      - parameter start:                 The date to start the timeline
@@ -481,12 +485,13 @@ extension Collection where Element == DoseEntry {
      - returns: A sequence of insulin amount remaining
      */
     func insulinOnBoard(
-        insulinModelSettings: InsulinModelSettings,
+        insulinModelProvider: InsulinModelProvider,
+        longestEffectDuration: TimeInterval,
         from start: Date? = nil,
         to end: Date? = nil,
         delta: TimeInterval = TimeInterval(minutes: 5)
     ) -> [InsulinValue] {
-        guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: insulinModelSettings.longestEffectDuration, delta: delta) else {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: longestEffectDuration, delta: delta) else {
             return []
         }
 
@@ -495,7 +500,7 @@ extension Collection where Element == DoseEntry {
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
-                return value + dose.insulinOnBoard(at: date, model: insulinModelSettings.model(for: dose.insulinType), delta: delta)
+                return value + dose.insulinOnBoard(at: date, model: insulinModelProvider.model(for: dose.insulinType), delta: delta)
             }
 
             values.append(InsulinValue(startDate: date, value: value))
@@ -508,7 +513,7 @@ extension Collection where Element == DoseEntry {
     /// Calculates the timeline of glucose effects for a collection of doses
     ///
     /// - Parameters:
-    ///   - defaultModel: The default model of insulin activity over time, normally the insulin type dispensed by the pump
+    ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
     ///   - longestEffectDuration: The longest duration that a dose could be active.
     ///   - insulinSensitivity: The schedule of glucose effect per unit of insulin
     ///   - start: The earliest date of effects to return
@@ -516,7 +521,8 @@ extension Collection where Element == DoseEntry {
     ///   - delta: The interval between returned effects
     /// - Returns: An array of glucose effects for the duration of the doses
     public func glucoseEffects(
-        insulinModelSettings: InsulinModelSettings,
+        insulinModelProvider: InsulinModelProvider,
+        longestEffectDuration: TimeInterval,
         insulinSensitivity: InsulinSensitivitySchedule,
         from start: Date? = nil,
         to end: Date? = nil,
@@ -524,7 +530,7 @@ extension Collection where Element == DoseEntry {
     ) -> [GlucoseEffect] {
         guard let (start, end) = LoopMath.simulationDateRangeForSamples(self.filter({ entry in
             entry.netBasalUnits != 0
-        }), from: start, to: end, duration: insulinModelSettings.longestEffectDuration, delta: delta) else {
+        }), from: start, to: end, duration: longestEffectDuration, delta: delta) else {
             return []
         }
 
@@ -534,7 +540,7 @@ extension Collection where Element == DoseEntry {
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
-                return value + dose.glucoseEffect(at: date, model: insulinModelSettings.model(for: dose.insulinType), insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delta: delta)
+                return value + dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delta: delta)
             }
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))

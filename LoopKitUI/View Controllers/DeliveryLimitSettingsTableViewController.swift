@@ -8,7 +8,7 @@
 import UIKit
 
 
-public protocol DeliveryLimitSettingsTableViewControllerDelegate: class {
+public protocol DeliveryLimitSettingsTableViewControllerDelegate: AnyObject {
     func deliveryLimitSettingsTableViewControllerDidUpdateMaximumBasalRatePerHour(_ vc: DeliveryLimitSettingsTableViewController)
 
     func deliveryLimitSettingsTableViewControllerDidUpdateMaximumBolus(_ vc: DeliveryLimitSettingsTableViewController)
@@ -21,7 +21,7 @@ public enum DeliveryLimitSettingsResult {
 }
 
 
-public protocol DeliveryLimitSettingsTableViewControllerSyncSource: class {
+public protocol DeliveryLimitSettingsTableViewControllerSyncSource: AnyObject {
     func syncDeliveryLimitSettings(for viewController: DeliveryLimitSettingsTableViewController, completion: @escaping (_ result: DeliveryLimitSettingsResult) -> Void)
 
     func syncButtonTitle(for viewController: DeliveryLimitSettingsTableViewController) -> String
