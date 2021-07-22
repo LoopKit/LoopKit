@@ -50,6 +50,22 @@ class PumpEvent: NSManagedObject {
             primitiveUnit = newValue?.rawValue
         }
     }
+    
+    var insulinType: InsulinType? {
+        get {
+            willAccessValue(forKey: "insulinType")
+            defer { didAccessValue(forKey: "insulinType") }
+            guard let type = primitiveInsulinType else {
+                return nil
+            }
+            return InsulinType(rawValue: type.intValue)
+        }
+        set {
+            willChangeValue(forKey: "insulinType")
+            defer { didChangeValue(forKey: "insulinType") }
+            primitiveInsulinType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
+        }
+    }
 
     var type: PumpEventType? {
         get {
@@ -89,6 +105,20 @@ class PumpEvent: NSManagedObject {
             primitiveValue = newValue != nil ? NSNumber(value: newValue!) : nil
         }
     }
+    
+    var automatic: Bool? {
+        get {
+            willAccessValue(forKey: "automatic")
+            defer { didAccessValue(forKey: "automatic") }
+            return primitiveAutomatic?.boolValue
+        }
+        set {
+            willChangeValue(forKey: "automatic")
+            defer { didChangeValue(forKey: "automatic") }
+            primitiveAutomatic = newValue != nil ? NSNumber(booleanLiteral: newValue!) : nil
+        }
+    }
+
 
     var deliveredUnits: Double? {
         get {
@@ -145,7 +175,6 @@ extension PumpEvent: TimelineValue {
 
 
 extension PumpEvent {
-
     var dose: DoseEntry? {
         get {
             // To handle migration, we're requiring any dose to also have a PumpEventType
@@ -160,7 +189,9 @@ extension PumpEvent {
                 value: value,
                 unit: unit,
                 deliveredUnits: deliveredUnits,
-                syncIdentifier: syncIdentifier
+                syncIdentifier: syncIdentifier,
+                insulinType: insulinType,
+                automatic: automatic
             )
         }
         set {
@@ -174,6 +205,8 @@ extension PumpEvent {
             value = entry.value
             unit = entry.unit
             deliveredUnits = entry.deliveredUnits
+            insulinType = entry.insulinType
+            automatic = entry.automatic
         }
     }
 
@@ -200,5 +233,6 @@ extension PumpEvent {
         raw = event.raw
         title = event.title
         dose = event.dose
+        automatic = event.automatic
     }
 }

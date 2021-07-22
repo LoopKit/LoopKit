@@ -269,7 +269,7 @@ extension InsulinDeliveryStore {
     ///   - syncVersion: The sync version used for the new dose entries.
     ///   - completion: A closure called once the dose entries have been stored.
     ///   - result: Success or error.
-    func addDoseEntries(_ entries: [DoseEntry], from device: HKDevice?, syncVersion: Int, completion: @escaping (_ result: Result<Void, Error>) -> Void) {
+    func addDoseEntries(_ entries: [DoseEntry], from device: HKDevice?, syncVersion: Int, provenanceIdentifier: String? = nil, completion: @escaping (_ result: Result<Void, Error>) -> Void) {
         guard !entries.isEmpty else {
             completion(.success(()))
             return
@@ -297,7 +297,7 @@ extension InsulinDeliveryStore {
                             return nil
                         }
 
-                        return HKQuantitySample(type: self.insulinType, unit: HKUnit.internationalUnit(), dose: entry, device: device, syncVersion: syncVersion)
+                        return HKQuantitySample(type: self.insulinType, unit: HKUnit.internationalUnit(), dose: entry, device: device, provenanceIdentifier: provenanceIdentifier ?? self.provenanceIdentifier, syncVersion: syncVersion)
                     }
 
                     changed = !quantitySamples.isEmpty
@@ -307,7 +307,7 @@ extension InsulinDeliveryStore {
 
                     let objects: [CachedInsulinDeliveryObject] = quantitySamples.map { quantitySample in
                         let object = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
-                        object.create(fromNew: quantitySample, provenanceIdentifier: self.provenanceIdentifier, on: self.currentDate())
+                        object.create(fromNew: quantitySample, on: self.currentDate())
                         return object
                     }
 
@@ -393,6 +393,26 @@ extension InsulinDeliveryStore {
         object.create(fromExisting: sample, on: self.currentDate())
 
         return true
+    }
+
+    func deleteDose(with uuidToDelete: UUID, _ completion: @escaping (String?) -> Void) {
+        queue.async {
+            var errorString: String? = nil
+            self.cacheStore.managedObjectContext.performAndWait {
+                do {
+                    let count = try self.deleteDoseEntries(withUUIDs: [uuidToDelete])
+                    guard count > 0 else {
+                        errorString = "Cannot find CachedInsulinDeliveryObject to delete"
+                        return
+                    }
+                    self.cacheStore.save()
+                } catch let error {
+                    errorString = "Error deleting CachedInsulinDeliveryObject: " + error.localizedDescription
+                    return
+                }
+            }
+            completion(errorString)
+        }
     }
 
     private func deleteDoseEntries(withUUIDs uuids: [UUID], batchSize: Int = 500) throws -> Int {

@@ -1,18 +1,17 @@
 //
-//  InsulinDeliveryTableViewController.swift
+//  LegacyInsulinDeliveryTableViewController.swift
 //  Naterade
 //
 //  Created by Nathan Racklyeft on 1/30/16.
 //  Copyright © 2016 Nathan Racklyeft. All rights reserved.
 //
-
 import UIKit
 import LoopKit
 
 private let ReuseIdentifier = "Right Detail"
 
 
-public final class InsulinDeliveryTableViewController: UITableViewController {
+public final class LegacyInsulinDeliveryTableViewController: UITableViewController {
 
     @IBOutlet var needsConfigurationMessageView: ErrorBackgroundView!
 
@@ -139,7 +138,6 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
     }
 
     // MARK: - Data
-
     private enum State {
         case unknown
         case unavailable(Error?)
@@ -351,7 +349,6 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
     public override func numberOfSections(in tableView: UITableView) -> Int {
         switch state {
         case .unknown, .unavailable:
@@ -392,7 +389,7 @@ public final class InsulinDeliveryTableViewController: UITableViewController {
                 if let attributedText = entry.dose?.localizedAttributedDescription {
                     cell.textLabel?.attributedText = attributedText
                 } else {
-                    cell.textLabel?.text = LocalizedString("Unknown", comment: "The default description to use when an entry has no dose description")
+                    cell.textLabel?.text = entry.title
                 }
                 
                 cell.detailTextLabel?.text = time

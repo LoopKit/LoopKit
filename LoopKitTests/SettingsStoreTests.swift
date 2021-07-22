@@ -154,6 +154,11 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
       }
     },
     "date" : "2020-05-14T22:48:15Z",
+    "defaultRapidActingModel" : {
+      "actionDuration" : 21600,
+      "modelType" : "rapidAdult",
+      "peakActivity" : 10800
+    },
     "deviceToken" : "DeviceTokenString",
     "dosingEnabled" : true,
     "glucoseTargetRangeSchedule" : {
@@ -198,11 +203,6 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
           }
         }
       }
-    },
-    "insulinModel" : {
-      "actionDuration" : 21600,
-      "modelType" : "rapidAdult",
-      "peakActivity" : 10800
     },
     "insulinSensitivitySchedule" : {
       "unit" : "mg/dL",
@@ -250,6 +250,9 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
       }
     ],
     "preMealOverride" : {
+      "actualEnd" : {
+        "type" : "natural"
+      },
       "context" : "preMeal",
       "duration" : "indefinite",
       "enactTrigger" : "local",
@@ -268,6 +271,9 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
       "minValue" : 80
     },
     "scheduleOverride" : {
+      "actualEnd" : {
+        "type" : "natural"
+      },
       "context" : "preMeal",
       "duration" : {
         "finite" : {
@@ -708,6 +714,11 @@ class StoredSettingsCodableTests: XCTestCase {
     }
   },
   "date" : "2020-05-14T22:48:15Z",
+  "defaultRapidActingModel" : {
+    "actionDuration" : 21600,
+    "modelType" : "rapidAdult",
+    "peakActivity" : 10800
+  },
   "deviceToken" : "DeviceTokenString",
   "dosingEnabled" : true,
   "glucoseTargetRangeSchedule" : {
@@ -752,11 +763,6 @@ class StoredSettingsCodableTests: XCTestCase {
         }
       }
     }
-  },
-  "insulinModel" : {
-    "actionDuration" : 21600,
-    "modelType" : "rapidAdult",
-    "peakActivity" : 10800
   },
   "insulinSensitivitySchedule" : {
     "unit" : "mg/dL",
@@ -804,6 +810,9 @@ class StoredSettingsCodableTests: XCTestCase {
     }
   ],
   "preMealOverride" : {
+    "actualEnd" : {
+      "type" : "natural"
+    },
     "context" : "preMeal",
     "duration" : "indefinite",
     "enactTrigger" : "local",
@@ -822,6 +831,9 @@ class StoredSettingsCodableTests: XCTestCase {
     "minValue" : 80
   },
   "scheduleOverride" : {
+    "actualEnd" : {
+      "type" : "natural"
+    },
     "context" : "preMeal",
     "duration" : {
       "finite" : {
@@ -894,7 +906,7 @@ extension StoredSettings: Equatable {
             lhs.maximumBolus == rhs.maximumBolus &&
             lhs.suspendThreshold == rhs.suspendThreshold &&
             lhs.deviceToken == rhs.deviceToken &&
-            lhs.insulinModel == rhs.insulinModel &&
+            lhs.defaultRapidActingModel == rhs.defaultRapidActingModel &&
             lhs.basalRateSchedule == rhs.basalRateSchedule &&
             lhs.insulinSensitivitySchedule == rhs.insulinSensitivitySchedule &&
             lhs.carbRatioSchedule == rhs.carbRatioSchedule &&
@@ -944,7 +956,7 @@ fileprivate extension StoredSettings {
                               maximumBolus: 10.0,
                               suspendThreshold: GlucoseThreshold(unit: .milligramsPerDeciliter, value: 75.0),
                               deviceToken: "DeviceTokenString",
-                              insulinModel: StoredInsulinModel(modelType: .rapidAdult, actionDuration: .hours(6), peakActivity: .hours(3)),
+                              defaultRapidActingModel: StoredInsulinModel(modelType: .rapidAdult, actionDuration: .hours(6), peakActivity: .hours(3)),
                               basalRateSchedule: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1.0),
                                                                                 RepeatingScheduleValue(startTime: .hours(6), value: 1.5),
                                                                                 RepeatingScheduleValue(startTime: .hours(18), value: 1.25)],

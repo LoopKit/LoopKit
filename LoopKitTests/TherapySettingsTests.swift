@@ -33,7 +33,7 @@ class TherapySettingsCodableTests: XCTestCase {
         decoder.dateDecodingStrategy = .iso8601
         return decoder
     }()
-
+    
     let encodedString = """
     {
       "basalRateSchedule" : {
@@ -137,6 +137,7 @@ class TherapySettingsCodableTests: XCTestCase {
           }
         }
       },
+      "defaultRapidActingModel" : "rapidActingAdult",
       "glucoseTargetRangeSchedule" : {
         "rangeSchedule" : {
           "unit" : "mg/dL",
@@ -193,9 +194,6 @@ class TherapySettingsCodableTests: XCTestCase {
           }
         }
       },
-      "insulinModelSettings" : {
-        "exponential" : "humalogNovologAdult"
-      },
       "insulinSensitivitySchedule" : {
         "unit" : "mg/dL",
         "valueSchedule" : {
@@ -242,28 +240,15 @@ class TherapySettingsCodableTests: XCTestCase {
     """
     
     func testInsulinModelEncoding() throws {
-        let adult = InsulinModelSettings.exponentialPreset(.humalogNovologAdult)
-        let child = InsulinModelSettings.exponentialPreset(.humalogNovologChild)
-        let walsh = InsulinModelSettings.walsh(WalshInsulinModel(actionDuration: 10))
+        let adult = ExponentialInsulinModelPreset.rapidActingAdult
+        let child = ExponentialInsulinModelPreset.rapidActingChild
         
         XCTAssertEqual("""
-        {
-          "exponential" : "humalogNovologAdult"
-        }
+        "rapidActingAdult"
         """, String(data: try encoder.encode(adult), encoding: .utf8)!)
         XCTAssertEqual("""
-        {
-          "exponential" : "humalogNovologChild"
-        }
+        "rapidActingChild"
         """, String(data: try encoder.encode(child), encoding: .utf8)!)
-        XCTAssertEqual("""
-        {
-          "walsh" : {
-            "actionDuration" : 10,
-            "delay" : 600
-          }
-        }
-        """, String(data: try encoder.encode(walsh), encoding: .utf8)!)
     }
 
     func testTherapySettingEncoding() throws {
@@ -286,7 +271,7 @@ class TherapySettingsCodableTests: XCTestCase {
         XCTAssertEqual(decoded.maximumBasalRatePerHour, expected.maximumBasalRatePerHour)
         XCTAssertEqual(decoded.suspendThreshold, expected.suspendThreshold)
         XCTAssertEqual(decoded.carbRatioSchedule, expected.carbRatioSchedule)
-        XCTAssertEqual(decoded.insulinModelSettings, expected.insulinModelSettings)
+        XCTAssertEqual(decoded.defaultRapidActingModel, expected.defaultRapidActingModel)
         XCTAssertEqual(decoded.glucoseTargetRangeSchedule, expected.glucoseTargetRangeSchedule)
     }
 }
@@ -348,7 +333,7 @@ fileprivate extension TherapySettings {
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             carbRatioSchedule: carbRatioSchedule,
             basalRateSchedule: basalRateSchedule,
-            insulinModelSettings: InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)
+            defaultRapidActingModel: ExponentialInsulinModelPreset.rapidActingAdult
         )
     }
 }

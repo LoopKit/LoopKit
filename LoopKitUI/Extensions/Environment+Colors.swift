@@ -69,6 +69,28 @@ public extension EnvironmentValues {
     }
 }
 
+private struct LightInsulinTintColorKey: EnvironmentKey {
+    static let defaultValue: UIColor = .lightenedInsulin
+}
+
+public extension EnvironmentValues {
+    var lightenedInsulinTintColor: UIColor {
+        get { self[LightInsulinTintColorKey.self] }
+        set { self[LightInsulinTintColorKey.self] = newValue }
+    }
+}
+
+private struct DarkInsulinTintColorKey: EnvironmentKey {
+    static let defaultValue: UIColor = .darkenedInsulin
+}
+
+public extension EnvironmentValues {
+    var darkenedInsulinTintColor: UIColor {
+        get { self[DarkInsulinTintColorKey.self] }
+        set { self[DarkInsulinTintColorKey.self] = newValue }
+    }
+}
+
 private struct LoopStatusColorPaletteKey: EnvironmentKey {
     static let defaultValue: StateColorPalette = StateColorPalette(unknown: .systemGray4,
                                                                    normal: .green,

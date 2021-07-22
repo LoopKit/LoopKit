@@ -14,6 +14,7 @@ import MockKit
 
 
 extension MockPumpManager: PumpManagerUI {
+    
     private var appName: String {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
     }
@@ -22,7 +23,7 @@ extension MockPumpManager: PumpManagerUI {
 
     public var smallImage: UIImage? { return UIImage(named: "Pump Simulator", in: Bundle(for: MockPumpManagerSettingsViewController.self), compatibleWith: nil) }
     
-    public static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
+    public static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let mockPumpManager = MockPumpManager()
         if let maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour {
             mockPumpManager.setMaximumTempBasalRate(maxBasalRateUnitsPerHour)
@@ -33,8 +34,8 @@ extension MockPumpManager: PumpManagerUI {
         return .createdAndOnboarded(mockPumpManager)
     }
 
-    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> PumpManagerViewController {
-        let settings = MockPumpManagerSettingsViewController(pumpManager: self)
+    public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> PumpManagerViewController {
+        let settings = MockPumpManagerSettingsViewController(pumpManager: self, supportedInsulinTypes: allowedInsulinTypes)
         let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
         return nav
     }
@@ -46,8 +47,8 @@ extension MockPumpManager: PumpManagerUI {
         }
     }
 
-    public func hudProvider(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> HUDProvider? {
-        return MockHUDProvider(pumpManager: self)
+    public func hudProvider(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> HUDProvider? {
+        return MockHUDProvider(pumpManager: self, allowedInsulinTypes: allowedInsulinTypes)
     }
 
     public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView? {

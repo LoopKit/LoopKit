@@ -306,6 +306,7 @@ extension TherapySettingsView {
                 )
             }
         }
+        .accessibilityElement(children: .combine)
     }
     
     private var maxBolusItem: some View {
@@ -323,20 +324,21 @@ extension TherapySettingsView {
                 )
             }
         }
+        .accessibilityElement(children: .combine)
     }
         
     private var insulinModelSection: Card {
         card(for: .insulinModel) {
-            if let insulinModelSettings = self.viewModel.therapySettings.insulinModelSettings {
+            if let insulinModelPreset = self.viewModel.therapySettings.defaultRapidActingModel {
                 SectionDivider()
                 HStack {
                     // Spacing and paddings here is my best guess based on the design...
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(insulinModelSettings.title)
+                        Text(insulinModelPreset.title)
                             .font(.body)
                             .padding(.top, 5)
                             .fixedSize(horizontal: false, vertical: true)
-                        Text(insulinModelSettings.subtitle)
+                        Text(insulinModelPreset.subtitle)
                             .font(.footnote)
                             .foregroundColor(.secondary)
                             .padding(.bottom, 8)
@@ -347,6 +349,7 @@ extension TherapySettingsView {
                         .font(Font.system(.title2).weight(.semibold))
                         .foregroundColor(.accentColor)
                 }
+                .accessibilityElement(children: .combine)
             }
         }
     }
@@ -612,7 +615,6 @@ public struct TherapySettingsView_Previews: PreviewProvider {
 
     static func preview_viewModel() -> TherapySettingsViewModel {
         TherapySettingsViewModel(therapySettings: preview_therapySettings,
-                                 supportedInsulinModelSettings: SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                                  pumpSupportedIncrements: { PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
                                                                                   bolusVolumes: preview_supportedBolusVolumes,
                                                                                   maximumBasalScheduleEntryCount: 24) })

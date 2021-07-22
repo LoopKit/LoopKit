@@ -1,13 +1,13 @@
 //
 //  ExponentialInsulinModelPreset.swift
-//  Loop
+//  LoopKit
 //
 //  Copyright © 2017 LoopKit Authors. All rights reserved.
 //
 
 public enum ExponentialInsulinModelPreset: String, Codable {
-    case humalogNovologAdult
-    case humalogNovologChild
+    case rapidActingAdult
+    case rapidActingChild
     case fiasp
 }
 
@@ -16,9 +16,9 @@ public enum ExponentialInsulinModelPreset: String, Codable {
 extension ExponentialInsulinModelPreset {
     public var actionDuration: TimeInterval {
         switch self {
-        case .humalogNovologAdult:
+        case .rapidActingAdult:
             return .minutes(360)
-        case .humalogNovologChild:
+        case .rapidActingChild:
             return .minutes(360)
         case .fiasp:
             return .minutes(360)
@@ -27,9 +27,9 @@ extension ExponentialInsulinModelPreset {
 
     public var peakActivity: TimeInterval {
         switch self {
-        case .humalogNovologAdult:
+        case .rapidActingAdult:
             return .minutes(75)
-        case .humalogNovologChild:
+        case .rapidActingChild:
             return .minutes(65)
         case .fiasp:
             return .minutes(55)
@@ -55,7 +55,6 @@ extension ExponentialInsulinModelPreset: InsulinModel {
         return model.percentEffectRemaining(at: time)
     }
 }
-
 
 extension ExponentialInsulinModelPreset: CustomDebugStringConvertible {
     public var debugDescription: String {
