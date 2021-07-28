@@ -1,5 +1,5 @@
 //
-//  PersistedOutsideDose.swift
+//  PersistedManualEntryDose.swift
 //  LoopKit
 //
 //  Created by Anna Quinlan on 4/17/20.
@@ -7,8 +7,7 @@
 //
 import Foundation
 
-// A wrapper around the CachedInsulinDeliveryObject to allow it to be used for logged/outside doses in Loop
-public struct PersistedOutsideDose {
+public struct PersistedManualEntryDose {
     /// The date of the event
     public let date: Date
     /// The date the event was persisted
@@ -20,12 +19,12 @@ public struct PersistedOutsideDose {
 }
 
 extension CachedInsulinDeliveryObject {
-    var persistedOutsideDose: PersistedOutsideDose? {
+    var persistedManualEntryDose: PersistedManualEntryDose? {
         guard provenanceIdentifier == "org.loopkit.provenance.manualEntry" else {
             return nil
         }
         
-        return PersistedOutsideDose(
+        return PersistedManualEntryDose(
             date: startDate,
             persistedDate: createdAt,
             dose: dose,
