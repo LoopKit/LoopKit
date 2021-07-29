@@ -168,7 +168,6 @@ extension CachedInsulinDeliveryObject {
         precondition(sample.syncIdentifier != nil)
 
         self.uuid = nil
-        self.provenanceIdentifier = provenanceIdentifier
         self.hasLoopKitOrigin = true
         self.startDate = sample.startDate
         self.endDate = sample.endDate
@@ -185,7 +184,7 @@ extension CachedInsulinDeliveryObject {
 
     func create(fromExisting sample: HKQuantitySample, on date: Date = Date()) {
         self.uuid = sample.uuid
-        self.provenanceIdentifier = provenanceIdentifier
+        self.provenanceIdentifier = sample.provenanceIdentifier
         self.hasLoopKitOrigin = sample.hasLoopKitOrigin
         self.startDate = sample.startDate
         self.endDate = sample.endDate

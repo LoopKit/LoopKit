@@ -308,6 +308,7 @@ extension InsulinDeliveryStore {
                     let objects: [CachedInsulinDeliveryObject] = quantitySamples.map { quantitySample in
                         let object = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
                         object.create(fromNew: quantitySample, on: self.currentDate())
+                        object.provenanceIdentifier = self.provenanceIdentifier
                         return object
                     }
 
