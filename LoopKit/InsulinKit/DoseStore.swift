@@ -831,25 +831,28 @@ extension DoseStore {
     }
 
     /**
-     Adds and persists manually entered doses
+     Adds and persists doses
      - parameter doses: An array of dose entries to add.
      - parameter completion: A closure called after the doses are saved. The closure takes a single argument:
      - parameter error: An error object explaining why the doses could not be saved.
      */
-    public func addManuallyEnteredDoses(_ doses: [DoseEntry], completion: @escaping (_ error: Error?) -> Void) {
+    public func addDoses(_ doses: [DoseEntry], completion: @escaping (_ error: Error?) -> Void) {
         guard doses.count > 0 else {
             completion(nil)
             return
         }
 
         self.persistenceController.save { (error) -> Void in
-            self.insulinDeliveryStore.addDoseEntries(doses, from: nil, syncVersion: self.syncVersion, provenanceIdentifier: "org.loopkit.provenance.manualEntry") { (result) in
+            self.insulinDeliveryStore.addDoseEntries(doses, from: nil, syncVersion: self.syncVersion) { (result) in
                 switch result {
                 case .success:
                     completion(nil)
-                    NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
+                    self.syncPumpEventsToInsulinDeliveryStore { error in
+                        completion(error)
+                        NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
+                    }
                 case .failure(let error):
-                    self.log.error("Error adding logged dose: %{public}@", String(describing: error))
+                    self.log.error("Error adding dose: %{public}@", String(describing: error))
                     completion(error)
                 }
             }
@@ -861,14 +864,13 @@ extension DoseStore {
     /// - Parameter dose: Dose to delete.
     /// - Parameter completion: A closure called after the event deleted. This closure takes a single argument:
     /// - Parameter success: True if dose was successfully deleted
-    public func deleteManuallyEnteredDose(_ dose: PersistedManualEntryDose, completion: @escaping (_ error: DoseStoreError?) -> Void) {
-        guard let uuid = dose.uuid else {
-            self.log.error("Unable to delete PersistedManualEntryDose: no UUID")
-            completion(DoseStoreError.fetchError(description: "Unable to delete dose: identifier is missing", recoverySuggestion: "File an issue report in Github"))
+    public func deleteDose(_ dose: DoseEntry, completion: @escaping (_ error: DoseStoreError?) -> Void) {
+        guard let syncIdentifier = dose.syncIdentifier else {
+            self.log.error("Unable to delete PersistedManualEntryDose: no syncIdentifier")
+            completion(DoseStoreError.fetchError(description: "Unable to delete dose: syncIdentifier is missing", recoverySuggestion: "File an issue report in Github"))
             return
         }
-        
-        insulinDeliveryStore.deleteDose(with: uuid) { (error) in
+        insulinDeliveryStore.deleteDose(bySyncIdentifier: syncIdentifier) { (error) in
             if let error = error {
                 completion(DoseStoreError.persistenceError(description: error, recoverySuggestion: nil))
             } else {
@@ -910,7 +912,7 @@ extension DoseStore {
     private func purgeManuallyEnteredDoses() throws {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: CachedInsulinDeliveryObject.entity().name!)
         // Only delete manually entered doses
-        let typePredicate = NSPredicate(format: "provenanceIdentifier == 'org.loopkit.provenance.manualEntry'")
+        let typePredicate = NSPredicate(format: "manuallyEntered == YES")
         fetchRequest.predicate = typePredicate
 
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
@@ -1028,7 +1030,7 @@ extension DoseStore {
     /// - Parameter startDate: The earliest dose startDate to include
     /// - Returns: An array of manually entered dose managed objects, in reverse-chronological order
     /// - Throws: An error describing the failure to fetch objects
-    public func getManuallyEnteredDoses(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<[PersistedManualEntryDose]>) -> Void) {
+    public func getManuallyEnteredDoses(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<[DoseEntry]>) -> Void) {
         persistenceController.managedObjectContext.perform {
             do {
                 let events = try self.getManuallyEnteredDoses(
@@ -1057,10 +1059,10 @@ extension DoseStore {
     ///   - chronological: Whether to return the objects in chronological or reverse-chronological order
     /// - Returns: An array of pump events in the specified order by date
     /// - Throws: An error describing the failure to fetch objects
-    private func getManuallyEnteredDoses(matching predicate: NSPredicate, chronological: Bool, limit: Int? = nil) throws -> [PersistedManualEntryDose] {
+    private func getManuallyEnteredDoses(matching predicate: NSPredicate, chronological: Bool, limit: Int? = nil) throws -> [DoseEntry] {
         let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
 
-        let sourcePredicate = NSPredicate(format: "provenanceIdentifier == 'org.loopkit.provenance.manualEntry'")
+        let sourcePredicate = NSPredicate(format: "manuallyEntered == YES")
         let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, sourcePredicate])
         request.predicate = compoundPredicate
         request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: chronological)]
@@ -1074,7 +1076,7 @@ extension DoseStore {
                 let (first, second) = chronological ? (lhs, rhs) : (rhs, lhs)
 
                 return first.startDate < second.startDate
-            }).compactMap{ $0.persistedManualEntryDose }
+            }).compactMap{ $0.dose }
         } catch let fetchError as NSError {
             throw DoseStoreError.fetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
         }
