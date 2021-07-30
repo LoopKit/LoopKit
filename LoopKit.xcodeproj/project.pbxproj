@@ -72,7 +72,7 @@
 		43025DAF1D5AB2E300106C28 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		43026D642132404900A332E2 /* ice_minus_flat_carb_effect_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43026D632132404900A332E2 /* ice_minus_flat_carb_effect_output.json */; };
 		4302F4D91D4D32D500F0FCAF /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
-		4302F4DF1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4DE1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift */; };
+		4302F4DF1D4E607B00F0FCAF /* LegacyInsulinDeliveryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4302F4DE1D4E607B00F0FCAF /* LegacyInsulinDeliveryTableViewController.swift */; };
 		4303C4921E2D665000ADEDC8 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
 		4303C4941E2D665F00ADEDC8 /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
 		43177D021D3729E60006E908 /* IdentifiableClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FF1DF1CF269D8000DB779 /* IdentifiableClass.swift */; };
@@ -1063,7 +1063,7 @@
 		4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoopKitExample.entitlements; sourceTree = "<group>"; };
 		4301582C1C7ECD7A00B64B63 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		43026D632132404900A332E2 /* ice_minus_flat_carb_effect_output.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_minus_flat_carb_effect_output.json; sourceTree = "<group>"; };
-		4302F4DE1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinDeliveryTableViewController.swift; sourceTree = "<group>"; };
+		4302F4DE1D4E607B00F0FCAF /* LegacyInsulinDeliveryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyInsulinDeliveryTableViewController.swift; sourceTree = "<group>"; };
 		4302F4E81D5066F400F0FCAF /* ReservoirValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirValue.swift; sourceTree = "<group>"; };
 		4302F4EA1D50670500F0FCAF /* NewPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPumpEvent.swift; sourceTree = "<group>"; };
 		4302F4EC1D5068CE00F0FCAF /* PersistedPumpEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistedPumpEvent.swift; sourceTree = "<group>"; };
@@ -1924,7 +1924,7 @@
 			isa = PBXGroup;
 			children = (
 				43177D031D372A7F0006E908 /* CarbEntryTableViewController.swift */,
-				4302F4DE1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift */,
+				4302F4DE1D4E607B00F0FCAF /* LegacyInsulinDeliveryTableViewController.swift */,
 				435F355D1C9CD16A00C204D2 /* NSUserDefaults.swift */,
 			);
 			path = Extensions;
@@ -3473,7 +3473,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1F5DAB1D2118C95700048054 /* LocalizedString.swift in Sources */,
-				4302F4DF1D4E607B00F0FCAF /* InsulinDeliveryTableViewController.swift in Sources */,
+				4302F4DF1D4E607B00F0FCAF /* LegacyInsulinDeliveryTableViewController.swift in Sources */,
 				43177D041D372A7F0006E908 /* CarbEntryTableViewController.swift in Sources */,
 				43B17C81208BFA6600AC27E9 /* HKUnit.swift in Sources */,
 				89AE2245228D0B5C00BDFD85 /* TimeZone.swift in Sources */,

@@ -476,7 +476,6 @@ extension Collection where Element == DoseEntry {
      Calculates the timeline of insulin remaining for a collection of doses
 
      - parameter insulinModelProvider:  A factory that can provide an insulin model given an insulin type
-     - parameter defaultModel:          The default model of insulin activity over time, normally the insulin type dispensed by the pump
      - parameter longestEffectDuration: The longest duration that a dose could be active.
      - parameter start:                 The date to start the timeline
      - parameter end:                   The date to end the timeline

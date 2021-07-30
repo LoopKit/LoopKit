@@ -198,11 +198,16 @@ public final class DoseStore {
     ///   - observeHealthKitSamplesFromOtherApps: Whether or not this Store should read HealthKit data written by other apps
     ///   - cacheStore: The cache store for reading & writing short-term intermediate data
     ///   - observationEnabled: Whether the store should observe changes from HealthKit
+    ///   - cacheLength: Maximum age of data to keep in the store.
     ///   - insulinModelSettings: A factory for producing insulin models based on insulin type
+    ///   - longestEffectDuration: This determines the oldest age of doses to be retrieved for calculating glucose effects
     ///   - basalProfile: The daily schedule of basal insulin rates
     ///   - insulinSensitivitySchedule: The daily schedule of insulin sensitivity (ISF)
+    ///   - overrideHistory: A history of overrides to be used when calculating glucose effects
     ///   - syncVersion: A version number for determining resolution in de-duplication
     ///   - lastPumpEventsReconciliation: The date the PumpManger last reconciled with the pump
+    ///   - provenanceIdentifier: An id to store with new doses, indicating the provenance of the dose, usually the app's bundle identifier.
+    ///   - test_currentDate: Used for testing to mock current time
     public init(
         healthStore: HKHealthStore,
         observeHealthKitSamplesFromOtherApps: Bool = true,
