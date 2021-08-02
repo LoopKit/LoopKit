@@ -1535,7 +1535,7 @@ extension DoseStore {
                             
                             self.getManuallyEnteredDoses(since: firstPumpEventDate) { (result) in
                                 report.append("")
-                                report.append("### getLoggedDoses")
+                                report.append("### getManuallyEnteredDoses")
 
                                 switch result {
                                 case .failure(let error):
