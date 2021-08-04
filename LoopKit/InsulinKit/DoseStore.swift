@@ -879,8 +879,8 @@ extension DoseStore {
             if let error = error {
                 completion(DoseStoreError.persistenceError(description: error, recoverySuggestion: nil))
             } else {
-                NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
                 completion(nil)
+                NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
             }
         }
     }

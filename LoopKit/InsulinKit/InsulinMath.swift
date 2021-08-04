@@ -283,7 +283,7 @@ extension DoseEntry {
     
     /// Annotates a dose with the specified insulin type.
     ///
-    /// - Parameter modelSetting: The insulin model preset to annotate the dose with.
+    /// - Parameter insulinType: The insulin type to annotate the dose with.
     /// - Returns: A dose annotated with the insulin model
     public func annotated(with insulinType: InsulinType) -> DoseEntry {
         return DoseEntry(
