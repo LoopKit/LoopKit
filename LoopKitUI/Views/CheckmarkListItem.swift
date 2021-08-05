@@ -49,6 +49,7 @@ public struct CheckmarkListItem: View {
             Spacer(minLength: 12)
 
             selectionIndicator
+                .accessibility(label: Text(isSelected ? "Selected" : "Unselected"))
         }
         .animation(nil)
     }

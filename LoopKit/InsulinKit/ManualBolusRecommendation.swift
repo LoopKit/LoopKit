@@ -1,5 +1,5 @@
 //
-//  BolusRecommendation.swift
+//  ManualBolusRecommendation.swift
 //  LoopKit
 //
 //  Created by Pete Schwamb on 1/2/17.
@@ -87,7 +87,7 @@ extension BolusRecommendationNotice: Codable {
     }
 }
 
-public struct BolusRecommendation {
+public struct ManualBolusRecommendation {
     public let amount: Double
     public let pendingInsulin: Double
     public var notice: BolusRecommendationNotice?
@@ -99,4 +99,4 @@ public struct BolusRecommendation {
     }
 }
 
-extension BolusRecommendation: Codable {}
+extension ManualBolusRecommendation: Codable {}

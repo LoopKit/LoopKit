@@ -11,14 +11,17 @@ import HealthKit
 import LoopKit
 import LoopKitUI
 import MockKit
+import SwiftUI
 
 
 final class MockPumpManagerSettingsViewController: UITableViewController {
 
     let pumpManager: MockPumpManager
+    let supportedInsulinTypes: [InsulinType]
 
-    init(pumpManager: MockPumpManager) {
+    init(pumpManager: MockPumpManager, supportedInsulinTypes: [InsulinType]) {
         self.pumpManager = pumpManager
+        self.supportedInsulinTypes = supportedInsulinTypes
         super.init(style: .grouped)
         title = NSLocalizedString("Pump Settings", comment: "Title for Pump simulator settings")
     }
@@ -84,6 +87,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         case deliverableIncrements = 0
         case supportedBasalRates
         case supportedBolusVolumes
+        case insulinType
         case reservoirRemaining
         case batteryRemaining
         case tempBasalErrorToggle
@@ -212,6 +216,13 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                     cell.accessoryType = .disclosureIndicator
                 }
                 return cell
+            case .insulinType:
+                let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+                cell.prepareForReuse()
+                cell.textLabel?.text = "Insulin Type"
+                cell.detailTextLabel?.text = pumpManager.state.insulinType?.brandName ?? "Unset"
+                cell.accessoryType = .disclosureIndicator
+                return cell
             case .reservoirRemaining:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = "Reservoir Remaining"
@@ -247,6 +258,11 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 cell.datePicker.maximumDate = Date()
                 cell.datePicker.minimumDate = Date() - .hours(48)
                 cell.datePicker.datePickerMode = .dateAndTime
+                #if swift(>=5.2)
+                    if #available(iOS 14.0, *) {
+                        cell.datePicker.preferredDatePickerStyle = .wheels
+                    }
+                #endif
                 cell.datePicker.isEnabled = true
                 cell.delegate = self
                 return cell
@@ -343,6 +359,15 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                     show(vc, sender: sender)
                 }
                 break
+            case .insulinType:
+                let view = InsulinTypeSetting(initialValue: pumpManager.state.insulinType, supportedInsulinTypes: InsulinType.allCases, allowUnsetInsulinType: true) { (newType) in
+                    self.pumpManager.state.insulinType = newType
+                }
+                let vc = DismissibleHostingController(rootView: view) {
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
+                vc.title = LocalizedString("Insulin Type", comment: "Controller title for insulin type selection screen")
+                show(vc, sender: sender)
             case .reservoirRemaining:
                 let vc = TextFieldTableViewController()
                 vc.value = String(format: "%.1f", pumpManager.state.reservoirUnitsRemaining)

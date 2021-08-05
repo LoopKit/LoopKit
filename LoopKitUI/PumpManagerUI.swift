@@ -51,8 +51,9 @@ public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager
     ///     - settings: Settings used to configure the pump manager.
     ///     - bluetoothProvider: The provider of Bluetooth functionality.
     ///     - colorPalette: Color palette to use for any UI.
+    ///     - allowedInsulinTypes: Types that the caller allows to be selected.
     /// - Returns: Either a conforming view controller to create and onboard the pump manager or a newly created and onboarded pump manager.
-    static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> SetupUIResult<PumpManagerViewController, PumpManagerUI>
+    static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI>
 
     /// Configure settings for an existing pump manager.
     ///
@@ -60,13 +61,13 @@ public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager
     ///     - bluetoothProvider: The provider of Bluetooth functionality.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: A view controller to configure an existing pump manager.
-    func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> PumpManagerViewController
+    func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> PumpManagerViewController
 
     // View for recovering from delivery uncertainty
     func deliveryUncertaintyRecoveryViewController(colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> (UIViewController & CompletionNotifying)
 
     // Returns a class that can provide HUD views
-    func hudProvider(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette) -> HUDProvider?
+    func hudProvider(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> HUDProvider?
 
     // Instantiates HUD view (typically reservoir volume) from the raw state returned by hudViewRawState
     static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView?

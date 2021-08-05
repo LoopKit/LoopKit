@@ -41,6 +41,7 @@ public struct ExpandableSetting<
                 trailingValueContent
                     .fixedSize(horizontal: true, vertical: false)
             }
+            .accessibilityElement(children: .combine)
             .contentShape(Rectangle())
             .onTapGesture {
                 withAnimation {
@@ -54,7 +55,6 @@ public struct ExpandableSetting<
                     .transition(.fadeInFromTop)
             }
         }
-
     }
 }
 

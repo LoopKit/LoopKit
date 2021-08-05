@@ -22,7 +22,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
     /// Notification posted when dose entries were changed, either via direct add or from HealthKit
     public static let doseEntriesDidChange = NSNotification.Name(rawValue: "com.loopkit.InsulinDeliveryStore.doseEntriesDidChange")
 
-    private let insulinType = HKQuantityType.quantityType(forIdentifier: .insulinDelivery)!
+    private let insulinQuantityType = HKQuantityType.quantityType(forIdentifier: .insulinDelivery)!
 
     private let queue = DispatchQueue(label: "com.loopkit.InsulinDeliveryStore.queue", qos: .utility)
 
@@ -64,7 +64,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: false,
             observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
-            type: insulinType,
+            type: insulinQuantityType,
             observationStart: (test_currentDate ?? Date()).addingTimeInterval(-cacheLength),
             observationEnabled: observationEnabled,
             test_currentDate: test_currentDate
@@ -269,7 +269,7 @@ extension InsulinDeliveryStore {
     ///   - syncVersion: The sync version used for the new dose entries.
     ///   - completion: A closure called once the dose entries have been stored.
     ///   - result: Success or error.
-    func addDoseEntries(_ entries: [DoseEntry], from device: HKDevice?, syncVersion: Int, completion: @escaping (_ result: Result<Void, Error>) -> Void) {
+    func addDoseEntries(_ entries: [DoseEntry], from device: HKDevice?, syncVersion: Int, manuallyEntered: Bool = false, completion: @escaping (_ result: Result<Void, Error>) -> Void) {
         guard !entries.isEmpty else {
             completion(.success(()))
             return
@@ -297,7 +297,7 @@ extension InsulinDeliveryStore {
                             return nil
                         }
 
-                        return HKQuantitySample(type: self.insulinType, unit: HKUnit.internationalUnit(), dose: entry, device: device, syncVersion: syncVersion)
+                        return HKQuantitySample(type: self.insulinQuantityType, unit: HKUnit.internationalUnit(), dose: entry, device: device, provenanceIdentifier: self.provenanceIdentifier, syncVersion: syncVersion)
                     }
 
                     changed = !quantitySamples.isEmpty
@@ -307,7 +307,8 @@ extension InsulinDeliveryStore {
 
                     let objects: [CachedInsulinDeliveryObject] = quantitySamples.map { quantitySample in
                         let object = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
-                        object.create(fromNew: quantitySample, provenanceIdentifier: self.provenanceIdentifier, on: self.currentDate())
+                        object.create(fromNew: quantitySample, on: self.currentDate())
+                        object.provenanceIdentifier = self.provenanceIdentifier
                         return object
                     }
 
@@ -394,6 +395,55 @@ extension InsulinDeliveryStore {
 
         return true
     }
+    
+    func deleteDose(bySyncIdentifier syncIdentifier: String, _ completion: @escaping (String?) -> Void) {
+        queue.async {
+            var errorString: String? = nil
+            self.cacheStore.managedObjectContext.performAndWait {
+                do {
+                    let predicate = NSPredicate(format: "syncIdentifier == %@", syncIdentifier)
+                    let count = try self.cacheStore.managedObjectContext.purgeObjects(of: CachedInsulinDeliveryObject.self, matching: predicate)
+                    guard count > 0 else {
+                        errorString = "Cannot find CachedInsulinDeliveryObject to delete"
+                        return
+                    }
+                    self.cacheStore.save()
+                    
+                    let healthKitPredicate = HKQuery.predicateForObjects(withMetadataKey: HKMetadataKeySyncIdentifier, allowedValues: [syncIdentifier])
+                    self.healthStore.deleteObjects(of: self.insulinQuantityType, predicate: healthKitPredicate)
+                    { success, deletedObjectCount, error in
+                        if let error = error {
+                            self.log.error("Unable to delete dose from Health: %@", error.localizedDescription)
+                        }
+                    }
+                } catch let error {
+                    errorString = "Error deleting CachedInsulinDeliveryObject: " + error.localizedDescription
+                    return
+                }
+            }
+            completion(errorString)
+        }
+    }
+
+    func deleteDose(with uuidToDelete: UUID, _ completion: @escaping (String?) -> Void) {
+        queue.async {
+            var errorString: String? = nil
+            self.cacheStore.managedObjectContext.performAndWait {
+                do {
+                    let count = try self.deleteDoseEntries(withUUIDs: [uuidToDelete])
+                    guard count > 0 else {
+                        errorString = "Cannot find CachedInsulinDeliveryObject to delete"
+                        return
+                    }
+                    self.cacheStore.save()
+                } catch let error {
+                    errorString = "Error deleting CachedInsulinDeliveryObject: " + error.localizedDescription
+                    return
+                }
+            }
+            completion(errorString)
+        }
+    }
 
     private func deleteDoseEntries(withUUIDs uuids: [UUID], batchSize: Int = 500) throws -> Int {
         dispatchPrecondition(condition: .onQueue(queue))
@@ -422,7 +472,7 @@ extension InsulinDeliveryStore {
     public func purgeAllDoseEntries(healthKitPredicate: NSPredicate, completion: @escaping (Error?) -> Void) {
         queue.async {
             let storeError = self.purgeCachedInsulinDeliveryObjects()
-            self.healthStore.deleteObjects(of: self.insulinType, predicate: healthKitPredicate) { _, _, healthKitError in
+            self.healthStore.deleteObjects(of: self.insulinQuantityType, predicate: healthKitPredicate) { _, _, healthKitError in
                 self.queue.async {
                     self.handleUpdatedDoseData(updateSource: .changedInApp)
                     completion(storeError ?? healthKitError)

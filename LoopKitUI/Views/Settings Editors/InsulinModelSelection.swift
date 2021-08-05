@@ -16,52 +16,31 @@ public struct InsulinModelSelection: View {
     @Environment(\.dismissAction) private var dismiss
     @Environment(\.authenticate) private var authenticate
 
-    @State private var value: InsulinModelSettings
+    @State private var value: ExponentialInsulinModelPreset
     @State private var chartManager: ChartsManager
 
-    private let initialValue: InsulinModelSettings
+    private let initialValue: ExponentialInsulinModelPreset
     private let insulinSensitivitySchedule: InsulinSensitivitySchedule
-    private let supportedInsulinModelSettings: SupportedInsulinModelSettings
     private let mode: SettingsPresentationMode
-    private let save: (_ insulinModelSettings: InsulinModelSettings) -> Void
+    private let save: (_ insulinModelPreset: ExponentialInsulinModelPreset) -> Void
 
     static let defaultInsulinSensitivitySchedule = InsulinSensitivitySchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue<Double>(startTime: 0, value: 40)])!
     
-    static let defaultWalshInsulinModelDuration = TimeInterval(hours: 6)
-
-    var walshActionDuration: Binding<TimeInterval> {
-        Binding(
-            get: {
-                if case .walsh(let walshModel) = value {
-                    return walshModel.actionDuration
-                } else {
-                    return Self.defaultWalshInsulinModelDuration
-                }
-            },
-            set: { newValue in
-                precondition(InsulinModelSettings.validWalshModelDurationRange.contains(newValue))
-                value = .walsh(WalshInsulinModel(actionDuration: newValue))
-            }
-        )
-    }
-
     private var displayGlucoseUnit: HKUnit {
         displayGlucoseUnitObservable.displayGlucoseUnit
     }
-
+    
     public init(
-        value: InsulinModelSettings,
+        value: ExponentialInsulinModelPreset,
         insulinSensitivitySchedule: InsulinSensitivitySchedule?,
-        supportedInsulinModelSettings: SupportedInsulinModelSettings,
         chartColors: ChartColorPalette,
-        onSave save: @escaping (_ insulinModelSettings: InsulinModelSettings) -> Void,
+        onSave save: @escaping (_ insulinModelPreset: ExponentialInsulinModelPreset) -> Void,
         mode: SettingsPresentationMode
     ){
         self._value = State(initialValue: value)
         self.initialValue = value
         self.insulinSensitivitySchedule = insulinSensitivitySchedule ?? Self.defaultInsulinSensitivitySchedule
         self.save = save
-        self.supportedInsulinModelSettings = supportedInsulinModelSettings
         self.mode = mode
 
         let chartManager = ChartsManager(
@@ -88,12 +67,11 @@ public struct InsulinModelSelection: View {
         didSave: (() -> Void)? = nil
     ) {
         self.init(
-            value: therapySettingsViewModel.therapySettings.insulinModelSettings ?? InsulinModelSettings.exponentialPreset(.humalogNovologAdult),
+            value: therapySettingsViewModel.therapySettings.defaultRapidActingModel ?? .rapidActingAdult,
             insulinSensitivitySchedule: therapySettingsViewModel.therapySettings.insulinSensitivitySchedule,
-            supportedInsulinModelSettings: therapySettingsViewModel.supportedInsulinModelSettings,
             chartColors: chartColors,
-            onSave: { [weak therapySettingsViewModel] insulinModelSettings in
-                therapySettingsViewModel?.saveInsulinModel(insulinModelSettings: insulinModelSettings)
+            onSave: { [weak therapySettingsViewModel] insulinModelPreset in
+                therapySettingsViewModel?.saveInsulinModel(insulinModelPreset: insulinModelPreset)
                 didSave?()
             },
             mode: mode
@@ -169,9 +147,9 @@ public struct InsulinModelSelection: View {
                     .frame(height: 170)
 
                     CheckmarkListItem(
-                        title: Text(InsulinModelSettings.exponentialPreset(.humalogNovologAdult).title),
-                        description: Text(InsulinModelSettings.exponentialPreset(.humalogNovologAdult).subtitle),
-                        isSelected: isSelected(.exponentialPreset(.humalogNovologAdult))
+                        title: Text(ExponentialInsulinModelPreset.rapidActingAdult.title),
+                        description: Text(ExponentialInsulinModelPreset.rapidActingAdult.subtitle),
+                        isSelected: isSelected(ExponentialInsulinModelPreset.rapidActingAdult)
                     )
                     .padding(.vertical, 4)
                     .contentShape(Rectangle())
@@ -179,38 +157,12 @@ public struct InsulinModelSelection: View {
 
                 SectionDivider()
                 CheckmarkListItem(
-                    title: Text(InsulinModelSettings.exponentialPreset(.humalogNovologChild).title),
-                    description: Text(InsulinModelSettings.exponentialPreset(.humalogNovologChild).subtitle),
-                    isSelected: isSelected(.exponentialPreset(.humalogNovologChild))
+                    title: Text(ExponentialInsulinModelPreset.rapidActingChild.title),
+                    description: Text(ExponentialInsulinModelPreset.rapidActingChild.subtitle),
+                    isSelected: isSelected(ExponentialInsulinModelPreset.rapidActingChild)
                 )
                 .padding(.vertical, 4)
-                .padding(.bottom, supportedInsulinModelSettings.fiaspModelEnabled ? 0 : 4)
-                .contentShape(Rectangle())
-
-                if supportedInsulinModelSettings.fiaspModelEnabled {
-                    SectionDivider()
-                    CheckmarkListItem(
-                        title: Text(InsulinModelSettings.exponentialPreset(.fiasp).title),
-                        description: Text(InsulinModelSettings.exponentialPreset(.fiasp).subtitle),
-                        isSelected: isSelected(.exponentialPreset(.fiasp))
-                    )
-                    .padding(.vertical, 4)
-                    .contentShape(Rectangle())
-                }
-
-                if supportedInsulinModelSettings.walshModelEnabled {
-                    SectionDivider()
-                    DurationBasedCheckmarkListItem(
-                        title: Text(WalshInsulinModel.title),
-                        description: Text(WalshInsulinModel.subtitle),
-                        isSelected: isWalshModelSelected,
-                        duration: walshActionDuration,
-                        validDurationRange: InsulinModelSettings.validWalshModelDurationRange
-                    )
-                    .padding(.vertical, 4)
-                    .padding(.bottom, 4)
-                    .contentShape(Rectangle())
-                }
+                .padding(.bottom, 4)
             }
             .buttonStyle(PlainButtonStyle()) // Disable row highlighting on selection
         }
@@ -220,40 +172,30 @@ public struct InsulinModelSelection: View {
         let spellOutFormatter = NumberFormatter()
         spellOutFormatter.numberStyle = .spellOut
         let modelCountString = spellOutFormatter.string(from: selectableInsulinModelSettings.count as NSNumber)!
-        return Text(String(format: LocalizedString("%1$@ assumes insulin is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity.", comment: "Insulin model setting description (1: app name) (2: number of models)"), appName, modelCountString))
+        return Text(String(format: LocalizedString("For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity.", comment: "Insulin model setting description (1: app name) (2: number of models)"), appName, modelCountString))
     }
 
-    var selectableInsulinModelSettings: [InsulinModelSettings] {
-        var options: [InsulinModelSettings] =  [
-            .exponentialPreset(.humalogNovologAdult),
-            .exponentialPreset(.humalogNovologChild)
+    var selectableInsulinModelSettings: [ExponentialInsulinModelPreset] {
+        return [
+            .rapidActingAdult,
+            .rapidActingChild
         ]
-
-        if supportedInsulinModelSettings.fiaspModelEnabled {
-            options.append(.exponentialPreset(.fiasp))
-        }
-
-        if supportedInsulinModelSettings.walshModelEnabled {
-            options.append(.walsh(WalshInsulinModel(actionDuration: walshActionDuration.wrappedValue)))
-        }
-
-        return options
     }
 
     private var selectedInsulinModelValues: [GlucoseValue] {
-        oneUnitBolusEffectPrediction(using: value.model)
+        oneUnitBolusEffectPrediction(using: value)
     }
 
     private var unselectedInsulinModelValues: [[GlucoseValue]] {
         selectableInsulinModelSettings
             .filter { $0 != value }
-            .map { oneUnitBolusEffectPrediction(using: $0.model) }
+            .map { oneUnitBolusEffectPrediction(using: $0) }
     }
-
-    private func oneUnitBolusEffectPrediction(using model: InsulinModel) -> [GlucoseValue] {
-        let bolus = DoseEntry(type: .bolus, startDate: chartManager.startDate, value: 1, unit: .units)
+    
+    private func oneUnitBolusEffectPrediction(using modelPreset: ExponentialInsulinModelPreset) -> [GlucoseValue] {
+        let bolus = DoseEntry(type: .bolus, startDate: chartManager.startDate, value: 1, unit: .units, insulinType: .novolog)
         let startingGlucoseSample = HKQuantitySample(type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!, quantity: startingGlucoseQuantity, start: chartManager.startDate, end: chartManager.startDate)
-        let effects = [bolus].glucoseEffects(insulinModel: model, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = [bolus].glucoseEffects(insulinModelProvider: StaticInsulinModelProvider(modelPreset), longestEffectDuration: .hours(6), insulinSensitivity: insulinSensitivitySchedule)
         return LoopMath.predictGlucose(startingAt: startingGlucoseSample, effects: effects)
     }
 
@@ -266,32 +208,19 @@ public struct InsulinModelSelection: View {
         HKQuantity(unit: displayGlucoseUnit, doubleValue: displayGlucoseUnit.glucoseExampleTargetValue)
     }
 
-    private func isSelected(_ settings: InsulinModelSettings) -> Binding<Bool> {
+    private func isSelected(_ preset: ExponentialInsulinModelPreset) -> Binding<Bool> {
         Binding(
-            get: { value == settings },
+            get: { value == preset },
             set: { isSelected in
                 if isSelected {
                     withAnimation {
-                        value = settings
+                        value = preset
                     }
                 }
             }
         )
     }
 
-    private var isWalshModelSelected: Binding<Bool> {
-        Binding(
-            get: { value.model is WalshInsulinModel },
-            set: { isSelected in
-                if isSelected {
-                    withAnimation {
-                        value = .walsh(WalshInsulinModel(actionDuration: walshActionDuration.wrappedValue))
-                    }
-                }
-            }
-        )
-    }
-    
     private func startSaving() {
         guard mode == .settings else {
             continueSaving()

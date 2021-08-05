@@ -160,6 +160,7 @@ public struct MockPumpManagerState {
     public var progressWarningThresholdPercentValue: Double?
     public var progressCriticalThresholdPercentValue: Double?
     
+    public var insulinType: InsulinType?
     public var timeZone: TimeZone
     
     public var dosesToStore: [UnfinalizedDose] {
@@ -182,7 +183,8 @@ public struct MockPumpManagerState {
                 unfinalizedTempBasal: UnfinalizedDose? = nil,
                 finalizedDoses: [UnfinalizedDose] = [],
                 progressWarningThresholdPercentValue: Double? = 0.75,
-                progressCriticalThresholdPercentValue: Double? = 0.9)
+                progressCriticalThresholdPercentValue: Double? = 0.9,
+                insulinType: InsulinType = .novolog)
     {
         self.deliverableIncrements = deliverableIncrements
         self.supportedBolusVolumes = deliverableIncrements.supportedBolusVolumes ?? []
@@ -201,6 +203,7 @@ public struct MockPumpManagerState {
         self.finalizedDoses = finalizedDoses
         self.progressWarningThresholdPercentValue = progressWarningThresholdPercentValue
         self.progressCriticalThresholdPercentValue = progressCriticalThresholdPercentValue
+        self.insulinType = insulinType
         self.timeZone = .currentFixed
     }
 
@@ -272,6 +275,12 @@ extension MockPumpManagerState: RawRepresentable {
             self.suspendState = .resumed(Date())
         }
         
+        if let rawInsulinType = rawValue["insulinType"] as? InsulinType.RawValue, let insulinType = InsulinType(rawValue: rawInsulinType) {
+            self.insulinType = insulinType
+        } else {
+            self.insulinType = .novolog
+        }
+
         if let timeZoneOffset = rawValue["timeZone"] as? Int {
             self.timeZone = TimeZone(secondsFromGMT: timeZoneOffset) ?? .currentFixed
         } else {
@@ -337,6 +346,8 @@ extension MockPumpManagerState: RawRepresentable {
         raw["progressWarningThresholdPercentValue"] = progressWarningThresholdPercentValue
         raw["progressCriticalThresholdPercentValue"] = progressCriticalThresholdPercentValue
         
+        raw["insulinType"] = insulinType?.rawValue
+        
         return raw
     }
 }
@@ -345,8 +356,7 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
     public var debugDescription: String {
         return """
         ## MockPumpManagerState
-        * supportedBolusVolumes: \(supportedBolusVolumes)
-        * supportedBasalRates: \(supportedBasalRates)
+        * deliverableIncrements: \(deliverableIncrements)
         * reservoirUnitsRemaining: \(reservoirUnitsRemaining)
         * basalRateSchedule: \(basalRateSchedule as Any)
         * tempBasalEnactmentShouldError: \(tempBasalEnactmentShouldError)
@@ -366,6 +376,7 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
         * progressPercentComplete: \(progressPercentComplete as Any)
         * progressWarningThresholdPercentValue: \(progressWarningThresholdPercentValue as Any)
         * progressCriticalThresholdPercentValue: \(progressCriticalThresholdPercentValue as Any)
+        * insulinType: \(insulinType as Any)
         """
     }
 }

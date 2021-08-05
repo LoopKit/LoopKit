@@ -24,9 +24,11 @@ class DoseEntryCodableTests: XCTestCase {
                                              scheduledBasalRate: HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: 1.5)),
         encodesJSON: """
 {
+  "automatic" : null,
   "deliveredUnits" : 0.5,
   "description" : "Temporary Basal",
   "endDate" : "2020-05-14T22:37:19Z",
+  "manuallyEntered" : false,
   "scheduledBasalRate" : 1.5,
   "scheduledBasalRateUnit" : "IU/hr",
   "startDate" : "2020-05-14T22:07:19Z",

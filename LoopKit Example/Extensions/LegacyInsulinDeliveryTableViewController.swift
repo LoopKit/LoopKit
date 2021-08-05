@@ -1,5 +1,5 @@
 //
-//  InsulinDeliveryTableViewController.swift
+//  LegacyInsulinDeliveryTableViewController.swift
 //  LoopKit
 //
 //  Created by Nate Racklyeft on 7/13/16.
@@ -9,4 +9,4 @@
 import LoopKitUI
 
 
-extension InsulinDeliveryTableViewController: IdentifiableClass { }
+extension LegacyInsulinDeliveryTableViewController: IdentifiableClass { }

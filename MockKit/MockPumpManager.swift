@@ -40,7 +40,7 @@ public enum MockPumpManagerError: LocalizedError {
 }
 
 public final class MockPumpManager: TestingPumpManager {
-
+    
     public static let managerIdentifier = "MockPumpManager"
 
     public var managerIdentifier: String {
@@ -131,6 +131,10 @@ public final class MockPumpManager: TestingPumpManager {
     
     public var lastReconciliation: Date? {
         return testLastReconciliation ?? Date()
+    }
+    
+    public var insulinType: InsulinType? {
+        return state.insulinType
     }
 
     private func basalDeliveryState(for state: MockPumpManagerState) -> PumpManagerStatus.BasalDeliveryState? {
@@ -223,6 +227,7 @@ public final class MockPumpManager: TestingPumpManager {
             pumpBatteryChargeRemaining: state.pumpBatteryChargeRemaining,
             basalDeliveryState: basalDeliveryState(for: state),
             bolusState: bolusState(for: state),
+            insulinType: state.insulinType,
             deliveryIsUncertain: state.deliveryIsUncertain
         )
     }
@@ -401,7 +406,7 @@ public final class MockPumpManager: TestingPumpManager {
 
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
         logDeviceComms(.send, message: "Temp Basal \(unitsPerHour) U/hr Duration:\(duration.hours)")
-
+        
         if state.tempBasalEnactmentShouldError || state.pumpBatteryChargeRemaining == 0 {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
             logDeviceComms(.error, message: "Temp Basal failed with error \(error)")
@@ -437,7 +442,7 @@ public final class MockPumpManager: TestingPumpManager {
                     completion(nil)
                 }
             } else {
-                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration)
+                let temp = UnfinalizedDose(tempBasalRate: unitsPerHour, startTime: now, duration: duration, insulinType: state.insulinType)
                 state.unfinalizedTempBasal = temp
                 storeDoses { (error) in
                     completion(nil)
@@ -453,9 +458,9 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
 
-    public func enactBolus(units: Double, at startDate: Date, completion: @escaping (PumpManagerError?) -> Void) {
+    public func enactBolus(units: Double, automatic: Bool, completion: @escaping (PumpManagerError?) -> Void) {
 
-        logDeviceCommunication("enactBolus(\(units), \(startDate))")
+        logDeviceCommunication("enactBolus(\(units), \(automatic))")
 
         if state.bolusEnactmentShouldError || state.pumpBatteryChargeRemaining == 0 {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
@@ -489,7 +494,7 @@ public final class MockPumpManager: TestingPumpManager {
             }
             
             
-            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute))
+            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute), insulinType: state.insulinType, automatic: automatic)
             state.unfinalizedBolus = bolus
             
             logDeviceComms(.receive, message: "Bolus accepted")
@@ -566,7 +571,7 @@ public final class MockPumpManager: TestingPumpManager {
             completion(error)
         } else {
             let resumeDate = Date()
-            let resume = UnfinalizedDose(resumeStartTime: resumeDate)
+            let resume = UnfinalizedDose(resumeStartTime: resumeDate, insulinType: state.insulinType)
             self.state.finalizedDoses.append(resume)
             self.state.suspendState = .resumed(resumeDate)
             storeDoses { (error) in

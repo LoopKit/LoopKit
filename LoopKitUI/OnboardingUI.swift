@@ -128,7 +128,11 @@ public protocol ServiceProvider: AnyObject {
     func onboardService(withIdentifier identifier: String) -> Result<OnboardingResult<ServiceViewController, Service>, Error>
 }
 
-public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, ServiceProvider {
+public protocol TherapySettingsProvider {
+    var onboardingTherapySettings: TherapySettings { get }
+}
+
+public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, ServiceProvider, TherapySettingsProvider {
     var allowDebugFeatures: Bool { get }   // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
 }
 
@@ -186,7 +190,7 @@ public protocol OnboardingUI: AnyObject {
     /// Provides a view controller to configure onboarding, if needed.
     ///
     /// - Parameters:
-    ///   - onboardingProvider: The provider of onboarding functionality.
+    ///   - onboardingProvider: The provider of auxillary services that support onboarding.
     ///   - displayGlucoseUnitObservable: The glucose unit to use for display.
     ///   - colorPalette: The colors to use in any UI,
     /// - Returns: A view controller to create and configure a new onboarding.

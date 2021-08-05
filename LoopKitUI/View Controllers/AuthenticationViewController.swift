@@ -117,7 +117,7 @@ public final class AuthenticationViewController<T: ServiceAuthenticationUI>: UIT
 
             switch state {
             case .authorized:
-                cell.textLabel?.text = LocalizedString("authentication-button-delete", comment: "The title of the button to remove the credentials for a service")
+                cell.textLabel?.text = LocalizedString("Delete", comment: "The title of the button to remove the credentials for a service")
                 cell.tintColor = .systemRed
             case .empty, .unauthorized, .verifying:
                 cell.textLabel?.text = LocalizedString("Add Account", comment: "The title of the button to add the credentials for a service")

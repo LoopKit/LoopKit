@@ -83,6 +83,15 @@ public class DosingDecisionStore {
         delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
         completion?(nil)
     }
+    
+    public func destroy() {
+        self.store.managedObjectContext.performAndWait {
+            let coordinator = self.store.managedObjectContext.persistentStoreCoordinator!
+            let store = coordinator.persistentStores.first!
+            let url = coordinator.url(for: store)
+            try! coordinator.destroyPersistentStore(at: url, ofType: NSSQLiteStoreType, options: nil)
+        }
+    }
 }
 
 extension DosingDecisionStore {
@@ -177,7 +186,7 @@ public struct StoredDosingDecision {
     public let manualGlucose: SimpleGlucoseValue?
     public let originalCarbEntry: StoredCarbEntry?
     public let carbEntry: StoredCarbEntry?
-    public let recommendedTempBasal: TempBasalRecommendationWithDate?
+    public let automaticDoseRecommendation: AutomaticDoseRecommendationWithDate?
     public let recommendedBolus: BolusRecommendationWithDate?
     public let requestedBolus: Double?
     public let pumpManagerStatus: PumpManagerStatus?
@@ -198,7 +207,7 @@ public struct StoredDosingDecision {
                 manualGlucose: SimpleGlucoseValue? = nil,
                 originalCarbEntry: StoredCarbEntry? = nil,
                 carbEntry: StoredCarbEntry? = nil,
-                recommendedTempBasal: TempBasalRecommendationWithDate? = nil,
+                automaticDoseRecommendation: AutomaticDoseRecommendationWithDate? = nil,
                 recommendedBolus: BolusRecommendationWithDate? = nil,
                 requestedBolus: Double? = nil,
                 pumpManagerStatus: PumpManagerStatus? = nil,
@@ -218,7 +227,7 @@ public struct StoredDosingDecision {
         self.manualGlucose = manualGlucose
         self.originalCarbEntry = originalCarbEntry
         self.carbEntry = carbEntry
-        self.recommendedTempBasal = recommendedTempBasal
+        self.automaticDoseRecommendation = automaticDoseRecommendation
         self.recommendedBolus = recommendedBolus
         self.requestedBolus = requestedBolus
         self.pumpManagerStatus = pumpManagerStatus
@@ -238,21 +247,21 @@ public struct StoredDosingDecision {
         }
     }
 
-    public struct TempBasalRecommendationWithDate: Codable {
-        public let recommendation: TempBasalRecommendation
+    public struct AutomaticDoseRecommendationWithDate: Codable {
+        public let recommendation: AutomaticDoseRecommendation
         public let date: Date
 
-        public init(recommendation: TempBasalRecommendation, date: Date) {
+        public init(recommendation: AutomaticDoseRecommendation, date: Date) {
             self.recommendation = recommendation
             self.date = date
         }
     }
 
     public struct BolusRecommendationWithDate: Codable {
-        public let recommendation: BolusRecommendation
+        public let recommendation: ManualBolusRecommendation
         public let date: Date
 
-        public init(recommendation: BolusRecommendation, date: Date) {
+        public init(recommendation: ManualBolusRecommendation, date: Date) {
             self.recommendation = recommendation
             self.date = date
         }

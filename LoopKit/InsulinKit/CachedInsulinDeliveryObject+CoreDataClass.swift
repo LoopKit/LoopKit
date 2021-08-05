@@ -82,6 +82,35 @@ class CachedInsulinDeliveryObject: NSManagedObject {
             primitiveProgrammedTempBasalRate = NSNumber(value: rate)
         }
     }
+
+    var insulinType: InsulinType? {
+        get {
+            willAccessValue(forKey: "insulinType")
+            defer { didAccessValue(forKey: "insulinType") }
+            guard let type = primitiveInsulinType else {
+                return nil
+            }
+            return InsulinType(rawValue: type.intValue)
+        }
+        set {
+            willChangeValue(forKey: "insulinType")
+            defer { didChangeValue(forKey: "insulinType") }
+            primitiveInsulinType = newValue != nil ? NSNumber(value: newValue!.rawValue) : nil
+        }
+    }
+    
+    var automaticallyIssued: Bool? {
+        get {
+            willAccessValue(forKey: "automaticallyIssued")
+            defer { didAccessValue(forKey: "automaticallyIssued") }
+            return primitiveAutomaticallyIssued?.boolValue
+        }
+        set {
+            willChangeValue(forKey: "automaticallyIssued")
+            defer { didChangeValue(forKey: "automaticallyIssued") }
+            primitiveAutomaticallyIssued = newValue != nil ? NSNumber(booleanLiteral: newValue!) : nil
+        }
+    }
 }
 
 // MARK: - Helpers
@@ -126,19 +155,19 @@ extension CachedInsulinDeliveryObject {
             deliveredUnits: deliveredUnits,
             description: nil,
             syncIdentifier: syncIdentifier,
-            scheduledBasalRate: scheduledBasalRate
+            scheduledBasalRate: scheduledBasalRate,
+            insulinType: insulinType,
+            automatic: automaticallyIssued,
+            manuallyEntered: manuallyEntered
         )
     }
 }
 
-// MARK: - Operations
-
 extension CachedInsulinDeliveryObject {
-    func create(fromNew sample: HKQuantitySample, provenanceIdentifier: String, on date: Date = Date()) {
+    func create(fromNew sample: HKQuantitySample, on date: Date = Date()) {
         precondition(sample.syncIdentifier != nil)
 
         self.uuid = nil
-        self.provenanceIdentifier = provenanceIdentifier
         self.hasLoopKitOrigin = true
         self.startDate = sample.startDate
         self.endDate = sample.endDate
@@ -146,6 +175,9 @@ extension CachedInsulinDeliveryObject {
         self.value = sample.quantity.doubleValue(for: .internationalUnit())
         self.scheduledBasalRate = sample.scheduledBasalRate
         self.programmedTempBasalRate = sample.programmedTempBasalRate
+        self.insulinType = sample.insulinType
+        self.automaticallyIssued = sample.automaticallyIssued
+        self.manuallyEntered = sample.manuallyEntered
         self.reason = sample.insulinDeliveryReason
         self.createdAt = date
     }
@@ -160,6 +192,9 @@ extension CachedInsulinDeliveryObject {
         self.value = sample.quantity.doubleValue(for: .internationalUnit())
         self.scheduledBasalRate = sample.scheduledBasalRate
         self.programmedTempBasalRate = sample.programmedTempBasalRate
+        self.insulinType = sample.insulinType
+        self.automaticallyIssued = sample.automaticallyIssued
+        self.manuallyEntered = sample.manuallyEntered
         self.reason = sample.insulinDeliveryReason
         self.createdAt = date
     }

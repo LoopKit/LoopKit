@@ -15,7 +15,6 @@ public class TherapySettingsViewModel: ObservableObject {
     public typealias SaveCompletion = (TherapySetting, TherapySettings) -> Void
     
     @Published public var therapySettings: TherapySettings
-    public var supportedInsulinModelSettings: SupportedInsulinModelSettings
     private let didSave: SaveCompletion?
 
     private let initialTherapySettings: TherapySettings
@@ -25,7 +24,6 @@ public class TherapySettingsViewModel: ObservableObject {
     public var prescription: Prescription?
 
     public init(therapySettings: TherapySettings,
-                supportedInsulinModelSettings: SupportedInsulinModelSettings = SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                 pumpSupportedIncrements: (() -> PumpSupportedIncrements?)? = nil,
                 syncPumpSchedule: (() -> PumpManager.SyncSchedule?)? = nil,
                 sensitivityOverridesEnabled: Bool = false,
@@ -37,7 +35,6 @@ public class TherapySettingsViewModel: ObservableObject {
         self.syncPumpSchedule = syncPumpSchedule
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
         self.prescription = prescription
-        self.supportedInsulinModelSettings = supportedInsulinModelSettings
         self.didSave = didSave
     }
 
@@ -113,8 +110,8 @@ public class TherapySettingsViewModel: ObservableObject {
         didSave?(TherapySetting.deliveryLimits, therapySettings)
     }
     
-    public func saveInsulinModel(insulinModelSettings: InsulinModelSettings) {
-        therapySettings.insulinModelSettings = insulinModelSettings
+    public func saveInsulinModel(insulinModelPreset: ExponentialInsulinModelPreset) {
+        therapySettings.defaultRapidActingModel = insulinModelPreset
         didSave?(TherapySetting.insulinModel, therapySettings)
     }
     

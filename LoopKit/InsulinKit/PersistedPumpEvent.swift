@@ -28,6 +28,8 @@ public struct PersistedPumpEvent {
     public let type: PumpEventType?
     /// Whether the pump event is marked mutable
     public let isMutable: Bool
+    /// Whether the event was automatic or manually triggered. nil indicates this status is unknown.
+    public let automatic: Bool?
 
     public init(date: Date,
                 persistedDate: Date,
@@ -37,7 +39,8 @@ public struct PersistedPumpEvent {
                 raw: Data?,
                 title: String?,
                 type: PumpEventType?,
-                isMutable: Bool) {
+                isMutable: Bool,
+                automatic: Bool? = nil) {
         self.date = date
         self.persistedDate = persistedDate
         self.dose = dose
@@ -47,6 +50,7 @@ public struct PersistedPumpEvent {
         self.title = title
         self.type = type
         self.isMutable = isMutable
+        self.automatic = automatic
     }
 }
 
@@ -62,7 +66,8 @@ extension PumpEvent {
             raw: raw,
             title: title,
             type: type,
-            isMutable: mutable
+            isMutable: mutable,
+            automatic: automatic
         )
     }
 }

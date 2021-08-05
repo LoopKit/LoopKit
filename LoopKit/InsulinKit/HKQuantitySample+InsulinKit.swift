@@ -17,8 +17,17 @@ let MetadataKeyProgrammedTempBasalRate = "com.loopkit.InsulinKit.MetadataKeyProg
 /// A crude determination of whether a sample was written by LoopKit, in the case of multiple LoopKit-enabled app versions on the same phone.
 let MetadataKeyHasLoopKitOrigin = "HasLoopKitOrigin"
 
+/// Defines the insulin curve type to use to evaluate the dose's activity
+let MetadataKeyInsulinType = "com.loopkit.InsulinKit.MetadataKeyInsulinType"
+
+/// Flag indicated whether this dose was manually entered
+let MetadataKeyManuallyEntered = "com.loopkit.InsulinKit.MetadataKeyManuallyEntered"
+
+/// Flag indicating whether this dose was issued automatically or if a user issued it manually.
+let MetadataKeyAutomaticallyIssued = "com.loopkit.InsulinKit.MetadataKeyAutomaticallyIssued"
+
 extension HKQuantitySample {
-    convenience init?(type: HKQuantityType, unit: HKUnit, dose: DoseEntry, device: HKDevice?, syncVersion: Int = 1) {
+    convenience init?(type: HKQuantityType, unit: HKUnit, dose: DoseEntry, device: HKDevice?, provenanceIdentifier: String, syncVersion: Int = 1) {
         let units = dose.unitsInDeliverableIncrements
 
         guard let syncIdentifier = dose.syncIdentifier else {
@@ -28,9 +37,10 @@ extension HKQuantitySample {
         var metadata: [String: Any] = [
             HKMetadataKeySyncVersion: syncVersion,
             HKMetadataKeySyncIdentifier: syncIdentifier,
-            MetadataKeyHasLoopKitOrigin: true
+            MetadataKeyHasLoopKitOrigin: true,
+            MetadataKeyManuallyEntered: dose.manuallyEntered
         ]
-
+        
         switch dose.type {
         case .basal, .tempBasal, .suspend:
             // Ignore 0-duration basal entries
@@ -56,6 +66,14 @@ extension HKQuantitySample {
             metadata[HKMetadataKeyInsulinDeliveryReason] = HKInsulinDeliveryReason.bolus.rawValue
         case .resume:
             return nil
+        }
+        
+        if let insulinType = dose.insulinType {
+            metadata[MetadataKeyInsulinType] = insulinType.healthKitRepresentation
+        }
+        
+        if let automatic = dose.automatic {
+            metadata[MetadataKeyAutomaticallyIssued] = automatic
         }
 
         self.init(
@@ -92,6 +110,22 @@ extension HKQuantitySample {
         return metadata?[MetadataKeyProgrammedTempBasalRate] as? HKQuantity
     }
 
+    var manuallyEntered: Bool {
+        return metadata?[MetadataKeyManuallyEntered] as? Bool ?? false
+    }
+    
+    var automaticallyIssued: Bool? {
+        return metadata?[MetadataKeyAutomaticallyIssued] as? Bool
+    }
+    
+    var insulinType: InsulinType? {
+        guard let rawType = metadata?[MetadataKeyInsulinType] as? String else {
+            return nil
+        }
+        
+        return InsulinType(healthKitRepresentation: rawType)
+    }
+
     /// Returns a DoseEntry representation of the sample.
     /// Doses are not normalized, nor should they be assumed reconciled.
     var dose: DoseEntry? {
@@ -123,7 +157,7 @@ extension HKQuantitySample {
         let value: Double
         let unit: DoseUnit
         let deliveredUnits: Double?
-
+        
         if let programmedRate = programmedTempBasalRate {
             value = programmedRate.doubleValue(for: .internationalUnitsPerHour)
             unit = .unitsPerHour
@@ -143,7 +177,47 @@ extension HKQuantitySample {
             deliveredUnits: deliveredUnits,
             description: nil,
             syncIdentifier: syncIdentifier,
-            scheduledBasalRate: scheduledBasalRate
+            scheduledBasalRate: scheduledBasalRate,
+            insulinType: insulinType,
+            automatic: automaticallyIssued,
+            manuallyEntered: manuallyEntered
         )
+    }
+}
+
+enum InsulinTypeHealthKitRepresentation: String {
+    case novolog = "Novolog"
+    case humalog = "Humalog"
+    case apidra = "Apidra"
+    case fiasp = "Fiasp"
+}
+
+extension InsulinType {
+    var healthKitRepresentation: String {
+        switch self {
+        case .novolog:
+            return InsulinTypeHealthKitRepresentation.novolog.rawValue
+        case .humalog:
+            return InsulinTypeHealthKitRepresentation.humalog.rawValue
+        case .apidra:
+            return InsulinTypeHealthKitRepresentation.apidra.rawValue
+        case .fiasp:
+            return InsulinTypeHealthKitRepresentation.fiasp.rawValue
+        }
+    }
+    
+    init?(healthKitRepresentation: String) {
+        switch healthKitRepresentation {
+        case InsulinTypeHealthKitRepresentation.novolog.rawValue:
+            self = .novolog
+        case InsulinTypeHealthKitRepresentation.humalog.rawValue:
+            self = .humalog
+        case InsulinTypeHealthKitRepresentation.apidra.rawValue:
+            self = .apidra
+        case InsulinTypeHealthKitRepresentation.fiasp.rawValue:
+            self = .fiasp
+        default:
+            return nil
+        }
     }
 }

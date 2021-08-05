@@ -38,7 +38,7 @@ public extension TherapySetting {
         case .deliveryLimits:
             return LocalizedString("Delivery Limits", comment: "Title text for delivery limits")
         case .insulinModel:
-            return LocalizedString("Insulin Model", comment: "Title text for insulin model")
+            return LocalizedString("Insulin Model", comment: "Title text for fast acting insulin model")
         case .carbRatio:
             return LocalizedString("Carb Ratios", comment: "Title text for carb ratios")
         case .insulinSensitivity:
@@ -70,7 +70,7 @@ public extension TherapySetting {
         case .deliveryLimits:
             return "\(DeliveryLimits.Setting.maximumBasalRate.localizedDescriptiveText(appName: appName))\n\n\(DeliveryLimits.Setting.maximumBolus.localizedDescriptiveText(appName: appName))"
         case .insulinModel:
-            return String(format: LocalizedString("%1$@ assumes insulin is actively working for 6 hours. You can choose from different models for how the app measures the insulin’s peak activity.", comment: "Descriptive text for insulin model (1: app name)"), appName)
+            return String(format: LocalizedString("For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity.", comment: "Descriptive text for fast acting insulin model (1: app name)"), appName)
         case .carbRatio:
             return LocalizedString("Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin.", comment: "Descriptive text for carb ratio")
         case .insulinSensitivity:

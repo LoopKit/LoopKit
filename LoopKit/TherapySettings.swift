@@ -26,7 +26,7 @@ public struct TherapySettings: Equatable {
     
     public var basalRateSchedule: BasalRateSchedule?
     
-    public var insulinModelSettings: InsulinModelSettings?
+    public var defaultRapidActingModel: ExponentialInsulinModelPreset?
 
     public var isComplete: Bool {
         return
@@ -39,7 +39,7 @@ public struct TherapySettings: Equatable {
             insulinSensitivitySchedule != nil &&
             carbRatioSchedule != nil &&
             basalRateSchedule != nil &&
-            insulinModelSettings != nil
+            defaultRapidActingModel != nil
     }
     
     public init(
@@ -51,7 +51,7 @@ public struct TherapySettings: Equatable {
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
         carbRatioSchedule: CarbRatioSchedule? = nil,
         basalRateSchedule: BasalRateSchedule? = nil,
-        insulinModelSettings: InsulinModelSettings? = nil
+        defaultRapidActingModel: ExponentialInsulinModelPreset? = nil
     ){
         self.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
         self.correctionRangeOverrides = correctionRangeOverrides
@@ -61,7 +61,7 @@ public struct TherapySettings: Equatable {
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.carbRatioSchedule = carbRatioSchedule
         self.basalRateSchedule = basalRateSchedule
-        self.insulinModelSettings = insulinModelSettings
+        self.defaultRapidActingModel = defaultRapidActingModel
     }
 }
 
@@ -89,8 +89,8 @@ extension TherapySettings: RawRepresentable {
         if let rawBasalRateSchedule = rawValue["basalRateSchedule"] as? BasalRateSchedule.RawValue {
             self.basalRateSchedule = BasalRateSchedule(rawValue: rawBasalRateSchedule)
         }
-        if let rawInsulinModelSettings = rawValue["insulinModelSettings"] as? InsulinModelSettings.RawValue {
-            self.insulinModelSettings = InsulinModelSettings(rawValue: rawInsulinModelSettings)
+        if let rawDefaultRapidActingModel = rawValue["defaultRapidActingModel"] as? ExponentialInsulinModelPreset.RawValue {
+            self.defaultRapidActingModel = ExponentialInsulinModelPreset(rawValue: rawDefaultRapidActingModel)
         }
     }
 
@@ -104,7 +104,7 @@ extension TherapySettings: RawRepresentable {
         rawValue["insulinSensitivitySchedule"] = insulinSensitivitySchedule?.rawValue
         rawValue["carbRatioSchedule"] = carbRatioSchedule?.rawValue
         rawValue["basalRateSchedule"] = basalRateSchedule?.rawValue
-        rawValue["insulinModelSettings"] = insulinModelSettings?.rawValue
+        rawValue["defaultRapidActingModel"] = defaultRapidActingModel?.rawValue
         return rawValue
     }
 }
@@ -121,7 +121,7 @@ extension TherapySettings: Codable {
         let insulinSensitivitySchedule = try container.decodeIfPresent(InsulinSensitivitySchedule.self, forKey: .insulinSensitivitySchedule)
         let carbRatioSchedule = try container.decodeIfPresent(CarbRatioSchedule.self, forKey: .carbRatioSchedule)
         let basalRateSchedule = try container.decodeIfPresent(BasalRateSchedule.self, forKey: .basalRateSchedule)
-        let insulinModelSettings = try container.decodeIfPresent(InsulinModelSettings.self, forKey: .insulinModelSettings)
+        let defaultRapidActingModel = try container.decodeIfPresent(ExponentialInsulinModelPreset.self, forKey: .defaultRapidActingModel)
 
         self.init(glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
                   correctionRangeOverrides: correctionRangeOverrides,
@@ -131,7 +131,7 @@ extension TherapySettings: Codable {
                   insulinSensitivitySchedule: insulinSensitivitySchedule,
                   carbRatioSchedule: carbRatioSchedule,
                   basalRateSchedule: basalRateSchedule,
-                  insulinModelSettings: insulinModelSettings)
+                  defaultRapidActingModel: defaultRapidActingModel)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -144,7 +144,7 @@ extension TherapySettings: Codable {
         try container.encodeIfPresent(insulinSensitivitySchedule, forKey: .insulinSensitivitySchedule)
         try container.encodeIfPresent(carbRatioSchedule, forKey: .carbRatioSchedule)
         try container.encodeIfPresent(basalRateSchedule, forKey: .basalRateSchedule)
-        try container.encodeIfPresent(insulinModelSettings, forKey: .insulinModelSettings)
+        try container.encodeIfPresent(defaultRapidActingModel, forKey: .defaultRapidActingModel)
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -156,7 +156,7 @@ extension TherapySettings: Codable {
         case insulinSensitivitySchedule
         case carbRatioSchedule
         case basalRateSchedule
-        case insulinModelSettings
+        case defaultRapidActingModel
     }
 }
 
@@ -199,7 +199,7 @@ extension TherapySettings {
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             carbRatioSchedule: carbRatioSchedule,
             basalRateSchedule: basalRateSchedule,
-            insulinModelSettings: InsulinModelSettings(model: ExponentialInsulinModelPreset.humalogNovologAdult)
+            defaultRapidActingModel: .rapidActingAdult
         )
     }
 }

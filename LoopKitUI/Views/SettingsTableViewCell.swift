@@ -38,5 +38,6 @@ public class SettingsTableViewCell: UITableViewCell {
         textLabel?.text = nil
         detailTextLabel?.text = nil
         accessoryView = nil
+        isUserInteractionEnabled = true
     }
 }
