@@ -18,8 +18,8 @@ public protocol AlertIssuer: AnyObject {
 
 /// Protocol that describes something that can deal with a user's response to an alert.
 public protocol AlertResponder: AnyObject {
-    /// Acknowledge alerts with a given type identifier
-    func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) -> Void
+    /// Acknowledge alerts with a given type identifier. If the alert fails to clear, an error should be passed to the completion handler, indicating the cause of failure.
+    func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) -> Void
 }
 
 /// Structure that represents an Alert that is issued from a Device.
