@@ -16,7 +16,7 @@ public enum RepeatingScheduleValueResult<T: RawRepresentable> {
 }
 
 
-public protocol SingleValueScheduleTableViewControllerSyncSource: class {
+public protocol SingleValueScheduleTableViewControllerSyncSource: AnyObject {
     func syncScheduleValues(for viewController: SingleValueScheduleTableViewController, completion: @escaping (_ result: RepeatingScheduleValueResult<Double>) -> Void)
 
     func syncButtonTitle(for viewController: SingleValueScheduleTableViewController) -> String

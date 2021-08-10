@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol FoodTypeShortcutCellDelegate: class {
+public protocol FoodTypeShortcutCellDelegate: AnyObject {
     func foodTypeShortcutCellDidUpdateSelection(_ cell: FoodTypeShortcutCell)
 }
 

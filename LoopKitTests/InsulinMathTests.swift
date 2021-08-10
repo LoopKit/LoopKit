@@ -27,7 +27,6 @@ extension DoseUnit {
     }
 }
 
-
 class InsulinMathTests: XCTestCase {
 
     var fixtureDateformatter: DateFormatter!
@@ -40,8 +39,11 @@ class InsulinMathTests: XCTestCase {
     
     private let exponentialModel = ExponentialInsulinModel(actionDuration: TimeInterval(minutes: 360), peakActivityTime: TimeInterval(minutes: 75))
     
-    let insulinModelSettings = InsulinModelSettings(model: ExponentialInsulinModelPreset.rapidActingAdult)!
-    let walshModelSettings = InsulinModelSettings(model: WalshInsulinModel(actionDuration: TimeInterval(hours: 4)))!
+    let insulinModelSettings = StaticInsulinModelProvider(ExponentialInsulinModelPreset.rapidActingAdult)
+    let insulinModelDuration = ExponentialInsulinModelPreset.rapidActingAdult.effectDuration
+    
+    let walshModelSettings = StaticInsulinModelProvider( WalshInsulinModel(actionDuration: TimeInterval(hours: 4)))
+    let walshModelDuration = WalshInsulinModel(actionDuration: TimeInterval(hours: 4)).effectDuration
 
     
     private func fixtureDate(_ input: String) -> Date {
@@ -248,7 +250,7 @@ class InsulinMathTests: XCTestCase {
             XCTAssertEqual(expected.value, calculated.netBasalUnitsPerHour, accuracy: Double(Float.ulpOfOne))
         }
 
-        let iob = normalized.insulinOnBoard(insulinModelSettings: walshModelSettings)
+        let iob = normalized.insulinOnBoard(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration)
 
         XCTAssertEqual(iobOutput.count, iob.count)
 
@@ -263,10 +265,10 @@ class InsulinMathTests: XCTestCase {
         let output = loadInsulinValueFixture("iob_from_doses_output")
         
         measure {
-            _ = input.insulinOnBoard(insulinModelSettings: walshModelSettings)
+            _ = input.insulinOnBoard(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration)
         }
 
-        let iob = input.insulinOnBoard(insulinModelSettings: walshModelSettings)
+        let iob = input.insulinOnBoard(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration)
 
         XCTAssertEqual(output.count, iob.count)
 
@@ -279,7 +281,7 @@ class InsulinMathTests: XCTestCase {
     func testIOBFromNoDoses() {
         let input: [DoseEntry] = []
 
-        let iob = input.insulinOnBoard(insulinModelSettings: insulinModelSettings)
+        let iob = input.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration)
 
         XCTAssertEqual(0, iob.count)
     }
@@ -306,10 +308,10 @@ class InsulinMathTests: XCTestCase {
         let output = loadInsulinValueFixture("iob_from_doses_exponential_output")
         
         measure {
-            _ = input.insulinOnBoard(insulinModelSettings: insulinModelSettings)
+            _ = input.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration)
         }
         
-        let iob = input.insulinOnBoard(insulinModelSettings: insulinModelSettings)
+        let iob = input.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration)
         
         XCTAssertEqual(output.count, iob.count)
         
@@ -323,7 +325,7 @@ class InsulinMathTests: XCTestCase {
         let input = loadDoseFixture("bolus_dose", insulinType: .novolog)
         let output = loadInsulinValueFixture("iob_from_bolus_exponential_output")
         
-        let iob = input.insulinOnBoard(insulinModelSettings: insulinModelSettings)
+        let iob = input.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration)
         
         XCTAssertEqual(output.count, iob.count)
         
@@ -337,11 +339,12 @@ class InsulinMathTests: XCTestCase {
     func testIOBFromBolus() {
         for hours in [2, 3, 4, 5, 5.2, 6, 7] as [Double] {
             let actionDuration = TimeInterval(hours: hours)
-            let insulinModelSettings = InsulinModelSettings(model: WalshInsulinModel(actionDuration: actionDuration))!
+            let model = WalshInsulinModel(actionDuration: actionDuration)
+            let insulinModelProvider = StaticInsulinModelProvider( model)
             let input = loadDoseFixture("bolus_dose", insulinType: .novolog)
             let output = loadInsulinValueFixture("iob_from_bolus_\(Int(actionDuration.minutes))min_output")
 
-            let iob = input.insulinOnBoard(insulinModelSettings: insulinModelSettings)
+            let iob = input.insulinOnBoard(insulinModelProvider: insulinModelProvider, longestEffectDuration: model.effectDuration)
 
             XCTAssertEqual(output.count, iob.count)
 
@@ -367,7 +370,7 @@ class InsulinMathTests: XCTestCase {
             DoseEntry(type: .bolus, startDate: f("2018-05-15 14:52:51 +0000"), endDate: f("2018-05-15 15:52:51 +0000"), value: 0.9, unit: .units, syncIdentifier: "01004a004a006d006e22354312", scheduledBasalRate: nil),
         ]
 
-        let iobWithoutModel = doses.insulinOnBoard(insulinModelSettings: insulinModelSettings)
+        let iobWithoutModel = doses.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration)
 
         let dosesWithModel = [
             DoseEntry(type: .basal, startDate: f("2018-05-15 14:42:36 +0000"), endDate: f("2018-05-16 14:42:36 +0000"), value: 0.84999999999999998, unit: .unitsPerHour, syncIdentifier: "7b02646a070f120e2200", scheduledBasalRate: nil),
@@ -377,9 +380,9 @@ class InsulinMathTests: XCTestCase {
             DoseEntry(type: .bolus, startDate: f("2018-05-15 14:52:51 +0000"), endDate: f("2018-05-15 15:52:51 +0000"), value: 0.9, unit: .units, syncIdentifier: "01004a004a006d006e22354312", scheduledBasalRate: nil, insulinType: .novolog),
         ]
 
-        let insulinModelSettings = InsulinModelSettings(model: ExponentialInsulinModelPreset.rapidActingChild)!
-        let iobWithModel = dosesWithModel.insulinOnBoard(insulinModelSettings: insulinModelSettings)
-
+        let insulinModelProvider = PresetInsulinModelProvider(defaultRapidActingModel: ExponentialInsulinModelPreset.rapidActingChild)
+        let iobWithModel = dosesWithModel.insulinOnBoard(insulinModelProvider: insulinModelProvider, longestEffectDuration: ExponentialInsulinModelPreset.rapidActingChild.effectDuration)
+        
         XCTAssertEqual(iobWithoutModel.count, iobWithModel.count)
 
         for (expected, calculated) in zip(output, iobWithModel) {
@@ -393,15 +396,11 @@ class InsulinMathTests: XCTestCase {
         let input = loadDoseFixture("normalized_reservoir_history_output")
         let output = loadInsulinValueFixture("iob_from_reservoir_output")
         
-        let insulinModel = WalshInsulinModel(actionDuration: TimeInterval(hours: 4))
-        let insulinModelSettings = InsulinModelSettings(model: insulinModel)!
-
-
         measure {
-            _ = input.insulinOnBoard(insulinModelSettings: insulinModelSettings)
+            _ = input.insulinOnBoard(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration)
         }
 
-        let iob = input.insulinOnBoard(insulinModelSettings: insulinModelSettings)
+        let iob = input.insulinOnBoard(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration)
 
         XCTAssertEqual(output.count, iob.count)
 
@@ -500,10 +499,10 @@ class InsulinMathTests: XCTestCase {
         let insulinSensitivitySchedule = self.insulinSensitivitySchedule
 
         measure {
-            _ = input.glucoseEffects(insulinModelSettings: walshModelSettings, insulinSensitivity: insulinSensitivitySchedule)
+            _ = input.glucoseEffects(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration, insulinSensitivity: insulinSensitivitySchedule)
         }
 
-        let effects = input.glucoseEffects(insulinModelSettings: walshModelSettings, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(Float(output.count), Float(effects.count), accuracy: 1.0)
 
@@ -519,10 +518,10 @@ class InsulinMathTests: XCTestCase {
         let insulinSensitivitySchedule = self.insulinSensitivitySchedule
 
         measure {
-            _ = input.glucoseEffects(insulinModelSettings: walshModelSettings, insulinSensitivity: insulinSensitivitySchedule)
+            _ = input.glucoseEffects(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration, insulinSensitivity: insulinSensitivitySchedule)
         }
 
-        let effects = input.glucoseEffects(insulinModelSettings: walshModelSettings, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(output.count, effects.count)
 
@@ -538,10 +537,10 @@ class InsulinMathTests: XCTestCase {
         let insulinSensitivitySchedule = self.insulinSensitivitySchedule
 
         measure {
-            _ = input.glucoseEffects(insulinModelSettings: walshModelSettings, insulinSensitivity: insulinSensitivitySchedule)
+            _ = input.glucoseEffects(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration, insulinSensitivity: insulinSensitivitySchedule)
         }
 
-        let effects = input.glucoseEffects(insulinModelSettings: walshModelSettings, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(output.count, effects.count)
 
@@ -555,7 +554,7 @@ class InsulinMathTests: XCTestCase {
         let input = loadDoseFixture("basal_dose_with_delivered", insulinType: .novolog)
         let output = loadGlucoseEffectFixture("effect_from_basal_output_exponential")
 
-        let effects = input.glucoseEffects(insulinModelSettings: insulinModelSettings, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(output.count, effects.count)
 
@@ -572,10 +571,10 @@ class InsulinMathTests: XCTestCase {
         let insulinSensitivitySchedule = self.insulinSensitivitySchedule
 
         measure {
-            _ = input.glucoseEffects(insulinModelSettings: walshModelSettings, insulinSensitivity: insulinSensitivitySchedule)
+            _ = input.glucoseEffects(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration, insulinSensitivity: insulinSensitivitySchedule)
         }
 
-        let effects = input.glucoseEffects(insulinModelSettings: walshModelSettings, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(insulinModelProvider: walshModelSettings, longestEffectDuration: walshModelDuration, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(output.count, effects.count)
 
@@ -589,7 +588,7 @@ class InsulinMathTests: XCTestCase {
         let input: [DoseEntry] = []
         let insulinSensitivitySchedule = self.insulinSensitivitySchedule
 
-        let effects = input.glucoseEffects(insulinModelSettings: insulinModelSettings, insulinSensitivity: insulinSensitivitySchedule)
+        let effects = input.glucoseEffects(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration, insulinSensitivity: insulinSensitivitySchedule)
 
         XCTAssertEqual(0, effects.count)
     }
@@ -1047,16 +1046,16 @@ class InsulinMathTests: XCTestCase {
         let date = f("2018-07-16 03:40:00 +0000")
 
         XCTAssertEqual(
-            normalizedDoseEntries.insulinOnBoard(insulinModelSettings: insulinModelSettings, from: date, to: date).first!.value,
-            appended.insulinOnBoard(insulinModelSettings: insulinModelSettings, from: date, to: date).first!.value,
+            normalizedDoseEntries.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration, from: date, to: date).first!.value,
+            appended.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration, from: date, to: date).first!.value,
             accuracy: 1.0/40
         )
 
         let emptyCacheAppended = ([DoseEntry]()).appendedUnion(with: normalizedDoseEntries)
 
         XCTAssertEqual(
-            normalizedDoseEntries.insulinOnBoard(insulinModelSettings: insulinModelSettings, from: date, to: date).first!.value,
-            emptyCacheAppended.insulinOnBoard(insulinModelSettings: insulinModelSettings, from: date, to: date).first!.value,
+            normalizedDoseEntries.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration, from: date, to: date).first!.value,
+            emptyCacheAppended.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration, from: date, to: date).first!.value,
             accuracy: 1.0/40,
             "Empty cache doesn't affect outcome"
         )
@@ -1064,8 +1063,8 @@ class InsulinMathTests: XCTestCase {
         let fullCache = cachedDoseEntries.appendedUnion(with: [])
 
         XCTAssertEqual(
-            cachedDoseEntries.insulinOnBoard(insulinModelSettings: insulinModelSettings, from: date, to: date).first!.value,
-            fullCache.insulinOnBoard(insulinModelSettings: insulinModelSettings, from: date, to: date).first!.value,
+            cachedDoseEntries.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration, from: date, to: date).first!.value,
+            fullCache.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration, from: date, to: date).first!.value,
             accuracy: 1.0/40,
             "Only cache doesn't affect outcome"
         )
@@ -1119,8 +1118,8 @@ class InsulinMathTests: XCTestCase {
         let date = f("2018-07-16 05:30:00 +0000")
 
         XCTAssertEqual(
-            normalizedReservoirDoseEntries.insulinOnBoard(insulinModelSettings: insulinModelSettings, from: date, to: date).first!.value,
-            appended.insulinOnBoard(insulinModelSettings: insulinModelSettings, from: date, to: date).first!.value,
+            normalizedReservoirDoseEntries.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration, from: date, to: date).first!.value,
+            appended.insulinOnBoard(insulinModelProvider: insulinModelSettings, longestEffectDuration: insulinModelDuration, from: date, to: date).first!.value,
             accuracy: 0.1
         )
     }

@@ -174,6 +174,7 @@ private struct CorrectionRangeGuardrailWarning: View {
     var body: some View {
         assert(!crossedThresholds.isEmpty)
         return GuardrailWarning(
+            therapySetting: .glucoseTargetRange,
             title: crossedThresholds.count == 1 ? singularWarningTitle(for: crossedThresholds.first!) : multipleWarningTitle,
             thresholds: crossedThresholds
         )

@@ -11,7 +11,7 @@ import LoopKit
 import LoopKitUI
 
 
-protocol GlucoseTrendTableViewControllerDelegate: class {
+protocol GlucoseTrendTableViewControllerDelegate: AnyObject {
     func glucoseTrendTableViewControllerDidChangeTrend(_ controller: GlucoseTrendTableViewController)
 }
 

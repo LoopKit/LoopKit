@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 import LoopKit
 
-protocol SetConstrainedScheduleEntryTableViewCellDelegate: class {
+protocol SetConstrainedScheduleEntryTableViewCellDelegate: AnyObject {
     func setConstrainedScheduleEntryTableViewCellDidUpdate(_ cell: SetConstrainedScheduleEntryTableViewCell)
 }
 

@@ -215,7 +215,7 @@ extension TherapySettingsView {
             if let items = self.viewModel.glucoseTargetRangeSchedule(for: glucoseUnit)?.items
             {
                 SectionDivider()
-                ForEach(items.indices) { index in
+                ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
                         SettingsDivider()
                     }
@@ -266,7 +266,7 @@ extension TherapySettingsView {
         card(for: .basalRate) {
             if let items = viewModel.therapySettings.basalRateSchedule?.items, let supportedBasalRates = viewModel.pumpSupportedIncrements?()?.basalRates {
                 SectionDivider()
-                ForEach(items.indices) { index in
+                ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
                         SettingsDivider()
                     }
@@ -329,16 +329,16 @@ extension TherapySettingsView {
         
     private var insulinModelSection: Card {
         card(for: .insulinModel) {
-            if let insulinModelSettings = self.viewModel.therapySettings.insulinModelSettings {
+            if let insulinModelPreset = self.viewModel.therapySettings.defaultRapidActingModel {
                 SectionDivider()
                 HStack {
                     // Spacing and paddings here is my best guess based on the design...
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(insulinModelSettings.title)
+                        Text(insulinModelPreset.title)
                             .font(.body)
                             .padding(.top, 5)
                             .fixedSize(horizontal: false, vertical: true)
-                        Text(insulinModelSettings.subtitle)
+                        Text(insulinModelPreset.subtitle)
                             .font(.footnote)
                             .foregroundColor(.secondary)
                             .padding(.bottom, 8)
@@ -358,7 +358,7 @@ extension TherapySettingsView {
         card(for: .carbRatio) {
             if let items = viewModel.therapySettings.carbRatioSchedule?.items {
                 SectionDivider()
-                ForEach(items.indices) { index in
+                ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
                         SettingsDivider()
                     }
@@ -375,7 +375,7 @@ extension TherapySettingsView {
         card(for: .insulinSensitivity) {
             if let items = viewModel.insulinSensitivitySchedule(for: glucoseUnit)?.items {
                 SectionDivider()
-                ForEach(items.indices) { index in
+                ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
                         SettingsDivider()
                     }
@@ -487,6 +487,7 @@ struct ScheduleRangeItem: View {
                          isEditing: .constant(false),
                          valueContent: {
                             GuardrailConstrainedQuantityRangeView(range: range.quantityRange(for: unit), unit: unit, guardrail: guardrail, isEditing: false)
+                                .padding(.leading, 10)
                          },
                          expandedContent: { EmptyView() })
     }
@@ -503,6 +504,7 @@ struct ScheduleValueItem: View {
                          isEditing: .constant(false),
                          valueContent: {
                             GuardrailConstrainedQuantityView(value: HKQuantity(unit: unit, doubleValue: value), unit: unit, guardrail: guardrail, isEditing: false)
+                                .padding(.leading, 10)
                          },
                          expandedContent: { EmptyView() })
     }
@@ -613,7 +615,6 @@ public struct TherapySettingsView_Previews: PreviewProvider {
 
     static func preview_viewModel() -> TherapySettingsViewModel {
         TherapySettingsViewModel(therapySettings: preview_therapySettings,
-                                 supportedInsulinModelSettings: SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
                                  pumpSupportedIncrements: { PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
                                                                                   bolusVolumes: preview_supportedBolusVolumes,
                                                                                   maximumBasalScheduleEntryCount: 24) })

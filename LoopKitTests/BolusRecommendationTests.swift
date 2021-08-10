@@ -81,6 +81,26 @@ class BolusRecommendationNoticeCodableTests: XCTestCase {
         )
     }
 
+    func testCodableAllGlucoseBelowTarget() throws {
+        let glucoseValue = SimpleGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T22:38:16Z")!,
+                                              quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 80.0))
+        try assertBolusRecommendationNoticeCodable(.allGlucoseBelowTarget(minGlucose: glucoseValue), encodesJSON: """
+{
+  "bolusRecommendationNotice" : {
+    "allGlucoseBelowTarget" : {
+      "minGlucose" : {
+        "endDate" : "2020-05-14T22:38:16Z",
+        "quantity" : 80,
+        "quantityUnit" : "mg/dL",
+        "startDate" : "2020-05-14T22:38:16Z"
+      }
+    }
+  }
+}
+"""
+        )
+    }
+
     private func assertBolusRecommendationNoticeCodable(_ original: BolusRecommendationNotice, encodesJSON string: String) throws {
         let data = try encoder.encode(TestContainer(bolusRecommendationNotice: original))
         XCTAssertEqual(String(data: data, encoding: .utf8), string)
@@ -113,7 +133,8 @@ extension BolusRecommendationNotice: Equatable {
         switch (lhs, rhs) {
         case (.glucoseBelowSuspendThreshold(let lhsGlucoseValue), .glucoseBelowSuspendThreshold(let rhsGlucoseValue)),
              (.currentGlucoseBelowTarget(let lhsGlucoseValue), .currentGlucoseBelowTarget(let rhsGlucoseValue)),
-             (.predictedGlucoseBelowTarget(let lhsGlucoseValue), .predictedGlucoseBelowTarget(let rhsGlucoseValue)):
+             (.predictedGlucoseBelowTarget(let lhsGlucoseValue), .predictedGlucoseBelowTarget(let rhsGlucoseValue)),
+             (.allGlucoseBelowTarget(let lhsGlucoseValue), .allGlucoseBelowTarget(let rhsGlucoseValue)):
             return lhsGlucoseValue.startDate == rhsGlucoseValue.startDate &&
                 lhsGlucoseValue.endDate == rhsGlucoseValue.endDate &&
                 lhsGlucoseValue.quantity == rhsGlucoseValue.quantity
