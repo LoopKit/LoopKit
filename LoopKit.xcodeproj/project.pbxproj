@@ -40,6 +40,7 @@
 		1D640FF724525228008F9755 /* sub.caf in Resources */ = {isa = PBXBuildFile; fileRef = 1D640FF524524284008F9755 /* sub.caf */; };
 		1D67E79D2563001800A82ED6 /* InformationScreens.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D67E79C2563001800A82ED6 /* InformationScreens.xcassets */; };
 		1D6EAB9124C12C090081249D /* PumpSupportedIncrements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D6EAB9024C12C090081249D /* PumpSupportedIncrements.swift */; };
+		1D70F80226C1BEB700D5BE96 /* CoreDataMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D70F80126C1BEB700D5BE96 /* CoreDataMigrationTests.swift */; };
 		1D841AAD24577EE10069DBFF /* AlertSoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D841AAC24577EE10069DBFF /* AlertSoundPlayer.swift */; };
 		1D97A33C256F11E00042737E /* View+InsetGroupedListStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D97A33B256F11E00042737E /* View+InsetGroupedListStyle.swift */; };
 		1DA649AB2445174400F61E75 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* Alert.swift */; };
@@ -49,6 +50,7 @@
 		1DC9240F2575EF9A004F132A /* QuantityFormatter+Guardrails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC9240E2575EF9A004F132A /* QuantityFormatter+Guardrails.swift */; };
 		1DD1964E248AE88000420876 /* HorizontalSizeClassOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD1964D248AE88000420876 /* HorizontalSizeClassOverride.swift */; };
 		1DD3DEB624451C3300BD8E40 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA649AA2445174400F61E75 /* Alert.swift */; };
+		1DD65CFF26C476890085CC64 /* Model.sqlite.v1.original in Resources */ = {isa = PBXBuildFile; fileRef = 1DD65CFE26C476880085CC64 /* Model.sqlite.v1.original */; };
 		1DE35E7A24ABEC720086F9AE /* DeviceManagerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE35E7924ABEC720086F9AE /* DeviceManagerUI.swift */; };
 		1DECC3F52513F98D00F4056E /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DECC3F42513F98D00F4056E /* UITextField.swift */; };
 		1DEE227724A676A300693C32 /* HKHealthStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437AFF1E203A763F008C4892 /* HKHealthStoreMock.swift */; };
@@ -995,6 +997,7 @@
 		1D640FF524524284008F9755 /* sub.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sub.caf; sourceTree = "<group>"; };
 		1D67E79C2563001800A82ED6 /* InformationScreens.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = InformationScreens.xcassets; sourceTree = "<group>"; };
 		1D6EAB9024C12C090081249D /* PumpSupportedIncrements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpSupportedIncrements.swift; sourceTree = "<group>"; };
+		1D70F80126C1BEB700D5BE96 /* CoreDataMigrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataMigrationTests.swift; sourceTree = "<group>"; };
 		1D841AAC24577EE10069DBFF /* AlertSoundPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertSoundPlayer.swift; sourceTree = "<group>"; };
 		1D97A33B256F11E00042737E /* View+InsetGroupedListStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+InsetGroupedListStyle.swift"; sourceTree = "<group>"; };
 		1DA649AA2445174400F61E75 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
@@ -1003,6 +1006,7 @@
 		1DC64C7D24BF6EBC004A63A1 /* DeliveryLimits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimits.swift; sourceTree = "<group>"; };
 		1DC9240E2575EF9A004F132A /* QuantityFormatter+Guardrails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuantityFormatter+Guardrails.swift"; sourceTree = "<group>"; };
 		1DD1964D248AE88000420876 /* HorizontalSizeClassOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSizeClassOverride.swift; sourceTree = "<group>"; };
+		1DD65CFE26C476880085CC64 /* Model.sqlite.v1.original */ = {isa = PBXFileReference; lastKnownFileType = file; path = Model.sqlite.v1.original; sourceTree = "<group>"; };
 		1DE35E7924ABEC720086F9AE /* DeviceManagerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManagerUI.swift; sourceTree = "<group>"; };
 		1DECC3F42513F98D00F4056E /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		1DEE230124A676A300693C32 /* LoopKitHostedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoopKitHostedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1807,12 +1811,22 @@
 			path = Sounds;
 			sourceTree = "<group>";
 		};
+		1D70F7FA26C1BE6100D5BE96 /* TestCoreData */ = {
+			isa = PBXGroup;
+			children = (
+				1DD65CFE26C476880085CC64 /* Model.sqlite.v1.original */,
+			);
+			path = TestCoreData;
+			sourceTree = "<group>";
+		};
 		1DEE230524A6960400693C32 /* LoopKitHostedTests */ = {
 			isa = PBXGroup;
 			children = (
+				1D70F7FA26C1BE6100D5BE96 /* TestCoreData */,
 				A9E068142534EB6B00BDAB59 /* Persistence */,
 				1DEE230224A676A300693C32 /* LoopKitHostedTests.plist */,
 				A98ED5FD253132A400FD8F70 /* CarbStoreHKQueryTests.swift */,
+				1D70F80126C1BEB700D5BE96 /* CoreDataMigrationTests.swift */,
 				A9E0681725350ECC00BDAB59 /* GlucoseStoreTests.swift */,
 				C1E703612500390B00DAB534 /* HKAnchoredObjectQueryMock.swift */,
 				C1E7035E25001EA500DAB534 /* HKObserverQueryMock.swift */,
@@ -3181,6 +3195,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DD65CFF26C476890085CC64 /* Model.sqlite.v1.original in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3464,6 +3479,7 @@
 				A994B884254241B10039B108 /* InsulinDeliveryStoreTests.swift in Sources */,
 				A9E0681825350ECC00BDAB59 /* GlucoseStoreTests.swift in Sources */,
 				A9E1E6AE24E1D8860073CA39 /* NSManagedObjectContext.swift in Sources */,
+				1D70F80226C1BEB700D5BE96 /* CoreDataMigrationTests.swift in Sources */,
 				A98ED5FB25312E3200FD8F70 /* HKObserverQueryMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
