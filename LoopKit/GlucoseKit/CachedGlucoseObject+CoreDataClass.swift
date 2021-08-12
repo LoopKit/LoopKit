@@ -37,6 +37,19 @@ class CachedGlucoseObject: NSManagedObject {
             primitiveDevice = newValue.flatMap { try? NSKeyedArchiver.archivedData(withRootObject: $0, requiringSecureCoding: false) }
         }
     }
+    
+    var trend: GlucoseTrend? {
+        get {
+            willAccessValue(forKey: "trend")
+            defer { didAccessValue(forKey: "trend") }
+            return primitiveTrend.flatMap { GlucoseTrend(rawValue: $0.intValue) }
+        }
+        set {
+            willChangeValue(forKey: "trend")
+            defer { didChangeValue(forKey: "trend") }
+            primitiveTrend = newValue.map { NSNumber(value: $0.rawValue) }
+        }
+    }
 
     var hasUpdatedModificationCounter: Bool { changedValues().keys.contains("modificationCounter") }
 
@@ -72,6 +85,9 @@ extension CachedGlucoseObject {
         if wasUserEntered {
             metadata[HKMetadataKeyWasUserEntered] = true
         }
+        if let trend = trend {
+            metadata[MetadataKeyGlucoseTrend] = trend.rawValue
+        }
         
         return HKQuantitySample(
             type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!,
@@ -100,6 +116,7 @@ extension CachedGlucoseObject {
         self.isDisplayOnly = sample.isDisplayOnly
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
+        self.trend = sample.trend
     }
 
     // HealthKit
@@ -116,6 +133,7 @@ extension CachedGlucoseObject {
         self.isDisplayOnly = sample.isDisplayOnly
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
+        self.trend = sample.trend
     }
 }
 
@@ -132,5 +150,6 @@ extension CachedGlucoseObject {
         self.isDisplayOnly = sample.isDisplayOnly
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
+        self.trend = sample.trend
     }
 }

@@ -26,6 +26,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
 
     public let isDisplayOnly: Bool
     public let wasUserEntered: Bool
+    public let trend: GlucoseTrend?
 
     public init(sample: HKQuantitySample) {
         self.init(
@@ -35,6 +36,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
             syncVersion: sample.syncVersion,
             startDate: sample.startDate,
             quantity: sample.quantity,
+            trend: sample.trend,
             isDisplayOnly: sample.isDisplayOnly,
             wasUserEntered: sample.wasUserEntered,
             device: sample.device)
@@ -47,6 +49,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
         syncVersion: Int?,
         startDate: Date,
         quantity: HKQuantity,
+        trend: GlucoseTrend?,
         isDisplayOnly: Bool,
         wasUserEntered: Bool,
         device: HKDevice?) {
@@ -56,6 +59,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
         self.syncVersion = syncVersion
         self.startDate = startDate
         self.quantity = quantity
+        self.trend = trend
         self.isDisplayOnly = isDisplayOnly
         self.wasUserEntered = wasUserEntered
         self.device = device
@@ -71,6 +75,7 @@ extension StoredGlucoseSample {
             syncVersion: managedObject.syncVersion,
             startDate: managedObject.startDate,
             quantity: managedObject.quantity,
+            trend: managedObject.trend,
             isDisplayOnly: managedObject.isDisplayOnly,
             wasUserEntered: managedObject.wasUserEntered,
             device: managedObject.device)

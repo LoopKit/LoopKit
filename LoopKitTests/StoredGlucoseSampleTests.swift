@@ -44,6 +44,7 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
                                          syncVersion: 3,
                                          startDate: startDate,
                                          quantity: quantity,
+                                         trend: .flat,
                                          isDisplayOnly: true,
                                          wasUserEntered: false,
                                          device: device)
@@ -53,6 +54,7 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
         XCTAssertEqual(sample.syncVersion, 3)
         XCTAssertEqual(sample.startDate, startDate)
         XCTAssertEqual(sample.quantity, quantity)
+        XCTAssertEqual(sample.trend, .flat)
         XCTAssertEqual(sample.isDisplayOnly, true)
         XCTAssertEqual(sample.wasUserEntered, false)
         XCTAssertEqual(sample.device, device)
@@ -67,6 +69,7 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
                                          syncVersion: nil,
                                          startDate: startDate,
                                          quantity: quantity,
+                                         trend: .flat,
                                          isDisplayOnly: false,
                                          wasUserEntered: true,
                                          device: nil)
@@ -76,6 +79,7 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
         XCTAssertNil(sample.syncVersion)
         XCTAssertEqual(sample.startDate, startDate)
         XCTAssertEqual(sample.quantity, quantity)
+        XCTAssertEqual(sample.trend, .flat)
         XCTAssertEqual(sample.isDisplayOnly, false)
         XCTAssertEqual(sample.wasUserEntered, true)
         XCTAssertNil(sample.device)
@@ -101,6 +105,7 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             managedObject.isDisplayOnly = true
             managedObject.wasUserEntered = true
             managedObject.device = device
+            managedObject.trend = .downDownDown
             let sample = StoredGlucoseSample(managedObject: managedObject)
             XCTAssertEqual(sample.uuid, uuid)
             XCTAssertEqual(sample.provenanceIdentifier, "C198186D-F15C-4D0F-B8A1-83B28626DB3A")
@@ -111,6 +116,7 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             XCTAssertEqual(sample.isDisplayOnly, true)
             XCTAssertEqual(sample.wasUserEntered, true)
             XCTAssertEqual(sample.device, device)
+            XCTAssertEqual(sample.trend, .downDownDown)
         }
     }
 
@@ -135,6 +141,7 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             XCTAssertEqual(sample.isDisplayOnly, true)
             XCTAssertEqual(sample.wasUserEntered, true)
             XCTAssertNil(sample.device)
+            XCTAssertNil(sample.trend)
         }
     }
 
