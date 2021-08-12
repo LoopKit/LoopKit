@@ -83,6 +83,9 @@ public protocol CGMManager: DeviceManager {
 
     /// The length of time to keep samples in HealthKit before removal. Return nil to never remove samples.
     var managedDataInterval: TimeInterval? { get }
+    
+    /// The length of time to delay until storing samples into HealthKit.  Return 0 for no delay.
+    static var healthKitStorageDelay: TimeInterval { get }
 
     var shouldSyncToRemoteService: Bool { get }
 
@@ -134,6 +137,9 @@ public extension CGMManager {
     var appURL: URL? {
         return nil
     }
+    
+    /// Default is no delay to store samples in HealthKit
+    static var healthKitStorageDelay: TimeInterval { 0 }
 
     /// Convenience wrapper for notifying the delegate of deletion on the delegate queue
     ///

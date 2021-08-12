@@ -11,24 +11,28 @@ import HealthKit
 @testable import LoopKit
 
 class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
+    private static let device = HKDevice(name: "NAME", manufacturer: "MANUFACTURER", model: "MODEL", hardwareVersion: "HARDWAREVERSION", firmwareVersion: "FIRMWAREVERSION", softwareVersion: "SOFTWAREVERSION", localIdentifier: "LOCALIDENTIFIER", udiDeviceIdentifier: "UDIDEVICEIDENTIFIER")
     private let sample1 = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.minutes(6)),
                                            quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.4),
                                            isDisplayOnly: true,
                                            wasUserEntered: false,
                                            syncIdentifier: "1925558F-E98F-442F-BBA6-F6F75FB4FD91",
-                                           syncVersion: 2)
+                                           syncVersion: 2,
+                                           device: device)
     private let sample2 = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.minutes(2)),
                                            quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 134.5),
                                            isDisplayOnly: false,
                                            wasUserEntered: true,
                                            syncIdentifier: "535F103C-3DFE-48F2-B15A-47313191E7B7",
-                                           syncVersion: 3)
+                                           syncVersion: 3,
+                                           device: device)
     private let sample3 = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.minutes(4)),
                                            quantity: HKQuantity(unit: .millimolesPerLiter, doubleValue: 7.65),
                                            isDisplayOnly: false,
                                            wasUserEntered: false,
                                            syncIdentifier: "E1624D2B-A971-41B8-B8A0-3A8212AC3D71",
-                                           syncVersion: 4)
+                                           syncVersion: 4,
+                                           device: device)
 
     var healthStore: HKHealthStoreMock!
     var glucoseStore: GlucoseStore!
@@ -184,29 +188,11 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
             case .success(let samples):
                 XCTAssertEqual(samples.count, 3)
                 XCTAssertNotNil(samples[0].uuid)
-                XCTAssertEqual(samples[0].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[0].syncIdentifier, self.sample1.syncIdentifier)
-                XCTAssertEqual(samples[0].syncVersion, self.sample1.syncVersion)
-                XCTAssertEqual(samples[0].startDate, self.sample1.date)
-                XCTAssertEqual(samples[0].quantity, self.sample1.quantity)
-                XCTAssertEqual(samples[0].isDisplayOnly, self.sample1.isDisplayOnly)
-                XCTAssertEqual(samples[0].wasUserEntered, self.sample1.wasUserEntered)
+                assertEqualSamples(samples[0], self.sample1)
                 XCTAssertNotNil(samples[1].uuid)
-                XCTAssertEqual(samples[1].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[1].syncIdentifier, self.sample3.syncIdentifier)
-                XCTAssertEqual(samples[1].syncVersion, self.sample3.syncVersion)
-                XCTAssertEqual(samples[1].startDate, self.sample3.date)
-                XCTAssertEqual(samples[1].quantity, self.sample3.quantity)
-                XCTAssertEqual(samples[1].isDisplayOnly, self.sample3.isDisplayOnly)
-                XCTAssertEqual(samples[1].wasUserEntered, self.sample3.wasUserEntered)
+                assertEqualSamples(samples[1], self.sample3)
                 XCTAssertNotNil(samples[2].uuid)
-                XCTAssertEqual(samples[2].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[2].syncIdentifier, self.sample2.syncIdentifier)
-                XCTAssertEqual(samples[2].syncVersion, self.sample2.syncVersion)
-                XCTAssertEqual(samples[2].startDate, self.sample2.date)
-                XCTAssertEqual(samples[2].quantity, self.sample2.quantity)
-                XCTAssertEqual(samples[2].isDisplayOnly, self.sample2.isDisplayOnly)
-                XCTAssertEqual(samples[2].wasUserEntered, self.sample2.wasUserEntered)
+                assertEqualSamples(samples[2], self.sample2)
             }
             getGlucoseSamples1Completion.fulfill()
         }
@@ -220,13 +206,7 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
             case .success(let samples):
                 XCTAssertEqual(samples.count, 1)
                 XCTAssertNotNil(samples[0].uuid)
-                XCTAssertEqual(samples[0].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[0].syncIdentifier, self.sample3.syncIdentifier)
-                XCTAssertEqual(samples[0].syncVersion, self.sample3.syncVersion)
-                XCTAssertEqual(samples[0].startDate, self.sample3.date)
-                XCTAssertEqual(samples[0].quantity, self.sample3.quantity)
-                XCTAssertEqual(samples[0].isDisplayOnly, self.sample3.isDisplayOnly)
-                XCTAssertEqual(samples[0].wasUserEntered, self.sample3.wasUserEntered)
+                assertEqualSamples(samples[0], self.sample3)
             }
             getGlucoseSamples2Completion.fulfill()
         }
@@ -251,7 +231,49 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
         }
         waitForExpectations(timeout: 10)
     }
+    
+    enum Error: Swift.Error { case arbitrary }
 
+    func testGetGlucoseSamplesDelayedHealthKitStorage() {
+        glucoseStore.healthKitStorageDelay = .minutes(5)
+        // Note error should not cause failure
+        healthStore.saveError = Error.arbitrary
+        var hkobjects = [HKObject]()
+        healthStore.setSaveHandler { o, _, _ in hkobjects = o }
+        let addGlucoseSamplesCompletion = expectation(description: "addGlucoseSamples")
+        glucoseStore.addGlucoseSamples([sample1, sample2, sample3]) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let samples):
+                XCTAssertEqual(samples.count, 3)
+            }
+            addGlucoseSamplesCompletion.fulfill()
+        }
+        waitForExpectations(timeout: 10)
+
+        let getGlucoseSamples1Completion = expectation(description: "getGlucoseSamples1")
+        glucoseStore.getGlucoseSamples() { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let samples):
+                XCTAssertEqual(samples.count, 3)
+                // HealthKit storage is deferred, so the second 2 UUIDs are nil
+                XCTAssertNotNil(samples[0].uuid)
+                assertEqualSamples(samples[0], self.sample1)
+                XCTAssertNil(samples[1].uuid)
+                assertEqualSamples(samples[1], self.sample3)
+                XCTAssertNil(samples[2].uuid)
+                assertEqualSamples(samples[2], self.sample2)
+            }
+            getGlucoseSamples1Completion.fulfill()
+        }
+        waitForExpectations(timeout: 10)
+
+        XCTAssertEqual([sample1.quantitySample.description], hkobjects.map { $0.description })
+    }
+    
     func testLatestGlucose() {
         XCTAssertNil(glucoseStore.latestGlucose)
 
@@ -262,6 +284,9 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
                 XCTAssertEqual(samples.count, 3)
+                assertEqualSamples(samples[0], self.sample1)
+                assertEqualSamples(samples[1], self.sample2)
+                assertEqualSamples(samples[2], self.sample3)
             }
             addGlucoseSamplesCompletion.fulfill()
         }
@@ -295,30 +320,13 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
                 XCTFail("Unexpected failure: \(error)")
             case .success(let samples):
                 XCTAssertEqual(samples.count, 3)
-                XCTAssertNotNil(samples[0].uuid)
-                XCTAssertEqual(samples[0].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[0].syncIdentifier, self.sample1.syncIdentifier)
-                XCTAssertEqual(samples[0].syncVersion, self.sample1.syncVersion)
-                XCTAssertEqual(samples[0].startDate, self.sample1.date)
-                XCTAssertEqual(samples[0].quantity, self.sample1.quantity)
-                XCTAssertEqual(samples[0].isDisplayOnly, self.sample1.isDisplayOnly)
-                XCTAssertEqual(samples[0].wasUserEntered, self.sample1.wasUserEntered)
-                XCTAssertNotNil(samples[1].uuid)
-                XCTAssertEqual(samples[1].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[1].syncIdentifier, self.sample2.syncIdentifier)
-                XCTAssertEqual(samples[1].syncVersion, self.sample2.syncVersion)
-                XCTAssertEqual(samples[1].startDate, self.sample2.date)
-                XCTAssertEqual(samples[1].quantity, self.sample2.quantity)
-                XCTAssertEqual(samples[1].isDisplayOnly, self.sample2.isDisplayOnly)
-                XCTAssertEqual(samples[1].wasUserEntered, self.sample2.wasUserEntered)
-                XCTAssertNotNil(samples[2].uuid)
-                XCTAssertEqual(samples[2].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[2].syncIdentifier, self.sample3.syncIdentifier)
-                XCTAssertEqual(samples[2].syncVersion, self.sample3.syncVersion)
-                XCTAssertEqual(samples[2].startDate, self.sample3.date)
-                XCTAssertEqual(samples[2].quantity, self.sample3.quantity)
-                XCTAssertEqual(samples[2].isDisplayOnly, self.sample3.isDisplayOnly)
-                XCTAssertEqual(samples[2].wasUserEntered, self.sample3.wasUserEntered)
+                // Note: the HealthKit UUID is no longer updated before being returned as a result of addGlucoseSamples.
+                XCTAssertNil(samples[0].uuid)
+                assertEqualSamples(samples[0], self.sample1)
+                XCTAssertNil(samples[1].uuid)
+                assertEqualSamples(samples[1], self.sample2)
+                XCTAssertNil(samples[2].uuid)
+                assertEqualSamples(samples[2], self.sample3)
             }
             addGlucoseSamples1Completion.fulfill()
         }
@@ -332,29 +340,11 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
             case .success(let samples):
                 XCTAssertEqual(samples.count, 3)
                 XCTAssertNotNil(samples[0].uuid)
-                XCTAssertEqual(samples[0].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[0].syncIdentifier, self.sample1.syncIdentifier)
-                XCTAssertEqual(samples[0].syncVersion, self.sample1.syncVersion)
-                XCTAssertEqual(samples[0].startDate, self.sample1.date)
-                XCTAssertEqual(samples[0].quantity, self.sample1.quantity)
-                XCTAssertEqual(samples[0].isDisplayOnly, self.sample1.isDisplayOnly)
-                XCTAssertEqual(samples[0].wasUserEntered, self.sample1.wasUserEntered)
+                assertEqualSamples(samples[0], self.sample1)
                 XCTAssertNotNil(samples[1].uuid)
-                XCTAssertEqual(samples[1].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[1].syncIdentifier, self.sample3.syncIdentifier)
-                XCTAssertEqual(samples[1].syncVersion, self.sample3.syncVersion)
-                XCTAssertEqual(samples[1].startDate, self.sample3.date)
-                XCTAssertEqual(samples[1].quantity, self.sample3.quantity)
-                XCTAssertEqual(samples[1].isDisplayOnly, self.sample3.isDisplayOnly)
-                XCTAssertEqual(samples[1].wasUserEntered, self.sample3.wasUserEntered)
+                assertEqualSamples(samples[1], self.sample3)
                 XCTAssertNotNil(samples[2].uuid)
-                XCTAssertEqual(samples[2].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[2].syncIdentifier, self.sample2.syncIdentifier)
-                XCTAssertEqual(samples[2].syncVersion, self.sample2.syncVersion)
-                XCTAssertEqual(samples[2].startDate, self.sample2.date)
-                XCTAssertEqual(samples[2].quantity, self.sample2.quantity)
-                XCTAssertEqual(samples[2].isDisplayOnly, self.sample2.isDisplayOnly)
-                XCTAssertEqual(samples[2].wasUserEntered, self.sample2.wasUserEntered)
+                assertEqualSamples(samples[2], self.sample2)
             }
             getGlucoseSamples1Completion.fulfill()
         }
@@ -380,29 +370,11 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
             case .success(let samples):
                 XCTAssertEqual(samples.count, 3)
                 XCTAssertNotNil(samples[0].uuid)
-                XCTAssertEqual(samples[0].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[0].syncIdentifier, self.sample1.syncIdentifier)
-                XCTAssertEqual(samples[0].syncVersion, self.sample1.syncVersion)
-                XCTAssertEqual(samples[0].startDate, self.sample1.date)
-                XCTAssertEqual(samples[0].quantity, self.sample1.quantity)
-                XCTAssertEqual(samples[0].isDisplayOnly, self.sample1.isDisplayOnly)
-                XCTAssertEqual(samples[0].wasUserEntered, self.sample1.wasUserEntered)
+                assertEqualSamples(samples[0], self.sample1)
                 XCTAssertNotNil(samples[1].uuid)
-                XCTAssertEqual(samples[1].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[1].syncIdentifier, self.sample3.syncIdentifier)
-                XCTAssertEqual(samples[1].syncVersion, self.sample3.syncVersion)
-                XCTAssertEqual(samples[1].startDate, self.sample3.date)
-                XCTAssertEqual(samples[1].quantity, self.sample3.quantity)
-                XCTAssertEqual(samples[1].isDisplayOnly, self.sample3.isDisplayOnly)
-                XCTAssertEqual(samples[1].wasUserEntered, self.sample3.wasUserEntered)
+                assertEqualSamples(samples[1], self.sample3)
                 XCTAssertNotNil(samples[2].uuid)
-                XCTAssertEqual(samples[2].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(samples[2].syncIdentifier, self.sample2.syncIdentifier)
-                XCTAssertEqual(samples[2].syncVersion, self.sample2.syncVersion)
-                XCTAssertEqual(samples[2].startDate, self.sample2.date)
-                XCTAssertEqual(samples[2].quantity, self.sample2.quantity)
-                XCTAssertEqual(samples[2].isDisplayOnly, self.sample2.isDisplayOnly)
-                XCTAssertEqual(samples[2].wasUserEntered, self.sample2.wasUserEntered)
+                assertEqualSamples(samples[2], self.sample2)
             }
             getGlucoseSamples2Completion.fulfill()
         }
@@ -473,29 +445,11 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
             case .success(let objects):
                 XCTAssertEqual(objects.count, 3)
                 XCTAssertNotNil(objects[0].uuid)
-                XCTAssertEqual(objects[0].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(objects[0].syncIdentifier, self.sample1.syncIdentifier)
-                XCTAssertEqual(objects[0].syncVersion, self.sample1.syncVersion)
-                XCTAssertEqual(objects[0].quantity, self.sample1.quantity)
-                XCTAssertEqual(objects[0].startDate, self.sample1.date)
-                XCTAssertEqual(objects[0].isDisplayOnly, self.sample1.isDisplayOnly)
-                XCTAssertEqual(objects[0].wasUserEntered, self.sample1.wasUserEntered)
+                assertEqualSamples(objects[0], self.sample1)
                 XCTAssertNotNil(objects[1].uuid)
-                XCTAssertEqual(objects[1].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(objects[1].syncIdentifier, self.sample3.syncIdentifier)
-                XCTAssertEqual(objects[1].syncVersion, self.sample3.syncVersion)
-                XCTAssertEqual(objects[1].quantity, self.sample3.quantity)
-                XCTAssertEqual(objects[1].startDate, self.sample3.date)
-                XCTAssertEqual(objects[1].isDisplayOnly, self.sample3.isDisplayOnly)
-                XCTAssertEqual(objects[1].wasUserEntered, self.sample3.wasUserEntered)
+                assertEqualSamples(objects[1], self.sample3)
                 XCTAssertNotNil(objects[2].uuid)
-                XCTAssertEqual(objects[2].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(objects[2].syncIdentifier, self.sample2.syncIdentifier)
-                XCTAssertEqual(objects[2].syncVersion, self.sample2.syncVersion)
-                XCTAssertEqual(objects[2].quantity, self.sample2.quantity)
-                XCTAssertEqual(objects[2].startDate, self.sample2.date)
-                XCTAssertEqual(objects[2].isDisplayOnly, self.sample2.isDisplayOnly)
-                XCTAssertEqual(objects[2].wasUserEntered, self.sample2.wasUserEntered)
+                assertEqualSamples(objects[2], self.sample2)
                 syncGlucoseSamples = objects
             }
             getSyncGlucoseSamples1Completion.fulfill()
@@ -510,13 +464,7 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
             case .success(let objects):
                 XCTAssertEqual(objects.count, 1)
                 XCTAssertNotNil(objects[0].uuid)
-                XCTAssertEqual(objects[0].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(objects[0].syncIdentifier, self.sample3.syncIdentifier)
-                XCTAssertEqual(objects[0].syncVersion, self.sample3.syncVersion)
-                XCTAssertEqual(objects[0].quantity, self.sample3.quantity)
-                XCTAssertEqual(objects[0].startDate, self.sample3.date)
-                XCTAssertEqual(objects[0].isDisplayOnly, self.sample3.isDisplayOnly)
-                XCTAssertEqual(objects[0].wasUserEntered, self.sample3.wasUserEntered)
+                assertEqualSamples(objects[0], self.sample3)
             }
             getSyncGlucoseSamples2Completion.fulfill()
         }
@@ -556,29 +504,11 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
             case .success(let objects):
                 XCTAssertEqual(objects.count, 3)
                 XCTAssertNotNil(objects[0].uuid)
-                XCTAssertEqual(objects[0].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(objects[0].syncIdentifier, self.sample1.syncIdentifier)
-                XCTAssertEqual(objects[0].syncVersion, self.sample1.syncVersion)
-                XCTAssertEqual(objects[0].quantity, self.sample1.quantity)
-                XCTAssertEqual(objects[0].startDate, self.sample1.date)
-                XCTAssertEqual(objects[0].isDisplayOnly, self.sample1.isDisplayOnly)
-                XCTAssertEqual(objects[0].wasUserEntered, self.sample1.wasUserEntered)
+                assertEqualSamples(objects[0], self.sample1)
                 XCTAssertNotNil(objects[1].uuid)
-                XCTAssertEqual(objects[1].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(objects[1].syncIdentifier, self.sample3.syncIdentifier)
-                XCTAssertEqual(objects[1].syncVersion, self.sample3.syncVersion)
-                XCTAssertEqual(objects[1].quantity, self.sample3.quantity)
-                XCTAssertEqual(objects[1].startDate, self.sample3.date)
-                XCTAssertEqual(objects[1].isDisplayOnly, self.sample3.isDisplayOnly)
-                XCTAssertEqual(objects[1].wasUserEntered, self.sample3.wasUserEntered)
+                assertEqualSamples(objects[1], self.sample3)
                 XCTAssertNotNil(objects[2].uuid)
-                XCTAssertEqual(objects[2].provenanceIdentifier, HKSource.default().bundleIdentifier)
-                XCTAssertEqual(objects[2].syncIdentifier, self.sample2.syncIdentifier)
-                XCTAssertEqual(objects[2].syncVersion, self.sample2.syncVersion)
-                XCTAssertEqual(objects[2].quantity, self.sample2.quantity)
-                XCTAssertEqual(objects[2].startDate, self.sample2.date)
-                XCTAssertEqual(objects[2].isDisplayOnly, self.sample2.isDisplayOnly)
-                XCTAssertEqual(objects[2].wasUserEntered, self.sample2.wasUserEntered)
+                assertEqualSamples(objects[2], self.sample2)
                 syncGlucoseSamples = objects
             }
             getSyncGlucoseSamples4Completion.fulfill()
@@ -769,4 +699,19 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
         NotificationCenter.default.removeObserver(observer)
         delegateCompletion = nil
     }
+}
+
+fileprivate func assertEqualSamples(_ storedGlucoseSample: StoredGlucoseSample,
+                                    _ newGlucoseSample: NewGlucoseSample,
+                                    provenanceIdentifier: String = HKSource.default().bundleIdentifier,
+                                    file: StaticString = #file,
+                                    line: UInt = #line) {
+    XCTAssertEqual(storedGlucoseSample.provenanceIdentifier, provenanceIdentifier, file: file, line: line)
+    XCTAssertEqual(storedGlucoseSample.syncIdentifier, newGlucoseSample.syncIdentifier, file: file, line: line)
+    XCTAssertEqual(storedGlucoseSample.syncVersion, newGlucoseSample.syncVersion, file: file, line: line)
+    XCTAssertEqual(storedGlucoseSample.startDate, newGlucoseSample.date, file: file, line: line)
+    XCTAssertEqual(storedGlucoseSample.quantity, newGlucoseSample.quantity, file: file, line: line)
+    XCTAssertEqual(storedGlucoseSample.isDisplayOnly, newGlucoseSample.isDisplayOnly, file: file, line: line)
+    XCTAssertEqual(storedGlucoseSample.wasUserEntered, newGlucoseSample.wasUserEntered, file: file, line: line)
+    XCTAssertEqual(storedGlucoseSample.device, newGlucoseSample.device, file: file, line: line)
 }

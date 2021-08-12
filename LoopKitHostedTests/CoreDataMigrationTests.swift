@@ -60,5 +60,19 @@ class CoreDataV1MigrationTests: XCTestCase {
         wait(for: [e0], timeout: 1.0)
         if let error = error { throw error }
         XCTAssertEqual(1, entries.count)
+
+        // Do a spot check: make sure "CachedGlucoseObject" has a "device" field.
+        XCTAssertNotNil(cacheStore.managedObjectContext.persistentStoreCoordinator?.managedObjectModel.entities)
+        var found = false
+        if let entities = cacheStore.managedObjectContext.persistentStoreCoordinator?.managedObjectModel.entities {
+            for entity in entities {
+                if entity.name == "CachedGlucoseObject", entity.attributesByName.contains(where: { (key: String, value: NSAttributeDescription) in
+                    key == "device"
+                }) {
+                    found = true
+                }
+            }
+        }
+        XCTAssertTrue(found)
     }
 }

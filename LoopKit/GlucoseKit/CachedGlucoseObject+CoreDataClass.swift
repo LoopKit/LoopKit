@@ -21,7 +21,20 @@ class CachedGlucoseObject: NSManagedObject {
         set {
             willChangeValue(forKey: "syncVersion")
             defer { didChangeValue(forKey: "syncVersion") }
-            primitiveSyncVersion = newValue != nil ? NSNumber(value: newValue!) : nil
+            primitiveSyncVersion = newValue.map { NSNumber(value: $0) }
+        }
+    }
+    
+    var device: HKDevice? {
+        get {
+            willAccessValue(forKey: "device")
+            defer { didAccessValue(forKey: "device") }
+            return primitiveDevice.flatMap { try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKDevice.self, from: $0) }
+        }
+        set {
+            willChangeValue(forKey: "device")
+            defer { didChangeValue(forKey: "device") }
+            primitiveDevice = newValue.flatMap { try? NSKeyedArchiver.archivedData(withRootObject: $0, requiringSecureCoding: false) }
         }
     }
 
@@ -46,6 +59,29 @@ class CachedGlucoseObject: NSManagedObject {
 
 extension CachedGlucoseObject {
     var quantity: HKQuantity { HKQuantity(unit: HKUnit(from: unitString), doubleValue: value) }
+
+    var quantitySample: HKQuantitySample {
+        var metadata: [String: Any] = [
+            HKMetadataKeySyncIdentifier: syncIdentifier as Any,
+            HKMetadataKeySyncVersion: syncVersion as Any,
+        ]
+        
+        if isDisplayOnly {
+            metadata[MetadataKeyGlucoseIsDisplayOnly] = true
+        }
+        if wasUserEntered {
+            metadata[HKMetadataKeyWasUserEntered] = true
+        }
+        
+        return HKQuantitySample(
+            type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!,
+            quantity: quantity,
+            start: startDate,
+            end: startDate,
+            device: device,
+            metadata: metadata
+        )
+    }
 }
 
 // MARK: - Operations
@@ -63,6 +99,7 @@ extension CachedGlucoseObject {
         self.startDate = sample.date
         self.isDisplayOnly = sample.isDisplayOnly
         self.wasUserEntered = sample.wasUserEntered
+        self.device = sample.device
     }
 
     // HealthKit
@@ -78,6 +115,7 @@ extension CachedGlucoseObject {
         self.startDate = sample.startDate
         self.isDisplayOnly = sample.isDisplayOnly
         self.wasUserEntered = sample.wasUserEntered
+        self.device = sample.device
     }
 }
 
@@ -85,7 +123,6 @@ extension CachedGlucoseObject {
 
 extension CachedGlucoseObject {
     func update(from sample: StoredGlucoseSample) {
-        self.uuid = sample.uuid
         self.provenanceIdentifier = sample.provenanceIdentifier
         self.syncIdentifier = sample.syncIdentifier
         self.syncVersion = sample.syncVersion
@@ -94,5 +131,6 @@ extension CachedGlucoseObject {
         self.startDate = sample.startDate
         self.isDisplayOnly = sample.isDisplayOnly
         self.wasUserEntered = sample.wasUserEntered
+        self.device = sample.device
     }
 }

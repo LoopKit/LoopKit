@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import HealthKit
 
 
 extension CachedGlucoseObject {
@@ -26,7 +27,7 @@ extension CachedGlucoseObject {
     @NSManaged public var isDisplayOnly: Bool
     @NSManaged public var wasUserEntered: Bool
     @NSManaged public var modificationCounter: Int64
-
+    @NSManaged public var primitiveDevice: Data?
 }
 
 extension CachedGlucoseObject: Encodable {
@@ -42,6 +43,7 @@ extension CachedGlucoseObject: Encodable {
         try container.encode(isDisplayOnly, forKey: .isDisplayOnly)
         try container.encode(wasUserEntered, forKey: .wasUserEntered)
         try container.encode(modificationCounter, forKey: .modificationCounter)
+        try container.encodeIfPresent(device, forKey: .device)
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -55,5 +57,6 @@ extension CachedGlucoseObject: Encodable {
         case isDisplayOnly
         case wasUserEntered
         case modificationCounter
+        case device
     }
 }
