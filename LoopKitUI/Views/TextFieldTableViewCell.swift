@@ -9,7 +9,7 @@
 import UIKit
 
 
-public protocol TextFieldTableViewCellDelegate: class {
+public protocol TextFieldTableViewCellDelegate: AnyObject {
     func textFieldTableViewCellDidBeginEditing(_ cell: TextFieldTableViewCell)
     
     func textFieldTableViewCellDidEndEditing(_ cell: TextFieldTableViewCell)

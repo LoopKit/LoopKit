@@ -13,7 +13,7 @@ public enum HUDTapAction {
     case openAppURL(URL)
 }
 
-public protocol HUDProvider: class  {
+public protocol HUDProvider: AnyObject  {
     var managerIdentifier: String { get }
 
     typealias HUDViewsRawState = [String: Any]

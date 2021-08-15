@@ -20,7 +20,7 @@ public enum CGMResult {
 }
 
 
-public protocol CGMManagerDelegate: class, DeviceManagerDelegate {
+public protocol CGMManagerDelegate: AnyObject, DeviceManagerDelegate {
     /// Asks the delegate for a date with which to filter incoming glucose data
     ///
     /// - Parameter manager: The manager instance

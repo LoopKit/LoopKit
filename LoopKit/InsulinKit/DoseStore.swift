@@ -11,7 +11,7 @@ import HealthKit
 import os.log
 
 
-public protocol DoseStoreDelegate: class {
+public protocol DoseStoreDelegate: AnyObject {
     /**
      Asks the delegate to upload recently-added pump events not yet marked as uploaded.
      

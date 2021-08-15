@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol DatePickerTableViewCellDelegate: class {
+public protocol DatePickerTableViewCellDelegate: AnyObject {
     func datePickerTableViewCellDidUpdateDate(_ cell: DatePickerTableViewCell)
 }
 

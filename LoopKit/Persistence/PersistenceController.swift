@@ -11,7 +11,7 @@ import HealthKit
 
 
 
-public protocol PersistenceControllerDelegate: class {
+public protocol PersistenceControllerDelegate: AnyObject {
     /// Informs the delegate that a save operation will start, so it can start a background task on its behalf
     ///
     /// - Parameter controller: The persistence controller

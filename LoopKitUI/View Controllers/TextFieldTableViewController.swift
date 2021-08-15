@@ -9,7 +9,7 @@
 import UIKit
 
 
-public protocol TextFieldTableViewControllerDelegate: class {
+public protocol TextFieldTableViewControllerDelegate: AnyObject {
     func textFieldTableViewControllerDidEndEditing(_ controller: TextFieldTableViewController)
 
     func textFieldTableViewControllerDidReturn(_ controller: TextFieldTableViewController)

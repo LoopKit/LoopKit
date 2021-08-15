@@ -19,7 +19,7 @@ public protocol DeviceManagerDelegate {
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 }
 
-public protocol DeviceManager: class, CustomDebugStringConvertible {
+public protocol DeviceManager: AnyObject, CustomDebugStringConvertible {
     typealias RawStateValue = [String: Any]
 
     /// The identifier of the manager. This should be unique

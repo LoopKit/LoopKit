@@ -23,7 +23,7 @@ public enum CarbAbsorptionModel {
     case adaptiveRateNonlinear
 }
 
-public protocol CarbStoreSyncDelegate: class {
+public protocol CarbStoreSyncDelegate: AnyObject {
 
     /// Asks the delegate to upload recently-added carb entries not yet marked as uploaded.
     ///
