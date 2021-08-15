@@ -1687,6 +1687,7 @@
 		E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideViewCell.swift; sourceTree = "<group>"; };
 		E9F54F5D25802D5E0034795E /* InsulinType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinType.swift; sourceTree = "<group>"; };
 		E9F54FC52581C50C0034795E /* ExpandableDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDatePicker.swift; sourceTree = "<group>"; };
+		E9FCB58326C864BA004281B5 /* Modelv5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv5.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5041,12 +5042,13 @@
 		E9C6911625180A4E009F9999 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				E9FCB58326C864BA004281B5 /* Modelv5.xcdatamodel */,
 				E9291366257D71880014116A /* Modelv4.xcdatamodel */,
 				E9C6911725180A4E009F9999 /* Modelv3.xcdatamodel */,
 				E9C6911825180A4E009F9999 /* Modelv2.xcdatamodel */,
 				E9C6911925180A4E009F9999 /* Model.xcdatamodel */,
 			);
-			currentVersion = E9291366257D71880014116A /* Modelv4.xcdatamodel */;
+			currentVersion = E9FCB58326C864BA004281B5 /* Modelv5.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
