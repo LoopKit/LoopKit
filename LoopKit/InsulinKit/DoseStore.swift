@@ -1611,7 +1611,7 @@ extension DoseStore {
 
         persistenceController.managedObjectContext.performAndWait {
             do {
-                let (maxPumpEventModificationCounter, storedPumpDoses) = try executeDoseEventsQuery(fromQueryAnchor: queryAnchor, limit: limit)
+                let (maxPumpEventModificationCounter, storedPumpDoses) = try executePumpEventsQuery(fromQueryAnchor: queryAnchor, limit: limit)
                 
                 let (maxInsulinDeliveryModificationCounter, storedInsulinDeliveryDoses) = try executeDoseEventsQuery(fromQueryAnchor: queryAnchor, limit: limit)
                 
