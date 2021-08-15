@@ -426,7 +426,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     }
     
     func testDoseEmptyWithDefaultQueryAnchor() {
-        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -443,7 +443,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     func testDoseEmptyWithMissingQueryAnchor() {
         queryAnchor = nil
         
-        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -460,7 +460,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     func testDoseEmptyWithNonDefaultQueryAnchor() {
         queryAnchor.modificationCounter = 1
         
-        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -481,7 +481,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         addDoseData(withSyncIdentifiers: syncIdentifiers)
         addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
         
-        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -507,7 +507,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         
         queryAnchor.modificationCounter = 4
         
-        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -531,7 +531,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         
         queryAnchor.modificationCounter = 5
         
-        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -554,7 +554,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         
         limit = 0
         
-        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -577,7 +577,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         
         limit = 2
         
-        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -738,6 +738,136 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
     
+    func testPumpEventAndDoseDataWithNoDuplicates() {
+        let pumpEventSyncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        let deliveryObjectSyncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+
+        addDoseData(withSyncIdentifiers: pumpEventSyncIdentifiers)
+        addInsulinDeliveryObjectData(withSyncIdentifiers: deliveryObjectSyncIdentifiers)
+        
+        limit = 2
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 5)
+                XCTAssertEqual(data.count, 4)
+                XCTAssertEqual(data[0].syncIdentifier, pumpEventSyncIdentifiers[0])
+                XCTAssertEqual(data[1].syncIdentifier, pumpEventSyncIdentifiers[1])
+                XCTAssertEqual(data[2].syncIdentifier, deliveryObjectSyncIdentifiers[0])
+                XCTAssertEqual(data[3].syncIdentifier, deliveryObjectSyncIdentifiers[1])
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testPumpEventAndDoseDataWithAllDuplicates() {
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+
+        addDoseData(withSyncIdentifiers: syncIdentifiers)
+        addInsulinDeliveryObjectData(withSyncIdentifiers: syncIdentifiers)
+        
+        limit = 3
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 6)
+                XCTAssertEqual(data.count, 3)
+                XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[0])
+                XCTAssertEqual(data[1].syncIdentifier, syncIdentifiers[1])
+                XCTAssertEqual(data[2].syncIdentifier, syncIdentifiers[2])
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testPumpEventAndDoseDataWithSomeDuplicates() {
+        let duplicateSyncIdentifier = generateSyncIdentifier()
+        let pumpEventSyncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), duplicateSyncIdentifier]
+        let doseEventSyncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), duplicateSyncIdentifier]
+
+        addDoseData(withSyncIdentifiers: pumpEventSyncIdentifiers)
+        addInsulinDeliveryObjectData(withSyncIdentifiers: doseEventSyncIdentifiers)
+        
+        limit = 5
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 6)
+                XCTAssertEqual(data.count, 5)
+                XCTAssertEqual(data[0].syncIdentifier, pumpEventSyncIdentifiers[0])
+                XCTAssertEqual(data[1].syncIdentifier, pumpEventSyncIdentifiers[1])
+                XCTAssertEqual(data[2].syncIdentifier, pumpEventSyncIdentifiers[2])
+                XCTAssertEqual(data[3].syncIdentifier, doseEventSyncIdentifiers[0])
+                XCTAssertEqual(data[4].syncIdentifier, doseEventSyncIdentifiers[1])
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testPumpEventAndDoseDataWithLowLimit() {
+        let duplicateSyncIdentifier = generateSyncIdentifier()
+        let pumpEventSyncIdentifiers = [duplicateSyncIdentifier, generateSyncIdentifier(), generateSyncIdentifier()]
+        let doseEventSyncIdentifiers = [duplicateSyncIdentifier, generateSyncIdentifier(), generateSyncIdentifier()]
+
+        addDoseData(withSyncIdentifiers: pumpEventSyncIdentifiers)
+        addInsulinDeliveryObjectData(withSyncIdentifiers: doseEventSyncIdentifiers)
+        
+        limit = 2
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 5)
+                XCTAssertEqual(data.count, 3)
+                XCTAssertEqual(data[0].syncIdentifier, pumpEventSyncIdentifiers[0])
+                XCTAssertEqual(data[1].syncIdentifier, pumpEventSyncIdentifiers[1])
+                XCTAssertEqual(data[2].syncIdentifier, doseEventSyncIdentifiers[1])
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testDoseDataWithLowLimit() {
+        let doseEventSyncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+
+        addInsulinDeliveryObjectData(withSyncIdentifiers: doseEventSyncIdentifiers)
+        
+        limit = 1
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 1)
+                XCTAssertEqual(data.count, 1)
+                XCTAssertEqual(data[0].syncIdentifier, doseEventSyncIdentifiers[0])
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
     private func addDoseData(withSyncIdentifiers syncIdentifiers: [String]) {
         cacheStore.managedObjectContext.performAndWait {
             for syncIdentifier in syncIdentifiers {
@@ -764,6 +894,17 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         }
     }
     
+    private func addInsulinDeliveryObjectData(withSyncIdentifiers syncIdentifiers: [String]) {
+        cacheStore.managedObjectContext.performAndWait {
+            for syncIdentifier in syncIdentifiers {
+                let deliveryObject = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
+                deliveryObject.createMockDose(with: syncIdentifier)
+
+                self.cacheStore.save()
+            }
+        }
+    }
+    
     private func addPumpEventData(withSyncIdentifiers syncIdentifiers: [String]) {
         cacheStore.managedObjectContext.performAndWait {
             for syncIdentifier in syncIdentifiers {
@@ -781,6 +922,19 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         return UUID().data.hexadecimalString
     }
     
+}
+
+extension CachedInsulinDeliveryObject {
+    func createMockDose(with syncIdentifier: String) {
+        reason = .bolus
+        startDate = Date()
+        endDate = Date()
+        value = 2
+        self.syncIdentifier = syncIdentifier
+        scheduledBasalRate = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1)
+        insulinType = .novolog
+        automaticallyIssued = false
+    }
 }
 
 class DoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
