@@ -1599,21 +1599,26 @@ extension DoseStore {
         case failure(Error)
     }
 
-    public func executeDoseQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (DoseQueryResult) -> Void) {
+    /// Queries the Core Data store for doses after the query anchor
+    /// - Parameters
+    ///     - queryAnchor: the anchor to use to determine which doses to fetch
+    ///     - limit: numerical limit for number of items to fetch. May return fewer items than the limit
+    ///     - completion: block to call with result of operation
+    public func executeDoseQuery(fromQueryAnchor queryAnchor: QueryAnchor?, pumpEventLimit: Int, doseEventsLimit: Int, completion: @escaping (DoseQueryResult) -> Void) {
         var queryAnchor = queryAnchor ?? QueryAnchor()
         var queryResult = [DoseEntry]()
         var queryError: Error?
 
-        guard limit > 0 else {
+        guard pumpEventLimit > 0 || doseEventsLimit > 0 else {
             completion(.success(queryAnchor, []))
             return
         }
 
         persistenceController.managedObjectContext.performAndWait {
             do {
-                let (maxPumpEventModificationCounter, storedPumpDoses) = try executePumpEventsQuery(fromQueryAnchor: queryAnchor, limit: limit)
+                let (maxPumpEventModificationCounter, storedPumpDoses) = try executePumpEventsQuery(fromQueryAnchor: queryAnchor, limit: pumpEventLimit)
                 
-                let (maxInsulinDeliveryModificationCounter, storedInsulinDeliveryDoses) = try executeDoseEventsQuery(fromQueryAnchor: queryAnchor, limit: limit)
+                let (maxInsulinDeliveryModificationCounter, storedInsulinDeliveryDoses) = try executeDoseEventsQuery(fromQueryAnchor: queryAnchor, limit: doseEventsLimit)
                 
                 if maxPumpEventModificationCounter != nil || maxInsulinDeliveryModificationCounter != nil  {
                     let modificationCounter =  max(maxPumpEventModificationCounter ?? Int64.min, maxInsulinDeliveryModificationCounter ?? Int64.min)
