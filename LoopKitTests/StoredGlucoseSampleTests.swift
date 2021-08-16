@@ -37,22 +37,27 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
         let uuid = UUID()
         let startDate = dateFormatter.date(from: "2020-02-03T04:05:06Z")!
         let quantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 134.5)
+        let device = HKDevice(name: "NAME", manufacturer: "MANUFACTURER", model: "MODEL", hardwareVersion: "HARDWAREVERSION", firmwareVersion: "FIRMWAREVERSION", softwareVersion: "SOFTWAREVERSION", localIdentifier: "LOCALIDENTIFIER", udiDeviceIdentifier: "UDIDEVICEIDENTIFIER")
         let sample = StoredGlucoseSample(uuid: uuid,
                                          provenanceIdentifier: "8A1333E7-79CB-413F-AB7A-5413F14D4531",
                                          syncIdentifier: "E7D34EED-CFEE-48FD-810F-5C8C41FACA83",
                                          syncVersion: 3,
                                          startDate: startDate,
                                          quantity: quantity,
+                                         trend: .flat,
                                          isDisplayOnly: true,
-                                         wasUserEntered: false)
+                                         wasUserEntered: false,
+                                         device: device)
         XCTAssertEqual(sample.uuid, uuid)
         XCTAssertEqual(sample.provenanceIdentifier, "8A1333E7-79CB-413F-AB7A-5413F14D4531")
         XCTAssertEqual(sample.syncIdentifier, "E7D34EED-CFEE-48FD-810F-5C8C41FACA83")
         XCTAssertEqual(sample.syncVersion, 3)
         XCTAssertEqual(sample.startDate, startDate)
         XCTAssertEqual(sample.quantity, quantity)
+        XCTAssertEqual(sample.trend, .flat)
         XCTAssertEqual(sample.isDisplayOnly, true)
         XCTAssertEqual(sample.wasUserEntered, false)
+        XCTAssertEqual(sample.device, device)
     }
 
     func testFullInitializerOptional() {
@@ -64,16 +69,20 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
                                          syncVersion: nil,
                                          startDate: startDate,
                                          quantity: quantity,
+                                         trend: .flat,
                                          isDisplayOnly: false,
-                                         wasUserEntered: true)
+                                         wasUserEntered: true,
+                                         device: nil)
         XCTAssertNil(sample.uuid)
         XCTAssertEqual(sample.provenanceIdentifier, "95F800A3-A59D-4419-B8F2-611BED0962CF")
         XCTAssertNil(sample.syncIdentifier)
         XCTAssertNil(sample.syncVersion)
         XCTAssertEqual(sample.startDate, startDate)
         XCTAssertEqual(sample.quantity, quantity)
+        XCTAssertEqual(sample.trend, .flat)
         XCTAssertEqual(sample.isDisplayOnly, false)
         XCTAssertEqual(sample.wasUserEntered, true)
+        XCTAssertNil(sample.device)
     }
 
     private let dateFormatter = ISO8601DateFormatter()
@@ -85,6 +94,7 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             let uuid = UUID()
             let startDate = dateFormatter.date(from: "2020-04-05T06:07:08Z")!
             let managedObject = CachedGlucoseObject(context: cacheStore.managedObjectContext)
+            let device = HKDevice(name: "NAME", manufacturer: "MANUFACTURER", model: "MODEL", hardwareVersion: "HARDWAREVERSION", firmwareVersion: "FIRMWAREVERSION", softwareVersion: "SOFTWAREVERSION", localIdentifier: "LOCALIDENTIFIER", udiDeviceIdentifier: "UDIDEVICEIDENTIFIER")
             managedObject.uuid = uuid
             managedObject.provenanceIdentifier = "C198186D-F15C-4D0F-B8A1-83B28626DB3A"
             managedObject.syncIdentifier = "A313021C-4B11-448A-9266-B01321CA0BCC"
@@ -94,6 +104,8 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             managedObject.startDate = startDate
             managedObject.isDisplayOnly = true
             managedObject.wasUserEntered = true
+            managedObject.device = device
+            managedObject.trend = .downDownDown
             let sample = StoredGlucoseSample(managedObject: managedObject)
             XCTAssertEqual(sample.uuid, uuid)
             XCTAssertEqual(sample.provenanceIdentifier, "C198186D-F15C-4D0F-B8A1-83B28626DB3A")
@@ -103,6 +115,8 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             XCTAssertEqual(sample.quantity, HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 145.6))
             XCTAssertEqual(sample.isDisplayOnly, true)
             XCTAssertEqual(sample.wasUserEntered, true)
+            XCTAssertEqual(sample.device, device)
+            XCTAssertEqual(sample.trend, .downDownDown)
         }
     }
 
@@ -126,6 +140,8 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             XCTAssertEqual(sample.quantity, HKQuantity(unit: .millimolesPerLiter, doubleValue: 7.6))
             XCTAssertEqual(sample.isDisplayOnly, true)
             XCTAssertEqual(sample.wasUserEntered, true)
+            XCTAssertNil(sample.device)
+            XCTAssertNil(sample.trend)
         }
     }
 

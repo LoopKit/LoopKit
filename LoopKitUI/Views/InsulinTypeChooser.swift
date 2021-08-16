@@ -1,6 +1,6 @@
 //
 //  InsulinTypeChooserView.swift
-//  MockKitUI
+//  LoopKitUI
 //
 //  Created by Pete Schwamb on 12/30/20.
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
@@ -59,8 +59,8 @@ public struct InsulinTypeChooser: View {
             } else {
                 HStack {
                     CheckmarkListItem(
-                        title: Text("Unset"),
-                        description: Text("The currently selected fast acting insulin model will be used as a default."),
+                        title: Text(LocalizedString("Unset", comment: "Title for selection when no insulin type is selected.")),
+                        description: Text(LocalizedString("The currently selected fast acting insulin model will be used as a default.", comment: "Description for selection when no insulin type is selected.")),
                         isSelected: Binding(
                             get: { self.insulinType == nil },
                             set: { isSelected in

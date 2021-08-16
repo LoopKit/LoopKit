@@ -20,8 +20,8 @@ let MetadataKeyHasLoopKitOrigin = "HasLoopKitOrigin"
 /// Defines the insulin curve type to use to evaluate the dose's activity
 let MetadataKeyInsulinType = "com.loopkit.InsulinKit.MetadataKeyInsulinType"
 
-/// Defines the source of the data, including if a dose was logged or from device history
-let MetadataKeyProvenanceIdentifier = "com.loopkit.InsulinKit.MetadataKeyProvenanceIdentifier"
+/// Flag indicated whether this dose was manually entered
+let MetadataKeyManuallyEntered = "com.loopkit.InsulinKit.MetadataKeyManuallyEntered"
 
 /// Flag indicating whether this dose was issued automatically or if a user issued it manually.
 let MetadataKeyAutomaticallyIssued = "com.loopkit.InsulinKit.MetadataKeyAutomaticallyIssued"
@@ -38,7 +38,7 @@ extension HKQuantitySample {
             HKMetadataKeySyncVersion: syncVersion,
             HKMetadataKeySyncIdentifier: syncIdentifier,
             MetadataKeyHasLoopKitOrigin: true,
-            MetadataKeyProvenanceIdentifier: provenanceIdentifier
+            MetadataKeyManuallyEntered: dose.manuallyEntered
         ]
         
         switch dose.type {
@@ -110,8 +110,8 @@ extension HKQuantitySample {
         return metadata?[MetadataKeyProgrammedTempBasalRate] as? HKQuantity
     }
 
-    var loopSpecificProvenanceIdentifier: String {
-        return metadata?[MetadataKeyProvenanceIdentifier] as? String ?? provenanceIdentifier
+    var manuallyEntered: Bool {
+        return metadata?[MetadataKeyManuallyEntered] as? Bool ?? false
     }
     
     var automaticallyIssued: Bool? {
@@ -179,7 +179,8 @@ extension HKQuantitySample {
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
             insulinType: insulinType,
-            automatic: automaticallyIssued
+            automatic: automaticallyIssued,
+            manuallyEntered: manuallyEntered
         )
     }
 }

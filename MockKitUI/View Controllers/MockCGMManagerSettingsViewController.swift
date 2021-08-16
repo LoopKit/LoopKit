@@ -77,6 +77,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case history
         case alerts
         case lifecycleProgress
+        case healthKit
         case deleteCGM
     }
 
@@ -124,6 +125,10 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case warningThreshold
         case criticalThreshold
     }
+    
+    private enum HealthKitRow: Int, CaseIterable {
+        case healthKitStorageDelay = 0
+    }
         
     // MARK: - UITableViewDataSource
 
@@ -147,6 +152,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return AlertsRow.allCases.count
         case .lifecycleProgress:
             return LifecycleProgressRow.allCases.count
+        case .healthKit:
+            return HealthKitRow.allCases.count
         case .deleteCGM:
             return 1
         }
@@ -168,6 +175,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return "Alerts"
         case .lifecycleProgress:
             return "Lifecycle Progress"
+        case .healthKit:
+            return "HealthKit"
         case .deleteCGM:
             return " " // Use an empty string for more dramatic spacing
         }
@@ -182,6 +191,13 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         return formatter
     }()
     
+    private lazy var durationFormatter: DateComponentsFormatter = {
+        let durationFormatter = DateComponentsFormatter()
+        durationFormatter.allowedUnits = [.hour, .minute]
+        durationFormatter.unitsStyle = .full
+        return durationFormatter
+    }()
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch Section(rawValue: indexPath.section)! {
         case .model:
@@ -364,6 +380,16 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             }
             cell.accessoryType = .disclosureIndicator
             return cell
+        case .healthKit:
+            let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
+            switch HealthKitRow(rawValue: indexPath.row)! {
+            case .healthKitStorageDelay:
+                cell.textLabel?.text = "HealthKit Storage Delay"
+                cell.detailTextLabel?.text = durationFormatter.string(from: MockCGMManager.healthKitStorageDelay)
+                cell.accessoryType = .disclosureIndicator
+            }
+            return cell
+
         case .deleteCGM:
             let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
             cell.textLabel?.text = "Delete CGM"
@@ -534,6 +560,23 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 vc.percentage = cgmManager.mockSensorState.progressCriticalThresholdPercentValue
             }
             show(vc, sender: sender)
+        case .healthKit:
+            switch HealthKitRow(rawValue: indexPath.row)! {
+            case .healthKitStorageDelay:
+                let vc = DateAndDurationTableViewController()
+                vc.inputMode = .duration(MockCGMManager.healthKitStorageDelay)
+                vc.title = "HealthKit Storage Delay"
+                vc.contextHelp = "Amount of time to wait before storing CGM samples to HealthKit. NOTE: after changing this, you will need to delete and re-add the CGM simulator!"
+                vc.indexPath = indexPath
+                vc.onSave { inputMode in
+                    guard case .duration(let duration) = inputMode else {
+                        assertionFailure()
+                        return
+                    }
+                    MockCGMManager.healthKitStorageDelay = duration
+                }
+                show(vc, sender: sender)
+            }
         case .deleteCGM:
             let confirmVC = UIAlertController(cgmDeletionHandler: {
                 self.cgmManager.notifyDelegateOfDeletion {

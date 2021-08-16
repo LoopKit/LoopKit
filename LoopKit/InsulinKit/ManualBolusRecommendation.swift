@@ -1,5 +1,5 @@
 //
-//  BolusRecommendation.swift
+//  ManualBolusRecommendation.swift
 //  LoopKit
 //
 //  Created by Pete Schwamb on 1/2/17.

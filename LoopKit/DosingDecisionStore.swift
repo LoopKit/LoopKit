@@ -83,6 +83,15 @@ public class DosingDecisionStore {
         delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
         completion?(nil)
     }
+    
+    public func destroy() {
+        self.store.managedObjectContext.performAndWait {
+            let coordinator = self.store.managedObjectContext.persistentStoreCoordinator!
+            let store = coordinator.persistentStores.first!
+            let url = coordinator.url(for: store)
+            try! coordinator.destroyPersistentStore(at: url, ofType: NSSQLiteStoreType, options: nil)
+        }
+    }
 }
 
 extension DosingDecisionStore {
