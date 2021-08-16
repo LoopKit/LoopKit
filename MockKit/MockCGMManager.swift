@@ -162,7 +162,6 @@ public struct MockCGMState: GlucoseDisplayable {
     }
     
     public init(isStateValid: Bool = true,
-                trendType: GlucoseTrend? = nil,
                 glucoseRangeCategory: GlucoseRangeCategory? = nil,
                 glucoseAlertingEnabled: Bool = false,
                 urgentLowGlucoseThresholdValue: Double = 55,
@@ -176,7 +175,6 @@ public struct MockCGMState: GlucoseDisplayable {
                 progressCriticalThresholdPercentValue: Double? = nil)
     {
         self.isStateValid = isStateValid
-        self.trendType = trendType
         self.glucoseRangeCategory = glucoseRangeCategory
         self.glucoseAlertingEnabled = glucoseAlertingEnabled
         self.urgentLowGlucoseThresholdValue = urgentLowGlucoseThresholdValue
@@ -384,7 +382,7 @@ public final class MockCGMManager: TestingCGMManager {
     private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 
     public init() {
-        self.mockSensorState = MockCGMState(isStateValid: true, trendType: nil)
+        self.mockSensorState = MockCGMState(isStateValid: true)
         self.dataSource = MockCGMDataSource(model: .noData)
         setupGlucoseUpdateTimer()
     }
@@ -416,7 +414,7 @@ public final class MockCGMManager: TestingCGMManager {
             let mockSensorState = MockCGMState(rawValue: mockSensorStateRawValue) {
             self.mockSensorState = mockSensorState
         } else {
-            self.mockSensorState = MockCGMState(isStateValid: true, trendType: nil)
+            self.mockSensorState = MockCGMState(isStateValid: true)
         }
 
         if let dataSourceRawValue = rawState["dataSource"] as? MockCGMDataSource.RawValue,
@@ -450,6 +448,8 @@ public final class MockCGMManager: TestingCGMManager {
 
     public let shouldSyncToRemoteService = false
     
+    public static var healthKitStorageDelay: TimeInterval = .minutes(2)
+    
     private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
         self.delegate.notify { (delegate) in
             delegate?.deviceManager(self, logEventForDeviceIdentifier: "MockId", type: type, message: message, completion: nil)
@@ -466,6 +466,7 @@ public final class MockCGMManager: TestingCGMManager {
         if case .newData(let samples) = result,
             let currentValue = samples.first
         {
+            mockSensorState.trendType = currentValue.trend
             mockSensorState.glucoseRangeCategory = glucoseRangeCategory(for: currentValue.quantitySample)
             issueAlert(for: currentValue)
         }
@@ -546,9 +547,20 @@ public final class MockCGMManager: TestingCGMManager {
 
     public func injectGlucoseSamples(_ samples: [NewGlucoseSample]) {
         guard !samples.isEmpty else { return }
-        var samples = samples
-        samples.mutateEach { $0.device = device }
-        sendCGMReadingResult(CGMReadingResult.newData(samples))
+        sendCGMReadingResult(CGMReadingResult.newData(samples.map { NewGlucoseSample($0, device: device) } ))
+    }
+}
+
+fileprivate extension NewGlucoseSample {
+    init(_ other: NewGlucoseSample, device: HKDevice?) {
+        self.init(date: other.date,
+                  quantity: other.quantity,
+                  trend: other.trend,
+                  isDisplayOnly: other.isDisplayOnly,
+                  wasUserEntered: other.wasUserEntered,
+                  syncIdentifier: other.syncIdentifier,
+                  syncVersion: other.syncVersion,
+                  device: device)
     }
 }
 
@@ -599,9 +611,10 @@ extension MockCGMManager {
         retractAlert(identifier: MockCGMManager.signalLoss.identifier)
     }
     
-    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) {
+    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) {
         endBackgroundTask()
         self.logDeviceComms(.delegateResponse, message: "\(#function): Alert \(alertIdentifier) acknowledged.")
+        completion(nil)
     }
 
     public func retractCurrentAlert() {
@@ -751,10 +764,6 @@ extension MockCGMState: RawRepresentable {
         self.cgmLowerLimitValue = cgmLowerLimitValue
         self.cgmUpperLimitValue = cgmUpperLimitValue
         
-        if let trendTypeRawValue = rawValue["trendType"] as? GlucoseTrend.RawValue {
-            self.trendType = GlucoseTrend(rawValue: trendTypeRawValue)
-        }
-        
         if let glucoseRangeCategoryRawValue = rawValue["glucoseRangeCategory"] as? GlucoseRangeCategory.RawValue {
             self.glucoseRangeCategory = GlucoseRangeCategory(rawValue: glucoseRangeCategoryRawValue)
         }
@@ -793,10 +802,6 @@ extension MockCGMState: RawRepresentable {
             "cgmUpperLimitValue": cgmUpperLimitValue,
         ]
 
-        if let trendType = trendType {
-            rawValue["trendType"] = trendType.rawValue
-        }
-        
         if let glucoseRangeCategory = glucoseRangeCategory {
             rawValue["glucoseRangeCategory"] = glucoseRangeCategory.rawValue
         }
@@ -835,7 +840,6 @@ extension MockCGMState: CustomDebugStringConvertible {
         return """
         ## MockCGMState
         * isStateValid: \(isStateValid)
-        * trendType: \(trendType as Any)
         * glucoseAlertingEnabled: \(glucoseAlertingEnabled)
         * urgentLowGlucoseThresholdValue: \(urgentLowGlucoseThresholdValue)
         * lowGlucoseThresholdValue: \(lowGlucoseThresholdValue)

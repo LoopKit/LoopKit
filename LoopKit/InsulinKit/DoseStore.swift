@@ -198,11 +198,16 @@ public final class DoseStore {
     ///   - observeHealthKitSamplesFromOtherApps: Whether or not this Store should read HealthKit data written by other apps
     ///   - cacheStore: The cache store for reading & writing short-term intermediate data
     ///   - observationEnabled: Whether the store should observe changes from HealthKit
-    ///   - insulinModelSettings: A factory for producing insulin models based on insulin type
+    ///   - cacheLength: Maximum age of data to keep in the store.
+    ///   - insulinModelProvider: A factory for producing insulin models based on insulin type
+    ///   - longestEffectDuration: This determines the oldest age of doses to be retrieved for calculating glucose effects
     ///   - basalProfile: The daily schedule of basal insulin rates
     ///   - insulinSensitivitySchedule: The daily schedule of insulin sensitivity (ISF)
+    ///   - overrideHistory: A history of overrides to be used when calculating glucose effects
     ///   - syncVersion: A version number for determining resolution in de-duplication
     ///   - lastPumpEventsReconciliation: The date the PumpManger last reconciled with the pump
+    ///   - provenanceIdentifier: An id to store with new doses, indicating the provenance of the dose, usually the app's bundle identifier.
+    ///   - test_currentDate: Used for testing to mock current time
     public init(
         healthStore: HKHealthStore,
         observeHealthKitSamplesFromOtherApps: Bool = true,
@@ -838,62 +843,64 @@ extension DoseStore {
     }
 
     /**
-     Adds and persists external dose entries
+     Adds and persists doses
      - parameter doses: An array of dose entries to add.
      - parameter completion: A closure called after the doses are saved. The closure takes a single argument:
      - parameter error: An error object explaining why the doses could not be saved.
      */
-    public func logOutsideDose(_ doses: [DoseEntry], completion: @escaping (_ error: Error?) -> Void) {
+    public func addDoses(_ doses: [DoseEntry], completion: @escaping (_ error: Error?) -> Void) {
         guard doses.count > 0 else {
             completion(nil)
             return
         }
 
         self.persistenceController.save { (error) -> Void in
-            self.insulinDeliveryStore.addDoseEntries(doses, from: nil, syncVersion: self.syncVersion, provenanceIdentifier: "org.loopkit.provenance.manualEntry") { (result) in
+            self.insulinDeliveryStore.addDoseEntries(doses, from: nil, syncVersion: self.syncVersion) { (result) in
                 switch result {
                 case .success:
                     completion(nil)
-                    NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
+                    self.syncPumpEventsToInsulinDeliveryStore { error in
+                        completion(error)
+                        NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
+                    }
                 case .failure(let error):
-                    self.log.error("Error adding logged dose: %{public}@", String(describing: error))
+                    self.log.error("Error adding dose: %{public}@", String(describing: error))
                     completion(error)
                 }
             }
         }
     }
 
-    /// Deletes one particular logged dose event from the store
+    /// Deletes one particular manually entered dose from the store
     ///
     /// - Parameter dose: Dose to delete.
     /// - Parameter completion: A closure called after the event deleted. This closure takes a single argument:
     /// - Parameter success: True if dose was successfully deleted
-    public func deleteOutsideDose(_ dose: PersistedOutsideDose, completion: @escaping (_ error: DoseStoreError?) -> Void) {
-        guard let uuid = dose.uuid else {
-            self.log.error("Unable to delete PersistedOutsideDose: no UUID")
-            completion(DoseStoreError.fetchError(description: "Unable to delete dose: identifier is missing", recoverySuggestion: "File an issue report in Github"))
+    public func deleteDose(_ dose: DoseEntry, completion: @escaping (_ error: DoseStoreError?) -> Void) {
+        guard let syncIdentifier = dose.syncIdentifier else {
+            self.log.error("Unable to delete PersistedManualEntryDose: no syncIdentifier")
+            completion(DoseStoreError.fetchError(description: "Unable to delete dose: syncIdentifier is missing", recoverySuggestion: "File an issue report in Github"))
             return
         }
-        
-        insulinDeliveryStore.deleteDose(with: uuid) { (error) in
+        insulinDeliveryStore.deleteDose(bySyncIdentifier: syncIdentifier) { (error) in
             if let error = error {
                 completion(DoseStoreError.persistenceError(description: error, recoverySuggestion: nil))
             } else {
-                NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
                 completion(nil)
+                NotificationCenter.default.post(name: DoseStore.valuesDidChange, object: self)
             }
         }
     }
 
-    /// Deletes all outside/external dose events
+    /// Deletes all manually entered doses
     ///
     /// - Parameter completion: A closure called after all the events are deleted. This closure takes a single argument:
     /// - Parameter error: An error explaining why the deletion failed
-    public func deleteAllOutsideDoses(_ completion: @escaping (_ error: DoseStoreError?) -> Void) {
+    public func deleteAllManuallyEnteredDoses(_ completion: @escaping (_ error: DoseStoreError?) -> Void) {
         self.persistenceController.managedObjectContext.perform {
             do {
-                self.log.info("Deleting all outside dose events")
-                try self.purgeOutsideDoses()
+                self.log.info("Deleting all manually entered doses")
+                try self.purgeManuallyEnteredDoses()
 
                 self.persistenceController.save { (error) in
 
@@ -909,15 +916,15 @@ extension DoseStore {
     }
 
     /**
-     Removes logged doses older than the recency predicate
+     Removes manually entered doses older than the recency predicate
      
      *This method should only be called from within a managed object context block.*
      - throws: PersistenceController.PersistenceControllerError.coreDataError if the delete request failed
      */
-    private func purgeOutsideDoses() throws {
+    private func purgeManuallyEnteredDoses() throws {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: CachedInsulinDeliveryObject.entity().name!)
-        // Only delete logged doses
-        let typePredicate = NSPredicate(format: "provenanceIdentifier == 'org.loopkit.provenance.manualEntry'")
+        // Only delete manually entered doses
+        let typePredicate = NSPredicate(format: "manuallyEntered == YES")
         fetchRequest.predicate = typePredicate
 
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
@@ -1030,15 +1037,15 @@ extension DoseStore {
         }
     }
     
-    /// *This method should only be called from within a managed object context block.*
+    /// Fetches manually entered doses.
     ///
-    /// - Parameter startDate: The earliest outside dose event date to include
-    /// - Returns: An array of logged dose managed objects, in reverse-chronological order
+    /// - Parameter startDate: The earliest dose startDate to include
+    /// - Returns: An array of manually entered dose managed objects, in reverse-chronological order
     /// - Throws: An error describing the failure to fetch objects
-    public func getLoggedDoses(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<[PersistedOutsideDose]>) -> Void) {
+    public func getManuallyEnteredDoses(since startDate: Date, completion: @escaping (_ result: DoseStoreResult<[DoseEntry]>) -> Void) {
         persistenceController.managedObjectContext.perform {
             do {
-                let events = try self.getLoggedDoses(
+                let events = try self.getManuallyEnteredDoses(
                     matching: NSPredicate(format: "startDate >= %@", startDate as NSDate),
                     chronological: false
                 )
@@ -1054,6 +1061,7 @@ extension DoseStore {
 
     }
 
+    /// Fetches manually entered doses.
     /// *This method should only be called from within a managed object context block.*
     ///
     /// Objects are ordered by date using the DoseType sort ordering as a tiebreaker for stability
@@ -1063,10 +1071,10 @@ extension DoseStore {
     ///   - chronological: Whether to return the objects in chronological or reverse-chronological order
     /// - Returns: An array of pump events in the specified order by date
     /// - Throws: An error describing the failure to fetch objects
-    private func getLoggedDoses(matching predicate: NSPredicate, chronological: Bool, limit: Int? = nil) throws -> [PersistedOutsideDose] {
+    private func getManuallyEnteredDoses(matching predicate: NSPredicate, chronological: Bool, limit: Int? = nil) throws -> [DoseEntry] {
         let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
 
-        let sourcePredicate = NSPredicate(format: "provenanceIdentifier == 'org.loopkit.provenance.manualEntry'")
+        let sourcePredicate = NSPredicate(format: "manuallyEntered == YES")
         let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [predicate, sourcePredicate])
         request.predicate = compoundPredicate
         request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: chronological)]
@@ -1080,7 +1088,7 @@ extension DoseStore {
                 let (first, second) = chronological ? (lhs, rhs) : (rhs, lhs)
 
                 return first.startDate < second.startDate
-            }).compactMap{ $0.persistedOutsideDose }
+            }).compactMap{ $0.dose }
         } catch let fetchError as NSError {
             throw DoseStoreError.fetchError(description: fetchError.localizedDescription, recoverySuggestion: fetchError.localizedRecoverySuggestion)
         }
@@ -1532,9 +1540,9 @@ extension DoseStore {
                                 }
                             }
                             
-                            self.getLoggedDoses(since: firstPumpEventDate) { (result) in
+                            self.getManuallyEnteredDoses(since: firstPumpEventDate) { (result) in
                                 report.append("")
-                                report.append("### getLoggedDoses")
+                                report.append("### getManuallyEnteredDoses")
 
                                 switch result {
                                 case .failure(let error):
