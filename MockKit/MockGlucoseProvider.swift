@@ -102,21 +102,21 @@ extension MockGlucoseProvider {
         let baseGlucoseValue = baseGlucose.doubleValue(for: unit)
         let amplitudeValue = amplitude.doubleValue(for: unit)
         let chanceOfNilTrend = 1.0/20.0
+        var prevGlucoseValue: Double?
         
         return MockGlucoseProvider { date, completion in
             let timeOffset = date.timeIntervalSince1970 - referenceDate.timeIntervalSince1970
             func sine(_ t: TimeInterval) -> Double {
                 return baseGlucoseValue + amplitudeValue * sin(2 * .pi / period * t)
             }
-            func derivative(_ t: TimeInterval) -> Double {
-                return 2 * .pi * amplitudeValue * cos(2 * .pi / period * t) / period
-            }
+            let glucoseValue = sine(timeOffset)
             func trend() -> GlucoseTrend? {
-                let smallDelta = 0.005
-                let mediumDelta = smallDelta * 2
-                let largeDelta = mediumDelta * 4
-                let d = derivative(timeOffset)
-                switch d {
+                let smallDelta = 0.9
+                let mediumDelta = 2.0
+                let largeDelta = 5.0
+                guard let prevGlucoseValue = prevGlucoseValue else { return nil }
+                let delta = glucoseValue - prevGlucoseValue
+                switch delta {
                 case -smallDelta ... smallDelta:
                     return .flat
                 case -mediumDelta ..< -smallDelta:
@@ -125,19 +125,20 @@ extension MockGlucoseProvider {
                     return .downDown
                 case -Double.greatestFiniteMagnitude ..< -largeDelta:
                     return .downDownDown
-                case smallDelta...mediumDelta:
+                case smallDelta ... mediumDelta:
                     return .up
-                case mediumDelta...largeDelta:
+                case mediumDelta ... largeDelta:
                     return .upUp
-                case largeDelta...Double.greatestFiniteMagnitude:
+                case largeDelta ... Double.greatestFiniteMagnitude:
                     return .upUpUp
                 default:
                     return nil
                 }
             }
-            let glucoseValue = sine(timeOffset)
             let sample = glucoseSample(at: date, quantity: HKQuantity(unit: unit, doubleValue: glucoseValue),
                                        trend: coinFlip(withChanceOfHeads: chanceOfNilTrend, ifHeads: nil, ifTails: trend()))
+            // capture semantics lets me "stow" the previous glucose value with this static function.  A little weird, but it seems to work.
+            prevGlucoseValue = glucoseValue
             completion(.newData([sample]))
         }
     }
