@@ -28,7 +28,7 @@ public struct PersistedPumpEvent {
     public let type: PumpEventType?
     /// Whether the pump event is marked mutable
     public let isMutable: Bool
-    /// Whether the event was automatic or manually triggered
+    /// Whether the event was automatic or manually triggered. nil indicates this status is unknown.
     public let automatic: Bool?
 
     public init(date: Date,

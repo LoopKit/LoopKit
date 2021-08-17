@@ -13,9 +13,9 @@ public struct CardStack: View {
     var cards: [Card?]
     var spacing: CGFloat?
     
-    public init(cards: [Card?]) {
+    public init(cards: [Card?], spacing: CGFloat? = nil) {
         self.cards = cards
-        self.spacing = nil
+        self.spacing = spacing
     }
 
     public var body: some View {
@@ -24,6 +24,7 @@ public struct CardStack: View {
                 self.cards[index]
             }
         }
+        .padding(.bottom)
     }
 }
 

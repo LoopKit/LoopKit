@@ -20,6 +20,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     public let description: String?
     public let insulinType: InsulinType?
     public let automatic: Bool?
+    public let manuallyEntered: Bool
     internal(set) public var syncIdentifier: String?
 
     /// The scheduled basal rate during this dose entry
@@ -34,7 +35,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     }
 
     // If the insulin model field is nil, it's assumed that the model is the type of insulin the pump dispenses
-    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil) {
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil, manuallyEntered: Bool = false) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
@@ -46,6 +47,7 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.scheduledBasalRate = scheduledBasalRate
         self.insulinType = insulinType
         self.automatic = automatic
+        self.manuallyEntered = manuallyEntered
     }
 }
 
@@ -162,6 +164,7 @@ extension DoseEntry: Codable {
             self.scheduledBasalRate = HKQuantity(unit: HKUnit(from: scheduledBasalRateUnit), doubleValue: scheduledBasalRate)
         }
         self.automatic = try container.decodeIfPresent(Bool.self, forKey: .automatic)
+        self.manuallyEntered = try container.decodeIfPresent(Bool.self, forKey: .manuallyEntered) ?? false
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -180,7 +183,8 @@ extension DoseEntry: Codable {
             try container.encode(DoseEntry.unitsPerHour.unitString, forKey: .scheduledBasalRateUnit)
         }
         try container.encode(automatic, forKey: .automatic)
-    } 
+        try container.encode(manuallyEntered, forKey: .manuallyEntered)
+    }
 
     private enum CodingKeys: String, CodingKey {
         case type
@@ -195,5 +199,6 @@ extension DoseEntry: Codable {
         case scheduledBasalRateUnit
         case insulinType
         case automatic
+        case manuallyEntered
     }
 }

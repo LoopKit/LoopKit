@@ -598,7 +598,9 @@ public final class MockPumpManager: TestingPumpManager {
 
 // MARK: - AlertResponder implementation
 extension MockPumpManager {
-    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) { }
+    public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) {
+        completion(nil)
+    }
 }
 
 // MARK: - AlertSoundVendor implementation

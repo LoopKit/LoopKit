@@ -18,7 +18,9 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval(5)
         let unfinalizedBolus = UnfinalizedDose(bolusAmount: amount,
                                                startTime: startTime,
-                                               duration: duration)
+                                               duration: duration,
+                                               insulinType: nil,
+                                               automatic: false)
         XCTAssertEqual(unfinalizedBolus.doseType, .bolus)
         XCTAssertEqual(unfinalizedBolus.units, amount)
         XCTAssertNil(unfinalizedBolus.scheduledUnits)
@@ -27,6 +29,8 @@ class UnfinalizedDoseTests: XCTestCase {
         XCTAssertEqual(unfinalizedBolus.duration, duration)
         XCTAssertEqual(unfinalizedBolus.finishTime, startTime.addingTimeInterval(duration))
         XCTAssertEqual(unfinalizedBolus.rate, amount/duration.hours)
+        XCTAssertNil(unfinalizedBolus.insulinType)
+        XCTAssertEqual(unfinalizedBolus.automatic, false)
     }
 
     func testInitializationTBR() {

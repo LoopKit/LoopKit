@@ -20,6 +20,6 @@ struct DateRelativeGlucoseSample: DateRelativeQuantity, Codable {
 
     func newGlucoseSample(relativeTo referenceDate: Date) -> NewGlucoseSample {
         let date = referenceDate.addingTimeInterval(dateOffset)
-        return NewGlucoseSample(date: date, quantity: quantity, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: UUID().uuidString)
+        return NewGlucoseSample(date: date, quantity: quantity, trend: nil, isDisplayOnly: false, wasUserEntered: false, syncIdentifier: UUID().uuidString)
     }
 }
