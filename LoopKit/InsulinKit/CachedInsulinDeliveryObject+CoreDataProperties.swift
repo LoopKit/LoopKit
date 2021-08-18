@@ -30,5 +30,5 @@ extension CachedInsulinDeliveryObject {
     @NSManaged public var primitiveInsulinType: NSNumber?
     @NSManaged public var primitiveAutomaticallyIssued: NSNumber?
     @NSManaged public var manuallyEntered: Bool
-    @NSManaged var modificationCounter: Int64
+    @NSManaged public var modificationCounter: Int64
 }
