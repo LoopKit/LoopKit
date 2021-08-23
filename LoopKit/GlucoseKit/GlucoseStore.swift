@@ -97,6 +97,9 @@ public final class GlucoseStore: HealthKitSampleStore {
 
     public var healthKitStorageDelay: TimeInterval = 0
     
+    // If HealthKit sharing is denied, a `nil` here will prevent later storage there
+    var healthKitStorageDelayIfAuthorized: TimeInterval? { sharingDenied ? nil : healthKitStorageDelay }
+    
     static let healthKitQueryAnchorMetadataKey = "com.loopkit.GlucoseStore.hkQueryAnchor"
 
     public init(
@@ -338,7 +341,9 @@ extension GlucoseStore {
 
                     let objects: [CachedGlucoseObject] = samples.map { sample in
                         let object = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
-                        object.create(from: sample, provenanceIdentifier: self.provenanceIdentifier)
+                        object.create(from: sample,
+                                      provenanceIdentifier: self.provenanceIdentifier,
+                                      healthKitStorageDelay: self.healthKitStorageDelayIfAuthorized)
                         return object
                     }
 
@@ -369,18 +374,18 @@ extension GlucoseStore {
         dispatchPrecondition(condition: .onQueue(queue))
         var error: Error? = nil
         
-        // Search for Glucose data that hasn't been stored in HealthKit yet (uuid = nil), which are
-        // "eligible" for storing in HealthKit (i.e. are not too "recent" according to `healthKitStorageDelay`
         cacheStore.managedObjectContext.performAndWait {
             let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
-            let now = Date()
-            let notInHealthKitPredicate = NSPredicate(format: "uuid = nil")
-            let eligibleForStorageInHealthKit = NSPredicate(format: "startDate <= %@", now.addingTimeInterval(-healthKitStorageDelay) as NSDate)
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [notInHealthKitPredicate, eligibleForStorageInHealthKit])
+            request.predicate = NSPredicate(format: "healthKitEligibleDate <= %@", Date() as NSDate)
             do {
                 let stored = try self.cacheStore.managedObjectContext.fetch(request)
                 guard !stored.isEmpty else {
                     return
+                }
+                
+                if stored.contains(where: { $0.uuid != nil }) {
+                    self.log.error("Found CachedGlucoseObjects with non-nil uuid. Should never happen, but HealthKit should be able to resolve it.")
+                    // Note the UUIDs will be overwritten below...HealthKit should resolve this by "replacing" these items since the syncIdentifiers match
                 }
                     
                 let quantitySamples = stored.map { $0.quantitySample }
@@ -398,6 +403,7 @@ extension GlucoseStore {
                 // Update Core Data with the changes, log any errors, but do not fail
                 zipped.forEach { quantitySample, object in
                     object.uuid = quantitySample.uuid
+                    object.healthKitEligibleDate = nil
                 }
                 if let e = self.cacheStore.save() {
                     self.log.error("Error updating CachedGlucoseObjects after saving HealthKit objects: %@", String(describing: error))
@@ -848,7 +854,7 @@ extension GlucoseStore {
             self.cacheStore.managedObjectContext.performAndWait {
                 for sample in samples {
                     let object = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
-                    object.create(from: sample, provenanceIdentifier: self.provenanceIdentifier)
+                    object.create(from: sample, provenanceIdentifier: self.provenanceIdentifier, healthKitStorageDelay: self.healthKitStorageDelayIfAuthorized)
                 }
                 error = self.cacheStore.save()
             }

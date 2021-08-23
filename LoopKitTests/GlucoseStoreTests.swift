@@ -396,9 +396,9 @@ class GlucoseStoreCriticalEventLogExportTests: PersistenceControllerTestCase {
                                          progress: progress))
         XCTAssertEqual(outputStream.string, """
             [
-            {"isDisplayOnly":false,"modificationCounter":1,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:08:00.000Z","syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784","syncVersion":1,"unitString":"mg/dL","value":111,"wasUserEntered":false},
-            {"isDisplayOnly":false,"modificationCounter":3,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:04:00.000Z","syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010","syncVersion":3,"trend":3,"unitString":"mg/dL","value":113,"wasUserEntered":false},
-            {"isDisplayOnly":false,"modificationCounter":4,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:06:00.000Z","syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E","syncVersion":4,"trend":3,"unitString":"mg/dL","value":114,"wasUserEntered":false}
+            {"healthKitEligibleDate":"2100-01-02T03:08:00.000Z","isDisplayOnly":false,"modificationCounter":1,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:08:00.000Z","syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784","syncVersion":1,"unitString":"mg/dL","value":111,"wasUserEntered":false},
+            {"healthKitEligibleDate":"2100-01-02T03:04:00.000Z","isDisplayOnly":false,"modificationCounter":3,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:04:00.000Z","syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010","syncVersion":3,"trend":3,"unitString":"mg/dL","value":113,"wasUserEntered":false},
+            {"healthKitEligibleDate":"2100-01-02T03:06:00.000Z","isDisplayOnly":false,"modificationCounter":4,"provenanceIdentifier":"com.apple.dt.xctest.tool","startDate":"2100-01-02T03:06:00.000Z","syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E","syncVersion":4,"trend":3,"unitString":"mg/dL","value":114,"wasUserEntered":false}
             ]
             """
         )

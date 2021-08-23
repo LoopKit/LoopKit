@@ -15,6 +15,7 @@ class HKHealthStoreMock: HKHealthStore {
     var deleteError: Error?
     var queryResults: (samples: [HKSample]?, error: Error?)?
     var lastQuery: HKQuery?
+    var authorizationStatus: HKAuthorizationStatus?
 
     private var saveHandler: ((_ objects: [HKObject], _ success: Bool, _ error: Error?) -> Void)?
     private var deleteObjectsHandler: ((_ objectType: HKObjectType, _ predicate: NSPredicate, _ success: Bool, _ count: Int, _ error: Error?) -> Void)?
@@ -61,7 +62,7 @@ class HKHealthStoreMock: HKHealthStore {
     }
     
     override func authorizationStatus(for type: HKObjectType) -> HKAuthorizationStatus {
-        return .notDetermined
+        return authorizationStatus ?? .notDetermined
     }
 
     func setDeletedObjectsHandler(_ deleteObjectsHandler: ((_ objectType: HKObjectType, _ predicate: NSPredicate, _ success: Bool, _ count: Int, _ error: Error?) -> Void)?) {
