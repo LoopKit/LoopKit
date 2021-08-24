@@ -157,7 +157,8 @@ extension CachedInsulinDeliveryObject {
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
             insulinType: insulinType,
-            automatic: automaticallyIssued
+            automatic: automaticallyIssued,
+            manuallyEntered: manuallyEntered
         )
     }
 }
@@ -167,7 +168,6 @@ extension CachedInsulinDeliveryObject {
         precondition(sample.syncIdentifier != nil)
 
         self.uuid = nil
-        self.provenanceIdentifier = sample.loopSpecificProvenanceIdentifier
         self.hasLoopKitOrigin = true
         self.startDate = sample.startDate
         self.endDate = sample.endDate
@@ -177,13 +177,14 @@ extension CachedInsulinDeliveryObject {
         self.programmedTempBasalRate = sample.programmedTempBasalRate
         self.insulinType = sample.insulinType
         self.automaticallyIssued = sample.automaticallyIssued
+        self.manuallyEntered = sample.manuallyEntered
         self.reason = sample.insulinDeliveryReason
         self.createdAt = date
     }
 
     func create(fromExisting sample: HKQuantitySample, on date: Date = Date()) {
         self.uuid = sample.uuid
-        self.provenanceIdentifier = sample.loopSpecificProvenanceIdentifier
+        self.provenanceIdentifier = sample.provenanceIdentifier
         self.hasLoopKitOrigin = sample.hasLoopKitOrigin
         self.startDate = sample.startDate
         self.endDate = sample.endDate
@@ -193,6 +194,7 @@ extension CachedInsulinDeliveryObject {
         self.programmedTempBasalRate = sample.programmedTempBasalRate
         self.insulinType = sample.insulinType
         self.automaticallyIssued = sample.automaticallyIssued
+        self.manuallyEntered = sample.manuallyEntered
         self.reason = sample.insulinDeliveryReason
         self.createdAt = date
     }

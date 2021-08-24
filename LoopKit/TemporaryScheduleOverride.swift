@@ -89,8 +89,12 @@ public struct TemporaryScheduleOverride: Hashable {
     }
 
     public var activeInterval: DateInterval {
+        return DateInterval(start: startDate, end: actualEndDate)
+    }
+    
+    public var scheduledInterval: DateInterval {
         get {
-            return DateInterval(start: startDate, end: actualEndDate)
+            return DateInterval(start: startDate, end: scheduledEndDate)
         }
         set {
             startDate = newValue.start

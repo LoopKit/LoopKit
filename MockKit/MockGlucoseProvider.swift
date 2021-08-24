@@ -70,10 +70,11 @@ extension MockGlucoseProvider {
         self = effects.transformations.reduce(model.glucoseProvider) { model, transform in transform(model) }
     }
 
-    private static func glucoseSample(at date: Date, quantity: HKQuantity) -> NewGlucoseSample {
+    private static func glucoseSample(at date: Date, quantity: HKQuantity, trend: GlucoseTrend?) -> NewGlucoseSample {
         return NewGlucoseSample(
             date: date,
             quantity: quantity,
+            trend: trend,
             isDisplayOnly: false,
             wasUserEntered: false,
             syncIdentifier: UUID().uuidString,
@@ -87,7 +88,7 @@ extension MockGlucoseProvider {
 extension MockGlucoseProvider {
     fileprivate static func constant(_ quantity: HKQuantity) -> MockGlucoseProvider {
         return MockGlucoseProvider { date, completion in
-            let sample = glucoseSample(at: date, quantity: quantity)
+            let sample = glucoseSample(at: date, quantity: quantity, trend: .flat)
             completion(.newData([sample]))
         }
     }
@@ -100,11 +101,43 @@ extension MockGlucoseProvider {
         precondition(amplitude.is(compatibleWith: unit))
         let baseGlucoseValue = baseGlucose.doubleValue(for: unit)
         let amplitudeValue = amplitude.doubleValue(for: unit)
-
+        let chanceOfNilTrend = 1.0/20.0
+        
         return MockGlucoseProvider { date, completion in
             let timeOffset = date.timeIntervalSince1970 - referenceDate.timeIntervalSince1970
-            let glucoseValue = baseGlucoseValue + amplitudeValue * sin(2 * .pi / period * timeOffset)
-            let sample = glucoseSample(at: date, quantity: HKQuantity(unit: unit, doubleValue: glucoseValue))
+            func sine(_ t: TimeInterval) -> Double {
+                return baseGlucoseValue + amplitudeValue * sin(2 * .pi / period * t)
+            }
+            func derivative(_ t: TimeInterval) -> Double {
+                return 2 * .pi * amplitudeValue * cos(2 * .pi / period * t) / period
+            }
+            func trend() -> GlucoseTrend? {
+                let smallDelta = 0.005
+                let mediumDelta = smallDelta * 2
+                let largeDelta = mediumDelta * 4
+                let d = derivative(timeOffset)
+                switch d {
+                case -smallDelta ... smallDelta:
+                    return .flat
+                case -mediumDelta ..< -smallDelta:
+                    return .down
+                case -largeDelta ..< -mediumDelta:
+                    return .downDown
+                case -Double.greatestFiniteMagnitude ..< -largeDelta:
+                    return .downDownDown
+                case smallDelta...mediumDelta:
+                    return .up
+                case mediumDelta...largeDelta:
+                    return .upUp
+                case largeDelta...Double.greatestFiniteMagnitude:
+                    return .upUpUp
+                default:
+                    return nil
+                }
+            }
+            let glucoseValue = sine(timeOffset)
+            let sample = glucoseSample(at: date, quantity: HKQuantity(unit: unit, doubleValue: glucoseValue),
+                                       trend: coinFlip(withChanceOfHeads: chanceOfNilTrend, ifHeads: nil, ifTails: trend()))
             completion(.newData([sample]))
         }
     }
@@ -198,6 +231,7 @@ private extension CGMReadingResult {
                 return NewGlucoseSample(
                     date: sample.date,
                     quantity: transform(sample.quantity),
+                    trend: sample.trend,
                     isDisplayOnly: sample.isDisplayOnly,
                     wasUserEntered: sample.wasUserEntered,
                     syncIdentifier: sample.syncIdentifier,

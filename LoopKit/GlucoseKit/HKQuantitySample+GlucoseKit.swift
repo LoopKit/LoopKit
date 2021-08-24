@@ -10,6 +10,7 @@ import HealthKit
 
 
 let MetadataKeyGlucoseIsDisplayOnly = "com.loudnate.GlucoseKit.HKMetadataKey.GlucoseIsDisplayOnly"
+let MetadataKeyGlucoseTrend = "com.LoopKit.GlucoseKit.HKMetadataKey.GlucoseTrend"
 
 
 extension HKQuantitySample: GlucoseSampleValue {
@@ -23,5 +24,9 @@ extension HKQuantitySample: GlucoseSampleValue {
 
     public var wasUserEntered: Bool {
         return metadata?[HKMetadataKeyWasUserEntered] as? Bool ?? false
+    }
+    
+    public var trend: GlucoseTrend? {
+        return (metadata?[MetadataKeyGlucoseTrend] as? Int).flatMap { GlucoseTrend(rawValue: $0) }
     }
 }
