@@ -1610,7 +1610,7 @@ extension DoseStore {
     /// Queries the Core Data store for doses after the query anchor
     /// - Parameters
     ///     - queryAnchor: the anchor to use to determine which doses to fetch
-    ///     - limit: numerical limit for number of items to fetch. May return fewer items than the limit
+    ///     - limit: numerical limit for number of items to fetch.
     ///     - completion: block to call with result of operation
     public func executeDoseQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (DoseQueryResult) -> Void) {
         var queryAnchor = queryAnchor ?? QueryAnchor()
@@ -1623,13 +1623,13 @@ extension DoseStore {
         }
 
         persistenceController.managedObjectContext.performAndWait {
-            do {
-                let insulinDeliveryRequest: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
+            let insulinDeliveryRequest: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
 
-                insulinDeliveryRequest.predicate =  NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter)
-                insulinDeliveryRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
-                insulinDeliveryRequest.fetchLimit = limit
-                
+            insulinDeliveryRequest.predicate =  NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter)
+            insulinDeliveryRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+            insulinDeliveryRequest.fetchLimit = limit
+            
+            do {
                 let storedObjects = try self.persistenceController.managedObjectContext.fetch(insulinDeliveryRequest)
                 
                 let maxModificationCounter = storedObjects.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter
