@@ -1612,29 +1612,32 @@ extension DoseStore {
     ///     - queryAnchor: the anchor to use to determine which doses to fetch
     ///     - limit: numerical limit for number of items to fetch. May return fewer items than the limit
     ///     - completion: block to call with result of operation
-    public func executeDoseQuery(fromQueryAnchor queryAnchor: QueryAnchor?, pumpEventLimit: Int, doseEventsLimit: Int, completion: @escaping (DoseQueryResult) -> Void) {
+    public func executeDoseQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (DoseQueryResult) -> Void) {
         var queryAnchor = queryAnchor ?? QueryAnchor()
         var queryResult = [DoseEntry]()
         var queryError: Error?
 
-        guard pumpEventLimit > 0 || doseEventsLimit > 0 else {
+        guard limit > 0 else {
             completion(.success(queryAnchor, []))
             return
         }
 
         persistenceController.managedObjectContext.performAndWait {
             do {
-                let (maxPumpEventModificationCounter, storedPumpDoses) = try executePumpEventsQuery(fromQueryAnchor: queryAnchor, limit: pumpEventLimit)
+                let insulinDeliveryRequest: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
+
+                insulinDeliveryRequest.predicate =  NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter)
+                insulinDeliveryRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+                insulinDeliveryRequest.fetchLimit = limit
                 
-                let (maxInsulinDeliveryModificationCounter, storedInsulinDeliveryDoses) = try executeDoseEventsQuery(fromQueryAnchor: queryAnchor, limit: doseEventsLimit)
+                let storedObjects = try self.persistenceController.managedObjectContext.fetch(insulinDeliveryRequest)
                 
-                if maxPumpEventModificationCounter != nil || maxInsulinDeliveryModificationCounter != nil  {
-                    let modificationCounter =  max(maxPumpEventModificationCounter ?? Int64.min, maxInsulinDeliveryModificationCounter ?? Int64.min)
-                    queryAnchor.modificationCounter = modificationCounter
+                let maxModificationCounter = storedObjects.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter
+
+                if let maxModificationCounter = maxModificationCounter  {
+                   queryAnchor.modificationCounter = maxModificationCounter
                 }
-                
-                queryResult.append(contentsOf: storedPumpDoses)
-                queryResult = queryResult.appendedUnion(with: storedInsulinDeliveryDoses)
+                queryResult.append(contentsOf: storedObjects.compactMap { $0.dose })
             } catch let error {
                 queryError = error
                 return
@@ -1648,38 +1651,7 @@ extension DoseStore {
 
         completion(.success(queryAnchor, queryResult))
     }
-    
-    private func executePumpEventsQuery(fromQueryAnchor queryAnchor: QueryAnchor, limit: Int) throws -> (Int64?, [DoseEntry]) {
-        let pumpEventRequest: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
 
-        pumpEventRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-            NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter),
-            NSPredicate(format: "type IN %@", PumpEventType.doseTypes.map { $0.rawValue })
-        ])
-        pumpEventRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
-        pumpEventRequest.fetchLimit = limit
-        
-        let storedPumpEvents = try self.persistenceController.managedObjectContext.fetch(pumpEventRequest)
-        
-        let maxPumpEventModificationCounter = storedPumpEvents.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter
-        
-        return (maxPumpEventModificationCounter, storedPumpEvents.compactMap { $0.dose })
-    }
-        
-    private func executeDoseEventsQuery(fromQueryAnchor queryAnchor: QueryAnchor, limit: Int) throws -> (Int64?, [DoseEntry]) {
-        let insulinDeliveryRequest: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
-
-        insulinDeliveryRequest.predicate =  NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter)
-        insulinDeliveryRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
-        insulinDeliveryRequest.fetchLimit = limit
-        
-        let storedInsulinDeliveryObjects = try self.persistenceController.managedObjectContext.fetch(insulinDeliveryRequest)
-        
-        let maxInsulinDeliveryModificationCounter = storedInsulinDeliveryObjects.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter
-        
-        return (maxInsulinDeliveryModificationCounter, storedInsulinDeliveryObjects.compactMap { $0.dose })
-    }
-    
     public func executePumpEventQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (PumpEventQueryResult) -> Void) {
         var queryAnchor = queryAnchor ?? QueryAnchor()
         var queryResult = [PersistedPumpEvent]()

@@ -426,7 +426,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     }
     
     func testDoseEmptyWithDefaultQueryAnchor() {
-        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
@@ -443,7 +443,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     func testDoseEmptyWithMissingQueryAnchor() {
         queryAnchor = nil
         
-        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, pumpEventLimit: limit, doseEventsLimit: limit) { result in
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
