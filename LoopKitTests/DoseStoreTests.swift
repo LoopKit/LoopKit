@@ -484,7 +484,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let anchor, let data):
-                XCTAssertEqual(anchor.modificationCounter, 5)
+                XCTAssertEqual(anchor.modificationCounter, 3)
                 XCTAssertEqual(data.count, 3)
                 for (index, syncIdentifier) in syncIdentifiers.enumerated() {
                     XCTAssertEqual(data[index].syncIdentifier, syncIdentifier)
@@ -501,14 +501,14 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
 
         addInsulinDeliveryObjectData(withSyncIdentifiers: syncIdentifiers)
         
-        queryAnchor.modificationCounter = 4
+        queryAnchor.modificationCounter = 2
         
         doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let anchor, let data):
-                XCTAssertEqual(anchor.modificationCounter, 5)
+                XCTAssertEqual(anchor.modificationCounter, 3)
                 XCTAssertEqual(data.count, 1)
                 XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[2])
             }
@@ -563,6 +563,30 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     func testDoseDataWithLimitCoveredByData() {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier()]
         
+        addInsulinDeliveryObjectData(withSyncIdentifiers: syncIdentifiers)
+        
+        limit = 2
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 2)
+                XCTAssertEqual(data.count, 2)
+                XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[0])
+                XCTAssertEqual(data[1].syncIdentifier, syncIdentifiers[1])
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testDoseDataWithDuplicates() {
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier()]
+        
+        addInsulinDeliveryObjectData(withSyncIdentifiers: syncIdentifiers)
         addInsulinDeliveryObjectData(withSyncIdentifiers: syncIdentifiers)
         
         limit = 2
