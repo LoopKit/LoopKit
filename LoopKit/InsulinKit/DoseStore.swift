@@ -1154,7 +1154,7 @@ extension DoseStore {
     ///   - result: An array of dose entries, in chronological order by startDate
     public func getNormalizedDoseEntries(start: Date, end: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[DoseEntry]>) -> Void) {
         insulinDeliveryStore.getCachedDoses(start: start, end: end, isChronological: true) { (insulinDeliveryDoses) in
-            let filteredStart = max(self.lastPumpEventsReconciliation ?? start, start)
+            let filteredStart = max(insulinDeliveryDoses.lastBasalEndDate ?? start, start)
 
             self.persistenceController.managedObjectContext.perform {
                 do {
