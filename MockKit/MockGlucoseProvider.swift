@@ -59,7 +59,7 @@ struct MockGlucoseProvider {
                     return []
                 }
             }
-            let result: CGMReadingResult = allSamples.isEmpty ? .noData : .newData(allSamples)
+            let result: CGMReadingResult = allSamples.isEmpty ? .noData : .newData(allSamples.reversed())
             completion(result)
         }
     }
@@ -107,7 +107,7 @@ extension MockGlucoseProvider {
         return MockGlucoseProvider { date, completion in
             let timeOffset = date.timeIntervalSince1970 - referenceDate.timeIntervalSince1970
             func sine(_ t: TimeInterval) -> Double {
-                return baseGlucoseValue + amplitudeValue * sin(2 * .pi / period * t)
+                return Double(baseGlucoseValue + amplitudeValue * sin(2 * .pi / period * t)).rounded()
             }
             let glucoseValue = sine(timeOffset)
             func trend() -> GlucoseTrend? {

@@ -97,8 +97,8 @@ public final class GlucoseStore: HealthKitSampleStore {
 
     public var healthKitStorageDelay: TimeInterval = 0
     
-    // If HealthKit sharing is denied, a `nil` here will prevent later storage there
-    var healthKitStorageDelayIfAuthorized: TimeInterval? { sharingDenied ? nil : healthKitStorageDelay }
+    // If HealthKit sharing is not authorized, `nil` will prevent later storage
+    var healthKitStorageDelayIfAuthorized: TimeInterval? { sharingAuthorized ? healthKitStorageDelay : nil }
     
     static let healthKitQueryAnchorMetadataKey = "com.loopkit.GlucoseStore.hkQueryAnchor"
 
@@ -196,7 +196,7 @@ public final class GlucoseStore: HealthKitSampleStore {
                 }
             }
 
-            if error != nil {
+            guard error == nil else {
                 completion(false)
                 return
             }
@@ -348,12 +348,10 @@ extension GlucoseStore {
                     }
 
                     error = self.cacheStore.save()
-                    if error != nil {
+                    guard error == nil else {
                         return
                     }
 
-                    // Note: because we cannot guarantee that we are allowed to store samples in HealthKit, we
-                    // don't update the UUID in StoredGlucoseSample here anymore.
                     storedSamples = objects.map { StoredGlucoseSample(managedObject: $0) }
                 } catch let coreDataError {
                     error = coreDataError
@@ -372,25 +370,26 @@ extension GlucoseStore {
     
     private func saveSamplesToHealthKit() {
         dispatchPrecondition(condition: .onQueue(queue))
-        var error: Error? = nil
+        var error: Error?
         
         cacheStore.managedObjectContext.performAndWait {
-            let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
-            request.predicate = NSPredicate(format: "healthKitEligibleDate <= %@", Date() as NSDate)
             do {
-                let stored = try self.cacheStore.managedObjectContext.fetch(request)
-                guard !stored.isEmpty else {
+                let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+                request.predicate = NSPredicate(format: "healthKitEligibleDate <= %@", Date() as NSDate)
+                request.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]   // Maintains modificationCounter order
+
+                let objects = try self.cacheStore.managedObjectContext.fetch(request)
+                guard !objects.isEmpty else {
                     return
                 }
                 
-                if stored.contains(where: { $0.uuid != nil }) {
+                if objects.contains(where: { $0.uuid != nil }) {
                     self.log.error("Found CachedGlucoseObjects with non-nil uuid. Should never happen, but HealthKit should be able to resolve it.")
-                    // Note the UUIDs will be overwritten below...HealthKit should resolve this by "replacing" these items since the syncIdentifiers match
+                    // Note: UUIDs will be overwritten below, but since the syncIdentifiers will match then HealthKit can resolve correctly via replacement
                 }
                     
-                let quantitySamples = stored.map { $0.quantitySample }
+                let quantitySamples = objects.map { $0.quantitySample }
                 
-                // Save objects to HealthKit, log any errors, but do not fail
                 let dispatchGroup = DispatchGroup()
                 dispatchGroup.enter()
                 self.healthStore.save(quantitySamples) { (_, healthKitError) in
@@ -398,26 +397,31 @@ extension GlucoseStore {
                     dispatchGroup.leave()
                 }
                 dispatchGroup.wait()
-                
-                let zipped = zip(quantitySamples, stored).map { ($0, $1) }
-                // Update Core Data with the changes, log any errors, but do not fail
-                zipped.forEach { quantitySample, object in
+
+                // If there is an error writing to HealthKit, then do not persist uuids and retry later
+                guard error == nil else {
+                    return
+                }
+
+                for (object, quantitySample) in zip(objects, quantitySamples) {
                     object.uuid = quantitySample.uuid
                     object.healthKitEligibleDate = nil
+                    object.updateModificationCounter()  // Maintains modificationCounter order
                 }
-                if let e = self.cacheStore.save() {
-                    self.log.error("Error updating CachedGlucoseObjects after saving HealthKit objects: %@", String(describing: error))
-                    stored.forEach { $0.uuid = nil }
-                    throw e
+
+                error = self.cacheStore.save()
+                guard error == nil else {
+                    return
                 }
                 
-                self.log.default("Stored %d eligible glucose samples to HealthKit", stored.count)
-            } catch let e {
-                error = e
+                self.log.default("Stored %d eligible glucose samples to HealthKit", objects.count)
+            } catch let coreDataError {
+                error = coreDataError
             }
         }
+
         if let error = error {
-            self.log.error("Error saving HealthKit objects: %@", String(describing: error))
+            self.log.error("Error saving samples to HealthKit: %{public}@", String(describing: error))
         }
     }
 
