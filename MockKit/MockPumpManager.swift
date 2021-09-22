@@ -129,7 +129,7 @@ public final class MockPumpManager: TestingPumpManager {
 
     public var testLastReconciliation: Date? = nil
     
-    public var lastReconciliation: Date? {
+    public var lastSync: Date? {
         return testLastReconciliation ?? Date()
     }
 
@@ -357,34 +357,27 @@ public final class MockPumpManager: TestingPumpManager {
         statusObservers.removeElement(observer)
     }
 
-    public func ensureCurrentPumpData(completion: (() -> Void)? = nil) {
+    public func ensureCurrentPumpData(completion: ((Date?) -> Void)?) {
         // Change this to artificially increase the delay fetching the current pump data
         let fetchDelay = 0
-        DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(fetchDelay)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(fetchDelay)) {
             
             self.state.finalizeFinishedDoses()
             
             self.storeDoses { (error) in
-                self.delegate.notify { (delegate) in
-                    delegate?.pumpManagerRecommendsLoop(self)
-                }
-                
                 guard error == nil else {
+                    completion?(self.lastSync)
                     return
                 }
                 
-                DispatchQueue.main.async {
-                    let totalInsulinUsage = self.state.finalizedDoses.reduce(into: 0 as Double) { total, dose in
-                        total += dose.units
-                    }
-                    
-                    self.state.finalizedDoses = []
-                    self.state.reservoirUnitsRemaining = max(self.state.reservoirUnitsRemaining - totalInsulinUsage, 0)
-                    
-                    DispatchQueue.global().async {
-                        completion?()
-                    }
+                let totalInsulinUsage = self.state.finalizedDoses.reduce(into: 0 as Double) { total, dose in
+                    total += dose.units
                 }
+                
+                self.state.finalizedDoses = []
+                self.state.reservoirUnitsRemaining = max(self.state.reservoirUnitsRemaining - totalInsulinUsage, 0)
+                
+                completion?(self.lastSync)
             }
         }
     }
@@ -393,7 +386,7 @@ public final class MockPumpManager: TestingPumpManager {
         state.finalizeFinishedDoses()
         let pendingPumpEvents = state.dosesToStore.map { NewPumpEvent($0) }
         delegate.notify { (delegate) in
-            delegate?.pumpManager(self, hasNewPumpEvents: pendingPumpEvents, lastReconciliation: self.lastReconciliation) { error in
+            delegate?.pumpManager(self, hasNewPumpEvents: pendingPumpEvents, lastSync: self.lastSync) { error in
                 completion(error)
             }
         }
@@ -585,7 +578,7 @@ public final class MockPumpManager: TestingPumpManager {
     public func syncBasalRateSchedule(items scheduleItems: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
         state.basalRateSchedule = BasalRateSchedule(dailyItems: scheduleItems, timeZone: self.status.timeZone)
 
-        DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(500)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
             completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: self.status.timeZone)!))
         }
     }
