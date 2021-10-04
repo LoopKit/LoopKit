@@ -18,4 +18,5 @@ public enum LoopPluginBundleKey: String {
     case onboardingIdentifier = "com.loopkit.Loop.OnboardingIdentifier"
     case supportIdentifier = "com.loopkit.Loop.SupportIdentifier"
     case extensionIdentifier = "com.loopkit.Loop.ExtensionIdentifier"
+    case pluginIsSimulator = "com.loopkit.Loop.PluginIsSimulator"
 }

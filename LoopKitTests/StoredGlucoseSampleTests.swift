@@ -47,7 +47,8 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
                                          trend: .flat,
                                          isDisplayOnly: true,
                                          wasUserEntered: false,
-                                         device: device)
+                                         device: device,
+                                         healthKitEligibleDate: startDate.addingTimeInterval(.hours(3)))
         XCTAssertEqual(sample.uuid, uuid)
         XCTAssertEqual(sample.provenanceIdentifier, "8A1333E7-79CB-413F-AB7A-5413F14D4531")
         XCTAssertEqual(sample.syncIdentifier, "E7D34EED-CFEE-48FD-810F-5C8C41FACA83")
@@ -58,6 +59,7 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
         XCTAssertEqual(sample.isDisplayOnly, true)
         XCTAssertEqual(sample.wasUserEntered, false)
         XCTAssertEqual(sample.device, device)
+        XCTAssertEqual(sample.healthKitEligibleDate, startDate.addingTimeInterval(.hours(3)))
     }
 
     func testFullInitializerOptional() {
@@ -72,7 +74,8 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
                                          trend: .flat,
                                          isDisplayOnly: false,
                                          wasUserEntered: true,
-                                         device: nil)
+                                         device: nil,
+                                         healthKitEligibleDate: nil)
         XCTAssertNil(sample.uuid)
         XCTAssertEqual(sample.provenanceIdentifier, "95F800A3-A59D-4419-B8F2-611BED0962CF")
         XCTAssertNil(sample.syncIdentifier)
@@ -83,6 +86,7 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
         XCTAssertEqual(sample.isDisplayOnly, false)
         XCTAssertEqual(sample.wasUserEntered, true)
         XCTAssertNil(sample.device)
+        XCTAssertNil(sample.healthKitEligibleDate)
     }
 
     private let dateFormatter = ISO8601DateFormatter()
@@ -106,6 +110,7 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             managedObject.wasUserEntered = true
             managedObject.device = device
             managedObject.trend = .downDownDown
+            managedObject.healthKitEligibleDate = startDate.addingTimeInterval(.hours(3))
             let sample = StoredGlucoseSample(managedObject: managedObject)
             XCTAssertEqual(sample.uuid, uuid)
             XCTAssertEqual(sample.provenanceIdentifier, "C198186D-F15C-4D0F-B8A1-83B28626DB3A")
@@ -117,6 +122,7 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             XCTAssertEqual(sample.wasUserEntered, true)
             XCTAssertEqual(sample.device, device)
             XCTAssertEqual(sample.trend, .downDownDown)
+            XCTAssertEqual(sample.healthKitEligibleDate, startDate.addingTimeInterval(.hours(3)))
         }
     }
 
@@ -142,6 +148,7 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             XCTAssertEqual(sample.wasUserEntered, true)
             XCTAssertNil(sample.device)
             XCTAssertNil(sample.trend)
+            XCTAssertNil(sample.healthKitEligibleDate)
         }
     }
 

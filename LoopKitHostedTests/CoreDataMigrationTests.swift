@@ -45,7 +45,7 @@ class CoreDataV1MigrationTests: XCTestCase {
             }
             e.fulfill()
         }
-        wait(for: [e], timeout: 3.0)
+        wait(for: [e], timeout: 10.0)
         if let error = error { throw error }        
         var entries: [CachedCarbObject]!
         let e0 = expectation(description: "\(#function): fetch")

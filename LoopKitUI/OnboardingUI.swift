@@ -157,6 +157,12 @@ public protocol OnboardingDelegate: AnyObject {
     ///     - onboarding: The onboarding that has new dosing enabled.
     ///     - isClosedLoop: The new dosing enabled.
     func onboarding(_ onboarding: OnboardingUI, hasNewDosingEnabled dosingEnabled: Bool)
+
+    /// Informs the delegate the onboarding has suspended.
+    ///
+    /// - Parameters:
+    ///     - onboarding: The onboarding that has suspended.
+    func onboardingDidSuspend(_ onboarding: OnboardingUI)
 }
 
 public typealias OnboardingViewController = (UIViewController & CGMManagerOnboarding & PumpManagerOnboarding & ServiceOnboarding & CompletionNotifying)
