@@ -104,8 +104,12 @@ extension CachedGlucoseObject {
 
 extension CachedGlucoseObject {
 
-    // Loop
-    func create(from sample: NewGlucoseSample, provenanceIdentifier: String) {
+    /// Creates (initializes) a `CachedGlucoseObject` from a new CGM sample from Loop.
+    /// - parameters:
+    ///   - sample: A new glucose (CGM) sample to copy data from.
+    ///   - provenanceIdentifier: A string uniquely identifying the provenance (origin) of the sample.
+    ///   - healthKitStorageDelay: The amount of time (seconds) to delay writing this sample to HealthKit.  A `nil` here means this sample is not eligible (i.e. authorized) to be written to HealthKit.
+    func create(from sample: NewGlucoseSample, provenanceIdentifier: String, healthKitStorageDelay: TimeInterval?) {
         self.uuid = nil
         self.provenanceIdentifier = provenanceIdentifier
         self.syncIdentifier = sample.syncIdentifier
@@ -117,6 +121,7 @@ extension CachedGlucoseObject {
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
         self.trend = sample.trend
+        self.healthKitEligibleDate = healthKitStorageDelay.map { sample.date.addingTimeInterval($0) }
     }
 
     // HealthKit
@@ -134,6 +139,9 @@ extension CachedGlucoseObject {
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
         self.trend = sample.trend
+        // The assumption here is that if this is created from a HKQuantitySample, it is coming out of HealthKit, and
+        // therefore does not need to be written to HealthKit.
+        self.healthKitEligibleDate = nil
     }
 }
 
@@ -141,6 +149,7 @@ extension CachedGlucoseObject {
 
 extension CachedGlucoseObject {
     func update(from sample: StoredGlucoseSample) {
+        self.uuid = sample.uuid
         self.provenanceIdentifier = sample.provenanceIdentifier
         self.syncIdentifier = sample.syncIdentifier
         self.syncVersion = sample.syncVersion
@@ -151,5 +160,6 @@ extension CachedGlucoseObject {
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
         self.trend = sample.trend
+        self.healthKitEligibleDate = sample.healthKitEligibleDate
     }
 }

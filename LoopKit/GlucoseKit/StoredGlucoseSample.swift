@@ -16,6 +16,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
     public let syncIdentifier: String?
     public let syncVersion: Int?
     public let device: HKDevice?
+    public let healthKitEligibleDate: Date?
 
     // MARK: - SampleValue
 
@@ -39,7 +40,8 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
             trend: sample.trend,
             isDisplayOnly: sample.isDisplayOnly,
             wasUserEntered: sample.wasUserEntered,
-            device: sample.device)
+            device: sample.device,
+            healthKitEligibleDate: nil)
     }
 
     public init(
@@ -52,7 +54,8 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
         trend: GlucoseTrend?,
         isDisplayOnly: Bool,
         wasUserEntered: Bool,
-        device: HKDevice?) {
+        device: HKDevice?,
+        healthKitEligibleDate: Date?) {
         self.uuid = uuid
         self.provenanceIdentifier = provenanceIdentifier
         self.syncIdentifier = syncIdentifier
@@ -63,6 +66,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
         self.isDisplayOnly = isDisplayOnly
         self.wasUserEntered = wasUserEntered
         self.device = device
+        self.healthKitEligibleDate = healthKitEligibleDate
     }
 }
 
@@ -78,6 +82,7 @@ extension StoredGlucoseSample {
             trend: managedObject.trend,
             isDisplayOnly: managedObject.isDisplayOnly,
             wasUserEntered: managedObject.wasUserEntered,
-            device: managedObject.device)
+            device: managedObject.device,
+            healthKitEligibleDate: managedObject.healthKitEligibleDate)
     }
 }

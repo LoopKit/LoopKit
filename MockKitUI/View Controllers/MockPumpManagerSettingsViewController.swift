@@ -254,7 +254,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             case .lastReconciliationDate:
                 let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
                 cell.titleLabel.text = "Last Reconciliation Date"
-                cell.date = pumpManager.lastReconciliation ?? Date()
+                cell.date = pumpManager.lastSync ?? Date()
                 cell.datePicker.maximumDate = Date()
                 cell.datePicker.minimumDate = Date() - .hours(48)
                 cell.datePicker.datePickerMode = .dateAndTime
