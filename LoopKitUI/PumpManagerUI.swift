@@ -44,7 +44,8 @@ public protocol PumpStatusIndicator {
 
 public typealias PumpManagerViewController = (UIViewController & PumpManagerOnboarding & CompletionNotifying)
 
-public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
+public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager { //}, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
+
     /// Create and onboard a new pump manager.
     ///
     /// - Parameters:

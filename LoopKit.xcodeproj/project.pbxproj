@@ -703,6 +703,7 @@
 		A9E675F5227140DD00E25293 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E675F4227140DD00E25293 /* HealthKit.framework */; };
 		A9FD046F24E310D00040F203 /* HKObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FD046E24E310D00040F203 /* HKObject.swift */; };
 		A9FD047024E310DD0040F203 /* HKObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FD046E24E310D00040F203 /* HKObject.swift */; };
+		B40C43912707408400F5D86C /* DeliveryLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC64C7D24BF6EBC004A63A1 /* DeliveryLimits.swift */; };
 		B40D07CA251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B40D07C8251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.xib */; };
 		B40D07CB251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40D07C9251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.swift */; };
 		B4102D3224ABB068005D460B /* DeviceLifecycleProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4102D3124ABB068005D460B /* DeviceLifecycleProgress.swift */; };
@@ -4185,6 +4186,7 @@
 				A9498D7F23386C3300DAA9B9 /* GlucoseThreshold.swift in Sources */,
 				A9E675D522713F4700E25293 /* WalshInsulinModel.swift in Sources */,
 				A9E675D622713F4700E25293 /* GlucoseEffectVelocity.swift in Sources */,
+				B40C43912707408400F5D86C /* DeliveryLimits.swift in Sources */,
 				A9E675D722713F4700E25293 /* PumpEvent+CoreDataClass.swift in Sources */,
 				A9E675D822713F4700E25293 /* UpdateSource.swift in Sources */,
 				A9E675D922713F4700E25293 /* Reservoir+CoreDataProperties.swift in Sources */,

@@ -170,8 +170,6 @@ public protocol PumpManager: DeviceManager {
     ///   - error: An error describing why the command failed
     func resumeDelivery(completion: @escaping (_ error: Error?) -> Void)
     
-    typealias SyncSchedule = (_ items: [RepeatingScheduleValue<Double>], _ completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) -> Void
-
     /// Sync the schedule of basal rates to the pump, annotating the result with the proper time zone.
     ///
     /// - Precondition:
@@ -182,6 +180,14 @@ public protocol PumpManager: DeviceManager {
     ///   - completion: A closure called after the command is complete
     ///   - result: A BasalRateSchedule or an error describing why the command failed
     func syncBasalRateSchedule(items scheduleItems: [RepeatingScheduleValue<Double>], completion: @escaping (_ result: Result<BasalRateSchedule, Error>) -> Void)
+
+    /// Sync the delivery limits for basal rate and bolus. If the pump does not support setting max bolus or max basal rates, the completion should be called with success including the provided delivery limits.
+    ///
+    /// - Parameters:
+    ///   - deliveryLimits: The delivery limits
+    ///   - completion: A closure called after the command is complete
+    ///   - result: The delivery limits set or an error describing why the command failed
+    func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits, completion: @escaping (_ result: Result<DeliveryLimits, Error>) -> Void)
 }
 
 

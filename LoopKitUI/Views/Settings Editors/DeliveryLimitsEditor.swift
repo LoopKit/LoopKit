@@ -12,18 +12,26 @@ import LoopKit
 
 
 public struct DeliveryLimitsEditor: View {
+    fileprivate enum PresentedAlert {
+        case saveConfirmation(AlertContent)
+        case saveError(Error)
+    }
+
     let initialValue: DeliveryLimits
     let supportedBasalRates: [Double]
     let selectableMaxBasalRates: [Double]
     let scheduledBasalRange: ClosedRange<Double>?
     let supportedBolusVolumes: [Double]
     let selectableBolusVolumes: [Double]
+    let syncDeliveryLimits: SyncDeliveryLimits?
     let save: (_ deliveryLimits: DeliveryLimits) -> Void
     let mode: SettingsPresentationMode
     
     @State var value: DeliveryLimits
     @State private var userDidTap: Bool = false
     @State var settingBeingEdited: DeliveryLimits.Setting?
+    @State private var isSyncing = false
+    @State private var presentedAlert: PresentedAlert?
 
     @State var showingConfirmationAlert = false
     @Environment(\.dismissAction) var dismiss
@@ -38,6 +46,7 @@ public struct DeliveryLimitsEditor: View {
         scheduledBasalRange: ClosedRange<Double>?,
         supportedBolusVolumes: [Double],
         lowestCarbRatio: Double?,
+        syncDeliveryLimits: SyncDeliveryLimits?,
         onSave save: @escaping (_ deliveryLimits: DeliveryLimits) -> Void,
         mode: SettingsPresentationMode = .settings
     ) {
@@ -48,6 +57,7 @@ public struct DeliveryLimitsEditor: View {
         self.scheduledBasalRange = scheduledBasalRange
         self.supportedBolusVolumes = supportedBolusVolumes
         self.selectableBolusVolumes = Guardrail.selectableBolusVolumes(supportedBolusVolumes: supportedBolusVolumes)
+        self.syncDeliveryLimits = syncDeliveryLimits
         self.save = save
         self.mode = mode
         self.lowestCarbRatio = lowestCarbRatio
@@ -74,6 +84,7 @@ public struct DeliveryLimitsEditor: View {
             scheduledBasalRange: therapySettingsViewModel.therapySettings.basalRateSchedule?.valueRange(),
             supportedBolusVolumes: therapySettingsViewModel.pumpSupportedIncrements!()!.bolusVolumes,
             lowestCarbRatio: therapySettingsViewModel.therapySettings.carbRatioSchedule?.lowestValue(),
+            syncDeliveryLimits: therapySettingsViewModel.syncDeliveryLimits?(),
             onSave: { [weak therapySettingsViewModel] newLimits in
                 therapySettingsViewModel?.saveDeliveryLimits(limits: newLimits)
                 didSave?()
@@ -86,8 +97,10 @@ public struct DeliveryLimitsEditor: View {
         switch mode {
         case .acceptanceFlow:
             content
+                .disabled(isSyncing)
         case .settings:
             contentWithCancel
+                .disabled(isSyncing)
                 .navigationBarTitle("", displayMode: .inline)
         }
     }
@@ -127,11 +140,11 @@ public struct DeliveryLimitsEditor: View {
                 if self.crossedThresholds.isEmpty {
                     self.startSaving()
                 } else {
-                    self.showingConfirmationAlert = true
+                    self.presentedAlert = .saveConfirmation(confirmationAlertContent)
                 }
             }
         )
-        .alert(isPresented: $showingConfirmationAlert, content: confirmationAlert)
+        .alert(item: $presentedAlert, content: alert(for:))
         .simultaneousGesture(TapGesture().onEnded {
             withAnimation {
                 self.userDidTap = true
@@ -142,6 +155,10 @@ public struct DeliveryLimitsEditor: View {
     var saveButtonState: ConfigurationPageActionButtonState {
         guard value.maximumBasalRate != nil, value.maximumBolus != nil else {
             return .disabled
+        }
+
+        if isSyncing {
+            return .loading
         }
         
         if mode == .acceptanceFlow {
@@ -297,33 +314,86 @@ public struct DeliveryLimitsEditor: View {
         return crossedThresholds
     }
 
-    private func confirmationAlert() -> SwiftUI.Alert {
-        SwiftUI.Alert(
-            title: Text(LocalizedString("Save Delivery Limits?", comment: "Alert title for confirming delivery limits outside the recommended range")),
-            message: Text(TherapySetting.deliveryLimits.guardrailSaveWarningCaption),
-            primaryButton: .cancel(Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert"))),
-            secondaryButton: .default(
-                Text(LocalizedString("Continue", comment: "Text for continue action on confirmation alert")),
-                action: startSaving
-            )
-        )
-    }
-
     private func startSaving() {
         guard mode == .settings else {
-            self.continueSaving()
+            self.continueSaving(savingMechanism: .synchronous { deliveryLimits in
+                save(deliveryLimits)
+            })
             return
         }
         authenticate(TherapySetting.deliveryLimits.authenticationChallengeDescription) {
             switch $0 {
-            case .success: self.continueSaving()
+            case .success: self.continueSaving(savingMechanism: .asynchronous { deliveryLimits, completion in
+                self.syncDeliveryLimits?(deliveryLimits) { result in
+                    switch result {
+                    case .success(let deliveryLimits):
+                        DispatchQueue.main.async {
+                            self.save(deliveryLimits)
+                        }
+                        completion(nil)
+                    case .failure(let error):
+                        completion(error)
+                    }
+                }
+            })
             case .failure: break
             }
         }
     }
     
-    private func continueSaving() {
-        self.save(self.value)
+    private func continueSaving(savingMechanism: SavingMechanism<DeliveryLimits>) {
+        switch savingMechanism {
+        case .synchronous(let save):
+            save(value)
+        case .asynchronous(let save):
+            withAnimation {
+                self.isSyncing = true
+            }
+
+            save(value) { error in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        withAnimation {
+                            self.isSyncing = false
+                        }
+                        self.presentedAlert = .saveError(error)
+                    }
+                }
+            }
+        }
+    }
+
+    private func alert(for presentedAlert: PresentedAlert) -> SwiftUI.Alert {
+        switch presentedAlert {
+        case .saveConfirmation(let content):
+            return Alert(
+                title: content.title,
+                message: content.message,
+                primaryButton: .cancel(
+                    content.cancel ??
+                    Text(LocalizedString("Go Back", comment: "Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range"))),
+                secondaryButton: .default(
+                    content.ok ??
+                    Text(LocalizedString("Continue", comment: "Button text to confirm saving from alert popup when some schedule values are outside the recommended range")),
+                    action: startSaving
+                )
+            )
+        case .saveError(let error):
+            return Alert(
+                title: Text(LocalizedString("Unable to Save", comment: "Alert title when error occurs while saving a schedule")),
+                message: Text(error.localizedDescription)
+            )
+        }
+    }
+
+    private var confirmationAlertContent: AlertContent {
+        AlertContent(
+            title: Text(LocalizedString("Save Delivery Limits?", comment: "Alert title for confirming delivery limits outside the recommended range")),
+            message: Text(TherapySetting.deliveryLimits.guardrailSaveWarningCaption),
+            cancel: Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert")),
+            ok: Text(LocalizedString("Continue", comment: "Text for continue action on confirmation alert")
+            )
+        )
     }
 }
 
@@ -363,6 +433,17 @@ struct DeliveryLimitsGuardrailWarning: View {
                 thresholds: Array(crossedThresholds.values))
         default:
             preconditionFailure("Unreachable: only two delivery limit settings exist")
+        }
+    }
+}
+
+extension DeliveryLimitsEditor.PresentedAlert: Identifiable {
+    var id: Int {
+        switch self {
+        case .saveConfirmation:
+            return 0
+        case .saveError:
+            return 1
         }
     }
 }

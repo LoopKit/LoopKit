@@ -11,6 +11,9 @@ import LoopKit
 import HealthKit
 import SwiftUI
 
+public typealias SyncSchedule = (_ items: [RepeatingScheduleValue<Double>], _ completion: @escaping (Swift.Result<BasalRateSchedule, Error>) -> Void) -> Void
+public typealias SyncDeliveryLimits = (_ deliveryLimits: DeliveryLimits, _ completion: @escaping (_ result: Swift.Result<DeliveryLimits, Error>) -> Void) -> Void
+
 public class TherapySettingsViewModel: ObservableObject {
     public typealias SaveCompletion = (TherapySetting, TherapySettings) -> Void
     
@@ -19,13 +22,15 @@ public class TherapySettingsViewModel: ObservableObject {
 
     private let initialTherapySettings: TherapySettings
     let pumpSupportedIncrements: (() -> PumpSupportedIncrements?)?
-    let syncPumpSchedule: (() -> PumpManager.SyncSchedule?)?
+    let syncPumpSchedule: (() -> SyncSchedule?)?
+    let syncDeliveryLimits: (() -> SyncDeliveryLimits?)?
     let sensitivityOverridesEnabled: Bool
     public var prescription: Prescription?
 
     public init(therapySettings: TherapySettings,
                 pumpSupportedIncrements: (() -> PumpSupportedIncrements?)? = nil,
-                syncPumpSchedule: (() -> PumpManager.SyncSchedule?)? = nil,
+                syncPumpSchedule: (() -> SyncSchedule?)? = nil,
+                syncDeliveryLimits: (() -> SyncDeliveryLimits?)? = nil,
                 sensitivityOverridesEnabled: Bool = false,
                 prescription: Prescription? = nil,
                 didSave: SaveCompletion? = nil) {
@@ -33,6 +38,7 @@ public class TherapySettingsViewModel: ObservableObject {
         self.initialTherapySettings = therapySettings
         self.pumpSupportedIncrements = pumpSupportedIncrements
         self.syncPumpSchedule = syncPumpSchedule
+        self.syncDeliveryLimits = syncDeliveryLimits
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
         self.prescription = prescription
         self.didSave = didSave

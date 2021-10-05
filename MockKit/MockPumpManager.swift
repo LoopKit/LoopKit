@@ -587,6 +587,12 @@ public final class MockPumpManager: TestingPumpManager {
             completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: self.status.timeZone)!))
         }
     }
+
+    public func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+            completion(.success(deliveryLimits))
+        }
+    }
 }
 
 // MARK: - AlertResponder implementation
