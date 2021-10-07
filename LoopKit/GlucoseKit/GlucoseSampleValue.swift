@@ -6,6 +6,8 @@
 //  Copyright © 2016 Nathan Racklyeft. All rights reserved.
 //
 
+import HealthKit
+
 public protocol GlucoseSampleValue: GlucoseValue {
     /// Uniquely identifies the source of the sample.
     var provenanceIdentifier: String { get }
@@ -15,4 +17,10 @@ public protocol GlucoseSampleValue: GlucoseValue {
 
     /// Whether the glucose value was entered by the user.
     var wasUserEntered: Bool { get }
+
+    /// Any condition applied to the sample.
+    var condition: GlucoseCondition? { get }
+
+    /// The trend rate of the sample.
+    var trendRate: HKQuantity? { get }
 }

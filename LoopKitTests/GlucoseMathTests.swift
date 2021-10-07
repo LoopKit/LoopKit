@@ -17,13 +17,17 @@ public struct GlucoseFixtureValue: GlucoseSampleValue {
     public let isDisplayOnly: Bool
     public let wasUserEntered: Bool
     public let provenanceIdentifier: String
+    public let condition: GlucoseCondition?
+    public let trendRate: HKQuantity?
 
-    public init(startDate: Date, quantity: HKQuantity, isDisplayOnly: Bool, wasUserEntered: Bool, provenanceIdentifier: String?) {
+    public init(startDate: Date, quantity: HKQuantity, isDisplayOnly: Bool, wasUserEntered: Bool, provenanceIdentifier: String?, condition: GlucoseCondition?, trendRate: HKQuantity?) {
         self.startDate = startDate
         self.quantity = quantity
         self.isDisplayOnly = isDisplayOnly
         self.wasUserEntered = wasUserEntered
         self.provenanceIdentifier = provenanceIdentifier ?? "com.loopkit.LoopKitTests"
+        self.condition = condition
+        self.trendRate = trendRate
     }
 }
 
@@ -35,10 +39,12 @@ extension GlucoseFixtureValue: Comparable {
 
     public static func ==(lhs: GlucoseFixtureValue, rhs: GlucoseFixtureValue) -> Bool {
         return lhs.startDate == rhs.startDate &&
-               lhs.quantity == rhs.quantity &&
-               lhs.isDisplayOnly == rhs.isDisplayOnly &&
-               lhs.wasUserEntered == rhs.wasUserEntered &&
-               lhs.provenanceIdentifier == rhs.provenanceIdentifier
+            lhs.quantity == rhs.quantity &&
+            lhs.isDisplayOnly == rhs.isDisplayOnly &&
+            lhs.wasUserEntered == rhs.wasUserEntered &&
+            lhs.provenanceIdentifier == rhs.provenanceIdentifier &&
+            lhs.condition == rhs.condition &&
+            lhs.trendRate == rhs.trendRate
     }
 }
 
@@ -73,7 +79,9 @@ class GlucoseMathTests: XCTestCase {
                 quantity: HKQuantity(unit: HKUnit.milligramsPerDeciliter, doubleValue: $0["amount"] as! Double),
                 isDisplayOnly: ($0["display_only"] as? Bool) ?? false,
                 wasUserEntered: ($0["user_entered"] as? Bool) ?? false,
-                provenanceIdentifier: $0["provenance_identifier"] as? String
+                provenanceIdentifier: $0["provenance_identifier"] as? String,
+                condition: ($0["condition"] as? String).flatMap { GlucoseCondition(rawValue: $0) },
+                trendRate: ($0["trend_rate"] as? Double).flatMap { HKQuantity(unit: .milligramsPerDeciliter, doubleValue: $0) }
             )
         }
     }

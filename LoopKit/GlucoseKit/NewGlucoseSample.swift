@@ -11,7 +11,9 @@ import HealthKit
 public struct NewGlucoseSample: Equatable {
     public let date: Date
     public let quantity: HKQuantity
+    public let condition: GlucoseCondition?
     public let trend: GlucoseTrend?
+    public let trendRate: HKQuantity?
     public let isDisplayOnly: Bool
     public let wasUserEntered: Bool
     public let syncIdentifier: String
@@ -29,7 +31,9 @@ public struct NewGlucoseSample: Equatable {
     ///   - device: The description of the device the collected the sample
     public init(date: Date,
                 quantity: HKQuantity,
+                condition: GlucoseCondition?,
                 trend: GlucoseTrend?,
+                trendRate: HKQuantity?,
                 isDisplayOnly: Bool,
                 wasUserEntered: Bool,
                 syncIdentifier: String,
@@ -37,7 +41,9 @@ public struct NewGlucoseSample: Equatable {
                 device: HKDevice? = nil) {
         self.date = date
         self.quantity = quantity
+        self.condition = condition
         self.trend = trend
+        self.trendRate = trendRate
         self.isDisplayOnly = isDisplayOnly
         self.wasUserEntered = wasUserEntered
         self.syncIdentifier = syncIdentifier
@@ -54,14 +60,18 @@ extension NewGlucoseSample {
             HKMetadataKeySyncVersion: syncVersion,
         ]
 
+        metadata[MetadataKeyGlucoseCondition] = condition?.rawValue
+        metadata[MetadataKeyGlucoseTrend] = trend?.symbol
+        if let trendRate = trendRate {
+            metadata[MetadataKeyGlucoseTrendRateUnit] = HKUnit.milligramsPerDeciliterPerMinute.unitString
+            metadata[MetadataKeyGlucoseTrendRateValue] = trendRate.doubleValue(for: .milligramsPerDeciliterPerMinute)
+        }
         if isDisplayOnly {
             metadata[MetadataKeyGlucoseIsDisplayOnly] = true
         }
         if wasUserEntered {
             metadata[HKMetadataKeyWasUserEntered] = true
         }
-        // Hm. Do we want something more human-readable here?
-        metadata[MetadataKeyGlucoseTrend] = trend?.rawValue
 
         return HKQuantitySample(
             type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!,

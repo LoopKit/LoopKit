@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20G95" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20G165" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CachedCarbObject" representedClassName=".CachedCarbObject" syncable="YES">
         <attribute name="absorptionTime" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="addedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -19,6 +19,7 @@
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
     <entity name="CachedGlucoseObject" representedClassName=".CachedGlucoseObject" syncable="YES">
+        <attribute name="condition" optional="YES" attributeType="String"/>
         <attribute name="device" optional="YES" attributeType="Binary"/>
         <attribute name="healthKitEligibleDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="isDisplayOnly" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
@@ -28,6 +29,8 @@
         <attribute name="syncIdentifier" optional="YES" attributeType="String"/>
         <attribute name="syncVersion" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
         <attribute name="trend" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="trendRateUnit" optional="YES" attributeType="String"/>
+        <attribute name="trendRateValue" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
         <attribute name="unitString" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="value" attributeType="Double" usesScalarValueType="YES"/>
@@ -145,7 +148,7 @@
     </entity>
     <elements>
         <element name="CachedCarbObject" positionX="-63" positionY="72" width="128" height="283"/>
-        <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="224"/>
+        <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="269"/>
         <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="239"/>
         <element name="DosingDecisionObject" positionX="-63" positionY="126" width="128" height="88"/>
         <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="254"/>

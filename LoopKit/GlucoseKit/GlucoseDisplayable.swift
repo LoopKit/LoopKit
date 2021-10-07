@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import HealthKit
 
 public protocol GlucoseDisplayable {
     /// Returns whether the current state is valid
@@ -18,6 +18,9 @@ public protocol GlucoseDisplayable {
 
     /// Enumerates the trend of the sensor values
     var trendType: GlucoseTrend? { get }
+
+    /// The trend rate of the sensor values, if available
+    var trendRate: HKQuantity? { get }
 
     /// Returns whether the data is from a locally-connected device
     var isLocal: Bool { get }

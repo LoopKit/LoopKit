@@ -38,6 +38,19 @@ class CachedGlucoseObject: NSManagedObject {
         }
     }
     
+    var condition: GlucoseCondition? {
+        get {
+            willAccessValue(forKey: "condition")
+            defer { didAccessValue(forKey: "condition") }
+            return primitiveCondition.flatMap { GlucoseCondition(rawValue: $0) }
+        }
+        set {
+            willChangeValue(forKey: "condition")
+            defer { didChangeValue(forKey: "condition") }
+            primitiveCondition = newValue.map { $0.rawValue }
+        }
+    }
+
     var trend: GlucoseTrend? {
         get {
             willAccessValue(forKey: "trend")
@@ -74,21 +87,20 @@ extension CachedGlucoseObject {
     var quantity: HKQuantity { HKQuantity(unit: HKUnit(from: unitString), doubleValue: value) }
 
     var quantitySample: HKQuantitySample {
-        var metadata: [String: Any] = [
-            HKMetadataKeySyncIdentifier: syncIdentifier as Any,
-            HKMetadataKeySyncVersion: syncVersion as Any,
-        ]
-        
+        var metadata: [String: Any] = [:]
+        metadata[HKMetadataKeySyncIdentifier] = syncIdentifier
+        metadata[HKMetadataKeySyncVersion] = syncVersion
         if isDisplayOnly {
             metadata[MetadataKeyGlucoseIsDisplayOnly] = true
         }
         if wasUserEntered {
             metadata[HKMetadataKeyWasUserEntered] = true
         }
-        if let trend = trend {
-            metadata[MetadataKeyGlucoseTrend] = trend.rawValue
-        }
-        
+        metadata[MetadataKeyGlucoseCondition] = condition?.rawValue
+        metadata[MetadataKeyGlucoseTrend] = trend?.symbol
+        metadata[MetadataKeyGlucoseTrendRateUnit] = trendRateUnit
+        metadata[MetadataKeyGlucoseTrendRateValue] = trendRateValue
+
         return HKQuantitySample(
             type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!,
             quantity: quantity,
@@ -97,6 +109,26 @@ extension CachedGlucoseObject {
             device: device,
             metadata: metadata
         )
+    }
+
+    var trendRate: HKQuantity? {
+        get {
+            guard let trendRateUnit = trendRateUnit, let trendRateValue = trendRateValue else {
+                return nil
+            }
+            return HKQuantity(unit: HKUnit(from: trendRateUnit), doubleValue: trendRateValue.doubleValue)
+        }
+
+        set {
+            if let newValue = newValue {
+                let unit = HKUnit(from: unitString).unitDivided(by: .minute())
+                trendRateUnit = unit.unitString
+                trendRateValue = NSNumber(value: newValue.doubleValue(for: unit))
+            } else {
+                trendRateUnit = nil
+                trendRateValue = nil
+            }
+        }
     }
 }
 
@@ -120,7 +152,9 @@ extension CachedGlucoseObject {
         self.isDisplayOnly = sample.isDisplayOnly
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
+        self.condition = sample.condition
         self.trend = sample.trend
+        self.trendRate = sample.trendRate
         self.healthKitEligibleDate = healthKitStorageDelay.map { sample.date.addingTimeInterval($0) }
     }
 
@@ -138,7 +172,9 @@ extension CachedGlucoseObject {
         self.isDisplayOnly = sample.isDisplayOnly
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
+        self.condition = sample.condition
         self.trend = sample.trend
+        self.trendRate = sample.trendRate
         // The assumption here is that if this is created from a HKQuantitySample, it is coming out of HealthKit, and
         // therefore does not need to be written to HealthKit.
         self.healthKitEligibleDate = nil
@@ -159,7 +195,9 @@ extension CachedGlucoseObject {
         self.isDisplayOnly = sample.isDisplayOnly
         self.wasUserEntered = sample.wasUserEntered
         self.device = sample.device
+        self.condition = sample.condition
         self.trend = sample.trend
+        self.trendRate = sample.trendRate
         self.healthKitEligibleDate = sample.healthKitEligibleDate
     }
 }
