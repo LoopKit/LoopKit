@@ -40,7 +40,7 @@ public struct WarningView: View {
                       title
                           .font(Font(UIFont.preferredFont(forTextStyle: .title3)))
                           .bold()
-                          .fixedSize()
+                          .fixedSize(horizontal: false, vertical: true)
                           .animation(nil)
                   }
                   .padding(.bottom, 2)

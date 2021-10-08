@@ -10,9 +10,10 @@ import SwiftUI
 import HealthKit
 import LoopKit
 
+public typealias SyncDeliveryLimits = (_ deliveryLimits: DeliveryLimits, _ completion: @escaping (Swift.Result<DeliveryLimits, Error>) -> Void) -> Void
 
 public struct DeliveryLimitsEditor: View {
-    fileprivate enum PresentedAlert {
+    fileprivate enum PresentedAlert: Error {
         case saveConfirmation(AlertContent)
         case saveError(Error)
     }
@@ -26,14 +27,13 @@ public struct DeliveryLimitsEditor: View {
     let syncDeliveryLimits: SyncDeliveryLimits?
     let save: (_ deliveryLimits: DeliveryLimits) -> Void
     let mode: SettingsPresentationMode
-    
+
     @State var value: DeliveryLimits
     @State private var userDidTap: Bool = false
     @State var settingBeingEdited: DeliveryLimits.Setting?
     @State private var isSyncing = false
     @State private var presentedAlert: PresentedAlert?
 
-    @State var showingConfirmationAlert = false
     @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
     @Environment(\.appName) var appName
@@ -46,7 +46,7 @@ public struct DeliveryLimitsEditor: View {
         scheduledBasalRange: ClosedRange<Double>?,
         supportedBolusVolumes: [Double],
         lowestCarbRatio: Double?,
-        syncDeliveryLimits: SyncDeliveryLimits?,
+        syncDeliveryLimits: @escaping SyncDeliveryLimits,
         onSave save: @escaping (_ deliveryLimits: DeliveryLimits) -> Void,
         mode: SettingsPresentationMode = .settings
     ) {
@@ -68,7 +68,7 @@ public struct DeliveryLimitsEditor: View {
         therapySettingsViewModel: TherapySettingsViewModel,
         didSave: (() -> Void)? = nil
     ) {
-        precondition(therapySettingsViewModel.pumpSupportedIncrements != nil)
+        precondition(therapySettingsViewModel.pumpSupportedIncrements() != nil)
         
         let maxBasal = therapySettingsViewModel.therapySettings.maximumBasalRatePerHour.map {
             HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)
@@ -80,11 +80,11 @@ public struct DeliveryLimitsEditor: View {
         
         self.init(
             value: DeliveryLimits(maximumBasalRate: maxBasal, maximumBolus: maxBolus),
-            supportedBasalRates: therapySettingsViewModel.pumpSupportedIncrements!()!.basalRates,
+            supportedBasalRates: therapySettingsViewModel.pumpSupportedIncrements()?.basalRates ?? [],
             scheduledBasalRange: therapySettingsViewModel.therapySettings.basalRateSchedule?.valueRange(),
-            supportedBolusVolumes: therapySettingsViewModel.pumpSupportedIncrements!()!.bolusVolumes,
+            supportedBolusVolumes: therapySettingsViewModel.pumpSupportedIncrements()?.bolusVolumes ?? [],
             lowestCarbRatio: therapySettingsViewModel.therapySettings.carbRatioSchedule?.lowestValue(),
-            syncDeliveryLimits: therapySettingsViewModel.syncDeliveryLimits?(),
+            syncDeliveryLimits: therapySettingsViewModel.syncDeliveryLimits,
             onSave: { [weak therapySettingsViewModel] newLimits in
                 therapySettingsViewModel?.saveDeliveryLimits(limits: newLimits)
                 didSave?()
@@ -316,32 +316,45 @@ public struct DeliveryLimitsEditor: View {
 
     private func startSaving() {
         guard mode == .settings else {
-            self.continueSaving(savingMechanism: .synchronous { deliveryLimits in
+            self.monitorSavingMechanism(savingMechanism: .synchronous { deliveryLimits in
                 save(deliveryLimits)
             })
             return
         }
         authenticate(TherapySetting.deliveryLimits.authenticationChallengeDescription) {
             switch $0 {
-            case .success: self.continueSaving(savingMechanism: .asynchronous { deliveryLimits, completion in
-                self.syncDeliveryLimits?(deliveryLimits) { result in
-                    switch result {
-                    case .success(let deliveryLimits):
-                        DispatchQueue.main.async {
-                            self.save(deliveryLimits)
-                        }
-                        completion(nil)
-                    case .failure(let error):
-                        completion(error)
-                    }
-                }
-            })
+            case .success:
+                self.monitorSavingMechanism(savingMechanism: .asynchronous { deliveryLimits, completion in
+                    synchronizeDeliveryLimits(deliveryLimits, completion)
+                })
             case .failure: break
             }
         }
     }
+
+    private func synchronizeDeliveryLimits(_ deliveryLimits: DeliveryLimits, _ completion: @escaping (Error?) -> Void) {
+        guard let syncDeliveryLimits = self.syncDeliveryLimits else {
+            actuallySave(deliveryLimits)
+            return
+        }
+        syncDeliveryLimits(deliveryLimits) { result in
+            switch result {
+            case .success(let deliveryLimits):
+                actuallySave(deliveryLimits)
+                completion(nil)
+            case .failure(let error):
+                completion(PresentedAlert.saveError(error))
+            }
+        }
+    }
+        
+    private func actuallySave(_ deliveryLimits: DeliveryLimits) {
+        DispatchQueue.main.async {
+            self.save(deliveryLimits)
+        }
+    }
     
-    private func continueSaving(savingMechanism: SavingMechanism<DeliveryLimits>) {
+    private func monitorSavingMechanism(savingMechanism: SavingMechanism<DeliveryLimits>) {
         switch savingMechanism {
         case .synchronous(let save):
             save(value)
@@ -352,21 +365,21 @@ public struct DeliveryLimitsEditor: View {
 
             save(value) { error in
                 DispatchQueue.main.async {
-                    if let error = error {
+                    if let error = error  {
                         withAnimation {
                             self.isSyncing = false
                         }
-                        self.presentedAlert = .saveError(error)
+                        self.presentedAlert = (error as? PresentedAlert) ?? .saveError(error)
                     }
                 }
             }
         }
     }
-
+    
     private func alert(for presentedAlert: PresentedAlert) -> SwiftUI.Alert {
         switch presentedAlert {
         case .saveConfirmation(let content):
-            return Alert(
+            return SwiftUI.Alert(
                 title: content.title,
                 message: content.message,
                 primaryButton: .cancel(
@@ -379,13 +392,13 @@ public struct DeliveryLimitsEditor: View {
                 )
             )
         case .saveError(let error):
-            return Alert(
+            return SwiftUI.Alert(
                 title: Text(LocalizedString("Unable to Save", comment: "Alert title when error occurs while saving a schedule")),
                 message: Text(error.localizedDescription)
             )
         }
     }
-
+    
     private var confirmationAlertContent: AlertContent {
         AlertContent(
             title: Text(LocalizedString("Save Delivery Limits?", comment: "Alert title for confirming delivery limits outside the recommended range")),

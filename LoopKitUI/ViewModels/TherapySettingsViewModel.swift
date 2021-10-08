@@ -11,37 +11,32 @@ import LoopKit
 import HealthKit
 import SwiftUI
 
-public typealias SyncSchedule = (_ items: [RepeatingScheduleValue<Double>], _ completion: @escaping (Swift.Result<BasalRateSchedule, Error>) -> Void) -> Void
-public typealias SyncDeliveryLimits = (_ deliveryLimits: DeliveryLimits, _ completion: @escaping (_ result: Swift.Result<DeliveryLimits, Error>) -> Void) -> Void
+public protocol TherapySettingsViewModelDelegate: AnyObject {
+    func syncBasalRateSchedule(items: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void)
+    func syncDeliveryLimits(deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void)
+    func saveCompletion(for therapySetting: TherapySetting, therapySettings: TherapySettings)
+    func pumpSupportedIncrements() -> PumpSupportedIncrements?
+}
 
 public class TherapySettingsViewModel: ObservableObject {
-    public typealias SaveCompletion = (TherapySetting, TherapySettings) -> Void
     
     @Published public var therapySettings: TherapySettings
-    private let didSave: SaveCompletion?
-
     private let initialTherapySettings: TherapySettings
-    let pumpSupportedIncrements: (() -> PumpSupportedIncrements?)?
-    let syncPumpSchedule: (() -> SyncSchedule?)?
-    let syncDeliveryLimits: (() -> SyncDeliveryLimits?)?
     let sensitivityOverridesEnabled: Bool
     public var prescription: Prescription?
 
+    private weak var delegate: TherapySettingsViewModelDelegate?
+    
     public init(therapySettings: TherapySettings,
                 pumpSupportedIncrements: (() -> PumpSupportedIncrements?)? = nil,
-                syncPumpSchedule: (() -> SyncSchedule?)? = nil,
-                syncDeliveryLimits: (() -> SyncDeliveryLimits?)? = nil,
                 sensitivityOverridesEnabled: Bool = false,
                 prescription: Prescription? = nil,
-                didSave: SaveCompletion? = nil) {
+                delegate: TherapySettingsViewModelDelegate? = nil) {
         self.therapySettings = therapySettings
         self.initialTherapySettings = therapySettings
-        self.pumpSupportedIncrements = pumpSupportedIncrements
-        self.syncPumpSchedule = syncPumpSchedule
-        self.syncDeliveryLimits = syncDeliveryLimits
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
         self.prescription = prescription
-        self.didSave = didSave
+        self.delegate = delegate
     }
 
     var deliveryLimits: DeliveryLimits {
@@ -83,10 +78,30 @@ public class TherapySettingsViewModel: ObservableObject {
     public func reset() {
         therapySettings = initialTherapySettings
     }
+}
 
+// MARK: Passing along to the delegate
+extension TherapySettingsViewModel {
+    
+    public func pumpSupportedIncrements() -> PumpSupportedIncrements? {
+        return delegate?.pumpSupportedIncrements()
+    }
+    
+    public func syncBasalRateSchedule(items: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
+        delegate?.syncBasalRateSchedule(items: items, completion: completion)
+    }
+    
+    public func syncDeliveryLimits(deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void) {
+        delegate?.syncDeliveryLimits(deliveryLimits: deliveryLimits, completion: completion)
+    }
+}
+
+// MARK: Saving
+extension TherapySettingsViewModel {
+    
     public func saveCorrectionRange(range: GlucoseRangeSchedule) {
         therapySettings.glucoseTargetRangeSchedule = range
-        didSave?(TherapySetting.glucoseTargetRange, therapySettings)
+        delegate?.saveCompletion(for: TherapySetting.glucoseTargetRange, therapySettings: therapySettings)
     }
         
     public func saveCorrectionRangeOverride(preset: CorrectionRangeOverrides.Preset,
@@ -94,40 +109,40 @@ public class TherapySettingsViewModel: ObservableObject {
         therapySettings.correctionRangeOverrides = correctionRangeOverrides
         switch preset {
         case .preMeal:
-            didSave?(TherapySetting.preMealCorrectionRangeOverride, therapySettings)
+            delegate?.saveCompletion(for: TherapySetting.preMealCorrectionRangeOverride, therapySettings: therapySettings)
         case .workout:
-            didSave?(TherapySetting.workoutCorrectionRangeOverride, therapySettings)
+            delegate?.saveCompletion(for: TherapySetting.workoutCorrectionRangeOverride, therapySettings: therapySettings)
         }
     }
 
     public func saveSuspendThreshold(quantity: HKQuantity, withDisplayGlucoseUnit displayGlucoseUnit: HKUnit) {
         therapySettings.suspendThreshold = GlucoseThreshold(unit: displayGlucoseUnit, value: quantity.doubleValue(for: displayGlucoseUnit))
-        didSave?(TherapySetting.suspendThreshold, therapySettings)
+        delegate?.saveCompletion(for: TherapySetting.suspendThreshold, therapySettings: therapySettings)
     }
     
     public func saveBasalRates(basalRates: BasalRateSchedule) {
         therapySettings.basalRateSchedule = basalRates
-        didSave?(TherapySetting.basalRate, therapySettings)
+        delegate?.saveCompletion(for: TherapySetting.basalRate, therapySettings: therapySettings)
     }
     
     public func saveDeliveryLimits(limits: DeliveryLimits) {
         therapySettings.maximumBasalRatePerHour = limits.maximumBasalRate?.doubleValue(for: .internationalUnitsPerHour)
         therapySettings.maximumBolus = limits.maximumBolus?.doubleValue(for: .internationalUnit())
-        didSave?(TherapySetting.deliveryLimits, therapySettings)
+        delegate?.saveCompletion(for: TherapySetting.deliveryLimits, therapySettings: therapySettings)
     }
     
     public func saveInsulinModel(insulinModelPreset: ExponentialInsulinModelPreset) {
         therapySettings.defaultRapidActingModel = insulinModelPreset
-        didSave?(TherapySetting.insulinModel, therapySettings)
+        delegate?.saveCompletion(for: TherapySetting.insulinModel, therapySettings: therapySettings)
     }
     
     public func saveCarbRatioSchedule(carbRatioSchedule: CarbRatioSchedule) {
         therapySettings.carbRatioSchedule = carbRatioSchedule
-        didSave?(TherapySetting.carbRatio, therapySettings)
+        delegate?.saveCompletion(for: TherapySetting.carbRatio, therapySettings: therapySettings)
     }
     
     public func saveInsulinSensitivitySchedule(insulinSensitivitySchedule: InsulinSensitivitySchedule) {
         therapySettings.insulinSensitivitySchedule = insulinSensitivitySchedule
-        didSave?(TherapySetting.insulinSensitivity, therapySettings)
+        delegate?.saveCompletion(for: TherapySetting.insulinSensitivity, therapySettings: therapySettings)
     }
 }
