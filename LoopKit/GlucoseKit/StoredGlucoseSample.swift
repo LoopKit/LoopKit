@@ -27,7 +27,9 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
 
     public let isDisplayOnly: Bool
     public let wasUserEntered: Bool
+    public let condition: GlucoseCondition?
     public let trend: GlucoseTrend?
+    public let trendRate: HKQuantity?
 
     public init(sample: HKQuantitySample) {
         self.init(
@@ -37,7 +39,9 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
             syncVersion: sample.syncVersion,
             startDate: sample.startDate,
             quantity: sample.quantity,
+            condition: sample.condition,
             trend: sample.trend,
+            trendRate: sample.trendRate,
             isDisplayOnly: sample.isDisplayOnly,
             wasUserEntered: sample.wasUserEntered,
             device: sample.device,
@@ -51,7 +55,9 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
         syncVersion: Int?,
         startDate: Date,
         quantity: HKQuantity,
+        condition: GlucoseCondition?,
         trend: GlucoseTrend?,
+        trendRate: HKQuantity?,
         isDisplayOnly: Bool,
         wasUserEntered: Bool,
         device: HKDevice?,
@@ -62,7 +68,9 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
         self.syncVersion = syncVersion
         self.startDate = startDate
         self.quantity = quantity
+        self.condition = condition
         self.trend = trend
+        self.trendRate = trendRate
         self.isDisplayOnly = isDisplayOnly
         self.wasUserEntered = wasUserEntered
         self.device = device
@@ -79,7 +87,9 @@ extension StoredGlucoseSample {
             syncVersion: managedObject.syncVersion,
             startDate: managedObject.startDate,
             quantity: managedObject.quantity,
+            condition: managedObject.condition,
             trend: managedObject.trend,
+            trendRate: managedObject.trendRate,
             isDisplayOnly: managedObject.isDisplayOnly,
             wasUserEntered: managedObject.wasUserEntered,
             device: managedObject.device,

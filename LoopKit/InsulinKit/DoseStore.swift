@@ -196,6 +196,7 @@ public final class DoseStore {
     /// - Parameters:
     ///   - healthStore: The HealthKit store for reading & writing insulin delivery
     ///   - observeHealthKitSamplesFromOtherApps: Whether or not this Store should read HealthKit data written by other apps
+    ///   - storeSamplesToHealthKit: Whether or not this Store should store samples in HealthKit
     ///   - cacheStore: The cache store for reading & writing short-term intermediate data
     ///   - observationEnabled: Whether the store should observe changes from HealthKit
     ///   - cacheLength: Maximum age of data to keep in the store.
@@ -211,6 +212,7 @@ public final class DoseStore {
     public init(
         healthStore: HKHealthStore,
         observeHealthKitSamplesFromOtherApps: Bool = true,
+        storeSamplesToHealthKit: Bool = true,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
@@ -227,6 +229,7 @@ public final class DoseStore {
         self.insulinDeliveryStore = InsulinDeliveryStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
+            storeSamplesToHealthKit: storeSamplesToHealthKit,
             cacheStore: cacheStore,
             observationEnabled: observationEnabled,
             provenanceIdentifier: provenanceIdentifier,

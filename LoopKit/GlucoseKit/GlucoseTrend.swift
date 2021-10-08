@@ -75,3 +75,26 @@ public enum GlucoseTrend: Int, CaseIterable {
         }
     }
 }
+
+extension GlucoseTrend {
+    public init?(symbol: String) {
+        switch symbol {
+        case "↑↑":
+            self = .upUpUp
+        case "↑":
+            self = .upUp
+        case "↗︎":
+            self = .up
+        case "→":
+            self = .flat
+        case "↘︎":
+            self = .down
+        case "↓":
+            self = .downDown
+        case "↓↓":
+            self = .downDownDown
+        default:
+            return nil
+        }
+    }
+}

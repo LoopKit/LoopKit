@@ -29,7 +29,10 @@ extension CachedGlucoseObject {
     @NSManaged public var wasUserEntered: Bool
     @NSManaged public var modificationCounter: Int64
     @NSManaged public var primitiveDevice: Data?
+    @NSManaged public var primitiveCondition: String?
     @NSManaged public var primitiveTrend: NSNumber?
+    @NSManaged public var trendRateUnit: String?
+    @NSManaged public var trendRateValue: NSNumber?
     /// This is the date when this object is eligible for writing to HealthKit.  For example, if it is required to delay writing
     /// data to HealthKit, this date will be in the future.  If the date is in the past, then it is written to HealthKit as soon as possible,
     /// and this value is set to `nil`.  A `nil` value either means that this object has already been written to HealthKit, or it is
@@ -51,7 +54,10 @@ extension CachedGlucoseObject: Encodable {
         try container.encode(wasUserEntered, forKey: .wasUserEntered)
         try container.encode(modificationCounter, forKey: .modificationCounter)
         try container.encodeIfPresent(device, forKey: .device)
+        try container.encodeIfPresent(condition, forKey: .condition)
         try container.encodeIfPresent(trend, forKey: .trend)
+        try container.encodeIfPresent(trendRateUnit, forKey: .trendRateUnit)
+        try container.encodeIfPresent(trendRateValue?.doubleValue, forKey: .trendRateValue)
         try container.encodeIfPresent(healthKitEligibleDate, forKey: .healthKitEligibleDate)
     }
 
@@ -67,7 +73,10 @@ extension CachedGlucoseObject: Encodable {
         case wasUserEntered
         case modificationCounter
         case device
+        case condition
         case trend
+        case trendRateUnit
+        case trendRateValue
         case healthKitEligibleDate
     }
 }

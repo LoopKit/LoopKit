@@ -16,6 +16,8 @@ public struct MockCGMState: GlucoseDisplayable {
 
     public var trendType: GlucoseTrend?
 
+    public var trendRate: HKQuantity?
+
     public var isLocal: Bool {
         return true
     }
@@ -467,6 +469,7 @@ public final class MockCGMManager: TestingCGMManager {
             let currentValue = samples.first
         {
             mockSensorState.trendType = currentValue.trend
+            mockSensorState.trendRate = currentValue.trendRate
             mockSensorState.glucoseRangeCategory = glucoseRangeCategory(for: currentValue.quantitySample)
             issueAlert(for: currentValue)
         }
@@ -555,7 +558,9 @@ fileprivate extension NewGlucoseSample {
     init(_ other: NewGlucoseSample, device: HKDevice?) {
         self.init(date: other.date,
                   quantity: other.quantity,
+                  condition: other.condition,
                   trend: other.trend,
+                  trendRate: other.trendRate,
                   isDisplayOnly: other.isDisplayOnly,
                   wasUserEntered: other.wasUserEntered,
                   syncIdentifier: other.syncIdentifier,
