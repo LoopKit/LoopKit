@@ -165,6 +165,8 @@ public final class CarbStore: HealthKitSampleStore {
     /// The interval to observe HealthKit data to populate the cache
     public let observationInterval: TimeInterval
 
+    private let storeEntriesToHealthKit: Bool
+
     private let cacheStore: PersistenceController
 
     /// The sync version used for new samples written to HealthKit
@@ -191,6 +193,7 @@ public final class CarbStore: HealthKitSampleStore {
     public init(
         healthStore: HKHealthStore,
         observeHealthKitSamplesFromOtherApps: Bool = true,
+        storeEntriesToHealthKit: Bool = true,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval,
         defaultAbsorptionTimes: DefaultAbsorptionTimes,
@@ -205,6 +208,7 @@ public final class CarbStore: HealthKitSampleStore {
         carbAbsorptionModel: CarbAbsorptionModel = .nonlinear,
         provenanceIdentifier: String
     ) {
+        self.storeEntriesToHealthKit = storeEntriesToHealthKit
         self.cacheStore = cacheStore
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
         self.lockedCarbRatioSchedule = Locked(carbRatioSchedule)
@@ -549,6 +553,10 @@ extension CarbStore {
 
     private func saveEntryToHealthKit(_ object: CachedCarbObject) {
         dispatchPrecondition(condition: .onQueue(queue))
+
+        guard storeEntriesToHealthKit else {
+            return
+        }
 
         let quantitySample = object.quantitySample
         var error: Error?
