@@ -264,7 +264,7 @@ extension TherapySettingsView {
 
     private var basalRatesSection: Card {
         card(for: .basalRate) {
-            if let items = viewModel.therapySettings.basalRateSchedule?.items, let supportedBasalRates = viewModel.pumpSupportedIncrements?()?.basalRates {
+            if let items = viewModel.therapySettings.basalRateSchedule?.items, let supportedBasalRates = viewModel.pumpSupportedIncrements()?.basalRates {
                 SectionDivider()
                 ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
@@ -292,7 +292,7 @@ extension TherapySettingsView {
         HStack {
             Text(DeliveryLimits.Setting.maximumBasalRate.title)
             Spacer()
-            if let basalRates = self.viewModel.pumpSupportedIncrements?()?.basalRates {
+            if let basalRates = self.viewModel.pumpSupportedIncrements()?.basalRates {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
                     unit: .internationalUnitsPerHour,
@@ -313,7 +313,7 @@ extension TherapySettingsView {
         HStack {
             Text(DeliveryLimits.Setting.maximumBolus.title)
             Spacer()
-            if let bolusVolumes = self.viewModel.pumpSupportedIncrements?()?.bolusVolumes {
+            if let bolusVolumes = self.viewModel.pumpSupportedIncrements()?.bolusVolumes {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) },
                     unit: .internationalUnit(),

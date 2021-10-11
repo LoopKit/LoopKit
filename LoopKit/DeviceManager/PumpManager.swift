@@ -151,7 +151,7 @@ public protocol PumpManager: DeviceManager {
     ///
     /// - Parameters:
     ///   - unitsPerHour: The temporary basal rate to set
-    ///   - duration: The duration of the temporary basal rate.
+    ///   - duration: The duration of the temporary basal rate.  If you pass in a duration of 0, that cancels any currently running Temp Basal
     ///   - completion: A closure called after the command is complete
     ///   - error: An optional error describing why the command failed
     func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (_ error: PumpManagerError?) -> Void)
