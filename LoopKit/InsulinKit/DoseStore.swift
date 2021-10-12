@@ -719,6 +719,13 @@ extension DoseStore {
                 completion(DoseStoreError(error: .coreDataError(error as NSError)))
                 return
             }
+            
+            // Remove old doses
+            self.purgePumpEventObjects(before: self.cacheStartDate, completion: { error in
+                if let error = error {
+                    self.log.error("Error purging PumpEvent objects: %{public}@", String(describing: error))
+                }
+            })
 
             // There is no guarantee of event ordering, so we must search the entire array to find key date boundaries.
 
