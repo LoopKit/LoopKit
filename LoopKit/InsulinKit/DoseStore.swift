@@ -723,7 +723,7 @@ extension DoseStore {
             // Remove old doses
             self.purgePumpEventObjects(before: self.cacheStartDate, completion: { error in
                 if let error = error {
-                    self.log.error("Error purging PumpEvent objects: %@", String(describing: error))
+                    self.log.error("Error purging PumpEvent objects: %{public}@", String(describing: error))
                 }
             })
 
