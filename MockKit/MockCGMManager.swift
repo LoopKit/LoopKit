@@ -329,8 +329,13 @@ public final class MockCGMManager: TestingCGMManager {
                                              foregroundContent: Alert.Content(title: "Signal Loss", body: "CGM simulator signal loss", acknowledgeActionButtonLabel: "Dismiss"),
                                              backgroundContent: Alert.Content(title: "Signal Loss", body: "CGM simulator signal loss", acknowledgeActionButtonLabel: "Dismiss"))
 
+    private let lockedMockSensorState = Locked(MockCGMState(isStateValid: true))
     public var mockSensorState: MockCGMState {
-        didSet {
+        get {
+            lockedMockSensorState.value
+        }
+        set {
+            lockedMockSensorState.mutate { $0 = newValue }
             self.notifyStatusObservers(cgmManagerStatus: self.cgmManagerStatus)
         }
     }
@@ -373,8 +378,13 @@ public final class MockCGMManager: TestingCGMManager {
 
     private let delegate = WeakSynchronizedDelegate<CGMManagerDelegate>()
 
+    private let lockedDataSource = Locked(MockCGMDataSource(model: .noData))
     public var dataSource: MockCGMDataSource {
-        didSet {
+        get {
+            lockedDataSource.value
+        }
+        set {
+            lockedDataSource.mutate { $0 = newValue }
             self.notifyStatusObservers(cgmManagerStatus: self.cgmManagerStatus)
         }
     }
@@ -384,8 +394,6 @@ public final class MockCGMManager: TestingCGMManager {
     private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 
     public init() {
-        self.mockSensorState = MockCGMState(isStateValid: true)
-        self.dataSource = MockCGMDataSource(model: .noData)
         setupGlucoseUpdateTimer()
     }
 
@@ -414,16 +422,16 @@ public final class MockCGMManager: TestingCGMManager {
     public init?(rawState: RawStateValue) {
         if let mockSensorStateRawValue = rawState["mockSensorState"] as? MockCGMState.RawValue,
             let mockSensorState = MockCGMState(rawValue: mockSensorStateRawValue) {
-            self.mockSensorState = mockSensorState
+            self.lockedMockSensorState.value = mockSensorState
         } else {
-            self.mockSensorState = MockCGMState(isStateValid: true)
+            self.lockedMockSensorState.value = MockCGMState(isStateValid: true)
         }
 
         if let dataSourceRawValue = rawState["dataSource"] as? MockCGMDataSource.RawValue,
             let dataSource = MockCGMDataSource(rawValue: dataSourceRawValue) {
-            self.dataSource = dataSource
+            self.lockedDataSource.value = dataSource
         } else {
-            self.dataSource = MockCGMDataSource(model: .sineCurve(parameters: (baseGlucose: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 110), amplitude: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 20), period: TimeInterval(hours: 6), referenceDate: Date())))
+            self.lockedDataSource.value = MockCGMDataSource(model: .sineCurve(parameters: (baseGlucose: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 110), amplitude: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 20), period: TimeInterval(hours: 6), referenceDate: Date())))
         }
 
         setupGlucoseUpdateTimer()
