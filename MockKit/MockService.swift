@@ -22,9 +22,7 @@ public final class MockService: Service {
     public var logging: Bool
     
     public var analytics: Bool
-    
-    public var versionUpdate = VersionUpdate.noneNeeded
-    
+        
     public let maxHistoryItems = 1000
     
     private var lockedHistory = Locked<[String]>([])
@@ -45,16 +43,14 @@ public final class MockService: Service {
         self.remoteData = rawState["remoteData"] as? Bool ?? false
         self.logging = rawState["logging"] as? Bool ?? false
         self.analytics = rawState["analytics"] as? Bool ?? false
-        self.versionUpdate = (rawState["versionUpdate"] as? String).flatMap { VersionUpdate(rawValue: $0) } ?? .noneNeeded
     }
     
     public var rawState: RawStateValue {
-        return [
-            "remoteData": remoteData,
-            "logging": logging,
-            "analytics": analytics,
-            "versionUpdate": versionUpdate.rawValue
-        ]
+        var rawValue: RawStateValue = [:]
+        rawValue["remoteData"] = remoteData
+        rawValue["logging"] = logging
+        rawValue["analytics"] = analytics
+        return rawValue
     }
     
     public let isOnboarded = true   // No distinction between created and onboarded
@@ -154,30 +150,4 @@ extension MockService: RemoteDataService {
         completion(.success(false))
     }
     
-}
-
-extension MockService: VersionCheckService {
-    public func checkVersion(bundleIdentifier: String, currentVersion: String, completion: @escaping (Result<VersionUpdate?, Error>) -> Void) {
-        record("[VersionCheckService] Version checked \(currentVersion)")
-        completion(.success(versionUpdate))
-    }
-}
-
-extension VersionUpdate: RawRepresentable {
-    public typealias RawValue = String
-    public init?(rawValue: RawValue) {
-        switch rawValue {
-        case "noneNeeded": self = .noneNeeded
-        case "supportedNeeded": self = .supportedNeeded
-        case "criticalNeeded": self = .criticalNeeded
-        default: return nil
-        }
-    }
-    public var rawValue: RawValue {
-        switch self {
-        case .noneNeeded: return "noneNeeded"
-        case .supportedNeeded: return "supportedNeeded"
-        case .criticalNeeded: return "criticalNeeded"
-        }
-    }
 }

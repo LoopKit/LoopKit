@@ -13,8 +13,9 @@ class VersionCheckServiceTests: XCTestCase {
 
     func testVersionUpdateOrder() throws {
         // Comparable order is important for VersionUpdate.  Do not reorder!
-        XCTAssertGreaterThan(VersionUpdate.criticalNeeded, VersionUpdate.supportedNeeded)
-        XCTAssertGreaterThan(VersionUpdate.supportedNeeded, VersionUpdate.noneNeeded)
+        XCTAssertGreaterThan(VersionUpdate.required, VersionUpdate.recommended)
+        XCTAssertGreaterThan(VersionUpdate.recommended, VersionUpdate.available)
+        XCTAssertGreaterThan(VersionUpdate.available, VersionUpdate.none)
     }
 
 }
