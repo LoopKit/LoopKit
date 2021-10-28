@@ -111,6 +111,10 @@ public final class MockPumpManager: TestingPumpManager {
         return state.supportedBolusVolumes
     }
 
+    public var supportedMaximumBolusVolumes: [Double] {
+        state.supportedBolusVolumes
+    }
+
     public var supportedBasalRates: [Double] {
         return state.supportedBasalRates
     }

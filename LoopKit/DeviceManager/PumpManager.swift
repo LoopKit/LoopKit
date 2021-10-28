@@ -78,6 +78,9 @@ public protocol PumpManager: DeviceManager {
     /// All user-selectable bolus volumes, in Units. Must be non-empty.
     var supportedBolusVolumes: [Double] { get }
 
+    /// All user-selectable bolus volumes for setting the maximum allowed bolus, in Units. Must be non-empty.
+    var supportedMaximumBolusVolumes: [Double] { get }
+
     /// The maximum number of scheduled basal rates in a single day supported by the pump
     var maximumBasalScheduleEntryCount: Int { get }
 
