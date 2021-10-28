@@ -69,6 +69,7 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
                     // Ensure overlaid unit label is not clipped
                     .padding(.trailing, unitLabelWidth + unitLabelSpacing)
                     .clipped()
+                    .compositingGroup()
                 } else {
                     FractionalQuantityPicker(
                         value: item.value.animation(),
