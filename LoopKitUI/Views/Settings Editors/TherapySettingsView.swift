@@ -313,11 +313,11 @@ extension TherapySettingsView {
         HStack {
             Text(DeliveryLimits.Setting.maximumBolus.title)
             Spacer()
-            if let bolusVolumes = self.viewModel.pumpSupportedIncrements()?.bolusVolumes {
+            if let maximumBolusVolumes = self.viewModel.pumpSupportedIncrements()?.maximumBolusVolumes {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) },
                     unit: .internationalUnit(),
-                    guardrail: .maximumBolus(supportedBolusVolumes: bolusVolumes),
+                    guardrail: .maximumBolus(supportedBolusVolumes: maximumBolusVolumes),
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
@@ -611,13 +611,16 @@ public struct TherapySettingsView_Previews: PreviewProvider {
         basalRateSchedule: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: 0, value: 0.2), RepeatingScheduleValue(startTime: 1800, value: 0.75)]))
 
     static let preview_supportedBasalRates = [0.2, 0.5, 0.75, 1.0]
-    static let preview_supportedBolusVolumes = [5.0, 10.0, 15.0]
+    static let preview_supportedBolusVolumes = [1.0, 2.0, 3.0]
+    static let preview_supportedMaximumBolusVolumes = [5.0, 10.0, 15.0]
 
     static func preview_viewModel() -> TherapySettingsViewModel {
         TherapySettingsViewModel(therapySettings: preview_therapySettings,
-                                 pumpSupportedIncrements: { PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
-                                                                                  bolusVolumes: preview_supportedBolusVolumes,
-                                                                                  maximumBasalScheduleEntryCount: 24) })
+                                 pumpSupportedIncrements: {
+                                    PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
+                                                            bolusVolumes: preview_supportedBolusVolumes,
+                                                            maximumBolusVolumes: preview_supportedMaximumBolusVolumes,
+                                                            maximumBasalScheduleEntryCount: 24) })
     }
 
     public static var previews: some View {

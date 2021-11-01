@@ -40,7 +40,7 @@ public enum MockPumpManagerError: LocalizedError {
 }
 
 public final class MockPumpManager: TestingPumpManager {
-    
+
     public static let managerIdentifier = "MockPumpManager"
 
     public var managerIdentifier: String {
@@ -63,6 +63,10 @@ public final class MockPumpManager: TestingPumpManager {
 
     public static var onboardingSupportedBolusVolumes: [Double] {
         MockPumpManagerState.DeliverableIncrements.medtronicX22.supportedBolusVolumes!
+    }
+
+    public static var onboardingSupportedMaximumBolusVolumes: [Double] {
+        self.onboardingSupportedBolusVolumes
     }
 
     private static let device = HKDevice(
