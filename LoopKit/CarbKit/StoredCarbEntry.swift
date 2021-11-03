@@ -15,7 +15,7 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
 
     // MARK: - HealthKit Sync Support
 
-    public let provenanceIdentifier: String?
+    public let provenanceIdentifier: String
     public let syncIdentifier: String?
     public let syncVersion: Int?
 
@@ -37,7 +37,7 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
 
     public init(
         uuid: UUID?,
-        provenanceIdentifier: String?,
+        provenanceIdentifier: String,
         syncIdentifier: String?,
         syncVersion: Int?,
         startDate: Date,
@@ -84,7 +84,7 @@ extension StoredCarbEntry: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.init(uuid: try container.decodeIfPresent(UUID.self, forKey: .uuid),
-                  provenanceIdentifier: try container.decodeIfPresent(String.self, forKey: .provenanceIdentifier),
+                  provenanceIdentifier: try container.decode(String.self, forKey: .provenanceIdentifier),
                   syncIdentifier: try container.decodeIfPresent(String.self, forKey: .syncIdentifier),
                   syncVersion: try container.decodeIfPresent(Int.self, forKey: .syncVersion),
                   startDate: try container.decode(Date.self, forKey: .startDate),
@@ -100,7 +100,7 @@ extension StoredCarbEntry: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(uuid, forKey: .uuid)
-        try container.encodeIfPresent(provenanceIdentifier, forKey: .provenanceIdentifier)
+        try container.encode(provenanceIdentifier, forKey: .provenanceIdentifier)
         try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
         try container.encodeIfPresent(syncVersion, forKey: .syncVersion)
         try container.encode(startDate, forKey: .startDate)
@@ -144,13 +144,8 @@ extension StoredCarbEntry {
             return nil
         }
 
-        var provenanceIdentifier: String?
         var syncIdentifier: String?
         var syncVersion: Int?
-
-        if createdByCurrentApp {
-            provenanceIdentifier = HKSource.default().bundleIdentifier
-        }
 
         if let externalID = rawValue["externalId"] as? String {
             syncIdentifier = externalID
@@ -159,7 +154,7 @@ extension StoredCarbEntry {
 
         self.init(
             uuid: uuid,
-            provenanceIdentifier: provenanceIdentifier,
+            provenanceIdentifier: createdByCurrentApp ? HKSource.default().bundleIdentifier : "",
             syncIdentifier: syncIdentifier,
             syncVersion: syncVersion,
             startDate: startDate,

@@ -8,7 +8,7 @@
         <attribute name="foodType" optional="YES" attributeType="String"/>
         <attribute name="grams" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="operation" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
-        <attribute name="provenanceIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="provenanceIdentifier" attributeType="String" defaultValueString=""/>
         <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="supercededDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="syncIdentifier" optional="YES" attributeType="String"/>
@@ -147,7 +147,7 @@
         <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="CachedCarbObject" positionX="-63" positionY="72" width="128" height="283"/>
+        <element name="CachedCarbObject" positionX="-63" positionY="72" width="128" height="269"/>
         <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="269"/>
         <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="239"/>
         <element name="DosingDecisionObject" positionX="-63" positionY="126" width="128" height="88"/>

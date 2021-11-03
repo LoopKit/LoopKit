@@ -894,14 +894,14 @@ extension CarbStore {
     private func areAllRelatedObjectsPurgable(to object: CachedCarbObject, before date: Date) throws -> Bool {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        // If no provenance identifier nor sync identifier, then there are no related objects
-        guard let provenanceIdentifier = object.provenanceIdentifier, let syncIdentifier = object.syncIdentifier else {
+        // If no sync identifier, then there are no related objects
+        guard let syncIdentifier = object.syncIdentifier else {
             return true
         }
 
         // Count any that are NOT purgable
         let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", provenanceIdentifier),
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", object.provenanceIdentifier),
                                                                                 NSPredicate(format: "syncIdentifier == %@", syncIdentifier),
                                                                                 NSPredicate(format: "startDate >= %@", date as NSDate)])
         request.fetchLimit = 1
@@ -1407,7 +1407,7 @@ extension CarbStore {
                     return [
                         "\t",
                         entry.uuid?.uuidString ?? "",
-                        entry.provenanceIdentifier ?? "",
+                        entry.provenanceIdentifier,
                         entry.syncIdentifier ?? "",
                         entry.syncVersion != nil ? String(describing: entry.syncVersion) : "",
                         String(describing: entry.startDate),
