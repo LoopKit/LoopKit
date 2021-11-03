@@ -57,6 +57,10 @@ extension MockSupport {
     var alertCadence: TimeInterval {
         return TimeInterval.minutes(1)
     }
+    
+    private var appName: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
+    }
 
     private func maybeIssueAlert(_ versionUpdate: VersionUpdate) {
         guard versionUpdate >= .recommended else {
@@ -69,16 +73,20 @@ extension MockSupport {
         if firstAlert {
             alertContent = Alert.Content(title: versionUpdate.localizedDescription,
                                          body: NSLocalizedString("""
-                                                Your app is out of date. It will continue to work, but we recommend updating to the latest version.
-                                                """, comment: "Alert content body for first software update alert"),
+                                                    Your \(appName) app is out of date. It will continue to work, but we recommend updating to the latest version.
+                                                    
+                                                    Go to \(appName) Settings > Software Update to complete.
+                                                    """, comment: "Alert content body for first software update alert"),
                                          acknowledgeActionButtonLabel: NSLocalizedString("OK", comment: "Default acknowledgement"),
                                          isCritical: versionUpdate == .required)
         } else if let lastVersionCheckAlertDate = lastVersionCheckAlertDate,
                   abs(lastVersionCheckAlertDate.timeIntervalSinceNow) > alertCadence {
             alertContent = Alert.Content(title: NSLocalizedString("Update Reminder", comment: "Recurring software update alert title"),
                                          body: NSLocalizedString("""
-                                                Your app is still out of date. It will continue to work, but we recommend updating to the latest version.
-                                                """, comment: "Alert content body for recurring software update alert"),
+                                                    A software update is recommended to continue using the \(appName) app.
+                                                    
+                                                    Go to \(appName) Settings > Software Update to install the latest version.
+                                                    """, comment: "Alert content body for recurring software update alert"),
                                          acknowledgeActionButtonLabel: NSLocalizedString("OK", comment: "Default acknowledgement"),
                                          isCritical: versionUpdate == .required)
         } else {
