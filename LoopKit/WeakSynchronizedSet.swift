@@ -62,9 +62,7 @@ public class WeakSynchronizedSet<Element> {
     /// - Returns: A reference to the instance for easy chaining
     @discardableResult public func cleanupDeallocatedElements() -> Self {
         elements.mutate { (storage) in
-            for (id, element) in storage where element.element == nil {
-                storage.removeValue(forKey: id)
-            }
+            storage = storage.compactMapValues { $0.element == nil ? nil : $0 }
         }
         return self
     }
