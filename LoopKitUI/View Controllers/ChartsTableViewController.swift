@@ -37,15 +37,14 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
         gestureRecognizer.addTarget(self, action: #selector(handlePan(_:)))
         charts.gestureRecognizer = gestureRecognizer
         
-        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { [weak self] _ in
-            guard let self = self else { return }
-            
-            if self.visible {
-                DispatchQueue.main.async {
-                    self.reloadData()
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                if self?.visible == true {
+                    self?.reloadData()
                 }
             }
-        }
+            .store(in: &cancellables)
     }
 
     open override func didReceiveMemoryWarning() {
