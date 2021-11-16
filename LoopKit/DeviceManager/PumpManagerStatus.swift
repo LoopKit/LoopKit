@@ -98,7 +98,7 @@ extension PumpManagerStatus: Codable {
         self.pumpBatteryChargeRemaining = try container.decodeIfPresent(Double.self, forKey: .pumpBatteryChargeRemaining)
         self.basalDeliveryState = try container.decodeIfPresent(BasalDeliveryState.self, forKey: .basalDeliveryState)
         self.bolusState = try container.decode(BolusState.self, forKey: .bolusState)
-        self.insulinType = try container.decode(InsulinType.self, forKey: .insulinType)
+        self.insulinType = try container.decodeIfPresent(InsulinType.self, forKey: .insulinType)
         self.deliveryIsUncertain = try container.decode(Bool.self, forKey: .deliveryIsUncertain)
     }
 
@@ -109,7 +109,7 @@ extension PumpManagerStatus: Codable {
         try container.encodeIfPresent(pumpBatteryChargeRemaining, forKey: .pumpBatteryChargeRemaining)
         try container.encodeIfPresent(basalDeliveryState, forKey: .basalDeliveryState)
         try container.encode(bolusState, forKey: .bolusState)
-        try container.encode(insulinType, forKey: .insulinType)
+        try container.encodeIfPresent(insulinType, forKey: .insulinType)
         try container.encode(deliveryIsUncertain, forKey: .deliveryIsUncertain)
     }
 

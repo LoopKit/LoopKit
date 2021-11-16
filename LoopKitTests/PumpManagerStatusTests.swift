@@ -47,8 +47,39 @@ class PumpManagerStatusCodableTests: XCTestCase {
     "softwareVersion" : "2.3.4",
     "udiDeviceIdentifier" : "U0D1I2"
   },
-  "insulinType\" : 0,
+  "insulinType" : 0,
   "pumpBatteryChargeRemaining" : 0.75,
+  "timeZone" : {
+    "identifier" : "America/Los_Angeles"
+  }
+}
+"""
+        )
+    }
+
+    func testCodableRequiredOnly() throws {
+        let device = HKDevice(name: nil,
+                              manufacturer: nil,
+                              model: nil,
+                              hardwareVersion: nil,
+                              firmwareVersion: nil,
+                              softwareVersion: nil,
+                              localIdentifier: nil,
+                              udiDeviceIdentifier: "U0D1I2")
+        try assertPumpManagerStatusCodable(PumpManagerStatus(timeZone: TimeZone(identifier: "America/Los_Angeles")!,
+                                                             device: device,
+                                                             pumpBatteryChargeRemaining: nil,
+                                                             basalDeliveryState: nil,
+                                                             bolusState: .noBolus,
+                                                             insulinType: nil,
+                                                             deliveryIsUncertain: true),
+                                           encodesJSON: """
+{
+  "bolusState" : "noBolus",
+  "deliveryIsUncertain" : true,
+  "device" : {
+    "udiDeviceIdentifier" : "U0D1I2"
+  },
   "timeZone" : {
     "identifier" : "America/Los_Angeles"
   }
