@@ -16,11 +16,13 @@ public struct StoredInsulinModel: Codable, Equatable {
     }
 
     public let modelType: ModelType
+    public let delay: TimeInterval
     public let actionDuration: TimeInterval
-    public let peakActivity: TimeInterval?
+    public let peakActivity: TimeInterval
 
-    public init(modelType: ModelType, actionDuration: TimeInterval, peakActivity: TimeInterval? = nil) {
+    public init(modelType: ModelType, delay: TimeInterval, actionDuration: TimeInterval, peakActivity: TimeInterval) {
         self.modelType = modelType
+        self.delay = delay
         self.actionDuration = actionDuration
         self.peakActivity = peakActivity
     }
@@ -29,8 +31,6 @@ public struct StoredInsulinModel: Codable, Equatable {
 public extension StoredInsulinModel {
     init(_ preset: ExponentialInsulinModelPreset) {
         var modelType: StoredInsulinModel.ModelType
-        var actionDuration: TimeInterval
-        var peakActivity: TimeInterval?
         
         switch preset {
         case .rapidActingAdult:
@@ -40,10 +40,8 @@ public extension StoredInsulinModel {
         case .fiasp:
             modelType = .fiasp
         }
-        actionDuration = preset.actionDuration
-        peakActivity = preset.peakActivity
         
-        self.init(modelType: modelType, actionDuration: actionDuration, peakActivity: peakActivity)
+        self.init(modelType: modelType, delay: preset.delay, actionDuration: preset.actionDuration, peakActivity: preset.peakActivity)
     }
 }
 

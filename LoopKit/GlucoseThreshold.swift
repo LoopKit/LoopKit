@@ -39,7 +39,7 @@ public struct GlucoseThreshold: Equatable, RawRepresentable {
         ]
     }
 
-    public func convertTo(unit: HKUnit) -> GlucoseThreshold? {
+    public func convertTo(unit: HKUnit) -> GlucoseThreshold {
         guard unit != self.unit else {
             return self
         }

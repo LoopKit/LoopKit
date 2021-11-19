@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import HealthKit
 @testable import LoopKit
 
 class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStoreDelegate {
@@ -153,13 +154,31 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
         }
       }
     },
+    "cgmDevice" : {
+      "firmwareVersion" : "CGM Firmware Version",
+      "hardwareVersion" : "CGM Hardware Version",
+      "localIdentifier" : "CGM Local Identifier",
+      "manufacturer" : "CGM Manufacturer",
+      "model" : "CGM Model",
+      "name" : "CGM Name",
+      "softwareVersion" : "CGM Software Version",
+      "udiDeviceIdentifier" : "CGM UDI Device Identifier"
+    },
+    "controllerDevice" : {
+      "model" : "Controller Model",
+      "modelIdentifier" : "Controller Model Identifier",
+      "name" : "Controller Name",
+      "systemName" : "Controller System Name",
+      "systemVersion" : "Controller System Version"
+    },
     "date" : "2020-05-14T22:48:15Z",
     "defaultRapidActingModel" : {
       "actionDuration" : 21600,
+      "delay" : 600,
       "modelType" : "rapidAdult",
       "peakActivity" : 10800
     },
-    "deviceToken" : "DeviceTokenString",
+    "deviceToken" : "Device Token String",
     "dosingEnabled" : true,
     "glucoseTargetRangeSchedule" : {
       "override" : {
@@ -228,8 +247,23 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
         }
       }
     },
+    "insulinType" : 1,
     "maximumBasalRatePerHour" : 3.5,
     "maximumBolus" : 10,
+    "notificationSettings" : {
+      "alertSetting" : "disabled",
+      "alertStyle" : "banner",
+      "announcementSetting" : "enabled",
+      "authorizationStatus" : "authorized",
+      "badgeSetting" : "enabled",
+      "carPlaySetting" : "notSupported",
+      "criticalAlertSetting" : "enabled",
+      "lockScreenSetting" : "disabled",
+      "notificationCenterSetting" : "notSupported",
+      "providesAppNotificationSettings" : true,
+      "showPreviewsSetting" : "whenAuthenticated",
+      "soundSetting" : "enabled"
+    },
     "overridePresets" : [
       {
         "duration" : {
@@ -269,6 +303,16 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
     "preMealTargetRange" : {
       "maxValue" : 90,
       "minValue" : 80
+    },
+    "pumpDevice" : {
+      "firmwareVersion" : "Pump Firmware Version",
+      "hardwareVersion" : "Pump Hardware Version",
+      "localIdentifier" : "Pump Local Identifier",
+      "manufacturer" : "Pump Manufacturer",
+      "model" : "Pump Model",
+      "name" : "Pump Name",
+      "softwareVersion" : "Pump Software Version",
+      "udiDeviceIdentifier" : "Pump UDI Device Identifier"
     },
     "scheduleOverride" : {
       "actualEnd" : {
@@ -559,7 +603,7 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
     
-    private func addData(withSyncIdentifiers syncIdentifiers: [String]) {
+    private func addData(withSyncIdentifiers syncIdentifiers: [UUID]) {
         let semaphore = DispatchSemaphore(value: 0)
         for syncIdentifier in syncIdentifiers {
             self.settingsStore.storeSettings(StoredSettings(syncIdentifier: syncIdentifier)) { semaphore.signal() }
@@ -567,10 +611,7 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
         for _ in syncIdentifiers { semaphore.wait() }
     }
     
-    private func generateSyncIdentifier() -> String {
-        return UUID().uuidString
-    }
-    
+    private func generateSyncIdentifier() -> UUID { UUID() }
 }
 
 class SettingsStoreCriticalEventLogTests: PersistenceControllerTestCase {
@@ -581,11 +622,11 @@ class SettingsStoreCriticalEventLogTests: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
 
-        let settings = [StoredSettings(date: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, syncIdentifier: "18CF3948-0B3D-4B12-8BFE-14986B0E6784"),
-                        StoredSettings(date: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, syncIdentifier: "C86DEB61-68E9-464E-9DD5-96A9CB445FD3"),
-                        StoredSettings(date: dateFormatter.date(from: "2100-01-02T03:04:00Z")!, syncIdentifier: "2B03D96C-6F5D-4140-99CD-80C3E64D6010"),
-                        StoredSettings(date: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, syncIdentifier: "FF1C4F01-3558-4FB2-957E-FA1522C4735E"),
-                        StoredSettings(date: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, syncIdentifier: "71B699D7-0E8F-4B13-B7A1-E7751EB78E74")]
+        let settings = [StoredSettings(date: dateFormatter.date(from: "2100-01-02T03:08:00Z")!, syncIdentifier: UUID(uuidString: "18CF3948-0B3D-4B12-8BFE-14986B0E6784")!),
+                        StoredSettings(date: dateFormatter.date(from: "2100-01-02T03:10:00Z")!, syncIdentifier: UUID(uuidString: "C86DEB61-68E9-464E-9DD5-96A9CB445FD3")!),
+                        StoredSettings(date: dateFormatter.date(from: "2100-01-02T03:04:00Z")!, syncIdentifier: UUID(uuidString: "2B03D96C-6F5D-4140-99CD-80C3E64D6010")!),
+                        StoredSettings(date: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, syncIdentifier: UUID(uuidString: "FF1C4F01-3558-4FB2-957E-FA1522C4735E")!),
+                        StoredSettings(date: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, syncIdentifier: UUID(uuidString: "71B699D7-0E8F-4B13-B7A1-E7751EB78E74")!)]
 
         settingsStore = SettingsStore(store: cacheStore, expireAfter: .hours(1))
 
@@ -713,13 +754,31 @@ class StoredSettingsCodableTests: XCTestCase {
       }
     }
   },
+  "cgmDevice" : {
+    "firmwareVersion" : "CGM Firmware Version",
+    "hardwareVersion" : "CGM Hardware Version",
+    "localIdentifier" : "CGM Local Identifier",
+    "manufacturer" : "CGM Manufacturer",
+    "model" : "CGM Model",
+    "name" : "CGM Name",
+    "softwareVersion" : "CGM Software Version",
+    "udiDeviceIdentifier" : "CGM UDI Device Identifier"
+  },
+  "controllerDevice" : {
+    "model" : "Controller Model",
+    "modelIdentifier" : "Controller Model Identifier",
+    "name" : "Controller Name",
+    "systemName" : "Controller System Name",
+    "systemVersion" : "Controller System Version"
+  },
   "date" : "2020-05-14T22:48:15Z",
   "defaultRapidActingModel" : {
     "actionDuration" : 21600,
+    "delay" : 600,
     "modelType" : "rapidAdult",
     "peakActivity" : 10800
   },
-  "deviceToken" : "DeviceTokenString",
+  "deviceToken" : "Device Token String",
   "dosingEnabled" : true,
   "glucoseTargetRangeSchedule" : {
     "override" : {
@@ -788,8 +847,23 @@ class StoredSettingsCodableTests: XCTestCase {
       }
     }
   },
+  "insulinType" : 1,
   "maximumBasalRatePerHour" : 3.5,
   "maximumBolus" : 10,
+  "notificationSettings" : {
+    "alertSetting" : "disabled",
+    "alertStyle" : "banner",
+    "announcementSetting" : "enabled",
+    "authorizationStatus" : "authorized",
+    "badgeSetting" : "enabled",
+    "carPlaySetting" : "notSupported",
+    "criticalAlertSetting" : "enabled",
+    "lockScreenSetting" : "disabled",
+    "notificationCenterSetting" : "notSupported",
+    "providesAppNotificationSettings" : true,
+    "showPreviewsSetting" : "whenAuthenticated",
+    "soundSetting" : "enabled"
+  },
   "overridePresets" : [
     {
       "duration" : {
@@ -829,6 +903,16 @@ class StoredSettingsCodableTests: XCTestCase {
   "preMealTargetRange" : {
     "maxValue" : 90,
     "minValue" : 80
+  },
+  "pumpDevice" : {
+    "firmwareVersion" : "Pump Firmware Version",
+    "hardwareVersion" : "Pump Hardware Version",
+    "localIdentifier" : "Pump Local Identifier",
+    "manufacturer" : "Pump Manufacturer",
+    "model" : "Pump Model",
+    "name" : "Pump Name",
+    "softwareVersion" : "Pump Software Version",
+    "udiDeviceIdentifier" : "Pump UDI Device Identifier"
   },
   "scheduleOverride" : {
     "actualEnd" : {
@@ -905,11 +989,14 @@ extension StoredSettings: Equatable {
             lhs.maximumBasalRatePerHour == rhs.maximumBasalRatePerHour &&
             lhs.maximumBolus == rhs.maximumBolus &&
             lhs.suspendThreshold == rhs.suspendThreshold &&
-            lhs.deviceToken == rhs.deviceToken &&
             lhs.defaultRapidActingModel == rhs.defaultRapidActingModel &&
             lhs.basalRateSchedule == rhs.basalRateSchedule &&
             lhs.insulinSensitivitySchedule == rhs.insulinSensitivitySchedule &&
             lhs.carbRatioSchedule == rhs.carbRatioSchedule &&
+            lhs.notificationSettings == rhs.notificationSettings &&
+            lhs.controllerDevice == rhs.controllerDevice &&
+            lhs.pumpDevice == rhs.pumpDevice &&
+            lhs.cgmDevice == rhs.cgmDevice &&
             lhs.bloodGlucoseUnit == rhs.bloodGlucoseUnit &&
             lhs.syncIdentifier == rhs.syncIdentifier
     }
@@ -917,62 +1004,118 @@ extension StoredSettings: Equatable {
 
 fileprivate extension StoredSettings {
     static var test: StoredSettings {
+        let dosingEnabled = true
+        let glucoseTargetRangeSchedule = GlucoseRangeSchedule(rangeSchedule: DailyQuantitySchedule(unit: .milligramsPerDeciliter,
+                                                                                                   dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: DoubleRange(minValue: 100.0, maxValue: 110.0)),
+                                                                                                                RepeatingScheduleValue(startTime: .hours(7), value: DoubleRange(minValue: 90.0, maxValue: 100.0)),
+                                                                                                                RepeatingScheduleValue(startTime: .hours(21), value: DoubleRange(minValue: 110.0, maxValue: 120.0))],
+                                                                                                   timeZone: TimeZone(identifier: "America/Los_Angeles")!)!,
+                                                              override: GlucoseRangeSchedule.Override(value: DoubleRange(minValue: 105.0, maxValue: 115.0),
+                                                                                                      start: dateFormatter.date(from: "2020-05-14T12:48:15Z")!,
+                                                                                                      end: dateFormatter.date(from: "2020-05-14T14:48:15Z")!))
+        let preMealTargetRange = DoubleRange(minValue: 80.0, maxValue: 90.0).quantityRange(for: .milligramsPerDeciliter)
+        let workoutTargetRange = DoubleRange(minValue: 150.0, maxValue: 160.0).quantityRange(for: .milligramsPerDeciliter)
+        let overridePresets = [TemporaryScheduleOverridePreset(id: UUID(uuidString: "2A67A303-5203-4CB8-8263-79498265368E")!,
+                                                               symbol: "🍎",
+                                                               name: "Apple",
+                                                               settings: TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter,
+                                                                                                           targetRange: DoubleRange(minValue: 130.0, maxValue: 140.0),
+                                                                                                           insulinNeedsScaleFactor: 2.0),
+                                                               duration: .finite(.minutes(60)))]
+        let scheduleOverride = TemporaryScheduleOverride(context: .preMeal,
+                                                         settings: TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter,
+                                                                                                     targetRange: DoubleRange(minValue: 110.0, maxValue: 120.0),
+                                                                                                     insulinNeedsScaleFactor: 1.5),
+                                                         startDate: dateFormatter.date(from: "2020-05-14T14:48:19Z")!,
+                                                         duration: .finite(.minutes(60)),
+                                                         enactTrigger: .remote("127.0.0.1"),
+                                                         syncIdentifier: UUID(uuidString: "2A67A303-1234-4CB8-8263-79498265368E")!)
+        let preMealOverride = TemporaryScheduleOverride(context: .preMeal,
+                                                        settings: TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter,
+                                                                                                    targetRange: DoubleRange(minValue: 80.0, maxValue: 90.0),
+                                                                                                    insulinNeedsScaleFactor: 0.5),
+                                                        startDate: dateFormatter.date(from: "2020-05-14T14:38:39Z")!,
+                                                        duration: .indefinite,
+                                                        enactTrigger: .local,
+                                                        syncIdentifier: UUID(uuidString: "2A67A303-5203-1234-8263-79498265368E")!)
+        let maximumBasalRatePerHour = 3.5
+        let maximumBolus = 10.0
+        let suspendThreshold = GlucoseThreshold(unit: .milligramsPerDeciliter, value: 75.0)
+        let deviceToken = "Device Token String"
+        let insulinType = InsulinType.humalog
+        let defaultRapidActingModel = StoredInsulinModel(modelType: .rapidAdult, delay: .minutes(10), actionDuration: .hours(6), peakActivity: .hours(3))
+        let basalRateSchedule = BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1.0),
+                                                               RepeatingScheduleValue(startTime: .hours(6), value: 1.5),
+                                                               RepeatingScheduleValue(startTime: .hours(18), value: 1.25)],
+                                                  timeZone: TimeZone(identifier: "America/Los_Angeles")!)
+        let insulinSensitivitySchedule = InsulinSensitivitySchedule(unit: .milligramsPerDeciliter,
+                                                                    dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 45.0),
+                                                                                 RepeatingScheduleValue(startTime: .hours(3), value: 40.0),
+                                                                                 RepeatingScheduleValue(startTime: .hours(15), value: 50.0)],
+                                                                    timeZone: TimeZone(identifier: "America/Los_Angeles")!)
+        let carbRatioSchedule = CarbRatioSchedule(unit: .gram(),
+                                                  dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 15.0),
+                                                               RepeatingScheduleValue(startTime: .hours(9), value: 14.0),
+                                                               RepeatingScheduleValue(startTime: .hours(20), value: 18.0)],
+                                                  timeZone: TimeZone(identifier: "America/Los_Angeles")!)
+        let notificationSettings = NotificationSettings(authorizationStatus: .authorized,
+                                                        soundSetting: .enabled,
+                                                        badgeSetting: .enabled,
+                                                        alertSetting: .disabled,
+                                                        notificationCenterSetting: .notSupported,
+                                                        lockScreenSetting: .disabled,
+                                                        carPlaySetting: .notSupported,
+                                                        alertStyle: .banner,
+                                                        showPreviewsSetting: .whenAuthenticated,
+                                                        criticalAlertSetting: .enabled,
+                                                        providesAppNotificationSettings: true,
+                                                        announcementSetting: .enabled)
+        let controllerDevice = StoredSettings.ControllerDevice(name: "Controller Name",
+                                                               systemName: "Controller System Name",
+                                                               systemVersion: "Controller System Version",
+                                                               model: "Controller Model",
+                                                               modelIdentifier: "Controller Model Identifier")
+        let cgmDevice = HKDevice(name: "CGM Name",
+                                 manufacturer: "CGM Manufacturer",
+                                 model: "CGM Model",
+                                 hardwareVersion: "CGM Hardware Version",
+                                 firmwareVersion: "CGM Firmware Version",
+                                 softwareVersion: "CGM Software Version",
+                                 localIdentifier: "CGM Local Identifier",
+                                 udiDeviceIdentifier: "CGM UDI Device Identifier")
+        let pumpDevice = HKDevice(name: "Pump Name",
+                                  manufacturer: "Pump Manufacturer",
+                                  model: "Pump Model",
+                                  hardwareVersion: "Pump Hardware Version",
+                                  firmwareVersion: "Pump Firmware Version",
+                                  softwareVersion: "Pump Software Version",
+                                  localIdentifier: "Pump Local Identifier",
+                                  udiDeviceIdentifier: "Pump UDI Device Identifier")
+        let bloodGlucoseUnit = HKUnit.milligramsPerDeciliter
+
         return StoredSettings(date: dateFormatter.date(from: "2020-05-14T22:48:15Z")!,
-                              dosingEnabled: true,
-                              glucoseTargetRangeSchedule: GlucoseRangeSchedule(rangeSchedule: DailyQuantitySchedule(unit: .milligramsPerDeciliter,
-                                                                                                                    dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: DoubleRange(minValue: 100.0, maxValue: 110.0)),
-                                                                                                                                 RepeatingScheduleValue(startTime: .hours(7), value: DoubleRange(minValue: 90.0, maxValue: 100.0)),
-                                                                                                                                 RepeatingScheduleValue(startTime: .hours(21), value: DoubleRange(minValue: 110.0, maxValue: 120.0))],
-                                                                                                                    timeZone: TimeZone(identifier: "America/Los_Angeles")!)!,
-                                                                               override: GlucoseRangeSchedule.Override(value: DoubleRange(minValue: 105.0, maxValue: 115.0),
-                                                                                                                       start: dateFormatter.date(from: "2020-05-14T12:48:15Z")!,
-                                                                                                                       end: dateFormatter.date(from: "2020-05-14T14:48:15Z")!)),
-                              preMealTargetRange: DoubleRange(minValue: 80.0, maxValue: 90.0).quantityRange(for: .milligramsPerDeciliter),
-                              workoutTargetRange: DoubleRange(minValue: 150.0, maxValue: 160.0).quantityRange(for: .milligramsPerDeciliter),
-                              overridePresets: [TemporaryScheduleOverridePreset(id: UUID(uuidString: "2A67A303-5203-4CB8-8263-79498265368E")!,
-                                                                                symbol: "🍎",
-                                                                                name: "Apple",
-                                                                                settings: TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter,
-                                                                                                                            targetRange: DoubleRange(minValue: 130.0, maxValue: 140.0),
-                                                                                                                            insulinNeedsScaleFactor: 2.0),
-                                                                                duration: .finite(.minutes(60)))],
-                              scheduleOverride: TemporaryScheduleOverride(context: .preMeal,
-                                                                          settings: TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter,
-                                                                                                                      targetRange: DoubleRange(minValue: 110.0, maxValue: 120.0),
-                                                                                                                      insulinNeedsScaleFactor: 1.5),
-                                                                          startDate: dateFormatter.date(from: "2020-05-14T14:48:19Z")!,
-                                                                          duration: .finite(.minutes(60)),
-                                                                          enactTrigger: .remote("127.0.0.1"),
-                                                                          syncIdentifier: UUID(uuidString: "2A67A303-1234-4CB8-8263-79498265368E")!),
-                              preMealOverride: TemporaryScheduleOverride(context: .preMeal,
-                                                                         settings: TemporaryScheduleOverrideSettings(unit: .milligramsPerDeciliter,
-                                                                                                                     targetRange: DoubleRange(minValue: 80.0, maxValue: 90.0),
-                                                                                                                     insulinNeedsScaleFactor: 0.5),
-                                                                         startDate: dateFormatter.date(from: "2020-05-14T14:38:39Z")!,
-                                                                         duration: .indefinite,
-                                                                         enactTrigger: .local,
-                                                                         syncIdentifier: UUID(uuidString: "2A67A303-5203-1234-8263-79498265368E")!),
-                              maximumBasalRatePerHour: 3.5,
-                              maximumBolus: 10.0,
-                              suspendThreshold: GlucoseThreshold(unit: .milligramsPerDeciliter, value: 75.0),
-                              deviceToken: "DeviceTokenString",
-                              defaultRapidActingModel: StoredInsulinModel(modelType: .rapidAdult, actionDuration: .hours(6), peakActivity: .hours(3)),
-                              basalRateSchedule: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1.0),
-                                                                                RepeatingScheduleValue(startTime: .hours(6), value: 1.5),
-                                                                                RepeatingScheduleValue(startTime: .hours(18), value: 1.25)],
-                                                                   timeZone: TimeZone(identifier: "America/Los_Angeles")!),
-                              insulinSensitivitySchedule: InsulinSensitivitySchedule(unit: .milligramsPerDeciliter,
-                                                                                     dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 45.0),
-                                                                                                  RepeatingScheduleValue(startTime: .hours(3), value: 40.0),
-                                                                                                  RepeatingScheduleValue(startTime: .hours(15), value: 50.0)],
-                                                                                     timeZone: TimeZone(identifier: "America/Los_Angeles")!),
-                              carbRatioSchedule: CarbRatioSchedule(unit: .gram(),
-                                                                   dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 15.0),
-                                                                                RepeatingScheduleValue(startTime: .hours(9), value: 14.0),
-                                                                                RepeatingScheduleValue(startTime: .hours(20), value: 18.0)],
-                                                                   timeZone: TimeZone(identifier: "America/Los_Angeles")!),
-                              bloodGlucoseUnit: .milligramsPerDeciliter,
-                              syncIdentifier: "2A67A303-1234-4CB8-1234-79498265368E")
+                              dosingEnabled: dosingEnabled,
+                              glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
+                              preMealTargetRange: preMealTargetRange,
+                              workoutTargetRange: workoutTargetRange,
+                              overridePresets: overridePresets,
+                              scheduleOverride: scheduleOverride,
+                              preMealOverride: preMealOverride,
+                              maximumBasalRatePerHour: maximumBasalRatePerHour,
+                              maximumBolus: maximumBolus,
+                              suspendThreshold: suspendThreshold,
+                              deviceToken: deviceToken,
+                              insulinType: insulinType,
+                              defaultRapidActingModel: defaultRapidActingModel,
+                              basalRateSchedule: basalRateSchedule,
+                              insulinSensitivitySchedule: insulinSensitivitySchedule,
+                              carbRatioSchedule: carbRatioSchedule,
+                              notificationSettings: notificationSettings,
+                              controllerDevice: controllerDevice,
+                              cgmDevice: cgmDevice,
+                              pumpDevice: pumpDevice,
+                              bloodGlucoseUnit: bloodGlucoseUnit,
+                              syncIdentifier: UUID(uuidString: "2A67A303-1234-4CB8-1234-79498265368E")!)
     }
 
     private static let dateFormatter = ISO8601DateFormatter()

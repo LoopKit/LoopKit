@@ -345,7 +345,7 @@ public final class MockCGMManager: TestingCGMManager {
     }
     
     public var cgmManagerStatus: CGMManagerStatus {
-        return CGMManagerStatus(hasValidSensorSession: dataSource.isValidSession, lastCommunicationDate: lastCommunicationDate)
+        return CGMManagerStatus(hasValidSensorSession: dataSource.isValidSession, lastCommunicationDate: lastCommunicationDate, device: device)
     }
 
     private var lastCommunicationDate: Date? = nil
