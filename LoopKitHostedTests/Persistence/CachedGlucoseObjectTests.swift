@@ -25,7 +25,7 @@ class CachedGlucoseObjectOperationsTests: PersistenceControllerTestCase {
                                                     syncVersion: 2,
                                                     device: device)
             let object = CachedGlucoseObject(context: cacheStore.managedObjectContext)
-            object.create(from: newGlucoseSample, provenanceIdentifier: "06173C6A-4945-4139-A77D-E3ABC3221EA9")
+            object.create(from: newGlucoseSample, provenanceIdentifier: "06173C6A-4945-4139-A77D-E3ABC3221EA9", healthKitStorageDelay: .minutes(1))
             XCTAssertNil(object.uuid)
             XCTAssertEqual(object.provenanceIdentifier, "06173C6A-4945-4139-A77D-E3ABC3221EA9")
             XCTAssertEqual(object.syncIdentifier, "F4C094AA-9EBE-4804-8F02-90C7B613BDEC")
@@ -38,6 +38,7 @@ class CachedGlucoseObjectOperationsTests: PersistenceControllerTestCase {
             XCTAssertEqual(object.trend, .flat)
             XCTAssertEqual(object.modificationCounter, 1)
             XCTAssertEqual(object.device, device)
+            XCTAssertEqual(object.healthKitEligibleDate, startDate.addingTimeInterval(.minutes(1)))
         }
     }
 
@@ -69,6 +70,7 @@ class CachedGlucoseObjectOperationsTests: PersistenceControllerTestCase {
             XCTAssertEqual(object.trend, .flat)
             XCTAssertEqual(object.modificationCounter, 1)
             XCTAssertEqual(object.device, device)
+            XCTAssertEqual(object.healthKitEligibleDate, nil)
         }
     }
     

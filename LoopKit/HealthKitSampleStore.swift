@@ -392,6 +392,11 @@ extension HealthKitSampleStore {
 // MARK: - HKHealthStore helpers
 extension HealthKitSampleStore {
     
+    /// True if the user has explicitly authorized access to any required share types
+    public var sharingAuthorized: Bool {
+        return healthStore.authorizationStatus(for: sampleType) == .sharingAuthorized
+    }
+
     /// True if the user has explicitly denied access to any required share types
     public var sharingDenied: Bool {
         return healthStore.authorizationStatus(for: sampleType) == .sharingDenied
