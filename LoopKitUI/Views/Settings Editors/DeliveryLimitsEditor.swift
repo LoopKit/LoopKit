@@ -126,7 +126,7 @@ public struct DeliveryLimitsEditor: View {
     private var content: some View {
         ConfigurationPage(
             title: Text(TherapySetting.deliveryLimits.title),
-            actionButtonTitle: Text(mode.buttonText),
+            actionButtonTitle: Text(mode.buttonText(isSaving: isSyncing)),
             actionButtonState: saveButtonState,
             cards: {
                 maximumBasalRateCard

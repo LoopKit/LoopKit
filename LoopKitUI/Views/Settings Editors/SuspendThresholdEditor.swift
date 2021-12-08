@@ -84,7 +84,7 @@ public struct SuspendThresholdEditor: View {
     private var content: some View {
         ConfigurationPage(
             title: Text(TherapySetting.suspendThreshold.title),
-            actionButtonTitle: Text(mode.buttonText),
+            actionButtonTitle: Text(mode.buttonText()),
             actionButtonState: saveButtonState,
             cards: {
                 Card {

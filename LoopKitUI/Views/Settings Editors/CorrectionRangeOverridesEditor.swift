@@ -90,7 +90,7 @@ public struct CorrectionRangeOverridesEditor: View {
     private var content: some View {
         ConfigurationPage(
             title: Text(preset.therapySetting.title),
-            actionButtonTitle: Text(mode.buttonText),
+            actionButtonTitle: Text(mode.buttonText()),
             actionButtonState: value != initialValue || mode == .acceptanceFlow ? .enabled : .disabled,
             cards: {
                 // TODO: Figure out why I need to explicitly return a CardStack with 1 card here

@@ -111,7 +111,7 @@ public struct InsulinModelSelection: View {
             CardList(title: Text(LocalizedString("Insulin Model", comment: "Title text for insulin model")),
                      style: .simple(CardStack(cards: [card])))
             Button(action: { startSaving() }) {
-                Text(mode.buttonText)
+                Text(mode.buttonText())
                     .actionButtonStyle(.primary)
                     .padding()
             }
