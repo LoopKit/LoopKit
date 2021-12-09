@@ -36,6 +36,7 @@
 		1D1FCE2B24BE704A000300A8 /* TherapySetting+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2A24BE704A000300A8 /* TherapySetting+Settings.swift */; };
 		1D24A8D524C896E100AB8DB9 /* Prescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D24A8D424C896E100AB8DB9 /* Prescription.swift */; };
 		1D25C22E246A2A1A00E87FA0 /* critical.caf in Resources */ = {isa = PBXBuildFile; fileRef = 1D25C22D246A2A1A00E87FA0 /* critical.caf */; };
+		1D3E2973276031F80041F460 /* ResizeablePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D3E2972276031F80041F460 /* ResizeablePicker.swift */; };
 		1D498E4724D892B0000627F2 /* Environment+Authenticate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D498E4624D892B0000627F2 /* Environment+Authenticate.swift */; };
 		1D60355E24D39ED10095DC2A /* Environment+AppName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D60355D24D39ED10095DC2A /* Environment+AppName.swift */; };
 		1D63DEA326E94FDF00F46FA5 /* VersionUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D63DEA226E94FDF00F46FA5 /* VersionUpdate.swift */; };
@@ -1006,6 +1007,7 @@
 		1D1FCE2A24BE704A000300A8 /* TherapySetting+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TherapySetting+Settings.swift"; sourceTree = "<group>"; };
 		1D24A8D424C896E100AB8DB9 /* Prescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prescription.swift; sourceTree = "<group>"; };
 		1D25C22D246A2A1A00E87FA0 /* critical.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = critical.caf; sourceTree = "<group>"; };
+		1D3E2972276031F80041F460 /* ResizeablePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeablePicker.swift; sourceTree = "<group>"; };
 		1D498E4624D892B0000627F2 /* Environment+Authenticate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Environment+Authenticate.swift"; sourceTree = "<group>"; };
 		1D60355D24D39ED10095DC2A /* Environment+AppName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Environment+AppName.swift"; sourceTree = "<group>"; };
 		1D63DEA226E94FDF00F46FA5 /* VersionUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionUpdate.swift; sourceTree = "<group>"; };
@@ -2080,6 +2082,7 @@
 				432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */,
 				432CF86820D76B320066B889 /* SetupButton.swift */,
 				432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */,
+				1D3E2972276031F80041F460 /* ResizeablePicker.swift */,
 				898E6E6D2241ED9F0019E459 /* SuspendResumeTableViewCell.swift */,
 				432CF86C20D76C470066B889 /* SwitchTableViewCell.swift */,
 				B41A60AE23D1DB5B00636320 /* TableViewTitleLabel.swift */,
@@ -3614,6 +3617,7 @@
 				A9498D8823386CAF00DAA9B9 /* ServiceNavigationController.swift in Sources */,
 				892A5D9E2231E122008961AB /* StateColorPalette.swift in Sources */,
 				895FE08022011F0C00FCF18A /* EmojiDataSource.swift in Sources */,
+				1D3E2973276031F80041F460 /* ResizeablePicker.swift in Sources */,
 				432CF86920D76B320066B889 /* SetupButton.swift in Sources */,
 				E9DFB93024E8CA8500468917 /* LegacyInsulinDeliveryTableViewController.swift in Sources */,
 				C1DE4C2125A253BD007065F8 /* Color.swift in Sources */,
