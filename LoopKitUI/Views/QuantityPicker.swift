@@ -103,7 +103,7 @@ public struct QuantityPicker: View {
     public var body: some View {
         picker
             .labelsHidden()
-            .pickerStyle(WheelPickerStyle())
+            .pickerStyle(.wheel)
             .overlayPreferenceValue(PickerValueBoundsKey.self, unitLabel(positionedFrom:))
             .accessibility(identifier: "quantity_picker")
     }

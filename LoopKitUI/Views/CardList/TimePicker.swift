@@ -43,6 +43,7 @@ public struct TimePicker: View {
                 self.text(for: time)
             }
         }
+        .pickerStyle(.wheel)
         .labelsHidden()
     }
 
