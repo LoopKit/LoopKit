@@ -2963,7 +2963,6 @@
 				430157F41C7EC03B00B64B63 /* Frameworks */,
 				430157F51C7EC03B00B64B63 /* Resources */,
 				4301581D1C7ECB5E00B64B63 /* Embed Frameworks */,
-				E9D95F9B24C8BB3D0079F47D /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
@@ -3482,26 +3481,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "echo \"Bootstrapping Carthage dependencies...\"\nunset LLVM_TARGET_TRIPLE_SUFFIX\n\nif ! cmp -s Cartfile.Resolved Carthage/Cartfile.resolved; then\n    time ./Scripts/carthage.sh bootstrap --project-directory \"$SRCROOT\" --platform ios --cache-builds --verbose || exit 1\n    cp Cartfile.resolved Carthage\nelse\n    echo \"Carthage: not bootstrapping\"\nfi\n";
-		};
-		E9D95F9B24C8BB3D0079F47D /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/SwiftCharts.framework/SwiftCharts",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftCharts.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Scripts/copy-frameworks.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
