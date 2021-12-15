@@ -564,7 +564,6 @@
 		A95A1D7F2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */; };
 		A95A1D802460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */; };
 		A95A1D822460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */; };
-		A95A1D832460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */; };
 		A95A1D852460CAD50079378D /* CarbValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D842460CAD50079378D /* CarbValueTests.swift */; };
 		A95A1D872460F1250079378D /* GlucoseValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D862460F1250079378D /* GlucoseValueTests.swift */; };
 		A95A1D892460F8930079378D /* PumpManagerStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D882460F8930079378D /* PumpManagerStatusTests.swift */; };
@@ -4154,7 +4153,6 @@
 				A9E675A722713F4700E25293 /* DoseStore.swift in Sources */,
 				A9E675A822713F4700E25293 /* TimeZone.swift in Sources */,
 				A9E675A922713F4700E25293 /* PumpEvent+CoreDataProperties.swift in Sources */,
-				A95A1D832460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift in Sources */,
 				A9E675AA22713F4700E25293 /* ReservoirValue.swift in Sources */,
 				A93761C225ED670200F6BE43 /* BluetoothProvider.swift in Sources */,
 				A9E675AB22713F4700E25293 /* HKHealthStore.swift in Sources */,

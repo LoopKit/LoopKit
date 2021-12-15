@@ -229,6 +229,7 @@ public struct StoredSettingsData {
 
 public struct StoredSettings {
     public let date: Date
+    public var controllerTimeZone: TimeZone
     public let dosingEnabled: Bool
     public let glucoseTargetRangeSchedule: GlucoseRangeSchedule?
     public let preMealTargetRange: ClosedRange<HKQuantity>?
@@ -253,6 +254,7 @@ public struct StoredSettings {
     public let syncIdentifier: UUID
 
     public init(date: Date = Date(),
+                controllerTimeZone: TimeZone = TimeZone.current,
                 dosingEnabled: Bool = false,
                 glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
                 preMealTargetRange: ClosedRange<HKQuantity>? = nil,
@@ -276,6 +278,7 @@ public struct StoredSettings {
                 bloodGlucoseUnit: HKUnit? = nil,
                 syncIdentifier: UUID = UUID()) {
         self.date = date
+        self.controllerTimeZone = controllerTimeZone
         self.dosingEnabled = dosingEnabled
         self.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
         self.preMealTargetRange = preMealTargetRange
@@ -308,6 +311,7 @@ extension StoredSettings: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let bloodGlucoseUnit = HKUnit(from: try container.decode(String.self, forKey: .bloodGlucoseUnit))
         self.init(date: try container.decode(Date.self, forKey: .date),
+                  controllerTimeZone: try container.decode(TimeZone.self, forKey: .controllerTimeZone),
                   dosingEnabled: try container.decode(Bool.self, forKey: .dosingEnabled),
                   glucoseTargetRangeSchedule: try container.decodeIfPresent(GlucoseRangeSchedule.self, forKey: .glucoseTargetRangeSchedule),
                   preMealTargetRange: try container.decodeIfPresent(DoubleRange.self, forKey: .preMealTargetRange)?.quantityRange(for: bloodGlucoseUnit),
@@ -336,6 +340,7 @@ extension StoredSettings: Codable {
         let bloodGlucoseUnit = self.bloodGlucoseUnit ?? StoredSettings.codingGlucoseUnit
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(date, forKey: .date)
+        try container.encode(controllerTimeZone, forKey: .controllerTimeZone)
         try container.encode(dosingEnabled, forKey: .dosingEnabled)
         try container.encodeIfPresent(glucoseTargetRangeSchedule, forKey: .glucoseTargetRangeSchedule)
         try container.encodeIfPresent(preMealTargetRange?.doubleRange(for: bloodGlucoseUnit), forKey: .preMealTargetRange)
@@ -378,6 +383,7 @@ extension StoredSettings: Codable {
 
     private enum CodingKeys: String, CodingKey {
         case date
+        case controllerTimeZone
         case dosingEnabled
         case glucoseTargetRangeSchedule
         case preMealTargetRange

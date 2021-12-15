@@ -96,3 +96,55 @@ extension StoredGlucoseSample {
             healthKitEligibleDate: managedObject.healthKitEligibleDate)
     }
 }
+
+extension StoredGlucoseSample: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(uuid: try container.decodeIfPresent(UUID.self, forKey: .uuid),
+                  provenanceIdentifier: try container.decode(String.self, forKey: .provenanceIdentifier),
+                  syncIdentifier: try container.decodeIfPresent(String.self, forKey: .syncIdentifier),
+                  syncVersion: try container.decodeIfPresent(Int.self, forKey: .syncVersion),
+                  startDate: try container.decode(Date.self, forKey: .startDate),
+                  quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: try container.decode(Double.self, forKey: .quantity)),
+                  condition: try container.decodeIfPresent(GlucoseCondition.self, forKey: .condition),
+                  trend: try container.decodeIfPresent(GlucoseTrend.self, forKey: .trend),
+                  trendRate: try container.decodeIfPresent(Double.self, forKey: .trendRate).map { HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: $0) },
+                  isDisplayOnly: try container.decode(Bool.self, forKey: .isDisplayOnly),
+                  wasUserEntered: try container.decode(Bool.self, forKey: .wasUserEntered),
+                  device: try container.decodeIfPresent(CodableDevice.self, forKey: .device).map { $0.device },
+                  healthKitEligibleDate: try container.decodeIfPresent(Date.self, forKey: .healthKitEligibleDate))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(uuid, forKey: .uuid)
+        try container.encode(provenanceIdentifier, forKey: .provenanceIdentifier)
+        try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
+        try container.encodeIfPresent(syncVersion, forKey: .syncVersion)
+        try container.encode(startDate, forKey: .startDate)
+        try container.encode(quantity.doubleValue(for: .milligramsPerDeciliter), forKey: .quantity)
+        try container.encodeIfPresent(condition, forKey: .condition)
+        try container.encodeIfPresent(trend, forKey: .trend)
+        try container.encodeIfPresent(trendRate?.doubleValue(for: .milligramsPerDeciliterPerMinute), forKey: .trendRate)
+        try container.encode(isDisplayOnly, forKey: .isDisplayOnly)
+        try container.encode(wasUserEntered, forKey: .wasUserEntered)
+        try container.encodeIfPresent(device.map { CodableDevice($0) }, forKey: .device)
+        try container.encodeIfPresent(healthKitEligibleDate, forKey: .healthKitEligibleDate)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case uuid
+        case provenanceIdentifier
+        case syncIdentifier
+        case syncVersion
+        case startDate
+        case quantity
+        case condition
+        case trend
+        case trendRate
+        case isDisplayOnly
+        case wasUserEntered
+        case device
+        case healthKitEligibleDate
+    }
+}
