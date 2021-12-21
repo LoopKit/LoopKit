@@ -858,6 +858,7 @@ extension DoseStore {
             self.insulinDeliveryStore.addDoseEntries(doses, from: nil, syncVersion: self.syncVersion) { (result) in
                 switch result {
                 case .success:
+                    self.delegate?.doseStoreHasUpdatedDoseData(self)
                     completion(nil)
                     self.syncPumpEventsToInsulinDeliveryStore { error in
                         completion(error)
@@ -1606,6 +1607,11 @@ extension DoseStore {
         case failure(Error)
     }
 
+    /// Queries the Core Data store for doses after the query anchor
+    /// - Parameters
+    ///     - queryAnchor: the anchor to use to determine which doses to fetch
+    ///     - limit: numerical limit for number of items to fetch.
+    ///     - completion: block to call with result of operation
     public func executeDoseQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (DoseQueryResult) -> Void) {
         var queryAnchor = queryAnchor ?? QueryAnchor()
         var queryResult = [DoseEntry]()
@@ -1617,21 +1623,21 @@ extension DoseStore {
         }
 
         persistenceController.managedObjectContext.performAndWait {
-            let storedRequest: NSFetchRequest<PumpEvent> = PumpEvent.fetchRequest()
+            let insulinDeliveryRequest: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
 
-            storedRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
-                NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter),
-                NSPredicate(format: "type IN %@", PumpEventType.doseTypes.map { $0.rawValue })
-            ])
-            storedRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
-            storedRequest.fetchLimit = limit
-
+            insulinDeliveryRequest.predicate =  NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter)
+            insulinDeliveryRequest.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]
+            insulinDeliveryRequest.fetchLimit = limit
+            
             do {
-                let stored = try self.persistenceController.managedObjectContext.fetch(storedRequest)
-                if let modificationCounter = stored.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter {
-                    queryAnchor.modificationCounter = modificationCounter
+                let storedObjects = try self.persistenceController.managedObjectContext.fetch(insulinDeliveryRequest)
+                
+                let maxModificationCounter = storedObjects.max(by: { $0.modificationCounter < $1.modificationCounter })?.modificationCounter
+
+                if let maxModificationCounter = maxModificationCounter  {
+                   queryAnchor.modificationCounter = maxModificationCounter
                 }
-                queryResult.append(contentsOf: stored.compactMap { $0.dose })
+                queryResult.append(contentsOf: storedObjects.compactMap { $0.dose })
             } catch let error {
                 queryError = error
                 return

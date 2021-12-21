@@ -111,6 +111,23 @@ class CachedInsulinDeliveryObject: NSManagedObject {
             primitiveAutomaticallyIssued = newValue != nil ? NSNumber(booleanLiteral: newValue!) : nil
         }
     }
+    
+    var hasUpdatedModificationCounter: Bool { changedValues().keys.contains("modificationCounter") }
+
+    func updateModificationCounter() { setPrimitiveValue(managedObjectContext!.modificationCounter!, forKey: "modificationCounter") }
+
+    public override func awakeFromInsert() {
+        super.awakeFromInsert()
+        updateModificationCounter()
+        createdAt = Date()
+    }
+
+    public override func willSave() {
+        if isUpdated && !hasUpdatedModificationCounter {
+            updateModificationCounter()
+        }
+        super.willSave()
+    }
 }
 
 // MARK: - Helpers

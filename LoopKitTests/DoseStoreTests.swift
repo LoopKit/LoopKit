@@ -476,17 +476,15 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     
     func testDoseDataWithUnusedQueryAnchor() {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
-        
-        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
-        addDoseData(withSyncIdentifiers: syncIdentifiers)
-        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+
+        addInsulinDeliveryObjectData(withSyncIdentifiers: syncIdentifiers)
         
         doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let anchor, let data):
-                XCTAssertEqual(anchor.modificationCounter, 5)
+                XCTAssertEqual(anchor.modificationCounter, 3)
                 XCTAssertEqual(data.count, 3)
                 for (index, syncIdentifier) in syncIdentifiers.enumerated() {
                     XCTAssertEqual(data[index].syncIdentifier, syncIdentifier)
@@ -500,19 +498,17 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     
     func testDoseDataWithStaleQueryAnchor() {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+
+        addInsulinDeliveryObjectData(withSyncIdentifiers: syncIdentifiers)
         
-        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
-        addDoseData(withSyncIdentifiers: syncIdentifiers)
-        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
-        
-        queryAnchor.modificationCounter = 4
+        queryAnchor.modificationCounter = 2
         
         doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
             switch result {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let anchor, let data):
-                XCTAssertEqual(anchor.modificationCounter, 5)
+                XCTAssertEqual(anchor.modificationCounter, 3)
                 XCTAssertEqual(data.count, 1)
                 XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[2])
             }
@@ -524,10 +520,8 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     
     func testDoseDataWithCurrentQueryAnchor() {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
-        
-        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
-        addDoseData(withSyncIdentifiers: syncIdentifiers)
-        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+
+        addInsulinDeliveryObjectData(withSyncIdentifiers: syncIdentifiers)
         
         queryAnchor.modificationCounter = 5
         
@@ -547,10 +541,8 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     
     func testDoseDataWithLimitZero() {
         let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
-        
-        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
-        addDoseData(withSyncIdentifiers: syncIdentifiers)
-        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+
+        addInsulinDeliveryObjectData(withSyncIdentifiers: syncIdentifiers)
         
         limit = 0
         
@@ -569,11 +561,9 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     }
     
     func testDoseDataWithLimitCoveredByData() {
-        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier()]
         
-        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
-        addDoseData(withSyncIdentifiers: syncIdentifiers)
-        addPumpEventData(withSyncIdentifiers: [generateSyncIdentifier(), generateSyncIdentifier()])
+        addInsulinDeliveryObjectData(withSyncIdentifiers: syncIdentifiers)
         
         limit = 2
         
@@ -582,7 +572,31 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
             case .failure(let error):
                 XCTFail("Unexpected failure: \(error)")
             case .success(let anchor, let data):
-                XCTAssertEqual(anchor.modificationCounter, 4)
+                XCTAssertEqual(anchor.modificationCounter, 2)
+                XCTAssertEqual(data.count, 2)
+                XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[0])
+                XCTAssertEqual(data[1].syncIdentifier, syncIdentifiers[1])
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
+    func testDoseDataWithDuplicates() {
+        let syncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier()]
+        
+        addInsulinDeliveryObjectData(withSyncIdentifiers: syncIdentifiers)
+        addInsulinDeliveryObjectData(withSyncIdentifiers: syncIdentifiers)
+        
+        limit = 2
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 2)
                 XCTAssertEqual(data.count, 2)
                 XCTAssertEqual(data[0].syncIdentifier, syncIdentifiers[0])
                 XCTAssertEqual(data[1].syncIdentifier, syncIdentifiers[1])
@@ -738,6 +752,28 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         wait(for: [completion], timeout: 2, enforceOrder: true)
     }
     
+    func testDoseDataWithLowLimit() {
+        let doseEventSyncIdentifiers = [generateSyncIdentifier(), generateSyncIdentifier(), generateSyncIdentifier()]
+
+        addInsulinDeliveryObjectData(withSyncIdentifiers: doseEventSyncIdentifiers)
+        
+        limit = 1
+        
+        doseStore.executeDoseQuery(fromQueryAnchor: queryAnchor, limit: limit) { result in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected failure: \(error)")
+            case .success(let anchor, let data):
+                XCTAssertEqual(anchor.modificationCounter, 1)
+                XCTAssertEqual(data.count, 1)
+                XCTAssertEqual(data[0].syncIdentifier, doseEventSyncIdentifiers[0])
+            }
+            self.completion.fulfill()
+        }
+        
+        wait(for: [completion], timeout: 2, enforceOrder: true)
+    }
+    
     private func addDoseData(withSyncIdentifiers syncIdentifiers: [String]) {
         cacheStore.managedObjectContext.performAndWait {
             for syncIdentifier in syncIdentifiers {
@@ -764,6 +800,17 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         }
     }
     
+    private func addInsulinDeliveryObjectData(withSyncIdentifiers syncIdentifiers: [String]) {
+        cacheStore.managedObjectContext.performAndWait {
+            for syncIdentifier in syncIdentifiers {
+                let deliveryObject = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
+                deliveryObject.createMockDose(with: syncIdentifier)
+
+                self.cacheStore.save()
+            }
+        }
+    }
+    
     private func addPumpEventData(withSyncIdentifiers syncIdentifiers: [String]) {
         cacheStore.managedObjectContext.performAndWait {
             for syncIdentifier in syncIdentifiers {
@@ -781,6 +828,19 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
         return UUID().data.hexadecimalString
     }
     
+}
+
+extension CachedInsulinDeliveryObject {
+    func createMockDose(with syncIdentifier: String) {
+        reason = .bolus
+        startDate = Date()
+        endDate = Date()
+        value = 2
+        self.syncIdentifier = syncIdentifier
+        scheduledBasalRate = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1)
+        insulinType = .novolog
+        automaticallyIssued = false
+    }
 }
 
 class DoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
