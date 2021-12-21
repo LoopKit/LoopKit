@@ -191,7 +191,7 @@ public final class PersistenceController {
                 // Ignore errors here, let Core Data explain the problem
             }
 
-            let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
+            let storeURL = directoryURL.appendingPathComponent("Modelv5.sqlite")
 
             do {
                 try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
