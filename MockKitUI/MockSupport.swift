@@ -77,8 +77,7 @@ extension MockSupport {
                                                     
                                                     Go to \(appName) Settings > Software Update to complete.
                                                     """, comment: "Alert content body for first software update alert"),
-                                         acknowledgeActionButtonLabel: NSLocalizedString("OK", comment: "Default acknowledgement"),
-                                         isCritical: versionUpdate == .required)
+                                         acknowledgeActionButtonLabel: NSLocalizedString("OK", comment: "Default acknowledgement"))
         } else if let lastVersionCheckAlertDate = lastVersionCheckAlertDate,
                   abs(lastVersionCheckAlertDate.timeIntervalSinceNow) > alertCadence {
             alertContent = Alert.Content(title: NSLocalizedString("Update Reminder", comment: "Recurring software update alert title"),
@@ -87,12 +86,12 @@ extension MockSupport {
                                                     
                                                     Go to \(appName) Settings > Software Update to install the latest version.
                                                     """, comment: "Alert content body for recurring software update alert"),
-                                         acknowledgeActionButtonLabel: NSLocalizedString("OK", comment: "Default acknowledgement"),
-                                         isCritical: versionUpdate == .required)
+                                         acknowledgeActionButtonLabel: NSLocalizedString("OK", comment: "Default acknowledgement"))
         } else {
             return
         }
-        alertIssuer?.issueAlert(Alert(identifier: alertIdentifier, foregroundContent: alertContent, backgroundContent: alertContent, trigger: .immediate))
+        let interruptionLevel: LoopKit.Alert.InterruptionLevel = versionUpdate == .required ? .critical : .active
+        alertIssuer?.issueAlert(Alert(identifier: alertIdentifier, foregroundContent: alertContent, backgroundContent: alertContent, trigger: .immediate, interruptionLevel: interruptionLevel))
         recordLastAlertDate()
     }
     
