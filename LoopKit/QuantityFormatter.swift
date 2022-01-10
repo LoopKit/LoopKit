@@ -195,7 +195,7 @@ public extension HKUnit {
         if fractionalDigits == 0 {
             return value.rounded()
         } else {
-            let scaleFactor = Double(10 * fractionalDigits)
+            let scaleFactor = pow(10.0, Double(fractionalDigits))
             return (value * scaleFactor).rounded() / scaleFactor
         }
     }

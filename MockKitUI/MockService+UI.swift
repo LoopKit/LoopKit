@@ -25,7 +25,5 @@ extension MockService: ServiceUI {
       return ServiceNavigationController(rootViewController: MockServiceTableViewController(service: self, for: .update))
     }
     
-    public func supportMenuItem(supportInfoProvider: SupportInfoProvider, urlHandler: @escaping (URL) -> Void) -> AnyView? {
-        return nil
-    }
 }
+

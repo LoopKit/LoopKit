@@ -75,8 +75,8 @@ class GlucoseThresholdTests: XCTestCase {
     func testConvertTo() {
         let glucoseThresholdMMOLL = GlucoseThreshold(unit: .millimolesPerLiter, value: 4.4)
         let glucoseThresholdMGDL = glucoseThresholdMMOLL.convertTo(unit: .milligramsPerDeciliter)
-        XCTAssertEqual(glucoseThresholdMGDL?.unit, .milligramsPerDeciliter)
-        XCTAssertEqual(glucoseThresholdMGDL?.value, HKQuantity(unit: .millimolesPerLiter, doubleValue: glucoseThresholdMMOLL.value).doubleValue(for: .milligramsPerDeciliter))
+        XCTAssertEqual(glucoseThresholdMGDL.unit, .milligramsPerDeciliter)
+        XCTAssertEqual(glucoseThresholdMGDL.value, HKQuantity(unit: .millimolesPerLiter, doubleValue: glucoseThresholdMMOLL.value).doubleValue(for: .milligramsPerDeciliter))
     }
 }
 

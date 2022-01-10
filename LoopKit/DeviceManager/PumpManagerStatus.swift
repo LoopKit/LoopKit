@@ -94,11 +94,11 @@ extension PumpManagerStatus: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.timeZone = try container.decode(TimeZone.self, forKey: .timeZone)
-        self.device = (try container.decode(CodableDevice.self, forKey: .device)).device
+        self.device = try container.decode(CodableDevice.self, forKey: .device).device
         self.pumpBatteryChargeRemaining = try container.decodeIfPresent(Double.self, forKey: .pumpBatteryChargeRemaining)
         self.basalDeliveryState = try container.decodeIfPresent(BasalDeliveryState.self, forKey: .basalDeliveryState)
         self.bolusState = try container.decode(BolusState.self, forKey: .bolusState)
-        self.insulinType = try container.decode(InsulinType.self, forKey: .insulinType)
+        self.insulinType = try container.decodeIfPresent(InsulinType.self, forKey: .insulinType)
         self.deliveryIsUncertain = try container.decode(Bool.self, forKey: .deliveryIsUncertain)
     }
 
@@ -109,41 +109,8 @@ extension PumpManagerStatus: Codable {
         try container.encodeIfPresent(pumpBatteryChargeRemaining, forKey: .pumpBatteryChargeRemaining)
         try container.encodeIfPresent(basalDeliveryState, forKey: .basalDeliveryState)
         try container.encode(bolusState, forKey: .bolusState)
-        try container.encode(insulinType, forKey: .insulinType)
+        try container.encodeIfPresent(insulinType, forKey: .insulinType)
         try container.encode(deliveryIsUncertain, forKey: .deliveryIsUncertain)
-    }
-
-    private struct CodableDevice: Codable {
-        let name: String?
-        let manufacturer: String?
-        let model: String?
-        let hardwareVersion: String?
-        let firmwareVersion: String?
-        let softwareVersion: String?
-        let localIdentifier: String?
-        let udiDeviceIdentifier: String?
-
-        init(_ device: HKDevice) {
-            self.name = device.name
-            self.manufacturer = device.manufacturer
-            self.model = device.model
-            self.hardwareVersion = device.hardwareVersion
-            self.firmwareVersion = device.firmwareVersion
-            self.softwareVersion = device.softwareVersion
-            self.localIdentifier = device.localIdentifier
-            self.udiDeviceIdentifier = device.udiDeviceIdentifier
-        }
-
-        var device: HKDevice {
-            return HKDevice(name: name,
-                            manufacturer: manufacturer,
-                            model: model,
-                            hardwareVersion: hardwareVersion,
-                            firmwareVersion: firmwareVersion,
-                            softwareVersion: softwareVersion,
-                            localIdentifier: localIdentifier,
-                            udiDeviceIdentifier: udiDeviceIdentifier)
-        }
     }
 
     private enum CodingKeys: String, CodingKey {

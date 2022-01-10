@@ -70,11 +70,13 @@ extension MockGlucoseProvider {
         self = effects.transformations.reduce(model.glucoseProvider) { model, transform in transform(model) }
     }
 
-    private static func glucoseSample(at date: Date, quantity: HKQuantity, trend: GlucoseTrend?) -> NewGlucoseSample {
+    private static func glucoseSample(at date: Date, quantity: HKQuantity, condition: GlucoseCondition?, trend: GlucoseTrend?, trendRate: HKQuantity?) -> NewGlucoseSample {
         return NewGlucoseSample(
             date: date,
             quantity: quantity,
+            condition: condition,
             trend: trend,
+            trendRate: trendRate,
             isDisplayOnly: false,
             wasUserEntered: false,
             syncIdentifier: UUID().uuidString,
@@ -88,7 +90,7 @@ extension MockGlucoseProvider {
 extension MockGlucoseProvider {
     fileprivate static func constant(_ quantity: HKQuantity) -> MockGlucoseProvider {
         return MockGlucoseProvider { date, completion in
-            let sample = glucoseSample(at: date, quantity: quantity, trend: .flat)
+            let sample = glucoseSample(at: date, quantity: quantity, condition: nil, trend: .flat, trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 0))
             completion(.newData([sample]))
         }
     }
@@ -97,11 +99,12 @@ extension MockGlucoseProvider {
         let (baseGlucose, amplitude, period, referenceDate) = parameters
         precondition(period > 0)
         let unit = HKUnit.milligramsPerDeciliter
+        let trendRateUnit = unit.unitDivided(by: .minute())
         precondition(baseGlucose.is(compatibleWith: unit))
         precondition(amplitude.is(compatibleWith: unit))
         let baseGlucoseValue = baseGlucose.doubleValue(for: unit)
         let amplitudeValue = amplitude.doubleValue(for: unit)
-        let chanceOfNilTrend = 1.0/20.0
+        let chanceOfNilTrendRate = 1.0/20.0
         var prevGlucoseValue: Double?
         
         return MockGlucoseProvider { date, completion in
@@ -110,33 +113,34 @@ extension MockGlucoseProvider {
                 return Double(baseGlucoseValue + amplitudeValue * sin(2 * .pi / period * t)).rounded()
             }
             let glucoseValue = sine(timeOffset)
-            func trend() -> GlucoseTrend? {
+            var trend: GlucoseTrend?
+            var trendRate: HKQuantity?
+            if let prevGlucoseValue = prevGlucoseValue,
+               let trendRateValue = coinFlip(withChanceOfHeads: chanceOfNilTrendRate, ifHeads: nil, ifTails: glucoseValue - prevGlucoseValue) {
                 let smallDelta = 0.9
                 let mediumDelta = 2.0
                 let largeDelta = 5.0
-                guard let prevGlucoseValue = prevGlucoseValue else { return nil }
-                let delta = glucoseValue - prevGlucoseValue
-                switch delta {
+                switch trendRateValue {
                 case -smallDelta ... smallDelta:
-                    return .flat
+                    trend = .flat
                 case -mediumDelta ..< -smallDelta:
-                    return .down
+                    trend = .down
                 case -largeDelta ..< -mediumDelta:
-                    return .downDown
+                    trend = .downDown
                 case -Double.greatestFiniteMagnitude ..< -largeDelta:
-                    return .downDownDown
+                    trend = .downDownDown
                 case smallDelta ... mediumDelta:
-                    return .up
+                    trend = .up
                 case mediumDelta ... largeDelta:
-                    return .upUp
+                    trend = .upUp
                 case largeDelta ... Double.greatestFiniteMagnitude:
-                    return .upUpUp
+                    trend = .upUpUp
                 default:
-                    return nil
+                    break
                 }
+                trendRate = HKQuantity(unit: trendRateUnit, doubleValue: trendRateValue)
             }
-            let sample = glucoseSample(at: date, quantity: HKQuantity(unit: unit, doubleValue: glucoseValue),
-                                       trend: coinFlip(withChanceOfHeads: chanceOfNilTrend, ifHeads: nil, ifTails: trend()))
+            let sample = glucoseSample(at: date, quantity: HKQuantity(unit: unit, doubleValue: glucoseValue), condition: nil, trend: trend, trendRate: trendRate)
             // capture semantics lets me "stow" the previous glucose value with this static function.  A little weird, but it seems to work.
             prevGlucoseValue = glucoseValue
             completion(.newData([sample]))
@@ -232,7 +236,9 @@ private extension CGMReadingResult {
                 return NewGlucoseSample(
                     date: sample.date,
                     quantity: transform(sample.quantity),
+                    condition: sample.condition,
                     trend: sample.trend,
+                    trendRate: sample.trendRate,
                     isDisplayOnly: sample.isDisplayOnly,
                     wasUserEntered: sample.wasUserEntered,
                     syncIdentifier: sample.syncIdentifier,

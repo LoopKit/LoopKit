@@ -22,7 +22,7 @@ public struct SyncCarbObject: Codable, Equatable {
     public let grams: Double
     public let startDate: Date
     public let uuid: UUID?
-    public let provenanceIdentifier: String?
+    public let provenanceIdentifier: String
     public let syncIdentifier: String?
     public let syncVersion: Int?
     public let userCreatedDate: Date?
@@ -38,7 +38,7 @@ public struct SyncCarbObject: Codable, Equatable {
                 grams: Double,
                 startDate: Date,
                 uuid: UUID?,
-                provenanceIdentifier: String?,
+                provenanceIdentifier: String,
                 syncIdentifier: String?,
                 syncVersion: Int?,
                 userCreatedDate: Date?,

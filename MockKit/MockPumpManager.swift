@@ -40,7 +40,7 @@ public enum MockPumpManagerError: LocalizedError {
 }
 
 public final class MockPumpManager: TestingPumpManager {
-    
+
     public static let managerIdentifier = "MockPumpManager"
 
     public var managerIdentifier: String {
@@ -63,6 +63,10 @@ public final class MockPumpManager: TestingPumpManager {
 
     public static var onboardingSupportedBolusVolumes: [Double] {
         MockPumpManagerState.DeliverableIncrements.medtronicX22.supportedBolusVolumes!
+    }
+
+    public static var onboardingSupportedMaximumBolusVolumes: [Double] {
+        self.onboardingSupportedBolusVolumes
     }
 
     private static let device = HKDevice(
@@ -109,6 +113,10 @@ public final class MockPumpManager: TestingPumpManager {
 
     public var supportedBolusVolumes: [Double] {
         return state.supportedBolusVolumes
+    }
+
+    public var supportedMaximumBolusVolumes: [Double] {
+        state.supportedBolusVolumes
     }
 
     public var supportedBasalRates: [Double] {
@@ -585,6 +593,12 @@ public final class MockPumpManager: TestingPumpManager {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
             completion(.success(BasalRateSchedule(dailyItems: scheduleItems, timeZone: self.status.timeZone)!))
+        }
+    }
+
+    public func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+            completion(.success(deliveryLimits))
         }
     }
 }

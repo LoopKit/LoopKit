@@ -32,13 +32,15 @@ public class DosingDecisionStore {
         self.expireAfter = expireAfter
     }
 
-    public func storeDosingDecisionData(_ dosingDecisionData: StoredDosingDecisionData, completion: @escaping () -> Void) {
+    public func storeDosingDecision(_ dosingDecision: StoredDosingDecision, completion: @escaping () -> Void) {
         dataAccessQueue.async {
-            self.store.managedObjectContext.performAndWait {
-                let object = DosingDecisionObject(context: self.store.managedObjectContext)
-                object.date = dosingDecisionData.date
-                object.data = dosingDecisionData.data
-                self.store.save()
+            if let data = self.encodeDosingDecision(dosingDecision) {
+                self.store.managedObjectContext.performAndWait {
+                    let object = DosingDecisionObject(context: self.store.managedObjectContext)
+                    object.data = data
+                    object.date = dosingDecision.date
+                    self.store.save()
+                }
             }
 
             self.purgeExpiredDosingDecisions()
@@ -84,12 +86,29 @@ public class DosingDecisionStore {
         completion?(nil)
     }
     
-    public func destroy() {
-        self.store.managedObjectContext.performAndWait {
-            let coordinator = self.store.managedObjectContext.persistentStoreCoordinator!
-            let store = coordinator.persistentStores.first!
-            let url = coordinator.url(for: store)
-            try! coordinator.destroyPersistentStore(at: url, ofType: NSSQLiteStoreType, options: nil)
+    private static var encoder: PropertyListEncoder = {
+        let encoder = PropertyListEncoder()
+        encoder.outputFormat = .binary
+        return encoder
+    }()
+
+    private func encodeDosingDecision(_ dosingDecision: StoredDosingDecision) -> Data? {
+        do {
+            return try Self.encoder.encode(dosingDecision)
+        } catch let error {
+            self.log.error("Error encoding StoredDosingDecision: %@", String(describing: error))
+            return nil
+        }
+    }
+
+    private static var decoder = PropertyListDecoder()
+
+    private func decodeDosingDecision(fromData data: Data) -> StoredDosingDecision? {
+        do {
+            return try Self.decoder.decode(StoredDosingDecision.self, from: data)
+        } catch let error {
+            self.log.error("Error decoding StoredDosingDecision: %@", String(describing: error))
+            return nil
         }
     }
 }
@@ -118,12 +137,12 @@ extension DosingDecisionStore {
         }
     }
     
-    public enum DosingDecisionDataQueryResult {
-        case success(QueryAnchor, [StoredDosingDecisionData])
+    public enum DosingDecisionQueryResult {
+        case success(QueryAnchor, [StoredDosingDecision])
         case failure(Error)
     }
     
-    public func executeDosingDecisionDataQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (DosingDecisionDataQueryResult) -> Void) {
+    public func executeDosingDecisionQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (DosingDecisionQueryResult) -> Void) {
         dataAccessQueue.async {
             var queryAnchor = queryAnchor ?? QueryAnchor()
             var queryResult = [StoredDosingDecisionData]()
@@ -158,7 +177,11 @@ extension DosingDecisionStore {
                 return
             }
 
-            completion(.success(queryAnchor, queryResult))
+            // Decoding a large number of dosing decision can be very CPU intensive and may take considerable wall clock time.
+            // Do not block DosingDecisionStore dataAccessQueue. Perform work and callback in global utility queue.
+            DispatchQueue.global(qos: .utility).async {
+                completion(.success(queryAnchor, queryResult.compactMap { self.decodeDosingDecision(fromData: $0.data) }))
+            }
         }
     }
 }
@@ -173,68 +196,104 @@ public struct StoredDosingDecisionData {
     }
 }
 
+public typealias HistoricalGlucoseValue = PredictedGlucoseValue
+
 public struct StoredDosingDecision {
-    public let date: Date
-    public let insulinOnBoard: InsulinValue?
-    public let carbsOnBoard: CarbValue?
-    public let scheduleOverride: TemporaryScheduleOverride?
-    public let glucoseTargetRangeSchedule: GlucoseRangeSchedule?
-    public let effectiveGlucoseTargetRangeSchedule: GlucoseRangeSchedule?
-    public let predictedGlucose: [PredictedGlucoseValue]?
-    public let predictedGlucoseIncludingPendingInsulin: [PredictedGlucoseValue]?
-    public let lastReservoirValue: LastReservoirValue?
-    public let manualGlucose: SimpleGlucoseValue?
-    public let originalCarbEntry: StoredCarbEntry?
-    public let carbEntry: StoredCarbEntry?
-    public let automaticDoseRecommendation: AutomaticDoseRecommendationWithDate?
-    public let recommendedBolus: BolusRecommendationWithDate?
-    public let requestedBolus: Double?
-    public let pumpManagerStatus: PumpManagerStatus?
-    public let notificationSettings: NotificationSettings?
-    public let deviceSettings: DeviceSettings?
-    public let errors: [Error]?
-    public let syncIdentifier: String
+    public var date: Date
+    public var controllerTimeZone: TimeZone
+    public var reason: String
+    public var settings: Settings?
+    public var scheduleOverride: TemporaryScheduleOverride?
+    public var controllerStatus: ControllerStatus?
+    public var pumpManagerStatus: PumpManagerStatus?
+    public var cgmManagerStatus: CGMManagerStatus?
+    public var lastReservoirValue: LastReservoirValue?
+    public var historicalGlucose: [HistoricalGlucoseValue]?
+    public var originalCarbEntry: StoredCarbEntry?
+    public var carbEntry: StoredCarbEntry?
+    public var manualGlucoseSample: StoredGlucoseSample?
+    public var carbsOnBoard: CarbValue?
+    public var insulinOnBoard: InsulinValue?
+    public var glucoseTargetRangeSchedule: GlucoseRangeSchedule?
+    public var predictedGlucose: [PredictedGlucoseValue]?
+    public var automaticDoseRecommendation: AutomaticDoseRecommendation?
+    public var manualBolusRecommendation: ManualBolusRecommendationWithDate?
+    public var manualBolusRequested: Double?
+    public var warnings: [Issue]
+    public var errors: [Issue]
+    public var syncIdentifier: UUID
 
     public init(date: Date = Date(),
-                insulinOnBoard: InsulinValue? = nil,
-                carbsOnBoard: CarbValue? = nil,
+                controllerTimeZone: TimeZone = TimeZone.current,
+                reason: String,
+                settings: Settings? = nil,
                 scheduleOverride: TemporaryScheduleOverride? = nil,
-                glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
-                effectiveGlucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
-                predictedGlucose: [PredictedGlucoseValue]? = nil,
-                predictedGlucoseIncludingPendingInsulin: [PredictedGlucoseValue]? = nil,
+                controllerStatus: ControllerStatus? = nil,
+                pumpManagerStatus: PumpManagerStatus? = nil,
+                cgmManagerStatus: CGMManagerStatus? = nil,
                 lastReservoirValue: LastReservoirValue? = nil,
-                manualGlucose: SimpleGlucoseValue? = nil,
+                historicalGlucose: [HistoricalGlucoseValue]? = nil,
                 originalCarbEntry: StoredCarbEntry? = nil,
                 carbEntry: StoredCarbEntry? = nil,
-                automaticDoseRecommendation: AutomaticDoseRecommendationWithDate? = nil,
-                recommendedBolus: BolusRecommendationWithDate? = nil,
-                requestedBolus: Double? = nil,
-                pumpManagerStatus: PumpManagerStatus? = nil,
-                notificationSettings: NotificationSettings? = nil,
-                deviceSettings: DeviceSettings? = nil,
-                errors: [Error]? = nil,
-                syncIdentifier: String = UUID().uuidString) {
+                manualGlucoseSample: StoredGlucoseSample? = nil,
+                carbsOnBoard: CarbValue? = nil,
+                insulinOnBoard: InsulinValue? = nil,
+                glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
+                predictedGlucose: [PredictedGlucoseValue]? = nil,
+                automaticDoseRecommendation: AutomaticDoseRecommendation? = nil,
+                manualBolusRecommendation: ManualBolusRecommendationWithDate? = nil,
+                manualBolusRequested: Double? = nil,
+                warnings: [Issue] = [],
+                errors: [Issue] = [],
+                syncIdentifier: UUID = UUID()) {
         self.date = date
-        self.insulinOnBoard = insulinOnBoard
-        self.carbsOnBoard = carbsOnBoard
+        self.controllerTimeZone = controllerTimeZone
+        self.reason = reason
+        self.settings = settings
         self.scheduleOverride = scheduleOverride
-        self.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
-        self.effectiveGlucoseTargetRangeSchedule = effectiveGlucoseTargetRangeSchedule
-        self.predictedGlucose = predictedGlucose
-        self.predictedGlucoseIncludingPendingInsulin = predictedGlucoseIncludingPendingInsulin
+        self.controllerStatus = controllerStatus
+        self.pumpManagerStatus = pumpManagerStatus
+        self.cgmManagerStatus = cgmManagerStatus
         self.lastReservoirValue = lastReservoirValue
-        self.manualGlucose = manualGlucose
+        self.historicalGlucose = historicalGlucose
         self.originalCarbEntry = originalCarbEntry
         self.carbEntry = carbEntry
+        self.manualGlucoseSample = manualGlucoseSample
+        self.carbsOnBoard = carbsOnBoard
+        self.insulinOnBoard = insulinOnBoard
+        self.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
+        self.predictedGlucose = predictedGlucose
         self.automaticDoseRecommendation = automaticDoseRecommendation
-        self.recommendedBolus = recommendedBolus
-        self.requestedBolus = requestedBolus
-        self.pumpManagerStatus = pumpManagerStatus
-        self.notificationSettings = notificationSettings
-        self.deviceSettings = deviceSettings
+        self.manualBolusRecommendation = manualBolusRecommendation
+        self.manualBolusRequested = manualBolusRequested
+        self.warnings = warnings
         self.errors = errors
         self.syncIdentifier = syncIdentifier
+    }
+
+    public struct Settings: Codable, Equatable {
+        public let syncIdentifier: UUID
+
+        public init(syncIdentifier: UUID) {
+            self.syncIdentifier = syncIdentifier
+        }
+    }
+
+    public struct ControllerStatus: Codable, Equatable {
+        public enum BatteryState: String, Codable {
+            case unknown
+            case unplugged
+            case charging
+            case full
+        }
+
+        public let batteryState: BatteryState?
+        public let batteryLevel: Float?
+
+        public init(batteryState: BatteryState? = nil, batteryLevel: Float? = nil) {
+            self.batteryState = batteryState
+            self.batteryLevel = batteryLevel
+        }
     }
 
     public struct LastReservoirValue: Codable {
@@ -247,59 +306,116 @@ public struct StoredDosingDecision {
         }
     }
 
-    public struct AutomaticDoseRecommendationWithDate: Codable {
-        public let recommendation: AutomaticDoseRecommendation
-        public let date: Date
+    public struct Issue: Codable, Equatable {
+        public let id: String
+        public let details: [String: String]?
 
-        public init(recommendation: AutomaticDoseRecommendation, date: Date) {
-            self.recommendation = recommendation
-            self.date = date
+        public init(id: String, details: [String: String]? = nil) {
+            self.id = id
+            self.details = details?.isEmpty == false ? details : nil
         }
     }
+}
 
-    public struct BolusRecommendationWithDate: Codable {
-        public let recommendation: ManualBolusRecommendation
-        public let date: Date
+public struct ManualBolusRecommendationWithDate: Codable {
+    public let recommendation: ManualBolusRecommendation
+    public let date: Date
 
-        public init(recommendation: ManualBolusRecommendation, date: Date) {
-            self.recommendation = recommendation
-            self.date = date
-        }
+    public init(recommendation: ManualBolusRecommendation, date: Date) {
+        self.recommendation = recommendation
+        self.date = date
+    }
+}
+
+extension StoredDosingDecision: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(date: try container.decode(Date.self, forKey: .date),
+                  controllerTimeZone: try container.decode(TimeZone.self, forKey: .controllerTimeZone),
+                  reason: try container.decode(String.self, forKey: .reason),
+                  settings: try container.decodeIfPresent(Settings.self, forKey: .settings),
+                  scheduleOverride: try container.decodeIfPresent(TemporaryScheduleOverride.self, forKey: .scheduleOverride),
+                  controllerStatus: try container.decodeIfPresent(ControllerStatus.self, forKey: .controllerStatus),
+                  pumpManagerStatus: try container.decodeIfPresent(PumpManagerStatus.self, forKey: .pumpManagerStatus),
+                  cgmManagerStatus: try container.decodeIfPresent(CGMManagerStatus.self, forKey: .cgmManagerStatus),
+                  lastReservoirValue: try container.decodeIfPresent(LastReservoirValue.self, forKey: .lastReservoirValue),
+                  historicalGlucose: try container.decodeIfPresent([HistoricalGlucoseValue].self, forKey: .historicalGlucose),
+                  originalCarbEntry: try container.decodeIfPresent(StoredCarbEntry.self, forKey: .originalCarbEntry),
+                  carbEntry: try container.decodeIfPresent(StoredCarbEntry.self, forKey: .carbEntry),
+                  manualGlucoseSample: try container.decodeIfPresent(StoredGlucoseSample.self, forKey: .manualGlucoseSample),
+                  carbsOnBoard: try container.decodeIfPresent(CarbValue.self, forKey: .carbsOnBoard),
+                  insulinOnBoard: try container.decodeIfPresent(InsulinValue.self, forKey: .insulinOnBoard),
+                  glucoseTargetRangeSchedule: try container.decodeIfPresent(GlucoseRangeSchedule.self, forKey: .glucoseTargetRangeSchedule),
+                  predictedGlucose: try container.decodeIfPresent([PredictedGlucoseValue].self, forKey: .predictedGlucose),
+                  automaticDoseRecommendation: try container.decodeIfPresent(AutomaticDoseRecommendation.self, forKey: .automaticDoseRecommendation),
+                  manualBolusRecommendation: try container.decodeIfPresent(ManualBolusRecommendationWithDate.self, forKey: .manualBolusRecommendation),
+                  manualBolusRequested: try container.decodeIfPresent(Double.self, forKey: .manualBolusRequested),
+                  warnings: try container.decodeIfPresent([Issue].self, forKey: .warnings) ?? [],
+                  errors: try container.decodeIfPresent([Issue].self, forKey: .errors) ?? [],
+                  syncIdentifier: try container.decode(UUID.self, forKey: .syncIdentifier))
     }
 
-    public struct DeviceSettings: Codable, Equatable {
-        let name: String
-        let systemName: String
-        let systemVersion: String
-        let model: String
-        let modelIdentifier: String
-        let batteryLevel: Float?
-        let batteryState: BatteryState?
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(date, forKey: .date)
+        try container.encode(controllerTimeZone, forKey: .controllerTimeZone)
+        try container.encode(reason, forKey: .reason)
+        try container.encodeIfPresent(settings, forKey: .settings)
+        try container.encodeIfPresent(scheduleOverride, forKey: .scheduleOverride)
+        try container.encodeIfPresent(controllerStatus, forKey: .controllerStatus)
+        try container.encodeIfPresent(pumpManagerStatus, forKey: .pumpManagerStatus)
+        try container.encodeIfPresent(cgmManagerStatus, forKey: .cgmManagerStatus)
+        try container.encodeIfPresent(lastReservoirValue, forKey: .lastReservoirValue)
+        try container.encodeIfPresent(historicalGlucose, forKey: .historicalGlucose)
+        try container.encodeIfPresent(originalCarbEntry, forKey: .originalCarbEntry)
+        try container.encodeIfPresent(carbEntry, forKey: .carbEntry)
+        try container.encodeIfPresent(manualGlucoseSample, forKey: .manualGlucoseSample)
+        try container.encodeIfPresent(carbsOnBoard, forKey: .carbsOnBoard)
+        try container.encodeIfPresent(insulinOnBoard, forKey: .insulinOnBoard)
+        try container.encodeIfPresent(glucoseTargetRangeSchedule, forKey: .glucoseTargetRangeSchedule)
+        try container.encodeIfPresent(predictedGlucose, forKey: .predictedGlucose)
+        try container.encodeIfPresent(automaticDoseRecommendation, forKey: .automaticDoseRecommendation)
+        try container.encodeIfPresent(manualBolusRecommendation, forKey: .manualBolusRecommendation)
+        try container.encodeIfPresent(manualBolusRequested, forKey: .manualBolusRequested)
+        try container.encodeIfPresent(!warnings.isEmpty ? warnings : nil, forKey: .warnings)
+        try container.encodeIfPresent(!errors.isEmpty ? errors : nil, forKey: .errors)
+        try container.encode(syncIdentifier, forKey: .syncIdentifier)
+    }
 
-        public init(name: String, systemName: String, systemVersion: String, model: String, modelIdentifier: String, batteryLevel: Float? = nil, batteryState: BatteryState? = nil) {
-            self.name = name
-            self.systemName = systemName
-            self.systemVersion = systemVersion
-            self.model = model
-            self.modelIdentifier = modelIdentifier
-            self.batteryLevel = batteryLevel
-            self.batteryState = batteryState
-        }
-
-        public enum BatteryState: String, Codable {
-            case unknown
-            case unplugged
-            case charging
-            case full
-        }
+    private enum CodingKeys: String, CodingKey {
+        case date
+        case controllerTimeZone
+        case reason
+        case settings
+        case scheduleOverride
+        case controllerStatus
+        case pumpManagerStatus
+        case cgmManagerStatus
+        case lastReservoirValue
+        case historicalGlucose
+        case originalCarbEntry
+        case carbEntry
+        case manualGlucoseSample
+        case carbsOnBoard
+        case insulinOnBoard
+        case glucoseTargetRangeSchedule
+        case predictedGlucose
+        case automaticDoseRecommendation
+        case manualBolusRecommendation
+        case manualBolusRequested
+        case warnings
+        case errors
+        case syncIdentifier
     }
 }
 
 // MARK: - Critical Event Log Export
 
-extension DosingDecisionStore {
+extension DosingDecisionStore: CriticalEventLog {
     private var exportProgressUnitCountPerObject: Int64 { 33 }
     private var exportFetchLimit: Int { Int(criticalEventLogExportProgressUnitCountPerFetch / exportProgressUnitCountPerObject) }
+
+    public var exportName: String { "DosingDecisions.json" }
 
     public func exportProgressTotalUnitCount(startDate: Date, endDate: Date? = nil) -> Result<Int64, Error> {
         var result: Result<Int64, Error>?
@@ -319,7 +435,8 @@ extension DosingDecisionStore {
         return result!
     }
 
-    public func export(startDate: Date, endDate: Date, using encoder: @escaping ([DosingDecisionObject]) throws -> Void, progress: Progress) -> Error? {
+    public func export(startDate: Date, endDate: Date, to stream: OutputStream, progress: Progress) -> Error? {
+        let encoder = JSONStreamEncoder(stream: stream)
         var modificationCounter: Int64 = 0
         var fetching = true
         var error: Error?
@@ -343,7 +460,7 @@ extension DosingDecisionStore {
                         return
                     }
 
-                    try encoder(objects)
+                    try encoder.encode(objects)
 
                     modificationCounter = objects.last!.modificationCounter
 
@@ -352,6 +469,10 @@ extension DosingDecisionStore {
                     error = fetchError
                 }
             }
+        }
+
+        if let closeError = encoder.close(), error == nil {
+            error = closeError
         }
 
         return error
@@ -369,8 +490,8 @@ extension DosingDecisionStore {
 // MARK: - Core Data (Bulk) - TEST ONLY
 
 extension DosingDecisionStore {
-    public func addStoredDosingDecisionDatas(dosingDecisionDatas: [StoredDosingDecisionData], completion: @escaping (Error?) -> Void) {
-        guard !dosingDecisionDatas.isEmpty else {
+    public func addStoredDosingDecisions(dosingDecisions: [StoredDosingDecision], completion: @escaping (Error?) -> Void) {
+        guard !dosingDecisions.isEmpty else {
             completion(nil)
             return
         }
@@ -379,10 +500,13 @@ extension DosingDecisionStore {
             var error: Error?
 
             self.store.managedObjectContext.performAndWait {
-                for dosingDecisionData in dosingDecisionDatas {
+                for dosingDecision in dosingDecisions {
+                    guard let data = self.encodeDosingDecision(dosingDecision) else {
+                        continue
+                    }
                     let object = DosingDecisionObject(context: self.store.managedObjectContext)
-                    object.date = dosingDecisionData.date
-                    object.data = dosingDecisionData.data
+                    object.data = data
+                    object.date = dosingDecision.date
                 }
                 error = self.store.save()
             }
@@ -392,7 +516,7 @@ extension DosingDecisionStore {
                 return
             }
 
-            self.log.info("Added %d DosingDecisionObjects", dosingDecisionDatas.count)
+            self.log.info("Added %d DosingDecisionObjects", dosingDecisions.count)
             self.delegate?.dosingDecisionStoreHasUpdatedDosingDecisionData(self)
             completion(nil)
         }

@@ -35,14 +35,14 @@ carthage_bootstrap: &carthage_bootstrap
 
 carthage_save_cache: &carthage_save_cache
   name: Save Carthage Cache
-  key: carthage-v2-{{ .Branch }}-{{ checksum "Cartfile.resolved" }}
+  key: carthage-v3-{{ .Branch }}-{{ checksum "Cartfile.resolved" }}
   paths:
     - Carthage
 
 carthage_restore_cache: &carthage_restore_cache
   name: Restore Carthage Cache
   keys:
-    - carthage-v2-{{ .Branch }}-{{ checksum "Cartfile.resolved" }}
+    - carthage-v3-{{ .Branch }}-{{ checksum "Cartfile.resolved" }}
 
 #
 # Jobs
@@ -52,7 +52,7 @@ jobs:
   test:
     working_directory: *project_directory
     macos:
-      xcode: 12.5.0
+      xcode: 13.1.0
     steps:
       - checkout
       - restore_cache: *carthage_restore_cache
@@ -69,7 +69,7 @@ jobs:
   build-example:
     working_directory: *project_directory
     macos:
-      xcode: 12.5.0
+      xcode: 13.1.0
     steps:
       - checkout
       - restore_cache: *carthage_restore_cache

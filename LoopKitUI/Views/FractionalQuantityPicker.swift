@@ -134,6 +134,7 @@ public struct FractionalQuantityPicker: View {
             .padding(.leading, usageContext == .independent ? unitLabelWidth + spacing : 0)
             .padding(.trailing, spacing + separatorWidth + spacing)
             .clipped()
+            .compositingGroup()
 
             QuantityPicker(
                 value: $fraction.withUnit(unit),
@@ -147,6 +148,7 @@ public struct FractionalQuantityPicker: View {
             .frame(width: availableWidth / 3.5)
             .padding(.trailing, spacing + unitLabelWidth)
             .clipped()
+            .compositingGroup()
         }
     }
 

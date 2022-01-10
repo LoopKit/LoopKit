@@ -18,3 +18,21 @@ extension DosingDecisionObject {
     @NSManaged public var date: Date
     @NSManaged public var modificationCounter: Int64
 }
+
+extension DosingDecisionObject: Encodable {
+    func encode(to encoder: Encoder) throws {
+        try EncodableDosingDecisionObject(self).encode(to: encoder)
+    }
+}
+
+fileprivate struct EncodableDosingDecisionObject: Encodable {
+    var data: StoredDosingDecision
+    var date: Date
+    var modificationCounter: Int64
+
+    init(_ object: DosingDecisionObject) throws {
+        self.data = try PropertyListDecoder().decode(StoredDosingDecision.self, from: object.data)
+        self.date = object.date
+        self.modificationCounter = object.modificationCounter
+    }
+}

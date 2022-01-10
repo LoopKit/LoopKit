@@ -10,7 +10,7 @@ import SwiftUI
 import HealthKit
 import LoopKit
 
-
+// Also known as "Glucose Safety Limit"
 public struct SuspendThresholdEditor: View {
     @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
 
@@ -84,7 +84,7 @@ public struct SuspendThresholdEditor: View {
     private var content: some View {
         ConfigurationPage(
             title: Text(TherapySetting.suspendThreshold.title),
-            actionButtonTitle: Text(mode.buttonText),
+            actionButtonTitle: Text(mode.buttonText()),
             actionButtonState: saveButtonState,
             cards: {
                 Card {
@@ -109,8 +109,7 @@ public struct SuspendThresholdEditor: View {
                                 bounds: viewModel.guardrail.absoluteBounds.lowerBound...viewModel.maxSuspendThresholdValue
                             )
                             // Prevent the picker from expanding the card's width on small devices
-                            .frame(maxWidth: UIScreen.main.bounds.width - 48)
-                            .clipped()
+                            .frame(maxWidth: 220)
                         }
                     )
                 }

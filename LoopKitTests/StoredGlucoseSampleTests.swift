@@ -37,6 +37,7 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
         let uuid = UUID()
         let startDate = dateFormatter.date(from: "2020-02-03T04:05:06Z")!
         let quantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 134.5)
+        let trendRate = HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 0.0)
         let device = HKDevice(name: "NAME", manufacturer: "MANUFACTURER", model: "MODEL", hardwareVersion: "HARDWAREVERSION", firmwareVersion: "FIRMWAREVERSION", softwareVersion: "SOFTWAREVERSION", localIdentifier: "LOCALIDENTIFIER", udiDeviceIdentifier: "UDIDEVICEIDENTIFIER")
         let sample = StoredGlucoseSample(uuid: uuid,
                                          provenanceIdentifier: "8A1333E7-79CB-413F-AB7A-5413F14D4531",
@@ -44,7 +45,9 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
                                          syncVersion: 3,
                                          startDate: startDate,
                                          quantity: quantity,
+                                         condition: .aboveRange,
                                          trend: .flat,
+                                         trendRate: trendRate,
                                          isDisplayOnly: true,
                                          wasUserEntered: false,
                                          device: device,
@@ -55,7 +58,9 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
         XCTAssertEqual(sample.syncVersion, 3)
         XCTAssertEqual(sample.startDate, startDate)
         XCTAssertEqual(sample.quantity, quantity)
+        XCTAssertEqual(sample.condition, .aboveRange)
         XCTAssertEqual(sample.trend, .flat)
+        XCTAssertEqual(sample.trendRate, trendRate)
         XCTAssertEqual(sample.isDisplayOnly, true)
         XCTAssertEqual(sample.wasUserEntered, false)
         XCTAssertEqual(sample.device, device)
@@ -71,7 +76,9 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
                                          syncVersion: nil,
                                          startDate: startDate,
                                          quantity: quantity,
-                                         trend: .flat,
+                                         condition: nil,
+                                         trend: nil,
+                                         trendRate: nil,
                                          isDisplayOnly: false,
                                          wasUserEntered: true,
                                          device: nil,
@@ -82,7 +89,9 @@ class StoredGlucoseSampleInitializerTests: XCTestCase {
         XCTAssertNil(sample.syncVersion)
         XCTAssertEqual(sample.startDate, startDate)
         XCTAssertEqual(sample.quantity, quantity)
-        XCTAssertEqual(sample.trend, .flat)
+        XCTAssertNil(sample.condition)
+        XCTAssertNil(sample.trend)
+        XCTAssertNil(sample.trendRate)
         XCTAssertEqual(sample.isDisplayOnly, false)
         XCTAssertEqual(sample.wasUserEntered, true)
         XCTAssertNil(sample.device)
@@ -104,12 +113,15 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             managedObject.syncIdentifier = "A313021C-4B11-448A-9266-B01321CA0BCC"
             managedObject.syncVersion = 4
             managedObject.value = 145.6
-            managedObject.unitString = "mg/dL"
+            managedObject.unitString = HKUnit.milligramsPerDeciliter.unitString
             managedObject.startDate = startDate
             managedObject.isDisplayOnly = true
             managedObject.wasUserEntered = true
             managedObject.device = device
+            managedObject.condition = .aboveRange
             managedObject.trend = .downDownDown
+            managedObject.trendRateUnit = HKUnit.milligramsPerDeciliterPerMinute.unitString
+            managedObject.trendRateValue = -4.0
             managedObject.healthKitEligibleDate = startDate.addingTimeInterval(.hours(3))
             let sample = StoredGlucoseSample(managedObject: managedObject)
             XCTAssertEqual(sample.uuid, uuid)
@@ -121,7 +133,9 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             XCTAssertEqual(sample.isDisplayOnly, true)
             XCTAssertEqual(sample.wasUserEntered, true)
             XCTAssertEqual(sample.device, device)
+            XCTAssertEqual(sample.condition, .aboveRange)
             XCTAssertEqual(sample.trend, .downDownDown)
+            XCTAssertEqual(sample.trendRate, HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: -4.0))
             XCTAssertEqual(sample.healthKitEligibleDate, startDate.addingTimeInterval(.hours(3)))
         }
     }
@@ -147,7 +161,9 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             XCTAssertEqual(sample.isDisplayOnly, true)
             XCTAssertEqual(sample.wasUserEntered, true)
             XCTAssertNil(sample.device)
+            XCTAssertNil(sample.condition)
             XCTAssertNil(sample.trend)
+            XCTAssertNil(sample.trendRate)
             XCTAssertNil(sample.healthKitEligibleDate)
         }
     }

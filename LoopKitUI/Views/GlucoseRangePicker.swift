@@ -111,6 +111,7 @@ public struct GlucoseRangePicker: View {
             .padding(.leading, usageContext == .independent ? unitLabelWidth : 0)
             .padding(.trailing, spacing + separatorWidth + spacing)
             .clipped()
+            .compositingGroup()
             .accessibility(identifier: "min_glucose_picker")
 
             GlucoseValuePicker(
@@ -124,6 +125,7 @@ public struct GlucoseRangePicker: View {
             .frame(width: availableWidth / 3.5)
             .padding(.trailing, unitLabelWidth)
             .clipped()
+            .compositingGroup()
             .accessibility(identifier: "max_glucose_picker")
         }
     }

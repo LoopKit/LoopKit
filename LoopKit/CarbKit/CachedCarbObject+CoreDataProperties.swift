@@ -22,7 +22,7 @@ extension CachedCarbObject {
     @NSManaged public var grams: Double
     @NSManaged public var startDate: Date
     @NSManaged public var uuid: UUID?
-    @NSManaged public var provenanceIdentifier: String?
+    @NSManaged public var provenanceIdentifier: String
     @NSManaged public var syncIdentifier: String?
     @NSManaged public var primitiveSyncVersion: NSNumber?
     @NSManaged public var userCreatedDate: Date?
@@ -44,7 +44,7 @@ extension CachedCarbObject: Encodable {
         try container.encode(grams, forKey: .grams)
         try container.encode(startDate, forKey: .startDate)
         try container.encodeIfPresent(uuid, forKey: .uuid)
-        try container.encodeIfPresent(provenanceIdentifier, forKey: .provenanceIdentifier)
+        try container.encode(provenanceIdentifier, forKey: .provenanceIdentifier)
         try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
         try container.encodeIfPresent(syncVersion, forKey: .syncVersion)
         try container.encodeIfPresent(userCreatedDate, forKey: .userCreatedDate)

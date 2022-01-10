@@ -75,6 +75,7 @@ class CachedCarbObjectEncodableTests: PersistenceControllerTestCase {
             cachedCarbObject.createdByCurrentApp = false
             cachedCarbObject.grams = 34
             cachedCarbObject.startDate = dateFormatter.date(from: "2020-05-15T22:38:14Z")!
+            cachedCarbObject.provenanceIdentifier = "238E41EA-9576-4981-A1A4-51E10228584F"
             cachedCarbObject.operation = .create
             cachedCarbObject.anchorKey = 234
             try! assertCachedCarbObjectEncodable(cachedCarbObject, encodesJSON: """
@@ -83,6 +84,7 @@ class CachedCarbObjectEncodableTests: PersistenceControllerTestCase {
   "createdByCurrentApp" : false,
   "grams" : 34,
   "operation" : 0,
+  "provenanceIdentifier" : "238E41EA-9576-4981-A1A4-51E10228584F",
   "startDate" : "2020-05-15T22:38:14Z"
 }
 """

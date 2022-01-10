@@ -44,7 +44,7 @@ public struct ExpandablePicker: View {
                             Text(self.items[$0])
                        }
                     }
-                    .pickerStyle(WheelPickerStyle())
+                    .pickerStyle(.wheel)
                     .labelsHidden()
                 }
             }

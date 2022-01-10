@@ -58,6 +58,9 @@ public protocol PumpManager: DeviceManager {
     /// All user-selectable bolus volumes, in Units. Must be non-empty. Used during onboarding by therapy settings.
     static var onboardingSupportedBolusVolumes: [Double] { get }
 
+    /// All user-selectable maximum bolus volumes, in Units. Must be non-empty. Used during onboarding by therapy settings.
+    static var onboardingSupportedMaximumBolusVolumes: [Double] { get }
+
     /// Rounds a basal rate in U/hr to a rate supported by this pump.
     ///
     /// - Parameters:
@@ -77,6 +80,9 @@ public protocol PumpManager: DeviceManager {
 
     /// All user-selectable bolus volumes, in Units. Must be non-empty.
     var supportedBolusVolumes: [Double] { get }
+
+    /// All user-selectable bolus volumes for setting the maximum allowed bolus, in Units. Must be non-empty.
+    var supportedMaximumBolusVolumes: [Double] { get }
 
     /// The maximum number of scheduled basal rates in a single day supported by the pump
     var maximumBasalScheduleEntryCount: Int { get }
@@ -151,7 +157,7 @@ public protocol PumpManager: DeviceManager {
     ///
     /// - Parameters:
     ///   - unitsPerHour: The temporary basal rate to set
-    ///   - duration: The duration of the temporary basal rate.
+    ///   - duration: The duration of the temporary basal rate.  If you pass in a duration of 0, that cancels any currently running Temp Basal
     ///   - completion: A closure called after the command is complete
     ///   - error: An optional error describing why the command failed
     func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (_ error: PumpManagerError?) -> Void)
@@ -170,8 +176,6 @@ public protocol PumpManager: DeviceManager {
     ///   - error: An error describing why the command failed
     func resumeDelivery(completion: @escaping (_ error: Error?) -> Void)
     
-    typealias SyncSchedule = (_ items: [RepeatingScheduleValue<Double>], _ completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) -> Void
-
     /// Sync the schedule of basal rates to the pump, annotating the result with the proper time zone.
     ///
     /// - Precondition:
@@ -182,6 +186,14 @@ public protocol PumpManager: DeviceManager {
     ///   - completion: A closure called after the command is complete
     ///   - result: A BasalRateSchedule or an error describing why the command failed
     func syncBasalRateSchedule(items scheduleItems: [RepeatingScheduleValue<Double>], completion: @escaping (_ result: Result<BasalRateSchedule, Error>) -> Void)
+
+    /// Sync the delivery limits for basal rate and bolus. If the pump does not support setting max bolus or max basal rates, the completion should be called with success including the provided delivery limits.
+    ///
+    /// - Parameters:
+    ///   - deliveryLimits: The delivery limits
+    ///   - completion: A closure called after the command is complete
+    ///   - result: The delivery limits set or an error describing why the command failed
+    func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits, completion: @escaping (_ result: Result<DeliveryLimits, Error>) -> Void)
 }
 
 

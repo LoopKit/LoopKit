@@ -91,6 +91,8 @@ public final class GlucoseStore: HealthKitSampleStore {
     }
     private let lockedLatestGlucose = Locked<GlucoseSampleValue?>(nil)
 
+    private let storeSamplesToHealthKit: Bool
+
     private let cacheStore: PersistenceController
 
     private let provenanceIdentifier: String
@@ -98,13 +100,14 @@ public final class GlucoseStore: HealthKitSampleStore {
     public var healthKitStorageDelay: TimeInterval = 0
     
     // If HealthKit sharing is not authorized, `nil` will prevent later storage
-    var healthKitStorageDelayIfAuthorized: TimeInterval? { sharingAuthorized ? healthKitStorageDelay : nil }
+    var healthKitStorageDelayIfAllowed: TimeInterval? { storeSamplesToHealthKit && sharingAuthorized ? healthKitStorageDelay : nil }
     
     static let healthKitQueryAnchorMetadataKey = "com.loopkit.GlucoseStore.hkQueryAnchor"
 
     public init(
         healthStore: HKHealthStore,
         observeHealthKitSamplesFromOtherApps: Bool = true,
+        storeSamplesToHealthKit: Bool = true,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 60 /* minutes */ * 60 /* seconds */,
@@ -117,6 +120,7 @@ public final class GlucoseStore: HealthKitSampleStore {
         self.cacheStore = cacheStore
         self.momentumDataInterval = momentumDataInterval
 
+        self.storeSamplesToHealthKit = storeSamplesToHealthKit
         self.cacheLength = cacheLength
         self.observationInterval = observationInterval ?? cacheLength
         self.provenanceIdentifier = provenanceIdentifier
@@ -343,7 +347,7 @@ extension GlucoseStore {
                         let object = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
                         object.create(from: sample,
                                       provenanceIdentifier: self.provenanceIdentifier,
-                                      healthKitStorageDelay: self.healthKitStorageDelayIfAuthorized)
+                                      healthKitStorageDelay: self.healthKitStorageDelayIfAllowed)
                         return object
                     }
 
@@ -372,6 +376,10 @@ extension GlucoseStore {
         dispatchPrecondition(condition: .onQueue(queue))
         var error: Error?
         
+        guard storeSamplesToHealthKit else {
+            return
+        }
+
         cacheStore.managedObjectContext.performAndWait {
             do {
                 let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
@@ -858,7 +866,7 @@ extension GlucoseStore {
             self.cacheStore.managedObjectContext.performAndWait {
                 for sample in samples {
                     let object = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
-                    object.create(from: sample, provenanceIdentifier: self.provenanceIdentifier, healthKitStorageDelay: self.healthKitStorageDelayIfAuthorized)
+                    object.create(from: sample, provenanceIdentifier: self.provenanceIdentifier, healthKitStorageDelay: self.healthKitStorageDelayIfAllowed)
                 }
                 error = self.cacheStore.save()
             }

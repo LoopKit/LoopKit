@@ -16,12 +16,16 @@ public enum SettingsPresentationMode {
 
 extension SettingsPresentationMode {
     /// Text for the button at the bottom of the settings screen
-    var buttonText: String {
+    func buttonText(isSaving: Bool = false) -> String {
         switch self {
         case .acceptanceFlow:
             return LocalizedString("Confirm Setting", comment: "The button text for confirming the setting")
         case .settings:
-            return LocalizedString("Save", comment: "The button text for saving on a configuration page")
+            if isSaving {
+                return LocalizedString("Saving...", comment: "The button text during saving on a configuration page")
+            } else {
+                return LocalizedString("Save", comment: "The button text for saving on a configuration page")
+            }
         }
     }
 }

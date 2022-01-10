@@ -170,7 +170,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     private var page: some View {
         ConfigurationPage(
             title: title,
-            actionButtonTitle: Text(mode.buttonText),
+            actionButtonTitle: Text(mode.buttonText(isSaving: isSyncing)),
             actionButtonState: saveButtonState,
             cards: {
                 Card {

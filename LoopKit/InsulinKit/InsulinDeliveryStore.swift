@@ -41,6 +41,8 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
     /// The interval of insulin delivery data to keep in cache
     public let cacheLength: TimeInterval
 
+    private let storeSamplesToHealthKit: Bool
+
     private let cacheStore: PersistenceController
 
     private let provenanceIdentifier: String
@@ -50,12 +52,14 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
     public init(
         healthStore: HKHealthStore,
         observeHealthKitSamplesFromOtherApps: Bool = true,
+        storeSamplesToHealthKit: Bool = true,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
         provenanceIdentifier: String,
         test_currentDate: Date? = nil
     ) {
+        self.storeSamplesToHealthKit = storeSamplesToHealthKit
         self.cacheStore = cacheStore
         self.cacheLength = cacheLength
         self.provenanceIdentifier = provenanceIdentifier
@@ -341,7 +345,7 @@ extension InsulinDeliveryStore {
     private func saveEntriesToHealthKit(_ quantitySamples: [HKQuantitySample], objects: [CachedInsulinDeliveryObject]) {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        guard !quantitySamples.isEmpty else {
+        guard storeSamplesToHealthKit, !quantitySamples.isEmpty else {
             return
         }
 

@@ -165,6 +165,8 @@ public final class CarbStore: HealthKitSampleStore {
     /// The interval to observe HealthKit data to populate the cache
     public let observationInterval: TimeInterval
 
+    private let storeEntriesToHealthKit: Bool
+
     private let cacheStore: PersistenceController
 
     /// The sync version used for new samples written to HealthKit
@@ -191,6 +193,7 @@ public final class CarbStore: HealthKitSampleStore {
     public init(
         healthStore: HKHealthStore,
         observeHealthKitSamplesFromOtherApps: Bool = true,
+        storeEntriesToHealthKit: Bool = true,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval,
         defaultAbsorptionTimes: DefaultAbsorptionTimes,
@@ -205,6 +208,7 @@ public final class CarbStore: HealthKitSampleStore {
         carbAbsorptionModel: CarbAbsorptionModel = .nonlinear,
         provenanceIdentifier: String
     ) {
+        self.storeEntriesToHealthKit = storeEntriesToHealthKit
         self.cacheStore = cacheStore
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
         self.lockedCarbRatioSchedule = Locked(carbRatioSchedule)
@@ -550,6 +554,10 @@ extension CarbStore {
     private func saveEntryToHealthKit(_ object: CachedCarbObject) {
         dispatchPrecondition(condition: .onQueue(queue))
 
+        guard storeEntriesToHealthKit else {
+            return
+        }
+
         let quantitySample = object.quantitySample
         var error: Error?
 
@@ -886,14 +894,14 @@ extension CarbStore {
     private func areAllRelatedObjectsPurgable(to object: CachedCarbObject, before date: Date) throws -> Bool {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        // If no provenance identifier nor sync identifier, then there are no related objects
-        guard let provenanceIdentifier = object.provenanceIdentifier, let syncIdentifier = object.syncIdentifier else {
+        // If no sync identifier, then there are no related objects
+        guard let syncIdentifier = object.syncIdentifier else {
             return true
         }
 
         // Count any that are NOT purgable
         let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", provenanceIdentifier),
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", object.provenanceIdentifier),
                                                                                 NSPredicate(format: "syncIdentifier == %@", syncIdentifier),
                                                                                 NSPredicate(format: "startDate >= %@", date as NSDate)])
         request.fetchLimit = 1
@@ -1399,7 +1407,7 @@ extension CarbStore {
                     return [
                         "\t",
                         entry.uuid?.uuidString ?? "",
-                        entry.provenanceIdentifier ?? "",
+                        entry.provenanceIdentifier,
                         entry.syncIdentifier ?? "",
                         entry.syncVersion != nil ? String(describing: entry.syncVersion) : "",
                         String(describing: entry.startDate),

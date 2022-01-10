@@ -58,57 +58,6 @@ extension MockPumpManager: PumpManagerUI {
     
 }
 
-// MARK: - DeliveryLimitSettingsTableViewControllerSyncSource
-extension MockPumpManager {
-    public func syncDeliveryLimitSettings(for viewController: DeliveryLimitSettingsTableViewController, completion: @escaping (DeliveryLimitSettingsResult) -> Void) {
-        guard let maximumBasalRatePerHour = viewController.maximumBasalRatePerHour,
-            let maximumBolus = viewController.maximumBolus else
-        {
-            completion(.failure(MockPumpManagerError.missingSettings))
-            return
-        }
-        completion(.success(maximumBasalRatePerHour: maximumBasalRatePerHour, maximumBolus: maximumBolus))
-    }
-
-    public func syncButtonTitle(for viewController: DeliveryLimitSettingsTableViewController) -> String {
-        return "Save to simulator"
-    }
-
-    public func syncButtonDetailText(for viewController: DeliveryLimitSettingsTableViewController) -> String? {
-        return nil
-    }
-
-    public func deliveryLimitSettingsTableViewControllerIsReadOnly(_ viewController: DeliveryLimitSettingsTableViewController) -> Bool {
-        return false
-    }
-}
-
-// MARK: - BasalScheduleTableViewControllerSyncSource
-extension MockPumpManager {
-    public func syncScheduleValues(for viewController: BasalScheduleTableViewController, completion: @escaping (SyncBasalScheduleResult<Double>) -> Void) {
-        syncBasalRateSchedule(items: viewController.scheduleItems) { result in
-            switch result {
-            case .success(let schedule):
-                completion(.success(scheduleItems: schedule.items, timeZone: schedule.timeZone))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-
-    public func syncButtonTitle(for viewController: BasalScheduleTableViewController) -> String {
-        return "Save to simulator"
-    }
-
-    public func syncButtonDetailText(for viewController: BasalScheduleTableViewController) -> String? {
-        return nil
-    }
-
-    public func basalScheduleTableViewControllerIsReadOnly(_ viewController: BasalScheduleTableViewController) -> Bool {
-        return false
-    }
-}
-
 public enum MockPumpStatusBadge: DeviceStatusBadge {
     case timeSyncNeeded
     
