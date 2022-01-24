@@ -43,11 +43,11 @@ public enum InsulinType: Int, Codable, CaseIterable {
     public var description: String {
         switch self {
         case .novolog:
-            return LocalizedString("NovoLog (insulin aspart) is a fast-acting insulin made by Novo Nordisk", comment: "Description for novolog insulin type")
+            return LocalizedString("NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk", comment: "Description for novolog insulin type")
         case .humalog:
-            return LocalizedString("Humalog (insulin lispro) is a fast-acting insulin made by Eli Lilly", comment: "Description for humalog insulin type")
+            return LocalizedString("Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly", comment: "Description for humalog insulin type")
         case .apidra:
-            return LocalizedString("Apidra (insulin glulisine) is a fast-acting insulin made by Sanofi-aventis ", comment: "Description for apidra insulin type")
+            return LocalizedString("Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis ", comment: "Description for apidra insulin type")
         case .fiasp:
             return LocalizedString("Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk", comment: "Description for fiasp insulin type")
         }
