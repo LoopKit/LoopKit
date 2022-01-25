@@ -18,4 +18,8 @@ public enum LoopNotificationCategory: String {
     case pumpExpired
     case pumpFault
     case alert
+    case remoteBolus
+    case remoteBolusFailure
+    case remoteCarbs
+    case remoteCarbsFailure
 }
