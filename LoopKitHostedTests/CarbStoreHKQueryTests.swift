@@ -10,14 +10,16 @@ import XCTest
 import HealthKit
 @testable import LoopKit
 
-class CarbStoreHKQueryTests: PersistenceControllerTestCase {
+class CarbStoreHKQueryTestsBase: PersistenceControllerTestCase {
     var healthStore: HKHealthStoreMock!
     var carbStore: CarbStore!
+    var authorizationStatus: HKAuthorizationStatus = .notDetermined
 
     override func setUp() {
         super.setUp()
 
         healthStore = HKHealthStoreMock()
+        healthStore.authorizationStatus = authorizationStatus
         carbStore = CarbStore(healthStore: healthStore,
                               cacheStore: cacheStore,
                               cacheLength: .hours(24),
@@ -38,10 +40,29 @@ class CarbStoreHKQueryTests: PersistenceControllerTestCase {
 
         super.tearDown()
     }
+    
+}
 
+class CarbStoreHKQueryTestsAuthorized: CarbStoreHKQueryTestsBase {
+    override func setUp() {
+        authorizationStatus = .sharingAuthorized
+        super.setUp()
+    }
+
+    func testObserverQueryStartup() {
+        // Check that an observer query was registered even before authorize() is called.
+        XCTAssertFalse(carbStore.authorizationRequired);
+        XCTAssertNotNil(carbStore.observerQuery);
+    }
+}
+
+class CarbStoreHKQueryTests: CarbStoreHKQueryTestsBase {
     func testHKQueryAnchorPersistence() {
         var observerQuery: HKObserverQueryMock? = nil
         var anchoredObjectQuery: HKAnchoredObjectQueryMock? = nil
+        
+        XCTAssert(carbStore.authorizationRequired);
+        XCTAssertNil(carbStore.observerQuery);
 
         carbStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
