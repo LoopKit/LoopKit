@@ -252,7 +252,11 @@ public final class CarbStore: HealthKitSampleStore {
             cacheStore.fetchAnchor(key: CarbStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
                     self.queryAnchor = anchor
-            
+
+                    if !self.authorizationRequired {
+                        self.createQuery()
+                    }
+
                     self.migrateLegacyCarbEntryKeys()
                     
                     semaphore.signal()
