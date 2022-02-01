@@ -124,7 +124,7 @@ public struct FractionalQuantityPicker: View {
             )
             // Ensure whole picker color updates when fraction updates
             .id(whole + fraction)
-            .frame(width: availableWidth / 3.5)
+            .frame(width: availableWidth / 3)
             .overlay(
                 Text(separator)
                     .foregroundColor(Color(.secondaryLabel))
@@ -145,7 +145,7 @@ public struct FractionalQuantityPicker: View {
             )
             // Ensure fractional picker values update when whole value updates
             .id(whole + fraction)
-            .frame(width: availableWidth / 3.5)
+            .frame(width: availableWidth / 3)
             .padding(.trailing, spacing + unitLabelWidth)
             .clipped()
             .compositingGroup()
@@ -189,7 +189,7 @@ public struct FractionalQuantityPicker: View {
         return attributedSeparator.size().width
     }
 
-    var spacing: CGFloat { 8 }
+    var spacing: CGFloat { 4 }
 
     var unitLabelWidth: CGFloat {
         let attributedUnitString = NSAttributedString(
