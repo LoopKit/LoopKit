@@ -10,42 +10,43 @@ import XCTest
 import HealthKit
 @testable import LoopKit
 
-class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
+class GlucoseStoreTestsBase: PersistenceControllerTestCase, GlucoseStoreDelegate {
     private static let device = HKDevice(name: "NAME", manufacturer: "MANUFACTURER", model: "MODEL", hardwareVersion: "HARDWAREVERSION", firmwareVersion: "FIRMWAREVERSION", softwareVersion: "SOFTWAREVERSION", localIdentifier: "LOCALIDENTIFIER", udiDeviceIdentifier: "UDIDEVICEIDENTIFIER")
-    private let sample1 = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.minutes(6)),
-                                           quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.4),
-                                           condition: nil,
-                                           trend: nil,
-                                           trendRate: nil,
-                                           isDisplayOnly: true,
-                                           wasUserEntered: false,
-                                           syncIdentifier: "1925558F-E98F-442F-BBA6-F6F75FB4FD91",
-                                           syncVersion: 2,
-                                           device: device)
-    private let sample2 = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.minutes(2)),
-                                           quantity: HKQuantity(unit: .millimolesPerLiter, doubleValue: 7.4),
-                                           condition: nil,
-                                           trend: .flat,
-                                           trendRate: HKQuantity(unit: .millimolesPerLiterPerMinute, doubleValue: 0.0),
-                                           isDisplayOnly: false,
-                                           wasUserEntered: true,
-                                           syncIdentifier: "535F103C-3DFE-48F2-B15A-47313191E7B7",
-                                           syncVersion: 3,
-                                           device: device)
-    private let sample3 = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.minutes(4)),
-                                           quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 400.0),
-                                           condition: .aboveRange,
-                                           trend: .upUpUp,
-                                           trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 4.2),
-                                           isDisplayOnly: false,
-                                           wasUserEntered: false,
-                                           syncIdentifier: "E1624D2B-A971-41B8-B8A0-3A8212AC3D71",
-                                           syncVersion: 4,
-                                           device: device)
+    internal let sample1 = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.minutes(6)),
+                                            quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.4),
+                                            condition: nil,
+                                            trend: nil,
+                                            trendRate: nil,
+                                            isDisplayOnly: true,
+                                            wasUserEntered: false,
+                                            syncIdentifier: "1925558F-E98F-442F-BBA6-F6F75FB4FD91",
+                                            syncVersion: 2,
+                                            device: device)
+    internal let sample2 = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.minutes(2)),
+                                            quantity: HKQuantity(unit: .millimolesPerLiter, doubleValue: 7.4),
+                                            condition: nil,
+                                            trend: .flat,
+                                            trendRate: HKQuantity(unit: .millimolesPerLiterPerMinute, doubleValue: 0.0),
+                                            isDisplayOnly: false,
+                                            wasUserEntered: true,
+                                            syncIdentifier: "535F103C-3DFE-48F2-B15A-47313191E7B7",
+                                            syncVersion: 3,
+                                            device: device)
+    internal let sample3 = NewGlucoseSample(date: Date(timeIntervalSinceNow: -.minutes(4)),
+                                            quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 400.0),
+                                            condition: .aboveRange,
+                                            trend: .upUpUp,
+                                            trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 4.2),
+                                            isDisplayOnly: false,
+                                            wasUserEntered: false,
+                                            syncIdentifier: "E1624D2B-A971-41B8-B8A0-3A8212AC3D71",
+                                            syncVersion: 4,
+                                            device: device)
 
     var healthStore: HKHealthStoreMock!
     var glucoseStore: GlucoseStore!
     var delegateCompletion: XCTestExpectation?
+    var authorizationStatus: HKAuthorizationStatus = .notDetermined
 
     override func setUp() {
         super.setUp()
@@ -58,7 +59,7 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
         semaphore.wait()
 
         healthStore = HKHealthStoreMock()
-        healthStore.authorizationStatus = .sharingAuthorized
+        healthStore.authorizationStatus = authorizationStatus
         glucoseStore = GlucoseStore(healthStore: healthStore,
                                     cacheStore: cacheStore,
                                     cacheLength: .hours(1),
@@ -87,12 +88,37 @@ class GlucoseStoreTests: PersistenceControllerTestCase, GlucoseStoreDelegate {
     func glucoseStoreHasUpdatedGlucoseData(_ glucoseStore: GlucoseStore) {
         delegateCompletion?.fulfill()
     }
+}
 
+class GlucoseStoreTestsAuthorizationRequired: GlucoseStoreTestsBase {
+    func testObserverQueryStartup() {
+        XCTAssert(glucoseStore.authorizationRequired);
+        XCTAssertNil(glucoseStore.observerQuery);
+
+        let authorizationCompletion = expectation(description: "authorization completion")
+        glucoseStore.authorize { (result) in
+            authorizationCompletion.fulfill()
+        }
+        waitForExpectations(timeout: 10)
+        XCTAssertNotNil(glucoseStore.observerQuery);
+    }
+}
+
+class GlucoseStoreTests: GlucoseStoreTestsBase {
+    override func setUp() {
+        authorizationStatus = .sharingAuthorized
+        super.setUp()
+    }
+    
     // MARK: - HealthKitSampleStore
 
     func testHealthKitQueryAnchorPersistence() {
         var observerQuery: HKObserverQueryMock? = nil
         var anchoredObjectQuery: HKAnchoredObjectQueryMock? = nil
+
+        // Check that an observer query was registered even without authorize() being called.
+        XCTAssertFalse(glucoseStore.authorizationRequired);
+        XCTAssertNotNil(glucoseStore.observerQuery);
 
         glucoseStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)

@@ -143,6 +143,10 @@ public final class GlucoseStore: HealthKitSampleStore {
                 self.queue.async {
                     self.queryAnchor = anchor
 
+                    if !self.authorizationRequired {
+                        self.createQuery()
+                    }
+
                     self.updateLatestGlucose()
 
                     semaphore.signal()
