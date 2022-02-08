@@ -71,6 +71,8 @@ struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValu
             result.textAlignment = .center
             result.textColor = UIColor(picker.colorer(picker.data[row]))
             result.accessibilityHint = text
+            result.lineBreakMode = .byClipping
+            result.adjustsFontSizeToFitWidth = true
             return result
         }
         
