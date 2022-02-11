@@ -322,6 +322,6 @@ fileprivate extension String {
         guard enabled else {
             return self
         }
-        return self.replacingOccurrences(of: string, with: "\u{2060}\(string)\u{2060}")
+        return self.replacingOccurrences(of: string, with: "\(String.wordJoiner)\(string)\(String.wordJoiner)")
     }
 }

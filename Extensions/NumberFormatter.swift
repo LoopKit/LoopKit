@@ -25,14 +25,14 @@ extension NumberFormatter {
         case .long:
             separator = " "
         case .medium:
-            separator = avoidLineBreaking ? "\u{00a0}" : " "
+            separator = avoidLineBreaking ? .nonBreakingSpace : " "
         case .short:
             fallthrough
         @unknown default:
-            separator = avoidLineBreaking ? "\u{2060}" : ""
+            separator = avoidLineBreaking ? .wordJoiner : ""
         }
         
-        let unit = avoidLineBreaking ? unit.replacingOccurrences(of: "/", with: "\u{2060}/\u{2060}") : unit
+        let unit = avoidLineBreaking ? unit.replacingOccurrences(of: "/", with: "\(String.wordJoiner)/\(String.wordJoiner)") : unit
         
         return String(
             format: NSLocalizedString("%1$@%2$@%3$@", comment: "String format for value with units (1: value, 2: separator, 3: units)"),
@@ -41,4 +41,9 @@ extension NumberFormatter {
             unit
         )
     }
+}
+
+public extension String {
+    static let nonBreakingSpace = "\u{00a0}"
+    static let wordJoiner = "\u{2060}"
 }
