@@ -40,11 +40,20 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
         NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
+                self?.active = true
                 if self?.visible == true {
                     self?.reloadData()
                 }
             }
             .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification, object: nil)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.active = false
+            }
+            .store(in: &cancellables)
+
     }
 
     open override func didReceiveMemoryWarning() {
