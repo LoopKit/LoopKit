@@ -62,14 +62,7 @@ public final class AuthenticationViewController<T: ServiceAuthenticationUI>: UIT
     }
 
     var credentials: [(field: ServiceCredential, value: String?)] {
-        switch state {
-        case .authorized:
-
-
-            return authentication.credentials.filter({ !$0.field.isSecret })
-        default:
-            return authentication.credentials
-        }
+        return authentication.credentials
     }
 
     public init(authentication: T) {
@@ -164,6 +157,16 @@ public final class AuthenticationViewController<T: ServiceAuthenticationUI>: UIT
             return cell
         }
     }
+    
+    public override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        if section == 0 {
+            return authentication.credentialFormFieldHelperMessage
+        } else {
+            return nil
+        }
+    }
+    
+    // MARK: - Table view delegate
 
     public override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         switch Section(rawValue: indexPath.section)! {
