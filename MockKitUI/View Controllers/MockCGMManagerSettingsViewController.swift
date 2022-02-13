@@ -29,7 +29,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         self.displayGlucoseUnitObservable = displayGlucoseUnitObservable
 
         super.init(style: .grouped)
-        title = NSLocalizedString("CGM Settings", comment: "Title for CGM simulator settings")
+        title = NSLocalizedString("CGM Settings", comment: "Title for Simulator CGM settings")
 
         displayGlucoseUnitObservable.$displayGlucoseUnit
             .sink { [weak self] _ in self?.tableView.reloadData() }
@@ -566,7 +566,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 let vc = DateAndDurationTableViewController()
                 vc.inputMode = .duration(MockCGMManager.healthKitStorageDelay)
                 vc.title = "HealthKit Storage Delay"
-                vc.contextHelp = "Amount of time to wait before storing CGM samples to HealthKit. NOTE: after changing this, you will need to delete and re-add the CGM simulator!"
+                vc.contextHelp = "Amount of time to wait before storing CGM samples to HealthKit. NOTE: after changing this, you will need to delete and re-add the Simulator CGM!"
                 vc.indexPath = indexPath
                 vc.onSave { inputMode in
                     guard case .duration(let duration) = inputMode else {

@@ -299,7 +299,7 @@ public final class MockCGMManager: TestingCGMManager {
         return MockCGMManager.managerIdentifier
     }
     
-    public static let localizedTitle = "CGM Simulator"
+    public static let localizedTitle = "Simulator CGM"
     
     public var localizedTitle: String {
         return MockCGMManager.localizedTitle
@@ -330,8 +330,8 @@ public final class MockCGMManager: TestingCGMManager {
                                        interruptionLevel: .active)
     public static let signalLoss = MockAlert(sound: .sound(name: "critical.caf"),
                                              identifier: "signalLoss",
-                                             foregroundContent: Alert.Content(title: "Signal Loss", body: "CGM simulator signal loss", acknowledgeActionButtonLabel: "Dismiss"),
-                                             backgroundContent: Alert.Content(title: "Signal Loss", body: "CGM simulator signal loss", acknowledgeActionButtonLabel: "Dismiss"),
+                                             foregroundContent: Alert.Content(title: "Signal Loss", body: "Simulator CGM signal loss", acknowledgeActionButtonLabel: "Dismiss"),
+                                             backgroundContent: Alert.Content(title: "Signal Loss", body: "Simulator CGM signal loss", acknowledgeActionButtonLabel: "Dismiss"),
                                              interruptionLevel: .critical)
 
     private let lockedMockSensorState = Locked(MockCGMState(isStateValid: true))
