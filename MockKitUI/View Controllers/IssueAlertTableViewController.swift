@@ -67,6 +67,20 @@ final class IssueAlertTableViewController: UITableViewController {
             default: return MockCGMManager.submarine.identifier
             }
         }
+
+        var metadata: Alert.Metadata? {
+            switch self {
+            case .buzz:
+                return Alert.Metadata(dict: [
+                    "string": Alert.MetadataValue("Buzz"),
+                    "int": Alert.MetadataValue(1),
+                    "double": Alert.MetadataValue(2.34),
+                    "bool": Alert.MetadataValue(true),
+                ])
+            default:
+                return nil
+            }
+        }
     }
 
     init(cgmManager: MockCGMManager) {
@@ -131,7 +145,7 @@ final class IssueAlertTableViewController: UITableViewController {
         case .retract:
             cgmManager.retractCurrentAlert()
         default:
-            cgmManager.issueAlert(identifier: row.identifier, trigger: row.trigger, delay: row.delayBeforeIssue)
+            cgmManager.issueAlert(identifier: row.identifier, trigger: row.trigger, delay: row.delayBeforeIssue, metadata: row.metadata)
         }
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadRows(at: [IndexPath(row: AlertRow.retract.rawValue, section: indexPath.section)], with: .automatic)

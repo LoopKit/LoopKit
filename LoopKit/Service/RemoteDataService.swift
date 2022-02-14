@@ -11,6 +11,17 @@
 */
 public protocol RemoteDataService: Service {
 
+    /// The maximum number of alert data to upload to the remote data service at one time.
+    var alertDataLimit: Int? { get }
+
+    /**
+     Upload alert data to the remote data service.
+
+     - Parameter stored: The stored alert data to upload.
+     - Parameter completion: The completion function to call with any success or failure.
+     */
+    func uploadAlertData(_ stored: [SyncAlertObject], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+
     /// The maximum number of carb data to upload to the remote data service at one time.
     var carbDataLimit: Int? { get }
 
@@ -82,6 +93,12 @@ public protocol RemoteDataService: Service {
 }
 
 public extension RemoteDataService {
+
+    var alertDataLimit: Int? { return nil }
+
+    func uploadAlertData(_ stored: [SyncAlertObject], completion: @escaping (_ result: Result<Bool, Error>) -> Void) {
+        completion(.success(false))
+    }
 
     var carbDataLimit: Int? { return nil }
 
