@@ -60,12 +60,12 @@ public class HealthKitSampleStore {
     }
     
     /// Allows unit test to inject a mock for HKObserverQuery
-    public var createObserverQuery: (HKSampleType, NSPredicate?, @escaping (HKObserverQuery, @escaping HKObserverQueryCompletionHandler, Error?) -> Void) -> HKObserverQuery = { (sampleType, predicate, updateHandler) in
+    internal var createObserverQuery: (HKSampleType, NSPredicate?, @escaping (HKObserverQuery, @escaping HKObserverQueryCompletionHandler, Error?) -> Void) -> HKObserverQuery = { (sampleType, predicate, updateHandler) in
         return HKObserverQuery(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
     }
     
     /// Allows unit test to inject a mock for HKAnchoredObjectQuery
-    public var createAnchoredObjectQuery: (HKSampleType, NSPredicate?, HKQueryAnchor?, Int, @escaping (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void) -> HKAnchoredObjectQuery = { (sampleType, predicate, anchor, limit, resultsHandler) in
+    internal var createAnchoredObjectQuery: (HKSampleType, NSPredicate?, HKQueryAnchor?, Int, @escaping (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void) -> HKAnchoredObjectQuery = { (sampleType, predicate, anchor, limit, resultsHandler) in
         return HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: limit, resultsHandler: resultsHandler)
     }
 
@@ -137,7 +137,7 @@ public class HealthKitSampleStore {
     // MARK: - Query support
 
     /// The active observer query
-    private var observerQuery: HKObserverQuery? {
+    internal var observerQuery: HKObserverQuery? {
         didSet {
             if let query = oldValue {
                 healthStore.stop(query)
@@ -317,7 +317,7 @@ extension HealthKitSampleStore {
 
 // MARK: - Observation
 extension HealthKitSampleStore {
-    private func createQuery() {
+    internal func createQuery() {
         log.debug("%@ [sampleType: %@]", #function, sampleType)
         log.debug("%@ [observationEnabled: %d]", #function, observationEnabled)
         log.debug("%@ [observeHealthKitSamplesFromCurrentApp: %d]", #function, observeHealthKitSamplesFromCurrentApp)

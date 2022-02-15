@@ -89,6 +89,13 @@ public protocol RemoteDataService: Service {
      - Parameter completion: The completion function to call with any success or failure.
      */
     func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+    
+    /**
+     Validates a push notification originated from this data service.
+     - Parameter notification: The push notification dictionary
+     - Returns: Success
+     */
+    func validatePushNotificationSource(_ notification: [String: AnyObject]) -> Bool
 
 }
 
@@ -134,6 +141,10 @@ public extension RemoteDataService {
 
     func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (_ result: Result<Bool, Error>) -> Void) {
         completion(.success(false))
+    }
+    
+    func validatePushNotificationSource(_ notification: [String: AnyObject]) -> Bool {
+        return false
     }
 
 }
