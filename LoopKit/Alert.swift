@@ -94,15 +94,21 @@ public struct Alert: Equatable {
         case sound(name: String)
     }
     public let sound: Sound?
+
+    /// Any metadata for the alert used to customize the alert content
+    public typealias MetadataValue = AnyCodableEquatable
+    public typealias Metadata = [String: MetadataValue]
+    public let metadata: Metadata?
     
     public init(identifier: Identifier, foregroundContent: Content?, backgroundContent: Content?, trigger: Trigger,
-                interruptionLevel: InterruptionLevel = .timeSensitive, sound: Sound? = nil) {
+                interruptionLevel: InterruptionLevel = .timeSensitive, sound: Sound? = nil, metadata: Metadata? = nil) {
         self.identifier = identifier
         self.foregroundContent = foregroundContent
         self.backgroundContent = backgroundContent
         self.trigger = trigger
         self.interruptionLevel = interruptionLevel
         self.sound = sound
+        self.metadata = metadata
     }
 }
 
@@ -215,6 +221,12 @@ extension Alert.Sound: Codable {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(SoundName(name: name), forKey: .sound)
         }
+    }
+}
+
+public extension Alert.Metadata {
+    init<E: Codable & Equatable>(dict: [String: E]) {
+        self = dict.mapValues { Alert.MetadataValue($0) }
     }
 }
 
