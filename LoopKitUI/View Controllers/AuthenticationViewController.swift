@@ -159,9 +159,10 @@ public final class AuthenticationViewController<T: ServiceAuthenticationUI>: UIT
     }
     
     public override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if section == 0 {
+        switch Section(rawValue: section)! {
+        case .credentials:
             return authentication.credentialFormFieldHelperMessage
-        } else {
+        case .button:
             return nil
         }
     }
