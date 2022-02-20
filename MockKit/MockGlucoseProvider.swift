@@ -175,7 +175,7 @@ extension MockGlucoseProvider {
         let magnitude = magnitude.doubleValue(for: unit)
 
         return mapGlucoseQuantities { glucose in
-            let glucoseValue = glucose.doubleValue(for: unit) + .random(in: -magnitude...magnitude)
+            let glucoseValue = (glucose.doubleValue(for: unit) + .random(in: -magnitude...magnitude)).rounded()
             return HKQuantity(unit: unit, doubleValue: glucoseValue)
         }
     }
@@ -199,7 +199,7 @@ extension MockGlucoseProvider {
         return mapGlucoseQuantities { glucose in
             return coinFlip(
                 withChanceOfHeads: chanceOfOutlier,
-                ifHeads: HKQuantity(unit: unit, doubleValue: glucose.doubleValue(for: unit) + outlierDelta),
+                ifHeads: HKQuantity(unit: unit, doubleValue: (glucose.doubleValue(for: unit) + outlierDelta).rounded()),
                 ifTails: glucose
             )
         }

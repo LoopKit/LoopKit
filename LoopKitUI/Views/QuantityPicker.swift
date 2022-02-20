@@ -28,6 +28,8 @@ public struct QuantityPicker: View {
     private let selectableValues: [Double]
     private let formatter: NumberFormatter
 
+    private let unitLabelSpacing: CGFloat = -6
+    
     public init(
         value: Binding<HKQuantity>,
         unit: HKUnit,
@@ -128,7 +130,7 @@ public struct QuantityPicker: View {
                 Text(self.unit.shortLocalizedUnitString())
                     .foregroundColor(.gray)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                    .offset(x: pickerValueBounds.union(in: geometry).maxX)
+                    .offset(x: pickerValueBounds.union(in: geometry).maxX + unitLabelSpacing)
                     .animation(.default)
             }
         }

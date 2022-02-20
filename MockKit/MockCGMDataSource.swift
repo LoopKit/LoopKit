@@ -53,8 +53,8 @@ public struct MockCGMDataSource {
 
     static let device = HKDevice(
         name: "MockCGMManager",
-        manufacturer: nil,
-        model: nil,
+        manufacturer: "LoopKit",
+        model: "MockCGMManager",
         hardwareVersion: nil,
         firmwareVersion: nil,
         softwareVersion: String(LoopKitVersionNumber),
