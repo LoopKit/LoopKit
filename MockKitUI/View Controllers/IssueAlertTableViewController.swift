@@ -24,6 +24,7 @@ final class IssueAlertTableViewController: UITableViewController {
         case issueLater
         case buzz
         case critical
+        case criticalDelayed
         case retract // should be kept at the bottom of the list
 
         var description: String {
@@ -35,6 +36,7 @@ final class IssueAlertTableViewController: UITableViewController {
             case .retract: return "Retract any alert above"
             case .buzz: return "Issue an immediate vibrate alert"
             case .critical: return "Issue a critical immediate alert"
+            case .criticalDelayed: return "Issue a \"delayed \(delay) seconds\" critical alert"
             }
         }
         
@@ -44,6 +46,7 @@ final class IssueAlertTableViewController: UITableViewController {
             case .retract: return .immediate
             case .critical: return .immediate
             case .delayed: return .delayed(interval: delay)
+            case .criticalDelayed: return .delayed(interval: delay)
             case .repeating: return .repeating(repeatInterval: delay)
             case .issueLater: return .immediate
             case .buzz: return .immediate
@@ -60,8 +63,22 @@ final class IssueAlertTableViewController: UITableViewController {
         var identifier: Alert.AlertIdentifier {
             switch self {
             case .buzz: return MockCGMManager.buzz.identifier
-            case .critical: return MockCGMManager.critical.identifier
+            case .critical, .criticalDelayed: return MockCGMManager.critical.identifier
             default: return MockCGMManager.submarine.identifier
+            }
+        }
+
+        var metadata: Alert.Metadata? {
+            switch self {
+            case .buzz:
+                return Alert.Metadata(dict: [
+                    "string": Alert.MetadataValue("Buzz"),
+                    "int": Alert.MetadataValue(1),
+                    "double": Alert.MetadataValue(2.34),
+                    "bool": Alert.MetadataValue(true),
+                ])
+            default:
+                return nil
             }
         }
     }
@@ -128,7 +145,7 @@ final class IssueAlertTableViewController: UITableViewController {
         case .retract:
             cgmManager.retractCurrentAlert()
         default:
-            cgmManager.issueAlert(identifier: row.identifier, trigger: row.trigger, delay: row.delayBeforeIssue)
+            cgmManager.issueAlert(identifier: row.identifier, trigger: row.trigger, delay: row.delayBeforeIssue, metadata: row.metadata)
         }
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadRows(at: [IndexPath(row: AlertRow.retract.rawValue, section: indexPath.section)], with: .automatic)

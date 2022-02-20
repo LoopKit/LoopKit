@@ -129,10 +129,10 @@ class GuardrailTests: XCTestCase {
     }
 
     func testBasalRateGuardrailClampedLow() {
-        let supportedBasalRates = [0.01, 1.0, 30.0]
+        let supportedBasalRates = [-1, 0.01, 1.0, 30.0]
         let guardrail = Guardrail.basalRate(supportedBasalRates: supportedBasalRates)
-        XCTAssertEqual(1.0...30.0, guardrail.absoluteBounds.range(withUnit: .internationalUnitsPerHour))
-        XCTAssertEqual(1.0...30.0, guardrail.recommendedBounds.range(withUnit: .internationalUnitsPerHour))
+        XCTAssertEqual(0.01...30.0, guardrail.absoluteBounds.range(withUnit: .internationalUnitsPerHour))
+        XCTAssertEqual(0.01...30.0, guardrail.recommendedBounds.range(withUnit: .internationalUnitsPerHour))
     }
 
     func testBasalRateGuardrailClampedHigh() {
@@ -143,10 +143,10 @@ class GuardrailTests: XCTestCase {
     }
 
     func testBasalRateGuardrailZeroDropsFirst() {
-        let supportedBasalRates = [0.0, 1.0, 2.0, 3.0, 4.0, 5.0]
+        let supportedBasalRates = [-1, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0]
         let guardrail = Guardrail.basalRate(supportedBasalRates: supportedBasalRates)
-        XCTAssertEqual(guardrail.absoluteBounds.range(withUnit: .internationalUnitsPerHour),  1.0...5.0)
-        XCTAssertEqual(guardrail.recommendedBounds.range(withUnit: .internationalUnitsPerHour), 1.0...5.0)
+        XCTAssertEqual(guardrail.absoluteBounds.range(withUnit: .internationalUnitsPerHour),  0.0...5.0)
+        XCTAssertEqual(guardrail.recommendedBounds.range(withUnit: .internationalUnitsPerHour), 0.0...5.0)
     }
 
     func testMaxBasalRateGuardrail() {

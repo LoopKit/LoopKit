@@ -101,7 +101,7 @@ public struct GlucoseRangePicker: View {
             )
             // Ensure the selectable picker values update when either bound changes
             .id(lowerBound...upperBound)
-            .frame(width: availableWidth / 3.5)
+            .frame(width: availableWidth / 3)
             .overlay(
                 Text(separator)
                     .foregroundColor(Color(.secondaryLabel))
@@ -122,7 +122,7 @@ public struct GlucoseRangePicker: View {
             )
             // Ensure the selectable picker values update when either bound changes
             .id(lowerBound...upperBound)
-            .frame(width: availableWidth / 3.5)
+            .frame(width: availableWidth / 3)
             .padding(.trailing, unitLabelWidth)
             .clipped()
             .compositingGroup()
@@ -141,7 +141,7 @@ public struct GlucoseRangePicker: View {
         return attributedSeparator.size().width
     }
 
-    var spacing: CGFloat { 8 }
+    var spacing: CGFloat { 4 }
 
     var unitLabelWidth: CGFloat {
         let attributedUnitString = NSAttributedString(

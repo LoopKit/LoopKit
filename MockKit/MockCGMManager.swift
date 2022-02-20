@@ -603,7 +603,7 @@ extension MockCGMManager {
         return mockSensorState.cgmStatusHighlight?.alertIdentifier
     }
     
-    public func issueAlert(identifier: Alert.AlertIdentifier, trigger: Alert.Trigger, delay: TimeInterval?) {
+    public func issueAlert(identifier: Alert.AlertIdentifier, trigger: Alert.Trigger, delay: TimeInterval?, metadata: Alert.Metadata? = nil) {
         guard let alert = alerts[identifier] else {
             return
         }
@@ -615,7 +615,8 @@ extension MockCGMManager {
                                        backgroundContent: alert.backgroundContent,
                                        trigger: trigger,
                                        interruptionLevel: alert.interruptionLevel,
-                                       sound: alert.sound))
+                                       sound: alert.sound,
+                                       metadata: metadata))
         }
 
         // updating the status highlight
