@@ -208,6 +208,29 @@ extension BidirectionalCollection where Element == GlucoseEffect {
 
         return sums.reversed()
     }
+
+    /// Sums all effects into a single effect
+    ///
+    /// Requires the receiver to be sorted chronologically by endDate
+    ///
+    /// - Parameter duration: The duration of each resulting summed element
+    /// - Returns: A single GlucoseChange representing the net effect
+    public func netEffect() -> GlucoseChange? {
+        guard let first = self.first, let last = self.last else {
+            return nil
+        }
+
+        let sum = self.map { $0.quantity.doubleValue(for: .milligramsPerDeciliter) }.sum()
+
+        return GlucoseChange(startDate: first.startDate, endDate: last.endDate, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: sum))
+    }
+
+}
+
+extension Sequence where Element: AdditiveArithmetic {
+    func sum() -> Element {
+        return reduce(.zero, +)
+    }
 }
 
 
