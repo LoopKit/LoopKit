@@ -220,9 +220,9 @@ extension BidirectionalCollection where Element == GlucoseEffect {
             return nil
         }
 
-        let sum = self.map { $0.quantity.doubleValue(for: .milligramsPerDeciliter) }.sum()
+        let net = last.quantity.doubleValue(for: .milligramsPerDeciliter) - first.quantity.doubleValue(for: .milligramsPerDeciliter)
 
-        return GlucoseChange(startDate: first.startDate, endDate: last.endDate, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: sum))
+        return GlucoseChange(startDate: first.startDate, endDate: last.endDate, quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: net))
     }
 
 }

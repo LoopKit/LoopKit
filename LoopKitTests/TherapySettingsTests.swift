@@ -10,14 +10,6 @@ import XCTest
 import HealthKit
 import LoopKit
 
-class TherapySettingsRawRepresentableTests: XCTestCase {
-    func testTherapySettingRawValue() {
-        let original = TherapySettings.test
-        let actual = TherapySettings(rawValue: original.rawValue)
-        XCTAssertEqual(actual, original)
-    }
-}
-
 class TherapySettingsCodableTests: XCTestCase {
     private let dateFormatter = ISO8601DateFormatter()
 
