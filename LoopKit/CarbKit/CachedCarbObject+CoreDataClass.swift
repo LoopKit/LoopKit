@@ -91,7 +91,7 @@ extension CachedCarbObject {
 
     // HealthKit
     func create(from sample: HKQuantitySample, on date: Date = Date()) {
-        precondition(!sample.createdByCurrentApp)
+        //precondition(!sample.createdByCurrentApp)
 
         self.absorptionTime = sample.absorptionTime
         self.createdByCurrentApp = sample.createdByCurrentApp

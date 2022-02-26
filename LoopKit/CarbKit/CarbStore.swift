@@ -226,8 +226,8 @@ public final class CarbStore: HealthKitSampleStore {
         let observationEnabled = observationInterval > 0
 
         super.init(healthStore: healthStore,
-                   observeHealthKitSamplesFromCurrentApp: false,
-                   observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
+                   observeHealthKitSamplesFromCurrentApp: true,
+                   observeHealthKitSamplesFromOtherApps: false,
                    type: carbType,
                    observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
                    observationEnabled: observationEnabled)
