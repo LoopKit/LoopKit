@@ -13,6 +13,7 @@ public enum InsulinType: Int, Codable, CaseIterable {
     case humalog
     case apidra
     case fiasp
+    case lyumjev
     
     public var title: String {
         switch self {
@@ -24,6 +25,8 @@ public enum InsulinType: Int, Codable, CaseIterable {
             return LocalizedString("Apidra (insulin glulisine)", comment: "Title for Apidra insulin type")
         case .fiasp:
             return LocalizedString("Fiasp", comment: "Title for Fiasp insulin type")
+        case .lyumjev:
+            return LocalizedString("Lyumjev", comment: "Title for Lyumjev insulin type")
         }
     }
     
@@ -37,6 +40,8 @@ public enum InsulinType: Int, Codable, CaseIterable {
             return LocalizedString("Apidra", comment: "Brand name for apidra insulin type")
         case .fiasp:
             return LocalizedString("Fiasp", comment: "Brand name for fiasp insulin type")
+        case .lyumjev:
+            return LocalizedString("Lyumjev", comment: "Brand name for lyumjev insulin type")
         }
     }
     
@@ -50,6 +55,8 @@ public enum InsulinType: Int, Codable, CaseIterable {
             return LocalizedString("Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis ", comment: "Description for apidra insulin type")
         case .fiasp:
             return LocalizedString("Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk", comment: "Description for fiasp insulin type")
+        case .lyumjev:
+            return LocalizedString("Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly", comment: "Description for lyumjev insulin type")
         }
     }
 }
