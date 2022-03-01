@@ -106,7 +106,14 @@ extension MockService: LoggingService {
 }
 
 extension MockService: RemoteDataService {
-    
+
+    public func uploadTemporaryOverrideData(updated: [TemporaryScheduleOverride], deleted: [TemporaryScheduleOverride], completion: @escaping (Result<Bool, Error>) -> Void) {
+        if remoteData {
+            record("[RemoteDataService] Upload temporary override data (updated: \(updated.count), deleted: \(deleted.count))")
+        }
+        completion(.success(false))
+    }
+
     public func uploadCarbData(created: [SyncCarbObject], updated: [SyncCarbObject], deleted: [SyncCarbObject], completion: @escaping (Result<Bool, Error>) -> Void) {
         if remoteData {
             record("[RemoteDataService] Upload carb data (created: \(created.count), updated: \(updated.count), deleted: \(deleted.count))")

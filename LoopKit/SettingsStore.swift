@@ -227,7 +227,7 @@ public struct StoredSettingsData {
     }
 }
 
-public struct StoredSettings {
+public struct StoredSettings: Equatable {
     public let date: Date
     public var controllerTimeZone: TimeZone
     public let dosingEnabled: Bool
