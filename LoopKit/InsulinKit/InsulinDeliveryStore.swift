@@ -66,7 +66,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
 
         super.init(
             healthStore: healthStore,
-            observeHealthKitSamplesFromCurrentApp: false,
+            observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
             type: insulinQuantityType,
             observationStart: (test_currentDate ?? Date()).addingTimeInterval(-cacheLength),

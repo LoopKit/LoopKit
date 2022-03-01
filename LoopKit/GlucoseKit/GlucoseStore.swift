@@ -126,7 +126,7 @@ public final class GlucoseStore: HealthKitSampleStore {
         self.provenanceIdentifier = provenanceIdentifier
 
         super.init(healthStore: healthStore,
-                   observeHealthKitSamplesFromCurrentApp: false,
+                   observeHealthKitSamplesFromCurrentApp: true,
                    observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
                    type: glucoseType,
                    observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
