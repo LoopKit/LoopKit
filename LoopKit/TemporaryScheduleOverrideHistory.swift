@@ -95,8 +95,6 @@ public final class TemporaryScheduleOverrideHistory {
         didSet {
             modificationCounter += 1
 
-            delegate?.temporaryScheduleOverrideHistoryDidUpdate(self)
-
             if let lastTaintedEvent = taintedEventLog.last,
                 Date().timeIntervalSince(lastTaintedEvent.override.startDate) > .hours(48)
             {
@@ -107,11 +105,7 @@ public final class TemporaryScheduleOverrideHistory {
     
     /// Tracks a sequence of override events that failed validation checks.
     /// Stored to enable retrieval via issue report after a deliberate crash.
-    private var taintedEventLog: [OverrideEvent] = [] {
-        didSet {
-            delegate?.temporaryScheduleOverrideHistoryDidUpdate(self)
-        }
-    }
+    private var taintedEventLog: [OverrideEvent] = []
     
     private var modificationCounter: Int64
     
@@ -133,6 +127,7 @@ public final class TemporaryScheduleOverrideHistory {
         } else {
             cancelActiveOverride(at: enableDate)
         }
+        delegate?.temporaryScheduleOverrideHistoryDidUpdate(self)
     }
     
     private var lastUndeletedEvent: OverrideEvent? {
