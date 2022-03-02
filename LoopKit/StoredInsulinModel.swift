@@ -12,6 +12,7 @@ public struct StoredInsulinModel: Codable, Equatable {
     public enum ModelType: String, Codable {
         case fiasp
         case lyumjev
+        case afrezza
         case rapidAdult
         case rapidChild
     }
@@ -42,6 +43,8 @@ public extension StoredInsulinModel {
             modelType = .fiasp
         case .lyumjev:
             modelType = .lyumjev
+        case .afrezza:
+            modelType = .afrezza
         }
         
         self.init(modelType: modelType, delay: preset.delay, actionDuration: preset.actionDuration, peakActivity: preset.peakActivity)

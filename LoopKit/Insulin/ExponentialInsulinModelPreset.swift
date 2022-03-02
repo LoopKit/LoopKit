@@ -10,6 +10,7 @@ public enum ExponentialInsulinModelPreset: String, Codable {
     case rapidActingChild
     case fiasp
     case lyumjev
+    case afrezza
 }
 
 
@@ -25,6 +26,8 @@ extension ExponentialInsulinModelPreset {
             return .minutes(360)
         case .lyumjev:
             return .minutes(360)
+        case .afrezza:
+            return .minutes(360)
         }
     }
 
@@ -38,11 +41,28 @@ extension ExponentialInsulinModelPreset {
             return .minutes(55)
         case .lyumjev:
             return .minutes(55)
+        case.afrezza:
+            return .minutes(19)
         }
     }
 
+    public var delay: TimeInterval {
+        switch self {
+        case .rapidActingAdult:
+            return .minutes(5)
+        case .rapidActingChild:
+            return .minutes(5)
+        case .fiasp:
+            return .minutes(5)
+        case .lyumjev:
+            return .minutes(5)
+        case.afrezza:
+            return .minutes(0)
+        }
+    }
+    
     var model: InsulinModel {
-        return ExponentialInsulinModel(actionDuration: actionDuration, peakActivityTime: peakActivity)
+        return ExponentialInsulinModel(actionDuration: actionDuration, peakActivityTime: peakActivity, delay: delay)
     }
 }
 
@@ -50,10 +70,6 @@ extension ExponentialInsulinModelPreset {
 extension ExponentialInsulinModelPreset: InsulinModel {
     public var effectDuration: TimeInterval {
         return model.effectDuration
-    }
-    
-    public var delay: TimeInterval {
-        return model.delay
     }
 
     public func percentEffectRemaining(at time: TimeInterval) -> Double {

@@ -14,6 +14,7 @@ public enum InsulinType: Int, Codable, CaseIterable {
     case apidra
     case fiasp
     case lyumjev
+    case afrezza
     
     public var title: String {
         switch self {
@@ -27,6 +28,8 @@ public enum InsulinType: Int, Codable, CaseIterable {
             return LocalizedString("Fiasp", comment: "Title for Fiasp insulin type")
         case .lyumjev:
             return LocalizedString("Lyumjev", comment: "Title for Lyumjev insulin type")
+        case .afrezza:
+            return LocalizedString("Afrezza", comment: "Title for Afrezza insulin type")
         }
     }
     
@@ -42,6 +45,8 @@ public enum InsulinType: Int, Codable, CaseIterable {
             return LocalizedString("Fiasp", comment: "Brand name for fiasp insulin type")
         case .lyumjev:
             return LocalizedString("Lyumjev", comment: "Brand name for lyumjev insulin type")
+        case .afrezza:
+            return LocalizedString("Afrezza", comment: "Brand name for afrezza insulin type")
         }
     }
     
@@ -57,6 +62,8 @@ public enum InsulinType: Int, Codable, CaseIterable {
             return LocalizedString("Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk", comment: "Description for fiasp insulin type")
         case .lyumjev:
             return LocalizedString("Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly", comment: "Description for lyumjev insulin type")
+        case .afrezza:
+            return LocalizedString("Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind", comment: "Description for afrezza insulin type")
         }
     }
 }

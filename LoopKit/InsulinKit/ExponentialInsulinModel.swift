@@ -24,7 +24,7 @@ public struct ExponentialInsulinModel {
     ///   - actionDuration: The total duration of insulin activity, excluding delay
     ///   - peakActivityTime: The time of the peak of insulin activity from dose.
     ///   - delay: The time to delay the dose effect
-    public init(actionDuration: TimeInterval, peakActivityTime: TimeInterval, delay: TimeInterval = 600) {
+    public init(actionDuration: TimeInterval, peakActivityTime: TimeInterval, delay: TimeInterval) {
         self.actionDuration = actionDuration
         self.peakActivityTime = peakActivityTime
         self.delay = delay
