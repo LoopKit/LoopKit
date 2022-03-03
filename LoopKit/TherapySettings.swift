@@ -65,50 +65,6 @@ public struct TherapySettings: Equatable {
     }
 }
 
-extension TherapySettings: RawRepresentable {
-    public typealias RawValue = [String: Any]
-
-    public init?(rawValue: RawValue) {
-        if let rawGlucoseTargetRangeSchedule = rawValue["glucoseTargetRangeSchedule"] as? GlucoseRangeSchedule.RawValue {
-            self.glucoseTargetRangeSchedule = GlucoseRangeSchedule(rawValue: rawGlucoseTargetRangeSchedule)
-        }
-        if let rawCorrectionRangeOverrides = rawValue["correctionRangeOverrides"] as? CorrectionRangeOverrides.RawValue {
-            self.correctionRangeOverrides = CorrectionRangeOverrides(rawValue: rawCorrectionRangeOverrides)
-        }
-        self.maximumBasalRatePerHour = rawValue["maximumBasalRatePerHour"] as? Double
-        self.maximumBolus = rawValue["maximumBolus"] as? Double
-        if let rawSuspendThreshold = rawValue["suspendThreshold"] as? GlucoseThreshold.RawValue {
-            self.suspendThreshold = GlucoseThreshold(rawValue: rawSuspendThreshold)
-        }
-        if let rawInsulinSensitivitySchedule = rawValue["insulinSensitivitySchedule"] as? InsulinSensitivitySchedule.RawValue {
-            self.insulinSensitivitySchedule = InsulinSensitivitySchedule(rawValue: rawInsulinSensitivitySchedule)
-        }
-        if let rawCarbRatioSchedule = rawValue["carbRatioSchedule"] as? CarbRatioSchedule.RawValue {
-            self.carbRatioSchedule = CarbRatioSchedule(rawValue: rawCarbRatioSchedule)
-        }
-        if let rawBasalRateSchedule = rawValue["basalRateSchedule"] as? BasalRateSchedule.RawValue {
-            self.basalRateSchedule = BasalRateSchedule(rawValue: rawBasalRateSchedule)
-        }
-        if let rawDefaultRapidActingModel = rawValue["defaultRapidActingModel"] as? ExponentialInsulinModelPreset.RawValue {
-            self.defaultRapidActingModel = ExponentialInsulinModelPreset(rawValue: rawDefaultRapidActingModel)
-        }
-    }
-
-    public var rawValue: RawValue {
-        var rawValue: RawValue = [:]
-        rawValue["glucoseTargetRangeSchedule"] = glucoseTargetRangeSchedule?.rawValue
-        rawValue["correctionRangeOverrides"] = correctionRangeOverrides?.rawValue
-        rawValue["maximumBasalRatePerHour"] = maximumBasalRatePerHour
-        rawValue["maximumBolus"] = maximumBolus
-        rawValue["suspendThreshold"] = suspendThreshold?.rawValue
-        rawValue["insulinSensitivitySchedule"] = insulinSensitivitySchedule?.rawValue
-        rawValue["carbRatioSchedule"] = carbRatioSchedule?.rawValue
-        rawValue["basalRateSchedule"] = basalRateSchedule?.rawValue
-        rawValue["defaultRapidActingModel"] = defaultRapidActingModel?.rawValue
-        return rawValue
-    }
-}
-
 extension TherapySettings: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

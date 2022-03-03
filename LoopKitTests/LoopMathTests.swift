@@ -412,4 +412,31 @@ class LoopMathTests: XCTestCase {
 
         XCTAssertEqual(expected, calculated)
     }
+
+
+    func testNetEffect() {
+        let formatter = DateFormatter.descriptionFormatter
+        let f = { (input) in
+            return formatter.date(from: input)!
+        }
+
+        let unit = HKUnit.milligramsPerDeciliter
+
+        let input = [
+            GlucoseEffect(startDate: f("2018-08-16 01:00:00 +0000"), quantity: HKQuantity(unit: unit, doubleValue: 25)),
+            GlucoseEffect(startDate: f("2018-08-16 01:05:00 +0000"), quantity: HKQuantity(unit: unit, doubleValue: 26)),
+            GlucoseEffect(startDate: f("2018-08-16 01:10:00 +0000"), quantity: HKQuantity(unit: unit, doubleValue: 27))
+        ]
+
+        let calculated = input.netEffect()
+
+        let expected = GlucoseChange(
+            startDate: f("2018-08-16 01:00:00 +0000"),
+            endDate: f("2018-08-16 01:10:00 +0000"),
+            quantity: HKQuantity(unit: unit, doubleValue: 2))
+
+        XCTAssertEqual(expected, calculated)
+    }
+
+    
 }
