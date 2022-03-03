@@ -209,11 +209,10 @@ extension BidirectionalCollection where Element == GlucoseEffect {
         return sums.reversed()
     }
 
-    /// Sums all effects into a single effect
+    /// Returns the net effect of the receiver as a GlucoseChange object
     ///
     /// Requires the receiver to be sorted chronologically by endDate
     ///
-    /// - Parameter duration: The duration of each resulting summed element
     /// - Returns: A single GlucoseChange representing the net effect
     public func netEffect() -> GlucoseChange? {
         guard let first = self.first, let last = self.last else {
