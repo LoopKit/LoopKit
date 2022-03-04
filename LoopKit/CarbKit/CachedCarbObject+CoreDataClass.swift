@@ -220,7 +220,7 @@ extension CachedCarbObject {
         var metadata = [String: Any]()
 
         metadata[HKMetadataKeyFoodType] = foodType
-        metadata[MetadataKeyAbsorptionTimeMinutes] = absorptionTime?.minutes
+        metadata[MetadataKeyAbsorptionTime] = absorptionTime
 
         metadata[HKMetadataKeySyncIdentifier] = syncIdentifier
         metadata[HKMetadataKeySyncVersion] = syncVersion
