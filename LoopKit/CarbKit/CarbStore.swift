@@ -1158,7 +1158,7 @@ extension CarbStore {
 // MARK: - Remote Data Service Query
 
 extension CarbStore {
-    public struct QueryAnchor: RawRepresentable {
+    public struct QueryAnchor: Equatable, RawRepresentable {
         public typealias RawValue = [String: Any]
 
         internal var anchorKey: Int64
