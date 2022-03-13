@@ -37,6 +37,7 @@ public struct SuspendThresholdEditor: View {
     ) {
         self.mode = mode
         let viewModel = SuspendThresholdEditorViewModel(therapySettingsViewModel: therapySettingsViewModel,
+                                                        mode: mode,
                                                         didSave: didSave)
         self._value = State(initialValue: viewModel.suspendThreshold ?? Self.defaultValue(for: viewModel.suspendThresholdUnit))
         self.viewModel = viewModel

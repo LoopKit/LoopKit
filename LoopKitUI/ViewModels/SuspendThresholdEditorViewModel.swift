@@ -22,15 +22,21 @@ struct SuspendThresholdEditorViewModel {
     var saveSuspendThreshold: (_ suspendThreshold: HKQuantity, _ displayGlucoseUnit: HKUnit) -> Void
 
     public init(therapySettingsViewModel: TherapySettingsViewModel,
+                mode: SettingsPresentationMode,
                 didSave: (() -> Void)? = nil)
     {
         self.suspendThreshold = therapySettingsViewModel.suspendThreshold?.quantity
         self.suspendThresholdUnit = therapySettingsViewModel.suspendThreshold?.unit ?? .milligramsPerDeciliter
 
-        self.maxSuspendThresholdValue = Guardrail.maxSuspendThresholdValue(
-            correctionRangeSchedule: therapySettingsViewModel.glucoseTargetRangeSchedule,
-            preMealTargetRange: therapySettingsViewModel.correctionRangeOverrides.preMeal,
-            workoutTargetRange: therapySettingsViewModel.correctionRangeOverrides.workout)
+        if mode == .acceptanceFlow {
+            // During a review/acceptance flow, do not limit suspend threshold by other targets
+            self.maxSuspendThresholdValue = Guardrail.suspendThreshold.absoluteBounds.upperBound
+        } else {
+            self.maxSuspendThresholdValue = Guardrail.maxSuspendThresholdValue(
+                correctionRangeSchedule: therapySettingsViewModel.glucoseTargetRangeSchedule,
+                preMealTargetRange: therapySettingsViewModel.correctionRangeOverrides.preMeal,
+                workoutTargetRange: therapySettingsViewModel.correctionRangeOverrides.workout)
+        }
         
         self.saveSuspendThreshold = { [weak therapySettingsViewModel] suspendThreshold, displayGlucoseUnit in
             guard let therapySettingsViewModel = therapySettingsViewModel else {

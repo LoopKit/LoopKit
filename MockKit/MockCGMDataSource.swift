@@ -302,23 +302,28 @@ extension MockCGMDataSource: CustomDebugStringConvertible {
 }
 
 public enum MeasurementFrequency: Int, CaseIterable {
-    case fast
     case normal
-    
+    case fast
+    case faster
+
     public var frequency: TimeInterval {
         switch self {
-        case .fast:
-            return TimeInterval(5)
         case .normal:
             return TimeInterval(5*60)
+        case .fast:
+            return TimeInterval(60)
+        case .faster:
+            return TimeInterval(5)
         }
     }
     public var localizedDescription: String {
         switch self {
-        case .fast:
-            return "5 seconds"
         case .normal:
             return "5 minutes"
+        case .fast:
+            return "1 minute"
+        case .faster:
+            return "5 seconds"
         }
     }
 }
