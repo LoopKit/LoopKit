@@ -149,10 +149,10 @@ class PumpManagerStatusBasalDeliveryStateCodableTests: XCTestCase {
   "basalDeliveryState" : {
     "tempBasal" : {
       "dose" : {
-        "automatic" : null,
         "deliveredUnits" : 0.5,
         "description" : "Temporary Basal",
         "endDate" : "2020-05-14T13:43:14Z",
+        "isMutable" : false,
         "manuallyEntered" : false,
         "scheduledBasalRate" : 1,
         "scheduledBasalRateUnit" : "IU/hr",
@@ -262,16 +262,17 @@ class PumpManagerStatusBolusStateCodableTests: XCTestCase {
                              unit: .units,
                              deliveredUnits: 1.0,
                              description: "Bolus",
-                             syncIdentifier: "2A67A303-5203-4CB8-8123-79498265368E")
+                             syncIdentifier: "2A67A303-5203-4CB8-8123-79498265368E",
+                             isMutable: true)
         try assertPumpManagerStatusBolusStateCodable(.inProgress(dose), encodesJSON: """
 {
   "bolusState" : {
     "inProgress" : {
       "dose" : {
-        "automatic" : null,
         "deliveredUnits" : 1,
         "description" : "Bolus",
         "endDate" : "2020-05-14T22:38:16Z",
+        "isMutable" : true,
         "manuallyEntered" : false,
         "startDate" : "2020-05-14T22:38:16Z",
         "syncIdentifier" : "2A67A303-5203-4CB8-8123-79498265368E",

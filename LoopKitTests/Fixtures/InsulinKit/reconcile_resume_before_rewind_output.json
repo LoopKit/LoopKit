@@ -4,55 +4,63 @@
     "end_at" : "2017-09-21T07:11:29",
     "type" : "BasalProfileStart",
     "amount" : 1.05,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "delivered": 0.35029166666666667
   },
   {
     "start_at" : "2017-09-21T07:11:29",
     "end_at" : "2017-09-21T07:16:48",
     "type" : "TempBasal",
     "amount" : 1.85,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "delivered": 0.15
   },
   {
     "start_at" : "2017-09-21T07:16:48",
     "end_at" : "2017-09-21T07:23:34",
     "type" : "PumpSuspend",
     "amount" : 0,
-    "unit" : "U"
+    "unit" : "U",
+    "delivered": 0.0
   },
   {
     "start_at" : "2017-09-21T07:23:34",
     "end_at" : "2017-09-21T07:23:40",
     "type" : "TempBasal",
     "amount" : 1.85,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "delivered": 0.0
   },
   {
     "start_at" : "2017-09-21T07:23:40",
     "end_at" : "2017-09-21T07:25:16",
     "type" : "PumpSuspend",
     "amount" : 0,
-    "unit" : "U"
+    "unit" : "U",
+    "delivered": 0.0
   },
   {
     "start_at" : "2017-09-21T07:25:16",
     "end_at" : "2017-09-21T07:41:29",
     "type" : "TempBasal",
     "amount" : 1.85,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "delivered": 0.5
   },
   {
     "start_at" : "2017-09-21T07:41:29",
     "end_at" : "2017-09-21T07:42:01",
     "type" : "BasalProfileStart",
     "amount" : 1.05,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "delivered": 0.009333333333333334
   },
   {
     "start_at" : "2017-09-21T07:42:01",
     "end_at" : "2017-09-22T08:12:01",
     "type" : "TempBasal",
     "amount" : 2.025,
-    "unit" : "U\/hour"
+    "unit" : "U\/hour",
+    "isMutable": true
   }
 ]

@@ -114,7 +114,7 @@ public class DosingDecisionStore {
 }
 
 extension DosingDecisionStore {
-    public struct QueryAnchor: RawRepresentable {
+    public struct QueryAnchor: Equatable, RawRepresentable {
         public typealias RawValue = [String: Any]
         
         internal var modificationCounter: Int64
