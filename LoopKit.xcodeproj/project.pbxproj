@@ -3003,9 +3003,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43BA715F201E484D0058961E /* Build configuration list for PBXNativeTarget "LoopKitUI" */;
 			buildPhases = (
+				43BA7151201E484D0058961E /* Headers */,
 				43BA714F201E484D0058961E /* Sources */,
 				43BA7150201E484D0058961E /* Frameworks */,
-				43BA7151201E484D0058961E /* Headers */,
 				43BA7152201E484D0058961E /* Resources */,
 			);
 			buildRules = (
@@ -3022,9 +3022,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43D8FDDF1C728FDF0073BE78 /* Build configuration list for PBXNativeTarget "LoopKit" */;
 			buildPhases = (
+				43D8FDC81C728FDF0073BE78 /* Headers */,
 				43D8FDC61C728FDF0073BE78 /* Sources */,
 				43D8FDC71C728FDF0073BE78 /* Frameworks */,
-				43D8FDC81C728FDF0073BE78 /* Headers */,
 				43D8FDC91C728FDF0073BE78 /* Resources */,
 			);
 			buildRules = (
@@ -3118,9 +3118,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A9E675ED22713F4700E25293 /* Build configuration list for PBXNativeTarget "LoopKit-watchOS" */;
 			buildPhases = (
+				A9E675E822713F4700E25293 /* Headers */,
 				A9E6758122713F4700E25293 /* Sources */,
 				A9E675E522713F4700E25293 /* Frameworks */,
-				A9E675E822713F4700E25293 /* Headers */,
 				A9E675EA22713F4700E25293 /* Resources */,
 			);
 			buildRules = (
