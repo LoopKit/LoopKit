@@ -28,9 +28,10 @@ extension PumpEvent {
     @NSManaged var mutable: Bool
     @NSManaged var raw: Data?
     @NSManaged var title: String?
-    @NSManaged var modificationCounter: Int64
     @NSManaged var primitiveInsulinType: NSNumber?
     @NSManaged var primitiveAutomatic: NSNumber?
+    @NSManaged var primitiveAlarmType: String?
+    @NSManaged var modificationCounter: Int64
 }
 
 extension PumpEvent: Encodable {
@@ -48,8 +49,10 @@ extension PumpEvent: Encodable {
         try container.encode(mutable, forKey: .mutable)
         try container.encodeIfPresent(raw?.base64EncodedString(), forKey: .raw)
         try container.encodeIfPresent(title, forKey: .title)
+        try container.encodeIfPresent(insulinType, forKey: .insulinType)
+        try container.encodeIfPresent(automatic, forKey: .automatic)
+        try container.encodeIfPresent(alarmType?.rawValue, forKey: .alarmType)
         try container.encode(modificationCounter, forKey: .modificationCounter)
-        try container.encodeIfPresent(insulinType?.rawValue, forKey: .insulinType)
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -65,7 +68,9 @@ extension PumpEvent: Encodable {
         case mutable
         case raw
         case title
-        case modificationCounter
         case insulinType
+        case automatic
+        case alarmType
+        case modificationCounter
     }
 }

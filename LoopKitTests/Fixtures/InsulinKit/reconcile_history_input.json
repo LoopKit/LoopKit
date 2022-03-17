@@ -403,6 +403,7 @@
         "end_at": "2016-02-15T21:16:09",
         "start_at": "2016-02-15T20:46:09",
         "type": "TempBasal",
-        "unit": "U/hour"
+        "unit": "U/hour",
+        "isMutable": true
     }
 ]

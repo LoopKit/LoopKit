@@ -25,15 +25,20 @@ class PumpEventEncodableTests: PersistenceControllerTestCase {
             pumpEvent.mutable = true
             pumpEvent.raw = Data(base64Encoded: "MTIzNDU2Nzg5MA==")!
             pumpEvent.title = "This is the title"
+            pumpEvent.insulinType = .fiasp
+            pumpEvent.automatic = false
+            pumpEvent.alarmType = .other("An Alarm")
             pumpEvent.modificationCounter = 123
             try! assertPumpEventEncodable(pumpEvent, encodesJSON: """
 {
+  "alarmType" : "An Alarm",
+  "automatic" : false,
   "createdAt" : "2020-05-14T22:33:48Z",
   "date" : "2020-05-14T22:38:14Z",
   "deliveredUnits" : 0.56000000000000005,
   "doseType" : "tempBasal",
   "duration" : 1800,
-  "insulinType" : 0,
+  "insulinType" : 3,
   "modificationCounter" : 123,
   "mutable" : true,
   "raw" : "MTIzNDU2Nzg5MA==",

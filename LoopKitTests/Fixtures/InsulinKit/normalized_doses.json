@@ -6,7 +6,8 @@
     "type": "TempBasal",
     "unit": "U/hour",
     "end_at": "2015-10-15T22:29:50",
-    "scheduled": 1.0
+    "scheduled": 1.0,
+    "isMutable": true
   },
   {
     "amount": 3.325,
