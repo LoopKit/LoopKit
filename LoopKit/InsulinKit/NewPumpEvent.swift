@@ -9,23 +9,22 @@
 import Foundation
 
 
-public struct NewPumpEvent {
+public struct NewPumpEvent: Equatable {
     /// The date of the event
     public let date: Date
     /// The insulin dose described by the event, if applicable
     public let dose: DoseEntry?
-    /// Whether the dose value is expected to change.
-    public let isMutable: Bool
     /// The opaque raw data representing the event
     public let raw: Data
     /// The type of pump event
     public let type: PumpEventType?
     /// A human-readable title to describe the event
     public let title: String
+    /// The type of alarm, only valid if type == .alarm
+    public let alarmType: PumpAlarmType?
 
-    public init(date: Date, dose: DoseEntry?, isMutable: Bool, raw: Data, title: String, type: PumpEventType? = nil) {
+    public init(date: Date, dose: DoseEntry?, raw: Data, title: String, type: PumpEventType? = nil, alarmType: PumpAlarmType? = nil) {
         self.date = date
-        self.isMutable = isMutable
         self.raw = raw
         self.title = title
 
@@ -36,5 +35,42 @@ public struct NewPumpEvent {
 
         // Try to use the dose's type if no explicit type was set
         self.type = type ?? dose?.type.pumpEventType
+
+        self.alarmType = alarmType
+    }
+}
+
+extension NewPumpEvent: RawRepresentable {
+    public typealias RawValue = [String: Any]
+
+    public init?(rawValue: [String: Any]) {
+        guard let date = rawValue["date"] as? Date,
+              let raw = rawValue["raw"] as? Data,
+              let title = rawValue["title"] as? String
+        else {
+            return nil
+        }
+
+        self.date = date
+        self.raw = raw
+        self.title = title
+
+        self.dose = (rawValue["dose"] as? DoseEntry.RawValue).flatMap { DoseEntry(rawValue: $0) }
+        self.type = (rawValue["type"] as? PumpEventType.RawValue).flatMap { PumpEventType(rawValue: $0) }
+        self.alarmType = (rawValue["alarmType"] as? PumpAlarmType.RawValue).flatMap { PumpAlarmType(rawValue: $0) }
+    }
+
+    public var rawValue: [String: Any] {
+        var rawValue: [String: Any] = [
+            "date": date,
+            "raw": raw,
+            "title": title
+        ]
+
+        rawValue["dose"] = dose?.rawValue
+        rawValue["type"] = type?.rawValue
+        rawValue["alarmType"] = alarmType?.rawValue
+
+        return rawValue
     }
 }

@@ -61,6 +61,7 @@
         "description": "TempBasalDurationPumpEvent(length: 7, rawData: 7 bytes, duration: 30, timestamp: calendar: gregorian (fixed) year: 2017 month: 9 day: 21 hour: 7 minute: 42 second: 1 isLeapMonth: false )",
         "start_at": "2017-09-21T07:42:01",
         "end_at": "2017-09-22T08:12:01",
-        "amount": 2.025
+        "amount": 2.025,
+        "isMutable": true
     }
 ]

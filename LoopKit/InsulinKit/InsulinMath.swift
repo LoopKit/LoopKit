@@ -114,7 +114,8 @@ extension DoseEntry {
             description: description,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinType: insulinType
+            insulinType: insulinType,
+            isMutable: isMutable
         )
     }
 }
@@ -296,7 +297,8 @@ extension DoseEntry {
             description: description,
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
-            insulinType: insulinType
+            insulinType: insulinType,
+            isMutable: isMutable
         )
     }
 }
@@ -329,7 +331,7 @@ extension DoseEntry {
     }
 
     fileprivate var resolvingDelivery: DoseEntry {
-        guard deliveredUnits == nil else {
+        guard !isMutable, deliveredUnits == nil else {
             return self
         }
 
@@ -347,7 +349,7 @@ extension DoseEntry {
                 return self
             }
         }
-        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinType: insulinType)
+        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinType: insulinType, isMutable: isMutable)
     }
 }
 
@@ -371,6 +373,8 @@ extension Collection where Element == DoseEntry {
                 reconciled.append(dose)
             case .basal, .tempBasal:
                 if lastSuspend == nil, let last = lastBasal {
+                    assert(!last.isMutable)
+
                     let endDate = Swift.min(last.endDate, dose.startDate)
 
                     // Ignore 0-duration doses
@@ -382,6 +386,8 @@ extension Collection where Element == DoseEntry {
                 lastBasal = dose
             case .resume:
                 if let suspend = lastSuspend {
+                    assert(!suspend.isMutable)
+
                     reconciled.append(DoseEntry(
                         type: suspend.type,
                         startDate: suspend.startDate,
@@ -390,7 +396,8 @@ extension Collection where Element == DoseEntry {
                         unit: suspend.unit,
                         description: suspend.description ?? dose.description,
                         syncIdentifier: suspend.syncIdentifier,
-                        insulinType: suspend.insulinType
+                        insulinType: suspend.insulinType,
+                        isMutable: suspend.isMutable
                     ))
 
                     lastSuspend = nil
@@ -407,7 +414,8 @@ extension Collection where Element == DoseEntry {
                                 description: last.description,
                                 // We intentionally use the resume's identifier, as the basal entry has already been entered
                                 syncIdentifier: dose.syncIdentifier,
-                                insulinType: last.insulinType
+                                insulinType: last.insulinType,
+                                isMutable: last.isMutable
                             )
                         } else {
                             lastBasal = nil
@@ -416,6 +424,8 @@ extension Collection where Element == DoseEntry {
                 }
             case .suspend:
                 if let last = lastBasal {
+                    assert(!last.isMutable)
+
                     reconciled.append(DoseEntry(
                         type: last.type,
                         startDate: last.startDate,
@@ -424,7 +434,8 @@ extension Collection where Element == DoseEntry {
                         unit: last.unit,
                         description: last.description,
                         syncIdentifier: last.syncIdentifier,
-                        insulinType: last.insulinType
+                        insulinType: last.insulinType,
+                        isMutable: last.isMutable
                     ))
 
                     if last.endDate <= dose.startDate {
@@ -559,7 +570,7 @@ extension Collection where Element == DoseEntry {
     ///   - end: The latest date to include. Doses must end before this time to be included.
     ///   - insertingBasalEntries: Whether basal doses should be created from the schedule. Pass true only for pump models that do not report their basal rates in event history.
     /// - Returns: An array of doses, 
-    func overlayBasalSchedule(_ basalSchedule: BasalRateSchedule, startingAt start: Date, endingAt end: Date, insertingBasalEntries: Bool) -> [DoseEntry] {
+    func overlayBasalSchedule(_ basalSchedule: BasalRateSchedule, startingAt start: Date, endingAt end: Date = .distantFuture, insertingBasalEntries: Bool) -> [DoseEntry] {
         let dateFormatter = ISO8601DateFormatter()  // GMT-based ISO formatting
         var newEntries = [DoseEntry]()
         var lastBasal: DoseEntry?
@@ -600,6 +611,7 @@ extension Collection where Element == DoseEntry {
                                 value: scheduled.value,
                                 unit: .unitsPerHour,
                                 syncIdentifier: syncIdentifier,
+                                scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: scheduled.value),
                                 insulinType: lastBasal.insulinType
                             ))
                         }

@@ -155,6 +155,7 @@ public struct MockPumpManagerState {
     public var unfinalizedTempBasal: UnfinalizedDose?
     
     var finalizedDoses: [UnfinalizedDose]
+    var additionalPumpEvents: [NewPumpEvent]
 
     public var progressPercentComplete: Double?
     public var progressWarningThresholdPercentValue: Double?
@@ -165,6 +166,10 @@ public struct MockPumpManagerState {
     
     public var dosesToStore: [UnfinalizedDose] {
         return finalizedDoses + [unfinalizedTempBasal, unfinalizedBolus].compactMap {$0}
+    }
+
+    public var pumpEventsToStore: [NewPumpEvent] {
+        return dosesToStore.map { NewPumpEvent($0) } + additionalPumpEvents
     }
 
     public init(deliverableIncrements: DeliverableIncrements = .medtronicX22,
@@ -182,6 +187,7 @@ public struct MockPumpManagerState {
                 unfinalizedBolus: UnfinalizedDose? = nil,
                 unfinalizedTempBasal: UnfinalizedDose? = nil,
                 finalizedDoses: [UnfinalizedDose] = [],
+                additionalPumpEvents: [NewPumpEvent] = [],
                 progressWarningThresholdPercentValue: Double? = 0.75,
                 progressCriticalThresholdPercentValue: Double? = 0.9,
                 insulinType: InsulinType = .novolog)
@@ -201,6 +207,7 @@ public struct MockPumpManagerState {
         self.suspendState = suspendState
         self.pumpBatteryChargeRemaining = pumpBatteryChargeRemaining
         self.finalizedDoses = finalizedDoses
+        self.additionalPumpEvents = additionalPumpEvents
         self.progressWarningThresholdPercentValue = progressWarningThresholdPercentValue
         self.progressCriticalThresholdPercentValue = progressCriticalThresholdPercentValue
         self.insulinType = insulinType
@@ -269,6 +276,12 @@ extension MockPumpManagerState: RawRepresentable {
             self.finalizedDoses = []
         }
 
+        if let rawAdditionalPumpEvents = rawValue["additionalPumpEvents"] as? [NewPumpEvent.RawValue] {
+            self.additionalPumpEvents = rawAdditionalPumpEvents.compactMap( { NewPumpEvent(rawValue: $0) } )
+        } else {
+            self.additionalPumpEvents = []
+        }
+
         if let rawSuspendState = rawValue["suspendState"] as? SuspendState.RawValue, let suspendState = SuspendState(rawValue: rawSuspendState) {
             self.suspendState = suspendState
         } else {
@@ -329,7 +342,8 @@ extension MockPumpManagerState: RawRepresentable {
             raw["deliveryIsUncertain"] = true
         }
 
-        raw["finalizedDoses"] = finalizedDoses.map( { $0.rawValue })
+        raw["finalizedDoses"] = finalizedDoses.map({ $0.rawValue })
+        raw["additionalPumpEvents"] = additionalPumpEvents.map({ $0.rawValue })
 
         raw["maximumBolus"] = maximumBolus
         raw["maximumBasalRatePerHour"] = maximumBasalRatePerHour
@@ -371,6 +385,7 @@ extension MockPumpManagerState: CustomDebugStringConvertible {
         * unfinalizedBolus: \(String(describing: unfinalizedBolus))
         * unfinalizedTempBasal: \(String(describing: unfinalizedTempBasal))
         * finalizedDoses: \(finalizedDoses)
+        * additionalPumpEvents: \(additionalPumpEvents)
         * occlusionDetected: \(occlusionDetected)
         * pumpErrorDetected: \(pumpErrorDetected)
         * progressPercentComplete: \(progressPercentComplete as Any)

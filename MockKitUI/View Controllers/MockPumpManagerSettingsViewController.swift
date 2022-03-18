@@ -326,10 +326,12 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 }
                 tableView.deselectRow(at: indexPath, animated: true)
             case .occlusion:
+                pumpManager.injectPumpEvents(pumpManager.state.occlusionDetected ? [NewPumpEvent(alarmClearAt: Date())] : [NewPumpEvent(alarmAt: Date(), alarmType: .occlusion)])
                 pumpManager.state.occlusionDetected = !pumpManager.state.occlusionDetected
                 tableView.deselectRow(at: indexPath, animated: true)
                 tableView.reloadRows(at: [indexPath], with: .automatic)
             case .pumpError:
+                pumpManager.injectPumpEvents(pumpManager.state.pumpErrorDetected ? [NewPumpEvent(alarmClearAt: Date())] : [NewPumpEvent(alarmAt: Date(), alarmType: .other("Mock Pump Error"))])
                 pumpManager.state.pumpErrorDetected = !pumpManager.state.pumpErrorDetected
                 tableView.deselectRow(at: indexPath, animated: true)
                 tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -604,5 +606,24 @@ extension MockPumpManagerSettingsViewController: SupportedRangeTableViewControll
         default:
             assertionFailure()
         }
+    }
+}
+
+fileprivate extension NewPumpEvent {
+    init(alarmAt date: Date, alarmType: PumpAlarmType? = nil) {
+        self.init(date: date,
+                  dose: nil,
+                  raw: Data(UUID().uuidString.utf8),
+                  title: "alarm[\(alarmType?.rawValue ?? "")]",
+                  type: .alarm,
+                  alarmType: alarmType)
+    }
+
+    init(alarmClearAt date: Date) {
+        self.init(date: date,
+                  dose: nil,
+                  raw: Data(UUID().uuidString.utf8),
+                  title: "alarmClear",
+                  type: .alarmClear)
     }
 }
