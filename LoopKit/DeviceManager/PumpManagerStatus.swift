@@ -70,7 +70,6 @@ public struct PumpManagerStatus: Equatable {
 
     public var deliveryIsUncertain: Bool
 
-
     public init(
         timeZone: TimeZone,
         device: HKDevice,

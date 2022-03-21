@@ -22,6 +22,30 @@ public protocol AlertResponder: AnyObject {
     func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) -> Void
 }
 
+public struct PersistedAlert: Equatable {
+    public let alert: Alert
+    public let issuedDate: Date
+    public let retractedDate: Date?
+    public let acknowledgedDate: Date?
+    public init(alert: Alert, issuedDate: Date, retractedDate: Date?, acknowledgedDate: Date?) {
+        self.alert = alert
+        self.issuedDate = issuedDate
+        self.retractedDate = retractedDate
+        self.acknowledgedDate = acknowledgedDate
+    }
+}
+
+/// Protocol for looking up alerts persisted in storage
+public protocol PersistedAlertStore {
+    /// Look up all issued, but unretracted, alerts for a given `managerIdentifier`.  This is useful for an Alert issuer to see what alerts are extant (outstanding).
+    /// NOTE: the completion function may be called on a different queue than the caller.  Callers must be prepared for this.
+    func lookupAllUnretracted(managerIdentifier: String, completion: @escaping (Swift.Result<[PersistedAlert], Error>) -> Void)
+
+    /// Look up all issued, but unretracted, and unacknowledged, alerts for a given `managerIdentifier`.  This is useful for an Alert issuer to see what alerts are extant (outstanding).
+    /// NOTE: the completion function may be called on a different queue than the caller.  Callers must be prepared for this.
+    func lookupAllUnacknowledgedUnretracted(managerIdentifier: String, completion: @escaping (Swift.Result<[PersistedAlert], Error>) -> Void)
+}
+
 /// Structure that represents an Alert that is issued from a Device.
 public struct Alert: Equatable {
     /// Representation of an alert Trigger

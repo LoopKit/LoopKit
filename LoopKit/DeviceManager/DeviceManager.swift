@@ -8,7 +8,7 @@
 import Foundation
 import UserNotifications
 
-public protocol DeviceManagerDelegate: AlertIssuer {    
+public protocol DeviceManagerDelegate: AlertIssuer, PersistedAlertStore {    
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 }
 
