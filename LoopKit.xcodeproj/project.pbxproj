@@ -1726,6 +1726,57 @@
 		E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideViewCell.swift; sourceTree = "<group>"; };
 		E9F54F5D25802D5E0034795E /* InsulinType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinType.swift; sourceTree = "<group>"; };
 		E9F54FC52581C50C0034795E /* ExpandableDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDatePicker.swift; sourceTree = "<group>"; };
+		F5E0BDE427E1D8950033557E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BDE527E1D8C20033557E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BDE627E1D8C20033557E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BDE727E1D8C20033557E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BDE827E1D8C20033557E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BDE927E1D9590033557E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BDEA27E1D9590033557E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BDEB27E1D9870033557E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BDEC27E1D9870033557E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BDED27E1D9870033557E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BDEE27E1D9EB0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BDEF27E1D9EB0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BDF027E1D9EB0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BDF127E1D9EB0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BDF227E1D9EC0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BDF327E1D9EC0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5E0BDF427E1D9EC0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5E0BDF527E1D9EC0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5E0BDF627E1D9F90033557E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BDF727E1DA260033557E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BDF827E1DA260033557E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BDF927E1DA260033557E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BDFA27E1DA260033557E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BDFB27E1DAA00033557E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		F5E0BDFC27E1DACD0033557E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Main.strings"; sourceTree = "<group>"; };
+		F5E0BDFD27E1DACE0033557E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/CarbKit.strings"; sourceTree = "<group>"; };
+		F5E0BDFE27E1DACE0033557E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InsulinKit.strings"; sourceTree = "<group>"; };
+		F5E0BDFF27E1DACE0033557E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LegacyInsulinDeliveryTableViewController.strings"; sourceTree = "<group>"; };
+		F5E0BE0027E1DB350033557E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BE0127E1DB620033557E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BE0227E1DB620033557E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BE0327E1DB620033557E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BE0427E1DB620033557E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BE0527E1DB760033557E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BE0627E1DBA40033557E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BE0727E1DBA40033557E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BE0827E1DBA40033557E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BE0927E1DBA40033557E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BE0A27E1DC480033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BE0B27E1DC480033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BE0C27E1DC490033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BE0D27E1DC490033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BE0E27E1DC490033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BE0F27E1DC490033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5E0BE1027E1DC490033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5E0BE1127E1DC490033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5E0BE1227E1DC9C0033557E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BE1327E1DCC90033557E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BE1427E1DCC90033557E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BE1527E1DCC90033557E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BE1627E1DCC90033557E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3231,6 +3282,15 @@
 				nb,
 				pl,
 				ru,
+				da,
+				fi,
+				he,
+				ja,
+				"pt-BR",
+				ro,
+				sv,
+				tr,
+				vi,
 			);
 			mainGroup = 43D8FDC11C728FDF0073BE78;
 			productRefGroup = 43D8FDCC1C728FDF0073BE78 /* Products */;
@@ -4371,6 +4431,8 @@
 				1F5DAB7A2118F3FB00048054 /* nb */,
 				1FE58794211D0967004F24ED /* Base */,
 				1F50C324212B20D300C18FAB /* pl */,
+				F5E0BDF327E1D9EC0033557E /* he */,
+				F5E0BE0F27E1DC490033557E /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4379,6 +4441,15 @@
 			isa = PBXVariantGroup;
 			children = (
 				430158001C7EC03B00B64B63 /* Base */,
+				F5E0BDE527E1D8C20033557E /* da */,
+				F5E0BDEA27E1D9590033557E /* fi */,
+				F5E0BDEF27E1D9EB0033557E /* he */,
+				F5E0BDF727E1DA260033557E /* ja */,
+				F5E0BDFC27E1DACD0033557E /* pt-BR */,
+				F5E0BE0127E1DB620033557E /* ro */,
+				F5E0BE0627E1DBA40033557E /* sv */,
+				F5E0BE0B27E1DC480033557E /* tr */,
+				F5E0BE1327E1DCC90033557E /* vi */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -4387,6 +4458,15 @@
 			isa = PBXVariantGroup;
 			children = (
 				430158051C7EC03B00B64B63 /* Base */,
+				F5E0BDE427E1D8950033557E /* da */,
+				F5E0BDE927E1D9590033557E /* fi */,
+				F5E0BDEE27E1D9EB0033557E /* he */,
+				F5E0BDF627E1D9F90033557E /* ja */,
+				F5E0BDFB27E1DAA00033557E /* pt-BR */,
+				F5E0BE0027E1DB350033557E /* ro */,
+				F5E0BE0527E1DB760033557E /* sv */,
+				F5E0BE0A27E1DC480033557E /* tr */,
+				F5E0BE1227E1DC9C0033557E /* vi */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -4404,6 +4484,15 @@
 				1F5DAB6B2118F3C200048054 /* nl */,
 				1F5DAB772118F3FB00048054 /* nb */,
 				1F50C321212B20D300C18FAB /* pl */,
+				F5E0BDE627E1D8C20033557E /* da */,
+				F5E0BDEB27E1D9870033557E /* fi */,
+				F5E0BDF027E1D9EB0033557E /* he */,
+				F5E0BDF827E1DA260033557E /* ja */,
+				F5E0BDFD27E1DACE0033557E /* pt-BR */,
+				F5E0BE0227E1DB620033557E /* ro */,
+				F5E0BE0727E1DBA40033557E /* sv */,
+				F5E0BE0C27E1DC490033557E /* tr */,
+				F5E0BE1427E1DCC90033557E /* vi */,
 			);
 			name = CarbKit.storyboard;
 			sourceTree = "<group>";
@@ -4421,6 +4510,15 @@
 				1F5DAB6C2118F3C200048054 /* nl */,
 				1F5DAB782118F3FB00048054 /* nb */,
 				1F50C322212B20D300C18FAB /* pl */,
+				F5E0BDE727E1D8C20033557E /* da */,
+				F5E0BDEC27E1D9870033557E /* fi */,
+				F5E0BDF127E1D9EB0033557E /* he */,
+				F5E0BDF927E1DA260033557E /* ja */,
+				F5E0BDFE27E1DACE0033557E /* pt-BR */,
+				F5E0BE0327E1DB620033557E /* ro */,
+				F5E0BE0827E1DBA40033557E /* sv */,
+				F5E0BE0D27E1DC490033557E /* tr */,
+				F5E0BE1527E1DCC90033557E /* vi */,
 			);
 			name = InsulinKit.storyboard;
 			sourceTree = "<group>";
@@ -4438,6 +4536,8 @@
 				1F5DAB702118F3C200048054 /* nl */,
 				1F5DAB7C2118F3FC00048054 /* nb */,
 				1F50C326212B20D400C18FAB /* pl */,
+				F5E0BDF427E1D9EC0033557E /* he */,
+				F5E0BE1027E1DC490033557E /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4455,6 +4555,8 @@
 				1F5DAB7F2118F3FC00048054 /* nb */,
 				1FE58790211CFBB7004F24ED /* Base */,
 				1F50C329212B20D400C18FAB /* pl */,
+				F5E0BDF527E1D9EC0033557E /* he */,
+				F5E0BE1127E1DC490033557E /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4473,6 +4575,15 @@
 				E9DFB94524E8CD8300468917 /* pl */,
 				E9DFB94724E8CD8400468917 /* ru */,
 				E9DFB94924E8CD8600468917 /* es */,
+				F5E0BDE827E1D8C20033557E /* da */,
+				F5E0BDED27E1D9870033557E /* fi */,
+				F5E0BDF227E1D9EC0033557E /* he */,
+				F5E0BDFA27E1DA260033557E /* ja */,
+				F5E0BDFF27E1DACE0033557E /* pt-BR */,
+				F5E0BE0427E1DB620033557E /* ro */,
+				F5E0BE0927E1DBA40033557E /* sv */,
+				F5E0BE0E27E1DC490033557E /* tr */,
+				F5E0BE1627E1DCC90033557E /* vi */,
 			);
 			name = LegacyInsulinDeliveryTableViewController.storyboard;
 			sourceTree = "<group>";
