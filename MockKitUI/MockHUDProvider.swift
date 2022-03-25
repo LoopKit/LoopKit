@@ -48,14 +48,14 @@ final class MockHUDProvider: NSObject, HUDProvider {
         return rawValue
     }
 
-    func createHUDView() -> LevelHUDView? {
+    func createHUDView() -> BaseHUDView? {
         reservoirView = ReservoirVolumeHUDView.instantiate()
         updateReservoirView()
     
         return reservoirView
     }
 
-    static func createHUDView(rawValue: HUDViewRawState) -> LevelHUDView? {
+    static func createHUDView(rawValue: HUDViewRawState) -> BaseHUDView? {
         guard let pumpReservoirCapacity = rawValue["pumpReservoirCapacity"] as? Double else {
             return nil
         }
