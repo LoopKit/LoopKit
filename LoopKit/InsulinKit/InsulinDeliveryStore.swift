@@ -380,6 +380,7 @@ extension InsulinDeliveryStore {
 
                         // If we have a mutable object that matches this sync identifier, then update, it will mark as NOT deleted
                         if let object = mutableObjects.first(where: { $0.provenanceIdentifier == self.provenanceIdentifier && $0.syncIdentifier == entry.syncIdentifier }) {
+                            self.log.debug("Update: %{public}@", String(describing: entry))
                             object.update(from: entry)
                             return (quantitySample, object)
 
@@ -396,7 +397,14 @@ extension InsulinDeliveryStore {
 
                             let object = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
                             object.create(from: entry, by: self.provenanceIdentifier, at: now)
+                            self.log.debug("Add: %{public}@", String(describing: entry))
                             return (quantitySample, object)
+                        }
+                    }
+
+                    for dose in mutableObjects {
+                        if dose.deletedAt != nil {
+                            self.log.debug("Delete: %{public}@", String(describing: dose))
                         }
                     }
 

@@ -1119,6 +1119,8 @@ extension DoseStore {
             throw DoseStoreError.configurationError
         }
 
+        self.log.info("Fetching Pumpevents between %{public}@ and %{public}@ for saving to InsulinDeliveryStore", String(describing: basalStart), String(describing: end))
+
         // Make sure we look far back enough to have prior temp basal records to reconcile
         // resumption of temp basal after suspend/resume.
         let queryStart = basalStart.addingTimeInterval(-pumpEventReconciliationWindow)
