@@ -141,14 +141,17 @@ class GlucoseRangeScheduleTests: XCTestCase {
     }
 
     func testBetweenStartEnd() {
+        let therapyTimeZone = TimeZone(secondsFromGMT: -4*60*60)!
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = therapyTimeZone
         let glucoseRangeSchedule = GlucoseRangeSchedule(
             unit: .milligramsPerDeciliter,
             dailyItems:  [
                 RepeatingScheduleValue(startTime: 0, value: DoubleRange(minValue: 75.0, maxValue: 90.0)),
                 RepeatingScheduleValue(startTime: 3000, value: DoubleRange(minValue: 100.0, maxValue: 120.0)),
                 RepeatingScheduleValue(startTime: 6000, value: DoubleRange(minValue: 130.0, maxValue: 150.0))
-            ])
-        let start = Calendar.current.startOfDay(for: Date())
+            ], timeZone: therapyTimeZone)
+        let start = calendar.startOfDay(for: Date())
         let end = start.addingTimeInterval(TimeInterval.minutes(30))
         let expected = [AbsoluteScheduleValue(startDate: start, endDate: start.addingTimeInterval(TimeInterval.minutes(50)), value: DoubleRange(minValue: 75.0, maxValue: 90.0))]
 
@@ -156,14 +159,17 @@ class GlucoseRangeScheduleTests: XCTestCase {
     }
 
     func testQuantityBetweenStartEnd() {
+        let therapyTimeZone = TimeZone(secondsFromGMT: -4*60*60)!
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = therapyTimeZone
         let glucoseRangeSchedule = GlucoseRangeSchedule(
             unit: .millimolesPerLiter,
             dailyItems:  [
                 RepeatingScheduleValue(startTime: 0, value: DoubleRange(minValue: 75.0, maxValue: 90.0)),
                 RepeatingScheduleValue(startTime: 3000, value: DoubleRange(minValue: 100.0, maxValue: 120.0)),
                 RepeatingScheduleValue(startTime: 6000, value: DoubleRange(minValue: 130.0, maxValue: 150.0))
-            ])
-        let start = Calendar.current.startOfDay(for: Date())
+            ], timeZone: therapyTimeZone)
+        let start = calendar.startOfDay(for: Date())
         let end = start.addingTimeInterval(TimeInterval.minutes(30))
         let expected = [AbsoluteScheduleValue(startDate: start, endDate: start.addingTimeInterval(TimeInterval.minutes(50)), value: DoubleRange(minValue: 75.0, maxValue: 90.0).quantityRange(for: .millimolesPerLiter))]
 
@@ -171,14 +177,17 @@ class GlucoseRangeScheduleTests: XCTestCase {
     }
 
     func testValueAtDate() {
+        let therapyTimeZone = TimeZone(secondsFromGMT: -4*60*60)!
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = therapyTimeZone
         let glucoseRangeSchedule = GlucoseRangeSchedule(
             unit: .milligramsPerDeciliter,
             dailyItems:  [
                 RepeatingScheduleValue(startTime: 0, value: DoubleRange(minValue: 75.0, maxValue: 90.0)),
                 RepeatingScheduleValue(startTime: 3000, value: DoubleRange(minValue: 100.0, maxValue: 120.0)),
                 RepeatingScheduleValue(startTime: 6000, value: DoubleRange(minValue: 130.0, maxValue: 150.0))
-            ])
-        let inDay30Min = Calendar.current.startOfDay(for: Date()).addingTimeInterval(TimeInterval.minutes(30))
+            ], timeZone: therapyTimeZone)
+        let inDay30Min = calendar.startOfDay(for: Date()).addingTimeInterval(TimeInterval.minutes(30))
         let inDay1Hour = inDay30Min.addingTimeInterval(TimeInterval.minutes(30))
         let inDay2Hours = inDay1Hour.addingTimeInterval(TimeInterval.minutes(60))
 
@@ -188,14 +197,17 @@ class GlucoseRangeScheduleTests: XCTestCase {
     }
 
     func testQuantityRangeAtDate() {
+        let therapyTimeZone = TimeZone(secondsFromGMT: -4*60*60)!
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = therapyTimeZone
         let glucoseRangeSchedule = GlucoseRangeSchedule(
             unit: .milligramsPerDeciliter,
             dailyItems:  [
                 RepeatingScheduleValue(startTime: 0, value: DoubleRange(minValue: 75.0, maxValue: 90.0)),
                 RepeatingScheduleValue(startTime: 3000, value: DoubleRange(minValue: 100.0, maxValue: 120.0)),
                 RepeatingScheduleValue(startTime: 6000, value: DoubleRange(minValue: 130.0, maxValue: 150.0))
-            ])
-        let inDay30Min = Calendar.current.startOfDay(for: Date()).addingTimeInterval(TimeInterval.minutes(30))
+            ], timeZone: therapyTimeZone)
+        let inDay30Min = calendar.startOfDay(for: Date()).addingTimeInterval(TimeInterval.minutes(30))
         let inDay1Hour = inDay30Min.addingTimeInterval(TimeInterval.minutes(30))
         let inDay2Hours = inDay1Hour.addingTimeInterval(TimeInterval.minutes(60))
 
@@ -205,11 +217,14 @@ class GlucoseRangeScheduleTests: XCTestCase {
     }
 
     func testScheduleFor() {
+        let therapyTimeZone = TimeZone(secondsFromGMT: -4*60*60)!
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = therapyTimeZone
         let glucoseRangeScheduleMGDL = GlucoseRangeSchedule(
             unit: .milligramsPerDeciliter,
             dailyItems:  [
                 RepeatingScheduleValue(startTime: 0, value: DoubleRange(minValue: 75.0, maxValue: 90.0))
-            ])
+            ], timeZone: therapyTimeZone)
         let glucoseRangeScheduleMMOLL = glucoseRangeScheduleMGDL?.schedule(for: .millimolesPerLiter)
         let expected = DoubleRange(minValue: 75.0, maxValue: 90.0).quantityRange(for: .milligramsPerDeciliter).doubleRange(for: .millimolesPerLiter)
 

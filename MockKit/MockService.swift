@@ -113,6 +113,13 @@ extension MockService: RemoteDataService {
         }
         completion(.success(false))
     }
+    
+    public func uploadAlertData(_ stored: [SyncAlertObject], completion: @escaping (Result<Bool, Error>) -> Void) {
+        if remoteData {
+            record("[RemoteDataService] Upload alert data (stored: \(stored.count))")
+        }
+        completion(.success(false))
+    }
 
     public func uploadCarbData(created: [SyncCarbObject], updated: [SyncCarbObject], deleted: [SyncCarbObject], completion: @escaping (Result<Bool, Error>) -> Void) {
         if remoteData {
@@ -121,13 +128,13 @@ extension MockService: RemoteDataService {
         completion(.success(false))
     }
     
-    public func uploadDoseData(_ stored: [DoseEntry], completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func uploadDoseData(created: [DoseEntry], deleted: [DoseEntry], completion: @escaping (_ result: Result<Bool, Error>) -> Void) {
         if remoteData {
-            record("[RemoteDataService] Upload dose data (stored: \(stored.count))")
+            record("[RemoteDataService] Upload dose data (created: \(created.count), deleted: \(deleted.count))")
         }
         completion(.success(false))
     }
-    
+
     public func uploadDosingDecisionData(_ stored: [StoredDosingDecision], completion: @escaping (Result<Bool, Error>) -> Void) {
         if remoteData {
             let warned = stored.filter { !$0.warnings.isEmpty }
@@ -161,4 +168,5 @@ extension MockService: RemoteDataService {
     public func validatePushNotificationSource(_ notification: [String : AnyObject]) -> Bool {
         return true
     }
+    
 }

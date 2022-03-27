@@ -22,6 +22,6 @@ struct DateRelativeBolusEntry: DateRelativeQuantity, Codable {
 
     func newPumpEvent(relativeTo referenceDate: Date) -> NewPumpEvent {
         let dose = doseEntry(relativeTo: referenceDate)
-        return NewPumpEvent(date: dose.startDate, dose: dose, isMutable: false, raw: .newPumpEventIdentifier(), title: "Bolus", type: .bolus)
+        return NewPumpEvent(date: dose.startDate, dose: dose, raw: .newPumpEventIdentifier(), title: "Bolus", type: .bolus)
     }
 }

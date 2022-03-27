@@ -709,7 +709,7 @@ extension GlucoseStore {
 // MARK: - Remote Data Service Query
 
 extension GlucoseStore {
-    public struct QueryAnchor: RawRepresentable {
+    public struct QueryAnchor: Equatable, RawRepresentable {
         public typealias RawValue = [String: Any]
 
         internal var modificationCounter: Int64

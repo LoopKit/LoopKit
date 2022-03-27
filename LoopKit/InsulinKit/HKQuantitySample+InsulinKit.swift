@@ -26,6 +26,9 @@ let MetadataKeyManuallyEntered = "com.loopkit.InsulinKit.MetadataKeyManuallyEnte
 /// Flag indicating whether this dose was issued automatically or if a user issued it manually.
 let MetadataKeyAutomaticallyIssued = "com.loopkit.InsulinKit.MetadataKeyAutomaticallyIssued"
 
+/// Flag indicating whether this dose is a suspend
+let MetadataKeyIsSuspend = "com.loopkit.InsulinKit.MetadataKeyIsSuspend"
+
 extension HKQuantitySample {
     convenience init?(type: HKQuantityType, unit: HKUnit, dose: DoseEntry, device: HKDevice?, provenanceIdentifier: String, syncVersion: Int = 1) {
         let units = dose.unitsInDeliverableIncrements
@@ -57,6 +60,8 @@ extension HKQuantitySample {
             if dose.type == .tempBasal {
                 metadata[MetadataKeyProgrammedTempBasalRate] = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: dose.unitsPerHour)
             }
+
+            metadata[MetadataKeyIsSuspend] = dose.type == .suspend
         case .bolus:
             // Ignore 0-unit bolus entries
             guard units > .ulpOfOne else {
@@ -110,6 +115,10 @@ extension HKQuantitySample {
         return metadata?[MetadataKeyProgrammedTempBasalRate] as? HKQuantity
     }
 
+    var isSuspend: Bool {
+        return metadata?[MetadataKeyIsSuspend] as? Bool ?? false
+    }
+
     var manuallyEntered: Bool {
         return metadata?[MetadataKeyManuallyEntered] as? Bool ?? false
     }
@@ -134,14 +143,15 @@ extension HKQuantitySample {
         }
 
         let type: DoseType
-        let scheduledBasalRate = self.scheduledBasalRate
 
         switch reason {
         case .basal:
-            if scheduledBasalRate == nil {
-                type = .basal
-            } else {
+            if isSuspend {
+                type = .suspend
+            } else if programmedTempBasalRate != nil {
                 type = .tempBasal
+            } else {
+                type = .basal
             }
 
             // We can't properly trust non-LoopKit-provided basal insulin

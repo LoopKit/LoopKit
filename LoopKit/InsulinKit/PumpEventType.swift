@@ -10,7 +10,7 @@ import Foundation
 
 
 /// A subset of pump event types, with raw values matching decocare's strings
-public enum PumpEventType: String {
+public enum PumpEventType: String, CaseIterable {
     case alarm      = "AlarmPump"
     case alarmClear = "ClearAlarm"
     case basal      = "BasalProfileStart"
@@ -52,16 +52,4 @@ extension PumpEventType {
             return 9
         }
     }
-}
-
-extension PumpEventType {
-
-    static var doseTypes: [PumpEventType] {
-        return [.basal, .bolus, .resume, .suspend, .tempBasal]
-    }
-
-    static var nonDoseTypes: [PumpEventType] {
-        return [.alarm, .alarmClear, .prime, .rewind]
-    }
-    
 }
