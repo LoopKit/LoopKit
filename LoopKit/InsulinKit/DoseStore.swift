@@ -849,6 +849,9 @@ extension DoseStore {
         }
 
         self.persistenceController.save { (error) -> Void in
+            if let error = error {
+                self.log.error("Error saving: %{public}@", String(describing: error))
+            }
             self.insulinDeliveryStore.addDoseEntries(doses, from: device, syncVersion: self.syncVersion) { (result) in
                 switch result {
                 case .success:

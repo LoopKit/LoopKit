@@ -703,7 +703,7 @@ extension InsulinDeliveryStore {
                 "#### cachedDoseEntries",
             ]
 
-            switch self.getDoseEntries(start: Date(timeIntervalSinceNow: -.hours(24))) {
+            switch self.getDoseEntries(start: Date(timeIntervalSinceNow: -.hours(24)), includeMutable: true) {
             case .failure(let error):
                 report.append("Error: \(error)")
             case .success(let entries):
