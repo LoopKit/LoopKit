@@ -59,7 +59,11 @@ public class PersistentDeviceLog {
             entry.timestamp = Date()
             do {
                 try self.managedObjectContext.save()
-                self.log.default("Logged: %{public}@ (%{public}@) %{public}@", String(describing: type), deviceIdentifier ?? "", message)
+                if type == .error {
+                    self.log.error("%{public}@ (%{public}@) %{public}@", String(describing: type), deviceIdentifier ?? "", message)
+                } else {
+                    self.log.default("%{public}@ (%{public}@) %{public}@", String(describing: type), deviceIdentifier ?? "", message)
+                }
                 completion?(nil)
             } catch let error {
                 self.log.error("Could not store device log entry %{public}@", String(describing: error))
