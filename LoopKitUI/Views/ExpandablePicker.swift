@@ -8,20 +8,24 @@
 
 import SwiftUI
 
-public struct ExpandablePicker: View {
+public protocol Labeled {
+    var label: String { get }
+}
+
+public struct ExpandablePicker<SelectionType: Hashable & Labeled>: View {
     @State var pickerShouldExpand = false
-    var pickerIndex: Binding<Int>
+    var selectedValue: Binding<SelectionType>
     let label: String
-    let items: [String]
+    let items: [SelectionType]
     
     
     public init (
-        with items: [String],
-        pickerIndex: Binding<Int>,
+        with items: [SelectionType],
+        selectedValue: Binding<SelectionType>,
         label: String = ""
     ) {
         self.items = items
-        self.pickerIndex = pickerIndex
+        self.selectedValue = selectedValue
         self.label = label
     }
     
@@ -30,7 +34,7 @@ public struct ExpandablePicker: View {
             HStack(alignment: .center) {
                 Text(label)
                 Spacer()
-                Text(items[pickerIndex.wrappedValue])
+                Text(selectedValue.wrappedValue.label)
                 .foregroundColor(.gray)
             }
             .padding(.vertical, 5)
@@ -39,9 +43,9 @@ public struct ExpandablePicker: View {
             }
             if pickerShouldExpand {
                 HStack(alignment: .center) {
-                    Picker(selection: self.pickerIndex, label: Text("")) {
-                        ForEach(0 ..< self.items.count) {
-                            Text(self.items[$0])
+                    Picker(selection: selectedValue, label: Text("")) {
+                        ForEach(items, id: \.self) { item in
+                            Text(item.label)
                        }
                     }
                     .pickerStyle(.wheel)
