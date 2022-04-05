@@ -39,7 +39,8 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(30)
         let unfinalizedTBR = UnfinalizedDose(tempBasalRate: amount,
                                              startTime: startTime,
-                                             duration: duration)
+                                             duration: duration,
+                                             automatic: true)
         XCTAssertEqual(unfinalizedTBR.doseType, .tempBasal)
         XCTAssertEqual(unfinalizedTBR.units, amount*duration.hours)
         XCTAssertNil(unfinalizedTBR.scheduledUnits)
@@ -48,6 +49,7 @@ class UnfinalizedDoseTests: XCTestCase {
         XCTAssertEqual(unfinalizedTBR.duration, duration)
         XCTAssertEqual(unfinalizedTBR.finishTime, startTime.addingTimeInterval(duration))
         XCTAssertEqual(unfinalizedTBR.rate, amount)
+        XCTAssertEqual(unfinalizedTBR.automatic, true)
     }
 
     func testInitializatinSuspend() {
@@ -78,12 +80,14 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(30)
         var unfinalizedTBR = UnfinalizedDose(tempBasalRate: amount,
                                              startTime: now,
-                                             duration: duration)
+                                             duration: duration,
+                                             automatic: true)
         XCTAssertFalse(unfinalizedTBR.finished)
 
         unfinalizedTBR = UnfinalizedDose(tempBasalRate: amount,
                                          startTime: now-duration,
-                                         duration: duration)
+                                         duration: duration,
+                                         automatic: true)
         XCTAssertTrue(unfinalizedTBR.finished)
     }
 
@@ -93,12 +97,14 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(1)
         var unfinalizedBolus = UnfinalizedDose(bolusAmount: amount,
                                                startTime: now,
-                                               duration: duration)
+                                               duration: duration,
+                                               automatic: true)
         XCTAssertNil(unfinalizedBolus.finalizedUnits)
 
         unfinalizedBolus = UnfinalizedDose(bolusAmount: amount,
                                            startTime: now-duration,
-                                           duration: duration)
+                                           duration: duration,
+                                           automatic: true)
         XCTAssertEqual(unfinalizedBolus.finalizedUnits, amount)
     }
 
@@ -108,13 +114,15 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.hours(1)
         var dose = UnfinalizedDose(tempBasalRate: rate,
                                    startTime: now,
-                                   duration: duration)
+                                   duration: duration,
+                                   automatic: true)
         dose.cancel(at: now + duration/2)
 
         XCTAssertEqual(dose.units, rate/2)
         XCTAssertEqual(dose.scheduledUnits, rate)
         XCTAssertEqual(dose.scheduledTempRate, rate)
         XCTAssertEqual(dose.duration, duration/2)
+        XCTAssertEqual(dose.automatic, true)
     }
 
     func testRawValue() {
@@ -123,7 +131,8 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(1)
         let unfinalizedBolus = UnfinalizedDose(bolusAmount: amount,
                                                startTime: startTime,
-                                               duration: duration)
+                                               duration: duration,
+                                               automatic: true)
         let rawValue = unfinalizedBolus.rawValue
         XCTAssertEqual(UnfinalizedDose.DoseType(rawValue: rawValue["doseType"] as! UnfinalizedDose.DoseType.RawValue), .bolus)
         XCTAssertEqual(rawValue["units"] as! Double, amount)
@@ -131,6 +140,7 @@ class UnfinalizedDoseTests: XCTestCase {
         XCTAssertNil(rawValue["scheduledUnits"])
         XCTAssertNil(rawValue["scheduledTempRate"])
         XCTAssertEqual(rawValue["duration"] as! Double, duration)
+        XCTAssertEqual(rawValue["automatic"] as! Bool, true)
     }
 
     func testRawValueBolusWithScheduledUnits() {
@@ -139,7 +149,8 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(1)
         var unfinalizedBolus = UnfinalizedDose(bolusAmount: amount,
                                                startTime: startTime,
-                                               duration: duration)
+                                               duration: duration,
+                                               automatic: true)
         unfinalizedBolus.scheduledUnits = amount
         let rawValue = unfinalizedBolus.rawValue
         XCTAssertEqual(UnfinalizedDose.DoseType(rawValue: rawValue["doseType"] as! UnfinalizedDose.DoseType.RawValue), .bolus)
@@ -148,6 +159,7 @@ class UnfinalizedDoseTests: XCTestCase {
         XCTAssertEqual(rawValue["scheduledUnits"] as! Double, amount)
         XCTAssertNil(rawValue["scheduleTempRate"])
         XCTAssertEqual(rawValue["duration"] as! Double, duration)
+        XCTAssertEqual(rawValue["automatic"] as! Bool, true)
 
         let restoredUnfinalizedBolus = UnfinalizedDose(rawValue: rawValue)!
         XCTAssertEqual(restoredUnfinalizedBolus.doseType, unfinalizedBolus.doseType)
@@ -156,6 +168,7 @@ class UnfinalizedDoseTests: XCTestCase {
         XCTAssertEqual(restoredUnfinalizedBolus.scheduledTempRate, unfinalizedBolus.scheduledTempRate)
         XCTAssertEqual(restoredUnfinalizedBolus.startTime, unfinalizedBolus.startTime)
         XCTAssertEqual(restoredUnfinalizedBolus.duration, unfinalizedBolus.duration)
+        XCTAssertEqual(restoredUnfinalizedBolus.automatic, unfinalizedBolus.automatic)
         XCTAssertEqual(restoredUnfinalizedBolus.finishTime, unfinalizedBolus.finishTime)
         XCTAssertEqual(restoredUnfinalizedBolus.rate, unfinalizedBolus.rate)
     }
@@ -166,7 +179,8 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(30)
         var unfinalizedTBR = UnfinalizedDose(tempBasalRate: rate,
                                              startTime: startTime,
-                                             duration: duration)
+                                             duration: duration,
+                                             automatic: true)
         unfinalizedTBR.scheduledTempRate = rate
         let rawValue = unfinalizedTBR.rawValue
         XCTAssertEqual(UnfinalizedDose.DoseType(rawValue: rawValue["doseType"] as! UnfinalizedDose.DoseType.RawValue), .tempBasal)
@@ -175,6 +189,7 @@ class UnfinalizedDoseTests: XCTestCase {
         XCTAssertNil(rawValue["scheduledUnits"])
         XCTAssertEqual(rawValue["scheduledTempRate"] as! Double, rate)
         XCTAssertEqual(rawValue["duration"] as! Double, duration)
+        XCTAssertEqual(rawValue["automatic"] as! Bool, true)
 
         let restoredUnfinalizedTBR = UnfinalizedDose(rawValue: rawValue)!
         XCTAssertEqual(restoredUnfinalizedTBR.doseType, unfinalizedTBR.doseType)
@@ -183,6 +198,7 @@ class UnfinalizedDoseTests: XCTestCase {
         XCTAssertEqual(restoredUnfinalizedTBR.scheduledTempRate, unfinalizedTBR.scheduledTempRate)
         XCTAssertEqual(restoredUnfinalizedTBR.startTime, unfinalizedTBR.startTime)
         XCTAssertEqual(restoredUnfinalizedTBR.duration, unfinalizedTBR.duration)
+        XCTAssertEqual(restoredUnfinalizedTBR.automatic, unfinalizedTBR.automatic)
         XCTAssertEqual(restoredUnfinalizedTBR.finishTime, unfinalizedTBR.finishTime)
         XCTAssertEqual(restoredUnfinalizedTBR.rate, unfinalizedTBR.rate)
     }
@@ -193,7 +209,8 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(30)
         let expectedUnfinalizedTBR = UnfinalizedDose(tempBasalRate: rate,
                                                      startTime: startTime,
-                                                     duration: duration)
+                                                     duration: duration,
+                                                     automatic: true)
         let rawValue = expectedUnfinalizedTBR.rawValue
         let unfinalizedTBR = UnfinalizedDose(rawValue: rawValue)!
         XCTAssertEqual(unfinalizedTBR.doseType, .tempBasal)
@@ -202,6 +219,7 @@ class UnfinalizedDoseTests: XCTestCase {
         XCTAssertNil(unfinalizedTBR.scheduledTempRate)
         XCTAssertEqual(unfinalizedTBR.startTime, startTime)
         XCTAssertEqual(unfinalizedTBR.duration, duration)
+        XCTAssertEqual(unfinalizedTBR.automatic, true)
         XCTAssertEqual(unfinalizedTBR.finishTime, startTime.addingTimeInterval(duration))
         XCTAssertEqual(unfinalizedTBR.rate, rate)
     }
@@ -212,13 +230,15 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(1)
         let unfinalizedBolus = UnfinalizedDose(bolusAmount: amount,
                                                startTime: now,
-                                               duration: duration)
+                                               duration: duration,
+                                               automatic: true)
         let doseEntry = DoseEntry(unfinalizedBolus)
         XCTAssertEqual(doseEntry.type, .bolus)
         XCTAssertEqual(doseEntry.startDate, now)
         XCTAssertEqual(doseEntry.endDate, now.addingTimeInterval(duration))
         XCTAssertEqual(doseEntry.programmedUnits, amount)
         XCTAssertEqual(doseEntry.unit, .units)
+        XCTAssertEqual(doseEntry.automatic, true)
         XCTAssertNil(doseEntry.deliveredUnits)
     }
 
@@ -229,13 +249,15 @@ class UnfinalizedDoseTests: XCTestCase {
         let rate = amount*duration.hours
         let unfinalizedTBR = UnfinalizedDose(tempBasalRate: amount,
                                              startTime: now,
-                                             duration: duration)
+                                             duration: duration,
+                                             automatic: true)
         let doseEntry = DoseEntry(unfinalizedTBR)
         XCTAssertEqual(doseEntry.type, .tempBasal)
         XCTAssertEqual(doseEntry.startDate, now)
         XCTAssertEqual(doseEntry.endDate, now.addingTimeInterval(duration))
         XCTAssertEqual(doseEntry.programmedUnits, rate)
         XCTAssertEqual(doseEntry.unit, .unitsPerHour)
+        XCTAssertEqual(doseEntry.automatic, true)
         XCTAssertNil(doseEntry.deliveredUnits)
     }
 
@@ -266,7 +288,7 @@ class UnfinalizedDoseTests: XCTestCase {
     func testBolusCancelLongAfterFinishTime() {
         let end = Date()
         let duration = TimeInterval(1)
-        var dose = UnfinalizedDose(bolusAmount: 1, startTime: end-duration, duration: duration)
+        var dose = UnfinalizedDose(bolusAmount: 1, startTime: end-duration, duration: duration, automatic: false)
         dose.cancel(at: end + .hours(1))
 
         XCTAssertEqual(1.0, dose.units)
@@ -278,7 +300,8 @@ class UnfinalizedDoseTests: XCTestCase {
         let duration = TimeInterval.minutes(1)
         var dose = UnfinalizedDose(bolusAmount: 5,
                                    startTime: end - duration/2,
-                                   duration: duration)
+                                   duration: duration,
+                                   automatic: false)
         dose.cancel(at: end)
 
         XCTAssertEqual(dose.units, 2.5)
@@ -288,6 +311,7 @@ class UnfinalizedDoseTests: XCTestCase {
         XCTAssertTrue(dose.finished)
         XCTAssertEqual(dose.progress, 1)
         XCTAssertEqual(dose.finalizedUnits!, 2.5)
+        XCTAssertEqual(dose.automatic, false)
         XCTAssertTrue(dose.description.contains("Interrupted Bolus"))
 
         let doseEntry = DoseEntry(dose)
@@ -296,5 +320,6 @@ class UnfinalizedDoseTests: XCTestCase {
         XCTAssertEqual(doseEntry.startDate, end - duration/2)
         XCTAssertEqual(doseEntry.endDate, end)
         XCTAssertEqual(doseEntry.type, .bolus)
+        XCTAssertEqual(doseEntry.automatic, false)
     }
 }
