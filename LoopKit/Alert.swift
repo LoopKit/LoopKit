@@ -35,7 +35,7 @@ public struct PersistedAlert: Equatable {
     }
 }
 
-/// Protocol for looking up alerts persisted in storage
+/// Protocol for adding and looking up alerts persisted in storage
 public protocol PersistedAlertStore {
     /// Look up all issued, but unretracted, alerts for a given `managerIdentifier`.  This is useful for an Alert issuer to see what alerts are extant (outstanding).
     /// NOTE: the completion function may be called on a different queue than the caller.  Callers must be prepared for this.
@@ -44,6 +44,9 @@ public protocol PersistedAlertStore {
     /// Look up all issued, but unretracted, and unacknowledged, alerts for a given `managerIdentifier`.  This is useful for an Alert issuer to see what alerts are extant (outstanding).
     /// NOTE: the completion function may be called on a different queue than the caller.  Callers must be prepared for this.
     func lookupAllUnacknowledgedUnretracted(managerIdentifier: String, completion: @escaping (Swift.Result<[PersistedAlert], Error>) -> Void)
+
+    /// Records an alert that occurred in the past and is already retracted. This alert will never be presented to the user by an AlertPresenter. An historical retracted alert has the same date for issued and retracted dates, and there is no acknowledged date
+    func recordHistoricalRetractedAlert(_ alert: Alert, at date: Date, completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 /// Structure that represents an Alert that is issued from a Device.
