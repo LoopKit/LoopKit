@@ -75,18 +75,16 @@ public struct GlucoseRangePicker: View {
     public var body: some View {
         switch usageContext {
         case .component(availableWidth: let availableWidth):
-            return AnyView(body(availableWidth: availableWidth))
+            body(availableWidth: availableWidth)
         case .independent:
-            return AnyView(
-                GeometryReader { geometry in
-                    HStack(spacing: 0) {
-                        Spacer()
-                        self.body(availableWidth: geometry.size.width)
-                        Spacer()
-                    }
+            GeometryReader { geometry in
+                HStack(spacing: 0) {
+                    Spacer()
+                    self.body(availableWidth: geometry.size.width)
+                    Spacer()
                 }
-                .frame(height: 216)
-            )
+            }
+            .frame(height: 216)
         }
     }
 
@@ -99,8 +97,6 @@ public struct GlucoseRangePicker: View {
                 bounds: lowerBoundRange,
                 isUnitLabelVisible: false
             )
-            // Ensure the selectable picker values update when either bound changes
-            .id(lowerBound...upperBound)
             .frame(width: availableWidth / 3)
             .overlay(
                 Text(separator)
@@ -120,8 +116,6 @@ public struct GlucoseRangePicker: View {
                 guardrail: guardrail,
                 bounds: upperBoundRange
             )
-            // Ensure the selectable picker values update when either bound changes
-            .id(lowerBound...upperBound)
             .frame(width: availableWidth / 3)
             .padding(.trailing, unitLabelWidth)
             .clipped()

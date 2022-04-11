@@ -68,19 +68,24 @@ public struct CorrectionRangeOverridesEditor: View {
                 .navigationBarTitle("", displayMode: .inline)
         }
     }
-    
-    private var contentWithCancel: some View {
-        if value == initialValue {
-            return AnyView(content
-                .navigationBarBackButtonHidden(false)
-                .navigationBarItems(leading: EmptyView())
-            )
+
+    private var shouldAddCancelButton: Bool {
+        return value != initialValue
+    }
+
+    @ViewBuilder
+    private var leadingNavigationBarItem: some View {
+        if shouldAddCancelButton {
+            cancelButton
         } else {
-            return AnyView(content
-                .navigationBarBackButtonHidden(true)
-                .navigationBarItems(leading: cancelButton)
-            )
+            EmptyView()
         }
+    }
+
+    private var contentWithCancel: some View {
+        content
+            .navigationBarBackButtonHidden(shouldAddCancelButton)
+            .navigationBarItems(leading: leadingNavigationBarItem)
     }
     
     private var cancelButton: some View {

@@ -147,26 +147,31 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                 .navigationBarBackButtonHidden(true)
                 .navigationBarItems(leading: backButton, trailing: trailingNavigationItems)
         case .settings:
-            pageWithCancel
+            page
+                .navigationBarBackButtonHidden(shouldAddCancelButton)
+                .navigationBarItems(leading: leadingNavigationBarItem, trailing: trailingNavigationItems)
                 .navigationBarTitle("", displayMode: .inline)
         }
     }
-        
-    private var pageWithCancel: some View {
+
+    private var shouldAddCancelButton: Bool {
         switch saveButtonState {
         case .disabled, .loading:
-            return AnyView(page
-                .navigationBarBackButtonHidden(false)
-                .navigationBarItems(leading: EmptyView(), trailing: trailingNavigationItems)
-            )
+            return false
         case .enabled:
-            return AnyView(page
-                .navigationBarBackButtonHidden(true)
-                .navigationBarItems(leading: cancelButton, trailing: trailingNavigationItems)
-            )
+            return true
         }
     }
-    
+
+    @ViewBuilder
+    private var leadingNavigationBarItem: some View {
+        if shouldAddCancelButton {
+            cancelButton
+        } else {
+            EmptyView()
+        }
+    }
+        
     private var page: some View {
         ConfigurationPage(
             title: title,
