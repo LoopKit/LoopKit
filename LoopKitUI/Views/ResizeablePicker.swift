@@ -43,16 +43,24 @@ struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValu
     }
 
     func updateUIView(_ view: UIPickerView, context: UIViewRepresentableContext<ResizeablePicker>) {
+        context.coordinator.updateData(newData: data)
+        view.reloadAllComponents()
         if view.selectedRow(inComponent: 0) != selectedRow {
-            view.selectRow(selectedRow, inComponent: 0, animated: true)
+            view.selectRow(selectedRow, inComponent: 0, animated: false)
         }
     }
 
     class Coordinator: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         private var picker: ResizeablePicker
+        private var data: [SelectionValue]
 
         init(_ pickerView: ResizeablePicker) {
             self.picker = pickerView
+            self.data = pickerView.data
+        }
+
+        func updateData(newData: [SelectionValue]) {
+            self.data = newData
         }
 
         func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -60,16 +68,16 @@ struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValu
         }
 
         func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-            picker.data.count
+            data.count
         }
 
         func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-            let text = self.picker.formatter(picker.data[row])
+            let text = self.picker.formatter(data[row])
             let result = view as? UILabel ?? UILabel()
             result.text = text
             result.font = UIFont.preferredFont(forTextStyle: .title2)
             result.textAlignment = .center
-            result.textColor = UIColor(picker.colorer(picker.data[row]))
+            result.textColor = UIColor(picker.colorer(data[row]))
             result.accessibilityHint = text
             result.lineBreakMode = .byClipping
             result.adjustsFontSizeToFitWidth = true
@@ -78,7 +86,7 @@ struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValu
         
         func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
             picker.selectedRow = row
-            picker.selection.wrappedValue = picker.data[row]
+            picker.selection.wrappedValue = data[row]
         }
     }
 }

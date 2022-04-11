@@ -22,6 +22,36 @@ public protocol AlertResponder: AnyObject {
     func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) -> Void
 }
 
+public struct PersistedAlert: Equatable {
+    public let alert: Alert
+    public let issuedDate: Date
+    public let retractedDate: Date?
+    public let acknowledgedDate: Date?
+    public init(alert: Alert, issuedDate: Date, retractedDate: Date?, acknowledgedDate: Date?) {
+        self.alert = alert
+        self.issuedDate = issuedDate
+        self.retractedDate = retractedDate
+        self.acknowledgedDate = acknowledgedDate
+    }
+}
+
+/// Protocol for recording and looking up alerts persisted in storage
+public protocol PersistedAlertStore {
+    /// Determine if an alert is already issued for a given `Alert.Identifier`.
+    func doesIssuedAlertExist(identifier: Alert.Identifier, completion: @escaping (Swift.Result<Bool, Error>) -> Void)
+
+    /// Look up all issued, but unretracted, alerts for a given `managerIdentifier`.  This is useful for an Alert issuer to see what alerts are extant (outstanding).
+    /// NOTE: the completion function may be called on a different queue than the caller.  Callers must be prepared for this.
+    func lookupAllUnretracted(managerIdentifier: String, completion: @escaping (Swift.Result<[PersistedAlert], Error>) -> Void)
+
+    /// Look up all issued, but unretracted, and unacknowledged, alerts for a given `managerIdentifier`.  This is useful for an Alert issuer to see what alerts are extant (outstanding).
+    /// NOTE: the completion function may be called on a different queue than the caller.  Callers must be prepared for this.
+    func lookupAllUnacknowledgedUnretracted(managerIdentifier: String, completion: @escaping (Swift.Result<[PersistedAlert], Error>) -> Void)
+
+    /// Records an alert that occurred (likely in the past) but is already retracted. This alert will never be presented to the user by an AlertPresenter. Such a retracted alert has the same date for issued and retracted dates, and there is no acknowledged date
+    func recordRetractedAlert(_ alert: Alert, at date: Date)
+}
+
 /// Structure that represents an Alert that is issued from a Device.
 public struct Alert: Equatable {
     /// Representation of an alert Trigger

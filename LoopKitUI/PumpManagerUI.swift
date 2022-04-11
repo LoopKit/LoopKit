@@ -71,7 +71,7 @@ public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager
     func hudProvider(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowedInsulinTypes: [InsulinType]) -> HUDProvider?
 
     // Instantiates HUD view (typically reservoir volume) from the raw state returned by hudViewRawState
-    static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> LevelHUDView?
+    static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> BaseHUDView?
 }
 
 public protocol PumpManagerOnboardingDelegate: AnyObject {

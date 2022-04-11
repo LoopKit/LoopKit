@@ -122,8 +122,6 @@ public struct FractionalQuantityPicker: View {
                 isUnitLabelVisible: false,
                 colorForValue: colorForWhole
             )
-            // Ensure whole picker color updates when fraction updates
-            .id(whole + fraction)
             .frame(width: availableWidth / 3)
             .overlay(
                 Text(separator)
@@ -143,8 +141,6 @@ public struct FractionalQuantityPicker: View {
                 formatter: fractionalFormatter,
                 colorForValue: colorForFraction
             )
-            // Ensure fractional picker values update when whole value updates
-            .id(whole + fraction)
             .frame(width: availableWidth / 3)
             .padding(.trailing, spacing + unitLabelWidth)
             .clipped()
