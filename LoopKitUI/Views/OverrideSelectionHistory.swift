@@ -71,7 +71,7 @@ public struct OverrideSelectionHistory: View {
                 }
             }
         }
-        .navigationBarTitle(Text(LocalizedString("Override History", comment: "Title for override history view")), displayMode: .large)
+        .navigationBarTitle(Text("Override History", comment: "Title for override history view"), displayMode: .large)
     }
     
     private func makeTargetRangeText(from targetRange: ClosedRange<HKQuantity>) -> String {
