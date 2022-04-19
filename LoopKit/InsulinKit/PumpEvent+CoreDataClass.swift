@@ -204,7 +204,8 @@ extension PumpEvent {
                 syncIdentifier: syncIdentifier,
                 insulinType: insulinType,
                 automatic: automatic,
-                isMutable: mutable
+                isMutable: mutable,
+                wasProgrammedByPumpUI: wasProgrammedByPumpUI
             )
         }
         set {
@@ -221,6 +222,7 @@ extension PumpEvent {
             insulinType = entry.insulinType
             automatic = entry.automatic
             mutable = entry.isMutable
+            wasProgrammedByPumpUI = entry.wasProgrammedByPumpUI
         }
     }
 

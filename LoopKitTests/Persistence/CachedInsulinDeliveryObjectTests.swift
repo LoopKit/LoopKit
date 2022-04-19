@@ -105,6 +105,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             object.programmedTempBasalRate = nil
             object.reason = .basal
             object.createdAt = dateFormatter.date(from: "2020-01-02T04:04:06Z")!
+            object.wasProgrammedByPumpUI = true
             let dose = object.dose
             XCTAssertNotNil(dose)
             XCTAssertEqual(dose!.type, .basal)
@@ -117,6 +118,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             XCTAssertEqual(dose!.syncIdentifier, "876DDBF9-CC47-45ED-B0D7-AD77B77913C4")
             XCTAssertEqual(dose!.scheduledBasalRate, nil)
             XCTAssertFalse(dose!.isMutable)
+            XCTAssertTrue(dose!.wasProgrammedByPumpUI)
         }
     }
 
@@ -134,6 +136,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             object.reason = .basal
             object.createdAt = dateFormatter.date(from: "2020-01-02T04:04:07Z")!
             object.isSuspend = false
+            object.wasProgrammedByPumpUI = true
             let dose = object.dose
             XCTAssertNotNil(dose)
             XCTAssertEqual(dose!.type, .tempBasal)
@@ -146,6 +149,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             XCTAssertEqual(dose!.syncIdentifier, nil)
             XCTAssertEqual(dose!.scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.0))
             XCTAssertFalse(dose!.isMutable)
+            XCTAssertTrue(dose!.wasProgrammedByPumpUI)
         }
     }
 
@@ -163,6 +167,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             object.reason = .basal
             object.createdAt = dateFormatter.date(from: "2020-01-02T04:04:07Z")!
             object.isSuspend = true
+            object.wasProgrammedByPumpUI = true
             let dose = object.dose
             XCTAssertNotNil(dose)
             XCTAssertEqual(dose!.type, .suspend)
@@ -175,6 +180,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             XCTAssertEqual(dose!.syncIdentifier, nil)
             XCTAssertEqual(dose!.scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.0))
             XCTAssertFalse(dose!.isMutable)
+            XCTAssertTrue(dose!.wasProgrammedByPumpUI)
         }
     }
 
@@ -193,6 +199,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             object.createdAt = dateFormatter.date(from: "2020-01-02T04:04:07Z")!
             object.isSuspend = false
             object.isMutable = true
+            object.wasProgrammedByPumpUI = true
             let dose = object.dose
             XCTAssertNotNil(dose)
             XCTAssertEqual(dose!.type, .tempBasal)
@@ -205,6 +212,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             XCTAssertEqual(dose!.syncIdentifier, nil)
             XCTAssertEqual(dose!.scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.0))
             XCTAssertTrue(dose!.isMutable)
+            XCTAssertTrue(dose!.wasProgrammedByPumpUI)
         }
     }
 
@@ -223,6 +231,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             object.createdAt = dateFormatter.date(from: "2020-01-02T04:04:07Z")!
             object.deletedAt = dateFormatter.date(from: "2020-01-02T04:34:06Z")!
             object.isSuspend = false
+            object.wasProgrammedByPumpUI = true
             let dose = object.dose
             XCTAssertNotNil(dose)
             XCTAssertEqual(dose!.type, .tempBasal)
@@ -235,6 +244,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             XCTAssertEqual(dose!.syncIdentifier, nil)
             XCTAssertEqual(dose!.scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.0))
             XCTAssertFalse(dose!.isMutable)
+            XCTAssertTrue(dose!.wasProgrammedByPumpUI)
         }
     }
 
@@ -251,6 +261,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             object.programmedTempBasalRate = nil
             object.reason = .bolus
             object.createdAt = dateFormatter.date(from: "2020-01-02T05:05:06Z")!
+            object.wasProgrammedByPumpUI = true
             let dose = object.dose
             XCTAssertNotNil(dose)
             XCTAssertEqual(dose!.type, .bolus)
@@ -263,6 +274,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             XCTAssertEqual(dose!.syncIdentifier, "9AA61454-EED5-476F-8E57-4BA63D0267C1")
             XCTAssertEqual(dose!.scheduledBasalRate, nil)
             XCTAssertFalse(dose!.isMutable)
+            XCTAssertTrue(dose!.wasProgrammedByPumpUI)
         }
     }
 
@@ -280,6 +292,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             object.reason = .bolus
             object.createdAt = dateFormatter.date(from: "2020-01-02T05:05:06Z")!
             object.isMutable = true
+            object.wasProgrammedByPumpUI = true
             let dose = object.dose
             XCTAssertNotNil(dose)
             XCTAssertEqual(dose!.type, .bolus)
@@ -292,6 +305,7 @@ class CachedInsulinDeliveryObjectDoseTests: PersistenceControllerTestCase {
             XCTAssertEqual(dose!.syncIdentifier, "9AA61454-EED5-476F-8E57-4BA63D0267C1")
             XCTAssertEqual(dose!.scheduledBasalRate, nil)
             XCTAssertTrue(dose!.isMutable)
+            XCTAssertTrue(dose!.wasProgrammedByPumpUI)
         }
     }
 

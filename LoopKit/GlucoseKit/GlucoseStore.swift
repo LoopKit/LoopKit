@@ -219,7 +219,7 @@ public final class GlucoseStore: HealthKitSampleStore {
                 self.purgeExpiredManagedDataFromHealthKit(before: newestStartDate)
             }
 
-            self.handleUpdatedGlucoseData(updateSource: .queriedByHealthKit)
+            self.handleUpdatedGlucoseData()
             completion(true)
         }
     }
@@ -371,7 +371,7 @@ extension GlucoseStore {
                 return
             }
 
-            self.handleUpdatedGlucoseData(updateSource: .changedInApp)
+            self.handleUpdatedGlucoseData()
             completion(.success(storedSamples))
         }
     }
@@ -543,7 +543,7 @@ extension GlucoseStore {
                 return
             }
 
-            self.handleUpdatedGlucoseData(updateSource: .changedInApp)
+            self.handleUpdatedGlucoseData()
             completion(nil)
         }
     }
@@ -571,7 +571,7 @@ extension GlucoseStore {
                         return
                     }
 
-                    self.handleUpdatedGlucoseData(updateSource: .changedInApp)
+                    self.handleUpdatedGlucoseData()
                     completion(nil)
                 }
             }
@@ -593,7 +593,7 @@ extension GlucoseStore {
                 completion(error)
                 return
             }
-            self.handleUpdatedGlucoseData(updateSource: .changedInApp)
+            self.handleUpdatedGlucoseData()
             completion(nil)
         }
     }
@@ -638,14 +638,14 @@ extension GlucoseStore {
         }
     }
 
-    private func handleUpdatedGlucoseData(updateSource: UpdateSource) {
+    private func handleUpdatedGlucoseData() {
         dispatchPrecondition(condition: .onQueue(queue))
 
         self.purgeExpiredCachedGlucoseObjects()
         self.updateLatestGlucose()
         self.saveSamplesToHealthKit()
 
-        NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: updateSource.rawValue])
+        NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self)
         delegate?.glucoseStoreHasUpdatedGlucoseData(self)
     }
 }

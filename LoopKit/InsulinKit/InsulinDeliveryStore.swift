@@ -169,7 +169,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
                 return
             }
 
-            self.handleUpdatedDoseData(updateSource: .queriedByHealthKit)
+            self.handleUpdatedDoseData()
             self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
 
             completion(true)
@@ -427,7 +427,7 @@ extension InsulinDeliveryStore {
                 return
             }
 
-            self.handleUpdatedDoseData(updateSource: .changedInApp)
+            self.handleUpdatedDoseData()
             self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
 
             completion(.success(()))
@@ -520,7 +520,7 @@ extension InsulinDeliveryStore {
                     return
                 }
             }
-            self.handleUpdatedDoseData(updateSource: .changedInApp)
+            self.handleUpdatedDoseData()
             self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
             completion(errorString)
         }
@@ -542,7 +542,7 @@ extension InsulinDeliveryStore {
                     return
                 }
             }
-            self.handleUpdatedDoseData(updateSource: .changedInApp)
+            self.handleUpdatedDoseData()
             self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
             completion(errorString)
         }
@@ -590,7 +590,7 @@ extension InsulinDeliveryStore {
                     doseStoreError = DoseStore.DoseStoreError(error: .coreDataError(error))
                 }
             }
-            self.handleUpdatedDoseData(updateSource: .changedInApp)
+            self.handleUpdatedDoseData()
             self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
             completion(doseStoreError)
         }
@@ -614,7 +614,7 @@ extension InsulinDeliveryStore {
             let storeError = self.purgeCachedInsulinDeliveryObjects(matching: nil)
             self.healthStore.deleteObjects(of: self.insulinQuantityType, predicate: healthKitPredicate) { _, _, healthKitError in
                 self.queue.async {
-                    self.handleUpdatedDoseData(updateSource: .changedInApp)
+                    self.handleUpdatedDoseData()
                     completion(storeError ?? healthKitError)
                 }
             }
@@ -636,7 +636,7 @@ extension InsulinDeliveryStore {
                 completion(error)
                 return
             }
-            self.handleUpdatedDoseData(updateSource: .changedInApp)
+            self.handleUpdatedDoseData()
             completion(nil)
         }
     }
@@ -666,13 +666,13 @@ extension InsulinDeliveryStore {
         return error
     }
 
-    private func handleUpdatedDoseData(updateSource: UpdateSource) {
+    private func handleUpdatedDoseData() {
         dispatchPrecondition(condition: .onQueue(queue))
 
         self.purgeExpiredCachedInsulinDeliveryObjects()
         self.updateLastImmutableBasalEndDate()
 
-        NotificationCenter.default.post(name: InsulinDeliveryStore.doseEntriesDidChange, object: self, userInfo: [InsulinDeliveryStore.notificationUpdateSourceKey: updateSource.rawValue])
+        NotificationCenter.default.post(name: InsulinDeliveryStore.doseEntriesDidChange, object: self)
     }
 }
 

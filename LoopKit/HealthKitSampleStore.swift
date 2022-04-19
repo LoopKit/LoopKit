@@ -23,9 +23,6 @@ public enum HealthKitSampleStoreResult<T> {
 
 
 public class HealthKitSampleStore {
-    /// Describes the source of an update notification. Value is of type `UpdateSource.RawValue`
-    public static let notificationUpdateSourceKey = "com.loopkit.UpdateSource"
-    
     private let observerQueryUpdateHandlerQueue: DispatchQueue
 
     public enum StoreError: Error {
