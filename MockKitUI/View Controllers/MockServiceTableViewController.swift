@@ -125,9 +125,9 @@ final class MockServiceTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch Section(rawValue: section)! {
         case .source:
-            return "Source"
+            return LocalizedString("Source", comment: "Caption for Source")
         case .history:
-            return "History"
+            return LocalizedString("History", comment: "Caption for History")
         case .deleteService:
             return " " // Use an empty string for more dramatic spacing
         }
@@ -245,7 +245,7 @@ fileprivate class MockServiceHistoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "History"
+        title = LocalizedString("History", comment: "History Caption")
 
         textView.contentInsetAdjustmentBehavior = .always
         textView.isEditable = false
