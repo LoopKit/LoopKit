@@ -76,7 +76,7 @@ public struct GlucoseValuePicker: View {
 private struct GlucoseValuePickerTester: View {
     @State var value = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 80)
 
-    private let guardrail = Guardrail(absoluteBounds: 54...180, recommendedBounds: 71...120, unit: .milligramsPerDeciliter, startingSuggestion: 80)
+    private let guardrail = Guardrail(absoluteBounds: 54...180, recommendedBounds: 71...150, unit: .milligramsPerDeciliter, startingSuggestion: 100)
 
     var unit: HKUnit
 

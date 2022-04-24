@@ -58,7 +58,7 @@ public struct GlucoseTherapySettingInformationView: View {
     private var bodyText: some View {
         VStack(alignment: .leading, spacing: 25) {
             text ?? AnyView(Text(therapySetting.descriptiveText(appName: appName)))
-            Text(therapySetting.guardrailInformationText)
+            Text(therapySetting.guardrailInformationText).bold()
         }
         .accentColor(.secondary)
         .foregroundColor(.accentColor)
@@ -96,7 +96,7 @@ fileprivate extension TherapySetting {
     }
 
     func lowHighText(lowerBoundString: String, upperBoundString: String) -> String {
-        return String(format: LocalizedString("It can be set as low as %1$@. It can be set as high as %2$@.",
+        return String(format: LocalizedString("Graphic above for illustration only; Code Limits:\n\tHigh Limit:\t%2$@\n\t Low Limit:\t%1$@",
                                               comment: "Guardrail info text format"), lowerBoundString, upperBoundString)
     }
 }

@@ -51,7 +51,8 @@ public struct CorrectionRangeOverrideInformationView: View {
         case .preMeal:
             return VStack(alignment: .leading, spacing: 20) {
                 Text(String(format: LocalizedString("Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button.", comment: "Information about pre-meal range format (1: app name)"), appName))
-                Text(LocalizedString("This will typically be", comment: "Information about pre-meal range relative to correction range")) + Text(LocalizedString(" lower ", comment: "Information about pre-meal range relative to correction range")).bold().italic() + Text(LocalizedString("than your Correction Range.", comment: "Information about pre-meal range relative to correction range"))
+                Text(LocalizedString("This will typically be", comment: "Information about pre-meal range relative to correction range")) + Text(LocalizedString(" lower ", comment: "Information about pre-meal range relative to correction range")).bold().italic() + Text(LocalizedString("than your Correction Range but cannot be lower than the Glucose Safety Limit.", comment: "Information about pre-meal range relative to correction range")) +
+                Text(LocalizedString("\n\nThe Pre-Meal duration is 1 hour or until user enters carbs, cancels Pre-Meal or enacts a different override.", comment: "Information about pre-meal duration"))
             }
             .fixedSize(horizontal: false, vertical: true) // prevent text from being cut off
         case .workout:

@@ -58,13 +58,13 @@ public extension TherapySetting {
     func descriptiveText(appName: String) -> String {
         switch self {
         case .glucoseTargetRange:
-            return String(format: LocalizedString("Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses.", comment: "Descriptive text for glucose target range (1: app name)"), appName)
+            return String(format: LocalizedString("Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your insulin delivery and helping you calculate your boluses.\n\nThe low level offered might be limited by Glucose Safety Range  and Pre-Meal (if set) choices.", comment: "Descriptive text for glucose target range (1: app name)"), appName)
         case .preMealCorrectionRangeOverride:
-            return LocalizedString("Temporarily lower your glucose target before a meal to impact post-meal glucose spikes.", comment: "Descriptive text for pre-meal correction range override")
+            return LocalizedString("Temporarily lower your glucose target before a meal to help decrease post-meal glucose spikes.\n\nThe Pre-Meal duration is 1 hour or until user enters carbs, cancels Pre-Meal or enacts a different override.", comment: "Descriptive text for pre-meal correction range override")
         case .workoutCorrectionRangeOverride:
             return LocalizedString("Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events.", comment: "Descriptive text for workout correction range override")
         case .suspendThreshold:
-            return String(format: LocalizedString("%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours.", comment: "Descriptive format string for glucose safety limit (1: app name)"), appName)
+            return String(format: LocalizedString("%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours.\n\nIf you want to raise the limit, you may need to first adjust Pre-Meal or Correction Range settings.", comment: "Descriptive format string for glucose safety limit (1: app name)"), appName)
         case .basalRate:
             return LocalizedString("Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs.", comment: "Descriptive text for basal rate")
         case .deliveryLimits:
