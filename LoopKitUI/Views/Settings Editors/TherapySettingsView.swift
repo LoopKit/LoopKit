@@ -281,7 +281,6 @@ extension TherapySettingsView {
             }
         }
     }
-
     
     private var deliveryLimitsSection: Card {
         card(for: .deliveryLimits) {
