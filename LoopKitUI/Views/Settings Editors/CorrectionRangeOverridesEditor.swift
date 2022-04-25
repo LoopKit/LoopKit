@@ -86,6 +86,11 @@ public struct CorrectionRangeOverridesEditor: View {
         content
             .navigationBarBackButtonHidden(shouldAddCancelButton)
             .navigationBarItems(leading: leadingNavigationBarItem)
+            .navigationBarItems(leading: EmptyView(), trailing: resetButton)
+    }
+
+    private var resetButton: some View {
+        Button(action: { value.ranges = [:] } ) { Text(LocalizedString("Reset", comment: "Restore settings to nil")) }
     }
     
     private var cancelButton: some View {
