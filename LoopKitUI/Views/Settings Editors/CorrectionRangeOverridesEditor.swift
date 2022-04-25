@@ -89,7 +89,11 @@ public struct CorrectionRangeOverridesEditor: View {
     }
 
     private var unsetButton: some View {
-        Button(action: { value.ranges = [:] } ) { Text(LocalizedString("Unset", comment: "Restore settings to nil")) }
+        Button( action: {
+                value.ranges = [:];
+                presetBeingEdited = nil
+        } )
+        { Text(LocalizedString("Unset", comment: "Restore settings to nil")) }
     }
     
     private var cancelButton: some View {
