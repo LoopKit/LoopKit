@@ -267,7 +267,7 @@ extension TherapySettingsView {
             if let items = viewModel.therapySettings.basalRateSchedule?.items,
                let supportedBasalRates = viewModel.pumpSupportedIncrements()?.basalRates,
                let total = viewModel.therapySettings.basalRateSchedule?.total()  {
-                Text(LocalizedString("\(round(total * 100) / 100.0) U/day", comment: "Schedule Basal Daily Total"))
+                Text(LocalizedString("\(round(total * 100) / 100.0) U/day", comment: "Scheduled Basal Daily Total"))
                 SectionDivider()
                 ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
