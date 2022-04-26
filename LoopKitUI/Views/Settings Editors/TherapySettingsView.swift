@@ -264,9 +264,11 @@ extension TherapySettingsView {
 
     private var basalRatesSection: Card {
         card(for: .basalRate) {
-            if let items = viewModel.therapySettings.basalRateSchedule?.items,
-               let supportedBasalRates = viewModel.pumpSupportedIncrements()?.basalRates,
-               let total = viewModel.therapySettings.basalRateSchedule?.total()  {
+            if let schedule = viewModel.therapySettings.basalRateSchedule,
+               let supportedBasalRates = viewModel.pumpSupportedIncrements()?.basalRates
+            {
+                let items = schedule.items
+                let total = schedule.total()
                 SectionDivider()
                 ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
