@@ -267,7 +267,6 @@ extension TherapySettingsView {
             if let items = viewModel.therapySettings.basalRateSchedule?.items,
                let supportedBasalRates = viewModel.pumpSupportedIncrements()?.basalRates,
                let total = viewModel.therapySettings.basalRateSchedule?.total()  {
-                Text(LocalizedString("\(round(total * 100) / 100.0) U/day", comment: "Scheduled Basal Daily Total"))
                 SectionDivider()
                 ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
@@ -277,6 +276,17 @@ extension TherapySettingsView {
                                       value:  items[index].value,
                                       unit: .internationalUnitsPerHour,
                                       guardrail: .basalRate(supportedBasalRates: supportedBasalRates))
+                }
+                SectionDivider()
+                HStack {
+                    Text(NSLocalizedString("Total", comment: "The text indicating Total for Daily Schedule Basal"))
+                        .bold()
+                        .foregroundColor(.primary)
+                    Spacer()
+                    Text("\(round(total * 100) / 100.0) ")
+                        .foregroundColor(.primary) +
+                    Text(NSLocalizedString("U/day", comment: "The text indicating U/day for Daily Schedule Basal"))
+                        .foregroundColor(.secondary)
                 }
             }
         }
