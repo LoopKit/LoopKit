@@ -285,7 +285,7 @@ extension TherapySettingsView {
                         .bold()
                         .foregroundColor(.primary)
                     Spacer()
-                    Text("\(round(total * 100) / 100.0) ")
+                    Text(String(format: "%.2f ",total))
                         .foregroundColor(.primary) +
                     Text(NSLocalizedString("U/day", comment: "The text indicating U/day for Daily Schedule Basal"))
                         .foregroundColor(.secondary)
