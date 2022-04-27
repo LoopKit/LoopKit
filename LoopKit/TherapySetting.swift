@@ -17,6 +17,8 @@ public enum TherapySetting: String {
     case insulinModel
     case carbRatio
     case insulinSensitivity
+    case addNewEntry
+    case editDeleteEntry
     case none
 }
 
@@ -43,7 +45,7 @@ public extension TherapySetting {
             return LocalizedString("Carb Ratios", comment: "Title text for carb ratios")
         case .insulinSensitivity:
             return LocalizedString("Insulin Sensitivities", comment: "Title text for insulin sensitivity")
-        case .none:
+        case .none, .addNewEntry, .editDeleteEntry :
             return ""
         }
     }
@@ -75,7 +77,11 @@ public extension TherapySetting {
             return LocalizedString("Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin.", comment: "Descriptive text for carb ratio")
         case .insulinSensitivity:
             return LocalizedString("Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin.", comment: "Descriptive text for insulin sensitivity")
-        case .none:
+        case .addNewEntry:
+            return LocalizedString("You can add an entry for any time slot not already filled by using the ➕ button.", comment: "Descriptive text for adding an entry")
+        case .editDeleteEntry:
+            return LocalizedString("You can edit or delete an entry using the Edit button.", comment: "Descriptive text for editing or deleting an entry")
+       case .none:
             return ""
         }
     }

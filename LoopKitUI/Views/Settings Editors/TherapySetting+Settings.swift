@@ -39,7 +39,7 @@ extension TherapySetting {
             return AnyView(CarbRatioInformationView(onExit: nil, mode: .settings))
         case .insulinSensitivity:
             return AnyView(InsulinSensitivityInformationView(onExit: nil, mode: .settings))
-        case .none:
+        case .none, .addNewEntry, .editDeleteEntry:
             return AnyView(Text("To be implemented"))
         }
     }

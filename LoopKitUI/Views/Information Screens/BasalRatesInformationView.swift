@@ -35,8 +35,8 @@ public struct BasalRatesInformationView: View {
             Text(LocalizedString("Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs.", comment: "Information about basal rates"))
             Text(String(format: LocalizedString("%1$@ supports 1 to 48 rates per day.", comment: "Information about max number of basal rates"), appName))
             Text(LocalizedString("The schedule starts at midnight and cannot contain a single rate of 0 U/hr.", comment: "Information about basal rate scheduling"))
-            Text(LocalizedString("You can add an entry at half-hour intervals for any time slot not already filled by using the ➕ button.", comment: "Information about adding a basal rate entry"))
-            Text(LocalizedString("You can edit the value or delete an entry by using the Edit button.", comment: "Information about editing or deleting a basal rate entry"))
+            Text(TherapySetting.addNewEntry.descriptiveText(appName: appName))
+            Text(TherapySetting.editDeleteEntry.descriptiveText(appName: appName))
        }
         .foregroundColor(.secondary)
     }

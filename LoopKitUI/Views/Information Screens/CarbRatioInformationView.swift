@@ -36,8 +36,8 @@ public struct CarbRatioInformationView: View {
     private var text: some View {
         VStack(alignment: .leading, spacing: 25) {
             Text(TherapySetting.carbRatio.descriptiveText(appName: appName))
-            Text(LocalizedString("You can add different carb ratios at half-hour intervals for any time slot not already filled by using the ➕ button.", comment: "Description of how to add a ratio"))
-            Text(LocalizedString("You can edit the value or delete an entry by using the Edit button.", comment: "Description of how to edit or delete an entry"))
+            Text(TherapySetting.addNewEntry.descriptiveText(appName: appName))
+            Text(TherapySetting.editDeleteEntry.descriptiveText(appName: appName))
         }
         .accentColor(.secondary)
         .foregroundColor(.accentColor)

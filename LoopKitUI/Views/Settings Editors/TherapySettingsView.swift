@@ -445,7 +445,7 @@ extension TherapySettingsView {
             return { dismiss in
                 AnyView(InsulinSensitivityScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
             }
-        case .none:
+        case .none, .addNewEntry, .editDeleteEntry:
             break
         }
         return { _ in AnyView(Text("\(setting.title)")) }
