@@ -264,7 +264,11 @@ extension TherapySettingsView {
 
     private var basalRatesSection: Card {
         card(for: .basalRate) {
-            if let items = viewModel.therapySettings.basalRateSchedule?.items, let supportedBasalRates = viewModel.pumpSupportedIncrements()?.basalRates {
+            if let schedule = viewModel.therapySettings.basalRateSchedule,
+               let supportedBasalRates = viewModel.pumpSupportedIncrements()?.basalRates
+            {
+                let items = schedule.items
+                let total = schedule.total()
                 SectionDivider()
                 ForEach(items.indices, id: \.self) { index in
                     if index > 0 {
@@ -274,6 +278,17 @@ extension TherapySettingsView {
                                       value:  items[index].value,
                                       unit: .internationalUnitsPerHour,
                                       guardrail: .basalRate(supportedBasalRates: supportedBasalRates))
+                }
+                SectionDivider()
+                HStack {
+                    Text(NSLocalizedString("Total", comment: "The text indicating Total for Daily Schedule Basal"))
+                        .bold()
+                        .foregroundColor(.primary)
+                    Spacer()
+                    Text(String(format: "%.2f ",total))
+                        .foregroundColor(.primary) +
+                    Text(NSLocalizedString("U/day", comment: "The text indicating U/day for Daily Schedule Basal"))
+                        .foregroundColor(.secondary)
                 }
             }
         }
