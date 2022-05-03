@@ -373,7 +373,7 @@ extension Collection where Element == DoseEntry {
                 reconciled.append(dose)
             case .basal, .tempBasal:
                 if lastSuspend == nil, let last = lastBasal {
-                    assert(!last.isMutable)
+                    // assert(!last.isMutable)
 
                     let endDate = Swift.min(last.endDate, dose.startDate)
 
@@ -424,7 +424,7 @@ extension Collection where Element == DoseEntry {
                 }
             case .suspend:
                 if let last = lastBasal {
-                    assert(!last.isMutable)
+                    // assert(!last.isMutable)
 
                     reconciled.append(DoseEntry(
                         type: last.type,
