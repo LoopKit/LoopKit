@@ -127,7 +127,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
     }
     
     private enum HealthKitRow: Int, CaseIterable {
-        case healthKitStorageDelay = 0
+        case healthKitStorageDelayEnabled = 0
+        case healthKitStorageDelay
     }
         
     // MARK: - UITableViewDataSource
@@ -383,9 +384,20 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case .healthKit:
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
             switch HealthKitRow(rawValue: indexPath.row)! {
+            case .healthKitStorageDelayEnabled:
+                let cell = tableView.dequeueReusableCell(withIdentifier: BoundSwitchTableViewCell.className, for: indexPath) as! BoundSwitchTableViewCell
+                cell.textLabel?.text = "HealthKit Storage Delay Enabled"
+                cell.switch?.isOn = cgmManager.healthKitStorageDelay != 0
+                cell.onToggle = { [weak cgmManager] isOn in
+                    if !isOn {
+                        cgmManager?.healthKitStorageDelay = 0
+                    }
+                }
+                cell.selectionStyle = .none
+                return cell
             case .healthKitStorageDelay:
                 cell.textLabel?.text = "HealthKit Storage Delay"
-                cell.detailTextLabel?.text = durationFormatter.string(from: MockCGMManager.healthKitStorageDelay)
+                cell.detailTextLabel?.text = durationFormatter.string(from: cgmManager.healthKitStorageDelay)
                 cell.accessoryType = .disclosureIndicator
             }
             return cell
@@ -562,18 +574,20 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             show(vc, sender: sender)
         case .healthKit:
             switch HealthKitRow(rawValue: indexPath.row)! {
+            case .healthKitStorageDelayEnabled:
+                return
             case .healthKitStorageDelay:
                 let vc = DateAndDurationTableViewController()
                 vc.inputMode = .duration(MockCGMManager.healthKitStorageDelay)
                 vc.title = "HealthKit Storage Delay"
                 vc.contextHelp = "Amount of time to wait before storing CGM samples to HealthKit. NOTE: after changing this, you will need to delete and re-add the CGM simulator!"
                 vc.indexPath = indexPath
-                vc.onSave { inputMode in
+                vc.onSave { [weak cgmManager] inputMode in
                     guard case .duration(let duration) = inputMode else {
                         assertionFailure()
                         return
                     }
-                    MockCGMManager.healthKitStorageDelay = duration
+                    cgmManager?.healthKitStorageDelay = duration
                 }
                 show(vc, sender: sender)
             }
