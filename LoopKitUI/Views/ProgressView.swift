@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+// TODO: SwiftUI now has built in ProgressView to replace this
+
 public struct ProgressView: View {
     
     private let progress: CGFloat
