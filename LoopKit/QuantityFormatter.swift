@@ -246,6 +246,21 @@ public extension HKUnit {
                     }
                 }
             }
+
+            if self == .hour() {
+                switch style {
+                case .short, .medium:
+                    return unitString
+                case .long:
+                    fallthrough
+                @unknown default:
+                    if singular {
+                        return LocalizedString("Hour", comment: "The long unit display string for a singular hour")
+                    } else {
+                        return LocalizedString("Hours", comment: "The long unit display string for hours")
+                    }
+                }
+            }
             
             if self == .internationalUnitsPerHour {
                 switch style {
