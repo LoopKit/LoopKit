@@ -27,6 +27,10 @@
 		1D096C0324C24C220078B6B5 /* ExponentialInsulinModelPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D096C0024C24C220078B6B5 /* ExponentialInsulinModelPreset.swift */; };
 		1D096C0524C624F70078B6B5 /* InsulinModelSettings+LoopKitUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D096C0424C624F70078B6B5 /* InsulinModelSettings+LoopKitUI.swift */; };
 		1D0E708526BDE3BB00AECF0D /* HKDeviceCodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0E708426BDE3BB00AECF0D /* HKDeviceCodableTests.swift */; };
+		1D1065E4282DAEE500026A70 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1065E2282DAEE500026A70 /* VideoView.swift */; };
+		1D1065E5282DAEE500026A70 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1065E3282DAEE500026A70 /* WebView.swift */; };
+		1D1065E7282DC3BB00026A70 /* PopoverLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1065E6282DC3BB00026A70 /* PopoverLink.swift */; };
+		1D1065E9282DC54700026A70 /* VideoPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1065E8282DC54700026A70 /* VideoPlayView.swift */; };
 		1D1438B825633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1438B725633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift */; };
 		1D1A019E24B678BF0077D86E /* TherapySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */; };
 		1D1FCE2324BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D1FCE2224BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift */; };
@@ -996,6 +1000,10 @@
 		1D096C0024C24C220078B6B5 /* ExponentialInsulinModelPreset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModelPreset.swift; sourceTree = "<group>"; };
 		1D096C0424C624F70078B6B5 /* InsulinModelSettings+LoopKitUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InsulinModelSettings+LoopKitUI.swift"; sourceTree = "<group>"; };
 		1D0E708426BDE3BB00AECF0D /* HKDeviceCodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKDeviceCodableTests.swift; sourceTree = "<group>"; };
+		1D1065E2282DAEE500026A70 /* VideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		1D1065E3282DAEE500026A70 /* WebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		1D1065E6282DC3BB00026A70 /* PopoverLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopoverLink.swift; sourceTree = "<group>"; };
+		1D1065E8282DC54700026A70 /* VideoPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayView.swift; sourceTree = "<group>"; };
 		1D1438B725633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseTherapySettingInformationView.swift; sourceTree = "<group>"; };
 		1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TherapySettingsView.swift; sourceTree = "<group>"; };
 		1D1FCE2224BD13A2000300A8 /* CorrectionRangeOverridesExpandableSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesExpandableSetting.swift; sourceTree = "<group>"; };
@@ -2054,6 +2062,7 @@
 				E93E866924DD05FA00FF40C8 /* OverrideSelectionHistory.swift */,
 				E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */,
 				4369F08E208859E6000E3E45 /* PaddedTextField.swift */,
+				1D1065E6282DC3BB00026A70 /* PopoverLink.swift */,
 				C1E4B304242E98E900E70CCB /* ProgressIndicatorView.swift */,
 				C1E4B303242E98E900E70CCB /* ProgressView.swift */,
 				89AC9DCA24529927004A6B8A /* QuantityPicker.swift */,
@@ -2089,7 +2098,10 @@
 				89CC35D32403450E008FB633 /* ThumbView.swift */,
 				89AC9DCC24529D9B004A6B8A /* TimePicker.swift */,
 				43F5034E210599DF009FA89A /* ValidatingIndicatorView.swift */,
+				1D1065E8282DC54700026A70 /* VideoPlayView.swift */,
+				1D1065E2282DAEE500026A70 /* VideoView.swift */,
 				89CAB37024CB4DEC009EE3CE /* WarningView.swift */,
+				1D1065E3282DAEE500026A70 /* WebView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3550,6 +3562,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D1438B825633E2100BE8F06 /* GlucoseTherapySettingInformationView.swift in Sources */,
+				1D1065E7282DC3BB00026A70 /* PopoverLink.swift in Sources */,
 				898E6E6E2241ED9F0019E459 /* SuspendResumeTableViewCell.swift in Sources */,
 				B4C004D12416961300B40429 /* GuidePage.swift in Sources */,
 				898B4E7E246DEB920053C484 /* GuardrailConstrainedQuantityRangeView.swift in Sources */,
@@ -3577,6 +3590,7 @@
 				1D97A33C256F11E00042737E /* View+InsetGroupedListStyle.swift in Sources */,
 				898E6E67224179310019E459 /* BaseHUDView.swift in Sources */,
 				43F5034F210599DF009FA89A /* ValidatingIndicatorView.swift in Sources */,
+				1D1065E5282DAEE500026A70 /* WebView.swift in Sources */,
 				C1E4B308242E995200E70CCB /* ActivityIndicator.swift in Sources */,
 				89FC6891245A2D680075CF59 /* ScheduleItemPicker.swift in Sources */,
 				1D1FCE2524BD42EF000300A8 /* TherapySettingsViewModel.swift in Sources */,
@@ -3745,6 +3759,8 @@
 				89AF78C02447E285002B4FCC /* CardStackBuilder.swift in Sources */,
 				E9F54FC62581C50D0034795E /* ExpandableDatePicker.swift in Sources */,
 				43BA7185201EE7090058961E /* DailyValueScheduleTableViewController.swift in Sources */,
+				1D1065E4282DAEE500026A70 /* VideoView.swift in Sources */,
+				1D1065E9282DC54700026A70 /* VideoPlayView.swift in Sources */,
 				E99A132E2557548300D3F5B3 /* SegmentedGaugeBar.swift in Sources */,
 				B455F31825FBEC5F000ED456 /* SuspendThresholdEditorViewModel.swift in Sources */,
 				892A5DB32231E191008961AB /* LevelHUDView.swift in Sources */,
