@@ -9,7 +9,7 @@
 import SwiftUI
 import UIKit
 
-struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValue: CustomStringConvertible & Hashable {
+public struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValue: CustomStringConvertible & Hashable {
     private let selection: Binding<SelectionValue>
     private var selectedRow: Int = 0
     // TODO: Would be nice if we could just use `ForEach` and Content, but for now, this'll do
@@ -29,11 +29,11 @@ struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValu
         self.colorer = colorer
     }
 
-    func makeCoordinator() -> ResizeablePicker.Coordinator {
+    public func makeCoordinator() -> ResizeablePicker.Coordinator {
         Coordinator(self)
     }
 
-    func makeUIView(context: UIViewRepresentableContext<ResizeablePicker>) -> UIPickerView {
+    public func makeUIView(context: UIViewRepresentableContext<ResizeablePicker>) -> UIPickerView {
         let picker = UIPickerViewResizeable(frame: .zero)
         
         picker.dataSource = context.coordinator
@@ -42,43 +42,51 @@ struct ResizeablePicker<SelectionValue>: UIViewRepresentable where SelectionValu
         return picker
     }
 
-    func updateUIView(_ view: UIPickerView, context: UIViewRepresentableContext<ResizeablePicker>) {
+    public func updateUIView(_ view: UIPickerView, context: UIViewRepresentableContext<ResizeablePicker>) {
+        context.coordinator.updateData(newData: data)
+        view.reloadAllComponents()
         if view.selectedRow(inComponent: 0) != selectedRow {
-            view.selectRow(selectedRow, inComponent: 0, animated: true)
+            view.selectRow(selectedRow, inComponent: 0, animated: false)
         }
     }
 
-    class Coordinator: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
+    public class Coordinator: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         private var picker: ResizeablePicker
+        private var data: [SelectionValue]
 
         init(_ pickerView: ResizeablePicker) {
             self.picker = pickerView
+            self.data = pickerView.data
         }
 
-        func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        func updateData(newData: [SelectionValue]) {
+            self.data = newData
+        }
+
+        public func numberOfComponents(in pickerView: UIPickerView) -> Int {
             1
         }
 
-        func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-            picker.data.count
+        public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+            data.count
         }
 
-        func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-            let text = self.picker.formatter(picker.data[row])
+        public func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+            let text = self.picker.formatter(data[row])
             let result = view as? UILabel ?? UILabel()
             result.text = text
             result.font = UIFont.preferredFont(forTextStyle: .title2)
             result.textAlignment = .center
-            result.textColor = UIColor(picker.colorer(picker.data[row]))
+            result.textColor = UIColor(picker.colorer(data[row]))
             result.accessibilityHint = text
             result.lineBreakMode = .byClipping
             result.adjustsFontSizeToFitWidth = true
             return result
         }
         
-        func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
             picker.selectedRow = row
-            picker.selection.wrappedValue = picker.data[row]
+            picker.selection.wrappedValue = data[row]
         }
     }
 }

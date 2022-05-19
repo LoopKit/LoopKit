@@ -65,14 +65,8 @@
 /* Carb entry section footer text explaining absorption time */
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Wähle eine längere absorbtionszeit für größere Mahlzeiten, oder welche viel Fett und Proteine beinhalten. Dies ist eine Unterstützung für den Algorithmus und muss nicht genau sein.";
 
-/* The format string describing the date of a COB value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.COBDateLabel" = "bei %1$@";
-
-/* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.totalDateLabel" = "seit %1$@";
-
 /* The format string describing the date of an IOB value. The first format argument is the localized date. */
-"com.loudnate.InsulinKit.IOBDateLabel" = "bei %1$@";
+"com.loudnate.InsulinKit.IOBDateLabel" = "um %1$@";
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
 "com.loudnate.InsulinKit.totalDateLabel" = "seit %1$@";
@@ -115,6 +109,8 @@
 
 /* The detail text describing an enabled setting */
 "Enabled" = "Aktiviert";
+
+"Enable" = "Aktivieren";
 
 /* The placeholder text instructing users how to enter a maximum bolus */
 "Enter a number of units" = "Eingabe der Einheiten";
@@ -251,3 +247,16 @@
 /* Title for the workout override range */
 "Workout" = "Training";
 
+/* The title for the custom preset selection screen */
+"Custom Preset" = "Voreinstellung";
+
+/* The text for the override history duration */
+"Active Duration" = "Dauer";
+
+/* The text for the override start time */
+"End Time" = "Endzeit";
+
+/* Title for override history view */
+"Override History" = "Verlauf";
+
+"History" = "Verlauf";

@@ -166,21 +166,17 @@ class MasterViewController: UITableViewController {
 
                 show(scheduleVC, sender: sender)
             case .correctionRange:
+                var therapySettings = TherapySettings()
+                therapySettings.glucoseTargetRangeSchedule = self.dataManager?.glucoseTargetRangeSchedule
+                let therapySettingsViewModel = TherapySettingsViewModel(therapySettings: therapySettings)
+                
+                let view = CorrectionRangeScheduleEditor(mode: .settings, therapySettingsViewModel: therapySettingsViewModel, didSave: {
+                    self.dataManager?.glucoseTargetRangeSchedule = therapySettingsViewModel.therapySettings.glucoseTargetRangeSchedule
+                    self.navigationController?.popToViewController(self, animated: true)
+                })
+                    .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
 
-                let unit = dataManager?.glucoseTargetRangeSchedule?.unit ?? dataManager?.glucoseStore.preferredUnit ?? HKUnit.milligramsPerDeciliter
-
-                let scheduleVC = GlucoseRangeScheduleTableViewController(allowedValues: unit.allowedCorrectionRangeValues, unit: unit)
-
-                scheduleVC.delegate = self
-                scheduleVC.title = sender?.textLabel?.text
-
-                if let schedule = dataManager?.glucoseTargetRangeSchedule {
-                    var overrides: [TemporaryScheduleOverride.Context: DoubleRange] = [:]
-                    overrides[.preMeal] = dataManager?.preMealTargetRange
-                    overrides[.legacyWorkout] = dataManager?.legacyWorkoutTargetRange
-                    scheduleVC.setSchedule(schedule, withOverrideRanges: overrides)
-                }
-
+                let scheduleVC = DismissibleHostingController(rootView: view, dismissalMode: .pop(to:  type(of: self)), isModalInPresentation: false)
                 show(scheduleVC, sender: sender)
             case .insulinSensitivity:
                 let unit = dataManager?.insulinSensitivitySchedule?.unit ?? dataManager?.glucoseStore.preferredUnit ?? HKUnit.milligramsPerDeciliter
@@ -379,23 +375,6 @@ extension MasterViewController: BasalScheduleTableViewControllerSyncSource {
 extension MasterViewController: InsulinSensitivityScheduleStorageDelegate {
     func saveSchedule(_ schedule: InsulinSensitivitySchedule, for viewController: InsulinSensitivityScheduleViewController, completion: @escaping (SaveInsulinSensitivityScheduleResult) -> Void) {
         self.dataManager?.insulinSensitivitySchedule = schedule
-        completion(.success)
-    }
-}
-
-extension MasterViewController: GlucoseRangeScheduleStorageDelegate {
-    func saveSchedule(for viewController: GlucoseRangeScheduleTableViewController, completion: @escaping (SaveGlucoseRangeScheduleResult) -> Void) {
-        self.dataManager?.glucoseTargetRangeSchedule = viewController.schedule
-        for (context, range) in viewController.overrideRanges {
-            switch context {
-            case .preMeal:
-                self.dataManager?.preMealTargetRange = range
-            case .legacyWorkout:
-                self.dataManager?.legacyWorkoutTargetRange = range
-            default:
-                break
-            }
-        }
         completion(.success)
     }
 }
