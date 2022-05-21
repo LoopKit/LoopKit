@@ -29,9 +29,3 @@ public protocol Logging {
 
 public protocol LoggingService: Logging, Service {}
 
-public class SharedLogging {
-
-    /// A shared, global instance of Logging.
-    public static var instance: Logging?
-
-}

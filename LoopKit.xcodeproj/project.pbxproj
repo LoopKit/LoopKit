@@ -562,7 +562,6 @@
 		A9498D7F23386C3300DAA9B9 /* GlucoseThreshold.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7423386C3200DAA9B9 /* GlucoseThreshold.swift */; };
 		A9498D8023386C3300DAA9B9 /* RemoteDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7523386C3300DAA9B9 /* RemoteDataService.swift */; };
 		A9498D8223386C3300DAA9B9 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7623386C3300DAA9B9 /* Service.swift */; };
-		A9498D8423386C3300DAA9B9 /* DiagnosticLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7723386C3300DAA9B9 /* DiagnosticLog.swift */; };
 		A9498D8823386CAF00DAA9B9 /* ServiceNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8623386CAF00DAA9B9 /* ServiceNavigationController.swift */; };
 		A9498D8B23386CC700DAA9B9 /* ServiceUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8A23386CC700DAA9B9 /* ServiceUI.swift */; };
 		A9498D8D23386CD800DAA9B9 /* MockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8C23386CD700DAA9B9 /* MockService.swift */; };
@@ -596,7 +595,6 @@
 		A98ED5FE253132A400FD8F70 /* CarbStoreHKQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98ED5FD253132A400FD8F70 /* CarbStoreHKQueryTests.swift */; };
 		A994B884254241B10039B108 /* InsulinDeliveryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A994B883254241B10039B108 /* InsulinDeliveryStoreTests.swift */; };
 		A99C7373233990D400C80963 /* TempBasalRecommendationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C7372233990D400C80963 /* TempBasalRecommendationTests.swift */; };
-		A99C7375233993FE00C80963 /* DiagnosticLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C7374233993FE00C80963 /* DiagnosticLogTests.swift */; };
 		A99C73772339A67A00C80963 /* GlucoseThresholdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C73762339A67A00C80963 /* GlucoseThresholdTests.swift */; };
 		A99C73792339ACDC00C80963 /* ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C73782339ACDC00C80963 /* ServiceTests.swift */; };
 		A9A53E2C2714E5BC0050C0B1 /* CodableDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A53E2B2714E5BC0050C0B1 /* CodableDevice.swift */; };
@@ -1522,7 +1520,6 @@
 		A9498D7423386C3200DAA9B9 /* GlucoseThreshold.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseThreshold.swift; sourceTree = "<group>"; };
 		A9498D7523386C3300DAA9B9 /* RemoteDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDataService.swift; sourceTree = "<group>"; };
 		A9498D7623386C3300DAA9B9 /* Service.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
-		A9498D7723386C3300DAA9B9 /* DiagnosticLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiagnosticLog.swift; sourceTree = "<group>"; };
 		A9498D8623386CAF00DAA9B9 /* ServiceNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceNavigationController.swift; sourceTree = "<group>"; };
 		A9498D8A23386CC700DAA9B9 /* ServiceUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceUI.swift; sourceTree = "<group>"; };
 		A9498D8C23386CD700DAA9B9 /* MockService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockService.swift; sourceTree = "<group>"; };
@@ -1549,7 +1546,6 @@
 		A98ED5FD253132A400FD8F70 /* CarbStoreHKQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbStoreHKQueryTests.swift; sourceTree = "<group>"; };
 		A994B883254241B10039B108 /* InsulinDeliveryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinDeliveryStoreTests.swift; sourceTree = "<group>"; };
 		A99C7372233990D400C80963 /* TempBasalRecommendationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempBasalRecommendationTests.swift; sourceTree = "<group>"; };
-		A99C7374233993FE00C80963 /* DiagnosticLogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticLogTests.swift; sourceTree = "<group>"; };
 		A99C73762339A67A00C80963 /* GlucoseThresholdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseThresholdTests.swift; sourceTree = "<group>"; };
 		A99C73782339ACDC00C80963 /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
 		A9A53E2B2714E5BC0050C0B1 /* CodableDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableDevice.swift; sourceTree = "<group>"; };
@@ -2356,7 +2352,6 @@
 				1DA649AA2445174400F61E75 /* Alert.swift */,
 				A96E6C3627B35BC600F81A5B /* AnyCodableEquatable.swift */,
 				A933DB8724BF956F009B417A /* CriticalEventLog.swift */,
-				A9498D7723386C3300DAA9B9 /* DiagnosticLog.swift */,
 				A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */,
 				A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */,
 				A919889E2355016B00B75EEE /* DosingDecisionStore.swift */,
@@ -2426,7 +2421,6 @@
 				A9DF02C824F724D900B7C988 /* CriticalEventLogTests.swift */,
 				A9BFA03D245CCCB9001E4AE3 /* DailyQuantityScheduleTests.swift */,
 				891A3FD6224BE62100378B27 /* DailyValueScheduleTests.swift */,
-				A99C7374233993FE00C80963 /* DiagnosticLogTests.swift */,
 				A95A1D8C246101760079378D /* DoseEntryTests.swift */,
 				B4CEE2A4256E91290093111B /* DoseProgressTests.swift */,
 				43A067121F245A2F00E9E90F /* DoseStoreTests.swift */,
@@ -4010,7 +4004,6 @@
 				89AE2232228BC68600BDFD85 /* UnfairLock.swift in Sources */,
 				A9FD046F24E310D00040F203 /* HKObject.swift in Sources */,
 				1DC64C7E24BF6EBC004A63A1 /* DeliveryLimits.swift in Sources */,
-				A9498D8423386C3300DAA9B9 /* DiagnosticLog.swift in Sources */,
 				4322B770202FA26F0002837D /* GlucoseStore.swift in Sources */,
 				C1814B8C226371DF008D2D8E /* WeakSynchronizedDelegate.swift in Sources */,
 				1D1FCE2724BE4DE2000300A8 /* CorrectionRangeOverrides.swift in Sources */,
@@ -4054,7 +4047,6 @@
 				A9DF02D324F762DC00B7C988 /* CarbStoreTests.swift in Sources */,
 				437874B5202FDD1200A3D8B9 /* DoseStoreTests.swift in Sources */,
 				A985465125144ABA0099C1A6 /* NotificationSettingsTests.swift in Sources */,
-				A99C7375233993FE00C80963 /* DiagnosticLogTests.swift in Sources */,
 				B455F4DF2600E0A8000ED456 /* GlucoseRangeTests.swift in Sources */,
 				4322B76C202F9ECD0002837D /* CarbMathTests.swift in Sources */,
 				1D70C40D26F01D9F00C62570 /* VersionCheckServiceTests.swift in Sources */,
