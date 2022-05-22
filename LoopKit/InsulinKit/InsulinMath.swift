@@ -115,6 +115,7 @@ extension DoseEntry {
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
             insulinType: insulinType,
+            automatic: automatic,
             isMutable: isMutable
         )
     }
@@ -373,8 +374,6 @@ extension Collection where Element == DoseEntry {
                 reconciled.append(dose)
             case .basal, .tempBasal:
                 if lastSuspend == nil, let last = lastBasal {
-                    assert(!last.isMutable)
-
                     let endDate = Swift.min(last.endDate, dose.startDate)
 
                     // Ignore 0-duration doses
@@ -415,6 +414,7 @@ extension Collection where Element == DoseEntry {
                                 // We intentionally use the resume's identifier, as the basal entry has already been entered
                                 syncIdentifier: dose.syncIdentifier,
                                 insulinType: last.insulinType,
+                                automatic: last.automatic,
                                 isMutable: last.isMutable
                             )
                         } else {
@@ -612,7 +612,8 @@ extension Collection where Element == DoseEntry {
                                 unit: .unitsPerHour,
                                 syncIdentifier: syncIdentifier,
                                 scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: scheduled.value),
-                                insulinType: lastBasal.insulinType
+                                insulinType: lastBasal.insulinType,
+                                automatic: lastBasal.automatic
                             ))
                         }
                     }
