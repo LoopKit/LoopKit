@@ -114,9 +114,6 @@ final class IssueAlertTableViewController: UITableViewController {
         if let nav = navigationController as? SettingsNavigationViewController {
             nav.notifyComplete()
         }
-        if let nav = navigationController as? MockPumpManagerSetupViewController {
-            nav.finishedSettingsDisplay()
-        }
     }
 
     // MARK: - UITableViewDataSource

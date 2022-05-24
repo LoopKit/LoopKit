@@ -152,7 +152,6 @@
 		4322B7AC202FA3D20002837D /* momentum_effect_stable_glucose_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEA31C7293FA0073BE78 /* momentum_effect_stable_glucose_output.json */; };
 		43260F6E21C4BF7A00DD6837 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43260F6D21C4BF7A00DD6837 /* UUID.swift */; };
 		432762741D60505F0083215A /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432762731D60505F0083215A /* HKQuantitySample.swift */; };
-		432CF86520D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86420D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift */; };
 		432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */; };
 		432CF86920D76B320066B889 /* SetupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86820D76B320066B889 /* SetupButton.swift */; };
 		432CF86B20D76B9C0066B889 /* SetupIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */; };
@@ -420,7 +419,6 @@
 		898E6E67224179310019E459 /* BaseHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E64224179300019E459 /* BaseHUDView.swift */; };
 		898E6E68224179310019E459 /* BatteryLevelHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 898E6E65224179300019E459 /* BatteryLevelHUDView.xib */; };
 		898E6E69224179310019E459 /* BatteryLevelHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E66224179300019E459 /* BatteryLevelHUDView.swift */; };
-		898E6E6A224179530019E459 /* BasalScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D60222F6AF3008961AB /* BasalScheduleTableViewController.swift */; };
 		898E6E6C224194060019E459 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E6B224194050019E459 /* UIColor.swift */; };
 		898E6E6E2241ED9F0019E459 /* SuspendResumeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E6D2241ED9F0019E459 /* SuspendResumeTableViewCell.swift */; };
 		898E6E702241EDB70019E459 /* PercentageTextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E6F2241EDB70019E459 /* PercentageTextFieldTableViewController.swift */; };
@@ -495,9 +493,6 @@
 		89D204B221CC7D93001238CC /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DC540C21B75AE7005A1CE0 /* Collection.swift */; };
 		89D204B421CC7E74001238CC /* MockCGMManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */; };
 		89D204B521CC7E74001238CC /* MockPumpManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */; };
-		89D204B721CC7F34001238CC /* MockPumpManagerSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */; };
-		89D204B821CC7F34001238CC /* MockPumpManagerSettingsSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */; };
-		89D204B921CC7F34001238CC /* MockPumpManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */; };
 		89D204BA21CC7F34001238CC /* MockPumpManagerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */; };
 		89D204BB21CC7F34001238CC /* MockCGMManagerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */; };
 		89D204BC21CC7F34001238CC /* SineCurveParametersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */; };
@@ -1107,7 +1102,6 @@
 		43260F6D21C4BF7A00DD6837 /* UUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUID.swift; sourceTree = "<group>"; };
 		432711371EDE826A00171F6A /* CustomInputTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInputTextField.swift; sourceTree = "<group>"; };
 		432762731D60505F0083215A /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
-		432CF86420D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimitSettingsTableViewController.swift; sourceTree = "<group>"; };
 		432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		432CF86820D76B320066B889 /* SetupButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupButton.swift; sourceTree = "<group>"; };
 		432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIndicatorView.swift; sourceTree = "<group>"; };
@@ -1368,7 +1362,6 @@
 		892A5D51222F03DB008961AB /* TestingDeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingDeviceManager.swift; sourceTree = "<group>"; };
 		892A5D53222F03F9008961AB /* TestingPumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingPumpManager.swift; sourceTree = "<group>"; };
 		892A5D55222F0414008961AB /* TestingCGMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingCGMManager.swift; sourceTree = "<group>"; };
-		892A5D60222F6AF3008961AB /* BasalScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalScheduleTableViewController.swift; sourceTree = "<group>"; };
 		892A5D62222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SetConstrainedScheduleEntryTableViewCell.xib; sourceTree = "<group>"; };
 		892A5D63222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetConstrainedScheduleEntryTableViewCell.swift; sourceTree = "<group>"; };
 		892A5D992231E0E3008961AB /* SettingsNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsNavigationViewController.swift; sourceTree = "<group>"; };
@@ -1432,9 +1425,6 @@
 		89AB9EC621A4774500351324 /* MockPumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManager.swift; sourceTree = "<group>"; };
 		89AB9EC821A4BC2400351324 /* MockCGMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManager.swift; sourceTree = "<group>"; };
 		89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockPumpManager+UI.swift"; sourceTree = "<group>"; };
-		89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSetupViewController.swift; sourceTree = "<group>"; };
-		89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsSetupViewController.swift; sourceTree = "<group>"; };
-		89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MockPumpManager.storyboard; sourceTree = "<group>"; };
 		89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsViewController.swift; sourceTree = "<group>"; };
 		89AC792C224C781100B8E9BA /* DoseProgressReporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseProgressReporter.swift; sourceTree = "<group>"; };
 		89AC792D224C781100B8E9BA /* DoseProgressTimerEstimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseProgressTimerEstimator.swift; sourceTree = "<group>"; };
@@ -1988,12 +1978,10 @@
 			children = (
 				895FE08D22011F4800FCF18A /* AddEditOverrideTableViewController.swift */,
 				43F5034C210599CC009FA89A /* AuthenticationViewController.swift */,
-				892A5D60222F6AF3008961AB /* BasalScheduleTableViewController.swift */,
 				434FB6491D712158007B9C70 /* CommandResponseViewController.swift */,
 				43D8FE041C7290530073BE78 /* DailyQuantityScheduleTableViewController.swift */,
 				43D8FE051C7290530073BE78 /* DailyValueScheduleTableViewController.swift */,
 				898E6E712241EDC10019E459 /* DateAndDurationTableViewController.swift */,
-				432CF86420D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift */,
 				895FE08F22011F4800FCF18A /* EmojiInputController.swift */,
 				8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */,
 				43D8FE061C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift */,
@@ -2772,10 +2760,7 @@
 				1DABAD392453615200ACF708 /* IssueAlertTableViewController.swift */,
 				B42C950C24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift */,
 				89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */,
-				89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */,
-				89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */,
 				89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */,
-				89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */,
 				A9498D8E23386CE800DAA9B9 /* MockServiceTableViewController.swift */,
 				892F481A21AB2964004D313D /* RandomOutlierTableViewController.swift */,
 				8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */,
@@ -3501,7 +3486,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				89D204D221CC837A001238CC /* Assets.xcassets in Resources */,
-				89D204B921CC7F34001238CC /* MockPumpManager.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3671,7 +3655,6 @@
 				B429D66C24BF7204003E1B4A /* GlucoseTrend.swift in Sources */,
 				432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */,
 				898B4E7B246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift in Sources */,
-				898E6E6A224179530019E459 /* BasalScheduleTableViewController.swift in Sources */,
 				E9E5E56A24D5CCE800B5DFFE /* OverrideViewCell.swift in Sources */,
 				892A5DB42231E191008961AB /* LevelMaskView.swift in Sources */,
 				892A5DA02231E130008961AB /* CompletionNotifying.swift in Sources */,
@@ -3679,7 +3662,6 @@
 				E949E38F24B3711E00024DA0 /* InsulinModelInformationView.swift in Sources */,
 				895FE08B22011F0C00FCF18A /* EmojiInputHeaderView.swift in Sources */,
 				43BA7170201E49220058961E /* FoodTypeShortcutCell.swift in Sources */,
-				432CF86520D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift in Sources */,
 				895FE08322011F0C00FCF18A /* OverrideSelectionFooterView.swift in Sources */,
 				89AF78C22447E353002B4FCC /* Splat.swift in Sources */,
 				893C9F8C2447DBD900CD4185 /* CardBuilder.swift in Sources */,
@@ -4138,7 +4120,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				892A5D2E222EF69A008961AB /* MockHUDProvider.swift in Sources */,
-				89D204B721CC7F34001238CC /* MockPumpManagerSetupViewController.swift in Sources */,
 				439706E922D2E94800C81566 /* BoundSwitchTableViewCell.swift in Sources */,
 				89D204B421CC7E74001238CC /* MockCGMManager+UI.swift in Sources */,
 				89D204B521CC7E74001238CC /* MockPumpManager+UI.swift in Sources */,
@@ -4154,7 +4135,6 @@
 				C1FAEC21264AEEA300A3250B /* UIImage.swift in Sources */,
 				89D204BD21CC7F34001238CC /* RandomOutlierTableViewController.swift in Sources */,
 				B42C950E24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift in Sources */,
-				89D204B821CC7F34001238CC /* MockPumpManagerSettingsSetupViewController.swift in Sources */,
 				898E6E732241EE000019E459 /* Comparable.swift in Sources */,
 				B45774352562CCC6004B9466 /* SupportedRangeTableViewController.swift in Sources */,
 				892A5D28222EF567008961AB /* (null) in Sources */,
