@@ -348,30 +348,6 @@ extension MasterViewController: DailyValueScheduleTableViewControllerDelegate {
 }
 
 
-extension MasterViewController: BasalScheduleTableViewControllerSyncSource {
-    func basalScheduleTableViewControllerIsReadOnly(_ viewController: BasalScheduleTableViewController) -> Bool {
-        return false
-    }
-
-    func syncButtonDetailText(for viewController: BasalScheduleTableViewController) -> String? {
-        return nil
-    }
-
-    func syncScheduleValues(for viewController: BasalScheduleTableViewController, completion: @escaping (SyncBasalScheduleResult<Double>) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-            let scheduleItems = viewController.scheduleItems
-            let timezone = self.dataManager?.basalRateSchedule?.timeZone ?? .currentFixed
-            let schedule = BasalRateSchedule(dailyItems: scheduleItems, timeZone: timezone)
-            self.dataManager?.basalRateSchedule = schedule
-            completion(.success(scheduleItems: scheduleItems, timeZone: .currentFixed))
-        }
-    }
-
-    func syncButtonTitle(for viewController: BasalScheduleTableViewController) -> String {
-        return LocalizedString("Sync With Pump", comment: "Title of button to sync basal profile from pump")
-    }
-}
-
 extension MasterViewController: InsulinSensitivityScheduleStorageDelegate {
     func saveSchedule(_ schedule: InsulinSensitivitySchedule, for viewController: InsulinSensitivityScheduleViewController, completion: @escaping (SaveInsulinSensitivityScheduleResult) -> Void) {
         self.dataManager?.insulinSensitivitySchedule = schedule
