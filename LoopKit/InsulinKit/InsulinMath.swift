@@ -385,7 +385,6 @@ extension Collection where Element == DoseEntry {
                 lastBasal = dose
             case .resume:
                 if let suspend = lastSuspend {
-                    assert(!suspend.isMutable)
 
                     reconciled.append(DoseEntry(
                         type: suspend.type,
@@ -424,7 +423,6 @@ extension Collection where Element == DoseEntry {
                 }
             case .suspend:
                 if let last = lastBasal {
-                    assert(!last.isMutable)
 
                     reconciled.append(DoseEntry(
                         type: last.type,
