@@ -66,4 +66,13 @@ public enum InsulinType: Int, Codable, CaseIterable {
             return LocalizedString("Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind", comment: "Description for afrezza insulin type")
         }
     }
+    
+    public var pumpAdministerable: Bool {
+        switch self {
+        case .afrezza:
+            return false
+        default:
+            return true
+        }
+    }
 }
