@@ -269,6 +269,10 @@ public final class MockPumpManager: TestingPumpManager {
         didSet {
             let newValue = state
 
+            guard newValue != oldValue else {
+                return
+            }
+
             let oldStatus = status(for: oldValue)
             let newStatus = status(for: newValue)
 
