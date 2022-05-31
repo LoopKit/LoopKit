@@ -18,6 +18,8 @@ public extension ExponentialInsulinModelPreset {
             return LocalizedString("Fiasp", comment: "Title of insulin model preset - fiasp")
         case .lyumjev:
             return LocalizedString("Lyumjev", comment: "Title of insulin model preset - lyumjev")
+        case .afrezza:
+            return LocalizedString("Afrezza", comment: "Title of insulin model preset - afrezza")
         }
     }
 
@@ -31,6 +33,8 @@ public extension ExponentialInsulinModelPreset {
             return LocalizedString("This model assumes peak insulin activity at 55 minutes.", comment: "Subtitle of Fiasp preset")
         case .lyumjev:
             return LocalizedString("This model assumes peak insulin activity at 55 minutes.", comment: "Subtitle of Lyumjev preset")
+        case .afrezza:
+            return LocalizedString("This model assumes peak insulin activity at 19 minutes.", comment: "Subtitle of afrezza preset")
         }
     }
 }
