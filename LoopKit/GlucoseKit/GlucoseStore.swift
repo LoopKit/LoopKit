@@ -783,7 +783,7 @@ extension GlucoseStore: CriticalEventLog {
     private var exportProgressUnitCountPerObject: Int64 { 1 }
     private var exportFetchLimit: Int { Int(criticalEventLogExportProgressUnitCountPerFetch / exportProgressUnitCountPerObject) }
 
-    public var exportName: String { "Glucoses.json" }
+    public var exportName: String { "Glucose.json" }
 
     public func exportProgressTotalUnitCount(startDate: Date, endDate: Date? = nil) -> Result<Int64, Error> {
         var result: Result<Int64, Error>?
