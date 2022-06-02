@@ -361,8 +361,8 @@ extension InsulinDeliveryStore {
                         mutableObjects.forEach { $0.deletedAt = now }
                     }
 
-                    let resolvedSampleObjects: [(HKQuantitySample, CachedInsulinDeliveryObject)] = try entries.compactMap { entry in
-                        guard let syncIdentifier = entry.syncIdentifier else {
+                    let resolvedSampleObjects: [(HKQuantitySample, CachedInsulinDeliveryObject)] = entries.compactMap { entry in
+                        guard entry.syncIdentifier != nil else {
                             self.log.error("Ignored adding dose entry without sync identifier: %{public}@", String(reflecting: entry))
                             return nil
                         }
@@ -383,17 +383,8 @@ extension InsulinDeliveryStore {
                             object.update(from: entry)
                             return (quantitySample, object)
 
-                        // Otherwise, add new object as long as sync identifier not found
+                        // Otherwise, add new object
                         } else {
-                            let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
-                            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", self.provenanceIdentifier),
-                                                                                                    NSPredicate(format: "syncIdentifier == %@", syncIdentifier)])
-                            request.fetchLimit = 1
-                            guard try self.cacheStore.managedObjectContext.count(for: request) == 0 else {
-                                self.log.default("Skipping adding dose entry due to existing cached sync identifier: %{public}@", syncIdentifier)
-                                return nil
-                            }
-
                             let object = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
                             object.create(from: entry, by: self.provenanceIdentifier, at: now)
                             return (quantitySample, object)
@@ -411,7 +402,7 @@ extension InsulinDeliveryStore {
                     }
 
                     // Only save immutable objects to HealthKit
-                    self.saveEntriesToHealthKit(resolvedSampleObjects.filter { !$0.1.isMutable })
+                    self.saveEntriesToHealthKit(resolvedSampleObjects.filter { !$0.1.isMutable && !$0.1.isFault })
                 } catch let coreDataError {
                     error = coreDataError
                 }

@@ -186,9 +186,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         healthStore.setSaveHandler({ (objects, success, error) in
             XCTFail()
         })
-        doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDateDidSet = {
-            XCTFail()
-        }
+        doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDateDidSet = nil
         doseStore.addPumpEvents(pumpEvents3, lastReconciliation: Date()) { (error) in
             XCTAssertNil(error)
             addPumpEvents3.fulfill()
