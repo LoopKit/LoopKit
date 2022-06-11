@@ -49,15 +49,15 @@ extension ExponentialInsulinModelPreset {
     public var delay: TimeInterval {
         switch self {
         case .rapidActingAdult:
-            return .minutes(5)
+            return .minutes(10)
         case .rapidActingChild:
-            return .minutes(5)
+            return .minutes(10)
         case .fiasp:
-            return .minutes(5)
+            return .minutes(10)
         case .lyumjev:
-            return .minutes(5)
+            return .minutes(10)
         case.afrezza:
-            return .minutes(0)
+            return .minutes(5)
         }
     }
     
