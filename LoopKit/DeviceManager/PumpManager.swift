@@ -17,6 +17,22 @@ public protocol PumpManagerStatusObserver: AnyObject {
     func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus)
 }
 
+public enum BolusActivationType: String, Codable {
+    case manualNoRecommendation
+    case manualRecommendationAccepted
+    case manualRecommendationChanged
+    case automatic
+
+    public var isAutomatic: Bool {
+        self == .automatic
+    }
+
+    static public func activationTypeFor(recommendedAmount: Double?, bolusAmount: Double) -> BolusActivationType {
+        guard let recommendedAmount = recommendedAmount else { return .manualNoRecommendation }
+        return recommendedAmount =~ bolusAmount ? .manualRecommendationAccepted : .manualRecommendationChanged
+    }
+}
+
 public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObserver {
     func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager)
 
@@ -144,7 +160,7 @@ public protocol PumpManager: DeviceManager {
     ///   - automatic: Whether the dose was triggered automatically as opposed to commanded by user
     ///   - completion: A closure called after the command is complete
     ///   - error: An optional error describing why the command failed
-    func enactBolus(units: Double, automatic: Bool, completion: @escaping (_ error: PumpManagerError?) -> Void)
+    func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (_ error: PumpManagerError?) -> Void)
 
     /// Cancels the current, in progress, bolus.
     ///
