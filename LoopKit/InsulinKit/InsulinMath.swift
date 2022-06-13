@@ -116,7 +116,7 @@ extension DoseEntry {
             scheduledBasalRate: scheduledBasalRate,
             insulinType: insulinType,
             automatic: automatic,
-            isMutable: isMutable
+            isMutable: isMutable,
             wasProgrammedByPumpUI: wasProgrammedByPumpUI
         )
     }
@@ -417,7 +417,7 @@ extension Collection where Element == DoseEntry {
                                 syncIdentifier: dose.syncIdentifier,
                                 insulinType: last.insulinType,
                                 automatic: last.automatic,
-                                isMutable: last.isMutable
+                                isMutable: last.isMutable,
                                 wasProgrammedByPumpUI: last.wasProgrammedByPumpUI
                             )
                         } else {
