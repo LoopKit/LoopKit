@@ -604,8 +604,6 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
         delegateCompletion = expectation(description: "delegate")
         let glucoseSamplesDidChangeCompletion = expectation(description: "glucoseSamplesDidChange")
         let observer = NotificationCenter.default.addObserver(forName: GlucoseStore.glucoseSamplesDidChange, object: glucoseStore, queue: nil) { notification in
-            let updateSource = notification.userInfo?[HealthKitSampleStore.notificationUpdateSourceKey] as? Int
-            XCTAssertEqual(updateSource, UpdateSource.changedInApp.rawValue)
             glucoseSamplesDidChangeCompletion.fulfill()
         }
 
@@ -891,8 +889,6 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
         delegateCompletion = expectation(description: "delegate")
         let glucoseSamplesDidChangeCompletion = expectation(description: "glucoseSamplesDidChange")
         let observer = NotificationCenter.default.addObserver(forName: GlucoseStore.glucoseSamplesDidChange, object: glucoseStore, queue: nil) { notification in
-            let updateSource = notification.userInfo?[HealthKitSampleStore.notificationUpdateSourceKey] as? Int
-            XCTAssertEqual(updateSource, UpdateSource.changedInApp.rawValue)
             glucoseSamplesDidChangeCompletion.fulfill()
         }
 

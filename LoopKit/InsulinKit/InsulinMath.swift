@@ -117,6 +117,7 @@ extension DoseEntry {
             insulinType: insulinType,
             automatic: automatic,
             isMutable: isMutable
+            wasProgrammedByPumpUI: wasProgrammedByPumpUI
         )
     }
 }
@@ -299,7 +300,8 @@ extension DoseEntry {
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
             insulinType: insulinType,
-            isMutable: isMutable
+            isMutable: isMutable,
+            wasProgrammedByPumpUI: wasProgrammedByPumpUI
         )
     }
 }
@@ -350,7 +352,7 @@ extension DoseEntry {
                 return self
             }
         }
-        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinType: insulinType, isMutable: isMutable)
+        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinType: insulinType, isMutable: isMutable, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
     }
 }
 
@@ -395,7 +397,8 @@ extension Collection where Element == DoseEntry {
                         description: suspend.description ?? dose.description,
                         syncIdentifier: suspend.syncIdentifier,
                         insulinType: suspend.insulinType,
-                        isMutable: suspend.isMutable
+                        isMutable: suspend.isMutable,
+                        wasProgrammedByPumpUI: suspend.wasProgrammedByPumpUI
                     ))
 
                     lastSuspend = nil
@@ -415,6 +418,7 @@ extension Collection where Element == DoseEntry {
                                 insulinType: last.insulinType,
                                 automatic: last.automatic,
                                 isMutable: last.isMutable
+                                wasProgrammedByPumpUI: last.wasProgrammedByPumpUI
                             )
                         } else {
                             lastBasal = nil
@@ -433,7 +437,8 @@ extension Collection where Element == DoseEntry {
                         description: last.description,
                         syncIdentifier: last.syncIdentifier,
                         insulinType: last.insulinType,
-                        isMutable: last.isMutable
+                        isMutable: last.isMutable,
+                        wasProgrammedByPumpUI: last.wasProgrammedByPumpUI
                     ))
 
                     if last.endDate <= dose.startDate {

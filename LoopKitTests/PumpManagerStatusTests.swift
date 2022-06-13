@@ -160,7 +160,8 @@ class PumpManagerStatusBasalDeliveryStateCodableTests: XCTestCase {
         "syncIdentifier" : "238E41EA-9576-4981-A1A4-51E10228584F",
         "type" : "tempBasal",
         "unit" : "U/hour",
-        "value" : 1.25
+        "value" : 1.25,
+        "wasProgrammedByPumpUI" : false
       }
     }
   }
@@ -278,7 +279,8 @@ class PumpManagerStatusBolusStateCodableTests: XCTestCase {
         "syncIdentifier" : "2A67A303-5203-4CB8-8123-79498265368E",
         "type" : "bolus",
         "unit" : "U",
-        "value" : 2.5
+        "value" : 2.5,
+        "wasProgrammedByPumpUI" : false
       }
     }
   }

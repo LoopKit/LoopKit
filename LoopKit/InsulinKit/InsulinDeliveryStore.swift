@@ -169,7 +169,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
                 return
             }
 
-            self.handleUpdatedDoseData(updateSource: .queriedByHealthKit)
+            self.handleUpdatedDoseData()
             self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
 
             completion(true)
@@ -361,8 +361,8 @@ extension InsulinDeliveryStore {
                         mutableObjects.forEach { $0.deletedAt = now }
                     }
 
-                    let resolvedSampleObjects: [(HKQuantitySample, CachedInsulinDeliveryObject)] = try entries.compactMap { entry in
-                        guard let syncIdentifier = entry.syncIdentifier else {
+                    let resolvedSampleObjects: [(HKQuantitySample, CachedInsulinDeliveryObject)] = entries.compactMap { entry in
+                        guard entry.syncIdentifier != nil else {
                             self.log.error("Ignored adding dose entry without sync identifier: %{public}@", String(reflecting: entry))
                             return nil
                         }
@@ -384,17 +384,8 @@ extension InsulinDeliveryStore {
                             object.update(from: entry)
                             return (quantitySample, object)
 
-                        // Otherwise, add new object as long as sync identifier not found
+                        // Otherwise, add new object
                         } else {
-                            let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
-                            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", self.provenanceIdentifier),
-                                                                                                    NSPredicate(format: "syncIdentifier == %@", syncIdentifier)])
-                            request.fetchLimit = 1
-                            guard try self.cacheStore.managedObjectContext.count(for: request) == 0 else {
-                                self.log.default("Skipping adding dose entry due to existing cached sync identifier: %{public}@", syncIdentifier)
-                                return nil
-                            }
-
                             let object = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
                             object.create(from: entry, by: self.provenanceIdentifier, at: now)
                             self.log.debug("Add: %{public}@", String(describing: entry))
@@ -419,7 +410,7 @@ extension InsulinDeliveryStore {
                     }
 
                     // Only save immutable objects to HealthKit
-                    self.saveEntriesToHealthKit(resolvedSampleObjects.filter { !$0.1.isMutable })
+                    self.saveEntriesToHealthKit(resolvedSampleObjects.filter { !$0.1.isMutable && !$0.1.isFault })
                 } catch let coreDataError {
                     error = coreDataError
                 }
@@ -435,7 +426,7 @@ extension InsulinDeliveryStore {
                 return
             }
 
-            self.handleUpdatedDoseData(updateSource: .changedInApp)
+            self.handleUpdatedDoseData()
             self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
 
             completion(.success(()))
@@ -528,7 +519,7 @@ extension InsulinDeliveryStore {
                     return
                 }
             }
-            self.handleUpdatedDoseData(updateSource: .changedInApp)
+            self.handleUpdatedDoseData()
             self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
             completion(errorString)
         }
@@ -550,7 +541,7 @@ extension InsulinDeliveryStore {
                     return
                 }
             }
-            self.handleUpdatedDoseData(updateSource: .changedInApp)
+            self.handleUpdatedDoseData()
             self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
             completion(errorString)
         }
@@ -598,7 +589,7 @@ extension InsulinDeliveryStore {
                     doseStoreError = DoseStore.DoseStoreError(error: .coreDataError(error))
                 }
             }
-            self.handleUpdatedDoseData(updateSource: .changedInApp)
+            self.handleUpdatedDoseData()
             self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
             completion(doseStoreError)
         }
@@ -622,7 +613,7 @@ extension InsulinDeliveryStore {
             let storeError = self.purgeCachedInsulinDeliveryObjects(matching: nil)
             self.healthStore.deleteObjects(of: self.insulinQuantityType, predicate: healthKitPredicate) { _, _, healthKitError in
                 self.queue.async {
-                    self.handleUpdatedDoseData(updateSource: .changedInApp)
+                    self.handleUpdatedDoseData()
                     completion(storeError ?? healthKitError)
                 }
             }
@@ -644,7 +635,7 @@ extension InsulinDeliveryStore {
                 completion(error)
                 return
             }
-            self.handleUpdatedDoseData(updateSource: .changedInApp)
+            self.handleUpdatedDoseData()
             completion(nil)
         }
     }
@@ -674,13 +665,13 @@ extension InsulinDeliveryStore {
         return error
     }
 
-    private func handleUpdatedDoseData(updateSource: UpdateSource) {
+    private func handleUpdatedDoseData() {
         dispatchPrecondition(condition: .onQueue(queue))
 
         self.purgeExpiredCachedInsulinDeliveryObjects()
         self.updateLastImmutableBasalEndDate()
 
-        NotificationCenter.default.post(name: InsulinDeliveryStore.doseEntriesDidChange, object: self, userInfo: [InsulinDeliveryStore.notificationUpdateSourceKey: updateSource.rawValue])
+        NotificationCenter.default.post(name: InsulinDeliveryStore.doseEntriesDidChange, object: self)
     }
 }
 
