@@ -28,12 +28,12 @@ public struct DoseEntry: TimelineValue, Equatable {
     /// The scheduled basal rate during this dose entry
     public internal(set) var scheduledBasalRate: HKQuantity?
 
-    public init(suspendDate: Date, automatic: Bool? = nil) {
-        self.init(type: .suspend, startDate: suspendDate, value: 0, unit: .units, automatic: automatic)
+    public init(suspendDate: Date, automatic: Bool? = nil, wasProgrammedByPumpUI: Bool = false) {
+        self.init(type: .suspend, startDate: suspendDate, value: 0, unit: .units, automatic: automatic, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
     }
 
-    public init(resumeDate: Date, insulinType: InsulinType? = nil, automatic: Bool? = nil) {
-        self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units, insulinType: insulinType, automatic: automatic)
+    public init(resumeDate: Date, insulinType: InsulinType? = nil, automatic: Bool? = nil, wasProgrammedByPumpUI: Bool = false) {
+        self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units, insulinType: insulinType, automatic: automatic, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
     }
 
     // If the insulin model field is nil, it's assumed that the model is the type of insulin the pump dispenses

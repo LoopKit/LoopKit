@@ -6,44 +6,6 @@ version: 2.1
 
 project_directory: &project_directory ~/project
 
-update_carthage: &update_carthage
-  name: Homebrew + Carthage Setup
-  command: |
-    if ! [ -x "$(command -v brew)" ]; then
-        # Install Homebrew
-        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    fi
-
-    if brew ls carthage > /dev/null; then
-        brew upgrade carthage || echo "Continuing…"
-    else
-        brew install carthage
-    fi
-
-carthage_bootstrap: &carthage_bootstrap
-  name: Carthage Bootstrap
-  command: |
-    echo "Bootstrapping carthage dependencies"
-    unset LLVM_TARGET_TRIPLE_SUFFIX
-
-    if ! cmp -s Cartfile.Resolved Carthage/Cartfile.resolved; then
-      time ./Scripts/carthage.sh bootstrap --project-directory "$SRCROOT" --platform ios,watchos --cache-builds --verbose
-      cp Cartfile.resolved Carthage
-    else
-      echo "Carthage: not bootstrapping"
-    fi
-
-carthage_save_cache: &carthage_save_cache
-  name: Save Carthage Cache
-  key: carthage-v3-{{ .Branch }}-{{ checksum "Cartfile.resolved" }}
-  paths:
-    - Carthage
-
-carthage_restore_cache: &carthage_restore_cache
-  name: Restore Carthage Cache
-  keys:
-    - carthage-v3-{{ .Branch }}-{{ checksum "Cartfile.resolved" }}
-
 #
 # Jobs
 #
@@ -52,35 +14,15 @@ jobs:
   test:
     working_directory: *project_directory
     macos:
-      xcode: 13.1.0
+      xcode: 13.4.1
     steps:
       - checkout
-      - restore_cache: *carthage_restore_cache
-      - run: *update_carthage
-      - run: *carthage_bootstrap
       - run:
           name: Test
           command: |
             set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 8' test | xcpretty
-      - save_cache: *carthage_save_cache
       - store_test_results:
           path: test_output
-
-  build-example:
-    working_directory: *project_directory
-    macos:
-      xcode: 13.1.0
-    steps:
-      - checkout
-      - restore_cache: *carthage_restore_cache
-      - run: *update_carthage
-      - run: *carthage_bootstrap
-      - run:
-          name: Build Example
-          command: |
-            set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme "LoopKit Example" build -destination 'name=iPhone 8' CODE_SIGNING_ALLOWED=NO | xcpretty
-      - save_cache: *carthage_save_cache
-
 #
 # Workflows
 #
@@ -90,4 +32,3 @@ workflows:
   build_and_test:
     jobs:
       - test
-      - build-example
