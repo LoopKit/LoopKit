@@ -470,8 +470,6 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
     func testAddDoseEntriesNotification() {
         let doseEntriesDidChangeCompletion = expectation(description: "doseEntriesDidChange")
         let observer = NotificationCenter.default.addObserver(forName: InsulinDeliveryStore.doseEntriesDidChange, object: insulinDeliveryStore, queue: nil) { notification in
-            let updateSource = notification.userInfo?[HealthKitSampleStore.notificationUpdateSourceKey] as? Int
-            XCTAssertEqual(updateSource, UpdateSource.changedInApp.rawValue)
             doseEntriesDidChangeCompletion.fulfill()
         }
 
@@ -744,8 +742,6 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
 
         let doseEntriesDidChangeCompletion = expectation(description: "doseEntriesDidChange")
         let observer = NotificationCenter.default.addObserver(forName: InsulinDeliveryStore.doseEntriesDidChange, object: insulinDeliveryStore, queue: nil) { notification in
-            let updateSource = notification.userInfo?[HealthKitSampleStore.notificationUpdateSourceKey] as? Int
-            XCTAssertEqual(updateSource, UpdateSource.changedInApp.rawValue)
             doseEntriesDidChangeCompletion.fulfill()
         }
 

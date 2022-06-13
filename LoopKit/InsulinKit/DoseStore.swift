@@ -729,6 +729,7 @@ extension DoseStore {
                 }
 
                 let isMutable = event.dose?.isMutable == true
+                let wasProgrammedByPumpUI = event.dose?.wasProgrammedByPumpUI ?? false
                 if isMutable {
                     firstMutableDate = min(event.date, firstMutableDate ?? event.date)
                 } else {
@@ -744,6 +745,7 @@ extension DoseStore {
                 object.mutable = isMutable
                 object.dose = event.dose
                 object.alarmType = event.alarmType
+                object.wasProgrammedByPumpUI = wasProgrammedByPumpUI
             }
 
             // Only change pumpEventQueryAfterDate if we received new finalized records.

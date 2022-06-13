@@ -466,9 +466,9 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
 
-    public func enactBolus(units: Double, automatic: Bool, completion: @escaping (PumpManagerError?) -> Void) {
+    public func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (PumpManagerError?) -> Void) {
 
-        logDeviceCommunication("enactBolus(\(units), \(automatic))")
+        logDeviceCommunication("enactBolus(\(units), \(activationType))")
 
         if state.bolusEnactmentShouldError || state.pumpBatteryChargeRemaining == 0 {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
@@ -502,7 +502,7 @@ public final class MockPumpManager: TestingPumpManager {
             }
             
             
-            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute), insulinType: state.insulinType, automatic: automatic)
+            let bolus = UnfinalizedDose(bolusAmount: units, startTime: Date(), duration: .minutes(units / type(of: self).deliveryUnitsPerMinute), insulinType: state.insulinType, automatic: activationType.isAutomatic)
             state.unfinalizedBolus = bolus
             
             logDeviceComms(.receive, message: "Bolus accepted")

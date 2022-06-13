@@ -29,6 +29,7 @@ class PumpEventEncodableTests: PersistenceControllerTestCase {
             pumpEvent.automatic = false
             pumpEvent.alarmType = .other("An Alarm")
             pumpEvent.modificationCounter = 123
+            pumpEvent.wasProgrammedByPumpUI = true
             try! assertPumpEventEncodable(pumpEvent, encodesJSON: """
 {
   "alarmType" : "An Alarm",
@@ -46,7 +47,8 @@ class PumpEventEncodableTests: PersistenceControllerTestCase {
   "type" : "TempBasal",
   "unit" : "U/hour",
   "uploaded" : false,
-  "value" : 1.23
+  "value" : 1.23,
+  "wasProgrammedByPumpUI" : true
 }
 """
             )
@@ -62,6 +64,7 @@ class PumpEventEncodableTests: PersistenceControllerTestCase {
             pumpEvent.uploaded = true
             pumpEvent.mutable = false
             pumpEvent.modificationCounter = 234
+            pumpEvent.wasProgrammedByPumpUI = true
             try! assertPumpEventEncodable(pumpEvent, encodesJSON: """
 {
   "createdAt" : "2020-05-13T22:33:48Z",
@@ -70,7 +73,8 @@ class PumpEventEncodableTests: PersistenceControllerTestCase {
   "insulinType" : 0,
   "modificationCounter" : 234,
   "mutable" : false,
-  "uploaded" : true
+  "uploaded" : true,
+  "wasProgrammedByPumpUI" : true
 }
 """
             )

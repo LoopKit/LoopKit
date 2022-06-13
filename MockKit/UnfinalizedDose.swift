@@ -159,6 +159,19 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         }
     }
 
+    public var eventTitle: String {
+        switch doseType {
+        case .bolus:
+            return NSLocalizedString("Bolus", comment: "Pump Event title for UnfinalizedDose with doseType of .bolus")
+        case .resume:
+            return NSLocalizedString("Resume", comment: "Pump Event title for UnfinalizedDose with doseType of .resume")
+        case .suspend:
+            return NSLocalizedString("Suspend", comment: "Pump Event title for UnfinalizedDose with doseType of .suspend")
+        case .tempBasal:
+            return NSLocalizedString("Temp Basal", comment: "Pump Event title for UnfinalizedDose with doseType of .tempBasal")
+        }
+    }
+
     // RawRepresentable
     public init?(rawValue: RawValue) {
         guard
@@ -223,9 +236,8 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
 
 extension NewPumpEvent {
     init(_ dose: UnfinalizedDose) {
-        let title = String(describing: dose)
         let entry = DoseEntry(dose)
-        self.init(date: dose.startTime, dose: entry, raw: dose.uniqueKey, title: title)
+        self.init(date: dose.startTime, dose: entry, raw: dose.uniqueKey, title: dose.eventTitle)
     }
 
     // Used for TestingScenarios, injecting doses into PumpManager

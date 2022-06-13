@@ -351,7 +351,7 @@ public final class CarbStore: HealthKitSampleStore {
                 return
             }
 
-            self.handleUpdatedCarbData(updateSource: .queriedByHealthKit)
+            self.handleUpdatedCarbData()
             completion(true)
         }
     }
@@ -502,7 +502,7 @@ extension CarbStore {
 
             completion(.success(storedEntry!))
 
-            self.handleUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData()
         }
     }
 
@@ -551,7 +551,7 @@ extension CarbStore {
 
             completion(.success(storedEntry!))
 
-            self.handleUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData()
         }
     }
 
@@ -629,7 +629,7 @@ extension CarbStore {
 
             completion(.success(true))
 
-            self.handleUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData()
         }
     }
 
@@ -794,7 +794,7 @@ extension CarbStore {
 
             completion(error)
 
-            self.handleUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData()
         }
     }
 }
@@ -859,7 +859,7 @@ extension CarbStore {
                 return
             }
 
-            self.handleUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData()
             completion(nil)
         }
     }
@@ -886,12 +886,12 @@ extension CarbStore {
         return error
     }
 
-    private func handleUpdatedCarbData(updateSource: UpdateSource) {
+    private func handleUpdatedCarbData() {
         dispatchPrecondition(condition: .onQueue(queue))
 
         purgeExpiredCachedCarbObjects()
 
-        NotificationCenter.default.post(name: CarbStore.carbEntriesDidChange, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: updateSource.rawValue])
+        NotificationCenter.default.post(name: CarbStore.carbEntriesDidChange, object: self)
         delegate?.carbStoreHasUpdatedCarbData(self)
     }
 

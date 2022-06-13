@@ -23,6 +23,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     public let manuallyEntered: Bool
     public internal(set) var syncIdentifier: String?
     public let isMutable: Bool
+    public let wasProgrammedByPumpUI: Bool
 
     /// The scheduled basal rate during this dose entry
     public internal(set) var scheduledBasalRate: HKQuantity?
@@ -36,7 +37,7 @@ public struct DoseEntry: TimelineValue, Equatable {
     }
 
     // If the insulin model field is nil, it's assumed that the model is the type of insulin the pump dispenses
-    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil, manuallyEntered: Bool = false, isMutable: Bool = false) {
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil, manuallyEntered: Bool = false, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
@@ -50,6 +51,7 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.automatic = automatic
         self.manuallyEntered = manuallyEntered
         self.isMutable = isMutable
+        self.wasProgrammedByPumpUI = wasProgrammedByPumpUI
     }
 }
 
@@ -170,6 +172,7 @@ extension DoseEntry: Codable {
         self.automatic = try container.decodeIfPresent(Bool.self, forKey: .automatic)
         self.manuallyEntered = try container.decodeIfPresent(Bool.self, forKey: .manuallyEntered) ?? false
         self.isMutable = try container.decodeIfPresent(Bool.self, forKey: .isMutable) ?? false
+        self.wasProgrammedByPumpUI = try container.decodeIfPresent(Bool.self, forKey: .wasProgrammedByPumpUI) ?? false
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -190,6 +193,7 @@ extension DoseEntry: Codable {
         try container.encodeIfPresent(automatic, forKey: .automatic)
         try container.encode(manuallyEntered, forKey: .manuallyEntered)
         try container.encode(isMutable, forKey: .isMutable)
+        try container.encode(wasProgrammedByPumpUI, forKey: .wasProgrammedByPumpUI)
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -207,6 +211,7 @@ extension DoseEntry: Codable {
         case automatic
         case manuallyEntered
         case isMutable
+        case wasProgrammedByPumpUI
     }
 }
 
@@ -240,6 +245,7 @@ extension DoseEntry: RawRepresentable {
         self.syncIdentifier = rawValue["syncIdentifier"] as? String
         self.scheduledBasalRate = (rawValue["scheduledBasalRate"] as? Double).flatMap { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) }
         self.isMutable = rawValue["isMutable"] as? Bool ?? false
+        self.wasProgrammedByPumpUI = rawValue["wasProgrammedByPumpUI"] as? Bool ?? false
     }
 
     public var rawValue: [String: Any] {
@@ -250,7 +256,8 @@ extension DoseEntry: RawRepresentable {
             "value": value,
             "unit": unit.rawValue,
             "manuallyEntered": manuallyEntered,
-            "isMutable": isMutable
+            "isMutable": isMutable,
+            "wasProgrammedByPumpUI": wasProgrammedByPumpUI
         ]
 
         rawValue["deliveredUnits"] = deliveredUnits

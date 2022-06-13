@@ -34,4 +34,5 @@ extension CachedInsulinDeliveryObject {
     @NSManaged public var isSuspend: Bool
     @NSManaged public var isMutable: Bool
     @NSManaged public var modificationCounter: Int64
+    @NSManaged public var wasProgrammedByPumpUI: Bool
 }
