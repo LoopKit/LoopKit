@@ -27,7 +27,7 @@ extension ExponentialInsulinModelPreset {
         case .lyumjev:
             return .minutes(360)
         case .afrezza:
-            return .minutes(360)
+            return .minutes(300)
         }
     }
 
@@ -42,7 +42,7 @@ extension ExponentialInsulinModelPreset {
         case .lyumjev:
             return .minutes(55)
         case.afrezza:
-            return .minutes(30)
+            return .minutes(29)
         }
     }
 
