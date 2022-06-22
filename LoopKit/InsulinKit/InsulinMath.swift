@@ -115,6 +115,7 @@ extension DoseEntry {
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
             insulinType: insulinType,
+            automatic: automatic,
             isMutable: isMutable,
             wasProgrammedByPumpUI: wasProgrammedByPumpUI
         )
@@ -375,8 +376,6 @@ extension Collection where Element == DoseEntry {
                 reconciled.append(dose)
             case .basal, .tempBasal:
                 if lastSuspend == nil, let last = lastBasal {
-                    assert(!last.isMutable)
-
                     let endDate = Swift.min(last.endDate, dose.startDate)
 
                     // Ignore 0-duration doses
@@ -388,7 +387,6 @@ extension Collection where Element == DoseEntry {
                 lastBasal = dose
             case .resume:
                 if let suspend = lastSuspend {
-                    assert(!suspend.isMutable)
 
                     reconciled.append(DoseEntry(
                         type: suspend.type,
@@ -418,6 +416,7 @@ extension Collection where Element == DoseEntry {
                                 // We intentionally use the resume's identifier, as the basal entry has already been entered
                                 syncIdentifier: dose.syncIdentifier,
                                 insulinType: last.insulinType,
+                                automatic: last.automatic,
                                 isMutable: last.isMutable,
                                 wasProgrammedByPumpUI: last.wasProgrammedByPumpUI
                             )
@@ -428,7 +427,6 @@ extension Collection where Element == DoseEntry {
                 }
             case .suspend:
                 if let last = lastBasal {
-                    assert(!last.isMutable)
 
                     reconciled.append(DoseEntry(
                         type: last.type,
@@ -617,7 +615,8 @@ extension Collection where Element == DoseEntry {
                                 unit: .unitsPerHour,
                                 syncIdentifier: syncIdentifier,
                                 scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: scheduled.value),
-                                insulinType: lastBasal.insulinType
+                                insulinType: lastBasal.insulinType,
+                                automatic: lastBasal.automatic
                             ))
                         }
                     }

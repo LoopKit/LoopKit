@@ -20,6 +20,10 @@ public struct PresetInsulinModelProvider: InsulinModelProvider {
         switch type {
         case .fiasp:
             return ExponentialInsulinModelPreset.fiasp
+        case .lyumjev:
+            return ExponentialInsulinModelPreset.lyumjev
+        case .afrezza:
+            return ExponentialInsulinModelPreset.afrezza
         default:
             return defaultRapidActingModel ?? ExponentialInsulinModelPreset.rapidActingAdult
         }

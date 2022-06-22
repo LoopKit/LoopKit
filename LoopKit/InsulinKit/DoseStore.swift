@@ -851,6 +851,9 @@ extension DoseStore {
         }
 
         self.persistenceController.save { (error) -> Void in
+            if let error = error {
+                self.log.error("Error saving: %{public}@", String(describing: error))
+            }
             self.insulinDeliveryStore.addDoseEntries(doses, from: device, syncVersion: self.syncVersion) { (result) in
                 switch result {
                 case .success:
@@ -1120,6 +1123,8 @@ extension DoseStore {
         guard let basalProfile = self.basalProfileApplyingOverrideHistory else {
             throw DoseStoreError.configurationError
         }
+
+        self.log.info("Fetching Pumpevents between %{public}@ and %{public}@ for saving to InsulinDeliveryStore", String(describing: basalStart), String(describing: end))
 
         // Make sure we look far back enough to have prior temp basal records to reconcile
         // resumption of temp basal after suspend/resume.

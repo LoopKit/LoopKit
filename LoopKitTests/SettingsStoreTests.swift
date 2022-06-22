@@ -982,33 +982,6 @@ class StoredSettingsCodableTests: XCTestCase {
     }()
 }
 
-extension StoredSettings: Equatable {
-    public static func == (lhs: StoredSettings, rhs: StoredSettings) -> Bool {
-        return lhs.date == rhs.date &&
-            lhs.controllerTimeZone == rhs.controllerTimeZone &&
-            lhs.dosingEnabled == rhs.dosingEnabled &&
-            lhs.glucoseTargetRangeSchedule == rhs.glucoseTargetRangeSchedule &&
-            lhs.preMealTargetRange == rhs.preMealTargetRange &&
-            lhs.workoutTargetRange == rhs.workoutTargetRange &&
-            lhs.overridePresets == rhs.overridePresets &&
-            lhs.scheduleOverride == rhs.scheduleOverride &&
-            lhs.preMealOverride == rhs.preMealOverride &&
-            lhs.maximumBasalRatePerHour == rhs.maximumBasalRatePerHour &&
-            lhs.maximumBolus == rhs.maximumBolus &&
-            lhs.suspendThreshold == rhs.suspendThreshold &&
-            lhs.defaultRapidActingModel == rhs.defaultRapidActingModel &&
-            lhs.basalRateSchedule == rhs.basalRateSchedule &&
-            lhs.insulinSensitivitySchedule == rhs.insulinSensitivitySchedule &&
-            lhs.carbRatioSchedule == rhs.carbRatioSchedule &&
-            lhs.notificationSettings == rhs.notificationSettings &&
-            lhs.controllerDevice == rhs.controllerDevice &&
-            lhs.pumpDevice == rhs.pumpDevice &&
-            lhs.cgmDevice == rhs.cgmDevice &&
-            lhs.bloodGlucoseUnit == rhs.bloodGlucoseUnit &&
-            lhs.syncIdentifier == rhs.syncIdentifier
-    }
-}
-
 fileprivate extension StoredSettings {
     static var test: StoredSettings {
         let controllerTimeZone = TimeZone(identifier: "America/Los_Angeles")!

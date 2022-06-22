@@ -10,7 +10,9 @@ import Foundation
 
 public struct StoredInsulinModel: Codable, Equatable {
     public enum ModelType: String, Codable {
+        case afrezza
         case fiasp
+        case lyumjev
         case rapidAdult
         case rapidChild
     }
@@ -31,16 +33,20 @@ public struct StoredInsulinModel: Codable, Equatable {
 public extension StoredInsulinModel {
     init(_ preset: ExponentialInsulinModelPreset) {
         var modelType: StoredInsulinModel.ModelType
-        
+
         switch preset {
+        case .afrezza:
+            modelType = .afrezza
+        case .fiasp:
+            modelType = .fiasp
+        case .lyumjev:
+            modelType = .lyumjev
         case .rapidActingAdult:
             modelType = .rapidAdult
         case .rapidActingChild:
             modelType = .rapidChild
-        case .fiasp:
-            modelType = .fiasp
         }
-        
+
         self.init(modelType: modelType, delay: preset.delay, actionDuration: preset.actionDuration, peakActivity: preset.peakActivity)
     }
 }

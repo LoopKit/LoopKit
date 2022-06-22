@@ -91,8 +91,6 @@ extension CachedCarbObject {
 
     // HealthKit
     func create(from sample: HKQuantitySample, on date: Date = Date()) {
-        precondition(!sample.createdByCurrentApp)
-
         self.absorptionTime = sample.absorptionTime
         self.createdByCurrentApp = sample.createdByCurrentApp
         self.foodType = sample.foodType
@@ -222,7 +220,7 @@ extension CachedCarbObject {
         var metadata = [String: Any]()
 
         metadata[HKMetadataKeyFoodType] = foodType
-        metadata[MetadataKeyAbsorptionTimeMinutes] = absorptionTime?.minutes
+        metadata[MetadataKeyAbsorptionTime] = absorptionTime
 
         metadata[HKMetadataKeySyncIdentifier] = syncIdentifier
         metadata[HKMetadataKeySyncVersion] = syncVersion

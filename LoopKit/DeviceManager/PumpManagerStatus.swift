@@ -8,33 +8,33 @@
 import Foundation
 import HealthKit
 
+public struct PumpStatusHighlight: DeviceStatusHighlight, Equatable {
+    public var localizedMessage: String
+
+    public var imageName: String
+
+    public var state: DeviceStatusHighlightState
+
+    public init(localizedMessage: String, imageName: String, state: DeviceStatusHighlightState) {
+        self.localizedMessage = localizedMessage
+        self.imageName = imageName
+        self.state = state
+    }
+}
+
+public struct PumpLifecycleProgress: DeviceLifecycleProgress, Equatable {
+    public var percentComplete: Double
+
+    public var progressState: DeviceLifecycleProgressState
+
+    public init(percentComplete: Double, progressState: DeviceLifecycleProgressState) {
+        self.percentComplete = percentComplete
+        self.progressState = progressState
+    }
+}
+
 public struct PumpManagerStatus: Equatable {
-    
-    public struct PumpStatusHighlight: DeviceStatusHighlight, Equatable {
-        public var localizedMessage: String
-        
-        public var imageName: String
-        
-        public var state: DeviceStatusHighlightState
-        
-        public init(localizedMessage: String, imageName: String, state: DeviceStatusHighlightState) {
-            self.localizedMessage = localizedMessage
-            self.imageName = imageName
-            self.state = state
-        }
-    }
-    
-    public struct PumpLifecycleProgress: DeviceLifecycleProgress, Equatable {
-        public var percentComplete: Double
-        
-        public var progressState: DeviceLifecycleProgressState
-        
-        public init(percentComplete: Double, progressState: DeviceLifecycleProgressState) {
-            self.percentComplete = percentComplete
-            self.progressState = progressState
-        }
-    }
-    
+
     public enum BasalDeliveryState: Equatable {
         case active(_ at: Date)
         case initiatingTempBasal
@@ -253,9 +253,9 @@ extension PumpManagerStatus.BolusState: Codable {
     }
 }
 
-extension PumpManagerStatus.PumpStatusHighlight: Codable { }
+extension PumpStatusHighlight: Codable { }
 
-extension PumpManagerStatus.PumpLifecycleProgress: Codable { }
+extension PumpLifecycleProgress: Codable { }
 
 extension PumpManagerStatus: CustomDebugStringConvertible {
     public var debugDescription: String {

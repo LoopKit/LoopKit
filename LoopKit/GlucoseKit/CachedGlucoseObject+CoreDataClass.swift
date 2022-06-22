@@ -160,8 +160,6 @@ extension CachedGlucoseObject {
 
     // HealthKit
     func create(from sample: HKQuantitySample) {
-        precondition(!sample.createdByCurrentApp)
-
         self.uuid = sample.uuid
         self.provenanceIdentifier = sample.provenanceIdentifier
         self.syncIdentifier = sample.syncIdentifier

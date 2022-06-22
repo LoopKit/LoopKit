@@ -126,8 +126,12 @@ public class HealthKitSampleStore {
                 
                 completion(.failure(authError))
             }
-            
+
             NotificationCenter.default.post(name: .StoreAuthorizationStatusDidChange, object: self)
+
+            // Do not remove this log: it actually triggers a query by calling preferredUnit, and can update the cache
+            // And trigger a unit change notification after authorization happens.
+            self.log.default("Checking units after authorization: %{public}@", String(describing: self.preferredUnit))
         }
     }
 

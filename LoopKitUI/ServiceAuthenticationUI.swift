@@ -11,6 +11,8 @@ import LoopKit
 public protocol ServiceAuthenticationUI: ServiceAuthentication {
     // The indexed credentials (e.g. username, password) used to authenticate
     var credentialFormFields: [ServiceCredential] { get }
+    //Form field helper text displayed when completing form
+    var credentialFormFieldHelperMessage: String? { get }
 }
 
 

@@ -8,11 +8,13 @@
 
 import SwiftUI
 
+// TODO: SwiftUI now has built in ProgressView to replace this
+
 public struct ProgressView: View {
     
     private let progress: CGFloat
     
-    private let barHeight: CGFloat = 6
+    private let barHeight: CGFloat = 8
     
     public init(progress: CGFloat) {
         self.progress = progress

@@ -231,7 +231,9 @@ extension CachedInsulinDeliveryObject {
 
     func update(from entry: DoseEntry) {
         assert(entry.type != .resume)
-        assert(entry.startDate == startDate)
+        // startDate can change when doses split by basal schedule changes are later split by
+        // override enactments/cancels.
+        //assert(entry.startDate == startDate)
         assert(entry.syncIdentifier == syncIdentifier)
         assert(isMutable)
 

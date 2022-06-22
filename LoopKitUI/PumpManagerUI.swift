@@ -20,11 +20,11 @@ public struct PumpManagerDescriptor {
 }
 
 public struct PumpManagerSetupSettings {
-    public var maxBasalRateUnitsPerHour: Double?
-    public var maxBolusUnits: Double?
-    public var basalSchedule: BasalRateSchedule?
+    public var maxBasalRateUnitsPerHour: Double
+    public var maxBolusUnits: Double
+    public var basalSchedule: BasalRateSchedule
 
-    public init(maxBasalRateUnitsPerHour: Double?, maxBolusUnits: Double?, basalSchedule: BasalRateSchedule?) {
+    public init(maxBasalRateUnitsPerHour: Double, maxBolusUnits: Double, basalSchedule: BasalRateSchedule) {
         self.maxBasalRateUnitsPerHour = maxBasalRateUnitsPerHour
         self.maxBolusUnits = maxBolusUnits
         self.basalSchedule = basalSchedule
@@ -44,7 +44,7 @@ public protocol PumpStatusIndicator {
 
 public typealias PumpManagerViewController = (UIViewController & PumpManagerOnboarding & CompletionNotifying)
 
-public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager { //}, DeliveryLimitSettingsTableViewControllerSyncSource, BasalScheduleTableViewControllerSyncSource {
+public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager {
 
     /// Create and onboard a new pump manager.
     ///

@@ -50,8 +50,10 @@ class BasalRateScheduleTests: XCTestCase {
     }
 
     func testBasalScheduleRanges() {
-        let schedule = BasalRateSchedule(dailyItems: items, timeZone: nil)!
-        let calendar = Calendar.current
+        let therapyTimeZone = TimeZone(secondsFromGMT: -6*60*60)!
+        let schedule = BasalRateSchedule(dailyItems: items, timeZone: therapyTimeZone)!
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = therapyTimeZone
 
         let midnight = calendar.startOfDay(for: Date())
 

@@ -35,6 +35,15 @@ public protocol RemoteDataService: Service {
      */
     func uploadCarbData(created: [SyncCarbObject], updated: [SyncCarbObject], deleted: [SyncCarbObject], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
 
+    /**
+     Upload overrides to the remote data service.
+
+     - Parameter updated: The updated or new overrides to upload.
+     - Parameter deleted: The deleted overrides to upload.
+     - Parameter completion: The completion function to call with any success or failure.
+     */
+    func uploadTemporaryOverrideData(updated: [TemporaryScheduleOverride], deleted: [TemporaryScheduleOverride], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+
     /// The maximum number of dose data to upload to the remote data service at one time.
     var doseDataLimit: Int? { get }
 

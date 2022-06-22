@@ -9,7 +9,7 @@
 import Foundation
 import LoopKit
 
-public struct MockPumpManagerState {
+public struct MockPumpManagerState: Equatable {
     public enum DeliverableIncrements: String, CaseIterable {
         case omnipod
         case medtronicX22

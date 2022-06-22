@@ -206,6 +206,7 @@ public struct StoredDosingDecision {
     public var scheduleOverride: TemporaryScheduleOverride?
     public var controllerStatus: ControllerStatus?
     public var pumpManagerStatus: PumpManagerStatus?
+    public var pumpStatusHighlight: StoredDeviceHighlight?
     public var cgmManagerStatus: CGMManagerStatus?
     public var lastReservoirValue: LastReservoirValue?
     public var historicalGlucose: [HistoricalGlucoseValue]?
@@ -230,6 +231,7 @@ public struct StoredDosingDecision {
                 scheduleOverride: TemporaryScheduleOverride? = nil,
                 controllerStatus: ControllerStatus? = nil,
                 pumpManagerStatus: PumpManagerStatus? = nil,
+                pumpStatusHighlight: StoredDeviceHighlight? = nil,
                 cgmManagerStatus: CGMManagerStatus? = nil,
                 lastReservoirValue: LastReservoirValue? = nil,
                 historicalGlucose: [HistoricalGlucoseValue]? = nil,
@@ -253,6 +255,7 @@ public struct StoredDosingDecision {
         self.scheduleOverride = scheduleOverride
         self.controllerStatus = controllerStatus
         self.pumpManagerStatus = pumpManagerStatus
+        self.pumpStatusHighlight = pumpStatusHighlight
         self.cgmManagerStatus = cgmManagerStatus
         self.lastReservoirValue = lastReservoirValue
         self.historicalGlucose = historicalGlucose
@@ -315,6 +318,18 @@ public struct StoredDosingDecision {
             self.details = details?.isEmpty == false ? details : nil
         }
     }
+
+    public struct StoredDeviceHighlight: Codable, Equatable, DeviceStatusHighlight {
+        public var localizedMessage: String
+        public var imageName: String
+        public var state: DeviceStatusHighlightState
+
+        public init(localizedMessage: String, imageName: String, state: DeviceStatusHighlightState) {
+            self.localizedMessage = localizedMessage
+            self.imageName = imageName
+            self.state = state
+        }
+    }
 }
 
 public struct ManualBolusRecommendationWithDate: Codable {
@@ -337,6 +352,7 @@ extension StoredDosingDecision: Codable {
                   scheduleOverride: try container.decodeIfPresent(TemporaryScheduleOverride.self, forKey: .scheduleOverride),
                   controllerStatus: try container.decodeIfPresent(ControllerStatus.self, forKey: .controllerStatus),
                   pumpManagerStatus: try container.decodeIfPresent(PumpManagerStatus.self, forKey: .pumpManagerStatus),
+                  pumpStatusHighlight: try container.decodeIfPresent(StoredDeviceHighlight.self, forKey: .pumpStatusHighlight),
                   cgmManagerStatus: try container.decodeIfPresent(CGMManagerStatus.self, forKey: .cgmManagerStatus),
                   lastReservoirValue: try container.decodeIfPresent(LastReservoirValue.self, forKey: .lastReservoirValue),
                   historicalGlucose: try container.decodeIfPresent([HistoricalGlucoseValue].self, forKey: .historicalGlucose),
@@ -364,6 +380,7 @@ extension StoredDosingDecision: Codable {
         try container.encodeIfPresent(scheduleOverride, forKey: .scheduleOverride)
         try container.encodeIfPresent(controllerStatus, forKey: .controllerStatus)
         try container.encodeIfPresent(pumpManagerStatus, forKey: .pumpManagerStatus)
+        try container.encodeIfPresent(pumpStatusHighlight, forKey: .pumpStatusHighlight)
         try container.encodeIfPresent(cgmManagerStatus, forKey: .cgmManagerStatus)
         try container.encodeIfPresent(lastReservoirValue, forKey: .lastReservoirValue)
         try container.encodeIfPresent(historicalGlucose, forKey: .historicalGlucose)
@@ -390,6 +407,7 @@ extension StoredDosingDecision: Codable {
         case scheduleOverride
         case controllerStatus
         case pumpManagerStatus
+        case pumpStatusHighlight
         case cgmManagerStatus
         case lastReservoirValue
         case historicalGlucose

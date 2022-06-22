@@ -25,12 +25,8 @@ extension MockPumpManager: PumpManagerUI {
     
     public static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let mockPumpManager = MockPumpManager()
-        if let maxBasalRateUnitsPerHour = settings.maxBasalRateUnitsPerHour {
-            mockPumpManager.setMaximumTempBasalRate(maxBasalRateUnitsPerHour)
-        }
-        if let basalSchedule = settings.basalSchedule {
-            mockPumpManager.syncBasalRateSchedule(items: basalSchedule.items, completion: { _ in })
-        }
+        mockPumpManager.setMaximumTempBasalRate(settings.maxBasalRateUnitsPerHour)
+        mockPumpManager.syncBasalRateSchedule(items: settings.basalSchedule.items, completion: { _ in })
         return .createdAndOnboarded(mockPumpManager)
     }
 

@@ -3,23 +3,8 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 52;
 	objects = {
-
-/* Begin PBXAggregateTarget section */
-		1D81903A25687FF2004D1BEC /* Cartfile */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 1D81903D25687FF2004D1BEC /* Build configuration list for PBXAggregateTarget "Cartfile" */;
-			buildPhases = (
-				1D81905025688014004D1BEC /* Homebrew & Carthage Setup */,
-				1D8190512568805E004D1BEC /* Carthage Bootstrap */,
-			);
-			dependencies = (
-			);
-			name = Cartfile;
-			productName = Cartfile;
-		};
-/* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
 		1D096BFA24C242300078B6B5 /* CheckmarkListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */; };
@@ -156,7 +141,6 @@
 		4322B7AC202FA3D20002837D /* momentum_effect_stable_glucose_output.json in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FEA31C7293FA0073BE78 /* momentum_effect_stable_glucose_output.json */; };
 		43260F6E21C4BF7A00DD6837 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43260F6D21C4BF7A00DD6837 /* UUID.swift */; };
 		432762741D60505F0083215A /* HKQuantitySample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432762731D60505F0083215A /* HKQuantitySample.swift */; };
-		432CF86520D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86420D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift */; };
 		432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */; };
 		432CF86920D76B320066B889 /* SetupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86820D76B320066B889 /* SetupButton.swift */; };
 		432CF86B20D76B9C0066B889 /* SetupIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */; };
@@ -187,7 +171,6 @@
 		4352A73C20DECF0700CAC200 /* CGMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4352A73B20DECF0600CAC200 /* CGMManager.swift */; };
 		4353D16F203D104F007B4ECD /* CarbStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4353D16E203D104F007B4ECD /* CarbStoreError.swift */; };
 		4353D170203D3E5C007B4ECD /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
-		4353D171203D3E71007B4ECD /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4301582C1C7ECD7A00B64B63 /* HealthKit.framework */; };
 		4353D173203D3E7E007B4ECD /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4353D172203D3E7E007B4ECD /* CoreData.framework */; };
 		435D2925205F3A670026F401 /* counteraction_effect_falling_glucose_almost_duplicates_input.json in Resources */ = {isa = PBXBuildFile; fileRef = 435D2924205F3A670026F401 /* counteraction_effect_falling_glucose_almost_duplicates_input.json */; };
 		435D2928205F3C760026F401 /* counteraction_effect_falling_glucose_double_entries._input.json in Resources */ = {isa = PBXBuildFile; fileRef = 435D2926205F3C750026F401 /* counteraction_effect_falling_glucose_double_entries._input.json */; };
@@ -278,7 +261,6 @@
 		43BA718A201EE8CF0058961E /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		43BA718B201EE93C0058961E /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
 		43BA718C201EEE5A0058961E /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434FB64B1D712449007B9C70 /* NSData.swift */; };
-		43BA7191202020140058961E /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		43BA7192202039950058961E /* RepeatingScheduleValueTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FE0B1C7290530073BE78 /* RepeatingScheduleValueTableViewCell.xib */; };
 		43BA7193202039A30058961E /* TextFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 434FF1EF1CF29451000DB779 /* TextFieldTableViewCell.xib */; };
 		43BA7194202039A90058961E /* GlucoseRangeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 43D8FE081C7290530073BE78 /* GlucoseRangeTableViewCell.xib */; };
@@ -422,7 +404,6 @@
 		898E6E67224179310019E459 /* BaseHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E64224179300019E459 /* BaseHUDView.swift */; };
 		898E6E68224179310019E459 /* BatteryLevelHUDView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 898E6E65224179300019E459 /* BatteryLevelHUDView.xib */; };
 		898E6E69224179310019E459 /* BatteryLevelHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E66224179300019E459 /* BatteryLevelHUDView.swift */; };
-		898E6E6A224179530019E459 /* BasalScheduleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5D60222F6AF3008961AB /* BasalScheduleTableViewController.swift */; };
 		898E6E6C224194060019E459 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E6B224194050019E459 /* UIColor.swift */; };
 		898E6E6E2241ED9F0019E459 /* SuspendResumeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E6D2241ED9F0019E459 /* SuspendResumeTableViewCell.swift */; };
 		898E6E702241EDB70019E459 /* PercentageTextFieldTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898E6E6F2241EDB70019E459 /* PercentageTextFieldTableViewController.swift */; };
@@ -497,9 +478,6 @@
 		89D204B221CC7D93001238CC /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DC540C21B75AE7005A1CE0 /* Collection.swift */; };
 		89D204B421CC7E74001238CC /* MockCGMManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */; };
 		89D204B521CC7E74001238CC /* MockPumpManager+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */; };
-		89D204B721CC7F34001238CC /* MockPumpManagerSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */; };
-		89D204B821CC7F34001238CC /* MockPumpManagerSettingsSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */; };
-		89D204B921CC7F34001238CC /* MockPumpManager.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */; };
 		89D204BA21CC7F34001238CC /* MockPumpManagerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */; };
 		89D204BB21CC7F34001238CC /* MockCGMManagerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */; };
 		89D204BC21CC7F34001238CC /* SineCurveParametersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */; };
@@ -562,7 +540,6 @@
 		A9498D7F23386C3300DAA9B9 /* GlucoseThreshold.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7423386C3200DAA9B9 /* GlucoseThreshold.swift */; };
 		A9498D8023386C3300DAA9B9 /* RemoteDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7523386C3300DAA9B9 /* RemoteDataService.swift */; };
 		A9498D8223386C3300DAA9B9 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7623386C3300DAA9B9 /* Service.swift */; };
-		A9498D8423386C3300DAA9B9 /* DiagnosticLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D7723386C3300DAA9B9 /* DiagnosticLog.swift */; };
 		A9498D8823386CAF00DAA9B9 /* ServiceNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8623386CAF00DAA9B9 /* ServiceNavigationController.swift */; };
 		A9498D8B23386CC700DAA9B9 /* ServiceUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8A23386CC700DAA9B9 /* ServiceUI.swift */; };
 		A9498D8D23386CD800DAA9B9 /* MockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9498D8C23386CD700DAA9B9 /* MockService.swift */; };
@@ -596,7 +573,6 @@
 		A98ED5FE253132A400FD8F70 /* CarbStoreHKQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A98ED5FD253132A400FD8F70 /* CarbStoreHKQueryTests.swift */; };
 		A994B884254241B10039B108 /* InsulinDeliveryStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A994B883254241B10039B108 /* InsulinDeliveryStoreTests.swift */; };
 		A99C7373233990D400C80963 /* TempBasalRecommendationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C7372233990D400C80963 /* TempBasalRecommendationTests.swift */; };
-		A99C7375233993FE00C80963 /* DiagnosticLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C7374233993FE00C80963 /* DiagnosticLogTests.swift */; };
 		A99C73772339A67A00C80963 /* GlucoseThresholdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C73762339A67A00C80963 /* GlucoseThresholdTests.swift */; };
 		A99C73792339ACDC00C80963 /* ServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C73782339ACDC00C80963 /* ServiceTests.swift */; };
 		A9A53E2C2714E5BC0050C0B1 /* CodableDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A53E2B2714E5BC0050C0B1 /* CodableDevice.swift */; };
@@ -791,8 +767,12 @@
 		C1A174ED23DEAD6A0034DF11 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
 		C1A3F5BE24AA6EE200329152 /* NSTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF21C7290350073BE78 /* NSTimeInterval.swift */; };
 		C1B9E127256C1E91008E8B84 /* Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892A5DBB2231E20C008961AB /* Comparable.swift */; };
+		C1BECA93285902F5008075C4 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		C1CAB9E926A3254800A57273 /* StoredInsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CAB9E826A3254800A57273 /* StoredInsulinModel.swift */; };
 		C1CB895925C8E7D900782BAC /* Modelv1v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = C1E84B8425C62FB100623C08 /* Modelv1v4.xcmappingmodel */; };
+		C1CCF1062858F07A0035389C /* SwiftCharts in Frameworks */ = {isa = PBXBuildFile; productRef = C1CCF1052858F07A0035389C /* SwiftCharts */; };
+		C1CCF1082858F1E10035389C /* SwiftCharts in Frameworks */ = {isa = PBXBuildFile; productRef = C1CCF1072858F1E10035389C /* SwiftCharts */; };
+		C1CCF1092858F1E10035389C /* SwiftCharts in Embed Frameworks */ = {isa = PBXBuildFile; productRef = C1CCF1072858F1E10035389C /* SwiftCharts */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C1DD512B259FD8A600DE27AE /* InsulinTypeChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1742345259CD3ED00399C9D /* InsulinTypeChooser.swift */; };
 		C1DD517825A016E700DE27AE /* InsulinTypeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DD515A259FE3AB00DE27AE /* InsulinTypeSetting.swift */; };
 		C1DE4C2125A253BD007065F8 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE4C2025A253BD007065F8 /* Color.swift */; };
@@ -955,19 +935,19 @@
 			remoteGlobalIDString = 89D2047121CC7BD7001238CC;
 			remoteInfo = MockKit;
 		};
-		A9E6757E22713C5300E25293 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43D8FDCA1C728FDF0073BE78;
-			remoteInfo = LoopKit;
-		};
 		B4CEE2E6257129780093111B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 89D2047121CC7BD7001238CC;
 			remoteInfo = MockKit;
+		};
+		C1BECA95285902F5008075C4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43D8FDC21C728FDF0073BE78 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43D8FDCA1C728FDF0073BE78;
+			remoteInfo = LoopKit;
 		};
 		C1E0280B264C47C900EC4DF1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -988,6 +968,17 @@
 				892A5D4A222F03CC008961AB /* LoopTestingKit.framework in Embed Frameworks */,
 				4301581A1C7ECB5E00B64B63 /* LoopKit.framework in Embed Frameworks */,
 				43BA715C201E484D0058961E /* LoopKitUI.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C1CCF10A2858F1E10035389C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C1CCF1092858F1E10035389C /* SwiftCharts in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1107,7 +1098,6 @@
 		43260F6D21C4BF7A00DD6837 /* UUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUID.swift; sourceTree = "<group>"; };
 		432711371EDE826A00171F6A /* CustomInputTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInputTextField.swift; sourceTree = "<group>"; };
 		432762731D60505F0083215A /* HKQuantitySample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKQuantitySample.swift; sourceTree = "<group>"; };
-		432CF86420D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimitSettingsTableViewController.swift; sourceTree = "<group>"; };
 		432CF86620D76AB90066B889 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		432CF86820D76B320066B889 /* SetupButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupButton.swift; sourceTree = "<group>"; };
 		432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupIndicatorView.swift; sourceTree = "<group>"; };
@@ -1366,7 +1356,6 @@
 		892A5D51222F03DB008961AB /* TestingDeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingDeviceManager.swift; sourceTree = "<group>"; };
 		892A5D53222F03F9008961AB /* TestingPumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingPumpManager.swift; sourceTree = "<group>"; };
 		892A5D55222F0414008961AB /* TestingCGMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestingCGMManager.swift; sourceTree = "<group>"; };
-		892A5D60222F6AF3008961AB /* BasalScheduleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasalScheduleTableViewController.swift; sourceTree = "<group>"; };
 		892A5D62222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SetConstrainedScheduleEntryTableViewCell.xib; sourceTree = "<group>"; };
 		892A5D63222F6B13008961AB /* SetConstrainedScheduleEntryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetConstrainedScheduleEntryTableViewCell.swift; sourceTree = "<group>"; };
 		892A5D992231E0E3008961AB /* SettingsNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsNavigationViewController.swift; sourceTree = "<group>"; };
@@ -1430,9 +1419,6 @@
 		89AB9EC621A4774500351324 /* MockPumpManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManager.swift; sourceTree = "<group>"; };
 		89AB9EC821A4BC2400351324 /* MockCGMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManager.swift; sourceTree = "<group>"; };
 		89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MockPumpManager+UI.swift"; sourceTree = "<group>"; };
-		89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSetupViewController.swift; sourceTree = "<group>"; };
-		89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsSetupViewController.swift; sourceTree = "<group>"; };
-		89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MockPumpManager.storyboard; sourceTree = "<group>"; };
 		89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsViewController.swift; sourceTree = "<group>"; };
 		89AC792C224C781100B8E9BA /* DoseProgressReporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseProgressReporter.swift; sourceTree = "<group>"; };
 		89AC792D224C781100B8E9BA /* DoseProgressTimerEstimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoseProgressTimerEstimator.swift; sourceTree = "<group>"; };
@@ -1517,7 +1503,6 @@
 		A9498D7423386C3200DAA9B9 /* GlucoseThreshold.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseThreshold.swift; sourceTree = "<group>"; };
 		A9498D7523386C3300DAA9B9 /* RemoteDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDataService.swift; sourceTree = "<group>"; };
 		A9498D7623386C3300DAA9B9 /* Service.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
-		A9498D7723386C3300DAA9B9 /* DiagnosticLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiagnosticLog.swift; sourceTree = "<group>"; };
 		A9498D8623386CAF00DAA9B9 /* ServiceNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceNavigationController.swift; sourceTree = "<group>"; };
 		A9498D8A23386CC700DAA9B9 /* ServiceUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceUI.swift; sourceTree = "<group>"; };
 		A9498D8C23386CD700DAA9B9 /* MockService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockService.swift; sourceTree = "<group>"; };
@@ -1544,7 +1529,6 @@
 		A98ED5FD253132A400FD8F70 /* CarbStoreHKQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbStoreHKQueryTests.swift; sourceTree = "<group>"; };
 		A994B883254241B10039B108 /* InsulinDeliveryStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinDeliveryStoreTests.swift; sourceTree = "<group>"; };
 		A99C7372233990D400C80963 /* TempBasalRecommendationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempBasalRecommendationTests.swift; sourceTree = "<group>"; };
-		A99C7374233993FE00C80963 /* DiagnosticLogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticLogTests.swift; sourceTree = "<group>"; };
 		A99C73762339A67A00C80963 /* GlucoseThresholdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseThresholdTests.swift; sourceTree = "<group>"; };
 		A99C73782339ACDC00C80963 /* ServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceTests.swift; sourceTree = "<group>"; };
 		A9A53E2B2714E5BC0050C0B1 /* CodableDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableDevice.swift; sourceTree = "<group>"; };
@@ -1717,6 +1701,57 @@
 		E9E5E56924D5CCE800B5DFFE /* OverrideViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverrideViewCell.swift; sourceTree = "<group>"; };
 		E9F54F5D25802D5E0034795E /* InsulinType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinType.swift; sourceTree = "<group>"; };
 		E9F54FC52581C50C0034795E /* ExpandableDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableDatePicker.swift; sourceTree = "<group>"; };
+		F5E0BDE427E1D8950033557E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BDE527E1D8C20033557E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BDE627E1D8C20033557E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BDE727E1D8C20033557E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BDE827E1D8C20033557E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BDE927E1D9590033557E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BDEA27E1D9590033557E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BDEB27E1D9870033557E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BDEC27E1D9870033557E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BDED27E1D9870033557E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BDEE27E1D9EB0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BDEF27E1D9EB0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BDF027E1D9EB0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BDF127E1D9EB0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BDF227E1D9EC0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BDF327E1D9EC0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5E0BDF427E1D9EC0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5E0BDF527E1D9EC0033557E /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5E0BDF627E1D9F90033557E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BDF727E1DA260033557E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BDF827E1DA260033557E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BDF927E1DA260033557E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BDFA27E1DA260033557E /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BDFB27E1DAA00033557E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		F5E0BDFC27E1DACD0033557E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Main.strings"; sourceTree = "<group>"; };
+		F5E0BDFD27E1DACE0033557E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/CarbKit.strings"; sourceTree = "<group>"; };
+		F5E0BDFE27E1DACE0033557E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/InsulinKit.strings"; sourceTree = "<group>"; };
+		F5E0BDFF27E1DACE0033557E /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LegacyInsulinDeliveryTableViewController.strings"; sourceTree = "<group>"; };
+		F5E0BE0027E1DB350033557E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BE0127E1DB620033557E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BE0227E1DB620033557E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BE0327E1DB620033557E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BE0427E1DB620033557E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BE0527E1DB760033557E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BE0627E1DBA40033557E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BE0727E1DBA40033557E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BE0827E1DBA40033557E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BE0927E1DBA40033557E /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BE0A27E1DC480033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BE0B27E1DC480033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BE0C27E1DC490033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BE0D27E1DC490033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BE0E27E1DC490033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		F5E0BE0F27E1DC490033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5E0BE1027E1DC490033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5E0BE1127E1DC490033557E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F5E0BE1227E1DC9C0033557E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F5E0BE1327E1DCC90033557E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Main.strings; sourceTree = "<group>"; };
+		F5E0BE1427E1DCC90033557E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/CarbKit.strings; sourceTree = "<group>"; };
+		F5E0BE1527E1DCC90033557E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		F5E0BE1627E1DCC90033557E /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1732,6 +1767,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1CCF1062858F07A0035389C /* SwiftCharts in Frameworks */,
 				892A5D49222F03CC008961AB /* LoopTestingKit.framework in Frameworks */,
 				4301582D1C7ECD7A00B64B63 /* HealthKit.framework in Frameworks */,
 				430158191C7ECB5E00B64B63 /* LoopKit.framework in Frameworks */,
@@ -1743,8 +1779,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4353D171203D3E71007B4ECD /* HealthKit.framework in Frameworks */,
-				43BA7191202020140058961E /* LoopKit.framework in Frameworks */,
+				C1CCF1082858F1E10035389C /* SwiftCharts in Frameworks */,
+				C1BECA93285902F5008075C4 /* LoopKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1932,12 +1968,10 @@
 			children = (
 				895FE08D22011F4800FCF18A /* AddEditOverrideTableViewController.swift */,
 				43F5034C210599CC009FA89A /* AuthenticationViewController.swift */,
-				892A5D60222F6AF3008961AB /* BasalScheduleTableViewController.swift */,
 				434FB6491D712158007B9C70 /* CommandResponseViewController.swift */,
 				43D8FE041C7290530073BE78 /* DailyQuantityScheduleTableViewController.swift */,
 				43D8FE051C7290530073BE78 /* DailyValueScheduleTableViewController.swift */,
 				898E6E712241EDC10019E459 /* DateAndDurationTableViewController.swift */,
-				432CF86420D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift */,
 				895FE08F22011F4800FCF18A /* EmojiInputController.swift */,
 				8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */,
 				43D8FE061C7290530073BE78 /* GlucoseRangeScheduleTableViewController.swift */,
@@ -2295,7 +2329,6 @@
 				1DA649AA2445174400F61E75 /* Alert.swift */,
 				A96E6C3627B35BC600F81A5B /* AnyCodableEquatable.swift */,
 				A933DB8724BF956F009B417A /* CriticalEventLog.swift */,
-				A9498D7723386C3300DAA9B9 /* DiagnosticLog.swift */,
 				A95A1D7E2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift */,
 				A95A1D812460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift */,
 				A919889E2355016B00B75EEE /* DosingDecisionStore.swift */,
@@ -2365,7 +2398,6 @@
 				A9DF02C824F724D900B7C988 /* CriticalEventLogTests.swift */,
 				A9BFA03D245CCCB9001E4AE3 /* DailyQuantityScheduleTests.swift */,
 				891A3FD6224BE62100378B27 /* DailyValueScheduleTests.swift */,
-				A99C7374233993FE00C80963 /* DiagnosticLogTests.swift */,
 				A95A1D8C246101760079378D /* DoseEntryTests.swift */,
 				B4CEE2A4256E91290093111B /* DoseProgressTests.swift */,
 				43A067121F245A2F00E9E90F /* DoseStoreTests.swift */,
@@ -2717,10 +2749,7 @@
 				1DABAD392453615200ACF708 /* IssueAlertTableViewController.swift */,
 				B42C950C24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift */,
 				89CCD4F521A8A6A60068C3FB /* MockCGMManagerSettingsViewController.swift */,
-				89AB9ED321A4D8F000351324 /* MockPumpManager.storyboard */,
-				89AB9ED121A4D74000351324 /* MockPumpManagerSettingsSetupViewController.swift */,
 				89AB9ED521A4DE5F00351324 /* MockPumpManagerSettingsViewController.swift */,
-				89AB9ECF21A4D2E500351324 /* MockPumpManagerSetupViewController.swift */,
 				A9498D8E23386CE800DAA9B9 /* MockServiceTableViewController.swift */,
 				892F481A21AB2964004D313D /* RandomOutlierTableViewController.swift */,
 				8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */,
@@ -2973,7 +3002,6 @@
 				430157F41C7EC03B00B64B63 /* Frameworks */,
 				430157F51C7EC03B00B64B63 /* Resources */,
 				4301581D1C7ECB5E00B64B63 /* Embed Frameworks */,
-				E9D95F9B24C8BB3D0079F47D /* Copy Frameworks with Carthage */,
 			);
 			buildRules = (
 			);
@@ -2985,6 +3013,9 @@
 				43CACE1222483AC500F90AF5 /* PBXTargetDependency */,
 			);
 			name = "LoopKit Example";
+			packageProductDependencies = (
+				C1CCF1052858F07A0035389C /* SwiftCharts */,
+			);
 			productName = "LoopKit Example";
 			productReference = 430157F71C7EC03B00B64B63 /* LoopKit Example.app */;
 			productType = "com.apple.product-type.application";
@@ -2997,13 +3028,17 @@
 				43BA714F201E484D0058961E /* Sources */,
 				43BA7150201E484D0058961E /* Frameworks */,
 				43BA7152201E484D0058961E /* Resources */,
+				C1CCF10A2858F1E10035389C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				A9E6757F22713C5300E25293 /* PBXTargetDependency */,
+				C1BECA96285902F5008075C4 /* PBXTargetDependency */,
 			);
 			name = LoopKitUI;
+			packageProductDependencies = (
+				C1CCF1072858F1E10035389C /* SwiftCharts */,
+			);
 			productName = LoopKitUI;
 			productReference = 43BA7154201E484D0058961E /* LoopKitUI.framework */;
 			productType = "com.apple.product-type.framework";
@@ -3150,10 +3185,6 @@
 				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = "LoopKit Authors";
 				TargetAttributes = {
-					1D81903A25687FF2004D1BEC = {
-						CreatedOnToolsVersion = 12.2;
-						ProvisioningStyle = Automatic;
-					};
 					1DEE226824A676A300693C32 = {
 						TestTargetID = 430157F61C7EC03B00B64B63;
 					};
@@ -3221,8 +3252,20 @@
 				nb,
 				pl,
 				ru,
+				da,
+				fi,
+				he,
+				ja,
+				"pt-BR",
+				ro,
+				sv,
+				tr,
+				vi,
 			);
 			mainGroup = 43D8FDC11C728FDF0073BE78;
+			packageReferences = (
+				C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */,
+			);
 			productRefGroup = 43D8FDCC1C728FDF0073BE78 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -3237,7 +3280,6 @@
 				B4CEE2DF257129780093111B /* MockKitTests */,
 				89D2048E21CC7C12001238CC /* MockKitUI */,
 				892A5D33222F03CB008961AB /* LoopTestingKit */,
-				1D81903A25687FF2004D1BEC /* Cartfile */,
 			);
 		};
 /* End PBXProject section */
@@ -3437,7 +3479,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				89D204D221CC837A001238CC /* Assets.xcassets in Resources */,
-				89D204B921CC7F34001238CC /* MockPumpManager.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3457,65 +3498,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		1D81905025688014004D1BEC /* Homebrew & Carthage Setup */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Homebrew & Carthage Setup";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if ! [ -x \"$(command -v brew)\" ]; then\n    # Install Homebrew\n    ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)\"\nfi\n\nif brew ls carthage > /dev/null; then\n    brew upgrade carthage || echo \"Continuing…\"\nelse\n    brew install carthage\nfi\n";
-		};
-		1D8190512568805E004D1BEC /* Carthage Bootstrap */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Carthage Bootstrap";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"Bootstrapping Carthage dependencies...\"\nunset LLVM_TARGET_TRIPLE_SUFFIX\n\nif ! cmp -s Cartfile.Resolved Carthage/Cartfile.resolved; then\n    time ./Scripts/carthage.sh bootstrap --project-directory \"$SRCROOT\" --platform ios --cache-builds --verbose || exit 1\n    cp Cartfile.resolved Carthage\nelse\n    echo \"Carthage: not bootstrapping\"\nfi\n";
-		};
-		E9D95F9B24C8BB3D0079F47D /* Copy Frameworks with Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/SwiftCharts.framework/SwiftCharts",
-			);
-			name = "Copy Frameworks with Carthage";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftCharts.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Scripts/copy-frameworks.sh\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1DEE226B24A676A300693C32 /* Sources */ = {
@@ -3609,7 +3591,6 @@
 				B429D66C24BF7204003E1B4A /* GlucoseTrend.swift in Sources */,
 				432CF86720D76AB90066B889 /* SettingsTableViewCell.swift in Sources */,
 				898B4E7B246DC6A70053C484 /* CorrectionRangeScheduleEditor.swift in Sources */,
-				898E6E6A224179530019E459 /* BasalScheduleTableViewController.swift in Sources */,
 				E9E5E56A24D5CCE800B5DFFE /* OverrideViewCell.swift in Sources */,
 				892A5DB42231E191008961AB /* LevelMaskView.swift in Sources */,
 				892A5DA02231E130008961AB /* CompletionNotifying.swift in Sources */,
@@ -3617,7 +3598,6 @@
 				E949E38F24B3711E00024DA0 /* InsulinModelInformationView.swift in Sources */,
 				895FE08B22011F0C00FCF18A /* EmojiInputHeaderView.swift in Sources */,
 				43BA7170201E49220058961E /* FoodTypeShortcutCell.swift in Sources */,
-				432CF86520D7692E0066B889 /* DeliveryLimitSettingsTableViewController.swift in Sources */,
 				895FE08322011F0C00FCF18A /* OverrideSelectionFooterView.swift in Sources */,
 				89AF78C22447E353002B4FCC /* Splat.swift in Sources */,
 				893C9F8C2447DBD900CD4185 /* CardBuilder.swift in Sources */,
@@ -3939,7 +3919,6 @@
 				89AE2232228BC68600BDFD85 /* UnfairLock.swift in Sources */,
 				A9FD046F24E310D00040F203 /* HKObject.swift in Sources */,
 				1DC64C7E24BF6EBC004A63A1 /* DeliveryLimits.swift in Sources */,
-				A9498D8423386C3300DAA9B9 /* DiagnosticLog.swift in Sources */,
 				C168CA7A280DD00F002BD2A7 /* Model.xcdatamodeld in Sources */,
 				4322B770202FA26F0002837D /* GlucoseStore.swift in Sources */,
 				C1814B8C226371DF008D2D8E /* WeakSynchronizedDelegate.swift in Sources */,
@@ -3983,7 +3962,6 @@
 				A9DF02D324F762DC00B7C988 /* CarbStoreTests.swift in Sources */,
 				437874B5202FDD1200A3D8B9 /* DoseStoreTests.swift in Sources */,
 				A985465125144ABA0099C1A6 /* NotificationSettingsTests.swift in Sources */,
-				A99C7375233993FE00C80963 /* DiagnosticLogTests.swift in Sources */,
 				B455F4DF2600E0A8000ED456 /* GlucoseRangeTests.swift in Sources */,
 				4322B76C202F9ECD0002837D /* CarbMathTests.swift in Sources */,
 				1D70C40D26F01D9F00C62570 /* VersionCheckServiceTests.swift in Sources */,
@@ -4075,7 +4053,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				892A5D2E222EF69A008961AB /* MockHUDProvider.swift in Sources */,
-				89D204B721CC7F34001238CC /* MockPumpManagerSetupViewController.swift in Sources */,
 				439706E922D2E94800C81566 /* BoundSwitchTableViewCell.swift in Sources */,
 				89D204B421CC7E74001238CC /* MockCGMManager+UI.swift in Sources */,
 				89D204B521CC7E74001238CC /* MockPumpManager+UI.swift in Sources */,
@@ -4091,7 +4068,6 @@
 				C1FAEC21264AEEA300A3250B /* UIImage.swift in Sources */,
 				89D204BD21CC7F34001238CC /* RandomOutlierTableViewController.swift in Sources */,
 				B42C950E24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift in Sources */,
-				89D204B821CC7F34001238CC /* MockPumpManagerSettingsSetupViewController.swift in Sources */,
 				898E6E732241EE000019E459 /* Comparable.swift in Sources */,
 				B45774352562CCC6004B9466 /* SupportedRangeTableViewController.swift in Sources */,
 				892A5D28222EF567008961AB /* (null) in Sources */,
@@ -4323,15 +4299,15 @@
 			target = 89D2047121CC7BD7001238CC /* MockKit */;
 			targetProxy = A9E6757C22713C3F00E25293 /* PBXContainerItemProxy */;
 		};
-		A9E6757F22713C5300E25293 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
-			targetProxy = A9E6757E22713C5300E25293 /* PBXContainerItemProxy */;
-		};
 		B4CEE2E7257129780093111B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 89D2047121CC7BD7001238CC /* MockKit */;
 			targetProxy = B4CEE2E6257129780093111B /* PBXContainerItemProxy */;
+		};
+		C1BECA96285902F5008075C4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43D8FDCA1C728FDF0073BE78 /* LoopKit */;
+			targetProxy = C1BECA95285902F5008075C4 /* PBXContainerItemProxy */;
 		};
 		C1E0280C264C47C900EC4DF1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -4355,6 +4331,8 @@
 				1F5DAB7A2118F3FB00048054 /* nb */,
 				1FE58794211D0967004F24ED /* Base */,
 				1F50C324212B20D300C18FAB /* pl */,
+				F5E0BDF327E1D9EC0033557E /* he */,
+				F5E0BE0F27E1DC490033557E /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4363,6 +4341,15 @@
 			isa = PBXVariantGroup;
 			children = (
 				430158001C7EC03B00B64B63 /* Base */,
+				F5E0BDE527E1D8C20033557E /* da */,
+				F5E0BDEA27E1D9590033557E /* fi */,
+				F5E0BDEF27E1D9EB0033557E /* he */,
+				F5E0BDF727E1DA260033557E /* ja */,
+				F5E0BDFC27E1DACD0033557E /* pt-BR */,
+				F5E0BE0127E1DB620033557E /* ro */,
+				F5E0BE0627E1DBA40033557E /* sv */,
+				F5E0BE0B27E1DC480033557E /* tr */,
+				F5E0BE1327E1DCC90033557E /* vi */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -4371,6 +4358,15 @@
 			isa = PBXVariantGroup;
 			children = (
 				430158051C7EC03B00B64B63 /* Base */,
+				F5E0BDE427E1D8950033557E /* da */,
+				F5E0BDE927E1D9590033557E /* fi */,
+				F5E0BDEE27E1D9EB0033557E /* he */,
+				F5E0BDF627E1D9F90033557E /* ja */,
+				F5E0BDFB27E1DAA00033557E /* pt-BR */,
+				F5E0BE0027E1DB350033557E /* ro */,
+				F5E0BE0527E1DB760033557E /* sv */,
+				F5E0BE0A27E1DC480033557E /* tr */,
+				F5E0BE1227E1DC9C0033557E /* vi */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -4388,6 +4384,15 @@
 				1F5DAB6B2118F3C200048054 /* nl */,
 				1F5DAB772118F3FB00048054 /* nb */,
 				1F50C321212B20D300C18FAB /* pl */,
+				F5E0BDE627E1D8C20033557E /* da */,
+				F5E0BDEB27E1D9870033557E /* fi */,
+				F5E0BDF027E1D9EB0033557E /* he */,
+				F5E0BDF827E1DA260033557E /* ja */,
+				F5E0BDFD27E1DACE0033557E /* pt-BR */,
+				F5E0BE0227E1DB620033557E /* ro */,
+				F5E0BE0727E1DBA40033557E /* sv */,
+				F5E0BE0C27E1DC490033557E /* tr */,
+				F5E0BE1427E1DCC90033557E /* vi */,
 			);
 			name = CarbKit.storyboard;
 			sourceTree = "<group>";
@@ -4405,6 +4410,15 @@
 				1F5DAB6C2118F3C200048054 /* nl */,
 				1F5DAB782118F3FB00048054 /* nb */,
 				1F50C322212B20D300C18FAB /* pl */,
+				F5E0BDE727E1D8C20033557E /* da */,
+				F5E0BDEC27E1D9870033557E /* fi */,
+				F5E0BDF127E1D9EB0033557E /* he */,
+				F5E0BDF927E1DA260033557E /* ja */,
+				F5E0BDFE27E1DACE0033557E /* pt-BR */,
+				F5E0BE0327E1DB620033557E /* ro */,
+				F5E0BE0827E1DBA40033557E /* sv */,
+				F5E0BE0D27E1DC490033557E /* tr */,
+				F5E0BE1527E1DCC90033557E /* vi */,
 			);
 			name = InsulinKit.storyboard;
 			sourceTree = "<group>";
@@ -4422,6 +4436,8 @@
 				1F5DAB702118F3C200048054 /* nl */,
 				1F5DAB7C2118F3FC00048054 /* nb */,
 				1F50C326212B20D400C18FAB /* pl */,
+				F5E0BDF427E1D9EC0033557E /* he */,
+				F5E0BE1027E1DC490033557E /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4439,6 +4455,8 @@
 				1F5DAB7F2118F3FC00048054 /* nb */,
 				1FE58790211CFBB7004F24ED /* Base */,
 				1F50C329212B20D400C18FAB /* pl */,
+				F5E0BDF527E1D9EC0033557E /* he */,
+				F5E0BE1127E1DC490033557E /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4457,6 +4475,15 @@
 				E9DFB94524E8CD8300468917 /* pl */,
 				E9DFB94724E8CD8400468917 /* ru */,
 				E9DFB94924E8CD8600468917 /* es */,
+				F5E0BDE827E1D8C20033557E /* da */,
+				F5E0BDED27E1D9870033557E /* fi */,
+				F5E0BDF227E1D9EC0033557E /* he */,
+				F5E0BDFA27E1DA260033557E /* ja */,
+				F5E0BDFF27E1DACE0033557E /* pt-BR */,
+				F5E0BE0427E1DB620033557E /* ro */,
+				F5E0BE0927E1DBA40033557E /* sv */,
+				F5E0BE0E27E1DC490033557E /* tr */,
+				F5E0BE1627E1DCC90033557E /* vi */,
 			);
 			name = LegacyInsulinDeliveryTableViewController.storyboard;
 			sourceTree = "<group>";
@@ -4464,28 +4491,16 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		1D81903B25687FF2004D1BEC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		1D81903C25687FF2004D1BEC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		1DEE22FF24A676A300693C32 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = LoopKitHostedTests/LoopKitHostedTests.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitHostedTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoopKit Example.app/LoopKit Example";
@@ -4497,7 +4512,11 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = LoopKitHostedTests/LoopKitHostedTests.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitHostedTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoopKit Example.app/LoopKit Example";
@@ -4513,12 +4532,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = UY678SP37Q;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "LoopKit Example/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.LoopKitExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -4534,12 +4553,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = UY678SP37Q;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "LoopKit Example/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rileylink.LoopKitExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -4562,18 +4581,20 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LoopKitUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitUI;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 			};
 			name = Debug;
 		};
@@ -4593,17 +4614,19 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LoopKitUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitUI;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 			};
 			name = Release;
 		};
@@ -4723,7 +4746,8 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -4748,12 +4772,17 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4773,12 +4802,17 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -4788,7 +4822,11 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = LoopKitTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -4799,7 +4837,11 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = LoopKitTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -4808,17 +4850,22 @@
 		89AE2219228BC50900BDFD85 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = MockKit/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKit;
 				PRODUCT_NAME = MockKit;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -4827,7 +4874,7 @@
 		89AE221A228BC50900BDFD85 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -4845,10 +4892,15 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LoopTestingKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKit;
 				PRODUCT_NAME = MockKit;
 				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -4856,16 +4908,22 @@
 		89AE221B228BC50900BDFD85 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = MockKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKitUI;
 				PRODUCT_NAME = MockKitUI;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4873,16 +4931,22 @@
 		89AE221C228BC50900BDFD85 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = MockKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKitUI;
 				PRODUCT_NAME = MockKitUI;
 				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -4896,11 +4960,16 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = MockKitUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKit;
 				PRODUCT_NAME = LoopTestingKit;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4915,10 +4984,15 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = MockKitUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopTestingKit;
 				PRODUCT_NAME = LoopTestingKit;
 				SKIP_INSTALL = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -4936,13 +5010,18 @@
 				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
 				PRODUCT_NAME = LoopKit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = 4;
 			};
 			name = Debug;
@@ -4960,13 +5039,18 @@
 				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LoopKit/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
 				PRODUCT_NAME = LoopKit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "watchos watchsimulator";
+				SWIFT_INSTALL_OBJC_HEADER = NO;
 				TARGETED_DEVICE_FAMILY = 4;
 			};
 			name = Release;
@@ -4995,15 +5079,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D81903D25687FF2004D1BEC /* Build configuration list for PBXAggregateTarget "Cartfile" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1D81903B25687FF2004D1BEC /* Debug */,
-				1D81903C25687FF2004D1BEC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		1DEE22FE24A676A300693C32 /* Build configuration list for PBXNativeTarget "LoopKitHostedTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -5104,6 +5179,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ivanschuetz/SwiftCharts";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C1CCF1052858F07A0035389C /* SwiftCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */;
+			productName = SwiftCharts;
+		};
+		C1CCF1072858F1E10035389C /* SwiftCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */;
+			productName = SwiftCharts;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		C168CA77280DD00F002BD2A7 /* Model.xcdatamodeld */ = {

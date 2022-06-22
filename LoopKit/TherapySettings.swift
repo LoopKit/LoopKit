@@ -14,6 +14,8 @@ public struct TherapySettings: Equatable {
 
     public var correctionRangeOverrides: CorrectionRangeOverrides?
 
+    public let overridePresets: [TemporaryScheduleOverridePreset]?
+
     public var maximumBasalRatePerHour: Double?
 
     public var maximumBolus: Double?
@@ -45,6 +47,7 @@ public struct TherapySettings: Equatable {
     public init(
         glucoseTargetRangeSchedule: GlucoseRangeSchedule? = nil,
         correctionRangeOverrides: CorrectionRangeOverrides? = nil,
+        overridePresets: [TemporaryScheduleOverridePreset]? = nil,
         maximumBasalRatePerHour: Double? = nil,
         maximumBolus: Double? = nil,
         suspendThreshold: GlucoseThreshold? = nil,
@@ -55,6 +58,7 @@ public struct TherapySettings: Equatable {
     ){
         self.glucoseTargetRangeSchedule = glucoseTargetRangeSchedule
         self.correctionRangeOverrides = correctionRangeOverrides
+        self.overridePresets = overridePresets
         self.maximumBasalRatePerHour = maximumBasalRatePerHour
         self.maximumBolus = maximumBolus
         self.suspendThreshold = suspendThreshold

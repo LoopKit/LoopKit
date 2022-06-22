@@ -54,9 +54,9 @@ public enum End: Equatable, Hashable, Codable {
 private struct OverrideEvent: Equatable {
 
     var override: TemporaryScheduleOverride
-    var modificationCounter: Int
+    var modificationCounter: Int64
 
-    init(override: TemporaryScheduleOverride, modificationCounter: Int) {
+    init(override: TemporaryScheduleOverride, modificationCounter: Int64) {
         self.override = override
         self.modificationCounter = modificationCounter
     }
@@ -68,13 +68,32 @@ public protocol TemporaryScheduleOverrideHistoryDelegate: AnyObject {
 }
 
 public final class TemporaryScheduleOverrideHistory {
-    public typealias QueryAnchor = Int
-    
+    public struct QueryAnchor: RawRepresentable {
+        public typealias RawValue = [String: Any]
+
+        internal var modificationCounter: Int64
+
+        public init() {
+            self.modificationCounter = 0
+        }
+
+        public init?(rawValue: RawValue) {
+            guard let modificationCounter = rawValue["modificationCounter"] as? Int64 else {
+                return nil
+            }
+            self.modificationCounter = modificationCounter
+        }
+
+        public var rawValue: RawValue {
+            var rawValue: RawValue = [:]
+            rawValue["modificationCounter"] = modificationCounter
+            return rawValue
+        }
+    }
+
     private var recentEvents: [OverrideEvent] = [] {
         didSet {
             modificationCounter += 1
-
-            delegate?.temporaryScheduleOverrideHistoryDidUpdate(self)
 
             if let lastTaintedEvent = taintedEventLog.last,
                 Date().timeIntervalSince(lastTaintedEvent.override.startDate) > .hours(48)
@@ -86,13 +105,9 @@ public final class TemporaryScheduleOverrideHistory {
     
     /// Tracks a sequence of override events that failed validation checks.
     /// Stored to enable retrieval via issue report after a deliberate crash.
-    private var taintedEventLog: [OverrideEvent] = [] {
-        didSet {
-            delegate?.temporaryScheduleOverrideHistoryDidUpdate(self)
-        }
-    }
+    private var taintedEventLog: [OverrideEvent] = []
     
-    private var modificationCounter: Int
+    private var modificationCounter: Int64
     
     public var relevantTimeWindow: TimeInterval = TimeInterval.hours(10)
 
@@ -112,6 +127,7 @@ public final class TemporaryScheduleOverrideHistory {
         } else {
             cancelActiveOverride(at: enableDate)
         }
+        delegate?.temporaryScheduleOverrideHistoryDidUpdate(self)
     }
     
     private var lastUndeletedEvent: OverrideEvent? {
@@ -265,11 +281,11 @@ public final class TemporaryScheduleOverrideHistory {
         modificationCounter = 0
     }
     
-    public func queryByAnchor(_ anchor: QueryAnchor?) -> (resultOverrides: [TemporaryScheduleOverride], deletedOverrides: [TemporaryScheduleOverride], newAnchor: QueryAnchor?)  {
+    public func queryByAnchor(_ anchor: QueryAnchor?) -> (resultOverrides: [TemporaryScheduleOverride], deletedOverrides: [TemporaryScheduleOverride], newAnchor: QueryAnchor)  {
         var resultOverrides = [TemporaryScheduleOverride]()
         var deletedOverrides = [TemporaryScheduleOverride]()
         for event in recentEvents {
-            if anchor == nil || event.modificationCounter >= anchor! {
+            if anchor == nil || event.modificationCounter >= anchor!.modificationCounter {
                 var override = event.override
                 if case .early(let endDate) = event.override.actualEnd {
                     override.scheduledEndDate = endDate
@@ -281,7 +297,9 @@ public final class TemporaryScheduleOverrideHistory {
                 }
             }
         }
-        return (resultOverrides: resultOverrides, deletedOverrides: deletedOverrides, newAnchor: modificationCounter)
+        var newAnchor = QueryAnchor()
+        newAnchor.modificationCounter = modificationCounter
+        return (resultOverrides: resultOverrides, deletedOverrides: deletedOverrides, newAnchor: newAnchor)
     }
 }
 
@@ -299,7 +317,7 @@ extension OverrideEvent: RawRepresentable {
 
         self.override = override
         
-        self.modificationCounter = rawValue["modificationCounter"] as? Int ?? 0
+        self.modificationCounter = rawValue["modificationCounter"] as? Int64 ?? 0
         
         if let isDeleted = rawValue["isDeleted"] as? Bool, isDeleted {
             self.override.actualEnd = .deleted
@@ -344,7 +362,7 @@ extension TemporaryScheduleOverrideHistory: RawRepresentable {
             self.taintedEventLog = taintedEventLog
         }
         
-        self.modificationCounter = rawValue["modificationCounter"] as? Int ?? 0
+        self.modificationCounter = rawValue["modificationCounter"] as? Int64 ?? 0
     }
 
     public var rawValue: RawValue {

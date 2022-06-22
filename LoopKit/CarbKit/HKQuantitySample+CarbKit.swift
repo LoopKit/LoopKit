@@ -9,7 +9,8 @@
 import HealthKit
 
 
-let MetadataKeyAbsorptionTimeMinutes = "com.loudnate.CarbKit.HKMetadataKey.AbsorptionTimeMinutes"
+let LegacyMetadataKeyAbsorptionTime = "com.loudnate.CarbKit.HKMetadataKey.AbsorptionTimeMinutes"
+let MetadataKeyAbsorptionTime = "com.loopkit.AbsorptionTime"
 let MetadataKeyUserCreatedDate = "com.loopkit.CarbKit.HKMetadataKey.UserCreatedDate"
 let MetadataKeyUserUpdatedDate = "com.loopkit.CarbKit.HKMetadataKey.UserUpdatedDate"
 
@@ -19,10 +20,8 @@ extension HKQuantitySample {
     }
 
     public var absorptionTime: TimeInterval? {
-        guard let absorptionTimeMinutes = metadata?[MetadataKeyAbsorptionTimeMinutes] as? Double else {
-            return nil
-        }
-        return TimeInterval(minutes: absorptionTimeMinutes)
+        return metadata?[MetadataKeyAbsorptionTime] as? TimeInterval
+            ?? metadata?[LegacyMetadataKeyAbsorptionTime] as? TimeInterval
     }
 
     public var createdByCurrentApp: Bool {

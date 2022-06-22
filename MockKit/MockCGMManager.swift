@@ -8,7 +8,7 @@
 
 import HealthKit
 import LoopKit
-import LoopKitUI // TODO: DeviceStatusBadge and UIBackgroundTask references should live in MockKitUI
+import LoopKitUI // TODO: DeviceStatusBadge references should live in MockKitUI
 import LoopTestingKit
 
 public struct MockCGMState: GlucoseDisplayable {
@@ -396,8 +396,6 @@ public final class MockCGMManager: TestingCGMManager {
 
     private var glucoseUpdateTimer: Timer?
 
-    private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
-
     public init() {
         setupGlucoseUpdateTimer()
     }
@@ -607,7 +605,6 @@ extension MockCGMManager {
         guard let alert = alerts[identifier] else {
             return
         }
-        registerBackgroundTask()
         delegate.notifyDelayed(by: delay ?? 0) { delegate in
             self.logDeviceComms(.delegate, message: "\(#function): \(identifier) \(trigger)")
             delegate?.issueAlert(Alert(identifier: Alert.Identifier(managerIdentifier: self.managerIdentifier, alertIdentifier: identifier),
@@ -632,7 +629,6 @@ extension MockCGMManager {
     }
     
     public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) {
-        endBackgroundTask()
         self.logDeviceComms(.delegateResponse, message: "\(#function): Alert \(alertIdentifier) acknowledged.")
         completion(nil)
     }
@@ -663,18 +659,6 @@ extension MockCGMManager {
         }
     }
     
-    private func registerBackgroundTask() {
-        backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
-            self?.endBackgroundTask()
-        }
-        assert(backgroundTask != .invalid)
-    }
-    
-    private func endBackgroundTask() {
-        UIApplication.shared.endBackgroundTask(backgroundTask)
-        backgroundTask = .invalid
-    }
-
     private func issueAlert(for glucose: NewGlucoseSample) {
         guard mockSensorState.glucoseAlertingEnabled else {
             return

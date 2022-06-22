@@ -170,30 +170,30 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
     
-    public func buildPumpStatusHighlight(for state: MockPumpManagerState) -> PumpManagerStatus.PumpStatusHighlight? {
+    public func buildPumpStatusHighlight(for state: MockPumpManagerState) -> PumpStatusHighlight? {
         if state.deliveryIsUncertain {
-            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Comms Issue", comment: "Status highlight that delivery is uncertain."),
+            return PumpStatusHighlight(localizedMessage: NSLocalizedString("Comms Issue", comment: "Status highlight that delivery is uncertain."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         }
         else if state.reservoirUnitsRemaining == 0 {
-            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("No Insulin", comment: "Status highlight that a pump is out of insulin."),
+            return PumpStatusHighlight(localizedMessage: NSLocalizedString("No Insulin", comment: "Status highlight that a pump is out of insulin."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         } else if state.occlusionDetected {
-            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Occlusion", comment: "Status highlight that an occlusion was detected."),
+            return PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Occlusion", comment: "Status highlight that an occlusion was detected."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         } else if state.pumpErrorDetected {
-            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Error", comment: "Status highlight that a pump error occurred."),
+            return PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Error", comment: "Status highlight that a pump error occurred."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         } else if pumpBatteryChargeRemaining == 0 {
-            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Battery Dead", comment: "Status highlight that pump has a dead battery."),
+            return PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Battery Dead", comment: "Status highlight that pump has a dead battery."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         } else if case .suspended = state.suspendState {
-            return PumpManagerStatus.PumpStatusHighlight(localizedMessage: NSLocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
+            return PumpStatusHighlight(localizedMessage: NSLocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
                                                          imageName: "pause.circle.fill",
                                                          state: .warning)
         }
@@ -201,7 +201,7 @@ public final class MockPumpManager: TestingPumpManager {
         return nil
     }
     
-    public func buildPumpLifecycleProgress(for state: MockPumpManagerState) -> PumpManagerStatus.PumpLifecycleProgress? {
+    public func buildPumpLifecycleProgress(for state: MockPumpManagerState) -> PumpLifecycleProgress? {
         guard let progressPercentComplete = state.progressPercentComplete else {
             return nil
         }
@@ -219,7 +219,7 @@ public final class MockPumpManager: TestingPumpManager {
             progressState = .normalPump
         }
         
-        return PumpManagerStatus.PumpLifecycleProgress(percentComplete: progressPercentComplete,
+        return PumpLifecycleProgress(percentComplete: progressPercentComplete,
                                                        progressState: progressState)
     }
     
@@ -268,6 +268,10 @@ public final class MockPumpManager: TestingPumpManager {
     public var state: MockPumpManagerState {
         didSet {
             let newValue = state
+
+            guard newValue != oldValue else {
+                return
+            }
 
             let oldStatus = status(for: oldValue)
             let newStatus = status(for: newValue)

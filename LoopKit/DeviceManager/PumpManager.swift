@@ -44,6 +44,9 @@ public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObs
     /// Informs the delegate that the manager is deactivating and should be deleted
     func pumpManagerWillDeactivate(_ pumpManager: PumpManager)
 
+    /// Informs the delegate that the hardware this PumpManager has been reporting for has been replaced.
+    func pumpManagerPumpWasReplaced(_ pumpManager: PumpManager)
+
     /// Triggered when pump model changes. With a more formalized setup flow (which requires a successful model fetch),
     /// this delegate method could go away.
     func pumpManager(_ pumpManager: PumpManager, didUpdatePumpRecordsBasalProfileStartEvents pumpRecordsBasalProfileStartEvents: Bool)
