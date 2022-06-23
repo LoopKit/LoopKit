@@ -77,12 +77,15 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
         self.cacheLength = cacheLength
         self.provenanceIdentifier = provenanceIdentifier
 
+        // Only observe HK driven changes from last 24 hours
+        let observationStartOffset = min(cacheLength, .hours(24))
+
         super.init(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
             type: insulinQuantityType,
-            observationStart: (test_currentDate ?? Date()).addingTimeInterval(-cacheLength),
+            observationStart: (test_currentDate ?? Date()).addingTimeInterval(-observationStartOffset),
             observationEnabled: observationEnabled,
             test_currentDate: test_currentDate
         )
