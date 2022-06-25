@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "swiftcharts",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ivanschuetz/SwiftCharts",
+      "state" : {
+        "branch" : "master",
+        "revision" : "3d011f67eccb1ffa622fbfccb1348eed80309ae8"
+      }
+    }
+  ],
+  "version" : 2
+}
