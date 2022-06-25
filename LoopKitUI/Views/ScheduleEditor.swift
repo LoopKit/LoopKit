@@ -73,8 +73,9 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
 
     @State private var presentedAlert: PresentedAlert?
 
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
+    @Environment(\.presentationMode) var presentationMode
 
     init(
         title: Text,
@@ -138,44 +139,49 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         }
     }
     
+    @ViewBuilder
     private var configurationPage: some View {
         switch mode {
         case .acceptanceFlow:
-            return AnyView(page)
+            page
+                .navigationBarBackButtonHidden(true)
+                .navigationBarItems(leading: backButton, trailing: trailingNavigationItems)
         case .settings:
-            return AnyView(pageWithCancel)
+            page
+                .navigationBarBackButtonHidden(shouldAddCancelButton)
+                .navigationBarItems(leading: leadingNavigationBarItem, trailing: trailingNavigationItems)
+                .navigationBarTitle("", displayMode: .inline)
+        }
+    }
+
+    private var shouldAddCancelButton: Bool {
+        switch saveButtonState {
+        case .disabled, .loading:
+            return false
+        case .enabled:
+            return true
+        }
+    }
+
+    @ViewBuilder
+    private var leadingNavigationBarItem: some View {
+        if shouldAddCancelButton {
+            cancelButton
+        } else {
+            EmptyView()
         }
     }
         
-    private var pageWithCancel: some View {
-        switch saveButtonState {
-        case .disabled, .loading:
-            return AnyView(page
-                .navigationBarBackButtonHidden(false)
-                .navigationBarItems(leading: EmptyView(), trailing: trailingNavigationItems)
-            )
-        case .enabled:
-            return AnyView(page
-                .navigationBarBackButtonHidden(true)
-                .navigationBarItems(leading: cancelButton, trailing: trailingNavigationItems)
-            )
-        }
-    }
-    
     private var page: some View {
         ConfigurationPage(
             title: title,
-            actionButtonTitle: Text(mode.buttonText),
+            actionButtonTitle: Text(mode.buttonText(isSaving: isSyncing)),
             actionButtonState: saveButtonState,
             cards: {
-                // TODO: Remove conditional when Swift 5.3 ships
-                // https://bugs.swift.org/browse/SR-11628
-                if true {
-                    Card {
-                        SettingDescription(text: description, informationalContent: {self.therapySettingType.helpScreen()})
-                        Splat(Array(scheduleItems.enumerated()), id: \.element.startTime) { index, item in
-                            self.itemView(for: item, at: index)
-                        }
+                Card {
+                    SettingDescription(text: description, informationalContent: {self.therapySettingType.helpScreen()})
+                    Splat(Array(scheduleItems.enumerated()), id: \.element.startTime) { index, item in
+                        self.itemView(for: item, at: index)
                     }
                 }
             },
@@ -192,10 +198,6 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             }
         )
         .alert(item: $presentedAlert, content: alert(for:))
-        .navigationBarTitle("", displayMode: .inline)
-        .navigationBarItems(
-            trailing: trailingNavigationItems
-        )
     }
 
     private var saveButtonState: ConfigurationPageActionButtonState {
@@ -308,6 +310,21 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
             addButton
         }
     }
+
+    private var backButton: some View {
+        Button(action: { presentationMode.wrappedValue.dismiss() }) {
+            HStack {
+                Image(systemName: "chevron.left")
+                    .resizable()
+                    .frame(width: 12, height: 20)
+                Text(backButtonTitle)
+                    .fontWeight(.regular)
+            }
+            .offset(x: -6, y: 0)
+        }
+    }
+
+    private var backButtonTitle: String { LocalizedString("Back", comment: "Back navigation button title") }
 
     var cancelButton: some View {
         Button(action: { self.dismiss() } ) { Text(LocalizedString("Cancel", comment: "Cancel editing settings button title")) }

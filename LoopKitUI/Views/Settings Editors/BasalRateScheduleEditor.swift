@@ -10,13 +10,14 @@ import SwiftUI
 import HealthKit
 import LoopKit
 
+public typealias SyncBasalRateSchedule = (_ items: [RepeatingScheduleValue<Double>], _ completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) -> Void
 
 public struct BasalRateScheduleEditor: View {
     var schedule: DailyQuantitySchedule<Double>?
     var supportedBasalRates: [Double]
     var guardrail: Guardrail<HKQuantity>
     var maximumScheduleEntryCount: Int
-    var syncSchedule: PumpManager.SyncSchedule?
+    var syncBasalRateSchedule: SyncBasalRateSchedule?
     var save: (BasalRateSchedule) -> Void
     let mode: SettingsPresentationMode
     @Environment(\.appName) private var appName
@@ -27,7 +28,7 @@ public struct BasalRateScheduleEditor: View {
         supportedBasalRates: [Double],
         maximumBasalRate: Double?,
         maximumScheduleEntryCount: Int,
-        syncSchedule: PumpManager.SyncSchedule?,
+        syncBasalRateSchedule: SyncBasalRateSchedule?,
         onSave save: @escaping (BasalRateSchedule) -> Void,
         mode: SettingsPresentationMode = .settings
     ) {
@@ -47,7 +48,7 @@ public struct BasalRateScheduleEditor: View {
 
         self.guardrail = Guardrail.basalRate(supportedBasalRates: supportedBasalRates)
         self.maximumScheduleEntryCount = maximumScheduleEntryCount
-        self.syncSchedule = syncSchedule
+        self.syncBasalRateSchedule = syncBasalRateSchedule
         self.save = save
         self.mode = mode
         
@@ -57,20 +58,21 @@ public struct BasalRateScheduleEditor: View {
     }
     
     public init(
-        viewModel: TherapySettingsViewModel,
+        mode: SettingsPresentationMode,
+        therapySettingsViewModel: TherapySettingsViewModel,
         didSave: (() -> Void)? = nil
     ) {
         self.init(
-            schedule: viewModel.therapySettings.basalRateSchedule,
-            supportedBasalRates: viewModel.pumpSupportedIncrements!()!.basalRates ,
-            maximumBasalRate: viewModel.therapySettings.maximumBasalRatePerHour,
-            maximumScheduleEntryCount: viewModel.pumpSupportedIncrements!()!.maximumBasalScheduleEntryCount,
-            syncSchedule: viewModel.syncPumpSchedule?(),
-            onSave: { [weak viewModel] newBasalRates in
-                viewModel?.saveBasalRates(basalRates: newBasalRates)
+            schedule: therapySettingsViewModel.therapySettings.basalRateSchedule,
+            supportedBasalRates: therapySettingsViewModel.pumpSupportedIncrements()?.basalRates ?? [],
+            maximumBasalRate: therapySettingsViewModel.therapySettings.maximumBasalRatePerHour,
+            maximumScheduleEntryCount: therapySettingsViewModel.pumpSupportedIncrements()?.maximumBasalScheduleEntryCount ?? 0,
+            syncBasalRateSchedule: therapySettingsViewModel.syncBasalRateSchedule,
+            onSave: { [weak therapySettingsViewModel] newBasalRates in
+                therapySettingsViewModel?.saveBasalRates(basalRates: newBasalRates)
                 didSave?()
             },
-            mode: viewModel.mode
+            mode: mode
         )
     }
 
@@ -113,8 +115,8 @@ public struct BasalRateScheduleEditor: View {
         switch mode {
         case .settings:
             return .asynchronous { quantitySchedule, completion in
-                precondition(self.syncSchedule != nil)
-                self.syncSchedule?(quantitySchedule.items) { result in
+                precondition(self.syncBasalRateSchedule != nil)
+                self.syncBasalRateSchedule?(quantitySchedule.items) { result in
                     switch result {
                     case .success(let syncedSchedule):
                         DispatchQueue.main.async {
@@ -148,6 +150,7 @@ private struct BasalRateGuardrailWarning: View {
             : nil
 
         return GuardrailWarning(
+            therapySetting: .basalRate,
             title: crossedThresholds.count == 1 ? singularWarningTitle(for: crossedThresholds.first!) : multipleWarningTitle,
             thresholds: crossedThresholds,
             caption: caption

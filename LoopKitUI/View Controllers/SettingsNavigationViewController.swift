@@ -6,7 +6,8 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
-import Foundation
+import HealthKit
+import LoopKit
 
 open class SettingsNavigationViewController: UINavigationController, CompletionNotifying {
 
@@ -16,4 +17,16 @@ open class SettingsNavigationViewController: UINavigationController, CompletionN
         completionDelegate?.completionNotifyingDidComplete(self)
     }
 
+}
+
+open class CGMManagerSettingsNavigationViewController: SettingsNavigationViewController, CGMManagerOnboarding {
+
+    open weak var cgmManagerOnboardingDelegate: CGMManagerOnboardingDelegate?
+
+}
+
+open class PumpManagerSettingsNavigationViewController: SettingsNavigationViewController, PumpManagerOnboarding {
+
+    open weak var pumpManagerOnboardingDelegate: PumpManagerOnboardingDelegate?
+    
 }

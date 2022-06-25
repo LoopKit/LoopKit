@@ -10,23 +10,31 @@ import SwiftUI
 import HealthKit
 import LoopKit
 
+public typealias SyncDeliveryLimits = (_ deliveryLimits: DeliveryLimits, _ completion: @escaping (Swift.Result<DeliveryLimits, Error>) -> Void) -> Void
 
 public struct DeliveryLimitsEditor: View {
+    fileprivate enum PresentedAlert: Error {
+        case saveConfirmation(AlertContent)
+        case saveError(Error)
+    }
+
     let initialValue: DeliveryLimits
     let supportedBasalRates: [Double]
-    let selectableMaxBasalRates: [Double]
+    let selectableMaximumBasalRates: [Double]
     let scheduledBasalRange: ClosedRange<Double>?
-    let supportedBolusVolumes: [Double]
-    let selectableBolusVolumes: [Double]
+    let supportedMaximumBolusVolumes: [Double]
+    let selectableMaximumBolusVolumes: [Double]
+    let syncDeliveryLimits: SyncDeliveryLimits?
     let save: (_ deliveryLimits: DeliveryLimits) -> Void
     let mode: SettingsPresentationMode
-    
+
     @State var value: DeliveryLimits
     @State private var userDidTap: Bool = false
     @State var settingBeingEdited: DeliveryLimits.Setting?
+    @State private var isSyncing = false
+    @State private var presentedAlert: PresentedAlert?
 
-    @State var showingConfirmationAlert = false
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
     @Environment(\.appName) var appName
 
@@ -36,55 +44,64 @@ public struct DeliveryLimitsEditor: View {
         value: DeliveryLimits,
         supportedBasalRates: [Double],
         scheduledBasalRange: ClosedRange<Double>?,
-        supportedBolusVolumes: [Double],
+        supportedMaximumBolusVolumes: [Double],
         lowestCarbRatio: Double?,
+        syncDeliveryLimits: @escaping SyncDeliveryLimits,
         onSave save: @escaping (_ deliveryLimits: DeliveryLimits) -> Void,
         mode: SettingsPresentationMode = .settings
     ) {
         self._value = State(initialValue: value)
         self.initialValue = value
         self.supportedBasalRates = supportedBasalRates
-        self.selectableMaxBasalRates = Guardrail.selectableMaxBasalRates(supportedBasalRates: supportedBasalRates, scheduledBasalRange: scheduledBasalRange, lowestCarbRatio: lowestCarbRatio)
+        self.selectableMaximumBasalRates = Guardrail.selectableMaxBasalRates(supportedBasalRates: supportedBasalRates, scheduledBasalRange: scheduledBasalRange, lowestCarbRatio: lowestCarbRatio)
         self.scheduledBasalRange = scheduledBasalRange
-        self.supportedBolusVolumes = supportedBolusVolumes
-        self.selectableBolusVolumes = Guardrail.selectableBolusVolumes(supportedBolusVolumes: supportedBolusVolumes)
+        self.supportedMaximumBolusVolumes = supportedMaximumBolusVolumes
+        self.selectableMaximumBolusVolumes = Guardrail.selectableBolusVolumes(supportedBolusVolumes: supportedMaximumBolusVolumes)
+        self.syncDeliveryLimits = syncDeliveryLimits
         self.save = save
         self.mode = mode
         self.lowestCarbRatio = lowestCarbRatio
     }
     
     public init(
-           viewModel: TherapySettingsViewModel,
-           didSave: (() -> Void)? = nil
+        mode: SettingsPresentationMode,
+        therapySettingsViewModel: TherapySettingsViewModel,
+        didSave: (() -> Void)? = nil
     ) {
-        precondition(viewModel.pumpSupportedIncrements != nil)
+        precondition(therapySettingsViewModel.pumpSupportedIncrements() != nil)
         
-        let maxBasal = viewModel.therapySettings.maximumBasalRatePerHour.map {
+        let maxBasal = therapySettingsViewModel.therapySettings.maximumBasalRatePerHour.map {
             HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0)
         }
 
-        let maxBolus = viewModel.therapySettings.maximumBolus.map {
+        let maxBolus = therapySettingsViewModel.therapySettings.maximumBolus.map {
             HKQuantity(unit: .internationalUnit(), doubleValue: $0)
         }
         
         self.init(
             value: DeliveryLimits(maximumBasalRate: maxBasal, maximumBolus: maxBolus),
-            supportedBasalRates: viewModel.pumpSupportedIncrements!()!.basalRates,
-            scheduledBasalRange: viewModel.therapySettings.basalRateSchedule?.valueRange(),
-            supportedBolusVolumes: viewModel.pumpSupportedIncrements!()!.bolusVolumes,
-            lowestCarbRatio: viewModel.therapySettings.carbRatioSchedule?.lowestValue(),
-            onSave: { [weak viewModel] newLimits in
-                viewModel?.saveDeliveryLimits(limits: newLimits)
+            supportedBasalRates: therapySettingsViewModel.pumpSupportedIncrements()?.basalRates ?? [],
+            scheduledBasalRange: therapySettingsViewModel.therapySettings.basalRateSchedule?.valueRange(),
+            supportedMaximumBolusVolumes: therapySettingsViewModel.pumpSupportedIncrements()?.maximumBolusVolumes ?? [],
+            lowestCarbRatio: therapySettingsViewModel.therapySettings.carbRatioSchedule?.lowestValue(),
+            syncDeliveryLimits: therapySettingsViewModel.syncDeliveryLimits,
+            onSave: { [weak therapySettingsViewModel] newLimits in
+                therapySettingsViewModel?.saveDeliveryLimits(limits: newLimits)
                 didSave?()
             },
-            mode: viewModel.mode
+            mode: mode
         )
     }
 
     public var body: some View {
         switch mode {
-        case .settings: return AnyView(contentWithCancel)
-        case .acceptanceFlow: return AnyView(content)
+        case .acceptanceFlow:
+            content
+                .disabled(isSyncing)
+        case .settings:
+            contentWithCancel
+                .disabled(isSyncing)
+                .navigationBarTitle("", displayMode: .inline)
         }
     }
     
@@ -109,7 +126,7 @@ public struct DeliveryLimitsEditor: View {
     private var content: some View {
         ConfigurationPage(
             title: Text(TherapySetting.deliveryLimits.title),
-            actionButtonTitle: Text(mode.buttonText),
+            actionButtonTitle: Text(mode.buttonText(isSaving: isSyncing)),
             actionButtonState: saveButtonState,
             cards: {
                 maximumBasalRateCard
@@ -123,20 +140,25 @@ public struct DeliveryLimitsEditor: View {
                 if self.crossedThresholds.isEmpty {
                     self.startSaving()
                 } else {
-                    self.showingConfirmationAlert = true
+                    self.presentedAlert = .saveConfirmation(confirmationAlertContent)
                 }
             }
         )
-        .alert(isPresented: $showingConfirmationAlert, content: confirmationAlert)
-        .navigationBarTitle("", displayMode: .inline)
-        .onTapGesture {
-            self.userDidTap = true
-        }
+        .alert(item: $presentedAlert, content: alert(for:))
+        .simultaneousGesture(TapGesture().onEnded {
+            withAnimation {
+                self.userDidTap = true
+            }
+        })
     }
 
     var saveButtonState: ConfigurationPageActionButtonState {
         guard value.maximumBasalRate != nil, value.maximumBolus != nil else {
             return .disabled
+        }
+
+        if isSyncing {
+            return .loading
         }
         
         if mode == .acceptanceFlow {
@@ -187,7 +209,7 @@ public struct DeliveryLimitsEditor: View {
                         ),
                         unit: .internationalUnitsPerHour,
                         guardrail: self.maximumBasalRateGuardrail,
-                        selectableValues: self.selectableMaxBasalRates,
+                        selectableValues: self.selectableMaximumBasalRates,
                         usageContext: .independent
                     )
                     .accessibility(identifier: "max_basal_picker")
@@ -197,7 +219,7 @@ public struct DeliveryLimitsEditor: View {
     }
 
     var maximumBolusGuardrail: Guardrail<HKQuantity> {
-        return Guardrail.maximumBolus(supportedBolusVolumes: supportedBolusVolumes)
+        return Guardrail.maximumBolus(supportedBolusVolumes: supportedMaximumBolusVolumes)
     }
 
     var maximumBolusCard: Card {
@@ -237,7 +259,7 @@ public struct DeliveryLimitsEditor: View {
                         ),
                         unit: .internationalUnit(),
                         guardrail: self.maximumBolusGuardrail,
-                        selectableValues: self.selectableBolusVolumes,
+                        selectableValues: self.selectableMaximumBolusVolumes,
                         usageContext: .independent
                     )
                     .accessibility(identifier: "max_bolus_picker")
@@ -292,33 +314,99 @@ public struct DeliveryLimitsEditor: View {
         return crossedThresholds
     }
 
-    private func confirmationAlert() -> SwiftUI.Alert {
-        SwiftUI.Alert(
-            title: Text(LocalizedString("Save Delivery Limits?", comment: "Alert title for confirming delivery limits outside the recommended range")),
-            message: Text(TherapySetting.deliveryLimits.guardrailSaveWarningCaption),
-            primaryButton: .cancel(Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert"))),
-            secondaryButton: .default(
-                Text(LocalizedString("Continue", comment: "Text for continue action on confirmation alert")),
-                action: startSaving
-            )
-        )
-    }
-
     private func startSaving() {
         guard mode == .settings else {
-            self.continueSaving()
+            self.monitorSavingMechanism(savingMechanism: .synchronous { deliveryLimits in
+                save(deliveryLimits)
+            })
             return
         }
         authenticate(TherapySetting.deliveryLimits.authenticationChallengeDescription) {
             switch $0 {
-            case .success: self.continueSaving()
+            case .success:
+                self.monitorSavingMechanism(savingMechanism: .asynchronous { deliveryLimits, completion in
+                    synchronizeDeliveryLimits(deliveryLimits, completion)
+                })
             case .failure: break
             }
         }
     }
+
+    private func synchronizeDeliveryLimits(_ deliveryLimits: DeliveryLimits, _ completion: @escaping (Error?) -> Void) {
+        guard let syncDeliveryLimits = self.syncDeliveryLimits else {
+            actuallySave(deliveryLimits)
+            return
+        }
+        syncDeliveryLimits(deliveryLimits) { result in
+            switch result {
+            case .success(let deliveryLimits):
+                actuallySave(deliveryLimits)
+                completion(nil)
+            case .failure(let error):
+                completion(PresentedAlert.saveError(error))
+            }
+        }
+    }
+        
+    private func actuallySave(_ deliveryLimits: DeliveryLimits) {
+        DispatchQueue.main.async {
+            self.save(deliveryLimits)
+        }
+    }
     
-    private func continueSaving() {
-        self.save(self.value)
+    private func monitorSavingMechanism(savingMechanism: SavingMechanism<DeliveryLimits>) {
+        switch savingMechanism {
+        case .synchronous(let save):
+            save(value)
+        case .asynchronous(let save):
+            withAnimation {
+                self.isSyncing = true
+            }
+
+            save(value) { error in
+                DispatchQueue.main.async {
+                    if let error = error  {
+                        withAnimation {
+                            self.isSyncing = false
+                        }
+                        self.presentedAlert = (error as? PresentedAlert) ?? .saveError(error)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func alert(for presentedAlert: PresentedAlert) -> SwiftUI.Alert {
+        switch presentedAlert {
+        case .saveConfirmation(let content):
+            return SwiftUI.Alert(
+                title: content.title,
+                message: content.message,
+                primaryButton: .cancel(
+                    content.cancel ??
+                    Text(LocalizedString("Go Back", comment: "Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range"))),
+                secondaryButton: .default(
+                    content.ok ??
+                    Text(LocalizedString("Continue", comment: "Button text to confirm saving from alert popup when some schedule values are outside the recommended range")),
+                    action: startSaving
+                )
+            )
+        case .saveError(let error):
+            return SwiftUI.Alert(
+                title: Text(LocalizedString("Unable to Save", comment: "Alert title when error occurs while saving a schedule")),
+                message: Text(error.localizedDescription)
+            )
+        }
+    }
+    
+    private var confirmationAlertContent: AlertContent {
+        AlertContent(
+            title: Text(LocalizedString("Save Delivery Limits?", comment: "Alert title for confirming delivery limits outside the recommended range")),
+            message: Text(TherapySetting.deliveryLimits.guardrailSaveWarningCaption),
+            cancel: Text(LocalizedString("Go Back", comment: "Text for go back action on confirmation alert")),
+            ok: Text(LocalizedString("Continue", comment: "Text for continue action on confirmation alert")
+            )
+        )
     }
 }
 
@@ -332,37 +420,43 @@ struct DeliveryLimitsGuardrailWarning: View {
             preconditionFailure("A guardrail warning requires at least one crossed threshold")
         case 1:
             let (setting, threshold) = crossedThresholds.first!
-            let title: Text, caption: Text?
+            let title: Text
             switch setting {
             case .maximumBasalRate:
                 switch threshold {
                 case .minimum, .belowRecommended:
                     title = Text(LocalizedString("Low Maximum Basal Rate", comment: "Title text for low maximum basal rate warning"))
-                    caption = Text(TherapySetting.deliveryLimits.guardrailCaptionForLowValue)
                 case .aboveRecommended, .maximum:
                     title = Text(LocalizedString("High Maximum Basal Rate", comment: "Title text for high maximum basal rate warning"))
-                    caption = Text(TherapySetting.deliveryLimits.guardrailCaptionForHighValue)
                 }
             case .maximumBolus:
                 switch threshold {
                 case .minimum, .belowRecommended:
                     title = Text(LocalizedString("Low Maximum Bolus", comment: "Title text for low maximum bolus warning"))
-                    caption = Text(TherapySetting.deliveryLimits.guardrailCaptionForLowValue)
                 case .aboveRecommended, .maximum:
                     title = Text(LocalizedString("High Maximum Bolus", comment: "Title text for high maximum bolus warning"))
-                    caption = nil
                 }
             }
 
-            return GuardrailWarning(title: title, threshold: threshold, caption: caption)
+            return GuardrailWarning(therapySetting: .deliveryLimits, title: title, threshold: threshold)
         case 2:
             return GuardrailWarning(
+                therapySetting: .deliveryLimits,
                 title: Text(LocalizedString("Delivery Limits", comment: "Title text for crossed thresholds guardrail warning")),
-                thresholds: Array(crossedThresholds.values),
-                caption: Text(TherapySetting.deliveryLimits.guardrailCaptionForOutsideValues)
-            )
+                thresholds: Array(crossedThresholds.values))
         default:
             preconditionFailure("Unreachable: only two delivery limit settings exist")
+        }
+    }
+}
+
+extension DeliveryLimitsEditor.PresentedAlert: Identifiable {
+    var id: Int {
+        switch self {
+        case .saveConfirmation:
+            return 0
+        case .saveError:
+            return 1
         }
     }
 }

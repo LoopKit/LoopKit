@@ -12,7 +12,9 @@ import LoopKit
 import SwiftUI
 
 public struct TherapySettingsView: View {
-    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    @Environment(\.chartColorPalette) var chartColorPalette
+    @Environment(\.dismissAction) var dismissAction
     @Environment(\.appName) private var appName
 
     public struct ActionButton {
@@ -23,81 +25,118 @@ public struct TherapySettingsView: View {
         let localizedString: String
         let action: () -> Void
     }
-    
+
+    private let mode: SettingsPresentationMode
+
     @ObservedObject var viewModel: TherapySettingsViewModel
         
     private let actionButton: ActionButton?
-        
-    public init(viewModel: TherapySettingsViewModel,
+
+    public init(mode: SettingsPresentationMode,
+                viewModel: TherapySettingsViewModel,
                 actionButton: ActionButton? = nil) {
+        self.mode = mode
         self.viewModel = viewModel
         self.actionButton = actionButton
     }
         
     public var body: some View {
-        switch viewModel.mode {
-        case .acceptanceFlow: return AnyView(content)
-        case .settings: return AnyView(navigationViewWrappedContent)
+        switch mode {
+        case .acceptanceFlow:
+            content
+        case .settings:
+            navigationViewWrappedContent
         }
     }
     
     private var content: some View {
-        List {
-            Group {
-                if viewModel.mode == .acceptanceFlow && viewModel.prescription != nil {
-                    // At start of acceptance flow
-                    prescriptionSection
-                } else if viewModel.mode == .acceptanceFlow && viewModel.prescription == nil {
-                    // At end of acceptance flow
-                    summaryHeaderSection
-                }
-                suspendThresholdSection
-                correctionRangeSection
-                preMealCorrectionRangeSection
-                if !viewModel.sensitivityOverridesEnabled {
-                    workoutCorrectionRangeSection
-                }
-                carbRatioSection
-                basalRatesSection
-                deliveryLimitsSection
-                insulinModelSection
-                insulinSensitivitiesSection
-            }
-            lastItem
+        CardList(title: cardListTitle, style: .sectioned(cardListSections), trailer: cardListTrailer)
+    }
+
+    private var cardListTitle: Text? { mode == .acceptanceFlow ? Text(therapySettingsTitle) : nil }
+
+    private var therapySettingsTitle: String {
+        return LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")
+    }
+
+    private var cardListSections: [CardListSection] {
+        var cardListSections: [CardListSection] = []
+
+        cardListSections.append(therapySettingsCardListSection)
+        if mode == .settings {
+            cardListSections.append(supportCardListSection)
         }
-        .insetGroupedListStyle()
-        .onAppear() {
-            UITableView.appearance().separatorStyle = .singleLine // Add lines between rows
-        }
-        .navigationBarTitle(Text(LocalizedString("Therapy Settings", comment: "Therapy Settings screen title")), displayMode: .large)
+
+        return cardListSections
     }
     
+    private var therapySettingsCardListSection: CardListSection {
+        CardListSection {
+            therapySettingsCardStack
+                .spacing(20)
+        }
+    }
+
+    private var therapySettingsCardStack: CardStack {
+        var cards: [Card] = []
+
+        if mode == .acceptanceFlow {
+            if viewModel.prescription != nil {
+                cards.append(prescriptionSection)
+            } else {
+                cards.append(summaryHeaderSection)
+            }
+        }
+        cards.append(suspendThresholdSection)
+        cards.append(correctionRangeSection)
+        cards.append(preMealCorrectionRangeSection)
+        if !viewModel.sensitivityOverridesEnabled {
+            cards.append(workoutCorrectionRangeSection)
+        }
+        cards.append(carbRatioSection)
+        cards.append(basalRatesSection)
+        cards.append(deliveryLimitsSection)
+        cards.append(insulinModelSection)
+        cards.append(insulinSensitivitiesSection)
+
+        return CardStack(cards: cards)
+    }
+    
+    private var supportCardListSection: CardListSection {
+        CardListSection(title: Text(LocalizedString("Support", comment: "Title for support section"))) {
+            supportSection
+        }
+    }
+
     private var navigationViewWrappedContent: some View {
         NavigationView {
-            content
-                .navigationBarItems(trailing: dismissButton)
+            ZStack {
+                Color(.systemGroupedBackground)
+                    .edgesIgnoringSafeArea(.all)
+                content
+                    .navigationBarItems(trailing: dismissButton)
+                    .navigationBarTitle(therapySettingsTitle, displayMode: .large)
+            }
         }
     }
     
     private var dismissButton: some View {
-        Button(action: {
-            self.dismiss()
-        }) {
-            Text(LocalizedString("Done", comment: "Text for dismiss button")).bold()
+        Button(action: dismissAction) {
+            Text(LocalizedString("Done", comment: "Text for dismiss button"))
+                .bold()
         }
     }
     
-    @ViewBuilder private var lastItem: some View {
-        if viewModel.mode == .acceptanceFlow {
-            if actionButton != nil {
-                Button(action: actionButton!.action) {
-                    Text(actionButton!.localizedString)
+    @ViewBuilder
+    private var cardListTrailer: some View {
+        if mode == .acceptanceFlow {
+            if let actionButton = actionButton {
+                Button(action: actionButton.action) {
+                    Text(actionButton.localizedString)
                 }
                 .buttonStyle(ActionButtonStyle(.primary))
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .padding()
             }
-        } else {
-            supportSection
         }
     }
 }
@@ -105,35 +144,36 @@ public struct TherapySettingsView: View {
 // MARK: Sections
 extension TherapySettingsView {
     
-    private var prescriptionSection: some View {
-        Section(header: Spacer()) {
-            VStack(alignment: .leading) {
-                Spacer()
-                Text(LocalizedString("Prescription", comment: "title for prescription section"))
-                    .bold()
-                Spacer()
-                DescriptiveText(label: prescriptionDescriptiveText)
+    private var prescriptionSection: Card {
+        Card {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(LocalizedString("Prescription", comment: "title for prescription section"))
+                        .bold()
+                    Spacer()
+                    DescriptiveText(label: prescriptionDescriptiveText)
+                }
                 Spacer()
             }
         }
     }
     
-    private var summaryHeaderSection: some View {
-        Section(header: Spacer()) {
+    private var summaryHeaderSection: Card {
+        Card {
             VStack(alignment: .leading) {
-                Spacer()
                 Text(LocalizedString("Review and Save Settings", comment: "title for summary description section"))
                     .bold()
                     .foregroundColor(.white)
                 Spacer()
                 VStack (alignment: .leading, spacing: 10) {
                     DescriptiveText(label: summaryHeaderReviewText, color: .white)
+                        .fixedSize(horizontal: false, vertical: true)
                     DescriptiveText(label: summaryHeaderEditText, color: .white)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                Spacer()
             }
         }
-        .listRowBackground(Color.accentColor)
+        .backgroundColor(Color.accentColor)
     }
     
     private var summaryHeaderReviewText: String {
@@ -145,35 +185,42 @@ extension TherapySettingsView {
     }
     
     private var prescriptionDescriptiveText: String {
-        String(format: LocalizedString("Submitted by %1$@, %2$@", comment: "Format for prescription descriptive text (1: providerName, 2: datePrescribed)"),
-               viewModel.prescription!.providerName,
-               DateFormatter.localizedString(from: viewModel.prescription!.datePrescribed, dateStyle: .short, timeStyle: .none))
+        guard let prescription = viewModel.prescription else {
+            return ""
+        }
+        return String(format: LocalizedString("Submitted by %1$@, %2$@", comment: "Format for prescription descriptive text (1: providerName, 2: datePrescribed)"),
+                      prescription.providerName,
+                      DateFormatter.localizedString(from: prescription.datePrescribed, dateStyle: .short, timeStyle: .none))
     }
-    
-    private var suspendThresholdSection: some View {
-        section(for: .suspendThreshold, header: viewModel.prescription == nil ? AnyView(Spacer()) : AnyView(EmptyView())) {
-            if let glucoseUnit = self.glucoseUnit {
-                HStack {
-                    Spacer()
-                    GuardrailConstrainedQuantityView(
-                        value: self.viewModel.therapySettings.suspendThreshold?.quantity,
-                        unit: glucoseUnit,
-                        guardrail: .suspendThreshold,
-                        isEditing: false,
-                        // Workaround for strange animation behavior on appearance
-                        forceDisableAnimations: true
-                    )
-                }
+
+    private var suspendThresholdSection: Card {
+        card(for: .suspendThreshold) {
+            SectionDivider()
+            HStack {
+                Spacer()
+                GuardrailConstrainedQuantityView(
+                    value: self.viewModel.suspendThreshold?.quantity,
+                    unit: glucoseUnit,
+                    guardrail: .suspendThreshold,
+                    isEditing: false,
+                    // Workaround for strange animation behavior on appearance
+                    forceDisableAnimations: true
+                )
             }
         }
     }
-    
-    private var correctionRangeSection: some View {
-        section(for: .glucoseTargetRange) {
-            if let glucoseUnit = self.glucoseUnit, let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
-                ForEach(schedule.items, id: \.self) { value in
-                    ScheduleRangeItem(time: value.startTime,
-                                      range: value.value,
+
+    private var correctionRangeSection: Card {
+        card(for: .glucoseTargetRange) {
+            if let items = self.viewModel.glucoseTargetRangeSchedule(for: glucoseUnit)?.items
+            {
+                SectionDivider()
+                ForEach(items.indices, id: \.self) { index in
+                    if index > 0 {
+                        SettingsDivider()
+                    }
+                    ScheduleRangeItem(time: items[index].startTime,
+                                      range: items[index].value,
                                       unit: glucoseUnit,
                                       guardrail: .correctionRange)
                 }
@@ -181,52 +228,77 @@ extension TherapySettingsView {
         }
     }
     
-    private var preMealCorrectionRangeSection: some View {
-        section(for: .preMealCorrectionRangeOverride) {
-            if let glucoseUnit = self.glucoseUnit, let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
+    private var preMealCorrectionRangeSection: Card {
+        card(for: .preMealCorrectionRangeOverride) {
+            if let correctionRangeOverrides = self.viewModel.correctionRangeOverrides,
+               let schedule = self.viewModel.glucoseTargetRangeSchedule
+            {
+                SectionDivider()
                 CorrectionRangeOverridesRangeItem(
-                    preMealTargetRange: self.viewModel.therapySettings.preMealTargetRange,
-                    workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange,
-                    unit: glucoseUnit,
+                    value: correctionRangeOverrides,
+                    displayGlucoseUnit: glucoseUnit,
                     preset: CorrectionRangeOverrides.Preset.preMeal,
-                    suspendThreshold: self.viewModel.therapySettings.suspendThreshold,
+                    suspendThreshold: viewModel.suspendThreshold,
                     correctionRangeScheduleRange: schedule.scheduleRange()
                 )
             }
         }
     }
     
-    private var workoutCorrectionRangeSection: some View {
-        section(for: .workoutCorrectionRangeOverride) {
-            if let glucoseUnit = self.glucoseUnit, let schedule = self.viewModel.therapySettings.glucoseTargetRangeSchedule {
+    private var workoutCorrectionRangeSection: Card {
+        card(for: .workoutCorrectionRangeOverride) {
+            if let correctionRangeOverrides = self.viewModel.correctionRangeOverrides,
+               let schedule = self.viewModel.glucoseTargetRangeSchedule
+            {
+                SectionDivider()
                 CorrectionRangeOverridesRangeItem(
-                    preMealTargetRange: self.viewModel.therapySettings.preMealTargetRange,
-                    workoutTargetRange: self.viewModel.therapySettings.workoutTargetRange,
-                    unit: glucoseUnit,
+                    value: correctionRangeOverrides,
+                    displayGlucoseUnit: glucoseUnit,
                     preset: CorrectionRangeOverrides.Preset.workout,
-                    suspendThreshold: self.viewModel.therapySettings.suspendThreshold,
+                    suspendThreshold: self.viewModel.suspendThreshold,
                     correctionRangeScheduleRange: schedule.scheduleRange()
                 )
             }
         }
     }
 
-    private var basalRatesSection: some View {
-        section(for: .basalRate) {
-            if self.viewModel.therapySettings.basalRateSchedule != nil && self.viewModel.pumpSupportedIncrements?() != nil {
-                ForEach(self.viewModel.therapySettings.basalRateSchedule!.items, id: \.self) { value in
-                    ScheduleValueItem(time: value.startTime,
-                                      value: value.value,
+    private var basalRatesSection: Card {
+        card(for: .basalRate) {
+            if let schedule = viewModel.therapySettings.basalRateSchedule,
+               let supportedBasalRates = viewModel.pumpSupportedIncrements()?.basalRates
+            {
+                let items = schedule.items
+                let total = schedule.total()
+                SectionDivider()
+                ForEach(items.indices, id: \.self) { index in
+                    if index > 0 {
+                        SettingsDivider()
+                    }
+                    ScheduleValueItem(time: items[index].startTime,
+                                      value:  items[index].value,
                                       unit: .internationalUnitsPerHour,
-                                      guardrail: Guardrail.basalRate(supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates))
+                                      guardrail: .basalRate(supportedBasalRates: supportedBasalRates))
+                }
+                SectionDivider()
+                HStack {
+                    Text(NSLocalizedString("Total", comment: "The text indicating Total for Daily Schedule Basal"))
+                        .bold()
+                        .foregroundColor(.primary)
+                    Spacer()
+                    Text(String(format: "%.2f ",total))
+                        .foregroundColor(.primary) +
+                    Text(NSLocalizedString("U/day", comment: "The text indicating U/day for Daily Schedule Basal"))
+                        .foregroundColor(.secondary)
                 }
             }
         }
     }
     
-    private var deliveryLimitsSection: some View {
-        section(for: .deliveryLimits) {
+    private var deliveryLimitsSection: Card {
+        card(for: .deliveryLimits) {
+            SectionDivider()
             self.maxBasalRateItem
+            SettingsDivider()
             self.maxBolusItem
         }
     }
@@ -235,12 +307,12 @@ extension TherapySettingsView {
         HStack {
             Text(DeliveryLimits.Setting.maximumBasalRate.title)
             Spacer()
-            if self.viewModel.pumpSupportedIncrements?() != nil {
+            if let basalRates = self.viewModel.pumpSupportedIncrements()?.basalRates {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBasalRatePerHour.map { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) },
                     unit: .internationalUnitsPerHour,
-                    guardrail: Guardrail.maximumBasalRate(
-                        supportedBasalRates: self.viewModel.pumpSupportedIncrements!()!.basalRates,
+                    guardrail: .maximumBasalRate(
+                        supportedBasalRates: basalRates,
                         scheduledBasalRange: self.viewModel.therapySettings.basalRateSchedule?.valueRange(),
                         lowestCarbRatio: self.viewModel.therapySettings.carbRatioSchedule?.lowestValue()),
                     isEditing: false,
@@ -256,11 +328,11 @@ extension TherapySettingsView {
         HStack {
             Text(DeliveryLimits.Setting.maximumBolus.title)
             Spacer()
-            if self.viewModel.pumpSupportedIncrements?() != nil {
+            if let maximumBolusVolumes = self.viewModel.pumpSupportedIncrements()?.maximumBolusVolumes {
                 GuardrailConstrainedQuantityView(
                     value: self.viewModel.therapySettings.maximumBolus.map { HKQuantity(unit: .internationalUnit(), doubleValue: $0) },
                     unit: .internationalUnit(),
-                    guardrail: Guardrail.maximumBolus(supportedBolusVolumes: self.viewModel.pumpSupportedIncrements!()!.bolusVolumes),
+                    guardrail: .maximumBolus(supportedBolusVolumes: maximumBolusVolumes),
                     isEditing: false,
                     // Workaround for strange animation behavior on appearance
                     forceDisableAnimations: true
@@ -270,89 +342,150 @@ extension TherapySettingsView {
         .accessibilityElement(children: .combine)
     }
         
-    private var insulinModelSection: some View {
-        section(for: .insulinModel) {
-            if self.viewModel.therapySettings.insulinModelSettings != nil {
-                // Spacing and paddings here is my best guess based on the design...
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(self.viewModel.therapySettings.insulinModelSettings!.title)
-                        .font(.body)
-                        .padding(.top, 5)
-                    Text(self.viewModel.therapySettings.insulinModelSettings!.subtitle)
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                        .padding(.bottom, 8)
+    private var insulinModelSection: Card {
+        card(for: .insulinModel) {
+            if let insulinModelPreset = self.viewModel.therapySettings.defaultRapidActingModel {
+                SectionDivider()
+                HStack {
+                    // Spacing and paddings here is my best guess based on the design...
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(insulinModelPreset.title)
+                            .font(.body)
+                            .padding(.top, 5)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Text(insulinModelPreset.subtitle)
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                            .padding(.bottom, 8)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    Spacer()
+                    Image(systemName: "checkmark")
+                        .font(Font.system(.title2).weight(.semibold))
+                        .foregroundColor(.accentColor)
                 }
                 .accessibilityElement(children: .combine)
             }
         }
     }
 
-    private var carbRatioSection: some View {
-        section(for: .carbRatio) {
-            if self.viewModel.therapySettings.carbRatioSchedule != nil {
-                ForEach(self.viewModel.therapySettings.carbRatioSchedule!.items, id: \.self) { value in
-                    ScheduleValueItem(time: value.startTime,
-                                      value: value.value,
+    private var carbRatioSection: Card {
+        card(for: .carbRatio) {
+            if let items = viewModel.therapySettings.carbRatioSchedule?.items {
+                SectionDivider()
+                ForEach(items.indices, id: \.self) { index in
+                    if index > 0 {
+                        SettingsDivider()
+                    }
+                    ScheduleValueItem(time: items[index].startTime,
+                                      value: items[index].value,
                                       unit: .gramsPerUnit,
-                                      guardrail: Guardrail.carbRatio)
+                                      guardrail: .carbRatio)
                 }
             }
         }
     }
     
-    private var insulinSensitivitiesSection: some View {
-        section(for: .insulinSensitivity) {
-            if let sensitivityUnit = self.sensitivityUnit, let schedule = self.viewModel.therapySettings.insulinSensitivitySchedule {
-                ForEach(schedule.items, id: \.self) { value in
-                    ScheduleValueItem(time: value.startTime,
-                                      value: value.value,
+    private var insulinSensitivitiesSection: Card {
+        card(for: .insulinSensitivity) {
+            if let items = viewModel.insulinSensitivitySchedule(for: glucoseUnit)?.items {
+                SectionDivider()
+                ForEach(items.indices, id: \.self) { index in
+                    if index > 0 {
+                        SettingsDivider()
+                    }
+                    ScheduleValueItem(time: items[index].startTime,
+                                      value: items[index].value,
                                       unit: sensitivityUnit,
-                                      guardrail: Guardrail.insulinSensitivity)
+                                      guardrail: .insulinSensitivity)
                 }
             }
         }
     }
     
     private var supportSection: some View {
-        Section(header: SectionHeader(label: LocalizedString("Support", comment: "Title for support section"))) {
+        Section {
             NavigationLink(destination: Text("Therapy Settings Support Placeholder")) {
-                Text("Get help with Therapy Settings", comment: "Support button for Therapy Settings")
+                HStack {
+                    Text("Get help with Therapy Settings", comment: "Support button for Therapy Settings")
+                        .foregroundColor(.primary)
+                    Spacer()
+                    Disclosure()
+                }
             }
         }
+        .contentShape(Rectangle())
+    }
+}
+
+// MARK: Navigation
+
+extension TherapySettingsView {
+
+    func screen(for setting: TherapySetting) -> (_ dismiss: @escaping () -> Void) -> AnyView {
+        switch setting {
+        case .suspendThreshold:
+            return { dismiss in
+                AnyView(SuspendThresholdEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
+            }
+        case .glucoseTargetRange:
+            return { dismiss in
+                AnyView(CorrectionRangeScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
+            }
+        case .preMealCorrectionRangeOverride:
+            return { dismiss in
+                AnyView(CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss).environment(\.dismissAction, dismiss))
+            }
+        case .workoutCorrectionRangeOverride:
+            return { dismiss in
+                AnyView(CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .workout, didSave: dismiss).environment(\.dismissAction, dismiss))
+            }
+        case .basalRate:
+            return { dismiss in
+                AnyView(BasalRateScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
+            }
+        case .deliveryLimits:
+            return { dismiss in
+                AnyView(DeliveryLimitsEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
+            }
+        case .insulinModel:
+            return { dismiss in
+                AnyView(InsulinModelSelection(mode: mode, therapySettingsViewModel: viewModel, chartColors: chartColorPalette, didSave: dismiss).environment(\.dismissAction, dismiss))
+            }
+        case .carbRatio:
+            return { dismiss in
+                AnyView(CarbRatioScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
+            }
+        case .insulinSensitivity:
+            return { dismiss in
+                AnyView(InsulinSensitivityScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
+            }
+        case .none:
+            break
+        }
+        return { _ in AnyView(Text("\(setting.title)")) }
     }
 }
 
 // MARK: Utilities
 extension TherapySettingsView {
     
-    private var glucoseUnit: HKUnit? {
-        viewModel.therapySettings.glucoseTargetRangeSchedule?.unit
+    private var glucoseUnit: HKUnit {
+        displayGlucoseUnitObservable.displayGlucoseUnit
     }
     
-    private var sensitivityUnit: HKUnit? {
-        glucoseUnit?.unitDivided(by: .internationalUnit())
+    private var sensitivityUnit: HKUnit {
+        glucoseUnit.unitDivided(by: .internationalUnit())
     }
     
-    private func section<Content>(for therapySetting: TherapySetting,
-                                  @ViewBuilder content: @escaping () -> Content) -> some View where Content: View {
-        SectionWithTapToEdit(isEnabled: viewModel.mode != .acceptanceFlow,
-                             header: EmptyView(),
-                             title: therapySetting.title,
-                             descriptiveText: therapySetting.descriptiveText(appName: appName),
-                             destination: screen(for: therapySetting),
-                             content: content)
-    }
-
-    private func section<Content, Header>(for therapySetting: TherapySetting,
-                                          header: Header,
-                                          @ViewBuilder content: @escaping () -> Content) -> some View where Content: View, Header: View {
-        SectionWithTapToEdit(isEnabled: viewModel.mode != .acceptanceFlow,
-                             header: header,
-                             title: therapySetting.title,
-                             descriptiveText: therapySetting.descriptiveText(appName: appName),
-                             destination: screen(for: therapySetting),
-                             content: content)
+    private func card<Content>(for therapySetting: TherapySetting, @ViewBuilder content: @escaping () -> Content) -> Card where Content: View {
+        Card {
+            SectionWithTapToEdit(isEnabled: mode != .acceptanceFlow,
+                                 title: therapySetting.title,
+                                 descriptiveText: therapySetting.descriptiveText(appName: appName),
+                                 destination: screen(for: therapySetting),
+                                 content: content)
+        }
     }
 }
 
@@ -369,6 +502,7 @@ struct ScheduleRangeItem: View {
                          isEditing: .constant(false),
                          valueContent: {
                             GuardrailConstrainedQuantityRangeView(range: range.quantityRange(for: unit), unit: unit, guardrail: guardrail, isEditing: false)
+                                .padding(.leading, 10)
                          },
                          expandedContent: { EmptyView() })
     }
@@ -385,15 +519,15 @@ struct ScheduleValueItem: View {
                          isEditing: .constant(false),
                          valueContent: {
                             GuardrailConstrainedQuantityView(value: HKQuantity(unit: unit, doubleValue: value), unit: unit, guardrail: guardrail, isEditing: false)
+                                .padding(.leading, 10)
                          },
                          expandedContent: { EmptyView() })
     }
 }
 
 struct CorrectionRangeOverridesRangeItem: View {
-    let preMealTargetRange: DoubleRange?
-    let workoutTargetRange: DoubleRange?
-    let unit: HKUnit
+    let value: CorrectionRangeOverrides
+    let displayGlucoseUnit: HKUnit
     let preset: CorrectionRangeOverrides.Preset
     let suspendThreshold: GlucoseThreshold?
     let correctionRangeScheduleRange: ClosedRange<HKQuantity>
@@ -401,54 +535,65 @@ struct CorrectionRangeOverridesRangeItem: View {
     public var body: some View {
         CorrectionRangeOverridesExpandableSetting(
             isEditing: .constant(false),
-            value: .constant(CorrectionRangeOverrides(
-                preMeal: preMealTargetRange,
-                workout: workoutTargetRange,
-                unit: unit
-            )),
+            value: .constant(value),
             preset: preset,
-            unit: unit,
+            unit: displayGlucoseUnit,
             suspendThreshold: suspendThreshold,
             correctionRangeScheduleRange: correctionRangeScheduleRange,
             expandedContent: { EmptyView() })
     }
 }
 
-struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where Header: View, Content: View, NavigationDestination: View  {
+struct SectionWithTapToEdit<Content, NavigationDestination>: View where Content: View, NavigationDestination: View  {
     let isEnabled: Bool
-    let header: Header
     let title: String
     let descriptiveText: String
     let destination: (_ goBack: @escaping () -> Void) -> NavigationDestination
-    let content: () -> Content
+    let content: Content
 
     @State var isActive: Bool = false
-    
+
+    init(isEnabled: Bool,
+         title: String,
+         descriptiveText: String,
+         destination: @escaping (@escaping () -> Void) -> NavigationDestination,
+         content: () -> Content)
+    {
+        self.isEnabled = isEnabled
+        self.title = title
+        self.descriptiveText = descriptiveText
+        self.destination = destination
+        self.content = content()
+    }
+
     private func onFinish() {
         // Dispatching here fixes an issue on iOS 14.2 where schedule editors do not dismiss. It does not fix iOS 14.0 and 14.1
-        DispatchQueue.main.async {
+        // Added a delay, since recently a similar issue was encountered in a plugin where a delay was also needed. Still uncertain why.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.isActive = false
         }
     }
 
     public var body: some View {
-        Section(header: header) {
+        Section {
             VStack(alignment: .leading) {
-                Spacer()
                 Text(title)
                     .bold()
                 Spacer()
-                ZStack(alignment: .leading) {
+                HStack {
                     DescriptiveText(label: descriptiveText)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer()
                     if isEnabled {
                         NavigationLink(destination: destination(onFinish), isActive: $isActive) {
-                            EmptyView()
+                            Disclosure()
                         }
+                        .frame(width: 10, alignment: .trailing)
                     }
                 }
                 Spacer()
             }
-            content()
+            content
         }
         .contentShape(Rectangle()) // make the whole card tappable
         .highPriorityGesture(
@@ -456,71 +601,6 @@ struct SectionWithTapToEdit<Header, Content, NavigationDestination>: View where 
                 .onEnded { _ in
                     self.isActive = true
         })
-    }
-}
-
-// MARK: Navigation
-
-private extension TherapySettingsView {
-    
-    func screen(for setting: TherapySetting) -> (_ goBack: @escaping () -> Void) -> AnyView {
-        switch setting {
-        case .suspendThreshold:
-            if viewModel.therapySettings.glucoseUnit != nil {
-                return { goBack in
-                    AnyView(SuspendThresholdEditor(viewModel: self.viewModel, didSave: goBack).environment(\.dismiss, goBack))
-                }
-            }
-        case .glucoseTargetRange:
-            if viewModel.therapySettings.glucoseUnit != nil {
-                return { goBack in
-                    AnyView(CorrectionRangeScheduleEditor(viewModel: self.viewModel, didSave: goBack).environment(\.dismiss, goBack))
-                }
-            }
-        case .preMealCorrectionRangeOverride:
-            if self.viewModel.therapySettings.glucoseUnit != nil {
-                return { goBack in
-                    AnyView(CorrectionRangeOverridesEditor(viewModel: self.viewModel, preset: .preMeal, didSave: goBack).environment(\.dismiss, goBack))
-                }
-            }
-        case .workoutCorrectionRangeOverride:
-            if self.viewModel.therapySettings.glucoseUnit != nil {
-                return { goBack in
-                    AnyView(CorrectionRangeOverridesEditor(viewModel: self.viewModel, preset: .workout, didSave: goBack).environment(\.dismiss, goBack))
-                }
-            }
-        case .basalRate:
-            if self.viewModel.pumpSupportedIncrements?() != nil {
-                return { goBack in
-                    AnyView(BasalRateScheduleEditor(viewModel: self.viewModel, didSave: goBack).environment(\.dismiss, goBack))
-                }
-            }
-        case .deliveryLimits:
-            if self.viewModel.pumpSupportedIncrements?() != nil {
-                return { goBack in
-                    AnyView(DeliveryLimitsEditor(viewModel: self.viewModel, didSave: goBack).environment(\.dismiss, goBack))
-                }
-            }
-        case .insulinModel:
-            if self.viewModel.therapySettings.glucoseUnit != nil && self.viewModel.therapySettings.insulinModelSettings != nil {
-                return { goBack in
-                    AnyView(InsulinModelSelection(viewModel: self.viewModel, didSave: goBack).environment(\.dismiss, goBack))
-                }
-            }
-        case .carbRatio:
-            return { goBack in
-                AnyView(CarbRatioScheduleEditor(viewModel: self.viewModel, didSave: goBack).environment(\.dismiss, goBack))
-            }
-        case .insulinSensitivity:
-            if self.viewModel.therapySettings.glucoseUnit != nil {
-                return { goBack in
-                    return AnyView(InsulinSensitivityScheduleEditor(viewModel: self.viewModel, didSave: goBack).environment(\.dismiss, goBack))
-                }
-            }
-        case .none:
-            break
-        }
-        return { _ in AnyView(Text("\(setting.title)")) }
     }
 }
 
@@ -536,9 +616,9 @@ public struct TherapySettingsView_Previews: PreviewProvider {
 
     static let preview_therapySettings = TherapySettings(
         glucoseTargetRangeSchedule: GlucoseRangeSchedule(unit: .milligramsPerDeciliter, dailyItems: preview_glucoseScheduleItems),
-        preMealTargetRange: DoubleRange(88...99),
-        workoutTargetRange: DoubleRange(99...111),
-        maximumBasalRatePerHour: 55,
+        correctionRangeOverrides: CorrectionRangeOverrides(preMeal: DoubleRange(88...99),
+                                                           workout: DoubleRange(99...111),
+                                                           unit: .milligramsPerDeciliter),
         maximumBolus: 4,
         suspendThreshold: GlucoseThreshold.init(unit: .milligramsPerDeciliter, value: 60),
         insulinSensitivitySchedule: InsulinSensitivitySchedule(unit: HKUnit.milligramsPerDeciliter.unitDivided(by: HKUnit.internationalUnit()), dailyItems: []),
@@ -546,44 +626,63 @@ public struct TherapySettingsView_Previews: PreviewProvider {
         basalRateSchedule: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: 0, value: 0.2), RepeatingScheduleValue(startTime: 1800, value: 0.75)]))
 
     static let preview_supportedBasalRates = [0.2, 0.5, 0.75, 1.0]
-    static let preview_supportedBolusVolumes = [5.0, 10.0, 15.0]
+    static let preview_supportedBolusVolumes = [1.0, 2.0, 3.0]
+    static let preview_supportedMaximumBolusVolumes = [5.0, 10.0, 15.0]
 
-    static func preview_viewModel(mode: SettingsPresentationMode) -> TherapySettingsViewModel {
-        TherapySettingsViewModel(mode: mode,
-                                 therapySettings: preview_therapySettings,
-                                 preferredGlucoseUnit: .milligramsPerDeciliter,
-                                 supportedInsulinModelSettings: SupportedInsulinModelSettings(fiaspModelEnabled: true, walshModelEnabled: true),
-                                 pumpSupportedIncrements: { PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
-                                                                                  bolusVolumes: preview_supportedBolusVolumes,
-                                                                                  maximumBasalScheduleEntryCount: 24) } ,
-                                 chartColors: ChartColorPalette(axisLine: .clear, axisLabel: .secondaryLabel, grid: .systemGray3, glucoseTint: .systemTeal, insulinTint: .systemOrange))
+    static func preview_viewModel() -> TherapySettingsViewModel {
+        TherapySettingsViewModel(therapySettings: preview_therapySettings,
+                                 pumpSupportedIncrements: {
+                                    PumpSupportedIncrements(basalRates: preview_supportedBasalRates,
+                                                            bolusVolumes: preview_supportedBolusVolumes,
+                                                            maximumBolusVolumes: preview_supportedMaximumBolusVolumes,
+                                                            maximumBasalScheduleEntryCount: 24) })
     }
 
     public static var previews: some View {
         Group {
-            TherapySettingsView(viewModel: preview_viewModel(mode: .acceptanceFlow))
+            TherapySettingsView(mode: .acceptanceFlow, viewModel: preview_viewModel())
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (onboarding)")
-            TherapySettingsView(viewModel: preview_viewModel(mode: .settings))
+                .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
+            TherapySettingsView(mode: .settings, viewModel: preview_viewModel())
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (settings)")
-            TherapySettingsView(viewModel: preview_viewModel(mode: .settings))
+                .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
+            TherapySettingsView(mode: .settings, viewModel: preview_viewModel())
                 .colorScheme(.dark)
                 .previewDevice(PreviewDevice(rawValue: "iPhone XS Max"))
                 .previewDisplayName("XS Max dark (settings)")
-            TherapySettingsView(viewModel: TherapySettingsViewModel(mode: .settings,
-                                                                    therapySettings: TherapySettings(),
-                                                                    preferredGlucoseUnit: .milligramsPerDeciliter,
-                                                                    chartColors: ChartColorPalette(axisLine: .clear,
-                                                                                                   axisLabel: .secondaryLabel,
-                                                                                                   grid: .systemGray3,
-                                                                                                   glucoseTint: .systemTeal,
-                                                                                                   insulinTint: .systemOrange)))
+            TherapySettingsView(mode: .settings, viewModel: TherapySettingsViewModel(therapySettings: TherapySettings()))
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (Empty TherapySettings)")
+                .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .millimolesPerLiter))
         }
+    }
+}
+
+fileprivate struct SectionDivider: View {
+    var body: some View {
+        Divider()
+            .padding(.trailing, -16)
+    }
+}
+
+fileprivate struct SettingsDivider: View {
+    var body: some View {
+        Divider()
+            .padding(.trailing, -8)
+    }
+}
+
+fileprivate struct Disclosure: View {
+    var body: some View {
+        Image(systemName: "chevron.right")
+            .imageScale(.small)
+            .font(.headline)
+            .foregroundColor(.secondary)
+            .opacity(0.5)
     }
 }

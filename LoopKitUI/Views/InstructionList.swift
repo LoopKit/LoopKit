@@ -9,12 +9,23 @@
 import SwiftUI
 
 public struct InstructionList: View {
-    let instructions: [String]
-    let stepsColor: Color
+    struct Instruction {
+        let text: String
+        let subtext: String?
+    }
+    let instructions: [Instruction]
+    let instructionColor: Color
     
-    public init(instructions: [String], stepsColor: Color = Color.accentColor) {
-        self.instructions = instructions
-        self.stepsColor = stepsColor
+    @Environment(\.isEnabled) var isEnabled
+    
+    public init(instructions: [String], instructionColor: Color = .primary) {
+        self.instructions = instructions.map { Instruction(text: $0, subtext: nil) }
+        self.instructionColor = instructionColor
+    }
+    
+    public init(instructions: [(String, String)],  instructionColor: Color = .primary) {
+        self.instructions = instructions.map { Instruction(text: $0.0, subtext: $0.1) }
+        self.instructionColor = instructionColor
     }
     
     public var body: some View {
@@ -22,18 +33,33 @@ public struct InstructionList: View {
             ForEach(instructions.indices, id: \.self) { index in
                 HStack(alignment: .top) {
                     Text("\(index+1)")
+                        .opacity(isEnabled ? 1.0 : 0.8)
                         .padding(6)
-                        .background(Circle().fill(self.stepsColor))
-                        .foregroundColor(.white)
+                        .background(Circle().fill(Color.accentColor))
+                        .foregroundColor(Color.white)
                         .font(.caption)
                         .accessibility(label: Text("\(index+1), ")) // Adds a pause after the number
-                    Text(self.instructions[index])
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(2)
+                    instructionView(instructions[index])
                 }
                 .accessibilityElement(children: .combine)
             }
         }
+    }
+    
+    @ViewBuilder
+    private func instructionView(_ instruction: Instruction) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(instruction.text)
+                .fixedSize(horizontal: false, vertical: true)
+            if let subtext = instruction.subtext {
+                Text(subtext)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .foregroundColor(isEnabled ? instructionColor : Color.secondary)
+                    .font(.caption)
+            }
+        }
+        .padding(2)
+        .foregroundColor(isEnabled ? instructionColor : Color.secondary)
     }
 }
 

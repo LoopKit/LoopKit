@@ -9,7 +9,7 @@
 import UIKit
 
 
-public protocol PercentageTextFieldTableViewControllerDelegate: class {
+public protocol PercentageTextFieldTableViewControllerDelegate: AnyObject {
     func percentageTextFieldTableViewControllerDidChangePercentage(_ controller: PercentageTextFieldTableViewController)
 }
 

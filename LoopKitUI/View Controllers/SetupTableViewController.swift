@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol SetupTableViewControllerDelegate: class {
+public protocol SetupTableViewControllerDelegate: AnyObject {
     func setupTableViewControllerCancelButtonPressed(_ viewController: SetupTableViewController)
 }
 

@@ -1,6 +1,6 @@
 //
 //  InsulinTypeChooserView.swift
-//  MockKitUI
+//  LoopKitUI
 //
 //  Created by Pete Schwamb on 12/30/20.
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
@@ -11,46 +11,70 @@ import LoopKit
 
 public struct InsulinTypeChooser: View {
     
-    @Binding private var insulinType: InsulinType
+    @Binding private var insulinType: InsulinType?
     
-    let supportedInsulinTypes: [InsulinType]
+    let supportedInsulinTypes: [InsulinType?]
     
-    public init(insulinType: Binding<InsulinType>, supportedInsulinTypes: [InsulinType]) {
-        self.supportedInsulinTypes = supportedInsulinTypes
+    public init(insulinType: Binding<InsulinType?>, supportedInsulinTypes: [InsulinType], allowUnsetInsulinType: Bool = false) {
+        if allowUnsetInsulinType {
+            self.supportedInsulinTypes = [InsulinType?](supportedInsulinTypes) + [nil]
+        } else {
+            self.supportedInsulinTypes = supportedInsulinTypes
+        }
         self._insulinType = insulinType
     }
 
     public var body: some View {
         ForEach(supportedInsulinTypes, id: \.self) { insulinType in
-            HStack {
-                ZStack {
-                    Image(frameworkImage: "vial_color")
-                        .renderingMode(.template)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(Color(frameworkColor: insulinType.brandName))
-                    Image(frameworkImage: "vial")
-                        .resizable()
-                        .scaledToFit()
-                }
-                .padding([.trailing])
-                .frame(height: 70)
-                CheckmarkListItem(
-                    title: Text(insulinType.title),
-                    description: Text(insulinType.description),
-                    isSelected: Binding(
-                        get: { self.insulinType == insulinType },
-                        set: { isSelected in
-                            if isSelected {
-                                withAnimation {
-                                    self.insulinType = insulinType
+            if let insulinType = insulinType {
+                HStack {
+                    ZStack {
+                        Image(frameworkImage: "vial_color")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(Color(frameworkColor: insulinType.brandName))
+                        Image(frameworkImage: "vial")
+                            .resizable()
+                            .scaledToFit()
+                    }
+                    .padding([.trailing])
+                    .frame(height: 70)
+                    CheckmarkListItem(
+                        title: Text(insulinType.title),
+                        description: Text(insulinType.description),
+                        isSelected: Binding(
+                            get: { self.insulinType == insulinType },
+                            set: { isSelected in
+                                if isSelected {
+                                    withAnimation {
+                                        self.insulinType = insulinType
+                                    }
                                 }
                             }
-                        }
+                        )
                     )
-                )
+                }
+                .padding(.vertical, 4)
+            } else {
+                HStack {
+                    CheckmarkListItem(
+                        title: Text(LocalizedString("Unset", comment: "Title for selection when no insulin type is selected.")),
+                        description: Text(LocalizedString("The currently selected fast acting insulin model will be used as a default.", comment: "Description for selection when no insulin type is selected.")),
+                        isSelected: Binding(
+                            get: { self.insulinType == nil },
+                            set: { isSelected in
+                                if isSelected {
+                                    withAnimation {
+                                        self.insulinType = nil
+                                    }
+                                }
+                            }
+                        )
+                    )
+                }
+                .padding(.vertical, 4)
             }
-            .padding(.vertical, 4)
         }
     }
 }

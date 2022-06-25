@@ -13,6 +13,26 @@ import HealthKit
 
 class DoseEntryCodableTests: XCTestCase {
     func testCodable() throws {
+        try assertDoseEntryCodable(DoseEntry(type: .bolus,
+                                             startDate: dateFormatter.date(from: "2020-05-14T22:07:19Z")!,
+                                             value: 2.5,
+                                             unit: .units),
+        encodesJSON: """
+{
+  "endDate" : "2020-05-14T22:07:19Z",
+  "isMutable" : false,
+  "manuallyEntered" : false,
+  "startDate" : "2020-05-14T22:07:19Z",
+  "type" : "bolus",
+  "unit" : "U",
+  "value" : 2.5,
+  "wasProgrammedByPumpUI" : false
+}
+"""
+        )
+    }
+
+    func testCodableOptional() throws {
         try assertDoseEntryCodable(DoseEntry(type: .tempBasal,
                                              startDate: dateFormatter.date(from: "2020-05-14T22:07:19Z")!,
                                              endDate: dateFormatter.date(from: "2020-05-14T22:37:19Z")!,
@@ -21,20 +41,29 @@ class DoseEntryCodableTests: XCTestCase {
                                              deliveredUnits: 0.5,
                                              description: "Temporary Basal",
                                              syncIdentifier: "238E41EA-9576-4981-A1A4-51E10228584F",
-                                             scheduledBasalRate: HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: 1.5)),
-        encodesJSON: """
+                                             scheduledBasalRate: HKQuantity(unit: DoseEntry.unitsPerHour, doubleValue: 1.5),
+                                             insulinType: .fiasp,
+                                             automatic: true,
+                                             manuallyEntered: true,
+                                             isMutable: true,
+                                             wasProgrammedByPumpUI: true),
+                                   encodesJSON: """
 {
-  "automatic" : null,
+  "automatic" : true,
   "deliveredUnits" : 0.5,
   "description" : "Temporary Basal",
   "endDate" : "2020-05-14T22:37:19Z",
+  "insulinType" : 3,
+  "isMutable" : true,
+  "manuallyEntered" : true,
   "scheduledBasalRate" : 1.5,
   "scheduledBasalRateUnit" : "IU/hr",
   "startDate" : "2020-05-14T22:07:19Z",
   "syncIdentifier" : "238E41EA-9576-4981-A1A4-51E10228584F",
   "type" : "tempBasal",
   "unit" : "U/hour",
-  "value" : 1.25
+  "value" : 1.25,
+  "wasProgrammedByPumpUI" : true
 }
 """
         )
@@ -61,4 +90,34 @@ class DoseEntryCodableTests: XCTestCase {
         decoder.dateDecodingStrategy = .iso8601
         return decoder
     }()
+}
+
+class DoseEntryRawRepresentableTests: XCTestCase {
+    func testDoseEntryRawRepresentable() {
+        let original = DoseEntry(type: .bolus,
+                                 startDate: Date(),
+                                 value: 2.5,
+                                 unit: .units)
+        let actual = DoseEntry(rawValue: original.rawValue)
+        XCTAssertEqual(actual, original)
+    }
+
+    func testDoseEntryRawRepresentableOptional() {
+        let original = DoseEntry(type: .tempBasal,
+                                 startDate: Date(),
+                                 endDate: Date().addingTimeInterval(.minutes(30)),
+                                 value: 1.25,
+                                 unit: .unitsPerHour,
+                                 deliveredUnits: 0.5,
+                                 description: "Temporary Basal",
+                                 syncIdentifier: UUID().uuidString,
+                                 scheduledBasalRate: HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.5),
+                                 insulinType: .fiasp,
+                                 automatic: true,
+                                 manuallyEntered: true,
+                                 isMutable: true,
+                                 wasProgrammedByPumpUI: true)
+        let actual = DoseEntry(rawValue: original.rawValue)
+        XCTAssertEqual(actual, original)
+    }
 }

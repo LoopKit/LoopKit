@@ -60,7 +60,7 @@ public struct FractionalQuantityPicker: View {
             if pair.0.last != whole {
                 pair.0.append(whole)
             }
-            pair.1[whole, default: []].append(selectableValue.fraction)
+            pair.1[whole, default: []].append(unit.roundForPicker(value: selectableValue.fraction))
         }
 
         self._whole = Binding(
@@ -122,9 +122,7 @@ public struct FractionalQuantityPicker: View {
                 isUnitLabelVisible: false,
                 colorForValue: colorForWhole
             )
-            // Ensure whole picker color updates when fraction updates
-            .id(whole + fraction)
-            .frame(width: availableWidth / 3.5)
+            .frame(width: availableWidth / 3)
             .overlay(
                 Text(separator)
                     .foregroundColor(Color(.secondaryLabel))
@@ -134,6 +132,7 @@ public struct FractionalQuantityPicker: View {
             .padding(.leading, usageContext == .independent ? unitLabelWidth + spacing : 0)
             .padding(.trailing, spacing + separatorWidth + spacing)
             .clipped()
+            .compositingGroup()
 
             QuantityPicker(
                 value: $fraction.withUnit(unit),
@@ -142,11 +141,10 @@ public struct FractionalQuantityPicker: View {
                 formatter: fractionalFormatter,
                 colorForValue: colorForFraction
             )
-            // Ensure fractional picker values update when whole value updates
-            .id(whole + fraction)
-            .frame(width: availableWidth / 3.5)
+            .frame(width: availableWidth / 3)
             .padding(.trailing, spacing + unitLabelWidth)
             .clipped()
+            .compositingGroup()
         }
     }
 
@@ -187,7 +185,7 @@ public struct FractionalQuantityPicker: View {
         return attributedSeparator.size().width
     }
 
-    var spacing: CGFloat { 8 }
+    var spacing: CGFloat { 4 }
 
     var unitLabelWidth: CGFloat {
         let attributedUnitString = NSAttributedString(

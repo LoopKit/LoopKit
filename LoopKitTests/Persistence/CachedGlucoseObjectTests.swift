@@ -284,5 +284,8 @@ extension CachedGlucoseObject {
         self.startDate = Date()
         self.isDisplayOnly = false
         self.wasUserEntered = false
+        self.condition = nil
+        self.trend = .up
+        self.trendRate = HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 1.0)
     }
 }

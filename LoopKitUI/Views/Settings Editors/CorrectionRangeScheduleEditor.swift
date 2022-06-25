@@ -12,45 +12,34 @@ import LoopKit
 
 
 public struct CorrectionRangeScheduleEditor: View {
-    var initialSchedule: GlucoseRangeSchedule?
-    @State var scheduleItems: [RepeatingScheduleValue<DoubleRange>]
-    var unit: HKUnit
-    var minValue: HKQuantity?
-    var save: (GlucoseRangeSchedule) -> Void
-    let guardrail = Guardrail.correctionRange
-    let mode: SettingsPresentationMode
+    @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
     @Environment(\.appName) private var appName
+
+    let mode: SettingsPresentationMode
+    let viewModel: CorrectionRangeScheduleEditorViewModel
+
+    @State var scheduleItems: [RepeatingScheduleValue<ClosedRange<HKQuantity>>]
+
     @State private var userDidTap: Bool = false
-    
-    fileprivate init(
-        schedule: GlucoseRangeSchedule?,
-        unit: HKUnit,
-        minValue: HKQuantity?,
-        onSave save: @escaping (GlucoseRangeSchedule) -> Void,
-        mode: SettingsPresentationMode = .settings
-    ) {
-        self.initialSchedule = schedule
-        self._scheduleItems = State(initialValue: schedule?.items ?? [])
-        self.unit = unit
-        self.minValue = minValue
-        self.save = save
-        self.mode = mode
+
+    var displayGlucoseUnit: HKUnit {
+        displayGlucoseUnitObservable.displayGlucoseUnit
     }
-    
+
+    var initialSchedule: GlucoseRangeSchedule? {
+        viewModel.glucoseTargetRangeSchedule
+    }
+
     public init(
-           viewModel: TherapySettingsViewModel,
-           didSave: (() -> Void)? = nil
+        mode: SettingsPresentationMode,
+        therapySettingsViewModel: TherapySettingsViewModel,
+        didSave: (() -> Void)? = nil
     ) {
-        self.init(
-            schedule: viewModel.therapySettings.glucoseTargetRangeSchedule,
-            unit: viewModel.therapySettings.glucoseTargetRangeSchedule?.unit ?? viewModel.preferredGlucoseUnit,
-            minValue: Guardrail.minCorrectionRangeValue(suspendThreshold: viewModel.therapySettings.suspendThreshold),
-            onSave: { [weak viewModel] newSchedule in
-                viewModel?.saveCorrectionRange(range: newSchedule)
-                didSave?()
-            },
-            mode: viewModel.mode
-        )
+        self.mode = mode
+        self._scheduleItems = State(initialValue: therapySettingsViewModel.glucoseTargetRangeSchedule?.quantityRanges ?? [])
+        self.viewModel = CorrectionRangeScheduleEditorViewModel(
+            therapySettingsViewModel: therapySettingsViewModel,
+            didSave: didSave)
     }
 
     public var body: some View {
@@ -58,25 +47,29 @@ public struct CorrectionRangeScheduleEditor: View {
             title: Text(TherapySetting.glucoseTargetRange.title),
             description: description,
             scheduleItems: $scheduleItems,
-            initialScheduleItems: initialSchedule?.items ?? [],
+            initialScheduleItems: initialSchedule?.quantityRanges ?? [],
             defaultFirstScheduleItemValue: defaultFirstScheduleItemValue,
             saveConfirmation: saveConfirmation,
             valueContent: { range, isEditing in
-                GuardrailConstrainedQuantityRangeView(range: range.quantityRange(for: self.unit), unit: self.unit, guardrail: self.guardrail, isEditing: isEditing)
+                GuardrailConstrainedQuantityRangeView(
+                    range: range,
+                    unit: displayGlucoseUnit,
+                    guardrail: viewModel.guardrail,
+                    isEditing: isEditing)
             },
             valuePicker: { scheduleItem, availableWidth in
                 GlucoseRangePicker(
                     range: Binding(
-                        get: { scheduleItem.wrappedValue.value.quantityRange(for: self.unit) },
+                        get: { scheduleItem.wrappedValue.value },
                         set: { quantityRange in
                             withAnimation {
-                                scheduleItem.wrappedValue.value = quantityRange.doubleRange(for: self.unit)
+                                scheduleItem.wrappedValue.value = quantityRange
                             }
                         }
                     ),
-                    unit: self.unit,
-                    minValue: self.minValue,
-                    guardrail: self.guardrail,
+                    unit: displayGlucoseUnit,
+                    minValue: viewModel.minValue,
+                    guardrail: viewModel.guardrail,
                     usageContext: .component(availableWidth: availableWidth)
                 )
             },
@@ -84,27 +77,34 @@ public struct CorrectionRangeScheduleEditor: View {
                 instructionalContentIfNecessary
                 guardrailWarningIfNecessary
             },
-            savingMechanism: .synchronous { items in
-                let quantitySchedule = DailyQuantitySchedule(unit: self.unit, dailyItems: items)!
-                let rangeSchedule = GlucoseRangeSchedule(rangeSchedule: quantitySchedule, override: self.initialSchedule?.override)
-                self.save(rangeSchedule)
+            savingMechanism: .synchronous { dailyQuantities in
+                let rangeSchedule = DailyQuantitySchedule(
+                    unit: displayGlucoseUnit,
+                    dailyQuantities: dailyQuantities,
+                    timeZone: initialSchedule?.timeZone)!
+                let glucoseTargetRangeSchedule = GlucoseRangeSchedule(
+                    rangeSchedule: rangeSchedule,
+                    override: initialSchedule?.override)
+                viewModel.saveGlucoseTargetRangeSchedule(glucoseTargetRangeSchedule)
             },
             mode: mode,
             therapySettingType: .glucoseTargetRange
         )
-        .onTapGesture {
-            self.userDidTap = true
-        }
+        .simultaneousGesture(TapGesture().onEnded {
+            withAnimation {
+                userDidTap = true
+            }
+        })
     }
 
-    var defaultFirstScheduleItemValue: DoubleRange {
-        switch unit {
+    var defaultFirstScheduleItemValue: ClosedRange<HKQuantity> {
+        switch displayGlucoseUnit {
         case .milligramsPerDeciliter:
-            return DoubleRange(minValue: 100, maxValue: 115)
+            return DoubleRange(minValue: 100, maxValue: 120).quantityRange(for: displayGlucoseUnit)
         case .millimolesPerLiter:
-            return DoubleRange(minValue: 5.6, maxValue: 6.7)
+            return DoubleRange(minValue: 5.6, maxValue: 6.7).quantityRange(for: displayGlucoseUnit)
         default:
-            fatalError("Unsupposed glucose unit \(unit)")
+            fatalError("Unsupposed glucose unit \(displayGlucoseUnit)")
         }
     }
 
@@ -147,10 +147,10 @@ public struct CorrectionRangeScheduleEditor: View {
 
     var crossedThresholds: [SafetyClassification.Threshold] {
         scheduleItems.flatMap { (item) -> [SafetyClassification.Threshold] in
-            let lowerBound = HKQuantity(unit: unit, doubleValue: item.value.minValue)
-            let upperBound = HKQuantity(unit: unit, doubleValue: item.value.maxValue)
+            let lowerBound = item.value.lowerBound
+            let upperBound = item.value.upperBound
             return [lowerBound, upperBound].compactMap { (bound) -> SafetyClassification.Threshold? in
-                switch guardrail.classification(for: bound) {
+                switch viewModel.guardrail.classification(for: bound) {
                 case .withinRecommendedRange:
                     return nil
                 case .outsideRecommendedRange(let threshold):
@@ -174,6 +174,7 @@ private struct CorrectionRangeGuardrailWarning: View {
     var body: some View {
         assert(!crossedThresholds.isEmpty)
         return GuardrailWarning(
+            therapySetting: .glucoseTargetRange,
             title: crossedThresholds.count == 1 ? singularWarningTitle(for: crossedThresholds.first!) : multipleWarningTitle,
             thresholds: crossedThresholds
         )

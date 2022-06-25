@@ -23,9 +23,6 @@ public enum HealthKitSampleStoreResult<T> {
 
 
 public class HealthKitSampleStore {
-    /// Describes the source of an update notification. Value is of type `UpdateSource.RawValue`
-    public static let notificationUpdateSourceKey = "com.loopkit.UpdateSource"
-    
     private let observerQueryUpdateHandlerQueue: DispatchQueue
 
     public enum StoreError: Error {
@@ -60,12 +57,12 @@ public class HealthKitSampleStore {
     }
     
     /// Allows unit test to inject a mock for HKObserverQuery
-    public var createObserverQuery: (HKSampleType, NSPredicate?, @escaping (HKObserverQuery, @escaping HKObserverQueryCompletionHandler, Error?) -> Void) -> HKObserverQuery = { (sampleType, predicate, updateHandler) in
+    internal var createObserverQuery: (HKSampleType, NSPredicate?, @escaping (HKObserverQuery, @escaping HKObserverQueryCompletionHandler, Error?) -> Void) -> HKObserverQuery = { (sampleType, predicate, updateHandler) in
         return HKObserverQuery(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
     }
     
     /// Allows unit test to inject a mock for HKAnchoredObjectQuery
-    public var createAnchoredObjectQuery: (HKSampleType, NSPredicate?, HKQueryAnchor?, Int, @escaping (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void) -> HKAnchoredObjectQuery = { (sampleType, predicate, anchor, limit, resultsHandler) in
+    internal var createAnchoredObjectQuery: (HKSampleType, NSPredicate?, HKQueryAnchor?, Int, @escaping (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void) -> HKAnchoredObjectQuery = { (sampleType, predicate, anchor, limit, resultsHandler) in
         return HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: limit, resultsHandler: resultsHandler)
     }
 
@@ -109,10 +106,11 @@ public class HealthKitSampleStore {
     ///
     /// - Parameters:
     ///   - toShare: Whether to request write authorization. Defaults to true.
+    ///   - read: Whether to request read authorization. Defaults to true.
     ///   - completion: A closure called after the authorization is completed
     ///   - result: The authorization result
-    public func authorize(toShare: Bool = true, _ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
-        healthStore.requestAuthorization(toShare: toShare ? [sampleType] : [], read: [sampleType]) { (completed, error) -> Void in
+    public func authorize(toShare: Bool = true, read: Bool = true, _ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
+        healthStore.requestAuthorization(toShare: toShare ? [sampleType] : [], read: read ? [sampleType] : []) { (completed, error) -> Void in
             if completed && !self.sharingDenied {
                 self.log.default("Authorize completed: creating HK query")
                 self.createQuery()
@@ -128,15 +126,19 @@ public class HealthKitSampleStore {
                 
                 completion(.failure(authError))
             }
-            
+
             NotificationCenter.default.post(name: .StoreAuthorizationStatusDidChange, object: self)
+
+            // Do not remove this log: it actually triggers a query by calling preferredUnit, and can update the cache
+            // And trigger a unit change notification after authorization happens.
+            self.log.default("Checking units after authorization: %{public}@", String(describing: self.preferredUnit))
         }
     }
 
     // MARK: - Query support
 
     /// The active observer query
-    private var observerQuery: HKObserverQuery? {
+    internal var observerQuery: HKObserverQuery? {
         didSet {
             if let query = oldValue {
                 healthStore.stop(query)
@@ -316,7 +318,7 @@ extension HealthKitSampleStore {
 
 // MARK: - Observation
 extension HealthKitSampleStore {
-    private func createQuery() {
+    internal func createQuery() {
         log.debug("%@ [sampleType: %@]", #function, sampleType)
         log.debug("%@ [observationEnabled: %d]", #function, observationEnabled)
         log.debug("%@ [observeHealthKitSamplesFromCurrentApp: %d]", #function, observeHealthKitSamplesFromCurrentApp)
@@ -391,6 +393,11 @@ extension HealthKitSampleStore {
 // MARK: - HKHealthStore helpers
 extension HealthKitSampleStore {
     
+    /// True if the user has explicitly authorized access to any required share types
+    public var sharingAuthorized: Bool {
+        return healthStore.authorizationStatus(for: sampleType) == .sharingAuthorized
+    }
+
     /// True if the user has explicitly denied access to any required share types
     public var sharingDenied: Bool {
         return healthStore.authorizationStatus(for: sampleType) == .sharingDenied

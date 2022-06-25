@@ -91,15 +91,23 @@ public final class GlucoseStore: HealthKitSampleStore {
     }
     private let lockedLatestGlucose = Locked<GlucoseSampleValue?>(nil)
 
+    private let storeSamplesToHealthKit: Bool
+
     private let cacheStore: PersistenceController
 
     private let provenanceIdentifier: String
 
+    public var healthKitStorageDelay: TimeInterval = 0
+    
+    // If HealthKit sharing is not authorized, `nil` will prevent later storage
+    var healthKitStorageDelayIfAllowed: TimeInterval? { storeSamplesToHealthKit && sharingAuthorized ? healthKitStorageDelay : nil }
+    
     static let healthKitQueryAnchorMetadataKey = "com.loopkit.GlucoseStore.hkQueryAnchor"
 
     public init(
         healthStore: HKHealthStore,
         observeHealthKitSamplesFromOtherApps: Bool = true,
+        storeSamplesToHealthKit: Bool = true,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
         cacheLength: TimeInterval = 60 /* minutes */ * 60 /* seconds */,
@@ -112,12 +120,13 @@ public final class GlucoseStore: HealthKitSampleStore {
         self.cacheStore = cacheStore
         self.momentumDataInterval = momentumDataInterval
 
+        self.storeSamplesToHealthKit = storeSamplesToHealthKit
         self.cacheLength = cacheLength
         self.observationInterval = observationInterval ?? cacheLength
         self.provenanceIdentifier = provenanceIdentifier
 
         super.init(healthStore: healthStore,
-                   observeHealthKitSamplesFromCurrentApp: false,
+                   observeHealthKitSamplesFromCurrentApp: true,
                    observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
                    type: glucoseType,
                    observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
@@ -133,6 +142,10 @@ public final class GlucoseStore: HealthKitSampleStore {
             cacheStore.fetchAnchor(key: GlucoseStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
                     self.queryAnchor = anchor
+
+                    if !self.authorizationRequired {
+                        self.createQuery()
+                    }
 
                     self.updateLatestGlucose()
 
@@ -191,7 +204,7 @@ public final class GlucoseStore: HealthKitSampleStore {
                 }
             }
 
-            if error != nil {
+            guard error == nil else {
                 completion(false)
                 return
             }
@@ -206,7 +219,7 @@ public final class GlucoseStore: HealthKitSampleStore {
                 self.purgeExpiredManagedDataFromHealthKit(before: newestStartDate)
             }
 
-            self.handleUpdatedGlucoseData(updateSource: .queriedByHealthKit)
+            self.handleUpdatedGlucoseData()
             completion(true)
         }
     }
@@ -336,16 +349,16 @@ extension GlucoseStore {
 
                     let objects: [CachedGlucoseObject] = samples.map { sample in
                         let object = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
-                        object.create(from: sample, provenanceIdentifier: self.provenanceIdentifier)
+                        object.create(from: sample,
+                                      provenanceIdentifier: self.provenanceIdentifier,
+                                      healthKitStorageDelay: self.healthKitStorageDelayIfAllowed)
                         return object
                     }
 
                     error = self.cacheStore.save()
-                    if error != nil {
+                    guard error == nil else {
                         return
                     }
-
-                    self.saveSamplesToHealthKit(samples, objects: objects)
 
                     storedSamples = objects.map { StoredGlucoseSample(managedObject: $0) }
                 } catch let coreDataError {
@@ -358,42 +371,69 @@ extension GlucoseStore {
                 return
             }
 
-            self.handleUpdatedGlucoseData(updateSource: .changedInApp)
+            self.handleUpdatedGlucoseData()
             completion(.success(storedSamples))
         }
     }
-
-    private func saveSamplesToHealthKit(_ samples: [NewGlucoseSample], objects: [CachedGlucoseObject]) {
+    
+    private func saveSamplesToHealthKit() {
         dispatchPrecondition(condition: .onQueue(queue))
-
-        guard !samples.isEmpty else {
+        var error: Error?
+        
+        guard storeSamplesToHealthKit else {
             return
         }
 
-        let quantitySamples = samples.map { $0.quantitySample }
-        var error: Error?
+        cacheStore.managedObjectContext.performAndWait {
+            do {
+                let request: NSFetchRequest<CachedGlucoseObject> = CachedGlucoseObject.fetchRequest()
+                request.predicate = NSPredicate(format: "healthKitEligibleDate <= %@", Date() as NSDate)
+                request.sortDescriptors = [NSSortDescriptor(key: "modificationCounter", ascending: true)]   // Maintains modificationCounter order
 
-        // Save objects to HealthKit, log any errors, but do not fail
-        let dispatchGroup = DispatchGroup()
-        dispatchGroup.enter()
-        self.healthStore.save(quantitySamples) { (_, healthKitError) in
-            error = healthKitError
-            dispatchGroup.leave()
+                let objects = try self.cacheStore.managedObjectContext.fetch(request)
+                guard !objects.isEmpty else {
+                    return
+                }
+                
+                if objects.contains(where: { $0.uuid != nil }) {
+                    self.log.error("Found CachedGlucoseObjects with non-nil uuid. Should never happen, but HealthKit should be able to resolve it.")
+                    // Note: UUIDs will be overwritten below, but since the syncIdentifiers will match then HealthKit can resolve correctly via replacement
+                }
+                    
+                let quantitySamples = objects.map { $0.quantitySample }
+                
+                let dispatchGroup = DispatchGroup()
+                dispatchGroup.enter()
+                self.healthStore.save(quantitySamples) { (_, healthKitError) in
+                    error = healthKitError
+                    dispatchGroup.leave()
+                }
+                dispatchGroup.wait()
+
+                // If there is an error writing to HealthKit, then do not persist uuids and retry later
+                guard error == nil else {
+                    return
+                }
+
+                for (object, quantitySample) in zip(objects, quantitySamples) {
+                    object.uuid = quantitySample.uuid
+                    object.healthKitEligibleDate = nil
+                    object.updateModificationCounter()  // Maintains modificationCounter order
+                }
+
+                error = self.cacheStore.save()
+                guard error == nil else {
+                    return
+                }
+                
+                self.log.default("Stored %d eligible glucose samples to HealthKit", objects.count)
+            } catch let coreDataError {
+                error = coreDataError
+            }
         }
-        dispatchGroup.wait()
 
         if let error = error {
-            self.log.error("Error saving HealthKit objects: %@", String(describing: error))
-            return
-        }
-
-        // Update Core Data with the changes, log any errors, but do not fail
-        for (object, quantitySample) in zip(objects, quantitySamples) {
-            object.uuid = quantitySample.uuid
-        }
-        if let error = self.cacheStore.save() {
-            self.log.error("Error updating CachedGlucoseObjects after saving HealthKit objects: %@", String(describing: error))
-            objects.forEach { $0.uuid = nil }
+            self.log.error("Error saving samples to HealthKit: %{public}@", String(describing: error))
         }
     }
 
@@ -503,7 +543,7 @@ extension GlucoseStore {
                 return
             }
 
-            self.handleUpdatedGlucoseData(updateSource: .changedInApp)
+            self.handleUpdatedGlucoseData()
             completion(nil)
         }
     }
@@ -531,7 +571,7 @@ extension GlucoseStore {
                         return
                     }
 
-                    self.handleUpdatedGlucoseData(updateSource: .changedInApp)
+                    self.handleUpdatedGlucoseData()
                     completion(nil)
                 }
             }
@@ -553,7 +593,7 @@ extension GlucoseStore {
                 completion(error)
                 return
             }
-            self.handleUpdatedGlucoseData(updateSource: .changedInApp)
+            self.handleUpdatedGlucoseData()
             completion(nil)
         }
     }
@@ -598,13 +638,14 @@ extension GlucoseStore {
         }
     }
 
-    private func handleUpdatedGlucoseData(updateSource: UpdateSource) {
+    private func handleUpdatedGlucoseData() {
         dispatchPrecondition(condition: .onQueue(queue))
 
         self.purgeExpiredCachedGlucoseObjects()
         self.updateLatestGlucose()
+        self.saveSamplesToHealthKit()
 
-        NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self, userInfo: [GlucoseStore.notificationUpdateSourceKey: updateSource.rawValue])
+        NotificationCenter.default.post(name: GlucoseStore.glucoseSamplesDidChange, object: self)
         delegate?.glucoseStoreHasUpdatedGlucoseData(self)
     }
 }
@@ -668,7 +709,7 @@ extension GlucoseStore {
 // MARK: - Remote Data Service Query
 
 extension GlucoseStore {
-    public struct QueryAnchor: RawRepresentable {
+    public struct QueryAnchor: Equatable, RawRepresentable {
         public typealias RawValue = [String: Any]
 
         internal var modificationCounter: Int64
@@ -703,7 +744,7 @@ extension GlucoseStore {
             var queryError: Error?
 
             guard limit > 0 else {
-                completion(.success(queryAnchor, queryResult))
+                completion(.success(queryAnchor, []))
                 return
             }
 
@@ -742,7 +783,7 @@ extension GlucoseStore: CriticalEventLog {
     private var exportProgressUnitCountPerObject: Int64 { 1 }
     private var exportFetchLimit: Int { Int(criticalEventLogExportProgressUnitCountPerFetch / exportProgressUnitCountPerObject) }
 
-    public var exportName: String { "Glucoses.json" }
+    public var exportName: String { "Glucose.json" }
 
     public func exportProgressTotalUnitCount(startDate: Date, endDate: Date? = nil) -> Result<Int64, Error> {
         var result: Result<Int64, Error>?
@@ -829,7 +870,7 @@ extension GlucoseStore {
             self.cacheStore.managedObjectContext.performAndWait {
                 for sample in samples {
                     let object = CachedGlucoseObject(context: self.cacheStore.managedObjectContext)
-                    object.create(from: sample, provenanceIdentifier: self.provenanceIdentifier)
+                    object.create(from: sample, provenanceIdentifier: self.provenanceIdentifier, healthKitStorageDelay: self.healthKitStorageDelayIfAllowed)
                 }
                 error = self.cacheStore.save()
             }

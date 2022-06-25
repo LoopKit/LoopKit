@@ -15,33 +15,35 @@ extension NumberFormatter {
         return string(from: NSNumber(value: number))
     }
 
-    func string(from number: Double, unit: String, style: Formatter.UnitStyle = .medium) -> String? {
+    func string(from number: Double, unit: String, style: Formatter.UnitStyle = .medium, avoidLineBreaking: Bool = true) -> String? {
         guard let stringValue = string(from: number) else {
             return nil
         }
-
-        let format: String
+        
+        let separator: String
         switch style {
-        case .long, .medium:
-            format = LocalizedString(
-                "quantity-and-unit-space",
-                value: "%1$@ %2$@",
-                comment: "Format string for combining localized numeric value and unit with a space. (1: numeric value)(2: unit)"
-            )
+        case .long:
+            separator = " "
+        case .medium:
+            separator = avoidLineBreaking ? .nonBreakingSpace : " "
         case .short:
             fallthrough
         @unknown default:
-            format = LocalizedString(
-                "quantity-and-unit-tight",
-                value: "%1$@%2$@",
-                comment: "Format string for combining localized numeric value and unit without spacing. (1: numeric value)(2: unit)"
-            )
+            separator = avoidLineBreaking ? .wordJoiner : ""
         }
-
+        
+        let unit = avoidLineBreaking ? unit.replacingOccurrences(of: "/", with: "\(String.wordJoiner)/\(String.wordJoiner)") : unit
+        
         return String(
-            format: format,
+            format: NSLocalizedString("%1$@%2$@%3$@", comment: "String format for value with units (1: value, 2: separator, 3: units)"),
             stringValue,
+            separator,
             unit
         )
     }
+}
+
+public extension String {
+    static let nonBreakingSpace = "\u{00a0}"
+    static let wordJoiner = "\u{2060}"
 }

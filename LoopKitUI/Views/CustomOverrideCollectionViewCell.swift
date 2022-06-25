@@ -14,11 +14,7 @@ final class CustomOverrideCollectionViewCell: UICollectionViewCell, Identifiable
 
     private lazy var overlayDimmerView: UIView = {
         let view = UIView()
-        if #available(iOSApplicationExtension 13.0, *) {
-            view.backgroundColor = .systemBackground
-        } else {
-            view.backgroundColor = .white
-        }
+        view.backgroundColor = .systemBackground
         view.alpha = 0
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -30,16 +26,10 @@ final class CustomOverrideCollectionViewCell: UICollectionViewCell, Identifiable
         let selectedBackgroundView = UIView()
         self.selectedBackgroundView = selectedBackgroundView
 
-        if #available(iOSApplicationExtension 13.0, iOS 13.0, *) {
-            selectedBackgroundView.backgroundColor = .tertiarySystemFill
+        selectedBackgroundView.backgroundColor = .tertiarySystemFill
 
-            backgroundColor = .secondarySystemGroupedBackground
-            layer.cornerCurve = .continuous
-        } else {
-            selectedBackgroundView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
-
-            backgroundColor = .white
-        }
+        backgroundColor = .secondarySystemGroupedBackground
+        layer.cornerCurve = .continuous
 
         layer.cornerRadius = 16
 

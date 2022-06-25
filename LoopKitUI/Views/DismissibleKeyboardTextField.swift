@@ -20,6 +20,9 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
     var autocorrectionType: UITextAutocorrectionType
     var shouldBecomeFirstResponder: Bool
     var maxLength: Int?
+    var doneButtonColor: UIColor
+    var isDismissible: Bool
+    var textFieldDidBeginEditing: (() -> Void)?
 
     public init(
         text: Binding<String>,
@@ -31,7 +34,10 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         autocapitalizationType: UITextAutocapitalizationType = .sentences,
         autocorrectionType: UITextAutocorrectionType = .default,
         shouldBecomeFirstResponder: Bool = false,
-        maxLength: Int? = nil
+        maxLength: Int? = nil,
+        doneButtonColor: UIColor = .blue,
+        isDismissible: Bool = true,
+        textFieldDidBeginEditing: (() -> Void)? = nil
     ) {
         self._text = text
         self.placeholder = placeholder
@@ -43,11 +49,14 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         self.autocorrectionType = autocorrectionType
         self.shouldBecomeFirstResponder = shouldBecomeFirstResponder
         self.maxLength = maxLength
+        self.doneButtonColor = doneButtonColor
+        self.isDismissible = isDismissible
+        self.textFieldDidBeginEditing = textFieldDidBeginEditing
     }
 
     public func makeUIView(context: Context) -> UITextField {
         let textField = UITextField()
-        textField.inputAccessoryView = makeDoneToolbar(for: textField)
+        textField.inputAccessoryView = isDismissible ? makeDoneToolbar(for: textField) : nil
         textField.addTarget(context.coordinator, action: #selector(Coordinator.textChanged), for: .editingChanged)
         textField.addTarget(context.coordinator, action: #selector(Coordinator.editingDidBegin), for: .editingDidBegin)
         textField.delegate = context.coordinator
@@ -58,7 +67,7 @@ public struct DismissibleKeyboardTextField: UIViewRepresentable {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: textField, action: #selector(UITextField.resignFirstResponder))
-        doneButton.tintColor = textColor
+        doneButton.tintColor = doneButtonColor
         toolbar.items = [flexibleSpace, doneButton]
         toolbar.sizeToFit()
         return toolbar
@@ -125,5 +134,9 @@ extension DismissibleKeyboardTextField.Coordinator: UITextFieldDelegate {
         let newString: NSString =
             currentString.replacingCharacters(in: range, with: string) as NSString
         return newString.length <= maxLength
+    }
+
+    public func textFieldDidBeginEditing(_ textField: UITextField) {
+        parent.textFieldDidBeginEditing?()
     }
 }

@@ -59,7 +59,7 @@ struct MockGlucoseProvider {
                     return []
                 }
             }
-            let result: CGMReadingResult = allSamples.isEmpty ? .noData : .newData(allSamples)
+            let result: CGMReadingResult = allSamples.isEmpty ? .noData : .newData(allSamples.reversed())
             completion(result)
         }
     }
@@ -70,10 +70,13 @@ extension MockGlucoseProvider {
         self = effects.transformations.reduce(model.glucoseProvider) { model, transform in transform(model) }
     }
 
-    private static func glucoseSample(at date: Date, quantity: HKQuantity) -> NewGlucoseSample {
+    private static func glucoseSample(at date: Date, quantity: HKQuantity, condition: GlucoseCondition?, trend: GlucoseTrend?, trendRate: HKQuantity?) -> NewGlucoseSample {
         return NewGlucoseSample(
             date: date,
             quantity: quantity,
+            condition: condition,
+            trend: trend,
+            trendRate: trendRate,
             isDisplayOnly: false,
             wasUserEntered: false,
             syncIdentifier: UUID().uuidString,
@@ -87,7 +90,7 @@ extension MockGlucoseProvider {
 extension MockGlucoseProvider {
     fileprivate static func constant(_ quantity: HKQuantity) -> MockGlucoseProvider {
         return MockGlucoseProvider { date, completion in
-            let sample = glucoseSample(at: date, quantity: quantity)
+            let sample = glucoseSample(at: date, quantity: quantity, condition: nil, trend: .flat, trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 0))
             completion(.newData([sample]))
         }
     }
@@ -96,21 +99,64 @@ extension MockGlucoseProvider {
         let (baseGlucose, amplitude, period, referenceDate) = parameters
         precondition(period > 0)
         let unit = HKUnit.milligramsPerDeciliter
+        let trendRateUnit = unit.unitDivided(by: .minute())
         precondition(baseGlucose.is(compatibleWith: unit))
         precondition(amplitude.is(compatibleWith: unit))
         let baseGlucoseValue = baseGlucose.doubleValue(for: unit)
         let amplitudeValue = amplitude.doubleValue(for: unit)
-
+        let chanceOfNilTrendRate = 1.0/20.0
+        var prevGlucoseValue: Double?
+        
         return MockGlucoseProvider { date, completion in
             let timeOffset = date.timeIntervalSince1970 - referenceDate.timeIntervalSince1970
-            let glucoseValue = baseGlucoseValue + amplitudeValue * sin(2 * .pi / period * timeOffset)
-            let sample = glucoseSample(at: date, quantity: HKQuantity(unit: unit, doubleValue: glucoseValue))
+            func sine(_ t: TimeInterval) -> Double {
+                return Double(baseGlucoseValue + amplitudeValue * sin(2 * .pi / period * t)).rounded()
+            }
+            let glucoseValue = sine(timeOffset)
+            var trend: GlucoseTrend?
+            var trendRate: HKQuantity?
+            if let prevGlucoseValue = prevGlucoseValue,
+               let trendRateValue = coinFlip(withChanceOfHeads: chanceOfNilTrendRate, ifHeads: nil, ifTails: glucoseValue - prevGlucoseValue) {
+                let smallDelta = 0.9
+                let mediumDelta = 2.0
+                let largeDelta = 5.0
+                switch trendRateValue {
+                case -smallDelta ... smallDelta:
+                    trend = .flat
+                case -mediumDelta ..< -smallDelta:
+                    trend = .down
+                case -largeDelta ..< -mediumDelta:
+                    trend = .downDown
+                case -Double.greatestFiniteMagnitude ..< -largeDelta:
+                    trend = .downDownDown
+                case smallDelta ... mediumDelta:
+                    trend = .up
+                case mediumDelta ... largeDelta:
+                    trend = .upUp
+                case largeDelta ... Double.greatestFiniteMagnitude:
+                    trend = .upUpUp
+                default:
+                    break
+                }
+                trendRate = HKQuantity(unit: trendRateUnit, doubleValue: trendRateValue)
+            }
+            let sample = glucoseSample(at: date, quantity: HKQuantity(unit: unit, doubleValue: glucoseValue), condition: nil, trend: trend, trendRate: trendRate)
+            // capture semantics lets me "stow" the previous glucose value with this static function.  A little weird, but it seems to work.
+            prevGlucoseValue = glucoseValue
             completion(.newData([sample]))
         }
     }
 
     fileprivate static var noData: MockGlucoseProvider {
         return MockGlucoseProvider { _, completion in completion(.noData) }
+    }
+    
+    fileprivate static var signalLoss: MockGlucoseProvider {
+        return MockGlucoseProvider { _, _ in }
+    }
+    
+    fileprivate static var unreliableData: MockGlucoseProvider {
+        return MockGlucoseProvider { _, completion in completion(.unreliableData) }
     }
 
     fileprivate static func error(_ error: Error) -> MockGlucoseProvider {
@@ -129,7 +175,7 @@ extension MockGlucoseProvider {
         let magnitude = magnitude.doubleValue(for: unit)
 
         return mapGlucoseQuantities { glucose in
-            let glucoseValue = glucose.doubleValue(for: unit) + .random(in: -magnitude...magnitude)
+            let glucoseValue = (glucose.doubleValue(for: unit) + .random(in: -magnitude...magnitude)).rounded()
             return HKQuantity(unit: unit, doubleValue: glucoseValue)
         }
     }
@@ -153,7 +199,7 @@ extension MockGlucoseProvider {
         return mapGlucoseQuantities { glucose in
             return coinFlip(
                 withChanceOfHeads: chanceOfOutlier,
-                ifHeads: HKQuantity(unit: unit, doubleValue: glucose.doubleValue(for: unit) + outlierDelta),
+                ifHeads: HKQuantity(unit: unit, doubleValue: (glucose.doubleValue(for: unit) + outlierDelta).rounded()),
                 ifTails: glucose
             )
         }
@@ -190,6 +236,9 @@ private extension CGMReadingResult {
                 return NewGlucoseSample(
                     date: sample.date,
                     quantity: transform(sample.quantity),
+                    condition: sample.condition,
+                    trend: sample.trend,
+                    trendRate: sample.trendRate,
                     isDisplayOnly: sample.isDisplayOnly,
                     wasUserEntered: sample.wasUserEntered,
                     syncIdentifier: sample.syncIdentifier,
@@ -211,7 +260,9 @@ private extension MockCGMDataSource.Model {
         case .noData:
             return .noData
         case .signalLoss:
-            return .noData
+            return .signalLoss
+        case .unreliableData:
+            return .unreliableData
         }
     }
 }

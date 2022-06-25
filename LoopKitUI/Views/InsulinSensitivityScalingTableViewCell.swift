@@ -24,11 +24,7 @@ final class InsulinSensitivityScalingTableViewCell: UITableViewCell {
 
     @IBOutlet weak var gaugeBar: SegmentedGaugeBarView! {
         didSet {
-            if #available(iOSApplicationExtension 13.0, *) {
-                gaugeBar.backgroundColor = .systemGray6
-            } else {
-                gaugeBar.backgroundColor = .white
-            }
+            gaugeBar.backgroundColor = .systemGray6
 
             gaugeBar.delegate = self
         }

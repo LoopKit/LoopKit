@@ -23,7 +23,7 @@ public enum CarbAbsorptionModel {
     case adaptiveRateNonlinear
 }
 
-public protocol CarbStoreDelegate: class {
+public protocol CarbStoreDelegate: AnyObject {
 
     /**
      Informs the delegate that the carb store has updated carb data.
@@ -165,6 +165,8 @@ public final class CarbStore: HealthKitSampleStore {
     /// The interval to observe HealthKit data to populate the cache
     public let observationInterval: TimeInterval
 
+    private let storeEntriesToHealthKit: Bool
+
     private let cacheStore: PersistenceController
 
     /// The sync version used for new samples written to HealthKit
@@ -191,6 +193,7 @@ public final class CarbStore: HealthKitSampleStore {
     public init(
         healthStore: HKHealthStore,
         observeHealthKitSamplesFromOtherApps: Bool = true,
+        storeEntriesToHealthKit: Bool = true,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval,
         defaultAbsorptionTimes: DefaultAbsorptionTimes,
@@ -205,6 +208,7 @@ public final class CarbStore: HealthKitSampleStore {
         carbAbsorptionModel: CarbAbsorptionModel = .nonlinear,
         provenanceIdentifier: String
     ) {
+        self.storeEntriesToHealthKit = storeEntriesToHealthKit
         self.cacheStore = cacheStore
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
         self.lockedCarbRatioSchedule = Locked(carbRatioSchedule)
@@ -222,7 +226,7 @@ public final class CarbStore: HealthKitSampleStore {
         let observationEnabled = observationInterval > 0
 
         super.init(healthStore: healthStore,
-                   observeHealthKitSamplesFromCurrentApp: false,
+                   observeHealthKitSamplesFromCurrentApp: true,
                    observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
                    type: carbType,
                    observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
@@ -248,7 +252,11 @@ public final class CarbStore: HealthKitSampleStore {
             cacheStore.fetchAnchor(key: CarbStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
                     self.queryAnchor = anchor
-            
+
+                    if !self.authorizationRequired {
+                        self.createQuery()
+                    }
+
                     self.migrateLegacyCarbEntryKeys()
                     
                     semaphore.signal()
@@ -343,7 +351,7 @@ public final class CarbStore: HealthKitSampleStore {
                 return
             }
 
-            self.handleUpdatedCarbData(updateSource: .queriedByHealthKit)
+            self.handleUpdatedCarbData()
             completion(true)
         }
     }
@@ -494,7 +502,7 @@ extension CarbStore {
 
             completion(.success(storedEntry!))
 
-            self.handleUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData()
         }
     }
 
@@ -543,12 +551,16 @@ extension CarbStore {
 
             completion(.success(storedEntry!))
 
-            self.handleUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData()
         }
     }
 
     private func saveEntryToHealthKit(_ object: CachedCarbObject) {
         dispatchPrecondition(condition: .onQueue(queue))
+
+        guard storeEntriesToHealthKit else {
+            return
+        }
 
         let quantitySample = object.quantitySample
         var error: Error?
@@ -617,7 +629,7 @@ extension CarbStore {
 
             completion(.success(true))
 
-            self.handleUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData()
         }
     }
 
@@ -782,7 +794,7 @@ extension CarbStore {
 
             completion(error)
 
-            self.handleUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData()
         }
     }
 }
@@ -847,7 +859,7 @@ extension CarbStore {
                 return
             }
 
-            self.handleUpdatedCarbData(updateSource: .changedInApp)
+            self.handleUpdatedCarbData()
             completion(nil)
         }
     }
@@ -874,26 +886,26 @@ extension CarbStore {
         return error
     }
 
-    private func handleUpdatedCarbData(updateSource: UpdateSource) {
+    private func handleUpdatedCarbData() {
         dispatchPrecondition(condition: .onQueue(queue))
 
         purgeExpiredCachedCarbObjects()
 
-        NotificationCenter.default.post(name: CarbStore.carbEntriesDidChange, object: self, userInfo: [CarbStore.notificationUpdateSourceKey: updateSource.rawValue])
+        NotificationCenter.default.post(name: CarbStore.carbEntriesDidChange, object: self)
         delegate?.carbStoreHasUpdatedCarbData(self)
     }
 
     private func areAllRelatedObjectsPurgable(to object: CachedCarbObject, before date: Date) throws -> Bool {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        // If no provenance identifier nor sync identifier, then there are no related objects
-        guard let provenanceIdentifier = object.provenanceIdentifier, let syncIdentifier = object.syncIdentifier else {
+        // If no sync identifier, then there are no related objects
+        guard let syncIdentifier = object.syncIdentifier else {
             return true
         }
 
         // Count any that are NOT purgable
         let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", provenanceIdentifier),
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", object.provenanceIdentifier),
                                                                                 NSPredicate(format: "syncIdentifier == %@", syncIdentifier),
                                                                                 NSPredicate(format: "startDate >= %@", date as NSDate)])
         request.fetchLimit = 1
@@ -1146,7 +1158,7 @@ extension CarbStore {
 // MARK: - Remote Data Service Query
 
 extension CarbStore {
-    public struct QueryAnchor: RawRepresentable {
+    public struct QueryAnchor: Equatable, RawRepresentable {
         public typealias RawValue = [String: Any]
 
         internal var anchorKey: Int64
@@ -1183,7 +1195,7 @@ extension CarbStore {
             var queryError: Error?
 
             guard limit > 0 else {
-                completion(.success(queryAnchor, queryCreatedResult, queryUpdatedResult, queryDeletedResult))
+                completion(.success(queryAnchor, [], [], []))
                 return
             }
 
@@ -1399,7 +1411,7 @@ extension CarbStore {
                     return [
                         "\t",
                         entry.uuid?.uuidString ?? "",
-                        entry.provenanceIdentifier ?? "",
+                        entry.provenanceIdentifier,
                         entry.syncIdentifier ?? "",
                         entry.syncVersion != nil ? String(describing: entry.syncVersion) : "",
                         String(describing: entry.startDate),

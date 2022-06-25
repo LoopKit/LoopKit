@@ -62,14 +62,7 @@ public final class AuthenticationViewController<T: ServiceAuthenticationUI>: UIT
     }
 
     var credentials: [(field: ServiceCredential, value: String?)] {
-        switch state {
-        case .authorized:
-
-
-            return authentication.credentials.filter({ !$0.field.isSecret })
-        default:
-            return authentication.credentials
-        }
+        return authentication.credentials
     }
 
     public init(authentication: T) {
@@ -117,7 +110,7 @@ public final class AuthenticationViewController<T: ServiceAuthenticationUI>: UIT
 
             switch state {
             case .authorized:
-                cell.textLabel?.text = LocalizedString("authentication-button-delete", comment: "The title of the button to remove the credentials for a service")
+                cell.textLabel?.text = LocalizedString("Delete", comment: "The title of the button to remove the credentials for a service")
                 cell.tintColor = .systemRed
             case .empty, .unauthorized, .verifying:
                 cell.textLabel?.text = LocalizedString("Add Account", comment: "The title of the button to add the credentials for a service")
@@ -164,6 +157,17 @@ public final class AuthenticationViewController<T: ServiceAuthenticationUI>: UIT
             return cell
         }
     }
+    
+    public override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        switch Section(rawValue: section)! {
+        case .credentials:
+            return authentication.credentialFormFieldHelperMessage
+        case .button:
+            return nil
+        }
+    }
+    
+    // MARK: - Table view delegate
 
     public override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         switch Section(rawValue: indexPath.section)! {

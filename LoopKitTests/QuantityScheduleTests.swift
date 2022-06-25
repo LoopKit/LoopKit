@@ -27,8 +27,10 @@ class QuantityScheduleTests: XCTestCase {
     }
 
     func testCarbRatioScheduleLocalTimeZone() {
-        let schedule = CarbRatioSchedule(unit: HKUnit.gram(), dailyItems: items, timeZone: nil)!
-        let calendar = Calendar.current
+        let therapyTimeZone = TimeZone(secondsFromGMT: -6*60*60)!
+        let schedule = CarbRatioSchedule(unit: HKUnit.gram(), dailyItems: items, timeZone: therapyTimeZone)!
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = therapyTimeZone
 
         let midnight = calendar.startOfDay(for: Date())
 

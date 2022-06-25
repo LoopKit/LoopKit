@@ -79,10 +79,10 @@ class GuardrailTests: XCTestCase {
     func testWorkoutCorrectionRange() {
         let correctionRangeInputs = [ 70...80, 70...85, 70...90 ]
         let suspendThresholdInputs: [Double?] = [ nil, 81, 91 ]
-        let expectedLow: [Double] = [ 85, 85, 91,
-                                      85, 85, 91,
+        let expectedLow: [Double] = [ 87, 87, 91,
+                                      87, 87, 91,
                                       90, 90, 91 ]
-        let expectedMin: [Double] = [ 85, 85, 91, 85, 85, 91, 85, 85, 91 ]
+        let expectedMin: [Double] = [ 87, 87, 91, 87, 87, 91, 87, 87, 91 ]
 
         var index = 0
         for correctionRange in correctionRangeInputs {
@@ -129,10 +129,10 @@ class GuardrailTests: XCTestCase {
     }
 
     func testBasalRateGuardrailClampedLow() {
-        let supportedBasalRates = [0.01, 1.0, 30.0]
+        let supportedBasalRates = [-1, 0.01, 1.0, 30.0]
         let guardrail = Guardrail.basalRate(supportedBasalRates: supportedBasalRates)
-        XCTAssertEqual(1.0...30.0, guardrail.absoluteBounds.range(withUnit: .internationalUnitsPerHour))
-        XCTAssertEqual(1.0...30.0, guardrail.recommendedBounds.range(withUnit: .internationalUnitsPerHour))
+        XCTAssertEqual(0.01...30.0, guardrail.absoluteBounds.range(withUnit: .internationalUnitsPerHour))
+        XCTAssertEqual(0.01...30.0, guardrail.recommendedBounds.range(withUnit: .internationalUnitsPerHour))
     }
 
     func testBasalRateGuardrailClampedHigh() {
@@ -143,10 +143,10 @@ class GuardrailTests: XCTestCase {
     }
 
     func testBasalRateGuardrailZeroDropsFirst() {
-        let supportedBasalRates = [0.0, 1.0, 2.0, 3.0, 4.0, 5.0]
+        let supportedBasalRates = [-1, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0]
         let guardrail = Guardrail.basalRate(supportedBasalRates: supportedBasalRates)
-        XCTAssertEqual(guardrail.absoluteBounds.range(withUnit: .internationalUnitsPerHour),  1.0...5.0)
-        XCTAssertEqual(guardrail.recommendedBounds.range(withUnit: .internationalUnitsPerHour), 1.0...5.0)
+        XCTAssertEqual(guardrail.absoluteBounds.range(withUnit: .internationalUnitsPerHour),  0.0...5.0)
+        XCTAssertEqual(guardrail.recommendedBounds.range(withUnit: .internationalUnitsPerHour), 0.0...5.0)
     }
 
     func testMaxBasalRateGuardrail() {
@@ -264,6 +264,30 @@ class GuardrailTests: XCTestCase {
         let supportedBolusVolumes = [0.0, 0.05, 1.0, 2.0, 30.nextUp]
         let selectableBolusVolumes = Guardrail.selectableBolusVolumes(supportedBolusVolumes: supportedBolusVolumes)
         XCTAssertEqual([0.05, 1.0, 2.0], selectableBolusVolumes)
+    }
+
+    func testAllValuesOfQuantity() {
+        var guardrail = Guardrail.carbRatio
+        var allValues = guardrail.allValues(
+            stridingBy: HKQuantity(unit: .gramsPerUnit, doubleValue: 0.1),
+            unit: .gramsPerUnit)
+        var expectedValues = Array(stride(
+            from: guardrail.absoluteBounds.lowerBound.doubleValue(for: .gramsPerUnit, withRounding: true),
+            through: guardrail.absoluteBounds.upperBound.doubleValue(for: .gramsPerUnit, withRounding: true),
+            by: 0.1
+        ))
+        XCTAssertEqual(allValues, expectedValues)
+
+        guardrail = Guardrail.insulinSensitivity
+        allValues = guardrail.allValues(
+            stridingBy: HKQuantity(unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()), doubleValue: 1),
+            unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()))
+        expectedValues = Array(stride(
+            from: guardrail.absoluteBounds.lowerBound.doubleValue(for: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()), withRounding: true),
+            through: guardrail.absoluteBounds.upperBound.doubleValue(for: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()), withRounding: true),
+            by: 1
+        ))
+        XCTAssertEqual(allValues, expectedValues)
     }
 }
 

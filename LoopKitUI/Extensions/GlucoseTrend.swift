@@ -6,6 +6,7 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
+import SwiftUI
 import LoopKit
 
 extension GlucoseTrend {
@@ -27,4 +28,24 @@ extension GlucoseTrend {
             return UIImage(frameworkImage: "arrow.double.down.circle")
         }
     }
+    
+    public var filledImage: Image {
+        switch self {
+        case .upUpUp:
+            return Image(frameworkImage: "arrow.double.up.fill")
+        case .upUp:
+            return Image(systemName: "arrow.up.circle.fill")
+        case .up:
+            return Image(systemName: "arrow.up.right.circle.fill")
+        case .flat:
+            return Image(systemName: "arrow.right.circle.fill")
+        case .down:
+            return Image(systemName: "arrow.down.right.circle.fill")
+        case .downDown:
+            return Image(systemName: "arrow.down.circle.fill")
+        case .downDownDown:
+            return Image(frameworkImage: "arrow.double.down.fill")
+        }
+    }
+    
 }

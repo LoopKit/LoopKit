@@ -18,6 +18,7 @@ public struct MockCGMDataSource {
         case sineCurve(parameters: SineCurveParameters)
         case noData
         case signalLoss
+        case unreliableData
         
         public var isValidSession: Bool {
             switch self {
@@ -51,9 +52,9 @@ public struct MockCGMDataSource {
     }
 
     static let device = HKDevice(
-        name: MockCGMManager.managerIdentifier,
-        manufacturer: nil,
-        model: nil,
+        name: "MockCGMManager",
+        manufacturer: "LoopKit",
+        model: "MockCGMManager",
         hardwareVersion: nil,
         firmwareVersion: nil,
         softwareVersion: String(LoopKitVersionNumber),
@@ -142,10 +143,11 @@ extension MockCGMDataSource.Model: RawRepresentable {
     public typealias RawValue = [String: Any]
 
     private enum Kind: String {
-        case constant = "constant"
-        case sineCurve = "sineCurve"
-        case noData = "noData"
-        case signalLoss = "signalLoss"
+        case constant
+        case sineCurve
+        case noData
+        case signalLoss
+        case unreliableData
     }
 
     private static let unit = HKUnit.milligramsPerDeciliter
@@ -188,6 +190,8 @@ extension MockCGMDataSource.Model: RawRepresentable {
             self = .noData
         case .signalLoss:
             self = .signalLoss
+        case .unreliableData:
+            self = .unreliableData
         }
     }
 
@@ -203,7 +207,7 @@ extension MockCGMDataSource.Model: RawRepresentable {
             rawValue["amplitude"] = amplitude.doubleValue(for: unit)
             rawValue["period"] = period
             rawValue["referenceDate"] = referenceDate.timeIntervalSince1970
-        case .noData, .signalLoss:
+        case .noData, .signalLoss, .unreliableData:
             break
         }
 
@@ -220,6 +224,8 @@ extension MockCGMDataSource.Model: RawRepresentable {
             return .noData
         case .signalLoss:
             return .signalLoss
+        case .unreliableData:
+            return .unreliableData
         }
     }
 }
@@ -296,23 +302,28 @@ extension MockCGMDataSource: CustomDebugStringConvertible {
 }
 
 public enum MeasurementFrequency: Int, CaseIterable {
-    case fast
     case normal
-    
+    case fast
+    case faster
+
     public var frequency: TimeInterval {
         switch self {
-        case .fast:
-            return TimeInterval(5)
         case .normal:
             return TimeInterval(5*60)
+        case .fast:
+            return TimeInterval(60)
+        case .faster:
+            return TimeInterval(5)
         }
     }
     public var localizedDescription: String {
         switch self {
-        case .fast:
-            return "5 seconds"
         case .normal:
             return "5 minutes"
+        case .fast:
+            return "1 minute"
+        case .faster:
+            return "5 seconds"
         }
     }
 }

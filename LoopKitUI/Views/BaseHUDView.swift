@@ -16,9 +16,7 @@ public typealias HUDViewOrderPriority = Int
         didSet {
             caption?.text = "–"
             // TODO: Setting this color in code because the nib isn't being applied correctly. Review at a later date.
-            if #available(iOSApplicationExtension 13.0, *) {
-                caption?.textColor = .label
-            }
+            caption?.textColor = .label
         }
     }
     

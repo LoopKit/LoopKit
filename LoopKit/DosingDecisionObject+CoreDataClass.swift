@@ -8,7 +8,7 @@
 
 import CoreData
 
-public class DosingDecisionObject: NSManagedObject {
+class DosingDecisionObject: NSManagedObject {
     var hasUpdatedModificationCounter: Bool { changedValues().keys.contains("modificationCounter") }
 
     func updateModificationCounter() { setPrimitiveValue(managedObjectContext!.modificationCounter!, forKey: "modificationCounter") }

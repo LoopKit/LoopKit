@@ -62,9 +62,6 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         if let nav = navigationController as? SettingsNavigationViewController {
             nav.notifyComplete()
         }
-        if let nav = navigationController as? MockPumpManagerSetupViewController {
-            nav.finishedSettingsDisplay()
-        }
     }
 
     // MARK: - Data Source
@@ -220,7 +217,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.prepareForReuse()
                 cell.textLabel?.text = "Insulin Type"
-                cell.detailTextLabel?.text = pumpManager.state.insulinType.brandName
+                cell.detailTextLabel?.text = pumpManager.state.insulinType?.brandName ?? "Unset"
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .reservoirRemaining:
@@ -254,7 +251,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             case .lastReconciliationDate:
                 let cell = tableView.dequeueReusableCell(withIdentifier: DateAndDurationTableViewCell.className, for: indexPath) as! DateAndDurationTableViewCell
                 cell.titleLabel.text = "Last Reconciliation Date"
-                cell.date = pumpManager.lastReconciliation ?? Date()
+                cell.date = pumpManager.lastSync ?? Date()
                 cell.datePicker.maximumDate = Date()
                 cell.datePicker.minimumDate = Date() - .hours(48)
                 cell.datePicker.datePickerMode = .dateAndTime
@@ -326,10 +323,12 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 }
                 tableView.deselectRow(at: indexPath, animated: true)
             case .occlusion:
+                pumpManager.injectPumpEvents(pumpManager.state.occlusionDetected ? [NewPumpEvent(alarmClearAt: Date())] : [NewPumpEvent(alarmAt: Date(), alarmType: .occlusion)])
                 pumpManager.state.occlusionDetected = !pumpManager.state.occlusionDetected
                 tableView.deselectRow(at: indexPath, animated: true)
                 tableView.reloadRows(at: [indexPath], with: .automatic)
             case .pumpError:
+                pumpManager.injectPumpEvents(pumpManager.state.pumpErrorDetected ? [NewPumpEvent(alarmClearAt: Date())] : [NewPumpEvent(alarmAt: Date(), alarmType: .other("Mock Pump Error"))])
                 pumpManager.state.pumpErrorDetected = !pumpManager.state.pumpErrorDetected
                 tableView.deselectRow(at: indexPath, animated: true)
                 tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -360,7 +359,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 }
                 break
             case .insulinType:
-                let view = InsulinTypeSetting(initialValue: pumpManager.state.insulinType, supportedInsulinTypes: InsulinType.allCases) { (newType) in
+                let view = InsulinTypeSetting(initialValue: pumpManager.state.insulinType, supportedInsulinTypes: InsulinType.allCases, allowUnsetInsulinType: true) { (newType) in
                     self.pumpManager.state.insulinType = newType
                 }
                 let vc = DismissibleHostingController(rootView: view) {
@@ -604,5 +603,24 @@ extension MockPumpManagerSettingsViewController: SupportedRangeTableViewControll
         default:
             assertionFailure()
         }
+    }
+}
+
+fileprivate extension NewPumpEvent {
+    init(alarmAt date: Date, alarmType: PumpAlarmType? = nil) {
+        self.init(date: date,
+                  dose: nil,
+                  raw: Data(UUID().uuidString.utf8),
+                  title: "alarm[\(alarmType?.rawValue ?? "")]",
+                  type: .alarm,
+                  alarmType: alarmType)
+    }
+
+    init(alarmClearAt date: Date) {
+        self.init(date: date,
+                  dose: nil,
+                  raw: Data(UUID().uuidString.utf8),
+                  title: "alarmClear",
+                  type: .alarmClear)
     }
 }

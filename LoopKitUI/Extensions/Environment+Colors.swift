@@ -7,6 +7,23 @@
 //
 
 import SwiftUI
+import LoopKit
+
+private struct ColorPaletteKey: EnvironmentKey {
+    static let defaultValue: LoopUIColorPalette = LoopUIColorPalette(guidanceColors: GuidanceColorsKey.defaultValue,
+                                                                     carbTintColor: CarbTintColorKey.defaultValue,
+                                                                     glucoseTintColor: GlucoseTintColorKey.defaultValue,
+                                                                     insulinTintColor: InsulinTintColorKey.defaultValue,
+                                                                     loopStatusColorPalette: LoopStatusColorPaletteKey.defaultValue,
+                                                                     chartColorPalette: ChartColorPaletteKey.defaultValue)
+}
+
+public extension EnvironmentValues {
+    var colorPalette: LoopUIColorPalette {
+        get { self[ColorPaletteKey.self] }
+        set { self[ColorPaletteKey.self] = newValue }
+    }
+}
 
 private struct GuidanceColorsKey: EnvironmentKey {
     static let defaultValue: GuidanceColors = GuidanceColors()
@@ -71,5 +88,34 @@ public extension EnvironmentValues {
     var darkenedInsulinTintColor: UIColor {
         get { self[DarkInsulinTintColorKey.self] }
         set { self[DarkInsulinTintColorKey.self] = newValue }
+    }
+}
+
+private struct LoopStatusColorPaletteKey: EnvironmentKey {
+    static let defaultValue: StateColorPalette = StateColorPalette(unknown: .systemGray4,
+                                                                   normal: .green,
+                                                                   warning: .yellow,
+                                                                   error: .red)
+}
+
+public extension EnvironmentValues {
+    var loopStatusColorPalette: StateColorPalette {
+        get { self[LoopStatusColorPaletteKey.self] }
+        set { self[LoopStatusColorPaletteKey.self] = newValue }
+    }
+}
+
+private struct ChartColorPaletteKey: EnvironmentKey {
+    static let defaultValue: ChartColorPalette = ChartColorPalette(axisLine: .clear,
+                                                                   axisLabel: .secondaryLabel,
+                                                                   grid: .systemGray3,
+                                                                   glucoseTint: .systemTeal,
+                                                                   insulinTint: .orange)
+}
+
+public extension EnvironmentValues {
+    var chartColorPalette: ChartColorPalette {
+        get { self[ChartColorPaletteKey.self] }
+        set { self[ChartColorPaletteKey.self] = newValue }
     }
 }

@@ -42,7 +42,6 @@ extension DoubleRange: RawRepresentable {
     }
 }
 
-
 extension DoubleRange: Equatable {
     public static func ==(lhs: DoubleRange, rhs: DoubleRange) -> Bool {
         return abs(lhs.minValue - rhs.minValue) < .ulpOfOne &&
@@ -149,6 +148,13 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         return rangeSchedule.items
     }
 
+    public var quantityRanges: [RepeatingScheduleValue<ClosedRange<HKQuantity>>] {
+        return self.items.map {
+            RepeatingScheduleValue<ClosedRange<HKQuantity>>(startTime: $0.startTime,
+                                                            value: $0.value.quantityRange(for: unit))
+        }
+    }
+
     public var timeZone: TimeZone {
         get {
             return rangeSchedule.timeZone
@@ -180,6 +186,27 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
 
         return lowerBound...upperBound
     }
+
+    private func convertTo(unit: HKUnit) -> GlucoseRangeSchedule? {
+        guard unit != self.unit else {
+            return self
+        }
+
+        let convertedDailyItems: [RepeatingScheduleValue<DoubleRange>] = rangeSchedule.items.map {
+            RepeatingScheduleValue(startTime: $0.startTime,
+                                   value: $0.value.quantityRange(for: self.unit).doubleRange(for: unit)
+            )
+        }
+
+        return GlucoseRangeSchedule(unit: unit,
+                                    dailyItems: convertedDailyItems,
+                                    timeZone: timeZone)
+    }
+
+    public func schedule(for glucoseUnit: HKUnit) -> GlucoseRangeSchedule? {
+        precondition(glucoseUnit == .millimolesPerLiter || glucoseUnit == .milligramsPerDeciliter)
+        return self.convertTo(unit: glucoseUnit)
+    }
 }
 
 extension GlucoseRangeSchedule: Codable {}
@@ -197,6 +224,10 @@ extension DoubleRange {
 extension ClosedRange where Bound == HKQuantity {
     public func doubleRange(for unit: HKUnit) -> DoubleRange {
         return DoubleRange(minValue: lowerBound.doubleValue(for: unit), maxValue: upperBound.doubleValue(for: unit))
+    }
+
+    public func glucoseRange(for unit: HKUnit) -> GlucoseRange {
+        GlucoseRange(range: self.doubleRange(for: unit), unit: unit)
     }
 }
 

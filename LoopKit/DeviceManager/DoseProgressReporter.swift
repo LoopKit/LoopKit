@@ -23,11 +23,11 @@ public struct DoseProgress {
     }
 }
 
-public protocol DoseProgressObserver: class {
+public protocol DoseProgressObserver: AnyObject {
     func doseProgressReporterDidUpdate(_ doseProgressReporter: DoseProgressReporter)
 }
 
-public protocol DoseProgressReporter: class {
+public protocol DoseProgressReporter: AnyObject {
     var progress: DoseProgress { get }
 
     func addObserver(_ observer: DoseProgressObserver)

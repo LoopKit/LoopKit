@@ -38,6 +38,7 @@ struct ScheduleItemPicker<Value, ValuePicker: View>: View {
                     )
                     .frame(width: geometry.size.width / 3)
                     .clipped()
+                    .compositingGroup()
                     .accessibility(identifier: "time_picker")
 
                     self.valuePicker(/* availableWidth: */ 2/3 * geometry.size.width)

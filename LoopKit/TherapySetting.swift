@@ -85,8 +85,7 @@ public extension TherapySetting {
 public extension TherapySetting {
     var guardrailCaptionForLowValue: String {
         switch self {
-        // For schedules & ranges where it's possible for more than 1 to be outside of guardrails
-        case .glucoseTargetRange:
+        case .glucoseTargetRange, .preMealCorrectionRangeOverride, .workoutCorrectionRangeOverride:
             return LocalizedString("A value you have entered is lower than what is typically recommended for most people.", comment: "Descriptive text for guardrail low value warning for schedule interface")
         default:
             return LocalizedString("The value you have entered is lower than what is typically recommended for most people.", comment: "Descriptive text for guardrail low value warning")
@@ -95,8 +94,7 @@ public extension TherapySetting {
     
     var guardrailCaptionForHighValue: String {
         switch self {
-        // For schedules & ranges where it's possible for more than 1 to be outside of guardrails
-        case .glucoseTargetRange:
+        case .glucoseTargetRange, .preMealCorrectionRangeOverride, .workoutCorrectionRangeOverride:
             return LocalizedString("A value you have entered is higher than what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning for schedule interface")
         default:
             return LocalizedString("The value you have entered is higher than what is typically recommended for most people.", comment: "Descriptive text for guardrail high value warning")

@@ -20,21 +20,24 @@ public struct DoseEntry: TimelineValue, Equatable {
     public let description: String?
     public let insulinType: InsulinType?
     public let automatic: Bool?
-    internal(set) public var syncIdentifier: String?
+    public let manuallyEntered: Bool
+    public internal(set) var syncIdentifier: String?
+    public let isMutable: Bool
+    public let wasProgrammedByPumpUI: Bool
 
     /// The scheduled basal rate during this dose entry
-    internal var scheduledBasalRate: HKQuantity?
+    public internal(set) var scheduledBasalRate: HKQuantity?
 
-    public init(suspendDate: Date) {
-        self.init(type: .suspend, startDate: suspendDate, value: 0, unit: .units)
+    public init(suspendDate: Date, automatic: Bool? = nil, wasProgrammedByPumpUI: Bool = false) {
+        self.init(type: .suspend, startDate: suspendDate, value: 0, unit: .units, automatic: automatic, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
     }
 
-    public init(resumeDate: Date, insulinType: InsulinType? = nil) {
-        self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units, insulinType: insulinType)
+    public init(resumeDate: Date, insulinType: InsulinType? = nil, automatic: Bool? = nil, wasProgrammedByPumpUI: Bool = false) {
+        self.init(type: .resume, startDate: resumeDate, value: 0, unit: .units, insulinType: insulinType, automatic: automatic, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
     }
 
     // If the insulin model field is nil, it's assumed that the model is the type of insulin the pump dispenses
-    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil) {
+    public init(type: DoseType, startDate: Date, endDate: Date? = nil, value: Double, unit: DoseUnit, deliveredUnits: Double? = nil, description: String? = nil, syncIdentifier: String? = nil, scheduledBasalRate: HKQuantity? = nil, insulinType: InsulinType? = nil, automatic: Bool? = nil, manuallyEntered: Bool = false, isMutable: Bool = false, wasProgrammedByPumpUI: Bool = false) {
         self.type = type
         self.startDate = startDate
         self.endDate = endDate ?? startDate
@@ -46,6 +49,9 @@ public struct DoseEntry: TimelineValue, Equatable {
         self.scheduledBasalRate = scheduledBasalRate
         self.insulinType = insulinType
         self.automatic = automatic
+        self.manuallyEntered = manuallyEntered
+        self.isMutable = isMutable
+        self.wasProgrammedByPumpUI = wasProgrammedByPumpUI
     }
 }
 
@@ -111,6 +117,8 @@ extension DoseEntry {
     /// The rate of delivery, net the basal rate scheduled during that time, which can be used to compute insulin on-board and glucose effects
     public var netBasalUnitsPerHour: Double {
         switch type {
+        case .basal:
+            return 0
         case .bolus:
             return self.unitsPerHour
         default:
@@ -161,7 +169,10 @@ extension DoseEntry: Codable {
             let scheduledBasalRateUnit = try container.decodeIfPresent(String.self, forKey: .scheduledBasalRateUnit) {
             self.scheduledBasalRate = HKQuantity(unit: HKUnit(from: scheduledBasalRateUnit), doubleValue: scheduledBasalRate)
         }
-        self.automatic = try container.decode(Bool.self, forKey: .automatic)
+        self.automatic = try container.decodeIfPresent(Bool.self, forKey: .automatic)
+        self.manuallyEntered = try container.decodeIfPresent(Bool.self, forKey: .manuallyEntered) ?? false
+        self.isMutable = try container.decodeIfPresent(Bool.self, forKey: .isMutable) ?? false
+        self.wasProgrammedByPumpUI = try container.decodeIfPresent(Bool.self, forKey: .wasProgrammedByPumpUI) ?? false
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -179,8 +190,11 @@ extension DoseEntry: Codable {
             try container.encode(scheduledBasalRate.doubleValue(for: DoseEntry.unitsPerHour), forKey: .scheduledBasalRate)
             try container.encode(DoseEntry.unitsPerHour.unitString, forKey: .scheduledBasalRateUnit)
         }
-        try container.encode(automatic, forKey: .automatic)
-    } 
+        try container.encodeIfPresent(automatic, forKey: .automatic)
+        try container.encode(manuallyEntered, forKey: .manuallyEntered)
+        try container.encode(isMutable, forKey: .isMutable)
+        try container.encode(wasProgrammedByPumpUI, forKey: .wasProgrammedByPumpUI)
+    }
 
     private enum CodingKeys: String, CodingKey {
         case type
@@ -195,5 +209,64 @@ extension DoseEntry: Codable {
         case scheduledBasalRateUnit
         case insulinType
         case automatic
+        case manuallyEntered
+        case isMutable
+        case wasProgrammedByPumpUI
+    }
+}
+
+extension DoseEntry: RawRepresentable {
+    public typealias RawValue = [String: Any]
+
+    public init?(rawValue: [String: Any]) {
+        guard let rawType = rawValue["type"] as? DoseType.RawValue,
+              let type = DoseType(rawValue: rawType),
+              let startDate = rawValue["startDate"] as? Date,
+              let endDate = rawValue["endDate"] as? Date,
+              let value = rawValue["value"] as? Double,
+              let rawUnit = rawValue["unit"] as? DoseUnit.RawValue,
+              let unit = DoseUnit(rawValue: rawUnit),
+              let manuallyEntered = rawValue["manuallyEntered"] as? Bool
+        else {
+            return nil
+        }
+
+        self.type = type
+        self.startDate = startDate
+        self.endDate = endDate
+        self.value = value
+        self.unit = unit
+        self.manuallyEntered = manuallyEntered
+
+        self.deliveredUnits = rawValue["deliveredUnits"] as? Double
+        self.description = rawValue["description"] as? String
+        self.insulinType = (rawValue["insulinType"] as? InsulinType.RawValue).flatMap { InsulinType(rawValue: $0) }
+        self.automatic = rawValue["automatic"] as? Bool
+        self.syncIdentifier = rawValue["syncIdentifier"] as? String
+        self.scheduledBasalRate = (rawValue["scheduledBasalRate"] as? Double).flatMap { HKQuantity(unit: .internationalUnitsPerHour, doubleValue: $0) }
+        self.isMutable = rawValue["isMutable"] as? Bool ?? false
+        self.wasProgrammedByPumpUI = rawValue["wasProgrammedByPumpUI"] as? Bool ?? false
+    }
+
+    public var rawValue: [String: Any] {
+        var rawValue: [String: Any] = [
+            "type": type.rawValue,
+            "startDate": startDate,
+            "endDate": endDate,
+            "value": value,
+            "unit": unit.rawValue,
+            "manuallyEntered": manuallyEntered,
+            "isMutable": isMutable,
+            "wasProgrammedByPumpUI": wasProgrammedByPumpUI
+        ]
+
+        rawValue["deliveredUnits"] = deliveredUnits
+        rawValue["description"] = description
+        rawValue["insulinType"] = insulinType?.rawValue
+        rawValue["automatic"] = automatic
+        rawValue["syncIdentifier"] = syncIdentifier
+        rawValue["scheduledBasalRate"] = scheduledBasalRate?.doubleValue(for: .internationalUnitsPerHour)
+
+        return rawValue
     }
 }

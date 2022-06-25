@@ -74,7 +74,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         return units
     }
 
-    init(bolusAmount: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType, automatic: Bool) {
+    init(bolusAmount: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType? = nil, automatic: Bool = false) {
         self.doseType = .bolus
         self.units = bolusAmount
         self.startTime = startTime
@@ -84,7 +84,7 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.automatic = automatic
     }
 
-    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType) {
+    init(tempBasalRate: Double, startTime: Date, duration: TimeInterval, insulinType: InsulinType? = nil) {
         self.doseType = .tempBasal
         self.units = tempBasalRate * duration.hours
         self.startTime = startTime
@@ -94,22 +94,22 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         self.automatic = true
     }
 
-    init(suspendStartTime: Date) {
+    init(suspendStartTime: Date, automatic: Bool? = nil) {
         self.doseType = .suspend
         self.units = 0
         self.startTime = suspendStartTime
         self.duration = 0
         self.insulinType = nil
-        self.automatic = false
+        self.automatic = automatic
     }
 
-    init(resumeStartTime: Date, insulinType: InsulinType) {
+    init(resumeStartTime: Date, insulinType: InsulinType? = nil, automatic: Bool? = nil) {
         self.doseType = .resume
         self.units = 0
         self.startTime = resumeStartTime
         self.duration = 0
         self.insulinType = insulinType
-        self.automatic = false
+        self.automatic = automatic
     }
 
     public mutating func cancel(at date: Date) {
@@ -156,6 +156,19 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
             return "Temp Basal rate:\(scheduledTempRate ?? rate) units:\(unitsStr) startTime:\(startTime) duration:\(String(describing: duration))"
         case .suspend, .resume:
             return "\(doseType) startTime:\(startTime)"
+        }
+    }
+
+    public var eventTitle: String {
+        switch doseType {
+        case .bolus:
+            return NSLocalizedString("Bolus", comment: "Pump Event title for UnfinalizedDose with doseType of .bolus")
+        case .resume:
+            return NSLocalizedString("Resume", comment: "Pump Event title for UnfinalizedDose with doseType of .resume")
+        case .suspend:
+            return NSLocalizedString("Suspend", comment: "Pump Event title for UnfinalizedDose with doseType of .suspend")
+        case .tempBasal:
+            return NSLocalizedString("Temp Basal", comment: "Pump Event title for UnfinalizedDose with doseType of .tempBasal")
         }
     }
 
@@ -223,9 +236,8 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
 
 extension NewPumpEvent {
     init(_ dose: UnfinalizedDose) {
-        let title = String(describing: dose)
         let entry = DoseEntry(dose)
-        self.init(date: dose.startTime, dose: entry, isMutable: dose.isMutable, raw: dose.uniqueKey, title: title)
+        self.init(date: dose.startTime, dose: entry, raw: dose.uniqueKey, title: dose.eventTitle)
     }
 
     // Used for TestingScenarios, injecting doses into PumpManager
@@ -246,9 +258,9 @@ extension NewPumpEvent {
                 }
                 return newDose
             case .resume:
-                return UnfinalizedDose(resumeStartTime: dose.startDate, insulinType: dose.insulinType ?? defaultInsulinType)
+                return UnfinalizedDose(resumeStartTime: dose.startDate, insulinType: dose.insulinType ?? defaultInsulinType, automatic: dose.automatic)
             case .suspend:
-                return UnfinalizedDose(suspendStartTime: dose.startDate)
+                return UnfinalizedDose(suspendStartTime: dose.startDate, automatic: dose.automatic)
             case .tempBasal:
                 return UnfinalizedDose(tempBasalRate: dose.unitsPerHour, startTime: dose.startDate, duration: duration, insulinType: dose.insulinType ?? defaultInsulinType)
             }
@@ -261,13 +273,13 @@ extension DoseEntry {
     init (_ dose: UnfinalizedDose) {
         switch dose.doseType {
         case .bolus:
-            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledUnits ?? dose.units, unit: .units, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, automatic: dose.automatic)
+            self = DoseEntry(type: .bolus, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledUnits ?? dose.units, unit: .units, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, automatic: dose.automatic, isMutable: dose.isMutable)
         case .tempBasal:
-            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledTempRate ?? dose.rate, unit: .unitsPerHour, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType)
+            self = DoseEntry(type: .tempBasal, startDate: dose.startTime, endDate: dose.finishTime, value: dose.scheduledTempRate ?? dose.rate, unit: .unitsPerHour, deliveredUnits: dose.finalizedUnits, insulinType: dose.insulinType, isMutable: dose.isMutable)
         case .suspend:
-            self = DoseEntry(suspendDate: dose.startTime)
+            self = DoseEntry(suspendDate: dose.startTime, automatic: dose.automatic)
         case .resume:
-            self = DoseEntry(resumeDate: dose.startTime, insulinType: dose.insulinType)
+            self = DoseEntry(resumeDate: dose.startTime, insulinType: dose.insulinType, automatic: dose.automatic)
         }
     }
 }

@@ -43,7 +43,7 @@ class StoredCarbEntryCodableTests: XCTestCase {
 
     func testCodableOptional() throws {
         let storedCarbEntry = StoredCarbEntry(uuid: nil,
-                                              provenanceIdentifier: nil,
+                                              provenanceIdentifier: "com.loopkit.loop",
                                               syncIdentifier: nil,
                                               syncVersion: nil,
                                               startDate: dateFormatter.date(from: "2020-02-03T04:16:18Z")!,
@@ -57,6 +57,7 @@ class StoredCarbEntryCodableTests: XCTestCase {
         try! assertStoredCarbEntryCodable(storedCarbEntry, encodesJSON: """
 {
   "createdByCurrentApp" : false,
+  "provenanceIdentifier" : "com.loopkit.loop",
   "quantity" : 19,
   "startDate" : "2020-02-03T04:16:18Z"
 }

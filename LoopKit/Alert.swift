@@ -8,8 +8,8 @@
 
 import Foundation
 
-/// Protocol that describes any class that presents Alerts.
-public protocol AlertPresenter: class {
+/// Protocol that describes any class that issues and retract Alerts.
+public protocol AlertIssuer: AnyObject {
     /// Issue (post) the given alert, according to its trigger schedule.
     func issueAlert(_ alert: Alert)
     /// Retract any alerts with the given identifier.  This includes both pending and delivered alerts.
@@ -17,9 +17,39 @@ public protocol AlertPresenter: class {
 }
 
 /// Protocol that describes something that can deal with a user's response to an alert.
-public protocol AlertResponder: class {
-    /// Acknowledge alerts with a given type identifier
-    func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier) -> Void
+public protocol AlertResponder: AnyObject {
+    /// Acknowledge alerts with a given type identifier. If the alert fails to clear, an error should be passed to the completion handler, indicating the cause of failure.
+    func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) -> Void
+}
+
+public struct PersistedAlert: Equatable {
+    public let alert: Alert
+    public let issuedDate: Date
+    public let retractedDate: Date?
+    public let acknowledgedDate: Date?
+    public init(alert: Alert, issuedDate: Date, retractedDate: Date?, acknowledgedDate: Date?) {
+        self.alert = alert
+        self.issuedDate = issuedDate
+        self.retractedDate = retractedDate
+        self.acknowledgedDate = acknowledgedDate
+    }
+}
+
+/// Protocol for recording and looking up alerts persisted in storage
+public protocol PersistedAlertStore {
+    /// Determine if an alert is already issued for a given `Alert.Identifier`.
+    func doesIssuedAlertExist(identifier: Alert.Identifier, completion: @escaping (Swift.Result<Bool, Error>) -> Void)
+
+    /// Look up all issued, but unretracted, alerts for a given `managerIdentifier`.  This is useful for an Alert issuer to see what alerts are extant (outstanding).
+    /// NOTE: the completion function may be called on a different queue than the caller.  Callers must be prepared for this.
+    func lookupAllUnretracted(managerIdentifier: String, completion: @escaping (Swift.Result<[PersistedAlert], Error>) -> Void)
+
+    /// Look up all issued, but unretracted, and unacknowledged, alerts for a given `managerIdentifier`.  This is useful for an Alert issuer to see what alerts are extant (outstanding).
+    /// NOTE: the completion function may be called on a different queue than the caller.  Callers must be prepared for this.
+    func lookupAllUnacknowledgedUnretracted(managerIdentifier: String, completion: @escaping (Swift.Result<[PersistedAlert], Error>) -> Void)
+
+    /// Records an alert that occurred (likely in the past) but is already retracted. This alert will never be presented to the user by an AlertPresenter. Such a retracted alert has the same date for issued and retracted dates, and there is no acknowledged date
+    func recordRetractedAlert(_ alert: Alert, at date: Date)
 }
 
 /// Structure that represents an Alert that is issued from a Device.
@@ -33,20 +63,27 @@ public struct Alert: Equatable {
         /// Delay triggering the alert by `repeatInterval`, and repeat at that interval until cancelled or unscheduled.
         case repeating(repeatInterval: TimeInterval)
     }
+    /// The interruption level of the alert.  Note that these follow the same definitions as defined by https://developer.apple.com/documentation/usernotifications/unnotificationinterruptionlevel
+    /// Handlers will determine how that is manifested.
+    public enum InterruptionLevel: String {
+        /// The system presents the notification immediately, lights up the screen, and can play a sound.  These alerts may be deferred if the user chooses.
+        case active
+        /// The system presents the notification immediately, lights up the screen, and can play a sound.  These alerts may not be deferred.
+        case timeSensitive
+        /// The system makes every attempt at alerting the user, including (possibly) ignoring the mute switch, or the user's notification settings.
+        case critical
+    }
     /// Content of the alert, either for foreground or background alerts
     public struct Content: Equatable  {
         public let title: String
         public let body: String
-        /// Should this alert be deemed "critical" for the User?  Handlers will determine how that is manifested.
-        public let isCritical: Bool
         // TODO: when we have more complicated actions.  For now, all we have is "acknowledge".
 //        let actions: [UserAlertAction]
         public let acknowledgeActionButtonLabel: String
-        public init(title: String, body: String, acknowledgeActionButtonLabel: String, isCritical: Bool = false) {
+        public init(title: String, body: String, acknowledgeActionButtonLabel: String) {
             self.title = title
             self.body = body
             self.acknowledgeActionButtonLabel = acknowledgeActionButtonLabel
-            self.isCritical = isCritical
         }
     }
     public struct Identifier: Equatable, Hashable {
@@ -73,6 +110,8 @@ public struct Alert: Equatable {
     public let backgroundContent: Content?
     /// Trigger for the alert.
     public let trigger: Trigger
+    /// Interruption level for the alert.  See `InterruptionLevel` above.
+    public let interruptionLevel: InterruptionLevel
 
     /// An alert's "identifier" is a tuple of `managerIdentifier` and `alertIdentifier`.  It's purpose is to uniquely identify an alert so we can
     /// find which device issued it, and send acknowledgment of that alert to the proper device manager.
@@ -85,13 +124,21 @@ public struct Alert: Equatable {
         case sound(name: String)
     }
     public let sound: Sound?
+
+    /// Any metadata for the alert used to customize the alert content
+    public typealias MetadataValue = AnyCodableEquatable
+    public typealias Metadata = [String: MetadataValue]
+    public let metadata: Metadata?
     
-    public init(identifier: Identifier, foregroundContent: Content?, backgroundContent: Content?, trigger: Trigger, sound: Sound? = nil) {
+    public init(identifier: Identifier, foregroundContent: Content?, backgroundContent: Content?, trigger: Trigger,
+                interruptionLevel: InterruptionLevel = .timeSensitive, sound: Sound? = nil, metadata: Metadata? = nil) {
         self.identifier = identifier
         self.foregroundContent = foregroundContent
         self.backgroundContent = backgroundContent
         self.trigger = trigger
+        self.interruptionLevel = interruptionLevel
         self.sound = sound
+        self.metadata = metadata
     }
 }
 
@@ -117,6 +164,7 @@ public protocol AlertSoundVendor {
 extension Alert: Codable { }
 extension Alert.Content: Codable { }
 extension Alert.Identifier: Codable { }
+extension Alert.InterruptionLevel: Codable { }
 // These Codable implementations of enums with associated values cannot be synthesized (yet) in Swift.
 // The code below follows a pattern described by https://medium.com/@hllmandel/codable-enum-with-associated-values-swift-4-e7d75d6f4370
 extension Alert.Trigger: Codable {
@@ -203,6 +251,12 @@ extension Alert.Sound: Codable {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(SoundName(name: name), forKey: .sound)
         }
+    }
+}
+
+public extension Alert.Metadata {
+    init<E: Codable & Equatable>(dict: [String: E]) {
+        self = dict.mapValues { Alert.MetadataValue($0) }
     }
 }
 

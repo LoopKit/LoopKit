@@ -7,12 +7,12 @@
 //
 
 import XCTest
+import HealthKit
 import LoopKit
 
-class TherapySettingsTests: XCTestCase {
+class TherapySettingsCodableTests: XCTestCase {
     private let dateFormatter = ISO8601DateFormatter()
-    let date = Date(timeIntervalSince1970: 100000)
-    
+
     private let encoder: JSONEncoder = {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
@@ -26,67 +26,6 @@ class TherapySettingsTests: XCTestCase {
         return decoder
     }()
     
-    private func getTherapySettings() -> TherapySettings {
-        let timeZone = TimeZone(identifier: "America/Los_Angeles")!
-        let glucoseTargetRangeSchedule =  GlucoseRangeSchedule(
-            rangeSchedule: DailyQuantitySchedule(unit: .milligramsPerDeciliter,
-                dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: DoubleRange(minValue: 100.0, maxValue: 110.0)),
-                             RepeatingScheduleValue(startTime: .hours(8), value: DoubleRange(minValue: 95.0, maxValue: 105.0)),
-                             RepeatingScheduleValue(startTime: .hours(14), value: DoubleRange(minValue: 95.0, maxValue: 105.0)),
-                             RepeatingScheduleValue(startTime: .hours(16), value: DoubleRange(minValue: 100.0, maxValue: 110.0)),
-                             RepeatingScheduleValue(startTime: .hours(18), value: DoubleRange(minValue: 90.0, maxValue: 100.0)),
-                             RepeatingScheduleValue(startTime: .hours(21), value: DoubleRange(minValue: 110.0, maxValue: 120.0))],
-                timeZone: timeZone)!,
-            override: GlucoseRangeSchedule.Override(value: DoubleRange(minValue: 80.0, maxValue: 90.0),
-                                                    start: date.addingTimeInterval(.minutes(-30)),
-                                                    end: date.addingTimeInterval(.minutes(30)))
-        )
-        let basalRateSchedule = BasalRateSchedule(
-            dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1.0),
-                         RepeatingScheduleValue(startTime: .hours(8), value: 1.125),
-                         RepeatingScheduleValue(startTime: .hours(10), value: 1.25),
-                         RepeatingScheduleValue(startTime: .hours(12), value: 1.5),
-                         RepeatingScheduleValue(startTime: .hours(14), value: 1.25),
-                         RepeatingScheduleValue(startTime: .hours(16), value: 1.5),
-                         RepeatingScheduleValue(startTime: .hours(18), value: 1.25),
-                         RepeatingScheduleValue(startTime: .hours(21), value: 1.0)],
-            timeZone: timeZone)!
-        let insulinSensitivitySchedule = InsulinSensitivitySchedule(
-            unit: .milligramsPerDeciliter,
-            dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 45.0),
-                         RepeatingScheduleValue(startTime: .hours(8), value: 40.0),
-                         RepeatingScheduleValue(startTime: .hours(10), value: 35.0),
-                         RepeatingScheduleValue(startTime: .hours(12), value: 30.0),
-                         RepeatingScheduleValue(startTime: .hours(14), value: 35.0),
-                         RepeatingScheduleValue(startTime: .hours(16), value: 40.0)],
-            timeZone: timeZone)!
-        let carbRatioSchedule = CarbRatioSchedule(
-            unit: .gram(),
-                                                  
-            dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 10.0),
-                         RepeatingScheduleValue(startTime: .hours(8), value: 12.0),
-                         RepeatingScheduleValue(startTime: .hours(10), value: 9.0),
-                         RepeatingScheduleValue(startTime: .hours(12), value: 10.0),
-                         RepeatingScheduleValue(startTime: .hours(14), value: 11.0),
-                         RepeatingScheduleValue(startTime: .hours(16), value: 12.0),
-                         RepeatingScheduleValue(startTime: .hours(18), value: 8.0),
-                         RepeatingScheduleValue(startTime: .hours(21), value: 10.0)],
-            timeZone: timeZone)!
-        
-        return TherapySettings(
-            glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
-            preMealTargetRange: DoubleRange(minValue: 80.0, maxValue: 90.0),
-            workoutTargetRange: DoubleRange(minValue: 130.0, maxValue: 140.0),
-            maximumBasalRatePerHour: 3,
-            maximumBolus: 5,
-            suspendThreshold: GlucoseThreshold(unit: .milligramsPerDeciliter, value: 80),
-            insulinSensitivitySchedule: insulinSensitivitySchedule,
-            carbRatioSchedule: carbRatioSchedule,
-            basalRateSchedule: basalRateSchedule,
-            insulinModelSettings: InsulinModelSettings(model: ExponentialInsulinModelPreset.rapidActingAdult)
-        )
-    }
-
     let encodedString = """
     {
       "basalRateSchedule" : {
@@ -127,7 +66,7 @@ class TherapySettingsTests: XCTestCase {
         "referenceTimeInterval" : 0,
         "repeatInterval" : 86400,
         "timeZone" : {
-          "identifier" : "America/Los_Angeles"
+          "identifier" : "GMT-0700"
         }
       },
       "carbRatioSchedule" : {
@@ -170,19 +109,28 @@ class TherapySettingsTests: XCTestCase {
           "referenceTimeInterval" : 0,
           "repeatInterval" : 86400,
           "timeZone" : {
-            "identifier" : "America/Los_Angeles"
+            "identifier" : "GMT-0700"
           }
         }
       },
-      "glucoseTargetRangeSchedule" : {
-        "override" : {
-          "end" : "1970-01-02T04:16:40Z",
-          "start" : "1970-01-02T03:16:40Z",
-          "value" : {
+      "correctionRangeOverrides" : {
+        "preMealRange" : {
+          "bloodGlucoseUnit" : "mg/dL",
+          "range" : {
             "maxValue" : 90,
             "minValue" : 80
           }
         },
+        "workoutRange" : {
+          "bloodGlucoseUnit" : "mg/dL",
+          "range" : {
+            "maxValue" : 140,
+            "minValue" : 130
+          }
+        }
+      },
+      "defaultRapidActingModel" : "rapidActingAdult",
+      "glucoseTargetRangeSchedule" : {
         "rangeSchedule" : {
           "unit" : "mg/dL",
           "valueSchedule" : {
@@ -233,13 +181,10 @@ class TherapySettingsTests: XCTestCase {
             "referenceTimeInterval" : 0,
             "repeatInterval" : 86400,
             "timeZone" : {
-              "identifier" : "America/Los_Angeles"
+              "identifier" : "GMT-0700"
             }
           }
         }
-      },
-      "insulinModelSettings" : {
-        "exponential" : "rapidActingAdult"
       },
       "insulinSensitivitySchedule" : {
         "unit" : "mg/dL",
@@ -273,75 +218,114 @@ class TherapySettingsTests: XCTestCase {
           "referenceTimeInterval" : 0,
           "repeatInterval" : 86400,
           "timeZone" : {
-            "identifier" : "America/Los_Angeles"
+            "identifier" : "GMT-0700"
           }
         }
       },
       "maximumBasalRatePerHour" : 3,
       "maximumBolus" : 5,
-      "preMealTargetRange" : {
-        "maxValue" : 90,
-        "minValue" : 80
-      },
       "suspendThreshold" : {
         "unit" : "mg/dL",
         "value" : 80
-      },
-      "workoutTargetRange" : {
-        "maxValue" : 140,
-        "minValue" : 130
       }
     }
     """
     
     func testInsulinModelEncoding() throws {
-        let adult = InsulinModelSettings.exponentialPreset(.rapidActingAdult)
-        let child = InsulinModelSettings.exponentialPreset(.rapidActingChild)
-        let walsh = InsulinModelSettings.walsh(WalshInsulinModel(actionDuration: 10))
+        let adult = ExponentialInsulinModelPreset.rapidActingAdult
+        let child = ExponentialInsulinModelPreset.rapidActingChild
         
         XCTAssertEqual("""
-        {
-          "exponential" : "rapidActingAdult"
-        }
+        "rapidActingAdult"
         """, String(data: try encoder.encode(adult), encoding: .utf8)!)
         XCTAssertEqual("""
-        {
-          "exponential" : "rapidActingChild"
-        }
+        "rapidActingChild"
         """, String(data: try encoder.encode(child), encoding: .utf8)!)
-        XCTAssertEqual("""
-        {
-          "walsh" : {
-            "actionDuration" : 10,
-            "delay" : 600
-          }
-        }
-        """, String(data: try encoder.encode(walsh), encoding: .utf8)!)
     }
 
     func testTherapySettingEncoding() throws {
-        let original = getTherapySettings()
+        let original = TherapySettings.test
         let data = try encoder.encode(original)
         XCTAssertEqual(encodedString, String(data: data, encoding: .utf8)!)
     }
-    
+
     func testTherapySettingDecoding() throws {
         let data = encodedString.data(using: .utf8)!
         let decoded = try decoder.decode(TherapySettings.self, from: data)
-        let expected = getTherapySettings()
-        
+        let expected = TherapySettings.test
+
         XCTAssertEqual(expected, decoded)
-        
+
         XCTAssertEqual(decoded.basalRateSchedule, expected.basalRateSchedule)
-        XCTAssertEqual(decoded.glucoseUnit, expected.glucoseUnit)
         XCTAssertEqual(decoded.insulinSensitivitySchedule, expected.insulinSensitivitySchedule)
-        XCTAssertEqual(decoded.preMealTargetRange, expected.preMealTargetRange)
-        XCTAssertEqual(decoded.workoutTargetRange, expected.workoutTargetRange)
+        XCTAssertEqual(decoded.correctionRangeOverrides, expected.correctionRangeOverrides)
         XCTAssertEqual(decoded.maximumBolus, expected.maximumBolus)
         XCTAssertEqual(decoded.maximumBasalRatePerHour, expected.maximumBasalRatePerHour)
         XCTAssertEqual(decoded.suspendThreshold, expected.suspendThreshold)
         XCTAssertEqual(decoded.carbRatioSchedule, expected.carbRatioSchedule)
-        XCTAssertEqual(decoded.insulinModelSettings, expected.insulinModelSettings)
+        XCTAssertEqual(decoded.defaultRapidActingModel, expected.defaultRapidActingModel)
         XCTAssertEqual(decoded.glucoseTargetRangeSchedule, expected.glucoseTargetRangeSchedule)
+    }
+}
+
+fileprivate extension TherapySettings {
+    static var test: TherapySettings {
+        let timeZone = TimeZone(secondsFromGMT: -25200)
+        let glucoseTargetRangeSchedule =  GlucoseRangeSchedule(
+            rangeSchedule: DailyQuantitySchedule(unit: .milligramsPerDeciliter,
+                                                 dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: DoubleRange(minValue: 100.0, maxValue: 110.0)),
+                                                              RepeatingScheduleValue(startTime: .hours(8), value: DoubleRange(minValue: 95.0, maxValue: 105.0)),
+                                                              RepeatingScheduleValue(startTime: .hours(14), value: DoubleRange(minValue: 95.0, maxValue: 105.0)),
+                                                              RepeatingScheduleValue(startTime: .hours(16), value: DoubleRange(minValue: 100.0, maxValue: 110.0)),
+                                                              RepeatingScheduleValue(startTime: .hours(18), value: DoubleRange(minValue: 90.0, maxValue: 100.0)),
+                                                              RepeatingScheduleValue(startTime: .hours(21), value: DoubleRange(minValue: 110.0, maxValue: 120.0))],
+                                                 timeZone: timeZone)!)
+        let basalRateSchedule = BasalRateSchedule(
+            dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1.0),
+                         RepeatingScheduleValue(startTime: .hours(8), value: 1.125),
+                         RepeatingScheduleValue(startTime: .hours(10), value: 1.25),
+                         RepeatingScheduleValue(startTime: .hours(12), value: 1.5),
+                         RepeatingScheduleValue(startTime: .hours(14), value: 1.25),
+                         RepeatingScheduleValue(startTime: .hours(16), value: 1.5),
+                         RepeatingScheduleValue(startTime: .hours(18), value: 1.25),
+                         RepeatingScheduleValue(startTime: .hours(21), value: 1.0)],
+            timeZone: timeZone)!
+        let insulinSensitivitySchedule = InsulinSensitivitySchedule(
+            unit: .milligramsPerDeciliter,
+            dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 45.0),
+                         RepeatingScheduleValue(startTime: .hours(8), value: 40.0),
+                         RepeatingScheduleValue(startTime: .hours(10), value: 35.0),
+                         RepeatingScheduleValue(startTime: .hours(12), value: 30.0),
+                         RepeatingScheduleValue(startTime: .hours(14), value: 35.0),
+                         RepeatingScheduleValue(startTime: .hours(16), value: 40.0)],
+            timeZone: timeZone)!
+        let carbRatioSchedule = CarbRatioSchedule(
+            unit: .gram(),
+
+            dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 10.0),
+                         RepeatingScheduleValue(startTime: .hours(8), value: 12.0),
+                         RepeatingScheduleValue(startTime: .hours(10), value: 9.0),
+                         RepeatingScheduleValue(startTime: .hours(12), value: 10.0),
+                         RepeatingScheduleValue(startTime: .hours(14), value: 11.0),
+                         RepeatingScheduleValue(startTime: .hours(16), value: 12.0),
+                         RepeatingScheduleValue(startTime: .hours(18), value: 8.0),
+                         RepeatingScheduleValue(startTime: .hours(21), value: 10.0)],
+            timeZone: timeZone)!
+        let correctionRangeOverrides = CorrectionRangeOverrides(
+            preMeal: DoubleRange(minValue: 80.0, maxValue: 90.0),
+            workout: DoubleRange(minValue: 130.0, maxValue: 140.0),
+            unit: .milligramsPerDeciliter)
+
+        return TherapySettings(
+            glucoseTargetRangeSchedule: glucoseTargetRangeSchedule,
+            correctionRangeOverrides: correctionRangeOverrides,
+            maximumBasalRatePerHour: 3,
+            maximumBolus: 5,
+            suspendThreshold: GlucoseThreshold(unit: .milligramsPerDeciliter, value: 80),
+            insulinSensitivitySchedule: insulinSensitivitySchedule,
+            carbRatioSchedule: carbRatioSchedule,
+            basalRateSchedule: basalRateSchedule,
+            defaultRapidActingModel: ExponentialInsulinModelPreset.rapidActingAdult
+        )
     }
 }

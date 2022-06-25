@@ -6,36 +6,35 @@
 //
 
 import Foundation
-import UIKit
 import HealthKit
 
+public struct PumpStatusHighlight: DeviceStatusHighlight, Equatable {
+    public var localizedMessage: String
+
+    public var imageName: String
+
+    public var state: DeviceStatusHighlightState
+
+    public init(localizedMessage: String, imageName: String, state: DeviceStatusHighlightState) {
+        self.localizedMessage = localizedMessage
+        self.imageName = imageName
+        self.state = state
+    }
+}
+
+public struct PumpLifecycleProgress: DeviceLifecycleProgress, Equatable {
+    public var percentComplete: Double
+
+    public var progressState: DeviceLifecycleProgressState
+
+    public init(percentComplete: Double, progressState: DeviceLifecycleProgressState) {
+        self.percentComplete = percentComplete
+        self.progressState = progressState
+    }
+}
+
 public struct PumpManagerStatus: Equatable {
-    
-    public struct PumpStatusHighlight: DeviceStatusHighlight, Equatable {
-        public var localizedMessage: String
-        
-        public var imageName: String
-        
-        public var state: DeviceStatusHighlightState
-        
-        public init(localizedMessage: String, imageName: String, state: DeviceStatusHighlightState) {
-            self.localizedMessage = localizedMessage
-            self.imageName = imageName
-            self.state = state
-        }
-    }
-    
-    public struct PumpLifecycleProgress: DeviceLifecycleProgress, Equatable {
-        public var percentComplete: Double
-        
-        public var progressState: DeviceLifecycleProgressState
-        
-        public init(percentComplete: Double, progressState: DeviceLifecycleProgressState) {
-            self.percentComplete = percentComplete
-            self.progressState = progressState
-        }
-    }
-    
+
     public enum BasalDeliveryState: Equatable {
         case active(_ at: Date)
         case initiatingTempBasal
@@ -69,11 +68,7 @@ public struct PumpManagerStatus: Equatable {
     /// The type of insulin this pump is delivering, nil if pump is in a state where insulin type is unknown; i.e. between reservoirs, or pod changes
     public var insulinType: InsulinType?
 
-    public var pumpStatusHighlight: PumpStatusHighlight?
-    public var pumpLifecycleProgress: PumpLifecycleProgress?
     public var deliveryIsUncertain: Bool
-
-
 
     public init(
         timeZone: TimeZone,
@@ -82,8 +77,6 @@ public struct PumpManagerStatus: Equatable {
         basalDeliveryState: BasalDeliveryState?,
         bolusState: BolusState,
         insulinType: InsulinType?,
-        pumpStatusHighlight: PumpStatusHighlight? = nil,
-        pumpLifecycleProgress: PumpLifecycleProgress? = nil,
         deliveryIsUncertain: Bool = false
     ) {
         self.timeZone = timeZone
@@ -92,8 +85,6 @@ public struct PumpManagerStatus: Equatable {
         self.basalDeliveryState = basalDeliveryState
         self.bolusState = bolusState
         self.insulinType = insulinType
-        self.pumpStatusHighlight = pumpStatusHighlight
-        self.pumpLifecycleProgress = pumpLifecycleProgress
         self.deliveryIsUncertain = deliveryIsUncertain
     }
 }
@@ -102,13 +93,11 @@ extension PumpManagerStatus: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.timeZone = try container.decode(TimeZone.self, forKey: .timeZone)
-        self.device = (try container.decode(CodableDevice.self, forKey: .device)).device
+        self.device = try container.decode(CodableDevice.self, forKey: .device).device
         self.pumpBatteryChargeRemaining = try container.decodeIfPresent(Double.self, forKey: .pumpBatteryChargeRemaining)
         self.basalDeliveryState = try container.decodeIfPresent(BasalDeliveryState.self, forKey: .basalDeliveryState)
         self.bolusState = try container.decode(BolusState.self, forKey: .bolusState)
-        self.insulinType = try container.decode(InsulinType.self, forKey: .insulinType)
-        self.pumpStatusHighlight = try container.decodeIfPresent(PumpStatusHighlight.self, forKey: .pumpStatusHighlight)
-        self.pumpLifecycleProgress = try container.decodeIfPresent(PumpLifecycleProgress.self, forKey: .pumpLifecycleProgress)
+        self.insulinType = try container.decodeIfPresent(InsulinType.self, forKey: .insulinType)
         self.deliveryIsUncertain = try container.decode(Bool.self, forKey: .deliveryIsUncertain)
     }
 
@@ -119,43 +108,8 @@ extension PumpManagerStatus: Codable {
         try container.encodeIfPresent(pumpBatteryChargeRemaining, forKey: .pumpBatteryChargeRemaining)
         try container.encodeIfPresent(basalDeliveryState, forKey: .basalDeliveryState)
         try container.encode(bolusState, forKey: .bolusState)
-        try container.encode(insulinType, forKey: .insulinType)
-        try container.encodeIfPresent(pumpStatusHighlight, forKey: .pumpStatusHighlight)
-        try container.encodeIfPresent(pumpLifecycleProgress, forKey: .pumpLifecycleProgress)
+        try container.encodeIfPresent(insulinType, forKey: .insulinType)
         try container.encode(deliveryIsUncertain, forKey: .deliveryIsUncertain)
-    }
-
-    private struct CodableDevice: Codable {
-        let name: String?
-        let manufacturer: String?
-        let model: String?
-        let hardwareVersion: String?
-        let firmwareVersion: String?
-        let softwareVersion: String?
-        let localIdentifier: String?
-        let udiDeviceIdentifier: String?
-
-        init(_ device: HKDevice) {
-            self.name = device.name
-            self.manufacturer = device.manufacturer
-            self.model = device.model
-            self.hardwareVersion = device.hardwareVersion
-            self.firmwareVersion = device.firmwareVersion
-            self.softwareVersion = device.softwareVersion
-            self.localIdentifier = device.localIdentifier
-            self.udiDeviceIdentifier = device.udiDeviceIdentifier
-        }
-
-        var device: HKDevice {
-            return HKDevice(name: name,
-                            manufacturer: manufacturer,
-                            model: model,
-                            hardwareVersion: hardwareVersion,
-                            firmwareVersion: firmwareVersion,
-                            softwareVersion: softwareVersion,
-                            localIdentifier: localIdentifier,
-                            udiDeviceIdentifier: udiDeviceIdentifier)
-        }
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -165,8 +119,6 @@ extension PumpManagerStatus: Codable {
         case basalDeliveryState
         case bolusState
         case insulinType
-        case pumpStatusHighlight
-        case pumpLifecycleProgress
         case deliveryIsUncertain
     }
 }
@@ -301,9 +253,9 @@ extension PumpManagerStatus.BolusState: Codable {
     }
 }
 
-extension PumpManagerStatus.PumpStatusHighlight: Codable { }
+extension PumpStatusHighlight: Codable { }
 
-extension PumpManagerStatus.PumpLifecycleProgress: Codable { }
+extension PumpLifecycleProgress: Codable { }
 
 extension PumpManagerStatus: CustomDebugStringConvertible {
     public var debugDescription: String {
@@ -315,8 +267,6 @@ extension PumpManagerStatus: CustomDebugStringConvertible {
         * basalDeliveryState: \(basalDeliveryState as Any)
         * bolusState: \(bolusState)
         * insulinType: \(insulinType as Any)
-        * pumpStatusHighlight: \(pumpStatusHighlight as Any)
-        * pumpLifecycleProgress: \(pumpLifecycleProgress as Any)
         * deliveryIsUncertain: \(deliveryIsUncertain)
         """
     }

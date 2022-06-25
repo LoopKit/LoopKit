@@ -34,11 +34,7 @@ final class OverridePresetCollectionViewCell: UICollectionViewCell, Identifiable
 
     @IBOutlet weak var insulinNeedsBar: SegmentedGaugeBarView! {
         didSet {
-            if #available(iOSApplicationExtension 13.0, *) {
-                insulinNeedsBar.backgroundColor = .systemGray6
-            } else {
-                insulinNeedsBar.backgroundColor = .white
-            }
+            insulinNeedsBar.backgroundColor = .systemGray6
 
             insulinNeedsBar.isUserInteractionEnabled = false
         }
@@ -71,11 +67,7 @@ final class OverridePresetCollectionViewCell: UICollectionViewCell, Identifiable
 
     private lazy var overlayDimmerView: UIView = {
         let view = UIView()
-        if #available(iOSApplicationExtension 13.0, *) {
-            view.backgroundColor = .systemBackground
-        } else {
-            view.backgroundColor = .white
-        }
+        view.backgroundColor = .systemBackground
         view.alpha = 0
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -87,16 +79,10 @@ final class OverridePresetCollectionViewCell: UICollectionViewCell, Identifiable
         let selectedBackgroundView = UIView()
         self.selectedBackgroundView = selectedBackgroundView
 
-        if #available(iOSApplicationExtension 13.0, iOS 13.0, *) {
-            selectedBackgroundView.backgroundColor = .tertiarySystemFill
-
-            backgroundColor = .secondarySystemGroupedBackground
-            layer.cornerCurve = .continuous
-        } else {
-            selectedBackgroundView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
-
-            backgroundColor = .white
-        }
+        selectedBackgroundView.backgroundColor = .tertiarySystemFill
+        
+        backgroundColor = .secondarySystemGroupedBackground
+        layer.cornerCurve = .continuous
 
         layer.cornerRadius = 16
 
@@ -124,9 +110,7 @@ final class OverridePresetCollectionViewCell: UICollectionViewCell, Identifiable
             scheduleButton.alpha = 0
             editingIndicator.alpha = 1
             deleteButtonWidthConstraint.constant = 32
-            if #available(iOSApplicationExtension 13.0, *) {
-                deleteButton.setImage(UIImage(systemName: "xmark")!, for: .normal)
-            }
+            deleteButton.setImage(UIImage(systemName: "xmark")!, for: .normal)
             deleteButton.setTitle(nil, for: .normal)
         }
 
@@ -148,9 +132,7 @@ final class OverridePresetCollectionViewCell: UICollectionViewCell, Identifiable
             scheduleButton.alpha = 1
             editingIndicator.alpha = 0
             deleteButtonWidthConstraint.constant = 0
-            if #available(iOSApplicationExtension 13.0, *) {
-                deleteButton.setImage(UIImage(systemName: "xmark")!, for: .normal)
-            }
+            deleteButton.setImage(UIImage(systemName: "xmark")!, for: .normal)
             deleteButton.setTitle(nil, for: .normal)
         }
 

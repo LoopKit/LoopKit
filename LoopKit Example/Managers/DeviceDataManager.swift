@@ -27,17 +27,11 @@ class DeviceDataManager {
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
         )
-        let insulinModelSetting: InsulinModelSettings?
-        if let actionDuration = insulinActionDuration {
-            let insulinModel = WalshInsulinModel(actionDuration: actionDuration)
-            insulinModelSetting = InsulinModelSettings(model: insulinModel)
-        } else {
-            insulinModelSetting = nil
-        }
         doseStore = DoseStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
-            pumpInsulinModelSetting: insulinModelSetting,
+            insulinModelProvider: PresetInsulinModelProvider(defaultRapidActingModel: ExponentialInsulinModelPreset.rapidActingAdult),
+            longestEffectDuration: ExponentialInsulinModelPreset.rapidActingAdult.effectDuration,
             basalProfile: basalRateSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
@@ -70,17 +64,6 @@ class DeviceDataManager {
             UserDefaults.standard.carbRatioSchedule = carbRatioSchedule
 
             carbStore?.carbRatioSchedule = carbRatioSchedule
-        }
-    }
-
-    var insulinActionDuration = UserDefaults.standard.insulinActionDuration {
-        didSet {
-            UserDefaults.standard.insulinActionDuration = insulinActionDuration
-
-            if let duration = insulinActionDuration {
-                let model = WalshInsulinModel(actionDuration: duration)
-                doseStore.insulinModelSettings = InsulinModelSettings(model: model)
-            }
         }
     }
 

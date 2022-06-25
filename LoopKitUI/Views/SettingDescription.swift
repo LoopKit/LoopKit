@@ -50,6 +50,7 @@ public struct SettingDescription<InformationalContent: View>: View {
                     .foregroundColor(.accentColor)
             }
         )
+        .accessibilityLabel("info")
         .padding(.trailing, 4)
     }
 }

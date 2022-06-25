@@ -51,20 +51,8 @@ public struct OverrideSelectionHistory: View {
     
     // Style conditionally based on iOS so we get a grouped list style
     public var body: some View {
-        #if swift(>=5.2)
-            if #available(iOS 14.0, *) {
-                bodyContents
-                .listStyle(InsetGroupedListStyle())
-            } else {
-                bodyContents
-                .listStyle(GroupedListStyle())
-                .environment(\.horizontalSizeClass, .regular)
-            }
-        #else
-            bodyContents
-            .listStyle(GroupedListStyle())
-            .environment(\.horizontalSizeClass, .regular)
-        #endif
+        bodyContents
+            .insetGroupedListStyle()
     }
     
     private var bodyContents: some View {
@@ -83,7 +71,7 @@ public struct OverrideSelectionHistory: View {
                 }
             }
         }
-        .navigationBarTitle(Text(LocalizedString("Override History", comment: "Title for override history view")), displayMode: .large)
+        .navigationBarTitle(Text("Override History", comment: "Title for override history view"), displayMode: .large)
     }
     
     private func makeTargetRangeText(from targetRange: ClosedRange<HKQuantity>) -> String {

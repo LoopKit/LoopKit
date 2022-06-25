@@ -18,3 +18,11 @@ extension Double: RawRepresentable {
         return self
     }
 }
+
+infix operator =~ : ComparisonPrecedence
+
+ extension Double {
+     static func =~ (lhs: Double, rhs: Double) -> Bool {
+         return fabs(lhs - rhs) < Double.ulpOfOne
+     }
+ }

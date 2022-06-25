@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol CompletionDelegate: class {
+public protocol CompletionDelegate: AnyObject {
     func completionNotifyingDidComplete(_ object: CompletionNotifying)
 }
 

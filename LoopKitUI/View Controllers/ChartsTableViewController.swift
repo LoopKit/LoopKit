@@ -6,17 +6,28 @@
 //
 
 import UIKit
+import Combine
 import HealthKit
 
 /// Abstract class providing boilerplate setup for chart-based table view controllers
 open class ChartsTableViewController: UITableViewController, UIGestureRecognizerDelegate {
 
-    public var preferredGlucoseUnit: HKUnit?
+    public var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable? {
+        didSet {
+            guard let displayGlucoseUnitObservable = displayGlucoseUnitObservable else { return }
+
+            displayGlucoseUnitObservable.$displayGlucoseUnit
+                .sink { [weak self] displayGlucoseUnit in self?.unitPreferencesDidChange(to: displayGlucoseUnit) }
+                .store(in: &cancellables)
+        }
+    }
+
+    private lazy var cancellables = Set<AnyCancellable>()
 
     open override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let unit = preferredGlucoseUnit {
+        if let unit = displayGlucoseUnitObservable?.displayGlucoseUnit {
             self.charts.setGlucoseUnit(unit)
         }
 
@@ -26,15 +37,23 @@ open class ChartsTableViewController: UITableViewController, UIGestureRecognizer
         gestureRecognizer.addTarget(self, action: #selector(handlePan(_:)))
         charts.gestureRecognizer = gestureRecognizer
         
-        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { [weak self] _ in
-            guard let self = self else { return }
-            
-            if self.visible {
-                DispatchQueue.main.async {
-                    self.reloadData()
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.active = true
+                if self?.visible == true {
+                    self?.reloadData()
                 }
             }
-        }
+            .store(in: &cancellables)
+
+        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification, object: nil)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.active = false
+            }
+            .store(in: &cancellables)
+
     }
 
     open override func didReceiveMemoryWarning() {

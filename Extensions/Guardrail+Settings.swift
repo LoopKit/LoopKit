@@ -35,9 +35,10 @@ public extension Guardrail where Value == HKQuantity {
     }
     
     // Static "unconstrained" constant values before applying constraints
-    static let unconstrainedWorkoutCorrectionRange = Guardrail(absoluteBounds: 85...250,
-                                                               recommendedBounds: correctionRange.recommendedBounds.lowerBound.doubleValue(for: .milligramsPerDeciliter)...180,
-                                                               unit: .milligramsPerDeciliter)
+    static let unconstrainedWorkoutCorrectionRange = Guardrail(
+        absoluteBounds: correctionRange.absoluteBounds.lowerBound.doubleValue(for: .milligramsPerDeciliter)...250,
+        recommendedBounds: correctionRange.recommendedBounds.lowerBound.doubleValue(for: .milligramsPerDeciliter)...180,
+        unit: .milligramsPerDeciliter)
     
     fileprivate static func workoutCorrectionRange(correctionRangeScheduleRange: ClosedRange<HKQuantity>,
                                                    suspendThreshold: GlucoseThreshold?) -> Guardrail<HKQuantity> {
@@ -92,7 +93,7 @@ public extension Guardrail where Value == HKQuantity {
     )
 
     static func basalRate(supportedBasalRates: [Double]) -> Guardrail {
-        let scheduledBasalRateAbsoluteRange = 0.05...30.0
+        let scheduledBasalRateAbsoluteRange = 0.0...30.0
         let allowedBasalRates = supportedBasalRates.filter { scheduledBasalRateAbsoluteRange.contains($0) }
         return Guardrail(
             absoluteBounds: allowedBasalRates.first!...allowedBasalRates.last!,

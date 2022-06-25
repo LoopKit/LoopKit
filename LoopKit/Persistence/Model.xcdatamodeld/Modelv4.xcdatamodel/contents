@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20C69" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="20G417" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CachedCarbObject" representedClassName=".CachedCarbObject" syncable="YES">
         <attribute name="absorptionTime" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="addedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -8,7 +8,7 @@
         <attribute name="foodType" optional="YES" attributeType="String"/>
         <attribute name="grams" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="operation" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO"/>
-        <attribute name="provenanceIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="provenanceIdentifier" attributeType="String" defaultValueString=""/>
         <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="supercededDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="syncIdentifier" optional="YES" attributeType="String"/>
@@ -19,12 +19,18 @@
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
     <entity name="CachedGlucoseObject" representedClassName=".CachedGlucoseObject" syncable="YES">
+        <attribute name="condition" optional="YES" attributeType="String"/>
+        <attribute name="device" optional="YES" attributeType="Binary"/>
+        <attribute name="healthKitEligibleDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="isDisplayOnly" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="provenanceIdentifier" attributeType="String"/>
         <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="syncIdentifier" optional="YES" attributeType="String"/>
         <attribute name="syncVersion" optional="YES" attributeType="Integer 32" usesScalarValueType="YES"/>
+        <attribute name="trend" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="trendRateUnit" optional="YES" attributeType="String"/>
+        <attribute name="trendRateValue" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
         <attribute name="unitString" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="value" attributeType="Double" usesScalarValueType="YES"/>
@@ -53,9 +59,14 @@
     <entity name="CachedInsulinDeliveryObject" representedClassName=".CachedInsulinDeliveryObject" syncable="YES">
         <attribute name="automaticallyIssued" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="hasLoopKitOrigin" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="insulinType" optional="YES" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="isMutable" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isSuspend" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="manuallyEntered" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="programmedTempBasalRate" optional="YES" attributeType="Double" usesScalarValueType="NO" elementID="scheduledTempBasalRate"/>
         <attribute name="provenanceIdentifier" attributeType="String"/>
         <attribute name="reason" attributeType="Integer 16" usesScalarValueType="NO"/>
@@ -64,6 +75,7 @@
         <attribute name="syncIdentifier" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="value" attributeType="Double" usesScalarValueType="YES"/>
+        <attribute name="wasProgrammedByPumpUI" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <fetchIndex name="byUUIDIndex">
             <fetchIndexElement property="uuid" type="Binary" order="ascending"/>
         </fetchIndex>
@@ -92,6 +104,7 @@
         </fetchIndex>
     </entity>
     <entity name="PumpEvent" representedClassName=".PumpEvent" syncable="YES">
+        <attribute name="alarmType" optional="YES" attributeType="String"/>
         <attribute name="automatic" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
@@ -107,6 +120,7 @@
         <attribute name="unit" optional="YES" attributeType="String"/>
         <attribute name="uploaded" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="NO"/>
         <attribute name="value" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
+        <attribute name="wasProgrammedByPumpUI" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <fetchIndex name="byDateIndex">
             <fetchIndexElement property="date" type="Binary" order="ascending"/>
         </fetchIndex>
@@ -140,11 +154,11 @@
         <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="CachedCarbObject" positionX="-63" positionY="72" width="128" height="283"/>
-        <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="193"/>
-        <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="238"/>
+        <element name="CachedCarbObject" positionX="-63" positionY="72" width="128" height="269"/>
+        <element name="CachedGlucoseObject" positionX="-63" positionY="99" width="128" height="269"/>
+        <element name="CachedInsulinDeliveryObject" positionX="-63" positionY="108" width="128" height="314"/>
         <element name="DosingDecisionObject" positionX="-63" positionY="126" width="128" height="88"/>
-        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="254"/>
+        <element name="PumpEvent" positionX="-63" positionY="18" width="128" height="284"/>
         <element name="Reservoir" positionX="-63" positionY="-18" width="128" height="105"/>
         <element name="SettingsObject" positionX="-63" positionY="126" width="128" height="88"/>
     </elements>

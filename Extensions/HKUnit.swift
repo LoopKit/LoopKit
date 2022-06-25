@@ -18,6 +18,14 @@ extension HKUnit {
         return HKUnit.moleUnit(with: .milli, molarMass: HKUnitMolarMassBloodGlucose).unitDivided(by: .liter())
     }()
 
+    static let milligramsPerDeciliterPerMinute: HKUnit = {
+        return HKUnit.milligramsPerDeciliter.unitDivided(by: .minute())
+    }()
+
+    static let millimolesPerLiterPerMinute: HKUnit = {
+        return HKUnit.millimolesPerLiter.unitDivided(by: .minute())
+    }()
+
     static let internationalUnitsPerHour: HKUnit = {
         return HKUnit.internationalUnit().unitDivided(by: .hour())
     }()
