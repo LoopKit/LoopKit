@@ -319,7 +319,7 @@ public struct StoredDosingDecision {
         }
     }
 
-    public struct StoredDeviceHighlight: Codable, Equatable {
+    public struct StoredDeviceHighlight: Codable, Equatable, DeviceStatusHighlight {
         public var localizedMessage: String
         public var imageName: String
         public var state: DeviceStatusHighlightState
