@@ -1,12 +1,6 @@
 language: objective-c
 osx_image: xcode12.5
 
-cache:
-  directories:
-  - Carthage
-
-before_script:
-    - ./Scripts/carthage.sh bootstrap --cache-builds
 script:
    - set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 8' test | xcpretty
    - set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme "LoopKit Example" build -destination 'name=iPhone 8' CODE_SIGNING_ALLOWED=NO | xcpretty
