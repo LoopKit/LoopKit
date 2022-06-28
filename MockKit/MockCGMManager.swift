@@ -460,8 +460,19 @@ public final class MockCGMManager: TestingCGMManager {
     public let managedDataInterval: TimeInterval? = nil
 
     public let shouldSyncToRemoteService = false
+
+    public var healthKitStorageDelayEnabled: Bool {
+        get {
+            MockCGMManager.healthKitStorageDelay == fixedHealthKitStorageDelay
+        }
+        set {
+            MockCGMManager.healthKitStorageDelay = newValue ? fixedHealthKitStorageDelay : 0
+        }
+    }
+
+    public let fixedHealthKitStorageDelay: TimeInterval = .minutes(2)
     
-    public var healthKitStorageDelay: TimeInterval = .minutes(2)
+    public static var healthKitStorageDelay: TimeInterval = 0
     
     private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
         self.delegate.notify { (delegate) in
