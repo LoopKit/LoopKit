@@ -774,7 +774,6 @@
 		C1CB895925C8E7D900782BAC /* Modelv1v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = C1E84B8425C62FB100623C08 /* Modelv1v4.xcmappingmodel */; };
 		C1CCF1062858F07A0035389C /* SwiftCharts in Frameworks */ = {isa = PBXBuildFile; productRef = C1CCF1052858F07A0035389C /* SwiftCharts */; };
 		C1CCF1082858F1E10035389C /* SwiftCharts in Frameworks */ = {isa = PBXBuildFile; productRef = C1CCF1072858F1E10035389C /* SwiftCharts */; };
-		C1CCF1092858F1E10035389C /* SwiftCharts in Embed Frameworks */ = {isa = PBXBuildFile; productRef = C1CCF1072858F1E10035389C /* SwiftCharts */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C1DD512B259FD8A600DE27AE /* InsulinTypeChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1742345259CD3ED00399C9D /* InsulinTypeChooser.swift */; };
 		C1DD517825A016E700DE27AE /* InsulinTypeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DD515A259FE3AB00DE27AE /* InsulinTypeSetting.swift */; };
 		C1DE4C2125A253BD007065F8 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE4C2025A253BD007065F8 /* Color.swift */; };
@@ -980,7 +979,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				C1CCF1092858F1E10035389C /* SwiftCharts in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;

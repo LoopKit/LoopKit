@@ -125,7 +125,6 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
     
     private enum HealthKitRow: Int, CaseIterable {
         case healthKitStorageDelayEnabled = 0
-        case healthKitStorageDelay
     }
         
     // MARK: - UITableViewDataSource
@@ -177,6 +176,15 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return "HealthKit"
         case .deleteCGM:
             return " " // Use an empty string for more dramatic spacing
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        switch Section(rawValue: section) {
+        case .healthKit:
+            return "Amount of time to wait before storing CGM samples to HealthKit. If enabled, the delay is \(cgmManager.fixedHealthKitStorageDelay.minutes) minutes. NOTE: after changing this, you will need to delete and re-add the CGM simulator!"
+        default:
+            return nil
         }
     }
 
@@ -379,26 +387,28 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             cell.accessoryType = .disclosureIndicator
             return cell
         case .healthKit:
-            let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
             switch HealthKitRow(rawValue: indexPath.row)! {
             case .healthKitStorageDelayEnabled:
                 let cell = tableView.dequeueReusableCell(withIdentifier: BoundSwitchTableViewCell.className, for: indexPath) as! BoundSwitchTableViewCell
-                cell.textLabel?.text = "HealthKit Storage Delay Enabled"
-                cell.switch?.isOn = cgmManager.healthKitStorageDelay != 0
-                cell.onToggle = { [weak cgmManager] isOn in
-                    if !isOn {
-                        cgmManager?.healthKitStorageDelay = 0
+                cell.textLabel?.text = "Storage Delay"
+                cell.switch?.isOn = cgmManager.healthKitStorageDelayEnabled
+                cell.onToggle = { isOn in
+                    let confirmVC = UIAlertController(cgmDeletionHandler: {
+                        self.cgmManager.healthKitStorageDelayEnabled = isOn
+                        self.cgmManager.notifyDelegateOfDeletion {
+                            DispatchQueue.main.async {
+                                self.done()
+                            }
+                        }
+                    }, cancelHandler: { cell.switch?.isOn = self.cgmManager.healthKitStorageDelayEnabled })
+
+                    self.present(confirmVC, animated: true) {
+                        tableView.deselectRow(at: indexPath, animated: true)
                     }
                 }
                 cell.selectionStyle = .none
                 return cell
-            case .healthKitStorageDelay:
-                cell.textLabel?.text = "HealthKit Storage Delay"
-                cell.detailTextLabel?.text = durationFormatter.string(from: cgmManager.healthKitStorageDelay)
-                cell.accessoryType = .disclosureIndicator
             }
-            return cell
-
         case .deleteCGM:
             let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
             cell.textLabel?.text = "Delete CGM"
@@ -570,24 +580,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             }
             show(vc, sender: sender)
         case .healthKit:
-            switch HealthKitRow(rawValue: indexPath.row)! {
-            case .healthKitStorageDelayEnabled:
-                return
-            case .healthKitStorageDelay:
-                let vc = DateAndDurationTableViewController()
-                vc.inputMode = .duration(MockCGMManager.healthKitStorageDelay)
-                vc.title = "HealthKit Storage Delay"
-                vc.contextHelp = "Amount of time to wait before storing CGM samples to HealthKit. NOTE: after changing this, you will need to delete and re-add the CGM simulator!"
-                vc.indexPath = indexPath
-                vc.onSave { [weak cgmManager] inputMode in
-                    guard case .duration(let duration) = inputMode else {
-                        assertionFailure()
-                        return
-                    }
-                    cgmManager?.healthKitStorageDelay = duration
-                }
-                show(vc, sender: sender)
-            }
+            return
         case .deleteCGM:
             let confirmVC = UIAlertController(cgmDeletionHandler: {
                 self.cgmManager.notifyDelegateOfDeletion {
@@ -764,7 +757,7 @@ extension MockCGMManagerSettingsViewController: MeasurementFrequencyTableViewCon
 }
 
 private extension UIAlertController {
-    convenience init(cgmDeletionHandler handler: @escaping () -> Void) {
+    convenience init(cgmDeletionHandler confirmHandler: @escaping () -> Void, cancelHandler: (() -> Void)? = nil) {
         self.init(
             title: nil,
             message: "Are you sure you want to delete this CGM?",
@@ -775,11 +768,11 @@ private extension UIAlertController {
             title: "Delete CGM",
             style: .destructive,
             handler: { _ in
-                handler()
+                confirmHandler()
             }
         ))
 
         let cancel = "Cancel"
-        addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
+        addAction(UIAlertAction(title: cancel, style: .cancel, handler: { _ in cancelHandler?() }))
     }
 }
