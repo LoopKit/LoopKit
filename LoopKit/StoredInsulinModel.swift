@@ -49,5 +49,15 @@ public extension StoredInsulinModel {
 
         self.init(modelType: modelType, delay: preset.delay, actionDuration: preset.actionDuration, peakActivity: preset.peakActivity)
     }
-}
 
+    var presetForRapidActingInsulin: ExponentialInsulinModelPreset? {
+        switch modelType {
+        case .rapidAdult:
+            return .rapidActingAdult
+        case .rapidChild:
+            return .rapidActingChild
+        default:
+            return nil
+        }
+    }
+}
