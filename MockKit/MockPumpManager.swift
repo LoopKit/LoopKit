@@ -346,9 +346,7 @@ public final class MockPumpManager: TestingPumpManager {
     public let isOnboarded = true   // No distinction between created and onboarded
 
     private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
-        self.delegate.notify { (delegate) in
-            delegate?.deviceManager(self, logEventForDeviceIdentifier: "MockId", type: type, message: message, completion: nil)
-        }
+        self.delegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: "MockId", type: type, message: message, completion: nil)
     }
 
     public func createBolusProgressReporter(reportingOn dispatchQueue: DispatchQueue) -> DoseProgressReporter? {
@@ -461,9 +459,7 @@ public final class MockPumpManager: TestingPumpManager {
     }
     
     private func logDeviceComms(_ type: DeviceLogEntryType, message: String) {
-        delegate.notify { (delegate) in
-            delegate?.deviceManager(self, logEventForDeviceIdentifier: "mockpump", type: type, message: message, completion: nil)
-        }
+        self.delegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: "mockpump", type: type, message: message, completion: nil)
     }
 
     public func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (PumpManagerError?) -> Void) {

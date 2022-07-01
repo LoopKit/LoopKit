@@ -8,7 +8,8 @@
 import Foundation
 import UserNotifications
 
-public protocol DeviceManagerDelegate: AlertIssuer, PersistedAlertStore {    
+public protocol DeviceManagerDelegate: AlertIssuer, PersistedAlertStore {
+    // This will be called from an unspecified queue
     func deviceManager(_ manager: DeviceManager, logEventForDeviceIdentifier deviceIdentifier: String?, type: DeviceLogEntryType, message: String, completion: ((Error?) -> Void)?)
 }
 
@@ -21,10 +22,6 @@ public protocol DeviceManager: CustomDebugStringConvertible, AlertResponder, Ale
     /// A title describing this manager
     var localizedTitle: String { get }
 
-    /// The queue on which delegate methods are called
-    /// Setting to nil resets to a default provided by the manager
-    var delegateQueue: DispatchQueue! { get set }
-    
     /// Initializes the manager with its previously-saved state
     ///
     /// Return nil if the saved state is invalid to prevent restoration
