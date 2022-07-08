@@ -28,6 +28,8 @@ public struct MockCGMState: GlucoseDisplayable {
 
     public var glucoseAlertingEnabled: Bool
 
+    public var samplesShouldBeUploaded: Bool
+
     private var cgmLowerLimitValue: Double
        
     // HKQuantity isn't codable
@@ -166,6 +168,7 @@ public struct MockCGMState: GlucoseDisplayable {
     public init(isStateValid: Bool = true,
                 glucoseRangeCategory: GlucoseRangeCategory? = nil,
                 glucoseAlertingEnabled: Bool = false,
+                samplesShouldBeUploaded: Bool = false,
                 urgentLowGlucoseThresholdValue: Double = 55,
                 lowGlucoseThresholdValue: Double = 80,
                 highGlucoseThresholdValue: Double = 200,
@@ -179,6 +182,7 @@ public struct MockCGMState: GlucoseDisplayable {
         self.isStateValid = isStateValid
         self.glucoseRangeCategory = glucoseRangeCategory
         self.glucoseAlertingEnabled = glucoseAlertingEnabled
+        self.samplesShouldBeUploaded = samplesShouldBeUploaded
         self.urgentLowGlucoseThresholdValue = urgentLowGlucoseThresholdValue
         self.lowGlucoseThresholdValue = lowGlucoseThresholdValue
         self.highGlucoseThresholdValue = highGlucoseThresholdValue
@@ -459,7 +463,9 @@ public final class MockCGMManager: TestingCGMManager {
 
     public let managedDataInterval: TimeInterval? = nil
 
-    public let shouldSyncToRemoteService = false
+    public var shouldSyncToRemoteService: Bool {
+        return self.mockSensorState.samplesShouldBeUploaded
+    }
     
     public var healthKitStorageDelay: TimeInterval = .minutes(2)
     
@@ -763,6 +769,7 @@ extension MockCGMState: RawRepresentable {
 
         self.isStateValid = isStateValid
         self.glucoseAlertingEnabled = glucoseAlertingEnabled
+        self.samplesShouldBeUploaded = rawValue["samplesShouldBeUploaded"] as? Bool ?? false
         self.urgentLowGlucoseThresholdValue = urgentLowGlucoseThresholdValue
         self.lowGlucoseThresholdValue = lowGlucoseThresholdValue
         self.highGlucoseThresholdValue = highGlucoseThresholdValue
@@ -800,6 +807,7 @@ extension MockCGMState: RawRepresentable {
         var rawValue: RawValue = [
             "isStateValid": isStateValid,
             "glucoseAlertingEnabled": glucoseAlertingEnabled,
+            "samplesShouldBeUploaded": samplesShouldBeUploaded,
             "urgentLowGlucoseThresholdValue": urgentLowGlucoseThresholdValue,
             "lowGlucoseThresholdValue": lowGlucoseThresholdValue,
             "highGlucoseThresholdValue": highGlucoseThresholdValue,
@@ -846,6 +854,7 @@ extension MockCGMState: CustomDebugStringConvertible {
         ## MockCGMState
         * isStateValid: \(isStateValid)
         * glucoseAlertingEnabled: \(glucoseAlertingEnabled)
+        * samplesShouldBeUploaded: \(samplesShouldBeUploaded)
         * urgentLowGlucoseThresholdValue: \(urgentLowGlucoseThresholdValue)
         * lowGlucoseThresholdValue: \(lowGlucoseThresholdValue)
         * highGlucoseThresholdValue: \(highGlucoseThresholdValue)
