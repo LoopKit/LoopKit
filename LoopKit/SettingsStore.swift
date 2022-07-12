@@ -61,6 +61,14 @@ public class SettingsStore {
             }
         }
     }
+
+    func storeSettings(_ settings: StoredSettings) async {
+        await withCheckedContinuation { continuation in
+            storeSettings(settings) {
+                continuation.resume()
+            }
+        }
+    }
     
     public func storeSettings(_ settings: StoredSettings, completion: @escaping () -> Void) {
         dataAccessQueue.async {
@@ -251,6 +259,7 @@ public struct StoredSettings: Equatable {
     public let cgmDevice: HKDevice?
     public let pumpDevice: HKDevice?
     public let bloodGlucoseUnit: HKUnit?
+    public let automaticDosingStrategy: AutomaticDosingStrategy
     public let syncIdentifier: UUID
 
     public init(date: Date = Date(),
@@ -276,6 +285,7 @@ public struct StoredSettings: Equatable {
                 cgmDevice: HKDevice? = nil,
                 pumpDevice: HKDevice? = nil,
                 bloodGlucoseUnit: HKUnit? = nil,
+                automaticDosingStrategy: AutomaticDosingStrategy = .tempBasalOnly,
                 syncIdentifier: UUID = UUID()) {
         self.date = date
         self.controllerTimeZone = controllerTimeZone
@@ -300,6 +310,7 @@ public struct StoredSettings: Equatable {
         self.cgmDevice = cgmDevice
         self.pumpDevice = pumpDevice
         self.bloodGlucoseUnit = bloodGlucoseUnit
+        self.automaticDosingStrategy = automaticDosingStrategy
         self.syncIdentifier = syncIdentifier
     }
 }
@@ -333,6 +344,7 @@ extension StoredSettings: Codable {
                   cgmDevice: try container.decodeIfPresent(CodableDevice.self, forKey: .cgmDevice)?.device,
                   pumpDevice: try container.decodeIfPresent(CodableDevice.self, forKey: .pumpDevice)?.device,
                   bloodGlucoseUnit: bloodGlucoseUnit,
+                  automaticDosingStrategy: try container.decodeIfPresent(AutomaticDosingStrategy.self, forKey: .automaticDosingStrategy) ?? .tempBasalOnly,
                   syncIdentifier: try container.decode(UUID.self, forKey: .syncIdentifier))
     }
 
@@ -362,6 +374,7 @@ extension StoredSettings: Codable {
         try container.encodeIfPresent(cgmDevice.map { CodableDevice($0) }, forKey: .cgmDevice)
         try container.encodeIfPresent(pumpDevice.map { CodableDevice($0) }, forKey: .pumpDevice)
         try container.encode(bloodGlucoseUnit.unitString, forKey: .bloodGlucoseUnit)
+        try container.encode(automaticDosingStrategy, forKey: .automaticDosingStrategy)
         try container.encode(syncIdentifier, forKey: .syncIdentifier)
     }
 
@@ -405,6 +418,7 @@ extension StoredSettings: Codable {
         case cgmDevice
         case pumpDevice
         case bloodGlucoseUnit
+        case automaticDosingStrategy
         case syncIdentifier
     }
 }
