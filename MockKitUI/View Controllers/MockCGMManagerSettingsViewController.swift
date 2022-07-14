@@ -418,7 +418,6 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 cell.selectionStyle = .none
                 return cell
             }
-            return cell
         case .uploading:
             switch UploadingRow(rawValue: indexPath.row)! {
             case .uploadEnabled:
@@ -602,29 +601,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             }
             show(vc, sender: sender)
         case .healthKit:
-            switch HealthKitRow(rawValue: indexPath.row)! {
-            case .healthKitStorageDelayEnabled:
-                return
-            case .healthKitStorageDelay:
-                let vc = DateAndDurationTableViewController()
-                vc.inputMode = .duration(MockCGMManager.healthKitStorageDelay)
-                vc.title = "HealthKit Storage Delay"
-                vc.contextHelp = "Amount of time to wait before storing CGM samples to HealthKit. NOTE: after changing this, you will need to delete and re-add the CGM simulator!"
-                vc.indexPath = indexPath
-                vc.onSave { [weak cgmManager] inputMode in
-                    guard case .duration(let duration) = inputMode else {
-                        assertionFailure()
-                        return
-                    }
-                    cgmManager?.healthKitStorageDelay = duration
-                }
-                show(vc, sender: sender)
-            }
+            return
         case .uploading:
-            switch UploadingRow(rawValue: indexPath.row)! {
-            case .uploadEnabled:
-                return
-            }
             return
         case .deleteCGM:
             let confirmVC = UIAlertController(cgmDeletionHandler: {
