@@ -108,6 +108,7 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
                 try assertSettingsObjectEncodable(object, encodesJSON: """
 {
   "data" : {
+    "automaticDosingStrategy" : 0,
     "basalRateSchedule" : {
       "items" : [
         {
@@ -678,9 +679,9 @@ class SettingsStoreCriticalEventLogTests: PersistenceControllerTestCase {
                                           progress: progress))
         XCTAssertEqual(outputStream.string, """
 [
-{"data":{"bloodGlucoseUnit":"mg/dL","controllerTimeZone":{"identifier":"America/Los_Angeles"},"date":"2100-01-02T03:08:00.000Z","dosingEnabled":false,"syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784"},"date":"2100-01-02T03:08:00.000Z","modificationCounter":1},
-{"data":{"bloodGlucoseUnit":"mg/dL","controllerTimeZone":{"identifier":"America/Los_Angeles"},"date":"2100-01-02T03:04:00.000Z","dosingEnabled":false,"syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010"},"date":"2100-01-02T03:04:00.000Z","modificationCounter":3},
-{"data":{"bloodGlucoseUnit":"mg/dL","controllerTimeZone":{"identifier":"America/Los_Angeles"},"date":"2100-01-02T03:06:00.000Z","dosingEnabled":false,"syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E"},"date":"2100-01-02T03:06:00.000Z","modificationCounter":4}
+{"data":{"automaticDosingStrategy":0,"bloodGlucoseUnit":"mg/dL","controllerTimeZone":{"identifier":"America/Los_Angeles"},"date":"2100-01-02T03:08:00.000Z","dosingEnabled":false,"syncIdentifier":"18CF3948-0B3D-4B12-8BFE-14986B0E6784"},"date":"2100-01-02T03:08:00.000Z","modificationCounter":1},
+{"data":{"automaticDosingStrategy":0,"bloodGlucoseUnit":"mg/dL","controllerTimeZone":{"identifier":"America/Los_Angeles"},"date":"2100-01-02T03:04:00.000Z","dosingEnabled":false,"syncIdentifier":"2B03D96C-6F5D-4140-99CD-80C3E64D6010"},"date":"2100-01-02T03:04:00.000Z","modificationCounter":3},
+{"data":{"automaticDosingStrategy":0,"bloodGlucoseUnit":"mg/dL","controllerTimeZone":{"identifier":"America/Los_Angeles"},"date":"2100-01-02T03:06:00.000Z","dosingEnabled":false,"syncIdentifier":"FF1C4F01-3558-4FB2-957E-FA1522C4735E"},"date":"2100-01-02T03:06:00.000Z","modificationCounter":4}
 ]
 """
         )
@@ -711,6 +712,7 @@ class StoredSettingsCodableTests: XCTestCase {
     func testStoredSettingsCodable() throws {
         try assertStoredSettingsCodable(StoredSettings.test, encodesJSON: """
 {
+  "automaticDosingStrategy" : 0,
   "basalRateSchedule" : {
     "items" : [
       {

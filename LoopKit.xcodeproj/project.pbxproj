@@ -742,6 +742,8 @@
 		B4CEE2E5257129780093111B /* MockKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89D2047221CC7BD7001238CC /* MockKit.framework */; };
 		B4D3D4AD25B8A94E0085BA0F /* DisplayGlucoseUnitObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B1162D25AF3A40006428DE /* DisplayGlucoseUnitObserver.swift */; };
 		B4D4C20D25F95A8700DA809D /* DisplayGlucoseUnitObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D4C20C25F95A8700DA809D /* DisplayGlucoseUnitObservable.swift */; };
+		C109240F286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */; };
+		C1092410286A4ADB00FAD2B8 /* AutomaticDosingStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */; };
 		C1390AAF246A541C002F3C3C /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
 		C140DFFF260276BF000A4FF7 /* ManualBolusRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C140DFFE260276BF000A4FF7 /* ManualBolusRecommendation.swift */; };
 		C140E0522602908A000A4FF7 /* SettingsPresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */; };
@@ -1597,6 +1599,7 @@
 		B4CEE2E2257129780093111B /* UnfinalizedDoseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinalizedDoseTests.swift; sourceTree = "<group>"; };
 		B4CEE2E4257129780093111B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B4D4C20C25F95A8700DA809D /* DisplayGlucoseUnitObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayGlucoseUnitObservable.swift; sourceTree = "<group>"; };
+		C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomaticDosingStrategy.swift; sourceTree = "<group>"; };
 		C1110E981EE98CF5009BB852 /* ice_35_min_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_input.json; sourceTree = "<group>"; };
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
@@ -2376,6 +2379,7 @@
 				1D1FCE2824BE4F11000300A8 /* TherapySetting.swift */,
 				1DC64C7D24BF6EBC004A63A1 /* DeliveryLimits.swift */,
 				1D24A8D424C896E100AB8DB9 /* Prescription.swift */,
+				C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -3840,6 +3844,7 @@
 				89AE222B228BC56A00BDFD85 /* WeakSet.swift in Sources */,
 				A9498D7C23386C3300DAA9B9 /* AnalyticsService.swift in Sources */,
 				1D24A8D524C896E100AB8DB9 /* Prescription.swift in Sources */,
+				C109240F286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift in Sources */,
 				4322B783202FA2AF0002837D /* Reservoir.swift in Sources */,
 				1DA649AB2445174400F61E75 /* Alert.swift in Sources */,
 				4322B777202FA2790002837D /* CarbValue.swift in Sources */,
@@ -4146,6 +4151,7 @@
 				A93761C225ED670200F6BE43 /* BluetoothProvider.swift in Sources */,
 				A9E675AB22713F4700E25293 /* HKHealthStore.swift in Sources */,
 				A9E675AC22713F4700E25293 /* Reservoir.swift in Sources */,
+				C1092410286A4ADB00FAD2B8 /* AutomaticDosingStrategy.swift in Sources */,
 				A9E675AE22713F4700E25293 /* CarbValue.swift in Sources */,
 				C17F39CB23CD2D2F00FA1113 /* DeviceLogEntryType.swift in Sources */,
 				A9E675AF22713F4700E25293 /* PumpEventType.swift in Sources */,
