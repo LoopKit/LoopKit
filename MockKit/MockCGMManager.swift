@@ -466,8 +466,19 @@ public final class MockCGMManager: TestingCGMManager {
     public var shouldSyncToRemoteService: Bool {
         return self.mockSensorState.samplesShouldBeUploaded
     }
+
+    public var healthKitStorageDelayEnabled: Bool {
+        get {
+            MockCGMManager.healthKitStorageDelay == fixedHealthKitStorageDelay
+        }
+        set {
+            MockCGMManager.healthKitStorageDelay = newValue ? fixedHealthKitStorageDelay : 0
+        }
+    }
+
+    public let fixedHealthKitStorageDelay: TimeInterval = .minutes(2)
     
-    public var healthKitStorageDelay: TimeInterval = .minutes(2)
+    public static var healthKitStorageDelay: TimeInterval = 0
     
     private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
         self.delegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: "MockId", type: type, message: message, completion: nil)
