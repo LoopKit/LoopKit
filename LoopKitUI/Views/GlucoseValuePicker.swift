@@ -51,7 +51,7 @@ public struct GlucoseValuePicker: View {
                        guidanceColors: guidanceColors)
     }
 
-    private var selectableValues: [Double] {
+    var selectableValues: [Double] {
         Array(
             Swift.stride(
                 from: bounds.lowerBound.doubleValue(for: unit, withRounding: true),
