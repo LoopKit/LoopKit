@@ -422,7 +422,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             switch UploadingRow(rawValue: indexPath.row)! {
             case .uploadEnabled:
                 let cell = tableView.dequeueReusableCell(withIdentifier: BoundSwitchTableViewCell.className, for: indexPath) as! BoundSwitchTableViewCell
-                cell.textLabel?.text = "Upload Mock CGM Samples"
+                cell.textLabel?.text = "Upload CGM Samples"
                 cell.switch?.isOn = cgmManager.mockSensorState.samplesShouldBeUploaded
                 cell.onToggle = { [weak cgmManager] isOn in
                     cgmManager?.mockSensorState.samplesShouldBeUploaded = isOn
