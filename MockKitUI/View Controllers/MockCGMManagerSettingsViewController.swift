@@ -75,6 +75,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         case alerts
         case lifecycleProgress
         case healthKit
+        case uploading
         case deleteCGM
     }
 
@@ -126,7 +127,11 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
     private enum HealthKitRow: Int, CaseIterable {
         case healthKitStorageDelayEnabled = 0
     }
-        
+
+    private enum UploadingRow: Int, CaseIterable {
+        case uploadEnabled = 0
+    }
+
     // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -151,6 +156,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return LifecycleProgressRow.allCases.count
         case .healthKit:
             return HealthKitRow.allCases.count
+        case .uploading:
+            return UploadingRow.allCases.count
         case .deleteCGM:
             return 1
         }
@@ -174,6 +181,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             return "Lifecycle Progress"
         case .healthKit:
             return "HealthKit"
+        case .uploading:
+            return "Uploading"
         case .deleteCGM:
             return " " // Use an empty string for more dramatic spacing
         }
@@ -409,6 +418,18 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 cell.selectionStyle = .none
                 return cell
             }
+        case .uploading:
+            switch UploadingRow(rawValue: indexPath.row)! {
+            case .uploadEnabled:
+                let cell = tableView.dequeueReusableCell(withIdentifier: BoundSwitchTableViewCell.className, for: indexPath) as! BoundSwitchTableViewCell
+                cell.textLabel?.text = "Upload CGM Samples"
+                cell.switch?.isOn = cgmManager.mockSensorState.samplesShouldBeUploaded
+                cell.onToggle = { [weak cgmManager] isOn in
+                    cgmManager?.mockSensorState.samplesShouldBeUploaded = isOn
+                }
+                cell.selectionStyle = .none
+                return cell
+            }
         case .deleteCGM:
             let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
             cell.textLabel?.text = "Delete CGM"
@@ -580,6 +601,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             }
             show(vc, sender: sender)
         case .healthKit:
+            return
+        case .uploading:
             return
         case .deleteCGM:
             let confirmVC = UIAlertController(cgmDeletionHandler: {

@@ -83,6 +83,10 @@ public protocol PumpManager: DeviceManager {
     /// All user-selectable maximum bolus volumes, in Units. Must be non-empty. Used during onboarding by therapy settings.
     static var onboardingSupportedMaximumBolusVolumes: [Double] { get }
 
+    /// The queue on which PumpManagerDelegate methods are called
+    /// Setting to nil resets to a default provided by the manager
+    var delegateQueue: DispatchQueue! { get set }
+
     /// Rounds a basal rate in U/hr to a rate supported by this pump.
     ///
     /// - Parameters:

@@ -119,6 +119,10 @@ public protocol CGMManager: DeviceManager {
     /// The current status of the cgm manager
     var cgmManagerStatus: CGMManagerStatus { get }
 
+    /// The queue on which CGMManagerDelegate methods are called
+    /// Setting to nil resets to a default provided by the manager
+    var delegateQueue: DispatchQueue! { get set }
+
 
     /// Implementations of this function must call the `completion` block, with the appropriate `CGMReadingResult`
     /// according to the current available data.

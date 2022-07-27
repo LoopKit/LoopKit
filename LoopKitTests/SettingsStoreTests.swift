@@ -108,7 +108,7 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
                 try assertSettingsObjectEncodable(object, encodesJSON: """
 {
   "data" : {
-    "automaticDosingStrategy" : 0,
+    "automaticDosingStrategy" : 1,
     "basalRateSchedule" : {
       "items" : [
         {
@@ -714,7 +714,7 @@ class StoredSettingsCodableTests: XCTestCase {
     func testStoredSettingsCodable() throws {
         try assertStoredSettingsCodable(StoredSettings.test, encodesJSON: """
 {
-  "automaticDosingStrategy" : 0,
+  "automaticDosingStrategy" : 1,
   "basalRateSchedule" : {
     "items" : [
       {
@@ -1106,6 +1106,7 @@ fileprivate extension StoredSettings {
                               cgmDevice: cgmDevice,
                               pumpDevice: pumpDevice,
                               bloodGlucoseUnit: bloodGlucoseUnit,
+                              automaticDosingStrategy: .automaticBolus,
                               syncIdentifier: UUID(uuidString: "2A67A303-1234-4CB8-1234-79498265368E")!)
     }
 

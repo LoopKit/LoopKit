@@ -258,6 +258,7 @@ public struct StoredSettings: Equatable {
     public let controllerDevice: ControllerDevice?
     public let cgmDevice: HKDevice?
     public let pumpDevice: HKDevice?
+    // This is the user's display preference glucose unit. TODO: Rename?
     public let bloodGlucoseUnit: HKUnit?
     public let automaticDosingStrategy: AutomaticDosingStrategy
     public let syncIdentifier: UUID

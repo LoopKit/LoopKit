@@ -81,6 +81,15 @@ public struct SuspendThresholdEditor: View {
     private var cancelButton: some View {
         Button(action: { self.dismiss() } ) { Text(LocalizedString("Cancel", comment: "Cancel editing settings button title")) }
     }
+
+    private var picker: GlucoseValuePicker {
+        GlucoseValuePicker(
+            value: self.$value.animation(),
+            unit: displayGlucoseUnitObservable.displayGlucoseUnit,
+            guardrail: viewModel.guardrail,
+            bounds: viewModel.guardrail.absoluteBounds.lowerBound...viewModel.maxSuspendThresholdValue
+        )
+    }
     
     private var content: some View {
         ConfigurationPage(
@@ -103,14 +112,8 @@ public struct SuspendThresholdEditor: View {
                             )
                         },
                         expandedContent: {
-                            GlucoseValuePicker(
-                                value: self.$value.animation(),
-                                unit: displayGlucoseUnitObservable.displayGlucoseUnit,
-                                guardrail: viewModel.guardrail,
-                                bounds: viewModel.guardrail.absoluteBounds.lowerBound...viewModel.maxSuspendThresholdValue
-                            )
                             // Prevent the picker from expanding the card's width on small devices
-                            .frame(maxWidth: 200)
+                            picker.frame(maxWidth: 200)
                         }
                     )
                 }
@@ -159,7 +162,12 @@ public struct SuspendThresholdEditor: View {
     }
 
     private var saveButtonState: ConfigurationPageActionButtonState {
-        initialValue == nil || value != initialValue || mode == .acceptanceFlow ? .enabled : .disabled
+        let selectableValues = picker.selectableValues
+        let adjustedBounds = (selectableValues.first!)...(selectableValues.last!)
+        guard adjustedBounds.contains(value.doubleValue(for: displayGlucoseUnitObservable.displayGlucoseUnit)) else {
+            return .disabled
+        }
+        return initialValue == nil || value != initialValue || mode == .acceptanceFlow ? .enabled : .disabled
     }
 
     private var warningThreshold: SafetyClassification.Threshold? {

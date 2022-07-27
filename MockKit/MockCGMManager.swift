@@ -28,6 +28,8 @@ public struct MockCGMState: GlucoseDisplayable {
 
     public var glucoseAlertingEnabled: Bool
 
+    public var samplesShouldBeUploaded: Bool
+
     private var cgmLowerLimitValue: Double
        
     // HKQuantity isn't codable
@@ -166,6 +168,7 @@ public struct MockCGMState: GlucoseDisplayable {
     public init(isStateValid: Bool = true,
                 glucoseRangeCategory: GlucoseRangeCategory? = nil,
                 glucoseAlertingEnabled: Bool = false,
+                samplesShouldBeUploaded: Bool = false,
                 urgentLowGlucoseThresholdValue: Double = 55,
                 lowGlucoseThresholdValue: Double = 80,
                 highGlucoseThresholdValue: Double = 200,
@@ -179,6 +182,7 @@ public struct MockCGMState: GlucoseDisplayable {
         self.isStateValid = isStateValid
         self.glucoseRangeCategory = glucoseRangeCategory
         self.glucoseAlertingEnabled = glucoseAlertingEnabled
+        self.samplesShouldBeUploaded = samplesShouldBeUploaded
         self.urgentLowGlucoseThresholdValue = urgentLowGlucoseThresholdValue
         self.lowGlucoseThresholdValue = lowGlucoseThresholdValue
         self.highGlucoseThresholdValue = highGlucoseThresholdValue
@@ -459,7 +463,9 @@ public final class MockCGMManager: TestingCGMManager {
 
     public let managedDataInterval: TimeInterval? = nil
 
-    public let shouldSyncToRemoteService = false
+    public var shouldSyncToRemoteService: Bool {
+        return self.mockSensorState.samplesShouldBeUploaded
+    }
 
     public var healthKitStorageDelayEnabled: Bool {
         get {
@@ -475,15 +481,11 @@ public final class MockCGMManager: TestingCGMManager {
     public static var healthKitStorageDelay: TimeInterval = 0
     
     private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
-        self.delegate.notify { (delegate) in
-            delegate?.deviceManager(self, logEventForDeviceIdentifier: "MockId", type: type, message: message, completion: nil)
-        }
+        self.delegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: "MockId", type: type, message: message, completion: nil)
     }
 
     private func logDeviceComms(_ type: DeviceLogEntryType, message: String) {
-        delegate.notify { (delegate) in
-            delegate?.deviceManager(self, logEventForDeviceIdentifier: "mockcgm", type: type, message: message, completion: nil)
-        }
+        self.delegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: "mockcgm", type: type, message: message, completion: nil)
     }
 
     private func sendCGMReadingResult(_ result: CGMReadingResult) {
@@ -778,6 +780,7 @@ extension MockCGMState: RawRepresentable {
 
         self.isStateValid = isStateValid
         self.glucoseAlertingEnabled = glucoseAlertingEnabled
+        self.samplesShouldBeUploaded = rawValue["samplesShouldBeUploaded"] as? Bool ?? false
         self.urgentLowGlucoseThresholdValue = urgentLowGlucoseThresholdValue
         self.lowGlucoseThresholdValue = lowGlucoseThresholdValue
         self.highGlucoseThresholdValue = highGlucoseThresholdValue
@@ -815,6 +818,7 @@ extension MockCGMState: RawRepresentable {
         var rawValue: RawValue = [
             "isStateValid": isStateValid,
             "glucoseAlertingEnabled": glucoseAlertingEnabled,
+            "samplesShouldBeUploaded": samplesShouldBeUploaded,
             "urgentLowGlucoseThresholdValue": urgentLowGlucoseThresholdValue,
             "lowGlucoseThresholdValue": lowGlucoseThresholdValue,
             "highGlucoseThresholdValue": highGlucoseThresholdValue,
@@ -861,6 +865,7 @@ extension MockCGMState: CustomDebugStringConvertible {
         ## MockCGMState
         * isStateValid: \(isStateValid)
         * glucoseAlertingEnabled: \(glucoseAlertingEnabled)
+        * samplesShouldBeUploaded: \(samplesShouldBeUploaded)
         * urgentLowGlucoseThresholdValue: \(urgentLowGlucoseThresholdValue)
         * lowGlucoseThresholdValue: \(lowGlucoseThresholdValue)
         * highGlucoseThresholdValue: \(highGlucoseThresholdValue)
