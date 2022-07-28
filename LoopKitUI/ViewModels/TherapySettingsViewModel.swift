@@ -82,11 +82,15 @@ public class TherapySettingsViewModel: ObservableObject {
 
 // MARK: Passing along to the delegate
 extension TherapySettingsViewModel {
-    
+
+    public var maximumBasalScheduleEntryCount: Int? {
+        pumpSupportedIncrements()?.maximumBasalScheduleEntryCount
+    }
+
     public func pumpSupportedIncrements() -> PumpSupportedIncrements? {
         return delegate?.pumpSupportedIncrements()
     }
-    
+
     public func syncBasalRateSchedule(items: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
         delegate?.syncBasalRateSchedule(items: items, completion: completion)
     }
