@@ -64,26 +64,28 @@ public class SettingsStore {
 
     func storeSettings(_ settings: StoredSettings) async {
         await withCheckedContinuation { continuation in
-            storeSettings(settings) {
+            storeSettings(settings) { (_) in
                 continuation.resume()
             }
         }
     }
     
-    public func storeSettings(_ settings: StoredSettings, completion: @escaping () -> Void) {
+    public func storeSettings(_ settings: StoredSettings, completion: @escaping (Error?) -> Void) {
         dataAccessQueue.async {
+            var error: Error?
+
             if let data = self.encodeSettings(settings) {
                 self.store.managedObjectContext.performAndWait {
                     let object = SettingsObject(context: self.store.managedObjectContext)
                     object.data = data
                     object.date = settings.date
-                    self.store.save()
+                    error = self.store.save()
                 }
             }
 
             self.latestSettings = settings
             self.purgeExpiredSettings()
-            completion()
+            completion(error)
         }
     }
 
