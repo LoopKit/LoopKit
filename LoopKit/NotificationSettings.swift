@@ -108,6 +108,8 @@ public struct NotificationSettings: Codable, Equatable {
     public let criticalAlertSetting: NotificationSetting
     public let providesAppNotificationSettings: Bool
     public let announcementSetting: NotificationSetting
+    public let timeSensitiveSetting: NotificationSetting
+    public let scheduledDeliverySetting: NotificationSetting
 
     public init(authorizationStatus: AuthorizationStatus,
                 soundSetting: NotificationSetting,
@@ -120,7 +122,10 @@ public struct NotificationSettings: Codable, Equatable {
                 showPreviewsSetting: ShowPreviewsSetting,
                 criticalAlertSetting: NotificationSetting,
                 providesAppNotificationSettings: Bool,
-                announcementSetting: NotificationSetting) {
+                announcementSetting: NotificationSetting,
+                timeSensitiveSetting: NotificationSetting,
+                scheduledDeliverySetting: NotificationSetting)
+    {
         self.authorizationStatus = authorizationStatus
         self.soundSetting = soundSetting
         self.badgeSetting = badgeSetting
@@ -133,6 +138,8 @@ public struct NotificationSettings: Codable, Equatable {
         self.criticalAlertSetting = criticalAlertSetting
         self.providesAppNotificationSettings = providesAppNotificationSettings
         self.announcementSetting = announcementSetting
+        self.timeSensitiveSetting = timeSensitiveSetting
+        self.scheduledDeliverySetting = scheduledDeliverySetting
     }
 }
 

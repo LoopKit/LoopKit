@@ -7,18 +7,26 @@
 //
 
 
-public enum TherapySetting: String {
+public enum TherapySetting {
     case glucoseTargetRange
     case preMealCorrectionRangeOverride
     case workoutCorrectionRangeOverride
     case suspendThreshold
-    case basalRate
+    case basalRate(Int?)
     case deliveryLimits
     case insulinModel
     case carbRatio
     case insulinSensitivity
     case none
 }
+
+public extension TherapySetting {
+    static var basalRate: TherapySetting {
+        .basalRate(nil)
+    }
+}
+
+extension TherapySetting: Equatable { }
 
 public extension TherapySetting {
     

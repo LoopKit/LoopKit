@@ -29,8 +29,8 @@ extension TherapySetting {
             return AnyView(CorrectionRangeOverrideInformationView(preset: .workout, onExit: nil, mode: .settings))
         case .suspendThreshold:
             return AnyView(SuspendThresholdInformationView(onExit: nil, mode: .settings))
-        case .basalRate:
-            return AnyView(BasalRatesInformationView(onExit: nil, mode: .settings))
+        case .basalRate(let maximumScheduleEntryCount):
+            return AnyView(BasalRatesInformationView(onExit: nil, mode: .settings, maximumScheduleEntryCount: maximumScheduleEntryCount))
         case .deliveryLimits:
             return AnyView(DeliveryLimitsInformationView(onExit: nil, mode: .settings))
         case .insulinModel:

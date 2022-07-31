@@ -24,8 +24,10 @@ class NotificationSettingsCodableTests: XCTestCase {
   "lockScreenSetting" : "disabled",
   "notificationCenterSetting" : "notSupported",
   "providesAppNotificationSettings" : true,
+  "scheduledDeliverySetting" : "disabled",
   "showPreviewsSetting" : "whenAuthenticated",
-  "soundSetting" : "enabled"
+  "soundSetting" : "enabled",
+  "timeSensitiveSetting" : "enabled"
 }
 """
         )
@@ -65,6 +67,8 @@ fileprivate extension NotificationSettings {
                                     showPreviewsSetting: .whenAuthenticated,
                                     criticalAlertSetting: .enabled,
                                     providesAppNotificationSettings: true,
-                                    announcementSetting: .enabled)
+                                    announcementSetting: .enabled,
+                                    timeSensitiveSetting: .enabled,
+                                    scheduledDeliverySetting: .disabled)
     }
 }
