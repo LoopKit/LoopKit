@@ -50,7 +50,7 @@ class NotificationSettingsCodableTests: XCTestCase {
   "soundSetting" : "enabled"
 }
 """
-        let decoded = try decoder.decode(NotificationSettings.self, from: oldSettingsString.data(using: .utf8)!)
+        let _ = try decoder.decode(NotificationSettings.self, from: oldSettingsString.data(using: .utf8)!)
     }
     
     private func assertNotificationSettingsCodable(_ original: NotificationSettings, encodesJSON string: String) throws {
