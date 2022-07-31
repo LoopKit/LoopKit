@@ -94,6 +94,14 @@ public class SettingsStore {
     }
 
     private func purgeExpiredSettings() {
+        guard let latestSettings = latestSettings else {
+            return
+        }
+
+        guard expireDate < latestSettings.date else {
+            return
+        }
+
         purgeSettingsObjects(before: expireDate)
     }
 
@@ -111,7 +119,9 @@ public class SettingsStore {
         store.managedObjectContext.performAndWait {
             do {
                 let count = try self.store.managedObjectContext.purgeObjects(of: SettingsObject.self, matching: NSPredicate(format: "date < %@", date as NSDate))
-                self.log.info("Purged %d SettingsObjects", count)
+                if count > 0 {
+                    self.log.default("Purged %d SettingsObjects", count)
+                }
             } catch let error {
                 self.log.error("Unable to purge SettingsObjects: %{public}@", String(describing: error))
                 purgeError = error
