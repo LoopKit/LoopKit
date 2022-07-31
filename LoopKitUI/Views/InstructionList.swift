@@ -14,17 +14,20 @@ public struct InstructionList: View {
         let subtext: String?
     }
     let instructions: [Instruction]
+    let startingIndex: Int
     let instructionColor: Color
     
     @Environment(\.isEnabled) var isEnabled
     
-    public init(instructions: [String], instructionColor: Color = .primary) {
+    public init(instructions: [String], startingIndex: Int = 1, instructionColor: Color = .primary) {
         self.instructions = instructions.map { Instruction(text: $0, subtext: nil) }
+        self.startingIndex = startingIndex
         self.instructionColor = instructionColor
     }
     
-    public init(instructions: [(String, String)],  instructionColor: Color = .primary) {
+    public init(instructions: [(String, String)], startingIndex: Int = 1, instructionColor: Color = .primary) {
         self.instructions = instructions.map { Instruction(text: $0.0, subtext: $0.1) }
+        self.startingIndex = startingIndex
         self.instructionColor = instructionColor
     }
     
@@ -32,7 +35,7 @@ public struct InstructionList: View {
         VStack(alignment: .leading, spacing: 10) {
             ForEach(instructions.indices, id: \.self) { index in
                 HStack(alignment: .top) {
-                    Text("\(index+1)")
+                    Text("\(index+startingIndex)")
                         .opacity(isEnabled ? 1.0 : 0.8)
                         .padding(6)
                         .background(Circle().fill(Color.accentColor))
