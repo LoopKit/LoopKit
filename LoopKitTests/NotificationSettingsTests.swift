@@ -32,6 +32,26 @@ class NotificationSettingsCodableTests: XCTestCase {
 """
         )
     }
+
+    func testMigration() throws {
+        let oldSettingsString = """
+{
+  "alertSetting" : "disabled",
+  "alertStyle" : "banner",
+  "announcementSetting" : "enabled",
+  "authorizationStatus" : "authorized",
+  "badgeSetting" : "enabled",
+  "carPlaySetting" : "notSupported",
+  "criticalAlertSetting" : "enabled",
+  "lockScreenSetting" : "disabled",
+  "notificationCenterSetting" : "notSupported",
+  "providesAppNotificationSettings" : true,
+  "showPreviewsSetting" : "whenAuthenticated",
+  "soundSetting" : "enabled"
+}
+"""
+        let _ = try decoder.decode(NotificationSettings.self, from: oldSettingsString.data(using: .utf8)!)
+    }
     
     private func assertNotificationSettingsCodable(_ original: NotificationSettings, encodesJSON string: String) throws {
         let data = try encoder.encode(original)

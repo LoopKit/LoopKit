@@ -57,7 +57,7 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
             }
         }
         
-        settingsStore.storeSettings(StoredSettings()) {
+        settingsStore.storeSettings(StoredSettings()) { _ in
             storeSettingsCompletion.fulfill()
         }
         
@@ -85,11 +85,11 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
             }
         }
         
-        settingsStore.storeSettings(StoredSettings()) {
+        settingsStore.storeSettings(StoredSettings()) { _ in
             storeSettingsCompletion1.fulfill()
         }
         
-        settingsStore.storeSettings(StoredSettings()) {
+        settingsStore.storeSettings(StoredSettings()) { _ in
             storeSettingsCompletion2.fulfill()
         }
         
@@ -612,7 +612,7 @@ class SettingsStoreQueryTests: PersistenceControllerTestCase {
     private func addData(withSyncIdentifiers syncIdentifiers: [UUID]) {
         let semaphore = DispatchSemaphore(value: 0)
         for syncIdentifier in syncIdentifiers {
-            self.settingsStore.storeSettings(StoredSettings(syncIdentifier: syncIdentifier)) { semaphore.signal() }
+            self.settingsStore.storeSettings(StoredSettings(syncIdentifier: syncIdentifier)) { _ in semaphore.signal() }
         }
         for _ in syncIdentifiers { semaphore.wait() }
     }

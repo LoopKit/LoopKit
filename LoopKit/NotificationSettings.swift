@@ -9,7 +9,7 @@
 import Foundation
 import UserNotifications
 
-public struct NotificationSettings: Codable, Equatable {
+public struct NotificationSettings: Equatable {
     public enum AuthorizationStatus: String, Codable {
         case notDetermined
         case denied
@@ -143,3 +143,43 @@ public struct NotificationSettings: Codable, Equatable {
     }
 }
 
+
+extension NotificationSettings: Codable {
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            authorizationStatus: try container.decode(AuthorizationStatus.self, forKey: .authorizationStatus),
+            soundSetting: try container.decode(NotificationSetting.self, forKey: .soundSetting),
+            badgeSetting: try container.decode(NotificationSetting.self, forKey: .badgeSetting),
+            alertSetting: try container.decode(NotificationSetting.self, forKey: .alertSetting),
+            notificationCenterSetting: try container.decode(NotificationSetting.self, forKey: .notificationCenterSetting),
+            lockScreenSetting: try container.decode(NotificationSetting.self, forKey: .lockScreenSetting),
+            carPlaySetting: try container.decode(NotificationSetting.self, forKey: .carPlaySetting),
+            alertStyle: try container.decode(AlertStyle.self, forKey: .alertStyle),
+            showPreviewsSetting: try container.decode(ShowPreviewsSetting.self, forKey: .showPreviewsSetting),
+            criticalAlertSetting: try container.decode(NotificationSetting.self, forKey: .criticalAlertSetting),
+            providesAppNotificationSettings: try container.decode(Bool.self, forKey: .providesAppNotificationSettings),
+            announcementSetting: try container.decode(NotificationSetting.self, forKey: .announcementSetting),
+            timeSensitiveSetting: try container.decodeIfPresent(NotificationSetting.self, forKey: .timeSensitiveSetting) ?? .unknown,
+            scheduledDeliverySetting: try container.decodeIfPresent(NotificationSetting.self, forKey: .scheduledDeliverySetting) ?? .unknown)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+
+        case authorizationStatus
+        case soundSetting
+        case badgeSetting
+        case alertSetting
+        case notificationCenterSetting
+        case lockScreenSetting
+        case carPlaySetting
+        case alertStyle
+        case showPreviewsSetting
+        case criticalAlertSetting
+        case providesAppNotificationSettings
+        case announcementSetting
+        case timeSensitiveSetting
+        case scheduledDeliverySetting
+    }
+}
