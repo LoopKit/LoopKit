@@ -165,36 +165,6 @@ extension NotificationSettings: Codable {
             scheduledDeliverySetting: try container.decodeIfPresent(NotificationSetting.self, forKey: .scheduledDeliverySetting) ?? .unknown)
     }
 
-//    public func encode(to encoder: Encoder) throws {
-//        let bloodGlucoseUnit = self.bloodGlucoseUnit ?? StoredSettings.codingGlucoseUnit
-//        var container = encoder.container(keyedBy: CodingKeys.self)
-//        try container.encode(date, forKey: .date)
-//        try container.encode(controllerTimeZone, forKey: .controllerTimeZone)
-//        try container.encode(dosingEnabled, forKey: .dosingEnabled)
-//        try container.encodeIfPresent(glucoseTargetRangeSchedule, forKey: .glucoseTargetRangeSchedule)
-//        try container.encodeIfPresent(preMealTargetRange?.doubleRange(for: bloodGlucoseUnit), forKey: .preMealTargetRange)
-//        try container.encodeIfPresent(workoutTargetRange?.doubleRange(for: bloodGlucoseUnit), forKey: .workoutTargetRange)
-//        try container.encodeIfPresent(overridePresets, forKey: .overridePresets)
-//        try container.encodeIfPresent(scheduleOverride, forKey: .scheduleOverride)
-//        try container.encodeIfPresent(preMealOverride, forKey: .preMealOverride)
-//        try container.encodeIfPresent(maximumBasalRatePerHour, forKey: .maximumBasalRatePerHour)
-//        try container.encodeIfPresent(maximumBolus, forKey: .maximumBolus)
-//        try container.encodeIfPresent(suspendThreshold, forKey: .suspendThreshold)
-//        try container.encodeIfPresent(insulinType, forKey: .insulinType)
-//        try container.encodeIfPresent(deviceToken, forKey: .deviceToken)
-//        try container.encodeIfPresent(defaultRapidActingModel, forKey: .defaultRapidActingModel)
-//        try container.encodeIfPresent(basalRateSchedule, forKey: .basalRateSchedule)
-//        try container.encodeIfPresent(insulinSensitivitySchedule, forKey: .insulinSensitivitySchedule)
-//        try container.encodeIfPresent(carbRatioSchedule, forKey: .carbRatioSchedule)
-//        try container.encodeIfPresent(notificationSettings, forKey: .notificationSettings)
-//        try container.encodeIfPresent(controllerDevice, forKey: .controllerDevice)
-//        try container.encodeIfPresent(cgmDevice.map { CodableDevice($0) }, forKey: .cgmDevice)
-//        try container.encodeIfPresent(pumpDevice.map { CodableDevice($0) }, forKey: .pumpDevice)
-//        try container.encode(bloodGlucoseUnit.unitString, forKey: .bloodGlucoseUnit)
-//        try container.encode(automaticDosingStrategy, forKey: .automaticDosingStrategy)
-//        try container.encode(syncIdentifier, forKey: .syncIdentifier)
-//    }
-
     private enum CodingKeys: String, CodingKey {
 
         case authorizationStatus
