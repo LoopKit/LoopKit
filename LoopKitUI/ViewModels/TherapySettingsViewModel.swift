@@ -14,7 +14,7 @@ import SwiftUI
 public protocol TherapySettingsViewModelDelegate: AnyObject {
     func syncBasalRateSchedule(items: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void)
     func syncDeliveryLimits(deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void)
-    func saveCompletion(for therapySetting: TherapySetting, therapySettings: TherapySettings)
+    func saveCompletion(therapySettings: TherapySettings)
     func pumpSupportedIncrements() -> PumpSupportedIncrements?
 }
 
@@ -105,48 +105,90 @@ extension TherapySettingsViewModel {
     
     public func saveCorrectionRange(range: GlucoseRangeSchedule) {
         therapySettings.glucoseTargetRangeSchedule = range
-        delegate?.saveCompletion(for: TherapySetting.glucoseTargetRange, therapySettings: therapySettings)
+        delegate?.saveCompletion(therapySettings: therapySettings)
     }
         
     public func saveCorrectionRangeOverride(preset: CorrectionRangeOverrides.Preset,
                                             correctionRangeOverrides: CorrectionRangeOverrides) {
         therapySettings.correctionRangeOverrides = correctionRangeOverrides
-        switch preset {
-        case .preMeal:
-            delegate?.saveCompletion(for: TherapySetting.preMealCorrectionRangeOverride, therapySettings: therapySettings)
-        case .workout:
-            delegate?.saveCompletion(for: TherapySetting.workoutCorrectionRangeOverride, therapySettings: therapySettings)
-        }
+        delegate?.saveCompletion(therapySettings: therapySettings)
     }
 
     public func saveSuspendThreshold(quantity: HKQuantity, withDisplayGlucoseUnit displayGlucoseUnit: HKUnit) {
         therapySettings.suspendThreshold = GlucoseThreshold(unit: displayGlucoseUnit, value: quantity.doubleValue(for: displayGlucoseUnit))
-        delegate?.saveCompletion(for: TherapySetting.suspendThreshold, therapySettings: therapySettings)
+
+        // TODO: Eventually target editors should support conflicting initial values
+        // But for now, ensure target ranges do not conflict with suspend threshold.
+        if let targetSchedule = therapySettings.glucoseTargetRangeSchedule {
+            let threshold = quantity.doubleValue(for: targetSchedule.unit)
+            let newItems = targetSchedule.items.map { item in
+                return RepeatingScheduleValue<DoubleRange>.init(
+                    startTime: item.startTime,
+                    value: DoubleRange(
+                        minValue: max(threshold, item.value.minValue),
+                        maxValue: max(threshold, item.value.maxValue)))
+            }
+            therapySettings.glucoseTargetRangeSchedule = GlucoseRangeSchedule(unit: targetSchedule.unit, dailyItems: newItems)
+        }
+
+        if let overrides = therapySettings.correctionRangeOverrides {
+            let adjusted = [overrides.preMeal, overrides.workout].map { item -> ClosedRange<HKQuantity>? in
+                guard let item = item else {
+                    return nil
+                }
+                return ClosedRange<HKQuantity>.init(
+                    uncheckedBounds: (
+                        lower: max(quantity, item.lowerBound),
+                        upper:  max(quantity, item.upperBound)))
+            }
+            therapySettings.correctionRangeOverrides = CorrectionRangeOverrides(
+                preMeal: adjusted[0],
+                workout: adjusted[1])
+        }
+
+        if let presets = therapySettings.overridePresets {
+            therapySettings.overridePresets = presets.map { preset in
+                if let targetRange = preset.settings.targetRange {
+                    var newPreset = preset
+                    newPreset.settings = TemporaryScheduleOverrideSettings(
+                        targetRange: ClosedRange<HKQuantity>.init(
+                            uncheckedBounds: (
+                                lower: max(quantity, targetRange.lowerBound),
+                                upper:  max(quantity, targetRange.upperBound))),
+                        insulinNeedsScaleFactor: preset.settings.insulinNeedsScaleFactor)
+                    return newPreset
+                } else {
+                    return preset
+                }
+            }
+        }
+
+        delegate?.saveCompletion(therapySettings: therapySettings)
     }
     
     public func saveBasalRates(basalRates: BasalRateSchedule) {
         therapySettings.basalRateSchedule = basalRates
-        delegate?.saveCompletion(for: TherapySetting.basalRate, therapySettings: therapySettings)
+        delegate?.saveCompletion(therapySettings: therapySettings)
     }
     
     public func saveDeliveryLimits(limits: DeliveryLimits) {
         therapySettings.maximumBasalRatePerHour = limits.maximumBasalRate?.doubleValue(for: .internationalUnitsPerHour)
         therapySettings.maximumBolus = limits.maximumBolus?.doubleValue(for: .internationalUnit())
-        delegate?.saveCompletion(for: TherapySetting.deliveryLimits, therapySettings: therapySettings)
+        delegate?.saveCompletion(therapySettings: therapySettings)
     }
     
     public func saveInsulinModel(insulinModelPreset: ExponentialInsulinModelPreset) {
         therapySettings.defaultRapidActingModel = insulinModelPreset
-        delegate?.saveCompletion(for: TherapySetting.insulinModel, therapySettings: therapySettings)
+        delegate?.saveCompletion(therapySettings: therapySettings)
     }
     
     public func saveCarbRatioSchedule(carbRatioSchedule: CarbRatioSchedule) {
         therapySettings.carbRatioSchedule = carbRatioSchedule
-        delegate?.saveCompletion(for: TherapySetting.carbRatio, therapySettings: therapySettings)
+        delegate?.saveCompletion(therapySettings: therapySettings)
     }
     
     public func saveInsulinSensitivitySchedule(insulinSensitivitySchedule: InsulinSensitivitySchedule) {
         therapySettings.insulinSensitivitySchedule = insulinSensitivitySchedule
-        delegate?.saveCompletion(for: TherapySetting.insulinSensitivity, therapySettings: therapySettings)
+        delegate?.saveCompletion(therapySettings: therapySettings)
     }
 }
