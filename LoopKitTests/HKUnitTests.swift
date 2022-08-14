@@ -51,8 +51,8 @@ class HKUnitTests: XCTestCase {
     }
 
     func testPickerFractionDigits() throws {
-        XCTAssertEqual(HKUnit.internationalUnit().pickerFractionDigits, 2)
-        XCTAssertEqual(HKUnit.internationalUnit().unitDivided(by: .hour()).pickerFractionDigits, 2)
+        XCTAssertEqual(HKUnit.internationalUnit().pickerFractionDigits, 3)
+        XCTAssertEqual(HKUnit.internationalUnit().unitDivided(by: .hour()).pickerFractionDigits, 3)
 
         XCTAssertEqual(HKUnit.millimolesPerLiter.pickerFractionDigits, 1)
         XCTAssertEqual(HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()).pickerFractionDigits, 1)
