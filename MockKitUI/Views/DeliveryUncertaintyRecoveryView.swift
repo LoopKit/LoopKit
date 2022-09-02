@@ -32,7 +32,11 @@ struct DeliveryUncertaintyRecoveryView: View, HorizontalSizeClassOverride {
             }
             .environment(\.horizontalSizeClass, horizontalOverride)
             .navigationBarTitle(Text("Comms Recovery"), displayMode: .large)
-            .navigationBarItems(leading: backButton)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    backButton
+                }
+            }
         }
     }
     

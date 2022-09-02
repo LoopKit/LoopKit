@@ -145,11 +145,25 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         case .acceptanceFlow:
             page
                 .navigationBarBackButtonHidden(true)
-                .navigationBarItems(leading: backButton, trailing: trailingNavigationItems)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        backButton
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        trailingNavigationItems
+                    }
+                }
         case .settings:
             page
                 .navigationBarBackButtonHidden(shouldAddCancelButton)
-                .navigationBarItems(leading: leadingNavigationBarItem, trailing: trailingNavigationItems)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        leadingNavigationBarItem
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        trailingNavigationItems
+                    }
+                }
                 .navigationBarTitle("", displayMode: .inline)
         }
     }
