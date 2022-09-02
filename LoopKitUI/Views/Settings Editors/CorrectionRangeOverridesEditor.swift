@@ -85,7 +85,14 @@ public struct CorrectionRangeOverridesEditor: View {
     private var contentWithCancel: some View {
         content
             .navigationBarBackButtonHidden(shouldAddCancelButton)
-            .navigationBarItems(leading: leadingNavigationBarItem, trailing: deleteButton)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    leadingNavigationBarItem
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    deleteButton
+                }
+            }
     }
 
     private var deleteButton: some View {

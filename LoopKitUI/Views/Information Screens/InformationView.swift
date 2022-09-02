@@ -80,7 +80,11 @@ struct InformationView<InformationalContent: View> : View {
             informationalContent
             Spacer()
         }
-        .navigationBarItems(trailing: cancelButton)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                cancelButton
+            }
+        }
         .navigationBarTitle(title, displayMode: .large)
     }
 

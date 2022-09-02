@@ -114,7 +114,11 @@ public struct TherapySettingsView: View {
                 Color(.systemGroupedBackground)
                     .edgesIgnoringSafeArea(.all)
                 content
-                    .navigationBarItems(trailing: dismissButton)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            dismissButton
+                        }
+                    }
                     .navigationBarTitle(therapySettingsTitle, displayMode: .large)
             }
         }
