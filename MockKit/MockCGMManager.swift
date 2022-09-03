@@ -480,10 +480,6 @@ public final class MockCGMManager: TestingCGMManager {
     
     public static var healthKitStorageDelay: TimeInterval = 0
     
-    private func logDeviceCommunication(_ message: String, type: DeviceLogEntryType = .send) {
-        self.delegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: "MockId", type: type, message: message, completion: nil)
-    }
-
     private func logDeviceComms(_ type: DeviceLogEntryType, message: String) {
         self.delegate.delegate?.deviceManager(self, logEventForDeviceIdentifier: "mockcgm", type: type, message: message, completion: nil)
     }
@@ -542,7 +538,7 @@ public final class MockCGMManager: TestingCGMManager {
 
     public func backfillData(datingBack duration: TimeInterval) {
         let now = Date()
-        self.logDeviceCommunication("backfillData(\(duration))")
+        self.logDeviceComms(.send, message: "backfillData(\(duration))")
         dataSource.backfillData(from: DateInterval(start: now.addingTimeInterval(-duration), end: now)) { result in
             switch result {
             case .error(let error):
