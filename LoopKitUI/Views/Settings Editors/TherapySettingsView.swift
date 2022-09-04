@@ -96,7 +96,9 @@ public struct TherapySettingsView: View {
         cards.append(carbRatioSection)
         cards.append(basalRatesSection)
         cards.append(deliveryLimitsSection)
-        cards.append(insulinModelSection)
+        if viewModel.adultChildInsulinModelSelectionEnabled {
+            cards.append(insulinModelSection)
+        }
         cards.append(insulinSensitivitiesSection)
 
         return CardStack(cards: cards)

@@ -40,8 +40,7 @@ public struct TherapySettings: Equatable {
             suspendThreshold != nil &&
             insulinSensitivitySchedule != nil &&
             carbRatioSchedule != nil &&
-            basalRateSchedule != nil &&
-            defaultRapidActingModel != nil
+            basalRateSchedule != nil
     }
     
     public init(
