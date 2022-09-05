@@ -1,14 +1,14 @@
 /* Class = "UILabel"; text = "Authorize access to Health to continue"; ObjectID = "7xi-Om-Y53"; */
-"7xi-Om-Y53.text" = "Autorisieren Sie den Zugriff auf die Health App, um fortzufahren";
+"7xi-Om-Y53.text" = "Autorisiere den Zugriff auf die Health App, um fortzufahren";
 
 /* Class = "UIButton"; normalTitle = "Authorize"; ObjectID = "8sx-XB-DRV"; */
-"8sx-XB-DRV.normalTitle" = "Autorisieren";
+"8sx-XB-DRV.normalTitle" = "Autorisiere";
 
 /* Class = "UILabel"; text = "Food Type"; ObjectID = "bdP-2A-DB8"; */
 "bdP-2A-DB8.text" = "Art von Essen";
 
 /* Class = "UINavigationItem"; title = "Add/Edit Carb Entry"; ObjectID = "bM2-yI-YmX"; */
-"bM2-yI-YmX.title" = "Hinzufügen/Bearbeiten von Kohlenhydrateintrag";
+"bM2-yI-YmX.title" = "Hinzufügen/Bearbeite KH-Eintrag";
 
 /* Class = "UILabel"; text = "g"; ObjectID = "D2S-2h-yH6"; */
 "D2S-2h-yH6.text" = "g";
@@ -57,3 +57,4 @@
 
 /* Class = "UIButton"; normalTitle = "🍭"; ObjectID = "XaD-wV-oiS"; */
 "XaD-wV-oiS.normalTitle" = "🍭";
+
