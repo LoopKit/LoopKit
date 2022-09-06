@@ -12,11 +12,19 @@ import HealthKit
 
 class DoseStoreTests: PersistenceControllerTestCase {
 
-    func testEmptyDoseStoreReturnsZeroInsulinOnBoard() {
-        // 1. Create a DoseStore
-        let healthStore = HKHealthStoreMock()
+    func loadReservoirFixture(_ resourceName: String) -> [NewReservoirValue] {
 
-        let doseStore = DoseStore(
+        let fixture: [JSONDictionary] = loadFixture(resourceName)
+        let dateFormatter = ISO8601DateFormatter.localTimeDate(timeZone: .utcTimeZone)
+
+        return fixture.map {
+            return NewReservoirValue(startDate: dateFormatter.date(from: $0["date"] as! String)!, unitVolume: $0["amount"] as! Double)
+        }
+    }
+
+    func defaultStore(testingDate: Date? = nil) -> DoseStore {
+        let healthStore = HKHealthStoreMock()
+        return DoseStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
             observationEnabled: false,
@@ -25,9 +33,20 @@ class DoseStoreTests: PersistenceControllerTestCase {
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
             syncVersion: 1,
-            provenanceIdentifier: Bundle.main.bundleIdentifier!
+            provenanceIdentifier: Bundle.main.bundleIdentifier!,
+            test_currentDate: testingDate
         )
-        
+    }
+
+    let testingDateFormatter = DateFormatter.descriptionFormatter
+
+    func testingDate(_ input: String) -> Date {
+        return testingDateFormatter.date(from: input)!
+    }
+
+    func testEmptyDoseStoreReturnsZeroInsulinOnBoard() {
+        let doseStore = defaultStore()
+
         let queryFinishedExpectation = expectation(description: "query finished")
         
         doseStore.insulinOnBoard(at: Date()) { (result) in
@@ -41,6 +60,44 @@ class DoseStoreTests: PersistenceControllerTestCase {
         }
         waitForExpectations(timeout: 3)
     }
+
+    func testGetNormalizedDoseEntriesUsingReservoir() {
+        let now = testingDate("2022-09-05 02:04:00 +0000")
+        let doseStore = defaultStore(testingDate: now)
+
+        let reservoirReadings = loadReservoirFixture("reservoir_iob_test")
+
+        let storageExpectations = expectation(description: "reservoir store finished")
+        storageExpectations.expectedFulfillmentCount = reservoirReadings.count + 1
+        for reading in reservoirReadings.reversed() {
+            doseStore.addReservoirValue(reading.unitVolume, at: reading.startDate) { _, _, _, _ in storageExpectations.fulfill() }
+        }
+
+        let bolusStart = testingDate("2022-09-05 01:49:47 +0000")
+        let bolusEnd = testingDate("2022-09-05 01:51:19 +0000")
+        let bolus = DoseEntry(type: .bolus, startDate: bolusStart, endDate: bolusEnd, value: 2.3, unit: .units, isMutable: true)
+        let pumpEvent = NewPumpEvent(date: bolus.startDate, dose: bolus, raw: Data(hexadecimalString: "0000")!, title: "Bolus 2.3U")
+
+        doseStore.addPumpEvents([pumpEvent], lastReconciliation: testingDate("2022-09-05 01:50:18 +0000")) { error in
+            storageExpectations.fulfill()
+        }
+        
+        waitForExpectations(timeout: 2)
+
+        let queryFinishedExpectation = expectation(description: "query finished")
+
+        doseStore.insulinOnBoard(at: now) { (result) in
+            switch result {
+            case .failure(let error):
+                XCTFail("Unexpected error: \(error)")
+            case .success(let value):
+                XCTAssertEqual(1.85, value.value, accuracy: 0.01)
+            }
+            queryFinishedExpectation.fulfill()
+        }
+        waitForExpectations(timeout: 3)
+    }
+
     
     func testPumpEventTypeDoseMigration() {
         cacheStore.managedObjectContext.performAndWait {

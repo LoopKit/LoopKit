@@ -54,8 +54,13 @@ public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObs
     /// Reports an error that should be surfaced to the user
     func pumpManager(_ pumpManager: PumpManager, didError error: PumpManagerError)
 
-    /// This should be called any time the PumpManager synchronizes with the pump, even if there are no new events in the log.
-    func pumpManager(_ pumpManager: PumpManager, hasNewPumpEvents events: [NewPumpEvent], lastSync: Date?, completion: @escaping (_ error: Error?) -> Void)
+    /// This should be called any time the PumpManager synchronizes with the pump, even if there are no new doses in the log, as changes to lastReconciliation
+    /// indicate we can trust insulin delivery status up until that point, even if there are no new doses.
+    /// For pumps whose only source of dosing adjustments is Loop, lastReconciliation should be reflective of the last time we received telemetry from the pump.
+    /// For pumps with a user interface and dosing history capabilities, lastReconciliation should be reflective of the last time we reconciled fully with pump history, and know
+    /// that we have accounted for any external doses. It is possible for the pump to report reservoir data beyond the date of lastReconciliation, and Loop can use it for
+    /// calculating IOB.
+    func pumpManager(_ pumpManager: PumpManager, hasNewPumpEvents events: [NewPumpEvent], lastReconciliation: Date?, completion: @escaping (_ error: Error?) -> Void)
 
     func pumpManager(_ pumpManager: PumpManager, didReadReservoirValue units: Double, at date: Date, completion: @escaping (_ result: Result<(newValue: ReservoirValue, lastValue: ReservoirValue?, areStoredValuesContinuous: Bool), Error>) -> Void)
 
@@ -129,7 +134,7 @@ public protocol PumpManager: DeviceManager {
     /// The maximum reservoir volume of the pump
     var pumpReservoirCapacity: Double { get }
 
-    /// The time of the last sync with the pump's event history, or last status check if pump does not provide history.
+    /// The time of the last sync with the pump's event history, or reservoir,  or last status check if pump does not provide history.
     var lastSync: Date? { get }
     
     /// The most-recent status
