@@ -312,7 +312,8 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
         }
         waitForExpectations(timeout: 10)
 
-        XCTAssertEqual([sample1.quantitySample.description], hkobjects.map { $0.description })
+        let stored = hkobjects[0] as! HKQuantitySample
+        XCTAssertEqual(sample1.quantitySample.quantity, stored.quantity)
     }
     
     func testGetGlucoseSamplesErrorHealthKitStorage() {
