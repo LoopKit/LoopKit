@@ -23,6 +23,11 @@ public enum CarbAbsorptionModel {
     case adaptiveRateNonlinear
 }
 
+public enum UnannouncedMealStatus {
+    case hasMeal(startTime: Date)
+    case noMeal
+}
+
 public protocol CarbStoreDelegate: AnyObject {
 
     /**
@@ -1432,6 +1437,10 @@ extension CarbStore {
     }
 }
 
+// MARK: Missed / Unannounced Meal Detection
+extension CarbStore {
+    public func containsUnannouncedMeal(insulinCounteractionEffects: [GlucoseEffectVelocity], completion: (UnannouncedMealStatus) -> Void) {
+    }
 // MARK: - NSManagedObjectContext
 
 fileprivate extension NSManagedObjectContext {
