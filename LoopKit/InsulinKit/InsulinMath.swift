@@ -382,7 +382,7 @@ extension Collection where Element == DoseEntry {
                     if endDate > last.startDate {
                         reconciled.append(last.trimmed(from: nil, to: endDate, syncIdentifier: last.syncIdentifier))
                     }
-                } else if let suspend = lastSuspend {
+                } else if let suspend = lastSuspend, dose.type == .tempBasal {
                     // Handle missing resume. Basal following suspend, with no resume.
                     reconciled.append(DoseEntry(
                         type: suspend.type,
