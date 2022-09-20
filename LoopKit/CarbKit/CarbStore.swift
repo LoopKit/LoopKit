@@ -1469,17 +1469,28 @@ extension CarbStore {
             /// Effect caching inspired by `LoopMath.predictGlucose`
             var effectValueCache: [Date: Double] = [:]
             let unit = HKUnit.milligramsPerDeciliter
-            
-            let effects = [insulinCounteractionEffects.map { $0.effect }, carbEffects]
-            
-            for timeline in effects {
-                var previousEffectValue: Double = timeline.first?.quantity.doubleValue(for: unit) ?? 0
 
-                for effect in timeline {
-                    let value = effect.quantity.doubleValue(for: unit)
-                    effectValueCache[effect.startDate] = (effectValueCache[effect.startDate] ?? 0) + value - previousEffectValue
-                    previousEffectValue = value
+            // Carb effects are cumulative, so we have to subtract the previous effect value
+            var previousEffectValue: Double = carbEffects.first?.quantity.doubleValue(for: unit) ?? 0
+
+            for effect in carbEffects {
+                let value = effect.quantity.doubleValue(for: unit)
+                effectValueCache[effect.startDate] = (effectValueCache[effect.startDate] ?? 0) + value - previousEffectValue
+                previousEffectValue = value
+            }
+            
+            let processedICE = insulinCounteractionEffects
+                .filterDateRange(intervalStart, intervalEnd)
+                .map {
+                    let effect = $0.effect
+                    return GlucoseEffect(startDate: effect.startDate.dateFlooredToTimeInterval(delta),
+                                         quantity: effect.quantity)
                 }
+            
+            for effect in processedICE {
+                let value = effect.quantity.doubleValue(for: unit)
+                effectValueCache[effect.startDate] = (effectValueCache[effect.startDate] ?? 0) + value
+                previousEffectValue = value
             }
             
             var unexpectedDeviation: Double = 0
