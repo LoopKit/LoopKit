@@ -45,6 +45,27 @@ public enum LoopMath {
             )
         }
     }
+    
+    // ANNA TODO: write unit tests for this
+    static func dateRange(
+        from start: Date,
+        to end: Date,
+        delta: TimeInterval
+    ) -> [Date] {
+        let flooredStart = start.dateFlooredToTimeInterval(delta)
+        let ceiledEnd = end.dateCeiledToTimeInterval(delta)
+        
+        var output: [Date] = []
+        var curr = flooredStart
+        repeat {
+            output.append(curr)
+            
+            let new = curr.addingTimeInterval(delta)
+            curr = new
+        } while curr <= ceiledEnd
+        
+        return output
+    }
 
     /**
      Calculates a timeline of predicted glucose values from a variety of effects timelines.

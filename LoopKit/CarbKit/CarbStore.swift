@@ -1443,15 +1443,19 @@ extension CarbStore {
 // MARK: Missed / Unannounced Meal Detection
 extension CarbStore {
     public func containsUnannouncedMeal(insulinCounteractionEffects: [GlucoseEffectVelocity], completion: @escaping (UnannouncedMealStatus) -> Void) {
-        let deviationMinuteChangeThreshold: Double = 2
+        let deviationMinuteChangeThreshold: Double = 2 // ANNA TODO: should this be LoopConstants.missedMealWarningGlucoseRiseThreshold?
         let carbThreshold: Double = 40
         let mealTimeRecencyThreshold = TimeInterval(minutes: 30)
         let notificationDeliveryThreshold = TimeInterval(hours: 2)
         
+        let delta = TimeInterval(minutes: 5)
+        
         let now = Date()
+        let intervalStart = Date(timeIntervalSinceNow: -notificationDeliveryThreshold)
+        let intervalEnd = Date(timeIntervalSinceNow: -mealTimeRecencyThreshold)
         
         // ANNA TODO: decide if we want to pass in ICE here
-        getGlucoseEffects(start: Date(timeIntervalSinceNow: notificationDeliveryThreshold), end: now, effectVelocities: insulinCounteractionEffects) {[weak self] result in
+        getGlucoseEffects(start: intervalStart, end: intervalEnd, effectVelocities: insulinCounteractionEffects) {[weak self] result in
             guard
                 let self = self,
                 case .success((let carbEntries, let carbEffects)) = result
@@ -1481,10 +1485,12 @@ extension CarbStore {
             var unexpectedDeviation: Double = 0
             var mealTime = now
             
-            for pastTime in self.dates(fromStart: Date(timeIntervalSinceNow: .hours(-3)),
-                                       toEnd: now,
-                                       component: .minute,
-                                       value: 5) {
+            let dateSearchRange = LoopMath.dateRange(from: intervalStart,
+                                                     to: intervalEnd,
+                                                     delta: delta)
+                                          .reversed()
+            
+            for pastTime in dateSearchRange {
                 guard
                     let unexpectedEffect = effectValueCache[pastTime],
                     !carbEntries.contains(where: { entry in
@@ -1497,26 +1503,24 @@ extension CarbStore {
                 unexpectedDeviation += unexpectedEffect
                 
                 // Find the slope of our unexpected deviations from pastTime -> now
-                let deviationSlope = unexpectedDeviation / pastTime.timeIntervalSinceNow * 60 // seconds in a minute
+                let deviationSlope = unexpectedDeviation / now.timeIntervalSince(pastTime) * 60 // seconds in a minute
                 let deviationExceedsChangeThreshold = deviationSlope >= deviationMinuteChangeThreshold
                 
                 do {
                     // Find effect we'd expect to see right now of our min carb amount threshold for detecting a missed meal if it started at `pastTime`
-                    guard
-                        let expectedEffectsThreshold = try self.glucoseEffects(of: [NewCarbEntry(quantity: HKQuantity(unit: .gram(),
-                                                                                                                      doubleValue: carbThreshold),
-                                                                                             startDate: pastTime,
-                                                                                             foodType: nil,
-                                                                                             absorptionTime: nil)],
-                                                                                startingAt: pastTime,
-                                                                                endingAt: now)
-                                                            .last?
-                                                            .quantity.doubleValue(for: unit)
-                    else {
-                        // anna todo handle error
-                        completion(.noMeal)
-                        return
-                    }
+                    let expectedEffectsThreshold = try self.glucoseEffects(
+                        of: [NewCarbEntry(quantity: HKQuantity(unit: .gram(),
+                                                               doubleValue: carbThreshold),
+                                          startDate: pastTime,
+                                          foodType: nil,
+                                          absorptionTime: nil)
+                            ],
+                        startingAt: pastTime,
+                        endingAt: now
+                    )
+                    .reduce(0.0, { partialResult, nextEffect in
+                        return partialResult + nextEffect.quantity.doubleValue(for: unit)
+                    })
 
                     let deviationExceedsTotalEffectThreshold = unexpectedDeviation >= expectedEffectsThreshold
                     
@@ -1525,15 +1529,14 @@ extension CarbStore {
                         continue
                     }
                     
-                    
                     mealTime = pastTime
                 } catch let error {
-                    self.log.error("Error fetching carb effectd: %{public}@", String(describing: error))
+                    self.log.error("Error fetching carb effects: %{public}@", String(describing: error))
                 }
             }
             
             let mealTimeTooRecent = now.timeIntervalSince(mealTime) < mealTimeRecencyThreshold
-            let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotification ?? .distantFuture) < notificationDeliveryThreshold
+            let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotification ?? .distantPast) < notificationDeliveryThreshold
 
             guard !mealTimeTooRecent && !notificationTimeTooRecent else {
                 completion(.noMeal)
@@ -1543,24 +1546,6 @@ extension CarbStore {
             self.lastUAMNotification = now
             completion(.hasMeal(startTime: mealTime))
         }
-    }
-    
-    // anna todo: this should be an extension
-    func dates(fromStart start: Date,
-               toEnd end: Date,
-               component: Calendar.Component,
-               value: Int) -> [Date] {
-        var result = [Date]()
-        var curr = start
-        repeat {
-            result.append(curr)
-            guard let new = Calendar.current.date(byAdding: component, value: value, to: curr) else {
-                return result
-            }
-            curr = new
-        } while curr <= end
-        
-        return result
     }
 }
 
