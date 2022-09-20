@@ -68,6 +68,8 @@ public final class CarbStore: HealthKitSampleStore {
     
     /// Notification posted when carb entries were changed, either via add/replace/delete methods or from HealthKit
     public static let carbEntriesDidChange = NSNotification.Name(rawValue: "com.loopkit.CarbStore.carbEntriesDidChange")
+    
+    public static let unannouncedCarbThreshold: Double = 40 // grams of carbs
 
     public typealias DefaultAbsorptionTimes = (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)
 
@@ -1444,7 +1446,6 @@ extension CarbStore {
 extension CarbStore {
     public func containsUnannouncedMeal(insulinCounteractionEffects: [GlucoseEffectVelocity], completion: @escaping (UnannouncedMealStatus) -> Void) {
         let deviationMinuteChangeThreshold: Double = 2 // ANNA TODO: should this be LoopConstants.missedMealWarningGlucoseRiseThreshold?
-        let carbThreshold: Double = 40
         let mealTimeRecencyThreshold = TimeInterval(minutes: 30)
         let notificationDeliveryThreshold = TimeInterval(hours: 2)
         
@@ -1521,7 +1522,7 @@ extension CarbStore {
                     // Find effect we'd expect to see right now of our min carb amount threshold for detecting a missed meal if it started at `pastTime`
                     let expectedEffectsThreshold = try self.glucoseEffects(
                         of: [NewCarbEntry(quantity: HKQuantity(unit: .gram(),
-                                                               doubleValue: carbThreshold),
+                                                               doubleValue: Self.unannouncedCarbThreshold),
                                           startDate: pastTime,
                                           foodType: nil,
                                           absorptionTime: nil)
