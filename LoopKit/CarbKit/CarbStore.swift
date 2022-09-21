@@ -1454,14 +1454,16 @@ extension CarbStore {
         let now = Date()
         let intervalStart = Date(timeIntervalSinceNow: -notificationDeliveryThreshold)
         let intervalEnd = Date(timeIntervalSinceNow: -mealTimeRecencyThreshold)
-        
-        // ANNA TODO: decide if we want to pass in ICE here
+
         getGlucoseEffects(start: intervalStart, end: intervalEnd, effectVelocities: insulinCounteractionEffects) {[weak self] result in
             guard
                 let self = self,
                 case .success((let carbEntries, let carbEffects)) = result
             else {
-                // anna todo handle error
+                if case .failure(let error) = result {
+                    self?.log.error("Failed to fetch glucose effects to check for missed meal: %{public}@", String(describing: error))
+                }
+
                 completion(.noMeal)
                 return
             }

@@ -47,6 +47,15 @@ public enum LoopMath {
     }
     
     // ANNA TODO: write unit tests for this
+    /**
+     Calculates a range of time in `delta`-value intervals
+
+     - parameter start:     The range start date
+     - parameter end:       The range end date
+     - parameter delta:     The time differential for items in the returned range
+
+     - returns: An array of dates
+     */
     static func dateRange(
         from start: Date,
         to end: Date,
