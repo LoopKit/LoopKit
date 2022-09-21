@@ -830,6 +830,7 @@
 		E96DCB5A24AF74AC007117BC /* SuspendThresholdEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */; };
 		E96DCB5E24AF7DC7007117BC /* BasalRatesInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5D24AF7DC7007117BC /* BasalRatesInformationView.swift */; };
 		E99A132E2557548300D3F5B3 /* SegmentedGaugeBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99A132D2557548300D3F5B3 /* SegmentedGaugeBar.swift */; };
+		E9A6D0E828DBCF5800DFF9D9 /* LoopNotificationUserInfoKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42A7471235885B600247B03 /* LoopNotificationUserInfoKey.swift */; };
 		E9C58A6E24DA65E400487A17 /* HistoricalOverrideDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C58A6D24DA65E400487A17 /* HistoricalOverrideDetailView.swift */; };
 		E9DFB92C24E634E800468917 /* ExpandablePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9DFB92B24E634E800468917 /* ExpandablePicker.swift */; };
 		E9DFB92E24E8A75C00468917 /* iob_from_multiple_curves_output.json in Resources */ = {isa = PBXBuildFile; fileRef = E9DFB92D24E8A75C00468917 /* iob_from_multiple_curves_output.json */; };
@@ -4176,6 +4177,7 @@
 				89AE2230228BC68100BDFD85 /* DoseProgressReporter.swift in Sources */,
 				A9E675BD22713F4700E25293 /* HKQuantitySample+InsulinKit.swift in Sources */,
 				C17F39CA23CD2D2000FA1113 /* PersistentDeviceLog.swift in Sources */,
+				E9A6D0E828DBCF5800DFF9D9 /* LoopNotificationUserInfoKey.swift in Sources */,
 				A9E675BE22713F4700E25293 /* InsulinModel.swift in Sources */,
 				89AE222D228BC66E00BDFD85 /* Locked.swift in Sources */,
 				89F53E9522B437570024A67C /* MutableCollection.swift in Sources */,
