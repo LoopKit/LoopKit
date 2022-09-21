@@ -45,8 +45,7 @@ public enum LoopMath {
             )
         }
     }
-    
-    // ANNA TODO: write unit tests for this
+
     /**
      Calculates a range of time in `delta`-value intervals
 
