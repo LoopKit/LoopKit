@@ -1507,9 +1507,7 @@ extension CarbStore {
             for pastTime in dateSearchRange {
                 guard
                     let unexpectedEffect = effectValueCache[pastTime],
-                    !carbEntries.contains(where: { entry in
-                         entry.startDate >= pastTime
-                    })
+                    !carbEntries.contains(where: { $0.startDate >= pastTime })
                 else {
                     continue
                 }
