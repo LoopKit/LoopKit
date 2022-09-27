@@ -193,7 +193,7 @@ public final class CarbStore: HealthKitSampleStore {
     private let provenanceIdentifier: String
     
     /// The last time an unannounced meal notification was sent
-    private var lastUAMNotification: Date? = nil
+    private var lastUAMNotificationDeliveryTime: Date? = nil
 
     /**
      Initializes a new instance of the store.
@@ -1405,6 +1405,7 @@ extension CarbStore {
                 "* delta: \(self.delta)",
                 "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",
                 "* carbAbsorptionModel: \(carbAbsorptionModel)",
+                "* lastUnannouncedMealNotificationTime: \(String(describing: self.lastUAMNotificationDeliveryTime))",
                 "* Carb absorption model settings: \(self.settings)",
                 super.debugDescription,
                 "",
@@ -1548,14 +1549,14 @@ extension CarbStore {
             }
             
             let mealTimeTooRecent = now.timeIntervalSince(mealTime) < mealTimeRecencyThreshold
-            let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotification ?? .distantPast) < notificationDeliveryThreshold
+            let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotificationDeliveryTime ?? .distantPast) < notificationDeliveryThreshold
 
             guard !mealTimeTooRecent && !notificationTimeTooRecent else {
                 completion(.noMeal)
                 return
             }
 
-            self.lastUAMNotification = now
+            self.lastUAMNotificationDeliveryTime = now
             completion(.hasMeal(startTime: mealTime))
         }
     }
