@@ -1494,7 +1494,6 @@ extension CarbStore {
             for effect in processedICE {
                 let value = effect.quantity.doubleValue(for: unit)
                 effectValueCache[effect.startDate] = (effectValueCache[effect.startDate] ?? 0) + value
-                previousEffectValue = value
             }
             
             var unexpectedDeviation: Double = 0
