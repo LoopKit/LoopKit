@@ -68,8 +68,16 @@ public final class CarbStore: HealthKitSampleStore {
     
     /// Notification posted when carb entries were changed, either via add/replace/delete methods or from HealthKit
     public static let carbEntriesDidChange = NSNotification.Name(rawValue: "com.loopkit.CarbStore.carbEntriesDidChange")
-    
-    public static let unannouncedCarbThreshold: Double = 40 // grams of carbs
+
+    /// Missed Meal warning constants
+    /// Minimum grams of unannounced carbs that must be detected
+    public static let unannouncedMealCarbThreshold: Double = 40 // grams
+    /// Minimum threshold for glucose rise over the detection window
+    static let unannouncedMealGlucoseRiseThreshold = 2.0 // mg/dL/m
+    /// Minimum time from now that must have passed for the meal to be detected
+    static let unannouncedMealMinRecency = TimeInterval(minutes: 30)
+    /// Maximum time from now that a meal can be detected
+    static let unannouncedMealMaxRecency = TimeInterval(hours: 2)
 
     public typealias DefaultAbsorptionTimes = (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)
 
@@ -1464,15 +1472,11 @@ extension CarbStore {
 // MARK: Missed / Unannounced Meal Detection
 extension CarbStore {
     public func containsUnannouncedMeal(insulinCounteractionEffects: [GlucoseEffectVelocity], completion: @escaping (UnannouncedMealStatus) -> Void) {
-        let unannouncedMealGlucoseRiseThreshold: Double = 2 // ANNA TODO: should this be LoopConstants.missedMealWarningGlucoseRiseThreshold?
-        let unannouncedMealMinRecency = TimeInterval(minutes: 30)
-        let unannouncedMealMaxRecency = TimeInterval(hours: 2)
-        
         let delta = TimeInterval(minutes: 5)
         
         let now = Date()
-        let intervalStart = Date(timeIntervalSinceNow: -unannouncedMealMaxRecency)
-        let intervalEnd = Date(timeIntervalSinceNow: -unannouncedMealMinRecency)
+        let intervalStart = Date(timeIntervalSinceNow: -Self.unannouncedMealMaxRecency)
+        let intervalEnd = Date(timeIntervalSinceNow: -Self.unannouncedMealMinRecency)
 
         getGlucoseEffects(start: intervalStart, end: intervalEnd, effectVelocities: insulinCounteractionEffects) {[weak self] result in
             guard
@@ -1537,13 +1541,13 @@ extension CarbStore {
                 
                 // Find the slope of our unexpected deviations from pastTime -> now
                 let deviationSlope = unexpectedDeviation / now.timeIntervalSince(pastTime) * 60 // seconds in a minute
-                let deviationExceedsChangeThreshold = deviationSlope >= unannouncedMealGlucoseRiseThreshold
+                let deviationExceedsChangeThreshold = deviationSlope >= Self.unannouncedMealGlucoseRiseThreshold
                 
                 do {
                     // Find effect we'd expect to see right now of our min carb amount threshold for detecting a missed meal if it started at `pastTime`
                     let expectedEffectsThreshold = try self.glucoseEffects(
                         of: [NewCarbEntry(quantity: HKQuantity(unit: .gram(),
-                                                               doubleValue: Self.unannouncedCarbThreshold),
+                                                               doubleValue: Self.unannouncedMealCarbThreshold),
                                           startDate: pastTime,
                                           foodType: nil,
                                           absorptionTime: nil)
@@ -1570,8 +1574,8 @@ extension CarbStore {
                 }
             }
             
-            let mealTimeTooRecent = now.timeIntervalSince(mealTime) < unannouncedMealMinRecency
-            let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotificationDeliveryTime ?? .distantPast) < unannouncedMealMaxRecency
+            let mealTimeTooRecent = now.timeIntervalSince(mealTime) < Self.unannouncedMealMinRecency
+            let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotificationDeliveryTime ?? .distantPast) < Self.unannouncedMealMaxRecency
 
             self.lastEvaluatedUamTimeline = uamTimeline.reversed() // ANNA TODO: debug info, remove
             
