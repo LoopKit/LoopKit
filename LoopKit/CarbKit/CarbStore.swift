@@ -1464,15 +1464,15 @@ extension CarbStore {
 // MARK: Missed / Unannounced Meal Detection
 extension CarbStore {
     public func containsUnannouncedMeal(insulinCounteractionEffects: [GlucoseEffectVelocity], completion: @escaping (UnannouncedMealStatus) -> Void) {
-        let deviationMinuteChangeThreshold: Double = 2 // ANNA TODO: should this be LoopConstants.missedMealWarningGlucoseRiseThreshold?
-        let mealTimeRecencyThreshold = TimeInterval(minutes: 30)
-        let notificationDeliveryThreshold = TimeInterval(hours: 2)
+        let unannouncedMealGlucoseRiseThreshold: Double = 2 // ANNA TODO: should this be LoopConstants.missedMealWarningGlucoseRiseThreshold?
+        let unannouncedMealMinRecency = TimeInterval(minutes: 30)
+        let unannouncedMealMaxRecency = TimeInterval(hours: 2)
         
         let delta = TimeInterval(minutes: 5)
         
         let now = Date()
-        let intervalStart = Date(timeIntervalSinceNow: -notificationDeliveryThreshold)
-        let intervalEnd = Date(timeIntervalSinceNow: -mealTimeRecencyThreshold)
+        let intervalStart = Date(timeIntervalSinceNow: -unannouncedMealMaxRecency)
+        let intervalEnd = Date(timeIntervalSinceNow: -unannouncedMealMinRecency)
 
         getGlucoseEffects(start: intervalStart, end: intervalEnd, effectVelocities: insulinCounteractionEffects) {[weak self] result in
             guard
@@ -1537,7 +1537,7 @@ extension CarbStore {
                 
                 // Find the slope of our unexpected deviations from pastTime -> now
                 let deviationSlope = unexpectedDeviation / now.timeIntervalSince(pastTime) * 60 // seconds in a minute
-                let deviationExceedsChangeThreshold = deviationSlope >= deviationMinuteChangeThreshold
+                let deviationExceedsChangeThreshold = deviationSlope >= unannouncedMealGlucoseRiseThreshold
                 
                 do {
                     // Find effect we'd expect to see right now of our min carb amount threshold for detecting a missed meal if it started at `pastTime`
@@ -1570,8 +1570,8 @@ extension CarbStore {
                 }
             }
             
-            let mealTimeTooRecent = now.timeIntervalSince(mealTime) < mealTimeRecencyThreshold
-            let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotificationDeliveryTime ?? .distantPast) < notificationDeliveryThreshold
+            let mealTimeTooRecent = now.timeIntervalSince(mealTime) < unannouncedMealMinRecency
+            let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotificationDeliveryTime ?? .distantPast) < unannouncedMealMaxRecency
 
             self.lastEvaluatedUamTimeline = uamTimeline.reversed() // ANNA TODO: debug info, remove
             
