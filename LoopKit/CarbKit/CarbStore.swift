@@ -193,12 +193,17 @@ public final class CarbStore: HealthKitSampleStore {
     private let provenanceIdentifier: String
     
     /// The last time an unannounced meal notification was sent
-    private var lastUAMNotificationDeliveryTime: Date? = nil
     private var lastUAMNotificationDeliveryTime: Date? = UserDefaults.standard.lastUAMNotificationDeliveryTime {
         didSet {
             UserDefaults.standard.lastUAMNotificationDeliveryTime = lastUAMNotificationDeliveryTime
         }
     }
+    
+    /// Debug info for UAM
+    /// ANNA TODO: remove before merging
+    private var lastEvaluatedUamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?)] = []
+    private var lastDetectedUamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?)] = []
+    private var lastUAMTime: Date? = nil
 
     /**
      Initializes a new instance of the store.
@@ -1411,6 +1416,14 @@ extension CarbStore {
                 "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",
                 "* carbAbsorptionModel: \(carbAbsorptionModel)",
                 "* lastUnannouncedMealNotificationTime: \(String(describing: self.lastUAMNotificationDeliveryTime))",
+                "* lastEvaluatedUnannouncedMealTimeline:",
+                self.lastEvaluatedUamTimeline.reduce(into: "", { (entries, entry) in
+                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), threshold: \(entry.effectsThreshold ?? -1), BG slope: \(entry.deviationSlope ?? -1)\n")
+                }),
+                "* lastDetectedUnannouncedMealTimeline:",
+                self.lastDetectedUamTimeline.reduce(into: "", { (entries, entry) in
+                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), threshold: \(entry.effectsThreshold ?? -1), BG slope: \(entry.deviationSlope ?? -1)\n")
+                }),
                 "* Carb absorption model settings: \(self.settings)",
                 super.debugDescription,
                 "",
@@ -1509,11 +1522,14 @@ extension CarbStore {
                                                      delta: delta)
                                           .reversed()
             
+            var uamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?)] = [] // ANNA TODO: debug info, remove
+            
             for pastTime in dateSearchRange {
                 guard
                     let unexpectedEffect = effectValueCache[pastTime],
                     !carbEntries.contains(where: { $0.startDate >= pastTime })
                 else {
+                    uamTimeline.append((pastTime, nil, nil, nil)) // ANNA TODO: debug info, remove
                     continue
                 }
                 
@@ -1541,6 +1557,8 @@ extension CarbStore {
 
                     let deviationExceedsTotalEffectThreshold = unexpectedDeviation >= expectedEffectsThreshold
                     
+                    uamTimeline.append((pastTime, unexpectedDeviation, expectedEffectsThreshold, deviationSlope)) // ANNA TODO: debug info, remove
+                    
                     // This isn't a potential missed meal time, so keep looking back
                     guard deviationExceedsChangeThreshold && deviationExceedsTotalEffectThreshold else {
                         continue
@@ -1555,12 +1573,17 @@ extension CarbStore {
             let mealTimeTooRecent = now.timeIntervalSince(mealTime) < mealTimeRecencyThreshold
             let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotificationDeliveryTime ?? .distantPast) < notificationDeliveryThreshold
 
+            self.lastEvaluatedUamTimeline = uamTimeline.reversed() // ANNA TODO: debug info, remove
+            
             guard !mealTimeTooRecent && !notificationTimeTooRecent else {
                 completion(.noMeal)
                 return
             }
 
+            self.lastUAMTime = mealTime
             self.lastUAMNotificationDeliveryTime = now
+            self.lastDetectedUamTimeline = uamTimeline.reversed()
+            
             completion(.hasMeal(startTime: mealTime))
         }
     }
