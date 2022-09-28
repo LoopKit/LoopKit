@@ -194,6 +194,11 @@ public final class CarbStore: HealthKitSampleStore {
     
     /// The last time an unannounced meal notification was sent
     private var lastUAMNotificationDeliveryTime: Date? = nil
+    private var lastUAMNotificationDeliveryTime: Date? = UserDefaults.standard.lastUAMNotificationDeliveryTime {
+        didSet {
+            UserDefaults.standard.lastUAMNotificationDeliveryTime = lastUAMNotificationDeliveryTime
+        }
+    }
 
     /**
      Initializes a new instance of the store.
