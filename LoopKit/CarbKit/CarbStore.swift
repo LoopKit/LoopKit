@@ -1575,7 +1575,7 @@ extension CarbStore {
             }
             
             let mealTimeTooRecent = now.timeIntervalSince(mealTime) < Self.unannouncedMealMinRecency
-            let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotificationDeliveryTime ?? .distantPast) < Self.unannouncedMealMaxRecency
+            let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotificationDeliveryTime ?? .distantPast) < (Self.unannouncedMealMaxRecency - Self.unannouncedMealMinRecency)
 
             self.lastEvaluatedUamTimeline = uamTimeline.reversed() // ANNA TODO: debug info, remove
             
