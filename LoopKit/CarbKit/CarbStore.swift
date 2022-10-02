@@ -1430,7 +1430,7 @@ extension CarbStore {
                 }),
                 "* lastDetectedUnannouncedMealTimeline:",
                 self.lastDetectedUamTimeline.reduce(into: "", { (entries, entry) in
-                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), threshold: \(entry.effectsThreshold ?? -1), BG slope: \(entry.deviationSlope ?? -1)\n")
+                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), meal-based threshold: \(entry.effectsThreshold ?? -1), change-based threshold: \(entry.deviationSlope ?? -1)\n")
                 }),
                 "* Carb absorption model settings: \(self.settings)",
                 super.debugDescription,
@@ -1496,7 +1496,7 @@ extension CarbStore {
             var effectValueCache: [Date: Double] = [:]
             let unit = HKUnit.milligramsPerDeciliter
 
-            // Carb effects are cumulative, so we have to subtract the previous effect value
+            /// Carb effects are cumulative, so we have to subtract the previous effect value
             var previousEffectValue: Double = carbEffects.first?.quantity.doubleValue(for: unit) ?? 0
 
             for effect in carbEffects {
@@ -1521,6 +1521,7 @@ extension CarbStore {
             var unexpectedDeviation: Double = 0
             var mealTime = now
             
+            /// Have the range go from newest -> oldest time
             let dateSearchRange = LoopMath.dateRange(from: intervalStart,
                                                      to: intervalEnd,
                                                      delta: delta)
@@ -1539,13 +1540,13 @@ extension CarbStore {
                 
                 unexpectedDeviation += unexpectedEffect
                 
-                // Find the slope of our unexpected deviations from pastTime -> now
-                let deviationSlope = unexpectedDeviation / now.timeIntervalSince(pastTime) * 60 // seconds in a minute
-                let deviationExceedsChangeThreshold = deviationSlope >= Self.unannouncedMealGlucoseRiseThreshold
+                /// Find the threshold based on a minimum of `unannouncedMealGlucoseRiseThreshold` of change per minute
+                let minutesAgo = now.timeIntervalSince(pastTime).minutes
+                let deviationChangeThreshold = Self.unannouncedMealGlucoseRiseThreshold * minutesAgo
                 
                 do {
-                    // Find effect we'd expect to see right now of our min carb amount threshold for detecting a missed meal if it started at `pastTime`
-                    let expectedEffectsThreshold = try self.glucoseEffects(
+                    /// Find effect we'd expect to see right now of our min carb amount threshold for detecting a missed meal if it started at `pastTime`
+                    let modeledMealEffectThreshold = try self.glucoseEffects(
                         of: [NewCarbEntry(quantity: HKQuantity(unit: .gram(),
                                                                doubleValue: Self.unannouncedMealCarbThreshold),
                                           startDate: pastTime,
@@ -1559,12 +1560,13 @@ extension CarbStore {
                         return partialResult + nextEffect.quantity.doubleValue(for: unit)
                     })
 
-                    let deviationExceedsTotalEffectThreshold = unexpectedDeviation >= expectedEffectsThreshold
+                    /// Use the higher of the 2 thresholds to ensure noisy CGM data doesn't cause false-positives for more recent times
+                    let effectThreshold = max(deviationChangeThreshold, modeledMealEffectThreshold)
                     
-                    uamTimeline.append((pastTime, unexpectedDeviation, expectedEffectsThreshold, deviationSlope)) // ANNA TODO: debug info, remove
-                    
-                    // This isn't a potential missed meal time, so keep looking back
-                    guard deviationExceedsChangeThreshold && deviationExceedsTotalEffectThreshold else {
+                    uamTimeline.append((pastTime, unexpectedDeviation, modeledMealEffectThreshold, deviationChangeThreshold)) // ANNA TODO: debug info, remove
+
+                    guard unexpectedDeviation >= effectThreshold else {
+                        /// This isn't a potential missed meal time, so keep looking at older times
                         continue
                     }
                     
