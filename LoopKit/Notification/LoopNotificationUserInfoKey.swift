@@ -13,4 +13,5 @@ public enum LoopNotificationUserInfoKey: String {
     case alertTypeID
     case managerIDForAlert
     case unannouncedMealTime
+    case expirationDate
 }
