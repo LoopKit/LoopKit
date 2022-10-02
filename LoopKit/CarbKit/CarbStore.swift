@@ -1504,11 +1504,19 @@ extension CarbStore {
                 effectValueCache[effect.startDate] = (effectValueCache[effect.startDate] ?? 0) + value - previousEffectValue
                 previousEffectValue = value
             }
-            
+
             let processedICE = insulinCounteractionEffects
                 .filterDateRange(intervalStart, intervalEnd)
-                .map {
-                    let effect = $0.effect
+                .compactMap {
+                    /// Clamp starts & ends to `intervalStart...intervalEnd` since our algorithm assumes all effects occur within the interval
+                    let start = max($0.startDate, intervalStart)
+                    let end = min($0.endDate, intervalEnd)
+
+                    guard let effect = $0.effect(from: start, to: end) else {
+                        let item: GlucoseEffect? = nil // FIXME: we get a compiler error if we try to return `nil` directly
+                        return item
+                    }
+
                     return GlucoseEffect(startDate: effect.startDate.dateFlooredToTimeInterval(delta),
                                          quantity: effect.quantity)
                 }
