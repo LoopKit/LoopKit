@@ -1471,7 +1471,7 @@ extension CarbStore {
 
 // MARK: Missed / Unannounced Meal Detection
 extension CarbStore {
-    public func containsUnannouncedMeal(insulinCounteractionEffects: [GlucoseEffectVelocity], completion: @escaping (UnannouncedMealStatus) -> Void) {
+    public func hasUnannouncedMeal(insulinCounteractionEffects: [GlucoseEffectVelocity], completion: @escaping (UnannouncedMealStatus) -> Void) {
         let delta = TimeInterval(minutes: 5)
         
         let now = Date()
