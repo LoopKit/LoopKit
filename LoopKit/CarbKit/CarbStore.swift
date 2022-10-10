@@ -209,8 +209,8 @@ public final class CarbStore: HealthKitSampleStore {
     
     /// Debug info for UAM
     /// ANNA TODO: remove before merging
-    private var lastEvaluatedUamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?)] = []
-    private var lastDetectedUamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?)] = []
+    private var lastEvaluatedUamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?, overallThreshold: Double?)] = []
+    private var lastDetectedUamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?, overallThreshold: Double?)] = []
     private var lastUAMTime: Date? = nil
 
     /**
@@ -1426,7 +1426,7 @@ extension CarbStore {
                 "* lastUnannouncedMealNotificationTime: \(String(describing: self.lastUAMNotificationDeliveryTime))",
                 "* lastEvaluatedUnannouncedMealTimeline:",
                 self.lastEvaluatedUamTimeline.reduce(into: "", { (entries, entry) in
-                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), threshold: \(entry.effectsThreshold ?? -1), BG slope: \(entry.deviationSlope ?? -1)\n")
+                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), meal-based threshold: \(entry.effectsThreshold ?? -1), rate of change-based threshold: \(entry.deviationSlope ?? -1), overall threshold: \(entry.overallThreshold)\n")
                 }),
                 "* lastDetectedUnannouncedMealTimeline:",
                 self.lastDetectedUamTimeline.reduce(into: "", { (entries, entry) in
@@ -1535,14 +1535,14 @@ extension CarbStore {
                                                      delta: delta)
                                           .reversed()
             
-            var uamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?)] = [] // ANNA TODO: debug info, remove
+            var uamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?, overallThreshold: Double?)] = [] // ANNA TODO: debug info, remove
             
             for pastTime in dateSearchRange {
                 guard
                     let unexpectedEffect = effectValueCache[pastTime],
                     !carbEntries.contains(where: { $0.startDate >= pastTime })
                 else {
-                    uamTimeline.append((pastTime, nil, nil, nil)) // ANNA TODO: debug info, remove
+                    uamTimeline.append((pastTime, nil, nil, nil, nil)) // ANNA TODO: debug info, remove
                     continue
                 }
                 
@@ -1571,7 +1571,7 @@ extension CarbStore {
                     /// Use the higher of the 2 thresholds to ensure noisy CGM data doesn't cause false-positives for more recent times
                     let effectThreshold = max(deviationChangeThreshold, modeledMealEffectThreshold)
                     
-                    uamTimeline.append((pastTime, unexpectedDeviation, modeledMealEffectThreshold, deviationChangeThreshold)) // ANNA TODO: debug info, remove
+                    uamTimeline.append((pastTime, unexpectedDeviation, modeledMealEffectThreshold, deviationChangeThreshold, effectThreshold)) // ANNA TODO: debug info, remove
 
                     guard unexpectedDeviation >= effectThreshold else {
                         /// This isn't a potential missed meal time, so keep looking at older times
@@ -1583,7 +1583,7 @@ extension CarbStore {
                     self.log.error("Error fetching carb effects: %{public}@", String(describing: error))
                 }
             }
-            
+
             let mealTimeTooRecent = now.timeIntervalSince(mealTime) < Self.unannouncedMealMinRecency
             let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotificationDeliveryTime ?? .distantPast) < (Self.unannouncedMealMaxRecency - Self.unannouncedMealMinRecency)
 
