@@ -14,7 +14,6 @@ extension UserDefaults {
         case CarbEntryCache = "com.loudnate.CarbKit.CarbEntryCache"
         case ModifiedCarbEntries = "com.loudnate.CarbKit.ModifiedCarbEntries"
         case DeletedCarbEntryIds = "com.loudnate.CarbKit.DeletedCarbEntryIds"
-        case LastUAMNotificationDeliveryTime = "com.loudnate.CarbKit.lastUAMNotificationDeliveryTime"
     }
 
     func purgeLegacyCarbEntryKeys() {
@@ -36,19 +35,6 @@ extension UserDefaults {
     var deletedCarbEntryIds: [String]? {
         get {
             return array(forKey: Key.DeletedCarbEntryIds.rawValue) as? [String]
-        }
-    }
-    
-    var lastUAMNotificationDeliveryTime: Date? {
-        get {
-            if let rawValue = value(forKey: Key.LastUAMNotificationDeliveryTime.rawValue) as? Date {
-                return rawValue
-            } else {
-                return nil
-            }
-        }
-        set {
-            set(newValue, forKey: Key.LastUAMNotificationDeliveryTime.rawValue)
         }
     }
 }

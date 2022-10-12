@@ -75,9 +75,9 @@ public final class CarbStore: HealthKitSampleStore {
     /// Minimum threshold for glucose rise over the detection window
     static let unannouncedMealGlucoseRiseThreshold = 2.0 // mg/dL/m
     /// Minimum time from now that must have passed for the meal to be detected
-    static let unannouncedMealMinRecency = TimeInterval(minutes: 30)
+    public static let unannouncedMealMinRecency = TimeInterval(minutes: 30)
     /// Maximum time from now that a meal can be detected
-    static let unannouncedMealMaxRecency = TimeInterval(hours: 2)
+    public static let unannouncedMealMaxRecency = TimeInterval(hours: 2)
 
     public typealias DefaultAbsorptionTimes = (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)
 
@@ -199,13 +199,6 @@ public final class CarbStore: HealthKitSampleStore {
     var settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.5, adaptiveAbsorptionRateEnabled: false)
 
     private let provenanceIdentifier: String
-    
-    /// The last time an unannounced meal notification was sent
-    private var lastUAMNotificationDeliveryTime: Date? = UserDefaults.standard.lastUAMNotificationDeliveryTime {
-        didSet {
-            UserDefaults.standard.lastUAMNotificationDeliveryTime = lastUAMNotificationDeliveryTime
-        }
-    }
     
     /// Debug info for UAM
     /// ANNA TODO: remove before merging
@@ -1423,10 +1416,9 @@ extension CarbStore {
                 "* delta: \(self.delta)",
                 "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",
                 "* carbAbsorptionModel: \(carbAbsorptionModel)",
-                "* lastUnannouncedMealNotificationTime: \(String(describing: self.lastUAMNotificationDeliveryTime))",
                 "* lastEvaluatedUnannouncedMealTimeline:",
                 self.lastEvaluatedUamTimeline.reduce(into: "", { (entries, entry) in
-                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), meal-based threshold: \(entry.effectsThreshold ?? -1), rate of change-based threshold: \(entry.deviationSlope ?? -1), overall threshold: \(entry.overallThreshold)\n")
+                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), meal-based threshold: \(entry.effectsThreshold ?? -1), rate of change-based threshold: \(entry.deviationSlope ?? -1), overall threshold: \(String(describing: entry.overallThreshold))\n")
                 }),
                 "* lastDetectedUnannouncedMealTimeline:",
                 self.lastDetectedUamTimeline.reduce(into: "", { (entries, entry) in
@@ -1584,20 +1576,17 @@ extension CarbStore {
                 }
             }
 
-            let mealTimeTooRecent = now.timeIntervalSince(mealTime) < Self.unannouncedMealMinRecency
-            let notificationTimeTooRecent = now.timeIntervalSince(self.lastUAMNotificationDeliveryTime ?? .distantPast) < (Self.unannouncedMealMaxRecency - Self.unannouncedMealMinRecency)
-
             self.lastEvaluatedUamTimeline = uamTimeline.reversed() // ANNA TODO: debug info, remove
             
-            guard !mealTimeTooRecent && !notificationTimeTooRecent else {
+            let mealTimeTooRecent = now.timeIntervalSince(mealTime) < Self.unannouncedMealMinRecency
+
+            guard !mealTimeTooRecent else {
                 completion(.noMeal)
                 return
             }
 
             self.lastUAMTime = mealTime
-            self.lastUAMNotificationDeliveryTime = now
             self.lastDetectedUamTimeline = uamTimeline.reversed()
-            
             completion(.hasMeal(startTime: mealTime))
         }
     }
