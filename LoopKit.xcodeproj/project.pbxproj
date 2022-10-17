@@ -826,7 +826,7 @@
 		E949E38924AFC82F00024DA0 /* DeliveryLimitsInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */; };
 		E949E38F24B3711E00024DA0 /* InsulinModelInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E949E38E24B3711E00024DA0 /* InsulinModelInformationView.swift */; };
 		E950CA8928FE0D1100B5B692 /* CarbStoreTests+UnannouncedMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = E950CA8828FE0D1100B5B692 /* CarbStoreTests+UnannouncedMeal.swift */; };
-		E950CA8B28FE13E800B5B692 /* uam_with_cob_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA8A28FE13E800B5B692 /* uam_with_cob_counteraction_effect.json */; };
+		E950CA8B28FE13E800B5B692 /* uam_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA8A28FE13E800B5B692 /* uam_counteraction_effect.json */; };
 		E950CA8D28FE1E0400B5B692 /* no_meal_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA8C28FE1E0400B5B692 /* no_meal_counteraction_effect.json */; };
 		E96175AE24B7BE38008E5080 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96175AD24B7BE38008E5080 /* Dictionary.swift */; };
 		E96DCB5824AEF50F007117BC /* SuspendThresholdInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */; };
@@ -1682,7 +1682,7 @@
 		E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimitsInformationView.swift; sourceTree = "<group>"; };
 		E949E38E24B3711E00024DA0 /* InsulinModelInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinModelInformationView.swift; sourceTree = "<group>"; };
 		E950CA8828FE0D1100B5B692 /* CarbStoreTests+UnannouncedMeal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CarbStoreTests+UnannouncedMeal.swift"; sourceTree = "<group>"; };
-		E950CA8A28FE13E800B5B692 /* uam_with_cob_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = uam_with_cob_counteraction_effect.json; sourceTree = "<group>"; };
+		E950CA8A28FE13E800B5B692 /* uam_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = uam_counteraction_effect.json; sourceTree = "<group>"; };
 		E950CA8C28FE1E0400B5B692 /* no_meal_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = no_meal_counteraction_effect.json; sourceTree = "<group>"; };
 		E96175AD24B7BE38008E5080 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdInformationView.swift; sourceTree = "<group>"; };
@@ -2478,7 +2478,7 @@
 		43D8FE431C7291930073BE78 /* CarbKit */ = {
 			isa = PBXGroup;
 			children = (
-				E950CA8A28FE13E800B5B692 /* uam_with_cob_counteraction_effect.json */,
+				E950CA8A28FE13E800B5B692 /* uam_counteraction_effect.json */,
 				E950CA8C28FE1E0400B5B692 /* no_meal_counteraction_effect.json */,
 				E9E5E56424D362E900B5DFFE /* dynamic_glucose_effect_fully_observed_output.json */,
 				E9E5E56224D362E800B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json */,
@@ -3379,7 +3379,7 @@
 				4322B7A2202FA3D20002837D /* momentum_effect_bouncing_glucose_output.json in Resources */,
 				4322B7A4202FA3D20002837D /* momentum_effect_duplicate_glucose_input.json in Resources */,
 				4322B79F202FA3CC0002837D /* ice_slow_absorption_output.json in Resources */,
-				E950CA8B28FE13E800B5B692 /* uam_with_cob_counteraction_effect.json in Resources */,
+				E950CA8B28FE13E800B5B692 /* uam_counteraction_effect.json in Resources */,
 				43DC87BE1C8AD41D005BC30D /* glucose_from_effects_non_zero_output.json in Resources */,
 				4322B79B202FA3CC0002837D /* ice_1_hour_output.json in Resources */,
 				43DC87B81C8AD058005BC30D /* glucose_from_effects_non_zero_glucose_input.json in Resources */,

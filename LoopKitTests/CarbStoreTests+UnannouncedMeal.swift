@@ -20,8 +20,8 @@ extension UAMTestType {
         switch self {
         case .noMeal:
             return "no_meal_counteraction_effect"
-        case .unannouncedMealWithCOB:
-            return "uam_with_cob_counteraction_effect"
+        case .unannouncedMealWithCOB, .unannouncedMealNoCOB:
+            return "uam_counteraction_effect"
         }
     }
     
@@ -31,7 +31,7 @@ extension UAMTestType {
         switch self {
         case .noMeal:
             return dateFormatter.date(from: "2022-10-17T23:28:45")!
-        case .unannouncedMealWithCOB:
+        case .unannouncedMealWithCOB, .unannouncedMealNoCOB:
             return dateFormatter.date(from: "2022-10-17T02:49:16")!
         }
     }
@@ -147,7 +147,20 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
         updateGroup.wait()
     }
     
-    func testMealAfterCarbEntry() {
+    func testUnannouncedMealNoCarbEntry() {
+        let counteractionEffects = setUp(for: .unannouncedMealWithCOB)
+
+        let updateGroup = DispatchGroup()
+        updateGroup.enter()
+        carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects, currentDate: currentDate) { [unowned self] status in
+            let expected = dateFormatter.date(from: "2022-10-17T02:05:00")!
+            XCTAssertEqual(status, .hasMeal(startTime: expected))
+            updateGroup.leave()
+        }
+        updateGroup.wait()
+    }
+    
+    func testUnannouncedMealAfterCarbEntry() {
         let counteractionEffects = setUp(for: .unannouncedMealWithCOB)
 
         let updateGroup = DispatchGroup()
