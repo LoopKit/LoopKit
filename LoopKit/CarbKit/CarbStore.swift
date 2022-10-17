@@ -23,7 +23,7 @@ public enum CarbAbsorptionModel {
     case adaptiveRateNonlinear
 }
 
-public enum UnannouncedMealStatus {
+public enum UnannouncedMealStatus: Equatable {
     case hasMeal(startTime: Date)
     case noMeal
 }
@@ -1463,12 +1463,11 @@ extension CarbStore {
 
 // MARK: Missed / Unannounced Meal Detection
 extension CarbStore {
-    public func hasUnannouncedMeal(insulinCounteractionEffects: [GlucoseEffectVelocity], completion: @escaping (UnannouncedMealStatus) -> Void) {
+    public func hasUnannouncedMeal(insulinCounteractionEffects: [GlucoseEffectVelocity], currentDate: Date, completion: @escaping (UnannouncedMealStatus) -> Void) {
         let delta = TimeInterval(minutes: 5)
-        
-        let now = Date()
-        let intervalStart = Date(timeIntervalSinceNow: -Self.unannouncedMealMaxRecency)
-        let intervalEnd = Date(timeIntervalSinceNow: -Self.unannouncedMealMinRecency)
+
+        let intervalStart = currentDate.addingTimeInterval(-Self.unannouncedMealMaxRecency)
+        let intervalEnd = currentDate.addingTimeInterval(-Self.unannouncedMealMinRecency)
 
         getGlucoseEffects(start: intervalStart, end: intervalEnd, effectVelocities: insulinCounteractionEffects) {[weak self] result in
             guard
@@ -1519,7 +1518,7 @@ extension CarbStore {
             }
             
             var unexpectedDeviation: Double = 0
-            var mealTime = now
+            var mealTime = currentDate
             
             /// Have the range go from newest -> oldest time
             let dateSearchRange = LoopMath.dateRange(from: intervalStart,
@@ -1541,7 +1540,7 @@ extension CarbStore {
                 unexpectedDeviation += unexpectedEffect
                 
                 /// Find the threshold based on a minimum of `unannouncedMealGlucoseRiseThreshold` of change per minute
-                let minutesAgo = now.timeIntervalSince(pastTime).minutes
+                let minutesAgo = currentDate.timeIntervalSince(pastTime).minutes
                 let deviationChangeThreshold = Self.unannouncedMealGlucoseRiseThreshold * minutesAgo
                 
                 do {
@@ -1554,7 +1553,7 @@ extension CarbStore {
                                           absorptionTime: nil)
                             ],
                         startingAt: pastTime,
-                        endingAt: now
+                        endingAt: currentDate
                     )
                     .reduce(0.0, { partialResult, nextEffect in
                         return partialResult + nextEffect.quantity.doubleValue(for: unit)
@@ -1578,7 +1577,7 @@ extension CarbStore {
 
             self.lastEvaluatedUamTimeline = uamTimeline.reversed() // ANNA TODO: debug info, remove
             
-            let mealTimeTooRecent = now.timeIntervalSince(mealTime) < Self.unannouncedMealMinRecency
+            let mealTimeTooRecent = currentDate.timeIntervalSince(mealTime) < Self.unannouncedMealMinRecency
 
             guard !mealTimeTooRecent else {
                 completion(.noMeal)
