@@ -1418,11 +1418,11 @@ extension CarbStore {
                 "* carbAbsorptionModel: \(carbAbsorptionModel)",
                 "* lastEvaluatedUnannouncedMealTimeline:",
                 self.lastEvaluatedUamTimeline.reduce(into: "", { (entries, entry) in
-                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), meal-based threshold: \(entry.effectsThreshold ?? -1), rate of change-based threshold: \(entry.deviationSlope ?? -1), overall threshold: \(String(describing: entry.overallThreshold))\n")
+                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), overall threshold: \(entry.overallThreshold ?? -1), meal-based threshold: \(entry.effectsThreshold ?? -1), rate of change-based threshold: \(entry.deviationSlope ?? -1)\n")
                 }),
                 "* lastDetectedUnannouncedMealTimeline:",
                 self.lastDetectedUamTimeline.reduce(into: "", { (entries, entry) in
-                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), meal-based threshold: \(entry.effectsThreshold ?? -1), change-based threshold: \(entry.deviationSlope ?? -1)\n")
+                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), overall threshold: \(entry.overallThreshold ?? -1), meal-based threshold: \(entry.effectsThreshold ?? -1), change-based threshold: \(entry.deviationSlope ?? -1) \n")
                 }),
                 "* Carb absorption model settings: \(self.settings)",
                 super.debugDescription,
