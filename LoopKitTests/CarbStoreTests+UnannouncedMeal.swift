@@ -11,8 +11,19 @@ import HealthKit
 @testable import LoopKit
 
 enum UAMTestType {
+    private static var dateFormatter = ISO8601DateFormatter.localTimeDate()
+    
+    /// No meal is present
     case noMeal
+    /// No meal is present, but if the counteraction effects aren't clamped properly it will look like there's a UAM
+    case noMealCounteractionEffectsNeedClamping
+    /// UAM with no carbs on board
+    case unannouncedMealNoCOB
+    /// UAM with carbs logged prior to it
     case unannouncedMealWithCOB
+    /// There is a meal, but it's announced and not unannounced
+    case announcedMeal
+    // ANNA TODO: add more cases
 }
 
 extension UAMTestType {
@@ -20,36 +31,60 @@ extension UAMTestType {
         switch self {
         case .noMeal:
             return "no_meal_counteraction_effect"
-        case .unannouncedMealWithCOB, .unannouncedMealNoCOB:
-            return "uam_counteraction_effect"
+        case .unannouncedMealWithCOB, .unannouncedMealNoCOB, .announcedMeal:
+            return "meal_counteraction_effect"
+        case .noMealCounteractionEffectsNeedClamping:
+            return "needs_clamping_counteraction_effect"
         }
     }
     
     var currentDate: Date {
-        let dateFormatter = ISO8601DateFormatter.localTimeDate()
-        
         switch self {
         case .noMeal:
-            return dateFormatter.date(from: "2022-10-17T23:28:45")!
-        case .unannouncedMealWithCOB, .unannouncedMealNoCOB:
-            return dateFormatter.date(from: "2022-10-17T02:49:16")!
+            return Self.dateFormatter.date(from: "2022-10-17T23:28:45")!
+        case .unannouncedMealWithCOB, .unannouncedMealNoCOB, .noMealCounteractionEffectsNeedClamping, .announcedMeal:
+            return Self.dateFormatter.date(from: "2022-10-17T02:49:16")!
+        }
+    }
+    
+    var uamDate: Date? {
+        switch self {
+        case .unannouncedMealWithCOB:
+            return Self.dateFormatter.date(from: "2022-10-17T02:05:00")
+        case .unannouncedMealNoCOB:
+            return Self.dateFormatter.date(from: "2022-10-17T02:15:00")
+        default:
+            return nil
         }
     }
     
     var carbEntries: [NewCarbEntry] {
-        let dateFormatter = ISO8601DateFormatter.localTimeDate()
-        
         switch self {
         case .unannouncedMealWithCOB:
             return [
                 NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 30),
-                             startDate: dateFormatter.date(from: "2022-10-14T02:34:22")!,
+                             startDate: Self.dateFormatter.date(from: "2022-10-14T02:34:22")!,
                              foodType: nil,
                              absorptionTime: nil),
                 NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 40),
-                             startDate: dateFormatter.date(from: "2022-10-17T01:06:52")!,
+                             startDate: Self.dateFormatter.date(from: "2022-10-17T01:06:52")!,
                              foodType: nil,
                              absorptionTime: nil)
+            ]
+        case .announcedMeal:
+            return [
+                NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 30),
+                             startDate: Self.dateFormatter.date(from: "2022-10-14T02:34:22")!,
+                             foodType: nil,
+                             absorptionTime: nil),
+                NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 40),
+                             startDate: Self.dateFormatter.date(from: "2022-10-17T01:06:52")!,
+                             foodType: nil,
+                             absorptionTime: nil),
+                NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 1),
+                             startDate: Self.dateFormatter.date(from: "2022-10-17T02:15:00")!,
+                             foodType: nil,
+                             absorptionTime: nil),
             ]
         default:
             return []
@@ -63,20 +98,21 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
     var carbStore: CarbStore!
     var queryAnchor: CarbStore.QueryAnchor!
     var limit: Int!
-    var currentDate: Date!
     
     func setUp(for testType: UAMTestType) -> [GlucoseEffectVelocity] {
+        let healthStore = HKHealthStoreMock()
+        
         carbStore = CarbStore(
-            healthStore: HKHealthStoreMock(),
+            healthStore: healthStore,
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
             observationInterval: 0,
             overrideHistory: TemporaryScheduleOverrideHistory(),
-            provenanceIdentifier: Bundle.main.bundleIdentifier!)
+            provenanceIdentifier: Bundle.main.bundleIdentifier!,
+            test_currentDate: testType.currentDate)
         queryAnchor = CarbStore.QueryAnchor()
         limit = Int.max
-        currentDate = testType.currentDate
         
         // Set up schedules
         let carbSchedule = CarbRatioSchedule(
@@ -105,7 +141,7 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
                 if case .failure(_) = result {
                     XCTFail("Failed to add carb entry to carb store")
                 }
-                
+
                 updateGroup.leave()
             }
         }
@@ -135,39 +171,51 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
         super.tearDown()
     }
     
-    func testNoMeal() {
+    func testNoUnannouncedMeal() {
         let counteractionEffects = setUp(for: .noMeal)
 
         let updateGroup = DispatchGroup()
         updateGroup.enter()
-        carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects, currentDate: currentDate) { status in
+        carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
             XCTAssertEqual(status, .noMeal)
             updateGroup.leave()
         }
         updateGroup.wait()
     }
     
-    func testUnannouncedMealNoCarbEntry() {
-        let counteractionEffects = setUp(for: .unannouncedMealWithCOB)
+    func testUnannouncedMeal_NoCarbEntry() {
+        let testType = UAMTestType.unannouncedMealNoCOB
+        let counteractionEffects = setUp(for: testType)
 
         let updateGroup = DispatchGroup()
         updateGroup.enter()
-        carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects, currentDate: currentDate) { [unowned self] status in
-            let expected = dateFormatter.date(from: "2022-10-17T02:05:00")!
-            XCTAssertEqual(status, .hasMeal(startTime: expected))
+        carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
+            XCTAssertEqual(status, .hasMeal(startTime: testType.uamDate!))
             updateGroup.leave()
         }
         updateGroup.wait()
     }
     
-    func testUnannouncedMealAfterCarbEntry() {
-        let counteractionEffects = setUp(for: .unannouncedMealWithCOB)
+    func testUnannouncedMeal_AfterCarbEntry() {
+        let testType = UAMTestType.unannouncedMealWithCOB
+        let counteractionEffects = setUp(for: testType)
 
         let updateGroup = DispatchGroup()
         updateGroup.enter()
-        carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects, currentDate: currentDate) { [unowned self] status in
-            let expected = dateFormatter.date(from: "2022-10-17T02:05:00")!
-            XCTAssertEqual(status, .hasMeal(startTime: expected))
+        carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
+            XCTAssertEqual(status, .hasMeal(startTime: testType.uamDate!))
+            updateGroup.leave()
+        }
+        updateGroup.wait()
+    }
+    
+    func testNoUnannouncedMeal_AnnouncedMealPresent() {
+        let counteractionEffects = setUp(for: .announcedMeal)
+
+        let updateGroup = DispatchGroup()
+        updateGroup.enter()
+        carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
+            XCTAssertEqual(status, .noMeal)
             updateGroup.leave()
         }
         updateGroup.wait()
