@@ -177,7 +177,7 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
         let updateGroup = DispatchGroup()
         updateGroup.enter()
         carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
-            XCTAssertEqual(status, .noMeal)
+            XCTAssertEqual(status, .noUnannouncedMeal)
             updateGroup.leave()
         }
         updateGroup.wait()
@@ -190,7 +190,7 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
         let updateGroup = DispatchGroup()
         updateGroup.enter()
         carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
-            XCTAssertEqual(status, .hasMeal(startTime: testType.uamDate!))
+            XCTAssertEqual(status, .hasUnannouncedMeal(startTime: testType.uamDate!))
             updateGroup.leave()
         }
         updateGroup.wait()
@@ -203,7 +203,7 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
         let updateGroup = DispatchGroup()
         updateGroup.enter()
         carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
-            XCTAssertEqual(status, .hasMeal(startTime: testType.uamDate!))
+            XCTAssertEqual(status, .hasUnannouncedMeal(startTime: testType.uamDate!))
             updateGroup.leave()
         }
         updateGroup.wait()
@@ -215,7 +215,7 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
         let updateGroup = DispatchGroup()
         updateGroup.enter()
         carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
-            XCTAssertEqual(status, .noMeal)
+            XCTAssertEqual(status, .noUnannouncedMeal)
             updateGroup.leave()
         }
         updateGroup.wait()

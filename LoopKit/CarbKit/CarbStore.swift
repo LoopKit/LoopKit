@@ -24,8 +24,8 @@ public enum CarbAbsorptionModel {
 }
 
 public enum UnannouncedMealStatus: Equatable {
-    case hasMeal(startTime: Date)
-    case noMeal
+    case hasUnannouncedMeal(startTime: Date)
+    case noUnannouncedMeal
 }
 
 public protocol CarbStoreDelegate: AnyObject {
@@ -251,6 +251,7 @@ public final class CarbStore: HealthKitSampleStore {
                    observeHealthKitSamplesFromCurrentApp: true,
                    observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
                    type: carbType,
+                   // anna todo: fix this to use unit-test time if needed
                    observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
                    observationEnabled: observationEnabled,
                    test_currentDate: test_currentDate)
@@ -1481,7 +1482,7 @@ extension CarbStore {
                     self?.log.error("Failed to fetch glucose effects to check for missed meal: %{public}@", String(describing: error))
                 }
 
-                completion(.noMeal)
+                completion(.noUnannouncedMeal)
                 return
             }
             
@@ -1583,13 +1584,13 @@ extension CarbStore {
             let mealTimeTooRecent = now.timeIntervalSince(mealTime) < Self.unannouncedMealMinRecency
 
             guard !mealTimeTooRecent else {
-                completion(.noMeal)
+                completion(.noUnannouncedMeal)
                 return
             }
 
             self.lastUAMTime = mealTime
             self.lastDetectedUamTimeline = uamTimeline.reversed()
-            completion(.hasMeal(startTime: mealTime))
+            completion(.hasUnannouncedMeal(startTime: mealTime))
         }
     }
 }
