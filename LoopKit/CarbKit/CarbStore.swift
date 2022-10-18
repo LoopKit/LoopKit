@@ -227,7 +227,8 @@ public final class CarbStore: HealthKitSampleStore {
         calculationDelta: TimeInterval = 5 /* minutes */ * 60,
         effectDelay: TimeInterval = 10 /* minutes */ * 60,
         carbAbsorptionModel: CarbAbsorptionModel = .nonlinear,
-        provenanceIdentifier: String
+        provenanceIdentifier: String,
+        test_currentDate: Date? = nil
     ) {
         self.storeEntriesToHealthKit = storeEntriesToHealthKit
         self.cacheStore = cacheStore
@@ -251,7 +252,8 @@ public final class CarbStore: HealthKitSampleStore {
                    observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
                    type: carbType,
                    observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
-                   observationEnabled: observationEnabled)
+                   observationEnabled: observationEnabled,
+                   test_currentDate: test_currentDate)
 
         // Carb model settings based on the selected absorption model
         switch self.carbAbsorptionModel {
@@ -824,7 +826,7 @@ extension CarbStore {
 
 extension CarbStore {
     public var earliestCacheDate: Date {
-        return Date(timeIntervalSinceNow: -cacheLength)
+        return currentDate(timeIntervalSinceNow: -cacheLength)
     }
 
     private func purgeExpiredCachedCarbObjects() {
@@ -1463,11 +1465,12 @@ extension CarbStore {
 
 // MARK: Missed / Unannounced Meal Detection
 extension CarbStore {
-    public func hasUnannouncedMeal(insulinCounteractionEffects: [GlucoseEffectVelocity], currentDate: Date, completion: @escaping (UnannouncedMealStatus) -> Void) {
+    public func hasUnannouncedMeal(insulinCounteractionEffects: [GlucoseEffectVelocity], completion: @escaping (UnannouncedMealStatus) -> Void) {
         let delta = TimeInterval(minutes: 5)
 
-        let intervalStart = currentDate.addingTimeInterval(-Self.unannouncedMealMaxRecency)
-        let intervalEnd = currentDate.addingTimeInterval(-Self.unannouncedMealMinRecency)
+        let intervalStart = currentDate(timeIntervalSinceNow: -Self.unannouncedMealMaxRecency)
+        let intervalEnd = currentDate(timeIntervalSinceNow: -Self.unannouncedMealMinRecency)
+        let now = self.currentDate
 
         getGlucoseEffects(start: intervalStart, end: intervalEnd, effectVelocities: insulinCounteractionEffects) {[weak self] result in
             guard
@@ -1518,7 +1521,7 @@ extension CarbStore {
             }
             
             var unexpectedDeviation: Double = 0
-            var mealTime = currentDate
+            var mealTime = now
             
             /// Have the range go from newest -> oldest time
             let dateSearchRange = LoopMath.dateRange(from: intervalStart,
@@ -1540,7 +1543,7 @@ extension CarbStore {
                 unexpectedDeviation += unexpectedEffect
                 
                 /// Find the threshold based on a minimum of `unannouncedMealGlucoseRiseThreshold` of change per minute
-                let minutesAgo = currentDate.timeIntervalSince(pastTime).minutes
+                let minutesAgo = now.timeIntervalSince(pastTime).minutes
                 let deviationChangeThreshold = Self.unannouncedMealGlucoseRiseThreshold * minutesAgo
                 
                 do {
@@ -1553,7 +1556,7 @@ extension CarbStore {
                                           absorptionTime: nil)
                             ],
                         startingAt: pastTime,
-                        endingAt: currentDate
+                        endingAt: now
                     )
                     .reduce(0.0, { partialResult, nextEffect in
                         return partialResult + nextEffect.quantity.doubleValue(for: unit)
@@ -1577,7 +1580,7 @@ extension CarbStore {
 
             self.lastEvaluatedUamTimeline = uamTimeline.reversed() // ANNA TODO: debug info, remove
             
-            let mealTimeTooRecent = currentDate.timeIntervalSince(mealTime) < Self.unannouncedMealMinRecency
+            let mealTimeTooRecent = now.timeIntervalSince(mealTime) < Self.unannouncedMealMinRecency
 
             guard !mealTimeTooRecent else {
                 completion(.noMeal)
