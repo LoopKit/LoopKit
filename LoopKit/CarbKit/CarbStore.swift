@@ -251,8 +251,7 @@ public final class CarbStore: HealthKitSampleStore {
                    observeHealthKitSamplesFromCurrentApp: true,
                    observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
                    type: carbType,
-                   // anna todo: fix this to use unit-test time if needed
-                   observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
+                   observationStart: (test_currentDate ?? Date()).addingTimeInterval(-self.observationInterval),
                    observationEnabled: observationEnabled,
                    test_currentDate: test_currentDate)
 
