@@ -734,8 +734,40 @@ class InsulinMathTests: XCTestCase {
             DoseEntry(type: .basal,     startDate: f("2018-04-04 05:11:02 +0000"), endDate: f("2018-04-04 05:14:15 +0000"), value: 1.2, unit: .unitsPerHour, deliveredUnits: 0.06433333333333334, syncIdentifier: "1f20420b160312", scheduledBasalRate: nil),
             DoseEntry(type: .tempBasal, startDate: f("2018-04-04 05:14:15 +0000"), endDate: f("2018-04-04 05:44:15 +0000"), value: 1.9, unit: .unitsPerHour, syncIdentifier: "16014f0e164312", scheduledBasalRate: nil, isMutable: true),
         ]
+
         XCTAssertEqual(reconciled, doses.reversed().reconciled())
     }
+
+    func testReconcilingTempBasalBeforeResume() {
+        let formatter = DateFormatter.descriptionFormatter
+        let f = { (input) in
+            return formatter.date(from: input)!
+        }
+
+        // getRecentPumpEventValues
+        let doses = [
+            DoseEntry(type: .tempBasal, startDate: f("2018-04-04 05:14:15 +0000"), endDate: f("2018-04-04 05:44:15 +0000"), value: 1.9, unit: .unitsPerHour, syncIdentifier: "16014f0e164312", scheduledBasalRate: nil, isMutable: true),
+            DoseEntry(type: .suspend, startDate: f("2018-04-04 04:40:06 +0000"), endDate: f("2018-04-04 04:40:06 +0000"), value: 0.0, unit: .units, syncIdentifier: "1e014628150312", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-04-04 04:39:15 +0000"), endDate: f("2018-04-04 05:09:15 +0000"), value: 4.5, unit: .unitsPerHour, syncIdentifier: "16014f27154312", scheduledBasalRate: nil),
+            DoseEntry(type: .bolus, startDate: f("2018-04-04 04:34:46 +0000"), endDate: f("2018-04-04 04:34:46 +0000"), value: 1.85, unit: .units, syncIdentifier: "01004a004a006d006e22354312", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-04-04 04:34:15 +0000"), endDate: f("2018-04-04 05:04:15 +0000"), value: 1.85, unit: .unitsPerHour, syncIdentifier: "16014f22154312", scheduledBasalRate: nil)
+        ]
+
+        let expectedReconciled = [
+            DoseEntry(type: .bolus,     startDate: f("2018-04-04 04:34:46 +0000"), endDate: f("2018-04-04 04:34:46 +0000"), value: 1.85, unit: .units, deliveredUnits: 1.85, syncIdentifier: "01004a004a006d006e22354312", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-04-04 04:34:15 +0000"), endDate: f("2018-04-04 04:39:15 +0000"), value: 1.85, unit: .unitsPerHour, deliveredUnits: 0.15, syncIdentifier: "16014f22154312", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-04-04 04:39:15 +0000"), endDate: f("2018-04-04 04:40:06 +0000"), value: 4.5, unit: .unitsPerHour, deliveredUnits: 0.05, syncIdentifier: "16014f27154312", scheduledBasalRate: nil),
+            DoseEntry(type: .suspend,   startDate: f("2018-04-04 04:40:06 +0000"), endDate: f("2018-04-04 05:14:15 +0000"), value: 0.0, unit: .units, deliveredUnits: 0.0, syncIdentifier: "1e014628150312", scheduledBasalRate: nil),
+            DoseEntry(type: .tempBasal, startDate: f("2018-04-04 05:14:15 +0000"), endDate: f("2018-04-04 05:44:15 +0000"), value: 1.9, unit: .unitsPerHour, syncIdentifier: "16014f0e164312", scheduledBasalRate: nil, isMutable: true),
+        ]
+
+        let reconciled = doses.reversed().reconciled()
+        for dose in reconciled {
+            print("Dose: start = \(dose.startDate), end = \(dose.endDate), type = \(dose.type)")
+        }
+        XCTAssertEqual(expectedReconciled, reconciled)
+    }
+
 
     func testReconcileMultipleResumes() {
         let formatter = DateFormatter.descriptionFormatter

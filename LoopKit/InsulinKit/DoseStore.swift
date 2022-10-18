@@ -1388,7 +1388,9 @@ extension DoseStore {
                 report.append("* insulinOnBoard: \(String(describing: value))")
             }
 
-            self.getReservoirValues(since: Date.distantPast) { (result) in
+            let historyStart = Date().addingTimeInterval(-.hours(24))
+
+            self.getReservoirValues(since: historyStart) { (result) in
                 report.append("")
                 report.append("### getReservoirValues")
 
@@ -1403,7 +1405,7 @@ extension DoseStore {
                     }
                 }
 
-                self.getPumpEventValues(since: Date.distantPast) { (result) in
+                self.getPumpEventValues(since: historyStart) { (result) in
                     report.append("")
                     report.append("### getPumpEventValues")
 
