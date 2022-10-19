@@ -1462,7 +1462,7 @@ extension CarbStore {
         let intervalEnd = currentDate(timeIntervalSinceNow: -UAMSettings.minRecency)
         let now = self.currentDate
 
-        getGlucoseEffects(start: intervalStart, end: intervalEnd, effectVelocities: insulinCounteractionEffects) {[weak self] result in
+        getGlucoseEffects(start: intervalStart, end: now, effectVelocities: insulinCounteractionEffects) {[weak self] result in
             guard
                 let self = self,
                 case .success((let carbEntries, let carbEffects)) = result
@@ -1490,11 +1490,11 @@ extension CarbStore {
             }
 
             let processedICE = insulinCounteractionEffects
-                .filterDateRange(intervalStart, intervalEnd)
+                .filterDateRange(intervalStart, now)
                 .compactMap {
-                    /// Clamp starts & ends to `intervalStart...intervalEnd` since our algorithm assumes all effects occur within the interval
+                    /// Clamp starts & ends to `intervalStart...now` since our algorithm assumes all effects occur within that interval
                     let start = max($0.startDate, intervalStart)
-                    let end = min($0.endDate, intervalEnd)
+                    let end = min($0.endDate, now)
 
                     guard let effect = $0.effect(from: start, to: end) else {
                         let item: GlucoseEffect? = nil // FIXME: we get a compiler error if we try to return `nil` directly
@@ -1512,16 +1512,21 @@ extension CarbStore {
             
             var unexpectedDeviation: Double = 0
             var mealTime = now
+
+            
+            let dateSearchRange = Set(LoopMath.dateRange(from: intervalStart,
+                                                         to: intervalEnd,
+                                                         delta: delta))
             
             /// Have the range go from newest -> oldest time
-            let dateSearchRange = LoopMath.dateRange(from: intervalStart,
-                                                     to: intervalEnd,
-                                                     delta: delta)
+            let summationRange = LoopMath.dateRange(from: intervalStart,
+                                                    to: now,
+                                                    delta: delta)
                                           .reversed()
             
             var uamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?, overallThreshold: Double?)] = [] // ANNA TODO: debug info, remove
             
-            for pastTime in dateSearchRange {
+            for pastTime in summationRange {
                 guard
                     let unexpectedEffect = effectValueCache[pastTime],
                     !carbEntries.contains(where: { $0.startDate >= pastTime })
@@ -1531,6 +1536,12 @@ extension CarbStore {
                 }
                 
                 unexpectedDeviation += unexpectedEffect
+
+                guard dateSearchRange.contains(pastTime) else {
+                    /// This time is too recent to check for a UAM
+                    uamTimeline.append((pastTime, unexpectedDeviation, nil, nil, nil)) // ANNA TODO: debug info, remove
+                    continue
+                }
                 
                 /// Find the threshold based on a minimum of `unannouncedMealGlucoseRiseThreshold` of change per minute
                 let minutesAgo = now.timeIntervalSince(pastTime).minutes
