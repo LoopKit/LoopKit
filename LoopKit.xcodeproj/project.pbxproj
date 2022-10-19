@@ -829,6 +829,8 @@
 		E950CA8B28FE13E800B5B692 /* meal_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA8A28FE13E800B5B692 /* meal_counteraction_effect.json */; };
 		E950CA8D28FE1E0400B5B692 /* no_meal_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA8C28FE1E0400B5B692 /* no_meal_counteraction_effect.json */; };
 		E950CA8F28FEE1DC00B5B692 /* needs_clamping_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA8E28FEE1DC00B5B692 /* needs_clamping_counteraction_effect.json */; };
+		E950CA962900381A00B5B692 /* UAMSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E950CA952900381A00B5B692 /* UAMSettings.swift */; };
+		E950CA972900390D00B5B692 /* UAMSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E950CA952900381A00B5B692 /* UAMSettings.swift */; };
 		E96175AE24B7BE38008E5080 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96175AD24B7BE38008E5080 /* Dictionary.swift */; };
 		E96DCB5824AEF50F007117BC /* SuspendThresholdInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */; };
 		E96DCB5A24AF74AC007117BC /* SuspendThresholdEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */; };
@@ -1686,6 +1688,7 @@
 		E950CA8A28FE13E800B5B692 /* meal_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = meal_counteraction_effect.json; sourceTree = "<group>"; };
 		E950CA8C28FE1E0400B5B692 /* no_meal_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = no_meal_counteraction_effect.json; sourceTree = "<group>"; };
 		E950CA8E28FEE1DC00B5B692 /* needs_clamping_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = needs_clamping_counteraction_effect.json; sourceTree = "<group>"; };
+		E950CA952900381A00B5B692 /* UAMSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UAMSettings.swift; sourceTree = "<group>"; };
 		E96175AD24B7BE38008E5080 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdInformationView.swift; sourceTree = "<group>"; };
 		E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdEditor.swift; sourceTree = "<group>"; };
@@ -2473,6 +2476,7 @@
 				4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */,
 				43D8FE4E1C7291BD0073BE78 /* StoredCarbEntry.swift */,
 				A9E1E6A824E1B6700073CA39 /* SyncCarbObject.swift */,
+				E950CA952900381A00B5B692 /* UAMSettings.swift */,
 			);
 			path = CarbKit;
 			sourceTree = "<group>";
@@ -3927,6 +3931,7 @@
 				4322B776202FA2790002837D /* CarbStore.swift in Sources */,
 				C1F8403A23DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift in Sources */,
 				A987CD4624A5893500439ADC /* JSONStreamEncoder.swift in Sources */,
+				E950CA962900381A00B5B692 /* UAMSettings.swift in Sources */,
 				A9498D7823386C3300DAA9B9 /* LoggingService.swift in Sources */,
 				1D096C0224C24C220078B6B5 /* InsulinModelProvider.swift in Sources */,
 				433BC7AA20538D4C000B1200 /* CachedGlucoseObject+CoreDataClass.swift in Sources */,
@@ -4125,6 +4130,7 @@
 				A9E1E6AA24E1B7C10073CA39 /* SyncCarbObject.swift in Sources */,
 				A9E6758322713F4700E25293 /* HKUnit.swift in Sources */,
 				A9E6758422713F4700E25293 /* NewCarbEntry.swift in Sources */,
+				E950CA972900390D00B5B692 /* UAMSettings.swift in Sources */,
 				A9E6758522713F4700E25293 /* GlucoseMath.swift in Sources */,
 				A9E6758722713F4700E25293 /* CarbEntry.swift in Sources */,
 				A9E6758822713F4700E25293 /* HealthKitSampleStore.swift in Sources */,

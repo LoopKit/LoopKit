@@ -69,16 +69,6 @@ public final class CarbStore: HealthKitSampleStore {
     /// Notification posted when carb entries were changed, either via add/replace/delete methods or from HealthKit
     public static let carbEntriesDidChange = NSNotification.Name(rawValue: "com.loopkit.CarbStore.carbEntriesDidChange")
 
-    /// Missed Meal warning constants
-    /// Minimum grams of unannounced carbs that must be detected
-    public static let unannouncedMealCarbThreshold: Double = 40 // grams
-    /// Minimum threshold for glucose rise over the detection window
-    static let unannouncedMealGlucoseRiseThreshold = 2.0 // mg/dL/m
-    /// Minimum time from now that must have passed for the meal to be detected
-    public static let unannouncedMealMinRecency = TimeInterval(minutes: 30)
-    /// Maximum time from now that a meal can be detected
-    public static let unannouncedMealMaxRecency = TimeInterval(hours: 2)
-
     public typealias DefaultAbsorptionTimes = (fast: TimeInterval, medium: TimeInterval, slow: TimeInterval)
 
     public enum CarbStoreError: Error {
@@ -1468,8 +1458,8 @@ extension CarbStore {
     public func hasUnannouncedMeal(insulinCounteractionEffects: [GlucoseEffectVelocity], completion: @escaping (UnannouncedMealStatus) -> Void) {
         let delta = TimeInterval(minutes: 5)
 
-        let intervalStart = currentDate(timeIntervalSinceNow: -Self.unannouncedMealMaxRecency)
-        let intervalEnd = currentDate(timeIntervalSinceNow: -Self.unannouncedMealMinRecency)
+        let intervalStart = currentDate(timeIntervalSinceNow: -UAMSettings.maxRecency)
+        let intervalEnd = currentDate(timeIntervalSinceNow: -UAMSettings.minRecency)
         let now = self.currentDate
 
         getGlucoseEffects(start: intervalStart, end: intervalEnd, effectVelocities: insulinCounteractionEffects) {[weak self] result in
@@ -1544,13 +1534,13 @@ extension CarbStore {
                 
                 /// Find the threshold based on a minimum of `unannouncedMealGlucoseRiseThreshold` of change per minute
                 let minutesAgo = now.timeIntervalSince(pastTime).minutes
-                let deviationChangeThreshold = Self.unannouncedMealGlucoseRiseThreshold * minutesAgo
+                let deviationChangeThreshold = UAMSettings.glucoseRiseThreshold * minutesAgo
                 
                 do {
                     /// Find effect we'd expect to see right now of our min carb amount threshold for detecting a missed meal if it started at `pastTime`
                     let modeledMealEffectThreshold = try self.glucoseEffects(
                         of: [NewCarbEntry(quantity: HKQuantity(unit: .gram(),
-                                                               doubleValue: Self.unannouncedMealCarbThreshold),
+                                                               doubleValue: UAMSettings.carbThreshold),
                                           startDate: pastTime,
                                           foodType: nil,
                                           absorptionTime: nil)
@@ -1580,7 +1570,7 @@ extension CarbStore {
 
             self.lastEvaluatedUamTimeline = uamTimeline.reversed() // ANNA TODO: debug info, remove
             
-            let mealTimeTooRecent = now.timeIntervalSince(mealTime) < Self.unannouncedMealMinRecency
+            let mealTimeTooRecent = now.timeIntervalSince(mealTime) < UAMSettings.minRecency
 
             guard !mealTimeTooRecent else {
                 completion(.noUnannouncedMeal)
