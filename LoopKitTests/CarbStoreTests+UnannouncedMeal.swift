@@ -23,6 +23,8 @@ enum UAMTestType {
     case unannouncedMealWithCOB
     /// There is a meal, but it's announced and not unannounced
     case announcedMeal
+    /// CGM data is noisy, but no meal is present
+    case noisyCGM
     // ANNA TODO: add more cases
 }
 
@@ -35,6 +37,8 @@ extension UAMTestType {
             return "long_interval_counteraction_effect"
         case .noMealCounteractionEffectsNeedClamping:
             return "needs_clamping_counteraction_effect"
+        case .noisyCGM:
+            return "noisy_cgm_counteraction_effect"
         }
     }
     
@@ -44,6 +48,8 @@ extension UAMTestType {
             return Self.dateFormatter.date(from: "2022-10-17T23:28:45")!
         case .unannouncedMealWithCOB, .noMeal, .noMealCounteractionEffectsNeedClamping, .announcedMeal:
             return Self.dateFormatter.date(from: "2022-10-17T02:49:16")!
+        case .noisyCGM:
+            return Self.dateFormatter.date(from: "2022-10-19T20:46:23")!
         }
     }
     
@@ -211,6 +217,18 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
     
     func testNoUnannouncedMeal_AnnouncedMealPresent() {
         let counteractionEffects = setUp(for: .announcedMeal)
+
+        let updateGroup = DispatchGroup()
+        updateGroup.enter()
+        carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
+            XCTAssertEqual(status, .noUnannouncedMeal)
+            updateGroup.leave()
+        }
+        updateGroup.wait()
+    }
+    
+    func testNoisyCGM() {
+        let counteractionEffects = setUp(for: .noisyCGM)
 
         let updateGroup = DispatchGroup()
         updateGroup.enter()
