@@ -1483,9 +1483,11 @@ extension CarbStore {
             /// Carb effects are cumulative, so we have to subtract the previous effect value
             var previousEffectValue: Double = carbEffects.first?.quantity.doubleValue(for: unit) ?? 0
 
+            /// Counteraction effects only take insulin into account, so we need to account for the carb effects when computing the unexpected deviations
             for effect in carbEffects {
                 let value = effect.quantity.doubleValue(for: unit)
-                effectValueCache[effect.startDate] = (effectValueCache[effect.startDate] ?? 0) + value - previousEffectValue
+                /// We do `-1 * (value - previousEffectValue)` because this will _counter_ the carb effect once the ICE is added
+                effectValueCache[effect.startDate] = (effectValueCache[effect.startDate] ?? 0) +  -1 * (value - previousEffectValue)
                 previousEffectValue = value
             }
 
