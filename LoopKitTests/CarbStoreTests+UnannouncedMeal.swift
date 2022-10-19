@@ -29,10 +29,10 @@ enum UAMTestType {
 extension UAMTestType {
     var counteractionEffectFixture: String {
         switch self {
-        case .noMeal:
-            return "no_meal_counteraction_effect"
-        case .unannouncedMealWithCOB, .unannouncedMealNoCOB, .announcedMeal:
-            return "meal_counteraction_effect"
+        case .unannouncedMealNoCOB:
+            return "uam_counteraction_effect"
+        case .noMeal, .unannouncedMealWithCOB, .announcedMeal:
+            return "long_interval_counteraction_effect"
         case .noMealCounteractionEffectsNeedClamping:
             return "needs_clamping_counteraction_effect"
         }
@@ -40,18 +40,18 @@ extension UAMTestType {
     
     var currentDate: Date {
         switch self {
-        case .noMeal:
+        case .unannouncedMealNoCOB:
             return Self.dateFormatter.date(from: "2022-10-17T23:28:45")!
-        case .unannouncedMealWithCOB, .unannouncedMealNoCOB, .noMealCounteractionEffectsNeedClamping, .announcedMeal:
+        case .unannouncedMealWithCOB, .noMeal, .noMealCounteractionEffectsNeedClamping, .announcedMeal:
             return Self.dateFormatter.date(from: "2022-10-17T02:49:16")!
         }
     }
     
     var uamDate: Date? {
         switch self {
-        case .unannouncedMealWithCOB:
-            return Self.dateFormatter.date(from: "2022-10-17T02:05:00")
         case .unannouncedMealNoCOB:
+            return Self.dateFormatter.date(from: "2022-10-17T22:40:00")
+        case .unannouncedMealWithCOB:
             return Self.dateFormatter.date(from: "2022-10-17T02:15:00")
         default:
             return nil
