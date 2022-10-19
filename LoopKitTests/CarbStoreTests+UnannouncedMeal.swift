@@ -17,6 +17,8 @@ enum UAMTestType {
     case noMeal
     /// No meal is present, but if the counteraction effects aren't clamped properly it will look like there's a UAM
     case noMealCounteractionEffectsNeedClamping
+    // No meal is present and there is COB
+    case noMealWithCOB
     /// UAM with no carbs on board
     case unannouncedMealNoCOB
     /// UAM with carbs logged prior to it
@@ -31,7 +33,7 @@ enum UAMTestType {
 extension UAMTestType {
     var counteractionEffectFixture: String {
         switch self {
-        case .unannouncedMealNoCOB:
+        case .unannouncedMealNoCOB, .noMealWithCOB:
             return "uam_counteraction_effect"
         case .noMeal, .unannouncedMealWithCOB, .announcedMeal:
             return "long_interval_counteraction_effect"
@@ -44,7 +46,7 @@ extension UAMTestType {
     
     var currentDate: Date {
         switch self {
-        case .unannouncedMealNoCOB:
+        case .unannouncedMealNoCOB, .noMealWithCOB:
             return Self.dateFormatter.date(from: "2022-10-17T23:28:45")!
         case .unannouncedMealWithCOB, .noMeal, .noMealCounteractionEffectsNeedClamping, .announcedMeal:
             return Self.dateFormatter.date(from: "2022-10-17T02:49:16")!
@@ -91,6 +93,13 @@ extension UAMTestType {
                              startDate: Self.dateFormatter.date(from: "2022-10-17T02:15:00")!,
                              foodType: nil,
                              absorptionTime: nil),
+            ]
+        case .noMealWithCOB:
+            return [
+                NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 30),
+                             startDate: Self.dateFormatter.date(from: "2022-10-17T22:40:00")!,
+                             foodType: nil,
+                             absorptionTime: nil)
             ]
         default:
             return []
@@ -179,6 +188,18 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
     
     func testNoUnannouncedMeal() {
         let counteractionEffects = setUp(for: .noMeal)
+
+        let updateGroup = DispatchGroup()
+        updateGroup.enter()
+        carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
+            XCTAssertEqual(status, .noUnannouncedMeal)
+            updateGroup.leave()
+        }
+        updateGroup.wait()
+    }
+    
+    func testNoUnannouncedMeal_WithCOB() {
+        let counteractionEffects = setUp(for: .noMealWithCOB)
 
         let updateGroup = DispatchGroup()
         updateGroup.enter()
