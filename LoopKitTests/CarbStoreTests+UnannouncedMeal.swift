@@ -27,6 +27,8 @@ enum UAMTestType {
     case announcedMeal
     /// CGM data is noisy, but no meal is present
     case noisyCGM
+    /// Realistic counteraction effects with multiple meals
+    case manyMeals
     // ANNA TODO: add more cases
 }
 
@@ -35,12 +37,14 @@ extension UAMTestType {
         switch self {
         case .unannouncedMealNoCOB, .noMealWithCOB:
             return "uam_counteraction_effect"
-        case .noMeal, .unannouncedMealWithCOB, .announcedMeal:
+        case .noMeal, .announcedMeal:
             return "long_interval_counteraction_effect"
         case .noMealCounteractionEffectsNeedClamping:
             return "needs_clamping_counteraction_effect"
         case .noisyCGM:
             return "noisy_cgm_counteraction_effect"
+        case .manyMeals, .unannouncedMealWithCOB:
+            return "realistic_report_counteraction_effect"
         }
     }
     
@@ -48,10 +52,14 @@ extension UAMTestType {
         switch self {
         case .unannouncedMealNoCOB, .noMealWithCOB:
             return Self.dateFormatter.date(from: "2022-10-17T23:28:45")!
-        case .unannouncedMealWithCOB, .noMeal, .noMealCounteractionEffectsNeedClamping, .announcedMeal:
+        case .noMeal, .noMealCounteractionEffectsNeedClamping, .announcedMeal:
             return Self.dateFormatter.date(from: "2022-10-17T02:49:16")!
         case .noisyCGM:
             return Self.dateFormatter.date(from: "2022-10-19T20:46:23")!
+        case .unannouncedMealWithCOB:
+            return Self.dateFormatter.date(from: "2022-10-19T19:50:15")!
+        case .manyMeals:
+            return Self.dateFormatter.date(from: "2022-10-19T21:50:15")!
         }
     }
     
@@ -60,7 +68,7 @@ extension UAMTestType {
         case .unannouncedMealNoCOB:
             return Self.dateFormatter.date(from: "2022-10-17T22:40:00")
         case .unannouncedMealWithCOB:
-            return Self.dateFormatter.date(from: "2022-10-17T02:15:00")
+            return Self.dateFormatter.date(from: "2022-10-19T19:15:00")
         default:
             return nil
         }
@@ -71,11 +79,11 @@ extension UAMTestType {
         case .unannouncedMealWithCOB:
             return [
                 NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 30),
-                             startDate: Self.dateFormatter.date(from: "2022-10-14T02:34:22")!,
+                             startDate: Self.dateFormatter.date(from: "2022-10-19T15:41:36")!,
                              foodType: nil,
                              absorptionTime: nil),
-                NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 40),
-                             startDate: Self.dateFormatter.date(from: "2022-10-17T01:06:52")!,
+                NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10),
+                             startDate: Self.dateFormatter.date(from: "2022-10-19T17:36:58")!,
                              foodType: nil,
                              absorptionTime: nil)
             ]
@@ -98,6 +106,21 @@ extension UAMTestType {
             return [
                 NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 30),
                              startDate: Self.dateFormatter.date(from: "2022-10-17T22:40:00")!,
+                             foodType: nil,
+                             absorptionTime: nil)
+            ]
+        case .manyMeals:
+            return [
+                NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 30),
+                             startDate: Self.dateFormatter.date(from: "2022-10-19T15:41:36")!,
+                             foodType: nil,
+                             absorptionTime: nil),
+                NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 10),
+                             startDate: Self.dateFormatter.date(from: "2022-10-19T17:36:58")!,
+                             foodType: nil,
+                             absorptionTime: nil),
+                NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 40),
+                             startDate: Self.dateFormatter.date(from: "2022-10-19T19:11:43")!,
                              foodType: nil,
                              absorptionTime: nil)
             ]
@@ -250,6 +273,18 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
     
     func testNoisyCGM() {
         let counteractionEffects = setUp(for: .noisyCGM)
+
+        let updateGroup = DispatchGroup()
+        updateGroup.enter()
+        carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
+            XCTAssertEqual(status, .noUnannouncedMeal)
+            updateGroup.leave()
+        }
+        updateGroup.wait()
+    }
+    
+    func testManyMeals() {
+        let counteractionEffects = setUp(for: .manyMeals)
 
         let updateGroup = DispatchGroup()
         updateGroup.enter()

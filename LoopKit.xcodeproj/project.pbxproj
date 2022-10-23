@@ -832,6 +832,7 @@
 		E950CA962900381A00B5B692 /* UAMSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E950CA952900381A00B5B692 /* UAMSettings.swift */; };
 		E950CA972900390D00B5B692 /* UAMSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E950CA952900381A00B5B692 /* UAMSettings.swift */; };
 		E950CA9929009AF500B5B692 /* noisy_cgm_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA9829009AF500B5B692 /* noisy_cgm_counteraction_effect.json */; };
+		E950CA9B2900F7A800B5B692 /* realistic_report_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA9A2900F7A800B5B692 /* realistic_report_counteraction_effect.json */; };
 		E96175AE24B7BE38008E5080 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96175AD24B7BE38008E5080 /* Dictionary.swift */; };
 		E96DCB5824AEF50F007117BC /* SuspendThresholdInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */; };
 		E96DCB5A24AF74AC007117BC /* SuspendThresholdEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */; };
@@ -1691,6 +1692,7 @@
 		E950CA8E28FEE1DC00B5B692 /* needs_clamping_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = needs_clamping_counteraction_effect.json; sourceTree = "<group>"; };
 		E950CA952900381A00B5B692 /* UAMSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UAMSettings.swift; sourceTree = "<group>"; };
 		E950CA9829009AF500B5B692 /* noisy_cgm_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = noisy_cgm_counteraction_effect.json; sourceTree = "<group>"; };
+		E950CA9A2900F7A800B5B692 /* realistic_report_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = realistic_report_counteraction_effect.json; sourceTree = "<group>"; };
 		E96175AD24B7BE38008E5080 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		E96DCB5724AEF50F007117BC /* SuspendThresholdInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdInformationView.swift; sourceTree = "<group>"; };
 		E96DCB5924AF74AC007117BC /* SuspendThresholdEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuspendThresholdEditor.swift; sourceTree = "<group>"; };
@@ -2513,6 +2515,7 @@
 				9E784340236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json */,
 				9E784342236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json */,
 				9E78434423665B5A0016C583 /* ice_35_min_partial_piecewiselinear_adaptiverate_output.json */,
+				E950CA9A2900F7A800B5B692 /* realistic_report_counteraction_effect.json */,
 			);
 			path = CarbKit;
 			sourceTree = "<group>";
@@ -3423,6 +3426,7 @@
 				437874D3202FDD2D00A3D8B9 /* short_basal_dose.json in Resources */,
 				C1FAC06328C7B0A100754AE2 /* reservoir_iob_test.json in Resources */,
 				437874C6202FDD2D00A3D8B9 /* iob_from_doses_output.json in Resources */,
+				E950CA9B2900F7A800B5B692 /* realistic_report_counteraction_effect.json in Resources */,
 				437874D6202FDD2D00A3D8B9 /* suspend_dose_reconciled.json in Resources */,
 				4343951F205EED1F0056DC37 /* counteraction_effect_falling_glucose_output.json in Resources */,
 				43D988AE1C87FFA300DA4467 /* glucose_from_effects_glucose_input.json in Resources */,
