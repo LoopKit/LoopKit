@@ -691,6 +691,7 @@
 		A9E675F5227140DD00E25293 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E675F4227140DD00E25293 /* HealthKit.framework */; };
 		A9FD046F24E310D00040F203 /* HKObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FD046E24E310D00040F203 /* HKObject.swift */; };
 		A9FD047024E310DD0040F203 /* HKObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FD046E24E310D00040F203 /* HKObject.swift */; };
+		B4001CF028CBC200002FB414 /* SingleSelectionCheckList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4001CEF28CBC200002FB414 /* SingleSelectionCheckList.swift */; };
 		B40C43912707408400F5D86C /* DeliveryLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC64C7D24BF6EBC004A63A1 /* DeliveryLimits.swift */; };
 		B40D07CA251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B40D07C8251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.xib */; };
 		B40D07CB251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40D07C9251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.swift */; };
@@ -1551,6 +1552,7 @@
 		A9E675F2227140D800E25293 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		A9E675F4227140DD00E25293 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 		A9FD046E24E310D00040F203 /* HKObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObject.swift; sourceTree = "<group>"; };
+		B4001CEF28CBC200002FB414 /* SingleSelectionCheckList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSelectionCheckList.swift; sourceTree = "<group>"; };
 		B40D07C8251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DateAndDurationSteppableTableViewCell.xib; sourceTree = "<group>"; };
 		B40D07C9251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateAndDurationSteppableTableViewCell.swift; sourceTree = "<group>"; };
 		B4102D3124ABB068005D460B /* DeviceLifecycleProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLifecycleProgress.swift; sourceTree = "<group>"; };
@@ -2124,6 +2126,7 @@
 				432CF86820D76B320066B889 /* SetupButton.swift */,
 				432CF86A20D76B9C0066B889 /* SetupIndicatorView.swift */,
 				1D3E2972276031F80041F460 /* ResizeablePicker.swift */,
+				B4001CEF28CBC200002FB414 /* SingleSelectionCheckList.swift */,
 				898E6E6D2241ED9F0019E459 /* SuspendResumeTableViewCell.swift */,
 				432CF86C20D76C470066B889 /* SwitchTableViewCell.swift */,
 				B41A60AE23D1DB5B00636320 /* TableViewTitleLabel.swift */,
@@ -3576,6 +3579,7 @@
 				43F5034F210599DF009FA89A /* ValidatingIndicatorView.swift in Sources */,
 				1D1065E5282DAEE500026A70 /* WebView.swift in Sources */,
 				C1E4B308242E995200E70CCB /* ActivityIndicator.swift in Sources */,
+				B4001CF028CBC200002FB414 /* SingleSelectionCheckList.swift in Sources */,
 				89FC6891245A2D680075CF59 /* ScheduleItemPicker.swift in Sources */,
 				1D1FCE2524BD42EF000300A8 /* TherapySettingsViewModel.swift in Sources */,
 				43BA718C201EEE5A0058961E /* NSData.swift in Sources */,

@@ -35,12 +35,6 @@ class AlertTests: XCTestCase {
         let str = try? alert.encodeToString()
     XCTAssertEqual("{\"trigger\":{\"repeating\":{\"repeatInterval\":2}},\"interruptionLevel\":\"timeSensitive\",\"identifier\":{\"managerIdentifier\":\"managerIdentifier1\",\"alertIdentifier\":\"alertIdentifier1\"},\"foregroundContent\":{\"title\":\"title1\",\"acknowledgeActionButtonLabel\":\"acknowledgeActionButtonLabel1\",\"body\":\"body1\"},\"backgroundContent\":{\"title\":\"title2\",\"acknowledgeActionButtonLabel\":\"acknowledgeActionButtonLabel2\",\"body\":\"body2\"}}", str)
     }
-    
-    func testAlertSilentSoundEncodable() {
-        let alert = Alert(identifier: identifier, foregroundContent: foregroundContent, backgroundContent: backgroundContent, trigger: .immediate, sound: .silence)
-        let str = try? alert.encodeToString()
-        XCTAssertEqual("{\"trigger\":\"immediate\",\"interruptionLevel\":\"timeSensitive\",\"sound\":\"silence\",\"identifier\":{\"managerIdentifier\":\"managerIdentifier1\",\"alertIdentifier\":\"alertIdentifier1\"},\"foregroundContent\":{\"title\":\"title1\",\"acknowledgeActionButtonLabel\":\"acknowledgeActionButtonLabel1\",\"body\":\"body1\"},\"backgroundContent\":{\"title\":\"title2\",\"acknowledgeActionButtonLabel\":\"acknowledgeActionButtonLabel2\",\"body\":\"body2\"}}", str)
-    }
 
     func testAlertVibrateSoundEncodable() {
         let alert = Alert(identifier: identifier, foregroundContent: foregroundContent, backgroundContent: backgroundContent, trigger: .immediate, sound: .vibrate)
@@ -75,13 +69,6 @@ class AlertTests: XCTestCase {
         XCTAssertEqual(expected, alert)
     }
 
-    func testAlertSilentSoundDecodable() {
-        let str = "{\"trigger\":\"immediate\",\"sound\":\"silence\",\"interruptionLevel\":\"timeSensitive\",\"identifier\":{\"managerIdentifier\":\"managerIdentifier1\",\"alertIdentifier\":\"alertIdentifier1\"},\"foregroundContent\":{\"body\":\"body1\",\"title\":\"title1\",\"acknowledgeActionButtonLabel\":\"acknowledgeActionButtonLabel1\"},\"backgroundContent\":{\"body\":\"body2\",\"title\":\"title2\",\"acknowledgeActionButtonLabel\":\"acknowledgeActionButtonLabel2\"}}"
-        let expected = Alert(identifier: identifier, foregroundContent: foregroundContent, backgroundContent: backgroundContent, trigger: .immediate, sound: .silence)
-        let alert = try? Alert.decode(from: str)
-        XCTAssertEqual(expected, alert)
-    }
-
     func testAlertVibrateSoundDecodable() {
         let str = "{\"trigger\":\"immediate\",\"sound\":\"vibrate\",\"interruptionLevel\":\"timeSensitive\",\"identifier\":{\"managerIdentifier\":\"managerIdentifier1\",\"alertIdentifier\":\"alertIdentifier1\"},\"foregroundContent\":{\"body\":\"body1\",\"title\":\"title1\",\"acknowledgeActionButtonLabel\":\"acknowledgeActionButtonLabel1\"},\"backgroundContent\":{\"body\":\"body2\",\"title\":\"title2\",\"acknowledgeActionButtonLabel\":\"acknowledgeActionButtonLabel2\"}}"
         let expected = Alert(identifier: identifier, foregroundContent: foregroundContent, backgroundContent: backgroundContent, trigger: .immediate, sound: .vibrate)
@@ -97,7 +84,6 @@ class AlertTests: XCTestCase {
     }
     
     func testAlertSoundFilename() {
-        XCTAssertNil(Alert.Sound.silence.filename)
         XCTAssertNil(Alert.Sound.vibrate.filename)
         XCTAssertEqual("foo", Alert.Sound.sound(name: "foo").filename)
     }
