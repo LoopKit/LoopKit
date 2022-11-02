@@ -1486,7 +1486,7 @@ extension CarbStore {
             /// Counteraction effects only take insulin into account, so we need to account for the carb effects when computing the unexpected deviations
             for effect in carbEffects {
                 let value = effect.quantity.doubleValue(for: unit)
-                /// We do `-1 * (value - previousEffectValue)` because this will _counter_ the carb effect once the ICE is added
+                /// We do `-1 * (value - previousEffectValue)` because this will compute the carb _counteraction_ effect
                 effectValueCache[effect.startDate] = (effectValueCache[effect.startDate] ?? 0) +  -1 * (value - previousEffectValue)
                 previousEffectValue = value
             }
@@ -1514,17 +1514,18 @@ extension CarbStore {
             
             var unexpectedDeviation: Double = 0
             var mealTime = now
-
             
-            let dateSearchRange = Set(LoopMath.dateRange(from: intervalStart,
-                                                         to: intervalEnd,
-                                                         delta: delta))
-            
+            /// Dates the algorithm uses when computing effects
             /// Have the range go from newest -> oldest time
             let summationRange = LoopMath.dateRange(from: intervalStart,
                                                     to: now,
                                                     delta: delta)
                                           .reversed()
+            
+            /// Dates the algorithm is allowed to check for the presence of a UAM
+            let dateSearchRange = Set(LoopMath.dateRange(from: intervalStart,
+                                                         to: intervalEnd,
+                                                         delta: delta))
             
             var uamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?, overallThreshold: Double?)] = [] // ANNA TODO: debug info, remove
             
@@ -1550,7 +1551,7 @@ extension CarbStore {
                 let deviationChangeThreshold = UAMSettings.glucoseRiseThreshold * minutesAgo
                 
                 do {
-                    /// Find effect we'd expect to see right now of our min carb amount threshold for detecting a missed meal if it started at `pastTime`
+                    /// Find effect we'd expect to see right now for a meal with `carbThreshold`-worth of carbs that started at `pastTime`
                     let modeledMealEffectThreshold = try self.glucoseEffects(
                         of: [NewCarbEntry(quantity: HKQuantity(unit: .gram(),
                                                                doubleValue: UAMSettings.carbThreshold),
