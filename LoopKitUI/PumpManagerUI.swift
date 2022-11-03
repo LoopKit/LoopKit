@@ -86,6 +86,12 @@ public protocol PumpManagerOnboardingDelegate: AnyObject {
     /// - Parameters:
     ///     - pumpManager: The pump manager onboarded.
     func pumpManagerOnboarding(didOnboardPumpManager pumpManager: PumpManagerUI)
+
+    /// Informs the delegate that the specified pump manager wishes to pause onboarding
+    ///
+    /// - Parameters:
+    ///     - pumpManager: The pump manager onboarded.
+    func pumpManagerOnboarding(didPauseOnboarding pumpManager: PumpManagerUI)
 }
 
 public protocol PumpManagerOnboarding {
