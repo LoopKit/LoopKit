@@ -66,7 +66,7 @@ extension UAMTestType {
     var uamDate: Date? {
         switch self {
         case .unannouncedMealNoCOB:
-            return Self.dateFormatter.date(from: "2022-10-17T22:40:00")
+            return Self.dateFormatter.date(from: "2022-10-17T22:35:00")
         case .unannouncedMealWithCOB:
             return Self.dateFormatter.date(from: "2022-10-19T19:15:00")
         default:
@@ -89,16 +89,16 @@ extension UAMTestType {
             ]
         case .announcedMeal:
             return [
-                NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 30),
-                             startDate: Self.dateFormatter.date(from: "2022-10-14T02:34:22")!,
-                             foodType: nil,
-                             absorptionTime: nil),
                 NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 40),
                              startDate: Self.dateFormatter.date(from: "2022-10-17T01:06:52")!,
                              foodType: nil,
                              absorptionTime: nil),
                 NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 1),
                              startDate: Self.dateFormatter.date(from: "2022-10-17T02:15:00")!,
+                             foodType: nil,
+                             absorptionTime: nil),
+                NewCarbEntry(quantity: HKQuantity(unit: .gram(), doubleValue: 30),
+                             startDate: Self.dateFormatter.date(from: "2022-10-17T02:35:00")!,
                              foodType: nil,
                              absorptionTime: nil),
             ]
