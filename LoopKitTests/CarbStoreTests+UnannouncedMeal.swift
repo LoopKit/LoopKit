@@ -29,7 +29,6 @@ enum UAMTestType {
     case noisyCGM
     /// Realistic counteraction effects with multiple meals
     case manyMeals
-    // ANNA TODO: add more cases
 }
 
 extension UAMTestType {
