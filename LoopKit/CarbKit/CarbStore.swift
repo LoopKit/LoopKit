@@ -191,10 +191,7 @@ public final class CarbStore: HealthKitSampleStore {
     private let provenanceIdentifier: String
     
     /// Debug info for UAM
-    /// ANNA TODO: remove before merging
-    private var lastEvaluatedUamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?, overallThreshold: Double?)] = []
-    private var lastDetectedUamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?, overallThreshold: Double?)] = []
-    private var lastUAMTime: Date? = nil
+    private var lastDetectedUamTimeline: [(date: Date, unexpectedDeviation: Double?, mealThreshold: Double?, rateOfChangeThreshold: Double?)] = []
 
     /**
      Initializes a new instance of the store.
@@ -1408,13 +1405,9 @@ extension CarbStore {
                 "* delta: \(self.delta)",
                 "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",
                 "* carbAbsorptionModel: \(carbAbsorptionModel)",
-                "* lastEvaluatedUnannouncedMealTimeline:",
-                self.lastEvaluatedUamTimeline.reduce(into: "", { (entries, entry) in
-                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), overall threshold: \(entry.overallThreshold ?? -1), meal-based threshold: \(entry.effectsThreshold ?? -1), rate of change-based threshold: \(entry.deviationSlope ?? -1)\n")
-                }),
                 "* lastDetectedUnannouncedMealTimeline:",
                 self.lastDetectedUamTimeline.reduce(into: "", { (entries, entry) in
-                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), overall threshold: \(entry.overallThreshold ?? -1), meal-based threshold: \(entry.effectsThreshold ?? -1), change-based threshold: \(entry.deviationSlope ?? -1) \n")
+                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), meal-based threshold: \(entry.mealThreshold ?? -1), change-based threshold: \(entry.rateOfChangeThreshold ?? -1) \n")
                 }),
                 "* Carb absorption model settings: \(self.settings)",
                 super.debugDescription,
@@ -1527,14 +1520,15 @@ extension CarbStore {
                                                          to: intervalEnd,
                                                          delta: delta))
             
-            var uamTimeline: [(date: Date, unexpectedDeviation: Double?, effectsThreshold: Double?, deviationSlope: Double?, overallThreshold: Double?)] = [] // ANNA TODO: debug info, remove
+            /// Timeline used for debug purposes
+            var uamTimeline: [(date: Date, unexpectedDeviation: Double?, mealThreshold: Double?, rateOfChangeThreshold: Double?)] = []
             
             for pastTime in summationRange {
                 guard
                     let unexpectedEffect = effectValueCache[pastTime],
                     !carbEntries.contains(where: { $0.startDate >= pastTime })
                 else {
-                    uamTimeline.append((pastTime, nil, nil, nil, nil)) // ANNA TODO: debug info, remove
+                    uamTimeline.append((pastTime, nil, nil, nil))
                     continue
                 }
                 
@@ -1542,7 +1536,7 @@ extension CarbStore {
 
                 guard dateSearchRange.contains(pastTime) else {
                     /// This time is too recent to check for a UAM
-                    uamTimeline.append((pastTime, unexpectedDeviation, nil, nil, nil)) // ANNA TODO: debug info, remove
+                    uamTimeline.append((pastTime, unexpectedDeviation, nil, nil))
                     continue
                 }
                 
@@ -1565,11 +1559,11 @@ extension CarbStore {
                     .reduce(0.0, { partialResult, nextEffect in
                         return partialResult + nextEffect.quantity.doubleValue(for: unit)
                     })
-
+                    
+                    uamTimeline.append((pastTime, unexpectedDeviation, modeledMealEffectThreshold, deviationChangeThreshold))
+                    
                     /// Use the higher of the 2 thresholds to ensure noisy CGM data doesn't cause false-positives for more recent times
                     let effectThreshold = max(deviationChangeThreshold, modeledMealEffectThreshold)
-                    
-                    uamTimeline.append((pastTime, unexpectedDeviation, modeledMealEffectThreshold, deviationChangeThreshold, effectThreshold)) // ANNA TODO: debug info, remove
 
                     guard unexpectedDeviation >= effectThreshold else {
                         /// This isn't a potential missed meal time, so keep looking at older times
@@ -1581,8 +1575,6 @@ extension CarbStore {
                     self.log.error("Error fetching carb effects: %{public}@", String(describing: error))
                 }
             }
-
-            self.lastEvaluatedUamTimeline = uamTimeline.reversed() // ANNA TODO: debug info, remove
             
             let mealTimeTooRecent = now.timeIntervalSince(mealTime) < UAMSettings.minRecency
 
@@ -1591,7 +1583,6 @@ extension CarbStore {
                 return
             }
 
-            self.lastUAMTime = mealTime
             self.lastDetectedUamTimeline = uamTimeline.reversed()
             completion(.hasUnannouncedMeal(startTime: mealTime))
         }
