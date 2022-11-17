@@ -265,8 +265,8 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
     
-    public func estimatedDuration(toDeliver bolusUnits: Double) -> TimeInterval {
-        .minutes(bolusUnits / type(of: self).deliveryUnitsPerMinute)
+    public func estimatedDuration(toBolus units: Double) -> TimeInterval {
+        .minutes(units / type(of: self).deliveryUnitsPerMinute)
     }
 
     public var state: MockPumpManagerState {

@@ -169,7 +169,7 @@ public protocol PumpManager: DeviceManager {
     func createBolusProgressReporter(reportingOn dispatchQueue: DispatchQueue) -> DoseProgressReporter?
 
     /// Returns the estimated time for the bolus amount to be delivered
-    func estimatedDuration(toDeliver bolusUnits: Double) -> TimeInterval
+    func estimatedDuration(toBolus units: Double) -> TimeInterval
     
     /// Send a bolus command and handle the result
     ///
