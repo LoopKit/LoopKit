@@ -14,7 +14,7 @@ import LoopKitUI
 import MockKit
 
 final class MockCGMManagerSettingsViewController: UITableViewController {
-    let cgmManager: MockCGMManager
+    weak var cgmManager: MockCGMManager!
 
     private let displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
 
@@ -266,7 +266,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 cell.textLabel?.text = "Glucose Value Alerting"
                 cell.switch?.isOn = cgmManager.mockSensorState.glucoseAlertingEnabled
                 cell.onToggle = { [unowned cgmManager] isOn in
-                    cgmManager.mockSensorState.glucoseAlertingEnabled = isOn
+                    cgmManager?.mockSensorState.glucoseAlertingEnabled = isOn
                 }
                 cell.selectionStyle = .none
                 return cell
