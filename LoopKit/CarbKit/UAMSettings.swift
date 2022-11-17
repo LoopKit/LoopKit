@@ -15,4 +15,7 @@ public struct UAMSettings {
     public static let minRecency = TimeInterval(minutes: 25)
     /// Maximum time from now that a meal can be detected
     public static let maxRecency = TimeInterval(hours: 2)
+    /// Maximum delay allowed in missed meal notification time to avoid
+    /// notifying the user during an autobolus
+    public static let maxNotificationDelay = TimeInterval(minutes: 4)
 }
