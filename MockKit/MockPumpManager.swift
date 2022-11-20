@@ -264,6 +264,10 @@ public final class MockPumpManager: TestingPumpManager {
             observer.pumpManager(self, didUpdate: status, oldStatus: oldStatus)
         }
     }
+    
+    public func estimatedDuration(toBolus units: Double) -> TimeInterval {
+        .minutes(units / type(of: self).deliveryUnitsPerMinute)
+    }
 
     public var state: MockPumpManagerState {
         didSet {

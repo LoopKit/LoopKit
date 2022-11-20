@@ -168,6 +168,9 @@ public protocol PumpManager: DeviceManager {
     /// Returns a dose estimator for the current bolus, if one is in progress
     func createBolusProgressReporter(reportingOn dispatchQueue: DispatchQueue) -> DoseProgressReporter?
 
+    /// Returns the estimated time for the bolus amount to be delivered
+    func estimatedDuration(toBolus units: Double) -> TimeInterval
+    
     /// Send a bolus command and handle the result
     ///
     /// - Parameters:
