@@ -7,8 +7,10 @@
 //
 
 public struct UAMSettings {
-    /// Minimum grams of unannounced carbs that must be detected
-    public static let carbThreshold: Double = 30 // grams
+    /// Minimum grams of unannounced carbs that must be detected for a notification to be delivered
+    public static let minCarbThreshold: Double = 20 // grams
+    /// Maximum grams of unannounced carbs that the algorithm will search for
+    public static let maxCarbThreshold: Double = 80 // grams
     /// Minimum threshold for glucose rise over the detection window
     static let glucoseRiseThreshold = 2.0 // mg/dL/m
     /// Minimum time from now that must have passed for the meal to be detected

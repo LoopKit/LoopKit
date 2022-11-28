@@ -29,6 +29,8 @@ enum UAMTestType {
     case noisyCGM
     /// Realistic counteraction effects with multiple meals
     case manyMeals
+    /// Test case to test dynamic computation of missed meal carb amount
+    case dynamicCarbAutofill
 }
 
 extension UAMTestType {
@@ -44,6 +46,8 @@ extension UAMTestType {
             return "noisy_cgm_counteraction_effect"
         case .manyMeals, .unannouncedMealWithCOB:
             return "realistic_report_counteraction_effect"
+        case .dynamicCarbAutofill:
+            return "dynamic_autofill_counteraction_effect"
         }
     }
     
@@ -59,15 +63,19 @@ extension UAMTestType {
             return Self.dateFormatter.date(from: "2022-10-19T19:50:15")!
         case .manyMeals:
             return Self.dateFormatter.date(from: "2022-10-19T21:50:15")!
+        case .dynamicCarbAutofill:
+            return Self.dateFormatter.date(from: "2022-10-17T07:51:09")!
         }
     }
     
     var uamDate: Date? {
         switch self {
         case .unannouncedMealNoCOB:
-            return Self.dateFormatter.date(from: "2022-10-17T22:35:00")
+            return Self.dateFormatter.date(from: "2022-10-17T22:10:00")
         case .unannouncedMealWithCOB:
             return Self.dateFormatter.date(from: "2022-10-19T19:15:00")
+        case .dynamicCarbAutofill:
+            return Self.dateFormatter.date(from: "2022-10-17T07:20:00")!
         default:
             return nil
         }
@@ -127,6 +135,26 @@ extension UAMTestType {
             return []
         }
     }
+    
+    var carbSchedule: CarbRatioSchedule {
+        CarbRatioSchedule(
+            unit: .gram(),
+            dailyItems: [
+                RepeatingScheduleValue(startTime: 0.0, value: 15.0),
+            ],
+            timeZone: .utcTimeZone
+        )!
+    }
+    
+    var insulinSensitivitySchedule: InsulinSensitivitySchedule {
+        InsulinSensitivitySchedule(
+            unit: HKUnit.milligramsPerDeciliter,
+            dailyItems: [
+                RepeatingScheduleValue(startTime: 0.0, value: 50.0)
+            ],
+            timeZone: .utcTimeZone
+        )!
+    }
 }
 
 class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
@@ -152,23 +180,8 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
         limit = Int.max
         
         // Set up schedules
-        let carbSchedule = CarbRatioSchedule(
-            unit: .gram(),
-            dailyItems: [
-                RepeatingScheduleValue(startTime: 0.0, value: 15.0),
-            ],
-            timeZone: .utcTimeZone
-        )!
-        carbStore.carbRatioSchedule = carbSchedule
-
-        let insulinSensitivitySchedule = InsulinSensitivitySchedule(
-            unit: HKUnit.milligramsPerDeciliter,
-            dailyItems: [
-                RepeatingScheduleValue(startTime: 0.0, value: 50.0)
-            ],
-            timeZone: .utcTimeZone
-        )!
-        carbStore.insulinSensitivitySchedule = insulinSensitivitySchedule
+        carbStore.carbRatioSchedule = testType.carbSchedule
+        carbStore.insulinSensitivitySchedule = testType.insulinSensitivitySchedule
 
         // Add any needed carb entries to the carb store
         let updateGroup = DispatchGroup()
@@ -239,20 +252,33 @@ class CarbStoreUnannouncedMealTests: PersistenceControllerTestCase {
         let updateGroup = DispatchGroup()
         updateGroup.enter()
         carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
-            XCTAssertEqual(status, .hasUnannouncedMeal(startTime: testType.uamDate!))
+            XCTAssertEqual(status, .hasUnannouncedMeal(startTime: testType.uamDate!, carbAmount: 55))
             updateGroup.leave()
         }
         updateGroup.wait()
     }
     
-    func testUnannouncedMeal_AfterCarbEntry() {
+    func testDynamicCarbAutofill() {
+        let testType = UAMTestType.dynamicCarbAutofill
+        let counteractionEffects = setUp(for: testType)
+
+        let updateGroup = DispatchGroup()
+        updateGroup.enter()
+        carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
+            XCTAssertEqual(status, .hasUnannouncedMeal(startTime: testType.uamDate!, carbAmount: 25))
+            updateGroup.leave()
+        }
+        updateGroup.wait()
+    }
+    
+    func testUnannouncedMeal_UAMAndCOB() {
         let testType = UAMTestType.unannouncedMealWithCOB
         let counteractionEffects = setUp(for: testType)
 
         let updateGroup = DispatchGroup()
         updateGroup.enter()
         carbStore.hasUnannouncedMeal(insulinCounteractionEffects: counteractionEffects) { status in
-            XCTAssertEqual(status, .hasUnannouncedMeal(startTime: testType.uamDate!))
+            XCTAssertEqual(status, .hasUnannouncedMeal(startTime: testType.uamDate!, carbAmount: 50))
             updateGroup.leave()
         }
         updateGroup.wait()

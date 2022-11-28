@@ -24,7 +24,7 @@ public enum CarbAbsorptionModel {
 }
 
 public enum UnannouncedMealStatus: Equatable {
-    case hasUnannouncedMeal(startTime: Date)
+    case hasUnannouncedMeal(startTime: Date, carbAmount: Double)
     case noUnannouncedMeal
 }
 
@@ -191,6 +191,10 @@ public final class CarbStore: HealthKitSampleStore {
     private let provenanceIdentifier: String
     
     /// Debug info for UAM
+    /// Timeline from the most recent check for unannounced meals
+    private var lastEvaluatedUamTimeline: [(date: Date, unexpectedDeviation: Double?, mealThreshold: Double?, rateOfChangeThreshold: Double?)] = []
+    
+    /// Timeline from the most recent detection of an unannounced meal
     private var lastDetectedUamTimeline: [(date: Date, unexpectedDeviation: Double?, mealThreshold: Double?, rateOfChangeThreshold: Double?)] = []
 
     /**
@@ -1405,6 +1409,10 @@ extension CarbStore {
                 "* delta: \(self.delta)",
                 "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",
                 "* carbAbsorptionModel: \(carbAbsorptionModel)",
+                "* lastEvaluatedUnannouncedMealTimeline:",
+                self.lastEvaluatedUamTimeline.reduce(into: "", { (entries, entry) in
+                    entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), meal-based threshold: \(entry.mealThreshold ?? -1), change-based threshold: \(entry.rateOfChangeThreshold ?? -1) \n")
+                }),
                 "* lastDetectedUnannouncedMealTimeline:",
                 self.lastDetectedUamTimeline.reduce(into: "", { (entries, entry) in
                     entries.append("  * date: \(entry.date), unexpectedDeviation: \(entry.unexpectedDeviation ?? -1), meal-based threshold: \(entry.mealThreshold ?? -1), change-based threshold: \(entry.rateOfChangeThreshold ?? -1) \n")
@@ -1544,48 +1552,71 @@ extension CarbStore {
                 let minutesAgo = now.timeIntervalSince(pastTime).minutes
                 let deviationChangeThreshold = UAMSettings.glucoseRiseThreshold * minutesAgo
                 
-                do {
-                    /// Find effect we'd expect to see right now for a meal with `carbThreshold`-worth of carbs that started at `pastTime`
-                    let modeledMealEffectThreshold = try self.glucoseEffects(
-                        of: [NewCarbEntry(quantity: HKQuantity(unit: .gram(),
-                                                               doubleValue: UAMSettings.carbThreshold),
-                                          startDate: pastTime,
-                                          foodType: nil,
-                                          absorptionTime: nil)
-                            ],
-                        startingAt: pastTime,
-                        endingAt: now
-                    )
-                    .reduce(0.0, { partialResult, nextEffect in
-                        return partialResult + nextEffect.quantity.doubleValue(for: unit)
-                    })
-                    
-                    uamTimeline.append((pastTime, unexpectedDeviation, modeledMealEffectThreshold, deviationChangeThreshold))
-                    
-                    /// Use the higher of the 2 thresholds to ensure noisy CGM data doesn't cause false-positives for more recent times
-                    let effectThreshold = max(deviationChangeThreshold, modeledMealEffectThreshold)
+                /// Find the total effect we'd expect to see for a meal with `carbThreshold`-worth of carbs that started at `pastTime`
+                guard let modeledMealEffectThreshold = self.effectThreshold(mealStart: pastTime, carbsInGrams: UAMSettings.minCarbThreshold) else {
+                    continue
+                }
+                
+                uamTimeline.append((pastTime, unexpectedDeviation, modeledMealEffectThreshold, deviationChangeThreshold))
+                
+                /// Use the higher of the 2 thresholds to ensure noisy CGM data doesn't cause false-positives for more recent times
+                let effectThreshold = max(deviationChangeThreshold, modeledMealEffectThreshold)
 
-                    guard unexpectedDeviation >= effectThreshold else {
-                        /// This isn't a potential missed meal time, so keep looking at older times
-                        continue
-                    }
-                    
+                if unexpectedDeviation >= effectThreshold {
                     mealTime = pastTime
-                } catch let error {
-                    self.log.error("Error fetching carb effects: %{public}@", String(describing: error))
                 }
             }
             
+            self.lastEvaluatedUamTimeline = uamTimeline.reversed()
+            
             let mealTimeTooRecent = now.timeIntervalSince(mealTime) < UAMSettings.minRecency
-
             guard !mealTimeTooRecent else {
                 completion(.noUnannouncedMeal)
                 return
             }
 
             self.lastDetectedUamTimeline = uamTimeline.reversed()
-            completion(.hasUnannouncedMeal(startTime: mealTime))
+            
+            let carbAmount = self.determineCarbs(mealtime: mealTime, unexpectedDeviation: unexpectedDeviation)
+            completion(.hasUnannouncedMeal(startTime: mealTime, carbAmount: carbAmount ?? UAMSettings.minCarbThreshold))
         }
+    }
+    
+    private func determineCarbs(mealtime: Date, unexpectedDeviation: Double) -> Double? {
+        var mealCarbs: Double? = nil
+        
+        /// Search `carbAmount`s from `minCarbThreshold` to `maxCarbThreshold` in 5-gram increments,
+        /// seeing if the deviation is at least `carbAmount` of carbs
+        for carbAmount in stride(from: UAMSettings.minCarbThreshold, through: UAMSettings.maxCarbThreshold, by: 5) {
+            if
+                let modeledCarbEffect = effectThreshold(mealStart: mealtime, carbsInGrams: carbAmount),
+                unexpectedDeviation >= modeledCarbEffect
+            {
+                mealCarbs = carbAmount
+            }
+        }
+        
+        return mealCarbs
+    }
+    
+    private func effectThreshold(mealStart: Date, carbsInGrams: Double) -> Double? {
+        do {
+            return try self.glucoseEffects(
+                of: [NewCarbEntry(quantity: HKQuantity(unit: .gram(),
+                                                       doubleValue: carbsInGrams),
+                                  startDate: mealStart,
+                                  foodType: nil,
+                                  absorptionTime: nil)
+                    ],
+                startingAt: mealStart
+            )
+                .last?
+                .quantity.doubleValue(for: HKUnit.milligramsPerDeciliter)
+        } catch let error {
+            self.log.error("Error fetching carb glucose effects: %{public}@", String(describing: error))
+        }
+        
+        return nil
     }
 }
 
