@@ -11,11 +11,12 @@ import AVKit
 
 /// Opens a Swift `VideoPlayer` on the given URL in a new page
 public struct VideoView: View {
-    @Environment(\.dismissAction) var dismiss
+    @Environment(\.dismissAction) var dismissAction
 
     let url: URL?
     let autoPlay: Bool
-    
+    public var isActive: Binding<Bool>?
+
     private class PlayerHolder {
         private let prevCategory: AVAudioSession.Category?
         private var player: AVPlayer?
@@ -55,10 +56,20 @@ public struct VideoView: View {
     }
     private let playerHolder: PlayerHolder
 
-    public init(url: URL?, autoPlay: Bool, overrideMuteSwitch: Bool = false) {
+    public init(url: URL?, autoPlay: Bool, overrideMuteSwitch: Bool = false, isActive: Binding<Bool>? = nil) {
         self.url = url
         self.autoPlay = autoPlay
         self.playerHolder = PlayerHolder(overrideMuteSwitch: overrideMuteSwitch)
+        self.isActive = isActive
+    }
+
+    private func dismiss() {
+        guard isActive != nil else {
+            dismissAction()
+            return
+        }
+
+        isActive?.wrappedValue = false
     }
     
     public var body: some View {
