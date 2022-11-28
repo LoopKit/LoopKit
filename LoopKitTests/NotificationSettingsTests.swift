@@ -27,6 +27,11 @@ class NotificationSettingsCodableTests: XCTestCase {
   "scheduledDeliverySetting" : "disabled",
   "showPreviewsSetting" : "whenAuthenticated",
   "soundSetting" : "enabled",
+  "temporaryMuteAlertsSetting" : {
+    "enabled" : {
+      "_0" : 1800
+    }
+  },
   "timeSensitiveSetting" : "enabled"
 }
 """
@@ -89,6 +94,7 @@ fileprivate extension NotificationSettings {
                                     providesAppNotificationSettings: true,
                                     announcementSetting: .enabled,
                                     timeSensitiveSetting: .enabled,
-                                    scheduledDeliverySetting: .disabled)
+                                    scheduledDeliverySetting: .disabled,
+                                    temporaryMuteAlertsSetting: .enabled(.minutes(30)))
     }
 }

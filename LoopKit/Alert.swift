@@ -106,8 +106,8 @@ public struct Alert: Equatable {
 
     /// Alert content to show while app is in the foreground.  If nil, there shall be no alert while app is in the foreground.
     public let foregroundContent: Content?
-    /// Alert content to show while app is in the background.  If nil, there shall be no alert while app is in the background.
-    public let backgroundContent: Content?
+    /// Alert content to show while app is in the background.
+    public let backgroundContent: Content
     /// Trigger for the alert.
     public let trigger: Trigger
     /// Interruption level for the alert.  See `InterruptionLevel` above.
@@ -120,7 +120,6 @@ public struct Alert: Equatable {
     /// Representation of a "sound" (or other sound-like action, like vibrate) to perform when the alert is issued.
     public enum Sound: Equatable {
         case vibrate
-        case silence
         case sound(name: String)
     }
     public let sound: Sound?
@@ -130,8 +129,14 @@ public struct Alert: Equatable {
     public typealias Metadata = [String: MetadataValue]
     public let metadata: Metadata?
     
-    public init(identifier: Identifier, foregroundContent: Content?, backgroundContent: Content?, trigger: Trigger,
-                interruptionLevel: InterruptionLevel = .timeSensitive, sound: Sound? = nil, metadata: Metadata? = nil) {
+    public init(identifier: Identifier,
+                foregroundContent: Content?,
+                backgroundContent: Content,
+                trigger: Trigger,
+                interruptionLevel: InterruptionLevel = .timeSensitive,
+                sound: Sound? = nil,
+                metadata: Metadata? = nil)
+    {
         self.identifier = identifier
         self.foregroundContent = foregroundContent
         self.backgroundContent = backgroundContent
@@ -146,7 +151,7 @@ public extension Alert.Sound {
     var filename: String? {
         switch self {
         case .sound(let name): return name
-        case .silence, .vibrate: return nil
+        case .vibrate: return nil
         }
     }
 }
@@ -214,7 +219,7 @@ extension Alert.Trigger: Codable {
 
 extension Alert.Sound: Codable {
     private enum CodingKeys: String, CodingKey {
-      case silence, vibrate, sound
+      case vibrate, sound
     }
     private struct SoundName: Codable {
         let name: String
@@ -222,8 +227,6 @@ extension Alert.Sound: Codable {
     public init(from decoder: Decoder) throws {
         if let singleValue = try? decoder.singleValueContainer().decode(CodingKeys.RawValue.self) {
             switch singleValue {
-            case CodingKeys.silence.rawValue:
-                self = .silence
             case CodingKeys.vibrate.rawValue:
                 self = .vibrate
             default:
@@ -241,9 +244,6 @@ extension Alert.Sound: Codable {
     
     public func encode(to encoder: Encoder) throws {
         switch self {
-        case .silence:
-            var container = encoder.singleValueContainer()
-            try container.encode(CodingKeys.silence.rawValue)
         case .vibrate:
             var container = encoder.singleValueContainer()
             try container.encode(CodingKeys.vibrate.rawValue)

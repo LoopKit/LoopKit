@@ -14,7 +14,7 @@ public struct TherapySettings: Equatable {
 
     public var correctionRangeOverrides: CorrectionRangeOverrides?
 
-    public let overridePresets: [TemporaryScheduleOverridePreset]?
+    public var overridePresets: [TemporaryScheduleOverridePreset]?
 
     public var maximumBasalRatePerHour: Double?
 
