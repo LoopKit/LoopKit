@@ -1518,13 +1518,13 @@ extension CarbStore {
             
             /// Dates the algorithm uses when computing effects
             /// Have the range go from newest -> oldest time
-            let summationRange = LoopMath.dateRange(from: intervalStart,
+            let summationRange = LoopMath.simulationDateRange(from: intervalStart,
                                                     to: now,
                                                     delta: delta)
                                           .reversed()
             
             /// Dates the algorithm is allowed to check for the presence of a UAM
-            let dateSearchRange = Set(LoopMath.dateRange(from: intervalStart,
+            let dateSearchRange = Set(LoopMath.simulationDateRange(from: intervalStart,
                                                          to: intervalEnd,
                                                          delta: delta))
             

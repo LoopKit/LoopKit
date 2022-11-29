@@ -480,16 +480,16 @@ class LoopMathTests: XCTestCase {
         let roundedEndDate = f("2018-08-16 03:10:00 +0000")
         let unroundedEndDate = f("2018-08-16 03:06:29 +0000")
 
-        let roundedOutput = LoopMath.dateRange(from: roundedStartDate, to: roundedEndDate, delta: .minutes(5))
+        let roundedOutput = LoopMath.simulationDateRange(from: roundedStartDate, to: roundedEndDate, delta: .minutes(5))
         XCTAssertEqual(expected, roundedOutput)
         
-        let unroundedOutput = LoopMath.dateRange(from: unroundedStartDate, to: unroundedEndDate, delta: .minutes(5))
+        let unroundedOutput = LoopMath.simulationDateRange(from: unroundedStartDate, to: unroundedEndDate, delta: .minutes(5))
         XCTAssertEqual(expected, unroundedOutput)
         
         let differentDeltaExpected = expected
                                         .enumerated()
                                         .compactMap { $0.offset.isMultiple(of: 2) ? $0.element : nil }
-        let differentDeltaOutput = LoopMath.dateRange(from: unroundedStartDate, to: unroundedEndDate, delta: .minutes(10))
+        let differentDeltaOutput = LoopMath.simulationDateRange(from: unroundedStartDate, to: unroundedEndDate, delta: .minutes(10))
         XCTAssertEqual(differentDeltaExpected, differentDeltaOutput)
     }
 }

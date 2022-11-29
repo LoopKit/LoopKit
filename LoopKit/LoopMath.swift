@@ -55,7 +55,7 @@ public enum LoopMath {
 
      - returns: An array of dates
      */
-    static func dateRange(
+    static func simulationDateRange(
         from start: Date,
         to end: Date,
         delta: TimeInterval
