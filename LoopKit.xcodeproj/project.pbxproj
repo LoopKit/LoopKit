@@ -825,12 +825,9 @@
 		E94141D024C8F31C0096C326 /* DeliveryLimitsEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94141CF24C8F31C0096C326 /* DeliveryLimitsEditor.swift */; };
 		E949E38924AFC82F00024DA0 /* DeliveryLimitsInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */; };
 		E949E38F24B3711E00024DA0 /* InsulinModelInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E949E38E24B3711E00024DA0 /* InsulinModelInformationView.swift */; };
-		E950CA8928FE0D1100B5B692 /* CarbStoreTests+UnannouncedMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = E950CA8828FE0D1100B5B692 /* CarbStoreTests+UnannouncedMeal.swift */; };
 		E950CA8B28FE13E800B5B692 /* uam_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA8A28FE13E800B5B692 /* uam_counteraction_effect.json */; };
 		E950CA8D28FE1E0400B5B692 /* long_interval_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA8C28FE1E0400B5B692 /* long_interval_counteraction_effect.json */; };
 		E950CA8F28FEE1DC00B5B692 /* needs_clamping_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA8E28FEE1DC00B5B692 /* needs_clamping_counteraction_effect.json */; };
-		E950CA962900381A00B5B692 /* UAMSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E950CA952900381A00B5B692 /* UAMSettings.swift */; };
-		E950CA972900390D00B5B692 /* UAMSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E950CA952900381A00B5B692 /* UAMSettings.swift */; };
 		E950CA9929009AF500B5B692 /* noisy_cgm_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA9829009AF500B5B692 /* noisy_cgm_counteraction_effect.json */; };
 		E950CA9B2900F7A800B5B692 /* realistic_report_counteraction_effect.json in Resources */ = {isa = PBXBuildFile; fileRef = E950CA9A2900F7A800B5B692 /* realistic_report_counteraction_effect.json */; };
 		E96175AE24B7BE38008E5080 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96175AD24B7BE38008E5080 /* Dictionary.swift */; };
@@ -1687,11 +1684,9 @@
 		E94141CF24C8F31C0096C326 /* DeliveryLimitsEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimitsEditor.swift; sourceTree = "<group>"; };
 		E949E38824AFC82F00024DA0 /* DeliveryLimitsInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryLimitsInformationView.swift; sourceTree = "<group>"; };
 		E949E38E24B3711E00024DA0 /* InsulinModelInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinModelInformationView.swift; sourceTree = "<group>"; };
-		E950CA8828FE0D1100B5B692 /* CarbStoreTests+UnannouncedMeal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CarbStoreTests+UnannouncedMeal.swift"; sourceTree = "<group>"; };
 		E950CA8A28FE13E800B5B692 /* uam_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = uam_counteraction_effect.json; sourceTree = "<group>"; };
 		E950CA8C28FE1E0400B5B692 /* long_interval_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = long_interval_counteraction_effect.json; sourceTree = "<group>"; };
 		E950CA8E28FEE1DC00B5B692 /* needs_clamping_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = needs_clamping_counteraction_effect.json; sourceTree = "<group>"; };
-		E950CA952900381A00B5B692 /* UAMSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UAMSettings.swift; sourceTree = "<group>"; };
 		E950CA9829009AF500B5B692 /* noisy_cgm_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = noisy_cgm_counteraction_effect.json; sourceTree = "<group>"; };
 		E950CA9A2900F7A800B5B692 /* realistic_report_counteraction_effect.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = realistic_report_counteraction_effect.json; sourceTree = "<group>"; };
 		E96175AD24B7BE38008E5080 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
@@ -2413,7 +2408,6 @@
 				A95A1D8A2460FD620079378D /* BolusRecommendationTests.swift */,
 				43D8FE411C7291900073BE78 /* CarbMathTests.swift */,
 				437AFF192039F149008C4892 /* CarbStoreTests.swift */,
-				E950CA8828FE0D1100B5B692 /* CarbStoreTests+UnannouncedMeal.swift */,
 				A95A1D842460CAD50079378D /* CarbValueTests.swift */,
 				A9B0D97D273313EB00D96D93 /* CGMManagerStatusTests.swift */,
 				C1E7035C24FFFA5C00DAB534 /* CollectionTests.swift */,
@@ -2482,7 +2476,6 @@
 				4346D1FB1C79481E00ABAFE3 /* NSUserDefaults.swift */,
 				43D8FE4E1C7291BD0073BE78 /* StoredCarbEntry.swift */,
 				A9E1E6A824E1B6700073CA39 /* SyncCarbObject.swift */,
-				E950CA952900381A00B5B692 /* UAMSettings.swift */,
 			);
 			path = CarbKit;
 			sourceTree = "<group>";
@@ -3943,7 +3936,6 @@
 				4322B776202FA2790002837D /* CarbStore.swift in Sources */,
 				C1F8403A23DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift in Sources */,
 				A987CD4624A5893500439ADC /* JSONStreamEncoder.swift in Sources */,
-				E950CA962900381A00B5B692 /* UAMSettings.swift in Sources */,
 				A9498D7823386C3300DAA9B9 /* LoggingService.swift in Sources */,
 				1D096C0224C24C220078B6B5 /* InsulinModelProvider.swift in Sources */,
 				433BC7AA20538D4C000B1200 /* CachedGlucoseObject+CoreDataClass.swift in Sources */,
@@ -3979,7 +3971,6 @@
 				1F5DAB202118C95700048054 /* LocalizedString.swift in Sources */,
 				434113B820F2BDE800D05747 /* PersistenceControllerTestCase.swift in Sources */,
 				437874B6202FDD1500A3D8B9 /* InsulinMathTests.swift in Sources */,
-				E950CA8928FE0D1100B5B692 /* CarbStoreTests+UnannouncedMeal.swift in Sources */,
 				B4B7C1612603F241007379F6 /* InsulinSensitivityScheduleTests.swift in Sources */,
 				A95A1D8B2460FD620079378D /* BolusRecommendationTests.swift in Sources */,
 				A99C7373233990D400C80963 /* TempBasalRecommendationTests.swift in Sources */,
@@ -4142,7 +4133,6 @@
 				A9E1E6AA24E1B7C10073CA39 /* SyncCarbObject.swift in Sources */,
 				A9E6758322713F4700E25293 /* HKUnit.swift in Sources */,
 				A9E6758422713F4700E25293 /* NewCarbEntry.swift in Sources */,
-				E950CA972900390D00B5B692 /* UAMSettings.swift in Sources */,
 				A9E6758522713F4700E25293 /* GlucoseMath.swift in Sources */,
 				A9E6758722713F4700E25293 /* CarbEntry.swift in Sources */,
 				A9E6758822713F4700E25293 /* HealthKitSampleStore.swift in Sources */,
