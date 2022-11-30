@@ -8,6 +8,7 @@
 import Foundation
 
 
+// FIXME: this class should be in Loop now that the carb entry flow is there
 /// Conveniences for activity handoff and restoration of creating a carb entry
 extension NSUserActivity {
     public static let newCarbEntryActivityType = "NewCarbEntry"
