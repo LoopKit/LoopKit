@@ -10,18 +10,14 @@ import Foundation
 import HealthKit
 
 extension GlucoseRangeSchedule {
-    public func safeSchedule(with suspendThreshold: GlucoseThreshold?) -> GlucoseRangeSchedule? {
-        var glucoseScheduleMinimunValue: Double!
-        if let threshold = suspendThreshold {
-            glucoseScheduleMinimunValue = Guardrail.minCorrectionRangeValue(suspendThreshold: threshold).doubleValue(for: threshold.unit)
-        }
-        else {
-            glucoseScheduleMinimunValue = Guardrail.correctionRange.absoluteBounds.lowerBound.doubleValue(for: .milligramsPerDeciliter)
-        }
-        return rangeScheduleWithMin(min: glucoseScheduleMinimunValue)
-    }
-
-    private func rangeScheduleWithMin(min: Double) -> GlucoseRangeSchedule? {
+    public func safeSchedule(with suspendThreshold: Double?, unit: HKUnit) -> GlucoseRangeSchedule? {
+        var min: Double!
+        min = [
+            suspendThreshold,
+            Guardrail.correctionRange.absoluteBounds.lowerBound.doubleValue(for: unit)
+        ]
+            .compactMap({ $0 })
+            .max()
         let filteredItems = rangeSchedule.valueSchedule.items.map { scheduleValue in
             let newScheduleValue = DoubleRange(minValue: max(min, scheduleValue.value.minValue), maxValue: max(min, scheduleValue.value.maxValue))
             return RepeatingScheduleValue(startTime: scheduleValue.startTime, value: newScheduleValue)
