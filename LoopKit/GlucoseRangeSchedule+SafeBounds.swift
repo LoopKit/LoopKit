@@ -11,15 +11,20 @@ import HealthKit
 
 extension GlucoseRangeSchedule {
     public func safeSchedule(with suspendThreshold: Double?, unit: HKUnit) -> GlucoseRangeSchedule? {
-        var min: Double!
-        min = [
+        let minGlucoseValue = [
             suspendThreshold,
             Guardrail.correctionRange.absoluteBounds.lowerBound.doubleValue(for: unit)
         ]
             .compactMap({ $0 })
-            .max()
+            .max()!
+        let maxGlucoseValue = Guardrail.correctionRange.absoluteBounds.upperBound.doubleValue(for: unit)
+        
+        func safeGlucoseValue(_ initialValue: Double) -> Double {
+            return max(minGlucoseValue, min(maxGlucoseValue, initialValue))
+        }
+        
         let filteredItems = rangeSchedule.valueSchedule.items.map { scheduleValue in
-            let newScheduleValue = DoubleRange(minValue: max(min, scheduleValue.value.minValue), maxValue: max(min, scheduleValue.value.maxValue))
+            let newScheduleValue = DoubleRange(minValue: safeGlucoseValue(scheduleValue.value.minValue), maxValue: safeGlucoseValue(scheduleValue.value.maxValue))
             return RepeatingScheduleValue(startTime: scheduleValue.startTime, value: newScheduleValue)
         }
         guard let filteredRangeSchedule = DailyQuantitySchedule(unit: rangeSchedule.unit, dailyItems: filteredItems) else {
