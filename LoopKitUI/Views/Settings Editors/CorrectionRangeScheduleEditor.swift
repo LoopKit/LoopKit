@@ -36,8 +36,8 @@ public struct CorrectionRangeScheduleEditor: View {
         didSave: (() -> Void)? = nil
     ) {
         self.mode = mode
-        if mode == .acceptanceFlow, let unsafeSchedule = therapySettingsViewModel.glucoseTargetRangeSchedule {
-            self._scheduleItems = State(initialValue: unsafeSchedule.safeSchedule(with: therapySettingsViewModel.suspendThreshold?.value, unit: unsafeSchedule.unit)?.quantityRanges ?? [])
+        if mode == .acceptanceFlow {
+            self._scheduleItems = State(initialValue: therapySettingsViewModel.glucoseTargetRangeSchedule?.safeSchedule(with: therapySettingsViewModel.suspendThreshold?.quantity)?.quantityRanges ?? [])
         }
         else {
             self._scheduleItems = State(initialValue: therapySettingsViewModel.glucoseTargetRangeSchedule?.quantityRanges ?? [])

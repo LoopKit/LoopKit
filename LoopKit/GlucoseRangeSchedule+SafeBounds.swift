@@ -10,14 +10,15 @@ import Foundation
 import HealthKit
 
 extension GlucoseRangeSchedule {
-    public func safeSchedule(with suspendThreshold: Double?, unit: HKUnit) -> GlucoseRangeSchedule? {
+    public func safeSchedule(with suspendThreshold: HKQuantity?) -> GlucoseRangeSchedule? {
         let minGlucoseValue = [
-            suspendThreshold,
-            Guardrail.correctionRange.absoluteBounds.lowerBound.doubleValue(for: unit)
+            suspendThreshold?.doubleValue(for: self.unit),
+            Guardrail.correctionRange.absoluteBounds.lowerBound.doubleValue(for: self.unit)
         ]
             .compactMap({ $0 })
             .max()!
-        let maxGlucoseValue = Guardrail.correctionRange.absoluteBounds.upperBound.doubleValue(for: unit)
+        
+        let maxGlucoseValue = Guardrail.correctionRange.absoluteBounds.upperBound.doubleValue(for: self.unit)
         
         func safeGlucoseValue(_ initialValue: Double) -> Double {
             return max(minGlucoseValue, min(maxGlucoseValue, initialValue))
