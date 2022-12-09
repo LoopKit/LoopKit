@@ -328,6 +328,8 @@
 		43FB60E720DCBC55002B996B /* RadioSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E620DCBC55002B996B /* RadioSelectionTableViewController.swift */; };
 		43FB60E920DCBE64002B996B /* PumpManagerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB60E820DCBE64002B996B /* PumpManagerStatus.swift */; };
 		43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43FB610620DDF19B002B996B /* PumpManagerError.swift */; };
+		4B67E2CB289B4EDB002D92AF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4B67E2C9289B4EDB002D92AF /* InfoPlist.strings */; };
+		4B67E2CE289B4EDB002D92AF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4B67E2CC289B4EDB002D92AF /* Localizable.strings */; };
 		7D68A9AE1FE0A3D000522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9B01FE0A3D000522C49 /* Localizable.strings */; };
 		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
 		89186C0524BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */; };
@@ -789,6 +791,7 @@
 		C1F8403923DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C1F8403A23DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
 		C1F8B1E2223C3CC000DD66CF /* TimeZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4303C4901E2D664200ADEDC8 /* TimeZone.swift */; };
+		C1FAC06328C7B0A100754AE2 /* reservoir_iob_test.json in Resources */ = {isa = PBXBuildFile; fileRef = C1FAC06228C7B0A100754AE2 /* reservoir_iob_test.json */; };
 		C1FAEC1D264AD6B400A3250B /* DeviceStatusBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FAEC1C264AD6B400A3250B /* DeviceStatusBadge.swift */; };
 		C1FAEC1F264AE12700A3250B /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47ECF8725DC20810024A54D /* UIImage.swift */; };
 		C1FAEC21264AEEA300A3250B /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FAEC20264AEEA300A3250B /* UIImage.swift */; };
@@ -1328,6 +1331,8 @@
 		43FB60E620DCBC55002B996B /* RadioSelectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioSelectionTableViewController.swift; sourceTree = "<group>"; };
 		43FB60E820DCBE64002B996B /* PumpManagerStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerStatus.swift; sourceTree = "<group>"; };
 		43FB610620DDF19B002B996B /* PumpManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpManagerError.swift; sourceTree = "<group>"; };
+		4B67E2CA289B4EDB002D92AF /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4B67E2CD289B4EDB002D92AF /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D68A9AF1FE0A3D000522C49 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D68A9CA1FE0A3D200522C49 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InsulinKit.strings; sourceTree = "<group>"; };
 		7D68A9E21FE0A3D300522C49 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1643,6 +1648,7 @@
 		C1E84B8425C62FB100623C08 /* Modelv1v4.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv1v4.xcmappingmodel; sourceTree = "<group>"; };
 		C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceLogEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceLogEntry+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C1FAC06228C7B0A100754AE2 /* reservoir_iob_test.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = reservoir_iob_test.json; sourceTree = "<group>"; };
 		C1FAEC1C264AD6B400A3250B /* DeviceStatusBadge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceStatusBadge.swift; sourceTree = "<group>"; };
 		C1FAEC20264AEEA300A3250B /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		E9077D2624ACD59F0066A88D /* InformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationView.swift; sourceTree = "<group>"; };
@@ -1957,6 +1963,7 @@
 				435F355C1C9CD14E00C204D2 /* Extensions */,
 				4301582A1C7ECCEF00B64B63 /* LoopKitExample.entitlements */,
 				430158071C7EC03B00B64B63 /* Info.plist */,
+				4B67E2C9289B4EDB002D92AF /* InfoPlist.strings */,
 				430157F91C7EC03B00B64B63 /* AppDelegate.swift */,
 				430157FB1C7EC03B00B64B63 /* MasterViewController.swift */,
 				430158021C7EC03B00B64B63 /* Assets.xcassets */,
@@ -2618,6 +2625,7 @@
 				434FB6471D70096A007B9C70 /* reservoir_history_with_continuity_holes.json */,
 				43D8FED11C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_input.json */,
 				43D8FED21C7294B80073BE78 /* reservoir_history_with_rewind_and_prime_output.json */,
+				C1FAC06228C7B0A100754AE2 /* reservoir_iob_test.json */,
 				43B99B031C74538D00D050F5 /* short_basal_dose.json */,
 				4378B6441ED55F8C000AE785 /* suspend_dose_reconciled_normalized_iob.json */,
 				4378B6451ED55F8C000AE785 /* suspend_dose_reconciled_normalized.json */,
@@ -2707,6 +2715,7 @@
 				1D640FF324524269008F9755 /* Assets */,
 				89D204AD21CC7D2B001238CC /* Extensions */,
 				89D2047521CC7BD7001238CC /* Info.plist */,
+				4B67E2CC289B4EDB002D92AF /* Localizable.strings */,
 				89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */,
 				89AB9EC821A4BC2400351324 /* MockCGMManager.swift */,
 				89AC7934224C783500B8E9BA /* MockDoseProgressEstimator.swift */,
@@ -3306,6 +3315,7 @@
 				430158061C7EC03B00B64B63 /* LaunchScreen.storyboard in Resources */,
 				430158031C7EC03B00B64B63 /* Assets.xcassets in Resources */,
 				430158011C7EC03B00B64B63 /* Main.storyboard in Resources */,
+				4B67E2CB289B4EDB002D92AF /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3399,6 +3409,7 @@
 				4322B799202FA3CC0002837D /* grouped_by_overlapping_absorption_times_output.json in Resources */,
 				435D292D205F48750026F401 /* counteraction_effect_falling_glucose_insulin.json in Resources */,
 				437874D3202FDD2D00A3D8B9 /* short_basal_dose.json in Resources */,
+				C1FAC06328C7B0A100754AE2 /* reservoir_iob_test.json in Resources */,
 				437874C6202FDD2D00A3D8B9 /* iob_from_doses_output.json in Resources */,
 				437874D6202FDD2D00A3D8B9 /* suspend_dose_reconciled.json in Resources */,
 				4343951F205EED1F0056DC37 /* counteraction_effect_falling_glucose_output.json in Resources */,
@@ -3484,6 +3495,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89D204D221CC837A001238CC /* Assets.xcassets in Resources */,
+				4B67E2CE289B4EDB002D92AF /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4429,6 +4441,22 @@
 				F5E0BE1527E1DCC90033557E /* vi */,
 			);
 			name = InsulinKit.storyboard;
+			sourceTree = "<group>";
+		};
+		4B67E2C9289B4EDB002D92AF /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B67E2CA289B4EDB002D92AF /* de */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		4B67E2CC289B4EDB002D92AF /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4B67E2CD289B4EDB002D92AF /* de */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		7D68A9B01FE0A3D000522C49 /* Localizable.strings */ = {

@@ -96,7 +96,9 @@ public struct TherapySettingsView: View {
         cards.append(carbRatioSection)
         cards.append(basalRatesSection)
         cards.append(deliveryLimitsSection)
-        cards.append(insulinModelSection)
+        if viewModel.adultChildInsulinModelSelectionEnabled {
+            cards.append(insulinModelSection)
+        }
         cards.append(insulinSensitivitiesSection)
 
         return CardStack(cards: cards)
@@ -114,7 +116,11 @@ public struct TherapySettingsView: View {
                 Color(.systemGroupedBackground)
                     .edgesIgnoringSafeArea(.all)
                 content
-                    .navigationBarItems(trailing: dismissButton)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            dismissButton
+                        }
+                    }
                     .navigationBarTitle(therapySettingsTitle, displayMode: .large)
             }
         }

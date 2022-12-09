@@ -179,7 +179,7 @@ public extension HKUnit {
     var pickerFractionDigits: Int {
         switch self {
         case .internationalUnit(), .internationalUnitsPerHour:
-            return 2
+            return 3
         case HKUnit.gram().unitDivided(by: .internationalUnit()):
             return 1
         case .millimolesPerLiter,

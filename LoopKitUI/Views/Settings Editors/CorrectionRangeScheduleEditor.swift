@@ -100,7 +100,7 @@ public struct CorrectionRangeScheduleEditor: View {
     var defaultFirstScheduleItemValue: ClosedRange<HKQuantity> {
         switch displayGlucoseUnit {
         case .milligramsPerDeciliter:
-            return DoubleRange(minValue: 100, maxValue: 120).quantityRange(for: displayGlucoseUnit)
+            return DoubleRange(minValue: 100, maxValue: 115).quantityRange(for: displayGlucoseUnit)
         case .millimolesPerLiter:
             return DoubleRange(minValue: 5.6, maxValue: 6.7).quantityRange(for: displayGlucoseUnit)
         default:

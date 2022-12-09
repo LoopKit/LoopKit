@@ -1,0 +1,6 @@
+/* Privacy - Health Share Usage Description */
+"NSHealthShareUsageDescription" = "Mahlzeitendaten aus HealthKit werden verwendet, um Blutzuckereffekte zu bestimmen. Blutzuckerdaten aus HealthKit werden für die grafische Darstellung und Momentum-Berechnung verwendet.";
+
+/* Privacy - Health Update Usage Description */
+"NSHealthUpdateUsageDescription" = "In die App eingegebene Daten zu Mahlzeiten werden in HealthKit gespeichert. Blutzuckerwerte werden sicher in HealthKit gespeichert.";
+

@@ -5,7 +5,7 @@
 "Carb Ratios" = "Kohlenhydratfaktoren";
 
 /* The title for the cell navigating to the carbs screen */
-"Carbs" = "Carbs";
+"Carbs" = "KH";
 
 /* The title text for the glucose correction range schedule */
 "Correction Range" = "Korrekturbereich";

@@ -23,6 +23,7 @@ public class TherapySettingsViewModel: ObservableObject {
     @Published public var therapySettings: TherapySettings
     private let initialTherapySettings: TherapySettings
     let sensitivityOverridesEnabled: Bool
+    let adultChildInsulinModelSelectionEnabled: Bool
     public var prescription: Prescription?
 
     private weak var delegate: TherapySettingsViewModelDelegate?
@@ -30,11 +31,13 @@ public class TherapySettingsViewModel: ObservableObject {
     public init(therapySettings: TherapySettings,
                 pumpSupportedIncrements: (() -> PumpSupportedIncrements?)? = nil,
                 sensitivityOverridesEnabled: Bool = false,
+                adultChildInsulinModelSelectionEnabled: Bool = false,
                 prescription: Prescription? = nil,
                 delegate: TherapySettingsViewModelDelegate? = nil) {
         self.therapySettings = therapySettings
         self.initialTherapySettings = therapySettings
         self.sensitivityOverridesEnabled = sensitivityOverridesEnabled
+        self.adultChildInsulinModelSelectionEnabled = adultChildInsulinModelSelectionEnabled
         self.prescription = prescription
         self.delegate = delegate
     }

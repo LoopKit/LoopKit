@@ -265,8 +265,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: BoundSwitchTableViewCell.className, for: indexPath) as! BoundSwitchTableViewCell
                 cell.textLabel?.text = "Glucose Value Alerting"
                 cell.switch?.isOn = cgmManager.mockSensorState.glucoseAlertingEnabled
-                cell.onToggle = { [unowned cgmManager] isOn in
-                    cgmManager.mockSensorState.glucoseAlertingEnabled = isOn
+                cell.onToggle = { [weak self] isOn in
+                    self?.cgmManager.mockSensorState.glucoseAlertingEnabled = isOn
                 }
                 cell.selectionStyle = .none
                 return cell
@@ -401,17 +401,17 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: BoundSwitchTableViewCell.className, for: indexPath) as! BoundSwitchTableViewCell
                 cell.textLabel?.text = "Storage Delay"
                 cell.switch?.isOn = cgmManager.healthKitStorageDelayEnabled
-                cell.onToggle = { isOn in
+                cell.onToggle = { [weak self] isOn in
                     let confirmVC = UIAlertController(cgmDeletionHandler: {
-                        self.cgmManager.healthKitStorageDelayEnabled = isOn
-                        self.cgmManager.notifyDelegateOfDeletion {
+                        self?.cgmManager.healthKitStorageDelayEnabled = isOn
+                        self?.cgmManager.notifyDelegateOfDeletion {
                             DispatchQueue.main.async {
-                                self.done()
+                                self?.done()
                             }
                         }
-                    }, cancelHandler: { cell.switch?.isOn = self.cgmManager.healthKitStorageDelayEnabled })
+                    }, cancelHandler: { cell.switch?.isOn = self?.cgmManager.healthKitStorageDelayEnabled ?? false })
 
-                    self.present(confirmVC, animated: true) {
+                    self?.present(confirmVC, animated: true) {
                         tableView.deselectRow(at: indexPath, animated: true)
                     }
                 }
@@ -424,8 +424,8 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: BoundSwitchTableViewCell.className, for: indexPath) as! BoundSwitchTableViewCell
                 cell.textLabel?.text = "Upload CGM Samples"
                 cell.switch?.isOn = cgmManager.mockSensorState.samplesShouldBeUploaded
-                cell.onToggle = { [weak cgmManager] isOn in
-                    cgmManager?.mockSensorState.samplesShouldBeUploaded = isOn
+                cell.onToggle = { [weak self] isOn in
+                    self?.cgmManager.mockSensorState.samplesShouldBeUploaded = isOn
                 }
                 cell.selectionStyle = .none
                 return cell

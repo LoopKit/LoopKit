@@ -264,6 +264,10 @@ public final class MockPumpManager: TestingPumpManager {
             observer.pumpManager(self, didUpdate: status, oldStatus: oldStatus)
         }
     }
+    
+    public func estimatedDuration(toBolus units: Double) -> TimeInterval {
+        .minutes(units / type(of: self).deliveryUnitsPerMinute)
+    }
 
     public var state: MockPumpManagerState {
         didSet {
@@ -401,7 +405,7 @@ public final class MockPumpManager: TestingPumpManager {
         state.finalizeFinishedDoses()
         let pendingPumpEvents = state.pumpEventsToStore
         delegate.notify { (delegate) in
-            delegate?.pumpManager(self, hasNewPumpEvents: pendingPumpEvents, lastSync: self.lastSync) { error in
+            delegate?.pumpManager(self, hasNewPumpEvents: pendingPumpEvents, lastReconciliation: self.lastSync) { error in
                 if error == nil {
                     self.state.additionalPumpEvents = []
                 }

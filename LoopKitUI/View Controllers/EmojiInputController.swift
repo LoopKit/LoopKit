@@ -39,6 +39,11 @@ public class EmojiInputController: UIInputViewController, UICollectionViewDataSo
         }
 
         setupSectionIndex()
+
+        // Scroll to medium absorption
+        DispatchQueue.main.async {
+            self.collectionView.scrollToItem(at: IndexPath(row: 0, section: 1), at: .left, animated: false)
+        }
     }
 
     private func setupSectionIndex() {
