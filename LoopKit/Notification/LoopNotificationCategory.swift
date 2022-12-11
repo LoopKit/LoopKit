@@ -20,6 +20,7 @@ public enum LoopNotificationCategory: String {
     case alert
     case remoteBolus
     case remoteBolusFailure
+    case remoteCommandExpired
     case remoteCarbs
     case remoteCarbsFailure
 }
