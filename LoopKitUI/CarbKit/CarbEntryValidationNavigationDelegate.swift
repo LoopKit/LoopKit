@@ -31,6 +31,23 @@ public class CarbEntryNavigationDelegate {
         viewController.present(alert, animated: true)
     }
 
+    public func showWarningQuantityValidationWarning(for viewController: UIViewController, warningQuantityGrams: Double) {
+        let message = String(
+            format: LocalizedString("A warning is issued for amounts over %@ grams", comment: "Alert body displayed for quantity greater than warning (1: warning quantity in grams)"),
+            NumberFormatter.localizedString(from: NSNumber(value: warningQuantityGrams), number: .none)
+        )
+        let alert = UIAlertController(title: validationTitle, message: message, preferredStyle: .alert)
+
+        let acceptAction = UIAlertAction(title: "Accept Anyway", style: .default, handler: nil)
+        alert.addAction(acceptAction)
+
+        let cancelAction = UIAlertAction(title: dismissActionTitle, style: .default)
+        alert.addAction(cancelAction)
+        alert.preferredAction = cancelAction
+
+        viewController.present(alert, animated: true)
+    }
+
     public func showMaxQuantityValidationWarning(for viewController: UIViewController, maxQuantityGrams: Double) {
         let message = String(
             format: LocalizedString("The maximum allowed amount is %@ grams", comment: "Alert body displayed for quantity greater than max (1: maximum quantity in grams)"),
