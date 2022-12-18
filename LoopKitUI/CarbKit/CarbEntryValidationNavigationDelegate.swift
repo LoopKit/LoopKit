@@ -35,7 +35,7 @@ public class CarbEntryNavigationDelegate {
         let warningTitle = LocalizedString("Large Meal Entered", comment: "Title of the warning shown when a large meal was entered")
 
         let message = String(
-            format: LocalizedString("Did you intend to enter %1$@ as the amount of carbohydrates for this meal?", comment: "Alert body when entered carbohydrates is greater than threshold (1: entered quantity in grams)"),
+            format: LocalizedString("Did you intend to enter %1$@ grams as the amount of carbohydrates for this meal?", comment: "Alert body when entered carbohydrates is greater than threshold (1: entered quantity in grams)"),
             NumberFormatter.localizedString(from: NSNumber(value: enteredGrams), number: .none)
                 )
         let alert = UIAlertController(title: warningTitle, message: message, preferredStyle: .alert)
