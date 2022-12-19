@@ -60,7 +60,7 @@ public struct DeliveryLimitsInformationView: View {
             Text(DeliveryLimits.Setting.maximumBolus.title)
             .font(.headline)
             VStack(alignment: .leading, spacing: 20) {
-                Text(LocalizedString("Maximum Bolus is the highest bolus amount \(appName) will recommend at one time to cover carbs or bring down high glucose.", comment: "Information about maximum bolus"))
+                Text(LocalizedString("Maximum Bolus is the highest bolus amount \(appName) will recommend, or allow you to deliver, at one time to cover carbs or bring down high glucose.", comment: "Information about maximum bolus"))
                 Text(LocalizedString("Your maximum bolus will also set a cap on how much insulin will be allowed for automatic dosing.  \(appName) will restrict automatic dosing to amounts that will not cause your insulin on board to exceed twice your maximum bolus.", comment: "Information about maximum sutomated insulin on board"))
             }
            .foregroundColor(.secondary)
