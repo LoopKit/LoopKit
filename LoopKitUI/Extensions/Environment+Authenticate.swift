@@ -17,7 +17,7 @@ public struct LocalAuthentication {
     public static let deviceOwnerCheck: AuthenticationChallenge = { authenticationChallengeDescription, completion in
         let context = LAContext()
         var error: NSError?
-        if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
+        if false && context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
             context.evaluatePolicy(.deviceOwnerAuthentication,
                                    localizedReason: authenticationChallengeDescription,
                                    reply: { (success, error) in
