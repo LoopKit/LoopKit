@@ -748,6 +748,7 @@
 		C140DFFF260276BF000A4FF7 /* ManualBolusRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C140DFFE260276BF000A4FF7 /* ManualBolusRecommendation.swift */; };
 		C140E0522602908A000A4FF7 /* SettingsPresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */; };
 		C1475B33264C30800040C7B1 /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BA7154201E484D0058961E /* LoopKitUI.framework */; };
+		C14A7E7E295F43AB00CD87B4 /* ConfigurationPageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14A7E7D295F43AB00CD87B4 /* ConfigurationPageScrollView.swift */; };
 		C164A56022F14C73000E3FA5 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A55F22F14C73000E3FA5 /* UnfinalizedDose.swift */; };
 		C164A56422F21081000E3FA5 /* MockPumpManagerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */; };
 		C168CA7A280DD00F002BD2A7 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C168CA77280DD00F002BD2A7 /* Model.xcdatamodeld */; };
@@ -1597,6 +1598,7 @@
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
 		C140DFFE260276BF000A4FF7 /* ManualBolusRecommendation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualBolusRecommendation.swift; sourceTree = "<group>"; };
 		C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsPresentationMode.swift; sourceTree = "<group>"; };
+		C14A7E7D295F43AB00CD87B4 /* ConfigurationPageScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPageScrollView.swift; sourceTree = "<group>"; };
 		C164A55F22F14C73000E3FA5 /* UnfinalizedDose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinalizedDose.swift; sourceTree = "<group>"; };
 		C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerState.swift; sourceTree = "<group>"; };
 		C168CA78280DD00F002BD2A7 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -2029,6 +2031,7 @@
 				E9086B3024B3A7270062F5C8 /* ChartTableViewCell.swift */,
 				1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */,
 				89627B172441168900BEB424 /* ConfigurationPage.swift */,
+				C14A7E7D295F43AB00CD87B4 /* ConfigurationPageScrollView.swift */,
 				8997B4F423727E8A00061132 /* CustomOverrideCollectionViewCell.swift */,
 				43D8FE591C7291D80073BE78 /* DatePickerTableViewCell.swift */,
 				895FE07922011F0B00FCF18A /* DecimalTextFieldTableViewCell.xib */,
@@ -2259,7 +2262,6 @@
 		43D8FDC11C728FDF0073BE78 = {
 			isa = PBXGroup;
 			children = (
-				E9D95F9C24C8BC880079F47D /* Scripts */,
 				1F5DAB1B2118C91C00048054 /* Common */,
 				430059211CCDC7A200C861EA /* Extensions */,
 				43D8FDCD1C728FDF0073BE78 /* LoopKit */,
@@ -2899,13 +2901,6 @@
 				1D1A019D24B678BF0077D86E /* TherapySettingsView.swift */,
 			);
 			path = "Settings Editors";
-			sourceTree = "<group>";
-		};
-		E9D95F9C24C8BC880079F47D /* Scripts */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Scripts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3557,6 +3552,7 @@
 				43F5034D210599CC009FA89A /* AuthenticationViewController.swift in Sources */,
 				B4C004D32416961300B40429 /* ActionButton.swift in Sources */,
 				895FE08922011F0C00FCF18A /* OverrideSelectionHeaderView.swift in Sources */,
+				C14A7E7E295F43AB00CD87B4 /* ConfigurationPageScrollView.swift in Sources */,
 				89653C802473527100E1BAA5 /* FractionalQuantityPicker.swift in Sources */,
 				1D97A33C256F11E00042737E /* View+InsetGroupedListStyle.swift in Sources */,
 				898E6E67224179310019E459 /* BaseHUDView.swift in Sources */,
@@ -4658,7 +4654,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					NSLocalizedString,
 					CFLocalizedString,
@@ -4718,7 +4714,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LOCALIZED_STRING_MACRO_NAMES = (
 					NSLocalizedString,
 					CFLocalizedString,
