@@ -44,6 +44,7 @@ public struct CheckmarkListItem: View {
                     .font(.footnote)
                     .foregroundColor(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
+                    .multilineTextAlignment(.leading)
             }
 
             Spacer(minLength: 12)
