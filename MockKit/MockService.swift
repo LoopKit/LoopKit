@@ -167,8 +167,16 @@ extension MockService: RemoteDataService {
         completion(.success(false))
     }
     
-    public func validatePushNotificationSource(_ notification: [String : AnyObject]) -> Result<Void, Error> {
-        return .success(Void())
+    public func commandFromPushNotification(_ notification: [String: AnyObject]) async throws -> RemoteCommand {
+        throw MockServiceError.remoteCommandsNotSupported
+    }
+    
+    public func fetchRemoteCommands() async throws -> [RemoteCommand] {return []}
+    
+    public func fetchPendingRemoteCommands() async throws -> [RemoteCommand] {return []}
+    
+    enum MockServiceError: LocalizedError {
+        case remoteCommandsNotSupported
     }
     
 }

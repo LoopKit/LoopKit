@@ -100,12 +100,10 @@ public protocol RemoteDataService: Service {
      */
     func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
     
-    /**
-     Validates a push notification originated from this data service.
-     - Parameter notification: The push notification dictionary
-     - Returns: Success
-     */
-    func validatePushNotificationSource(_ notification: [String: AnyObject]) -> Result<Void, Error>
+
+    func commandFromPushNotification(_ notification: [String: AnyObject]) async throws -> RemoteCommand
+    func fetchRemoteCommands() async throws -> [RemoteCommand]
+    func fetchPendingRemoteCommands() async throws -> [RemoteCommand]
 
 }
 
@@ -118,7 +116,7 @@ public extension RemoteDataService {
     var pumpEventDataLimit: Int? { return nil }
     var settingsDataLimit: Int? { return nil }
 
-    func validatePushNotificationSource(_ notification: [String: AnyObject]) -> Result<Void, Error> { return .failure(PushNotificationValidationError.notificationsNotSupported) }
+    func commandFromPushNotification(_ notification: [String: AnyObject]) async throws -> RemoteCommand { throw PushNotificationValidationError.notificationsNotSupported }
 }
 
 enum PushNotificationValidationError: LocalizedError {
@@ -131,3 +129,4 @@ enum PushNotificationValidationError: LocalizedError {
         }
     }
 }
+
