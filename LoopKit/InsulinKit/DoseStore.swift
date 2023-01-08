@@ -1201,7 +1201,7 @@ extension DoseStore {
     ///   - completion: A closure called once the entries have been retrieved
     ///   - result: An array of dose entries, in chronological order by startDate
     public func getNormalizedDoseEntries(start: Date, end: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[DoseEntry]>) -> Void) {
-        insulinDeliveryStore.getDoseEntries(start: start, end: end) { (result) in
+        insulinDeliveryStore.getDoseEntries(start: start, end: end, includeMutable: true) { (result) in
             switch result {
             case .failure(let error):
                 completion(.failure(.persistenceError(description: error.localizedDescription, recoverySuggestion: nil)))
@@ -1220,7 +1220,7 @@ extension DoseStore {
                             let mutableDoses = try self.getNormalizedMutablePumpEventDoseEntries(start: endOfReservoirData)
                             doses = insulinDeliveryDoses.map({ $0.trimmed(to: startOfReservoirData) }) + reservoirDoses + mutableDoses.map({ $0.trimmed(from: endOfReservoirData) })
                         } else {
-                            // Includes mutable doses.
+                            // Deduplicates doses by syncIdentifier
                             doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
                         }
                         completion(.success(doses))

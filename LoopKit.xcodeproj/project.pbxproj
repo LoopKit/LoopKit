@@ -775,6 +775,7 @@
 		C1CB895925C8E7D900782BAC /* Modelv1v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = C1E84B8425C62FB100623C08 /* Modelv1v4.xcmappingmodel */; };
 		C1CCF1062858F07A0035389C /* SwiftCharts in Frameworks */ = {isa = PBXBuildFile; productRef = C1CCF1052858F07A0035389C /* SwiftCharts */; };
 		C1CCF1082858F1E10035389C /* SwiftCharts in Frameworks */ = {isa = PBXBuildFile; productRef = C1CCF1072858F1E10035389C /* SwiftCharts */; };
+		C1D56376296B3F5E00BA15EC /* reservoir_for_iob_missing.json in Resources */ = {isa = PBXBuildFile; fileRef = C1D56375296B3F5E00BA15EC /* reservoir_for_iob_missing.json */; };
 		C1DD512B259FD8A600DE27AE /* InsulinTypeChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1742345259CD3ED00399C9D /* InsulinTypeChooser.swift */; };
 		C1DD517825A016E700DE27AE /* InsulinTypeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DD515A259FE3AB00DE27AE /* InsulinTypeSetting.swift */; };
 		C1DE4C2125A253BD007065F8 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE4C2025A253BD007065F8 /* Color.swift */; };
@@ -1618,6 +1619,7 @@
 		C1ABE38D2245CFCD00570E82 /* UnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
 		C1CAB9E826A3254800A57273 /* StoredInsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoredInsulinModel.swift; sourceTree = "<group>"; };
 		C1CBF61B1EEA2A1E001E4851 /* ice_1_hour_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_1_hour_input.json; sourceTree = "<group>"; };
+		C1D56375296B3F5E00BA15EC /* reservoir_for_iob_missing.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = reservoir_for_iob_missing.json; sourceTree = "<group>"; };
 		C1DB55B01F2E95FD00C483A2 /* WalshInsulinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalshInsulinModel.swift; sourceTree = "<group>"; };
 		C1DB55B21F2E964400C483A2 /* ExponentialInsulinModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExponentialInsulinModel.swift; sourceTree = "<group>"; };
 		C1DB55B41F2EA6EA00C483A2 /* iob_from_doses_exponential_output.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = iob_from_doses_exponential_output.json; sourceTree = "<group>"; };
@@ -2606,6 +2608,7 @@
 				4378B6451ED55F8C000AE785 /* suspend_dose_reconciled_normalized.json */,
 				4378B6461ED55F8C000AE785 /* suspend_dose_reconciled.json */,
 				4378B6421ED55E81000AE785 /* suspend_dose.json */,
+				C1D56375296B3F5E00BA15EC /* reservoir_for_iob_missing.json */,
 			);
 			path = InsulinKit;
 			sourceTree = "<group>";
@@ -3333,6 +3336,7 @@
 				4322B7A0202FA3CC0002837D /* ice_slow_absorption.json in Resources */,
 				437874BE202FDD2D00A3D8B9 /* iob_from_bolus_180min_output.json in Resources */,
 				4322B7A6202FA3D20002837D /* momentum_effect_falling_glucose_output.json in Resources */,
+				C1D56376296B3F5E00BA15EC /* reservoir_for_iob_missing.json in Resources */,
 				437874C0202FDD2D00A3D8B9 /* iob_from_bolus_300min_output.json in Resources */,
 				4322B7A8202FA3D20002837D /* momentum_effect_mixed_provenance_glucose_input.json in Resources */,
 				435D2929205F3C760026F401 /* momentum_effect_rising_glucose_double_entries_input.json in Resources */,
