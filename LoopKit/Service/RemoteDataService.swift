@@ -105,7 +105,7 @@ public protocol RemoteDataService: Service {
      - Parameter notification: The push notification dictionary
      - Returns: Success
      */
-    func validatePushNotificationSource(_ notification: [String: AnyObject]) -> Bool
+    func validatePushNotificationSource(_ notification: [String: AnyObject]) -> Result<Void, Error>
 
 }
 
@@ -118,5 +118,16 @@ public extension RemoteDataService {
     var pumpEventDataLimit: Int? { return nil }
     var settingsDataLimit: Int? { return nil }
 
-    func validatePushNotificationSource(_ notification: [String: AnyObject]) -> Bool { return false }
+    func validatePushNotificationSource(_ notification: [String: AnyObject]) -> Result<Void, Error> { return .failure(PushNotificationValidationError.notificationsNotSupported) }
+}
+
+enum PushNotificationValidationError: LocalizedError {
+    case notificationsNotSupported
+    
+    var errorDescription: String? {
+        switch self {
+        case .notificationsNotSupported:
+            return "Service does not handle push notifications"
+        }
+    }
 }

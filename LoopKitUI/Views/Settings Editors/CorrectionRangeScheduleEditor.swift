@@ -36,10 +36,17 @@ public struct CorrectionRangeScheduleEditor: View {
         didSave: (() -> Void)? = nil
     ) {
         self.mode = mode
-        self._scheduleItems = State(initialValue: therapySettingsViewModel.glucoseTargetRangeSchedule?.quantityRanges ?? [])
+        if mode == .acceptanceFlow {
+            self._scheduleItems = State(initialValue: therapySettingsViewModel.glucoseTargetRangeSchedule?.safeSchedule(with: therapySettingsViewModel.suspendThreshold?.quantity)?.quantityRanges ?? [])
+        }
+        else {
+            self._scheduleItems = State(initialValue: therapySettingsViewModel.glucoseTargetRangeSchedule?.quantityRanges ?? [])
+        }
         self.viewModel = CorrectionRangeScheduleEditorViewModel(
+            mode: mode,
             therapySettingsViewModel: therapySettingsViewModel,
-            didSave: didSave)
+            didSave: didSave
+        )
     }
 
     public var body: some View {
@@ -100,7 +107,7 @@ public struct CorrectionRangeScheduleEditor: View {
     var defaultFirstScheduleItemValue: ClosedRange<HKQuantity> {
         switch displayGlucoseUnit {
         case .milligramsPerDeciliter:
-            return DoubleRange(minValue: 100, maxValue: 120).quantityRange(for: displayGlucoseUnit)
+            return DoubleRange(minValue: 100, maxValue: 115).quantityRange(for: displayGlucoseUnit)
         case .millimolesPerLiter:
             return DoubleRange(minValue: 5.6, maxValue: 6.7).quantityRange(for: displayGlucoseUnit)
         default:

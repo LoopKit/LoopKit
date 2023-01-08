@@ -12,6 +12,7 @@ import LoopKitUI
 import SwiftUI
 
 public class MockSupport: SupportUI {
+
     public static let supportIdentifier = "MockSupport"
     
     var versionUpdate: VersionUpdate?
@@ -38,7 +39,11 @@ public class MockSupport: SupportUI {
     }
     
     public weak var delegate: SupportUIDelegate?
-    
+
+    public func configurationMenuItems() -> [AnyView] {
+        return []
+    }
+
     public func supportMenuItem(supportInfoProvider: SupportInfoProvider, urlHandler: @escaping (URL) -> Void) -> AnyView? {
         return AnyView(SupportMenuItem(mockSupport: self))
     }

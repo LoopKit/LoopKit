@@ -268,6 +268,11 @@ class SettingsStorePersistenceTests: PersistenceControllerTestCase, SettingsStor
       "scheduledDeliverySetting" : "disabled",
       "showPreviewsSetting" : "whenAuthenticated",
       "soundSetting" : "enabled",
+      "temporaryMuteAlertsSetting" : {
+        "disabled" : {
+
+        }
+      },
       "timeSensitiveSetting" : "enabled"
     },
     "overridePresets" : [
@@ -874,6 +879,11 @@ class StoredSettingsCodableTests: XCTestCase {
     "scheduledDeliverySetting" : "disabled",
     "showPreviewsSetting" : "whenAuthenticated",
     "soundSetting" : "enabled",
+    "temporaryMuteAlertsSetting" : {
+      "disabled" : {
+
+      }
+    },
     "timeSensitiveSetting" : "enabled"
   },
   "overridePresets" : [
@@ -1059,7 +1069,8 @@ fileprivate extension StoredSettings {
                                                         providesAppNotificationSettings: true,
                                                         announcementSetting: .enabled,
                                                         timeSensitiveSetting: .enabled,
-                                                        scheduledDeliverySetting: .disabled)
+                                                        scheduledDeliverySetting: .disabled,
+                                                        temporaryMuteAlertsSetting: .disabled)
         let controllerDevice = StoredSettings.ControllerDevice(name: "Controller Name",
                                                                systemName: "Controller System Name",
                                                                systemVersion: "Controller System Version",

@@ -16,6 +16,7 @@ public struct VideoPlayView<ThumbnailContent: View>: View {
     let hasBeenPlayed: Binding<Bool>
     private var _autoPlay: Bool = true
     private var _overrideMuteSwitch: Bool = true
+    @State private var isActive: Bool = false
     
     // This from right out of the Design spec
     private let frameColor = Color(UIColor(red: 0.784, green: 0.784, blue: 0.784, alpha: 1))
@@ -47,7 +48,7 @@ public struct VideoPlayView<ThumbnailContent: View>: View {
     }
 
     public var body: some View {
-        PopoverLink(destination: videoView) {
+        PopoverLink(destination: videoView, isActive: $isActive) {
             if includeThumbnailBorder {
                 placeholderImage
                     .padding()
@@ -78,7 +79,7 @@ public struct VideoPlayView<ThumbnailContent: View>: View {
 
     @ViewBuilder
     private var videoView: some View {
-        VideoView(url: url, autoPlay: _autoPlay, overrideMuteSwitch: _overrideMuteSwitch)
+        VideoView(url: url, autoPlay: _autoPlay, overrideMuteSwitch: _overrideMuteSwitch, isActive: $isActive)
             .onDisappear { hasBeenPlayed.wrappedValue = true }
     }
     
