@@ -416,6 +416,10 @@ public final class MockPumpManager: TestingPumpManager {
 
     public func enactTempBasal(unitsPerHour: Double, for duration: TimeInterval, completion: @escaping (PumpManagerError?) -> Void) {
         logDeviceComms(.send, message: "Temp Basal \(unitsPerHour) U/hr Duration:\(duration.hours)")
+
+        if state.tempBasalShouldCrash {
+            fatalError("Crashing intentionally on temp basal")
+        }
         
         if state.tempBasalEnactmentShouldError || state.pumpBatteryChargeRemaining == 0 {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)
@@ -469,6 +473,10 @@ public final class MockPumpManager: TestingPumpManager {
     public func enactBolus(units: Double, activationType: BolusActivationType, completion: @escaping (PumpManagerError?) -> Void) {
 
         logDeviceCommunication("enactBolus(\(units), \(activationType))")
+
+        if state.bolusShouldCrash {
+            fatalError("Crashing intentionally on bolus")
+        }
 
         if state.bolusEnactmentShouldError || state.pumpBatteryChargeRemaining == 0 {
             let error = PumpManagerError.communication(MockPumpManagerError.communicationFailure)

@@ -142,6 +142,8 @@ public struct MockPumpManagerState: Equatable {
     public var bolusCancelShouldError: Bool
     public var deliverySuspensionShouldError: Bool
     public var deliveryResumptionShouldError: Bool
+    public var bolusShouldCrash: Bool
+    public var tempBasalShouldCrash: Bool
     public var deliveryCommandsShouldTriggerUncertainDelivery: Bool
     public var maximumBolus: Double
     public var maximumBasalRatePerHour: Double
@@ -179,6 +181,8 @@ public struct MockPumpManagerState: Equatable {
                 bolusCancelShouldError: Bool = false,
                 deliverySuspensionShouldError: Bool = false,
                 deliveryResumptionShouldError: Bool = false,
+                bolusShouldCrash: Bool = false,
+                tempBasalShouldCrash: Bool = false,
                 deliveryCommandsShouldTriggerUncertainDelivery: Bool = false,
                 maximumBolus: Double = 25.0,
                 maximumBasalRatePerHour: Double = 5.0,
@@ -201,6 +205,8 @@ public struct MockPumpManagerState: Equatable {
         self.bolusCancelShouldError = bolusCancelShouldError
         self.deliverySuspensionShouldError = deliverySuspensionShouldError
         self.deliveryResumptionShouldError = deliveryResumptionShouldError
+        self.bolusShouldCrash = bolusShouldCrash
+        self.tempBasalShouldCrash = tempBasalShouldCrash
         self.deliveryCommandsShouldTriggerUncertainDelivery = deliveryCommandsShouldTriggerUncertainDelivery
         self.maximumBolus = maximumBolus
         self.maximumBasalRatePerHour = maximumBasalRatePerHour
@@ -246,6 +252,8 @@ extension MockPumpManagerState: RawRepresentable {
         self.bolusCancelShouldError = rawValue["bolusCancelShouldError"] as? Bool ?? false
         self.deliverySuspensionShouldError = rawValue["deliverySuspensionShouldError"] as? Bool ?? false
         self.deliveryResumptionShouldError = rawValue["deliveryResumptionShouldError"] as? Bool ?? false
+        self.bolusShouldCrash = rawValue["bolusShouldCrash"] as? Bool ?? false
+        self.tempBasalShouldCrash = rawValue["tempBasalShouldCrash"] as? Bool ?? false
         self.deliveryCommandsShouldTriggerUncertainDelivery = rawValue["deliveryCommandsShouldTriggerUncertainDelivery"] as? Bool ?? false
         self.maximumBolus = rawValue["maximumBolus"] as? Double ?? 25.0
         self.maximumBasalRatePerHour = rawValue["maximumBasalRatePerHour"] as? Double ?? 5.0
@@ -308,6 +316,8 @@ extension MockPumpManagerState: RawRepresentable {
             "supportedBolusVolumes": supportedBolusVolumes,
             "supportedBasalRates": supportedBasalRates,
             "reservoirUnitsRemaining": reservoirUnitsRemaining,
+            "bolusShouldCrash": bolusShouldCrash,
+            "tempBasalShouldCrash": tempBasalShouldCrash,
             "timeZone": timeZone.secondsFromGMT()
         ]
 
