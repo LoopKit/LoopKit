@@ -19,6 +19,12 @@ public protocol ServiceDelegate: AnyObject {
     /// - Parameters:
     ///     - service: The service that wants deletion.
     func serviceWantsDeletion(_ service: Service)
+
+    /// An identifier for the host of this service. Usually something that identifies the app. Example: "com.loopkit.Loop", or "org.tidepool.Loop"
+    var hostIdentifier: String { get }
+
+    /// The version of the host of this service.
+    var hostVersion: String { get }
 }
 
 public protocol Service: AnyObject {
