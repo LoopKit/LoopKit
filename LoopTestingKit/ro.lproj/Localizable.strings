@@ -1,0 +1,18 @@
+/* Status highlight that delivery is uncertain. */
+"Comms Issue" = "Prebleme comenzi";
+
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Livrarea insulinei suspendată";
+
+/* Status highlight that a pump is out of insulin. */
+"No Insulin" = "Fără insulină";
+
+/* Status highlight that pump has a dead battery. */
+"Pump Battery Dead" = "Baterie epuizata pompa";
+
+/* Status highlight that a pump error occurred. */
+"Pump Error" = "Eroare pompă";
+
+/* Status highlight that an occlusion was detected. */
+"Pump Occlusion" = "Ocluzie pompă";
+

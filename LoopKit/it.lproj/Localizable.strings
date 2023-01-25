@@ -40,32 +40,17 @@
 /* Glucose trend flat */
 "Flat" = "Piatto";
 
-/* The short unit display string for grams per U */
-"g/U" = "g/U";
-
 /* Generic pump error description */
 "Invalid Configuration" = "Configurazione non valida";
 
 /* Recovery instruction for a certain bolus failure */
 "It is safe to retry" = "E sicuro riprovare";
 
-/* The short unit display string for milligrams per deciliter per U */
-"mg/dL/U" = "mg/dL/U";
-
-/* The short unit display string for millimoles per liter */
-"mmol/L" = "mmol/L";
-
-/* The short unit display string for millimoles per liter per U */
-"mmol/L/U" = "mmol/L/U";
-
 /* Sensor state description for the non-valid state */
 "Needs Attention" = "Esige Attenzione";
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "Nessun valore trovato";
-
-/* Sensor state description for the valid state */
-"OK" = "OK";
 
 /* The error recovery suggestion when Health sharing was denied */
 "Please re-enable sharing in Health" = "Per favore, riattiva la condivisione in Salute";
@@ -78,9 +63,6 @@
 
 /* Glucose trend up-up-up */
 "Rising very fast" = "Crescente molto veloce";
-
-/* The short unit display string for international units of insulin */
-"U" = "U";
 
 /* The short unit display string for international units of insulin per hour */
 "U/hr" = "U/ora";

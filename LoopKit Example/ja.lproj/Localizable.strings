@@ -1,9 +1,6 @@
 /* The title text for the basal rate schedule */
 "Basal Rates" = "基礎インスリン";
 
-/* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Carb Ratios";
-
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "カーボ";
 
@@ -18,10 +15,6 @@
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "データ生成";
-
-/* The title of the insulin sensitivity schedule screen
-   The title text for the insulin sensitivity schedule */
-"Insulin Sensitivity" = "Insulin Sensitivity";
 
 /* The title text for the pump ID */
 "Pump ID" = "ポンプID";

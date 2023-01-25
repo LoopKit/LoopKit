@@ -24,7 +24,7 @@
 "Insulin Sensitivity" = "Insulinkänslighet";
 
 /* The title text for the pump ID */
-"Pump ID" = "Pump ID";
+"Pump ID" = "Pump-ID";
 
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "Reservoar";
@@ -33,8 +33,8 @@
 "Reset" = "Återställ";
 
 /* Title of button to sync basal profile from pump */
-"Sync With Pump" = "Synka med pump";
+"Sync With Pump" = "Synkronisera med pump";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
-"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Ditt pump-ID står tryckt på baksidan, eller nästan längst ner på status/Esc-menyn. Det är den numeriska delen av serienumret (visad som SN eller S/N). ";
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Ditt pump-ID står tryckt på baksidan, eller nästan längst ner på status/Esc-menyn. Det är den numeriska delen av serienumret (visad som SN eller S/N).";
 

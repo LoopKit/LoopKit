@@ -40,8 +40,11 @@
 /* Glucose trend flat */
 "Flat" = "Estable";
 
-/* The short unit display string for grams per U */
-"g/U" = "g/U";
+/* Brand name for humalog insulin type */
+"Humalog" = "Humalog";
+
+/* Title for Humalog insulin type */
+"Humalog (insulin lispro)" = "Humalog (insulina lispro)";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Configuración no Válida";
@@ -49,23 +52,17 @@
 /* Recovery instruction for a certain bolus failure */
 "It is safe to retry" = "Es seguro reintentar";
 
-/* The short unit display string for milligrams per deciliter per U */
-"mg/dL/U" = "mg/dL/U";
-
-/* The short unit display string for millimoles per liter */
-"mmol/L" = "mmol/L";
-
-/* The short unit display string for millimoles per liter per U */
-"mmol/L/U" = "mmol/L/U";
-
 /* Sensor state description for the non-valid state */
 "Needs Attention" = "Necesita Atención";
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "No hay datos";
 
-/* Sensor state description for the valid state */
-"OK" = "OK";
+/* Brand name for novolog insulin type */
+"Novolog" = "Novolog";
+
+/* Title for Novolog insulin type */
+"Novolog (insulin aspart)" = "Novolog (insulina aspart)";
 
 /* The error recovery suggestion when Health sharing was denied */
 "Please re-enable sharing in Health" = "Por favor, vuelva a habilitar compartir en Salud";
@@ -78,9 +75,6 @@
 
 /* Glucose trend up-up-up */
 "Rising very fast" = "Ascendiendo muy rápido";
-
-/* The short unit display string for international units of insulin */
-"U" = "U";
 
 /* The short unit display string for international units of insulin per hour */
 "U/hr" = "U/hra";

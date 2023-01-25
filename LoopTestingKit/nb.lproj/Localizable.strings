@@ -1,0 +1,18 @@
+/* Status highlight that delivery is uncertain. */
+"Comms Issue" = "Kommunikasjons problem";
+
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Insulintilførsel stoppet";
+
+/* Status highlight that a pump is out of insulin. */
+"No Insulin" = "Tom for insulin";
+
+/* Status highlight that pump has a dead battery. */
+"Pump Battery Dead" = "Pumpe batteri er dødt";
+
+/* Status highlight that a pump error occurred. */
+"Pump Error" = "Pumpefeil";
+
+/* Status highlight that an occlusion was detected. */
+"Pump Occlusion" = "Pumpen er blokkert";
+

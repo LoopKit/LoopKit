@@ -1,9 +1,6 @@
 /* Class = "UILabel"; text = "Title"; ObjectID = "7Fi-wD-gf2"; */
 "7Fi-wD-gf2.text" = "Título";
 
-/* Class = "UILabel"; text = "..."; ObjectID = "7Fy-gG-Zof"; */
-"7Fy-gG-Zof.text" = "...";
-
 /* Class = "UILabel"; text = "Detail"; ObjectID = "9jm-X6-3QA"; */
 "9jm-X6-3QA.text" = "Detalle";
 
@@ -12,12 +9,6 @@
 
 /* Class = "UILabel"; text = "No pump configured"; ObjectID = "jSc-64-2tZ"; */
 "jSc-64-2tZ.text" = "No hay microinfusadora configurada";
-
-/* Class = "UILabel"; text = "U Total"; ObjectID = "kys-by-14s"; */
-"kys-by-14s.text" = "U Total";
-
-/* Class = "UILabel"; text = "..."; ObjectID = "PZQ-gO-084"; */
-"PZQ-gO-084.text" = "...";
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[0] = "Reservoir"; ObjectID = "TyZ-xm-mVN"; */
 "TyZ-xm-mVN.segmentTitles[0]" = "Reservorio";

@@ -36,5 +36,5 @@
 "Sync With Pump" = "Synkroniser med pumpe";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
-"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).";
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Pumpens ID kan finnes på ryggen, eller i nærheten av bunnen av STATUS/Esc-skjermen. Det er kun den numeriske delen av serienummeret (vist som SN eller S/N).";
 
