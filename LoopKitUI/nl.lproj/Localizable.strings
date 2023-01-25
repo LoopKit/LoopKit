@@ -1,3 +1,15 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% of normale insuline";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
 /* The format for an override preset cell. (1: symbol)(2: name)
    The format for an override symbol and name (1: symbol)(2: name) */
 "%1$@ %2$@" = "%1$@ %2$@";
@@ -5,35 +17,23 @@
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ nog actieve eenheden %2$@";
 
-/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
-"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
-
-/* The format for an insulin needs percentage. */
-"%@%% of normal insulin" = "%@%% of normale insuline";
-
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
-
-/* Format string for reservoir volume. (1: The localized volume) */
-"%@U" = "%@U";
-
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Absorptie tijd";
 
 /* The title for the override emoji activity section */
 "Activity" = "Activiteit";
 
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Voeg account toe";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Voer koolhydraten in";
+
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Weet je zeker dat je de gehele pompgeschiedenis wilt verwijderen?";
 
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Weet je zeker dat je alle waardes van het reservoir wilt verwijderen?";
-
-/* The title of the button to add the credentials for a service */
-"Add Account" = "Voeg account toe";
-
-/* The title of the button to remove the credentials for a service */
-"Delete Account" = "Verwijder account";
 
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Basaal, bolus en insuline correctie hoeveelheden zijn gereduceerd met %@%%.";
@@ -52,12 +52,6 @@
 
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Annuleer tijdelijk basaal";
-
-/* The title of the view controller to create a new carb entry */
-"Add Carb Entry" = "Voer koolhydraten in";
-
-/* The title of the view controller to edit an existing carb entry */
-"Edit Carb Entry" = "Bewerk koolhydraten";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Wijzigingen gelden alleen als je het tijdelijk programma activeert. De standaard instellingen van %@ worden niet veranderd.";
@@ -98,11 +92,17 @@
 /* Title of the carb entry date picker cell */
 "Date" = "Datum";
 
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Verwijder account";
+
 /* Button title to delete all objects */
 "Delete All" = "Verwijder alles";
 
 /* The text for the override duration setting */
 "Duration" = "Duur";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Bewerk koolhydraten";
 
 /* The title for the override editing screen */
 "Edit Override" = "Pas aangepast programma aan";
@@ -153,7 +153,7 @@
 "New Preset" = "Nieuw tijdelijk programma";
 
 /* Section title for no-carb food
-The title for override emoji miscellaneous section */
+   The title for override emoji miscellaneous section */
 "Other" = "Anders";
 
 /* The title text for the insulin sensitivity scaling setting */
@@ -176,6 +176,9 @@ The title for override emoji miscellaneous section */
 
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Pomp gebeurtenis";
+
+/* The default placeholder string for a credential */
+"Required" = "Vereist";
 
 /* Title text for button to resume insulin delivery */
 "Resume Delivery" = "Hervat toediening";
@@ -220,9 +223,6 @@ The title for override emoji miscellaneous section */
 /* The title for the override selection screen */
 "Temporary Override" = "Tijdelijk programma";
 
-/* The default placeholder string for a credential */
-"Required" = "Vereist";
-
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "De maximum absorptietijd is %@";
 
@@ -239,7 +239,7 @@ The title for override emoji miscellaneous section */
 "Units" = "Eenheden";
 
 /* Accessibility value for an unknown value
-The default title to use when an entry has none */
+   The default title to use when an entry has none */
 "Unknown" = "Onbekend";
 
 /* Label indicating validation is occurring */
