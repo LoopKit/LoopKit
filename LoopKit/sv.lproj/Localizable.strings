@@ -132,7 +132,7 @@
 "mg/dL/U" = "mg/dl/E";
 
 /* The short unit display string for millimoles per liter */
-"mmol/L" = "mmol/l";
+"mmol/L" = "mmol/L";
 
 /* The short unit display string for millimoles per liter per U */
 "mmol/L/U" = "mmol/L/E";

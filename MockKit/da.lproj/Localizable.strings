@@ -23,10 +23,10 @@
 "Delete Service" = "Slet service";
 
 /* The alert title for a resume error */
-"Error Resuming" = "Fejl ved genoptagelse";
+"Error Resuming" = "Fejl ved Fortsættelse";
 
 /* The alert title for a suspend error */
-"Error Suspending" = "Fejl ved suspendering";
+"Error Suspending" = "Fejl ved Udsættelse";
 
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Insulin type";

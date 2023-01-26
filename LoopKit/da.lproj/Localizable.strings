@@ -23,7 +23,7 @@
 "Apidra (insulin glulisine)" = "Apidra (insulin glulisin)";
 
 /* The error description describing when Health sharing was denied */
-"Authorization Denied" = "Tilladelse nægtet";
+"Authorization Denied" = "Tilladelse Nægtet";
 
 /* Title for basal dose type */
 "Basal" = "Basal";
@@ -41,19 +41,19 @@
 "Check your pump before retrying" = "Check pumpen før du prøver igen";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
-"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Tilladelse nægtet";
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Tilladelse Nægtet";
 
 /* The error recovery suggestion when attempting to delete a sample not shared by the current app */
-"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Dette eksempel kan slettes fra Sundheds appen";
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "This sample can be deleted from the Health app";
 
 /* Generic pump error description */
-"Communication Failure" = "Kommunikations fejl";
+"Communication Failure" = "Kommunikations Fejl";
 
 /* Failure reason for uncertain delivery */
 "Communications interrupted during insulin delivery command." = "Kommunikation afbrudt under insulinafgivelse (kommando).";
 
 /* Generic pump error description */
-"Connection Failure" = "Forbindelsesfejl";
+"Connection Failure" = "Forbindelses Fejl";
 
 /* Title text for glucose target range */
 "Correction Range" = "Korrektionsområde";
@@ -65,13 +65,13 @@
 "Delivery Limits" = "Insulin-grænser";
 
 /* Generic pump error description */
-"Device Refused" = "Enhed nægtet";
+"Device Refused" = "Enhed Nægtet";
 
 /* Recovery suggestion for a no data error */
 "Ensure carb data exists for the specified date" = "Sørg for at kulhydrat data findes for den angivne dato";
 
 /* Glucose trend down */
-"Falling" = "Faldende";
+"Falling" = "Falder";
 
 /* Glucose trend down-down */
 "Falling fast" = "Falder hurtigt";
@@ -111,7 +111,7 @@
 "Insulin Sensitivities" = "Insulinfølsomheder";
 
 /* Generic pump error description */
-"Invalid Configuration" = "Forkert indstilling";
+"Invalid Configuration" = "Forkert Indstilling";
 
 /* Recovery instruction for a certain bolus failure */
 "It is safe to retry" = "Det er sikkert at forsøge igen";
@@ -138,7 +138,7 @@
 "mmol/L/U" = "mmol/L/E";
 
 /* Sensor state description for the non-valid state */
-"Needs Attention" = "Kræver opmærksomhed";
+"Needs Attention" = "Behøver Opmærksomhed";
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "Ingen værdier fundet";

@@ -14,7 +14,7 @@
 "Cancel" = "Annuleer";
 
 /* Title for CGM simulator settings */
-"CGM Settings" = "CGM instellingen";
+"CGM Settings" = "CGM Instellingen";
 
 /* No comment provided by engineer. */
 "Comms Recovery" = "Comms herstel";
@@ -28,12 +28,16 @@
 /* The alert title for a suspend error */
 "Error Suspending" = "Fout bij onderbreken";
 
+/* Caption for History
+   History Caption */
+"History" = "Geschiedenis";
+
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Insuline soort";
 
 /* Button title to acknowledge error
    Default acknowledgement */
-"OK" = "Ok";
+"OK" = "OK";
 
 /* Title for Pump simulator settings */
 "Pump Settings" = "Pomp instellingen";

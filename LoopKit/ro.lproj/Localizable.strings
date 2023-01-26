@@ -44,7 +44,7 @@
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorizare refuzată";
 
 /* The error recovery suggestion when attempting to delete a sample not shared by the current app */
-"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Acest exemplu poate fi șters din aplicația Health";
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Acest exemplu poate fi șters din aplicația Sănătate";
 
 /* Generic pump error description */
 "Communication Failure" = "Eroare de comunicare";
@@ -156,7 +156,7 @@
 "One or more of the values you have entered is outside of what is typically recommended for most people." = "Unele dintre valorile introduse sunt în afara a ceea ce este recomandat de obicei pentru majoritatea oamenilor.";
 
 /* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "Vă rugăm să re-activați partajarea datelor în aplicația Health";
+"Please re-enable sharing in Health" = "Vă rugăm să re-activați partajarea datelor în Sănătate";
 
 /* Title for pre-meal mode */
 "Pre-Meal" = "Preprandial";
@@ -207,7 +207,7 @@
 "Uncertain Delivery" = "Livrare incertă";
 
 /* The long unit display string for a singular international unit of insulin */
-"Unit" = "Unitate";
+"Unit" = "Unități";
 
 /* The long unit display string for a singular international unit of insulin per hour */
 "Unit/hour" = "Unități/oră";

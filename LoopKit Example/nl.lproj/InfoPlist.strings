@@ -2,8 +2,8 @@
 "CFBundleName" = "LoopKit voorbeeld";
 
 /* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "De maaltijd gegevens uit Apple Health worden gebruikt voor het bepalen van glucose effecten. Glucosegegevens van Apple Health worden gebruikt voor de weergaven in de grafiek en de momentum calculatie.";
+"NSHealthShareUsageDescription" = "Maaltijdgegevens uit de database Gezondheid (Health) worden gebruikt om glucose-effecten te bepalen. Glucosegegevens uit de database Gezondheid worden gebruikt voor grafieken en het berekenen van trendlijnen.";
 
 /* Privacy - Health Update Usage Description */
-"NSHealthUpdateUsageDescription" = "Koolhydraten van de maaltijd die worden ingevoerd in de app worden opgeslagen in de Gezondheid database. Glucose gegevens worden veilig opgeslagen in HealthKit.";
+"NSHealthUpdateUsageDescription" = "Maaltijdkoolhydraten die worden ingevoerd in de app worden opgeslagen in de database Gezondheid (Health). Glucosegegevens worden veilig opgeslagen in HealthKit.";
 

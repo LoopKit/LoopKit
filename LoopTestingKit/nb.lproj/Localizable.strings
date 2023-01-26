@@ -1,5 +1,8 @@
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
+
 /* Status highlight that delivery is uncertain. */
-"Comms Issue" = "Kommunikasjons problem";
+"Comms Issue" = "Kommunikasjonsutgave";
 
 /* Status highlight that insulin delivery was suspended. */
 "Insulin Suspended" = "Insulintilførsel stoppet";

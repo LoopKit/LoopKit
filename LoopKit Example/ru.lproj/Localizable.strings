@@ -1,6 +1,9 @@
 /* The title text for the basal rate schedule */
 "Basal Rates" = "Скорости базала";
 
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "Carb Ratios";
+
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Углеводы";
 

@@ -2,8 +2,8 @@
 "CFBundleName" = "LoopKit-eksempel";
 
 /* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "Måltider med karbohydrater lagret i helsedatabasen brukes til å bestemme blodsukkereffekter. Blodsukkerdata fra helsedatabasen brukes til beregning av grafer og momentum.";
+"NSHealthShareUsageDescription" = "Måltidsdata fra helsedatabasen brukes til å bestemme glukoseeffekter. Glukosedata fra helsedatabasen brukes til grafer og momentumberegning.";
 
 /* Privacy - Health Update Usage Description */
-"NSHealthUpdateUsageDescription" = "Karbohydrater som registreres blir lagret i Apple Helse-databasen. Glukosedata lagres sikkert i HealthKit.";
+"NSHealthUpdateUsageDescription" = "Karbohydratmåltidsdata som legges inn i appen, lagres i Helsedatabasen. Glukosedata lagres sikkert i HealthKit.";
 

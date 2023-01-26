@@ -1,5 +1,18 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
 /* The format for an insulin needs percentage. */
 "%@%% of normal insulin" = "%@%% de insulina normal";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ unidades restantes a %2$@";
@@ -64,6 +77,9 @@
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
 "com.loudnate.InsulinKit.totalDateLabel" = "hace %1$@";
 
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
 /* The title for the override emoji condition section */
 "Condition" = "Condición";
 
@@ -121,6 +137,9 @@
 /* The description shown on the insulin sensitivity schedule interface. */
 "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "La sensibilidad a la insulina describe cómo responde su glucemia a 1 unidad de insulina. Valores menores implican que se administrará más insulina.";
 
+/* Placeholder for maximum value in glucose range */
+"max" = "max";
+
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Perfil Basal Máximo";
 
@@ -129,6 +148,9 @@
 
 /* Section title for medium absorbing food */
 "Medium" = "Medio";
+
+/* Placeholder for minimum value in glucose range */
+"min" = "min";
 
 /* Alert action title to open error help */
 "More Info" = "Más Info";

@@ -1,3 +1,12 @@
+/* The title text for the basal rate schedule */
+"Basal Rates" = "Basal Rates";
+
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "Carb Ratios";
+
+/* The title for the cell navigating to the carbs screen */
+"Carbs" = "Carbs";
+
 /* The title text for the glucose correction range schedule */
 "Correction Range" = "Phạm vi liều Bổ sung";
 

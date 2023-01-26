@@ -1,3 +1,25 @@
+/* Separator between min and max glucose values */
+"-" = "-";
+
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% of normal insulin";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ units remaining at %2$@";
+
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "吸収時間";
 
@@ -51,6 +73,9 @@
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
 "com.loudnate.InsulinKit.totalDateLabel" = "%1$@ より";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
 
 /* The title for the override emoji condition section */
 "Condition" = "コンディション";
@@ -106,6 +131,9 @@
 /* The description shown on the insulin sensitivity schedule interface. */
 "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "インスリン効果値は、1単位のインスリンによって血糖値がどれだけ反応するかを表します。この値が小さいほど、測定値がターゲットを超えたときに注入されるインスリンの量が多くなります。値を小さく設定しすぎると低血糖の原因となり危険です。";
 
+/* Placeholder for maximum value in glucose range */
+"max" = "max";
+
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "最大基礎レート";
 
@@ -114,6 +142,9 @@
 
 /* Section title for medium absorbing food */
 "Medium" = "中";
+
+/* Placeholder for minimum value in glucose range */
+"min" = "min";
 
 /* Alert action title to open error help */
 "More Info" = "詳細";
@@ -164,6 +195,9 @@
 /* Button text for saving glucose correction range schedule
    Button text for saving insulin sensitivity schedule */
 "Save" = "保存";
+
+/* The section header text for a scheduled override */
+"SCHEDULED OVERRIDE" = "SCHEDULED OVERRIDE";
 
 /* Section title for slow absorbing food */
 "Slow" = "遅め";

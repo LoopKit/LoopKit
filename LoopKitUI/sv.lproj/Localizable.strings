@@ -32,10 +32,10 @@
 "%@." = "%@.";
 
 /* The format for an insulin needs percentage. */
-"%@%% of normal insulin" = "%@%% av normalt insulinbehov";
+"%@%% of normal insulin" = "%@%% of normal insulin";
 
 /* Format string for reservoir volume. (1: The localized volume) */
-"%@U" = "%@E";
+"%@U" = "%@U";
 
 /* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
 "%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
@@ -145,7 +145,7 @@
 "Cancel" = "Avbryt";
 
 /* The text for the override cancellation button */
-"Cancel Override" = "Avbryt Undantag";
+"Cancel Override" = "Avbryt Override";
 
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Avbryt temporär basal";
@@ -154,13 +154,13 @@
 "Carb Ratios" = "Insulinkvoter";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
-"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Ändringarna kommer endast att gälla denna gång du använder undantag. De ordinarie inställningarna på %@ kommer inte att påverkas.";
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Ändringarna kommer endast att utföras denna gång du använder override. De ordinarie inställingarna på %@ kommer inte att påverkas. ";
 
 /* Footer text for customizing from a preset (1: preset name) */
 "Changes will only apply this time you enable the preset. The default settings of %@ will not be affected." = "Ändringarna kommer endast att gälla denna gång du använder undantag. De ordinarie inställningarna på %@ kommer inte att påverkas.";
 
 /* Carb entry section footer text explaining absorption time */
-"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Välj en längre absorptionstid för måltid med mycket fett eller protein. Du kan också dela upp måltiden i snabba och långsamma kolhydrater och mata in dessa var för sig.";
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Välj en längre absorptionstid för måltid med mycket fett eller protein. Ofta är det bäst att dela upp måltiden i snabba och långsamma kolhydrater och mata in dessa var för sig.";
 
 /* Button text to close a modal
    Text to close informational page */
@@ -206,7 +206,7 @@
 "Custom" = "Anpassad";
 
 /* The title for the custom override entry screen */
-"Custom Override" = "Anpassat undantag";
+"Custom Override" = "Anpassad Override";
 
 /* The title for the custom preset entry screen
    The title for the custom preset selection screen */
@@ -257,10 +257,10 @@
 "Edit Carb Entry" = "Ändra kolhydrater";
 
 /* The title for the override editing screen */
-"Edit Override" = "Ändra Undantag";
+"Edit Override" = "Ändra Override";
 
 /* Footer text for editing an active override (1: preset name) */
-"Editing affects only the active override. The default settings of %@ will not be affected." = "Ändringar ändrar endast aktivt Undantag. De ordinarie inställningarna på %@ kommer inte att påverkas.";
+"Editing affects only the active override. The default settings of %@ will not be affected." = "Ändringar ändrar endast aktiv Override. De ordinarie inställningarna på %@ kommer inte att påverkas";
 
 /* Footer text for editing an enabled custom preset (1: preset name) */
 "Edits persist only until the preset is disabled. The default settings of %@ will not be affected." = "Ändringar gäller endast tills förinställningen är inaktiverad. Standardinställningarna för %@ påverkas inte.";
@@ -269,7 +269,7 @@
 "Enable" = "Aktivera";
 
 /* The text for the indefinite override duration setting */
-"Enable Indefinitely" = "Sätt på tills vidare";
+"Enable Indefinitely" = "Sätt på oändligt";
 
 /* The detail text describing an enabled setting */
 "Enabled" = "På";
@@ -281,7 +281,7 @@
 "Enter %1$@ value" = "Ange %1$@värde";
 
 /* The placeholder text instructing users how to enter a maximum bolus */
-"Enter a number of units" = "Ange antal enheter";
+"Enter a number of units" = "Ange antal eheter";
 
 /* The placeholder text instructing users how to enter a maximum basal rate */
 "Enter a rate in units per hour" = "Ange värde i enheter per timme";
@@ -351,7 +351,7 @@
 "Insulin Sensitivities" = "Insulinkänslighet";
 
 /* The description shown on the insulin sensitivity schedule interface. */
-"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insulinkänslighet beskriver hur ditt blodglukos svarar på 1 enhet insulin. Mindre värden innebär att mer insulin kommer att ges när blodsocker är över målvärde. Värden som är för små kan orsaka farligt låga blodsocker.";
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insulinkänslighet beskriver hur ditt blodglukos svarar på 1 enhet insulin.Mindre värden innebär att mer insulin kommer att ges när över målvärde. Värden som är för små kan orsaka farligt lågt blodsocker. ";
 
 /* Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: programmed value (? if no value), 4: unit) */
 "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@" = "Avbruten %1$@: <b>%2$@</b> av %3$@ %4$@";
@@ -445,13 +445,13 @@
 "Override History" = "Historik av Undantag";
 
 /* The title text for the override presets screen */
-"Override Presets" = "Förinställningar för Undantag";
+"Override Presets" = "Override förinställningar";
 
 /* Text directing the user to configure override presets */
-"Override presets can be set up under the 'Configuration' section of the settings screen." = "Förinställningar för undantag kan ställas in under ‘Konfiguration’ i menyn inställningar.";
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Override förinställningar kan ställas in under ‘Konfiguration’ i menyn inställningar.";
 
 /* The section title of glucose overrides */
-"Overrides" = "Undantag";
+"Overrides" = "Overrides";
 
 /* Title for the pre-meal override range */
 "Pre-Meal" = "Före måltid";
@@ -487,7 +487,7 @@
 "Reservoir" = "Reservoar";
 
 /* Title text for button to resume insulin delivery */
-"Resume Delivery" = "Återuppta insulintillförsel";
+"Resume Delivery" = "Återuppta insulindosering";
 
 /* Title text for button when insulin delivery is in the process of being resumed */
 "Resuming" = "Återupptar";
@@ -530,7 +530,7 @@
 "Save Workout Range?" = "Spara målvärde för träning?";
 
 /* The section header text for a scheduled override */
-"SCHEDULED OVERRIDE" = "SCHEMALAGT UNDANTAG";
+"SCHEDULED OVERRIDE" = "SCHEMALAGD OVERRIDE";
 
 /* The section header text for a scheduled custom preset */
 "SCHEDULED PRESET" = "SCHEMALAGD FÖRINSTÄLLNING";
@@ -581,7 +581,7 @@
 "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Höj tillfälligt ditt målvärde före, under eller efter fysisk aktivitet för att minska risken för låga blodsockervärden.";
 
 /* The title for the override selection screen */
-"Temporary Override" = "Temporärt undantag";
+"Temporary Override" = "Temporär Override";
 
 /* Information about pre-meal range relative to correction range
    Information about workout range relative to correction range */
@@ -594,7 +594,7 @@
 "The maximum absorption time is %@" = "Maximala absorptionstiden är %@";
 
 /* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
-"The maximum allowed amount is %@ grams" = "Maximal tillåtna mängd är %@ gram";
+"The maximum allowed amount is %@ grams" = "Maximala mängd är %@ gram";
 
 /* Information about adult insulin model */
 "The rapid-acting adult model assumes peak activity at 75 minutes." = "Den snabbverkande vuxenmodellen antar en maximal aktivitet vid 75 minuter.";
@@ -647,7 +647,7 @@
 "Unable to Save" = "Kunde inte spara";
 
 /* The unit string for units */
-"Units" = "Enheter";
+"Units" = "Eheter";
 
 /* Accessibility value for an unknown value
    The default title to use when an entry has none */

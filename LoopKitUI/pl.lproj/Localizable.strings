@@ -1,8 +1,18 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
 /* The format for an insulin needs percentage. */
 "%@%% of normal insulin" = "%@%% normalnej insuliny";
 
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@J";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ jednostek pozostających w %2$@";
@@ -60,6 +70,9 @@
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
 "com.loudnate.InsulinKit.totalDateLabel" = "od %1$@";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
 
 /* The title for the override emoji condition section */
 "Condition" = "Warunek";
@@ -197,6 +210,9 @@
 
 /* Title text for button when insulin delivery is in the process of being stopped */
 "Suspending" = "Wstrzymywanie";
+
+/* The text for the override preset symbol setting */
+"Symbol" = "Symbol";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Kliknij, aby ustawić";

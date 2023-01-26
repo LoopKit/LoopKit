@@ -2,10 +2,10 @@
 "%@." = "%@.";
 
 /* The format for an insulin needs percentage. */
-"%@%% of normal insulin" = "%@%% of normal insulin";
+"%@%% of normal insulin" = "%@%% normal insulin";
 
 /* Format string for reservoir volume. (1: The localized volume) */
-"%@U" = "%@U";
+"%@U" = "%@Ü";
 
 /* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
 "%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
@@ -15,31 +15,31 @@
 "%1$@ %2$@" = "%1$@ %2$@";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ units remaining at %2$@";
+"%1$@ units remaining at %2$@" = "%1$@ ünite kaldı %2$@";
 
 /* Title of the carb entry absorption time cell */
-"Absorption Time" = "Absorption Time";
+"Absorption Time" = "Emilim Süresi";
 
 /* The title for the override emoji activity section */
-"Activity" = "Activity";
+"Activity" = "Aktivite";
 
 /* The title of the button to add the credentials for a service */
-"Add Account" = "Add Account";
+"Add Account" = "Hesap Ekle";
 
 /* The title of the view controller to create a new carb entry */
-"Add Carb Entry" = "Add Carb Entry";
+"Add Carb Entry" = "Karb Girişi Ekle";
 
 /* Action sheet confirmation message for pump history deletion */
-"Are you sure you want to delete all history entries?" = "Are you sure you want to delete all history entries?";
+"Are you sure you want to delete all history entries?" = "Tüm geçmiş girişlerini silmek istediğinizden emin misiniz?";
 
 /* Action sheet confirmation message for reservoir deletion */
-"Are you sure you want to delete all reservoir values?" = "Are you sure you want to delete all reservoir values?";
+"Are you sure you want to delete all reservoir values?" = "Tüm rezervuar değerlerini silmek istediğinizden emin misiniz?";
 
 /* Describes a percentage decrease in overall insulin needs */
-"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Basal, bolus, and correction insulin dose amounts are decreased by %@%%.";
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Bazal, bolus ve düzeltme insülin doz miktarları %@%% azaltılır.";
 
 /* Describes a percentage increase in overall insulin needs */
-"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Basal, bolus, and correction insulin dose amounts are increased by %@%%.";
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Bazal, bolus ve düzeltme insülin doz miktarları %@%% oranında artırılır.";
 
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Basal, bolus, and correction insulin dose amounts are unaffected.";
@@ -60,10 +60,10 @@
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact.";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.COBDateLabel" = "at %1$@";
+"com.loudnate.CarbKit.COBDateLabel" = "%1$@";
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.totalDateLabel" = "since %1$@";
+"com.loudnate.CarbKit.totalDateLabel" = "%1$@ tarihinden beri";
 
 /* The format string describing the date of an IOB value. The first format argument is the localized date. */
 "com.loudnate.InsulinKit.IOBDateLabel" = "at %1$@";

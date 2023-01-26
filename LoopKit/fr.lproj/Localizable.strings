@@ -1,23 +1,39 @@
 /* Format for correction range override therapy setting card */
-"%@ Range" = "Zone de %@";
+"%@ Range" = "%@ Plage";
 
 /* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "Échec de bolus de %1$@ U";
+"%1$@ U bolus failed" = "Le bolus de %1$@ U a échoué";
 
 /* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "Le bolus de %1$@ U a peut-être échou";
+"%1$@ U bolus may not have succeeded" = "Le bolus de %1$@ U a peut-être échoué";
 
 /* Descriptive format string for glucose safety limit (1: app name) */
-"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ délivrera l'insuline basale et recommandera l'insuline de bolus uniquement si la prédiction de votre glycémie est supérieure à cette limite pour les trois prochaines heures.";
+"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ ne délivrera de l'insuline basale et ne recommandera un bolus que si la projection de glycémie est supérieure à cette limite au cours des trois prochaines heures.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Descriptive text for guardrail high value warning for schedule interface */
-"A value you have entered is higher than what is typically recommended for most people." = "Une valeur que vous avez saisie est supérieure à ce qui est généralement recommandé pour la plupart des personnes.";
+"A value you have entered is higher than what is typically recommended for most people." = "Une valeur a été entrée qui est supérieure ce qui est typiquement recommandé pour la majorité des personnes.";
 
 /* Descriptive text for guardrail low value warning for schedule interface */
-"A value you have entered is lower than what is typically recommended for most people." = "Une valeur que vous avez saisie est inférieure à ce qui est généralement recommandé pour la plupart des personnes.";
+"A value you have entered is lower than what is typically recommended for most people." = "Une valeur a été entrée qui est inférieure à ce qui est typiquement recommandé pour la majorité des personnes.";
+
+/* Brand name for afrezza insulin type
+   Title for Afrezza insulin type */
+"Afrezza" = "Afrezza";
+
+/* Description for afrezza insulin type */
+"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza est une insuline prandiale à action ultra rapide qui est inhalée par vos poumons à l'aide d'un inhalateur oral et fabriquée par MannKind.";
 
 /* Brand name for apidra insulin type */
 "Apidra" = "Apidra";
+
+/* Title for Apidra insulin type */
+"Apidra (insulin glulisine)" = "Apidra (insuline glulisine)";
+
+/* Description for apidra insulin type */
+"Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis " = "Apidra (insuline glulisine) est une insuline à action rapide fabriquée par Sanofi-Aventis ";
 
 /* The error description describing when Health sharing was denied */
 "Authorization Denied" = "Autorisation refusée";
@@ -26,7 +42,7 @@
 "Basal" = "Basal";
 
 /* Title text for basal rates */
-"Basal Rates" = "Débits basal";
+"Basal Rates" = "Débits basaux";
 
 /* Title for bolus dose type */
 "Bolus" = "Bolus";
@@ -87,10 +103,22 @@
 "g/U" = "g/U";
 
 /* Title text for glucose safety limit */
-"Glucose Safety Limit" = "Seuil de Suspension de la Glycémie";
+"Glucose Safety Limit" = "Limite de sécurité pour la glycémie";
+
+/* The long unit display string for a singular hour */
+"Hour" = "Heure";
+
+/* The long unit display string for hours */
+"Hours" = "Heures";
 
 /* Brand name for humalog insulin type */
 "Humalog" = "Humalog";
+
+/* Title for Humalog insulin type */
+"Humalog (insulin lispro)" = "Humalog (insulin lispro)";
+
+/* Description for humalog insulin type */
+"Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Humalog (insuline lispro) est une insuline à action rapide fabriquée par Eli Lilly";
 
 /* Title text for fast acting insulin model */
 "Insulin Model" = "Modèle d'insuline";
@@ -99,10 +127,10 @@
 "Insulin Sensitivities" = "Facteurs de sensibilité à l'insuline";
 
 /* Generic pump error description */
-"Invalid Configuration" = "Configuration non valide";
+"Invalid Configuration" = "Configuration invalide";
 
 /* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "Il est prudent de réessayer";
+"It is safe to retry" = "Il est possible de réessayer en toute sécurité";
 
 /* Recovery suggestion for uncertain delivery */
 "Make sure your pump is within communication range of your phone." = "Assurez-vous que votre pompe soit à portée de communication de votre téléphone.";
@@ -126,7 +154,7 @@
 "mmol/L/U" = "mmol/L/U";
 
 /* Sensor state description for the non-valid state */
-"Needs Attention" = "Nécessite de l'attention";
+"Needs Attention" = "Demande votre attention";
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "Aucune entrée trouvée";
@@ -204,7 +232,7 @@
 "Units/hour" = "unités / heure";
 
 /* Title for workout mode */
-"Workout" = "Entraînement";
+"Workout" = "Exercice";
 
 /* Descriptive text for basal rate */
 "Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Votre debit basal est le nombre d'unités par heure que vous souhaitez utiliser pour couvrir vos besoins vitaux d'insuline.";

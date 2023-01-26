@@ -1,5 +1,5 @@
 /* Format for correction range override therapy setting card */
-"%@ Range" = "%@ område";
+"%@ Range" = "%@ Målområde";
 
 /* Describes a certain bolus failure (1: size of the bolus in units) */
 "%1$@ U bolus failed" = "%1$@ E bolus feilet";
@@ -8,19 +8,32 @@
 "%1$@ U bolus may not have succeeded" = "%1$@ E bolus kan ha feilet";
 
 /* Descriptive format string for glucose safety limit (1: app name) */
-"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ vil gi basalinsulin og anbefale bolusinsulin kun hvis blodsukkeret forventes å være over denne grensen i de neste tre timene.";
+"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ vil levere basal og anbefale bolusinsulin bare hvis glukosen din forventes å være over denne grensen de neste tre timene.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
 
 /* Descriptive text for guardrail high value warning for schedule interface */
-"A value you have entered is higher than what is typically recommended for most people." = "En verdi du har angitt er høyere enn det som typisk anbefales for de fleste.";
+"A value you have entered is higher than what is typically recommended for most people." = "En verdi du har lagt inn er høyere enn det som vanligvis anbefales for de fleste.";
 
 /* Descriptive text for guardrail low value warning for schedule interface */
-"A value you have entered is lower than what is typically recommended for most people." = "En verdi du har angitt er lavere enn det som typisk anbefales for de fleste.";
+"A value you have entered is lower than what is typically recommended for most people." = "En verdi du har lagt inn er lavere enn det som vanligvis anbefales for de fleste.";
+
+/* Brand name for afrezza insulin type
+   Title for Afrezza insulin type */
+"Afrezza" = "Afrezza";
+
+/* Description for afrezza insulin type */
+"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza er et ultrahurtigvirkende måltidsinsulin som pustes inn gjennom lungene ved hjelp av en oral inhalator og laget av MannKind";
 
 /* Brand name for apidra insulin type */
 "Apidra" = "Apidra";
 
 /* Title for Apidra insulin type */
 "Apidra (insulin glulisine)" = "Apidra (insulin glulisin)";
+
+/* Description for apidra insulin type */
+"Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis " = "Apidra (insulin glulisin) er et hurtigvirkende insulin laget av Sanofi-aventis";
 
 /* The error description describing when Health sharing was denied */
 "Authorization Denied" = "Autorisasjon avslått";
@@ -29,13 +42,13 @@
 "Basal" = "Basal";
 
 /* Title text for basal rates */
-"Basal Rates" = "Basalsatser";
+"Basal Rates" = "Basal-satser";
 
 /* Title for bolus dose type */
 "Bolus" = "Bolus";
 
 /* Title text for carb ratios */
-"Carb Ratios" = "Karbohydratforhold";
+"Carb Ratios" = "Karb forhold";
 
 /* Recovery instruction for an uncertain bolus failure */
 "Check your pump before retrying" = "Sjekk pumpa før du fortsetter";
@@ -59,7 +72,10 @@
 "Correction Range" = "Korreksjonsområde";
 
 /* Descriptive text for glucose target range (1: app name) */
-"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Korreksjonsområdet er den verdien (eller området) du vil at %1$@ skal korrigere blodsukkeret til ved å justere basalinsulinet.";
+"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Korreksjonsområde er glukoseverdien (eller verdiområdet) som du vil at %1$@ skal sikte på for å justere basalinsulinet og hjelpe deg med å beregne bolusene dine.";
+
+/* Description of critical software update needed */
+"Critical Update" = "Kritisk oppdatering";
 
 /* Title text for delivery limits */
 "Delivery Limits" = "Leveringsgrenser";
@@ -90,13 +106,13 @@
 "Flat" = "Flatt";
 
 /* Descriptive text for fast acting insulin model (1: app name) */
-"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "For hurtigvirkende insulin antas %1$@ å virke aktivt i 6 timer. Du kan velge fra forskjellige modeller for toppaktiviteten.";
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "For hurtigvirkende insulin antar %1$@ at det virker aktivt i 6 timer. Du kan velge mellom ulike modeller for toppaktiviteten.";
 
 /* The short unit display string for grams per U */
 "g/U" = "g/E";
 
 /* Title text for glucose safety limit */
-"Glucose Safety Limit" = "Sikkerhetsgrense for glukose";
+"Glucose Safety Limit" = "Glukosesikkerhetsgrense";
 
 /* Brand name for humalog insulin type */
 "Humalog" = "Humalog";
@@ -126,7 +142,7 @@
 "Maximum Bolus" = "Maksimal bolus-dose";
 
 /* Descriptive text for maximum bolus */
-"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksimal Bolus er den høyeste bolus mengden du kan levere på en gang for å dekke karbohydrater eller få ned høy glukose.";
+"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den høyeste bolusmengden du kan gi på en gang for å dekke karbohydrater eller redusere høyt glukose.";
 
 /* The short unit display string for milligrams per deciliter per U */
 "mg/dL/U" = "mg/dL/E";
@@ -153,10 +169,10 @@
 "OK" = "Ok";
 
 /* Descriptive text for saving settings outside the recommended range */
-"One or more of the values you have entered is outside of what is typically recommended for most people." = "En eller flere av verdiene du har satt er utenfor hva som vanligvis er anbefalt.";
+"One or more of the values you have entered is outside of what is typically recommended for most people." = "En verdi du har lagt inn er lavere enn det som vanligvis anbefales for de fleste.";
 
 /* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "Vennligst aktiver deling i Helse på nytt";
+"Please re-enable sharing in Health" = "Vennligst aktiver deling i Health på nytt";
 
 /* Title for pre-meal mode */
 "Pre-Meal" = "Pre-måltid";
@@ -174,7 +190,7 @@
 "Rising very fast" = "Stiger veldig fort";
 
 /* Descriptive text for guardrail high value warning for schedule interface */
-"Some of the values you have entered are outside of what is typically recommended for most people." = "Noen av verdiene du har satt er utenfor det som vanligvis er anbefalt.";
+"Some of the values you have entered are outside of what is typically recommended for most people." = "Noen av verdiene du har lagt inn er utenfor det som vanligvis anbefales for de fleste.";
 
 /* Title for suspend dose type */
 "Suspended" = "Suspendert";
@@ -183,19 +199,19 @@
 "Temp Basal" = "Midlertidig basal";
 
 /* Descriptive text for pre-meal correction range override */
-"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Senker blodsukkermål midlertidig før et måltid for å unngå post-måltid blodsukkertopper.";
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduser glukosemålet ditt midlertidig før et måltid for å påvirke glukosetoppene etter måltidet.";
 
 /* Descriptive text for workout correction range override */
-"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Øk blodsukkermålet før, under eller etter fysisk aktivitet for å redusere risikoen for føling.";
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Øk glukosemålet ditt midlertidig før, under eller etter fysisk aktivitet for å redusere risikoen for hendelser med lavt glukose.";
 
 /* Descriptive text for guardrail high value warning */
-"The value you have entered is higher than what is typically recommended for most people." = "Verdien du har satt er høyere enn det som vanligvis er anbefalt.";
+"The value you have entered is higher than what is typically recommended for most people." = "Verdien du har lagt inn er høyere enn det som vanligvis anbefales for de fleste.";
 
 /* Descriptive text for guardrail low value warning */
-"The value you have entered is lower than what is typically recommended for most people." = "Verdien du har satt er lavere enn det som vanligvis er anbefalt.";
+"The value you have entered is lower than what is typically recommended for most people." = "Verdien du har lagt inn er lavere enn det som vanligvis anbefales for de fleste.";
 
 /* Descriptive text for guardrail high value warning */
-"The values you have entered are outside of what is typically recommended for most people." = "Verdien du har satt er utenfor det som vanligvis er anbefalt.";
+"The values you have entered are outside of what is typically recommended for most people." = "Verdiene du har lagt inn er utenfor det som vanligvis anbefales for de fleste.";
 
 /* The short unit display string for international units of insulin */
 "U" = "E";
@@ -222,11 +238,11 @@
 "Workout" = "Treningsøkt";
 
 /* Descriptive text for basal rate */
-"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din basalinsulinrate er antall enheter per time som du ønsker å bruke for å dekke ditt grunnleggende insulinbehov.";
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din basaldose av insulin er antall enheter per time du vil bruke for å dekke ditt bakgrunnsinsulinbehov.";
 
 /* Descriptive text for carb ratio */
-"Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Karbohydratforholdet ditt er antallet gram karbohydrater en enhet med insulin dekker.";
+"Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Karbforholdet ditt er antall gram karbohydrater som dekkes av én enhet insulin.";
 
 /* Descriptive text for insulin sensitivity */
-"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "Insulinsensitiviteten din henviser til fallet i blodglukose som forventes fra en enhet med insulin.";
+"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "Din insulinfølsomhet refererer til fallet i glukose som forventes fra én enhet insulin.";
 

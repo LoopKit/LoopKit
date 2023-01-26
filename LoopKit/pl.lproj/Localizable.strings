@@ -52,6 +52,9 @@
 /* The short unit display string for milligrams per deciliter per U */
 "mg/dL/U" = "mg/dL/J";
 
+/* The short unit display string for millimoles per liter */
+"mmol/L" = "mmol/L";
+
 /* The short unit display string for millimoles per liter per U */
 "mmol/L/U" = "mmol/L/J";
 
@@ -60,6 +63,9 @@
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "Nie znaleziono wartości";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
 
 /* The error recovery suggestion when Health sharing was denied */
 "Please re-enable sharing in Health" = "Włącz ponownie udostępnianie w aplikacji Zdrowie";

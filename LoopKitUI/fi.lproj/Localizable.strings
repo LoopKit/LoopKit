@@ -35,7 +35,7 @@
 "%@%% of normal insulin" = "%@%% norm. insuliinista";
 
 /* Format string for reservoir volume. (1: The localized volume) */
-"%@U" = "%@ U";
+"%@U" = "%@U";
 
 /* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
 "%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
@@ -284,7 +284,7 @@
 "Enter a number of units" = "Syötä yksikkömäärä";
 
 /* The placeholder text instructing users how to enter a maximum basal rate */
-"Enter a rate in units per hour" = "Syötä määrä yksiköinä tunnissa";
+"Enter a rate in units per hour" = "Syötä nopeus yksiköinä tunnissa";
 
 /* Segmented button title for insulin delivery log event history */
 "Event History" = "Tapahtumahistoria";
@@ -351,7 +351,7 @@
 "Insulin Sensitivities" = "Insuliiniherkkyydet";
 
 /* The description shown on the insulin sensitivity schedule interface. */
-"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insuliiniherkkyys kuvaa sitä, kuinka paljon glukoosi laskee yhdellä insuliiniyksiköllä. Liian pienet arvot voivat johtaa vaarallisen matalaan verensokeriin.";
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insuliiniherkkyys kuvaa sitä, kuinka paljon verensokerisi laskee yhdellä insuliiniyksiköllä. Liian pienet arvot voivat johtaa vaarallisen matalaan verensokeriin.";
 
 /* Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: programmed value (? if no value), 4: unit) */
 "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@" = "Keskeytetty %1$@: <b>%2$@</b> / %3$@ %4$@";
@@ -469,7 +469,7 @@
 "Progressing." = "Edistyminen.";
 
 /* The title of the screen displaying a pump event */
-"Pump Event" = "Pumpun tapahtuma";
+"Pump Event" = "Pumpputapahtuma";
 
 /* Title text for suspend resume button when the basal delivery state is not set */
 "Pump Inoperable" = "Pumppu ei toiminnassa";

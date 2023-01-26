@@ -47,7 +47,7 @@
 "com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Tämä näyte voidaan poistaa Terveys-sovelluksesta";
 
 /* Generic pump error description */
-"Communication Failure" = "Yhteysvirhe";
+"Communication Failure" = "Kommunikaatiovirhe";
 
 /* Failure reason for uncertain delivery */
 "Communications interrupted during insulin delivery command." = "Yhteys katkesi insuliinin annostelu -toiminnon aikana.";
@@ -201,7 +201,7 @@
 "U" = "U";
 
 /* The short unit display string for international units of insulin per hour */
-"U/hr" = "U/t";
+"U/hr" = "U/h";
 
 /* Error description for uncertain delivery */
 "Uncertain Delivery" = "Epävarma annostelu";
