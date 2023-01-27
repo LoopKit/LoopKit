@@ -4,11 +4,29 @@
 /* Information about pre-meal range relative to correction range */
 " lower " = " niedriger";
 
+/* Separator between min and max glucose values */
+"-" = "-";
+
+/* No comment provided by engineer. */
+"－" = "－";
+
+/* The detail text representing no value */
+"–" = "–";
+
+/* No comment provided by engineer. */
+"···" = "···";
+
 /* Information about insulin action duration */
 "(appName) assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "Loop geht davon aus, dass das abgegebene Insulin 6 Stunden lang aktiv daran arbeitet, Deinen Blutzucker zu senken. Diese Einstellung kann nicht geändert werden.";
 
+/* No comment provided by engineer. */
+"%@" = "%@";
+
 /* Information about insulin action duration */
 "%@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%@ geht davon aus, dass das abgegebene Insulin 6 Stunden lang aktiv daran arbeitet, Deinen Blutzucker zu senken. Diese Einstellung kann nicht geändert werden.";
+
+/* No comment provided by engineer. */
+"%@, " = "%@, ";
 
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
@@ -38,20 +56,33 @@
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ Einheiten verbleiben um %2$@";
 
+/* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
+   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+"%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
+
 /* Format string for progress accessibility label (1: duration in seconds) */
 "%1$d percent complete." = "%1$d Prozent erledigt.";
 
+/* No comment provided by engineer. */
+"🍽" = "🍽";
+
 /* Premeal override preset title */
 "🍽 Pre-Meal" = "🍽 Vor dem Essen";
+
+/* No comment provided by engineer. */
+"🏃‍♂️" = "🏃‍♂️";
 
 /* Workout override preset title */
 "🏃‍♂️ Workout" = "🏃‍♂️ Training";
 
 /* No comment provided by engineer. */
-"A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "";
+"A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "Eine Karte, deren Text in mehrere Zeilen umbrochen wird, wenn ich lange genug einsetze – diese Länge sollte";
 
 /* Information about differences between target range and correction range */
 "A Correction Range is different. This will be a narrower range." = "Der Korrekturbereich ist anders als der Zielbereich und wird enger sein.";
+
+/* No comment provided by engineer. */
+"A simple card" = "Eine einfache Karte";
 
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Ein Wert von 0 IE/h heißt, dass Du in dieser Zeit kein Basalinsulin erhält.";
@@ -127,6 +158,9 @@
 
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Temporäre Basalrate abbrechen";
+
+/* Title text for multi-value carb ratio warning */
+"Carb Ratios" = "KH-Verhältnis";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Änderungen werden nur dann wirksam, wenn Sie den Override aktivieren. Die Standardeinstellungen von %@ werden nicht beeinflusst.";
@@ -515,6 +549,9 @@
 
 /* The section header text for a scheduled override */
 "SCHEDULED OVERRIDE" = "GEPLANTER OVERRIDE";
+
+/* The section header text for a scheduled custom preset */
+"SCHEDULED PRESET" = "GEPLANTE VOREINSTELLUNG";
 
 /* Section title for slow absorbing food */
 "Slow" = "Langsam";

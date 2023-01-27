@@ -1,21 +1,8 @@
-/* The format for an override preset cell. (1: symbol)(2: name)
-   The format for an override symbol and name (1: symbol)(2: name) */
-"%1$@ %2$@" = "%1$@ %2$@";
-
-/* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ unidades restantes em %2$@";
-
-/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
-"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
-
 /* The format for an insulin needs percentage. */
 "%@%% of normal insulin" = "%@%% de insulina normal";
 
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
-
-/* Format string for reservoir volume. (1: The localized volume) */
-"%@U" = "%@U";
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ unidades restantes em %2$@";
 
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Tempo de Absorção";
@@ -23,17 +10,17 @@
 /* The title for the override emoji activity section */
 "Activity" = "Atividade";
 
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Adicionar Conta";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Adicionar Carb";
+
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Tem certeza de que deseja excluir todas as entradas do histórico?";
 
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Tem certeza de que deseja excluir todos os valores do reservatório?";
-
-/* The title of the button to add the credentials for a service */
-"Add Account" = "Adicionar Conta";
-
-/* The title of the button to remove the credentials for a service */
-"Delete Account" = "Remover Conta";
 
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "As quantidades basais, de bolus e de dose de insulina de correção diminuem em %@%%.";
@@ -53,12 +40,6 @@
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Cancelar Basal Temporária";
 
-/* The title of the view controller to create a new carb entry */
-"Add Carb Entry" = "Adicionar Carb";
-
-/* The title of the view controller to edit an existing carb entry */
-"Edit Carb Entry" = "Editar Carb";
-
 /* Footer text for customizing an override from a preset (1: preset name) */
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "As alterações serão aplicadas apenas desta vez que você ativar a sobreposição. As configurações padrão de %@ não serão afetadas.";
 
@@ -76,9 +57,6 @@
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
 "com.loudnate.InsulinKit.totalDateLabel" = "desde %1$@";
-
-/* The title of the action used to dismiss an error alert */
-"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
 
 /* The title for the override emoji condition section */
 "Condition" = "Estado";
@@ -98,11 +76,17 @@
 /* Title of the carb entry date picker cell */
 "Date" = "Data";
 
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Remover Conta";
+
 /* Button title to delete all objects */
 "Delete All" = "Remover Todos";
 
 /* The text for the override duration setting */
 "Duration" = "Duração";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Editar Carb";
 
 /* The title for the override editing screen */
 "Edit Override" = "Editar Sobreposição";
@@ -128,9 +112,6 @@
 /* The description shown on the insulin sensitivity schedule interface. */
 "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "A sensibilidade à insulina descreve como a glicose no sangue deve responder a uma dose unitária de insulina. Valores menores significam que mais insulina será administrada quando acima do objetivo. Valores muito pequenos podem causar hipoglicemia.";
 
-/* Placeholder for maximum value in glucose range */
-"max" = "max";
-
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Taxa Basal Máxima";
 
@@ -139,9 +120,6 @@
 
 /* Section title for medium absorbing food */
 "Medium" = "Média";
-
-/* Placeholder for minimum value in glucose range */
-"min" = "min";
 
 /* Alert action title to open error help */
 "More Info" = "Mais Info";
@@ -176,6 +154,9 @@
 
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Eventos da Bomba";
+
+/* The default placeholder string for a credential */
+"Required" = "Obrigatório";
 
 /* Title text for button to resume insulin delivery */
 "Resume Delivery" = "Retomar Entrega";
@@ -220,9 +201,6 @@
 /* The title for the override selection screen */
 "Temporary Override" = "Sobreposição Temporária";
 
-/* The default placeholder string for a credential */
-"Required" = "Obrigatório";
-
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "O tempo máximo de absorção é %@";
 
@@ -250,3 +228,4 @@
 
 /* Title for the workout override range */
 "Workout" = "Exercício";
+

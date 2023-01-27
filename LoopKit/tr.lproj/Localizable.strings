@@ -1,98 +1,99 @@
 /* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ U bolus failed";
+"%1$@ U bolus failed" = "%1$@ Ü bolus başarısız";
 
 /* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ U bolus may not have succeeded";
+"%1$@ U bolus may not have succeeded" = "%1$@ Ü bolus başarılı olmayabilir";
 
 /* The error description describing when Health sharing was denied */
-"Authorization Denied" = "Authorization Denied";
+"Authorization Denied" = "Yetkilendirme Reddedildi";
 
 /* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Check your pump before retrying";
+"Check your pump before retrying" = "Yeniden denemeden önce pompanızı kontrol edin";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
-"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Authorization Denied";
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Yetkilendirme Reddedildi";
 
 /* The error recovery suggestion when attempting to delete a sample not shared by the current app */
-"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "This sample can be deleted from the Health app";
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Bu örnek Health uygulamasından silinebilir";
 
 /* Generic pump error description */
-"Communication Failure" = "Communication Failure";
+"Communication Failure" = "İletişim Hatası";
 
 /* Generic pump error description */
-"Connection Failure" = "Connection Failure";
+"Connection Failure" = "Bağlantı hatası";
 
 /* Generic pump error description */
-"Device Refused" = "Device Refused";
+"Device Refused" = "Cihaz Reddedildi";
 
 /* Recovery suggestion for a no data error */
-"Ensure carb data exists for the specified date" = "Ensure carb data exists for the specified date";
+"Ensure carb data exists for the specified date" = "Belirtilen tarih için karbonhidrat verilerinin var olduğundan emin olun";
 
 /* Glucose trend down */
-"Falling" = "Falling";
+"Falling" = "Düşüyor";
 
 /* Glucose trend down-down */
-"Falling fast" = "Falling fast";
+"Falling fast" = "Hızlı Düşüyor";
 
 /* Glucose trend down-down-down */
-"Falling very fast" = "Falling very fast";
+"Falling very fast" = "Çok Hızlı Düşüyor";
 
 /* Glucose trend flat */
-"Flat" = "Flat";
+"Flat" = "Sabit";
 
 /* The short unit display string for grams per U */
-"g/U" = "g/U";
+"g/U" = "gr/Ü";
 
 /* Generic pump error description */
-"Invalid Configuration" = "Invalid Configuration";
+"Invalid Configuration" = "Geçersiz Konfigürasyon";
 
 /* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "It is safe to retry";
+"It is safe to retry" = "Yeniden denemek güvenlidir";
 
 /* The short unit display string for milligrams per deciliter per U */
-"mg/dL/U" = "mg/dL/U";
+"mg/dL/U" = "mg/dL/Ü";
 
 /* The short unit display string for millimoles per liter */
 "mmol/L" = "mmol/L";
 
 /* The short unit display string for millimoles per liter per U */
-"mmol/L/U" = "mmol/L/U";
+"mmol/L/U" = "mmol/L/Ü";
 
 /* Sensor state description for the non-valid state */
-"Needs Attention" = "Needs Attention";
+"Needs Attention" = "İlgilenmeniz gerekiyor";
 
 /* Describes an error for no data found in a CarbStore request */
-"No values found" = "No values found";
+"No values found" = "Değer bulunamadı";
 
 /* Sensor state description for the valid state */
-"OK" = "OK";
+"OK" = "Tamam";
 
 /* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "Please re-enable sharing in Health";
+"Please re-enable sharing in Health" = "Lütfen Health paylaşımı yeniden etkinleştirin";
 
 /* Glucose trend up */
-"Rising" = "Rising";
+"Rising" = "Yükseliyor";
 
 /* Glucose trend up-up */
-"Rising fast" = "Rising fast";
+"Rising fast" = "Hızlı yükseliyor";
 
 /* Glucose trend up-up-up */
-"Rising very fast" = "Rising very fast";
+"Rising very fast" = "Çok hızlı yükseliyor";
 
 /* The short unit display string for international units of insulin */
-"U" = "U";
+"U" = "Ü";
 
 /* The short unit display string for international units of insulin per hour */
-"U/hr" = "U/hr";
+"U/hr" = "Ü/sa";
 
 /* The long unit display string for a singular international unit of insulin */
-"Unit" = "Unit";
+"Unit" = "Ünite";
 
 /* The long unit display string for a singular international unit of insulin per hour */
-"Unit/hour" = "Unit/hour";
+"Unit/hour" = "Ünite/saat";
 
 /* The long unit display string for international units of insulin */
-"Units" = "Units";
+"Units" = "Ünite";
 
 /* The long unit display string for international units of insulin per hour */
-"Units/hour" = "Units/hour";
+"Units/hour" = "Ünite/saat";
+

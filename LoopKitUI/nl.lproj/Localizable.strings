@@ -1,27 +1,118 @@
-/* The format for an override preset cell. (1: symbol)(2: name)
-   The format for an override symbol and name (1: symbol)(2: name) */
-"%1$@ %2$@" = "%1$@ %2$@";
+/* Information about workout range relative to correction range */
+" higher " = " hoger ";
 
-/* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ nog actieve eenheden %2$@";
+/* Information about pre-meal range relative to correction range */
+" lower " = " lager ";
 
-/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
-"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+/* Separator between min and max glucose values */
+"-" = "-";
 
-/* The format for an insulin needs percentage. */
-"%@%% of normal insulin" = "%@%% of normale insuline";
+/* No comment provided by engineer. */
+"－" = "－";
+
+/* The detail text representing no value */
+"–" = "–";
+
+/* No comment provided by engineer. */
+"···" = "···";
+
+/* Information about insulin action duration */
+"(appName) assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "(appName) gaat ervan uit dat de geleverde insuline actief werkt om je glucose gedurende 6 uur te verlagen. Deze instelling kan niet worden gewijzigd.";
+
+/* No comment provided by engineer. */
+"%@" = "%@";
+
+/* Information about insulin action duration */
+"%@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%@ gaat ervan uit dat de insuline die het heeft geleverd actief werkt om uw glucose te verlagen voor 6 uur. Deze instelling kan niet worden gewijzigd.";
+
+/* No comment provided by engineer. */
+"%@, " = "%@, ";
 
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% of normale insuline";
+
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Lower bound workout information text format (1: app name) */
+"%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ of uw Glucose Veiligheidslimiet, afhankelijk van welke hoger is";
+
+/* Reservoir entry (1: volume value) */
+"%1$@ U" = "%1$@ E";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ nog actieve eenheden %2$@";
+
+/* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
+   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+"%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
+
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "%1$d procent voltooid.";
+
+/* No comment provided by engineer. */
+"🍽" = "🍽";
+
+/* Premeal override preset title */
+"🍽 Pre-Meal" = "🍽 Pre-Meal";
+
+/* No comment provided by engineer. */
+"🏃‍♂️" = "🏃‍♂️";
+
+/* Workout override preset title */
+"🏃‍♂️ Workout" = "🏃‍♂️ Training";
+
+/* No comment provided by engineer. */
+"A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "Een kaart waarvan de tekst op meerdere regels wordt teruggedrongen als ik lang genoeg blijf typen- Dit zou voldoende moeten zijn";
+
+/* Information about differences between target range and correction range */
+"A Correction Range is different. This will be a narrower range." = "Een Correctiebereik is anders. Dit zal een kleiner bereik zijn.";
+
+/* No comment provided by engineer. */
+"A simple card" = "Een eenvoudige kaart";
+
+/* Warning text for basal rate of 0 U/hr */
+"A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Een waarde van 0 E/uur betekent dat u geen basale insuline ontvangt.";
+
+/* No comment provided by engineer. */
+"Above dynamic data" = "Boven dynamische gegevens";
+
+/* No comment provided by engineer. */
+"Above the save button" = "Boven de knop Opslaan";
 
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Absorptie tijd";
 
+/* No comment provided by engineer. */
+"Action Button" = "Actieknop";
+
+/* The text for the override history duration */
+"Active Duration" = "Actieve duur";
+
 /* The title for the override emoji activity section */
 "Activity" = "Activiteit";
+
+/* Button text to confirm adding a new schedule item */
+"Add" = "Toevoegen";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Voeg account toe";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Voer koolhydraten in";
+
+/* Title of insulin model preset - afrezza */
+"Afrezza" = "Afrezza";
 
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Weet je zeker dat je de gehele pompgeschiedenis wilt verwijderen?";
@@ -29,11 +120,14 @@
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Weet je zeker dat je alle waardes van het reservoir wilt verwijderen?";
 
-/* The title of the button to add the credentials for a service */
-"Add Account" = "Voeg account toe";
+/* Authentication hint string for therapy settings */
+"Authenticate to save therapy setting" = "Authenticeer om therapie-instellingen op te slaan";
 
-/* The title of the button to remove the credentials for a service */
-"Delete Account" = "Verwijder account";
+/* Back navigation button title */
+"Back" = "Terug";
+
+/* Title text for multi-value basal rate warning */
+"Basal Rates" = "Basaalsnelheden";
 
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Basaal, bolus en insuline correctie hoeveelheden zijn gereduceerd met %@%%.";
@@ -44,26 +138,39 @@
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Basaal, bolus en insuline correctie hoeveelheden zijn onveranderd.";
 
+/* No comment provided by engineer. */
+"Below dynamic data" = "Onder dynamische gegevens";
+
+/* No comment provided by engineer. */
+"Bottom" = "Onderkant";
+
+/* No comment provided by engineer. */
+"Bottom component" = "Onderste component";
+
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Annuleer";
 
 /* The text for the override cancellation button */
-"Cancel Override" = "Annuleer tijdelijk programma";
+"Cancel Override" = "Annuleer Override";
 
 /* Title text for suspend resume button when temp basal canceling */
-"Canceling Temp Basal" = "Annuleer tijdelijk basaal";
+"Canceling Temp Basal" = "Tijdelijk Basaal Annuleren";
 
-/* The title of the view controller to create a new carb entry */
-"Add Carb Entry" = "Voer koolhydraten in";
-
-/* The title of the view controller to edit an existing carb entry */
-"Edit Carb Entry" = "Bewerk koolhydraten";
+/* Title text for multi-value carb ratio warning */
+"Carb Ratios" = "Koolhydraatratio's";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
-"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Wijzigingen gelden alleen als je het tijdelijk programma activeert. De standaard instellingen van %@ worden niet veranderd.";
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Wijzigingen worden alleen nu toegepast wanneer je de override inschakelt. De standaard instellingen van %@ worden niet beïnvloed.";
+
+/* Footer text for customizing from a preset (1: preset name) */
+"Changes will only apply this time you enable the preset. The default settings of %@ will not be affected." = "Wijzigingen gelden alleen als je het tijdelijk programma activeert. De standaard instellingen van %@ worden niet veranderd.";
 
 /* Carb entry section footer text explaining absorption time */
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Kies een langere opnametijd voor grotere maaltijden of voor degene die vetten en eiwitten bevatten. Dit is alleen een leidraad voor het algoritme en hoeft niet exact te zijn.";
+
+/* Button text to close a modal
+   Text to close informational page */
+"Close" = "Sluiten";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
 "com.loudnate.CarbKit.COBDateLabel" = "op %1$@";
@@ -80,35 +187,92 @@
 /* The title of the action used to dismiss an error alert */
 "com.loudnate.LoopKit.errorAlertActionTitle" = "Ok";
 
+/* Accessibility label for ProgressIndicatorView when showIndeterminantProgress */
+"Completed." = "Voltooid.";
+
 /* The title for the override emoji condition section */
 "Condition" = "Gesteldheid";
+
+/* The button text for confirming the setting */
+"Confirm Setting" = "Bevestig instelling";
+
+/* No comment provided by engineer. */
+"content" = "inhoud";
 
 /* Title of the setup button to continue */
 "Continue" = "Ga verder";
 
 /* The section footer of correction range schedule */
-"Correction range is the blood glucose range that you would like Loop to correct to." = "Correctie bereik is het bereik dat je wilt dat Loop op aanstuurt.";
+"Correction range is the blood glucose range that you would like Loop to correct to." = "Correctiebereik is het glucosebereik waar je Loop naartoe wilt laten corrigeren.";
+
+/* Title text for multi-value correction value warning */
+"Correction Values" = "Correctiewaarden";
 
 /* The text for a custom override */
 "Custom" = "Aangepast";
 
 /* The title for the custom override entry screen */
-"Custom Override" = "Aangepast programma";
+"Custom Override" = "Aangepaste Override";
+
+/* The title for the custom preset entry screen
+   The title for the custom preset selection screen */
+"Custom Preset" = "Aangepast Programma";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Datum";
 
+/* Delete values for Pre-Meal, inactivates Pre-Meal icon
+   Test for table cell delete button
+   The title of the button to remove the credentials for a service */
+"Delete" = "Verwijderen";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Verwijder account";
+
 /* Button title to delete all objects */
 "Delete All" = "Verwijder alles";
+
+/* Title text for crossed thresholds guardrail warning */
+"Delivery Limits" = "Toediening limieten";
+
+/* Information about delivery limits */
+"Delivery Limits are safety guardrails for your insulin delivery." = "Leveringslimieten zijn de beveiliging voor uw insulinetoevoer.";
+
+/* The text for the custom preset disable button */
+"Disable Preset" = "Voorinstelling uitschakelen";
+
+/* Text for dismiss button
+   Text for done button
+   Video player done button label */
+"Done" = "Gereed";
 
 /* The text for the override duration setting */
 "Duration" = "Duur";
 
+/* No comment provided by engineer. */
+"Dynamic component #%@" = "Dynamische component #%@";
+
+/* No comment provided by engineer. */
+"Dynamic data %@" = "Dynamische gegevens %@";
+
+/* Text for edit button
+   The title for the enabled custom preset editing screen */
+"Edit" = "Bewerken";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Bewerk koolhydraten";
+
 /* The title for the override editing screen */
-"Edit Override" = "Pas aangepast programma aan";
+"Edit Override" = "Override Aanpassen";
 
 /* Footer text for editing an active override (1: preset name) */
-"Editing affects only the active override. The default settings of %@ will not be affected." = "Veranderingen hebben alleen effect op aangepast programma. De standaard instellingen van %@ worden niet aangepast. ";
+"Editing affects only the active override. The default settings of %@ will not be affected." = "Veranderingen hebben alleen effect op de actieve override. De standaard instellingen van %@ worden niet beïnvloed.";
+
+/* Footer text for editing an enabled custom preset (1: preset name) */
+"Edits persist only until the preset is disabled. The default settings of %@ will not be affected." = "Bewerkingen blijven alleen bestaan totdat de voorinstelling is uitgeschakeld. De standaard instellingen van %@ worden niet beïnvloed.";
+
+/* The button text for enabling a temporary override */
+"Enable" = "Inschakelen";
 
 /* The text for the indefinite override duration setting */
 "Enable Indefinitely" = "Voor onbepaalde tijd inschakelen";
@@ -116,17 +280,120 @@
 /* The detail text describing an enabled setting */
 "Enabled" = "Ingeschakeld";
 
+/* The text for the override start time */
+"End Time" = "Eind Tijd";
+
+/* Format string for accessibility label for value entry. (1: value label) */
+"Enter %1$@ value" = "Voer %1$@ waarde in";
+
 /* The placeholder text instructing users how to enter a maximum bolus */
 "Enter a number of units" = "Voer aantal eenheden in";
 
 /* The placeholder text instructing users how to enter a maximum basal rate */
 "Enter a rate in units per hour" = "Voer aantal eenheden per uur in";
 
+/* Segmented button title for insulin delivery log event history */
+"Event History" = "Gebeurtenisgeschiedenis";
+
+/* No comment provided by engineer. */
+"Example" = "Voorbeeld";
+
 /* Section title for fast absorbing food */
 "Fast" = "Snel";
 
+/* Title of insulin model preset - fiasp */
+"Fiasp" = "Fiasp";
+
+/* Insulin model setting description (1: app name) (2: number of models) */
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity." = "Voor snelwerkende insuline gaat %1$@ ervan uit dat het gedurende 6 uur actief werkt. Je kunt kiezen uit %2$@ verschillende modellen voor hoe de app de piekactiviteit van de insuline meet.";
+
+/* Information about correction range format (1: app name) */
+"For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin." = "Kies voor dit bereik de specifieke glucosewaarde (of bereik aan waarde) waar u wilt dat %1$@ naar streeft bij het aanpassen van uw basale insuline.";
+
+/* Support button for Therapy Settings */
+"Get help with Therapy Settings" = "Krijg hulp bij therapie-instellingen";
+
+/* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range
+   Text for go back action on confirmation alert */
+"Go Back" = "Ga Terug";
+
+/* Title text for the high basal rate warning */
+"High Basal Rate" = "Hoge Basaal Snelheid";
+
+/* Title text for the high carb ratio warning */
+"High Carb Ratio" = "Hoge Koolhydraatratio";
+
+/* Title text for the high correction value warning */
+"High Correction Value" = "Hoge Correctiewaarde";
+
+/* Title text for the high glucose safety limit warning */
+"High Glucose Safety Limit" = "Hoge glucose veiligheidslimiet";
+
+/* Title text for the high insulin sensitivity warning */
+"High Insulin Sensitivity" = "Hoge Insulinegevoeligheid";
+
+/* Title text for high maximum basal rate warning */
+"High Maximum Basal Rate" = "Hoge Maximale Basaal Snelheid";
+
+/* Title text for high maximum bolus warning */
+"High Maximum Bolus" = "Hoge Maximum Bolus";
+
+/* Title text for the low pre-meal value warning */
+"High Pre-Meal Value" = "Hoge Pre-Meal Waarde";
+
+/* Title text for the high workout value warning */
+"High Workout Value" = "Hoge trainingswaarde";
+
+/* The text for the override history */
+"History" = "Geschiedenis";
+
+/* Description of how to interact with summary screen */
+"If these settings look good to you, tap Save Settings to continue." = "Als deze instellingen er goed uitzien, tikt u op Instellingen opslaan om door te gaan.";
+
+/* Information about target range */
+"If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Als u al eerder een CGM hebt gebruikt, bent u waarschijnlijk bekend met het doelbereik als een breed scala aan waarden die u wilt voor uw glucosemeldingswaarschuwingen, zoals 70-180 mg/dL of 90-200 mg/dL.";
+
+/* Title text for multi-value insulin sensitivity warning */
+"Insulin Sensitivities" = "Insuline gevoeligheden";
+
 /* The description shown on the insulin sensitivity schedule interface. */
 "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insuline gevoeligheid beschrijft hoe de bloed glucose reageert op 1 eenheid insuline. Lagere waarde betekent dat meer insuline gegeven wordt wanneer je boven doelbereik bent. Een te laag ingestelde insuline gevoeligheid kan leiden tot gevaarlijk lage bloed glucose waardes.";
+
+/* Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: programmed value (? if no value), 4: unit) */
+"Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@" = "Onderbroken %1$@: <b>%2$@</b> van %3$@ %4$@";
+
+/* Guardrail info text format */
+"It can be set as low as %1$@. It can be set as high as %2$@." = "Het kan zo laag worden ingesteld als %1$@. Het kan zo hoog worden ingesteld als %2$@.";
+
+/* Title text for the low basal rate warning */
+"Low Basal Rate" = "Lage Basaalsnelheid";
+
+/* Title text for the low carb ratio warning */
+"Low Carb Ratio" = "Lage Koolhydraatratio";
+
+/* Title text for the low correction value warning */
+"Low Correction Value" = "Lage Correctiewaarde";
+
+/* Title text for the low glucose safety limit warning */
+"Low Glucose Safety Limit" = "Lage Glucose veiligheidslimiet";
+
+/* Title text for the low insulin sensitivity warning */
+"Low Insulin Sensitivity" = "Lage Insulinegevoeligheid";
+
+/* Title text for low maximum basal rate warning */
+"Low Maximum Basal Rate" = "Lage maximale basaal snelheid";
+
+/* Title text for low maximum bolus warning */
+"Low Maximum Bolus" = "Lage Maximum Bolus";
+
+/* Title text for the low pre-meal value warning */
+"Low Pre-Meal Value" = "Lage Pre-Meal Waarde";
+
+/* Title text for the low workout value warning */
+"Low Workout Value" = "Lage Trainings Waarde";
+
+/* Title of insulin model preset - lyumjev */
+"Lyumjev" = "Lyumjev";
 
 /* Placeholder for maximum value in glucose range */
 "max" = "max";
@@ -134,14 +401,32 @@
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Maximum basaal waarde";
 
+/* Information about maximum basal rate */
+"Maximum Basal Rate is the maximum automatically adjusted basal rate that (appName) is allowed to enact to help reach your correction range." = "Maximale Basaalsnelheid is de maximale automatisch aangepaste basaalsnelheid die (appName) mag toedienen om te helpen binnen je correctiebereik te komen.";
+
+/* Information about maximum basal rate */
+"Maximum Basal Rate is the maximum automatically adjusted basal rate that %@ is allowed to enact to help reach your correction range." = "Maximale Basaalsnelheid is de maximale automatisch aangepaste basaalsnelheid die %@ mag toedienen om te helpen binnen je correctiebereik te komen.";
+
 /* The title text for the maximum bolus value */
-"Maximum Bolus" = "Maximum bolus";
+"Maximum Bolus" = "Maximum Bolus";
+
+/* Information about maximum bolus */
+"Maximum Bolus is the highest bolus amount that you will allow (appName) to recommend at one time to cover carbs or bring down high glucose." = "Maximale bolus is de hoogste bolus die (appName) je kan geven om koolhydraten te dekken of hoge bloed glucose te verlagen.";
+
+/* Information about maximum bolus */
+"Maximum Bolus is the highest bolus amount that you will allow %@ to recommend at one time to cover carbs or bring down high glucose." = "Maximale bolus is de hoogste bolus die %@ je kan geven om koolhydraten te dekken of hoge bloed glucose te verlagen.";
 
 /* Section title for medium absorbing food */
 "Medium" = "Middel";
 
+/* No comment provided by engineer. */
+"Middle" = "Midden";
+
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
+
+/* No comment provided by engineer. */
+"more content" = "meer inhoud";
 
 /* Alert action title to open error help */
 "More Info" = "Meer informatie";
@@ -149,39 +434,78 @@
 /* The text for the override preset name setting */
 "Name" = "Naam";
 
+/* Title for mini-modal to add a new schedule entry */
+"New Entry" = "Nieuwe invoer";
+
 /* The title for the new override preset entry screen */
-"New Preset" = "Nieuw tijdelijk programma";
+"New Preset" = "Nieuw Programma";
+
+/* Title text for the zero basal rate warning */
+"No Basal Insulin" = "Geen basale insuline";
 
 /* Section title for no-carb food
-The title for override emoji miscellaneous section */
+   The title for override emoji miscellaneous section */
 "Other" = "Anders";
 
 /* The title text for the insulin sensitivity scaling setting */
 "Overall Insulin Needs" = "Totale insuline behoefte";
 
+/* Title for override history view */
+"Override History" = "Overridegeschiedenis";
+
 /* The title text for the override presets screen */
-"Override Presets" = "Tijdelijke programma’s";
+"Override Presets" = "Override Programma's";
 
 /* Text directing the user to configure override presets */
-"Override presets can be set up under the 'Configuration' section of the settings screen." = "Tijdelijke programma’s kunnen ingesteld worden via het onderdeel “instellingen” in het instellingenscherm.";
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Override programma's kunnen ingesteld worden via het onderdeel 'Instellingen' in het instellingenscherm.";
 
 /* The section title of glucose overrides */
-"Overrides" = "Tijdelijke programma’s";
+"Overrides" = "Override's";
 
 /* Title for the pre-meal override range */
-"Pre-Meal" = "Voor de maaltijd";
+"Pre-Meal" = "Pre-Meal";
+
+/* Title text for multi-value pre-meal value warning */
+"Pre-Meal Values" = "Pre-Meal Waarden";
+
+/* title for prescription section */
+"Prescription" = "Recepten";
 
 /* The section header text override presets */
-"PRESETS" = "Programma’s";
+"PRESETS" = "PROGRAMMA'S";
+
+/* Accessibility label for ProgressIndicatorView when showIndeterminantProgress */
+"Progressing." = "Voortgang.";
 
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Pomp gebeurtenis";
 
+/* Title text for suspend resume button when the basal delivery state is not set */
+"Pump Inoperable" = "Pomp onwerkbaar";
+
+/* Title of insulin model preset - rapid acting adult */
+"Rapid-Acting – Adults" = "Snelwerkend - Volwassenen";
+
+/* Title of insulin model preset - rapid acting children */
+"Rapid-Acting – Children" = "Snelwerkend - Kinderen";
+
+/* The default placeholder string for a credential */
+"Required" = "Vereist";
+
+/* Segmented button title for insulin delivery log reservoir history */
+"Reservoir" = "Reservoir";
+
 /* Title text for button to resume insulin delivery */
-"Resume Delivery" = "Hervat toediening";
+"Resume Delivery" = "Hervat Toediening";
 
 /* Title text for button when insulin delivery is in the process of being resumed */
 "Resuming" = "Hervat";
+
+/* title for summary description section */
+"Review and Save Settings" = "Bekijk en bewaar instellingen";
+
+/* Description of how to interact with summary screen */
+"Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen." = "Bekijk hieronder je therapie-instellingen. Als je een van deze instellingen wilt aanpassen, tikt je op Terug om terug te gaan naar dat scherm.";
 
 /* The text for the override preset name field placeholder */
 "Running" = "Hardlopen";
@@ -190,11 +514,41 @@ The title for override emoji miscellaneous section */
    Button text for saving insulin sensitivity schedule */
 "Save" = "Sla op";
 
+/* Alert title for confirming basal rates outside the recommended range */
+"Save Basal Rates?" = "Basaalsnelheden Opslaan?";
+
+/* Alert title for confirming carb ratios outside the recommended range */
+"Save Carb Ratios?" = "Koolhydraatratio opslaan";
+
+/* Alert title for confirming correction ranges outside the recommended range */
+"Save Correction Range(s)?" = "Correctiebereik(en) Opslaan?";
+
+/* Alert title for confirming delivery limits outside the recommended range */
+"Save Delivery Limits?" = "Toebedienings limieten opslaan?";
+
+/* Alert title for confirming a glucose safety limit outside the recommended range */
+"Save Glucose Safety Limit?" = "Glucose veiligheid limiet opslaan?";
+
+/* Alert title for confirming insulin sensitivities outside the recommended range */
+"Save Insulin Sensitivities?" = "Insuline gevoeligheden opslaan?";
+
+/* Alert title for confirming pre-meal range overrides outside the recommended range */
+"Save Pre-Meal Range?" = "Pre-Meal Bereik Opslaan?";
+
+/* Alert title for confirming workout range overrides outside the recommended range */
+"Save Workout Range?" = "Trainings bereik opslaan?";
+
 /* The section header text for a scheduled override */
-"SCHEDULED OVERRIDE" = "GEPLAND TIJDELIJK PROGRAMMA";
+"SCHEDULED OVERRIDE" = "GEPLANDE OVERRIDE";
+
+/* The section header text for a scheduled custom preset */
+"SCHEDULED PRESET" = "GEPLAND PROGRAMMA";
 
 /* Section title for slow absorbing food */
 "Slow" = "Langzaam";
+
+/* Information about typical maximum basal rates */
+"Some users choose a value 2, 3, or 4 times their highest scheduled basal rate." = "Sommige gebruikers kiezen een waarde 2, 3 of 4 keer de hoogst geplande basaalsnelheid.";
 
 /* The text for the override start time */
 "Start Time" = "Start tijd";
@@ -202,26 +556,51 @@ The title for override emoji miscellaneous section */
 /* Title text for suspend resume button when temp basal starting */
 "Starting Temp Basal" = "Start tijdelijk basaal";
 
+/* Format for prescription descriptive text (1: providerName, 2: datePrescribed) */
+"Submitted by %1$@, %2$@" = "Ingediend door %1$@, %2$@";
+
+/* Title for support section */
+"Support" = "Ondersteuning";
+
 /* Title text for button to suspend insulin delivery */
 "Suspend Delivery" = "Onderbreek toediening";
 
 /* Title text for button when insulin delivery is in the process of being stopped */
 "Suspending" = "Onderbreek";
 
+/* No comment provided by engineer. */
+"Switch Preview State" = "Omschakelen naar voorbeeld stand";
+
 /* The text for the override preset symbol setting */
 "Symbol" = "Symbool";
+
+/* Text directing the user to configure their first custom preset */
+"Tap '+' to create a new custom preset." = "Tik op '+' om een nieuwe aangepast programma te maken.";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Instellen…";
 
 /* The text for the override target range setting */
-"Target Range" = "Doel bereik";
+"Target Range" = "Doelbereik";
+
+/* Description of pre-meal mode */
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Tijdelijk verlagen van uw glucosedoel voor een maaltijd (pre-meal) om invloed te hebben op post-maaltijd glucose pieken.";
+
+/* Description of workout mode */
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Verhoog tijdelijk je glucosedoel voor, gedurende of na fysieke activiteit om het risico van lage glucosewaardes te verminderen.";
 
 /* The title for the override selection screen */
-"Temporary Override" = "Tijdelijk programma";
+"Temporary Override" = "Tijdelijke Override";
 
-/* The default placeholder string for a credential */
-"Required" = "Vereist";
+/* Information about pre-meal range relative to correction range
+   Information about workout range relative to correction range */
+"than your Correction Range." = "dan je Correctiebereik.";
+
+/* Description for selection when no insulin type is selected. */
+"The currently selected fast acting insulin model will be used as a default." = "Het momenteel geselecteerde snelwerkende insulinemodel wordt als standaard gebruikt.";
+
+/* Subtitle description of Walsh insulin model setting */
+"The legacy model used by Loop, allowing customization of action duration." = "Het model gebruikt bij Loop, staat verandering van actieduur toe.";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "De maximum absorptietijd is %@";
@@ -229,25 +608,135 @@ The title for override emoji miscellaneous section */
 /* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
 "The maximum allowed amount is %@ grams" = "De maximum toegestane waarde is %@ gram";
 
+/* Information about adult insulin model */
+"The rapid-acting adult model assumes peak activity at 75 minutes." = "Het snelwerkende model voor volwassenen gaat uit van een piekactiviteit op 75 minuten.";
+
+/* Information about child insulin model */
+"The rapid-acting child model assumes peak activity at 65 minutes." = "Het snelwerkende model voor kinderen gaat uit van een piekactiviteit op 65 minuten.";
+
+/* Information about basal rate scheduling */
+"The schedule starts at midnight and cannot contain a rate of 0 U/hr." = "Het schema begint om middernacht en mag geen hoeveelheid 0 E/uur bevatten.";
+
+/* Therapy Settings screen title */
+"Therapy Settings" = "Therapie-instellingen";
+
+/* No comment provided by engineer. */
+"Therapy Settings Support Placeholder" = "Therapy Settings Support Placeholder";
+
+/* Subtitle of afrezza preset */
+"This model assumes peak insulin activity at 19 minutes." = "Dit model gaat uit van een piek in de insulineactiviteit op 19 minuten.";
+
+/* Subtitle of Fiasp preset
+   Subtitle of Lyumjev preset */
+"This model assumes peak insulin activity at 55 minutes." = "Dit model gaat uit van een piek in de insulineactiviteit op 55 minuten.";
+
+/* Subtitle of Rapid-Acting – Children preset */
+"This model assumes peak insulin activity at 65 minutes." = "Dit model gaat uit van een piek in de insulineactiviteit op 65 minuten.";
+
+/* Subtitle of Rapid-Acting – Adult preset */
+"This model assumes peak insulin activity at 75 minutes." = "Dit model gaat uit van een piek in de insulineactiviteit op 75 minuten.";
+
+/* Information about pre-meal range relative to correction range
+   Information about workout range relative to correction range */
+"This will typically be" = "Dit zal meestal";
+
+/* Label for offset from midnight picker */
+"Time" = "Tijd";
+
 /* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
 "Times in %1$@%2$@%3$@" = "keer in %1$@%2$@%3$@";
 
+/* No comment provided by engineer. */
+"To be implemented" = "Te implementeren";
+
+/* No comment provided by engineer. */
+"Top" = "Boven";
+
+/* No comment provided by engineer. */
+"Top component" = "Bovenste component";
+
+/* The text indicating U/day for Daily Schedule Basal */
+"U/day" = "E/dag";
+
 /* The unit string for units per hour */
 "U/hour" = "E/uur";
+
+/* Alert title when error occurs while saving a schedule */
+"Unable to Save" = "Kan Niet Opslaan";
 
 /* The unit string for units */
 "Units" = "Eenheden";
 
 /* Accessibility value for an unknown value
-The default title to use when an entry has none */
+   The default title to use when an entry has none */
 "Unknown" = "Onbekend";
+
+/* Title for selection when no insulin type is selected. */
+"Unset" = "Niet Ingesteld";
+
+/* Placeholder text until value is entered */
+"Value" = "Waarde";
 
 /* Label indicating validation is occurring */
 "Verifying" = "Verifiëren";
 
+/* The title for the override editing screen */
+"View Override" = "Bekijk Override";
+
+/* Title of insulin model setting */
+"Walsh" = "Walsh";
+
 /* Title of an alert containing a validation warning */
 "Warning" = "Waarschuwing";
 
+/* Disclaimer */
+"Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable." = "Werk samen met uw zorgverlener om een waarde te kiezen die hoger is dan je hoogst ingestelde basaalsnelheid, maar zo conservatief of agressief als je je prettig voelt.";
+
 /* Title for the workout override range */
 "Workout" = "Training";
+
+/* Information about workout range format (1: app name) */
+"Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button." = "Tijdelijk Trainings programma is de glucosewaarde of bereik van waarden die u wilt dat %1$@ richt tijdens de activiteit. Deze reeks zal van kracht zijn wanneer u het tijdelijk training programma activeert.";
+
+/* Title text for multi-value workout value warning */
+"Workout Values" = "Trainings Waardes";
+
+/* Description of how to add a ratio */
+"You can add different carb ratios for different times of day by using the ➕." = "Je kunt verschillende koolhydraatratio's voor verschillende tijdstippen op de dag toevoegen met de ➕.";
+
+/* Description of how to add a ratio */
+"You can add different insulin sensitivities for different times of day by using the ➕." = "Je kunt verschillende insulinegevoeligheden voor verschillende tijdstippen op de dag toevoegen met de ➕.";
+
+/* Description of how to add a configuration range */
+"You can add different ranges for different times of day by using the ➕." = "Je kunt verschillende bereiken voor verschillende tijdstippen op de dag toevoegen met de ➕.";
+
+/* Description of how to add a range */
+"You can add entries for different times of day by using the ➕." = "Je kunt invoergegevens voor verschillende tijdstippen op de dag toevoegen met de ➕.";
+
+/* Information about insulin model */
+"You can choose how (appName) measures rapid acting insulin's peak activity according to one of these two insulin models." = "Je kunt kiezen hoe (appName) de piekactiviteit van snelwerkende insuline meet volgens een van deze twee insulinemodellen.";
+
+/* Information about insulin model */
+"You can choose how %@ measures rapid acting insulin's peak activity according to one of these two insulin models." = "Je kunt kiezen hoe %@ de piekactiviteit van snelwerkende insuline meet volgens een van deze twee insulinemodellen.";
+
+/* Description of how to edit setting */
+"You can edit a setting by tapping into any line item." = "Je kunt een instelling bewerken door op een regelitem te tikken.";
+
+/* Description of how to edit setting */
+"You can edit the setting by tapping into the line item." = "Je kunt de instelling bewerken door op het regelitem te tikken.";
+
+/* Information about basal rates */
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Je basale insulinesnelheid is het aantal eenheden per uur dat je wilt toedienen om in je basale insulinebehoefte te voorzien.";
+
+/* Lower bound pre-meal information text */
+"your Glucose Safety Limit" = "je Glucose Veiligheidslimiet";
+
+/* Disclaimer */
+"Your healthcare provider can help you choose a Correction Range that's right for you." = "Je zorgverlener kan je helpen bij het kiezen van een correctiebereik dat bij je past.";
+
+/* Description of insulin sensitivity factor */
+"Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Je Insulinegevoeligheidsfactor (ISF) is de daling van de glucosewaarde uitgaande van één eenheid insuline.";
+
+/* Information about pre-meal range format (1: app name) */
+"Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Je Pre-Meal Bereik zou de glucosewaarde %1$@ moeten zijn (of een bereik) die je wilt bereiken tegen de tijd dat je je eerste hap van je maaltijd neemt. Dit bereik wordt ingesteld wanneer je het Pre-Meal Programma met de knop activeert.";
 

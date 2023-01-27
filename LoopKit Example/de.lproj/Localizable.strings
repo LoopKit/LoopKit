@@ -30,7 +30,7 @@
 "Reservoir" = "Reservoir";
 
 /* Title for the cell resetting the data manager */
-"Reset" = "Reset";
+"Reset" = "Zurücksetzen";
 
 /* Title of button to sync basal profile from pump */
 "Sync With Pump" = "Mit der Pumpe synchronisieren";

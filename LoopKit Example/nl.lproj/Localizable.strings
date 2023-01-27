@@ -2,10 +2,13 @@
 "Basal Rates" = "Basaalsnelheden";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Koolhydraten absorptie snelheid";
+"Carb Ratios" = "Koolhydraatratio's";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Koolhydraten";
+
+/* The title text for the glucose correction range schedule */
+"Correction Range" = "Correctiebereik";
 
 /* The title for the cell displaying diagnostic data */
 "Diagnostic" = "Diagnose";
@@ -18,10 +21,7 @@
 
 /* The title of the insulin sensitivity schedule screen
    The title text for the insulin sensitivity schedule */
-"Insulin Sensitivity" = "Correctie bereik";
-
-/* The title text for the glucose target range schedule */
-"Correction Range" = "Gewenst glucose doelbereik";
+"Insulin Sensitivity" = "Insulinegevoeligheid";
 
 /* The title text for the pump ID */
 "Pump ID" = "Pomp ID";

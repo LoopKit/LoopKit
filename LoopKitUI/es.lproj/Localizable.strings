@@ -17,6 +17,12 @@
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ unidades restantes a %2$@";
 
+/* Premeal override preset title */
+"🍽 Pre-Meal" = "🍽 Pre-Comida";
+
+/* Workout override preset title */
+"🏃‍♂️ Workout" = "🏃‍♂️ Ejercicio";
+
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Tiempo de Absorción";
 
@@ -125,6 +131,9 @@
 /* Section title for fast absorbing food */
 "Fast" = "Rápido";
 
+/* The text for the override history */
+"History" = "Historial";
+
 /* The description shown on the insulin sensitivity schedule interface. */
 "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "La sensibilidad a la insulina describe cómo responde su glucemia a 1 unidad de insulina. Valores menores implican que se administrará más insulina.";
 
@@ -159,6 +168,9 @@
 /* The title text for the insulin sensitivity scaling setting */
 "Overall Insulin Needs" = "Necesidades de insulina";
 
+/* Title for override history view */
+"Override History" = "Historial de sobreescrituras";
+
 /* The title text for the override presets screen */
 "Override Presets" = "Sobreescrituras preestablecidas";
 
@@ -179,6 +191,9 @@
 
 /* The default placeholder string for a credential */
 "Required" = "Requerido";
+
+/* Segmented button title for insulin delivery log reservoir history */
+"Reservoir" = "Reservorio";
 
 /* Title text for button to resume insulin delivery */
 "Resume Delivery" = "Resumir la infusión";
@@ -244,6 +259,9 @@
 
 /* Label indicating validation is occurring */
 "Verifying" = "Verificando";
+
+/* The title for the override editing screen */
+"View Override" = "Ver la sobreescritura";
 
 /* Title of an alert containing a validation warning */
 "Warning" = "Aviso";

@@ -43,6 +43,12 @@
 /* The short unit display string for grams per U */
 "g/U" = "g/U";
 
+/* Brand name for humalog insulin type */
+"Humalog" = "Humalog";
+
+/* Title for Humalog insulin type */
+"Humalog (insulin lispro)" = "Humalog (insulina lispro)";
+
 /* Generic pump error description */
 "Invalid Configuration" = "Configuración no Válida";
 
@@ -63,6 +69,12 @@
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "No hay datos";
+
+/* Brand name for novolog insulin type */
+"Novolog" = "Novolog";
+
+/* Title for Novolog insulin type */
+"Novolog (insulin aspart)" = "Novolog (insulina aspart)";
 
 /* Sensor state description for the valid state */
 "OK" = "OK";

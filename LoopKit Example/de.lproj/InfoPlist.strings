@@ -1,3 +1,6 @@
+/* Bundle name */
+"CFBundleName" = "LoopKit-Beispiel";
+
 /* Privacy - Health Share Usage Description */
 "NSHealthShareUsageDescription" = "Mahlzeitendaten aus HealthKit werden verwendet, um Blutzuckereffekte zu bestimmen. Blutzuckerdaten aus HealthKit werden für die grafische Darstellung und Momentum-Berechnung verwendet.";
 
