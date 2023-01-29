@@ -8,7 +8,7 @@
 "%1$@ U bolus may not have succeeded" = "%1$@ E bolus kan ha feilet";
 
 /* Descriptive format string for glucose safety limit (1: app name) */
-"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ vil levere basal og anbefale bolusinsulin bare hvis glukosen din forventes å være over denne grensen de neste tre timene.";
+"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ vil levere basal og anbefale bolusinsulin bare hvis blodsukkeret ditt forventes å være over denne grensen de neste tre timene.";
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
@@ -57,7 +57,7 @@
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorisasjon avslått";
 
 /* The error recovery suggestion when attempting to delete a sample not shared by the current app */
-"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Denne testen kan slettes fra Health-appen";
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Denne testen kan slettes fra Helse-appen";
 
 /* Generic pump error description */
 "Communication Failure" = "Kommunikasjonsfeil";
@@ -72,7 +72,7 @@
 "Correction Range" = "Korreksjonsområde";
 
 /* Descriptive text for glucose target range (1: app name) */
-"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Korreksjonsområde er glukoseverdien (eller verdiområdet) som du vil at %1$@ skal sikte på for å justere basalinsulinet og hjelpe deg med å beregne bolusene dine.";
+"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Korreksjonsområde er blodsukkerverdien (eller verdiområdet) som du vil at %1$@ skal sikte på for å justere basalinsulinet og hjelpe deg med å beregne bolusene dine.";
 
 /* Description of critical software update needed */
 "Critical Update" = "Kritisk oppdatering";
@@ -87,13 +87,13 @@
 "Ensure carb data exists for the specified date" = "Verifiser at karbohydratoppføring eksisterer for den valgte datoen";
 
 /* Glucose trend down */
-"Falling" = "Faller";
+"Falling" = "Synker";
 
 /* Glucose trend down-down */
-"Falling fast" = "Faller raskt";
+"Falling fast" = "Synker raskt";
 
 /* Glucose trend down-down-down */
-"Falling very fast" = "Faller veldig raskt";
+"Falling very fast" = "Synker veldig raskt";
 
 /* Brand name for fiasp insulin type
    Title for Fiasp insulin type */
@@ -112,13 +112,22 @@
 "g/U" = "g/E";
 
 /* Title text for glucose safety limit */
-"Glucose Safety Limit" = "Glukosesikkerhetsgrense";
+"Glucose Safety Limit" = "Sikkerhetsgrense for blodsukker";
+
+/* The long unit display string for a singular hour */
+"Hour" = "Time";
+
+/* The long unit display string for hours */
+"Hours" = "Timer";
 
 /* Brand name for humalog insulin type */
 "Humalog" = "Humalog";
 
 /* Title for Humalog insulin type */
 "Humalog (insulin lispro)" = "Humalog (insulin lispro)";
+
+/* Description for humalog insulin type */
+"Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Humalog (insulin lispro) er et hurtigvirkende insulin laget av Eli Lilly";
 
 /* Title text for fast acting insulin model */
 "Insulin Model" = "Insulinmodell";
@@ -132,17 +141,27 @@
 /* Recovery instruction for a certain bolus failure */
 "It is safe to retry" = "Det er trygt å prøve igjen";
 
+/* Brand name for lyumjev insulin type
+   Title for Lyumjev insulin type */
+"Lyumjev" = "Lyumjev";
+
+/* Description for lyumjev insulin type */
+"Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly" = "Lyumjev er en insulin lispro-formulering for måltider med tillegg av citrat og treprostinil laget av Eli Lilly";
+
 /* Recovery suggestion for uncertain delivery */
 "Make sure your pump is within communication range of your phone." = "Kontroller at pumpen er innenfor kommunikasjonsområdet til telefonen.";
 
 /* Title text for maximum basal rate configuration */
 "Maximum Basal Rate" = "Maksimal basalrate";
 
+/* Descriptive text for maximum basal rate (1: app name) */
+"Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Maksimal basaldose er den høyeste midlertidige basaldosen %1$@ er tillatt å angi.";
+
 /* Title text for maximum bolus configuration */
 "Maximum Bolus" = "Maksimal bolus-dose";
 
 /* Descriptive text for maximum bolus */
-"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den høyeste bolusmengden du kan gi på en gang for å dekke karbohydrater eller redusere høyt glukose.";
+"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den høyeste bolusmengden du kan gi på en gang for å dekke karbohydrater eller redusere høyt blodsukker.";
 
 /* The short unit display string for milligrams per deciliter per U */
 "mg/dL/U" = "mg/dL/E";
@@ -156,6 +175,9 @@
 /* Sensor state description for the non-valid state */
 "Needs Attention" = "Trenger tilsyn";
 
+/* Description of no software update needed */
+"No Update" = "Ingen oppdatering";
+
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "Ingen verdier funnet";
 
@@ -165,6 +187,9 @@
 /* Title for Novolog insulin type */
 "Novolog (insulin aspart)" = "Novolog (insulin aspart)";
 
+/* Description for novolog insulin type */
+"NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk" = "NovoLog (insulin aspart) er et hurtigvirkende insulin laget av Novo Nordisk";
+
 /* Sensor state description for the valid state */
 "OK" = "Ok";
 
@@ -172,10 +197,13 @@
 "One or more of the values you have entered is outside of what is typically recommended for most people." = "En verdi du har lagt inn er lavere enn det som vanligvis anbefales for de fleste.";
 
 /* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "Vennligst aktiver deling i Health på nytt";
+"Please re-enable sharing in Health" = "Vennligst aktiver deling i Helse-appen på nytt";
 
 /* Title for pre-meal mode */
 "Pre-Meal" = "Pre-måltid";
+
+/* Description of supported software update needed */
+"Recommended Update" = "Anbefalt oppdatering";
 
 /* Title for resume dose type */
 "Resumed" = "Gjenopptatt";
@@ -199,10 +227,10 @@
 "Temp Basal" = "Midlertidig basal";
 
 /* Descriptive text for pre-meal correction range override */
-"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduser glukosemålet ditt midlertidig før et måltid for å påvirke glukosetoppene etter måltidet.";
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduser blodsukkeretmålet ditt midlertidig før et måltid for å påvirke blodsukkertoppene etter måltidet.";
 
 /* Descriptive text for workout correction range override */
-"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Øk glukosemålet ditt midlertidig før, under eller etter fysisk aktivitet for å redusere risikoen for hendelser med lavt glukose.";
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Øk blodsukkermålet ditt midlertidig før, under eller etter fysisk aktivitet for å redusere risikoen for hendelser med lavt blodsukker.";
 
 /* Descriptive text for guardrail high value warning */
 "The value you have entered is higher than what is typically recommended for most people." = "Verdien du har lagt inn er høyere enn det som vanligvis anbefales for de fleste.";
@@ -217,7 +245,7 @@
 "U" = "E";
 
 /* The short unit display string for international units of insulin per hour */
-"U/hr" = "E/hr";
+"U/hr" = "E/t";
 
 /* Error description for uncertain delivery */
 "Uncertain Delivery" = "Usikker levering";
@@ -234,15 +262,18 @@
 /* The long unit display string for international units of insulin per hour */
 "Units/hour" = "Enheter/time";
 
+/* Description of informational software update needed */
+"Update Available" = "Oppdatering tilgjengelig";
+
 /* Title for workout mode */
 "Workout" = "Treningsøkt";
 
 /* Descriptive text for basal rate */
-"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din basaldose av insulin er antall enheter per time du vil bruke for å dekke ditt bakgrunnsinsulinbehov.";
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din basaldose av insulin er antall enheter per time du vil bruke for å dekke kroppens grunnleggende behov for insulin.";
 
 /* Descriptive text for carb ratio */
 "Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Karbforholdet ditt er antall gram karbohydrater som dekkes av én enhet insulin.";
 
 /* Descriptive text for insulin sensitivity */
-"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "Din insulinfølsomhet refererer til fallet i glukose som forventes fra én enhet insulin.";
+"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "Din insulinfølsomhet refererer til fallet i blodsukker som forventes fra én enhet insulin.";
 

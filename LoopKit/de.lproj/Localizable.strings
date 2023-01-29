@@ -10,6 +10,9 @@
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ gibt nur dann Basalinsulin ab und empfiehlt Bolusinsulin, wenn Dein Blutzucker voraussichtlich in den nächsten drei Stunden über diesem Grenzwert liegen wird.";
 
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
 /* Descriptive text for guardrail high value warning for schedule interface */
 "A value you have entered is higher than what is typically recommended for most people." = "Ein von Dir eingegebener Wert liegt über dem, was normalerweise für die meisten Menschen empfohlen wird.";
 

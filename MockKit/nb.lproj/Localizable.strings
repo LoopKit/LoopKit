@@ -8,7 +8,7 @@
 "%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
 
 /* Alert content body for recurring software update alert */
-"A software update is recommended to continue using the (appName) app.\n\nGo to (appName) Settings > Software Update to install the latest version." = "En programvareoppdatering anbefales for å fortsette å bruke (appName)-appen. \n\n Gå til (appnavn) Innstillinger > Programvareoppdatering for å installere den nyeste versjonen.";
+"A software update is recommended to continue using the (appName) app.\n\nGo to (appName) Settings > Software Update to install the latest version." = "En programvareoppdatering anbefales for å fortsette å bruke (appName)-appen. \n\nGå til (appnavn) Innstillinger > Programvareoppdatering for å installere den nyeste versjonen.";
 
 /* Confirmation message for deleting a service */
 "Are you sure you want to delete this service?" = "Er du sikker på at du vil slette denne tjenesten?";
@@ -41,8 +41,14 @@
    History Caption */
 "History" = "Historie";
 
+/* No comment provided by engineer. */
+"How should the simulator respond to a version check?" = "Hvordan skal simulatoren svare på en versjonskontroll?";
+
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Insulin Type";
+
+/* No comment provided by engineer. */
+"Mock Version Check %@" = "Mock versjonskontroll %@";
 
 /* Button title to acknowledge error
    Default acknowledgement */
@@ -54,9 +60,15 @@
 /* Button title recovering comms */
 "Recover Simulator" = "Gjenopprett simulator";
 
+/* Caption for Source */
+"Source" = "Kilde";
+
+/* Recurring software update alert title */
+"Update Reminder" = "Oppdater påminnelse";
+
 /* No comment provided by engineer. */
 "Version Check Response" = "Svar på versjonskontroll";
 
 /* Alert content body for first software update alert */
-"Your (appName) app is out of date. It will continue to work, but we recommend updating to the latest version.\n\nGo to (appName) Settings > Software Update to complete." = "Appen din (appName) er utdatert. Det vil fortsette å fungere, men vi anbefaler å oppdatere til siste versjon. \n\n Gå til (appnavn) Innstillinger > Programvareoppdatering for å fullføre.";
+"Your (appName) app is out of date. It will continue to work, but we recommend updating to the latest version.\n\nGo to (appName) Settings > Software Update to complete." = "Appen din (appName) er utdatert. Den vil fortsette å fungere, men vi anbefaler å oppdatere til siste versjon. \n\nGå til (appnavn) Innstillinger > Programvareoppdatering for å fullføre.";
 

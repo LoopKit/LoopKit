@@ -1665,6 +1665,7 @@
 		C183FDD7297E493D003B16ED /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C188B83322CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinSensitivityScheduleViewController.swift; sourceTree = "<group>"; };
 		C191D26225B3815000C26C0B /* AutomaticDoseRecommendation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomaticDoseRecommendation.swift; sourceTree = "<group>"; };
+		C19E387F298638CE00851444 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1A4ED662981EE36008F4B1A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
 		C1A4ED672981EE36008F4B1A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1AA4E0F2981EE4400888F32 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -4510,6 +4511,7 @@
 				C1DB5556297E499500EB1DCE /* zh-Hans */,
 				C1D107BA297E499D008905A6 /* ja */,
 				C126BB0D29830A83002CEE4F /* zh-Hans-CN */,
+				C19E387F298638CE00851444 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

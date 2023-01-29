@@ -1,3 +1,6 @@
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
+
 /* Status highlight that delivery is uncertain. */
 "Comms Issue" = "Comms Problem";
 
@@ -15,4 +18,13 @@
 
 /* Status highlight that an occlusion was detected. */
 "Pump Occlusion" = "Pumpenverschluss";
+
+/* Pump Event title for UnfinalizedDose with doseType of .resume */
+"Resume" = "Fortsetzen";
+
+/* Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Unterbrechen";
+
+/* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Temp. Basalrate";
 

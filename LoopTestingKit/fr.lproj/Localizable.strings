@@ -19,3 +19,12 @@
 /* Status highlight that an occlusion was detected. */
 "Pump Occlusion" = "Occlusion détectée";
 
+/* Pump Event title for UnfinalizedDose with doseType of .resume */
+"Resume" = "Reprendre";
+
+/* Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Suspendre";
+
+/* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Débit basal temporaire";
+

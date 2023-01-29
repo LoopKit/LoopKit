@@ -19,3 +19,12 @@
 /* Status highlight that an occlusion was detected. */
 "Pump Occlusion" = "Pumpen er blokkert";
 
+/* Pump Event title for UnfinalizedDose with doseType of .resume */
+"Resume" = "Gjenoppta";
+
+/* Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Utsett";
+
+/* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Midlertidig Basal";
+

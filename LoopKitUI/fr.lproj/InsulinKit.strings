@@ -25,6 +25,9 @@
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[1] = "Event History"; ObjectID = "TyZ-xm-mVN"; */
 "TyZ-xm-mVN.segmentTitles[1]" = "Historique des événements";
 
+/* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[2] = "Non-Pump Insulin"; ObjectID = "TyZ-xm-mVN"; */
+"TyZ-xm-mVN.segmentTitles[2]" = "Insuline ne venant pas de la pompe";
+
 /* Class = "UINavigationItem"; title = "Insulin Delivery"; ObjectID = "vls-EW-uwI"; */
 "vls-EW-uwI.title" = "Administration de l'insuline";
 
