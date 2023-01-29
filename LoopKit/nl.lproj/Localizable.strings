@@ -8,7 +8,10 @@
 "%1$@ U bolus may not have succeeded" = "%1$@ E bolus is mogelijk niet geslaagd";
 
 /* Descriptive format string for glucose safety limit (1: app name) */
-"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ zal alleen een basaal geven en een bolus insuline aanbevelen als je glucose de komende drie uur hoger zal zijn dan deze limiet.";
+"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ zal alleen een basaal geven en een bolusinsuline aanbevelen als je glucose de komende drie uur hoger zal zijn dan deze limiet.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Descriptive text for guardrail high value warning for schedule interface */
 "A value you have entered is higher than what is typically recommended for most people." = "Een waarde die je hebt ingevoerd is hoger dan wat meestal voor de meeste mensen wordt aanbevolen.";
@@ -16,8 +19,12 @@
 /* Descriptive text for guardrail low value warning for schedule interface */
 "A value you have entered is lower than what is typically recommended for most people." = "Een waarde die je hebt ingevoerd is lager dan wat meestal voor de meeste mensen wordt aanbevolen.";
 
+/* Brand name for afrezza insulin type
+   Title for Afrezza insulin type */
+"Afrezza" = "Afrezza";
+
 /* Description for afrezza insulin type */
-"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza is een ultrasnelwerkende maaltijdinsuline die via uw longen wordt ingeademd met een orale inhalator en wordt gemaakt door MannKind";
+"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza is een ultrasnelwerkende maaltijdinsuline die via je longen wordt ingeademd met een orale inhalator en wordt gemaakt door MannKind";
 
 /* Brand name for apidra insulin type */
 "Apidra" = "Apidra";
@@ -47,7 +54,7 @@
 "Check your pump before retrying" = "Controleer je pomp voordat je het nogmaals probeert";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
-"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorisatie geweigerd";
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorisatie Geweigerd";
 
 /* The error recovery suggestion when attempting to delete a sample not shared by the current app */
 "com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Dit voorbeeld kan verwijderd worden uit de app Gezondheid";
@@ -65,10 +72,13 @@
 "Correction Range" = "Correctiebereik";
 
 /* Descriptive text for glucose target range (1: app name) */
-"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Correctiebereik is de glucosewaarde (of bereik van waarden) waarnaar je %1$@ wilt sturen bij het corrigeren van je basale insuline en het berekenen van jebolussen.";
+"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Correctiebereik is de glucosewaarde (of bereik van waarden) waar je wilt dat %1$@ naar streeft bij het aanpassen van je basale insuline en het helpen berekenen van je bolussen.";
+
+/* Description of critical software update needed */
+"Critical Update" = "Kritieke Update";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Toediening limieten";
+"Delivery Limits" = "Toedieningslimieten";
 
 /* Generic pump error description */
 "Device Refused" = "Apparaat geweigerd";
@@ -90,7 +100,7 @@
 "Fiasp" = "Fiasp";
 
 /* Description for fiasp insulin type */
-"Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" = "Fiasp is een maaltijdse insuline aspart formulering, met toevoeging van nicotinamide (vitamine B3) gemaakt door Novo Nordisk";
+"Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" = "Fiasp is een maaltijdinsuline aspart formule met de toevoeging van nicotinamide (vitamine B3) gemaakt door Novo Nordisk";
 
 /* Glucose trend flat */
 "Flat" = "Gelijk";
@@ -99,10 +109,16 @@
 "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "Voor snelwerkende insuline gaat %1$@ ervan uit dat het gedurende 6 uur actief werkt. Je kunt kiezen uit verschillende modellen voor de piekactiviteit.";
 
 /* The short unit display string for grams per U */
-"g/U" = "g/U";
+"g/U" = "g/E";
 
 /* Title text for glucose safety limit */
 "Glucose Safety Limit" = "Glucose veiligheidslimiet";
+
+/* The long unit display string for a singular hour */
+"Hour" = "Uur";
+
+/* The long unit display string for hours */
+"Hours" = "Uren";
 
 /* Brand name for humalog insulin type */
 "Humalog" = "Humalog";
@@ -114,10 +130,10 @@
 "Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Humalog (insuline lispro) is een snelwerkende insuline gemaakt door Eli Lilly";
 
 /* Title text for fast acting insulin model */
-"Insulin Model" = "Insuline model";
+"Insulin Model" = "Insulinemodel";
 
 /* Title text for insulin sensitivity */
-"Insulin Sensitivities" = "Insuline gevoeligheden";
+"Insulin Sensitivities" = "Insulinegevoeligheid";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Ongeldige configuratie";
@@ -129,14 +145,20 @@
    Title for Lyumjev insulin type */
 "Lyumjev" = "Lyumjev";
 
+/* Description for lyumjev insulin type */
+"Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly" = "Lyumjev is een maaltijdinsuline lispro formule met de toevoeging van citraat en treprostinil gemaakt door Eli Lilly";
+
 /* Recovery suggestion for uncertain delivery */
 "Make sure your pump is within communication range of your phone." = "Zorg ervoor dat je pomp binnen het communicatiebereik van je telefoon ligt.";
 
 /* Title text for maximum basal rate configuration */
-"Maximum Basal Rate" = "Maximum basaal instelling";
+"Maximum Basal Rate" = "Maximale Basaalsnelheid";
+
+/* Descriptive text for maximum basal rate (1: app name) */
+"Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Maximale Basaalsnelheid is de maximale tijdelijke basaalsnelheid die %1$@ mag instellen.";
 
 /* Title text for maximum bolus configuration */
-"Maximum Bolus" = "Maximum bolus";
+"Maximum Bolus" = "Maximale Bolus";
 
 /* Descriptive text for maximum bolus */
 "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maximale bolus is de hoogste bolus die je kan geven om koolhydraten te dekken of hoge bloed glucose te verlagen.";
@@ -157,7 +179,7 @@
 "No Update" = "Geen Update";
 
 /* Describes an error for no data found in a CarbStore request */
-"No values found" = "Geen waardes gevonden";
+"No values found" = "Geen waarden gevonden";
 
 /* Brand name for novolog insulin type */
 "Novolog" = "Novolog";
@@ -180,6 +202,9 @@
 /* Title for pre-meal mode */
 "Pre-Meal" = "Pre-Meal";
 
+/* Description of supported software update needed */
+"Recommended Update" = "Aanbevolen Update";
+
 /* Title for resume dose type */
 "Resumed" = "Hervatten";
 
@@ -199,13 +224,13 @@
 "Suspended" = "Onderbroken";
 
 /* Title for temp basal dose type */
-"Temp Basal" = "Tijdelijk basaal";
+"Temp Basal" = "Tijdelijk Basaal";
 
 /* Descriptive text for pre-meal correction range override */
-"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Tijdelijk verlagen van uw glucosedoel voor een maaltijd (pre-meal) om invloed te hebben op post-maaltijd glucose pieken.";
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Tijdelijk verlagen van je glucosedoel vóór de maaltijd om de kans op post-maaltijd glucosepieken te verkleinen.";
 
 /* Descriptive text for workout correction range override */
-"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Verhoog tijdelijk je glucosedoel voor, gedurende of na fysieke activiteit om het risico van lage glucosewaardes te verminderen.";
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Verhoog tijdelijk je glucosedoel voor, gedurende of na fysieke activiteit om het risico van lage glucosewaarden te verminderen.";
 
 /* Descriptive text for guardrail high value warning */
 "The value you have entered is higher than what is typically recommended for most people." = "Een waarde die je hebt ingevoerd is hoger dan wat meestal voor de meeste mensen wordt aanbevolen.";
@@ -237,15 +262,18 @@
 /* The long unit display string for international units of insulin per hour */
 "Units/hour" = "Eenheden/uur";
 
+/* Description of informational software update needed */
+"Update Available" = "Update Beschikbaar";
+
 /* Title for workout mode */
 "Workout" = "Training";
 
 /* Descriptive text for basal rate */
-"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Uw basale snelheid van insuline is het aantal eenheden per uur dat u wilt gebruiken om uw standaard insuline behoeften te dekken.";
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Je basale insulinesnelheid is het aantal eenheden per uur dat je wilt toedienen om in je basale insulinebehoefte te voorzien.";
 
 /* Descriptive text for carb ratio */
 "Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Je koolhydraatratio is het aantal gram koolhydraten dat wordt verwerkt door één eenheid insuline.";
 
 /* Descriptive text for insulin sensitivity */
-"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "Uw insuline gevoeligheden verwijzen naar de verwachte daling in glucose van één eenheid insuline.";
+"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "Je Insulinegevoeligheid is de daling van de glucose verwacht van één eenheid insuline.";
 

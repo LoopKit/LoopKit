@@ -35,6 +35,3 @@
 /* Title of button to sync basal profile from pump */
 "Sync With Pump" = "Synchroniseer met pomp";
 
-/* Instructions on where to find the pump ID on a Minimed pump */
-"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).";
-

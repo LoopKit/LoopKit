@@ -7,6 +7,9 @@
 /* The error description describing when Health sharing was denied */
 "Authorization Denied" = "Odmowa autoryzacji";
 
+/* Title text for basal rates */
+"Basal Rates" = "Dawka Podstawowa (Baza)";
+
 /* Recovery instruction for an uncertain bolus failure */
 "Check your pump before retrying" = "Sprawdź pompę zanim spróbujesz ponownie";
 
@@ -21,6 +24,12 @@
 
 /* Generic pump error description */
 "Connection Failure" = "Błąd połączenia";
+
+/* Title text for glucose target range */
+"Correction Range" = "Zakres docelowy";
+
+/* Descriptive text for glucose target range (1: app name) */
+"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Zakres docelowy (zakres korekty) to wartość glukozy (lub zakres wartości), do której chcesz dążyć %1$@ podczas dostosowywania insuliny bazowej i pomagania w obliczaniu bolusów.";
 
 /* Generic pump error description */
 "Device Refused" = "Urządzenie odmówiło";
@@ -96,4 +105,7 @@
 
 /* The long unit display string for international units of insulin per hour */
 "Units/hour" = "Jednostki/godzinę";
+
+/* Descriptive text for basal rate */
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Dawka podstawowa insuliny to liczba jednostek na godzinę, którą chcesz wykorzystać do pokrycia podstawowego zapotrzebowania na insulinę.";
 

@@ -17,5 +17,14 @@
 "Pump Error" = "Pomp foutmelding";
 
 /* Status highlight that an occlusion was detected. */
-"Pump Occlusion" = "Pomp Occlusie";
+"Pump Occlusion" = "Pompverstopping";
+
+/* Pump Event title for UnfinalizedDose with doseType of .resume */
+"Resume" = "Hervatten";
+
+/* Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Onderbreek";
+
+/* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Tijdelijk Basaal";
 

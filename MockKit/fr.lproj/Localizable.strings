@@ -22,6 +22,12 @@
 /* Title for CGM simulator settings */
 "CGM Settings" = "Paramètres MGC";
 
+/* No comment provided by engineer. */
+"Clear Last Version Check Alert Date" = "Effacer la date d'alerte de la dernière vérification de version";
+
+/* No comment provided by engineer. */
+"Comms Recovery" = "Récupération des communications";
+
 /* Button title to delete a service */
 "Delete Service" = "Supprimer le service";
 
@@ -41,10 +47,28 @@
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Type d'insuline";
 
+/* No comment provided by engineer. */
+"Mock Version Check %@" = "Vérification de version fictive %@";
+
 /* Button title to acknowledge error
    Default acknowledgement */
 "OK" = "OK";
 
 /* Title for Pump simulator settings */
 "Pump Settings" = "Paramètres de la pompe";
+
+/* Button title recovering comms */
+"Recover Simulator" = "Rétablissement du simulateur";
+
+/* Caption for Source */
+"Source" = "Source";
+
+/* Recurring software update alert title */
+"Update Reminder" = "Rappel de mise à jour";
+
+/* No comment provided by engineer. */
+"Version Check Response" = "Réponse à la vérification de version";
+
+/* Alert content body for first software update alert */
+"Your (appName) app is out of date. It will continue to work, but we recommend updating to the latest version.\n\nGo to (appName) Settings > Software Update to complete." = "Votre application (appname) n'est plus à jour. Elle continuera à fonctionner, mais nous vous recommandons de la mettre à jour avec la dernière version.\n\nAllez dans Paramètres de (appname) > Mise à jour du logiciel pour l'effectuer.";
 

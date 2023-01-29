@@ -48,7 +48,7 @@
 "Bolus" = "Bolo";
 
 /* Title text for carb ratios */
-"Carb Ratios" = "Rapporti carboidrati";
+"Carb Ratios" = "Rapporti Carboidrati";
 
 /* Recovery instruction for an uncertain bolus failure */
 "Check your pump before retrying" = "Controlla il tuo microinfusore prima di riprovare";
@@ -69,7 +69,7 @@
 "Connection Failure" = "Errore di connessione";
 
 /* Title text for glucose target range */
-"Correction Range" = "Intervallo di correzione";
+"Correction Range" = "Intervallo Glicemico";
 
 /* Descriptive text for glucose target range (1: app name) */
 "Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Intervallo di correzione è il valore glicemico (o l'intervallo di valori) a cui vuoi che %1$@ miri per regolare l'insulina basale e aiutarti a calcolare i boli.";
@@ -78,19 +78,19 @@
 "Critical Update" = "Aggiornamento critico";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Limiti di erogazione";
+"Delivery Limits" = "Limiti Erogazione";
 
 /* Generic pump error description */
-"Device Refused" = "Il dispositivo e' stato rifiutato";
+"Device Refused" = "Il dispositivo è stato rifiutato";
 
 /* Recovery suggestion for a no data error */
-"Ensure carb data exists for the specified date" = "Assicurare che i dati carbo esistano per la data specificata";
+"Ensure carb data exists for the specified date" = "Assicurati che i dati sui carboidrati esistano per la data specificata";
 
 /* Glucose trend down */
 "Falling" = "Abbassamento";
 
 /* Glucose trend down-down */
-"Falling fast" = "Abbassamento veloc";
+"Falling fast" = "Abbassamento veloce";
 
 /* Glucose trend down-down-down */
 "Falling very fast" = "Abbassamento molto veloce";
@@ -100,19 +100,19 @@
 "Fiasp" = "Fiasp";
 
 /* Description for fiasp insulin type */
-"Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" = "Fiasp e' una formulazione di insulina ad azione rapida ( Novorapid o Novolog) con un l'aggiunta di Nicotinamide (vitamina B3) prodotta da Novo Nordisk. ";
+"Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" = "Fiasp è una formulazione di insulina ad azione rapida con un l'aggiunta di Nicotinamide (vitamina B3) prodotta da Novo Nordisk. ";
 
 /* Glucose trend flat */
 "Flat" = "Piatto";
 
 /* Descriptive text for fast acting insulin model (1: app name) */
-"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "Per l'insulina ad azione veloce,%1$@ si presume che sara' attiva per 6 ore e Si puo' sceglire fra modelli diversi a seconda dei rispettivi picchi di azione.";
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "Per l'insulina ad azione veloce,%1$@ si presume che sarà attiva per 6 ore. Si può scegliere fra modelli diversi a seconda dei rispettivi picchi d'azione.";
 
 /* The short unit display string for grams per U */
 "g/U" = "g/U";
 
 /* Title text for glucose safety limit */
-"Glucose Safety Limit" = "Limite di Salvezza del Glucosio";
+"Glucose Safety Limit" = "Limite Glicemico di Sicurezza";
 
 /* The long unit display string for a singular hour */
 "Hour" = "Ora";
@@ -127,13 +127,13 @@
 "Humalog (insulin lispro)" = "Humalog (insulina lispro)";
 
 /* Description for humalog insulin type */
-"Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Humalog (insulin Lispro) e' una insulina ad azione rapida prodotta dalla Ely Lilly";
+"Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Humalog (insulin Lispro) è una insulina ad azione rapida prodotta dalla Ely Lilly";
 
 /* Title text for fast acting insulin model */
-"Insulin Model" = "Modello di insulina";
+"Insulin Model" = "Modello d'insulina";
 
 /* Title text for insulin sensitivity */
-"Insulin Sensitivities" = "Sensibilita' all'insulina";
+"Insulin Sensitivities" = "Sensibilità Insulinica";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Configurazione non valida";
@@ -158,7 +158,7 @@
 "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "La scala dei valori della basale massima e' anche la piu' alta basale temporanea  permessa a %1$@ di impostare.";
 
 /* Title text for maximum bolus configuration */
-"Maximum Bolus" = "Bollo Massimo";
+"Maximum Bolus" = "Bolo Massimo";
 
 /* Descriptive text for maximum bolus */
 "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Il bolo massimo e' il valore piu' alto di bolo che puo'essere erogato tutto in una volta per coprire i carboidrati inseriti o per abbassare una iperglicemia";
@@ -200,7 +200,7 @@
 "Please re-enable sharing in Health" = "Per favore, riattiva la condivisione in Salute";
 
 /* Title for pre-meal mode */
-"Pre-Meal" = "Pre-pasto";
+"Pre-Meal" = "Pre-Pasto";
 
 /* Description of supported software update needed */
 "Recommended Update" = "Aggiornamento consigliato";

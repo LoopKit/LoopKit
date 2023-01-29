@@ -32,7 +32,7 @@
 "%@." = "%@.";
 
 /* The format for an insulin needs percentage. */
-"%@%% of normal insulin" = "%@%% of normal insulin";
+"%@%% of normal insulin" = "%@ %% d'insulina normale";
 
 /* Format string for reservoir volume. (1: The localized volume) */
 "%@U" = "%@U";
@@ -106,7 +106,7 @@
 "Active Duration" = "Durata attiva";
 
 /* The title for the override emoji activity section */
-"Activity" = "Activity";
+"Activity" = "Attività";
 
 /* Button text to confirm adding a new schedule item */
 "Add" = "Aggiungi";
@@ -115,19 +115,19 @@
 "Add Account" = "Aggiungi Account";
 
 /* The title of the view controller to create a new carb entry */
-"Add Carb Entry" = "Aggiungi carboidrati assunti";
+"Add Carb Entry" = "Agg. Carb. Assunti";
 
 /* Title of insulin model preset - afrezza */
 "Afrezza" = "Afrezza";
 
 /* Action sheet confirmation message for pump history deletion */
-"Are you sure you want to delete all history entries?" = "Sei sicuro di voler eliminare tutti gli inserimenti storiche?";
+"Are you sure you want to delete all history entries?" = "Sei sicuro di voler eliminare tutte le voci della cronologia?";
 
 /* Action sheet confirmation message for reservoir deletion */
-"Are you sure you want to delete all reservoir values?" = "Sei sicuro di voler eliminare tutti  i valori del serbato?";
+"Are you sure you want to delete all reservoir values?" = "Sei sicuro di voler eliminare tutti i valori del serbatoio?";
 
 /* Authentication hint string for therapy settings */
-"Authenticate to save therapy setting" = "Autenticare per salvare le Impostazioni di Terapia";
+"Authenticate to save therapy setting" = "Eseguire l'autenticazione per salvare le Impostazioni di Terapia";
 
 /* Back navigation button title */
 "Back" = "Indietro";
@@ -148,19 +148,19 @@
 "Below dynamic data" = "Sotto i dati dinamici";
 
 /* No comment provided by engineer. */
-"Bottom" = "Fondo";
+"Bottom" = "Inferiore";
 
 /* No comment provided by engineer. */
 "Bottom component" = "Componente inferiore";
 
 /* The title of the cancel action in an action sheet */
-"Cancel" = "Cancella";
+"Cancel" = "Annulla";
 
 /* The text for the override cancellation button */
-"Cancel Override" = "Annulla programma alternativo";
+"Cancel Override" = "Annulla Programma Alternativo";
 
 /* Title text for suspend resume button when temp basal canceling */
-"Canceling Temp Basal" = "Annullamento velocità basale temporanea in corso";
+"Canceling Temp Basal" = "Annullamento Basale Temp";
 
 /* Title text for multi-value carb ratio warning */
 "Carb Ratios" = "Rapporti carboidrati";
@@ -215,14 +215,14 @@
 "Correction Values" = "Valori di correzione";
 
 /* The text for a custom override */
-"Custom" = "Personalizzata";
+"Custom" = "Programma";
 
 /* The title for the custom override entry screen */
-"Custom Override" = "Programma alternativo personalizzato";
+"Custom Override" = "Progr. Alternativo";
 
 /* The title for the custom preset entry screen
    The title for the custom preset selection screen */
-"Custom Preset" = "Preimpostazione personalizzata";
+"Custom Preset" = "Programmazione";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Data";
@@ -230,19 +230,19 @@
 /* Delete values for Pre-Meal, inactivates Pre-Meal icon
    Test for table cell delete button
    The title of the button to remove the credentials for a service */
-"Delete" = "Elimina";
+"Delete" = "Cancella";
 
 /* The title of the button to remove the credentials for a service */
 "Delete Account" = "Cancella Account";
 
 /* Button title to delete all objects */
-"Delete All" = "Elimina tutto";
+"Delete All" = "Cancella tutto";
 
 /* Title text for crossed thresholds guardrail warning */
-"Delivery Limits" = "Limiti di erogazione";
+"Delivery Limits" = "Limiti Erogazione";
 
 /* Information about delivery limits */
-"Delivery Limits are safety guardrails for your insulin delivery." = "I limiti di erogazione sono barriere di sicurezza per la somministrazione di insulina.";
+"Delivery Limits are safety guardrails for your insulin delivery." = "I limiti di consegna sono barriere di sicurezza per la somministrazione di insulina.";
 
 /* The text for the custom preset disable button */
 "Disable Preset" = "Disabilita preimpostazione";
@@ -250,7 +250,7 @@
 /* Text for dismiss button
    Text for done button
    Video player done button label */
-"Done" = "Fatto";
+"Done" = "Fine";
 
 /* The text for the override duration setting */
 "Duration" = "Durata";
@@ -263,13 +263,13 @@
 
 /* Text for edit button
    The title for the enabled custom preset editing screen */
-"Edit" = "Modificare";
+"Edit" = "Modifica";
 
 /* The title of the view controller to edit an existing carb entry */
-"Edit Carb Entry" = "Modifica carboidrati Assunti";
+"Edit Carb Entry" = "Mod. Carb Assunti";
 
 /* The title for the override editing screen */
-"Edit Override" = "Modifica programma alternativo";
+"Edit Override" = "Mod. Progr. Alternativo";
 
 /* Footer text for editing an active override (1: preset name) */
 "Editing affects only the active override. The default settings of %@ will not be affected." = "La modifica riguarda solo il programma alternativo attivo.  Le impostazioni predefinite di %@ resteranno invariate.";
@@ -278,10 +278,10 @@
 "Edits persist only until the preset is disabled. The default settings of %@ will not be affected." = "Le modifiche persistono solo finché la preimpostazione non viene disattivata. Le impostazioni predefinite di %@ non vengono modificate.";
 
 /* The button text for enabling a temporary override */
-"Enable" = "Abilitare";
+"Enable" = "Abilita";
 
 /* The text for the indefinite override duration setting */
-"Enable Indefinitely" = "Attiva a tempo indeterminato";
+"Enable Indefinitely" = "Abilita a tempo indeterminato";
 
 /* The detail text describing an enabled setting */
 "Enabled" = "Abilitato";
@@ -293,10 +293,10 @@
 "Enter %1$@ value" = "Inserisci il valore %1$@";
 
 /* The placeholder text instructing users how to enter a maximum bolus */
-"Enter a number of units" = "Inserire un numero di unità";
+"Enter a number of units" = "Inserisci un numero di unità";
 
 /* The placeholder text instructing users how to enter a maximum basal rate */
-"Enter a rate in units per hour" = "Inserire un tasso di unità per ora";
+"Enter a rate in units per hour" = "Inserisci velocità U/ora";
 
 /* Segmented button title for insulin delivery log event history */
 "Event History" = "Storia degli Eventi";
@@ -324,7 +324,7 @@
 "Go Back" = "Torna indietro";
 
 /* Title text for the high basal rate warning */
-"High Basal Rate" = "Scala dei valori della Basale massima Alta";
+"High Basal Rate" = "Velocità Basale Alta";
 
 /* Title text for the high carb ratio warning */
 "High Carb Ratio" = "Rapporto Carboidrati Alto";
@@ -333,19 +333,19 @@
 "High Correction Value" = "Valore di Correzione Alto";
 
 /* Title text for the high glucose safety limit warning */
-"High Glucose Safety Limit" = "Limite di Salvezza del Glucosio Alto";
+"High Glucose Safety Limit" = "Limite glicemico di sicurezza alto";
 
 /* Title text for the high insulin sensitivity warning */
 "High Insulin Sensitivity" = "Sensibilità all’insulina Alta";
 
 /* Title text for high maximum basal rate warning */
-"High Maximum Basal Rate" = "Scala dei valori della Basale massima Alta";
+"High Maximum Basal Rate" = "Velocità Basale massima Alta";
 
 /* Title text for high maximum bolus warning */
 "High Maximum Bolus" = "Bolo Massimo Alto";
 
 /* Title text for the low pre-meal value warning */
-"High Pre-Meal Value" = "Valori pre-pasto alti";
+"High Pre-Meal Value" = "Valori Pre-Pasto Alti";
 
 /* Title text for the high workout value warning */
 "High Workout Value" = "Alto valore di allenamento";
@@ -393,10 +393,10 @@
 "Low Maximum Basal Rate" = "Scala dei valori della Basale massima bassa";
 
 /* Title text for low maximum bolus warning */
-"Low Maximum Bolus" = "Massimo Bolo basso";
+"Low Maximum Bolus" = "Bolo Massimo Basso";
 
 /* Title text for the low pre-meal value warning */
-"Low Pre-Meal Value" = "Valori bassi pre-pasto";
+"Low Pre-Meal Value" = "Valori bassi Pre-Pasto";
 
 /* Title text for the low workout value warning */
 "Low Workout Value" = "Valori degli esercizi  fisici a bassa intensita'";
@@ -444,7 +444,7 @@
 "Name" = "Nome";
 
 /* Title for mini-modal to add a new schedule entry */
-"New Entry" = "Nuovo accesso ";
+"New Entry" = "Nuovo accesso";
 
 /* The title for the new override preset entry screen */
 "New Preset" = "Nuove impostazioni predefinite";
@@ -460,10 +460,10 @@
 "Overall Insulin Needs" = "Fabbisogno complessivo di insulina";
 
 /* Title for override history view */
-"Override History" = "Cronostoria del programma alternativo";
+"Override History" = "Cronostoria";
 
 /* The title text for the override presets screen */
-"Override Presets" = "Impostazioni predefinite del programma alternativo";
+"Override Presets" = "Programma Alternativo";
 
 /* Text directing the user to configure override presets */
 "Override presets can be set up under the 'Configuration' section of the settings screen." = "È possibile configurare le impostazioni predefinite del programma alternativo nella sezione ‘Configurazione' della schermata impostazioni.";
@@ -587,7 +587,7 @@
 "Symbol" = "Simbolo";
 
 /* Text directing the user to configure their first custom preset */
-"Tap '+' to create a new custom preset." = "Tocca \"+\" per creare un nuovo predefinito personalizzato.";
+"Tap '+' to create a new custom preset." = "Tocca \"+\" per creare una nuova programmazione.";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Imposta";
@@ -630,7 +630,7 @@
 "The schedule starts at midnight and cannot contain a rate of 0 U/hr." = "Il programma inizia a mezzanotte e non può contenere una velocità di 0 U/ora.";
 
 /* Therapy Settings screen title */
-"Therapy Settings" = "Impostazioni della terapia";
+"Therapy Settings" = "Impostazioni Terapia";
 
 /* No comment provided by engineer. */
 "Therapy Settings Support Placeholder" = "Segnaposto di supporto per le impostazioni di terapia";

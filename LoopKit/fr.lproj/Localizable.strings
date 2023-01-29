@@ -74,6 +74,9 @@
 /* Descriptive text for glucose target range (1: app name) */
 "Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "La plage de correction est la valeur de glucose (ou la plage de valeurs) que vous voulez que %1$@ vise en ajustant votre insuline basale et en vous aidant à calculer vos bolus.";
 
+/* Description of critical software update needed */
+"Critical Update" = "Mise à jour critique";
+
 /* Title text for delivery limits */
 "Delivery Limits" = "Limites d'Administration";
 
@@ -96,8 +99,14 @@
    Title for Fiasp insulin type */
 "Fiasp" = "Fiasp";
 
+/* Description for fiasp insulin type */
+"Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" = "Fiasp est une formulation d'insuline asparte prandiale avec ajout de nicotinamide (vitamine B3) qui est produite par Novo Nordisk";
+
 /* Glucose trend flat */
 "Flat" = "Stable";
+
+/* Descriptive text for fast acting insulin model (1: app name) */
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "Pour l'insuline à action rapide, %1$@ suppose qu'elle agit activement pendant 6 heures. Vous pouvez choisir parmi différents modèles pour le pic d'activité.";
 
 /* The short unit display string for grams per U */
 "g/U" = "g/U";
@@ -132,11 +141,21 @@
 /* Recovery instruction for a certain bolus failure */
 "It is safe to retry" = "Il est possible de réessayer en toute sécurité";
 
+/* Brand name for lyumjev insulin type
+   Title for Lyumjev insulin type */
+"Lyumjev" = "Lyumjev";
+
+/* Description for lyumjev insulin type */
+"Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly" = "Lyumjev est une formulation d'insuline lispro prandiale avec ajout de citrate et de tréprostinil fabriqué par Eli Lilly";
+
 /* Recovery suggestion for uncertain delivery */
 "Make sure your pump is within communication range of your phone." = "Assurez-vous que votre pompe soit à portée de communication de votre téléphone.";
 
 /* Title text for maximum basal rate configuration */
 "Maximum Basal Rate" = "Débit Basal Maximum";
+
+/* Descriptive text for maximum basal rate (1: app name) */
+"Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Le débit basal maximum est le débit de base temporaire le plus élevé que %1$@ est autorisé à définir.";
 
 /* Title text for maximum bolus configuration */
 "Maximum Bolus" = "Bolus Maximum";
@@ -156,11 +175,20 @@
 /* Sensor state description for the non-valid state */
 "Needs Attention" = "Demande votre attention";
 
+/* Description of no software update needed */
+"No Update" = "Pas de mise à jour";
+
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "Aucune entrée trouvée";
 
 /* Brand name for novolog insulin type */
 "Novolog" = "Novolog";
+
+/* Title for Novolog insulin type */
+"Novolog (insulin aspart)" = "Novolog (insuline asparte)";
+
+/* Description for novolog insulin type */
+"NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk" = "NovoLog (insuline asparte) est une insuline à action rapide fabriquée par Novo Nordisk";
 
 /* Sensor state description for the valid state */
 "OK" = "OK";
@@ -173,6 +201,9 @@
 
 /* Title for pre-meal mode */
 "Pre-Meal" = "Pré-Repas";
+
+/* Description of supported software update needed */
+"Recommended Update" = "Mise à jour recommandée";
 
 /* Title for resume dose type */
 "Resumed" = "Reprendre";
@@ -230,6 +261,9 @@
 
 /* The long unit display string for international units of insulin per hour */
 "Units/hour" = "unités / heure";
+
+/* Description of informational software update needed */
+"Update Available" = "Mise à jour disponible";
 
 /* Title for workout mode */
 "Workout" = "Exercice";

@@ -17,13 +17,13 @@
 "···" = "···";
 
 /* Information about insulin action duration */
-"(appName) assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "(appName) antar at insulinet den har levert, jobber aktivt med å senke glukosen i 6 timer. Denne innstillingen kan ikke endres.";
+"(appName) assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "(appName) antar at insulinet den har levert, jobber aktivt med å senke blodsukkeret i 6 timer. Denne innstillingen kan ikke endres.";
 
 /* No comment provided by engineer. */
 "%@" = "%@";
 
 /* Information about insulin action duration */
-"%@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%@ antar at insulinet den har levert, jobber aktivt med å senke glukosen i 6 timer. Denne innstillingen kan ikke endres.";
+"%@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%@ antar at insulinet den har levert, jobber aktivt med å senke blodsukkeret i 6 timer. Denne innstillingen kan ikke endres.";
 
 /* No comment provided by engineer. */
 "%@, " = "%@ ,";
@@ -45,7 +45,7 @@
 "%1$@ %2$@" = "%1$@ %2$@";
 
 /* Lower bound workout information text format (1: app name) */
-"%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ eller din sikkerhetsgrense for glukose, avhengig av hva som er høyest";
+"%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ eller din sikkerhetsgrense for blodsukker, avhengig av hva som er høyest";
 
 /* Information about max number of basal rates */
 "%1$@ supports 1 to (maximumScheduleEntryCount) rates per day." = "%1$@ støtter 1 til (maximumScheduleEntryCount) priser per dag.";
@@ -136,13 +136,13 @@
 "Basal Rates" = "Basal-satser";
 
 /* Describes a percentage decrease in overall insulin needs */
-"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Insulindoser for babsal, bolus og korreksjon er redusert med %@%%.";
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Insulindoser for basal, bolus og korreksjon er redusert med %@%%.";
 
 /* Describes a percentage increase in overall insulin needs */
-"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Insulindoser for babsal, bolus og korreksjon er økt med %@%%";
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Insulindoser for bassal, bolus og korreksjon er økt med %@%%";
 
 /* Describes a lack of change in overall insulin needs */
-"Basal, bolus, and correction insulin dose amounts are unaffected." = "Insulindoser for babsal, bolus og korreksjon er uendret.";
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "Insulindoser for basal, bolus og korreksjon er uendret.";
 
 /* No comment provided by engineer. */
 "Below dynamic data" = "Under dynamiske data";
@@ -160,7 +160,7 @@
 "Cancel Override" = "Avbryt overstyring";
 
 /* Title text for suspend resume button when temp basal canceling */
-"Canceling Temp Basal" = "Avbryter temp basal";
+"Canceling Temp Basal" = "Avbryter midlertidig basal";
 
 /* Title text for multi-value carb ratio warning */
 "Carb Ratios" = "Karb forhold";
@@ -169,7 +169,7 @@
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Endringer vil kun gjelde for denne gangen du aktiverer overstyring. Standardinstillinger for %@ vil ikke bli påvirket.";
 
 /* Footer text for customizing from a preset (1: preset name) */
-"Changes will only apply this time you enable the preset. The default settings of %@ will not be affected." = "Endringer vil bare gjelde denne gangen du aktiverer forhåndsinnstillingen. Standardinnstillingene til %@ vil ikke bli påvirket.";
+"Changes will only apply this time you enable the preset. The default settings of %@ will not be affected." = "Endringer vil kun gjelde for denne gangen du aktiverer forhåndsinnstillingen. Standardinnstillingene til %@ vil ikke bli påvirket.";
 
 /* Carb entry section footer text explaining absorption time */
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Velg en lengre absorpsjonstid for større måltider, eller de som inneholder fett og proteiner. Dette er bare veiledning til algoritmen og trenger ikke å være nøyaktig.";
@@ -314,7 +314,7 @@
 "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity." = "For hurtigvirkende insulin antar %1$@ at det virker aktivt i 6 timer. Du kan velge mellom %2$@ forskjellige modeller for hvordan appen måler insulinets toppaktivitet.";
 
 /* Information about correction range format (1: app name) */
-"For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin." = "For dette området, velg den spesifikke glukoseverdien (eller verdiområdet) som du vil at %1$@ skal sikte på for å justere basalinsulinet.";
+"For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin." = "For dette området, velg den spesifikke sikkerhets grenseverdien (eller verdiområdet) som du vil at %1$@ skal sikte på for å justere basalinsulinet.";
 
 /* Support button for Therapy Settings */
 "Get help with Therapy Settings" = "Få hjelp med behandlingsinnstillinger";
@@ -333,7 +333,7 @@
 "High Correction Value" = "Høy korreksjonsverdi";
 
 /* Title text for the high glucose safety limit warning */
-"High Glucose Safety Limit" = "Høy glukosesikkerhetsgrense";
+"High Glucose Safety Limit" = "Sikkerhetsgrense for høyt blodsukker";
 
 /* Title text for the high insulin sensitivity warning */
 "High Insulin Sensitivity" = "Høy insulinfølsomhet";
@@ -357,13 +357,16 @@
 "If these settings look good to you, tap Save Settings to continue." = "Hvis disse innstillingene ser bra ut, trykk på Lagre innstillingene for å fortsette.";
 
 /* Information about target range */
-"If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Hvis du har brukt en CGM før, er du sannsynligvis kjent med målområdet som et bredt spekter av verdier du vil ha for glukosevarslene dine, for eksempel 70-180 mg/dL eller 90-200 mg/dL.";
+"If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Hvis du har brukt en CGM før, er du sannsynligvis kjent med målområdet som et bredt spekter av verdier du vil ha for blodsukkervarslene dine, for eksempel 70-180 mg/dL eller 90-200 mg/dL.";
+
+/* Title text for insulin model */
+"Insulin Model" = "Insulin modell";
 
 /* Title text for multi-value insulin sensitivity warning */
 "Insulin Sensitivities" = "Insulinsensitivitet";
 
 /* The description shown on the insulin sensitivity schedule interface. */
-"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insulinfølsomhet beskriver hvordan blodsukkeret responderer på 1 enhet insulin. Mindre verdier betyr at mer insulin vil bli gitt når man er over målområdet. Verdier som er for små kan føre til farlig lavt blodsukker. ";
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insulinfølsomhet beskriver hvordan blodsukkeret responderer på 1 enhet insulin. Mindre verdier betyr at mer insulin vil bli gitt når man er over målområdet. Verdier som er for små kan føre til farlig lavt blodsukker.";
 
 /* Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: programmed value (? if no value), 4: unit) */
 "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@" = "Avbrutt %1$@: <b>%2$@</b> av %3$@ %4$@";
@@ -381,7 +384,7 @@
 "Low Correction Value" = "Lav korreksjonsverdi";
 
 /* Title text for the low glucose safety limit warning */
-"Low Glucose Safety Limit" = "Lav glukose sikkerhetsgrense";
+"Low Glucose Safety Limit" = "Sikkerhetsgrense for lavt blodsukker";
 
 /* Title text for the low insulin sensitivity warning */
 "Low Insulin Sensitivity" = "Lav insulinfølsomhet";
@@ -398,6 +401,9 @@
 /* Title text for the low workout value warning */
 "Low Workout Value" = "Lav treningsverdi";
 
+/* Title of insulin model preset - lyumjev */
+"Lyumjev" = "Lyumjev";
+
 /* Placeholder for maximum value in glucose range */
 "max" = "max";
 
@@ -405,7 +411,7 @@
 "Maximum Basal Rate" = "Maks basalgrense";
 
 /* Information about maximum basal rate */
-"Maximum Basal Rate is the maximum automatically adjusted basal rate that (appName) is allowed to enact to help reach your correction range." = "Maksimal basalrate er den maksimale automatisk justerte basaldosen som (appName) har lov til å vedta for å hjelpe deg med å nå korrigeringsområdet ditt.";
+"Maximum Basal Rate is the maximum automatically adjusted basal rate that (appName) is allowed to enact to help reach your correction range." = "Maksimal basalrate er den maksimale automatisk justerte basaldosen som (appName) har lov til å vedta for å hjelpe deg med å nå ditt korreksjsjonsområdet.";
 
 /* Information about maximum basal rate */
 "Maximum Basal Rate is the maximum automatically adjusted basal rate that %@ is allowed to enact to help reach your correction range." = "Maksimal basaldose er den maksimale automatisk justerte basaldosen som %@ har lov til å aktivere for å hjelpe deg med å nå ditt korreksjonsområde.";
@@ -414,10 +420,10 @@
 "Maximum Bolus" = "Maks bolus";
 
 /* Information about maximum bolus */
-"Maximum Bolus is the highest bolus amount that you will allow (appName) to recommend at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den høyeste bolusmengden du vil tillate (appName) å anbefale på en gang for å dekke karbohydrater eller redusere høyt glukose.";
+"Maximum Bolus is the highest bolus amount that you will allow (appName) to recommend at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den høyeste bolusmengden du vil tillate (appName) å anbefale på en gang for å dekke karbohydrater eller redusere høyt blodsukker.";
 
 /* Information about maximum bolus */
-"Maximum Bolus is the highest bolus amount that you will allow %@ to recommend at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den høyeste bolusmengden du vil tillate %@ å anbefale på en gang for å dekke karbohydrater eller redusere høyt glukose.";
+"Maximum Bolus is the highest bolus amount that you will allow %@ to recommend at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den høyeste bolusmengden du vil tillate %@ å anbefale på en gang for å dekke karbohydrater eller redusere høyt blodsukker.";
 
 /* Section title for medium absorbing food */
 "Medium" = "Medium";
@@ -469,7 +475,7 @@
 "Pre-Meal" = "Pre-måltid";
 
 /* Title text for multi-value pre-meal value warning */
-"Pre-Meal Values" = "Pre-måltider verdier";
+"Pre-Meal Values" = "Pre-måltids verdier";
 
 /* title for prescription section */
 "Prescription" = "Resept";
@@ -484,7 +490,7 @@
 "Pump Event" = "Pumpehendelse";
 
 /* Title text for suspend resume button when the basal delivery state is not set */
-"Pump Inoperable" = "Pumpe er ubrukelig";
+"Pump Inoperable" = "Pumpe er ute av drift";
 
 /* Title of insulin model preset - rapid acting adult */
 "Rapid-Acting – Adults" = "Hurtigvirkende - Voksen";
@@ -508,7 +514,7 @@
 "Review and Save Settings" = "Se gjennom og lagre innstillinger";
 
 /* Description of how to interact with summary screen */
-"Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen." = "Se gjennom innstillingene dine nedenfor. Om du vil endre noen av disse, trykk \"tilbake\" for å gå til det skjermbildet.";
+"Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen." = "Se gjennom innstillingene dine nedenfor. Om du vil endre noen av disse, trykk \"Tilbake\" for å gå til det skjermbildet.";
 
 /* The text for the override preset name field placeholder */
 "Running" = "Løper";
@@ -530,7 +536,7 @@
 "Save Delivery Limits?" = "Lagre leveringsgrenser?";
 
 /* Alert title for confirming a glucose safety limit outside the recommended range */
-"Save Glucose Safety Limit?" = "Lagre glukose-sikkerhets begrensning?";
+"Save Glucose Safety Limit?" = "Lagre sikkerhetsbegrensning for blodsukker?";
 
 /* Alert title for confirming insulin sensitivities outside the recommended range */
 "Save Insulin Sensitivities?" = "Lagre Insulinsensitivitet?";
@@ -540,6 +546,9 @@
 
 /* Alert title for confirming workout range overrides outside the recommended range */
 "Save Workout Range?" = "Lagre treningsområde?";
+
+/* The button text during saving on a configuration page */
+"Saving..." = "Lagrer...";
 
 /* The section header text for a scheduled override */
 "SCHEDULED OVERRIDE" = "PLANLAGT OVERSTYRING";
@@ -587,10 +596,10 @@
 "Target Range" = "Målområde";
 
 /* Description of pre-meal mode */
-"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduser glukosemålet ditt midlertidig før et måltid for å påvirke glukosetoppene etter måltidet.";
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduser blodsukkermålet ditt midlertidig før et måltid for å påvirke blodsukkertoppene etter måltidet.";
 
 /* Description of workout mode */
-"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Øk glukosemålet ditt midlertidig før, under eller etter fysisk aktivitet for å redusere risikoen for hendelser med lavt glukose.";
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Øk blodsukkermålet ditt midlertidig før, under eller etter fysisk aktivitet for å redusere risikoen for hendelser med lavt blodsukker.";
 
 /* The title for the override selection screen */
 "Temporary Override" = "Midlertidig overstyring";
@@ -626,6 +635,9 @@
 /* No comment provided by engineer. */
 "Therapy Settings Support Placeholder" = "Therapy Settings Support Placeholder";
 
+/* Subtitle of afrezza preset */
+"This model assumes peak insulin activity at 19 minutes." = "Denne modellen antar topp insulinaktivitet etter 19 minutter.";
+
 /* Subtitle of Fiasp preset
    Subtitle of Lyumjev preset */
 "This model assumes peak insulin activity at 55 minutes." = "Denne modellen antar maksimal insulinaktivitet etter 55 minutter.";
@@ -655,6 +667,12 @@
 /* No comment provided by engineer. */
 "Top component" = "Topp komponent";
 
+/* The text indicating Total for Daily Schedule Basal */
+"Total" = "Total";
+
+/* The text indicating U/day for Daily Schedule Basal */
+"U/day" = "E/dag";
+
 /* The unit string for units per hour */
 "U/hour" = "E/timen";
 
@@ -667,6 +685,9 @@
 /* Accessibility value for an unknown value
    The default title to use when an entry has none */
 "Unknown" = "Ukjent";
+
+/* Title for selection when no insulin type is selected. */
+"Unset" = "Fjern";
 
 /* Placeholder text until value is entered */
 "Value" = "Verdi";
@@ -690,7 +711,7 @@
 "Workout" = "Trening";
 
 /* Information about workout range format (1: app name) */
-"Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button." = "Treningsområde er glukoseverdien eller verdiområdet du vil at %1$@ skal målrettes mot under aktivitet. Dette området trer i kraft når du aktiverer knappen Forhåndsinnstilling for treningsøkt.";
+"Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button." = "Treningsområde er blodsukkerverdien eller verdiområdet du vil at %1$@ skal målrettes mot under aktivitet. Dette området trer i kraft når du aktiverer knappen Forhåndsinnstilling for treningsøkt.";
 
 /* Title text for multi-value workout value warning */
 "Workout Values" = "Verdier for treningsøkt";
@@ -723,14 +744,14 @@
 "Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din basaldose av insulin er antall enheter per time du vil bruke for å dekke ditt bakgrunnsinsulinbehov.";
 
 /* Lower bound pre-meal information text */
-"your Glucose Safety Limit" = "din glukosesikkerhetsgrense";
+"your Glucose Safety Limit" = "din sikkerhetsgrense for blodsukker";
 
 /* Disclaimer */
 "Your healthcare provider can help you choose a Correction Range that's right for you." = "Helsepersonellet kan hjelpe deg med å velge et korrigeringsområde som er riktig for deg.";
 
 /* Description of insulin sensitivity factor */
-"Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Din insulinsensitivitetsfaktor (ISF) er fallet i glukose som forventes fra én enhet insulin.";
+"Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Din insulinsensitivitetsfaktor (ISF) er fallet i blodsukker som forventes fra én enhet insulin.";
 
 /* Information about pre-meal range format (1: app name) */
-"Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Pre-Meal Range bør være glukoseverdien (eller verdiområdet) du vil at %1$@ skal målrettes mot når du tar din første bit av måltidet. Dette området vil være i kraft når du aktiverer forhåndsinnstillingsknappen før måltid.";
+"Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Pre-Meal Range bør være blodsukkerverdien (eller verdiområdet) du vil at %1$@ skal målrettes mot når du tar din første bit av måltidet. Dette området vil være i kraft når du aktiverer forhåndsinnstillingsknappen før måltid.";
 
