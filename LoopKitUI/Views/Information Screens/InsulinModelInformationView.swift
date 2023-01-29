@@ -37,12 +37,12 @@ public struct InsulinModelInformationView: View {
     }
     
     private var diaInfo: Text {
-        Text(LocalizedString("\(appName) assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed.", comment: "Information about insulin action duration"))
+        Text(String(format: LocalizedString("%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed.", comment: "Information about insulin action duration (1: app name)"), appName))
     }
     
     private var modelPeakInfo: some View {
         VStack (alignment: .leading, spacing: 20) {
-            Text(LocalizedString("You can choose how \(appName) measures rapid acting insulin's peak activity according to one of these two insulin models.", comment: "Information about insulin model"))
+            Text(String(format: LocalizedString("You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models.", comment: "Information about insulin model (1: app name)"), appName))
             HStack(spacing: 10) {
                 bulletCircle
                 Text(LocalizedString("The rapid-acting adult model assumes peak activity at 75 minutes.", comment: "Information about adult insulin model"))
