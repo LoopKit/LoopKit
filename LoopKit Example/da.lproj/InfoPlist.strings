@@ -2,7 +2,7 @@
 "CFBundleName" = "Eksempel på LoopKit";
 
 /* Privacy - Health Share Usage Description */
-"NSHealthShareUsageDescription" = "Måltid data fra Apple Health-databasen bruges til at bestemme effekten på blodsukkeret. Blodsukkerdata fra Apple Health-databasen bruges til graftegning og momentum beregning.";
+"NSHealthShareUsageDescription" = "Måltidsdata fra Apple Health-databasen bruges til at bestemme effekten på blodsukkeret. Blodsukkerdata fra Apple Health-databasen bruges til graftegning og momentum beregnings";
 
 /* Privacy - Health Update Usage Description */
 "NSHealthUpdateUsageDescription" = "Kulhydrater indtastet i Loop gemmes i Health databasen. Blodsukker lagres sikkert i HealthKit.";

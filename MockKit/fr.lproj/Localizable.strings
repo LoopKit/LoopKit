@@ -7,9 +7,6 @@
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
-/* Alert content body for recurring software update alert */
-"A software update is recommended to continue using the (appName) app.\n\nGo to (appName) Settings > Software Update to install the latest version." = "Une mise à jour logicielle est recommandée pour continuer à utiliser l'applicaiton (appName).\n\nNaviguer vers les paramètres (appName) > Mise à jour logicielle pour installer la version la plus récente.";
-
 /* Confirmation message for deleting a service */
 "Are you sure you want to delete this service?" = "Voulez-vous vraiment supprimer ce service?";
 
@@ -20,7 +17,7 @@
 "Cancel" = "Annuler";
 
 /* Title for CGM simulator settings */
-"CGM Settings" = "Paramètres MGC";
+"CGM Settings" = "Paramètres CGM";
 
 /* No comment provided by engineer. */
 "Clear Last Version Check Alert Date" = "Effacer la date d'alerte de la dernière vérification de version";
@@ -68,7 +65,4 @@
 
 /* No comment provided by engineer. */
 "Version Check Response" = "Réponse à la vérification de version";
-
-/* Alert content body for first software update alert */
-"Your (appName) app is out of date. It will continue to work, but we recommend updating to the latest version.\n\nGo to (appName) Settings > Software Update to complete." = "Votre application (appname) n'est plus à jour. Elle continuera à fonctionner, mais nous vous recommandons de la mettre à jour avec la dernière version.\n\nAllez dans Paramètres de (appname) > Mise à jour du logiciel pour l'effectuer.";
 

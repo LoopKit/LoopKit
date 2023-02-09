@@ -152,10 +152,10 @@
 "Make sure your pump is within communication range of your phone." = "Fare sicuro che il microinfusore e' nel cerchio di comunicazione del cellulare";
 
 /* Title text for maximum basal rate configuration */
-"Maximum Basal Rate" = "Scala dei valori della Basale massima";
+"Maximum Basal Rate" = "Velocità Basale Massima";
 
 /* Descriptive text for maximum basal rate (1: app name) */
-"Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "La scala dei valori della basale massima e' anche la piu' alta basale temporanea  permessa a %1$@ di impostare.";
+"Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Velocità Basale Massima è la velocità basale temporanea più alta che %1$@ può impostare.";
 
 /* Title text for maximum bolus configuration */
 "Maximum Bolus" = "Bolo Massimo";
@@ -269,11 +269,11 @@
 "Workout" = "Allenarsi";
 
 /* Descriptive text for basal rate */
-"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "La velocità basale di insulina è il numero di unità all'ora che si desidera utilizzare per coprire il fabbisogno di insulina di base.";
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "La velocità basale d'insulina è il numero di unità all'ora che si desidera utilizzare per coprire il tuo fabbisogno d'insulina basale.";
 
 /* Descriptive text for carb ratio */
 "Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Il tuo rapporto carboidrati è il numero di grammi di carboidrati coperti da un'unità di insulina.";
 
 /* Descriptive text for insulin sensitivity */
-"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "La tua sensibilità all'insulina si riferisce al calo di glucosio previsto da un'unità di insulina.";
+"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "La tua sensibilità all'insulina si riferisce al calo di glucosio previsto da un'unità d'insulina.";
 

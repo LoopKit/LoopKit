@@ -7,9 +7,6 @@
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
-/* Alert content body for recurring software update alert */
-"A software update is recommended to continue using the (appName) app.\n\nGo to (appName) Settings > Software Update to install the latest version." = "Es wird eine Softwareaktualisierung empfohlen, um die App (AppName) weiterhin zu verwenden.\n\nGehen Sie zu (AppName) Einstellungen > Software-Update, um die neueste Version zu installieren.";
-
 /* Confirmation message for deleting a service */
 "Are you sure you want to delete this service?" = "Möchten Sie diesen Dienst wirklich löschen?";
 
@@ -68,7 +65,4 @@
 
 /* No comment provided by engineer. */
 "Version Check Response" = "Antwort der Versionsprüfung";
-
-/* Alert content body for first software update alert */
-"Your (appName) app is out of date. It will continue to work, but we recommend updating to the latest version.\n\nGo to (appName) Settings > Software Update to complete." = "Ihre (appName) App ist veraltet. Sie wird weiterhin funktionieren, aber wir empfehlen, auf die neueste Version zu aktualisieren.\n\nGehen Sie zu (appName) Einstellungen > Software-Update, um die Aktualisierung abzuschließen.";
 

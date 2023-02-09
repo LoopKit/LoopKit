@@ -14,10 +14,10 @@
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Descriptive text for guardrail high value warning for schedule interface */
-"A value you have entered is higher than what is typically recommended for most people." = "Een waarde die je hebt ingevoerd is hoger dan wat meestal voor de meeste mensen wordt aanbevolen.";
+"A value you have entered is higher than what is typically recommended for most people." = "Een waarde die je hebt ingevoerd is hoger dan wat gebruikelijk voor de meeste mensen wordt aanbevolen.";
 
 /* Descriptive text for guardrail low value warning for schedule interface */
-"A value you have entered is lower than what is typically recommended for most people." = "Een waarde die je hebt ingevoerd is lager dan wat meestal voor de meeste mensen wordt aanbevolen.";
+"A value you have entered is lower than what is typically recommended for most people." = "Een waarde die je hebt ingevoerd is lager dan wat gebruikelijk voor de meeste mensen wordt aanbevolen.";
 
 /* Brand name for afrezza insulin type
    Title for Afrezza insulin type */
@@ -36,7 +36,7 @@
 "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis " = "Apidra (insuline glulisine) is een snelwerkende insuline gemaakt door Sanofi-aventis";
 
 /* The error description describing when Health sharing was denied */
-"Authorization Denied" = "Autorisatie geweigerd";
+"Authorization Denied" = "Autorisatie Geweigerd";
 
 /* Title for basal dose type */
 "Basal" = "Basaal";
@@ -63,7 +63,7 @@
 "Communication Failure" = "Communicatiefout";
 
 /* Failure reason for uncertain delivery */
-"Communications interrupted during insulin delivery command." = "Communicatie onderbroken tijdens het commando over insulinelevering.";
+"Communications interrupted during insulin delivery command." = "Communicatie onderbroken tijdens het commando voor insulinetoediening.";
 
 /* Generic pump error description */
 "Connection Failure" = "Verbindingsfout";
@@ -72,7 +72,7 @@
 "Correction Range" = "Correctiebereik";
 
 /* Descriptive text for glucose target range (1: app name) */
-"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Correctiebereik is de glucosewaarde (of bereik van waarden) waar je wilt dat %1$@ naar streeft bij het aanpassen van je basale insuline en het helpen berekenen van je bolussen.";
+"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Correctiebereik is de glucosewaarde (of een bereik van waarden) waar je wilt dat %1$@ naar streeft bij het aanpassen van je basale insuline en het berekenen van je bolussen.";
 
 /* Description of critical software update needed */
 "Critical Update" = "Kritieke Update";
@@ -81,7 +81,7 @@
 "Delivery Limits" = "Toedieningslimieten";
 
 /* Generic pump error description */
-"Device Refused" = "Apparaat geweigerd";
+"Device Refused" = "Apparaat Geweigerd";
 
 /* Recovery suggestion for a no data error */
 "Ensure carb data exists for the specified date" = "Zorg ervoor dat er koolhydraten gegevens bestaan voor de opgegeven datum";
@@ -106,19 +106,19 @@
 "Flat" = "Gelijk";
 
 /* Descriptive text for fast acting insulin model (1: app name) */
-"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "Voor snelwerkende insuline gaat %1$@ ervan uit dat het gedurende 6 uur actief werkt. Je kunt kiezen uit verschillende modellen voor de piekactiviteit.";
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "Voor snelwerkende insuline gaat %1$@ ervan uit dat het 6 uur lang actief is. Je kunt kiezen uit verschillende modellen voor de piekactiviteit.";
 
 /* The short unit display string for grams per U */
 "g/U" = "g/E";
 
 /* Title text for glucose safety limit */
-"Glucose Safety Limit" = "Glucose veiligheidslimiet";
+"Glucose Safety Limit" = "Glucoseveiligheidslimiet";
 
 /* The long unit display string for a singular hour */
 "Hour" = "Uur";
 
 /* The long unit display string for hours */
-"Hours" = "Uren";
+"Hours" = "Uur";
 
 /* Brand name for humalog insulin type */
 "Humalog" = "Humalog";
@@ -136,7 +136,7 @@
 "Insulin Sensitivities" = "Insulinegevoeligheid";
 
 /* Generic pump error description */
-"Invalid Configuration" = "Ongeldige configuratie";
+"Invalid Configuration" = "Ongeldige Configuratie";
 
 /* Recovery instruction for a certain bolus failure */
 "It is safe to retry" = "Veilig om opnieuw te proberen";
@@ -161,7 +161,7 @@
 "Maximum Bolus" = "Maximale Bolus";
 
 /* Descriptive text for maximum bolus */
-"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maximale bolus is de hoogste bolus die je kan geven om koolhydraten te dekken of hoge bloed glucose te verlagen.";
+"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maximale Bolus is de hoogste bolushoeveelheid die je in één keer kunt toedienen om koolhydraten te dekken of om een hoge glucose te verlagen.";
 
 /* The short unit display string for milligrams per deciliter per U */
 "mg/dL/U" = "mg/dL/E";
@@ -194,10 +194,10 @@
 "OK" = "Ok";
 
 /* Descriptive text for saving settings outside the recommended range */
-"One or more of the values you have entered is outside of what is typically recommended for most people." = "Een of meer van de waarden die u hebt ingevoerd valt buiten wat algemeen wordt aanbevolen.";
+"One or more of the values you have entered is outside of what is typically recommended for most people." = "Een of meer van de waarden die je hebt ingevoerd valt buiten wat algemeen wordt aanbevolen.";
 
 /* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "Stel delen opnieuw in in Gezondheid, alstjeblieft";
+"Please re-enable sharing in Health" = "Stel delen opnieuw in in Gezondheid, alsjeblieft";
 
 /* Title for pre-meal mode */
 "Pre-Meal" = "Pre-Meal";
@@ -233,10 +233,10 @@
 "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Verhoog tijdelijk je glucosedoel voor, gedurende of na fysieke activiteit om het risico van lage glucosewaarden te verminderen.";
 
 /* Descriptive text for guardrail high value warning */
-"The value you have entered is higher than what is typically recommended for most people." = "Een waarde die je hebt ingevoerd is hoger dan wat meestal voor de meeste mensen wordt aanbevolen.";
+"The value you have entered is higher than what is typically recommended for most people." = "Een waarde die je hebt ingevoerd is hoger dan wat algemeen voor de meeste mensen wordt aanbevolen.";
 
 /* Descriptive text for guardrail low value warning */
-"The value you have entered is lower than what is typically recommended for most people." = "Een waarde die je hebt ingevoerd is lager dan wat meestal voor de meeste mensen wordt aanbevolen.";
+"The value you have entered is lower than what is typically recommended for most people." = "Een waarde die je hebt ingevoerd is lager dan wat algemeen voor de meeste mensen wordt aanbevolen.";
 
 /* Descriptive text for guardrail high value warning */
 "The values you have entered are outside of what is typically recommended for most people." = "Sommige van de waarden die u hebt ingevoerd vallen buiten wat algemeen wordt aanbevolen.";
@@ -245,10 +245,10 @@
 "U" = "E";
 
 /* The short unit display string for international units of insulin per hour */
-"U/hr" = "E/hr";
+"U/hr" = "E/uur";
 
 /* Error description for uncertain delivery */
-"Uncertain Delivery" = "Onzekere levering";
+"Uncertain Delivery" = "Toediening Onzeker";
 
 /* The long unit display string for a singular international unit of insulin */
 "Unit" = "Eenheid";
