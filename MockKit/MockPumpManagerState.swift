@@ -20,10 +20,10 @@ public struct MockPumpManagerState: Equatable {
             switch self {
             case .omnipod:
                 // 0.05 units for volumes between 0.05-30U
-                return (1...600).map { Double($0) * 0.05 }
+                return (1...600).map { Double($0) / Double(20) }
             case .medtronicX22:
                 // 0.1 units for volumes between 0.1-25U
-                return (1...250).map { Double($0) * 0.1 }
+                return (1...250).map { Double($0) / Double(10) }
             case .medtronicX23:
                 let breakpoints = [0, 1, 10, 25]
                 let scales = [40, 20, 10]
