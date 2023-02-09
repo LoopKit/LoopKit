@@ -1,0 +1,9 @@
+/* Bundle name */
+"CFBundleName" = "LoopKit Örneği";
+
+/* Privacy - Health Share Usage Description */
+"NSHealthShareUsageDescription" = "Sağlık veri tabanından alınan yemek verileri, KŞ etkilerini belirlemek için kullanılır. Sağlık veri tabanından alınan KŞ verileri, grafik ve momentum hesaplaması için kullanılır.";
+
+/* Privacy - Health Update Usage Description */
+"NSHealthUpdateUsageDescription" = "Uygulamaya girilen karbonhidrat yemek verileri Sağlık veritabanında saklanır. KŞ verileri HealthKit'te güvenli bir şekilde saklanır.";
+

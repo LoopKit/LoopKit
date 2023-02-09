@@ -16,14 +16,8 @@
 /* No comment provided by engineer. */
 "···" = "···";
 
-/* Information about insulin action duration */
-"(appName) assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "(appName) presuppone che l'insulina erogata funzioni attivamente per abbassare la glicemia per 6 ore. Questa impostazione non può essere modificata.";
-
 /* No comment provided by engineer. */
 "%@" = "%@";
-
-/* Information about insulin action duration */
-"%@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%@ presuppone che l'insulina erogata funzioni attivamente per abbassare la glicemia per 6 ore. Questa impostazione non può essere modificata.";
 
 /* No comment provided by engineer. */
 "%@, " = "%@, ";
@@ -176,7 +170,7 @@
 
 /* Button text to close a modal
    Text to close informational page */
-"Close" = "Chiudere";
+"Close" = "Chiudi";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
 "com.loudnate.CarbKit.COBDateLabel" = "a %1$@";
@@ -339,16 +333,16 @@
 "High Insulin Sensitivity" = "Sensibilità all’insulina Alta";
 
 /* Title text for high maximum basal rate warning */
-"High Maximum Basal Rate" = "Velocità Basale massima Alta";
+"High Maximum Basal Rate" = "Velocità Basale Massima Alta";
 
 /* Title text for high maximum bolus warning */
 "High Maximum Bolus" = "Bolo Massimo Alto";
 
 /* Title text for the low pre-meal value warning */
-"High Pre-Meal Value" = "Valori Pre-Pasto Alti";
+"High Pre-Meal Value" = "Valore Pre-Pasto Alto";
 
 /* Title text for the high workout value warning */
-"High Workout Value" = "Alto valore di allenamento";
+"High Workout Value" = "Valore Alto Allenamento";
 
 /* The text for the override history */
 "History" = "Storia";
@@ -375,7 +369,7 @@
 "It can be set as low as %1$@. It can be set as high as %2$@." = "Può essere impostato a partire da %1$@ . Può essere impostato fino a %2$@ .";
 
 /* Title text for the low basal rate warning */
-"Low Basal Rate" = "Scala dei valori della Basale bassa";
+"Low Basal Rate" = "Velocità basale bassa";
 
 /* Title text for the low carb ratio warning */
 "Low Carb Ratio" = "Rapporto Carboidrati basso";
@@ -390,16 +384,16 @@
 "Low Insulin Sensitivity" = "Sensibilità all’insulina bassa";
 
 /* Title text for low maximum basal rate warning */
-"Low Maximum Basal Rate" = "Scala dei valori della Basale massima bassa";
+"Low Maximum Basal Rate" = "Velocità Basale Massima Bassa";
 
 /* Title text for low maximum bolus warning */
 "Low Maximum Bolus" = "Bolo Massimo Basso";
 
 /* Title text for the low pre-meal value warning */
-"Low Pre-Meal Value" = "Valori bassi Pre-Pasto";
+"Low Pre-Meal Value" = "Valore Pre-Pasto basso";
 
 /* Title text for the low workout value warning */
-"Low Workout Value" = "Valori degli esercizi  fisici a bassa intensita'";
+"Low Workout Value" = "Valore Basso Allenamento";
 
 /* Title of insulin model preset - lyumjev */
 "Lyumjev" = "Lyumjev";
@@ -410,20 +404,8 @@
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Profilo Basale Massimo";
 
-/* Information about maximum basal rate */
-"Maximum Basal Rate is the maximum automatically adjusted basal rate that (appName) is allowed to enact to help reach your correction range." = "Velocità basale massima è la velocità basale massima regolata automaticamente che (appName) è autorizzata ad applicare per raggiungere l'intervallo di correzione.";
-
-/* Information about maximum basal rate */
-"Maximum Basal Rate is the maximum automatically adjusted basal rate that %@ is allowed to enact to help reach your correction range." = "Velocità basale massima è la velocità basale massima regolata automaticamente che %@ è autorizzata a mettere in atto per raggiungere l'intervallo di correzione.";
-
 /* The title text for the maximum bolus value */
 "Maximum Bolus" = "Bolo Massimo";
-
-/* Information about maximum bolus */
-"Maximum Bolus is the highest bolus amount that you will allow (appName) to recommend at one time to cover carbs or bring down high glucose." = "Bolo massimo è la quantità massima di bolo che consenti a (appName) di consigliare in una sola volta per coprire i carboidrati o per abbassare una iperglicemia.";
-
-/* Information about maximum bolus */
-"Maximum Bolus is the highest bolus amount that you will allow %@ to recommend at one time to cover carbs or bring down high glucose." = "Bolo massimo è la quantità massima di bolo che consenti a %@ di consigliare in una sola volta per coprire i carboidrati o ridurre gli alti livelli di glucosio.";
 
 /* Section title for medium absorbing food */
 "Medium" = "Medio";
@@ -460,7 +442,7 @@
 "Overall Insulin Needs" = "Fabbisogno complessivo di insulina";
 
 /* Title for override history view */
-"Override History" = "Cronostoria";
+"Override History" = "Storia Programma";
 
 /* The title text for the override presets screen */
 "Override Presets" = "Programma Alternativo";
@@ -475,7 +457,7 @@
 "Pre-Meal" = "Pre-Pasto";
 
 /* Title text for multi-value pre-meal value warning */
-"Pre-Meal Values" = "Valori pre-prandiali";
+"Pre-Meal Values" = "Valori Pre-Pasto";
 
 /* title for prescription section */
 "Prescription" = "Prescrizione";
@@ -542,7 +524,7 @@
 "Save Insulin Sensitivities?" = "Salva la sensibilità insulinica?";
 
 /* Alert title for confirming pre-meal range overrides outside the recommended range */
-"Save Pre-Meal Range?" = "Salva l'intervallo pre-pasto?";
+"Save Pre-Meal Range?" = "Salva l'intervallo Pre-Pasto?";
 
 /* Alert title for confirming workout range overrides outside the recommended range */
 "Save Workout Range?" = "Salvare l'intervallo di allenamento?";
@@ -581,7 +563,7 @@
 "Suspending" = "Sospensione in corso";
 
 /* No comment provided by engineer. */
-"Switch Preview State" = "Cambia stato di anteprima";
+"Switch Preview State" = "Cambia Stato Anteprima";
 
 /* The text for the override preset symbol setting */
 "Symbol" = "Simbolo";
@@ -593,7 +575,7 @@
 "Tap to set" = "Imposta";
 
 /* The text for the override target range setting */
-"Target Range" = "Intervallo target";
+"Target Range" = "Intervallo Obiettivo";
 
 /* Description of pre-meal mode */
 "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Abbassa temporaneamente il tuo target glicemico prima di un pasto per influenzare i picchi glicemici postprandiali.";
@@ -671,7 +653,7 @@
 "Total" = "Totale";
 
 /* The text indicating U/day for Daily Schedule Basal */
-"U/day" = "Unita' al Giorno";
+"U/day" = "U/giorno";
 
 /* The unit string for units per hour */
 "U/hour" = "U/ora";
@@ -714,7 +696,7 @@
 "Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button." = "L'intervallo di allenamento è il valore glicemico o l'intervallo di valori che vuoi che %1$@ abbia come target durante l'attività. Questo intervallo sarà effettivo quando si attiva il pulsante Preimpostazione allenamento.";
 
 /* Title text for multi-value workout value warning */
-"Workout Values" = "Valori di allenamento";
+"Workout Values" = "Valori Allenamento";
 
 /* Description of how to add a ratio */
 "You can add different carb ratios for different times of day by using the ➕." = "Puoi aggiungere diversi rapporti di carboidrati per diversi momenti della giornata utilizzando ➕.";
@@ -728,12 +710,6 @@
 /* Description of how to add a range */
 "You can add entries for different times of day by using the ➕." = "È possibile aggiungere valori per le diverse ore del giorno utilizzando ➕.";
 
-/* Information about insulin model */
-"You can choose how (appName) measures rapid acting insulin's peak activity according to one of these two insulin models." = "Puoi scegliere come (appName) misurare l'attività di picco dell'insulina ad azione rapida in base a uno di questi due modelli di insulina.";
-
-/* Information about insulin model */
-"You can choose how %@ measures rapid acting insulin's peak activity according to one of these two insulin models." = "Puoi scegliere come %@ misura il picco di attività dell'insulina ad azione rapida in base a uno di questi due modelli di insulina.";
-
 /* Description of how to edit setting */
 "You can edit a setting by tapping into any line item." = "Per redigere qualsiasi impostazioni basta toccare la linea relativa dell'articolo desiderato ";
 
@@ -741,7 +717,7 @@
 "You can edit the setting by tapping into the line item." = "Per redigerne le impostazioni basta toccare la linea dell'articolo desiderato ";
 
 /* Information about basal rates */
-"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "La tua scala di valori basali d'insulina e' il numero di unita'in un'ora che tu desideri usare per coprire le tue necessita' di insulina basale. ";
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "La velocità basale d'insulina è il numero di unità all'ora che si desidera utilizzare per coprire il tuo fabbisogno d'insulina basale.";
 
 /* Lower bound pre-meal information text */
 "your Glucose Safety Limit" = "il tuo limite di sicurezza del glucosio";
@@ -750,8 +726,8 @@
 "Your healthcare provider can help you choose a Correction Range that's right for you." = "Il tuo medico può aiutarti a scegliere la gamma di correzione adatto a te.";
 
 /* Description of insulin sensitivity factor */
-"Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Il Fattore di Sensibilita' all'insulina e' il valore di cui si abbassa la glicema con la somministrazione di una Unita' di Insulina.";
+"Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Il fattore di sensibilità all'insulina (ISF) è il calo di glicemia previsto da un'unità di insulina.";
 
 /* Information about pre-meal range format (1: app name) */
-"Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Il tuo Intervallo pre-prandiale dovrebbe essere il valore glicemico (o l'intervallo di valori) che vuoi che %1$@ abbia come target prima che tu assuma il primo boccone del tuo pasto. Questo intervallo sarà effettivo quando si attiva il pulsante pre-pasto preimpostato.";
+"Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Il tuo Intervallo pre-prasto dovrebbe essere il valore glicemico (o l'intervallo di valori) che vuoi che %1$@ abbia come target prima che tu assuma il primo boccone del tuo pasto. Questo intervallo sarà effettivo quando si attiva il pulsante pre-pasto preimpostato.";
 

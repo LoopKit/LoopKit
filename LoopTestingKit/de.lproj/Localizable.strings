@@ -26,5 +26,5 @@
 "Suspend" = "Unterbrechen";
 
 /* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
-"Temp Basal" = "Temp. Basalrate";
+"Temp Basal" = "Temporäre Basalrate";
 

@@ -16,14 +16,8 @@
 /* No comment provided by engineer. */
 "···" = "···";
 
-/* Information about insulin action duration */
-"(appName) assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "(appName) antar att insulin doserat har en verkan i 6 timmar. Denna inställning går ej att ändra.";
-
 /* No comment provided by engineer. */
 "%@" = "%@";
-
-/* Information about insulin action duration */
-"%@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%@ antar att insulin doserat har en verkan i 6 timmar. Denna inställning går ej att ändra.";
 
 /* No comment provided by engineer. */
 "%@, " = "%@, ";
@@ -392,20 +386,8 @@
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Maximal basaldos";
 
-/* Information about maximum basal rate */
-"Maximum Basal Rate is the maximum automatically adjusted basal rate that (appName) is allowed to enact to help reach your correction range." = "Maximal basaldos är den automatisk inställda basaldos som (appName) använder för att korrigera blodsockret till ditt angivna målvärde med.";
-
-/* Information about maximum basal rate */
-"Maximum Basal Rate is the maximum automatically adjusted basal rate that %@ is allowed to enact to help reach your correction range." = "Maximal basaldos är den automatisk inställda basaldos som %@ använder för att korrigera blodsockret till ditt angivna målvärde med.";
-
 /* The title text for the maximum bolus value */
 "Maximum Bolus" = "Maximal bolus";
-
-/* Information about maximum bolus */
-"Maximum Bolus is the highest bolus amount that you will allow (appName) to recommend at one time to cover carbs or bring down high glucose." = "Maximal bolus är den högsta bolusmängd som kan ges vid ett tillfälle av (appName) för att behandla kolhydrater eller ett högt blodsocker.";
-
-/* Information about maximum bolus */
-"Maximum Bolus is the highest bolus amount that you will allow %@ to recommend at one time to cover carbs or bring down high glucose." = "Maximal bolus är den högsta bolusmängd som kan ges vid ett tillfälle av %@ för att behandla kolhydrater eller ett högt blodsocker.";
 
 /* Section title for medium absorbing food */
 "Medium" = "Medium";
@@ -691,12 +673,6 @@
 
 /* Description of how to add a range */
 "You can add entries for different times of day by using the ➕." = "Du kan lägga till inmatningar för olika tider på dagen med hjälp av ➕.";
-
-/* Information about insulin model */
-"You can choose how (appName) measures rapid acting insulin's peak activity according to one of these two insulin models." = "Du kan välja hur %@ mäter insulinets maximala effekt enligt en av dessa två insulinmodeller.";
-
-/* Information about insulin model */
-"You can choose how %@ measures rapid acting insulin's peak activity according to one of these two insulin models." = "Du kan välja hur %@ mäter insulinets maximala effekt enligt en av dessa två insulinmodeller.";
 
 /* Description of how to edit setting */
 "You can edit a setting by tapping into any line item." = "Du kan ändra en inställning genom att trycka på ett objekt på en av raderna.";

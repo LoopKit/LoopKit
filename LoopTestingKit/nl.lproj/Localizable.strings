@@ -5,16 +5,16 @@
 "Comms Issue" = "Comms probleem";
 
 /* Status highlight that insulin delivery was suspended. */
-"Insulin Suspended" = "Insuline onderbroken";
+"Insulin Suspended" = "Insuline Onderbroken";
 
 /* Status highlight that a pump is out of insulin. */
-"No Insulin" = "Geen insuline";
+"No Insulin" = "Geen Insuline";
 
 /* Status highlight that pump has a dead battery. */
-"Pump Battery Dead" = "Pomp Batterij Dood";
+"Pump Battery Dead" = "Pompbatterij Leeg";
 
 /* Status highlight that a pump error occurred. */
-"Pump Error" = "Pomp foutmelding";
+"Pump Error" = "Pomp Foutmelding";
 
 /* Status highlight that an occlusion was detected. */
 "Pump Occlusion" = "Pompverstopping";

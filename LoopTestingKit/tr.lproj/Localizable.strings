@@ -2,29 +2,29 @@
 "Bolus" = "Bolus";
 
 /* Status highlight that delivery is uncertain. */
-"Comms Issue" = "Kommunikationsfejl";
+"Comms Issue" = "İletişim Sorunu";
 
 /* Status highlight that insulin delivery was suspended. */
-"Insulin Suspended" = "Insulin suspenderet";
+"Insulin Suspended" = "İnsülin Askıya Alındı";
 
 /* Status highlight that a pump is out of insulin. */
-"No Insulin" = "Ingen insulin";
+"No Insulin" = "İnsülin yok";
 
 /* Status highlight that pump has a dead battery. */
-"Pump Battery Dead" = "Pumpebatteri dødt";
+"Pump Battery Dead" = "Pompa Pili Bitti";
 
 /* Status highlight that a pump error occurred. */
-"Pump Error" = "Pumpefejl";
+"Pump Error" = "Pompa Hatası";
 
 /* Status highlight that an occlusion was detected. */
-"Pump Occlusion" = "Pumpen er blokeret";
+"Pump Occlusion" = "Pompa Tıkanıklığı";
 
 /* Pump Event title for UnfinalizedDose with doseType of .resume */
-"Resume" = "Genoptag";
+"Resume" = "Devam et";
 
 /* Pump Event title for UnfinalizedDose with doseType of .suspend */
-"Suspend" = "Suspender";
+"Suspend" = "Askıya al";
 
 /* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
-"Temp Basal" = "Midlertidig basal";
+"Temp Basal" = "Geçici Bazal";
 

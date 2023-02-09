@@ -7,9 +7,6 @@
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
 
-/* Alert content body for recurring software update alert */
-"A software update is recommended to continue using the (appName) app.\n\nGo to (appName) Settings > Software Update to install the latest version." = "Si consiglia un aggiornamento software per continuare a utilizzare l'app (appName).\n\nVai a (appName) Impostazioni > Aggiornamento Software per installare la versione più recente.";
-
 /* Confirmation message for deleting a service */
 "Are you sure you want to delete this service?" = "Sei sicuro di voler eliminare questo servizio?";
 
@@ -23,7 +20,7 @@
 "CGM Settings" = "Impostazioni CGM";
 
 /* No comment provided by engineer. */
-"Clear Last Version Check Alert Date" = "Cancella la data dell'avviso di controllo dell'ultima versione";
+"Clear Last Version Check Alert Date" = "Cancella l'ultima versione Controlla la data dell'avviso";
 
 /* No comment provided by engineer. */
 "Comms Recovery" = "recovero delle comunicazioni";
@@ -68,7 +65,4 @@
 
 /* No comment provided by engineer. */
 "Version Check Response" = "Responso del controllo versione";
-
-/* Alert content body for first software update alert */
-"Your (appName) app is out of date. It will continue to work, but we recommend updating to the latest version.\n\nGo to (appName) Settings > Software Update to complete." = "La tua App  non è aggiornata ,essa continuerà a funzionare, ma si consiglia di fare al piu' presto l'aggiornamento all'ultima versione. \n\n Per fare l'aggiornamento della tua App, dalle impostazioni esegui: Impostazioni > Aggiornamento software.";
 
