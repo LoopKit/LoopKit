@@ -1,3 +1,15 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% нормального инсулина";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
 /* The format for an override preset cell. (1: symbol)(2: name)
    The format for an override symbol and name (1: symbol)(2: name) */
 "%1$@ %2$@" = "%1$@ %2$@";
@@ -5,35 +17,23 @@
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ единиц остается в %2$@";
 
-/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
-"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
-
-/* The format for an insulin needs percentage. */
-"%@%% of normal insulin" = "%@%% нормального инсулина";
-
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
-
-/* Format string for reservoir volume. (1: The localized volume) */
-"%@U" = "%@U";
-
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Длительность усвоения";
 
 /* The title for the override emoji activity section */
 "Activity" = "Нагрузка";
 
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Добавить пользователя";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Добавить запись углеводов";
+
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Подтвердите удаление всех записей истории?";
 
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Подтвердите удаление всех записей резервуара?";
-
-/* The title of the button to add the credentials for a service */
-"Add Account" = "Добавить пользователя";
-
-/* The title of the button to remove the credentials for a service */
-"Delete Account" = "Удалить аккаунт";
 
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "База, болюсы и болюсы на коррекцию снижены на%@%%.";
@@ -52,12 +52,6 @@
 
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Отмена врем базала";
-
-/* The title of the view controller to create a new carb entry */
-"Add Carb Entry" = "Добавить запись углеводов";
-
-/* The title of the view controller to edit an existing carb entry */
-"Edit Carb Entry" = "Редактировать запись углеводов";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Изменения будут действительны только на время ручного контроля.";
@@ -98,11 +92,17 @@
 /* Title of the carb entry date picker cell */
 "Date" = "Дата";
 
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Удалить аккаунт";
+
 /* Button title to delete all objects */
 "Delete All" = "Стереть все";
 
 /* The text for the override duration setting */
 "Duration" = "Продолжительность";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Редактировать запись углеводов";
 
 /* The title for the override editing screen */
 "Edit Override" = "Редактировать ручной контроль";
@@ -153,7 +153,7 @@
 "New Preset" = "Новый параметр";
 
 /* Section title for no-carb food
-The title for override emoji miscellaneous section */
+   The title for override emoji miscellaneous section */
 "Other" = "Другая";
 
 /* The title text for the insulin sensitivity scaling setting */
@@ -176,6 +176,9 @@ The title for override emoji miscellaneous section */
 
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Событие помпы";
+
+/* The default placeholder string for a credential */
+"Required" = "обязательный";
 
 /* Title text for button to resume insulin delivery */
 "Resume Delivery" = "Возобновить подачу";
@@ -220,9 +223,6 @@ The title for override emoji miscellaneous section */
 /* The title for the override selection screen */
 "Temporary Override" = "Временный";
 
-/* The default placeholder string for a credential */
-"Required" = "обязательный";
-
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Максимальная длительность усвоения %@";
 
@@ -239,7 +239,7 @@ The title for override emoji miscellaneous section */
 "Units" = "Единицы";
 
 /* Accessibility value for an unknown value
-The default title to use when an entry has none */
+   The default title to use when an entry has none */
 "Unknown" = "Неизвестно";
 
 /* Label indicating validation is occurring */

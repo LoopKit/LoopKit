@@ -1,0 +1,9 @@
+/* Bundle name */
+"CFBundleName" = "LoopKit Example";
+
+/* Privacy - Health Share Usage Description */
+"NSHealthShareUsageDescription" = "Kolhydratdata från Apple Health-databasen används för att avgöra glukoseffekt. Blodglukosvärden från Apple Health-databasen används i diagram och för beräkning av förändring.";
+
+/* Privacy - Health Update Usage Description */
+"NSHealthUpdateUsageDescription" = "Kolhydratvärden inmatade i appen lagras i Apple Health-databasen. Blodglukosvärden lagras säkert i HealthKit.";
+

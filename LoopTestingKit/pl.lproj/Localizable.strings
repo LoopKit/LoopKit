@@ -1,0 +1,30 @@
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
+
+/* Status highlight that delivery is uncertain. */
+"Comms Issue" = "Problem z komunikacją";
+
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Podawanie insuliny zawieszone";
+
+/* Status highlight that a pump is out of insulin. */
+"No Insulin" = "Brak insuliny";
+
+/* Status highlight that pump has a dead battery. */
+"Pump Battery Dead" = "Rozładowana bateria pompy";
+
+/* Status highlight that a pump error occurred. */
+"Pump Error" = "Błąd pompy";
+
+/* Status highlight that an occlusion was detected. */
+"Pump Occlusion" = "Niedrożność pompy";
+
+/* Pump Event title for UnfinalizedDose with doseType of .resume */
+"Resume" = "Wznów";
+
+/* Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Wstrzymaj";
+
+/* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Tymczasowa dawka podstawowa";
+

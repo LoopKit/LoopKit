@@ -1,3 +1,15 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% của insulin bình thường";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
 /* The format for an override preset cell. (1: symbol)(2: name)
    The format for an override symbol and name (1: symbol)(2: name) */
 "%1$@ %2$@" = "%1$@ %2$@";
@@ -5,35 +17,23 @@
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ units vẫn còn lúc %2$@";
 
-/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
-"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
-
-/* The format for an insulin needs percentage. */
-"%@%% of normal insulin" = "%@%% của insulin bình thường";
-
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
-
-/* Format string for reservoir volume. (1: The localized volume) */
-"%@U" = "%@U";
-
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Thời gian Hấp thụ";
 
 /* The title for the override emoji activity section */
 "Activity" = "Hoạt động";
 
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Thêm Tài khoản";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Khai báo Carb";
+
 /* Action sheet confirmation message for pump history deletion */
 "Are you sure you want to delete all history entries?" = "Bạn có chắc muốn xóa hết các dữ liệu cũ?";
 
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Bạn có chắc muốn xóa hết mọi giá trị của ngăn chứa insulin?";
-
-/* The title of the button to add the credentials for a service */
-"Add Account" = "Thêm Tài khoản";
-
-/* The title of the button to remove the credentials for a service */
-"Delete Account" = "Xóa Tài khoản";
 
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Liều Basal, bolus, và liều bổ sung đang giảm bằng %@%%.";
@@ -52,12 +52,6 @@
 
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Đang hủy liều Basal tạm thời";
-
-/* The title of the view controller to create a new carb entry */
-"Add Carb Entry" = "Khai báo Carb";
-
-/* The title of the view controller to edit an existing carb entry */
-"Edit Carb Entry" = "Chỉnh sửa Carb";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Các thay đổi sẽ chỉ áp dụng thời điểm này khi bạn cho phép chồng liều. Các cài đặt gốc %@ sẽ không bị ảnh hưởng.";
@@ -98,11 +92,17 @@
 /* Title of the carb entry date picker cell */
 "Date" = "Ngày";
 
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Xóa Tài khoản";
+
 /* Button title to delete all objects */
 "Delete All" = "Xóa hết";
 
 /* The text for the override duration setting */
 "Duration" = "Khoảng thời gian";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Chỉnh sửa Carb";
 
 /* The title for the override editing screen */
 "Edit Override" = "Hiệu chỉnh chồng liều";
@@ -177,6 +177,9 @@
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Pump Event";
 
+/* The default placeholder string for a credential */
+"Required" = "Bắt buộc";
+
 /* Title text for button to resume insulin delivery */
 "Resume Delivery" = "Tiếp tục lại việc tiêm insulin";
 
@@ -220,9 +223,6 @@
 /* The title for the override selection screen */
 "Temporary Override" = "Chồng liều tạm thời";
 
-/* The default placeholder string for a credential */
-"Required" = "Bắt buộc";
-
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Thời gian tiêu hóa tối đa là  %@";
 
@@ -250,3 +250,4 @@
 
 /* Title for the workout override range */
 "Workout" = "Workout";
+

@@ -5,7 +5,7 @@
 "7Fy-gG-Zof.text" = "...";
 
 /* Class = "UILabel"; text = "Detail"; ObjectID = "9jm-X6-3QA"; */
-"9jm-X6-3QA.text" = "Detaljert";
+"9jm-X6-3QA.text" = "Detalj";
 
 /* Class = "UILabel"; text = "U IOB"; ObjectID = "dZi-Ta-IHm"; */
 "dZi-Ta-IHm.text" = "E IOB";
@@ -24,6 +24,9 @@
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[1] = "Event History"; ObjectID = "TyZ-xm-mVN"; */
 "TyZ-xm-mVN.segmentTitles[1]" = "Hendelseshistorikk";
+
+/* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[2] = "Non-Pump Insulin"; ObjectID = "TyZ-xm-mVN"; */
+"TyZ-xm-mVN.segmentTitles[2]" = "Ikke-pumpe insulin";
 
 /* Class = "UINavigationItem"; title = "Insulin Delivery"; ObjectID = "vls-EW-uwI"; */
 "vls-EW-uwI.title" = "Insulintilførsel";
