@@ -102,6 +102,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
             cacheStore.fetchAnchor(key: InsulinDeliveryStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
                     self.queryAnchor = anchor
+                    self.log.default("Fetched hk query anchor: %{public}@", String(describing: anchor))
 
                     if !self.authorizationRequired {
                         self.createQuery()

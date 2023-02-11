@@ -264,10 +264,11 @@ extension PersistenceController {
             if let encoded = value as? Data {
                 let anchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: encoded)
                 if anchor == nil {
-                    self.log.error("Decoding anchor from %{public} failed.", String(describing: encoded))
+                    self.log.error("Decoding anchor from %{public}@ failed.", String(describing: encoded))
                 }
                 completion(anchor)
             } else {
+                self.log.error("Anchor metadata invalid %{public}@.", String(describing: value))
                 completion(nil)
             }
         }
