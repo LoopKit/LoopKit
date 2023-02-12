@@ -23,7 +23,6 @@ public enum HealthKitSampleStoreResult<T> {
 
 
 public class HealthKitSampleStore {
-    private let observerQueryUpdateHandlerQueue: DispatchQueue
 
     public enum StoreError: Error {
         case authorizationDenied
@@ -56,7 +55,7 @@ public class HealthKitSampleStore {
         return date.addingTimeInterval(timeIntervalSinceNow)
     }
     
-    /// Allows unit test to inject a mock for HKObserverQuery
+    /// Declaring this as a var allows unit test to inject a mock for HKObserverQuery
     internal var createObserverQuery: (HKSampleType, NSPredicate?, @escaping (HKObserverQuery, @escaping HKObserverQueryCompletionHandler, Error?) -> Void) -> HKObserverQuery = { (sampleType, predicate, updateHandler) in
         return HKObserverQuery(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
     }
@@ -87,8 +86,6 @@ public class HealthKitSampleStore {
         self.lockedQueryAnchor = Locked<HKQueryAnchor?>(nil)
 
         self.log = OSLog(category: String(describing: Swift.type(of: self)))
- 
-        self.observerQueryUpdateHandlerQueue = DispatchQueue(label: "com.loopkit.HealthKitSampleStore.observerQueryUpdateHandlerQueue.\(Swift.type(of: self))", qos: .utility)
     }
 
     deinit {
@@ -191,64 +188,68 @@ public class HealthKitSampleStore {
     /// - Parameters:
     ///   - query: The query which triggered the update
     ///   - error: An error during the update, if one occurred
-    internal final func observeUpdates(to query: HKObserverQuery, completionHandler: @escaping HKObserverQueryCompletionHandler, error: Error?) {
+    internal final func observerQueryHandler(query: HKObserverQuery, observerQueryCompletionHandler: @escaping HKObserverQueryCompletionHandler, error: Error?) {
 
         if let error = error {
-            self.log.error("Observer query %@ notified of error: %{public}@", query, String(describing: error))
-            completionHandler()
+            log.error("Observer query %{public}@ notified of error: %{public}@", query, String(describing: error))
+            observerQueryCompletionHandler()
             return
         }
         
-        self.log.default("observeUpdates invoked - queueing handling")
+        log.default("%{public}@ notified with changes. Fetching from: %{public}@", query, queryAnchor.map(String.init(describing:)) ?? "0")
+        executeAnchorQuery(observerQuery: query, observerQueryCompletionHandler: observerQueryCompletionHandler)
+    }
 
-        observerQueryUpdateHandlerQueue.async {
+    internal final func executeAnchorQuery(observerQuery: HKObserverQuery, observerQueryCompletionHandler: @escaping HKObserverQueryCompletionHandler) {
 
-            let queryAnchor = self.queryAnchor
-            
-            self.log.default("%@ notified with changes. Fetching from: %{public}@", query, queryAnchor.map(String.init(describing:)) ?? "0")
-            
-            let semaphore = DispatchSemaphore(value: 0)
+        let batchSize = 500
+        
+        let anchoredObjectQuery = createAnchoredObjectQuery(sampleType, observerQuery.predicate, queryAnchor, batchSize) { [weak self] (query, newSamples, deletedSamples, anchor, error) in
 
-            let anchoredObjectQuery = self.createAnchoredObjectQuery(self.sampleType, query.predicate, queryAnchor, HKObjectQueryNoLimit) { [weak self] (query, newSamples, deletedSamples, anchor, error) in
-                
-                if let self = self {
-                    self.anchoredObjectQueryResultsHandler(query: query, newSamples: newSamples, deletedSamples: deletedSamples, anchor: anchor, error: error) {
-                        completionHandler()
-                        semaphore.signal()
+            if let error = error {
+                self?.log.error("HKQuery: Error from anchoredObjectQuery: anchor: %{public}@ error: %{public}@", String(describing: anchor), String(describing: error))
+                observerQueryCompletionHandler()
+                return
+            }
+
+            guard let newSamples else {
+                self?.log.error("HKQuery: Error from anchoredObjectQuery: newSamples is nil")
+                observerQueryCompletionHandler()
+                return
+            }
+
+            guard let deletedSamples else {
+                self?.log.error("HKQuery: Error from anchoredObjectQuery: deletedSamples is nil")
+                observerQueryCompletionHandler()
+                return
+            }
+
+            guard let anchor = anchor else {
+                self?.log.error("HKQuery: anchoredObjectQueryResultsHandler called with no anchor")
+                observerQueryCompletionHandler()
+                return
+            }
+
+            self?.log.default("AnchorQuery results new: %{public}d deleted: %{public}d anchor: %{public}@", newSamples.count, deletedSamples.count, anchor.description)
+
+            self?.processResults(from: query, added: newSamples, deleted: deletedSamples, anchor: anchor) { (success) in
+                if success {
+                    // Do not advance anchor if we failed to update local cache
+                    self?.queryAnchor = anchor
+
+                    if newSamples.count + deletedSamples.count >= batchSize {
+                        self?.executeAnchorQuery(observerQuery: observerQuery, observerQueryCompletionHandler: observerQueryCompletionHandler)
+                    } else {
+                        observerQueryCompletionHandler()
                     }
                 } else {
-                    completionHandler()
-                    semaphore.signal()
+                    observerQueryCompletionHandler()
                 }
             }
-            self.healthStore.execute(anchoredObjectQuery)
-            
-            semaphore.wait()
-        }
-    }
-    
-    private func anchoredObjectQueryResultsHandler(query: HKAnchoredObjectQuery, newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, anchor: HKQueryAnchor?, error: Error?, completion: @escaping () -> Void) {
-        if let error = error {
-            self.log.error("Error from anchoredObjectQuery: anchor: %{public}@ error: %{public}@", String(describing: anchor), String(describing: error))
-            completion()
-            return
-        }
-        
-        self.log.default("anchoredObjectQuery.resultsHandler: new: %{public}d deleted: %{public}d anchor: %{public}@", newSamples?.count ?? 0, deletedSamples?.count ?? 0, String(describing: anchor))
-        
-        guard let anchor = anchor else {
-            self.log.error("anchoredObjectQueryResultsHandler called with no anchor")
-            completion()
-            return
         }
 
-        self.processResults(from: query, added: newSamples ?? [], deleted: deletedSamples ?? [], anchor: anchor) { (success) in
-            if success {
-                // Do not advance anchor if we failed to update local cache
-                self.queryAnchor = anchor
-            }
-            completion()
-        }
+        log.default("HKQuery: Executing anchored object query")
+        healthStore.execute(anchoredObjectQuery)
     }
 
     /// Called in response to new results from an anchored object query
@@ -333,8 +334,10 @@ extension HealthKitSampleStore {
             return
         }
 
+        // Assigning observerQuery here starts the query
         observerQuery = createObserverQuery(sampleType, predicate) { [weak self] (query, completionHandler, error) in
-            self?.observeUpdates(to: query, completionHandler: completionHandler, error: error)
+            // This is the HKObserverQueryCompletionHandler
+            self?.observerQueryHandler(query: query, observerQueryCompletionHandler: completionHandler, error: error)
         }
 
         enableBackgroundDelivery { (result) in
