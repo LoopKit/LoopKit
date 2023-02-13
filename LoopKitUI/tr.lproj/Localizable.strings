@@ -1,252 +1,721 @@
-/* The format for an override preset cell. (1: symbol)(2: name)
-   The format for an override symbol and name (1: symbol)(2: name) */
-"%1$@ %2$@" = "%1$@ %2$@";
+/* Information about workout range relative to correction range */
+" higher " = " daha yüksek ";
 
-/* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ units remaining at %2$@";
+/* Information about pre-meal range relative to correction range */
+" lower " = " daha düşük ";
 
-/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
-"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+/* Separator between min and max glucose values */
+"-" = "-";
 
-/* The format for an insulin needs percentage. */
-"%@%% of normal insulin" = "%@%% of normal insulin";
+/* No comment provided by engineer. */
+"－" = "－";
+
+/* The detail text representing no value */
+"–" = "–";
+
+/* No comment provided by engineer. */
+"···" = "···";
+
+/* No comment provided by engineer. */
+"%@" = "%@";
+
+/* No comment provided by engineer. */
+"%@, " = "%@, ";
 
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% normal insulin";
+
 /* Format string for reservoir volume. (1: The localized volume) */
-"%@U" = "%@U";
+"%@U" = "%@Ü";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Lower bound workout information text format (1: app name) */
+"%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ veya KŞ Güvenlik Limitiniz, hangisi daha yüksekse";
+
+/* Information about max number of basal rates */
+"%1$@ supports 1 to (maximumScheduleEntryCount) rates per day." = "%1$@ günlük 1 ila (maksimumProgramGirişSayısı) oranlarını destekler.";
+
+/* Reservoir entry (1: volume value) */
+"%1$@ U" = "%1$@ Ü";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ ünite kaldı %2$@";
+
+/* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
+   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+"%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "Yüzde %1$d tamamlandı.";
+
+/* No comment provided by engineer. */
+"🍽" = "🍽";
+
+/* Premeal override preset title */
+"🍽 Pre-Meal" = "🍽 Yemek Öncesi";
+
+/* No comment provided by engineer. */
+"🏃‍♂️" = "🏃‍♂️";
+
+/* Workout override preset title */
+"🏃‍♂️ Workout" = "🏃‍♂️ Egzersiz";
+
+/* Information about differences between target range and correction range */
+"A Correction Range is different. This will be a narrower range." = "Düzeltme Aralığı farklıdır. Bu daha dar bir aralık olacaktır.";
+
+/* Warning text for basal rate of 0 U/hr */
+"A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "0 Ü/saat değeri, bazal insülin almayacağınız anlamına gelir.";
+
+/* No comment provided by engineer. */
+"Above dynamic data" = "Dinamik verilerin üstünde";
 
 /* Title of the carb entry absorption time cell */
-"Absorption Time" = "Absorption Time";
+"Absorption Time" = "Emilim Süresi";
+
+/* No comment provided by engineer. */
+"Action Button" = "Eylem Butonu";
+
+/* The text for the override history duration */
+"Active Duration" = "Aktif Süre";
 
 /* The title for the override emoji activity section */
-"Activity" = "Activity";
+"Activity" = "Aktivite";
 
-/* Action sheet confirmation message for pump history deletion */
-"Are you sure you want to delete all history entries?" = "Are you sure you want to delete all history entries?";
-
-/* Action sheet confirmation message for reservoir deletion */
-"Are you sure you want to delete all reservoir values?" = "Are you sure you want to delete all reservoir values?";
+/* Button text to confirm adding a new schedule item */
+"Add" = "Ekle";
 
 /* The title of the button to add the credentials for a service */
-"Add Account" = "Add Account";
-
-/* The title of the button to remove the credentials for a service */
-"Delete Account" = "Delete Account";
-
-/* Describes a percentage decrease in overall insulin needs */
-"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Basal, bolus, and correction insulin dose amounts are decreased by %@%%.";
-
-/* Describes a percentage increase in overall insulin needs */
-"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Basal, bolus, and correction insulin dose amounts are increased by %@%%.";
-
-/* Describes a lack of change in overall insulin needs */
-"Basal, bolus, and correction insulin dose amounts are unaffected." = "Basal, bolus, and correction insulin dose amounts are unaffected.";
-
-/* The title of the cancel action in an action sheet */
-"Cancel" = "Cancel";
-
-/* The text for the override cancellation button */
-"Cancel Override" = "Cancel Override";
-
-/* Title text for suspend resume button when temp basal canceling */
-"Canceling Temp Basal" = "Canceling Temp Basal";
+"Add Account" = "Hesap Ekle";
 
 /* The title of the view controller to create a new carb entry */
-"Add Carb Entry" = "Add Carb Entry";
+"Add Carb Entry" = "Karb Girişi Ekle";
 
-/* The title of the view controller to edit an existing carb entry */
-"Edit Carb Entry" = "Edit Carb Entry";
+/* Title of insulin model preset - afrezza */
+"Afrezza" = "Afrezza";
+
+/* Action sheet confirmation message for pump history deletion */
+"Are you sure you want to delete all history entries?" = "Tüm geçmiş girişlerini silmek istediğinizden emin misiniz?";
+
+/* Action sheet confirmation message for reservoir deletion */
+"Are you sure you want to delete all reservoir values?" = "Tüm rezervuar değerlerini silmek istediğinizden emin misiniz?";
+
+/* Authentication hint string for therapy settings */
+"Authenticate to save therapy setting" = "Tedavi ayarını kaydetmek için kimlik doğrulama";
+
+/* Back navigation button title */
+"Back" = "Geri";
+
+/* Title text for multi-value basal rate warning */
+"Basal Rates" = "Bazal Oranlar";
+
+/* Describes a percentage decrease in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Bazal, bolus ve düzeltme insülin doz miktarları %@%% azaltılır.";
+
+/* Describes a percentage increase in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Bazal, bolus ve düzeltme insülin doz miktarları %@%% oranında artırılır.";
+
+/* Describes a lack of change in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "Bazal, bolus ve düzeltme insülin doz miktarları etkilenmez.";
+
+/* No comment provided by engineer. */
+"Below dynamic data" = "Dinamik verilerin altında";
+
+/* No comment provided by engineer. */
+"Bottom" = "Alt";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "İptal";
+
+/* The text for the override cancellation button */
+"Cancel Override" = "Geçersiz Kılma İptal";
+
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Geçici Bazalı İptal Et";
+
+/* Title text for multi-value carb ratio warning */
+"Carb Ratios" = "Karbonhidrat Oranları";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
-"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Changes will only apply this time you enable the override. The default settings of %@ will not be affected.";
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Değişiklikler yalnızca geçersiz kılmayı etkinleştirdiğiniz bu sefer uygulanacaktır. %@ varsayılan ayarları etkilenmeyecektir.";
+
+/* Footer text for customizing from a preset (1: preset name) */
+"Changes will only apply this time you enable the preset. The default settings of %@ will not be affected." = "Değişiklikler yalnızca ön ayarı bu kez etkinleştirdiğinizde geçerli olacaktır. Varsayılan %@ ayarları etkilenmeyecektir.";
 
 /* Carb entry section footer text explaining absorption time */
-"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact.";
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Daha büyük öğünler veya yağ ve protein içeren besinler için daha uzun bir emilim süresi seçin. Bu değer yalnızca algoritmaya rehberlik eder ve kesin olması gerekmez.";
+
+/* Button text to close a modal
+   Text to close informational page */
+"Close" = "Kapat";
 
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.COBDateLabel" = "at %1$@";
+"com.loudnate.CarbKit.COBDateLabel" = "%1$@";
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.totalDateLabel" = "since %1$@";
+"com.loudnate.CarbKit.totalDateLabel" = "%1$@ tarihinden beri";
 
 /* The format string describing the date of an IOB value. The first format argument is the localized date. */
-"com.loudnate.InsulinKit.IOBDateLabel" = "at %1$@";
+"com.loudnate.InsulinKit.IOBDateLabel" = "%1$@";
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.InsulinKit.totalDateLabel" = "since %1$@";
+"com.loudnate.InsulinKit.totalDateLabel" = "%1$@ den beri";
 
 /* The title of the action used to dismiss an error alert */
-"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+"com.loudnate.LoopKit.errorAlertActionTitle" = "Tamam";
+
+/* Accessibility label for ProgressIndicatorView when showIndeterminantProgress */
+"Completed." = "Tamamlandı.";
 
 /* The title for the override emoji condition section */
-"Condition" = "Condition";
+"Condition" = "Kondisyon";
+
+/* The button text for confirming the setting */
+"Confirm Setting" = "Ayarı Onaylayın";
+
+/* No comment provided by engineer. */
+"content" = "içerik";
 
 /* Title of the setup button to continue */
-"Continue" = "Continue";
+"Continue" = "Devam et";
 
 /* The section footer of correction range schedule */
-"Correction range is the blood glucose range that you would like Loop to correct to." = "Correction range is the blood glucose range that you would like Loop to correct to.";
+"Correction range is the blood glucose range that you would like Loop to correct to." = "Düzeltme aralığı, Loop'un düzeltmesini istediğiniz kan şekeri aralığıdır.";
+
+/* Title text for multi-value correction value warning */
+"Correction Values" = "Düzeltme Değerleri";
 
 /* The text for a custom override */
-"Custom" = "Custom";
+"Custom" = "Özel";
 
 /* The title for the custom override entry screen */
-"Custom Override" = "Custom Override";
+"Custom Override" = "Özel Geçersiz kılma";
+
+/* The title for the custom preset entry screen
+   The title for the custom preset selection screen */
+"Custom Preset" = "Özel Ön Ayar";
 
 /* Title of the carb entry date picker cell */
-"Date" = "Date";
+"Date" = "Tarih";
+
+/* Delete values for Pre-Meal, inactivates Pre-Meal icon
+   Test for table cell delete button
+   The title of the button to remove the credentials for a service */
+"Delete" = "Sil";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Hesabı sil";
 
 /* Button title to delete all objects */
-"Delete All" = "Delete All";
+"Delete All" = "Hepsini sil";
+
+/* Title text for crossed thresholds guardrail warning */
+"Delivery Limits" = "İletim Limitleri";
+
+/* Information about delivery limits */
+"Delivery Limits are safety guardrails for your insulin delivery." = "İletim Limitleri, insülin iletiminiz için güvenlik korkuluklarıdır.";
+
+/* The text for the custom preset disable button */
+"Disable Preset" = "Ön Ayarı Devre Dışı Bırak";
+
+/* Text for dismiss button
+   Text for done button
+   Video player done button label */
+"Done" = "Tamamlandı";
 
 /* The text for the override duration setting */
-"Duration" = "Duration";
+"Duration" = "Süre";
+
+/* No comment provided by engineer. */
+"Dynamic component #%@" = "Dinamik bileşen # %@";
+
+/* No comment provided by engineer. */
+"Dynamic data %@" = "Dinamik veri %@";
+
+/* Text for edit button
+   The title for the enabled custom preset editing screen */
+"Edit" = "Düzenle";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Karb Girişini Düzenle";
 
 /* The title for the override editing screen */
-"Edit Override" = "Edit Override";
+"Edit Override" = "Geçersiz Kılmayı Düzenle";
 
 /* Footer text for editing an active override (1: preset name) */
-"Editing affects only the active override. The default settings of %@ will not be affected." = "Editing affects only the active override. The default settings of %@ will not be affected.";
+"Editing affects only the active override. The default settings of %@ will not be affected." = "Düzenleme yalnızca etkin geçersiz kılmayı etkiler. %@ varsayılan ayarlar etkilenmeyecektir.";
+
+/* Footer text for editing an enabled custom preset (1: preset name) */
+"Edits persist only until the preset is disabled. The default settings of %@ will not be affected." = "Düzenlemeler yalnızca ön ayar devre dışı bırakılana kadar devam eder. %@ varsayılan ayarları etkilenmeyecektir.";
+
+/* The button text for enabling a temporary override */
+"Enable" = "Etkinleştir";
 
 /* The text for the indefinite override duration setting */
-"Enable Indefinitely" = "Enable Indefinitely";
+"Enable Indefinitely" = "Süresiz Olarak Etkinleştir";
 
 /* The detail text describing an enabled setting */
-"Enabled" = "Enabled";
+"Enabled" = "Etkin";
+
+/* The text for the override start time */
+"End Time" = "Bitiş zamanı";
+
+/* Format string for accessibility label for value entry. (1: value label) */
+"Enter %1$@ value" = "%1$@ değer girin";
 
 /* The placeholder text instructing users how to enter a maximum bolus */
-"Enter a number of units" = "Enter a number of units";
+"Enter a number of units" = "Ünite değeri girin";
 
 /* The placeholder text instructing users how to enter a maximum basal rate */
-"Enter a rate in units per hour" = "Enter a rate in units per hour";
+"Enter a rate in units per hour" = "Her saat için ünite oranı girin";
+
+/* Segmented button title for insulin delivery log event history */
+"Event History" = "Etkinlik Geçmişi";
+
+/* No comment provided by engineer. */
+"Example" = "Örnek";
 
 /* Section title for fast absorbing food */
-"Fast" = "Fast";
+"Fast" = "Hızlı";
+
+/* Title of insulin model preset - fiasp */
+"Fiasp" = "Fiasp";
+
+/* Insulin model setting description (1: app name) (2: number of models) */
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity." = "Hızlı etkili insülin için, %1$@ 6 saat boyunca aktif olarak çalıştığını varsayar. Uygulamanın insülinin en yüksek etkisini nasıl ölçtüğüne ilişkin %2$@ farklı model arasından seçim yapabilirsiniz.";
+
+/* Information about correction range format (1: app name) */
+"For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin." = "Bu aralık için, %1$@ bazal insülininizi ayarlarken hedeflemesini istediğiniz belirli KŞ değerini (veya değer aralığını) seçin.";
+
+/* Support button for Therapy Settings */
+"Get help with Therapy Settings" = "Tedavi Ayarları ile ilgili yardım alın";
+
+/* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range
+   Text for go back action on confirmation alert */
+"Go Back" = "Geri dön";
+
+/* Title text for the high basal rate warning */
+"High Basal Rate" = "Yüksek Bazal Oran";
+
+/* Title text for the high carb ratio warning */
+"High Carb Ratio" = "Yüksek Karb Oranı";
+
+/* Title text for the high correction value warning */
+"High Correction Value" = "Yüksek Düzeltme Değeri";
+
+/* Title text for the high glucose safety limit warning */
+"High Glucose Safety Limit" = "Yüksek KŞ Güvenlik Limiti";
+
+/* Title text for the high insulin sensitivity warning */
+"High Insulin Sensitivity" = "Yüksek İnsülin Duyarlılığı";
+
+/* Title text for high maximum basal rate warning */
+"High Maximum Basal Rate" = "Yüksek Maksimum Bazal Oranı";
+
+/* Title text for high maximum bolus warning */
+"High Maximum Bolus" = "Yüksek Maksimum Bolus";
+
+/* Title text for the low pre-meal value warning */
+"High Pre-Meal Value" = "Yüksek Yemek Öncesi Değeri";
+
+/* Title text for the high workout value warning */
+"High Workout Value" = "Yüksek Egzersiz Değeri";
+
+/* The text for the override history */
+"History" = "Geçmiş";
+
+/* Description of how to interact with summary screen */
+"If these settings look good to you, tap Save Settings to continue." = "Bu ayarlar size uygun görünüyorsa, devam etmek için Ayarları Kaydet'e dokunun.";
+
+/* Information about target range */
+"If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Daha önce bir CGM kullandıysanız, KŞ bildirim uyarılarınız için 70-180 mg/dL veya 90-200 mg/dL gibi geniş bir hedef aralığına aşinasınızdır.";
+
+/* Title text for insulin model */
+"Insulin Model" = "İnsülin Modeli";
+
+/* Title text for multi-value insulin sensitivity warning */
+"Insulin Sensitivities" = "İnsülin Duyarlılığı";
 
 /* The description shown on the insulin sensitivity schedule interface. */
-"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose.";
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "İnsülin duyarlılığı, (İDF) kan şekerinizin 1 Ünite insülin dozuna nasıl tepki vermesi gerektiğini tanımlar. Daha küçük değerler, hedefin üzerindeyken daha fazla insülin verileceği anlamına gelir. Çok küçük değerler tehlikeli derecede düşük kan şekerine neden olabilir.";
+
+/* Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: programmed value (? if no value), 4: unit) */
+"Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@" = "%1$@ kesintiye uğradı: %3$@ %4$@'nın <b>%2$@</b> 'si";
+
+/* Guardrail info text format */
+"It can be set as low as %1$@. It can be set as high as %2$@." = "%1$@ kadar düşük bir değere ayarlanabilir. %2$@ kadar yükseğe ayarlanabilir.";
+
+/* Title text for the low basal rate warning */
+"Low Basal Rate" = "Düşük Bazal Oran";
+
+/* Title text for the low carb ratio warning */
+"Low Carb Ratio" = "Düşük Karb Oranı";
+
+/* Title text for the low correction value warning */
+"Low Correction Value" = "Düşük Düzeltme Değeri";
+
+/* Title text for the low glucose safety limit warning */
+"Low Glucose Safety Limit" = "Düşük KŞ Güvenlik Limiti";
+
+/* Title text for the low insulin sensitivity warning */
+"Low Insulin Sensitivity" = "Düşük İnsülin Duyarlılığı";
+
+/* Title text for low maximum basal rate warning */
+"Low Maximum Basal Rate" = "Düşük Maksimum Bazal Oranı";
+
+/* Title text for low maximum bolus warning */
+"Low Maximum Bolus" = "Düşük Maksimum Bolus";
+
+/* Title text for the low pre-meal value warning */
+"Low Pre-Meal Value" = "Düşük Yemek Öncesi Değer";
+
+/* Title text for the low workout value warning */
+"Low Workout Value" = "Düşük Egzersiz Değeri";
+
+/* Title of insulin model preset - lyumjev */
+"Lyumjev" = "Lyumjev";
 
 /* Placeholder for maximum value in glucose range */
-"max" = "max";
+"max" = "maks";
 
 /* The title text for the maximum basal rate value */
-"Maximum Basal Rate" = "Maximum Basal Rate";
+"Maximum Basal Rate" = "Maksimum Bazal Oranı";
 
 /* The title text for the maximum bolus value */
-"Maximum Bolus" = "Maximum Bolus";
+"Maximum Bolus" = "Maksimum Bolus";
 
 /* Section title for medium absorbing food */
-"Medium" = "Medium";
+"Medium" = "Orta";
+
+/* No comment provided by engineer. */
+"Middle" = "Orta";
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
 
+/* No comment provided by engineer. */
+"more content" = "daha fazla içerik";
+
 /* Alert action title to open error help */
-"More Info" = "More Info";
+"More Info" = "Daha fazla bilgi";
 
 /* The text for the override preset name setting */
-"Name" = "Name";
+"Name" = "İsim";
+
+/* Title for mini-modal to add a new schedule entry */
+"New Entry" = "Yeni giriş";
 
 /* The title for the new override preset entry screen */
-"New Preset" = "New Preset";
+"New Preset" = "Yeni Ön Ayar";
+
+/* Title text for the zero basal rate warning */
+"No Basal Insulin" = "Bazal İnsülin Yok";
 
 /* Section title for no-carb food
    The title for override emoji miscellaneous section */
-"Other" = "Other";
+"Other" = "Diğer";
 
 /* The title text for the insulin sensitivity scaling setting */
-"Overall Insulin Needs" = "Overall Insulin Needs";
+"Overall Insulin Needs" = "Genel İnsülin İhtiyaçları";
+
+/* Title for override history view */
+"Override History" = "Geçmişi geçersiz kılma";
 
 /* The title text for the override presets screen */
-"Override Presets" = "Override Presets";
+"Override Presets" = "Geçersiz Kılma Ön Ayarları";
 
 /* Text directing the user to configure override presets */
-"Override presets can be set up under the 'Configuration' section of the settings screen." = "Override presets can be set up under the 'Configuration' section of the settings screen.";
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Geçersiz kılma ön ayarları, ayarlar ekranının 'Konfigürsayon' bölümü altında ayarlanabilir.";
 
 /* The section title of glucose overrides */
-"Overrides" = "Overrides";
+"Overrides" = "Geçersiz kılmalar";
 
 /* Title for the pre-meal override range */
-"Pre-Meal" = "Pre-Meal";
+"Pre-Meal" = "Yemek öncesi";
+
+/* Title text for multi-value pre-meal value warning */
+"Pre-Meal Values" = "Yemek Öncesi Değerler";
+
+/* title for prescription section */
+"Prescription" = "Reçete";
 
 /* The section header text override presets */
-"PRESETS" = "PRESETS";
+"PRESETS" = "ÖN AYARLAR";
+
+/* Accessibility label for ProgressIndicatorView when showIndeterminantProgress */
+"Progressing." = "İlerliyor.";
 
 /* The title of the screen displaying a pump event */
-"Pump Event" = "Pump Event";
+"Pump Event" = "Pompa Etkinliği";
+
+/* Title text for suspend resume button when the basal delivery state is not set */
+"Pump Inoperable" = "Pompa Çalışmıyor";
+
+/* Title of insulin model preset - rapid acting adult */
+"Rapid-Acting – Adults" = "Hızlı Etkili – Yetişkinler";
+
+/* Title of insulin model preset - rapid acting children */
+"Rapid-Acting – Children" = "Hızlı Etkili – Çocuklar";
+
+/* The default placeholder string for a credential */
+"Required" = "Gerekli";
+
+/* Segmented button title for insulin delivery log reservoir history */
+"Reservoir" = "Rezervuar";
 
 /* Title text for button to resume insulin delivery */
-"Resume Delivery" = "Resume Delivery";
+"Resume Delivery" = "İletimi Devam Ettir";
 
 /* Title text for button when insulin delivery is in the process of being resumed */
-"Resuming" = "Resuming";
+"Resuming" = "Devam ediyor";
+
+/* title for summary description section */
+"Review and Save Settings" = "Ayarları Gözden Geçir ve Kaydet";
+
+/* Description of how to interact with summary screen */
+"Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen." = "Aşağıdaki tedavi ayarlarınızı gözden geçirin. Bu ayarlardan herhangi birini düzenlemek isterseniz, o ekrana geri dönmek için Geri'ye dokunun.";
 
 /* The text for the override preset name field placeholder */
-"Running" = "Running";
+"Running" = "Çalışıyor";
 
 /* Button text for saving glucose correction range schedule
    Button text for saving insulin sensitivity schedule */
-"Save" = "Save";
+"Save" = "Kaydet";
+
+/* Alert title for confirming basal rates outside the recommended range */
+"Save Basal Rates?" = "Bazal Oranlar Kaydedilsin mi?";
+
+/* Alert title for confirming carb ratios outside the recommended range */
+"Save Carb Ratios?" = "Karb Oranlarını Kaydet?";
+
+/* Alert title for confirming correction ranges outside the recommended range */
+"Save Correction Range(s)?" = "Düzeltme Aralığı/Aralıkları Kaydedilsin mi?";
+
+/* Alert title for confirming delivery limits outside the recommended range */
+"Save Delivery Limits?" = "İletim Limitleri Kaydedilsin mi?";
+
+/* Alert title for confirming a glucose safety limit outside the recommended range */
+"Save Glucose Safety Limit?" = "KŞ Güvenlik Limiti Kaydedilsin mi?";
+
+/* Alert title for confirming insulin sensitivities outside the recommended range */
+"Save Insulin Sensitivities?" = "İnsülin Hassasiyeti Kaydedilsin mi?";
+
+/* Alert title for confirming pre-meal range overrides outside the recommended range */
+"Save Pre-Meal Range?" = "Yemek Öncesi Aralığı Kaydedilsin mi?";
+
+/* Alert title for confirming workout range overrides outside the recommended range */
+"Save Workout Range?" = "Egzersiz Aralığını Kaydet?";
+
+/* The button text during saving on a configuration page */
+"Saving..." = "Kaydediliyor...";
 
 /* The section header text for a scheduled override */
-"SCHEDULED OVERRIDE" = "SCHEDULED OVERRIDE";
+"SCHEDULED OVERRIDE" = "PLANLANMIŞ GEÇERSİZ KILMA";
+
+/* The section header text for a scheduled custom preset */
+"SCHEDULED PRESET" = "PLANLANMIŞ ÖN AYAR";
 
 /* Section title for slow absorbing food */
-"Slow" = "Slow";
+"Slow" = "Yavaş";
+
+/* Information about typical maximum basal rates */
+"Some users choose a value 2, 3, or 4 times their highest scheduled basal rate." = "Bazı kullanıcılar, planlanan en yüksek bazal oranının 2, 3 veya 4 katı bir değer seçer.";
 
 /* The text for the override start time */
-"Start Time" = "Start Time";
+"Start Time" = "Başlangıç zamanı";
 
 /* Title text for suspend resume button when temp basal starting */
-"Starting Temp Basal" = "Starting Temp Basal";
+"Starting Temp Basal" = "Geçici Bazal başlatılıyor";
+
+/* Format for prescription descriptive text (1: providerName, 2: datePrescribed) */
+"Submitted by %1$@, %2$@" = "%2$@, %1$@ tarafından gönderildi";
+
+/* Title for support section */
+"Support" = "Destek";
 
 /* Title text for button to suspend insulin delivery */
-"Suspend Delivery" = "Suspend Delivery";
+"Suspend Delivery" = "İletimi Askıya Al";
 
 /* Title text for button when insulin delivery is in the process of being stopped */
-"Suspending" = "Suspending";
+"Suspending" = "Askıya alınıyor";
+
+/* No comment provided by engineer. */
+"Switch Preview State" = "Önizleme Durumunu Değiştir";
 
 /* The text for the override preset symbol setting */
-"Symbol" = "Symbol";
+"Symbol" = "Sembol";
+
+/* Text directing the user to configure their first custom preset */
+"Tap '+' to create a new custom preset." = "Yeni bir özel ön ayar oluşturmak için '+' düğmesine dokunun.";
 
 /* The empty-state text for a configuration value */
-"Tap to set" = "Tap to set";
+"Tap to set" = "Ayarlamak için dokunun";
 
 /* The text for the override target range setting */
-"Target Range" = "Target Range";
+"Target Range" = "Hedef Aralığı";
+
+/* Description of pre-meal mode */
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Yemek sonrası KŞ artışlarını engellemek için yemekten önce KŞ hedefinizi geçici olarak düşürün.";
+
+/* Description of workout mode */
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Düşük KŞ riskini azaltmak için fiziksel aktivite öncesinde, sırasında veya sonrasında KŞ hedefinizi geçici olarak yükseltin.";
 
 /* The title for the override selection screen */
-"Temporary Override" = "Temporary Override";
+"Temporary Override" = "Geçici Geçersiz Kılma";
 
-/* The default placeholder string for a credential */
-"Required" = "Required";
+/* Information about pre-meal range relative to correction range
+   Information about workout range relative to correction range */
+"than your Correction Range." = "düzeltme Aralığınızdan daha fazla.";
+
+/* Description for selection when no insulin type is selected. */
+"The currently selected fast acting insulin model will be used as a default." = "Şu anda seçili olan hızlı etkili insülin modeli varsayılan olarak kullanılacaktır.";
+
+/* Subtitle description of Walsh insulin model setting */
+"The legacy model used by Loop, allowing customization of action duration." = "Loop tarafından kullanılan ve eylem süresinin özelleştirilmesine izin veren eski model.";
 
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
-"The maximum absorption time is %@" = "The maximum absorption time is %@";
+"The maximum absorption time is %@" = "Maksimum emilim süresi %@";
 
 /* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
-"The maximum allowed amount is %@ grams" = "The maximum allowed amount is %@ grams";
+"The maximum allowed amount is %@ grams" = "İzin verilen maksimum miktar %@ gramdır";
+
+/* Information about adult insulin model */
+"The rapid-acting adult model assumes peak activity at 75 minutes." = "Hızlı etkili yetişkin modeli, 75 dakikada en yüksek etkiyi varsayar.";
+
+/* Information about child insulin model */
+"The rapid-acting child model assumes peak activity at 65 minutes." = "Hızlı etkili çocuk modeli, 65 dakikada en yüksek etkiyi varsayar.";
+
+/* Information about basal rate scheduling */
+"The schedule starts at midnight and cannot contain a rate of 0 U/hr." = "Program gece yarısı başlar ve 0 Ü/sa bir oran içeremez.";
+
+/* Therapy Settings screen title */
+"Therapy Settings" = "Tedavi Ayarları";
+
+/* No comment provided by engineer. */
+"Therapy Settings Support Placeholder" = "Tedavi Ayarları Destek Yer Tutucusu";
+
+/* Subtitle of afrezza preset */
+"This model assumes peak insulin activity at 19 minutes." = "Bu model, 19. dakikada en yüksek insülin aktivitesini varsayar.";
+
+/* Subtitle of Fiasp preset
+   Subtitle of Lyumjev preset */
+"This model assumes peak insulin activity at 55 minutes." = "Bu model, 55. dakikada en yüksek insülin aktivitesini varsayar.";
+
+/* Subtitle of Rapid-Acting – Children preset */
+"This model assumes peak insulin activity at 65 minutes." = "Bu model, 65 dakikada en yüksek insülin aktivitesini varsayar.";
+
+/* Subtitle of Rapid-Acting – Adult preset */
+"This model assumes peak insulin activity at 75 minutes." = "Bu model, 75 dakikada en yüksek insülin aktivitesini varsayar.";
+
+/* Information about pre-meal range relative to correction range
+   Information about workout range relative to correction range */
+"This will typically be" = "Bu genellikle şu şekilde olacaktır";
+
+/* Label for offset from midnight picker */
+"Time" = "Zaman";
 
 /* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
-"Times in %1$@%2$@%3$@" = "Times in %1$@%2$@%3$@";
+"Times in %1$@%2$@%3$@" = "Saat dilimi %1$@%2$@%3$@";
+
+/* No comment provided by engineer. */
+"To be implemented" = "Uygulanacak";
+
+/* No comment provided by engineer. */
+"Top" = "Üst";
+
+/* No comment provided by engineer. */
+"Top component" = "Üst bileşen";
+
+/* The text indicating Total for Daily Schedule Basal */
+"Total" = "Toplam";
+
+/* The text indicating U/day for Daily Schedule Basal */
+"U/day" = "Ü/gün";
 
 /* The unit string for units per hour */
-"U/hour" = "U/hour";
+"U/hour" = "Ü/saat";
+
+/* Alert title when error occurs while saving a schedule */
+"Unable to Save" = "Kaydedilemiyor";
 
 /* The unit string for units */
-"Units" = "Units";
+"Units" = "Ünite";
 
 /* Accessibility value for an unknown value
    The default title to use when an entry has none */
-"Unknown" = "Unknown";
+"Unknown" = "Bilinmeyen";
+
+/* Title for selection when no insulin type is selected. */
+"Unset" = "Ayarlanmamış";
+
+/* Placeholder text until value is entered */
+"Value" = "Değer";
 
 /* Label indicating validation is occurring */
-"Verifying" = "Verifying";
+"Verifying" = "Doğrulanıyor";
+
+/* The title for the override editing screen */
+"View Override" = "Geçersiz Kılmayı Görüntüle";
+
+/* Title of insulin model setting */
+"Walsh" = "Walsh";
 
 /* Title of an alert containing a validation warning */
-"Warning" = "Warning";
+"Warning" = "Uyarı";
+
+/* Disclaimer */
+"Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable." = "Planlanan en yüksek bazal oranınızdan daha yüksek, ancak kendinizi rahat hissettiğiniz ölçüde tutucu veya agresif bir değer seçmek için sağlık uzmanınızla birlikte çalışın.";
 
 /* Title for the workout override range */
-"Workout" = "Workout";
+"Workout" = "Egzersiz";
+
+/* Information about workout range format (1: app name) */
+"Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button." = "Egzersiz Aralığı, aktivite sırasında %1$@ değerinin hedeflenmesini istediğiniz KŞ değeri veya değer aralığıdır. Bu aralık, Egzersiz Ön Ayarı butonunu etkinleştirdiğinizde geçerli olacaktır.";
+
+/* Title text for multi-value workout value warning */
+"Workout Values" = "Egzersiz Değerleri";
+
+/* Description of how to add a ratio */
+"You can add different carb ratios for different times of day by using the ➕." = "➕ butonunu kullanarak günün farklı saatleri için farklı karbonhidrat oranları ekleyebilirsiniz.";
+
+/* Description of how to add a ratio */
+"You can add different insulin sensitivities for different times of day by using the ➕." = "➕ butonunu kullanarak günün farklı saatleri için farklı insülin duyarlılıkları ekleyebilirsiniz.";
+
+/* Description of how to add a configuration range */
+"You can add different ranges for different times of day by using the ➕." = "➕ butonunu kullanarak günün farklı saatleri için farklı aralıklar ekleyebilirsiniz.";
+
+/* Description of how to add a range */
+"You can add entries for different times of day by using the ➕." = "➕ butonunu kullanarak günün farklı saatleri için girişler ekleyebilirsiniz.";
+
+/* Description of how to edit setting */
+"You can edit a setting by tapping into any line item." = "Herhangi bir satır öğesine dokunarak bir ayarı düzenleyebilirsiniz.";
+
+/* Description of how to edit setting */
+"You can edit the setting by tapping into the line item." = "Satır öğesine dokunarak ayarı düzenleyebilirsiniz.";
+
+/* Information about basal rates */
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Bazal İnsülin Oranınız, arka plan insülin ihtiyaçlarınızı karşılamak için kullanmak istediğiniz  saat başına ünite miktarıdır.";
+
+/* Lower bound pre-meal information text */
+"your Glucose Safety Limit" = "KŞ Güvenlik Limitiniz";
+
+/* Disclaimer */
+"Your healthcare provider can help you choose a Correction Range that's right for you." = "Sağlık uzmanınız sizin için doğru olan Düzeltme Aralığını seçmenize yardımcı olabilir.";
+
+/* Description of insulin sensitivity factor */
+"Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "İnsülin Duyarlılık faktörünüz (İDF), bir ünite insülinden beklenen KŞ düşüşünü ifade eder.";
+
+/* Information about pre-meal range format (1: app name) */
+"Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Yemek Öncesi Aralığınız, yemeğinizden ilk lokmanızı aldığınız zaman %1$@ 'un hedeflemesini istediğiniz KŞ değeri (veya değer aralığı) olmalıdır. Bu aralık, Yemek Öncesi Ön Ayar butonunu etkinleştirdiğinizde etkin olacaktır.";
+

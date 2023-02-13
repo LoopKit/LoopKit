@@ -153,7 +153,18 @@ extension DosingDecisionStore {
                 return
             }
 
+            let enqueueTime = DispatchTime.now()
+
             self.store.managedObjectContext.performAndWait {
+                let startTime = DispatchTime.now()
+
+                defer {
+                    let endTime = DispatchTime.now()
+                    let queueWait = Double(startTime.uptimeNanoseconds - enqueueTime.uptimeNanoseconds) / 1_000_000_000
+                    let fetchWait = Double(endTime.uptimeNanoseconds - startTime.uptimeNanoseconds) / 1_000_000_000
+                    self.log.debug("executeDosingDecisionQuery (anchor = %{public}@: queueWait(%.03f), fetch(%.03f)", String(describing: queryAnchor), queueWait, fetchWait)
+                }
+
                 let storedRequest: NSFetchRequest<DosingDecisionObject> = DosingDecisionObject.fetchRequest()
 
                 storedRequest.predicate = NSPredicate(format: "modificationCounter > %d", queryAnchor.modificationCounter)

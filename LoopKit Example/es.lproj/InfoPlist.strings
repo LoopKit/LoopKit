@@ -1,0 +1,9 @@
+/* Bundle name */
+"CFBundleName" = "Ejemplo de LoopKit";
+
+/* Privacy - Health Share Usage Description */
+"NSHealthShareUsageDescription" = "Datos de alimentos de Salud se utiliza para determinar los efectos en el nivel de glucosa. Datos de glucosa de Salud se utilizan para graficar y determinar cálculos de momento.";
+
+/* Privacy - Health Update Usage Description */
+"NSHealthUpdateUsageDescription" = "Datos de alimentos ingresados en la aplicación son almacenados en la base de datos de Salud. Los datos de glucosa se almacenan de manera segura en Kit de Salud.";
+

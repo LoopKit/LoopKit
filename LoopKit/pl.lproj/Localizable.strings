@@ -1,11 +1,54 @@
+/* Format for correction range override therapy setting card */
+"%@ Range" = "%@ Zakres";
+
 /* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ J bolusa nie zostało podane";
+"%1$@ U bolus failed" = "%1$@ J bolus nie zostało podane";
 
 /* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ J bolusa mogło nie zostać podane";
+"%1$@ U bolus may not have succeeded" = "%1$@ J podanie bolusa mogło się nie powieść.";
+
+/* Descriptive format string for glucose safety limit (1: app name) */
+"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ będzie dostarczać insulinę podstawową i zalecaną w bolusie tylko wtedy, gdy przewiduje się, że poziom glukozy przekroczy ten limit przez następne trzy godziny.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Descriptive text for guardrail high value warning for schedule interface */
+"A value you have entered is higher than what is typically recommended for most people." = "Wprowadzona wartość jest wyższa niż zwykle zalecana dla większości osób.";
+
+/* Descriptive text for guardrail low value warning for schedule interface */
+"A value you have entered is lower than what is typically recommended for most people." = "Wprowadzona wartość jest niższa niż zwykle zalecana dla większości osób.";
+
+/* Brand name for afrezza insulin type
+   Title for Afrezza insulin type */
+"Afrezza" = "Afrezza";
+
+/* Description for afrezza insulin type */
+"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza to ultraszybko działająca doposiłkowa insulina wziewna, którą wdycha się przy użyciu doustnego inhalatora, wytwarzana przez firmę MannKind.";
+
+/* Brand name for apidra insulin type */
+"Apidra" = "Apidra";
+
+/* Title for Apidra insulin type */
+"Apidra (insulin glulisine)" = "Apidra (insulina glulizynowa)";
+
+/* Description for apidra insulin type */
+"Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis " = "Apidra (insulina glulizynowa) to szybko działająca insulina firmy Sanofi-Aventis.";
 
 /* The error description describing when Health sharing was denied */
 "Authorization Denied" = "Odmowa autoryzacji";
+
+/* Title for basal dose type */
+"Basal" = "Dawka podstawowa";
+
+/* Title text for basal rates */
+"Basal Rates" = "Dawka Podstawowa (Baza)";
+
+/* Title for bolus dose type */
+"Bolus" = "Bolus";
+
+/* Title text for carb ratios */
+"Carb Ratios" = "Współczynniki węglowodanowe";
 
 /* Recovery instruction for an uncertain bolus failure */
 "Check your pump before retrying" = "Sprawdź pompę zanim spróbujesz ponownie";
@@ -19,8 +62,23 @@
 /* Generic pump error description */
 "Communication Failure" = "Błąd komunikacji";
 
+/* Failure reason for uncertain delivery */
+"Communications interrupted during insulin delivery command." = "Komunikacja przerwana podczas polecenia podania insuliny.";
+
 /* Generic pump error description */
 "Connection Failure" = "Błąd połączenia";
+
+/* Title text for glucose target range */
+"Correction Range" = "Zakres docelowy";
+
+/* Descriptive text for glucose target range (1: app name) */
+"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Zakres docelowy (zakres korekty) to wartość glukozy (lub zakres wartości), do której chcesz dążyć %1$@ podczas dostosowywania insuliny bazowej i pomagania w obliczaniu bolusów.";
+
+/* Description of critical software update needed */
+"Critical Update" = "Krytyczna aktualizacja";
+
+/* Title text for delivery limits */
+"Delivery Limits" = "Limity podaży";
 
 /* Generic pump error description */
 "Device Refused" = "Urządzenie odmówiło";
@@ -37,17 +95,73 @@
 /* Glucose trend down-down-down */
 "Falling very fast" = "Bardzo szybki spadek";
 
+/* Brand name for fiasp insulin type
+   Title for Fiasp insulin type */
+"Fiasp" = "Fiasp";
+
+/* Description for fiasp insulin type */
+"Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" = "Fiasp to insulina aspart do posiłków z dodatkiem nikotynamidu (witaminy B3) firmy Novo Nordisk.";
+
 /* Glucose trend flat */
 "Flat" = "Powolna zmiana";
 
+/* Descriptive text for fast acting insulin model (1: app name) */
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "W przypadku szybko działającej insuliny %1$@ zakłada jej działanie przez 6 godzin. Możesz wybrać spośród różnych modeli szczytowej aktywności.";
+
 /* The short unit display string for grams per U */
 "g/U" = "g/J";
+
+/* Title text for glucose safety limit */
+"Glucose Safety Limit" = "Granica bezpiecznego poziomu glukozy";
+
+/* The long unit display string for a singular hour */
+"Hour" = "Godzina";
+
+/* The long unit display string for hours */
+"Hours" = "Godziny";
+
+/* Brand name for humalog insulin type */
+"Humalog" = "Humalog";
+
+/* Title for Humalog insulin type */
+"Humalog (insulin lispro)" = "Humalog (insulina lispro)";
+
+/* Description for humalog insulin type */
+"Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Humalog (insulina lispro) to szybko działająca insulina firmy Eli Lilly";
+
+/* Title text for fast acting insulin model */
+"Insulin Model" = "Model insuliny";
+
+/* Title text for insulin sensitivity */
+"Insulin Sensitivities" = "Wrażliwość na insulinę (ISF)";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Nieprawidłowa konfiguracja";
 
 /* Recovery instruction for a certain bolus failure */
 "It is safe to retry" = "Można bezpiecznie ponowić podanie bolusa";
+
+/* Brand name for lyumjev insulin type
+   Title for Lyumjev insulin type */
+"Lyumjev" = "Lyumjev";
+
+/* Description for lyumjev insulin type */
+"Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly" = "Lyumjev to preparat insuliny lispro do posiłków z dodatkiem cytrynianu i treprostinilu wyprodukowany przez firmę Eli Lilly.";
+
+/* Recovery suggestion for uncertain delivery */
+"Make sure your pump is within communication range of your phone." = "Upewnij się, że pompa jest połączona z Twoim telefonem.";
+
+/* Title text for maximum basal rate configuration */
+"Maximum Basal Rate" = "Maksymalna dawka podstawowa";
+
+/* Descriptive text for maximum basal rate (1: app name) */
+"Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Maksymalna dawka podstawowa to najwyższa tymczasowa dawka podstawowa, jaką %1$@ może ustawić.";
+
+/* Title text for maximum bolus configuration */
+"Maximum Bolus" = "Maksymalny bolus";
+
+/* Descriptive text for maximum bolus */
+"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksymalny bolus to największa wielkość bolusa, jaką można podać w jednym czasie, aby pokryć węglowodany lub obniżyć wysoki poziom glukozy.";
 
 /* The short unit display string for milligrams per deciliter per U */
 "mg/dL/U" = "mg/dL/J";
@@ -61,14 +175,38 @@
 /* Sensor state description for the non-valid state */
 "Needs Attention" = "Potrzebuje uwagi";
 
+/* Description of no software update needed */
+"No Update" = "Brak aktualizacji";
+
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "Nie znaleziono wartości";
+
+/* Brand name for novolog insulin type */
+"Novolog" = "Novolog";
+
+/* Title for Novolog insulin type */
+"Novolog (insulin aspart)" = "Novolog (insulina aspart)";
+
+/* Description for novolog insulin type */
+"NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk" = "NovoLog (insulina aspart) to szybko działająca insulina firmy Novo Nordisk.";
 
 /* Sensor state description for the valid state */
 "OK" = "OK";
 
+/* Descriptive text for saving settings outside the recommended range */
+"One or more of the values you have entered is outside of what is typically recommended for most people." = "Co najmniej jedna z wprowadzonych wartości wykracza poza to, co jest zwykle zalecane dla większości osób.";
+
 /* The error recovery suggestion when Health sharing was denied */
 "Please re-enable sharing in Health" = "Włącz ponownie udostępnianie w aplikacji Zdrowie";
+
+/* Title for pre-meal mode */
+"Pre-Meal" = "Przed posiłkiem";
+
+/* Description of supported software update needed */
+"Recommended Update" = "Zalecana aktualizacja";
+
+/* Title for resume dose type */
+"Resumed" = "Wznowione";
 
 /* Glucose trend up */
 "Rising" = "Wzrost";
@@ -78,6 +216,30 @@
 
 /* Glucose trend up-up-up */
 "Rising very fast" = "Bardzo szybki wzrost";
+
+/* Descriptive text for guardrail high value warning for schedule interface */
+"Some of the values you have entered are outside of what is typically recommended for most people." = "Niektóre z wprowadzonych wartości wykraczają poza to, co jest zwykle zalecane dla większości osób.";
+
+/* Title for suspend dose type */
+"Suspended" = "Wstrzymane";
+
+/* Title for temp basal dose type */
+"Temp Basal" = "Tymczasowa dawka podstawowa";
+
+/* Descriptive text for pre-meal correction range override */
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Tymczasowo obniż docelowy poziom glukozy przed posiłkiem, aby ograniczyć gwałtowny wzrost glukozy po posiłku.";
+
+/* Descriptive text for workout correction range override */
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Tymczasowo zwiększ docelowy poziom glukozy przed, w trakcie lub po aktywności fizycznej, aby zmniejszyć ryzyko wystąpienia niskiego poziomu glukozy (Hipoglikemia).";
+
+/* Descriptive text for guardrail high value warning */
+"The value you have entered is higher than what is typically recommended for most people." = "Wprowadzona wartość jest wyższa niż zwykle zalecana dla większości osób.";
+
+/* Descriptive text for guardrail low value warning */
+"The value you have entered is lower than what is typically recommended for most people." = "Wprowadzona wartość jest niższa niż zwykle zalecana dla większości osób.";
+
+/* Descriptive text for guardrail high value warning */
+"The values you have entered are outside of what is typically recommended for most people." = "Wprowadzone wartości wykraczają poza to, co jest zwykle zalecane dla większości osób.";
 
 /* The short unit display string for international units of insulin */
 "U" = "J";
@@ -96,4 +258,19 @@
 
 /* The long unit display string for international units of insulin per hour */
 "Units/hour" = "Jednostki/godzinę";
+
+/* Description of informational software update needed */
+"Update Available" = "Dostępna aktualizacja";
+
+/* Title for workout mode */
+"Workout" = "Wysiłek fizyczny";
+
+/* Descriptive text for basal rate */
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Dawka podstawowa insuliny to liczba jednostek na godzinę, którą chcesz wykorzystać do pokrycia podstawowego zapotrzebowania na insulinę.";
+
+/* Descriptive text for carb ratio */
+"Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Twój Współczynnik Węglowodanowy to liczba gramów węglowodanów rekompensowanych przez jedną jednostkę insuliny.";
+
+/* Descriptive text for insulin sensitivity */
+"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "Wrażliwość na insulinę odnosi się do oczekiwanego spadku glukozy po jednej jednostce insuliny.";
 

@@ -33,6 +33,14 @@ public protocol SupportUI: AnyObject {
     /// - Returns: A view that will be used in a support menu for providing user support.
     func supportMenuItem(supportInfoProvider: SupportInfoProvider, urlHandler: @escaping (URL) -> Void) -> AnyView?
 
+    /// Provides configuration menu items.
+    ///
+    /// - Parameters:
+    ///   - supportInfoProvider: A provider of additional support information.
+    ///   - urlHandler: A handler to open any URLs.
+    /// - Returns: An array of views that will be added to the configuration section of settings.
+    func configurationMenuItems() -> [AnyView]
+
     ///
     /// Check whether the given app version for the given `bundleIdentifier` needs an update.  Services should return their last result, if known.
     ///

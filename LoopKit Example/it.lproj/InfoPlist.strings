@@ -1,0 +1,9 @@
+/* Bundle name */
+"CFBundleName" = "Esempio di LoopKit";
+
+/* Privacy - Health Share Usage Description */
+"NSHealthShareUsageDescription" = "I dati sui pasti contenuti nel  database della app  Apple Salute vengono utilizzati per determinare gli effetti sulla glicemia. Inoltre i dati del glucosio contenuti  nel database di Apple Salute vengono utilizzati per il calcolo del grafico  e le variazioni glicemiche.";
+
+/* Privacy - Health Update Usage Description */
+"NSHealthUpdateUsageDescription" = "I dati dei carboidrati relativi ai pasti inseriti nell'app vengono archiviati nel database Salute. I dati delle glicemie vengono archiviati in modo sicuro in Salute.";
+
