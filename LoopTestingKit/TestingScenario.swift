@@ -18,7 +18,8 @@ public struct TestingScenario {
     public func instantiate(relativeTo referenceDate: Date = Date()) -> TestingScenarioInstance {
         let glucoseSamples = dateRelativeGlucoseSamples
             .map { $0.newGlucoseSample(relativeTo: referenceDate) }
-            .filter { $0.date <= referenceDate }
+        let pastGlucoseSamples = glucoseSamples.filter { $0.date <= referenceDate }
+        let futureGlucoseSamples = glucoseSamples.filter { $0.date > referenceDate }
         let basalEntries = dateRelativeBasalEntries.map { $0.newPumpEvent(relativeTo: referenceDate) }
         let bolusEntries = dateRelativeBolusEntries.map { $0.newPumpEvent(relativeTo: referenceDate) }
         let pumpEvents = (basalEntries + bolusEntries)
@@ -27,7 +28,7 @@ public struct TestingScenario {
         let carbEntries = dateRelativeCarbEntries
             .filter { $0.enteredAt(relativeTo: referenceDate) <= referenceDate }
             .map { $0.newCarbEntry(relativeTo: referenceDate) }
-        return TestingScenarioInstance(glucoseSamples: glucoseSamples, pumpEvents: pumpEvents, carbEntries: carbEntries)
+        return TestingScenarioInstance(pastGlucoseSamples: pastGlucoseSamples, futureGlucoseSamples: futureGlucoseSamples, pumpEvents: pumpEvents, carbEntries: carbEntries)
     }
 
     public mutating func stepBackward(by offset: TimeInterval) {
