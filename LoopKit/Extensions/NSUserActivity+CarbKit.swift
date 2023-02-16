@@ -14,7 +14,7 @@ extension NSUserActivity {
     public static let newCarbEntryActivityType = "NewCarbEntry"
 
     public static let newCarbEntryUserInfoKey = "NewCarbEntry"
-    public static let carbEntryIsUAMUserInfoKey = "CarbEntryIsUAM"
+    public static let carbEntryIsMissedMealUserInfoKey = "CarbEntryIsMissedMeal"
 
     public class func forNewCarbEntry() -> NSUserActivity {
         let activity = NSUserActivity(activityType: newCarbEntryActivityType)
@@ -22,11 +22,11 @@ extension NSUserActivity {
         return activity
     }
 
-    public func update(from entry: NewCarbEntry?, isUnannouncedMeal: Bool = false) {
+    public func update(from entry: NewCarbEntry?, isMissedMeal: Bool = false) {
         if let rawValue = entry?.rawValue {
             addUserInfoEntries(from: [
                 NSUserActivity.newCarbEntryUserInfoKey: rawValue,
-                NSUserActivity.carbEntryIsUAMUserInfoKey: isUnannouncedMeal
+                NSUserActivity.carbEntryIsMissedMealUserInfoKey: isMissedMeal
             ])
         } else {
             userInfo = nil
@@ -41,11 +41,11 @@ extension NSUserActivity {
         return NewCarbEntry(rawValue: rawValue)
     }
     
-    public var entryIsUnannouncedMeal: Bool {
+    public var entryisMissedMeal: Bool {
         guard newCarbEntry != nil else {
             return false
         }
         
-        return userInfo?[NSUserActivity.carbEntryIsUAMUserInfoKey] as? Bool ?? false
+        return userInfo?[NSUserActivity.carbEntryIsMissedMealUserInfoKey] as? Bool ?? false
     }
 }
