@@ -271,6 +271,9 @@ public final class TemporaryScheduleOverrideHistory {
             // Wipe only conflicting overrides to retain as much history as possible.
             recentEvents.removeAll(at: invalidOverrideIndices)
 
+            // Store the history without the conflicting overrides
+            delegate?.temporaryScheduleOverrideHistoryDidUpdate(self)
+
             // Crash deliberately to notify something has gone wrong.
             preconditionFailure("No overrides should overlap.")
         }
