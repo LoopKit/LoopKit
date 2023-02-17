@@ -72,6 +72,9 @@ public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObs
 
     /// Indicates the system time offset from a trusted time source. If the return value is added to the system time, the result is the trusted time source value. If the trusted time source is earlier than the system time, the return value is negative.
     var detectedSystemTimeOffset: TimeInterval { get }
+
+    /// Indicates if automatic dosing has been enabled
+    var automaticDosingEnabled: Bool { get }
 }
 
 
