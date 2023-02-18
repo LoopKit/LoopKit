@@ -1443,7 +1443,7 @@ extension DoseStore {
                         self.getPumpEventDoseEntriesForSavingToInsulinDeliveryStore(startingAt: firstPumpEventDate, completion: { (result) in
 
                             report.append("")
-                            report.append("### getNormalizedPumpEventDoseEntriesOverlaidWithBasalEntries")
+                            report.append("### getPumpEventDoseEntriesForSavingToInsulinDeliveryStore")
 
                             switch result {
                             case .failure(let error):
