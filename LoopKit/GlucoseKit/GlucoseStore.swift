@@ -132,10 +132,8 @@ public final class GlucoseStore: HealthKitSampleStore {
                    observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
                    observationEnabled: observationEnabled)
 
-        let semaphore = DispatchSemaphore(value: 0)
         cacheStore.onReady { (error) in
             guard error == nil else {
-                semaphore.signal()
                 return
             }
 
@@ -148,12 +146,9 @@ public final class GlucoseStore: HealthKitSampleStore {
                     }
 
                     self.updateLatestGlucose()
-
-                    semaphore.signal()
                 }
             }
         }
-        semaphore.wait()
     }
 
     // MARK: - HealthKitSampleStore
