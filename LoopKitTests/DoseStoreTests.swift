@@ -203,21 +203,29 @@ class DoseStoreTests: PersistenceControllerTestCase {
         // 1. Create a DoseStore
         let healthStore = HKHealthStoreMock()
 
+        let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
+
         let doseStore = DoseStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
             observationEnabled: false,
             insulinModelProvider: StaticInsulinModelProvider(WalshInsulinModel(actionDuration: .hours(4))),
             longestEffectDuration: .hours(4),
-            basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
+            basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [ // Timezone = -0800
+                ["value": 0.75, "startTime": 0.0],       // 0000 - Midnight
+                ["value": 0.8, "startTime": 10800.0],    // 0300 - 3am
+                ["value": 0.85, "startTime": 32400.0],   // 0900 - 9am
+                ["value": 1.0, "startTime": 68400.0]]]), // 1900 - 7pm
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
             syncVersion: 1,
             provenanceIdentifier: Bundle.main.bundleIdentifier!,
+            onReady: { _ in doseStoreInitialization.fulfill() },
 
             // Set the current date
             test_currentDate: f("2018-12-12 18:07:14 +0000")
         )
 
+        waitForExpectations(timeout: 3)
 
         // 2. Add a temp basal which has already ended. It should be saved to Health
         let pumpEvents1 = [
@@ -314,6 +322,8 @@ class DoseStoreTests: PersistenceControllerTestCase {
         // Create a DoseStore
         let healthStore = HKHealthStoreMock()
 
+        let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
+
         let doseStore = DoseStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
@@ -325,9 +335,14 @@ class DoseStoreTests: PersistenceControllerTestCase {
             syncVersion: 1,
             provenanceIdentifier: Bundle.main.bundleIdentifier!,
 
+            onReady: { _ in doseStoreInitialization.fulfill() },
+
             // Set the current date (5 minutes later)
             test_currentDate: f("2018-11-29 11:04:27 +0000")
         )
+
+        waitForExpectations(timeout: 3)
+
         doseStore.pumpRecordsBasalProfileStartEvents = false
 
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = f("2018-11-29 10:54:28 +0000")
@@ -481,6 +496,9 @@ class DoseStoreTests: PersistenceControllerTestCase {
             return formatter.date(from: input)!
         }
 
+        let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
+
+
         // 1. Create a DoseStore
         let doseStore = DoseStore(
             healthStore: HKHealthStoreMock(),
@@ -493,9 +511,12 @@ class DoseStoreTests: PersistenceControllerTestCase {
             syncVersion: 1,
             provenanceIdentifier: Bundle.main.bundleIdentifier!,
 
+            onReady: { _ in doseStoreInitialization.fulfill() },
+
             // Set the current date
             test_currentDate: f("2018-12-12 18:07:14 +0000")
         )
+        waitForExpectations(timeout: 3)
 
 
         // 2. Add a temp basal which has already ended. It should persist in InsulinDeliveryStore.
@@ -560,6 +581,9 @@ class DoseStoreTests: PersistenceControllerTestCase {
             return formatter.date(from: input)!
         }
 
+        let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
+
+
         // 1. Create a DoseStore
         let doseStore = DoseStore(
             healthStore: HKHealthStoreMock(),
@@ -572,10 +596,12 @@ class DoseStoreTests: PersistenceControllerTestCase {
             syncVersion: 1,
             provenanceIdentifier: Bundle.main.bundleIdentifier!,
 
+            onReady: { _ in doseStoreInitialization.fulfill() },
             // Set the current date
             test_currentDate: f("2018-12-12 18:07:14 +0000")
         )
 
+        waitForExpectations(timeout: 3)
 
         // 2. Add a temp basal which has already ended. It should persist in InsulinDeliveryStore.
         let pumpEvents1 = [

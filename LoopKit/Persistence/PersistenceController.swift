@@ -52,14 +52,6 @@ public final class PersistenceController {
         }
     }
 
-    private enum ReadyState {
-        case waiting
-        case ready
-        case error(PersistenceControllerError)
-    }
-
-    public typealias ReadyCallback = (_ error: PersistenceControllerError?) -> Void
-
     internal let managedObjectContext: NSManagedObjectContext
 
     public let isReadOnly: Bool
@@ -69,6 +61,34 @@ public final class PersistenceController {
     public weak var delegate: PersistenceControllerDelegate?
 
     private let log = OSLog(category: "PersistenceController")
+
+    private var queue = DispatchQueue(label: "com.loopkit.PersistenceController", qos: .utility)
+
+    // MARK: - ReadyState
+    private enum ReadyState {
+        case waiting
+        case ready
+        case error(PersistenceControllerError)
+    }
+
+    public typealias ReadyCallback = (_ error: PersistenceControllerError?) -> Void
+
+    private var readyCallbacks: [ReadyCallback] = []
+
+    private var readyState: ReadyState = .waiting
+
+    func onReady(_ callback: @escaping ReadyCallback) {
+        queue.async {
+            switch self.readyState {
+            case .waiting:
+                self.readyCallbacks.append(callback)
+            case .ready:
+                callback(nil)
+            case .error(let error):
+                callback(error)
+            }
+        }
+    }
 
     /// Initializes a new persistence controller in the specified directory
     ///
@@ -99,25 +119,6 @@ public final class PersistenceController {
         self.isReadOnly = isReadOnly
         
         initializeStack(inDirectory: directoryURL, model: model)
-    }
-
-    private var readyCallbacks: [ReadyCallback] = []
-
-    private var readyState: ReadyState = .waiting
-
-    private var queue = DispatchQueue(label: "com.loopkit.PersistenceController", qos: .utility)
-
-    func onReady(_ callback: @escaping ReadyCallback) {
-        queue.async {
-            switch self.readyState {
-            case .waiting:
-                self.readyCallbacks.append(callback)
-            case .ready:
-                callback(nil)
-            case .error(let error):
-                callback(error)
-            }
-        }
     }
 
     @discardableResult
@@ -263,10 +264,11 @@ extension PersistenceController {
             if let encoded = value as? Data {
                 let anchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: encoded)
                 if anchor == nil {
-                    self.log.error("Decoding anchor from %{public} failed.", String(describing: encoded))
+                    self.log.error("Decoding anchor from %{public}@ failed.", String(describing: encoded))
                 }
                 completion(anchor)
             } else {
+                self.log.error("Anchor metadata invalid %{public}@.", String(describing: value))
                 completion(nil)
             }
         }
