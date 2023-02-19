@@ -21,13 +21,13 @@ public enum RemoteAction: CustomStringConvertible, Codable {
     var actionName: String {
         switch self {
         case .carbsEntry:
-            return "Carb Entry"
+            return NSLocalizedString("Carb Entry", comment: "Carb entry action name")
         case .bolusEntry:
-            return "Bolus Entry"
+            return NSLocalizedString("Bolus Entry", comment: "Bolus entry action name")
         case .cancelTemporaryOverride:
-            return "Cancel Override"
+            return NSLocalizedString("Cancel Override", comment: "Cancel override action name")
         case .temporaryScheduleOverride:
-            return "Override"
+            return NSLocalizedString("Override", comment: "Override action name")
         }
     }
     
