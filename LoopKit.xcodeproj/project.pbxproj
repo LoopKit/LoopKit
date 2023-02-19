@@ -527,6 +527,14 @@
 		A933DB8924BF97CC009B417A /* CriticalEventLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A933DB8724BF956F009B417A /* CriticalEventLog.swift */; };
 		A935094426E2FAB70030B60D /* GlucoseCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A935094326E2FAB70030B60D /* GlucoseCondition.swift */; };
 		A935094526E2FAB70030B60D /* GlucoseCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A935094326E2FAB70030B60D /* GlucoseCondition.swift */; };
+		A935793B29A2570400246DED /* RemoteCarbAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A935793629A2570300246DED /* RemoteCarbAction.swift */; };
+		A935793C29A2570400246DED /* RemoteOverrideCancelAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A935793729A2570300246DED /* RemoteOverrideCancelAction.swift */; };
+		A935793D29A2570400246DED /* RemoteOverrideAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A935793829A2570400246DED /* RemoteOverrideAction.swift */; };
+		A935793E29A2570400246DED /* RemoteBolusAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A935793929A2570400246DED /* RemoteBolusAction.swift */; };
+		A935793F29A2570400246DED /* RemoteAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A935793A29A2570400246DED /* RemoteAction.swift */; };
+		A935794329A2618E00246DED /* RemoteBolusActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A935794029A2618D00246DED /* RemoteBolusActionTests.swift */; };
+		A935794429A2618E00246DED /* RemoteOverrideActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A935794129A2618D00246DED /* RemoteOverrideActionTests.swift */; };
+		A935794529A2618E00246DED /* RemoteCarbActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A935794229A2618D00246DED /* RemoteCarbActionTests.swift */; };
 		A93761C125ED670200F6BE43 /* BluetoothProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93761C025ED670200F6BE43 /* BluetoothProvider.swift */; };
 		A93761C225ED670200F6BE43 /* BluetoothProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93761C025ED670200F6BE43 /* BluetoothProvider.swift */; };
 		A93CA899278D08CC003B5A01 /* PumpAlarmType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93CA898278D08CC003B5A01 /* PumpAlarmType.swift */; };
@@ -1489,6 +1497,14 @@
 		A932803A2798D63B0091D0A1 /* SyncAlertObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncAlertObject.swift; sourceTree = "<group>"; };
 		A933DB8724BF956F009B417A /* CriticalEventLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriticalEventLog.swift; sourceTree = "<group>"; };
 		A935094326E2FAB70030B60D /* GlucoseCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseCondition.swift; sourceTree = "<group>"; };
+		A935793629A2570300246DED /* RemoteCarbAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteCarbAction.swift; sourceTree = "<group>"; };
+		A935793729A2570300246DED /* RemoteOverrideCancelAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteOverrideCancelAction.swift; sourceTree = "<group>"; };
+		A935793829A2570400246DED /* RemoteOverrideAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteOverrideAction.swift; sourceTree = "<group>"; };
+		A935793929A2570400246DED /* RemoteBolusAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteBolusAction.swift; sourceTree = "<group>"; };
+		A935793A29A2570400246DED /* RemoteAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteAction.swift; sourceTree = "<group>"; };
+		A935794029A2618D00246DED /* RemoteBolusActionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteBolusActionTests.swift; sourceTree = "<group>"; };
+		A935794129A2618D00246DED /* RemoteOverrideActionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteOverrideActionTests.swift; sourceTree = "<group>"; };
+		A935794229A2618D00246DED /* RemoteCarbActionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteCarbActionTests.swift; sourceTree = "<group>"; };
 		A93761C025ED670200F6BE43 /* BluetoothProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothProvider.swift; sourceTree = "<group>"; };
 		A93CA898278D08CC003B5A01 /* PumpAlarmType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PumpAlarmType.swift; sourceTree = "<group>"; };
 		A9498D6E23386C0B00DAA9B9 /* TempBasalRecommendation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TempBasalRecommendation.swift; sourceTree = "<group>"; };
@@ -1924,6 +1940,7 @@
 		1D63DEA126E94F6B00F46FA5 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				A98FF28F29A25699005739A5 /* Remote */,
 				A9498D7323386C3200DAA9B9 /* AnalyticsService.swift */,
 				A9498D7123386C3200DAA9B9 /* LoggingService.swift */,
 				A9498D7523386C3300DAA9B9 /* RemoteDataService.swift */,
@@ -2487,6 +2504,9 @@
 				B46E096C25F80D6C0025A04D /* OverrideTests.swift */,
 				A9DF02D024F7449E00B7C988 /* PersistentDeviceLogTests.swift */,
 				A95A1D882460F8930079378D /* PumpManagerStatusTests.swift */,
+				A935794029A2618D00246DED /* RemoteBolusActionTests.swift */,
+				A935794229A2618D00246DED /* RemoteCarbActionTests.swift */,
+				A935794129A2618D00246DED /* RemoteOverrideActionTests.swift */,
 				434C5F9F209ABD4700B2FD1A /* QuantityFormatterTests.swift */,
 				43D8FE1C1C72906E0073BE78 /* QuantityScheduleTests.swift */,
 				A99C73782339ACDC00C80963 /* ServiceTests.swift */,
@@ -2823,6 +2843,26 @@
 				B45774342562CCC6004B9466 /* SupportedRangeTableViewController.swift */,
 			);
 			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		A935793529A256F800246DED /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				A935793A29A2570400246DED /* RemoteAction.swift */,
+				A935793929A2570400246DED /* RemoteBolusAction.swift */,
+				A935793629A2570300246DED /* RemoteCarbAction.swift */,
+				A935793829A2570400246DED /* RemoteOverrideAction.swift */,
+				A935793729A2570300246DED /* RemoteOverrideCancelAction.swift */,
+			);
+			path = Actions;
+			sourceTree = "<group>";
+		};
+		A98FF28F29A25699005739A5 /* Remote */ = {
+			isa = PBXGroup;
+			children = (
+				A935793529A256F800246DED /* Actions */,
+			);
+			path = Remote;
 			sourceTree = "<group>";
 		};
 		A9E068142534EB6B00BDAB59 /* Persistence */ = {
@@ -3857,6 +3897,7 @@
 				437AFEED2036A156008C4892 /* CachedCarbObject+CoreDataClass.swift in Sources */,
 				43D8FDF71C7290350073BE78 /* DailyValueSchedule.swift in Sources */,
 				4322B77D202FA2AF0002837D /* NewPumpEvent.swift in Sources */,
+				A935793F29A2570400246DED /* RemoteAction.swift in Sources */,
 				434113AA20F171CB00D05747 /* CachedInsulinDeliveryObject+CoreDataClass.swift in Sources */,
 				C140DFFF260276BF000A4FF7 /* ManualBolusRecommendation.swift in Sources */,
 				432CF86F20D76CCF0066B889 /* GlucoseTrend.swift in Sources */,
@@ -3871,6 +3912,7 @@
 				89ED164324A29BE400C9A105 /* ClosedRange.swift in Sources */,
 				4322B76F202FA26F0002837D /* GlucoseSampleValue.swift in Sources */,
 				89AE222C228BC66E00BDFD85 /* Locked.swift in Sources */,
+				A935793C29A2570400246DED /* RemoteOverrideCancelAction.swift in Sources */,
 				432CF87120D76D5A0066B889 /* GlucoseDisplayable.swift in Sources */,
 				A919889F2355016B00B75EEE /* DosingDecisionStore.swift in Sources */,
 				A9BD318224F4548900994B83 /* Modelv3EntityMigrationPolicy.swift in Sources */,
@@ -3892,6 +3934,7 @@
 				43D9888B1C87E47800DA4467 /* GlucoseValue.swift in Sources */,
 				A967D94924F99B6A00CDDF8A /* OutputStream.swift in Sources */,
 				43D8FDF41C7290350073BE78 /* BasalRateSchedule.swift in Sources */,
+				A935793B29A2570400246DED /* RemoteCarbAction.swift in Sources */,
 				4322B788202FA2B30002837D /* DoseStore.swift in Sources */,
 				4303C4921E2D665000ADEDC8 /* TimeZone.swift in Sources */,
 				A9498D6F23386C0B00DAA9B9 /* TempBasalRecommendation.swift in Sources */,
@@ -3901,6 +3944,7 @@
 				A9498D8223386C3300DAA9B9 /* Service.swift in Sources */,
 				4322B785202FA2AF0002837D /* ReservoirValue.swift in Sources */,
 				891A3FD9224BEB4600378B27 /* EGPSchedule.swift in Sources */,
+				A935793D29A2570400246DED /* RemoteOverrideAction.swift in Sources */,
 				89AE2229228BC54C00BDFD85 /* TemporaryScheduleOverrideHistory.swift in Sources */,
 				437AFF24203BE402008C4892 /* HKHealthStore.swift in Sources */,
 				89AE222B228BC56A00BDFD85 /* WeakSet.swift in Sources */,
@@ -3981,6 +4025,7 @@
 				4322B778202FA2790002837D /* HKQuantitySample+CarbKit.swift in Sources */,
 				4322B771202FA26F0002837D /* HKQuantitySample+GlucoseKit.swift in Sources */,
 				433BC7AB20538D4C000B1200 /* CachedGlucoseObject+CoreDataProperties.swift in Sources */,
+				A935793E29A2570400246DED /* RemoteBolusAction.swift in Sources */,
 				43FB610720DDF19B002B996B /* PumpManagerError.swift in Sources */,
 				89AE2232228BC68600BDFD85 /* UnfairLock.swift in Sources */,
 				A9FD046F24E310D00040F203 /* HKObject.swift in Sources */,
@@ -4029,8 +4074,11 @@
 				437874B5202FDD1200A3D8B9 /* DoseStoreTests.swift in Sources */,
 				A985465125144ABA0099C1A6 /* NotificationSettingsTests.swift in Sources */,
 				B455F4DF2600E0A8000ED456 /* GlucoseRangeTests.swift in Sources */,
+				A935794529A2618E00246DED /* RemoteCarbActionTests.swift in Sources */,
+				A935794429A2618E00246DED /* RemoteOverrideActionTests.swift in Sources */,
 				4322B76C202F9ECD0002837D /* CarbMathTests.swift in Sources */,
 				1D70C40D26F01D9F00C62570 /* VersionCheckServiceTests.swift in Sources */,
+				A935794329A2618E00246DED /* RemoteBolusActionTests.swift in Sources */,
 				434113B520F2BDB500D05747 /* CachedInsulinDeliveryObjectTests.swift in Sources */,
 				43D8FE1F1C72906E0073BE78 /* QuantityScheduleTests.swift in Sources */,
 				43D8FE1D1C72906E0073BE78 /* BasalRateScheduleTests.swift in Sources */,
