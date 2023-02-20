@@ -182,6 +182,7 @@ public final class DoseStore {
     /// Window for retrieving historical doses that might be used to reconcile current events
     private let pumpEventReconciliationWindow = TimeInterval(hours: 24)
 
+    
     // MARK: -
 
     /// Initializes and configures a new store
@@ -201,6 +202,7 @@ public final class DoseStore {
     ///   - syncVersion: A version number for determining resolution in de-duplication
     ///   - lastPumpEventsReconciliation: The date the PumpManger last reconciled with the pump
     ///   - provenanceIdentifier: An id to store with new doses, indicating the provenance of the dose, usually the app's bundle identifier.
+    ///   - readyCallback: A closure that will be called after initialization.
     ///   - test_currentDate: Used for testing to mock current time
     public init(
         healthStore: HKHealthStore,
@@ -217,6 +219,7 @@ public final class DoseStore {
         syncVersion: Int = 1,
         lastPumpEventsReconciliation: Date? = nil,
         provenanceIdentifier: String,
+        onReady: ((DoseStoreError?) -> Void)? = nil,
         test_currentDate: Date? = nil
     ) {
         self.insulinDeliveryStore = InsulinDeliveryStore(
@@ -243,6 +246,7 @@ public final class DoseStore {
 
         persistenceController.onReady { (error) -> Void in
             guard error == nil else {
+                onReady?(.init(error: error))
                 return
             }
 
@@ -259,6 +263,8 @@ public final class DoseStore {
 
                 // Validate the state of the stored reservoir data.
                 self.validateReservoirContinuity()
+
+                onReady?(nil)
             }
         }
     }
@@ -993,6 +999,7 @@ extension DoseStore {
                 return
             }
 
+            self.log.debug("Overlaying basal schedule for %d doses starting at %@", doses.count, String(describing: startingAt))
             let reconciledDoses = doses.overlayBasalSchedule(basalSchedule, startingAt: startingAt, insertingBasalEntries: !self.pumpRecordsBasalProfileStartEvents)
             completion(.success(reconciledDoses))
         }
@@ -1443,7 +1450,7 @@ extension DoseStore {
                         self.getPumpEventDoseEntriesForSavingToInsulinDeliveryStore(startingAt: firstPumpEventDate, completion: { (result) in
 
                             report.append("")
-                            report.append("### getNormalizedPumpEventDoseEntriesOverlaidWithBasalEntries")
+                            report.append("### getPumpEventDoseEntriesForSavingToInsulinDeliveryStore")
 
                             switch result {
                             case .failure(let error):

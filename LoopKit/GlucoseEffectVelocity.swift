@@ -39,4 +39,26 @@ extension GlucoseEffectVelocity {
             )
         )
     }
+    
+    /// The integration of the velocity span from `start` to `end`
+    public func effect(from start: Date, to end: Date) -> GlucoseEffect? {
+        guard
+            start <= end,
+            startDate <= start,
+            end <= endDate
+        else {
+            return nil
+        }
+        
+        let duration = end.timeIntervalSince(start)
+        let velocityPerSecond = quantity.doubleValue(for: GlucoseEffectVelocity.perSecondUnit)
+
+        return GlucoseEffect(
+            startDate: end,
+            quantity: HKQuantity(
+                unit: .milligramsPerDeciliter,
+                doubleValue: velocityPerSecond * duration
+            )
+        )
+    }
 }

@@ -206,7 +206,8 @@ public final class CarbStore: HealthKitSampleStore {
         calculationDelta: TimeInterval = 5 /* minutes */ * 60,
         effectDelay: TimeInterval = 10 /* minutes */ * 60,
         carbAbsorptionModel: CarbAbsorptionModel = .nonlinear,
-        provenanceIdentifier: String
+        provenanceIdentifier: String,
+        test_currentDate: Date? = nil
     ) {
         self.storeEntriesToHealthKit = storeEntriesToHealthKit
         self.cacheStore = cacheStore
@@ -229,8 +230,9 @@ public final class CarbStore: HealthKitSampleStore {
                    observeHealthKitSamplesFromCurrentApp: true,
                    observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
                    type: carbType,
-                   observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
-                   observationEnabled: observationEnabled)
+                   observationStart: (test_currentDate ?? Date()).addingTimeInterval(-self.observationInterval),
+                   observationEnabled: observationEnabled,
+                   test_currentDate: test_currentDate)
 
         // Carb model settings based on the selected absorption model
         switch self.carbAbsorptionModel {
@@ -242,10 +244,8 @@ public final class CarbStore: HealthKitSampleStore {
             self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.0, adaptiveAbsorptionRateEnabled: true, adaptiveRateStandbyIntervalFraction: 0.2)
         }
 
-        let semaphore = DispatchSemaphore(value: 0)
         cacheStore.onReady { (error) in
             guard error == nil else {
-                semaphore.signal()
                 return
             }
             
@@ -258,12 +258,9 @@ public final class CarbStore: HealthKitSampleStore {
                     }
 
                     self.migrateLegacyCarbEntryKeys()
-                    
-                    semaphore.signal()
                 }
             }
         }
-        semaphore.wait()
     }
 
     // Migrate modifiedCarbEntries and deletedCarbEntryIDs
@@ -803,7 +800,7 @@ extension CarbStore {
 
 extension CarbStore {
     public var earliestCacheDate: Date {
-        return Date(timeIntervalSinceNow: -cacheLength)
+        return currentDate(timeIntervalSinceNow: -cacheLength)
     }
 
     private func purgeExpiredCachedCarbObjects() {
