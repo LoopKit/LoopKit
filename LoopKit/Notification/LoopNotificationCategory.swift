@@ -23,4 +23,5 @@ public enum LoopNotificationCategory: String {
     case remoteCommandExpired
     case remoteCarbs
     case remoteCarbsFailure
+    case missedMeal
 }

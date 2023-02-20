@@ -206,7 +206,8 @@ public final class CarbStore: HealthKitSampleStore {
         calculationDelta: TimeInterval = 5 /* minutes */ * 60,
         effectDelay: TimeInterval = 10 /* minutes */ * 60,
         carbAbsorptionModel: CarbAbsorptionModel = .nonlinear,
-        provenanceIdentifier: String
+        provenanceIdentifier: String,
+        test_currentDate: Date? = nil
     ) {
         self.storeEntriesToHealthKit = storeEntriesToHealthKit
         self.cacheStore = cacheStore
@@ -229,8 +230,9 @@ public final class CarbStore: HealthKitSampleStore {
                    observeHealthKitSamplesFromCurrentApp: true,
                    observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
                    type: carbType,
-                   observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
-                   observationEnabled: observationEnabled)
+                   observationStart: (test_currentDate ?? Date()).addingTimeInterval(-self.observationInterval),
+                   observationEnabled: observationEnabled,
+                   test_currentDate: test_currentDate)
 
         // Carb model settings based on the selected absorption model
         switch self.carbAbsorptionModel {
@@ -798,7 +800,7 @@ extension CarbStore {
 
 extension CarbStore {
     public var earliestCacheDate: Date {
-        return Date(timeIntervalSinceNow: -cacheLength)
+        return currentDate(timeIntervalSinceNow: -cacheLength)
     }
 
     private func purgeExpiredCachedCarbObjects() {

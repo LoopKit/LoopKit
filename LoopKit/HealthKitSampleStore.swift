@@ -47,12 +47,16 @@ public class HealthKitSampleStore {
     /// For unit testing only.
     internal var testQueryStore: HKSampleQueryTestable?
 
+    /// Current date. Will return the unit-test configured date if set, or the current date otherwise.
+    internal var currentDate: Date {
+        test_currentDate ?? Date()
+    }
+    
     /// Allows for controlling uses of the system date in unit testing
     internal var test_currentDate: Date?
 
     internal func currentDate(timeIntervalSinceNow: TimeInterval = 0) -> Date {
-        let date = test_currentDate ?? Date()
-        return date.addingTimeInterval(timeIntervalSinceNow)
+        return currentDate.addingTimeInterval(timeIntervalSinceNow)
     }
     
     /// Declaring this as a var allows unit test to inject a mock for HKObserverQuery
