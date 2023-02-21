@@ -1,5 +1,5 @@
 //
-//  RemoteOverrideAction.swift
+//  OverrideAction.swift
 //  LoopKit
 //
 //  Created by Bill Gestrich on 12/25/22.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct RemoteOverrideAction: Codable {
+public struct OverrideAction: Codable {
     
     public let name: String
     public let durationTime: TimeInterval?

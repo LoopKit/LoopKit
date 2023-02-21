@@ -1,5 +1,5 @@
 //
-//  RemoteBolusAction.swift
+//  BolusAction.swift
 //  LoopKit
 //
 //  Created by Bill Gestrich on 12/25/22.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct RemoteBolusAction: Codable {
+public struct BolusAction: Codable {
     
     public let amountInUnits: Double
     

@@ -1,5 +1,5 @@
 //
-//  RemoteCarbAction.swift
+//  CarbAction.swift
 //  LoopKit
 //
 //  Created by Bill Gestrich on 12/25/22.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct RemoteCarbAction: Codable{
+public struct CarbAction: Codable{
     
     public let amountInGrams: Double
     public let absorptionTime: TimeInterval?
