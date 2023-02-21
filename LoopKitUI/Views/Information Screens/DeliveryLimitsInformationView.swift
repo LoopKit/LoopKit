@@ -61,7 +61,7 @@ public struct DeliveryLimitsInformationView: View {
             .font(.headline)
             VStack(alignment: .leading, spacing: 20) {
                     Text(LocalizedString("Maximum Bolus is the highest bolus amount \(appName) will recommend, or allow you to deliver, at one time to cover carbs or bring down high glucose.", comment: "Information about maximum bolus"))
-                    Text(LocalizedString("Your maximum bolus will also set a cap on how much insulin will be allowed for automatic dosing.  \(appName) will restrict automatic dosing to amounts that will not cause your insulin on board to exceed twice your maximum bolus.", comment: "Information about maximum automated insulin on board"))
+                    Text(LocalizedString("The insulin \(appName) will automatically deliver is limited by an active insulin cap equal to twice your maximum bolus. The active insulin from manual bolus is not limited by this cap.", comment: "Information about maximum automated insulin on board"))
             }
            .foregroundColor(.secondary)
         }
