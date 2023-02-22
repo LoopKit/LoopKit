@@ -93,12 +93,12 @@ public struct TherapySettingsView: View {
         if !viewModel.sensitivityOverridesEnabled {
             cards.append(workoutCorrectionRangeSection)
         }
-        cards.append(carbRatioSection)
         cards.append(basalRatesSection)
         cards.append(deliveryLimitsSection)
         if viewModel.adultChildInsulinModelSelectionEnabled {
             cards.append(insulinModelSection)
         }
+        cards.append(carbRatioSection)
         cards.append(insulinSensitivitiesSection)
 
         return CardStack(cards: cards)
