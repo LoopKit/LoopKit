@@ -14,4 +14,12 @@ public struct TestingScenarioInstance {
     public var futureGlucoseSamples: [NewGlucoseSample]
     public var pumpEvents: [NewPumpEvent]
     public var carbEntries: [NewCarbEntry]
+    
+    public var hasCGMData: Bool {
+        !(pastGlucoseSamples + futureGlucoseSamples).isEmpty
+    }
+    
+    public var hasPumpData: Bool {
+        !pumpEvents.isEmpty || !carbEntries.isEmpty
+    }
 }
