@@ -194,15 +194,20 @@ public final class PersistenceController {
 
             let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
 
+            var options: [AnyHashable : Any] = [
+                NSMigratePersistentStoresAutomaticallyOption: true,
+                NSInferMappingModelAutomaticallyOption: true
+            ]
+            
+#if os(iOS)
+            options[NSPersistentStoreFileProtectionKey] = FileProtectionType.completeUntilFirstUserAuthentication
+#endif
+
             do {
                 try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
                     configurationName: nil,
                     at: storeURL,
-                    options: [
-                        NSMigratePersistentStoresAutomaticallyOption: true,
-                        NSInferMappingModelAutomaticallyOption: true,
-                        NSPersistentStoreFileProtectionKey: FileProtectionType.completeUntilFirstUserAuthentication
-                    ]
+                    options: options
                 )
             } catch let storeError as NSError {
                 self.log.error("Failed to initialize persistenceController: %{public}@", storeError)
