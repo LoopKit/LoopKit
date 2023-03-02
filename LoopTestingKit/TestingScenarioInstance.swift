@@ -20,6 +20,6 @@ public struct TestingScenarioInstance {
     }
     
     public var hasPumpData: Bool {
-        !pumpEvents.isEmpty || !carbEntries.isEmpty
+        !pumpEvents.isEmpty
     }
 }
