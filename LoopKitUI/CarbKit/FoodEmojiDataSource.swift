@@ -14,9 +14,12 @@ private class FoodEmojiDataSource: EmojiDataSource {
     private static let fast: [String] = {
         var fast = [
             "🍭", // lollipop
+            "🧃", // juice box
+            "🥤", // cup with straw (soda)
             "🍬", // candy
             "🍯", // honey pot
             "🍇", // grapes
+            "🫐", // blueberries
             "🍈", // melon
             "🍉", // watermelon
             "🍊", // tangerine
@@ -30,6 +33,7 @@ private class FoodEmojiDataSource: EmojiDataSource {
             "🍒", // cherries
             "🍓", // strawberry
             "🥝", // kiwi fruit
+            "🥭", // mango
             "🌽", // ear of corn
             "🍿", // popcorn
             "🍘", // rice cracker
@@ -39,6 +43,7 @@ private class FoodEmojiDataSource: EmojiDataSource {
             "🎂", // birthday cake
             "🥠", // fortune cookie
             "☕️", // coffee
+            "🫖" // tea
         ]
 
         return fast
@@ -50,13 +55,18 @@ private class FoodEmojiDataSource: EmojiDataSource {
             "🍟", // french fries
             "🍳", // cooking
             "🍲", // pot of food
+            "🥘", // pan of food
             "🍱", // bento box
             "🍛", // curry rice
             "🍜", // steaming bowl (ramen / noodle soup)
             "🍠", // roasted sweet potato
             "🍤", // fried shrimp
+            "🦪", // oyster
             "🍥", // fish cake with swirl
             "🥪", // sandwich
+            "🥙", // pita sandwich
+            "🧆", // falafel
+            "🫔", // tamale
             "🥫", // canned food
             "🥟", // dumpling
             "🥡", // takeout box
@@ -66,17 +76,26 @@ private class FoodEmojiDataSource: EmojiDataSource {
             "🥔", // potato
             "🥕", // carrot
             "🌶", // hot pepper
+            "🫑", // bell pepper
+            "🧅", // onion
+            "🧄", // garlic
+            "🥔", // potato
             "🥒", // cucumber
             "🥗", // green salad
+            "🥬", // leafy green
             "🍄", // mushroom
             "🥦", // broccoli
             "🍆", // eggplant
+            "🫘", // beans
             "🥥", // coconut
             "🍞", // bread
             "🥐", // croissant
             "🥖", // baguette bread
+            "🥯", // bagel
+            "🫓", // flat bread
             "🥨", // pretzel
             "🥞", // pancakes
+            "🧇", // waffle
             "🍙", // rice ball
             "🍚", // cooked rice
             "🍼", // baby bottle
@@ -86,8 +105,11 @@ private class FoodEmojiDataSource: EmojiDataSource {
             "🍨", // ice cream
             "🍩", // doughnut
             "🍪", // cookie
+            "🧁", // cupcake
+            "🥮", // moon cake
             "🍰", // shortcake
             "🍫", // chocolate bar
+            "🧋", // bubble tea
        ]
 
         return medium
@@ -97,9 +119,11 @@ private class FoodEmojiDataSource: EmojiDataSource {
         var slow = [
             "🍕", // pizza
             "🥑", // avocado
+            "🥚", // egg
             "🥜", // peanuts
             "🌰", // chestnut
             "🧀", // cheese wedge
+            "🫕", // fondue
             "🍖", // meat on bone
             "🍗", // poultry leg
             "🥓", // bacon
@@ -107,7 +131,9 @@ private class FoodEmojiDataSource: EmojiDataSource {
             "🌭", // hot dog
             "🌯", // burrito
             "🍝", // spaghetti
-            "🥩" // cut of meat
+            "🥩", // cut of meat
+            "🧈", // butter
+            "🦴", // bone
         ]
 
         return slow
@@ -124,10 +150,18 @@ private class FoodEmojiDataSource: EmojiDataSource {
             "🥂", // clinking glasses
             "🥃", // tumbler glass
             "🍹", // tropical drink
+            "🧉", // mate
+            "🫗", // pouring liquid
             "🥣", // bowl with spoon
             "🥤", // cup with straw
             "🥢", // chopsticks
             "🍵", // teacup without handle
+            "🍴", // fork and knife
+            "🍽", // fork and knife with plate
+            "🥄", // spoon
+            "🫙", // jar
+            "🧊", // ice cube
+            "🧂", // salt
             "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣",
             "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"
         ]
