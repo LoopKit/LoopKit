@@ -39,5 +39,17 @@ let package = Package(
             name: "LoopKitUI",
             dependencies: ["LoopKit", "SwiftCharts"],
             path: "LoopKitUI"),
+        .target(
+            name: "LoopTestingKit",
+            dependencies: ["LoopKit"],
+            path: "LoopTestingKit"),
+        .target(
+            name: "MockKit",
+            dependencies: ["LoopKit", "LoopTestingKit"],
+            path: "MockKit"),
+        .target(
+            name: "MockKitUI",
+            dependencies: ["MockKit", "LoopKit", "LoopKitUI"],
+            path: "MockKitUI"),
     ]
 )

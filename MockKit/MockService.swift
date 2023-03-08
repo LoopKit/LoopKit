@@ -7,6 +7,7 @@
 //
 
 import os.log
+import Foundation
 import LoopKit
 
 public final class MockService: Service {
