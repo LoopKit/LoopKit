@@ -6,6 +6,8 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
+import UIKit
+
 extension UIFont {
     public static var titleFontGroupedInset: UIFont {
         return UIFontMetrics(forTextStyle: .title1).scaledFont(for: systemFont(ofSize: 28, weight: .semibold))

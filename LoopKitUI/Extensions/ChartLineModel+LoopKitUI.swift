@@ -6,7 +6,7 @@
 //
 
 import SwiftCharts
-
+import UIKit
 
 extension ChartLineModel {
     /// Creates a model configured with the dashed prediction line style
