@@ -13,6 +13,7 @@ project_directory: &project_directory ~/project
 jobs:
   test:
     working_directory: *project_directory
+    resource_class: large
     macos:
       xcode: 14.2.0
     steps:
