@@ -8,7 +8,7 @@
 
 import XCTest
 import HealthKit
-import LoopKit
+@testable import LoopKit
 
 class NewPumpEventRawRepresentableTests: XCTestCase {
     func testNewPumpEventRawRepresentable() {

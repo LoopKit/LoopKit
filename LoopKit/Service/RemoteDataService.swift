@@ -9,6 +9,9 @@
 /**
  Protocol for a remote data service.
 */
+
+import Foundation
+
 public protocol RemoteDataService: Service {
 
     /// The maximum number of alert data to upload to the remote data service at one time.
