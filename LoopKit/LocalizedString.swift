@@ -8,10 +8,10 @@
 
 import Foundation
 
-private class LocalBundle {
+class LocalBundle {
     /// Returns the resource bundle associated with the current Swift module.
     static var main: Bundle = {
-        if let mainResourceURL = Bundle.main.resourceURL,
+        if let mainResourceURL = Bundle(for: LocalBundle.self).resourceURL,
            let bundle = Bundle(url: mainResourceURL.appendingPathComponent("LoopKit_LoopKit.bundle"))
         {
             return bundle

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="21G115" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="CachedCarbObject" representedClassName=".CachedCarbObject" syncable="YES">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="22D68" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CachedCarbObject" representedClassName="LoopKit.CachedCarbObject" syncable="YES">
         <attribute name="absorptionTime" optional="YES" attributeType="Double" usesScalarValueType="NO"/>
         <attribute name="addedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="anchorKey" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" elementID="modificationCounter"/>
@@ -18,7 +18,7 @@
         <attribute name="userUpdatedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
-    <entity name="CachedGlucoseObject" representedClassName=".CachedGlucoseObject" syncable="YES">
+    <entity name="CachedGlucoseObject" representedClassName="LoopKit.CachedGlucoseObject" syncable="YES">
         <attribute name="condition" optional="YES" attributeType="String"/>
         <attribute name="device" optional="YES" attributeType="Binary"/>
         <attribute name="healthKitEligibleDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -56,7 +56,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="CachedInsulinDeliveryObject" representedClassName=".CachedInsulinDeliveryObject" syncable="YES">
+    <entity name="CachedInsulinDeliveryObject" representedClassName="LoopKit.CachedInsulinDeliveryObject" syncable="YES">
         <attribute name="automaticallyIssued" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -95,7 +95,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="DosingDecisionObject" representedClassName=".DosingDecisionObject" syncable="YES">
+    <entity name="DosingDecisionObject" representedClassName="LoopKit.DosingDecisionObject" syncable="YES">
         <attribute name="data" attributeType="Binary"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -108,7 +108,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="PumpEvent" representedClassName=".PumpEvent" syncable="YES">
+    <entity name="PumpEvent" representedClassName="LoopKit.PumpEvent" syncable="YES">
         <attribute name="alarmType" optional="YES" attributeType="String"/>
         <attribute name="automatic" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
@@ -144,7 +144,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="Reservoir" representedClassName=".Reservoir" syncable="YES">
+    <entity name="Reservoir" representedClassName="LoopKit.Reservoir" syncable="YES">
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="raw" optional="YES" attributeType="Binary"/>
@@ -153,7 +153,7 @@
             <fetchIndexElement property="date" type="Binary" order="descending"/>
         </fetchIndex>
     </entity>
-    <entity name="SettingsObject" representedClassName=".SettingsObject" syncable="YES">
+    <entity name="SettingsObject" representedClassName="LoopKit.SettingsObject" syncable="YES">
         <attribute name="data" attributeType="Binary"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="modificationCounter" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>

@@ -1,5 +1,10 @@
 // swift-tools-version: 5.7
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// The swift tools-version declares the minimum version of Swift required to build this package.
+
+// *************** Not complete yet, do not expect this to work! ***********************
+// There are issues with how test fixtures are copied into the bundle, and then referenced,
+// and other issues, largely around accessing bundle resources, and probably others not yet
+// discovered, as this is not being used as a swift package from any actual project yet.
 
 import PackageDescription
 
@@ -34,7 +39,10 @@ let package = Package(
         .testTarget(
             name: "LoopKitTests",
             dependencies: ["LoopKit"],
-            path: "LoopKitTests"),
+            path: "LoopKitTests",
+            resources: [
+                .copy("Fixtures")
+            ]),
         .target(
             name: "LoopKitUI",
             dependencies: ["LoopKit", "SwiftCharts"],
@@ -45,7 +53,7 @@ let package = Package(
             path: "LoopTestingKit"),
         .target(
             name: "MockKit",
-            dependencies: ["LoopKit", "LoopTestingKit"],
+            dependencies: ["LoopKit", "LoopKitUI", "LoopTestingKit"],
             path: "MockKit"),
         .target(
             name: "MockKitUI",
