@@ -147,9 +147,12 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
 
         XCTAssertNotNil(insulinDeliveryStore.queryAnchor)
 
+        // Allow any managedObjectContext tasks to complete, like storing the anchor
         cacheStore.managedObjectContext.performAndWait {}
+        print("Anchor should be stored now.")
 
         // Create a new glucose store, and ensure it uses the last query anchor
+        print("Creating new insulin delivery store.")
         let newInsulinDeliveryStore = InsulinDeliveryStore(healthStore: healthStore,
                                                            cacheStore: cacheStore,
                                                            provenanceIdentifier: HKSource.default().bundleIdentifier)
@@ -167,6 +170,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             return observerQuery!
         }
 
+        print("Calling authorize on new insulin delivery store.")
         newInsulinDeliveryStore.authorize { (result) in
             newAuthorizationCompletion.fulfill()
         }
