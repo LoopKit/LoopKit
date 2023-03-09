@@ -251,12 +251,7 @@ public final class CarbStore: HealthKitSampleStore {
             
             cacheStore.fetchAnchor(key: CarbStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
-                    self.queryAnchor = anchor
-
-                    if !self.authorizationRequired {
-                        self.createQuery()
-                    }
-
+                    self.setInitialQueryAnchor(anchor)
                     self.migrateLegacyCarbEntryKeys()
                 }
             }
@@ -288,18 +283,12 @@ public final class CarbStore: HealthKitSampleStore {
 
     // MARK: - HealthKitSampleStore
     
-    override func queryAnchorDidChange() {
-        cacheStore.storeAnchor(queryAnchor, key: CarbStore.healthKitQueryAnchorMetadataKey)
+    override func storeQueryAnchor(_ anchor: HKQueryAnchor) {
+        cacheStore.storeAnchor(anchor, key: CarbStore.healthKitQueryAnchorMetadataKey)
     }
 
     override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
         queue.async {
-            guard anchor != self.queryAnchor else {
-                self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
-                completion(true)
-                return
-            }
-
             var changed = false
             var error: CarbStoreError?
 

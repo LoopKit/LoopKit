@@ -87,7 +87,7 @@ public class HealthKitSampleStore {
         self.observationStart = observationStart
         self.observationEnabled = observationEnabled
         self.test_currentDate = test_currentDate
-        self.lockedQueryAnchorState = Locked<QueryAnchorState>(.uninitialized)
+        self.lockedQueryState = Locked<QueryState>(QueryState(anchorState: .uninitialized, authorizationDetermined: false))
 
         self.log = OSLog(category: String(describing: Swift.type(of: self)))
     }
@@ -112,10 +112,9 @@ public class HealthKitSampleStore {
     ///   - result: The authorization result
     public func authorize(toShare: Bool = true, read: Bool = true, _ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
         healthStore.requestAuthorization(toShare: toShare ? [sampleType] : [], read: read ? [sampleType] : []) { (completed, error) -> Void in
-            if completed && !self.sharingDenied {
-                self.log.default("Authorize completed")
-                if self.lockedQueryAnchorState.value != .uninitialized {
-                    self.createQuery()
+            if completed {
+                self.mutateQueryState { state in
+                    state.authorizationDetermined = true
                 }
                 completion(.success(true))
             } else {
@@ -129,8 +128,6 @@ public class HealthKitSampleStore {
                 
                 completion(.failure(authError))
             }
-
-            NotificationCenter.default.post(name: .StoreAuthorizationStatusDidChange, object: self)
 
             // Do not remove this log: it actually triggers a query by calling preferredUnit, and can update the cache
             // And trigger a unit change notification after authorization happens.
@@ -160,7 +157,7 @@ public class HealthKitSampleStore {
             // If we are now looking farther back, then reset the query
             if oldValue > observationStart {
                 log.default("observationStart changed: creating HK query")
-                createQuery()
+                createQuery(from: "observartionStart")
             }
         }
     }
@@ -182,27 +179,78 @@ public class HealthKitSampleStore {
     /// The last-retreived anchor from an anchored object query
     internal var queryAnchor: HKQueryAnchor? {
         get {
-            if case .initializationComplete(let anchor) = lockedQueryAnchorState.value {
+            if case .initializationComplete(let anchor) = queryState.anchorState {
                 return anchor
             } else {
                 return nil
             }
         }
         set {
-            var changed: Bool = false
-            lockedQueryAnchorState.mutate { (anchorState) in
-                changed = anchorState.anchor != newValue
-                anchorState = .initializationComplete(newValue)
-            }
-            if changed {
-                queryAnchorDidChange()
+            mutateQueryState { state in
+                state.anchorState = .initializationComplete(newValue)
             }
         }
     }
-    private let lockedQueryAnchorState: Locked<QueryAnchorState>
 
-    func queryAnchorDidChange() {
-        // Subclasses can override
+    private struct QueryState: Equatable {
+        var anchorState: QueryAnchorState
+        var authorizationDetermined: Bool
+
+        // ObserverQuery will fail if HKAuthorizationStatus is undetermined
+        var readyToQuery: Bool {
+            return anchorState != .uninitialized && authorizationDetermined
+        }
+    }
+
+    private let lockedQueryState: Locked<QueryState>
+
+    private var queryState: QueryState {
+        return lockedQueryState.value
+    }
+
+    @discardableResult
+    private func mutateQueryState(_ changes: (_ state: inout QueryState) -> Void) -> QueryState {
+        return setQueryStateWithResult({ (state) -> QueryState in
+            changes(&state)
+            return state
+        })
+    }
+
+    private func setQueryStateWithResult<ReturnType>(_ changes: (_ state: inout QueryState) -> ReturnType) -> ReturnType {
+        var oldValue: QueryState!
+        var returnType: ReturnType!
+        let newValue = lockedQueryState.mutate { (state) in
+            oldValue = state
+            returnType = changes(&state)
+        }
+
+        guard oldValue != newValue else {
+            return returnType
+        }
+
+        if let anchor = newValue.anchorState.anchor, anchor != oldValue.anchorState.anchor {
+            storeQueryAnchor(anchor)
+        }
+
+        if !oldValue.readyToQuery && newValue.readyToQuery {
+            createQuery(from: "main")
+        }
+
+        if !oldValue.authorizationDetermined && newValue.authorizationDetermined {
+            NotificationCenter.default.post(name: .StoreAuthorizationStatusDidChange, object: self)
+        }
+
+        return returnType
+    }
+
+
+    // Observation will not start until this is called. Pass nil to receive all the matching samples and recently deleted objects
+    func setInitialQueryAnchor(_ anchor: HKQueryAnchor?) {
+        queryAnchor = anchor
+    }
+
+    func storeQueryAnchor(_ anchor: HKQueryAnchor) {
+        // Subclasses should override
     }
 
     /// Called in response to an update by the observer query
@@ -228,39 +276,49 @@ public class HealthKitSampleStore {
         
         let anchoredObjectQuery = createAnchoredObjectQuery(sampleType, observerQuery.predicate, queryAnchor, batchSize) { [weak self] (query, newSamples, deletedSamples, anchor, error) in
 
+            guard let self else {
+                return
+            }
+
             if let error = error {
-                self?.log.error("HKQuery: Error from anchoredObjectQuery: anchor: %{public}@ error: %{public}@", String(describing: anchor), String(describing: error))
+                self.log.error("HKQuery: Error from anchoredObjectQuery: anchor: %{public}@ error: %{public}@", String(describing: anchor), String(describing: error))
                 observerQueryCompletionHandler()
                 return
             }
 
             guard let newSamples else {
-                self?.log.error("HKQuery: Error from anchoredObjectQuery: newSamples is nil")
+                self.log.error("HKQuery: Error from anchoredObjectQuery: newSamples is nil")
                 observerQueryCompletionHandler()
                 return
             }
 
             guard let deletedSamples else {
-                self?.log.error("HKQuery: Error from anchoredObjectQuery: deletedSamples is nil")
+                self.log.error("HKQuery: Error from anchoredObjectQuery: deletedSamples is nil")
                 observerQueryCompletionHandler()
                 return
             }
 
             guard let anchor = anchor else {
-                self?.log.error("HKQuery: anchoredObjectQueryResultsHandler called with no anchor")
+                self.log.error("HKQuery: anchoredObjectQueryResultsHandler called with no anchor")
                 observerQueryCompletionHandler()
                 return
             }
 
-            self?.log.default("AnchorQuery results new: %{public}d deleted: %{public}d anchor: %{public}@", newSamples.count, deletedSamples.count, anchor.description)
+            self.log.default("AnchorQuery results new: %{public}d deleted: %{public}d anchor: %{public}@", newSamples.count, deletedSamples.count, anchor.description)
 
-            self?.processResults(from: query, added: newSamples, deleted: deletedSamples, anchor: anchor) { (success) in
+            guard anchor != self.queryAnchor else {
+                self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
+                observerQueryCompletionHandler()
+                return
+            }
+
+            self.processResults(from: query, added: newSamples, deleted: deletedSamples, anchor: anchor) { (success) in
                 if success {
                     // Do not advance anchor if we failed to update local cache
-                    self?.queryAnchor = anchor
+                    self.queryAnchor = anchor
 
                     if newSamples.count + deletedSamples.count >= batchSize {
-                        self?.executeAnchorQuery(observerQuery: observerQuery, observerQueryCompletionHandler: observerQueryCompletionHandler)
+                        self.executeAnchorQuery(observerQuery: observerQuery, observerQueryCompletionHandler: observerQueryCompletionHandler)
                     } else {
                         observerQueryCompletionHandler()
                     }
@@ -341,7 +399,8 @@ extension HealthKitSampleStore {
 
 // MARK: - Observation
 extension HealthKitSampleStore {
-    internal func createQuery() {
+    internal func createQuery(from: String) {
+        log.debug("%@ [from: %@]", #function, from)
         log.debug("%@ [sampleType: %@]", #function, sampleType)
         log.debug("%@ [observationEnabled: %d]", #function, observationEnabled)
         log.debug("%@ [observeHealthKitSamplesFromCurrentApp: %d]", #function, observeHealthKitSamplesFromCurrentApp)

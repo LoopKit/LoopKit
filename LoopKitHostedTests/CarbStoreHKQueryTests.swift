@@ -66,8 +66,11 @@ class CarbStoreHKQueryTests: CarbStoreHKQueryTestsBase {
         XCTAssert(carbStore.authorizationRequired);
         XCTAssertNil(carbStore.observerQuery);
 
+        let observerQueryCreated = expectation(description: "observer query created")
+
         carbStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            observerQueryCreated.fulfill()
             return observerQuery!
         }
 

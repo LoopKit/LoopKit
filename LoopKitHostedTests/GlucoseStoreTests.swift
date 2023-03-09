@@ -118,13 +118,12 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
 
         // Check that an observer query was registered even without authorize() being called.
         XCTAssertFalse(glucoseStore.authorizationRequired);
-        // We *are* creating the observer query on startup, even when authorized,
-        // but it happens asynchronously now, and we don't have a hook to know when
-        // it's completed.
-        //XCTAssertNotNil(glucoseStore.observerQuery);
+
+        let observerQueryCreated = expectation(description: "observer query created")
 
         glucoseStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            observerQueryCreated.fulfill()
             return observerQuery!
         }
 
@@ -174,8 +173,11 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
 
         observerQuery = nil
 
+        let newObserverQueryCreated = expectation(description: "new observer query created")
+
         newGlucoseStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            newObserverQueryCreated.fulfill()
             return observerQuery!
         }
 

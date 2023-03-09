@@ -120,7 +120,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             authorizationCompletion.fulfill()
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         XCTAssertNotNil(observerQuery)
 
