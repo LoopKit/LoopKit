@@ -14,7 +14,15 @@ import HealthKit
 
 class MasterViewController: UITableViewController {
 
-    private var dataManager: DeviceDataManager? = DeviceDataManager()
+    private var dataManager: DeviceDataManager?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil {
+            dataManager = DeviceDataManager()
+        }
+    }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
