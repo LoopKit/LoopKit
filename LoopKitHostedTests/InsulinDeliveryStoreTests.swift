@@ -158,8 +158,11 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
 
         observerQuery = nil
 
+        let newObserverQueryCreationExpectation = expectation(description: "new observer query created")
+
         newInsulinDeliveryStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            newObserverQueryCreationExpectation.fulfill()
             return observerQuery!
         }
 
