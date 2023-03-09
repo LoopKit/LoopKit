@@ -117,6 +117,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
 
     override func queryAnchorDidChange() {
         cacheStore.storeAnchor(queryAnchor, key: InsulinDeliveryStore.healthKitQueryAnchorMetadataKey)
+        self.log.default("stored query anchor %{public}@", String(describing: queryAnchor))
     }
 
     override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
