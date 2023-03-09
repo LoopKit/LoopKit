@@ -152,10 +152,8 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
 
         // Allow any managedObjectContext tasks to complete, like storing the anchor
         cacheStore.managedObjectContext.performAndWait {}
-        print("Anchor should be stored now.")
 
         // Create a new glucose store, and ensure it uses the last query anchor
-        print("Creating new insulin delivery store.")
         let newInsulinDeliveryStore = InsulinDeliveryStore(healthStore: healthStore,
                                                            cacheStore: cacheStore,
                                                            provenanceIdentifier: HKSource.default().bundleIdentifier)
@@ -168,17 +166,14 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
 
         newInsulinDeliveryStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
-            print("observer query for new insulin delivery store created... should have anchor at this point")
             newObserverQueryCreationExpectation.fulfill()
             return observerQuery!
         }
 
-        print("Calling authorize on new insulin delivery store.")
         newInsulinDeliveryStore.authorize { (result) in
             newAuthorizationCompletion.fulfill()
         }
         waitForExpectations(timeout: 10)
-        print("Expectations finished: new ids observer query creation, and new ids authorization")
 
         anchoredObjectQuery = nil
 
