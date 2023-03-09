@@ -90,10 +90,21 @@ class InsulinDeliveryStoreTestsAuthorized: InsulinDeliveryStoreTestsBase {
     func testObserverQueryStartup() {
         // Check that an observer query was registered even before authorize() is called.
         XCTAssertFalse(insulinDeliveryStore.authorizationRequired);
-        // We *are* creating the observer query on startup, even when authorized,
-        // but it happens asynchronously now, and we don't have a hook to know when
-        // it's completed.
-        //XCTAssertNotNil(insulinDeliveryStore.observerQuery);
+
+        let observerQueryCreated = expectation(description: "observer query created")
+
+        insulinDeliveryStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
+            let observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            observerQueryCreated.fulfill()
+            return observerQuery
+        }
+
+        let authorizationCompletion = expectation(description: "authorization completion")
+        insulinDeliveryStore.authorize { (result) in
+            authorizationCompletion.fulfill()
+        }
+
+        waitForExpectations(timeout: 2)
     }
 }
 
