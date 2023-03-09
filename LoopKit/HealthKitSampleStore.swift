@@ -168,6 +168,15 @@ public class HealthKitSampleStore {
     private enum QueryAnchorState: Equatable {
         case uninitialized
         case initializationComplete(HKQueryAnchor?)
+
+        var anchor: HKQueryAnchor? {
+            switch self {
+            case .uninitialized:
+                return nil
+            case.initializationComplete(let anchor):
+                return anchor
+            }
+        }
     }
 
     /// The last-retreived anchor from an anchored object query
@@ -181,10 +190,9 @@ public class HealthKitSampleStore {
         }
         set {
             var changed: Bool = false
-            lockedQueryAnchorState.mutate { (anchor) in
-                let oldValue = anchor
-                anchor = .initializationComplete(newValue)
-                changed = oldValue != anchor
+            lockedQueryAnchorState.mutate { (anchorState) in
+                changed = anchorState.anchor != newValue
+                anchorState = .initializationComplete(newValue)
             }
             if changed {
                 queryAnchorDidChange()

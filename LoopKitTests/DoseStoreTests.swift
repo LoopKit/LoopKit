@@ -24,7 +24,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
     func defaultStore(testingDate: Date? = nil) -> DoseStore {
         let healthStore = HKHealthStoreMock()
-        return DoseStore(
+        let doseStore = DoseStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
             observationEnabled: false,
@@ -36,6 +36,14 @@ class DoseStoreTests: PersistenceControllerTestCase {
             provenanceIdentifier: Bundle.main.bundleIdentifier!,
             test_currentDate: testingDate
         )
+
+        let semaphore = DispatchSemaphore(value: 0)
+        cacheStore.onReady { (error) in
+            semaphore.signal()
+        }
+        semaphore.wait()
+
+        return doseStore
     }
 
     let testingDateFormatter = DateFormatter.descriptionFormatter
@@ -1052,6 +1060,13 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
                               basalProfile: basalProfile,
                               insulinSensitivitySchedule: insulinSensitivitySchedule,
                               provenanceIdentifier: Bundle.main.bundleIdentifier!)
+
+        let semaphore = DispatchSemaphore(value: 0)
+        cacheStore.onReady { (error) in
+            semaphore.signal()
+        }
+        semaphore.wait()
+
         completion = expectation(description: "Completion")
         queryAnchor = DoseStore.QueryAnchor()
         limit = Int.max
