@@ -131,15 +131,16 @@ class CarbStoreHKQueryTests: CarbStoreHKQueryTestsBase {
                                      observationInterval: .hours(1),
                                      provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
-        let newAuthorizationCompletion = expectation(description: "authorization completion")
-
         observerQuery = nil
 
+        let newObserverQueryCreated = expectation(description: "new observer query created")
         newCarbStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            newObserverQueryCreated.fulfill()
             return observerQuery!
         }
 
+        let newAuthorizationCompletion = expectation(description: "authorization completion")
         newCarbStore.authorize { (result) in
             newAuthorizationCompletion.fulfill()
         }
