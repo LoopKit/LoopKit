@@ -87,7 +87,7 @@ public class HealthKitSampleStore {
         self.observationStart = observationStart
         self.observationEnabled = observationEnabled
         self.test_currentDate = test_currentDate
-        self.lockedQueryAnchor = Locked<HKQueryAnchor?>(nil)
+        self.lockedQueryAnchorState = Locked<QueryAnchorState>(.uninitialized)
 
         self.log = OSLog(category: String(describing: Swift.type(of: self)))
     }
@@ -113,8 +113,10 @@ public class HealthKitSampleStore {
     public func authorize(toShare: Bool = true, read: Bool = true, _ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
         healthStore.requestAuthorization(toShare: toShare ? [sampleType] : [], read: read ? [sampleType] : []) { (completed, error) -> Void in
             if completed && !self.sharingDenied {
-                self.log.default("Authorize completed: creating HK query")
-                self.createQuery()
+                self.log.default("Authorize completed")
+                if self.lockedQueryAnchorState.value != .uninitialized {
+                    self.createQuery()
+                }
                 completion(.success(true))
             } else {
                 let authError: StoreError
@@ -163,25 +165,33 @@ public class HealthKitSampleStore {
         }
     }
 
+    private enum QueryAnchorState: Equatable {
+        case uninitialized
+        case initializationComplete(HKQueryAnchor?)
+    }
+
     /// The last-retreived anchor from an anchored object query
     internal var queryAnchor: HKQueryAnchor? {
         get {
-            return lockedQueryAnchor.value
+            if case .initializationComplete(let anchor) = lockedQueryAnchorState.value {
+                return anchor
+            } else {
+                return nil
+            }
         }
         set {
             var changed: Bool = false
-            lockedQueryAnchor.mutate { (anchor) in
-                if anchor != newValue {
-                    anchor = newValue
-                    changed = true
-                }
+            lockedQueryAnchorState.mutate { (anchor) in
+                let oldValue = anchor
+                anchor = .initializationComplete(newValue)
+                changed = oldValue != anchor
             }
             if changed {
                 queryAnchorDidChange()
             }
         }
     }
-    private let lockedQueryAnchor: Locked<HKQueryAnchor?>
+    private let lockedQueryAnchorState: Locked<QueryAnchorState>
 
     func queryAnchorDidChange() {
         // Subclasses can override

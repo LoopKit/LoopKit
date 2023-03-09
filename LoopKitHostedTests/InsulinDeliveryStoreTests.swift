@@ -107,8 +107,11 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssert(insulinDeliveryStore.authorizationRequired);
         XCTAssertNil(insulinDeliveryStore.observerQuery);
 
+        let observerQueryCreated = expectation(description: "observer query created")
+
         insulinDeliveryStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            observerQueryCreated.fulfill()
             return observerQuery!
         }
 
@@ -175,6 +178,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             newAuthorizationCompletion.fulfill()
         }
         waitForExpectations(timeout: 10)
+        print("Expectations finished: new ids observer query creation, and new ids authorization")
 
         anchoredObjectQuery = nil
 
