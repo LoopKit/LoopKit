@@ -162,6 +162,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
 
         newInsulinDeliveryStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            print("observer query for new insulin delivery store created... should have anchor at this point")
             newObserverQueryCreationExpectation.fulfill()
             return observerQuery!
         }
