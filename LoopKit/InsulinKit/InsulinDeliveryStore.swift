@@ -95,7 +95,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
                 return
             }
 
-            self.queue.async {
+            self.queue.sync {
                 self.updateLastImmutableBasalEndDate()
             }
 
@@ -283,7 +283,7 @@ extension InsulinDeliveryStore {
                 completion(.success(date))
             case .none:
                 // TODO: send a proper error
-                completion(.failure(DoseStore.DoseStoreError.configurationError))
+                completion(.failure(DoseStore.DoseStoreError.initializationError(description: "lastImmutableBasalEndDate has not been set", recoverySuggestion: "Avoid accessing InsulinDeliveryStore until initialization is complete")))
             }
         }
     }
