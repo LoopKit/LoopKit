@@ -51,19 +51,19 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
 
-        let semaphore = DispatchSemaphore(value: 0)
-        cacheStore.onReady { error in
-            XCTAssertNil(error)
-            semaphore.signal()
-        }
-        semaphore.wait()
-
         healthStore = HKHealthStoreMock()
         healthStore.authorizationStatus = authorizationStatus
         insulinDeliveryStore = InsulinDeliveryStore(healthStore: healthStore,
                                                     cacheStore: cacheStore,
                                                     cacheLength: .hours(1),
                                                     provenanceIdentifier: HKSource.default().bundleIdentifier)
+
+        let semaphore = DispatchSemaphore(value: 0)
+        cacheStore.onReady { error in
+            XCTAssertNil(error)
+            semaphore.signal()
+        }
+        semaphore.wait()
     }
 
     override func tearDown() {
