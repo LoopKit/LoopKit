@@ -75,7 +75,7 @@ public final class MockPumpManager: TestingPumpManager {
         model: nil,
         hardwareVersion: nil,
         firmwareVersion: nil,
-        softwareVersion: String(LoopKitVersionNumber),
+        softwareVersion: "1.0",
         localIdentifier: nil,
         udiDeviceIdentifier: nil
     )

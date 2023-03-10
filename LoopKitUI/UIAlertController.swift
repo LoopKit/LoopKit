@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension UIAlertController {
     /// Convenience method to initialize an alert controller to display an error

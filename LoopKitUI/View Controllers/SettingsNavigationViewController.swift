@@ -8,6 +8,7 @@
 
 import HealthKit
 import LoopKit
+import UIKit
 
 open class SettingsNavigationViewController: UINavigationController, CompletionNotifying {
 

@@ -29,6 +29,12 @@ class CachedCarbObjectTests: PersistenceControllerTestCase {
 
 class CachedCarbObjectEncodableTests: PersistenceControllerTestCase {
     func testEncodable() throws {
+        let semaphore = DispatchSemaphore(value: 0)
+
+        cacheStore.onReady { error in
+            semaphore.signal()
+        }
+        semaphore.wait()
         cacheStore.managedObjectContext.performAndWait {
             let cachedCarbObject = CachedCarbObject(context: cacheStore.managedObjectContext)
             cachedCarbObject.absorptionTime = 18000

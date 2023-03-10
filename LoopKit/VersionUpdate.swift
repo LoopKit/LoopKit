@@ -6,6 +6,8 @@
 //  Copyright © 2021 LoopKit Authors. All rights reserved.
 //
 
+import Foundation
+
 // Note: order is important for VersionUpdate.  Later version updates are more critical than earlier ones.  Do not reorder!
 public enum VersionUpdate: Comparable, CaseIterable {
     /// No version update needed.

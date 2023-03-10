@@ -10,6 +10,7 @@ import Foundation
 import HealthKit
 import LoopKit
 import SwiftCharts
+import UIKit
 
 
 open class ChartsManager {

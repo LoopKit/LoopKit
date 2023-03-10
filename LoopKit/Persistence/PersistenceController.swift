@@ -101,7 +101,7 @@ public final class PersistenceController {
         isReadOnly: Bool = false
     ) {
         
-        guard let url = Bundle(for: PersistenceController.self).url(forResource: "Model", withExtension: "momd") else {
+        guard let url = LocalBundle.main.url(forResource: "Model", withExtension: "momd") else {
             log.error("Could not find Model url")
             fatalError("Unable to find Model url")
         }

@@ -6,6 +6,7 @@
 //
 
 import LoopKitUI
+import UIKit
 
 class BoundSwitchTableViewCell: SwitchTableViewCell {
 

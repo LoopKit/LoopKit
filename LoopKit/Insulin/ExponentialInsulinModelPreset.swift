@@ -5,6 +5,8 @@
 //  Copyright © 2017 LoopKit Authors. All rights reserved.
 //
 
+import Foundation
+
 public enum ExponentialInsulinModelPreset: String, Codable {
     case rapidActingAdult
     case rapidActingChild

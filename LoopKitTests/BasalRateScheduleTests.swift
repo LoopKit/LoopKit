@@ -9,6 +9,18 @@
 import XCTest
 @testable import LoopKit
 
+private class TestingBundle {
+    /// Returns the resource bundle associated with the current Swift module.
+    static var main: Bundle = {
+        if let mainResourceURL = Bundle(for: TestingBundle.self).resourceURL,
+           let bundle = Bundle(url: mainResourceURL.appendingPathComponent("LoopKit_LoopKitTests.bundle"))
+        {
+            return bundle
+        }
+        return Bundle(for: TestingBundle.self)
+    }()
+}
+
 
 func ==<T: Equatable>(lhs: RepeatingScheduleValue<T>, rhs: RepeatingScheduleValue<T>) -> Bool {
     return lhs.startTime == rhs.startTime && lhs.value == rhs.value
@@ -41,7 +53,7 @@ class BasalRateScheduleTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        let path = Bundle(for: type(of: self)).path(forResource: "basal", ofType: "json")!
+        let path = TestingBundle.main.path(forResource: "basal", ofType: "json")!
         let fixture = try! JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: path)), options: []) as! [JSONDictionary]
 
         items = fixture.map {

@@ -7,7 +7,7 @@
 //
 
 import LoopKit
-
+import Foundation
 
 struct DateRelativeBolusEntry: DateRelativeQuantity, Codable {
     var unitsValue: Double

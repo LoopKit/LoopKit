@@ -6,6 +6,7 @@
 //  Copyright © 2016 Nathan Racklyeft. All rights reserved.
 //
 
+import Foundation
 
 extension Double: RawRepresentable {
     public typealias RawValue = Double

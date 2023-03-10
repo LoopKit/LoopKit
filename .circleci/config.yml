@@ -14,13 +14,17 @@ jobs:
   test:
     working_directory: *project_directory
     macos:
-      xcode: 13.4.1
+      xcode: 14.2.0
     steps:
       - checkout
       - run:
           name: Test
           command: |
-            set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 8' test | xcpretty
+            set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 14' test | xcpretty
+      - run:
+          name: Build Swift Package
+          command: |
+            swift build -v -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios15.0-simulator" | xcpretty
       - store_test_results:
           path: test_output
 #
