@@ -95,6 +95,15 @@ class GlucoseStoreTestsAuthorizationRequired: GlucoseStoreTestsBase {
         XCTAssert(glucoseStore.authorizationRequired);
         XCTAssertNil(glucoseStore.observerQuery);
 
+        let observerQueryCreated = expectation(description: "observer query created")
+
+        glucoseStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
+            let observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            observerQueryCreated.fulfill()
+            return observerQuery
+        }
+
+
         let authorizationCompletion = expectation(description: "authorization completion")
         glucoseStore.authorize { (result) in
             authorizationCompletion.fulfill()
