@@ -1951,15 +1951,6 @@
 			path = Service;
 			sourceTree = "<group>";
 		};
-		1D640FF324524269008F9755 /* Assets */ = {
-			isa = PBXGroup;
-			children = (
-				1D640FF424524274008F9755 /* Sounds */,
-				B47ECFD525DC22D20024A54D /* Assets.xcassets */,
-			);
-			path = Assets;
-			sourceTree = "<group>";
-		};
 		1D640FF424524274008F9755 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -2257,31 +2248,26 @@
 		43BA7155201E484D0058961E /* LoopKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				C1CEBFDE29BB72EA007FD8A3 /* Resources */,
 				C18733B529B9495400519CDF /* LocalizedString.swift */,
 				E9086B4624B5404D0062F5C8 /* Models */,
 				E9086B4324B53CB40062F5C8 /* Charts */,
 				B41A60B023D1DBB700636320 /* Extensions */,
-				43177D091D3732C70006E908 /* Assets.xcassets */,
 				43BA7160201E48910058961E /* CarbKit */,
 				43A8EC3B210CEEA500A81379 /* CGMManagerUI.swift */,
 				892A5D9F2231E12F008961AB /* CompletionNotifying.swift */,
 				1DE35E7924ABEC720086F9AE /* DeviceManagerUI.swift */,
 				C1FAEC1C264AD6B400A3250B /* DeviceStatusBadge.swift */,
-				895FE07022011EDD00FCF18A /* EmojiInputController.storyboard */,
 				B4B1162D25AF3A40006428DE /* DisplayGlucoseUnitObserver.swift */,
 				892A5DA12231E136008961AB /* HUDProvider.swift */,
 				43BA7157201E484D0058961E /* Info.plist */,
 				1D096C0424C624F70078B6B5 /* InsulinModelSettings+LoopKitUI.swift */,
 				43BA7161201E48EB0058961E /* InsulinKit */,
-				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
-				E9DFB93324E8CD5800468917 /* LegacyInsulinDeliveryTableViewController.storyboard */,
-				7D68A9E31FE0A3D300522C49 /* Localizable.strings */,
 				43BA7156201E484D0058961E /* LoopKitUI.h */,
 				C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */,
 				A9DCF2C925B0F38000C89088 /* LoopUIColorPalette.swift */,
 				A9CFCA8E2582F9FA00A04932 /* OnboardingUI.swift */,
 				895FE06C22011E9900FCF18A /* OverrideEmojiDataSource.swift */,
-				895FE06D22011E9A00FCF18A /* OverrideSelectionViewController.storyboard */,
 				43FB60E220DCB9E0002B996B /* PumpManagerUI.swift */,
 				43F503622106C761009FA89A /* ServiceAuthenticationUI.swift */,
 				43F5035521059A8A009FA89A /* ServiceCredential.swift */,
@@ -2723,6 +2709,7 @@
 		892A5D35222F03CB008961AB /* LoopTestingKit */ = {
 			isa = PBXGroup;
 			children = (
+				C1CEBFE129BB735B007FD8A3 /* Resources */,
 				C187339B29B948D800519CDF /* Data.swift */,
 				89ADE12C226BDD190067222B /* DateRelativeBasalEntry.swift */,
 				89ADE12E226BDED40067222B /* DateRelativeBolusEntry.swift */,
@@ -2731,7 +2718,6 @@
 				89CA2B37226D4456004D9350 /* DateRelativeQuantity.swift */,
 				C187339D29B948F200519CDF /* HKUnit.swift */,
 				892A5D37222F03CB008961AB /* Info.plist */,
-				C182168A297E55A7001EB097 /* Localizable.strings */,
 				892A5D36222F03CB008961AB /* LoopTestingKit.h */,
 				892A5D55222F0414008961AB /* TestingCGMManager.swift */,
 				892A5D51222F03DB008961AB /* TestingDeviceManager.swift */,
@@ -2773,10 +2759,9 @@
 		89D2047321CC7BD7001238CC /* MockKit */ = {
 			isa = PBXGroup;
 			children = (
-				1D640FF324524269008F9755 /* Assets */,
+				C1CEBFDF29BB731E007FD8A3 /* Resources */,
 				89D204AD21CC7D2B001238CC /* Extensions */,
 				89D2047521CC7BD7001238CC /* Info.plist */,
-				4B67E2CC289B4EDB002D92AF /* Localizable.strings */,
 				89CCD4F121A87D340068C3FB /* MockCGMDataSource.swift */,
 				89AB9EC821A4BC2400351324 /* MockCGMManager.swift */,
 				89AC7934224C783500B8E9BA /* MockDoseProgressEstimator.swift */,
@@ -2793,6 +2778,7 @@
 		89D2049021CC7C13001238CC /* MockKitUI */ = {
 			isa = PBXGroup;
 			children = (
+				C1CEBFE029BB7342007FD8A3 /* Resources */,
 				C18733CB29B94A7A00519CDF /* LocalizedString.swift */,
 				8992426321EC137900EA512B /* Extensions */,
 				89D204B621CC7E77001238CC /* View Controllers */,
@@ -2804,7 +2790,6 @@
 				1DFFB987271740EE0075AEAA /* MockSupport.swift */,
 				89D2049121CC7C13001238CC /* MockKitUI.h */,
 				89D2049221CC7C13001238CC /* Info.plist */,
-				89D204D121CC837A001238CC /* Assets.xcassets */,
 			);
 			path = MockKitUI;
 			sourceTree = "<group>";
@@ -2971,6 +2956,45 @@
 			isa = PBXGroup;
 			children = (
 				1F5DAB2B2118CE9300048054 /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C1CEBFDE29BB72EA007FD8A3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				895FE07022011EDD00FCF18A /* EmojiInputController.storyboard */,
+				43D8FEED1C7294E90073BE78 /* InsulinKit.storyboard */,
+				E9DFB93324E8CD5800468917 /* LegacyInsulinDeliveryTableViewController.storyboard */,
+				7D68A9E31FE0A3D300522C49 /* Localizable.strings */,
+				895FE06D22011E9A00FCF18A /* OverrideSelectionViewController.storyboard */,
+				43177D091D3732C70006E908 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C1CEBFDF29BB731E007FD8A3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B47ECFD525DC22D20024A54D /* Assets.xcassets */,
+				1D640FF424524274008F9755 /* Sounds */,
+				4B67E2CC289B4EDB002D92AF /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C1CEBFE029BB7342007FD8A3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				89D204D121CC837A001238CC /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C1CEBFE129BB735B007FD8A3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C182168A297E55A7001EB097 /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
