@@ -1,6 +1,0 @@
-/* Alert content body for recurring software update alert */
-"A software update is recommended to continue using the %1$@ app.\n\nGo to %2$@ Settings > Software Update to install the latest version." = "Chcete-li nadále používat aplikaci %1$@, doporučujeme její aktualizaci. \n\nPřejděte do %2$@ Nastavení > Aktualizace softwaru pro nainstalování nejnovější verze.";
-
-/* Alert content body for first software update alert (1: app name)(2: app name) */
-"Your %1$@ app is out of date. It will continue to work, but we recommend updating to the latest version.\n\nGo to %2$@ Settings > Software Update to complete." = "Vaše aplikace %1$@ je zastaralá. Bude fungovat i nadále, ale doporučujeme aktualizaci na nejnovější verzi. \n\nPro dokončení přejděte do %2$@ Nastavení > Aktualizace softwaru.";
-
