@@ -41,9 +41,6 @@
 /* Lower bound workout information text format (1: app name) */
 "%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ veya KŞ Güvenlik Limitiniz, hangisi daha yüksekse";
 
-/* Information about max number of basal rates */
-"%1$@ supports 1 to (maximumScheduleEntryCount) rates per day." = "%1$@ günlük 1 ila (maksimumProgramGirişSayısı) oranlarını destekler.";
-
 /* Reservoir entry (1: volume value) */
 "%1$@ U" = "%1$@ Ü";
 
@@ -56,9 +53,6 @@
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
-
-/* Format string for progress accessibility label (1: duration in seconds) */
-"%1$d percent complete." = "Yüzde %1$d tamamlandı.";
 
 /* No comment provided by engineer. */
 "🍽" = "🍽";

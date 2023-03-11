@@ -64,9 +64,6 @@
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "未发现数据";
 
-/* Sensor state description for the valid state */
-"OK" = "OK";
-
 /* The error recovery suggestion when Health sharing was denied */
 "Please re-enable sharing in Health" = "请先在Health Kit中允许Loop读写数据";
 
@@ -78,9 +75,6 @@
 
 /* Glucose trend up-up-up */
 "Rising very fast" = "非常快速上升";
-
-/* The short unit display string for international units of insulin */
-"U" = "U";
 
 /* The short unit display string for international units of insulin per hour */
 "U/hr" = "U/小时";

@@ -51,9 +51,6 @@
    Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
 "%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
 
-/* Format string for progress accessibility label (1: duration in seconds) */
-"%1$d percent complete." = "%1$d la sută complet.";
-
 /* No comment provided by engineer. */
 "🍽" = "🍽";
 

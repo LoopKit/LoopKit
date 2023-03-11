@@ -41,9 +41,6 @@
 /* Lower bound workout information text format (1: app name) */
 "%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ of je Glucoseveiligheidslimiet, afhankelijk van welke hoger is";
 
-/* Information about max number of basal rates */
-"%1$@ supports 1 to (maximumScheduleEntryCount) rates per day." = "%1$@ ondersteunt 1 tot (maximumScheduleEntryCount) snelheden per dag.";
-
 /* Reservoir entry (1: volume value) */
 "%1$@ U" = "%1$@ E";
 
@@ -56,9 +53,6 @@
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
-
-/* Format string for progress accessibility label (1: duration in seconds) */
-"%1$d percent complete." = "%1$d procent voltooid.";
 
 /* No comment provided by engineer. */
 "🍽" = "🍽";
