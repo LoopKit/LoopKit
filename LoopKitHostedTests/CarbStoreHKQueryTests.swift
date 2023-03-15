@@ -50,6 +50,7 @@ class CarbStoreHKQueryTestsAuthorized: CarbStoreHKQueryTestsBase {
     }
 
     func testObserverQueryStartup() {
+        // Check that an observer query is registered when authorization is already determined.
         XCTAssertFalse(carbStore.authorizationRequired);
 
         let observerQueryCreated = expectation(description: "observer query created")

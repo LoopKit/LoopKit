@@ -103,10 +103,39 @@ class GlucoseStoreTestsAuthorizationRequired: GlucoseStoreTestsBase {
             return observerQuery
         }
 
+
+        let authorizationCompletion = expectation(description: "authorization completion")
+        glucoseStore.authorize { (result) in
+            authorizationCompletion.fulfill()
+        }
+
         waitForExpectations(timeout: 10)
         XCTAssertNotNil(glucoseStore.observerQuery);
     }
 }
+
+class GlucoseStoreStoreTestsAuthorized: GlucoseStoreTestsBase {
+    override func setUp() {
+        authorizationStatus = .sharingAuthorized
+        super.setUp()
+    }
+
+    func testObserverQueryStartup() {
+        // Check that an observer query is registered when authorization is already determined.
+        XCTAssertFalse(glucoseStore.authorizationRequired);
+
+        let observerQueryCreated = expectation(description: "observer query created")
+
+        glucoseStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
+            let observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            observerQueryCreated.fulfill()
+            return observerQuery
+        }
+
+        waitForExpectations(timeout: 2)
+    }
+}
+
 
 class GlucoseStoreTests: GlucoseStoreTestsBase {
     override func setUp() {

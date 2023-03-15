@@ -88,7 +88,7 @@ class InsulinDeliveryStoreTestsAuthorized: InsulinDeliveryStoreTestsBase {
     }
     
     func testObserverQueryStartup() {
-        // Check that an observer query was registered even before authorize() is called.
+        // Check that an observer query is registered when authorization is already determined.
         XCTAssertFalse(insulinDeliveryStore.authorizationRequired);
 
         let observerQueryCreated = expectation(description: "observer query created")
