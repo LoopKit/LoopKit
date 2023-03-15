@@ -103,11 +103,6 @@ class GlucoseStoreTestsAuthorizationRequired: GlucoseStoreTestsBase {
             return observerQuery
         }
 
-
-        let authorizationCompletion = expectation(description: "authorization completion")
-        glucoseStore.authorize { (result) in
-            authorizationCompletion.fulfill()
-        }
         waitForExpectations(timeout: 10)
         XCTAssertNotNil(glucoseStore.observerQuery);
     }

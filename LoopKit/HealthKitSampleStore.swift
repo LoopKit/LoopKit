@@ -188,6 +188,7 @@ public class HealthKitSampleStore {
         set {
             mutateQueryState { state in
                 state.anchorState = .initializationComplete(newValue)
+                state.authorizationDetermined = !authorizationRequired
             }
         }
     }

@@ -60,11 +60,6 @@ class CarbStoreHKQueryTestsAuthorized: CarbStoreHKQueryTestsBase {
             return observerQuery
         }
 
-        let authorizationCompletion = expectation(description: "authorization completion")
-        carbStore.authorize { (result) in
-            authorizationCompletion.fulfill()
-        }
-
         waitForExpectations(timeout: 2)
     }
 }

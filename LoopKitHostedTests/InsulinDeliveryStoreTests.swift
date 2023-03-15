@@ -99,11 +99,6 @@ class InsulinDeliveryStoreTestsAuthorized: InsulinDeliveryStoreTestsBase {
             return observerQuery
         }
 
-        let authorizationCompletion = expectation(description: "authorization completion")
-        insulinDeliveryStore.authorize { (result) in
-            authorizationCompletion.fulfill()
-        }
-
         waitForExpectations(timeout: 2)
     }
 }

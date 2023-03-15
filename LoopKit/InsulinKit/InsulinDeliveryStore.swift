@@ -324,7 +324,7 @@ extension InsulinDeliveryStore {
     ///   - entries: The new dose entries to add to the store.
     ///   - device: The optional device used for the new dose entries.
     ///   - syncVersion: The sync version used for the new dose entries.
-    ///   - resolveMutable: Whether to update or delete any pre-existing mutable dose entries based upon any matching incoming mutable dose entries.
+    ///   - resolveMutable: Whether to update or delete any pre-existing mutable dose entries based upon any matching incoming mutable dose entries. Any previously stored mutable doses that are not also included in entries will be marked as deleted.
     ///   - completion: A closure called once the dose entries have been stored.
     ///   - result: Success or error.
     func addDoseEntries(_ entries: [DoseEntry], from device: HKDevice?, syncVersion: Int, resolveMutable: Bool = false, completion: @escaping (_ result: Result<Void, Error>) -> Void) {
