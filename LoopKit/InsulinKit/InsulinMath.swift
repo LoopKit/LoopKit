@@ -600,7 +600,7 @@ extension Collection where Element == DoseEntry {
         if insertingBasalEntries {
             // Create a placeholder entry at our start date, so we know the correct duration of the
             // inserted basal entries
-            lastBasal = DoseEntry(resumeDate: start)
+            lastBasal = DoseEntry(resumeDate: start, automatic: true)
         }
 
         for dose in self {
