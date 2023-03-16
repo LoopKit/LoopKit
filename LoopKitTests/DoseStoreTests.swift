@@ -583,6 +583,66 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
     }
 
+    func testBasalInsertionBetweenTempBasals() {
+
+
+        let start = testingDate("2018-12-12 17:00:00 +0000")
+        let now = start.addingTimeInterval(.minutes(20))
+
+        let doseStore = defaultStore(testingDate: now)
+
+        doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = start
+
+
+        // 2. Add a temp basal which has already ended. It should persist in InsulinDeliveryStore.
+        let pumpEvents1 = [
+            NewPumpEvent(
+                date: start,
+                dose: DoseEntry(
+                    type: .tempBasal,
+                    startDate: start,
+                    endDate: start.addingTimeInterval(.minutes(5)),
+                    value: 1.5,
+                    unit: .unitsPerHour,
+                    automatic: true),
+                raw: Data(hexadecimalString: "01")!,
+                title: "First Temp",
+                type: .tempBasal),
+            NewPumpEvent(
+                date: start.addingTimeInterval(.minutes(10)),
+                dose: DoseEntry(
+                    type: .tempBasal,
+                    startDate: start.addingTimeInterval(.minutes(10)),
+                    endDate: start.addingTimeInterval(.minutes(15)),
+                    value: 1.5,
+                    unit: .unitsPerHour,
+                    automatic: true),
+                raw: Data(hexadecimalString: "02")!,
+                title: "Second Temp",
+                type: .tempBasal)
+        ]
+
+        let addPumpEvents = expectation(description: "addPumpEvents")
+        doseStore.addPumpEvents(pumpEvents1, lastReconciliation: now) { (error) in
+            XCTAssertNil(error)
+            doseStore.insulinDeliveryStore.getDoseEntries(start: start, end: start.addingTimeInterval(.minutes(20))) { result in
+                switch result {
+                case .failure:
+                    XCTFail()
+                case .success(let doseEntries):
+                    XCTAssertEqual(doseEntries.count, 3)
+                    XCTAssertTrue(doseEntries[0].automatic!)
+                    XCTAssertTrue(doseEntries[1].automatic!)
+                    XCTAssertTrue(doseEntries[2].automatic!)
+                }
+                addPumpEvents.fulfill();
+            }
+        }
+
+        waitForExpectations(timeout: 3)
+
+    }
+
     func testAddPumpEventsPurgesMutableDosesFromInsulinDeliveryStore() {
         let formatter = DateFormatter.descriptionFormatter
         let f = { (input) in
