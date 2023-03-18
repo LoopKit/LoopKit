@@ -1583,12 +1583,6 @@
 		C122DF0229BBFAAE00321F8D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C122DF0329BBFAAE00321F8D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C122DF0429BBFAAE00321F8D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		C126BB0829830A83002CEE4F /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		C126BB0929830A83002CEE4F /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		C126BB0A29830A83002CEE4F /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/InsulinKit.strings"; sourceTree = "<group>"; };
-		C126BB0B29830A83002CEE4F /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LegacyInsulinDeliveryTableViewController.strings"; sourceTree = "<group>"; };
-		C126BB0C29830A83002CEE4F /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		C126BB0D29830A83002CEE4F /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		C12BCCFB29BBFA480066A158 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
 		C1330679297E49730067A05C /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1615,7 +1609,6 @@
 		C14C46EA2981EE3F00E20BEF /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C14CC03C29BBFA8300E74F82 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C14CC03D29BBFA8300E74F82 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
-		C15649EC29BBFAD100FF4AE4 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		C161742B297E494D007C2E5F /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C161742C297E494D007C2E5F /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C161742D297E494D007C2E5F /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1714,6 +1707,7 @@
 		C1AD630229BBFAA80002685D /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1B2679E2995824000BCB7C1 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C1B2679F2995824000BCB7C1 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B82ED529C651840063FE88 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		C1BCB5BA298309C4001C50FF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Main.strings; sourceTree = "<group>"; };
 		C1BCB5BB298309C4001C50FF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C1BCB5BC298309C4001C50FF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -3430,7 +3424,6 @@
 				sv,
 				tr,
 				vi,
-				"zh-Hans-CN",
 				cs,
 			);
 			mainGroup = 43D8FDC11C728FDF0073BE78;
@@ -4507,7 +4500,6 @@
 				C133067A297E49730067A05C /* sv */,
 				C13493B5297E498700D87305 /* da */,
 				C1D107B8297E499D008905A6 /* ja */,
-				C126BB0929830A83002CEE4F /* zh-Hans-CN */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4576,7 +4568,6 @@
 				F5E0BE0827E1DBA40033557E /* sv */,
 				F5E0BE0D27E1DC490033557E /* tr */,
 				F5E0BE1527E1DCC90033557E /* vi */,
-				C126BB0A29830A83002CEE4F /* zh-Hans-CN */,
 			);
 			name = InsulinKit.storyboard;
 			sourceTree = "<group>";
@@ -4620,7 +4611,6 @@
 				C10B8078297E498E00446CDD /* es */,
 				C1DB5556297E499500EB1DCE /* zh-Hans */,
 				C1D107BA297E499D008905A6 /* ja */,
-				C126BB0D29830A83002CEE4F /* zh-Hans-CN */,
 				C19E387F298638CE00851444 /* tr */,
 			);
 			name = Localizable.strings;
@@ -4648,7 +4638,6 @@
 				C1330679297E49730067A05C /* sv */,
 				C13493B4297E498700D87305 /* da */,
 				C1D107B7297E499D008905A6 /* ja */,
-				C126BB0829830A83002CEE4F /* zh-Hans-CN */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4675,7 +4664,6 @@
 				C133067B297E49730067A05C /* sv */,
 				C13493B6297E498700D87305 /* da */,
 				C1D107B9297E499D008905A6 /* ja */,
-				C126BB0C29830A83002CEE4F /* zh-Hans-CN */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4700,7 +4688,7 @@
 				C1FAFBA829BBFABB00101A92 /* sv */,
 				C16E513929BBFAC2003584CB /* tr */,
 				C1E15FF729BBFACA003737E0 /* vi */,
-				C15649EC29BBFAD100FF4AE4 /* zh-Hans-CN */,
+				C1B82ED529C651840063FE88 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4767,7 +4755,6 @@
 				F5E0BE0927E1DBA40033557E /* sv */,
 				F5E0BE0E27E1DC490033557E /* tr */,
 				F5E0BE1627E1DCC90033557E /* vi */,
-				C126BB0B29830A83002CEE4F /* zh-Hans-CN */,
 			);
 			name = LegacyInsulinDeliveryTableViewController.storyboard;
 			sourceTree = "<group>";
