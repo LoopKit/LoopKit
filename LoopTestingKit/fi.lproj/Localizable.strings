@@ -1,0 +1,18 @@
+/* Status highlight that delivery is uncertain. */
+"Comms Issue" = "Yhteysongelma";
+
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Insuliini pysäytetty";
+
+/* Status highlight that a pump is out of insulin. */
+"No Insulin" = "Ei insuliinia";
+
+/* Status highlight that pump has a dead battery. */
+"Pump Battery Dead" = "Pumpun paristo ei toimi";
+
+/* Status highlight that a pump error occurred. */
+"Pump Error" = "Pumpun virhe";
+
+/* Status highlight that an occlusion was detected. */
+"Pump Occlusion" = "Tukkeutunut pumppu";
+

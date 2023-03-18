@@ -38,8 +38,14 @@
    The format for an override symbol and name (1: symbol)(2: name) */
 "%1$@ %2$@" = "%1$@ %2$@";
 
+/* Information about insulin action duration (1: app name) */
+"%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%1$@ antar at insulinet den har levert, jobber aktivt med å senke blodsukkeret i 6 timer. Denne innstillingen kan ikke endres.";
+
 /* Lower bound workout information text format (1: app name) */
 "%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ eller din sikkerhetsgrense for blodsukker, avhengig av hva som er høyest";
+
+/* Information about max number of basal rates (1: app name) (2: maximum schedule entry count) */
+"%1$@ supports 1 to %2$@ rates per day." = "%1$@ støtter 1 til %2$@ rater per dag.";
 
 /* Reservoir entry (1: volume value) */
 "%1$@ U" = "%1$@ E";
@@ -398,8 +404,14 @@
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Maks basalgrense";
 
+/* Information about maximum basal rate (1: app name) */
+"Maximum Basal Rate is the maximum automatically adjusted basal rate that %1$@ is allowed to enact to help reach your correction range." = "Maksimal basaldose er den maksimale automatisk justerte basaldosen som %1$@ har lov til å aktivere for å hjelpe deg med å nå ditt korreksjonsområde.";
+
 /* The title text for the maximum bolus value */
 "Maximum Bolus" = "Maks bolus";
+
+/* Information about maximum bolus (1: app name) */
+"Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den høyeste bolusmengden du vil tillate %1$@ å anbefale på en gang for å dekke karbohydrater eller redusere høyt blodsukker.";
 
 /* Section title for medium absorbing food */
 "Medium" = "Medium";
@@ -624,6 +636,9 @@
 /* Subtitle of Rapid-Acting – Adult preset */
 "This model assumes peak insulin activity at 75 minutes." = "Denne modellen antar maksimal insulinaktivitet etter 75 minutter.";
 
+/* Information about maximum automated insulin on board (1: app name) */
+"This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." = "Denne innstillingen vil også bestemme en sikkerhetsgrense for automatisk dosering. %1$@ vil begrense automatisk tilførsel for å holde mengden aktivt insulin under det dobbelte av maksimal bolus.";
+
 /* Information about pre-meal range relative to correction range
    Information about workout range relative to correction range */
 "This will typically be" = "Dette vil typisk være";
@@ -703,6 +718,9 @@
 
 /* Description of how to add a range */
 "You can add entries for different times of day by using the ➕." = "Du kan legge til oppføringer for forskjellige tider på dagen ved å bruke ➕.";
+
+/* Information about insulin model (1: app name) */
+"You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models." = "Du kan velge hvordan %1$@ måler hurtigvirkende insulins toppaktivitet i henhold til en av disse to insulinmodellene.";
 
 /* Description of how to edit setting */
 "You can edit a setting by tapping into any line item." = "Du kan redigere en innstilling ved å trykke på et hvilket som helst linjeelement.";

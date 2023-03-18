@@ -1,8 +1,8 @@
 /* Information about workout range relative to correction range */
-" higher " = " höher";
+" higher " = " höher ";
 
 /* Information about pre-meal range relative to correction range */
-" lower " = " niedriger";
+" lower " = " niedriger ";
 
 /* Separator between min and max glucose values */
 "-" = "-";
@@ -38,8 +38,14 @@
    The format for an override symbol and name (1: symbol)(2: name) */
 "%1$@ %2$@" = "%1$@ %2$@";
 
+/* Information about insulin action duration (1: app name) */
+"%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%1$@ nimmt an, dass das abgegebene Insulin für 6 Stunden wirkt, um den Blutzucker zu senken. Diese Einstellung kann nicht geändert werden.";
+
 /* Lower bound workout information text format (1: app name) */
-"%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ oder Ihre Sicherheitsgrenze, je nachdem, welcher Wert höher ist";
+"%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ oder Deine Sicherheitsgrenze, je nachdem, welcher Wert höher ist";
+
+/* Information about max number of basal rates (1: app name) (2: maximum schedule entry count) */
+"%1$@ supports 1 to %2$@ rates per day." = "%1$@ unterstützt 1 bis %2$@ Raten pro Tag.";
 
 /* Reservoir entry (1: volume value) */
 "%1$@ U" = "%1$@ IE";
@@ -109,13 +115,13 @@
 "Afrezza" = "Afrezza";
 
 /* Action sheet confirmation message for pump history deletion */
-"Are you sure you want to delete all history entries?" = "Möchten Sie wirklich alle Verlaufseinträge löschen?";
+"Are you sure you want to delete all history entries?" = "Möchtest Du wirklich alle Verlaufseinträge löschen?";
 
 /* Action sheet confirmation message for reservoir deletion */
-"Are you sure you want to delete all reservoir values?" = "Möchten Sie wirklich alle Reservoirwerte löschen?";
+"Are you sure you want to delete all reservoir values?" = "Möchtest Du wirklich alle Reservoirwerte löschen?";
 
 /* Authentication hint string for therapy settings */
-"Authenticate to save therapy setting" = "Authentisieren Sie sich zum Speichern der Therapieeinstellungen";
+"Authenticate to save therapy setting" = "Authentisiere Dich zum Speichern der Therapieeinstellungen";
 
 /* Back navigation button title */
 "Back" = "Zurück";
@@ -154,7 +160,7 @@
 "Carb Ratios" = "KH-Verhältnis";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
-"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Änderungen werden nur dann wirksam, wenn Sie die Voreinstellung aktivieren. Die Standardeinstellungen von %@ werden nicht beeinflusst.";
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Änderungen werden nur dann wirksam, wenn Du die Voreinstellung aktivierst. Die Standardeinstellungen von %@ werden nicht beeinflusst.";
 
 /* Footer text for customizing from a preset (1: preset name) */
 "Changes will only apply this time you enable the preset. The default settings of %@ will not be affected." = "Änderungen gelten nur, wenn Sie die Voreinstellung aktivieren. Die Standardeinstellungen von %@ werden nicht beeinflusst.";
@@ -230,7 +236,7 @@
 "Delivery Limits" = "Abgabelimits";
 
 /* Information about delivery limits */
-"Delivery Limits are safety guardrails for your insulin delivery." = "Abgabelimits sind Leitplanken für Ihre Insulinabgabe.";
+"Delivery Limits are safety guardrails for your insulin delivery." = "Abgabelimits sind Leitplanken für Deine Insulinabgabe.";
 
 /* The text for the custom preset disable button */
 "Disable Preset" = "Deaktiviere Voreinstellung";
@@ -302,7 +308,7 @@
 "For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity." = "Bei schnell wirkendem Insulin geht %1$@ davon aus, dass es 6 Stunden lang wirkt. Du kannst aus %2$@ verschiedenen Modellen wählen, wie die App die Spitzenaktivität des Insulins misst.";
 
 /* Information about correction range format (1: app name) */
-"For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin." = "Wählen Sie für diesen Bereich den spezifischen Blutzucker (oder Wertebereich) aus, den %1$@ bei der Anpassung Ihres Basalinsulins anstreben soll.";
+"For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin." = "Wähle für diesen Bereich den spezifischen Blutzucker (oder Wertebereich) aus, den %1$@ bei der Anpassung Deines Basalinsulins anstreben soll.";
 
 /* Support button for Therapy Settings */
 "Get help with Therapy Settings" = "Bekomme Unterstützung bei den Therapieeinstellungen";
@@ -342,10 +348,10 @@
 "History" = "Historie";
 
 /* Description of how to interact with summary screen */
-"If these settings look good to you, tap Save Settings to continue." = "Wenn diese Einstellungen für Sie gut aussehen, tippen Sie auf Einstellungen speichern, um fortzufahren.";
+"If these settings look good to you, tap Save Settings to continue." = "Wenn diese Einstellungen für Dich gut aussehen, tippe auf Einstellungen speichern, um fortzufahren.";
 
 /* Information about target range */
-"If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Wenn Sie bereits ein CGM verwenden, sind Sie wahrscheinlich mit einem Zielbereich vertraut, den Sie für Ihren Blutzuckeralarm verwenden, z. B. 70–180 mg/dL oder 90–200 mg/dL.";
+"If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Wenn Du bereits ein CGM verwendest, bist Du wahrscheinlich mit einem Zielbereich vertraut, den Du für Deinen Blutzuckeralarm verwendest, z. B. 70–180 mg/dL oder 90–200 mg/dL.";
 
 /* Title text for insulin model */
 "Insulin Model" = "Insulin-Modell";
@@ -354,7 +360,7 @@
 "Insulin Sensitivities" = "Insulinempfindlichkeit";
 
 /* The description shown on the insulin sensitivity schedule interface. */
-"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Die Insulinempfindlichkeit beschreibt, wie Ihr Blutzucker auf die Insulindosis von 1 Einheit reagiert. Kleinere Werte bedeuten, dass mehr Insulin verabreicht wird, wenn der Blutzucker über dem Ziel liegt. Zu kleine Werte können gefährlich niedrige Blutzuckerwerte verursachen.";
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Die Insulinempfindlichkeit beschreibt, wie Dein Blutzucker auf die Insulindosis von 1 Einheit reagiert. Kleinere Werte bedeuten, dass mehr Insulin verabreicht wird, wenn der Blutzucker über dem Ziel liegt. Zu kleine Werte können gefährlich niedrige Blutzuckerwerte verursachen.";
 
 /* Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: programmed value (? if no value), 4: unit) */
 "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@" = "%1$@ unterbrochen: <b>%2$@</b> von %3$@ %4$@";
@@ -398,8 +404,14 @@
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Maximale Basalrate";
 
+/* Information about maximum basal rate (1: app name) */
+"Maximum Basal Rate is the maximum automatically adjusted basal rate that %1$@ is allowed to enact to help reach your correction range." = "Die maximale Basalrate ist die maximale automatisch angepasste Basalrate, die %1$@ anwenden darf, um Deinen Korrekturbereich zu erreichen.";
+
 /* The title text for the maximum bolus value */
 "Maximum Bolus" = "Maximaler Bolus";
+
+/* Information about maximum bolus (1: app name) */
+"Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose." = "Maximaler Bolus ist die höchste Bolusmenge, die Du %1$@ auf einmal erlaubst zu geben, um Kohlenhydrate abzudecken oder hohe Glukosewerte zu senken.";
 
 /* Section title for medium absorbing food */
 "Medium" = "Mittlere";
@@ -490,7 +502,7 @@
 "Review and Save Settings" = "Überprüfen und Speichern";
 
 /* Description of how to interact with summary screen */
-"Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen." = "Überprüfen Sie ihre Therapieeinstellungen. Wenn Sie eine dieser Einstellungen bearbeiten möchten, tippen Sie auf Zurück, um zum Bearbeiten-Bildschirm zurückzukehren.";
+"Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen." = "Überprüfe Deine Therapieeinstellungen. Wenn Du eine dieser Einstellungen bearbeiten möchtest, tippe auf Zurück, um zum Bearbeiten-Bildschirm zurückzukehren.";
 
 /* The text for the override preset name field placeholder */
 "Running" = "Laufen";
@@ -572,10 +584,10 @@
 "Target Range" = "Zielbereich";
 
 /* Description of pre-meal mode */
-"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Senken Sie Ihr Blutzuckerziel vor einer Mahlzeit vorübergehend ab, um Blutzuckerspitzen nach der Mahlzeit auszugleichen.";
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Senke Dein Blutzuckerziel vor einer Mahlzeit vorübergehend ab, um Blutzuckerspitzen nach der Mahlzeit auszugleichen.";
 
 /* Description of workout mode */
-"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Erhöhen Sie Ihr Blutzuckerziel vorübergehend vor, während oder nach körperlicher Aktivität, um das Risiko von Ereignissen mit niedrigem Blutzucker zu verringern.";
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Erhöhe Dein Blutzuckerziel vorübergehend vor, während oder nach körperlicher Aktivität, um das Risiko von Ereignissen mit niedrigem Blutzucker zu verringern.";
 
 /* The title for the override selection screen */
 "Temporary Override" = "Vorübergehende Override";
@@ -623,6 +635,9 @@
 
 /* Subtitle of Rapid-Acting – Adult preset */
 "This model assumes peak insulin activity at 75 minutes." = "Dieses Modell geht von einer maximalen Insulinaktivität nach 75 Minuten aus.";
+
+/* Information about maximum automated insulin on board (1: app name) */
+"This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." = "Diese Einstellung bestimmt auch eine Sicherheitsgrenze für die automatische Dosierung. %1$@ begrenzt die automatische Abgabe, um die Menge an aktivem Insulin unter dem Doppelten Deines maximalen Bolus zu halten.";
 
 /* Information about pre-meal range relative to correction range
    Information about workout range relative to correction range */
@@ -681,7 +696,7 @@
 "Warning" = "Warnung";
 
 /* Disclaimer */
-"Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable." = "Arbeiten Sie mit Ihrem medizinischen Betreuer zusammen, um einen Wert zu wählen, der höher ist als Ihre höchste geplante Basalrate, aber so konservativ oder aggressiv, wie Sie sich damit wohlfühlen.";
+"Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable." = "Arbeite mit Deinem medizinischen Betreuer zusammen, um einen Wert zu finden, der höher ist als Deine höchste geplante Basalrate, aber so konservativ oder aggressiv, sodass Du Dich damit wohlfühlst.";
 
 /* Title for the workout override range */
 "Workout" = "Training";
@@ -704,6 +719,9 @@
 /* Description of how to add a range */
 "You can add entries for different times of day by using the ➕." = "Mit ➕ kannst Du Einträge für verschieden Tageszeiten hinzufügen.";
 
+/* Information about insulin model (1: app name) */
+"You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models." = "Du kannst wählen, wie %1$@ die Spitzenaktivität des schnell wirkenden Insulins gemäß einem dieser beiden Insulinmodelle misst.";
+
 /* Description of how to edit setting */
 "You can edit a setting by tapping into any line item." = "Du kannst eine Einstellung bearbeiten, indem Du auf eine beliebige Zeile tippst.";
 
@@ -711,10 +729,10 @@
 "You can edit the setting by tapping into the line item." = "Du kannst die Einstellung bearbeiten, indem Du auf die Zeile tippst.";
 
 /* Information about basal rates */
-"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Die Basalrate gibt die Anzahl der Einheiten pro Stunde an, um Ihren Hintergrund-Insulinbedarf zu decken.";
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Die Basalrate gibt die Anzahl der Einheiten pro Stunde an, um Deinen Hintergrund-Insulinbedarf zu decken.";
 
 /* Lower bound pre-meal information text */
-"your Glucose Safety Limit" = "Ihre Blutzuckersicherheitsgrenze";
+"your Glucose Safety Limit" = "Deine Blutzuckersicherheitsgrenze";
 
 /* Disclaimer */
 "Your healthcare provider can help you choose a Correction Range that's right for you." = "Ihr medizinischer Betreuer kann Ihnen bei der Auswahl eines für Sie geeigneten Korrekturbereichs behilflich sein.";
@@ -723,5 +741,5 @@
 "Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Der Insulinempfindlichkeitsfaktor (ISF) ist der Blutzuckerabfall, der von einer Einheit Insulin erwartet wird.";
 
 /* Information about pre-meal range format (1: app name) */
-"Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Der Bereich vor dem Essen sollte der Blutzucker sein, den %1$@ bis zum ersten Bissen Ihrer Mahlzeit anstreben soll. Dieser Bereich wird wirksam, wenn Sie die Voreinstellungstaste vor dem Essen aktivieren.";
+"Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Der Bereich vor dem Essen sollte der Blutzucker sein, den %1$@ bis zum ersten Bissen Deiner Mahlzeit anstreben soll. Dieser Bereich wird wirksam, wenn Du die Voreinstellungstaste vor dem Essen aktivierst.";
 

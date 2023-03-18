@@ -10,17 +10,30 @@
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ va livra bazala şi bolusul recomandat numai dacă glucoza este estimată a fi peste această limită pentru următoarele trei ore.";
 
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@ %2$@%3$@";
+
 /* Descriptive text for guardrail high value warning for schedule interface */
 "A value you have entered is higher than what is typically recommended for most people." = "Valoarea pe care ați introdus-o este mai mare decât cea recomandată de obicei pentru majoritatea oamenilor.";
 
 /* Descriptive text for guardrail low value warning for schedule interface */
 "A value you have entered is lower than what is typically recommended for most people." = "Valoarea pe care ați introdus-o este mai mica decât cea recomandată de obicei pentru majoritatea oamenilor.";
 
+/* Brand name for afrezza insulin type
+   Title for Afrezza insulin type */
+"Afrezza" = "Afrezza";
+
+/* Description for afrezza insulin type */
+"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza este o insulină cu acțiune ultra rapidă în timpul mesei, care este inspirată prin plămâni folosind un inhalator oral și produsă de MannKind.";
+
 /* Brand name for apidra insulin type */
 "Apidra" = "Apidra";
 
 /* Title for Apidra insulin type */
 "Apidra (insulin glulisine)" = "Apidra (insulină glulisine)";
+
+/* Description for apidra insulin type */
+"Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis " = "Apidra (insulina glulizină) este o insulină cu acțiune rapidă produsă de Sanofi-aventis";
 
 /* The error description describing when Health sharing was denied */
 "Authorization Denied" = "Autorizare refuzată";
@@ -61,6 +74,9 @@
 /* Descriptive text for glucose target range (1: app name) */
 "Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Intervalul de corecție este valoarea glicemiei (sau intervalul de valori) spre care doriți ca %1$@ să țintească în ajustarea insulinei bazale și în calculul bolusurilor.";
 
+/* Description of critical software update needed */
+"Critical Update" = "Actualizare critică";
+
 /* Title text for delivery limits */
 "Delivery Limits" = "Limite de administrare";
 
@@ -98,11 +114,20 @@
 /* Title text for glucose safety limit */
 "Glucose Safety Limit" = "Limita de siguranță a glicemiei";
 
+/* The long unit display string for a singular hour */
+"Hour" = "Oră";
+
+/* The long unit display string for hours */
+"Hours" = "Ore";
+
 /* Brand name for humalog insulin type */
 "Humalog" = "Humalog";
 
 /* Title for Humalog insulin type */
 "Humalog (insulin lispro)" = "Humalog (insulină lispro)";
+
+/* Description for humalog insulin type */
+"Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Humalog (insulina lispro) este o insulină cu acțiune rapidă produsă de Eli Lilly";
 
 /* Title text for fast acting insulin model */
 "Insulin Model" = "Model insulină";
@@ -116,11 +141,21 @@
 /* Recovery instruction for a certain bolus failure */
 "It is safe to retry" = "Puteți încerca fără riscuri";
 
+/* Brand name for lyumjev insulin type
+   Title for Lyumjev insulin type */
+"Lyumjev" = "Lyumjev";
+
+/* Description for lyumjev insulin type */
+"Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly" = "Lyumjev este o formulă de insulină lispro la masă, cu adaos de citrat și treprostinil, produse de Eli Lilly";
+
 /* Recovery suggestion for uncertain delivery */
 "Make sure your pump is within communication range of your phone." = "Asigură-te că pompa ta se află în raza de comunicare a telefonului.";
 
 /* Title text for maximum basal rate configuration */
 "Maximum Basal Rate" = "Rată bazală maximă";
+
+/* Descriptive text for maximum basal rate (1: app name) */
+"Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Rata bazală maximă este cea mai mare rată bazală temporară pe care %1$@ are voie să o seteze.";
 
 /* Title text for maximum bolus configuration */
 "Maximum Bolus" = "Bolus maxim";
@@ -140,6 +175,9 @@
 /* Sensor state description for the non-valid state */
 "Needs Attention" = "Necesită atenție";
 
+/* Description of no software update needed */
+"No Update" = "Nicio actualizare";
+
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "Nu s-au găsit valori";
 
@@ -148,6 +186,9 @@
 
 /* Title for Novolog insulin type */
 "Novolog (insulin aspart)" = "Novolog (insulină aspart)";
+
+/* Description for novolog insulin type */
+"NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk" = "NovoLog (insulină aspart) este o insulină cu acțiune rapidă produsă de Novo Nordisk";
 
 /* Sensor state description for the valid state */
 "OK" = "OK";
@@ -160,6 +201,9 @@
 
 /* Title for pre-meal mode */
 "Pre-Meal" = "Preprandial";
+
+/* Description of supported software update needed */
+"Recommended Update" = "Actualizare recomandată";
 
 /* Title for resume dose type */
 "Resumed" = "Reluat";
@@ -217,6 +261,9 @@
 
 /* The long unit display string for international units of insulin per hour */
 "Units/hour" = "Unități/oră";
+
+/* Description of informational software update needed */
+"Update Available" = "Actualizare disponibilă";
 
 /* Title for workout mode */
 "Workout" = "Activitate sportivă";
