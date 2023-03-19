@@ -35,7 +35,7 @@ extension NumberFormatter {
         let unit = avoidLineBreaking ? unit.replacingOccurrences(of: "/", with: "\(String.wordJoiner)/\(String.wordJoiner)") : unit
         
         return String(
-            format: NSLocalizedString("%1$@%2$@%3$@", comment: "String format for value with units (1: value, 2: separator, 3: units)"),
+            format: LocalizedString("%1$@%2$@%3$@", comment: "String format for value with units (1: value, 2: separator, 3: units)"),
             stringValue,
             separator,
             unit
