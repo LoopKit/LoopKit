@@ -20,7 +20,7 @@
 "PZQ-gO-084.text" = "...";
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[0] = "Reservoir"; ObjectID = "TyZ-xm-mVN"; */
-"TyZ-xm-mVN.segmentTitles[0]" = "Reservoir";
+"TyZ-xm-mVN.segmentTitles[0]" = "Réservoir";
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[1] = "Event History"; ObjectID = "TyZ-xm-mVN"; */
 "TyZ-xm-mVN.segmentTitles[1]" = "Historique des événements";

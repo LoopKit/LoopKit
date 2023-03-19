@@ -14,7 +14,7 @@
 "Diagnostic" = "Diagnostic";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Enter the 6-digit pump ID";
+"Enter the 6-digit pump ID" = "הזן את מספר זיהוי המשאבה בן 6 הספרות";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Generate Data";
@@ -24,7 +24,7 @@
 "Insulin Sensitivity" = "Insulin Sensitivity";
 
 /* The title text for the pump ID */
-"Pump ID" = "Pump ID";
+"Pump ID" = "מספר זיהוי המשאבה";
 
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "Reservoir";

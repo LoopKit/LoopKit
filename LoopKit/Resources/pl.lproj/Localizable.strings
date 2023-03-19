@@ -1,12 +1,6 @@
 /* Format for correction range override therapy setting card */
 "%@ Range" = "%@ Zakres";
 
-/* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ J bolus nie zostało podane";
-
-/* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ J podanie bolusa mogło się nie powieść.";
-
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ będzie dostarczać insulinę podstawową i zalecaną w bolusie tylko wtedy, gdy przewiduje się, że poziom glukozy przekroczy ten limit przez następne trzy godziny.";
 
@@ -50,9 +44,6 @@
 /* Title text for carb ratios */
 "Carb Ratios" = "Współczynniki węglowodanowe";
 
-/* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Sprawdź pompę zanim spróbujesz ponownie";
-
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Odmowa autoryzacji";
 
@@ -78,7 +69,7 @@
 "Critical Update" = "Krytyczna aktualizacja";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Limity podaży";
+"Delivery Limits" = "Limity podawania";
 
 /* Generic pump error description */
 "Device Refused" = "Urządzenie odmówiło";
@@ -137,9 +128,6 @@
 
 /* Generic pump error description */
 "Invalid Configuration" = "Nieprawidłowa konfiguracja";
-
-/* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "Można bezpiecznie ponowić podanie bolusa";
 
 /* Brand name for lyumjev insulin type
    Title for Lyumjev insulin type */

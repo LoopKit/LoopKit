@@ -1,68 +1,30 @@
-/* No comment provided by engineer. */
-"%@ has been unable to communicate with the Simulator Pump since %@.\n\nWithout communication, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered." = "%1$@ har ikke været i stand til at kommunikere med simulator pumpen siden %2$@.\n\nUden kommunikation kan Loop ikke fortsætte med at sende kommandoer til afgivelse af insulin eller vise nøjagtig og opdateret information om dit aktive insulin eller den insulin du får.";
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
 
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
+/* Status highlight that delivery is uncertain. */
+"Comms Issue" = "Kommunikationsproblem";
 
-/* String format for value with units (1: value, 2: separator, 3: units) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Insulin suspenderet";
 
-/* Confirmation message for deleting a service */
-"Are you sure you want to delete this service?" = "Er du sikker på, du vil slette denne service?";
+/* Status highlight that a pump is out of insulin. */
+"No Insulin" = "Ingen insulin";
 
-/* Back button text on DeliveryUncertaintyRecoveryView */
-"Back" = "Tilbage";
+/* Status highlight that pump has a dead battery. */
+"Pump Battery Dead" = "Pumpebatteri dødt";
 
-/* The title of the cancel action in an action sheet */
-"Cancel" = "Annuller";
+/* Status highlight that a pump error occurred. */
+"Pump Error" = "Pumpefejl";
 
-/* Title for CGM simulator settings */
-"CGM Settings" = "CGM-indstillinger";
+/* Status highlight that an occlusion was detected. */
+"Pump Occlusion" = "Pumpen er blokeret";
 
-/* No comment provided by engineer. */
-"Clear Last Version Check Alert Date" = "Ryd advarselsdato for sidste versionskontrol";
+/* Pump Event title for UnfinalizedDose with doseType of .resume */
+"Resume" = "Genoptag";
 
-/* No comment provided by engineer. */
-"Comms Recovery" = "Kommunikation-genoprettelse";
+/* Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Suspender";
 
-/* Button title to delete a service */
-"Delete Service" = "Slet service";
-
-/* The alert title for a resume error */
-"Error Resuming" = "Fejl ved genoptagelse";
-
-/* The alert title for a suspend error */
-"Error Suspending" = "Fejl ved suspendering";
-
-/* Caption for History
-   History Caption */
-"History" = "Historik";
-
-/* No comment provided by engineer. */
-"How should the simulator respond to a version check?" = "Hvordan skal simulatoren reagere på en versionskontrol?";
-
-/* Controller title for insulin type selection screen */
-"Insulin Type" = "Insulintype";
-
-/* No comment provided by engineer. */
-"Mock Version Check %@" = "Kontrollér prøveversion %@";
-
-/* Button title to acknowledge error
-   Default acknowledgement */
-"OK" = "OK";
-
-/* Title for Pump simulator settings */
-"Pump Settings" = "Pumpeindstillinger";
-
-/* Button title recovering comms */
-"Recover Simulator" = "Gendan simulator";
-
-/* Caption for Source */
-"Source" = "Kilde";
-
-/* Recurring software update alert title */
-"Update Reminder" = "Påmindelse om opdatering";
-
-/* No comment provided by engineer. */
-"Version Check Response" = "Svar på versionskontrol";
+/* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Midlertidig basal";
 

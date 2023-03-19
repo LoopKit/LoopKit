@@ -19,9 +19,6 @@
 /* No comment provided by engineer. */
 "%@" = "%@";
 
-/* No comment provided by engineer. */
-"%@, " = "%@, ";
-
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -76,9 +73,6 @@
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Arvo 0 U/t tarkoittaa, että et saa lainkaan basaali-insuliinia.";
 
 /* No comment provided by engineer. */
-"Above dynamic data" = "Dynaamisten tietojen yläpuolella";
-
-/* No comment provided by engineer. */
 "Above the save button" = "Tallenna-painikkeen yläpuolella";
 
 /* Title of the carb entry absorption time cell */
@@ -111,6 +105,9 @@
 /* Authentication hint string for therapy settings */
 "Authenticate to save therapy setting" = "Varmenna tallentaaksesi hoitoasetukset";
 
+/* Back navigation button title */
+"Back" = "Takaisin";
+
 /* Title text for multi-value basal rate warning */
 "Basal Rates" = "Basaalitasot";
 
@@ -122,12 +119,6 @@
 
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Basaalin, boluksen ja korjaavan insuliiniannoksen määrät pysyvät ennallaan.";
-
-/* No comment provided by engineer. */
-"Below dynamic data" = "Dynaamisten tietojen alapuolella";
-
-/* No comment provided by engineer. */
-"Bottom" = "Alaosa";
 
 /* No comment provided by engineer. */
 "Bottom component" = "Alaosan komponentti";
@@ -234,12 +225,6 @@
 /* The text for the override duration setting */
 "Duration" = "Kesto";
 
-/* No comment provided by engineer. */
-"Dynamic component #%@" = "Dynaaminen komponentti #%@";
-
-/* No comment provided by engineer. */
-"Dynamic data %@" = "Dynaamiset tiedot %@";
-
 /* Text for edit button
    The title for the enabled custom preset editing screen */
 "Edit" = "Muokkaa";
@@ -338,6 +323,9 @@
 /* Information about target range */
 "If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Jos olet käyttänyt jatkuvaa glukoosinseurantaa aiemmin, tavoitealue on todennäköisesti tuttu laajana glukoosiarvoalueena, jonka haluat hälytyksille, esimerkiksi 4–10 mmol/L tai 5–11 mmol/L.";
 
+/* Title text for insulin model */
+"Insulin Model" = "Insuliinimalli";
+
 /* Title text for multi-value insulin sensitivity warning */
 "Insulin Sensitivities" = "Insuliiniherkkyydet";
 
@@ -388,9 +376,6 @@
 
 /* Section title for medium absorbing food */
 "Medium" = "Keskiverto";
-
-/* No comment provided by engineer. */
-"Middle" = "Keskellä";
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min.";
@@ -612,9 +597,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Toteutettava";
-
-/* No comment provided by engineer. */
-"Top" = "Yläosa";
 
 /* No comment provided by engineer. */
 "Top component" = "Ylin komponentti";

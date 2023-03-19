@@ -19,9 +19,6 @@
 /* No comment provided by engineer. */
 "%@" = "%@";
 
-/* No comment provided by engineer. */
-"%@, " = "%@, ";
-
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -61,6 +58,12 @@
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* No comment provided by engineer. */
+"%lld" = "%lld";
+
+/* No comment provided by engineer. */
+"%lld, " = "%lld, ";
+
+/* No comment provided by engineer. */
 "🍽" = "🍽";
 
 /* Premeal override preset title */
@@ -83,9 +86,6 @@
 
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Wartość 0 jedn./godz. oznacza, że nie zaplanowano podawania insuliny bazowej.";
-
-/* No comment provided by engineer. */
-"Above dynamic data" = "Powyżej danych";
 
 /* No comment provided by engineer. */
 "Above the save button" = "Nad przyciskiem zapisz";
@@ -137,12 +137,6 @@
 
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Dawka podstawowa, bolus i korygująca dawka insuliny bez zmian.";
-
-/* No comment provided by engineer. */
-"Below dynamic data" = "Poniżej danych";
-
-/* No comment provided by engineer. */
-"Bottom" = "Dół";
 
 /* No comment provided by engineer. */
 "Bottom component" = "Dolny element";
@@ -209,14 +203,14 @@
 "Correction Values" = "Wartości korekty";
 
 /* The text for a custom override */
-"Custom" = "Niestandardowe";
+"Custom" = "Cel na teraz";
 
 /* The title for the custom override entry screen */
-"Custom Override" = "Pominięcie niestandardowe";
+"Custom Override" = "Custom Override";
 
 /* The title for the custom preset entry screen
    The title for the custom preset selection screen */
-"Custom Preset" = "Ustawienia niestandardowe";
+"Custom Preset" = "Cel Tymczasowy";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Data";
@@ -250,10 +244,7 @@
 "Duration" = "Czas trwania";
 
 /* No comment provided by engineer. */
-"Dynamic component #%@" = "Komponent dynamiczny # %@";
-
-/* No comment provided by engineer. */
-"Dynamic data %@" = "Dane dynamiczne %@";
+"Dynamic component #%lld" = "Składnik dynamiczny #%lld";
 
 /* Text for edit button
    The title for the enabled custom preset editing screen */
@@ -353,6 +344,9 @@
 /* Information about target range */
 "If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Jeśli korzystałeś już z CGM, prawdopodobnie znasz zakres docelowy jako szeroki zakres wartości, które chcesz wyświetlać w alertach powiadomień o poziomie glukozy, na przykład 70-180 mg/dl lub 90-200 mg/dl.";
 
+/* No comment provided by engineer. */
+"info" = "info";
+
 /* Title text for insulin model */
 "Insulin Model" = "Model insuliny";
 
@@ -415,9 +409,6 @@
 
 /* Section title for medium absorbing food */
 "Medium" = "Średnia";
-
-/* No comment provided by engineer. */
-"Middle" = "Środek";
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min.";
@@ -544,6 +535,9 @@
 /* The section header text for a scheduled custom preset */
 "SCHEDULED PRESET" = "Lista Celów";
 
+/* No comment provided by engineer. */
+"Selected" = "Wybrany";
+
 /* Section title for slow absorbing food */
 "Slow" = "Wolna";
 
@@ -575,7 +569,7 @@
 "Symbol" = "Symbol";
 
 /* Text directing the user to configure their first custom preset */
-"Tap '+' to create a new custom preset." = "Dotknij „+”, aby utworzyć nowe  ustawienie niestandardowe.";
+"Tap '+' to create a new custom preset." = "Stuknij „+”, aby utworzyć nowy Cel Tymczasowy";
 
 /* The empty-state text for a configuration value */
 "Tap to set" = "Kliknij, aby ustawić";
@@ -591,6 +585,9 @@
 
 /* The title for the override selection screen */
 "Temporary Override" = "Pominięcie tymczasowe";
+
+/* No comment provided by engineer. */
+"Test" = "Test";
 
 /* Information about pre-meal range relative to correction range
    Information about workout range relative to correction range */
@@ -653,9 +650,6 @@
 "To be implemented" = "Być realizowane";
 
 /* No comment provided by engineer. */
-"Top" = "Szczyt";
-
-/* No comment provided by engineer. */
 "Top component" = "Górny składnik";
 
 /* The text indicating Total for Daily Schedule Basal */
@@ -676,6 +670,9 @@
 /* Accessibility value for an unknown value
    The default title to use when an entry has none */
 "Unknown" = "Nieznany";
+
+/* No comment provided by engineer. */
+"Unselected" = "Niezaznaczone";
 
 /* Title for selection when no insulin type is selected. */
 "Unset" = "Niewybrano";

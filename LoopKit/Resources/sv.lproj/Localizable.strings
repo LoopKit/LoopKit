@@ -1,12 +1,6 @@
 /* Format for correction range override therapy setting card */
 "%@ Range" = "%@sintervall";
 
-/* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ E bolus misslyckades";
-
-/* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ E bolus kan ha misslyckats";
-
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ kommer att tillföra basal och rekommendera insulin endast om ditt blodsocker förväntas ligga över denna gräns under de kommande tre timmarna.";
 
@@ -36,9 +30,6 @@
 
 /* Title text for carb ratios */
 "Carb Ratios" = "Insulinkvoter";
-
-/* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Kontrollera pump och försök igen";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Auktorisation nekad";
@@ -113,9 +104,6 @@
 /* Generic pump error description */
 "Invalid Configuration" = "Ogiltig konfiguration";
 
-/* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "Det är säkert att försöka igen";
-
 /* Recovery suggestion for uncertain delivery */
 "Make sure your pump is within communication range of your phone." = "Säkerställ att din pump är inom räckvidd för kommunikation med telefon.";
 
@@ -183,7 +171,7 @@
 "Temp Basal" = "Temporär basal";
 
 /* Descriptive text for pre-meal correction range override */
-"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Sänk tillfälligt ditt målvärde före en måltid för att motverka postprandiella hyperglykemier (stegrade blodsocker efter en måltid).";
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Sänker tillfälligt ditt målvärde före en måltid för att motverka postprandiella hyperglykemier (stegrade blodsocker efter en måltid).";
 
 /* Descriptive text for workout correction range override */
 "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Höj tillfälligt ditt målvärde före, under eller efter fysisk aktivitet för att minska risken för låga blodsockervärden.";
@@ -213,7 +201,7 @@
 "Unit/hour" = "Enhet/timme";
 
 /* The long unit display string for international units of insulin */
-"Units" = "Enheter";
+"Units" = "Eheter";
 
 /* The long unit display string for international units of insulin per hour */
 "Units/hour" = "Enhet/timme";

@@ -1,68 +1,30 @@
-/* No comment provided by engineer. */
-"%@ has been unable to communicate with the Simulator Pump since %@.\n\nWithout communication, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered." = "%1$@ no ha podido comunicarse con la Bomba Simuladora desde %2$@.\n\nSin comunicación, la aplicación no puede seguir enviando órdenes de administración de insulina ni mostrar información precisa y reciente sobre la insulina activa o la insulina que se está administrando.";
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolo";
 
-/* Appends a full-stop to a statement */
-"%@." = "%@.";
+/* Status highlight that delivery is uncertain. */
+"Comms Issue" = "Problema de comunicaciones";
 
-/* String format for value with units (1: value, 2: separator, 3: units) */
-"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+/* Status highlight that insulin delivery was suspended. */
+"Insulin Suspended" = "Insulina Suspendida";
 
-/* Confirmation message for deleting a service */
-"Are you sure you want to delete this service?" = "¿Está seguro de que desea eliminar este servicio?";
+/* Status highlight that a pump is out of insulin. */
+"No Insulin" = "No hay insulina";
 
-/* Back button text on DeliveryUncertaintyRecoveryView */
-"Back" = "Atrás";
+/* Status highlight that pump has a dead battery. */
+"Pump Battery Dead" = "Batería de la bomba agotada";
 
-/* The title of the cancel action in an action sheet */
-"Cancel" = "Cancelar";
+/* Status highlight that a pump error occurred. */
+"Pump Error" = "Error de la bomba";
 
-/* Title for CGM simulator settings */
-"CGM Settings" = "Configuración del MCG";
+/* Status highlight that an occlusion was detected. */
+"Pump Occlusion" = "Oclusión de la bomba";
 
-/* No comment provided by engineer. */
-"Clear Last Version Check Alert Date" = "Borrar última versión y comprobar fecha de alerta";
+/* Pump Event title for UnfinalizedDose with doseType of .resume */
+"Resume" = "Reanudar";
 
-/* No comment provided by engineer. */
-"Comms Recovery" = "Recuperación de comunicaciones";
+/* Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Suspender";
 
-/* Button title to delete a service */
-"Delete Service" = "Eliminar servicio";
-
-/* The alert title for a resume error */
-"Error Resuming" = "Error al reanudar";
-
-/* The alert title for a suspend error */
-"Error Suspending" = "Error al suspender";
-
-/* Caption for History
-   History Caption */
-"History" = "Historial";
-
-/* No comment provided by engineer. */
-"How should the simulator respond to a version check?" = "¿Cómo debe responder el simulador a una verificación de versión?";
-
-/* Controller title for insulin type selection screen */
-"Insulin Type" = "Tipo de Insulina";
-
-/* No comment provided by engineer. */
-"Mock Version Check %@" = "Comprobación de versión simulada %@";
-
-/* Button title to acknowledge error
-   Default acknowledgement */
-"OK" = "OK";
-
-/* Title for Pump simulator settings */
-"Pump Settings" = "Configuración de la bomba";
-
-/* Button title recovering comms */
-"Recover Simulator" = "Recuperar Simulador";
-
-/* Caption for Source */
-"Source" = "Fuente";
-
-/* Recurring software update alert title */
-"Update Reminder" = "Recordatorio de actualización";
-
-/* No comment provided by engineer. */
-"Version Check Response" = "Respuesta de verificación de versión";
+/* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Insulina basal temporal";
 

@@ -23,7 +23,7 @@
 "TyZ-xm-mVN.segmentTitles[0]" = "Reservoir";
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[1] = "Event History"; ObjectID = "TyZ-xm-mVN"; */
-"TyZ-xm-mVN.segmentTitles[1]" = "Event-log";
+"TyZ-xm-mVN.segmentTitles[1]" = "Hændelseshistorik";
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[2] = "Non-Pump Insulin"; ObjectID = "TyZ-xm-mVN"; */
 "TyZ-xm-mVN.segmentTitles[2]" = "Ikke-pumpe insulin";

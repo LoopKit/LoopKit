@@ -1,8 +1,8 @@
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basalraten";
+"Basal Rates" = "Basalrate";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Kohlenhydratfaktoren";
+"Carb Ratios" = "KH-Verhältnis";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "KH";
@@ -30,7 +30,7 @@
 "Reservoir" = "Reservoir";
 
 /* Title for the cell resetting the data manager */
-"Reset" = "Zurücksetzen";
+"Reset" = "Reset";
 
 /* Title of button to sync basal profile from pump */
 "Sync With Pump" = "Mit der Pumpe synchronisieren";

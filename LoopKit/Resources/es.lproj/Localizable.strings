@@ -1,12 +1,6 @@
 /* Format for correction range override therapy setting card */
 "%@ Range" = "%@ Rango";
 
-/* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ U bolo falló";
-
-/* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ U bolo puede no haber tenido exito";
-
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ administrará insulina basal y bolo recomendado solo si se prevé que tu nivel de glucosa estará por encima de este límite durante las próximas tres horas.";
 
@@ -49,9 +43,6 @@
 
 /* Title text for carb ratios */
 "Carb Ratios" = "Ratios de carbohidratos";
-
-/* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Revise la microinfusora antes de reintentar";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorización Denegada";
@@ -138,9 +129,6 @@
 /* Generic pump error description */
 "Invalid Configuration" = "Configuración no Válida";
 
-/* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "Es seguro reintentar";
-
 /* Brand name for lyumjev insulin type
    Title for Lyumjev insulin type */
 "Lyumjev" = "Lyumjev";
@@ -152,7 +140,7 @@
 "Make sure your pump is within communication range of your phone." = "Asegúrate de que tu bomba esté dentro del rango de comunicación de tu teléfono.";
 
 /* Title text for maximum basal rate configuration */
-"Maximum Basal Rate" = "Tasa basal máxima por hora";
+"Maximum Basal Rate" = "Perfil Basal Máximo";
 
 /* Descriptive text for maximum basal rate (1: app name) */
 "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Tasa Basal Máxima es la tasa basal temporal más alta que %1$@ puede establecer.";
@@ -227,7 +215,7 @@
 "Temp Basal" = "Insulina basal temporal";
 
 /* Descriptive text for pre-meal correction range override */
-"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduzca temporalmente su objetivo de glucosa antes de las comidas para reducir los picos de glucosa después de las comidas.";
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduzca temporalmente su objetivo de glucosa antes de una comida para reducir los picos de glucosa después de las comidas.";
 
 /* Descriptive text for workout correction range override */
 "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Aumente temporalmente su objetivo de glucosa antes, durante o después de la actividad física para reducir el riesgo de tener eventos de glucosa baja.";
@@ -269,7 +257,7 @@
 "Workout" = "Ejercicio";
 
 /* Descriptive text for basal rate */
-"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Tu tasa basal de insulina es el número de unidades por hora que quieres utilizar para cubrir tus necesidades de insulina basicas no relacionadas con las comidas.";
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Su tasa basal de insulina es la cantidad de unidades por hora que desea usar para cubrir sus necesidades de insulina de fondo, no relacionadas con las comidas.";
 
 /* Descriptive text for carb ratio */
 "Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "El ratio de carbohidratos es el número de gramos de carbohidratos que cubre una unidad de insulina.";

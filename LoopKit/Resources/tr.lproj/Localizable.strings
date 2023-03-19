@@ -1,12 +1,6 @@
 /* Format for correction range override therapy setting card */
 "%@ Range" = "%@ Aralık";
 
-/* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ Ü bolus başarısız";
-
-/* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ Ü bolus başarılı olmayabilir";
-
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ bazal insülin verecek ve yalnızca KŞ'nizin önümüzdeki üç saat boyunca bu sınırın üzerinde olacağı tahmin ediliyorsa bolus insülin önerecektir.";
 
@@ -49,9 +43,6 @@
 
 /* Title text for carb ratios */
 "Carb Ratios" = "Karbonhidrat Oranları";
-
-/* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Yeniden denemeden önce pompanızı kontrol edin";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Yetkilendirme Reddedildi";
@@ -137,9 +128,6 @@
 
 /* Generic pump error description */
 "Invalid Configuration" = "Geçersiz Konfigürasyon";
-
-/* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "Yeniden denemek güvenlidir";
 
 /* Brand name for lyumjev insulin type
    Title for Lyumjev insulin type */
@@ -269,7 +257,7 @@
 "Workout" = "Egzersiz";
 
 /* Descriptive text for basal rate */
-"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Bazal İnsülin Oranınız, arka plan insülin ihtiyaçlarınızı karşılamak için kullanmak istediğiniz saat başına ünite miktarıdır.";
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Bazal İnsülin Oranınız, arka plan insülin ihtiyaçlarınızı karşılamak için kullanmak istediğiniz  saat başına ünite miktarıdır.";
 
 /* Descriptive text for carb ratio */
 "Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Karbonhidrat İnsülin Oranınız, bir ünite insülinin kaç gram karbonhidrat karşılayacağını ifade eder.";

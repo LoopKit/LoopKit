@@ -19,9 +19,6 @@
 /* No comment provided by engineer. */
 "%@" = "%@";
 
-/* No comment provided by engineer. */
-"%@, " = "%@, ";
-
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -85,9 +82,6 @@
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Een waarde van 0 E/uur betekent dat u geen basale insuline ontvangt.";
 
 /* No comment provided by engineer. */
-"Above dynamic data" = "Boven dynamische gegevens";
-
-/* No comment provided by engineer. */
 "Above the save button" = "Boven de knop Opslaan";
 
 /* Title of the carb entry absorption time cell */
@@ -137,12 +131,6 @@
 
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Basaal-, bolus- en insulinecorrectiehoeveelheden zijn onveranderd.";
-
-/* No comment provided by engineer. */
-"Below dynamic data" = "Onder dynamische gegevens";
-
-/* No comment provided by engineer. */
-"Bottom" = "Onderkant";
 
 /* No comment provided by engineer. */
 "Bottom component" = "Onderste component";
@@ -248,12 +236,6 @@
 
 /* The text for the override duration setting */
 "Duration" = "Duur";
-
-/* No comment provided by engineer. */
-"Dynamic component #%@" = "Dynamische component #%@";
-
-/* No comment provided by engineer. */
-"Dynamic data %@" = "Dynamische gegevens %@";
 
 /* Text for edit button
    The title for the enabled custom preset editing screen */
@@ -415,9 +397,6 @@
 
 /* Section title for medium absorbing food */
 "Medium" = "Middel";
-
-/* No comment provided by engineer. */
-"Middle" = "Midden";
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
@@ -651,9 +630,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Te implementeren";
-
-/* No comment provided by engineer. */
-"Top" = "Boven";
 
 /* No comment provided by engineer. */
 "Top component" = "Bovenste component";

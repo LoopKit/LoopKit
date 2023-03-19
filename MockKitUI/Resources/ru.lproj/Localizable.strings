@@ -1,0 +1,68 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Alert content body for recurring software update alert */
+"A software update is recommended to continue using the %1$@ app.\n\nGo to %2$@ Settings > Software Update to install the latest version." = "Для продолжения использования приложения %1$@ рекомендуется обновить программное обеспечение.\n\nПерейдите в %2$@ Настройки > Обновление ПО, чтобы установить последнюю версию.";
+
+/* Confirmation message for deleting a service */
+"Are you sure you want to delete this service?" = "Вы уверены, что хотите удалить этот сервис?";
+
+/* Back button text on DeliveryUncertaintyRecoveryView */
+"Back" = "Назад";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Отмена";
+
+/* Title for CGM simulator settings */
+"CGM Settings" = "Настройки CGM";
+
+/* No comment provided by engineer. */
+"Clear Last Version Check Alert Date" = "Очистить последнюю дату проверки версии";
+
+/* No comment provided by engineer. */
+"Comms Recovery" = "Восстановление связи";
+
+/* Button title to delete a service */
+"Delete Service" = "Удалить сервис";
+
+/* The alert title for a resume error */
+"Error Resuming" = "Ошибка возобновления";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Ошибка приостановки";
+
+/* Caption for History
+   History Caption */
+"History" = "История";
+
+/* No comment provided by engineer. */
+"How should the simulator respond to a version check?" = "Как симулятор должен реагировать на проверку версии?";
+
+/* Controller title for insulin type selection screen */
+"Insulin Type" = "Тип инсулина";
+
+/* Button title to acknowledge error
+   Default acknowledgement */
+"OK" = "OK";
+
+/* Title for Pump simulator settings */
+"Pump Settings" = "Настройки помпы";
+
+/* Button title recovering comms */
+"Recover Simulator" = "Восстановить симулятор";
+
+/* Caption for Source */
+"Source" = "Источник";
+
+/* Recurring software update alert title */
+"Update Reminder" = "Напоминание об обновлении";
+
+/* No comment provided by engineer. */
+"Version Check Response" = "Ответ на проверку версии";
+
+/* Alert content body for first software update alert (1: app name)(2: app name) */
+"Your %1$@ app is out of date. It will continue to work, but we recommend updating to the latest version.\n\nGo to %2$@ Settings > Software Update to complete." = "Ваше приложение %1$@ устарело. Оно будет продолжать работать, но мы рекомендуем обновить его до последней версии.\n\nДля завершения обновления перейдите в %2$@ Настройки > Обновление ПО.";
+

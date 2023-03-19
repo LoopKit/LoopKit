@@ -1,3 +1,6 @@
+/* The detail text representing no value */
+"–" = "—";
+
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -35,6 +38,9 @@
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Tem certeza de que deseja excluir todos os valores do reservatório?";
 
+/* Title text for multi-value basal rate warning */
+"Basal Rates" = "Taxas Basais";
+
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "As quantidades basais, de bolus e de dose de insulina de correção diminuem em %@%%.";
 
@@ -52,6 +58,9 @@
 
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Cancelar Basal Temporária";
+
+/* Title text for multi-value carb ratio warning */
+"Carb Ratios" = "Taxas de Carbs";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "As alterações serão aplicadas apenas desta vez que você ativar a sobreposição. As configurações padrão de %@ não serão afetadas.";
@@ -98,6 +107,9 @@
 /* Button title to delete all objects */
 "Delete All" = "Remover Todos";
 
+/* Title text for crossed thresholds guardrail warning */
+"Delivery Limits" = "Limites de Entrega";
+
 /* The text for the override duration setting */
 "Duration" = "Duração";
 
@@ -122,8 +134,20 @@
 /* The placeholder text instructing users how to enter a maximum basal rate */
 "Enter a rate in units per hour" = "Insira uma taxa em unidades por hora";
 
+/* Segmented button title for insulin delivery log event history */
+"Event History" = "Event History";
+
 /* Section title for fast absorbing food */
 "Fast" = "Rápida";
+
+/* Title of insulin model preset - fiasp */
+"Fiasp" = "Fiasp";
+
+/* Title text for insulin model */
+"Insulin Model" = "Modelo de Insulina";
+
+/* Title text for multi-value insulin sensitivity warning */
+"Insulin Sensitivities" = "Sensibilidades a Insulina";
 
 /* The description shown on the insulin sensitivity schedule interface. */
 "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "A sensibilidade à insulina descreve como a glicose no sangue deve responder a uma dose unitária de insulina. Valores menores significam que mais insulina será administrada quando acima do objetivo. Valores muito pequenos podem causar hipoglicemia.";
@@ -177,8 +201,17 @@
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Eventos da Bomba";
 
+/* Title of insulin model preset - rapid acting adult */
+"Rapid-Acting – Adults" = "Ação-Rápida – Adultos";
+
+/* Title of insulin model preset - rapid acting children */
+"Rapid-Acting – Children" = "Ação-Rapida – Crianças";
+
 /* The default placeholder string for a credential */
 "Required" = "Obrigatório";
+
+/* Segmented button title for insulin delivery log reservoir history */
+"Reservoir" = "Reservoir";
 
 /* Title text for button to resume insulin delivery */
 "Resume Delivery" = "Retomar Entrega";
@@ -223,6 +256,9 @@
 /* The title for the override selection screen */
 "Temporary Override" = "Sobreposição Temporária";
 
+/* Subtitle description of Walsh insulin model setting */
+"The legacy model used by Loop, allowing customization of action duration." = "O modelo antigo utilizado pelo Loop permitindo personalização da duração da ação.";
+
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "O tempo máximo de absorção é %@";
 
@@ -244,6 +280,9 @@
 
 /* Label indicating validation is occurring */
 "Verifying" = "Verificando";
+
+/* Title of insulin model setting */
+"Walsh" = "Walsh";
 
 /* Title of an alert containing a validation warning */
 "Warning" = "Aviso";

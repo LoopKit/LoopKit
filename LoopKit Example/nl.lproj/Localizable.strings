@@ -14,7 +14,7 @@
 "Diagnostic" = "Diagnose";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Vul de 6 cijferige pompserienummer in";
+"Enter the 6-digit pump ID" = "Voer het 6-cijferige pompserienummer in";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Genereer Gegevens";

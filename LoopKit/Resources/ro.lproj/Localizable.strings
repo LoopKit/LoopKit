@@ -1,12 +1,6 @@
 /* Format for correction range override therapy setting card */
 "%@ Range" = "%@ Interval";
 
-/* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "bolus eșuat de %1$@ U";
-
-/* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "bolusul de %1$@ U s-ar putea să fi eșuat";
-
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ va livra bazala şi bolusul recomandat numai dacă glucoza este estimată a fi peste această limită pentru următoarele trei ore.";
 
@@ -50,9 +44,6 @@
 /* Title text for carb ratios */
 "Carb Ratios" = "Raport carbohidrați/insulină";
 
-/* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Verificați pompa înainte de a încerca din nou";
-
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorizare refuzată";
 
@@ -78,7 +69,7 @@
 "Critical Update" = "Actualizare critică";
 
 /* Title text for delivery limits */
-"Delivery Limits" = "Limite de administrare";
+"Delivery Limits" = "Limite de livrare";
 
 /* Generic pump error description */
 "Device Refused" = "Dispozitiv refuzat";
@@ -130,16 +121,13 @@
 "Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Humalog (insulina lispro) este o insulină cu acțiune rapidă produsă de Eli Lilly";
 
 /* Title text for fast acting insulin model */
-"Insulin Model" = "Model insulină";
+"Insulin Model" = "Modelul de insulină";
 
 /* Title text for insulin sensitivity */
-"Insulin Sensitivities" = "Sensibilitate insulină";
+"Insulin Sensitivities" = "Factor de sensibilitate la insulină";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Configurație invalidă";
-
-/* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "Puteți încerca fără riscuri";
 
 /* Brand name for lyumjev insulin type
    Title for Lyumjev insulin type */

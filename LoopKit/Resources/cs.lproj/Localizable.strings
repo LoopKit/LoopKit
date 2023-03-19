@@ -1,7 +1,12 @@
-/*
-  Localizable.strings
-  LoopKit
+/* Title text for basal rates */
+"Basal Rates" = "Úrovně bazálu";
 
-  Created by Pete Schwamb on 3/19/23.
-  Copyright © 2023 LoopKit Authors. All rights reserved.
-*/
+/* Title text for delivery limits */
+"Delivery Limits" = "Limity podávání";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
+
+/* Title for suspend dose type */
+"Suspended" = "Pozastaveno";
+

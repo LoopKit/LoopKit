@@ -19,9 +19,6 @@
 /* No comment provided by engineer. */
 "%@" = "%@";
 
-/* No comment provided by engineer. */
-"%@, " = "%@, ";
-
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -85,9 +82,6 @@
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Ein Wert von 0 IE/h heißt, dass Sie in dieser Zeit kein Basalinsulin erhalten.";
 
 /* No comment provided by engineer. */
-"Above dynamic data" = "Über dynamischen Daten";
-
-/* No comment provided by engineer. */
 "Above the save button" = "Über dem Speichern-Knopf";
 
 /* Title of the carb entry absorption time cell */
@@ -137,12 +131,6 @@
 
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Basal-, Bolus- und Korrekturinsulindosismengen bleiben unverändert.";
-
-/* No comment provided by engineer. */
-"Below dynamic data" = "Unter dynamischen Daten";
-
-/* No comment provided by engineer. */
-"Bottom" = "Unterseite";
 
 /* No comment provided by engineer. */
 "Bottom component" = "Unterseitenkomponente";
@@ -249,12 +237,6 @@
 /* The text for the override duration setting */
 "Duration" = "Dauer";
 
-/* No comment provided by engineer. */
-"Dynamic component #%@" = "Dynamische Komponente #%@";
-
-/* No comment provided by engineer. */
-"Dynamic data %@" = "Dynamische Daten %@";
-
 /* Text for edit button
    The title for the enabled custom preset editing screen */
 "Edit" = "Bearbeiten";
@@ -293,7 +275,7 @@
 "Enter a rate in units per hour" = "Eingabe Rate in Einheiten pro Stunde";
 
 /* Segmented button title for insulin delivery log event history */
-"Event History" = "Ereignishistorie";
+"Event History" = "Ereignisverlauf";
 
 /* No comment provided by engineer. */
 "Example" = "Beispiel";
@@ -415,9 +397,6 @@
 
 /* Section title for medium absorbing food */
 "Medium" = "Mittlere";
-
-/* No comment provided by engineer. */
-"Middle" = "Mittlere";
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
@@ -584,7 +563,7 @@
 "Target Range" = "Zielbereich";
 
 /* Description of pre-meal mode */
-"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Senke Dein Blutzuckerziel vor einer Mahlzeit vorübergehend ab, um Blutzuckerspitzen nach der Mahlzeit auszugleichen.";
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Senke Deinen Blutzuckerziel vor einer Mahlzeit vorübergehend ab, um Blutzuckerspitzen nach der Mahlzeit auszugleichen.";
 
 /* Description of workout mode */
 "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Erhöhe Dein Blutzuckerziel vorübergehend vor, während oder nach körperlicher Aktivität, um das Risiko von Ereignissen mit niedrigem Blutzucker zu verringern.";
@@ -651,9 +630,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Zu implementieren";
-
-/* No comment provided by engineer. */
-"Top" = "Oben";
 
 /* No comment provided by engineer. */
 "Top component" = "Oben Komponente";
@@ -729,7 +705,7 @@
 "You can edit the setting by tapping into the line item." = "Du kannst die Einstellung bearbeiten, indem Du auf die Zeile tippst.";
 
 /* Information about basal rates */
-"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Die Basalrate gibt die Anzahl der Einheiten pro Stunde an, um Deinen Hintergrund-Insulinbedarf zu decken.";
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Deine Basalrate ist die Anzahl der Einheiten pro Stunde, die Du verwenden möchtest, um Deinen Hintergrund-Insulinbedarf zu decken.";
 
 /* Lower bound pre-meal information text */
 "your Glucose Safety Limit" = "Deine Blutzuckersicherheitsgrenze";

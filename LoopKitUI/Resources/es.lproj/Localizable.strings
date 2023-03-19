@@ -19,9 +19,6 @@
 /* No comment provided by engineer. */
 "%@" = "%@";
 
-/* No comment provided by engineer. */
-"%@, " = "%@,";
-
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -37,6 +34,9 @@
 /* The format for an override preset cell. (1: symbol)(2: name)
    The format for an override symbol and name (1: symbol)(2: name) */
 "%1$@ %2$@" = "%1$@ %2$@";
+
+/* Information about insulin action duration (1: app name) */
+"%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%1$@ asume que la insulina que ha administrado está trabajando activamente para reducir el nivel de glucosa durante 6 horas. Esta configuración no se puede cambiar.";
 
 /* Lower bound workout information text format (1: app name) */
 "%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ o su Límite de Seguridad de Glucosa, el que sea mayor";
@@ -71,9 +71,6 @@
 
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Un valor de 0 U/hora significa que se programará que no reciba insulina basal.";
-
-/* No comment provided by engineer. */
-"Above dynamic data" = "Por encima de los datos dinámicos";
 
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Tiempo de Absorción";
@@ -122,12 +119,6 @@
 
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Basal, bolos y cantidades de corrección de insulina sin cambio.";
-
-/* No comment provided by engineer. */
-"Below dynamic data" = "Debajo de los datos dinámicos";
-
-/* No comment provided by engineer. */
-"Bottom" = "Abajo";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Cancelar";
@@ -230,12 +221,6 @@
 
 /* The text for the override duration setting */
 "Duration" = "Duración";
-
-/* No comment provided by engineer. */
-"Dynamic component #%@" = "Componente dinámico #%@";
-
-/* No comment provided by engineer. */
-"Dynamic data %@" = "Datos dinámicos %@";
 
 /* Text for edit button
    The title for the enabled custom preset editing screen */
@@ -386,14 +371,17 @@
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Perfil Basal Máximo";
 
+/* Information about maximum basal rate (1: app name) */
+"Maximum Basal Rate is the maximum automatically adjusted basal rate that %1$@ is allowed to enact to help reach your correction range." = "La Tasa Basal Máxima es el máximo ajuste automático que %1$@ tiene permitido habilitar para ayudar a alcanzar tu rango de corrección.";
+
 /* The title text for the maximum bolus value */
 "Maximum Bolus" = "Bolo Máximo";
 
+/* Information about maximum bolus (1: app name) */
+"Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose." = "El Bolo Máximo es la cantidad de bolo más alta que permitirá que %1$@ recomiende de una sola vez para cubrir los carbohidratos o reducir los niveles altos de glucosa.";
+
 /* Section title for medium absorbing food */
 "Medium" = "Medio";
-
-/* No comment provided by engineer. */
-"Middle" = "Medio";
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
@@ -626,9 +614,6 @@
 "To be implemented" = "Por desarrollarse";
 
 /* No comment provided by engineer. */
-"Top" = "Arriba";
-
-/* No comment provided by engineer. */
 "Top component" = "Componente superior";
 
 /* The text indicating Total for Daily Schedule Basal */
@@ -691,6 +676,9 @@
 
 /* Description of how to add a range */
 "You can add entries for different times of day by using the ➕." = "Puede agregar entradas para diferentes momentos del día usando el ➕.";
+
+/* Information about insulin model (1: app name) */
+"You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models." = "Puedes elegir cómo %1$@ mide el pico del efecto de la insulina de acción rápida en función de uno de estos dos modelos de insulina.";
 
 /* Description of how to edit setting */
 "You can edit a setting by tapping into any line item." = "Puede editar una configuración tocando cualquier elemento de línea.";

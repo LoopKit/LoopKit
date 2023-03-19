@@ -19,9 +19,6 @@
 /* No comment provided by engineer. */
 "%@" = "%@";
 
-/* No comment provided by engineer. */
-"%@, " = "%@, ";
-
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -72,9 +69,6 @@
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "0 Ü/saat değeri, bazal insülin almayacağınız anlamına gelir.";
 
-/* No comment provided by engineer. */
-"Above dynamic data" = "Dinamik verilerin üstünde";
-
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Emilim Süresi";
 
@@ -123,12 +117,6 @@
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Bazal, bolus ve düzeltme insülin doz miktarları etkilenmez.";
 
-/* No comment provided by engineer. */
-"Below dynamic data" = "Dinamik verilerin altında";
-
-/* No comment provided by engineer. */
-"Bottom" = "Alt";
-
 /* The title of the cancel action in an action sheet */
 "Cancel" = "İptal";
 
@@ -158,7 +146,7 @@
 "com.loudnate.CarbKit.COBDateLabel" = "%1$@";
 
 /* The format string describing the starting date of a total value. The first format argument is the localized date. */
-"com.loudnate.CarbKit.totalDateLabel" = "%1$@ tarihinden beri";
+"com.loudnate.CarbKit.totalDateLabel" = "%1$@ den beri";
 
 /* The format string describing the date of an IOB value. The first format argument is the localized date. */
 "com.loudnate.InsulinKit.IOBDateLabel" = "%1$@";
@@ -230,12 +218,6 @@
 
 /* The text for the override duration setting */
 "Duration" = "Süre";
-
-/* No comment provided by engineer. */
-"Dynamic component #%@" = "Dinamik bileşen # %@";
-
-/* No comment provided by engineer. */
-"Dynamic data %@" = "Dinamik veri %@";
 
 /* Text for edit button
    The title for the enabled custom preset editing screen */
@@ -391,9 +373,6 @@
 
 /* Section title for medium absorbing food */
 "Medium" = "Orta";
-
-/* No comment provided by engineer. */
-"Middle" = "Orta";
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
@@ -624,9 +603,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Uygulanacak";
-
-/* No comment provided by engineer. */
-"Top" = "Üst";
 
 /* No comment provided by engineer. */
 "Top component" = "Üst bileşen";

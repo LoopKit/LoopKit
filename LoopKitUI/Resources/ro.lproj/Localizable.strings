@@ -19,9 +19,6 @@
 /* No comment provided by engineer. */
 "%@" = "%@";
 
-/* No comment provided by engineer. */
-"%@, " = "%@, ";
-
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -85,9 +82,6 @@
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "O valoare de 0 U/oră înseamnă că nu vei primi insulină bazală.";
 
 /* No comment provided by engineer. */
-"Above dynamic data" = "Deasupra datelor dinamice";
-
-/* No comment provided by engineer. */
 "Above the save button" = "Deasupra butonului de salvare";
 
 /* Title of the carb entry absorption time cell */
@@ -137,12 +131,6 @@
 
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Dozele de insulină bazale, de bolus și de corecție sunt neafectate.";
-
-/* No comment provided by engineer. */
-"Below dynamic data" = "Sub datele dinamice";
-
-/* No comment provided by engineer. */
-"Bottom" = "Jos";
 
 /* No comment provided by engineer. */
 "Bottom component" = "Componenta de jos";
@@ -212,7 +200,7 @@
 "Custom" = "Personalizată";
 
 /* The title for the custom override entry screen */
-"Custom Override" = "Înlocuire personalizată";
+"Custom Override" = "Modificare personalizată";
 
 /* The title for the custom preset entry screen
    The title for the custom preset selection screen */
@@ -244,16 +232,10 @@
 /* Text for dismiss button
    Text for done button
    Video player done button label */
-"Done" = "Terminat";
+"Done" = "Realizat";
 
 /* The text for the override duration setting */
 "Duration" = "Durată";
-
-/* No comment provided by engineer. */
-"Dynamic component #%@" = "Componenta dinamică #%@";
-
-/* No comment provided by engineer. */
-"Dynamic data %@" = "Date dinamice %@";
 
 /* Text for edit button
    The title for the enabled custom preset editing screen */
@@ -278,7 +260,7 @@
 "Enable Indefinitely" = "Activează pe termen nedeterminat";
 
 /* The detail text describing an enabled setting */
-"Enabled" = "Activată";
+"Enabled" = "Activat";
 
 /* The text for the override start time */
 "End Time" = "Timp de încheiere";
@@ -415,9 +397,6 @@
 
 /* Section title for medium absorbing food */
 "Medium" = "Medie";
-
-/* No comment provided by engineer. */
-"Middle" = "Mijloc";
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
@@ -651,9 +630,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Va fi implementat";
-
-/* No comment provided by engineer. */
-"Top" = "Superior";
 
 /* No comment provided by engineer. */
 "Top component" = "Componenta superioara";

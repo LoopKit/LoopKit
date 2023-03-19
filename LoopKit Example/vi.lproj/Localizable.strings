@@ -1,5 +1,5 @@
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basal Rates";
+"Basal Rates" = "Lịch biểu tiêm liều nền";
 
 /* The title of the carb ratios schedule screen */
 "Carb Ratios" = "Carb Ratios";
@@ -14,7 +14,7 @@
 "Diagnostic" = "Chuẩn đoán";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Khai báo 6 số ID của bơm";
+"Enter the 6-digit pump ID" = "Nhập 6 số ID của bơm";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Xuất bản dữ liệu";
@@ -27,7 +27,7 @@
 "Pump ID" = "Số ID của bơm";
 
 /* The title for the cell navigating to the reservoir screen */
-"Reservoir" = "Ngăn chứa insulin";
+"Reservoir" = "Reservoir";
 
 /* Title for the cell resetting the data manager */
 "Reset" = "Khôi phục lại";
