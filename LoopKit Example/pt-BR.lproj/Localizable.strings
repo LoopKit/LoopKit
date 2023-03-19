@@ -14,7 +14,7 @@
 "Diagnostic" = "Diagnóstico";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Entre com o ID de 6 dígitos da bomba";
+"Enter the 6-digit pump ID" = "Digite o ID da bomba de 6 dígitos";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Gerar Dados";
@@ -27,7 +27,7 @@
 "Pump ID" = "ID da Bomba";
 
 /* The title for the cell navigating to the reservoir screen */
-"Reservoir" = "Reservatório";
+"Reservoir" = "Reservoir";
 
 /* Title for the cell resetting the data manager */
 "Reset" = "Restabelecer";

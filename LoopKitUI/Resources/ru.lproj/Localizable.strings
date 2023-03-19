@@ -8,10 +8,16 @@
 "-" = "-";
 
 /* No comment provided by engineer. */
-"%@" = "%@";
+"－" = "－";
+
+/* The detail text representing no value */
+"–" = "–";
 
 /* No comment provided by engineer. */
-"%@, " = "%@, ";
+"···" = "---";
+
+/* No comment provided by engineer. */
+"%@" = "%@";
 
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
@@ -52,6 +58,18 @@
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* No comment provided by engineer. */
+"🍽" = "🍽";
+
+/* Premeal override preset title */
+"🍽 Pre-Meal" = "До еды";
+
+/* No comment provided by engineer. */
+"🏃‍♂️" = "🏃‍";
+
+/* Workout override preset title */
+"🏃‍♂️ Workout" = "🏃‍♂️ Тренировки";
+
+/* No comment provided by engineer. */
 "A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "Карточка, текст которой будет переноситься на несколько строк, если я буду продолжать печатать достаточно долго — такой длины должно хватить.";
 
 /* Information about differences between target range and correction range */
@@ -62,9 +80,6 @@
 
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Значение 0 Ед/час означает, что Вы не будете получать базальный инсулин.";
-
-/* No comment provided by engineer. */
-"Above dynamic data" = "Выше динамических данных";
 
 /* No comment provided by engineer. */
 "Above the save button" = "Над кнопкой сохранения";
@@ -118,12 +133,6 @@
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "BБаза, болюсы и болюсы на коррекцию не изменились.";
 
 /* No comment provided by engineer. */
-"Below dynamic data" = "Ниже динамических данных";
-
-/* No comment provided by engineer. */
-"Bottom" = "Низ";
-
-/* No comment provided by engineer. */
 "Bottom component" = "Нижний компонент";
 
 /* The title of the cancel action in an action sheet */
@@ -147,6 +156,10 @@
 /* Carb entry section footer text explaining absorption time */
 "Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Выберите более высокую длительность усвоения для обильной пищи или для пищи с белками и протеинами. Это единственное указание для алгоритма не нуждается в дополнительных уточнениях.";
 
+/* Button text to close a modal
+   Text to close informational page */
+"Close" = "Закрыть";
+
 /* The format string describing the date of a COB value. The first format argument is the localized date. */
 "com.loudnate.CarbKit.COBDateLabel" = "В %1$@";
 
@@ -162,8 +175,17 @@
 /* The title of the action used to dismiss an error alert */
 "com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
 
+/* Accessibility label for ProgressIndicatorView when showIndeterminantProgress */
+"Completed." = "Завершено.";
+
 /* The title for the override emoji condition section */
 "Condition" = "Условие";
+
+/* The button text for confirming the setting */
+"Confirm Setting" = "Подтвердить настройки";
+
+/* No comment provided by engineer. */
+"content" = "содержание";
 
 /* Title of the setup button to continue */
 "Continue" = "Продолжить";
@@ -171,20 +193,46 @@
 /* The section footer of correction range schedule */
 "Correction range is the blood glucose range that you would like Loop to correct to." = "Диапазон коррекции это желательный диапазон значений ГК для обработки алгоритмом петли.";
 
+/* Title text for multi-value correction value warning */
+"Correction Values" = "Значения коррекции";
+
 /* The text for a custom override */
 "Custom" = "Настраиваемый";
 
 /* The title for the custom override entry screen */
 "Custom Override" = "Настраиваемое ручное управление";
 
+/* The title for the custom preset entry screen
+   The title for the custom preset selection screen */
+"Custom Preset" = "Пользовательский пресет";
+
 /* Title of the carb entry date picker cell */
 "Date" = "Дата";
+
+/* Delete values for Pre-Meal, inactivates Pre-Meal icon
+   Test for table cell delete button
+   The title of the button to remove the credentials for a service */
+"Delete" = "Удалить";
 
 /* The title of the button to remove the credentials for a service */
 "Delete Account" = "Удалить аккаунт";
 
 /* Button title to delete all objects */
 "Delete All" = "Стереть все";
+
+/* Title text for crossed thresholds guardrail warning */
+"Delivery Limits" = "Пределы подачи";
+
+/* Information about delivery limits */
+"Delivery Limits are safety guardrails for your insulin delivery." = "Пределы подачи - это защита от ввода лишнего инсулина.";
+
+/* The text for the custom preset disable button */
+"Disable Preset" = "Выключить пресет";
+
+/* Text for dismiss button
+   Text for done button
+   Video player done button label */
+"Done" = "Готово";
 
 /* The text for the override duration setting */
 "Duration" = "Продолжительность";
@@ -336,13 +384,13 @@
 "max" = "макс";
 
 /* The title text for the maximum basal rate value */
-"Maximum Basal Rate" = "Макс скорость базала";
+"Maximum Basal Rate" = "Максимальная скорость базала";
 
 /* Information about maximum basal rate (1: app name) */
 "Maximum Basal Rate is the maximum automatically adjusted basal rate that %1$@ is allowed to enact to help reach your correction range." = "Максимальная базальная скорость - это максимальная базальная скорость, которую %1$@ разрешено использовать для достижения диапазона коррекции в автоматическом режиме.";
 
 /* The title text for the maximum bolus value */
-"Maximum Bolus" = "Макс Болюс";
+"Maximum Bolus" = "Максимальный Болюс";
 
 /* Information about maximum bolus (1: app name) */
 "Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose." = "Максимальный болюс - это наибольший размер болюса, котороый вы позволите %1$@ рекомендовать за один раз для покрытия углеводов или снижения высокого уровня глюкозы.";
@@ -350,11 +398,11 @@
 /* Section title for medium absorbing food */
 "Medium" = "Средняя";
 
-/* No comment provided by engineer. */
-"Middle" = "Средний";
-
 /* Placeholder for minimum value in glucose range */
 "min" = "мин";
+
+/* No comment provided by engineer. */
+"more content" = "дополнительное содержание";
 
 /* Alert action title to open error help */
 "More Info" = "Доп. инфо";
@@ -420,11 +468,20 @@
 /* The default placeholder string for a credential */
 "Required" = "обязательный";
 
+/* Segmented button title for insulin delivery log reservoir history */
+"Reservoir" = "Reservoir";
+
 /* Title text for button to resume insulin delivery */
 "Resume Delivery" = "Возобновить подачу";
 
 /* Title text for button when insulin delivery is in the process of being resumed */
 "Resuming" = "Возобновляется";
+
+/* title for summary description section */
+"Review and Save Settings" = "Просмотр и сохранение настроек";
+
+/* Description of how to interact with summary screen */
+"Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen." = "Просмотрите настройки терапии ниже. Если вы хотите изменить какие-либо из этих настроек, нажмите Назад";
 
 /* The text for the override preset name field placeholder */
 "Running" = "Выполнение";
@@ -433,8 +490,38 @@
    Button text for saving insulin sensitivity schedule */
 "Save" = "Сохранить";
 
+/* Alert title for confirming basal rates outside the recommended range */
+"Save Basal Rates?" = "Сохранить базальные дозы?";
+
+/* Alert title for confirming carb ratios outside the recommended range */
+"Save Carb Ratios?" = "Сохранить соотношение углеводов?";
+
+/* Alert title for confirming correction ranges outside the recommended range */
+"Save Correction Range(s)?" = "Сохранить диапазон(ы) коррекции?";
+
+/* Alert title for confirming delivery limits outside the recommended range */
+"Save Delivery Limits?" = "Сохранить пределы подачи?";
+
+/* Alert title for confirming a glucose safety limit outside the recommended range */
+"Save Glucose Safety Limit?" = "Сохранить безопасный предел глюкозы?";
+
+/* Alert title for confirming insulin sensitivities outside the recommended range */
+"Save Insulin Sensitivities?" = "Сохранить чувствительность к инсулину?";
+
+/* Alert title for confirming pre-meal range overrides outside the recommended range */
+"Save Pre-Meal Range?" = "Сохранить диапазон до еды?";
+
+/* Alert title for confirming workout range overrides outside the recommended range */
+"Save Workout Range?" = "Сохранить диапазон для физнагрузки?";
+
+/* The button text during saving on a configuration page */
+"Saving..." = "Сохранение...";
+
 /* The section header text for a scheduled override */
 "SCHEDULED OVERRIDE" = "ЗАПЛАНИРОВАННОЕ ВЫПОЛНЕНИЕ ИЗМЕНЕНИЙ";
+
+/* The section header text for a scheduled custom preset */
+"SCHEDULED PRESET" = "ПРЕДУСТАНОВКА ПО РАСПИСАНИЮ";
 
 /* Section title for slow absorbing food */
 "Slow" = "Медленная";
@@ -483,6 +570,10 @@
 
 /* The title for the override selection screen */
 "Temporary Override" = "Временный";
+
+/* Information about pre-meal range relative to correction range
+   Information about workout range relative to correction range */
+"than your Correction Range." = "чем ваш диапазон коррекции.";
 
 /* Description for selection when no insulin type is selected. */
 "The currently selected fast acting insulin model will be used as a default." = "Выбранная в данный момент модель быстродействующего инсулина будет использоваться по умолчанию.";
@@ -541,9 +632,6 @@
 "To be implemented" = "Будет применено";
 
 /* No comment provided by engineer. */
-"Top" = "Топ";
-
-/* No comment provided by engineer. */
 "Top component" = "Верхний компонент";
 
 /* The text indicating Total for Daily Schedule Basal */
@@ -577,9 +665,51 @@
 /* The title for the override editing screen */
 "View Override" = "Просмотреть оверрайд";
 
+/* Title of insulin model setting */
+"Walsh" = "Walsh";
+
 /* Title of an alert containing a validation warning */
 "Warning" = "Предостережение";
 
+/* Disclaimer */
+"Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable." = "Вместе с вашим лечащим врачом выберите значение, которое будет выше, чем ваша самая высокая запланированная база, но на столько, на сколько вам удобно.";
+
 /* Title for the workout override range */
 "Workout" = "Физическая нагрузка";
+
+/* Title text for multi-value workout value warning */
+"Workout Values" = "Настройки физнагрузок";
+
+/* Description of how to add a ratio */
+"You can add different carb ratios for different times of day by using the ➕." = "Вы можете добавлять различные соотношения углеводов для разного времени суток с помощью ➕.";
+
+/* Description of how to add a ratio */
+"You can add different insulin sensitivities for different times of day by using the ➕." = "Вы можете добавить различные показатели чувствительности к инсулину для разного времени суток с помощью кнопки ➕.";
+
+/* Description of how to add a configuration range */
+"You can add different ranges for different times of day by using the ➕." = "Вы можете добавить различные диапазоны для разного времени суток с помощью кнопки ➕.";
+
+/* Description of how to add a range */
+"You can add entries for different times of day by using the ➕." = "Можно добавлять записи для разного времени суток с помощью кнопки ➕.";
+
+/* Information about insulin model (1: app name) */
+"You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models." = "Вы можете выбрать, как %1$@ измеряет пиковую активность быстродействующего инсулина в соответствии с одной из этих двух моделей инсулина.";
+
+/* Description of how to edit setting */
+"You can edit a setting by tapping into any line item." = "Вы можете изменить настройку, коснувшись самой строки.";
+
+/* Description of how to edit setting */
+"You can edit the setting by tapping into the line item." = "Вы можете изменить настройку, коснувшись самой строки.";
+
+/* Information about basal rates */
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Ваша базальная норма инсулина - это количество единиц в час, которое вы хотите использовать для покрытия своих фоновых потребностей в инсулине.";
+
+/* Lower bound pre-meal information text */
+"your Glucose Safety Limit" = "Ваш безопасный предел ГК";
+
+/* Disclaimer */
+"Your healthcare provider can help you choose a Correction Range that's right for you." = "Ваш лечащий врач поможет вам выбрать подходящий для Вас диапазон коррекции.";
+
+/* Description of insulin sensitivity factor */
+"Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Ваш фактор чувствительности к инсулину (ISF) - это снижение уровня глюкозы, ожидаемое от одной единицы инсулина.";
 

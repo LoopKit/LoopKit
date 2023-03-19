@@ -1,12 +1,6 @@
 /* Format for correction range override therapy setting card */
 "%@ Range" = "%@ -tavoite";
 
-/* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ U bolus epäonnistui";
-
-/* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ U bolus ei ehkä onnistunut";
-
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ annostelee basaalia ja suosittelee bolusinsuliinia vain, jos glukoosin ennustetaan ylittävän tämän rajan seuraavien kolmen tunnin aikana.";
 
@@ -36,9 +30,6 @@
 
 /* Title text for carb ratios */
 "Carb Ratios" = "Hiilihydraattisuhteet";
-
-/* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Tarkista pumppu ennen kuin yrität uudelleen";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Valtuutus hylättiin";
@@ -112,9 +103,6 @@
 
 /* Generic pump error description */
 "Invalid Configuration" = "Virheellinen määritys";
-
-/* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "On turvallista yrittää uudelleen";
 
 /* Recovery suggestion for uncertain delivery */
 "Make sure your pump is within communication range of your phone." = "Varmista, että pumppu on puhelimen yhteysalueen sisällä.";

@@ -1,6 +1,6 @@
-/* The alert title for a resume error */
-"Error Resuming" = "Lỗi khi thực hiện Tiếp tục lại";
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
 
-/* The alert title for a suspend error */
-"Error Suspending" = "Lỗi khi thực hiện Tạm ngưng";
+/* Status highlight that a pump error occurred. */
+"Pump Error" = "Bơm lỗi";
 

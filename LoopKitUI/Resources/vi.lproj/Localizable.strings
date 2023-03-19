@@ -1,3 +1,6 @@
+/* The detail text representing no value */
+"–" = "—";
+
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -35,6 +38,9 @@
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Bạn có chắc muốn xóa hết mọi giá trị của ngăn chứa insulin?";
 
+/* Title text for multi-value basal rate warning */
+"Basal Rates" = "Lịch biểu tiêm liều nền";
+
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Liều Basal, bolus, và liều bổ sung đang giảm bằng %@%%.";
 
@@ -52,6 +58,9 @@
 
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Đang hủy liều Basal tạm thời";
+
+/* Title text for multi-value carb ratio warning */
+"Carb Ratios" = "Carb Ratios";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Các thay đổi sẽ chỉ áp dụng thời điểm này khi bạn cho phép chồng liều. Các cài đặt gốc %@ sẽ không bị ảnh hưởng.";
@@ -98,6 +107,9 @@
 /* Button title to delete all objects */
 "Delete All" = "Xóa hết";
 
+/* Title text for crossed thresholds guardrail warning */
+"Delivery Limits" = "Giới hạn liều tiêm";
+
 /* The text for the override duration setting */
 "Duration" = "Khoảng thời gian";
 
@@ -122,8 +134,20 @@
 /* The placeholder text instructing users how to enter a maximum basal rate */
 "Enter a rate in units per hour" = "Nhập tỉ lệ của đơn vị/units trên giờ";
 
+/* Segmented button title for insulin delivery log event history */
+"Event History" = "Event History";
+
 /* Section title for fast absorbing food */
 "Fast" = "Nhanh";
+
+/* Title of insulin model preset - fiasp */
+"Fiasp" = "Fiasp";
+
+/* Title text for insulin model */
+"Insulin Model" = "Chủng loại Insulin";
+
+/* Title text for multi-value insulin sensitivity warning */
+"Insulin Sensitivities" = "Độ nhạy của Insulin";
 
 /* The description shown on the insulin sensitivity schedule interface. */
 "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Độ nhạy của Insulin biểu thị đường huyết của bạn phản ứng với 1 unit insulin. Giá trị phản ứng nhỏ hơn nghĩa là bạn cần thêm insulin để đạt mục tiêu ở trên. Các giá trị quá nhỏ có thể dẫn đến tình trạng hạ đường huyết nghiêm trọng.";
@@ -177,8 +201,17 @@
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Pump Event";
 
+/* Title of insulin model preset - rapid acting adult */
+"Rapid-Acting – Adults" = "Thuốc tác động nhanh cho người lớn";
+
+/* Title of insulin model preset - rapid acting children */
+"Rapid-Acting – Children" = "Thuốc tác động nhanh cho trẻ em";
+
 /* The default placeholder string for a credential */
 "Required" = "Bắt buộc";
+
+/* Segmented button title for insulin delivery log reservoir history */
+"Reservoir" = "Reservoir";
 
 /* Title text for button to resume insulin delivery */
 "Resume Delivery" = "Tiếp tục lại việc tiêm insulin";
@@ -223,6 +256,9 @@
 /* The title for the override selection screen */
 "Temporary Override" = "Chồng liều tạm thời";
 
+/* Subtitle description of Walsh insulin model setting */
+"The legacy model used by Loop, allowing customization of action duration." = "Mô hình cũ được Loop sử dụng, cho phép tùy chỉnh thời lượng hành động.";
+
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "Thời gian tiêu hóa tối đa là  %@";
 
@@ -244,6 +280,9 @@
 
 /* Label indicating validation is occurring */
 "Verifying" = "Đang kiểm tra";
+
+/* Title of insulin model setting */
+"Walsh" = "Walsh";
 
 /* Title of an alert containing a validation warning */
 "Warning" = "Cảnh báo";

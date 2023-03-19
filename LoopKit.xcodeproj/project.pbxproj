@@ -1570,13 +1570,18 @@
 		B4CEE2E2257129780093111B /* UnfinalizedDoseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfinalizedDoseTests.swift; sourceTree = "<group>"; };
 		B4CEE2E4257129780093111B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B4D4C20C25F95A8700DA809D /* DisplayGlucoseUnitObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayGlucoseUnitObservable.swift; sourceTree = "<group>"; };
+		C10340F329C786E900FE5BA1 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C104B64A2981EE3B003A9235 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
 		C104B64B2981EE3B003A9235 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomaticDosingStrategy.swift; sourceTree = "<group>"; };
 		C10B8078297E498E00446CDD /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C10BD98429C7867600FE2BDC /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1110E981EE98CF5009BB852 /* ice_35_min_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_35_min_input.json; sourceTree = "<group>"; };
+		C121D8D329C7866D00DA0520 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C121D8D429C7866D00DA0520 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C122DF0129BBFAAE00321F8D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		C122DF0229BBFAAE00321F8D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C12D11D229C7867E000B215F /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C12EE16B1F2964B3007DB9F1 /* InsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModel.swift; sourceTree = "<group>"; };
 		C1330679297E49730067A05C /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C133067A297E49730067A05C /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1597,6 +1602,14 @@
 		C14C0AD02981EE35001B758E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C14C46E82981EE3F00E20BEF /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Main.strings; sourceTree = "<group>"; };
 		C14C46E92981EE3F00E20BEF /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C15A582429C7866600D3A5A1 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Main.strings; sourceTree = "<group>"; };
+		C15A582529C7866600D3A5A1 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C15A582629C7866600D3A5A1 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C15A582729C7866600D3A5A1 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		C15A582829C7866600D3A5A1 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		C15A582929C7866600D3A5A1 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C15A582A29C7866600D3A5A1 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C15A582B29C7866600D3A5A1 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C15E994529C6790A004AB926 /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
 		C161742B297E494D007C2E5F /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C161742C297E494D007C2E5F /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1675,14 +1688,21 @@
 		C18733CF29B94B3300519CDF /* TimeInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
 		C18733D129B94B8E00519CDF /* HKUnit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKUnit.swift; sourceTree = "<group>"; };
 		C188B83322CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinSensitivityScheduleViewController.swift; sourceTree = "<group>"; };
+		C18E73FD29C7870A0031245F /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C191D26225B3815000C26C0B /* AutomaticDoseRecommendation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutomaticDoseRecommendation.swift; sourceTree = "<group>"; };
+		C192C60529C78711001EFEA6 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C19951DA29C786C8001983C9 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C19E387F298638CE00851444 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1A1C7A529C786D1001A0FA5 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1A4ED662981EE36008F4B1A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
 		C1AA4E0F2981EE4400888F32 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C1ABE38D2245CFCD00570E82 /* UnfairLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnfairLock.swift; sourceTree = "<group>"; };
+		C1B0CFDB29C786BF0045B04D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1B2679E2995824000BCB7C1 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C1B761F229C786D90098916A /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1BCB5BA298309C4001C50FF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Main.strings; sourceTree = "<group>"; };
 		C1BCB5BB298309C4001C50FF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C1C685F929C786B70002E063 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1CAB9E826A3254800A57273 /* StoredInsulinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoredInsulinModel.swift; sourceTree = "<group>"; };
 		C1CBF61B1EEA2A1E001E4851 /* ice_1_hour_input.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_1_hour_input.json; sourceTree = "<group>"; };
 		C1D107B7297E499D008905A6 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1714,17 +1734,34 @@
 		C1E50006297E492E0018FA21 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1E50007297E492E0018FA21 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1E50008297E492E0018FA21 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1E5A6DF29C7870100703C90 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1E5F20D29C786A100BC686C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1E693D129C786E200410918 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		C1E7035C24FFFA5C00DAB534 /* CollectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTests.swift; sourceTree = "<group>"; };
 		C1E7035E25001EA500DAB534 /* HKObserverQueryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObserverQueryMock.swift; sourceTree = "<group>"; };
 		C1E703612500390B00DAB534 /* HKAnchoredObjectQueryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKAnchoredObjectQueryMock.swift; sourceTree = "<group>"; };
 		C1E84B8425C62FB100623C08 /* Modelv1v4.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = Modelv1v4.xcmappingmodel; sourceTree = "<group>"; };
 		C1F490012995821600C8BD69 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Main.strings; sourceTree = "<group>"; };
 		C1F490022995821600C8BD69 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C1F4FD5A29C7869800D7ACBC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceLogEntry+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceLogEntry+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C1FAB5C329C786B000D25073 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1FAB5C429C786B000D25073 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1FAC06228C7B0A100754AE2 /* reservoir_iob_test.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = reservoir_iob_test.json; sourceTree = "<group>"; };
 		C1FAEC1C264AD6B400A3250B /* DeviceStatusBadge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceStatusBadge.swift; sourceTree = "<group>"; };
 		C1FAEC20264AEEA300A3250B /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		C1FC393029C786F20003C587 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1FC9C6329C78690005D2515 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1FDCC0429C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Main.strings; sourceTree = "<group>"; };
+		C1FDCC0529C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1FDCC0629C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1FDCC0729C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/InsulinKit.strings; sourceTree = "<group>"; };
+		C1FDCC0829C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/LegacyInsulinDeliveryTableViewController.strings; sourceTree = "<group>"; };
+		C1FDCC0929C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1FDCC0A29C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1FDCC0B29C786F90056E652 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1FF3D4E29C786A900BDC1EC /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E9077D2624ACD59F0066A88D /* InformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationView.swift; sourceTree = "<group>"; };
 		E9077D2924ACDE2C0066A88D /* CorrectionRangeInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeInformationView.swift; sourceTree = "<group>"; };
 		E9086B2824B39EDC0062F5C8 /* ChartsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsTableViewController.swift; sourceTree = "<group>"; };
@@ -3384,6 +3421,9 @@
 				tr,
 				vi,
 				cs,
+				ar,
+				hi,
+				sk,
 			);
 			mainGroup = 43D8FDC11C728FDF0073BE78;
 			packageReferences = (
@@ -4463,6 +4503,8 @@
 				C13493B5297E498700D87305 /* da */,
 				C1D107B8297E499D008905A6 /* ja */,
 				C1D7162929C75EE200B5AB3B /* cs */,
+				C15A582629C7866600D3A5A1 /* ar */,
+				C1FDCC0629C786F90056E652 /* sk */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4488,6 +4530,8 @@
 				C1BCB5BA298309C4001C50FF /* it */,
 				C1F490012995821600C8BD69 /* pl */,
 				C122DF0129BBFAAE00321F8D /* ru */,
+				C15A582429C7866600D3A5A1 /* ar */,
+				C1FDCC0429C786F90056E652 /* sk */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -4531,6 +4575,8 @@
 				F5E0BE0827E1DBA40033557E /* sv */,
 				F5E0BE0D27E1DC490033557E /* tr */,
 				F5E0BE1527E1DCC90033557E /* vi */,
+				C15A582729C7866600D3A5A1 /* ar */,
+				C1FDCC0729C786F90056E652 /* sk */,
 			);
 			name = InsulinKit.storyboard;
 			sourceTree = "<group>";
@@ -4578,6 +4624,8 @@
 				C1D7162429C75E3B00B5AB3B /* en */,
 				C1D7162529C75E9000B5AB3B /* cs */,
 				C1D7162629C75E9F00B5AB3B /* he */,
+				C15A582A29C7866600D3A5A1 /* ar */,
+				C1FDCC0A29C786F90056E652 /* sk */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4604,6 +4652,9 @@
 				C1330679297E49730067A05C /* sv */,
 				C13493B4297E498700D87305 /* da */,
 				C1D107B7297E499D008905A6 /* ja */,
+				C15A582529C7866600D3A5A1 /* ar */,
+				C121D8D329C7866D00DA0520 /* cs */,
+				C1FDCC0529C786F90056E652 /* sk */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4632,6 +4683,9 @@
 				C1D107B9297E499D008905A6 /* ja */,
 				C1D7162729C75EBD00B5AB3B /* en */,
 				C1D7162829C75ECE00B5AB3B /* cs */,
+				C15A582929C7866600D3A5A1 /* ar */,
+				C1FAB5C329C786B000D25073 /* hi */,
+				C1FDCC0929C786F90056E652 /* sk */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4640,6 +4694,27 @@
 			isa = PBXVariantGroup;
 			children = (
 				C1D7162229C75DC700B5AB3B /* en */,
+				C15A582B29C7866600D3A5A1 /* ar */,
+				C121D8D429C7866D00DA0520 /* cs */,
+				C10BD98429C7867600FE2BDC /* da */,
+				C12D11D229C7867E000B215F /* de */,
+				C1FC9C6329C78690005D2515 /* es */,
+				C1F4FD5A29C7869800D7ACBC /* fi */,
+				C1E5F20D29C786A100BC686C /* fr */,
+				C1FF3D4E29C786A900BDC1EC /* he */,
+				C1FAB5C429C786B000D25073 /* hi */,
+				C1C685F929C786B70002E063 /* it */,
+				C1B0CFDB29C786BF0045B04D /* ja */,
+				C19951DA29C786C8001983C9 /* nb */,
+				C1A1C7A529C786D1001A0FA5 /* nl */,
+				C1B761F229C786D90098916A /* pl */,
+				C1E693D129C786E200410918 /* pt-BR */,
+				C10340F329C786E900FE5BA1 /* ro */,
+				C1FC393029C786F20003C587 /* ru */,
+				C1FDCC0B29C786F90056E652 /* sk */,
+				C1E5A6DF29C7870100703C90 /* sv */,
+				C18E73FD29C7870A0031245F /* tr */,
+				C192C60529C78711001EFEA6 /* vi */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -4667,6 +4742,8 @@
 				F5E0BE0927E1DBA40033557E /* sv */,
 				F5E0BE0E27E1DC490033557E /* tr */,
 				F5E0BE1627E1DCC90033557E /* vi */,
+				C15A582829C7866600D3A5A1 /* ar */,
+				C1FDCC0829C786F90056E652 /* sk */,
 			);
 			name = LegacyInsulinDeliveryTableViewController.storyboard;
 			sourceTree = "<group>";

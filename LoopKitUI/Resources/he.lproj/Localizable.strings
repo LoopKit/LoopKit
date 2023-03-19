@@ -1,3 +1,9 @@
+/* Separator between min and max glucose values */
+"-" = "-";
+
+/* The detail text representing no value */
+"–" = "-";
+
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -17,6 +23,9 @@
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ units remaining at %2$@";
 
+/* No comment provided by engineer. */
+"🍽" = "🍽";
+
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Absorption Time";
 
@@ -35,6 +44,9 @@
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "Are you sure you want to delete all reservoir values?";
 
+/* Title text for multi-value basal rate warning */
+"Basal Rates" = "Basal Rates";
+
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Basal, bolus, and correction insulin dose amounts are decreased by %@%%.";
 
@@ -52,6 +64,9 @@
 
 /* Title text for suspend resume button when temp basal canceling */
 "Canceling Temp Basal" = "Canceling Temp Basal";
+
+/* Title text for multi-value carb ratio warning */
+"Carb Ratios" = "Carb Ratios";
 
 /* Footer text for customizing an override from a preset (1: preset name) */
 "Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Changes will only apply this time you enable the override. The default settings of %@ will not be affected.";
@@ -98,6 +113,9 @@
 /* Button title to delete all objects */
 "Delete All" = "Delete All";
 
+/* Title text for crossed thresholds guardrail warning */
+"Delivery Limits" = "Delivery Limits";
+
 /* The text for the override duration setting */
 "Duration" = "Duration";
 
@@ -122,8 +140,20 @@
 /* The placeholder text instructing users how to enter a maximum basal rate */
 "Enter a rate in units per hour" = "Enter a rate in units per hour";
 
+/* Segmented button title for insulin delivery log event history */
+"Event History" = "Event History";
+
 /* Section title for fast absorbing food */
 "Fast" = "Fast";
+
+/* Title of insulin model preset - fiasp */
+"Fiasp" = "Fiasp";
+
+/* Title text for insulin model */
+"Insulin Model" = "Insulin Model";
+
+/* Title text for multi-value insulin sensitivity warning */
+"Insulin Sensitivities" = "Insulin Sensitivities";
 
 /* The description shown on the insulin sensitivity schedule interface. */
 "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose.";
@@ -177,8 +207,17 @@
 /* The title of the screen displaying a pump event */
 "Pump Event" = "Pump Event";
 
+/* Title of insulin model preset - rapid acting adult */
+"Rapid-Acting – Adults" = "Rapid-Acting – Adults";
+
+/* Title of insulin model preset - rapid acting children */
+"Rapid-Acting – Children" = "Rapid-Acting – Children";
+
 /* The default placeholder string for a credential */
 "Required" = "Required";
+
+/* Segmented button title for insulin delivery log reservoir history */
+"Reservoir" = "Reservoir";
 
 /* Title text for button to resume insulin delivery */
 "Resume Delivery" = "Resume Delivery";
@@ -223,11 +262,17 @@
 /* The title for the override selection screen */
 "Temporary Override" = "Temporary Override";
 
+/* Subtitle description of Walsh insulin model setting */
+"The legacy model used by Loop, allowing customization of action duration." = "The legacy model used by Loop, allowing customization of action duration.";
+
 /* Alert body displayed absorption time greater than max (1: maximum absorption time) */
 "The maximum absorption time is %@" = "The maximum absorption time is %@";
 
 /* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
 "The maximum allowed amount is %@ grams" = "The maximum allowed amount is %@ grams";
+
+/* Label for offset from midnight picker */
+"Time" = "שעה";
 
 /* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
 "Times in %1$@%2$@%3$@" = "Times in %1$@%2$@%3$@";
@@ -244,6 +289,9 @@
 
 /* Label indicating validation is occurring */
 "Verifying" = "Verifying";
+
+/* Title of insulin model setting */
+"Walsh" = "Walsh";
 
 /* Title of an alert containing a validation warning */
 "Warning" = "Warning";

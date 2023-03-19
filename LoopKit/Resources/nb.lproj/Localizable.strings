@@ -1,12 +1,6 @@
 /* Format for correction range override therapy setting card */
 "%@ Range" = "%@ Målområde";
 
-/* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ E bolus feilet";
-
-/* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ E bolus kan ha feilet";
-
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ vil levere basal og anbefale bolusinsulin bare hvis blodsukkeret ditt forventes å være over denne grensen de neste tre timene.";
 
@@ -49,9 +43,6 @@
 
 /* Title text for carb ratios */
 "Carb Ratios" = "Karb forhold";
-
-/* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Sjekk pumpa før du fortsetter";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorisasjon avslått";
@@ -130,16 +121,13 @@
 "Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Humalog (insulin lispro) er et hurtigvirkende insulin laget av Eli Lilly";
 
 /* Title text for fast acting insulin model */
-"Insulin Model" = "Insulinmodell";
+"Insulin Model" = "Insulin modell";
 
 /* Title text for insulin sensitivity */
-"Insulin Sensitivities" = "Insulinfølsomhet";
+"Insulin Sensitivities" = "Insulinsensitivitet";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Ugyldig konfigurasjon";
-
-/* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "Det er trygt å prøve igjen";
 
 /* Brand name for lyumjev insulin type
    Title for Lyumjev insulin type */
@@ -152,13 +140,13 @@
 "Make sure your pump is within communication range of your phone." = "Kontroller at pumpen er innenfor kommunikasjonsområdet til telefonen.";
 
 /* Title text for maximum basal rate configuration */
-"Maximum Basal Rate" = "Maksimal basalrate";
+"Maximum Basal Rate" = "Maks basalgrense";
 
 /* Descriptive text for maximum basal rate (1: app name) */
 "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Maksimal basaldose er den høyeste midlertidige basaldosen %1$@ er tillatt å angi.";
 
 /* Title text for maximum bolus configuration */
-"Maximum Bolus" = "Maksimal bolus-dose";
+"Maximum Bolus" = "Maks bolus";
 
 /* Descriptive text for maximum bolus */
 "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den høyeste bolusmengden du kan gi på en gang for å dekke karbohydrater eller redusere høyt blodsukker.";
@@ -227,7 +215,7 @@
 "Temp Basal" = "Midlertidig basal";
 
 /* Descriptive text for pre-meal correction range override */
-"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduser blodsukkeretmålet ditt midlertidig før et måltid for å påvirke blodsukkertoppene etter måltidet.";
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduser blodsukkermålet ditt midlertidig før et måltid for å påvirke blodsukkertoppene etter måltidet.";
 
 /* Descriptive text for workout correction range override */
 "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Øk blodsukkermålet ditt midlertidig før, under eller etter fysisk aktivitet for å redusere risikoen for hendelser med lavt blodsukker.";
@@ -266,10 +254,10 @@
 "Update Available" = "Oppdatering tilgjengelig";
 
 /* Title for workout mode */
-"Workout" = "Treningsøkt";
+"Workout" = "Trening";
 
 /* Descriptive text for basal rate */
-"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din basaldose av insulin er antall enheter per time du vil bruke for å dekke kroppens grunnleggende behov for insulin.";
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din basaldose av insulin er antall enheter per time du vil bruke for å dekke ditt bakgrunnsinsulinbehov.";
 
 /* Descriptive text for carb ratio */
 "Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Karbforholdet ditt er antall gram karbohydrater som dekkes av én enhet insulin.";

@@ -1,12 +1,6 @@
 /* Format for correction range override therapy setting card */
 "%@ Range" = "%@ Intervallo";
 
-/* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ U bolo fallito";
-
-/* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ U bolo potrebbe non aver avuto successo";
-
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ erogherà l'insulina basale e consiglierà il bolo solo se si prevede che il tuo glucosio sarà superiore a questo limite per le prossime tre ore.";
 
@@ -48,10 +42,7 @@
 "Bolus" = "Bolo";
 
 /* Title text for carb ratios */
-"Carb Ratios" = "Rapporti Carboidrati";
-
-/* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Controlla il tuo microinfusore prima di riprovare";
+"Carb Ratios" = "Rapporti carboidrati";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorizzazione negata";
@@ -130,16 +121,13 @@
 "Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Humalog (insulin Lispro) è una insulina ad azione rapida prodotta dalla Ely Lilly";
 
 /* Title text for fast acting insulin model */
-"Insulin Model" = "Modello d'insulina";
+"Insulin Model" = "Modello di azione dell'Insulina";
 
 /* Title text for insulin sensitivity */
 "Insulin Sensitivities" = "Sensibilità Insulinica";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Configurazione non valida";
-
-/* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "E sicuro riprovare";
 
 /* Brand name for lyumjev insulin type
    Title for Lyumjev insulin type */
@@ -152,7 +140,7 @@
 "Make sure your pump is within communication range of your phone." = "Fare sicuro che il microinfusore e' nel cerchio di comunicazione del cellulare";
 
 /* Title text for maximum basal rate configuration */
-"Maximum Basal Rate" = "Velocità Basale Massima";
+"Maximum Basal Rate" = "Profilo Basale Massimo";
 
 /* Descriptive text for maximum basal rate (1: app name) */
 "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Velocità Basale Massima è la velocità basale temporanea più alta che %1$@ può impostare.";

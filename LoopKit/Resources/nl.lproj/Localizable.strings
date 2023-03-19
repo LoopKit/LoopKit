@@ -1,12 +1,6 @@
 /* Format for correction range override therapy setting card */
 "%@ Range" = "%@ bereik";
 
-/* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ E bolus mislukt";
-
-/* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ E bolus is mogelijk niet geslaagd";
-
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ zal alleen een basaal geven en een bolusinsuline aanbevelen als je glucose de komende drie uur hoger zal zijn dan deze limiet.";
 
@@ -49,9 +43,6 @@
 
 /* Title text for carb ratios */
 "Carb Ratios" = "Koolhydraatratio's";
-
-/* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Controleer je pomp voordat je het nogmaals probeert";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Autorisatie Geweigerd";
@@ -133,13 +124,10 @@
 "Insulin Model" = "Insulinemodel";
 
 /* Title text for insulin sensitivity */
-"Insulin Sensitivities" = "Insulinegevoeligheid";
+"Insulin Sensitivities" = "Insulinegevoeligheden";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Ongeldige Configuratie";
-
-/* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "Veilig om opnieuw te proberen";
 
 /* Brand name for lyumjev insulin type
    Title for Lyumjev insulin type */

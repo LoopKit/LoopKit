@@ -1,12 +1,6 @@
 /* Format for correction range override therapy setting card */
 "%@ Range" = "%@ Диапазон";
 
-/* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ ед Болюс не состоялся ";
-
-/* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ ед. возможная неудача подачи болюса";
-
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ будет вводить базу и рекомендовать болюсы, только если прогнозируется, что уровень глюкозы будет выше этого предела в течение следующих трех часов.";
 
@@ -49,9 +43,6 @@
 
 /* Title text for carb ratios */
 "Carb Ratios" = "Соотношения углеводов";
-
-/* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Проверьте помпу перед повторением";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Авторизация не состоялась";
@@ -137,9 +128,6 @@
 
 /* Generic pump error description */
 "Invalid Configuration" = "Неверная конфигурация";
-
-/* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "Можно повторить";
 
 /* Brand name for lyumjev insulin type
    Title for Lyumjev insulin type */

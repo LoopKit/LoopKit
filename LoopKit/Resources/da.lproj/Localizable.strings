@@ -1,12 +1,6 @@
 /* Format for correction range override therapy setting card */
 "%@ Range" = "%@ område";
 
-/* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ E bolus fejlede";
-
-/* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ E bolus er måske ikke gennemført";
-
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ vil kun afgive basal og anbefale bolus, hvis blodsukkeret forventes at være over denne grænse i de næste tre timer.";
 
@@ -49,9 +43,6 @@
 
 /* Title text for carb ratios */
 "Carb Ratios" = "Kulhydratforhold";
-
-/* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "Kontroller din pumpe, før du prøver igen";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Tilladelse nægtet";
@@ -137,9 +128,6 @@
 
 /* Generic pump error description */
 "Invalid Configuration" = "Forkert indstilling";
-
-/* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "Det er sikkert at forsøge igen";
 
 /* Brand name for lyumjev insulin type
    Title for Lyumjev insulin type */
@@ -266,7 +254,7 @@
 "Update Available" = "Opdatering tilgængelig";
 
 /* Title for workout mode */
-"Workout" = "Træning";
+"Workout" = "Motion";
 
 /* Descriptive text for basal rate */
 "Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "En basalrate, er det antal af enheder i timen, som du skal bruge for at dække dit basale insulinbehov.";

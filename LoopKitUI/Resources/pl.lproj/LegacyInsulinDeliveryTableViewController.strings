@@ -20,10 +20,10 @@
 "PZQ-gO-084.text" = "...";
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[0] = "Reservoir"; ObjectID = "TyZ-xm-mVN"; */
-"TyZ-xm-mVN.segmentTitles[0]" = "Reservoir";
+"TyZ-xm-mVN.segmentTitles[0]" = "Zbiorniczek";
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[1] = "Event History"; ObjectID = "TyZ-xm-mVN"; */
-"TyZ-xm-mVN.segmentTitles[1]" = "Event History";
+"TyZ-xm-mVN.segmentTitles[1]" = "Historia zdarzeń";
 
 /* Class = "UINavigationItem"; title = "Insulin Delivery"; ObjectID = "vls-EW-uwI"; */
 "vls-EW-uwI.title" = "Insulin Delivery";

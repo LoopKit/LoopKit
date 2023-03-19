@@ -8,13 +8,13 @@
 "Carbs" = "Kolhydrater";
 
 /* The title text for the glucose correction range schedule */
-"Correction Range" = "Målvärden";
+"Correction Range" = "Målvärde";
 
 /* The title for the cell displaying diagnostic data */
 "Diagnostic" = "Diagnostisk";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Ange ditt 6-siffriga pump-ID";
+"Enter the 6-digit pump ID" = "Ange 6-siffrigt pump-ID";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Generera data";
@@ -24,7 +24,7 @@
 "Insulin Sensitivity" = "Insulinkänslighet";
 
 /* The title text for the pump ID */
-"Pump ID" = "Pump ID";
+"Pump ID" = "Pump-ID";
 
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "Reservoar";

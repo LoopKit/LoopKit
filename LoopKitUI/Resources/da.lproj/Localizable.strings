@@ -19,9 +19,6 @@
 /* No comment provided by engineer. */
 "%@" = "%@";
 
-/* No comment provided by engineer. */
-"%@, " = "%@, ";
-
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -37,6 +34,9 @@
 /* The format for an override preset cell. (1: symbol)(2: name)
    The format for an override symbol and name (1: symbol)(2: name) */
 "%1$@ %2$@" = "%1$@ %2$@";
+
+/* Information about insulin action duration (1: app name) */
+"%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%1$@ antager, at den insulin, der er leveret, arbejder aktivt på at sænke din glukose i 6 timer. Denne indstilling kan ikke ændres.";
 
 /* Lower bound workout information text format (1: app name) */
 "%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ eller din glukose sikkerhedsgrænse afhængigt af, hvad der er højest";
@@ -77,9 +77,6 @@
 
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "En værdi på 0 E/time betyder, at du ikke vil modtage basal i den angivende tidesperiode.";
-
-/* No comment provided by engineer. */
-"Above dynamic data" = "Over dynamisk data";
 
 /* No comment provided by engineer. */
 "Above the save button" = "Over gem knappen";
@@ -131,12 +128,6 @@
 
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Basal-, bolus- og korrektionsinsulindoser er uændrede.";
-
-/* No comment provided by engineer. */
-"Below dynamic data" = "Under dynamisk data";
-
-/* No comment provided by engineer. */
-"Bottom" = "Bund";
 
 /* No comment provided by engineer. */
 "Bottom component" = "Nederst komponent";
@@ -242,12 +233,6 @@
 
 /* The text for the override duration setting */
 "Duration" = "Varighed";
-
-/* No comment provided by engineer. */
-"Dynamic component #%@" = "Dynamisk komponent #%@";
-
-/* No comment provided by engineer. */
-"Dynamic data %@" = "Dynamiske data %@";
 
 /* Text for edit button
    The title for the enabled custom preset editing screen */
@@ -398,14 +383,17 @@
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Maksimal basalrate";
 
+/* Information about maximum basal rate (1: app name) */
+"Maximum Basal Rate is the maximum automatically adjusted basal rate that %1$@ is allowed to enact to help reach your correction range." = "Maksimal basalrate er den maksimale automatisk justerede basalrate, som %1$@ har lov til at sætte for at hjælpe med at nå dit korrektionsområde.";
+
 /* The title text for the maximum bolus value */
 "Maximum Bolus" = "Maksimal bolus";
 
+/* Information about maximum bolus (1: app name) */
+"Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den højeste bolus, som du vil tillade %1$@ at anbefale på én gang for at dække kulhydrater eller nedbringe højt blodsukker.";
+
 /* Section title for medium absorbing food */
 "Medium" = "Medium";
-
-/* No comment provided by engineer. */
-"Middle" = "Mellem";
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
@@ -638,9 +626,6 @@
 "To be implemented" = "Ikke implementeret";
 
 /* No comment provided by engineer. */
-"Top" = "Top";
-
-/* No comment provided by engineer. */
 "Top component" = "Top-komponent";
 
 /* The text indicating Total for Daily Schedule Basal */
@@ -703,6 +688,9 @@
 
 /* Description of how to add a range */
 "You can add entries for different times of day by using the ➕." = "Du kan tilføje forskellige poster for forskellige tidspunkter af dagen ved at bruge ➕.";
+
+/* Information about insulin model (1: app name) */
+"You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models." = "Du kan vælge, hvordan %1$@ måler hurtigtvirkende insulins maksimale aktivitet i henhold til en af disse to insulinmodeller.";
 
 /* Description of how to edit setting */
 "You can edit a setting by tapping into any line item." = "Du kan redigere en indstilling ved at trykke på en linje.";

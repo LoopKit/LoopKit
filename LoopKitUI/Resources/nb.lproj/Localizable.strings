@@ -19,9 +19,6 @@
 /* No comment provided by engineer. */
 "%@" = "%@";
 
-/* No comment provided by engineer. */
-"%@, " = "%@ ,";
-
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -85,9 +82,6 @@
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "En verdi på 0 E/time betyr at du ikke vil få noe basalinsulin.";
 
 /* No comment provided by engineer. */
-"Above dynamic data" = "Over dynamiske data";
-
-/* No comment provided by engineer. */
 "Above the save button" = "Over lagre-knappen";
 
 /* Title of the carb entry absorption time cell */
@@ -137,12 +131,6 @@
 
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Insulindoser for basal, bolus og korreksjon er uendret.";
-
-/* No comment provided by engineer. */
-"Below dynamic data" = "Under dynamiske data";
-
-/* No comment provided by engineer. */
-"Bottom" = "Bunn";
 
 /* No comment provided by engineer. */
 "Bottom component" = "Nederste komponent";
@@ -248,12 +236,6 @@
 
 /* The text for the override duration setting */
 "Duration" = "Varighet";
-
-/* No comment provided by engineer. */
-"Dynamic component #%@" = "Dynamisk komponent #%@";
-
-/* No comment provided by engineer. */
-"Dynamic data %@" = "Dynamisk data %@";
 
 /* Text for edit button
    The title for the enabled custom preset editing screen */
@@ -415,9 +397,6 @@
 
 /* Section title for medium absorbing food */
 "Medium" = "Medium";
-
-/* No comment provided by engineer. */
-"Middle" = "Middels";
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
@@ -651,9 +630,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Skal implementeres";
-
-/* No comment provided by engineer. */
-"Top" = "Topp";
 
 /* No comment provided by engineer. */
 "Top component" = "Topp komponent";

@@ -19,9 +19,6 @@
 /* No comment provided by engineer. */
 "%@" = "%@";
 
-/* No comment provided by engineer. */
-"%@, " = "%@, ";
-
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -79,9 +76,6 @@
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Une valeur de 0 U/hr veut dire que vous ne recevrez aucune insuline basale.";
 
 /* No comment provided by engineer. */
-"Above dynamic data" = "Au dessus des données dynamiques";
-
-/* No comment provided by engineer. */
 "Above the save button" = "Au dessus du bouton sauvegarder";
 
 /* Title of the carb entry absorption time cell */
@@ -131,12 +125,6 @@
 
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Le débit de basal, les bolus, et le niveau de l’insuline de correction ne sont pas affectés.";
-
-/* No comment provided by engineer. */
-"Below dynamic data" = "En dessous des données dynamiques";
-
-/* No comment provided by engineer. */
-"Bottom" = "Bas";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "Annuler";
@@ -239,12 +227,6 @@
 
 /* The text for the override duration setting */
 "Duration" = "Durée";
-
-/* No comment provided by engineer. */
-"Dynamic component #%@" = "Composant dynamique #%@";
-
-/* No comment provided by engineer. */
-"Dynamic data %@" = "Données dynamiques %@";
 
 /* Text for edit button
    The title for the enabled custom preset editing screen */
@@ -400,9 +382,6 @@
 
 /* Section title for medium absorbing food */
 "Medium" = "Moyen";
-
-/* No comment provided by engineer. */
-"Middle" = "Milieu";
 
 /* Placeholder for minimum value in glucose range */
 "min" = "min";
@@ -633,9 +612,6 @@
 
 /* No comment provided by engineer. */
 "To be implemented" = "Pas encore implémenté";
-
-/* No comment provided by engineer. */
-"Top" = "Haut";
 
 /* No comment provided by engineer. */
 "Top component" = "Composant supérieur";

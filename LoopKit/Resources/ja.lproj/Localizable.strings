@@ -1,14 +1,14 @@
-/* Describes a certain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus failed" = "%1$@ U のボーラスが不成功";
-
-/* Describes an uncertain bolus failure (1: size of the bolus in units) */
-"%1$@ U bolus may not have succeeded" = "%1$@ U のボーラスが成功していないかもしれません";
-
 /* The error description describing when Health sharing was denied */
 "Authorization Denied" = "認証が拒否されました";
 
-/* Recovery instruction for an uncertain bolus failure */
-"Check your pump before retrying" = "やり直す前にポンプを確認してください";
+/* Title text for basal rates */
+"Basal Rates" = "基礎レート";
+
+/* Title for bolus dose type */
+"Bolus" = "ボーラス";
+
+/* Title text for carb ratios */
+"Carb Ratios" = "Carb Ratios";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "認証が拒否されました";
@@ -21,6 +21,12 @@
 
 /* Generic pump error description */
 "Connection Failure" = "接続エラー";
+
+/* Title text for glucose target range */
+"Correction Range" = "ターゲット範囲";
+
+/* Title text for delivery limits */
+"Delivery Limits" = "注入限度";
 
 /* Generic pump error description */
 "Device Refused" = "機器拒否";
@@ -37,17 +43,30 @@
 /* Glucose trend down-down-down */
 "Falling very fast" = "超急降下";
 
+/* Brand name for fiasp insulin type
+   Title for Fiasp insulin type */
+"Fiasp" = "Fiasp";
+
 /* Glucose trend flat */
 "Flat" = "平坦";
 
 /* The short unit display string for grams per U */
 "g/U" = "g/U";
 
+/* Title text for fast acting insulin model */
+"Insulin Model" = "インスリンモデル";
+
+/* Title text for insulin sensitivity */
+"Insulin Sensitivities" = "インスリン効果値";
+
 /* Generic pump error description */
 "Invalid Configuration" = "コンフィグレーションが無効";
 
-/* Recovery instruction for a certain bolus failure */
-"It is safe to retry" = "やり直せます";
+/* Title text for maximum basal rate configuration */
+"Maximum Basal Rate" = "最大基礎レート";
+
+/* Title text for maximum bolus configuration */
+"Maximum Bolus" = "最大ボーラス";
 
 /* The short unit display string for milligrams per deciliter per U */
 "mg/dL/U" = "mg/dL/U";
@@ -70,6 +89,9 @@
 /* The error recovery suggestion when Health sharing was denied */
 "Please re-enable sharing in Health" = "ヘルスケアの共有を有効にしてください";
 
+/* Title for pre-meal mode */
+"Pre-Meal" = "食前";
+
 /* Glucose trend up */
 "Rising" = "上昇";
 
@@ -78,6 +100,9 @@
 
 /* Glucose trend up-up-up */
 "Rising very fast" = "超急上昇";
+
+/* Title for suspend dose type */
+"Suspended" = "一時停止";
 
 /* The short unit display string for international units of insulin */
 "U" = "U";
@@ -96,4 +121,7 @@
 
 /* The long unit display string for international units of insulin per hour */
 "Units/hour" = "U/時";
+
+/* Title for workout mode */
+"Workout" = "運動";
 

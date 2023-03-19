@@ -2,7 +2,7 @@
 "Basal Rates" = "Débits basaux";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Ratios de glucides";
+"Carb Ratios" = "Ratios Insuline-Glucides";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Glucides";
@@ -14,7 +14,7 @@
 "Diagnostic" = "Diagnostique";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Entrez l’ID de la pompe, composé de 6 lettres et chiffres";
+"Enter the 6-digit pump ID" = "Entrée l’ID de pompe de 6 chiffres";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Générer les données";

@@ -1,5 +1,5 @@
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Dawki podstawowe";
+"Basal Rates" = "Dawka Podstawowa (Baza)";
 
 /* The title of the carb ratios schedule screen */
 "Carb Ratios" = "Współczynniki węglowodanowe";
@@ -8,13 +8,13 @@
 "Carbs" = "Węglowodany";
 
 /* The title text for the glucose correction range schedule */
-"Correction Range" = "Zakres korekty";
+"Correction Range" = "Zakres docelowy";
 
 /* The title for the cell displaying diagnostic data */
 "Diagnostic" = "Diagnostyka";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Wprowadź 6-cyfrowy ID pompy";
+"Enter the 6-digit pump ID" = "Wprowadź 6-cyfrowy numer pompy";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Generuj dane";
@@ -24,10 +24,10 @@
 "Insulin Sensitivity" = "Insulinowrażliwość";
 
 /* The title text for the pump ID */
-"Pump ID" = "Pompą ID";
+"Pump ID" = "ID pompy";
 
 /* The title for the cell navigating to the reservoir screen */
-"Reservoir" = "Zbiornik";
+"Reservoir" = "Zbiorniczek";
 
 /* Title for the cell resetting the data manager */
 "Reset" = "Resetuj";

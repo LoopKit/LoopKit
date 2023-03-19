@@ -1,0 +1,12 @@
+/* Class = "UILabel"; text = "Title"; ObjectID = "7Fi-wD-gf2"; */
+"7Fi-wD-gf2.text" = "Názov";
+
+/* Class = "UILabel"; text = "Detail"; ObjectID = "9jm-X6-3QA"; */
+"9jm-X6-3QA.text" = "Detail";
+
+/* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[0] = "Reservoir"; ObjectID = "TyZ-xm-mVN"; */
+"TyZ-xm-mVN.segmentTitles[0]" = "Rezervoár";
+
+/* Class = "UINavigationItem"; title = "Insulin Delivery"; ObjectID = "vls-EW-uwI"; */
+"vls-EW-uwI.title" = "Podávanie inzulínu";
+

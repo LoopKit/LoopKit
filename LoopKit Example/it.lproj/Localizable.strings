@@ -2,7 +2,7 @@
 "Basal Rates" = "Velocità basali";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Rapporti Carboidrati";
+"Carb Ratios" = "Rapporti carboidrati";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Carb.";
@@ -14,7 +14,7 @@
 "Diagnostic" = "Dati diagnostici";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Inserisci 6-cifre ID micro";
+"Enter the 6-digit pump ID" = "Inserire 6-cifre ID micro";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Genera dati";
@@ -24,7 +24,7 @@
 "Insulin Sensitivity" = "Sensibilità insulinica";
 
 /* The title text for the pump ID */
-"Pump ID" = "ID pompa";
+"Pump ID" = "ID microinfusore";
 
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "Serbatoio";
