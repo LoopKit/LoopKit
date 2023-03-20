@@ -5,7 +5,7 @@
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ va livra bazala şi bolusul recomandat numai dacă glucoza este estimată a fi peste această limită pentru următoarele trei ore.";
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
-"%1$@%2$@%3$@" = "%1$@ %2$@%3$@";
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Descriptive text for guardrail high value warning for schedule interface */
 "A value you have entered is higher than what is typically recommended for most people." = "Valoarea pe care ați introdus-o este mai mare decât cea recomandată de obicei pentru majoritatea oamenilor.";

@@ -1,6 +1,18 @@
 /* Separator between min and max glucose values */
 "-" = "-";
 
+/* Appends a full-stop to a statement */
+"%@." = "%@ .";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@ j";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ jednotiek zostávajúcich na %2$@";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
+
 /* The title for the override emoji activity section */
 "Activity" = "Aktivita";
 

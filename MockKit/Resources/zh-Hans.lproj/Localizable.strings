@@ -1,6 +1,3 @@
-/* The alert title for a resume error */
-"Error Resuming" = "无法恢复";
-
-/* The alert title for a suspend error */
-"Error Suspending" = "无法暂停";
+/* Status highlight that a pump error occurred. */
+"Pump Error" = "胰岛素泵错误";
 
