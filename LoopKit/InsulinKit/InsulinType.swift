@@ -15,6 +15,7 @@ public enum InsulinType: Int, Codable, CaseIterable {
     case fiasp
     case lyumjev
     case afrezza
+    case lantus
     
     public var title: String {
         switch self {
@@ -30,6 +31,8 @@ public enum InsulinType: Int, Codable, CaseIterable {
             return LocalizedString("Lyumjev", comment: "Title for Lyumjev insulin type")
         case .afrezza:
             return LocalizedString("Afrezza", comment: "Title for Afrezza insulin type")
+        case .lantus:
+            return LocalizedString("Lantus (insulin glargine)", comment: "Title for Lantus insulin type")
         }
     }
     
@@ -47,6 +50,8 @@ public enum InsulinType: Int, Codable, CaseIterable {
             return LocalizedString("Lyumjev", comment: "Brand name for lyumjev insulin type")
         case .afrezza:
             return LocalizedString("Afrezza", comment: "Brand name for afrezza insulin type")
+        case .lantus:
+            return LocalizedString("Lantus", comment: "Brand name for lantus insulin type")
         }
     }
     
@@ -64,15 +69,26 @@ public enum InsulinType: Int, Codable, CaseIterable {
             return LocalizedString("Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly", comment: "Description for lyumjev insulin type")
         case .afrezza:
             return LocalizedString("Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind", comment: "Description for afrezza insulin type")
+        case .lantus:
+            return LocalizedString("Lantus is a long acting basal insulin that is injected either once or twice a day", comment: "Description for lantus insulin type")
         }
     }
     
     public var pumpAdministerable: Bool {
         switch self {
-        case .afrezza:
+        case .afrezza, .lantus:
             return false
         default:
             return true
+        }
+    }
+    
+    public var isBasal: Bool {
+        switch self {
+        case .lantus:
+            return true
+        default:
+            return false
         }
     }
 }

@@ -40,6 +40,7 @@ extension HKQuantitySample {
         var metadata: [String: Any] = [
             HKMetadataKeySyncVersion: syncVersion,
             HKMetadataKeySyncIdentifier: syncIdentifier,
+            HKMetadataKeyWasUserEntered: dose.manuallyEntered,
             MetadataKeyHasLoopKitOrigin: true,
             MetadataKeyManuallyEntered: dose.manuallyEntered
         ]
@@ -54,11 +55,6 @@ extension HKQuantitySample {
             metadata[MetadataKeyIsSuspend] = true
 
         case .basal, .tempBasal:
-            // Ignore 0-duration basal entries
-            guard dose.endDate.timeIntervalSince(dose.startDate) > .ulpOfOne else {
-                return nil
-            }
-
             metadata[HKMetadataKeyInsulinDeliveryReason] = HKInsulinDeliveryReason.basal.rawValue
 
             if let basalRate = dose.scheduledBasalRate {
@@ -210,6 +206,7 @@ enum InsulinTypeHealthKitRepresentation: String {
     case fiasp = "Fiasp"
     case lyumjev = "Lyumjev"
     case afrezza = "Afrezza"
+    case lantus = "Lantus"
 }
 
 extension InsulinType {
@@ -227,6 +224,8 @@ extension InsulinType {
             return InsulinTypeHealthKitRepresentation.lyumjev.rawValue
         case .afrezza:
             return InsulinTypeHealthKitRepresentation.afrezza.rawValue
+        case .lantus:
+            return InsulinTypeHealthKitRepresentation.lantus.rawValue
         }
     }
     
@@ -244,6 +243,8 @@ extension InsulinType {
             self = .lyumjev
         case InsulinTypeHealthKitRepresentation.afrezza.rawValue:
             self = .afrezza
+        case InsulinTypeHealthKitRepresentation.lantus.rawValue:
+            self = .lantus
         default:
             return nil
         }
