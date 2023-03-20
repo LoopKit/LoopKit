@@ -26,6 +26,9 @@
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "%1$d אחוז בוצע";
+
 /* No comment provided by engineer. */
 "🍽" = "🍽";
 
