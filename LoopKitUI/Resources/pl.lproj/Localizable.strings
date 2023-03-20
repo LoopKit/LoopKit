@@ -48,7 +48,7 @@
 "%1$@ U" = "%1$@ J";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ jednostek pozostających w %2$@";
+"%1$@ units remaining at %2$@" = "%1$@ jednostek pozostaje w %2$@";
 
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
    Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
@@ -360,7 +360,7 @@
 "Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@" = "Przerwane %1$@ : <b> %2$@ </b> z %3$@ %4$@";
 
 /* Guardrail info text format */
-"It can be set as low as %1$@. It can be set as high as %2$@." = "Można go ustawić w zakresie od %1$@. do %2$@.";
+"It can be set as low as %1$@. It can be set as high as %2$@." = "Można go ustawić w zakresie od %1$@ do %2$@.";
 
 /* Title text for the low basal rate warning */
 "Low Basal Rate" = "Niska dawka podstawowa";
@@ -426,7 +426,7 @@
 "New Entry" = "Nowy wpis";
 
 /* The title for the new override preset entry screen */
-"New Preset" = "Nowe ustawienie wstępne";
+"New Preset" = "Nowy Cel Tymczasowy";
 
 /* Title text for the zero basal rate warning */
 "No Basal Insulin" = "Bez insuliny bazowej";
@@ -442,7 +442,7 @@
 "Override History" = "Historia Celu Tymczasowego";
 
 /* The title text for the override presets screen */
-"Override Presets" = "Wstępne ustawienia pominięcia";
+"Override Presets" = "Override Presets";
 
 /* Text directing the user to configure override presets */
 "Override presets can be set up under the 'Configuration' section of the settings screen." = "Wstępne ustawienia pominięcia można skonfigurować w części „Konfiguracja” na ekranie ustawień.";
@@ -612,7 +612,7 @@
 "The rapid-acting child model assumes peak activity at 65 minutes." = "Szybko działający model dziecka zakłada szczytową aktywność po 65 minutach.";
 
 /* Information about basal rate scheduling */
-"The schedule starts at midnight and cannot contain a rate of 0 U/hr." = "Harmonogram rozpoczyna się o północy i nie może zawierać stawki 0 U/godz.";
+"The schedule starts at midnight and cannot contain a rate of 0 U/hr." = "Harmonogram rozpoczyna się o północy i nie może zawierać dawki 0 J/godz.";
 
 /* Therapy Settings screen title */
 "Therapy Settings" = "Ustawienia terapii";
@@ -653,7 +653,7 @@
 "Top component" = "Górny składnik";
 
 /* The text indicating Total for Daily Schedule Basal */
-"Total" = "Całkowity";
+"Total" = "Łącznie";
 
 /* The text indicating U/day for Daily Schedule Basal */
 "U/day" = "J/dzień";

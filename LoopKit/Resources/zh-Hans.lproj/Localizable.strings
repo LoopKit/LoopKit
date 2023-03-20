@@ -1,5 +1,11 @@
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
 /* The error description describing when Health sharing was denied */
 "Authorization Denied" = "没有权限";
+
+/* Title text for basal rates */
+"Basal Rates" = "基础率";
 
 /* The description of an error returned when attempting to delete a sample not shared by the current app */
 "com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "没有权限";
@@ -12,6 +18,9 @@
 
 /* Generic pump error description */
 "Connection Failure" = "连接失败";
+
+/* Title text for delivery limits */
+"Delivery Limits" = "输注限制";
 
 /* Generic pump error description */
 "Device Refused" = "设备拒绝连接";
@@ -63,6 +72,9 @@
 
 /* Glucose trend up-up-up */
 "Rising very fast" = "非常快速上升";
+
+/* Title for suspend dose type */
+"Suspended" = "暂停";
 
 /* The short unit display string for international units of insulin per hour */
 "U/hr" = "U/小时";

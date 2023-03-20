@@ -4,6 +4,9 @@
 /* Descriptive format string for glucose safety limit (1: app name) */
 "%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ annostelee basaalia ja suosittelee bolusinsuliinia vain, jos glukoosin ennustetaan ylittävän tämän rajan seuraavien kolmen tunnin aikana.";
 
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
 /* Descriptive text for guardrail high value warning for schedule interface */
 "A value you have entered is higher than what is typically recommended for most people." = "Antamasi arvo on suurempi kuin useimmille ihmisille yleensä suositeltava arvo.";
 

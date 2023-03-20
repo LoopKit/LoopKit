@@ -10,6 +10,12 @@
 /* The title text for the glucose correction range schedule */
 "Correction Range" = "نطاق التصحيح";
 
+/* The placeholder text instructing users how to enter a pump ID */
+"Enter the 6-digit pump ID" = "Enter the 6-digit pump ID";
+
+/* The title text for the pump ID */
+"Pump ID" = "Pump ID";
+
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "الخزان";
 

@@ -20,6 +20,9 @@
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ unidades restantes em %2$@";
 
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Tempo de Absorção";
 
