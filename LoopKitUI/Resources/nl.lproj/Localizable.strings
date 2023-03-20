@@ -48,7 +48,7 @@
 "%1$@ U" = "%1$@ E";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ nog actieve eenheden %2$@";
+"%1$@ units remaining at %2$@" = "%1$@ eenheden over om %2$@";
 
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
    Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */

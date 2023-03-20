@@ -20,7 +20,7 @@
 "%@" = "%@";
 
 /* Appends a full-stop to a statement */
-"%@." = "%@.";
+"%@." = "%@ .";
 
 /* The format for an insulin needs percentage. */
 "%@%% of normal insulin" = "%@%% av normalt insulin";
@@ -48,7 +48,7 @@
 "%1$@ U" = "%1$@ E";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ enheter gjennstår klokken %2$@";
+"%1$@ units remaining at %2$@" = "%1$@ enheter gjenstår ved %2$@";
 
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
    Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
@@ -335,6 +335,9 @@
 /* Information about target range */
 "If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Hvis du har brukt en CGM før, er du sannsynligvis kjent med målområdet som et bredt spekter av verdier du vil ha for blodsukkervarslene dine, for eksempel 70-180 mg/dL eller 90-200 mg/dL.";
 
+/* No comment provided by engineer. */
+"info" = "info";
+
 /* Title text for insulin model */
 "Insulin Model" = "Insulin modell";
 
@@ -523,6 +526,9 @@
 /* The section header text for a scheduled custom preset */
 "SCHEDULED PRESET" = "PLANLAGT OVERRIDE";
 
+/* No comment provided by engineer. */
+"Selected" = "Valgt";
+
 /* Section title for slow absorbing food */
 "Slow" = "Langsom";
 
@@ -570,6 +576,9 @@
 
 /* The title for the override selection screen */
 "Temporary Override" = "Midlertidig overstyring";
+
+/* No comment provided by engineer. */
+"Test" = "Test";
 
 /* Information about pre-meal range relative to correction range
    Information about workout range relative to correction range */
@@ -652,6 +661,9 @@
 /* Accessibility value for an unknown value
    The default title to use when an entry has none */
 "Unknown" = "Ukjent";
+
+/* No comment provided by engineer. */
+"Unselected" = "Ikke valgt";
 
 /* Title for selection when no insulin type is selected. */
 "Unset" = "Fjern";

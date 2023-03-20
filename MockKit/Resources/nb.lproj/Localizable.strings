@@ -11,7 +11,7 @@
 "No Insulin" = "Ingen insulin";
 
 /* Status highlight that pump has a dead battery. */
-"Pump Battery Dead" = "Pumpe batteri er dødt";
+"Pump Battery Dead" = "Pumpebatteri er dødt";
 
 /* Status highlight that a pump error occurred. */
 "Pump Error" = "Pumpefeil";

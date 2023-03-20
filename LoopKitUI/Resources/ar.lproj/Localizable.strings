@@ -1,6 +1,9 @@
 /* The detail text representing no value */
 "–" = "—";
 
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
 /* The title of the view controller to create a new carb entry */
 "Add Carb Entry" = "Add Carb Entry";
 

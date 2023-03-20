@@ -1,3 +1,6 @@
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
+
 /* Title text for basal rates */
 "Basal Rates" = "Bazálne dávky";
 
