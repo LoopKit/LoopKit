@@ -57,6 +57,15 @@
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "%1$d procent voltooid.";
+
+/* No comment provided by engineer. */
+"%lld" = "%lld";
+
+/* No comment provided by engineer. */
+"%lld, " = "%lld, ";
+
 /* No comment provided by engineer. */
 "🍽" = "🍽";
 
@@ -237,6 +246,9 @@
 /* The text for the override duration setting */
 "Duration" = "Duur";
 
+/* No comment provided by engineer. */
+"Dynamic component #%lld" = "Dynamische component #%lld";
+
 /* Text for edit button
    The title for the enabled custom preset editing screen */
 "Edit" = "Bewerken";
@@ -334,6 +346,9 @@
 
 /* Information about target range */
 "If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Als je al eerder een CGM hebt gebruikt, ben je waarschijnlijk bekend met een streefbereik met een grote spreidingsbreedte die je wilt voor je glucosemeldingswaarschuwingen, zoals 3,9-10,0 mmol/L of 5,0-11,1 mmol/L.";
+
+/* No comment provided by engineer. */
+"info" = "Informatie";
 
 /* Title text for insulin model */
 "Insulin Model" = "Insulinemodel";
@@ -523,6 +538,9 @@
 /* The section header text for a scheduled custom preset */
 "SCHEDULED PRESET" = "GEPLAND PROGRAMMA";
 
+/* No comment provided by engineer. */
+"Selected" = "Geselecteerd";
+
 /* Section title for slow absorbing food */
 "Slow" = "Langzaam";
 
@@ -570,6 +588,9 @@
 
 /* The title for the override selection screen */
 "Temporary Override" = "Tijdelijke Override";
+
+/* No comment provided by engineer. */
+"Test" = "Test";
 
 /* Information about pre-meal range relative to correction range
    Information about workout range relative to correction range */
@@ -652,6 +673,9 @@
 /* Accessibility value for an unknown value
    The default title to use when an entry has none */
 "Unknown" = "Onbekend";
+
+/* No comment provided by engineer. */
+"Unselected" = "Niet Geselecteerd";
 
 /* Title for selection when no insulin type is selected. */
 "Unset" = "Niet Ingesteld";

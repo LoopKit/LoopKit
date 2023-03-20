@@ -1,3 +1,6 @@
+/* No comment provided by engineer. */
+"%@ has been unable to communicate with the Simulator Pump since %@.\n\nWithout communication, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered." = "%1$@ kan niet communiceren met de Pompsimulator sinds %2$@.\n\nZonder communicatie kan de app geen opdrachten meer versturen voor insulinetoediening of nauwkeurige recente informatie weergeven over jouw actieve insuline of de insuline die is toegediend.";
+
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -43,6 +46,9 @@
 
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Insulinetype";
+
+/* No comment provided by engineer. */
+"Mock Version Check %@" = "Mock Versie Check %@";
 
 /* Button title to acknowledge error
    Default acknowledgement */
