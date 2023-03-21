@@ -79,7 +79,6 @@ private class FoodEmojiDataSource: EmojiDataSource {
             "🫑", // bell pepper
             "🧅", // onion
             "🧄", // garlic
-            "🥔", // potato
             "🥒", // cucumber
             "🥗", // green salad
             "🥬", // leafy green
