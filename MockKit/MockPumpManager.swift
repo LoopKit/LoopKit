@@ -619,6 +619,12 @@ public final class MockPumpManager: TestingPumpManager {
     }
 }
 
+extension MockPumpManager {
+    public func acceptDefaultsAndSkipOnboarding() {
+        // TODO: Implement This
+    }
+}
+
 // MARK: - AlertResponder implementation
 extension MockPumpManager {
     public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) {

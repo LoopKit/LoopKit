@@ -572,6 +572,10 @@ public final class MockCGMManager: TestingCGMManager {
         guard !pastSamples.isEmpty else { return }
         sendCGMReadingResult(CGMReadingResult.newData(pastSamples.map { NewGlucoseSample($0, device: device) } ))
     }
+    
+    public func acceptDefaultsAndSkipOnboarding() {
+        // TODO: Implement This
+    }
 }
 
 fileprivate extension NewGlucoseSample {

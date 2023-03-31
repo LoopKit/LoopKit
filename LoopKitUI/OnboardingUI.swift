@@ -81,7 +81,7 @@ public protocol CGMManagerProvider: AnyObject {
     /// - Parameters:
     ///     - identifier: The identifier of the CGM manager to onboard.
     /// - Returns: Either a conforming view controller to onboard the CGM manager, a newly onboarded CGM manager, or an error.
-    func onboardCGMManager(withIdentifier identifier: String) -> Result<OnboardingResult<CGMManagerViewController, CGMManager>, Error>
+    func onboardCGMManager(withIdentifier identifier: String, prefersToSkipUserInteraction: Bool) -> Result<OnboardingResult<CGMManagerViewController, CGMManager>, Error>
 }
 
 public protocol PumpManagerProvider: AnyObject {
@@ -110,7 +110,7 @@ public protocol PumpManagerProvider: AnyObject {
     /// - Parameters:
     ///     - identifier: The identifier of the pump manager to onboard.
     /// - Returns: Either a conforming view controller to onboard the pump manager, a newly onboarded pump manager, or an error.
-    func onboardPumpManager(withIdentifier identifier: String, initialSettings settings: PumpManagerSetupSettings) -> Result<OnboardingResult<PumpManagerViewController, PumpManager>, Error>
+    func onboardPumpManager(withIdentifier identifier: String, initialSettings settings: PumpManagerSetupSettings, prefersToSkipUserInteraction: Bool) -> Result<OnboardingResult<PumpManagerViewController, PumpManager>, Error>
 }
 
 public protocol ServiceProvider: AnyObject {
@@ -132,8 +132,16 @@ public protocol TherapySettingsProvider {
     var onboardingTherapySettings: TherapySettings { get }
 }
 
+public enum StudyProduct: String, CaseIterable {
+    case none
+    case studyProduct1
+    case studyProduct2
+}
+
 public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, ServiceProvider, TherapySettingsProvider {
+    
     var allowDebugFeatures: Bool { get }   // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
+    var studyProduct: StudyProduct { get } // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
 }
 
 public protocol OnboardingDelegate: AnyObject {
