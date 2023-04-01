@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "generic-reservoir-fill.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
