@@ -231,6 +231,13 @@ public protocol PumpManager: DeviceManager {
     ///   - completion: A closure called after the command is complete
     ///   - result: The delivery limits set or an error describing why the command failed
     func syncDeliveryLimits(limits deliveryLimits: DeliveryLimits, completion: @escaping (_ result: Result<DeliveryLimits, Error>) -> Void)
+    
+    ///
+    /// Warn the pump manager that it will be deactivated
+    ///
+    /// - Parameters:
+    ///   - completion: A closure called after preparations are complete
+    func prepareForDeactivation(_ completion: @escaping (Error?) -> Void)
 }
 
 
@@ -241,6 +248,10 @@ public extension PumpManager {
 
     func roundToSupportedBolusVolume(units: Double) -> Double {
         return supportedBolusVolumes.filter({$0 <= units}).max() ?? 0
+    }
+    
+    func prepareForDeactivation(_ completion: @escaping (Error?) -> Void) {
+        notifyDelegateOfDeactivation() { completion(nil) }
     }
 
     /// Convenience wrapper for notifying the delegate of deactivation on the delegate queue
