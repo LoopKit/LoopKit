@@ -619,6 +619,13 @@ public final class MockPumpManager: TestingPumpManager {
     }
 }
 
+extension MockPumpManager {
+    public func acceptDefaultsAndSkipOnboarding() {
+        // TODO: Unimplemented as it's not needed for HF. Ticket to complete below.
+        // https://tidepool.atlassian.net/browse/LOOP-4599
+    }
+}
+
 // MARK: - AlertResponder implementation
 extension MockPumpManager {
     public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) {

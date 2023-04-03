@@ -54,7 +54,7 @@ public protocol PumpManagerUI: DeviceManagerUI, PumpStatusIndicator, PumpManager
     ///     - colorPalette: Color palette to use for any UI.
     ///     - allowedInsulinTypes: Types that the caller allows to be selected.
     /// - Returns: Either a conforming view controller to create and onboard the pump manager or a newly created and onboarded pump manager.
-    static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI>
+    static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, prefersToSkipUserInteraction: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI>
 
     /// Configure settings for an existing pump manager.
     ///
