@@ -132,16 +132,9 @@ public protocol TherapySettingsProvider {
     var onboardingTherapySettings: TherapySettings { get }
 }
 
-public enum StudyProduct: String, CaseIterable {
-    case none
-    case studyProduct1
-    case studyProduct2
-}
-
 public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, ServiceProvider, TherapySettingsProvider {
     
     var allowDebugFeatures: Bool { get }   // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
-    var studyProduct: StudyProduct { get } // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
 }
 
 public protocol OnboardingDelegate: AnyObject {
