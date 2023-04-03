@@ -621,7 +621,8 @@ public final class MockPumpManager: TestingPumpManager {
 
 extension MockPumpManager {
     public func acceptDefaultsAndSkipOnboarding() {
-        // TODO: Implement This
+        // TODO: Unimplemented as it's not needed for HF. Ticket to complete below.
+        // https://tidepool.atlassian.net/browse/LOOP-4599
     }
 }
 
