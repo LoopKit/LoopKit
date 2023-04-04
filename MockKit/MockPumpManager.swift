@@ -596,6 +596,13 @@ public final class MockPumpManager: TestingPumpManager {
             logDeviceCommunication("resumeDelivery succeeded", type: .receive)
         }
     }
+    
+    public func inject(action: InjectedAction) {
+        switch action {
+        case .test:
+            break
+        }
+    }
 
     public func injectPumpEvents(_ pumpEvents: [NewPumpEvent]) {
         state.finalizedDoses += pumpEvents.compactMap { $0.unfinalizedDose }
