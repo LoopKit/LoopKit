@@ -573,6 +573,13 @@ public final class MockCGMManager: TestingCGMManager {
         sendCGMReadingResult(CGMReadingResult.newData(pastSamples.map { NewGlucoseSample($0, device: device) } ))
     }
     
+    public func inject(action: InjectedAction) {
+        switch action {
+        case .test:
+            break
+        }
+    }
+    
     public func acceptDefaultsAndSkipOnboarding() {
         // TODO: Unimplemented as it's not needed for HF. Ticket to complete below.
         // https://tidepool.atlassian.net/browse/LOOP-4598

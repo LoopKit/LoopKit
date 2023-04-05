@@ -14,6 +14,7 @@ public struct TestingScenario {
     var dateRelativeBasalEntries: [DateRelativeBasalEntry]
     var dateRelativeBolusEntries: [DateRelativeBolusEntry]
     var dateRelativeCarbEntries: [DateRelativeCarbEntry]
+    var injectedActions: [String]?
 
     public func instantiate(relativeTo referenceDate: Date = Date()) -> TestingScenarioInstance {
         let glucoseSamples = dateRelativeGlucoseSamples
@@ -28,7 +29,7 @@ public struct TestingScenario {
         let carbEntries = dateRelativeCarbEntries
             .filter { $0.enteredAt(relativeTo: referenceDate) <= referenceDate }
             .map { $0.newCarbEntry(relativeTo: referenceDate) }
-        return TestingScenarioInstance(pastGlucoseSamples: pastGlucoseSamples, futureGlucoseSamples: futureGlucoseSamples, pumpEvents: pumpEvents, carbEntries: carbEntries)
+        return TestingScenarioInstance(pastGlucoseSamples: pastGlucoseSamples, futureGlucoseSamples: futureGlucoseSamples, pumpEvents: pumpEvents, carbEntries: carbEntries, injectedActions: injectedActions?.compactMap(InjectedAction.init(rawValue:)) ?? [])
     }
 
     public mutating func stepBackward(by offset: TimeInterval) {
@@ -68,6 +69,7 @@ extension TestingScenario: Codable {
         case dateRelativeBasalEntries = "basalDoses"
         case dateRelativeBolusEntries = "bolusDoses"
         case dateRelativeCarbEntries = "carbEntries"
+        case injectedActions = "injectedActions"
     }
 }
 
