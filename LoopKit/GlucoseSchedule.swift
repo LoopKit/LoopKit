@@ -9,9 +9,7 @@
 import Foundation
 import HealthKit
 
-public typealias GlucoseSchedule = SingleQuantitySchedule
-
-public typealias InsulinSensitivitySchedule = GlucoseSchedule
+public typealias InsulinSensitivitySchedule = SingleQuantitySchedule
 
 public extension InsulinSensitivitySchedule {
     private func convertTo(unit: HKUnit) -> InsulinSensitivitySchedule? {
