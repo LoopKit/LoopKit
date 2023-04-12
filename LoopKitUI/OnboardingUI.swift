@@ -136,6 +136,17 @@ public enum StudyProduct: String, CaseIterable {
     case none
     case studyProduct1
     case studyProduct2
+    
+    public func filtered(scenarioURLs: [URL]) -> [URL] {
+        switch self {
+        case .none:
+            return scenarioURLs.filter { !$0.lastPathComponent.hasPrefix("HF-") }
+        case .studyProduct1:
+            return scenarioURLs.filter { $0.lastPathComponent.hasPrefix("HF-1-") }
+        case .studyProduct2:
+            return scenarioURLs.filter { $0.lastPathComponent.hasPrefix("HF-2-") }
+        }
+    }
 }
 
 public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, ServiceProvider, TherapySettingsProvider {
