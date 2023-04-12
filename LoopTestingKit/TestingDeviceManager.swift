@@ -14,5 +14,5 @@ public protocol TestingDeviceManager: DeviceManager {
     var testingDevice: HKDevice { get }
     
     func acceptDefaultsAndSkipOnboarding()
-    func inject(action: InjectedAction)
+    func inject(action: NewDeviceAction)
 }

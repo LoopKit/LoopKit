@@ -597,12 +597,7 @@ public final class MockPumpManager: TestingPumpManager {
         }
     }
     
-    public func inject(action: InjectedAction) {
-        switch action {
-        case .test:
-            break
-        }
-    }
+    public func inject(action: NewDeviceAction) {}
 
     public func injectPumpEvents(_ pumpEvents: [NewPumpEvent]) {
         state.finalizedDoses += pumpEvents.compactMap { $0.unfinalizedDose }
