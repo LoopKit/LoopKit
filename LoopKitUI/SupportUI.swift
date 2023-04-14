@@ -56,6 +56,8 @@ public protocol SupportUI: AnyObject {
                             openAppStore: (() -> Void)?
     ) -> AnyView?
 
+    func filterScenarios(scenarioURLs: [URL]) -> [URL]
+    
     /// Initializes the support with the previously-serialized state.
     ///
     /// - Parameters:

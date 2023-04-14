@@ -132,27 +132,8 @@ public protocol TherapySettingsProvider {
     var onboardingTherapySettings: TherapySettings { get }
 }
 
-public enum StudyProduct: String, CaseIterable {
-    case none
-    case studyProduct1
-    case studyProduct2
-    
-    public func filtered(scenarioURLs: [URL]) -> [URL] {
-        switch self {
-        case .none:
-            return scenarioURLs.filter { !$0.lastPathComponent.hasPrefix("HF-") }
-        case .studyProduct1:
-            return scenarioURLs.filter { $0.lastPathComponent.hasPrefix("HF-1-") }
-        case .studyProduct2:
-            return scenarioURLs.filter { $0.lastPathComponent.hasPrefix("HF-2-") }
-        }
-    }
-}
-
 public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, ServiceProvider, TherapySettingsProvider {
-    
     var allowDebugFeatures: Bool { get }   // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
-    var studyProductSelection: StudyProduct { get }
 }
 
 public protocol OnboardingDelegate: AnyObject {
