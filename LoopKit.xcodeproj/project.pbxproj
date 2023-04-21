@@ -331,7 +331,6 @@
 		4B67E2CB289B4EDB002D92AF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4B67E2C9289B4EDB002D92AF /* InfoPlist.strings */; };
 		4B67E2CE289B4EDB002D92AF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4B67E2CC289B4EDB002D92AF /* Localizable.strings */; };
 		7D68A9AE1FE0A3D000522C49 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D68A9B01FE0A3D000522C49 /* Localizable.strings */; };
-		7E0B007629E76ABA00211F33 /* DateRelativeDeviceAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0B007529E76ABA00211F33 /* DateRelativeDeviceAction.swift */; };
 		8907E35921A9D0EC00335852 /* GlucoseEntryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */; };
 		89186C0524BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */; };
 		89186C0724BF7FC70003D0F3 /* Guardrail+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89186C0624BF7FC70003D0F3 /* Guardrail+UI.swift */; };
@@ -694,6 +693,7 @@
 		A9E675F5227140DD00E25293 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E675F4227140DD00E25293 /* HealthKit.framework */; };
 		A9FD046F24E310D00040F203 /* HKObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FD046E24E310D00040F203 /* HKObject.swift */; };
 		A9FD047024E310DD0040F203 /* HKObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FD046E24E310D00040F203 /* HKObject.swift */; };
+		B400177929F0249D00532398 /* DeviceAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B400177829F0249D00532398 /* DeviceAction.swift */; };
 		B4001CF028CBC200002FB414 /* SingleSelectionCheckList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4001CEF28CBC200002FB414 /* SingleSelectionCheckList.swift */; };
 		B40C43912707408400F5D86C /* DeliveryLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC64C7D24BF6EBC004A63A1 /* DeliveryLimits.swift */; };
 		B40D07CA251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B40D07C8251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.xib */; };
@@ -1340,7 +1340,6 @@
 		7D68AAB91FE31A2800522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InsulinKit.strings; sourceTree = "<group>"; };
 		7D68AABC1FE31BE700522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D68AAC61FE31BE900522C49 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		7E0B007529E76ABA00211F33 /* DateRelativeDeviceAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateRelativeDeviceAction.swift; sourceTree = "<group>"; };
 		8907E35821A9D0EC00335852 /* GlucoseEntryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEntryTableViewController.swift; sourceTree = "<group>"; };
 		8907E35A21A9D1B200335852 /* SineCurveParametersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SineCurveParametersTableViewController.swift; sourceTree = "<group>"; };
 		89186C0424BEC9CA0003D0F3 /* SegmentedControlTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControlTableViewCell.swift; sourceTree = "<group>"; };
@@ -1559,6 +1558,7 @@
 		A9E675F2227140D800E25293 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		A9E675F4227140DD00E25293 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 		A9FD046E24E310D00040F203 /* HKObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObject.swift; sourceTree = "<group>"; };
+		B400177829F0249D00532398 /* DeviceAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAction.swift; sourceTree = "<group>"; };
 		B4001CEF28CBC200002FB414 /* SingleSelectionCheckList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSelectionCheckList.swift; sourceTree = "<group>"; };
 		B40D07C8251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DateAndDurationSteppableTableViewCell.xib; sourceTree = "<group>"; };
 		B40D07C9251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateAndDurationSteppableTableViewCell.swift; sourceTree = "<group>"; };
@@ -2673,7 +2673,6 @@
 		892A5D35222F03CB008961AB /* LoopTestingKit */ = {
 			isa = PBXGroup;
 			children = (
-				7E0B007529E76ABA00211F33 /* DateRelativeDeviceAction.swift */,
 				89ADE12C226BDD190067222B /* DateRelativeBasalEntry.swift */,
 				89ADE12E226BDED40067222B /* DateRelativeBolusEntry.swift */,
 				89ADE12A226BDB730067222B /* DateRelativeCarbEntry.swift */,
@@ -2681,6 +2680,7 @@
 				89CA2B37226D4456004D9350 /* DateRelativeQuantity.swift */,
 				892A5D37222F03CB008961AB /* Info.plist */,
 				892A5D36222F03CB008961AB /* LoopTestingKit.h */,
+				B400177829F0249D00532398 /* DeviceAction.swift */,
 				892A5D55222F0414008961AB /* TestingCGMManager.swift */,
 				892A5D51222F03DB008961AB /* TestingDeviceManager.swift */,
 				892A5D53222F03F9008961AB /* TestingPumpManager.swift */,
@@ -4035,7 +4035,7 @@
 				892A5D54222F03F9008961AB /* TestingPumpManager.swift in Sources */,
 				89ADE12F226BDED40067222B /* DateRelativeBolusEntry.swift in Sources */,
 				89ADE132226BE0590067222B /* HKUnit.swift in Sources */,
-				7E0B007629E76ABA00211F33 /* DateRelativeDeviceAction.swift in Sources */,
+				B400177929F0249D00532398 /* DeviceAction.swift in Sources */,
 				89CA2B38226D4456004D9350 /* DateRelativeQuantity.swift in Sources */,
 				89ADE12D226BDD190067222B /* DateRelativeBasalEntry.swift in Sources */,
 				89ADE134226BF0490067222B /* TestingScenarioInstance.swift in Sources */,
