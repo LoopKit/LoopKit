@@ -5,7 +5,7 @@
 "Comms Issue" = "Kommunikasjonsutgave";
 
 /* Status highlight that insulin delivery was suspended. */
-"Insulin Suspended" = "Insulintilførsel utsatt";
+"Insulin Suspended" = "Insulin suspendert";
 
 /* Status highlight that a pump is out of insulin. */
 "No Insulin" = "Ingen insulin";
@@ -17,13 +17,13 @@
 "Pump Error" = "Pumpefeil";
 
 /* Status highlight that an occlusion was detected. */
-"Pump Occlusion" = "Pumpen er blokkert";
+"Pump Occlusion" = "Pumpeokklusjon";
 
 /* Pump Event title for UnfinalizedDose with doseType of .resume */
 "Resume" = "Gjenoppta";
 
 /* Pump Event title for UnfinalizedDose with doseType of .suspend */
-"Suspend" = "Utsette";
+"Suspend" = "Suspendere";
 
 /* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
 "Temp Basal" = "Midlertidig basal";

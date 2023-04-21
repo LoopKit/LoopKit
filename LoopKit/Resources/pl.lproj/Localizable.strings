@@ -233,7 +233,7 @@
 "U" = "J";
 
 /* The short unit display string for international units of insulin per hour */
-"U/hr" = "J/godz";
+"U/hr" = "J/h";
 
 /* Error description for uncertain delivery */
 "Uncertain Delivery" = "Niepewne podanie";

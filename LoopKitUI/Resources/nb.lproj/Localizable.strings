@@ -48,7 +48,7 @@
 "%1$@ U" = "%1$@ E";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ enheter gjenstår ved %2$@";
+"%1$@ units remaining at %2$@" = "%1$@ enheter som gjenstår på %2$@";
 
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
    Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
@@ -56,6 +56,15 @@
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
+
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "%1$d prosent fullført.";
+
+/* No comment provided by engineer. */
+"%lld" = "%lld";
+
+/* No comment provided by engineer. */
+"%lld, " = "%lld,";
 
 /* No comment provided by engineer. */
 "🍽" = "🍽";
@@ -236,6 +245,9 @@
 
 /* The text for the override duration setting */
 "Duration" = "Varighet";
+
+/* No comment provided by engineer. */
+"Dynamic component #%lld" = "Dynamisk komponent #%lld";
 
 /* Text for edit button
    The title for the enabled custom preset editing screen */

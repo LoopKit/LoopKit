@@ -57,6 +57,15 @@
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "Выполнено на %1$d процентов.";
+
+/* No comment provided by engineer. */
+"%lld" = "%lld";
+
+/* No comment provided by engineer. */
+"%lld, " = "%lld, ";
+
 /* No comment provided by engineer. */
 "🍽" = "🍽";
 
@@ -237,6 +246,9 @@
 /* The text for the override duration setting */
 "Duration" = "Продолжительность";
 
+/* No comment provided by engineer. */
+"Dynamic component #%lld" = "Динамический компонент #%lld";
+
 /* Text for edit button
    The title for the enabled custom preset editing screen */
 "Edit" = "Редактировать";
@@ -334,6 +346,9 @@
 
 /* Information about target range */
 "If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Если вы уже пользовались CGM, вы, скорее всего, знакомы с целевым диапазоном как широким диапазоном значений, которые вы хотели бы видеть в уведомлениях о глюкозе, например, 3,9 ммоль/л - 10 ммоль/л или 5 - 11,1 ммоль/л.";
+
+/* No comment provided by engineer. */
+"info" = "инфо";
 
 /* Title text for insulin model */
 "Insulin Model" = "Модель инсулина";
@@ -469,7 +484,7 @@
 "Required" = "обязательный";
 
 /* Segmented button title for insulin delivery log reservoir history */
-"Reservoir" = "Reservoir";
+"Reservoir" = "Резервуар";
 
 /* Title text for button to resume insulin delivery */
 "Resume Delivery" = "Возобновить подачу";
@@ -523,6 +538,9 @@
 /* The section header text for a scheduled custom preset */
 "SCHEDULED PRESET" = "ПРЕДУСТАНОВКА ПО РАСПИСАНИЮ";
 
+/* No comment provided by engineer. */
+"Selected" = "Выбрано";
+
 /* Section title for slow absorbing food */
 "Slow" = "Медленная";
 
@@ -570,6 +588,9 @@
 
 /* The title for the override selection screen */
 "Temporary Override" = "Временный";
+
+/* No comment provided by engineer. */
+"Test" = "Тест";
 
 /* Information about pre-meal range relative to correction range
    Information about workout range relative to correction range */
@@ -653,6 +674,9 @@
    The default title to use when an entry has none */
 "Unknown" = "Неизвестно";
 
+/* No comment provided by engineer. */
+"Unselected" = "Не выбрано";
+
 /* Title for selection when no insulin type is selected. */
 "Unset" = "Не выбрано";
 
@@ -676,6 +700,9 @@
 
 /* Title for the workout override range */
 "Workout" = "Физическая нагрузка";
+
+/* Information about workout range format (1: app name) */
+"Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button." = "Диапазон физнагрузки - это значение глюкозы или диапазон значений, на которые вы хотите ориентировать %1$@ во время активности. Этот диапазон будет действовать, когда вы активируете кнопку Workout Preset";
 
 /* Title text for multi-value workout value warning */
 "Workout Values" = "Настройки физнагрузок";
@@ -712,4 +739,7 @@
 
 /* Description of insulin sensitivity factor */
 "Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Ваш фактор чувствительности к инсулину (ISF) - это снижение уровня глюкозы, ожидаемое от одной единицы инсулина.";
+
+/* Information about pre-meal range format (1: app name) */
+"Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Диапазон до еды - это значение глюкозы (или диапазон значений), которое Вы хотите, чтобы %1$@ было целевым к моменту приема пищи. Этот диапазон будет действовать, только когда Вы активируете кнопку предварительной настройки до еды и будет выключен после ввода углеводов.";
 
