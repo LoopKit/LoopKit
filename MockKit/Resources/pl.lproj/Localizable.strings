@@ -5,7 +5,7 @@
 "Comms Issue" = "Problem z komunikacją";
 
 /* Status highlight that insulin delivery was suspended. */
-"Insulin Suspended" = "Podawanie insuliny zawieszone";
+"Insulin Suspended" = "Podawanie Zawieszone";
 
 /* Status highlight that a pump is out of insulin. */
 "No Insulin" = "Brak insuliny";
@@ -20,11 +20,11 @@
 "Pump Occlusion" = "Niedrożność pompy";
 
 /* Pump Event title for UnfinalizedDose with doseType of .resume */
-"Resume" = "Wznów";
+"Resume" = "Wznowiono";
 
 /* Pump Event title for UnfinalizedDose with doseType of .suspend */
-"Suspend" = "Wstrzymaj";
+"Suspend" = "Wstrzymano";
 
 /* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
-"Temp Basal" = "Tymczasowa dawka podstawowa";
+"Temp Basal" = "Tymczasowa dawka podst.";
 

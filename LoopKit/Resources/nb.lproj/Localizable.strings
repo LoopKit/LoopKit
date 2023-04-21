@@ -124,7 +124,7 @@
 "Insulin Model" = "Insulin modell";
 
 /* Title text for insulin sensitivity */
-"Insulin Sensitivities" = "Insulinsensitivitet";
+"Insulin Sensitivities" = "Insulinfølsomhet";
 
 /* Generic pump error description */
 "Invalid Configuration" = "Ugyldig konfigurasjon";
@@ -140,13 +140,13 @@
 "Make sure your pump is within communication range of your phone." = "Kontroller at pumpen er innenfor kommunikasjonsområdet til telefonen.";
 
 /* Title text for maximum basal rate configuration */
-"Maximum Basal Rate" = "Maks basalgrense";
+"Maximum Basal Rate" = "Maksimal basalrate";
 
 /* Descriptive text for maximum basal rate (1: app name) */
 "Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Maksimal basaldose er den høyeste midlertidige basaldosen %1$@ er tillatt å angi.";
 
 /* Title text for maximum bolus configuration */
-"Maximum Bolus" = "Maks bolus";
+"Maximum Bolus" = "Maksimal bolus";
 
 /* Descriptive text for maximum bolus */
 "Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den høyeste bolusmengden du kan gi på en gang for å dekke karbohydrater eller redusere høyt blodsukker.";
@@ -215,7 +215,7 @@
 "Temp Basal" = "Midlertidig basal";
 
 /* Descriptive text for pre-meal correction range override */
-"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduser blodsukkermålet ditt midlertidig før et måltid for å påvirke blodsukkertoppene etter måltidet.";
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduser glukosemålet ditt midlertidig før et måltid for å påvirke glukosetoppene etter måltidet.";
 
 /* Descriptive text for workout correction range override */
 "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Øk blodsukkermålet ditt midlertidig før, under eller etter fysisk aktivitet for å redusere risikoen for hendelser med lavt blodsukker.";
@@ -254,7 +254,7 @@
 "Update Available" = "Oppdatering tilgjengelig";
 
 /* Title for workout mode */
-"Workout" = "Trening";
+"Workout" = "Treningsøkt";
 
 /* Descriptive text for basal rate */
 "Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din basaldose av insulin er antall enheter per time du vil bruke for å dekke ditt bakgrunnsinsulinbehov.";

@@ -23,6 +23,12 @@
 /* Accessibility format string for (1: localized volume)(2: time) */
 "%1$@ units remaining at %2$@" = "%1$@ units remaining at %2$@";
 
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "%1$d אחוז בוצע";
+
 /* No comment provided by engineer. */
 "🍽" = "🍽";
 
@@ -149,6 +155,9 @@
 /* Title of insulin model preset - fiasp */
 "Fiasp" = "Fiasp";
 
+/* Title text for the high glucose safety limit warning */
+"High Glucose Safety Limit" = "ערך הבטיחות גבוה";
+
 /* Title text for insulin model */
 "Insulin Model" = "Insulin Model";
 
@@ -157,6 +166,9 @@
 
 /* The description shown on the insulin sensitivity schedule interface. */
 "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose.";
+
+/* Title text for the low glucose safety limit warning */
+"Low Glucose Safety Limit" = "ערך הבטיחות נמוך";
 
 /* Placeholder for maximum value in glucose range */
 "max" = "max";
@@ -231,6 +243,9 @@
 /* Button text for saving glucose correction range schedule
    Button text for saving insulin sensitivity schedule */
 "Save" = "Save";
+
+/* Alert title for confirming a glucose safety limit outside the recommended range */
+"Save Glucose Safety Limit?" = "האם לשמור את הגדרת הבטיחות?";
 
 /* The section header text for a scheduled override */
 "SCHEDULED OVERRIDE" = "SCHEDULED OVERRIDE";

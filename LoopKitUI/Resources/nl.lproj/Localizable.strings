@@ -48,7 +48,7 @@
 "%1$@ U" = "%1$@ E";
 
 /* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ nog actieve eenheden %2$@";
+"%1$@ units remaining at %2$@" = "%1$@ eenheden over om %2$@";
 
 /* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
    Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
@@ -56,6 +56,15 @@
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "%1$d procent voltooid.";
+
+/* No comment provided by engineer. */
+"%lld" = "%lld";
+
+/* No comment provided by engineer. */
+"%lld, " = "%lld, ";
 
 /* No comment provided by engineer. */
 "🍽" = "🍽";
@@ -237,6 +246,9 @@
 /* The text for the override duration setting */
 "Duration" = "Duur";
 
+/* No comment provided by engineer. */
+"Dynamic component #%lld" = "Dynamische component #%lld";
+
 /* Text for edit button
    The title for the enabled custom preset editing screen */
 "Edit" = "Bewerken";
@@ -334,6 +346,9 @@
 
 /* Information about target range */
 "If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Als je al eerder een CGM hebt gebruikt, ben je waarschijnlijk bekend met een streefbereik met een grote spreidingsbreedte die je wilt voor je glucosemeldingswaarschuwingen, zoals 3,9-10,0 mmol/L of 5,0-11,1 mmol/L.";
+
+/* No comment provided by engineer. */
+"info" = "Informatie";
 
 /* Title text for insulin model */
 "Insulin Model" = "Insulinemodel";
@@ -523,6 +538,9 @@
 /* The section header text for a scheduled custom preset */
 "SCHEDULED PRESET" = "GEPLAND PROGRAMMA";
 
+/* No comment provided by engineer. */
+"Selected" = "Geselecteerd";
+
 /* Section title for slow absorbing food */
 "Slow" = "Langzaam";
 
@@ -566,10 +584,13 @@
 "Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Tijdelijk verlagen van je glucosedoel vóór de maaltijd om de kans op post-maaltijd glucosepieken te verkleinen.";
 
 /* Description of workout mode */
-"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Verhoog tijdelijk je glucosedoel voor, gedurende of na fysieke activiteit om het risico van lage glucosewaarden te verminderen.";
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Verhoog tijdelijk je glucosedoel voor, gedurende, of na fysieke activiteit om het risico op lage glucosegebeurtenissen te verminderen.";
 
 /* The title for the override selection screen */
 "Temporary Override" = "Tijdelijke Override";
+
+/* No comment provided by engineer. */
+"Test" = "Test";
 
 /* Information about pre-meal range relative to correction range
    Information about workout range relative to correction range */
@@ -652,6 +673,9 @@
 /* Accessibility value for an unknown value
    The default title to use when an entry has none */
 "Unknown" = "Onbekend";
+
+/* No comment provided by engineer. */
+"Unselected" = "Niet Geselecteerd";
 
 /* Title for selection when no insulin type is selected. */
 "Unset" = "Niet Ingesteld";

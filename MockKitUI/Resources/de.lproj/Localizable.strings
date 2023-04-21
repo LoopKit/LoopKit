@@ -1,3 +1,6 @@
+/* No comment provided by engineer. */
+"%@ has been unable to communicate with the Simulator Pump since %@.\n\nWithout communication, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered." = "%1$@ konnte seit %2$@ nicht mehr mit der Simulatorpumpe kommunizieren.\n\nOhne die Kommunikation kann die App keine Befehle für die Insulinabgabe senden oder genaue, aktuelle Informationen über Dein aktives Insulin oder das abgegebene Insulin anzeigen.";
+
 /* Appends a full-stop to a statement */
 "%@." = "%@.";
 
@@ -23,7 +26,7 @@
 "Clear Last Version Check Alert Date" = "Löschen Sie das Datum der letzten Versionsprüfungswarnung";
 
 /* No comment provided by engineer. */
-"Comms Recovery" = "Comms Wiederherstellung";
+"Comms Recovery" = "Kommunikationswiederherstellung";
 
 /* Button title to delete a service */
 "Delete Service" = "Dienst löschen";
@@ -43,6 +46,9 @@
 
 /* Controller title for insulin type selection screen */
 "Insulin Type" = "Insulintyp";
+
+/* No comment provided by engineer. */
+"Mock Version Check %@" = "Mock Versionsprüfung %@";
 
 /* Button title to acknowledge error
    Default acknowledgement */

@@ -1,8 +1,17 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
 /* The format for an insulin needs percentage. */
 "%@%% of normal insulin" = "%@%% 胰岛素";
 
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
 /* Accessibility format string for (1: localized volume)(2: time) */
-"%1$@ units remaining at %2$@" = "%1$@ 单位剩余在 %2$@";
+"%1$@ units remaining at %2$@" = "%1$@ units remaining at %2$@";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "吸收时间";
@@ -21,6 +30,9 @@
 
 /* Action sheet confirmation message for reservoir deletion */
 "Are you sure you want to delete all reservoir values?" = "确定要删除所有的储药器数据吗？";
+
+/* Title text for multi-value basal rate warning */
+"Basal Rates" = "基础率";
 
 /* Describes a percentage decrease in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "基础率,大剂量及追加剂量将以%@%%减少";
@@ -82,6 +94,9 @@
 /* Button title to delete all objects */
 "Delete All" = "删除所有";
 
+/* Title text for crossed thresholds guardrail warning */
+"Delivery Limits" = "输注限制";
+
 /* The text for the override duration setting */
 "Duration" = "持续时间";
 
@@ -105,6 +120,9 @@
 
 /* The placeholder text instructing users how to enter a maximum basal rate */
 "Enter a rate in units per hour" = "输入每小时基础率";
+
+/* Segmented button title for insulin delivery log event history */
+"Event History" = "历史事件";
 
 /* Section title for fast absorbing food */
 "Fast" = "快速";
@@ -163,6 +181,9 @@
 
 /* The default placeholder string for a credential */
 "Required" = "需要";
+
+/* Segmented button title for insulin delivery log reservoir history */
+"Reservoir" = "胰岛素容量";
 
 /* Title text for button to resume insulin delivery */
 "Resume Delivery" = "恢复输注";

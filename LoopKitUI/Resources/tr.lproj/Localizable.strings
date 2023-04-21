@@ -35,8 +35,14 @@
    The format for an override symbol and name (1: symbol)(2: name) */
 "%1$@ %2$@" = "%1$@ %2$@";
 
+/* Information about insulin action duration (1: app name) */
+"%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%1$@ verdiği insülinin 6 saat boyunca glikozunuzu düşürmek için aktif olarak çalıştığını varsayar. Bu ayar değiştirilemez.";
+
 /* Lower bound workout information text format (1: app name) */
 "%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ veya KŞ Güvenlik Limitiniz, hangisi daha yüksekse";
+
+/* Information about max number of basal rates (1: app name) (2: maximum schedule entry count) */
+"%1$@ supports 1 to %2$@ rates per day." = "%1$@ günlük 1 ila %2$@ oranlarını destekler.";
 
 /* Reservoir entry (1: volume value) */
 "%1$@ U" = "%1$@ Ü";
@@ -51,6 +57,15 @@
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "Yüzde %1$d tamamlandı.";
+
+/* No comment provided by engineer. */
+"%lld" = "%lld";
+
+/* No comment provided by engineer. */
+"%lld, " = "%lld, ";
+
 /* No comment provided by engineer. */
 "🍽" = "🍽";
 
@@ -63,11 +78,20 @@
 /* Workout override preset title */
 "🏃‍♂️ Workout" = "🏃‍♂️ Egzersiz";
 
+/* No comment provided by engineer. */
+"A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "Yeterince uzun yazmaya devam edersem metni birden fazla satıra kayacak bir kart; bu uzunluk yeterli olacaktır.";
+
 /* Information about differences between target range and correction range */
 "A Correction Range is different. This will be a narrower range." = "Düzeltme Aralığı farklıdır. Bu daha dar bir aralık olacaktır.";
 
+/* No comment provided by engineer. */
+"A simple card" = "Basit bir kart";
+
 /* Warning text for basal rate of 0 U/hr */
 "A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "0 Ü/saat değeri, bazal insülin almayacağınız anlamına gelir.";
+
+/* No comment provided by engineer. */
+"Above the save button" = "Kaydet düğmesinin üstünde";
 
 /* Title of the carb entry absorption time cell */
 "Absorption Time" = "Emilim Süresi";
@@ -116,6 +140,9 @@
 
 /* Describes a lack of change in overall insulin needs */
 "Basal, bolus, and correction insulin dose amounts are unaffected." = "Bazal, bolus ve düzeltme insülin doz miktarları etkilenmez.";
+
+/* No comment provided by engineer. */
+"Bottom component" = "Alt bileşen";
 
 /* The title of the cancel action in an action sheet */
 "Cancel" = "İptal";
@@ -219,6 +246,9 @@
 /* The text for the override duration setting */
 "Duration" = "Süre";
 
+/* No comment provided by engineer. */
+"Dynamic component #%lld" = "Dinamik bileşen #%lld";
+
 /* Text for edit button
    The title for the enabled custom preset editing screen */
 "Edit" = "Düzenle";
@@ -317,6 +347,9 @@
 /* Information about target range */
 "If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Daha önce bir CGM kullandıysanız, KŞ bildirim uyarılarınız için 70-180 mg/dL veya 90-200 mg/dL gibi geniş bir hedef aralığına aşinasınızdır.";
 
+/* No comment provided by engineer. */
+"info" = "bilgi";
+
 /* Title text for insulin model */
 "Insulin Model" = "İnsülin Modeli";
 
@@ -368,8 +401,14 @@
 /* The title text for the maximum basal rate value */
 "Maximum Basal Rate" = "Maksimum Bazal Oranı";
 
+/* Information about maximum basal rate (1: app name) */
+"Maximum Basal Rate is the maximum automatically adjusted basal rate that %1$@ is allowed to enact to help reach your correction range." = "Maksimum Bazal Oran, düzeltme aralığınıza ulaşmanıza yardımcı olmak için %1$@ tarafından yürürlüğe koymasına izin verilen otomatik olarak ayarlanan maksimum bazal orandır.";
+
 /* The title text for the maximum bolus value */
 "Maximum Bolus" = "Maksimum Bolus";
+
+/* Information about maximum bolus (1: app name) */
+"Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose." = "Maksimum Bolus, karbonhidratları karşılamak veya yüksek kan şekerini düşürmek için %1$@ tarafından tek seferde önermesine izin vereceğiniz en yüksek bolus miktarıdır.";
 
 /* Section title for medium absorbing food */
 "Medium" = "Orta";
@@ -499,11 +538,14 @@
 /* The section header text for a scheduled custom preset */
 "SCHEDULED PRESET" = "PLANLANMIŞ ÖN AYAR";
 
+/* No comment provided by engineer. */
+"Selected" = "Seçilmiş";
+
 /* Section title for slow absorbing food */
 "Slow" = "Yavaş";
 
 /* Information about typical maximum basal rates */
-"Some users choose a value 2, 3, or 4 times their highest scheduled basal rate." = "Bazı kullanıcılar, planlanan en yüksek bazal oranının 2, 3 veya 4 katı bir değer seçer.";
+"Some users choose a value 2, 3, or 4 times their highest scheduled basal rate." = "Bazı kullanıcılar, programlanan en yüksek bazal oranının 2, 3 veya 4 katı bir değer seçer.";
 
 /* The text for the override start time */
 "Start Time" = "Başlangıç zamanı";
@@ -546,6 +588,9 @@
 
 /* The title for the override selection screen */
 "Temporary Override" = "Geçici Geçersiz Kılma";
+
+/* No comment provided by engineer. */
+"Test" = "Test";
 
 /* Information about pre-meal range relative to correction range
    Information about workout range relative to correction range */
@@ -591,6 +636,9 @@
 /* Subtitle of Rapid-Acting – Adult preset */
 "This model assumes peak insulin activity at 75 minutes." = "Bu model, 75 dakikada en yüksek insülin aktivitesini varsayar.";
 
+/* Information about maximum automated insulin on board (1: app name) */
+"This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." = "Bu ayar aynı zamanda otomatik dozlama için bir güvenlik limiti belirleyecektir. %1$@ aktif insülin miktarını maksimum bolusunuzun iki katının altında tutmak için otomatik iletimi sınırlayacaktır.";
+
 /* Information about pre-meal range relative to correction range
    Information about workout range relative to correction range */
 "This will typically be" = "Bu genellikle şu şekilde olacaktır";
@@ -626,6 +674,9 @@
    The default title to use when an entry has none */
 "Unknown" = "Bilinmeyen";
 
+/* No comment provided by engineer. */
+"Unselected" = "Seçilmemiş";
+
 /* Title for selection when no insulin type is selected. */
 "Unset" = "Ayarlanmamış";
 
@@ -645,7 +696,7 @@
 "Warning" = "Uyarı";
 
 /* Disclaimer */
-"Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable." = "Planlanan en yüksek bazal oranınızdan daha yüksek, ancak kendinizi rahat hissettiğiniz ölçüde tutucu veya agresif bir değer seçmek için sağlık uzmanınızla birlikte çalışın.";
+"Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable." = "Programlanan en yüksek bazal oranınızdan daha yüksek, ancak kendinizi rahat hissettiğiniz ölçüde tutucu veya agresif bir değer seçmek için sağlık uzmanınızla birlikte çalışın.";
 
 /* Title for the workout override range */
 "Workout" = "Egzersiz";
@@ -667,6 +718,9 @@
 
 /* Description of how to add a range */
 "You can add entries for different times of day by using the ➕." = "➕ butonunu kullanarak günün farklı saatleri için girişler ekleyebilirsiniz.";
+
+/* Information about insulin model (1: app name) */
+"You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models." = "Bu iki insülin modelinden birine göre %1$@ hızlı etkili insülinin tepe aktivitesini nasıl ölçeceğini seçebilirsiniz.";
 
 /* Description of how to edit setting */
 "You can edit a setting by tapping into any line item." = "Herhangi bir satır öğesine dokunarak bir ayarı düzenleyebilirsiniz.";

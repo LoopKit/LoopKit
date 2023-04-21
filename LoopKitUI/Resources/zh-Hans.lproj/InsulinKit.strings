@@ -14,7 +14,7 @@
 "kys-by-14s.text" = "单位 总计";
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[0] = "Reservoir"; ObjectID = "TyZ-xm-mVN"; */
-"TyZ-xm-mVN.segmentTitles[0]" = "储药器";
+"TyZ-xm-mVN.segmentTitles[0]" = "胰岛素容量";
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[1] = "Event History"; ObjectID = "TyZ-xm-mVN"; */
 "TyZ-xm-mVN.segmentTitles[1]" = "历史事件";

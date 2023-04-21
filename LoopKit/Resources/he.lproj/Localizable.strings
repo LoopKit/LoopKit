@@ -1,3 +1,6 @@
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
 /* The error description describing when Health sharing was denied */
 "Authorization Denied" = "Authorization Denied";
 
