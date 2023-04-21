@@ -524,7 +524,7 @@
 "Save Insulin Sensitivities?" = "Zapisać Współczynnik Wrażliwości na insulinę?";
 
 /* Alert title for confirming pre-meal range overrides outside the recommended range */
-"Save Pre-Meal Range?" = "Zapisać zakres przedposiłkowy?";
+"Save Pre-Meal Range?" = "Zapisać zakres przed posiłkiem?";
 
 /* Alert title for confirming workout range overrides outside the recommended range */
 "Save Workout Range?" = "Zapisać zakres treningu?";
@@ -587,7 +587,7 @@
 "Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Tymczasowo zwiększ docelowy poziom glukozy przed, w trakcie lub po aktywności fizycznej, aby zmniejszyć ryzyko wystąpienia niskiego poziomu glukozy (Hipoglikemia).";
 
 /* The title for the override selection screen */
-"Temporary Override" = "Pominięcie tymczasowe";
+"Temporary Override" = "Zdalny Cel Tymczasowy";
 
 /* No comment provided by engineer. */
 "Test" = "Test";
@@ -615,7 +615,7 @@
 "The rapid-acting child model assumes peak activity at 65 minutes." = "Szybko działający model dziecka zakłada szczytową aktywność po 65 minutach.";
 
 /* Information about basal rate scheduling */
-"The schedule starts at midnight and cannot contain a rate of 0 U/hr." = "Harmonogram rozpoczyna się o północy i nie może zawierać dawki 0 J/godz.";
+"The schedule starts at midnight and cannot contain a rate of 0 U/hr." = "Harmonogram rozpoczyna się o północy i nie może zawierać dawki 0 J/h.";
 
 /* Therapy Settings screen title */
 "Therapy Settings" = "Ustawienia terapii";

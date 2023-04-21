@@ -2,7 +2,7 @@
 "Basal Rates" = "Basalrate";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "KH-Verhältnis";
+"Carb Ratios" = "KH-Verhältnisse";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "KH";

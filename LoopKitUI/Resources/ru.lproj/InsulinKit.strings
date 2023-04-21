@@ -8,10 +8,10 @@
 "9jm-X6-3QA.text" = "Detail";
 
 /* Class = "UILabel"; text = "U IOB"; ObjectID = "dZi-Ta-IHm"; */
-"dZi-Ta-IHm.text" = "U IOB";
+"dZi-Ta-IHm.text" = "Ед на борту";
 
 /* Class = "UILabel"; text = "No pump configured"; ObjectID = "jSc-64-2tZ"; */
-"jSc-64-2tZ.text" = "No pump configured";
+"jSc-64-2tZ.text" = "Нет помпы";
 
 /* Class = "UILabel"; text = "U Total"; ObjectID = "kys-by-14s"; */
 "kys-by-14s.text" = "ед Всего";
@@ -20,7 +20,7 @@
 "PZQ-gO-084.text" = "...";
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[0] = "Reservoir"; ObjectID = "TyZ-xm-mVN"; */
-"TyZ-xm-mVN.segmentTitles[0]" = "Reservoir";
+"TyZ-xm-mVN.segmentTitles[0]" = "Резервуар";
 
 /* Class = "UISegmentedControl"; TyZ-xm-mVN.segmentTitles[1] = "Event History"; ObjectID = "TyZ-xm-mVN"; */
 "TyZ-xm-mVN.segmentTitles[1]" = "История событий";
