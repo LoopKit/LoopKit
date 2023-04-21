@@ -1,5 +1,5 @@
 /* The title text for the basal rate schedule */
-"Basal Rates" = "基礎インスリン";
+"Basal Rates" = "基礎レート";
 
 /* The title of the carb ratios schedule screen */
 "Carb Ratios" = "Carb Ratios";
@@ -14,7 +14,7 @@
 "Diagnostic" = "診断";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "6桁のトランスミッターIDを入力";
+"Enter the 6-digit pump ID" = "6桁のポンプ ID";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "データ生成";
@@ -24,10 +24,10 @@
 "Insulin Sensitivity" = "Insulin Sensitivity";
 
 /* The title text for the pump ID */
-"Pump ID" = "ポンプID";
+"Pump ID" = "ポンプ ID";
 
 /* The title for the cell navigating to the reservoir screen */
-"Reservoir" = "リザーバ";
+"Reservoir" = "Reservoir";
 
 /* Title for the cell resetting the data manager */
 "Reset" = "リセット";

@@ -9,6 +9,9 @@
 /**
  Protocol for a remote data service.
 */
+
+import Foundation
+
 public protocol RemoteDataService: Service {
 
     /// The maximum number of alert data to upload to the remote data service at one time.
@@ -101,11 +104,11 @@ public protocol RemoteDataService: Service {
     func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
     
     /**
-     Validates a push notification originated from this data service.
+     Fetch a RemoteCommand from a push notification
      - Parameter notification: The push notification dictionary
-     - Returns: Success
+     - Returns: RemoteCommand
      */
-    func validatePushNotificationSource(_ notification: [String: AnyObject]) -> Bool
+    func commandFromPushNotification(_ notification: [String: AnyObject]) async throws -> RemoteCommand
 
 }
 
@@ -117,6 +120,4 @@ public extension RemoteDataService {
     var glucoseDataLimit: Int? { return nil }
     var pumpEventDataLimit: Int? { return nil }
     var settingsDataLimit: Int? { return nil }
-
-    func validatePushNotificationSource(_ notification: [String: AnyObject]) -> Bool { return false }
 }

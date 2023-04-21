@@ -6,8 +6,8 @@
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
 //
 
+import Foundation
 import LoopKit
-
 
 public struct TestingScenario {
     var dateRelativeGlucoseSamples: [DateRelativeGlucoseSample]

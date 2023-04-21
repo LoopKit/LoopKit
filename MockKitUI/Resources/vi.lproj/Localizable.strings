@@ -1,0 +1,25 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Hủy bỏ";
+
+/* Button title to delete a service */
+"Delete Service" = "Delete Service";
+
+/* The alert title for a resume error */
+"Error Resuming" = "Lỗi khi đang tái thực hiện";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Lỗi khi đang tạm ngưng";
+
+/* Button title to acknowledge error
+   Default acknowledgement */
+"OK" = "OK";
+
+/* Title for Pump simulator settings */
+"Pump Settings" = "Cấu hình của bơm";
+

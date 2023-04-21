@@ -9,7 +9,7 @@
 import LoopKit
 import LoopKitUI
 import MockKit
-
+import Foundation
 
 final class MockHUDProvider: NSObject, HUDProvider {
 

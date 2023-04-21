@@ -330,18 +330,18 @@ fileprivate extension UIAlertController {
     convenience init(serviceDeletionHandler handler: @escaping () -> Void) {
         self.init(
             title: nil,
-            message: NSLocalizedString("Are you sure you want to delete this service?", comment: "Confirmation message for deleting a service"),
+            message: LocalizedString("Are you sure you want to delete this service?", comment: "Confirmation message for deleting a service"),
             preferredStyle: .actionSheet
         )
 
         addAction(UIAlertAction(
-            title: NSLocalizedString("Delete Service", comment: "Button title to delete a service"),
+            title: LocalizedString("Delete Service", comment: "Button title to delete a service"),
             style: .destructive,
             handler: { _ in
                 handler()
         }))
 
-        let cancel = NSLocalizedString("Cancel", comment: "The title of the cancel action in an action sheet")
+        let cancel = LocalizedString("Cancel", comment: "The title of the cancel action in an action sheet")
         addAction(UIAlertAction(title: cancel, style: .cancel, handler: nil))
     }
 }

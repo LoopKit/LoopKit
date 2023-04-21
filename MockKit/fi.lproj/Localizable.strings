@@ -1,6 +1,0 @@
-/* The alert title for a resume error */
-"Error Resuming" = "Virhe jatkamisessa";
-
-/* The alert title for a suspend error */
-"Error Suspending" = "Virhe pysäytyksessä";
-

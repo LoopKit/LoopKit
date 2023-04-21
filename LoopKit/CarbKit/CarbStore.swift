@@ -206,7 +206,8 @@ public final class CarbStore: HealthKitSampleStore {
         calculationDelta: TimeInterval = 5 /* minutes */ * 60,
         effectDelay: TimeInterval = 10 /* minutes */ * 60,
         carbAbsorptionModel: CarbAbsorptionModel = .nonlinear,
-        provenanceIdentifier: String
+        provenanceIdentifier: String,
+        test_currentDate: Date? = nil
     ) {
         self.storeEntriesToHealthKit = storeEntriesToHealthKit
         self.cacheStore = cacheStore
@@ -229,8 +230,9 @@ public final class CarbStore: HealthKitSampleStore {
                    observeHealthKitSamplesFromCurrentApp: true,
                    observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
                    type: carbType,
-                   observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
-                   observationEnabled: observationEnabled)
+                   observationStart: (test_currentDate ?? Date()).addingTimeInterval(-self.observationInterval),
+                   observationEnabled: observationEnabled,
+                   test_currentDate: test_currentDate)
 
         // Carb model settings based on the selected absorption model
         switch self.carbAbsorptionModel {
@@ -242,28 +244,18 @@ public final class CarbStore: HealthKitSampleStore {
             self.settings = CarbModelSettings(absorptionModel: PiecewiseLinearAbsorption(), initialAbsorptionTimeOverrun: 1.0, adaptiveAbsorptionRateEnabled: true, adaptiveRateStandbyIntervalFraction: 0.2)
         }
 
-        let semaphore = DispatchSemaphore(value: 0)
         cacheStore.onReady { (error) in
             guard error == nil else {
-                semaphore.signal()
                 return
             }
             
             cacheStore.fetchAnchor(key: CarbStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
-                    self.queryAnchor = anchor
-
-                    if !self.authorizationRequired {
-                        self.createQuery()
-                    }
-
+                    self.setInitialQueryAnchor(anchor)
                     self.migrateLegacyCarbEntryKeys()
-                    
-                    semaphore.signal()
                 }
             }
         }
-        semaphore.wait()
     }
 
     // Migrate modifiedCarbEntries and deletedCarbEntryIDs
@@ -291,18 +283,12 @@ public final class CarbStore: HealthKitSampleStore {
 
     // MARK: - HealthKitSampleStore
     
-    override func queryAnchorDidChange() {
-        cacheStore.storeAnchor(queryAnchor, key: CarbStore.healthKitQueryAnchorMetadataKey)
+    override func storeQueryAnchor(_ anchor: HKQueryAnchor) {
+        cacheStore.storeAnchor(anchor, key: CarbStore.healthKitQueryAnchorMetadataKey)
     }
 
     override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
         queue.async {
-            guard anchor != self.queryAnchor else {
-                self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
-                completion(true)
-                return
-            }
-
             var changed = false
             var error: CarbStoreError?
 
@@ -803,7 +789,7 @@ extension CarbStore {
 
 extension CarbStore {
     public var earliestCacheDate: Date {
-        return Date(timeIntervalSinceNow: -cacheLength)
+        return currentDate(timeIntervalSinceNow: -cacheLength)
     }
 
     private func purgeExpiredCachedCarbObjects() {

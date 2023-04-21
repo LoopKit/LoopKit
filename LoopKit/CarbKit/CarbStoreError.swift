@@ -5,6 +5,7 @@
 //  Copyright © 2018 LoopKit Authors. All rights reserved.
 //
 
+import Foundation
 
 extension CarbStore.CarbStoreError: LocalizedError {
     public var errorDescription: String? {

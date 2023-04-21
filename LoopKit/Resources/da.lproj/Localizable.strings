@@ -1,0 +1,267 @@
+/* Format for correction range override therapy setting card */
+"%@ Range" = "%@ område";
+
+/* Descriptive format string for glucose safety limit (1: app name) */
+"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ vil kun afgive basal og anbefale bolus, hvis blodsukkeret forventes at være over denne grænse i de næste tre timer.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Descriptive text for guardrail high value warning for schedule interface */
+"A value you have entered is higher than what is typically recommended for most people." = "En værdi, du har angivet, er højere end den, der typisk anbefales til de fleste.";
+
+/* Descriptive text for guardrail low value warning for schedule interface */
+"A value you have entered is lower than what is typically recommended for most people." = "En værdi, du har angivet, er lavere end den, der typisk anbefales til de fleste.";
+
+/* Brand name for afrezza insulin type
+   Title for Afrezza insulin type */
+"Afrezza" = "Afrezza";
+
+/* Description for afrezza insulin type */
+"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza er en ultrahurtigt virkende måltidsinsulin, som indåndes gennem lungerne ved hjælp af en oral inhalator og fremstilles af MannKind.";
+
+/* Brand name for apidra insulin type */
+"Apidra" = "Apidra";
+
+/* Title for Apidra insulin type */
+"Apidra (insulin glulisine)" = "Apidra (insulin glulisin)";
+
+/* Description for apidra insulin type */
+"Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis " = "Apidra (insulin glulisine) er en hurtigtvirkende insulin fremstillet af Sanofi-aventis ";
+
+/* The error description describing when Health sharing was denied */
+"Authorization Denied" = "Tilladelse nægtet";
+
+/* Title for basal dose type */
+"Basal" = "Basal";
+
+/* Title text for basal rates */
+"Basal Rates" = "Basalrater";
+
+/* Title for bolus dose type */
+"Bolus" = "Bolus";
+
+/* Title text for carb ratios */
+"Carb Ratios" = "Kulhydratforhold";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Tilladelse nægtet";
+
+/* The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Dette eksempel kan slettes fra appen Sundhed";
+
+/* Generic pump error description */
+"Communication Failure" = "Kommunikationsfejl";
+
+/* Failure reason for uncertain delivery */
+"Communications interrupted during insulin delivery command." = "Kommunikation afbrudt under insulinafgivelse (kommando).";
+
+/* Generic pump error description */
+"Connection Failure" = "Forbindelsesfejl";
+
+/* Title text for glucose target range */
+"Correction Range" = "Korrektionsområde";
+
+/* Descriptive text for glucose target range (1: app name) */
+"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Korrektionsområdet er det blodsukkerinterval som du vil have %1$@ til at sigte efter, når din basal justeres og hjælper dig med at beregne bolus.";
+
+/* Description of critical software update needed */
+"Critical Update" = "Kritisk opdatering";
+
+/* Title text for delivery limits */
+"Delivery Limits" = "Insulingrænser";
+
+/* Generic pump error description */
+"Device Refused" = "Enhed nægtet";
+
+/* Recovery suggestion for a no data error */
+"Ensure carb data exists for the specified date" = "Sørg for, at kulhydratdata findes for den angivne dato";
+
+/* Glucose trend down */
+"Falling" = "Falder";
+
+/* Glucose trend down-down */
+"Falling fast" = "Falder hurtigt";
+
+/* Glucose trend down-down-down */
+"Falling very fast" = "Falder meget hurtigt";
+
+/* Brand name for fiasp insulin type
+   Title for Fiasp insulin type */
+"Fiasp" = "Fiasp";
+
+/* Description for fiasp insulin type */
+"Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" = "Fiasp er et måltidsinsulin aspart med tilsætning af nicotinamid (vitamin B3) fremstillet af Novo Nordisk";
+
+/* Glucose trend flat */
+"Flat" = "Flad";
+
+/* Descriptive text for fast acting insulin model (1: app name) */
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "For hurtigt virkende insulin, %1$@ antager det arbejder aktivt i 6 timer. Du kan vælge mellem forskellige modeller til spidsbelastningsaktiviteten.";
+
+/* The short unit display string for grams per U */
+"g/U" = "g/E";
+
+/* Title text for glucose safety limit */
+"Glucose Safety Limit" = "Sikkerhedsgrænse for blodsukker";
+
+/* The long unit display string for a singular hour */
+"Hour" = "Time";
+
+/* The long unit display string for hours */
+"Hours" = "Timer";
+
+/* Brand name for humalog insulin type */
+"Humalog" = "Humalog";
+
+/* Title for Humalog insulin type */
+"Humalog (insulin lispro)" = "Humalog (insulin lispro)";
+
+/* Description for humalog insulin type */
+"Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Humalog (insulin lispro) er et hurtigtvirkende insulin fremstillet af Eli Lilly";
+
+/* Title text for fast acting insulin model */
+"Insulin Model" = "Insulinmodel";
+
+/* Title text for insulin sensitivity */
+"Insulin Sensitivities" = "Insulinfølsomheder";
+
+/* Generic pump error description */
+"Invalid Configuration" = "Forkert indstilling";
+
+/* Brand name for lyumjev insulin type
+   Title for Lyumjev insulin type */
+"Lyumjev" = "Lyumjev";
+
+/* Description for lyumjev insulin type */
+"Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly" = "Lyumjev er en måltidsinsulin lispro med tilsætning af citrat og treprostinil fremstillet af Eli Lilly";
+
+/* Recovery suggestion for uncertain delivery */
+"Make sure your pump is within communication range of your phone." = "Sørg for, at din pumpe er tæt på din telefon.";
+
+/* Title text for maximum basal rate configuration */
+"Maximum Basal Rate" = "Maksimal basalrate";
+
+/* Descriptive text for maximum basal rate (1: app name) */
+"Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Maksimal basalrate er den højeste midlertidige basalhastighed, som %1$@ har lov til at indstille.";
+
+/* Title text for maximum bolus configuration */
+"Maximum Bolus" = "Maksimal bolus";
+
+/* Descriptive text for maximum bolus */
+"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksimal bolus er den højeste bolus mængde, du kan afgive på én gang, i forbindelse med indtastning af kulhydrater eller en korrektionsbolus.";
+
+/* The short unit display string for milligrams per deciliter per U */
+"mg/dL/U" = "mg/dL/E";
+
+/* The short unit display string for millimoles per liter */
+"mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per U */
+"mmol/L/U" = "mmol/L/E";
+
+/* Sensor state description for the non-valid state */
+"Needs Attention" = "Handling påkrævet";
+
+/* Description of no software update needed */
+"No Update" = "Ingen opdatering";
+
+/* Describes an error for no data found in a CarbStore request */
+"No values found" = "Ingen værdier fundet";
+
+/* Brand name for novolog insulin type */
+"Novolog" = "Novolog";
+
+/* Title for Novolog insulin type */
+"Novolog (insulin aspart)" = "Novolog (insulin aspart)";
+
+/* Description for novolog insulin type */
+"NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk" = "NovoLog (insulin aspart) er et hurtigtvirkende insulin fremstillet af Novo Nordisk";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
+
+/* Descriptive text for saving settings outside the recommended range */
+"One or more of the values you have entered is outside of what is typically recommended for most people." = "En eller flere af de værdier, du har indtastet, er udenfor hvad der generelt anbefales.";
+
+/* The error recovery suggestion when Health sharing was denied */
+"Please re-enable sharing in Health" = "Venligst gen-aktiver deling i Sundhed";
+
+/* Title for pre-meal mode */
+"Pre-Meal" = "Før-måltid";
+
+/* Description of supported software update needed */
+"Recommended Update" = "Anbefalet opdatering";
+
+/* Title for resume dose type */
+"Resumed" = "Genoptaget";
+
+/* Glucose trend up */
+"Rising" = "Stiger";
+
+/* Glucose trend up-up */
+"Rising fast" = "Stiger hurtigt";
+
+/* Glucose trend up-up-up */
+"Rising very fast" = "Stiger meget hurtigt";
+
+/* Descriptive text for guardrail high value warning for schedule interface */
+"Some of the values you have entered are outside of what is typically recommended for most people." = "Nogle af de værdier, du har angivet, ligger uden for det, der typisk anbefales til de fleste.";
+
+/* Title for suspend dose type */
+"Suspended" = "Suspenderet";
+
+/* Title for temp basal dose type */
+"Temp Basal" = "Midlertidig basal";
+
+/* Descriptive text for pre-meal correction range override */
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Sænker midlertidigt dit blodsukker mål før et måltid for at modvirke stigning i blodsukker efter måltidet.";
+
+/* Descriptive text for workout correction range override */
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Hæver midlertidigt dit blodsukkermål før, under eller efter fysisk aktivitet for at reducere risikoen for lavt blodsukker.";
+
+/* Descriptive text for guardrail high value warning */
+"The value you have entered is higher than what is typically recommended for most people." = "En værdi, du har angivet, er højere end den, der typisk anbefales til de fleste.";
+
+/* Descriptive text for guardrail low value warning */
+"The value you have entered is lower than what is typically recommended for most people." = "En værdi, du har angivet, er lavere end den, der typisk anbefales til de fleste.";
+
+/* Descriptive text for guardrail high value warning */
+"The values you have entered are outside of what is typically recommended for most people." = "Nogle af de værdier, du har angivet, ligger uden for det, der typisk anbefales til de fleste.";
+
+/* The short unit display string for international units of insulin */
+"U" = "E";
+
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "E/t";
+
+/* Error description for uncertain delivery */
+"Uncertain Delivery" = "Usikker indgivelse";
+
+/* The long unit display string for a singular international unit of insulin */
+"Unit" = "Enhed";
+
+/* The long unit display string for a singular international unit of insulin per hour */
+"Unit/hour" = "Enhed/time";
+
+/* The long unit display string for international units of insulin */
+"Units" = "Enheder";
+
+/* The long unit display string for international units of insulin per hour */
+"Units/hour" = "Enheder/time";
+
+/* Description of informational software update needed */
+"Update Available" = "Opdatering tilgængelig";
+
+/* Title for workout mode */
+"Workout" = "Motion";
+
+/* Descriptive text for basal rate */
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "En basalrate, er det antal af enheder i timen, som du skal bruge for at dække dit basale insulinbehov.";
+
+/* Descriptive text for carb ratio */
+"Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Kulhydratforhold er antallet af kulhydrater i gram, der dækkes af én enhed insulin.";
+
+/* Descriptive text for insulin sensitivity */
+"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "Insulinfølsomhed henviser til det fald i blodsukker, der forventes fra én insulinenhed.";
+

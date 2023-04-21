@@ -1,8 +1,8 @@
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basalraten";
+"Basal Rates" = "Basalrate";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Kohlenhydratfaktoren";
+"Carb Ratios" = "KH-Verhältnisse";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "KH";

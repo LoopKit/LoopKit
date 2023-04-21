@@ -1,0 +1,18 @@
+/* The title text for the basal rate schedule */
+"Basal Rates" = "Bazálne dávky";
+
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "Inzulínovo sacharidový pomer";
+
+/* The placeholder text instructing users how to enter a pump ID */
+"Enter the 6-digit pump ID" = "Zadajte 6-miestne ID pumpy";
+
+/* The title text for the pump ID */
+"Pump ID" = "ID pumpy";
+
+/* The title for the cell navigating to the reservoir screen */
+"Reservoir" = "Rezervoár";
+
+/* Title for the cell resetting the data manager */
+"Reset" = "Resetovať";
+

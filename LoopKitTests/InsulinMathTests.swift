@@ -842,8 +842,8 @@ class InsulinMathTests: XCTestCase {
         ]
 
         let scheduledBasalRate = HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.2)
-        let reconciledWithBasal = [
-            DoseEntry(type: .basal,     startDate: f("2018-07-11 04:00:00 +0000"), endDate: f("2018-07-11 04:07:15 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "BasalRateSchedule 2018-07-11T04:00:00Z 2018-07-11T04:07:15Z", scheduledBasalRate: scheduledBasalRate),
+        let expected = [
+            DoseEntry(type: .basal,     startDate: f("2018-07-11 04:00:00 +0000"), endDate: f("2018-07-11 04:07:15 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "BasalRateSchedule 2018-07-11T04:00:00Z 2018-07-11T04:07:15Z", scheduledBasalRate: scheduledBasalRate, automatic: true),
             DoseEntry(type: .tempBasal, startDate: f("2018-07-11 04:07:15 +0000"), endDate: f("2018-07-11 04:12:15 +0000"), value: 0.67500000000000004, unit: .unitsPerHour),
             DoseEntry(type: .basal,     startDate: f("2018-07-11 04:12:15 +0000"), endDate: f("2018-07-11 04:31:55 +0000"), value: 1.2, unit: .unitsPerHour, syncIdentifier: "BasalRateSchedule 2018-07-11T04:12:15Z 2018-07-11T04:31:55Z", scheduledBasalRate: scheduledBasalRate),
             DoseEntry(type: .suspend,   startDate: f("2018-07-11 04:31:55 +0000"), endDate: f("2018-07-11 05:01:14 +0000"), value: 0.0, unit: .units),
@@ -853,7 +853,15 @@ class InsulinMathTests: XCTestCase {
 
         let basalSchedule = BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: 0, value: 1.2)])
 
-        XCTAssertEqual(reconciledWithBasal, reconciled.overlayBasalSchedule(basalSchedule!, startingAt: f("2018-07-11 04:00:00 +0000"), endingAt: f("2018-07-11 05:32:15 +0000"), insertingBasalEntries: true))
+        let overlaid = reconciled.overlayBasalSchedule(basalSchedule!, startingAt: f("2018-07-11 04:00:00 +0000"), endingAt: f("2018-07-11 05:32:15 +0000"), insertingBasalEntries: true)
+
+        XCTAssertEqual(expected.count, overlaid.count)
+
+        XCTAssertEqual(expected[0], overlaid[0])
+        XCTAssertEqual(expected[1], overlaid[1])
+        XCTAssertEqual(expected[2], overlaid[2])
+        XCTAssertEqual(expected[3], overlaid[3])
+        XCTAssertEqual(expected[4], overlaid[4])
     }
 
     func testAppendedUnionOfPumpEvents() {

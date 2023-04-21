@@ -28,6 +28,13 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             provenanceIdentifier: Bundle.main.bundleIdentifier!)
         carbStore.testQueryStore = healthStore
         carbStore.delegate = self
+
+        let semaphore = DispatchSemaphore(value: 0)
+        cacheStore.onReady { (error) in
+            semaphore.signal()
+        }
+        semaphore.wait()
+
     }
     
     override func tearDown() {
@@ -1019,6 +1026,13 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
             observationInterval: 0,
             provenanceIdentifier: Bundle.main.bundleIdentifier!)
+
+        let semaphore = DispatchSemaphore(value: 0)
+        cacheStore.onReady { (error) in
+            semaphore.signal()
+        }
+        semaphore.wait()
+
         completion = expectation(description: "Completion")
         queryAnchor = CarbStore.QueryAnchor()
         limit = Int.max

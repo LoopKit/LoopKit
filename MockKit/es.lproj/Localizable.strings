@@ -1,6 +1,0 @@
-/* The alert title for a resume error */
-"Error Resuming" = "Error al reanudar";
-
-/* The alert title for a suspend error */
-"Error Suspending" = "Error al suspender";
-

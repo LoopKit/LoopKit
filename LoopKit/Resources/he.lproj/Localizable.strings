@@ -1,0 +1,130 @@
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* The error description describing when Health sharing was denied */
+"Authorization Denied" = "Authorization Denied";
+
+/* Title text for basal rates */
+"Basal Rates" = "Basal Rates";
+
+/* Title for bolus dose type */
+"Bolus" = "Bolus";
+
+/* Title text for carb ratios */
+"Carb Ratios" = "Carb Ratios";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Authorization Denied";
+
+/* The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "This sample can be deleted from the Health app";
+
+/* Generic pump error description */
+"Communication Failure" = "Communication Failure";
+
+/* Generic pump error description */
+"Connection Failure" = "Connection Failure";
+
+/* Title text for glucose target range */
+"Correction Range" = "Correction Range";
+
+/* Title text for delivery limits */
+"Delivery Limits" = "Delivery Limits";
+
+/* Generic pump error description */
+"Device Refused" = "Device Refused";
+
+/* Recovery suggestion for a no data error */
+"Ensure carb data exists for the specified date" = "Ensure carb data exists for the specified date";
+
+/* Glucose trend down */
+"Falling" = "Falling";
+
+/* Glucose trend down-down */
+"Falling fast" = "Falling fast";
+
+/* Glucose trend down-down-down */
+"Falling very fast" = "Falling very fast";
+
+/* Brand name for fiasp insulin type
+   Title for Fiasp insulin type */
+"Fiasp" = "Fiasp";
+
+/* Glucose trend flat */
+"Flat" = "Flat";
+
+/* The short unit display string for grams per U */
+"g/U" = "g/U";
+
+/* Title text for fast acting insulin model */
+"Insulin Model" = "Insulin Model";
+
+/* Title text for insulin sensitivity */
+"Insulin Sensitivities" = "Insulin Sensitivities";
+
+/* Generic pump error description */
+"Invalid Configuration" = "Invalid Configuration";
+
+/* Title text for maximum basal rate configuration */
+"Maximum Basal Rate" = "Maximum Basal Rate";
+
+/* Title text for maximum bolus configuration */
+"Maximum Bolus" = "Maximum Bolus";
+
+/* The short unit display string for milligrams per deciliter per U */
+"mg/dL/U" = "mg/dL/U";
+
+/* The short unit display string for millimoles per liter */
+"mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per U */
+"mmol/L/U" = "mmol/L/U";
+
+/* Sensor state description for the non-valid state */
+"Needs Attention" = "Needs Attention";
+
+/* Describes an error for no data found in a CarbStore request */
+"No values found" = "No values found";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
+
+/* The error recovery suggestion when Health sharing was denied */
+"Please re-enable sharing in Health" = "Please re-enable sharing in Health";
+
+/* Title for pre-meal mode */
+"Pre-Meal" = "Pre-Meal";
+
+/* Glucose trend up */
+"Rising" = "Rising";
+
+/* Glucose trend up-up */
+"Rising fast" = "Rising fast";
+
+/* Glucose trend up-up-up */
+"Rising very fast" = "Rising very fast";
+
+/* Title for suspend dose type */
+"Suspended" = "Suspended";
+
+/* The short unit display string for international units of insulin */
+"U" = "U";
+
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "U/hr";
+
+/* The long unit display string for a singular international unit of insulin */
+"Unit" = "Unit";
+
+/* The long unit display string for a singular international unit of insulin per hour */
+"Unit/hour" = "Unit/hour";
+
+/* The long unit display string for international units of insulin */
+"Units" = "Units";
+
+/* The long unit display string for international units of insulin per hour */
+"Units/hour" = "Units/hour";
+
+/* Title for workout mode */
+"Workout" = "Workout";
+

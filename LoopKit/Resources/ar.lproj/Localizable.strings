@@ -1,0 +1,43 @@
+/* Title text for basal rates */
+"Basal Rates" = "الضخ المستمر";
+
+/* Title for bolus dose type */
+"Bolus" = "Bolus";
+
+/* Title text for carb ratios */
+"Carb Ratios" = "معاملات الكارب";
+
+/* Title text for glucose target range */
+"Correction Range" = "نطاق التصحيح";
+
+/* Title text for delivery limits */
+"Delivery Limits" = "حدود الضخ";
+
+/* Brand name for fiasp insulin type
+   Title for Fiasp insulin type */
+"Fiasp" = "Fiasp";
+
+/* Title text for fast acting insulin model */
+"Insulin Model" = "نوع الأنسولين";
+
+/* Title text for insulin sensitivity */
+"Insulin Sensitivities" = "حساسية الأنسولين";
+
+/* The short unit display string for millimoles per liter */
+"mmol/L" = "mmol/L";
+
+/* Sensor state description for the valid state */
+"OK" = "موافق";
+
+/* Title for pre-meal mode */
+"Pre-Meal" = "Pre-Meal";
+
+/* The short unit display string for international units of insulin */
+"U" = "وحدة";
+
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "وحدة لكل ساعة";
+
+/* Title for workout mode */
+"Workout" = "التمارين";
+

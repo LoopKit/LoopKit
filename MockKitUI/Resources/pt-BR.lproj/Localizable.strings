@@ -1,0 +1,25 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Cancelar";
+
+/* Button title to delete a service */
+"Delete Service" = "Delete Service";
+
+/* The alert title for a resume error */
+"Error Resuming" = "Erro ao Retomar";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Erro ao Suspender";
+
+/* Button title to acknowledge error
+   Default acknowledgement */
+"OK" = "OK";
+
+/* Title for Pump simulator settings */
+"Pump Settings" = "Configurações da Bomba";
+

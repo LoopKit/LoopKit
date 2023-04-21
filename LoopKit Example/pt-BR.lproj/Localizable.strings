@@ -14,7 +14,7 @@
 "Diagnostic" = "Diagnóstico";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Entre com o ID de 6 dígitos da bomba";
+"Enter the 6-digit pump ID" = "Digite o ID da bomba de 6 dígitos";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Gerar Dados";
@@ -27,7 +27,7 @@
 "Pump ID" = "ID da Bomba";
 
 /* The title for the cell navigating to the reservoir screen */
-"Reservoir" = "Reservatório";
+"Reservoir" = "Reservoir";
 
 /* Title for the cell resetting the data manager */
 "Reset" = "Restabelecer";
@@ -37,3 +37,4 @@
 
 /* Instructions on where to find the pump ID on a Minimed pump */
 "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "O ID da bomba pode ser encontrado impresso na parte traseira ou na parte inferior da tela STATUS/Esc. É a parte estritamente numérica do número de série (mostrado como SN ou S/N).";
+

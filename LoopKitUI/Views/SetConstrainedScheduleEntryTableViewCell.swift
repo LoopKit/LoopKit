@@ -9,6 +9,7 @@
 import Foundation
 import HealthKit
 import LoopKit
+import UIKit
 
 protocol SetConstrainedScheduleEntryTableViewCellDelegate: AnyObject {
     func setConstrainedScheduleEntryTableViewCellDidUpdate(_ cell: SetConstrainedScheduleEntryTableViewCell)

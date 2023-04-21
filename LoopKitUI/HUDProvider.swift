@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 public enum HUDTapAction {
     case presentViewController(UIViewController & CompletionNotifying)

@@ -8,7 +8,7 @@
 
 import XCTest
 import Foundation
-import LoopKit
+@testable import LoopKit
 
 class NotificationSettingsCodableTests: XCTestCase {
     func testCodable() throws {

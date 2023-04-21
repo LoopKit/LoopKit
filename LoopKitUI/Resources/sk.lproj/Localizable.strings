@@ -1,0 +1,88 @@
+/* Separator between min and max glucose values */
+"-" = "-";
+
+/* Appends a full-stop to a statement */
+"%@." = "%@ .";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@ j";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ jednotiek zostávajúcich na %2$@";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@ %2$@ %3$@";
+
+/* The title for the override emoji activity section */
+"Activity" = "Aktivita";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Pridať účet";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Zadať sacharidy";
+
+/* Back navigation button title */
+"Back" = "Späť";
+
+/* Title text for multi-value basal rate warning */
+"Basal Rates" = "Bazálne dávky";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Zrušiť";
+
+/* Title text for multi-value carb ratio warning */
+"Carb Ratios" = "Inzulínovo sacharidový pomer";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* Title of the setup button to continue */
+"Continue" = "Pokračovať";
+
+/* Title of the carb entry date picker cell */
+"Date" = "Dátum";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Odstrániť účet";
+
+/* Title text for crossed thresholds guardrail warning */
+"Delivery Limits" = "Limity podávania";
+
+/* Text for dismiss button
+   Text for done button
+   Video player done button label */
+"Done" = "Hotovo";
+
+/* Title text for insulin model */
+"Insulin Model" = "Inzulínový model";
+
+/* The text for the override preset name setting */
+"Name" = "Názov";
+
+/* The default placeholder string for a credential */
+"Required" = "Povinné";
+
+/* Segmented button title for insulin delivery log reservoir history */
+"Reservoir" = "Rezervoár";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "Uložiť";
+
+/* The button text during saving on a configuration page */
+"Saving..." = "Ukladá sa...";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Ťuknutím nastavte";
+
+/* Label for offset from midnight picker */
+"Time" = "Čas";
+
+/* The unit string for units */
+"Units" = "jednotky";
+
+/* Accessibility value for an unknown value
+   The default title to use when an entry has none */
+"Unknown" = "Neznáme";
+

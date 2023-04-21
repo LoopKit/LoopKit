@@ -1,8 +1,8 @@
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basalsatser";
+"Basal Rates" = "Basal-satser";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Karbohydratforhold";
+"Carb Ratios" = "Karb forhold";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Karbohydrater";
@@ -14,7 +14,7 @@
 "Diagnostic" = "Diagnostikk";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Skriv 6-siffret pumpe ID";
+"Enter the 6-digit pump ID" = "Skriv 6-siffret pumpe-ID";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Generer data";
@@ -30,11 +30,11 @@
 "Reservoir" = "Reservoar";
 
 /* Title for the cell resetting the data manager */
-"Reset" = "Nullstill";
+"Reset" = "Nullstille";
 
 /* Title of button to sync basal profile from pump */
 "Sync With Pump" = "Synkroniser med pumpe";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
-"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).";
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Pumpe-ID finner du trykt på baksiden eller nær bunnen av STATUS/Esc-skjermen. Det er den numeriske delen av serienummeret (vist som SN eller S/N).";
 

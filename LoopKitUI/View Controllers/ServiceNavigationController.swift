@@ -7,6 +7,7 @@
 //
 
 import LoopKit
+import UIKit
 
 open class ServiceNavigationController: UINavigationController, ServiceOnboarding, CompletionNotifying {
     public weak var serviceOnboardingDelegate: ServiceOnboardingDelegate?

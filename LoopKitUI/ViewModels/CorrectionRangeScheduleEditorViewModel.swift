@@ -20,10 +20,17 @@ struct CorrectionRangeScheduleEditorViewModel {
 
     var saveGlucoseTargetRangeSchedule: (_ glucoseTargetRangeSchedule: GlucoseRangeSchedule) -> Void
 
-    init(therapySettingsViewModel: TherapySettingsViewModel,
-         didSave: (() -> Void)? = nil)
-    {
-        self.glucoseTargetRangeSchedule = therapySettingsViewModel.glucoseTargetRangeSchedule
+    init(
+        mode: SettingsPresentationMode,
+        therapySettingsViewModel: TherapySettingsViewModel,
+        didSave: (() -> Void)? = nil
+    ) {
+        if mode == .acceptanceFlow {
+            self.glucoseTargetRangeSchedule = therapySettingsViewModel.glucoseTargetRangeSchedule?.safeSchedule(with: therapySettingsViewModel.suspendThreshold?.quantity)
+        }
+        else {
+            self.glucoseTargetRangeSchedule = therapySettingsViewModel.glucoseTargetRangeSchedule
+        }
         self.minValue = Guardrail.minCorrectionRangeValue(suspendThreshold: therapySettingsViewModel.suspendThreshold)
         self.saveGlucoseTargetRangeSchedule = { [weak therapySettingsViewModel] glucoseTargetRangeSchedule in
             guard let therapySettingsViewModel = therapySettingsViewModel else {

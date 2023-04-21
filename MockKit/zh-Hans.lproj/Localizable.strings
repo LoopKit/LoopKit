@@ -1,6 +1,0 @@
-/* The alert title for a resume error */
-"Error Resuming" = "无法恢复";
-
-/* The alert title for a suspend error */
-"Error Suspending" = "无法暂停";
-

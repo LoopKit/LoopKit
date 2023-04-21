@@ -1,0 +1,74 @@
+/* No comment provided by engineer. */
+"%@ has been unable to communicate with the Simulator Pump since %@.\n\nWithout communication, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered." = "%1$@ kan niet communiceren met de Pompsimulator sinds %2$@.\n\nZonder communicatie kan de app geen opdrachten meer versturen voor insulinetoediening of nauwkeurige recente informatie weergeven over jouw actieve insuline of de insuline die is toegediend.";
+
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Alert content body for recurring software update alert */
+"A software update is recommended to continue using the %1$@ app.\n\nGo to %2$@ Settings > Software Update to install the latest version." = "Een software-update wordt aanbevolen om de %1$@ app te blijven gebruiken. \n\nGa naar %2$@ Instellingen > Software Update om de nieuwste versie te installeren.";
+
+/* Confirmation message for deleting a service */
+"Are you sure you want to delete this service?" = "Weet je zeker dat je deze service wil verwijderen?";
+
+/* Back button text on DeliveryUncertaintyRecoveryView */
+"Back" = "Terug";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Annuleer";
+
+/* Title for CGM simulator settings */
+"CGM Settings" = "CGM Instellingen";
+
+/* No comment provided by engineer. */
+"Clear Last Version Check Alert Date" = "Wis laatste versie Controleer Waarschuwingsdatum";
+
+/* No comment provided by engineer. */
+"Comms Recovery" = "Comms Herstel";
+
+/* Button title to delete a service */
+"Delete Service" = "Service Verwijderen";
+
+/* The alert title for a resume error */
+"Error Resuming" = "Fout Bij Hervatten";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Fout Bij Onderbreken";
+
+/* Caption for History
+   History Caption */
+"History" = "Geschiedenis";
+
+/* No comment provided by engineer. */
+"How should the simulator respond to a version check?" = "Hoe moet de simulator reageren op een versiecontrole?";
+
+/* Controller title for insulin type selection screen */
+"Insulin Type" = "Insulinetype";
+
+/* No comment provided by engineer. */
+"Mock Version Check %@" = "Mock Versie Check %@";
+
+/* Button title to acknowledge error
+   Default acknowledgement */
+"OK" = "Ok";
+
+/* Title for Pump simulator settings */
+"Pump Settings" = "Pompinstellingen";
+
+/* Button title recovering comms */
+"Recover Simulator" = "Simulator Herstellen";
+
+/* Caption for Source */
+"Source" = "Bron";
+
+/* Recurring software update alert title */
+"Update Reminder" = "Update Herinnering";
+
+/* No comment provided by engineer. */
+"Version Check Response" = "Reactie op versiecontrole";
+
+/* Alert content body for first software update alert (1: app name)(2: app name) */
+"Your %1$@ app is out of date. It will continue to work, but we recommend updating to the latest version.\n\nGo to %2$@ Settings > Software Update to complete." = "Je %1$@ app is verouderd. De app blijft werken, maar we raden je aan om de app bij te werken naar de nieuwste versie. \n\nGa naar %2$@ Instellingen > Software Update om de update te voltooien.";
+

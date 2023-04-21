@@ -1,14 +1,14 @@
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Perfil Basal";
+"Basal Rates" = "Tasas basales";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Relaciones de hidratos";
+"Carb Ratios" = "Ratios de carbohidratos";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Carbohidratos";
 
 /* The title text for the glucose correction range schedule */
-"Correction Range" = "Rango Objetivo de Glucosa";
+"Correction Range" = "Rango de Corrección";
 
 /* The title for the cell displaying diagnostic data */
 "Diagnostic" = "Diagnóstico";
@@ -24,7 +24,7 @@
 "Insulin Sensitivity" = "Sensibilidad a la insulina";
 
 /* The title text for the pump ID */
-"Pump ID" = "ID de microinfusora";
+"Pump ID" = "ID de Bomba";
 
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "Reservorio";

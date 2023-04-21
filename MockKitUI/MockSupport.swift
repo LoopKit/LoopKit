@@ -12,6 +12,7 @@ import LoopKitUI
 import SwiftUI
 
 public class MockSupport: SupportUI {
+
     public static let supportIdentifier = "MockSupport"
     
     var versionUpdate: VersionUpdate?
@@ -38,7 +39,11 @@ public class MockSupport: SupportUI {
     }
     
     public weak var delegate: SupportUIDelegate?
-    
+
+    public func configurationMenuItems() -> [AnyView] {
+        return []
+    }
+
     public func supportMenuItem(supportInfoProvider: SupportInfoProvider, urlHandler: @escaping (URL) -> Void) -> AnyView? {
         return AnyView(SupportMenuItem(mockSupport: self))
     }
@@ -72,21 +77,21 @@ extension MockSupport {
         let alertContent: LoopKit.Alert.Content
         if firstAlert {
             alertContent = Alert.Content(title: versionUpdate.localizedDescription,
-                                         body: NSLocalizedString("""
-                                                    Your \(appName) app is out of date. It will continue to work, but we recommend updating to the latest version.
+                                         body: String(format: LocalizedString("""
+                                                    Your %1$@ app is out of date. It will continue to work, but we recommend updating to the latest version.
                                                     
-                                                    Go to \(appName) Settings > Software Update to complete.
-                                                    """, comment: "Alert content body for first software update alert"),
-                                         acknowledgeActionButtonLabel: NSLocalizedString("OK", comment: "Default acknowledgement"))
+                                                    Go to %2$@ Settings > Software Update to complete.
+                                                    """, comment: "Alert content body for first software update alert (1: app name)(2: app name)"), appName, appName),
+                                         acknowledgeActionButtonLabel: LocalizedString("OK", comment: "Default acknowledgement"))
         } else if let lastVersionCheckAlertDate = lastVersionCheckAlertDate,
                   abs(lastVersionCheckAlertDate.timeIntervalSinceNow) > alertCadence {
-            alertContent = Alert.Content(title: NSLocalizedString("Update Reminder", comment: "Recurring software update alert title"),
-                                         body: NSLocalizedString("""
-                                                    A software update is recommended to continue using the \(appName) app.
+            alertContent = Alert.Content(title: LocalizedString("Update Reminder", comment: "Recurring software update alert title"),
+                                         body: String(format: LocalizedString("""
+                                                    A software update is recommended to continue using the %1$@ app.
                                                     
-                                                    Go to \(appName) Settings > Software Update to install the latest version.
-                                                    """, comment: "Alert content body for recurring software update alert"),
-                                         acknowledgeActionButtonLabel: NSLocalizedString("OK", comment: "Default acknowledgement"))
+                                                    Go to %2$@ Settings > Software Update to install the latest version.
+                                                    """, comment: "Alert content body for recurring software update alert"), appName, appName),
+                                         acknowledgeActionButtonLabel: LocalizedString("OK", comment: "Default acknowledgement"))
         } else {
             return
         }

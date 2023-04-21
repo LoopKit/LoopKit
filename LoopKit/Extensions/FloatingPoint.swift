@@ -6,6 +6,8 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
+import Foundation
+
 extension Double {
     public func matchingOrTruncatedValue(from supportedValues: [Double], withinDecimalPlaces precision: Int) -> Double {
         let nearestSupportedValue = roundedToNearest(of: supportedValues)

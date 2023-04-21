@@ -1,0 +1,745 @@
+/* Information about workout range relative to correction range */
+" higher " = " mai mare ";
+
+/* Information about pre-meal range relative to correction range */
+" lower " = " mai mic ";
+
+/* Separator between min and max glucose values */
+"-" = "-";
+
+/* No comment provided by engineer. */
+"－" = "-";
+
+/* The detail text representing no value */
+"–" = "–";
+
+/* No comment provided by engineer. */
+"···" = "···";
+
+/* No comment provided by engineer. */
+"%@" = "%@";
+
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% din insulină normală";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Information about insulin action duration (1: app name) */
+"%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%1$@ presupune că insulina pe care a livrat-o acționează pentru a vă scădea glicemia timp de 6 ore. Această setare nu poate fi schimbată.";
+
+/* Lower bound workout information text format (1: app name) */
+"%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ sau limita dvs. de siguranță, oricare dintre acestea este mai mare";
+
+/* Information about max number of basal rates (1: app name) (2: maximum schedule entry count) */
+"%1$@ supports 1 to %2$@ rates per day." = "%1$@ acceptă rate de la 1 la %2$@ pe zi.";
+
+/* Reservoir entry (1: volume value) */
+"%1$@ U" = "%1$@ U";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ unități rămase la %2$@";
+
+/* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
+   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+"%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "%1$d la sută complet.";
+
+/* No comment provided by engineer. */
+"%lld" = "%lld";
+
+/* No comment provided by engineer. */
+"%lld, " = "%lld, ";
+
+/* No comment provided by engineer. */
+"🍽" = "🍽";
+
+/* Premeal override preset title */
+"🍽 Pre-Meal" = "🍽 Preprandial";
+
+/* No comment provided by engineer. */
+"🏃‍♂️" = "🏃‍♂️";
+
+/* Workout override preset title */
+"🏃‍♂️ Workout" = "🏃‍♂️ Activitate sportivă";
+
+/* No comment provided by engineer. */
+"A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "Un card al cărui text se va întinde pe mai multe linii dacă continui să tastez pentru o perioadă suficient de lungă — această lungime ar trebui să o facă";
+
+/* Information about differences between target range and correction range */
+"A Correction Range is different. This will be a narrower range." = "Un interval de corecție este diferit. Acesta ar trebui sa fie un interval mai îngust.";
+
+/* No comment provided by engineer. */
+"A simple card" = "Un card simplu";
+
+/* Warning text for basal rate of 0 U/hr */
+"A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "O valoare de 0 U/oră înseamnă că nu vei primi insulină bazală.";
+
+/* No comment provided by engineer. */
+"Above the save button" = "Deasupra butonului de salvare";
+
+/* Title of the carb entry absorption time cell */
+"Absorption Time" = "Timp de absorbție";
+
+/* No comment provided by engineer. */
+"Action Button" = "Buton acțiune";
+
+/* The text for the override history duration */
+"Active Duration" = "Durata activă";
+
+/* The title for the override emoji activity section */
+"Activity" = "Activitate";
+
+/* Button text to confirm adding a new schedule item */
+"Add" = "Adaugă";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Adaugă cont";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Adaugă carbohidrați";
+
+/* Title of insulin model preset - afrezza */
+"Afrezza" = "Afrezza";
+
+/* Action sheet confirmation message for pump history deletion */
+"Are you sure you want to delete all history entries?" = "Sigur doriți să ștergeți toate înregistrările din istoric?";
+
+/* Action sheet confirmation message for reservoir deletion */
+"Are you sure you want to delete all reservoir values?" = "Sigur doriți să ștergeți toate valorile de rezervor?";
+
+/* Authentication hint string for therapy settings */
+"Authenticate to save therapy setting" = "Autentifică-te pentru a salva setările terapiei";
+
+/* Back navigation button title */
+"Back" = "Înapoi";
+
+/* Title text for multi-value basal rate warning */
+"Basal Rates" = "Rate bazale";
+
+/* Describes a percentage decrease in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Dozele de insulină bazale, de bolus și de corecție sunt scăzute cu %@%%.";
+
+/* Describes a percentage increase in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Dozele de insulină bazale, de bolus și de corecție sunt crescute cu %@%%.";
+
+/* Describes a lack of change in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "Dozele de insulină bazale, de bolus și de corecție sunt neafectate.";
+
+/* No comment provided by engineer. */
+"Bottom component" = "Componenta de jos";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Renunță";
+
+/* The text for the override cancellation button */
+"Cancel Override" = "Oprește înlocuirea";
+
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Oprește bazala temporară";
+
+/* Title text for multi-value carb ratio warning */
+"Carb Ratios" = "Raport carbohidrați/insulină";
+
+/* Footer text for customizing an override from a preset (1: preset name) */
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Modificările se vor aplica doar pe durata înlocuirii. Setările implicite de %@ nu vor fi afectate.";
+
+/* Footer text for customizing from a preset (1: preset name) */
+"Changes will only apply this time you enable the preset. The default settings of %@ will not be affected." = "Modificările se vor aplica numai de această dată când activați presetarea. Setările implicite %@ nu vor fi afectate.";
+
+/* Carb entry section footer text explaining absorption time */
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Alegeți o durată mai lungă de absorbție pentru mese mai mari sau pentru cele care conțin grăsimi și proteine. Nu e necesară o valoare exactă, scopul e să oferim doar o ghidare pentru algoritm.";
+
+/* Button text to close a modal
+   Text to close informational page */
+"Close" = "Închide";
+
+/* The format string describing the date of a COB value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.COBDateLabel" = "la %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.totalDateLabel" = "de la %1$@";
+
+/* The format string describing the date of an IOB value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.IOBDateLabel" = "la %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.totalDateLabel" = "de la %1$@";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* Accessibility label for ProgressIndicatorView when showIndeterminantProgress */
+"Completed." = "Finalizat.";
+
+/* The title for the override emoji condition section */
+"Condition" = "Condiție";
+
+/* The button text for confirming the setting */
+"Confirm Setting" = "Confirmați setările";
+
+/* No comment provided by engineer. */
+"content" = "conținut";
+
+/* Title of the setup button to continue */
+"Continue" = "Continuă";
+
+/* The section footer of correction range schedule */
+"Correction range is the blood glucose range that you would like Loop to correct to." = "Correction range is the blood glucose range that you would like Loop to correct to.";
+
+/* Title text for multi-value correction value warning */
+"Correction Values" = "Valori corecție";
+
+/* The text for a custom override */
+"Custom" = "Personalizată";
+
+/* The title for the custom override entry screen */
+"Custom Override" = "Modificare personalizată";
+
+/* The title for the custom preset entry screen
+   The title for the custom preset selection screen */
+"Custom Preset" = "Presetare particularizată";
+
+/* Title of the carb entry date picker cell */
+"Date" = "Data";
+
+/* Delete values for Pre-Meal, inactivates Pre-Meal icon
+   Test for table cell delete button
+   The title of the button to remove the credentials for a service */
+"Delete" = "Șterge";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Șterge cont";
+
+/* Button title to delete all objects */
+"Delete All" = "Șterge tot";
+
+/* Title text for crossed thresholds guardrail warning */
+"Delivery Limits" = "Limite de livrare";
+
+/* Information about delivery limits */
+"Delivery Limits are safety guardrails for your insulin delivery." = "Limitele de livrare sunt măsuri de siguranță pentru administrarea insulinei.";
+
+/* The text for the custom preset disable button */
+"Disable Preset" = "Dezactivează presetarea";
+
+/* Text for dismiss button
+   Text for done button
+   Video player done button label */
+"Done" = "Realizat";
+
+/* The text for the override duration setting */
+"Duration" = "Durată";
+
+/* No comment provided by engineer. */
+"Dynamic component #%lld" = "Componenta dinamică #%lld";
+
+/* Text for edit button
+   The title for the enabled custom preset editing screen */
+"Edit" = "Editare";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Editează carbohidrați";
+
+/* The title for the override editing screen */
+"Edit Override" = "Editează înlocuirea";
+
+/* Footer text for editing an active override (1: preset name) */
+"Editing affects only the active override. The default settings of %@ will not be affected." = "Editarea afectează doar înlocuirea activă. Setările implicite de %@ nu vor fi afectate.";
+
+/* Footer text for editing an enabled custom preset (1: preset name) */
+"Edits persist only until the preset is disabled. The default settings of %@ will not be affected." = "Modificările persistă numai până când presetarea este dezactivată. Setările implicite %@ nu vor fi afectate.";
+
+/* The button text for enabling a temporary override */
+"Enable" = "Activează";
+
+/* The text for the indefinite override duration setting */
+"Enable Indefinitely" = "Activează pe termen nedeterminat";
+
+/* The detail text describing an enabled setting */
+"Enabled" = "Activat";
+
+/* The text for the override start time */
+"End Time" = "Timp de încheiere";
+
+/* Format string for accessibility label for value entry. (1: value label) */
+"Enter %1$@ value" = "Introduceți valoarea %1$@";
+
+/* The placeholder text instructing users how to enter a maximum bolus */
+"Enter a number of units" = "Introduceți un număr de unități";
+
+/* The placeholder text instructing users how to enter a maximum basal rate */
+"Enter a rate in units per hour" = "Introduceți o rată exprimată în unități per oră";
+
+/* Segmented button title for insulin delivery log event history */
+"Event History" = "Istoric evenimente";
+
+/* No comment provided by engineer. */
+"Example" = "Exemplu";
+
+/* Section title for fast absorbing food */
+"Fast" = "Rapidă";
+
+/* Title of insulin model preset - fiasp */
+"Fiasp" = "Fiasp";
+
+/* Insulin model setting description (1: app name) (2: number of models) */
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity." = "Pentru insulina cu acțiune rapida, %1$@ presupune că acționează timp de 6 ore. Puteți alege din %2$@ modele diferite pentru modul în care aplicația determina vârful de acțiune al insulinei.";
+
+/* Information about correction range format (1: app name) */
+"For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin." = "Pentru acest interval, alegeți valoarea specifică a glicemiei (sau intervalul de valori) spre care doriți ca %1$@ să țintească în ajustarea insulinei bazale.";
+
+/* Support button for Therapy Settings */
+"Get help with Therapy Settings" = "Obțineți ajutor cu Setările Terapiei";
+
+/* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range
+   Text for go back action on confirmation alert */
+"Go Back" = "Inapoi";
+
+/* Title text for the high basal rate warning */
+"High Basal Rate" = "Rată bazală ridicată";
+
+/* Title text for the high carb ratio warning */
+"High Carb Ratio" = "Raport carbohidrați/insulina ridicat";
+
+/* Title text for the high correction value warning */
+"High Correction Value" = "Valoare de corecție ridicată";
+
+/* Title text for the high glucose safety limit warning */
+"High Glucose Safety Limit" = "Limita superioara de siguranță a glicemiei";
+
+/* Title text for the high insulin sensitivity warning */
+"High Insulin Sensitivity" = "Factor de sensibilitate la insulină ridicat";
+
+/* Title text for high maximum basal rate warning */
+"High Maximum Basal Rate" = "Rată bazală maximă ridicata";
+
+/* Title text for high maximum bolus warning */
+"High Maximum Bolus" = "Bolus maxim ridicat";
+
+/* Title text for the low pre-meal value warning */
+"High Pre-Meal Value" = "Valoare mare preprandiala";
+
+/* Title text for the high workout value warning */
+"High Workout Value" = "Valoare mare antrenament";
+
+/* The text for the override history */
+"History" = "Istoric";
+
+/* Description of how to interact with summary screen */
+"If these settings look good to you, tap Save Settings to continue." = "Dacă aceste setări arată bine pentru tine, apasă pe Salvează Setări pentru a continua.";
+
+/* Information about target range */
+"If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Dacă ați folosit anterior un CGM, probabil sunteți familiarizat cu intervalul țintă ca o gamă largă de valori pe care le-ați dori pentru alertele de notificare, cum sunt 70-180 mg/dl sau 90-200 mg/dl.";
+
+/* No comment provided by engineer. */
+"info" = "info";
+
+/* Title text for insulin model */
+"Insulin Model" = "Modelul de insulină";
+
+/* Title text for multi-value insulin sensitivity warning */
+"Insulin Sensitivities" = "Factor de sensibilitate la insulină";
+
+/* The description shown on the insulin sensitivity schedule interface. */
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Factorul de sensibilitate la insulină descrie felul în care glicemia ar trebui să răspundă la 1 unitate de insulină. Valori mai mici determină administrarea unor doze mai mari de insulină pentru a scădea glicemia la intervalul țintă.";
+
+/* Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: programmed value (? if no value), 4: unit) */
+"Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@" = "Întrerupere %1$@: <b>%2$@</b> din %3$@ %4$@";
+
+/* Guardrail info text format */
+"It can be set as low as %1$@. It can be set as high as %2$@." = "Poate fi setat la minim %1$@. Poate fi setat până la %2$@.";
+
+/* Title text for the low basal rate warning */
+"Low Basal Rate" = "Rată bazală scăzută";
+
+/* Title text for the low carb ratio warning */
+"Low Carb Ratio" = "Raport Carbohidrați/Insulina scăzut";
+
+/* Title text for the low correction value warning */
+"Low Correction Value" = "Valoare de corecție scăzută";
+
+/* Title text for the low glucose safety limit warning */
+"Low Glucose Safety Limit" = "Limita inferioara de siguranță a glicemiei";
+
+/* Title text for the low insulin sensitivity warning */
+"Low Insulin Sensitivity" = "Factor de sensibilitate la insulină scăzut";
+
+/* Title text for low maximum basal rate warning */
+"Low Maximum Basal Rate" = "Rată bazală maximă scăzută";
+
+/* Title text for low maximum bolus warning */
+"Low Maximum Bolus" = "Bolus maxim scăzut";
+
+/* Title text for the low pre-meal value warning */
+"Low Pre-Meal Value" = "Valoare mica preprandiala";
+
+/* Title text for the low workout value warning */
+"Low Workout Value" = "Valoare mica antrenament";
+
+/* Title of insulin model preset - lyumjev */
+"Lyumjev" = "Lyumjev";
+
+/* Placeholder for maximum value in glucose range */
+"max" = "max";
+
+/* The title text for the maximum basal rate value */
+"Maximum Basal Rate" = "Rată bazală maximă";
+
+/* Information about maximum basal rate (1: app name) */
+"Maximum Basal Rate is the maximum automatically adjusted basal rate that %1$@ is allowed to enact to help reach your correction range." = "Rata bazală maximă este rata bazală maximă ajustată automat pe care %1$@ are voie să o activeze pentru a vă ajuta să atingeți intervalul de corecție.";
+
+/* The title text for the maximum bolus value */
+"Maximum Bolus" = "Bolus maxim";
+
+/* Information about maximum bolus (1: app name) */
+"Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose." = "Bolusul maxim este cea mai mare cantitate de insulină pe care o permiteți %1$@ să o recomande dintr-odată pentru a acoperi carbohidrați sau pentru a scădea o glicemie mare.";
+
+/* Section title for medium absorbing food */
+"Medium" = "Medie";
+
+/* Placeholder for minimum value in glucose range */
+"min" = "min";
+
+/* No comment provided by engineer. */
+"more content" = "mai mult conținut";
+
+/* Alert action title to open error help */
+"More Info" = "Detalii";
+
+/* The text for the override preset name setting */
+"Name" = "Nume";
+
+/* Title for mini-modal to add a new schedule entry */
+"New Entry" = "Înregistrare nouă";
+
+/* The title for the new override preset entry screen */
+"New Preset" = "Presetare nouă";
+
+/* Title text for the zero basal rate warning */
+"No Basal Insulin" = "Fără insulină bazală";
+
+/* Section title for no-carb food
+   The title for override emoji miscellaneous section */
+"Other" = "Altele";
+
+/* The title text for the insulin sensitivity scaling setting */
+"Overall Insulin Needs" = "Necesar de insulină total";
+
+/* Title for override history view */
+"Override History" = "Suprascrie istoricul";
+
+/* The title text for the override presets screen */
+"Override Presets" = "Presetări de înlocuire";
+
+/* Text directing the user to configure override presets */
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Presetările de înlocuire pot fi setate în secțiunea 'Configurație' din ecranul de setări.";
+
+/* The section title of glucose overrides */
+"Overrides" = "Înlocuiri";
+
+/* Title for the pre-meal override range */
+"Pre-Meal" = "Preprandial";
+
+/* Title text for multi-value pre-meal value warning */
+"Pre-Meal Values" = "Valori preprandiale";
+
+/* title for prescription section */
+"Prescription" = "Prescripție";
+
+/* The section header text override presets */
+"PRESETS" = "PRESETĂRI";
+
+/* Accessibility label for ProgressIndicatorView when showIndeterminantProgress */
+"Progressing." = "Progresează.";
+
+/* The title of the screen displaying a pump event */
+"Pump Event" = "Eveniment de pompă";
+
+/* Title text for suspend resume button when the basal delivery state is not set */
+"Pump Inoperable" = "Pompă inoperabilă";
+
+/* Title of insulin model preset - rapid acting adult */
+"Rapid-Acting – Adults" = "Acțiune rapidă – Adulți";
+
+/* Title of insulin model preset - rapid acting children */
+"Rapid-Acting – Children" = "Acțiune rapidă - Copii";
+
+/* The default placeholder string for a credential */
+"Required" = "Necesar";
+
+/* Segmented button title for insulin delivery log reservoir history */
+"Reservoir" = "Rezervor";
+
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Reia administrarea";
+
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Se reia";
+
+/* title for summary description section */
+"Review and Save Settings" = "Revizuiește și Salvează Setările";
+
+/* Description of how to interact with summary screen */
+"Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen." = "Revizuiți setările de terapie de mai jos. Dacă doriți să editați oricare dintre aceste setări, apăsați Înapoi pentru a reveni la acel ecran.";
+
+/* The text for the override preset name field placeholder */
+"Running" = "Se rulează";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "Salvează";
+
+/* Alert title for confirming basal rates outside the recommended range */
+"Save Basal Rates?" = "Salvați ratele bazale?";
+
+/* Alert title for confirming carb ratios outside the recommended range */
+"Save Carb Ratios?" = "Salvați rațiile insulina carbohidrați?";
+
+/* Alert title for confirming correction ranges outside the recommended range */
+"Save Correction Range(s)?" = "Salvați intervalul (intervalele) de corecție?";
+
+/* Alert title for confirming delivery limits outside the recommended range */
+"Save Delivery Limits?" = "Salvați limitele de administrare?";
+
+/* Alert title for confirming a glucose safety limit outside the recommended range */
+"Save Glucose Safety Limit?" = "Salvați limita de siguranță pentru glicemie?";
+
+/* Alert title for confirming insulin sensitivities outside the recommended range */
+"Save Insulin Sensitivities?" = "Salvați sensibilitatea la insulină?";
+
+/* Alert title for confirming pre-meal range overrides outside the recommended range */
+"Save Pre-Meal Range?" = "Salvează Interval preprandial?";
+
+/* Alert title for confirming workout range overrides outside the recommended range */
+"Save Workout Range?" = "Salvați intervalul țintă pentru antrenament?";
+
+/* The button text during saving on a configuration page */
+"Saving..." = "Salvare...";
+
+/* The section header text for a scheduled override */
+"SCHEDULED OVERRIDE" = "ÎNLOCUIRE PLANIFICATĂ";
+
+/* The section header text for a scheduled custom preset */
+"SCHEDULED PRESET" = "PRESETARE PROGRAMATĂ";
+
+/* No comment provided by engineer. */
+"Selected" = "Selectat";
+
+/* Section title for slow absorbing food */
+"Slow" = "Lentă";
+
+/* Information about typical maximum basal rates */
+"Some users choose a value 2, 3, or 4 times their highest scheduled basal rate." = "Unii utilizatori aleg o valoare de 2, 3 sau 4 ori cea mai mare rată bazală programată.";
+
+/* The text for the override start time */
+"Start Time" = "Oră începere";
+
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Pornire bazală temporară";
+
+/* Format for prescription descriptive text (1: providerName, 2: datePrescribed) */
+"Submitted by %1$@, %2$@" = "Trimis de %1$@, %2$@";
+
+/* Title for support section */
+"Support" = "Asistenţă";
+
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Suspendă administrarea";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Se suspendă";
+
+/* No comment provided by engineer. */
+"Switch Preview State" = "Schimbă către Stare Previzualizare";
+
+/* The text for the override preset symbol setting */
+"Symbol" = "Simbol";
+
+/* Text directing the user to configure their first custom preset */
+"Tap '+' to create a new custom preset." = "Apasă '+' pentru a crea o nouă presetare personalizată.";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Apăsați pentru setare";
+
+/* The text for the override target range setting */
+"Target Range" = "Interval țintă";
+
+/* Description of pre-meal mode */
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduceți temporar glicemia țintă înainte de masă pentru a avea un impact asupra vârfurilor postprandiale.";
+
+/* Description of workout mode */
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Creșteți temporar valoarea ținta a glicemiei înainte, în timpul sau după activitatea fizică pentru a reduce riscul de apariție a hipoglicemiei.";
+
+/* The title for the override selection screen */
+"Temporary Override" = "Înlocuire temporară";
+
+/* No comment provided by engineer. */
+"Test" = "Test";
+
+/* Information about pre-meal range relative to correction range
+   Information about workout range relative to correction range */
+"than your Correction Range." = "față de intervalul de corecții.";
+
+/* Description for selection when no insulin type is selected. */
+"The currently selected fast acting insulin model will be used as a default." = "Modelul de insulină cu acțiune rapidă selectat în prezent va fi utilizat ca implicit.";
+
+/* Subtitle description of Walsh insulin model setting */
+"The legacy model used by Loop, allowing customization of action duration." = "Modelul vechi utilizat de Loop, permite personalizarea duratei de acțiune.";
+
+/* Alert body displayed absorption time greater than max (1: maximum absorption time) */
+"The maximum absorption time is %@" = "Durata maximă de absorbție este de %@";
+
+/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
+"The maximum allowed amount is %@ grams" = "Cantitatea maximă admisă este de %@ grame";
+
+/* Information about adult insulin model */
+"The rapid-acting adult model assumes peak activity at 75 minutes." = "Modelul pentru adulți de acțiune rapidă presupune vârful de acțiune la 75 de minute.";
+
+/* Information about child insulin model */
+"The rapid-acting child model assumes peak activity at 65 minutes." = "Modelul pentru copii de acțiune rapidă presupune vârful de acțiune la 65 de minute.";
+
+/* Information about basal rate scheduling */
+"The schedule starts at midnight and cannot contain a rate of 0 U/hr." = "Programul începe la miezul nopții și nu poate conține o rată bazala de 0 U/oră.";
+
+/* Therapy Settings screen title */
+"Therapy Settings" = "Setări Terapie";
+
+/* No comment provided by engineer. */
+"Therapy Settings Support Placeholder" = "Suport Setări de Terapie Substituent";
+
+/* Subtitle of afrezza preset */
+"This model assumes peak insulin activity at 19 minutes." = "Acest model presupune vârful de acțiune al insulinei la 19 minute.";
+
+/* Subtitle of Fiasp preset
+   Subtitle of Lyumjev preset */
+"This model assumes peak insulin activity at 55 minutes." = "Acest model presupune activitatea maximă a insulinei la 55 minute.";
+
+/* Subtitle of Rapid-Acting – Children preset */
+"This model assumes peak insulin activity at 65 minutes." = "Acest model presupune activitatea maximă a insulinei la 65 minute.";
+
+/* Subtitle of Rapid-Acting – Adult preset */
+"This model assumes peak insulin activity at 75 minutes." = "Acest model presupune activitatea maximă a insulinei la 75 minute.";
+
+/* Information about maximum automated insulin on board (1: app name) */
+"This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." = "Această setare va determina, de asemenea, o limită de siguranță pentru administrarea automată. %1$@ va limita administrarea automată pentru a menține cantitatea de insulină activă sub dublul bolusului maxim.";
+
+/* Information about pre-meal range relative to correction range
+   Information about workout range relative to correction range */
+"This will typically be" = "Acesta va fi de obicei";
+
+/* Label for offset from midnight picker */
+"Time" = "Timp";
+
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "Orele în %1$@%2$@%3$@";
+
+/* No comment provided by engineer. */
+"To be implemented" = "Va fi implementat";
+
+/* No comment provided by engineer. */
+"Top component" = "Componenta superioara";
+
+/* The text indicating Total for Daily Schedule Basal */
+"Total" = "Total";
+
+/* The text indicating U/day for Daily Schedule Basal */
+"U/day" = "U/zi";
+
+/* The unit string for units per hour */
+"U/hour" = "U/oră";
+
+/* Alert title when error occurs while saving a schedule */
+"Unable to Save" = "Nu se poate salva";
+
+/* The unit string for units */
+"Units" = "Unități";
+
+/* Accessibility value for an unknown value
+   The default title to use when an entry has none */
+"Unknown" = "Necunoscut";
+
+/* No comment provided by engineer. */
+"Unselected" = "Neselectat";
+
+/* Title for selection when no insulin type is selected. */
+"Unset" = "Nealeasă";
+
+/* Placeholder text until value is entered */
+"Value" = "Valoare";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Se verifică";
+
+/* The title for the override editing screen */
+"View Override" = "Vizualizare suprascriere";
+
+/* Title of insulin model setting */
+"Walsh" = "Walsh";
+
+/* Title of an alert containing a validation warning */
+"Warning" = "Avertizare";
+
+/* Disclaimer */
+"Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable." = "Consultați-va cu medicul pentru a alege o valoare mai mare decât cea mai mare rată bazală programată, dar suficient de prudenta sau agresiva pe cât vă simțiți confortabil.";
+
+/* Title for the workout override range */
+"Workout" = "Activitate sportivă";
+
+/* Information about workout range format (1: app name) */
+"Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button." = "Intervalul ținta pentru antrenament este valoarea glicemiei sau intervalul de valori pe care vrei să le țintești %1$@ în timpul activității. Acest interval va fi în vigoare atunci când activați butonul de presetare a antrenamentului.";
+
+/* Title text for multi-value workout value warning */
+"Workout Values" = "Valori activitate sportivă";
+
+/* Description of how to add a ratio */
+"You can add different carb ratios for different times of day by using the ➕." = "Poți adăuga diferite rații carbohidrați/insulina pentru diferite momente ale zilei folosind ➕.";
+
+/* Description of how to add a ratio */
+"You can add different insulin sensitivities for different times of day by using the ➕." = "Puteți adăuga valori pentru sensibilitatea la insulină pentru diferite momente ale zilei utilizând ➕.";
+
+/* Description of how to add a configuration range */
+"You can add different ranges for different times of day by using the ➕." = "Poți adăuga diferite intervale pentru diferite momente ale zilei folosind ➕.";
+
+/* Description of how to add a range */
+"You can add entries for different times of day by using the ➕." = "Poți adăuga intrări pentru diferite momente ale zilei folosind ➕.";
+
+/* Information about insulin model (1: app name) */
+"You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models." = "Puteți alege modul în care %1$@ măsoară momentul de vârf al insulinei cu acțiune rapidă în funcție de unul dintre aceste două modele de insulină.";
+
+/* Description of how to edit setting */
+"You can edit a setting by tapping into any line item." = "Puteți edita o setare apăsând pe orice linie.";
+
+/* Description of how to edit setting */
+"You can edit the setting by tapping into the line item." = "Puteți edita setarea apăsând pe linie.";
+
+/* Information about basal rates */
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Rata bazală de insulină este numărul de unități pe oră pe care doriți să le utilizați pentru a acoperi necesarul bazal de insulina al organismului.";
+
+/* Lower bound pre-meal information text */
+"your Glucose Safety Limit" = "limita de siguranță a glicemiei";
+
+/* Disclaimer */
+"Your healthcare provider can help you choose a Correction Range that's right for you." = "Medicul dvs. vă poate ajuta să alegeți un interval de corecție potrivit pentru dvs.";
+
+/* Description of insulin sensitivity factor */
+"Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Factorul de sensibilitate la insulină (ISF) este scăderea glicemiei determinata de o unitate de insulină.";
+
+/* Information about pre-meal range format (1: app name) */
+"Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Intervalul ținta preparandial trebuie să fie valoarea glicemiei (sau intervalul de valori) pe care doriți %1$@ să o vizați până la prima mușcătură a mesei. Acest interval va fi în vigoare atunci când activați butonul Presetare înainte de masă.";
+

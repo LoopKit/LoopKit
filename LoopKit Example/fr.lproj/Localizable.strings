@@ -1,8 +1,8 @@
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Débits de basale";
+"Basal Rates" = "Débits basaux";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Ratios de glucides";
+"Carb Ratios" = "Ratios Insuline-Glucides";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Glucides";
@@ -14,7 +14,7 @@
 "Diagnostic" = "Diagnostique";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Entrez l’ID de la pompe, composé de 6 lettres et chiffres";
+"Enter the 6-digit pump ID" = "Entrée l’ID de pompe de 6 chiffres";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Générer les données";
@@ -36,5 +36,5 @@
 "Sync With Pump" = "Synchroniser avec la pompe";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
-"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).";
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "L'ID de la pompe se trouve imprimé au dos ou près du bas de l'écran STATUS/Esc. Il s'agit de la partie uniquement numérique du numéro de série (indiquée par SN ou S/N).";
 
