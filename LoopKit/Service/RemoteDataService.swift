@@ -104,11 +104,13 @@ public protocol RemoteDataService: Service {
     func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
     
     /**
-     Fetch a RemoteCommand from a push notification
+     Handle a push notification
      - Parameter notification: The push notification dictionary
-     - Returns: RemoteCommand
      */
-    func commandFromPushNotification(_ notification: [String: AnyObject]) async throws -> RemoteCommand
+    func handleRemoteNotification(_ notification: [String: AnyObject]) async throws
+    
+     /// Process pending remote commands
+    func processPendingRemoteCommands() async throws
 
 }
 
