@@ -600,8 +600,10 @@ public final class MockPumpManager: TestingPumpManager {
     public func trigger(action: DeviceAction) {}
 
     public func injectPumpEvents(_ pumpEvents: [NewPumpEvent]) {
-        state.finalizedDoses += pumpEvents.compactMap { $0.unfinalizedDose }
-        state.additionalPumpEvents += pumpEvents.filter { $0.dose == nil }
+        // directly report these pump events
+        delegate.notify { delegate in
+            delegate?.pumpManager(self, hasNewPumpEvents: pumpEvents, lastReconciliation: Date()) { _ in }
+        }
     }
     
     public func setMaximumTempBasalRate(_ rate: Double) { }
