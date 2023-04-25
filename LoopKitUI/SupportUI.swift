@@ -69,6 +69,8 @@ public protocol SupportUI: AnyObject {
  
     /// A delegate for SupportUI to use (see `SupportUIDelegate`).
     var delegate: SupportUIDelegate? { get set }
+
+    var studyProductSelection: String? { get }
 }
 
 extension SupportUI {

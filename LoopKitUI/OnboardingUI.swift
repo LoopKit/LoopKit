@@ -132,7 +132,11 @@ public protocol TherapySettingsProvider {
     var onboardingTherapySettings: TherapySettings { get }
 }
 
-public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, ServiceProvider, TherapySettingsProvider {
+public protocol SupportProvider: AnyObject {
+    var availableSupports: [SupportUI] { get }
+}
+
+public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, ServiceProvider, TherapySettingsProvider, SupportProvider {
     var allowDebugFeatures: Bool { get }   // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
 }
 
