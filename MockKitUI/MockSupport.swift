@@ -33,9 +33,9 @@ public class MockSupport: SupportUI {
         return rawValue
     }
    
-    public func checkVersion(bundleIdentifier: String, currentVersion: String, completion: @escaping (Result<VersionUpdate?, Error>) -> Void) {
-        maybeIssueAlert(versionUpdate ?? .none)
-        completion(.success(versionUpdate))
+    public func checkVersion(bundleIdentifier: String, currentVersion: String) async -> VersionUpdate? {
+        maybeIssueAlert(versionUpdate ?? .noUpdateNeeded)
+        return versionUpdate
     }
     
     public weak var delegate: SupportUIDelegate?
