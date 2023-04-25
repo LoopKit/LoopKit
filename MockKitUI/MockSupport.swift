@@ -51,10 +51,6 @@ public class MockSupport: SupportUI {
         )
     }
     
-    public func filterScenarios(scenarioURLs: [URL]) -> [URL] {
-        scenarioURLs
-    }
-    
     public var studyProductSelection: String? = nil
 }
 
