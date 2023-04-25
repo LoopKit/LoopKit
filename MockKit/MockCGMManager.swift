@@ -573,7 +573,7 @@ public final class MockCGMManager: TestingCGMManager {
         sendCGMReadingResult(CGMReadingResult.newData(pastSamples.map { NewGlucoseSample($0, device: device) } ))
     }
     
-    public func inject(action: NewDeviceAction) {}
+    public func trigger(action: DeviceAction) {}
     
     public func acceptDefaultsAndSkipOnboarding() {
         // TODO: Unimplemented as it's not needed for HF. Ticket to complete below.
