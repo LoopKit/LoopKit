@@ -68,6 +68,8 @@ public protocol SupportUI: AnyObject {
     
     func getScenarios(from scenarioURLs: [URL]) -> [LoopScenario]
     
+    func resetLoop()
+    
     /// Initializes the support with the previously-serialized state.
     ///
     /// - Parameters:
@@ -81,6 +83,8 @@ public protocol SupportUI: AnyObject {
     var delegate: SupportUIDelegate? { get set }
 
     var studyProductSelection: String? { get }
+    
+    var loopNeedsReset: Bool { get set }
 }
 
 extension SupportUI {
