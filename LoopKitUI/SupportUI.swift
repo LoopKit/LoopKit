@@ -20,6 +20,11 @@ public protocol SupportInfoProvider {
 public struct LoopScenario: Hashable {
     public let name: String
     public let url: URL
+    
+    public init(name: String, url: URL) {
+        self.name = name
+        self.url = url
+    }
 }
 
 public protocol SupportUIDelegate: AlertIssuer { }
@@ -61,6 +66,8 @@ public protocol SupportUI: AnyObject {
                             openAppStore: (() -> Void)?
     ) -> AnyView?
     
+    func getScenarios(from scenarioURLs: [URL]) -> [LoopScenario]
+    
     /// Initializes the support with the previously-serialized state.
     ///
     /// - Parameters:
@@ -80,35 +87,4 @@ extension SupportUI {
     public var identifier: String {
         return Self.supportIdentifier
     }
-    
-    public func filteredScenarios(scenarioURLs: [URL]) -> [LoopScenario] {
-        var filteredURLs: [URL] = []
-        
-        switch StudyProduct(rawValue: studyProductSelection ?? "none") ?? .none {
-        case .none:
-            filteredURLs = scenarioURLs
-        case .studyProduct1:
-            filteredURLs = scenarioURLs.filter { $0.lastPathComponent.hasPrefix("HF-1-") }
-        case .studyProduct2:
-            filteredURLs = scenarioURLs.filter { $0.lastPathComponent.hasPrefix("HF-2-") }
-        }
-        
-        return filteredURLs.map {
-            LoopScenario(
-                name: $0                                            // /Scenarios/HF-1-Scenario_1.json
-                    .deletingPathExtension()                        // /Scenarios/HF-1-Scenario_1
-                    .lastPathComponent                              // HF-1-Scenario_1
-                    .replacingOccurrences(of: "HF-1-", with: "")    // Scenario_1
-                    .replacingOccurrences(of: "HF-2-", with: "")    // Scenario_1
-                    .replacingOccurrences(of: "_", with: " "),      // Scenario 1,
-                url: $0
-            )
-        }
-    }
-}
-
-private enum StudyProduct: String {
-    case none
-    case studyProduct1
-    case studyProduct2
 }
