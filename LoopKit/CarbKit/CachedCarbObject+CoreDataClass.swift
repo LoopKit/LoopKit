@@ -10,7 +10,6 @@ import Foundation
 import CoreData
 import HealthKit
 
-
 class CachedCarbObject: NSManagedObject {
     var absorptionTime: TimeInterval? {
         get {

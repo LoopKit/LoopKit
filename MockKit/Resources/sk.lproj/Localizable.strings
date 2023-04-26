@@ -1,0 +1,12 @@
+/* Pump Event title for UnfinalizedDose with doseType of .bolus */
+"Bolus" = "Bolus";
+
+/* Status highlight that a pump is out of insulin. */
+"No Insulin" = "Žiadny inzulín";
+
+/* Pump Event title for UnfinalizedDose with doseType of .suspend */
+"Suspend" = "Pozastavenie";
+
+/* Pump Event title for UnfinalizedDose with doseType of .tempBasal */
+"Temp Basal" = "Dočasný bazál";
+

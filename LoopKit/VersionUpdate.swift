@@ -6,6 +6,8 @@
 //  Copyright © 2021 LoopKit Authors. All rights reserved.
 //
 
+import Foundation
+
 // Note: order is important for VersionUpdate.  Later version updates are more critical than earlier ones.  Do not reorder!
 public enum VersionUpdate: Comparable, CaseIterable {
     /// No version update needed.
@@ -49,13 +51,13 @@ extension VersionUpdate {
     public var localizedDescription: String {
         switch self {
         case .none:
-            return NSLocalizedString("No Update", comment: "Description of no software update needed")
+            return LocalizedString("No Update", comment: "Description of no software update needed")
         case .available:
-            return NSLocalizedString("Update Available", comment: "Description of informational software update needed")
+            return LocalizedString("Update Available", comment: "Description of informational software update needed")
         case .recommended:
-            return NSLocalizedString("Recommended Update", comment: "Description of supported software update needed")
+            return LocalizedString("Recommended Update", comment: "Description of supported software update needed")
         case .required:
-            return NSLocalizedString("Critical Update", comment: "Description of critical software update needed")
+            return LocalizedString("Critical Update", comment: "Description of critical software update needed")
         }
     }
 }

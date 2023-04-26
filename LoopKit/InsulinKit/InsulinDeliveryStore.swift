@@ -90,44 +90,32 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
             test_currentDate: test_currentDate
         )
 
-        let semaphore = DispatchSemaphore(value: 0)
         cacheStore.onReady { (error) in
             guard error == nil else {
-                semaphore.signal()
                 return
+            }
+
+            self.queue.sync {
+                self.updateLastImmutableBasalEndDate()
             }
 
             cacheStore.fetchAnchor(key: InsulinDeliveryStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
-                    self.queryAnchor = anchor
-
-                    if !self.authorizationRequired {
-                        self.createQuery()
-                    }
-
-                    self.updateLastImmutableBasalEndDate()
-
-                    semaphore.signal()
+                    self.setInitialQueryAnchor(anchor)
                 }
             }
         }
-        semaphore.wait()
     }
     
     // MARK: - HealthKitSampleStore
 
-    override func queryAnchorDidChange() {
-        cacheStore.storeAnchor(queryAnchor, key: InsulinDeliveryStore.healthKitQueryAnchorMetadataKey)
+    override func storeQueryAnchor(_ anchor: HKQueryAnchor) {
+        cacheStore.storeAnchor(anchor, key: InsulinDeliveryStore.healthKitQueryAnchorMetadataKey)
+        self.log.default("stored query anchor %{public}@", String(describing: anchor))
     }
 
     override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
         queue.async {
-            guard anchor != self.queryAnchor else {
-                self.log.default("Skipping processing results from anchored object query, as anchor was already processed")
-                completion(true)
-                return
-            }
-
             var changed = false
             var error: Error?
 
@@ -295,7 +283,7 @@ extension InsulinDeliveryStore {
                 completion(.success(date))
             case .none:
                 // TODO: send a proper error
-                completion(.failure(DoseStore.DoseStoreError.configurationError))
+                completion(.failure(DoseStore.DoseStoreError.initializationError(description: "lastImmutableBasalEndDate has not been set", recoverySuggestion: "Avoid accessing InsulinDeliveryStore until initialization is complete")))
             }
         }
     }
@@ -336,7 +324,7 @@ extension InsulinDeliveryStore {
     ///   - entries: The new dose entries to add to the store.
     ///   - device: The optional device used for the new dose entries.
     ///   - syncVersion: The sync version used for the new dose entries.
-    ///   - resolveMutable: Whether to update or delete any pre-existing mutable dose entries based upon any matching incoming mutable dose entries.
+    ///   - resolveMutable: Whether to update or delete any pre-existing mutable dose entries based upon any matching incoming mutable dose entries. Any previously stored mutable doses that are not also included in entries will be marked as deleted.
     ///   - completion: A closure called once the dose entries have been stored.
     ///   - result: Success or error.
     func addDoseEntries(_ entries: [DoseEntry], from device: HKDevice?, syncVersion: Int, resolveMutable: Bool = false, completion: @escaping (_ result: Result<Void, Error>) -> Void) {

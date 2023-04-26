@@ -1,0 +1,267 @@
+/* Format for correction range override therapy setting card */
+"%@ Range" = "%@ Aralık";
+
+/* Descriptive format string for glucose safety limit (1: app name) */
+"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ bazal insülin verecek ve yalnızca KŞ'nizin önümüzdeki üç saat boyunca bu sınırın üzerinde olacağı tahmin ediliyorsa bolus insülin önerecektir.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Descriptive text for guardrail high value warning for schedule interface */
+"A value you have entered is higher than what is typically recommended for most people." = "Girdiğiniz bir değer, çoğu insan için tipik olarak önerilenden daha yüksektir.";
+
+/* Descriptive text for guardrail low value warning for schedule interface */
+"A value you have entered is lower than what is typically recommended for most people." = "Girdiğiniz bir değer, çoğu insan için tipik olarak önerilenden daha düşüktür.";
+
+/* Brand name for afrezza insulin type
+   Title for Afrezza insulin type */
+"Afrezza" = "Afrezza";
+
+/* Description for afrezza insulin type */
+"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza, oral bir inhaler kullanılarak akciğerlerinizden solunan ve MannKind tarafından üretilen ultra hızlı etkili bir öğün insülinidir.";
+
+/* Brand name for apidra insulin type */
+"Apidra" = "Apidra";
+
+/* Title for Apidra insulin type */
+"Apidra (insulin glulisine)" = "Apidra (insülin glulisin)";
+
+/* Description for apidra insulin type */
+"Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis " = "Apidra (insülin glulisine) Sanofi-aventis tarafından üretilen hızlı etkili bir insülindir";
+
+/* The error description describing when Health sharing was denied */
+"Authorization Denied" = "Yetkilendirme Reddedildi";
+
+/* Title for basal dose type */
+"Basal" = "Bazal";
+
+/* Title text for basal rates */
+"Basal Rates" = "Bazal Oranlar";
+
+/* Title for bolus dose type */
+"Bolus" = "Bolus";
+
+/* Title text for carb ratios */
+"Carb Ratios" = "Karbonhidrat Oranları";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Yetkilendirme Reddedildi";
+
+/* The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Bu örnek Health uygulamasından silinebilir";
+
+/* Generic pump error description */
+"Communication Failure" = "İletişim Hatası";
+
+/* Failure reason for uncertain delivery */
+"Communications interrupted during insulin delivery command." = "İnsülin iletim komutu sırasında iletişim kesildi.";
+
+/* Generic pump error description */
+"Connection Failure" = "Bağlantı hatası";
+
+/* Title text for glucose target range */
+"Correction Range" = "Düzeltme Aralığı";
+
+/* Descriptive text for glucose target range (1: app name) */
+"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Düzeltme Aralığı, bazal insülininizi ayarlamak ve boluslarınızı hesaplamanıza yardımcı olmak için %1$@ 'ın hedeflemesini istediğiniz KŞ değeridir (veya değer aralığıdır).";
+
+/* Description of critical software update needed */
+"Critical Update" = "Kritik Güncelleme";
+
+/* Title text for delivery limits */
+"Delivery Limits" = "İletim Limitleri";
+
+/* Generic pump error description */
+"Device Refused" = "Cihaz Reddedildi";
+
+/* Recovery suggestion for a no data error */
+"Ensure carb data exists for the specified date" = "Belirtilen tarih için karbonhidrat verilerinin var olduğundan emin olun";
+
+/* Glucose trend down */
+"Falling" = "Düşüyor";
+
+/* Glucose trend down-down */
+"Falling fast" = "Hızlı Düşüyor";
+
+/* Glucose trend down-down-down */
+"Falling very fast" = "Çok Hızlı Düşüyor";
+
+/* Brand name for fiasp insulin type
+   Title for Fiasp insulin type */
+"Fiasp" = "Fiasp";
+
+/* Description for fiasp insulin type */
+"Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" = "Fiasp, Novo Nordisk tarafından üretilen nikotinamid (B3 vitamini) ilaveli bir öğün insülin aspart formülasyonudur";
+
+/* Glucose trend flat */
+"Flat" = "Sabit";
+
+/* Descriptive text for fast acting insulin model (1: app name) */
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "Hızlı etkili insülin için, %1$@ 6 saat boyunca aktif olarak çalıştığını varsayar. En yüksek etki için farklı modeller arasından seçim yapabilirsiniz.";
+
+/* The short unit display string for grams per U */
+"g/U" = "gr/Ü";
+
+/* Title text for glucose safety limit */
+"Glucose Safety Limit" = "KŞ Güvenlik Limiti";
+
+/* The long unit display string for a singular hour */
+"Hour" = "Saat";
+
+/* The long unit display string for hours */
+"Hours" = "Saat";
+
+/* Brand name for humalog insulin type */
+"Humalog" = "Humalog";
+
+/* Title for Humalog insulin type */
+"Humalog (insulin lispro)" = "Hümalog (insülin lispro)";
+
+/* Description for humalog insulin type */
+"Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Humalog (insülin lispro), Eli Lilly tarafından üretilen hızlı etkili bir insülindir";
+
+/* Title text for fast acting insulin model */
+"Insulin Model" = "İnsülin Modeli";
+
+/* Title text for insulin sensitivity */
+"Insulin Sensitivities" = "İnsülin Duyarlılığı";
+
+/* Generic pump error description */
+"Invalid Configuration" = "Geçersiz Konfigürasyon";
+
+/* Brand name for lyumjev insulin type
+   Title for Lyumjev insulin type */
+"Lyumjev" = "Lyumjev";
+
+/* Description for lyumjev insulin type */
+"Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly" = "Lyumjev, Eli Lilly tarafından üretilen sitrat ve treprostinil ilaveli bir öğün insülin lispro formülasyonudur";
+
+/* Recovery suggestion for uncertain delivery */
+"Make sure your pump is within communication range of your phone." = "Pompanızın telefonunuzun iletişim menzilinde olduğundan emin olun.";
+
+/* Title text for maximum basal rate configuration */
+"Maximum Basal Rate" = "Maksimum Bazal Oranı";
+
+/* Descriptive text for maximum basal rate (1: app name) */
+"Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Maksimum Bazal Oranı, %1$@ 'ın ayarlamasına izin verilen en yüksek geçici bazal orandır.";
+
+/* Title text for maximum bolus configuration */
+"Maximum Bolus" = "Maksimum Bolus";
+
+/* Descriptive text for maximum bolus */
+"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maksimum Bolus, karbonhidratları karşılamak veya yüksek KŞ'ni düşürmek için tek seferde verebileceğiniz en yüksek bolus miktarıdır.";
+
+/* The short unit display string for milligrams per deciliter per U */
+"mg/dL/U" = "mg/dL/Ü";
+
+/* The short unit display string for millimoles per liter */
+"mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per U */
+"mmol/L/U" = "mmol/L/Ü";
+
+/* Sensor state description for the non-valid state */
+"Needs Attention" = "İlgilenmeniz gerekiyor";
+
+/* Description of no software update needed */
+"No Update" = "Güncelleme yok";
+
+/* Describes an error for no data found in a CarbStore request */
+"No values found" = "Değer bulunamadı";
+
+/* Brand name for novolog insulin type */
+"Novolog" = "Novolog";
+
+/* Title for Novolog insulin type */
+"Novolog (insulin aspart)" = "Novolog (insülin aspart)";
+
+/* Description for novolog insulin type */
+"NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk" = "NovoLog (insülin aspart), Novo Nordisk tarafından üretilen hızlı etkili bir insülindir.";
+
+/* Sensor state description for the valid state */
+"OK" = "Tamam";
+
+/* Descriptive text for saving settings outside the recommended range */
+"One or more of the values you have entered is outside of what is typically recommended for most people." = "Girdiğiniz değerlerden biri veya daha fazlası, çoğu insan için tipik olarak önerilen değerlerin dışındadır.";
+
+/* The error recovery suggestion when Health sharing was denied */
+"Please re-enable sharing in Health" = "Lütfen Health paylaşımı yeniden etkinleştirin";
+
+/* Title for pre-meal mode */
+"Pre-Meal" = "Yemek öncesi";
+
+/* Description of supported software update needed */
+"Recommended Update" = "Önerilen Güncelleme";
+
+/* Title for resume dose type */
+"Resumed" = "Devam ettirildi";
+
+/* Glucose trend up */
+"Rising" = "Yükseliyor";
+
+/* Glucose trend up-up */
+"Rising fast" = "Hızlı yükseliyor";
+
+/* Glucose trend up-up-up */
+"Rising very fast" = "Çok hızlı yükseliyor";
+
+/* Descriptive text for guardrail high value warning for schedule interface */
+"Some of the values you have entered are outside of what is typically recommended for most people." = "Girdiğiniz değerlerden bazıları, çoğu insan için tipik olarak önerilen değerlerin dışındadır.";
+
+/* Title for suspend dose type */
+"Suspended" = "Askıya alındı";
+
+/* Title for temp basal dose type */
+"Temp Basal" = "Geçici Bazal";
+
+/* Descriptive text for pre-meal correction range override */
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Yemek sonrası KŞ artışlarını engellemek için yemekten önce KŞ hedefinizi geçici olarak düşürün.";
+
+/* Descriptive text for workout correction range override */
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Düşük KŞ riskini azaltmak için fiziksel aktivite öncesinde, sırasında veya sonrasında KŞ hedefinizi geçici olarak yükseltin.";
+
+/* Descriptive text for guardrail high value warning */
+"The value you have entered is higher than what is typically recommended for most people." = "Girdiğiniz değer, çoğu insan için tipik olarak önerilenden daha yüksektir.";
+
+/* Descriptive text for guardrail low value warning */
+"The value you have entered is lower than what is typically recommended for most people." = "Girdiğiniz değer, çoğu insan için tipik olarak önerilenden daha düşüktür.";
+
+/* Descriptive text for guardrail high value warning */
+"The values you have entered are outside of what is typically recommended for most people." = "Girdiğiniz değerler, çoğu insan için tipik olarak önerilen değerlerin dışındadır.";
+
+/* The short unit display string for international units of insulin */
+"U" = "Ü";
+
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "Ü/sa";
+
+/* Error description for uncertain delivery */
+"Uncertain Delivery" = "Belirsiz İletim";
+
+/* The long unit display string for a singular international unit of insulin */
+"Unit" = "Ünite";
+
+/* The long unit display string for a singular international unit of insulin per hour */
+"Unit/hour" = "Ünite/saat";
+
+/* The long unit display string for international units of insulin */
+"Units" = "Ünite";
+
+/* The long unit display string for international units of insulin per hour */
+"Units/hour" = "Ünite/saat";
+
+/* Description of informational software update needed */
+"Update Available" = "Güncelleme Mevcut";
+
+/* Title for workout mode */
+"Workout" = "Egzersiz";
+
+/* Descriptive text for basal rate */
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Bazal İnsülin Oranınız, arka plan insülin ihtiyaçlarınızı karşılamak için kullanmak istediğiniz  saat başına ünite miktarıdır.";
+
+/* Descriptive text for carb ratio */
+"Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Karbonhidrat İnsülin Oranınız, bir ünite insülinin kaç gram karbonhidrat karşılayacağını ifade eder.";
+
+/* Descriptive text for insulin sensitivity */
+"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "İnsülin Duyarlılık faktörünüz, bir ünite insülinden beklenen KŞ düşüşünü ifade eder.";
+

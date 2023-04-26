@@ -24,7 +24,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
     func defaultStore(testingDate: Date? = nil) -> DoseStore {
         let healthStore = HKHealthStoreMock()
-        return DoseStore(
+        let doseStore = DoseStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
             observationEnabled: false,
@@ -36,6 +36,14 @@ class DoseStoreTests: PersistenceControllerTestCase {
             provenanceIdentifier: Bundle.main.bundleIdentifier!,
             test_currentDate: testingDate
         )
+
+        let semaphore = DispatchSemaphore(value: 0)
+        cacheStore.onReady { (error) in
+            semaphore.signal()
+        }
+        semaphore.wait()
+
+        return doseStore
     }
 
     let testingDateFormatter = DateFormatter.descriptionFormatter
@@ -203,21 +211,29 @@ class DoseStoreTests: PersistenceControllerTestCase {
         // 1. Create a DoseStore
         let healthStore = HKHealthStoreMock()
 
+        let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
+
         let doseStore = DoseStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
             observationEnabled: false,
             insulinModelProvider: StaticInsulinModelProvider(WalshInsulinModel(actionDuration: .hours(4))),
             longestEffectDuration: .hours(4),
-            basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
+            basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [ // Timezone = -0800
+                ["value": 0.75, "startTime": 0.0],       // 0000 - Midnight
+                ["value": 0.8, "startTime": 10800.0],    // 0300 - 3am
+                ["value": 0.85, "startTime": 32400.0],   // 0900 - 9am
+                ["value": 1.0, "startTime": 68400.0]]]), // 1900 - 7pm
             insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": -28800, "items": [["value": 40.0, "startTime": 0.0], ["value": 35.0, "startTime": 21600.0], ["value": 40.0, "startTime": 57600.0]]]),
             syncVersion: 1,
             provenanceIdentifier: Bundle.main.bundleIdentifier!,
+            onReady: { _ in doseStoreInitialization.fulfill() },
 
             // Set the current date
             test_currentDate: f("2018-12-12 18:07:14 +0000")
         )
 
+        waitForExpectations(timeout: 3)
 
         // 2. Add a temp basal which has already ended. It should be saved to Health
         let pumpEvents1 = [
@@ -314,6 +330,8 @@ class DoseStoreTests: PersistenceControllerTestCase {
         // Create a DoseStore
         let healthStore = HKHealthStoreMock()
 
+        let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
+
         let doseStore = DoseStore(
             healthStore: healthStore,
             cacheStore: cacheStore,
@@ -325,9 +343,14 @@ class DoseStoreTests: PersistenceControllerTestCase {
             syncVersion: 1,
             provenanceIdentifier: Bundle.main.bundleIdentifier!,
 
+            onReady: { _ in doseStoreInitialization.fulfill() },
+
             // Set the current date (5 minutes later)
             test_currentDate: f("2018-11-29 11:04:27 +0000")
         )
+
+        waitForExpectations(timeout: 3)
+
         doseStore.pumpRecordsBasalProfileStartEvents = false
 
         doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = f("2018-11-29 10:54:28 +0000")
@@ -481,6 +504,9 @@ class DoseStoreTests: PersistenceControllerTestCase {
             return formatter.date(from: input)!
         }
 
+        let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
+
+
         // 1. Create a DoseStore
         let doseStore = DoseStore(
             healthStore: HKHealthStoreMock(),
@@ -493,9 +519,12 @@ class DoseStoreTests: PersistenceControllerTestCase {
             syncVersion: 1,
             provenanceIdentifier: Bundle.main.bundleIdentifier!,
 
+            onReady: { _ in doseStoreInitialization.fulfill() },
+
             // Set the current date
             test_currentDate: f("2018-12-12 18:07:14 +0000")
         )
+        waitForExpectations(timeout: 3)
 
 
         // 2. Add a temp basal which has already ended. It should persist in InsulinDeliveryStore.
@@ -554,11 +583,74 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
     }
 
+    func testBasalInsertionBetweenTempBasals() {
+
+
+        let start = testingDate("2018-12-12 17:00:00 +0000")
+        let now = start.addingTimeInterval(.minutes(20))
+
+        let doseStore = defaultStore(testingDate: now)
+
+        doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = start
+
+
+        // 2. Add a temp basal which has already ended. It should persist in InsulinDeliveryStore.
+        let pumpEvents1 = [
+            NewPumpEvent(
+                date: start,
+                dose: DoseEntry(
+                    type: .tempBasal,
+                    startDate: start,
+                    endDate: start.addingTimeInterval(.minutes(5)),
+                    value: 1.5,
+                    unit: .unitsPerHour,
+                    automatic: true),
+                raw: Data(hexadecimalString: "01")!,
+                title: "First Temp",
+                type: .tempBasal),
+            NewPumpEvent(
+                date: start.addingTimeInterval(.minutes(10)),
+                dose: DoseEntry(
+                    type: .tempBasal,
+                    startDate: start.addingTimeInterval(.minutes(10)),
+                    endDate: start.addingTimeInterval(.minutes(15)),
+                    value: 1.5,
+                    unit: .unitsPerHour,
+                    automatic: true),
+                raw: Data(hexadecimalString: "02")!,
+                title: "Second Temp",
+                type: .tempBasal)
+        ]
+
+        let addPumpEvents = expectation(description: "addPumpEvents")
+        doseStore.addPumpEvents(pumpEvents1, lastReconciliation: now) { (error) in
+            XCTAssertNil(error)
+            doseStore.insulinDeliveryStore.getDoseEntries(start: start, end: start.addingTimeInterval(.minutes(20))) { result in
+                switch result {
+                case .failure:
+                    XCTFail()
+                case .success(let doseEntries):
+                    XCTAssertEqual(doseEntries.count, 3)
+                    XCTAssertTrue(doseEntries[0].automatic!)
+                    XCTAssertTrue(doseEntries[1].automatic!)
+                    XCTAssertTrue(doseEntries[2].automatic!)
+                }
+                addPumpEvents.fulfill();
+            }
+        }
+
+        waitForExpectations(timeout: 3)
+
+    }
+
     func testAddPumpEventsPurgesMutableDosesFromInsulinDeliveryStore() {
         let formatter = DateFormatter.descriptionFormatter
         let f = { (input) in
             return formatter.date(from: input)!
         }
+
+        let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
+
 
         // 1. Create a DoseStore
         let doseStore = DoseStore(
@@ -572,10 +664,12 @@ class DoseStoreTests: PersistenceControllerTestCase {
             syncVersion: 1,
             provenanceIdentifier: Bundle.main.bundleIdentifier!,
 
+            onReady: { _ in doseStoreInitialization.fulfill() },
             // Set the current date
             test_currentDate: f("2018-12-12 18:07:14 +0000")
         )
 
+        waitForExpectations(timeout: 3)
 
         // 2. Add a temp basal which has already ended. It should persist in InsulinDeliveryStore.
         let pumpEvents1 = [
@@ -1026,6 +1120,13 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
                               basalProfile: basalProfile,
                               insulinSensitivitySchedule: insulinSensitivitySchedule,
                               provenanceIdentifier: Bundle.main.bundleIdentifier!)
+
+        let semaphore = DispatchSemaphore(value: 0)
+        cacheStore.onReady { (error) in
+            semaphore.signal()
+        }
+        semaphore.wait()
+
         completion = expectation(description: "Completion")
         queryAnchor = DoseStore.QueryAnchor()
         limit = Int.max

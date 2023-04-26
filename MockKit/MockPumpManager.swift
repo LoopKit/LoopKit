@@ -75,7 +75,7 @@ public final class MockPumpManager: TestingPumpManager {
         model: nil,
         hardwareVersion: nil,
         firmwareVersion: nil,
-        softwareVersion: String(LoopKitVersionNumber),
+        softwareVersion: "1.0",
         localIdentifier: nil,
         udiDeviceIdentifier: nil
     )
@@ -172,28 +172,28 @@ public final class MockPumpManager: TestingPumpManager {
     
     public func buildPumpStatusHighlight(for state: MockPumpManagerState) -> PumpStatusHighlight? {
         if state.deliveryIsUncertain {
-            return PumpStatusHighlight(localizedMessage: NSLocalizedString("Comms Issue", comment: "Status highlight that delivery is uncertain."),
+            return PumpStatusHighlight(localizedMessage: LocalizedString("Comms Issue", comment: "Status highlight that delivery is uncertain."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         }
         else if state.reservoirUnitsRemaining == 0 {
-            return PumpStatusHighlight(localizedMessage: NSLocalizedString("No Insulin", comment: "Status highlight that a pump is out of insulin."),
+            return PumpStatusHighlight(localizedMessage: LocalizedString("No Insulin", comment: "Status highlight that a pump is out of insulin."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         } else if state.occlusionDetected {
-            return PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Occlusion", comment: "Status highlight that an occlusion was detected."),
+            return PumpStatusHighlight(localizedMessage: LocalizedString("Pump Occlusion", comment: "Status highlight that an occlusion was detected."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         } else if state.pumpErrorDetected {
-            return PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Error", comment: "Status highlight that a pump error occurred."),
+            return PumpStatusHighlight(localizedMessage: LocalizedString("Pump Error", comment: "Status highlight that a pump error occurred."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         } else if pumpBatteryChargeRemaining == 0 {
-            return PumpStatusHighlight(localizedMessage: NSLocalizedString("Pump Battery Dead", comment: "Status highlight that pump has a dead battery."),
+            return PumpStatusHighlight(localizedMessage: LocalizedString("Pump Battery Dead", comment: "Status highlight that pump has a dead battery."),
                                                          imageName: "exclamationmark.circle.fill",
                                                          state: .critical)
         } else if case .suspended = state.suspendState {
-            return PumpStatusHighlight(localizedMessage: NSLocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
+            return PumpStatusHighlight(localizedMessage: LocalizedString("Insulin Suspended", comment: "Status highlight that insulin delivery was suspended."),
                                                          imageName: "pause.circle.fill",
                                                          state: .warning)
         }

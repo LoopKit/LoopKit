@@ -8,7 +8,7 @@
 import Foundation
 import LoopKit
 import SwiftCharts
-
+import UIKit
 
 public class InsulinModelChart: GlucoseChart, ChartProviding {
     /// The chart points for the selected model

@@ -11,11 +11,13 @@ import Foundation
 
 
 class HKHealthStoreMock: HKHealthStore {
+
     var saveError: Error?
     var deleteError: Error?
     var queryResults: (samples: [HKSample]?, error: Error?)?
     var lastQuery: HKQuery?
     var authorizationStatus: HKAuthorizationStatus?
+    let authorizationRequestUserResponse: Result<Bool, Error> = .success(true)
 
     private var saveHandler: ((_ objects: [HKObject], _ success: Bool, _ error: Error?) -> Void)?
     private var deleteObjectsHandler: ((_ objectType: HKObjectType, _ predicate: NSPredicate, _ success: Bool, _ count: Int, _ error: Error?) -> Void)?
@@ -56,8 +58,17 @@ class HKHealthStoreMock: HKHealthStore {
     }
     
     override func requestAuthorization(toShare typesToShare: Set<HKSampleType>?, read typesToRead: Set<HKObjectType>?, completion: @escaping (Bool, Error?) -> Void) {
-        DispatchQueue.main.async {
-            completion(true, nil)
+        switch authorizationRequestUserResponse {
+
+        case .success(let authorized):
+            authorizationStatus = authorized ? .sharingAuthorized : .sharingDenied
+            DispatchQueue.main.async {
+                completion(true, nil)
+            }
+        case .failure(let error):
+            DispatchQueue.main.async {
+                completion(false, error)
+            }
         }
     }
     

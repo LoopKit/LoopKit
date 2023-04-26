@@ -1,0 +1,60 @@
+/* Separator between min and max glucose values */
+"-" = "-";
+
+/* Information about insulin action duration (1: app name) */
+"%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%1$@ předpokládá, že inzulín, který podal, aktivně pracuje na snížení hladiny glukózy po dobu 6 hodin. Toto nastavení nelze změnit.";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Přidat účet";
+
+/* Back navigation button title */
+"Back" = "Zpět";
+
+/* Title text for multi-value basal rate warning */
+"Basal Rates" = "Úrovně bazálu";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Zrušit";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* Title of the setup button to continue */
+"Continue" = "Pokračovat";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Smazat účet";
+
+/* Title text for crossed thresholds guardrail warning */
+"Delivery Limits" = "Limity podávání";
+
+/* Text for dismiss button
+   Text for done button
+   Video player done button label */
+"Done" = "Hotovo";
+
+/* Information about maximum basal rate (1: app name) */
+"Maximum Basal Rate is the maximum automatically adjusted basal rate that %1$@ is allowed to enact to help reach your correction range." = "Maximální bazální dávka je maximální automaticky upravená bazální dávka, kterou může %1$@ podat, aby vás dostal do vašeho korekčního rozsahu.";
+
+/* Information about maximum bolus (1: app name) */
+"Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose." = "Maximální bolus je nejvyšší hodnota bolusu, kterou umožníte %1$@ najednou doporučit na pokrytí sacharidů nebo snížení vysoké hladiny glukózy.";
+
+/* The text for the override preset name setting */
+"Name" = "Název";
+
+/* The default placeholder string for a credential */
+"Required" = "Povinné";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "Uložit";
+
+/* The button text during saving on a configuration page */
+"Saving..." = "Ukládám...";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Klepnutím nastavit";
+
+/* Information about insulin model (1: app name) */
+"You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models." = "Můžete si vybrat, jak %1$@ měří nejvyšší aktivitu rychle působícího inzulínu podle jednoho z těchto dvou inzulínových modelů.";
+

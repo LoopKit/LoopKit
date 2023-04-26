@@ -6,6 +6,8 @@
 //  Copyright © 2021 LoopKit Authors. All rights reserved.
 //
 
+import Foundation
+
 public enum BluetoothAuthorization: Int {
     /// User has not yet made a choice regarding whether the application may use Bluetooth.
     case notDetermined

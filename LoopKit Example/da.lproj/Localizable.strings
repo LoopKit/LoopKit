@@ -1,27 +1,27 @@
 /* The title text for the basal rate schedule */
-"Basal Rates" = "Basal Rater";
+"Basal Rates" = "Basalrater";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Kulhydrat Ratioer";
+"Carb Ratios" = "Kulhydratforhold";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Kulhydrater";
 
 /* The title text for the glucose correction range schedule */
-"Correction Range" = "Korrektions Interval";
+"Correction Range" = "Korrektionsområde";
 
 /* The title for the cell displaying diagnostic data */
-"Diagnostic" = "Diagnostisk";
+"Diagnostic" = "Diagnostik";
 
 /* The placeholder text instructing users how to enter a pump ID */
 "Enter the 6-digit pump ID" = "Indtast det 6-cifrede pumpe ID";
 
 /* The title for the cell displaying data generation */
-"Generate Data" = "Genererer Data";
+"Generate Data" = "Genererer data";
 
 /* The title of the insulin sensitivity schedule screen
    The title text for the insulin sensitivity schedule */
-"Insulin Sensitivity" = "Insulin Følsomhed";
+"Insulin Sensitivity" = "Insulinfølsomhed";
 
 /* The title text for the pump ID */
 "Pump ID" = "Pumpe ID";
@@ -33,7 +33,7 @@
 "Reset" = "Nulstil";
 
 /* Title of button to sync basal profile from pump */
-"Sync With Pump" = "Synkroniser med Pumpe";
+"Sync With Pump" = "Synkroniser med pumpe";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
 "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Pumpe ID kan findes trykt på bagsiden, eller nær bunden på STATUS/Esc skærmen. Det er den rent numeriske del af serienummeret (vist som SN eller S/N)";

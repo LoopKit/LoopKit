@@ -6,6 +6,8 @@
 //  Copyright © 2020 LoopKit Authors. All rights reserved.
 //
 
+import Foundation
+
 public protocol Prescription {
     /// Date prescription was prescribed
     var datePrescribed: Date { get }

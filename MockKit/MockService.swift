@@ -7,6 +7,7 @@
 //
 
 import os.log
+import Foundation
 import LoopKit
 
 public final class MockService: Service {
@@ -167,8 +168,12 @@ extension MockService: RemoteDataService {
         completion(.success(false))
     }
     
-    public func validatePushNotificationSource(_ notification: [String : AnyObject]) -> Result<Void, Error> {
-        return .success(Void())
+    public func commandFromPushNotification(_ notification: [String: AnyObject]) async throws -> RemoteCommand {
+        
+        enum MockServicePushNotificationError: LocalizedError {
+            case remoteCommandsNotSupported
+        }
+        
+        throw MockServicePushNotificationError.remoteCommandsNotSupported
     }
-    
 }

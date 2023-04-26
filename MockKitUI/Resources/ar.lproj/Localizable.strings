@@ -1,0 +1,13 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "إلغاء";
+
+/* The alert title for a resume error */
+"Error Resuming" = "خطأ في الاستئناف";
+
+/* Button title to acknowledge error
+   Default acknowledgement */
+"OK" = "موافق";
+

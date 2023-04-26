@@ -1,0 +1,68 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Alert content body for recurring software update alert */
+"A software update is recommended to continue using the %1$@ app.\n\nGo to %2$@ Settings > Software Update to install the latest version." = "Se recomienda una actualización de software para continuar usando la aplicación %1$@. \n\n Vaya a Configuración %2$@ > Actualización de Software para instalar la última versión.";
+
+/* Confirmation message for deleting a service */
+"Are you sure you want to delete this service?" = "¿Está seguro de que desea eliminar este servicio?";
+
+/* Back button text on DeliveryUncertaintyRecoveryView */
+"Back" = "Atrás";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Cancelar";
+
+/* Title for CGM simulator settings */
+"CGM Settings" = "Configuración del MCG";
+
+/* No comment provided by engineer. */
+"Clear Last Version Check Alert Date" = "Borrar última versión y comprobar fecha de alerta";
+
+/* No comment provided by engineer. */
+"Comms Recovery" = "Recuperación de comunicaciones";
+
+/* Button title to delete a service */
+"Delete Service" = "Eliminar servicio";
+
+/* The alert title for a resume error */
+"Error Resuming" = "Error Reanudando";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Error Suspendiendo";
+
+/* Caption for History
+   History Caption */
+"History" = "Historial";
+
+/* No comment provided by engineer. */
+"How should the simulator respond to a version check?" = "¿Cómo debe responder el simulador a una verificación de versión?";
+
+/* Controller title for insulin type selection screen */
+"Insulin Type" = "Tipo de Insulina";
+
+/* Button title to acknowledge error
+   Default acknowledgement */
+"OK" = "OK";
+
+/* Title for Pump simulator settings */
+"Pump Settings" = "Configuración de la bomba";
+
+/* Button title recovering comms */
+"Recover Simulator" = "Recuperar Simulador";
+
+/* Caption for Source */
+"Source" = "Fuente";
+
+/* Recurring software update alert title */
+"Update Reminder" = "Recordatorio de actualización";
+
+/* No comment provided by engineer. */
+"Version Check Response" = "Respuesta de verificación de versión";
+
+/* Alert content body for first software update alert (1: app name)(2: app name) */
+"Your %1$@ app is out of date. It will continue to work, but we recommend updating to the latest version.\n\nGo to %2$@ Settings > Software Update to complete." = "Tu aplicación %1$@ no está actualizada. Seguirá funcionando, pero recomendamos actualizar a la última versión. \n\n Vaya a %2$@ Configuración > Actualización de Software para completar.";
+

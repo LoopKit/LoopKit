@@ -57,7 +57,7 @@ public struct MockCGMDataSource {
         model: "MockCGMManager",
         hardwareVersion: nil,
         firmwareVersion: nil,
-        softwareVersion: String(LoopKitVersionNumber),
+        softwareVersion: "1.0",
         localIdentifier: nil,
         udiDeviceIdentifier: nil
     )
