@@ -149,12 +149,16 @@ public struct GlucoseRangePicker: View {
     var lowerBoundRange: ClosedRange<HKQuantity> {
         let min = minValue.map { Swift.max(guardrail.absoluteBounds.lowerBound, $0) }
             ?? guardrail.absoluteBounds.lowerBound
-        let max = Swift.min(guardrail.absoluteBounds.upperBound, upperBound)
+        var max = Swift.min(guardrail.absoluteBounds.upperBound, upperBound)
+        // max can not be lower than guardrail.absoluteBounds.lowerBound
+        max = Swift.max(max, guardrail.absoluteBounds.lowerBound)
         return min...max
     }
 
     var upperBoundRange: ClosedRange<HKQuantity> {
-        let min = max(guardrail.absoluteBounds.lowerBound, lowerBound)
+        var min = max(guardrail.absoluteBounds.lowerBound, lowerBound)
+        // min can not be higher than guardrail.absoluteBounds.upperBound
+        min = Swift.min(min, guardrail.absoluteBounds.upperBound)
         let max = maxValue.map { Swift.min(guardrail.absoluteBounds.upperBound, $0) }
             ?? guardrail.absoluteBounds.upperBound
         return min...max
