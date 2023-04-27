@@ -17,6 +17,16 @@ public protocol SupportInfoProvider {
     func generateIssueReport(completion: @escaping (String) -> Void)
 }
 
+public struct LoopScenario: Hashable {
+    public let name: String
+    public let url: URL
+    
+    public init(name: String, url: URL) {
+        self.name = name
+        self.url = url
+    }
+}
+
 public protocol SupportUIDelegate: AlertIssuer { }
 
 public protocol SupportUI: AnyObject {
@@ -64,7 +74,11 @@ public protocol SupportUI: AnyObject {
                             guidanceColors: GuidanceColors,
                             openAppStore: (() -> Void)?
     ) -> AnyView?
-
+    
+    func getScenarios(from scenarioURLs: [URL]) -> [LoopScenario]
+    
+    func resetLoop()
+    
     /// Initializes the support with the previously-serialized state.
     ///
     /// - Parameters:
@@ -76,6 +90,10 @@ public protocol SupportUI: AnyObject {
  
     /// A delegate for SupportUI to use (see `SupportUIDelegate`).
     var delegate: SupportUIDelegate? { get set }
+
+    var studyProductSelection: String? { get }
+    
+    var loopNeedsReset: Bool { get set }
 }
 
 extension SupportUI {
