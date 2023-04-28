@@ -45,9 +45,6 @@ public protocol SupportUI: AnyObject {
 
     /// Provides configuration menu items.
     ///
-    /// - Parameters:
-    ///   - supportInfoProvider: A provider of additional support information.
-    ///   - urlHandler: A handler to open any URLs.
     /// - Returns: An array of views that will be added to the configuration section of settings.
     func configurationMenuItems() -> [AnyView]
 
