@@ -48,7 +48,7 @@ extension BidirectionalCollection where Element: GlucoseSampleValue, Index == In
 
     /// Whether the collection contains no calibration entries
     /// Runtime: O(n)
-    var isCalibrated: Bool {
+    public func isCalibrated() -> Bool {
         return filter({ $0.isDisplayOnly }).count == 0
     }
 
@@ -96,7 +96,7 @@ extension BidirectionalCollection where Element: GlucoseSampleValue, Index == In
     ) -> [GlucoseEffect] {
         guard
             self.count > 2,  // Linear regression isn't much use without 3 or more entries.
-            isContinuous() && isCalibrated && hasSingleProvenance,
+            isContinuous() && isCalibrated() && hasSingleProvenance,
             let firstSample = self.first,
             let lastSample = self.last,
             let (startDate, endDate) = LoopMath.simulationDateRangeForSamples([lastSample], duration: duration, delta: delta)
