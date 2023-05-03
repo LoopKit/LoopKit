@@ -1,6 +1,0 @@
-/* The alert title for a resume error */
-"Error Resuming" = "Gjenoppta feilet";
-
-/* The alert title for a suspend error */
-"Error Suspending" = "Pause feilet";
-

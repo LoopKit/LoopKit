@@ -1,0 +1,130 @@
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* The error description describing when Health sharing was denied */
+"Authorization Denied" = "Cấp quyền bị từ chối";
+
+/* Title text for basal rates */
+"Basal Rates" = "Lịch biểu tiêm liều nền";
+
+/* Title for bolus dose type */
+"Bolus" = "Bolus";
+
+/* Title text for carb ratios */
+"Carb Ratios" = "Carb Ratios";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Cấp quyền bị từ chối";
+
+/* The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Mẫu này có thể bị xóa khỏi ứng dụng Health";
+
+/* Generic pump error description */
+"Communication Failure" = "Liên lạc thất bại";
+
+/* Generic pump error description */
+"Connection Failure" = "Kết nối thất bại";
+
+/* Title text for glucose target range */
+"Correction Range" = "Phạm vi liều Bổ sung";
+
+/* Title text for delivery limits */
+"Delivery Limits" = "Giới hạn liều tiêm";
+
+/* Generic pump error description */
+"Device Refused" = "Thiết bị bị từ chối";
+
+/* Recovery suggestion for a no data error */
+"Ensure carb data exists for the specified date" = "Đảm bảo dữ liệu carb tồn tại cho ngày cụ thể";
+
+/* Glucose trend down */
+"Falling" = "Đang hạ";
+
+/* Glucose trend down-down */
+"Falling fast" = "Đang hạ nhanh";
+
+/* Glucose trend down-down-down */
+"Falling very fast" = "Đang hạ rất nhanh";
+
+/* Brand name for fiasp insulin type
+   Title for Fiasp insulin type */
+"Fiasp" = "Fiasp";
+
+/* Glucose trend flat */
+"Flat" = "Flat";
+
+/* The short unit display string for grams per U */
+"g/U" = "g/U";
+
+/* Title text for fast acting insulin model */
+"Insulin Model" = "Chủng loại Insulin";
+
+/* Title text for insulin sensitivity */
+"Insulin Sensitivities" = "Độ nhạy của Insulin";
+
+/* Generic pump error description */
+"Invalid Configuration" = "Cấu hình không hiệu lực";
+
+/* Title text for maximum basal rate configuration */
+"Maximum Basal Rate" = "Lượng Basal tối đa";
+
+/* Title text for maximum bolus configuration */
+"Maximum Bolus" = "Liều Bolus tối đa";
+
+/* The short unit display string for milligrams per deciliter per U */
+"mg/dL/U" = "mg/dL/U";
+
+/* The short unit display string for millimoles per liter */
+"mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per U */
+"mmol/L/U" = "mmol/L/U";
+
+/* Sensor state description for the non-valid state */
+"Needs Attention" = "Cần chú ý";
+
+/* Describes an error for no data found in a CarbStore request */
+"No values found" = "Không tìm thấy giá trị nào";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
+
+/* The error recovery suggestion when Health sharing was denied */
+"Please re-enable sharing in Health" = "Xin hãy cấp quyền chia sẻ lại trong ứng dụng Health";
+
+/* Title for pre-meal mode */
+"Pre-Meal" = "Trước bữa ăn";
+
+/* Glucose trend up */
+"Rising" = "Đang tăng";
+
+/* Glucose trend up-up */
+"Rising fast" = "Đang tăng nhanh";
+
+/* Glucose trend up-up-up */
+"Rising very fast" = "Đang tăng rất nhanh";
+
+/* Title for suspend dose type */
+"Suspended" = "Đã tạm ngưng";
+
+/* The short unit display string for international units of insulin */
+"U" = "U";
+
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "U/giờ";
+
+/* The long unit display string for a singular international unit of insulin */
+"Unit" = "Unit";
+
+/* The long unit display string for a singular international unit of insulin per hour */
+"Unit/hour" = "Unit/giờ";
+
+/* The long unit display string for international units of insulin */
+"Units" = "Units";
+
+/* The long unit display string for international units of insulin per hour */
+"Units/hour" = "Units/giờ";
+
+/* Title for workout mode */
+"Workout" = "Workout";
+

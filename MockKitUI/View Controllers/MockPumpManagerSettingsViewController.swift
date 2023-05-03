@@ -23,7 +23,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         self.pumpManager = pumpManager
         self.supportedInsulinTypes = supportedInsulinTypes
         super.init(style: .grouped)
-        title = NSLocalizedString("Pump Settings", comment: "Title for Pump simulator settings")
+        title = LocalizedString("Pump Settings", comment: "Title for Pump simulator settings")
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -565,7 +565,7 @@ private extension UIAlertController {
         let message: String
 
         if let localizedError = error as? LocalizedError {
-            let sentenceFormat = NSLocalizedString("%@.", comment: "Appends a full-stop to a statement")
+            let sentenceFormat = LocalizedString("%@.", comment: "Appends a full-stop to a statement")
             message = [localizedError.failureReason, localizedError.recoverySuggestion].compactMap({ $0 }).map({
                 String(format: sentenceFormat, $0)
             }).joined(separator: "\n")
@@ -580,7 +580,7 @@ private extension UIAlertController {
         )
 
         addAction(UIAlertAction(
-            title: NSLocalizedString("OK", comment: "Button title to acknowledge error"),
+            title: LocalizedString("OK", comment: "Button title to acknowledge error"),
             style: .default,
             handler: nil
         ))

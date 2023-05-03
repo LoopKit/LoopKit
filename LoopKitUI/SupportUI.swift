@@ -43,15 +43,21 @@ public protocol SupportUI: AnyObject {
     /// - Returns: A view that will be used in a support menu for providing user support.
     func supportMenuItem(supportInfoProvider: SupportInfoProvider, urlHandler: @escaping (URL) -> Void) -> AnyView?
 
+    /// Provides configuration menu items.
+    ///
+    /// - Returns: An array of views that will be added to the configuration section of settings.
+    func configurationMenuItems() -> [AnyView]
+
     ///
     /// Check whether the given app version for the given `bundleIdentifier` needs an update.  Services should return their last result, if known.
+    ///  If version cannot be checked or checking version fails, nil should be returned.
     ///
     /// - Parameters:
     ///    - bundleIdentifier: The host app's `bundleIdentifier` (a.k.a. `CFBundleIdentifier`) string.
     ///    - currentVersion: The host app's current version (i.e. `CFBundleVersion`).
-    ///    - completion: The completion function to call with any success result (or `nil` if not known) or failure.
-    func checkVersion(bundleIdentifier: String, currentVersion: String, completion: @escaping (Result<VersionUpdate?, Error>) -> Void)
-    
+    /// - returns: A VersionUpdate object describing the update status
+    func checkVersion(bundleIdentifier: String, currentVersion: String) async -> VersionUpdate?
+
     /// Provides screen for software update UI.
     ///
     /// - Parameters:

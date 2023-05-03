@@ -1,0 +1,679 @@
+/* Information about workout range relative to correction range */
+" higher " = " korkeampi ";
+
+/* Information about pre-meal range relative to correction range */
+" lower " = " matalampi ";
+
+/* Separator between min and max glucose values */
+"-" = "-";
+
+/* No comment provided by engineer. */
+"－" = "－";
+
+/* The detail text representing no value */
+"–" = "–";
+
+/* No comment provided by engineer. */
+"···" = "···";
+
+/* No comment provided by engineer. */
+"%@" = "%@";
+
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% norm. insuliinista";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@ U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Lower bound workout information text format (1: app name) */
+"%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ tai glukoosin turvaraja riippuen siitä, kumpi on korkeampi";
+
+/* Reservoir entry (1: volume value) */
+"%1$@ U" = "%1$@ U";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "%1$@ yksikköä jäljellä klo %2$@";
+
+/* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
+   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+"%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* No comment provided by engineer. */
+"🍽" = "🍽";
+
+/* Premeal override preset title */
+"🍽 Pre-Meal" = "🍽 Ennen ateriaa";
+
+/* No comment provided by engineer. */
+"🏃‍♂️" = "🏃‍♂️";
+
+/* Workout override preset title */
+"🏃‍♂️ Workout" = "🏃‍♂️ Liikunta";
+
+/* No comment provided by engineer. */
+"A card whose text will wrap onto multiple lines if I continue to type for long enough—this length should do" = "Kortti, jonka teksti rivittyy usealle riville, jos jatkan kirjoittamista riittävän kauan – tämän pituuden pitäisi riittää";
+
+/* Information about differences between target range and correction range */
+"A Correction Range is different. This will be a narrower range." = "Korjausalue tarkoittaa eri asiaa. Se on kapeampi alue.";
+
+/* No comment provided by engineer. */
+"A simple card" = "Yksinkertainen kortti";
+
+/* Warning text for basal rate of 0 U/hr */
+"A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Arvo 0 U/t tarkoittaa, että et saa lainkaan basaali-insuliinia.";
+
+/* No comment provided by engineer. */
+"Above the save button" = "Tallenna-painikkeen yläpuolella";
+
+/* Title of the carb entry absorption time cell */
+"Absorption Time" = "Imeytymisaika";
+
+/* No comment provided by engineer. */
+"Action Button" = "Toimintopainike";
+
+/* The text for the override history duration */
+"Active Duration" = "Aktiivinen kesto";
+
+/* The title for the override emoji activity section */
+"Activity" = "Liikunta";
+
+/* Button text to confirm adding a new schedule item */
+"Add" = "Lisää";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Lisää tili";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Lisää hiilihydraatteja";
+
+/* Action sheet confirmation message for pump history deletion */
+"Are you sure you want to delete all history entries?" = "Haluatko varmasti poistaa kaikki historiatiedot?";
+
+/* Action sheet confirmation message for reservoir deletion */
+"Are you sure you want to delete all reservoir values?" = "Haluatko varmasti poistaa kaikki säiliön arvot?";
+
+/* Authentication hint string for therapy settings */
+"Authenticate to save therapy setting" = "Varmenna tallentaaksesi hoitoasetukset";
+
+/* Back navigation button title */
+"Back" = "Takaisin";
+
+/* Title text for multi-value basal rate warning */
+"Basal Rates" = "Basaalitasot";
+
+/* Describes a percentage decrease in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Basaalin, boluksen ja korjaavan insuliiniannoksen määriä vähennetään %@%%.";
+
+/* Describes a percentage increase in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Basaalin, boluksen ja korjaavan insuliiniannoksen määriä lisätään %@%%.";
+
+/* Describes a lack of change in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "Basaalin, boluksen ja korjaavan insuliiniannoksen määrät pysyvät ennallaan.";
+
+/* No comment provided by engineer. */
+"Bottom component" = "Alaosan komponentti";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Kumoa";
+
+/* The text for the override cancellation button */
+"Cancel Override" = "Kumoa tilapäisasetus";
+
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Kumotaan tilapäinen basaali";
+
+/* Title text for multi-value carb ratio warning */
+"Carb Ratios" = "Hiilihydraattisuhteet";
+
+/* Footer text for customizing an override from a preset (1: preset name) */
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Muutokset otetaan käyttöön vain tällä kertaa, kun otat tilapäisasetuksen käyttöön. Alkuperäiset %@-asetukset pysyvät ennallaan.";
+
+/* Footer text for customizing from a preset (1: preset name) */
+"Changes will only apply this time you enable the preset. The default settings of %@ will not be affected." = "Muutokset ovat voimassa vain tällä kertaa, kun esiasetus otetaan käyttöön. Tämä ei vaikuta alkuperäisiin %@ -asetuksiin.";
+
+/* Carb entry section footer text explaining absorption time */
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Valitse pidempi imeytymisaika isoille tai paljon rasvaa ja proteiineja sisältäville aterioille. Tämä on suuntaa antava ohje, eikä sen tarvitse olla tarkka.";
+
+/* Button text to close a modal
+   Text to close informational page */
+"Close" = "Sulje";
+
+/* The format string describing the date of a COB value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.COBDateLabel" = "klo %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.totalDateLabel" = "%1$@ jälkeen";
+
+/* The format string describing the date of an IOB value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.IOBDateLabel" = "klo %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.totalDateLabel" = "%1$@ jälkeen";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* Accessibility label for ProgressIndicatorView when showIndeterminantProgress */
+"Completed." = "Valmis.";
+
+/* The title for the override emoji condition section */
+"Condition" = "Vointi";
+
+/* The button text for confirming the setting */
+"Confirm Setting" = "Vahvista asetus";
+
+/* No comment provided by engineer. */
+"content" = "sisältö";
+
+/* Title of the setup button to continue */
+"Continue" = "Jatka";
+
+/* The section footer of correction range schedule */
+"Correction range is the blood glucose range that you would like Loop to correct to." = "Korjausalue on glukoositavoitealue, johon haluat Loopin korjaavan.";
+
+/* Title text for multi-value correction value warning */
+"Correction Values" = "Korjausarvot";
+
+/* The text for a custom override */
+"Custom" = "Mukautettu";
+
+/* The title for the custom override entry screen */
+"Custom Override" = "Mukautettu tilapäisasetus";
+
+/* The title for the custom preset entry screen
+   The title for the custom preset selection screen */
+"Custom Preset" = "Mukautettu esiasetus";
+
+/* Title of the carb entry date picker cell */
+"Date" = "Aika";
+
+/* Delete values for Pre-Meal, inactivates Pre-Meal icon
+   Test for table cell delete button
+   The title of the button to remove the credentials for a service */
+"Delete" = "Poista";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Poista tili";
+
+/* Button title to delete all objects */
+"Delete All" = "Poista kaikki";
+
+/* Title text for crossed thresholds guardrail warning */
+"Delivery Limits" = "Annostelurajat";
+
+/* Information about delivery limits */
+"Delivery Limits are safety guardrails for your insulin delivery." = "Annostelurajoilla tarkoitetaan insuliinin annostelun turvarajoja.";
+
+/* The text for the custom preset disable button */
+"Disable Preset" = "Poista esiasetus käytöstä";
+
+/* Text for dismiss button
+   Text for done button
+   Video player done button label */
+"Done" = "Valmis";
+
+/* The text for the override duration setting */
+"Duration" = "Kesto";
+
+/* Text for edit button
+   The title for the enabled custom preset editing screen */
+"Edit" = "Muokkaa";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Muokkaa hiilihydraatteja";
+
+/* The title for the override editing screen */
+"Edit Override" = "Muokkaa tilapäisasetusta";
+
+/* Footer text for editing an active override (1: preset name) */
+"Editing affects only the active override. The default settings of %@ will not be affected." = "Muokkaus vaikuttaa vain aktiiviseen tilapäisasetukseen. Alkuperäiset %@-asetukset säilyvät ennallaan.";
+
+/* Footer text for editing an enabled custom preset (1: preset name) */
+"Edits persist only until the preset is disabled. The default settings of %@ will not be affected." = "Muokkaukset säilyvät siihen asti, kun esiasetus poistetaan käytöstä. Tämä ei vaikuta alkuperäisiin %@ -asetuksiin.";
+
+/* The button text for enabling a temporary override */
+"Enable" = "Ota käyttöön";
+
+/* The text for the indefinite override duration setting */
+"Enable Indefinitely" = "Ilman aikarajaa";
+
+/* The detail text describing an enabled setting */
+"Enabled" = "Käytössä";
+
+/* The text for the override start time */
+"End Time" = "Päättymisaika";
+
+/* Format string for accessibility label for value entry. (1: value label) */
+"Enter %1$@ value" = "Syötä %1$@ arvo";
+
+/* The placeholder text instructing users how to enter a maximum bolus */
+"Enter a number of units" = "Syötä yksikkömäärä";
+
+/* The placeholder text instructing users how to enter a maximum basal rate */
+"Enter a rate in units per hour" = "Syötä nopeus yksiköinä tunnissa";
+
+/* Segmented button title for insulin delivery log event history */
+"Event History" = "Tapahtumahistoria";
+
+/* No comment provided by engineer. */
+"Example" = "Esimerkki";
+
+/* Section title for fast absorbing food */
+"Fast" = "Nopea";
+
+/* Title of insulin model preset - fiasp */
+"Fiasp" = "Fiasp";
+
+/* Insulin model setting description (1: app name) (2: number of models) */
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity." = "%1$@ olettaa, että nopeavaikutteinen insuliini vaikuttaa aktiivisesti 6 tuntia. Valittavana on %2$@ eri mallia siitä, miten sovellus mittaa insuliinin vaikutushuipun.";
+
+/* Information about correction range format (1: app name) */
+"For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin." = "Valitse tähän glukoosiarvo (tai arvoalue), jota %1$@ tavoittelee säätäessään basaalin määrää.";
+
+/* Support button for Therapy Settings */
+"Get help with Therapy Settings" = "Apua hoitoasetuksiin";
+
+/* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range
+   Text for go back action on confirmation alert */
+"Go Back" = "Takaisin";
+
+/* Title text for the high basal rate warning */
+"High Basal Rate" = "Korkea basaalitaso";
+
+/* Title text for the high carb ratio warning */
+"High Carb Ratio" = "Korkea hiilihydraattisuhde";
+
+/* Title text for the high correction value warning */
+"High Correction Value" = "Korkea korjausarvo";
+
+/* Title text for the high glucose safety limit warning */
+"High Glucose Safety Limit" = "Korkea glukoosin turvaraja";
+
+/* Title text for the high insulin sensitivity warning */
+"High Insulin Sensitivity" = "Korkea insuliiniherkkyys";
+
+/* Title text for high maximum basal rate warning */
+"High Maximum Basal Rate" = "Korkea suurin sallittu basaalitaso";
+
+/* Title text for high maximum bolus warning */
+"High Maximum Bolus" = "Korkea suurin sallittu bolus";
+
+/* Title text for the low pre-meal value warning */
+"High Pre-Meal Value" = "Korkea Ennen ateriaa -arvo";
+
+/* Title text for the high workout value warning */
+"High Workout Value" = "Korkea liikuntatilan arvo";
+
+/* The text for the override history */
+"History" = "Historia";
+
+/* Description of how to interact with summary screen */
+"If these settings look good to you, tap Save Settings to continue." = "Jos nämä asetukset näyttävät sopivilta, jatka napauttamalla Tallenna asetukset.";
+
+/* Information about target range */
+"If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Jos olet käyttänyt jatkuvaa glukoosinseurantaa aiemmin, tavoitealue on todennäköisesti tuttu laajana glukoosiarvoalueena, jonka haluat hälytyksille, esimerkiksi 4–10 mmol/L tai 5–11 mmol/L.";
+
+/* Title text for insulin model */
+"Insulin Model" = "Insuliinimalli";
+
+/* Title text for multi-value insulin sensitivity warning */
+"Insulin Sensitivities" = "Insuliiniherkkyydet";
+
+/* The description shown on the insulin sensitivity schedule interface. */
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "Insuliiniherkkyys kuvaa sitä, kuinka paljon verensokerisi laskee yhdellä insuliiniyksiköllä. Liian pienet arvot voivat johtaa vaarallisen matalaan verensokeriin.";
+
+/* Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: programmed value (? if no value), 4: unit) */
+"Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@" = "Keskeytetty %1$@: <b>%2$@</b> / %3$@ %4$@";
+
+/* Guardrail info text format */
+"It can be set as low as %1$@. It can be set as high as %2$@." = "Se voidaan asettaa alimmillaan %1$@ ja korkeimmillaan %2$@.";
+
+/* Title text for the low basal rate warning */
+"Low Basal Rate" = "Matala basaalitaso";
+
+/* Title text for the low carb ratio warning */
+"Low Carb Ratio" = "Matala hiilihydraattisuhde";
+
+/* Title text for the low correction value warning */
+"Low Correction Value" = "Matala korjausarvo";
+
+/* Title text for the low glucose safety limit warning */
+"Low Glucose Safety Limit" = "Matala glukoosin turvaraja";
+
+/* Title text for the low insulin sensitivity warning */
+"Low Insulin Sensitivity" = "Matala insuliiniherkkyys";
+
+/* Title text for low maximum basal rate warning */
+"Low Maximum Basal Rate" = "Matala suurin sallittu basaalitaso";
+
+/* Title text for low maximum bolus warning */
+"Low Maximum Bolus" = "Matala suurin sallittu bolus";
+
+/* Title text for the low pre-meal value warning */
+"Low Pre-Meal Value" = "Matala Ennen ateriaa -arvo";
+
+/* Title text for the low workout value warning */
+"Low Workout Value" = "Matala liikuntatilan arvo";
+
+/* Placeholder for maximum value in glucose range */
+"max" = "maks.";
+
+/* The title text for the maximum basal rate value */
+"Maximum Basal Rate" = "Suurin sallittu basaalitaso";
+
+/* The title text for the maximum bolus value */
+"Maximum Bolus" = "Suurin sallittu bolus";
+
+/* Section title for medium absorbing food */
+"Medium" = "Keskiverto";
+
+/* Placeholder for minimum value in glucose range */
+"min" = "min.";
+
+/* No comment provided by engineer. */
+"more content" = "lisää sisältöä";
+
+/* Alert action title to open error help */
+"More Info" = "Lisätietoa";
+
+/* The text for the override preset name setting */
+"Name" = "Nimi";
+
+/* Title for mini-modal to add a new schedule entry */
+"New Entry" = "Uusi merkintä";
+
+/* The title for the new override preset entry screen */
+"New Preset" = "Uusi esiasetus";
+
+/* Title text for the zero basal rate warning */
+"No Basal Insulin" = "Ei basaali-insuliinia";
+
+/* Section title for no-carb food
+   The title for override emoji miscellaneous section */
+"Other" = "Muu";
+
+/* The title text for the insulin sensitivity scaling setting */
+"Overall Insulin Needs" = "Kokonaisinsuliinitarve";
+
+/* Title for override history view */
+"Override History" = "Tilapäisasetushistoria";
+
+/* The title text for the override presets screen */
+"Override Presets" = "Tilapäisasetukset";
+
+/* Text directing the user to configure override presets */
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Tilapäisasetuksia voidaan luoda Asetukset-näkymän Määritykset-osiossa.";
+
+/* The section title of glucose overrides */
+"Overrides" = "Tilapäisasetukset";
+
+/* Title for the pre-meal override range */
+"Pre-Meal" = "Ennen ateriaa";
+
+/* Title text for multi-value pre-meal value warning */
+"Pre-Meal Values" = "Ennen ateriaa -arvot";
+
+/* title for prescription section */
+"Prescription" = "Resepti";
+
+/* The section header text override presets */
+"PRESETS" = "ESIASETUKSET";
+
+/* Accessibility label for ProgressIndicatorView when showIndeterminantProgress */
+"Progressing." = "Edistyminen.";
+
+/* The title of the screen displaying a pump event */
+"Pump Event" = "Pumpputapahtuma";
+
+/* Title text for suspend resume button when the basal delivery state is not set */
+"Pump Inoperable" = "Pumppu ei toiminnassa";
+
+/* Title of insulin model preset - rapid acting adult */
+"Rapid-Acting – Adults" = "Nopeavaikutteinen – aikuiset";
+
+/* Title of insulin model preset - rapid acting children */
+"Rapid-Acting – Children" = "Nopeavaikutteinen – lapset";
+
+/* The default placeholder string for a credential */
+"Required" = "Pakollinen";
+
+/* Segmented button title for insulin delivery log reservoir history */
+"Reservoir" = "Säiliö";
+
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Jatka annostelua";
+
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Jatketaan";
+
+/* title for summary description section */
+"Review and Save Settings" = "Tarkista ja tallenna asetukset";
+
+/* Description of how to interact with summary screen */
+"Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen." = "Tarkista alla olevat hoitoasetukset. Jos haluat muokata jotakin näistä asetuksista, napauta Takaisin.";
+
+/* The text for the override preset name field placeholder */
+"Running" = "Juoksu";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "Tallenna";
+
+/* Alert title for confirming basal rates outside the recommended range */
+"Save Basal Rates?" = "Tallenna basaalitasot?";
+
+/* Alert title for confirming carb ratios outside the recommended range */
+"Save Carb Ratios?" = "Tallenna hiilihydraattisuhteet?";
+
+/* Alert title for confirming correction ranges outside the recommended range */
+"Save Correction Range(s)?" = "Tallenna korjausalue(et)?";
+
+/* Alert title for confirming delivery limits outside the recommended range */
+"Save Delivery Limits?" = "Tallenna annostelurajat?";
+
+/* Alert title for confirming a glucose safety limit outside the recommended range */
+"Save Glucose Safety Limit?" = "Tallenna glukoosin turvaraja?";
+
+/* Alert title for confirming insulin sensitivities outside the recommended range */
+"Save Insulin Sensitivities?" = "Tallenna insuliiniherkkyydet?";
+
+/* Alert title for confirming pre-meal range overrides outside the recommended range */
+"Save Pre-Meal Range?" = "Tallenna Ennen ateriaa -alue?";
+
+/* Alert title for confirming workout range overrides outside the recommended range */
+"Save Workout Range?" = "Tallenna liikuntatila-alue?";
+
+/* The section header text for a scheduled override */
+"SCHEDULED OVERRIDE" = "AJASTETTU TILAPÄISASETUS";
+
+/* The section header text for a scheduled custom preset */
+"SCHEDULED PRESET" = "AJASTETTU ESIASETUS";
+
+/* Section title for slow absorbing food */
+"Slow" = "Hidas";
+
+/* Information about typical maximum basal rates */
+"Some users choose a value 2, 3, or 4 times their highest scheduled basal rate." = "Useimmat käyttäjät valitsevat omaa korkeinta basaalitasoa 2, 3 tai 4 kertaa suuremman arvon.";
+
+/* The text for the override start time */
+"Start Time" = "Alkaa";
+
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Aloitetaan tilapäinen basaali";
+
+/* Format for prescription descriptive text (1: providerName, 2: datePrescribed) */
+"Submitted by %1$@, %2$@" = "Lähettänyt %1$@, %2$@";
+
+/* Title for support section */
+"Support" = "Tuki";
+
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Pysäytä annostelu";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Pysäytetään";
+
+/* No comment provided by engineer. */
+"Switch Preview State" = "Vaihda esikatselutila";
+
+/* The text for the override preset symbol setting */
+"Symbol" = "Symboli";
+
+/* Text directing the user to configure their first custom preset */
+"Tap '+' to create a new custom preset." = "Luo uusi mukautettu esiasetus napauttamalla '+'.";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Napauta asettaaksesi";
+
+/* The text for the override target range setting */
+"Target Range" = "Tavoitealue";
+
+/* Description of pre-meal mode */
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Laske glukoositavoitetta väliaikaisesti ennen ateriaa vaikuttaaksesi aterian jälkeiseen glukoosin nousuun.";
+
+/* Description of workout mode */
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Nosta glukoositavoitetta väliaikaisesti ennen liikuntaa, sen aikana tai sen jälkeen, jotta matalan glukoosin riski pienenee.";
+
+/* The title for the override selection screen */
+"Temporary Override" = "Tilapäisasetus";
+
+/* Information about pre-meal range relative to correction range
+   Information about workout range relative to correction range */
+"than your Correction Range." = "kuin korjausalue.";
+
+/* Subtitle description of Walsh insulin model setting */
+"The legacy model used by Loop, allowing customization of action duration." = "Loopin vanha insuliinimalli, jossa voi muokata insuliinin vaikutusaikaa.";
+
+/* Alert body displayed absorption time greater than max (1: maximum absorption time) */
+"The maximum absorption time is %@" = "Pisin sallittu imeytymisaika on %@";
+
+/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
+"The maximum allowed amount is %@ grams" = "Suurin sallittu määrä on %@ grammaa";
+
+/* Information about adult insulin model */
+"The rapid-acting adult model assumes peak activity at 75 minutes." = "Nopeavaikutteinen aikuisten malli olettaa vaikutushuippua 75 minuutissa.";
+
+/* Information about child insulin model */
+"The rapid-acting child model assumes peak activity at 65 minutes." = "Nopeavaikutteinen lasten malli olettaa vaikutushuippua 65 minuutissa.";
+
+/* Information about basal rate scheduling */
+"The schedule starts at midnight and cannot contain a rate of 0 U/hr." = "Aikataulu alkaa keskiyöstä, eikä se voi sisältää basaalitasoa 0 U/t.";
+
+/* Therapy Settings screen title */
+"Therapy Settings" = "Hoitoasetukset";
+
+/* No comment provided by engineer. */
+"Therapy Settings Support Placeholder" = "Hoitoasetusten tuen paikkamerkki";
+
+/* Subtitle of Fiasp preset
+   Subtitle of Lyumjev preset */
+"This model assumes peak insulin activity at 55 minutes." = "Tässä mallissa oletetaan, että insuliinin vaikutushuippu on 55 minuutissa.";
+
+/* Subtitle of Rapid-Acting – Children preset */
+"This model assumes peak insulin activity at 65 minutes." = "Tässä mallissa oletetaan, että insuliinin vaikutushuippu on 65 minuutissa.";
+
+/* Subtitle of Rapid-Acting – Adult preset */
+"This model assumes peak insulin activity at 75 minutes." = "Tässä mallissa oletetaan, että insuliinin vaikutushuippu on 75 minuutissa.";
+
+/* Information about pre-meal range relative to correction range
+   Information about workout range relative to correction range */
+"This will typically be" = "Tämä on yleensä";
+
+/* Label for offset from midnight picker */
+"Time" = "Aika";
+
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "Aika %1$@%2$@%3$@";
+
+/* No comment provided by engineer. */
+"To be implemented" = "Toteutettava";
+
+/* No comment provided by engineer. */
+"Top component" = "Ylin komponentti";
+
+/* The unit string for units per hour */
+"U/hour" = "U/tunti";
+
+/* Alert title when error occurs while saving a schedule */
+"Unable to Save" = "Ei voitu tallentaa";
+
+/* The unit string for units */
+"Units" = "Yksikköä";
+
+/* Accessibility value for an unknown value
+   The default title to use when an entry has none */
+"Unknown" = "Tuntematon";
+
+/* Placeholder text until value is entered */
+"Value" = "Arvo";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Tarkistetaan";
+
+/* The title for the override editing screen */
+"View Override" = "Näytä tilapäisasetus";
+
+/* Title of insulin model setting */
+"Walsh" = "Walsh";
+
+/* Title of an alert containing a validation warning */
+"Warning" = "Varoitus";
+
+/* Disclaimer */
+"Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable." = "Keskustele terveydenhuollon ammattilaisen kanssa valitaksesi arvon, joka on korkeampi kuin korkein ohjelmoitu basaalitasosi, mutta niin konservatiivinen tai aggressiivinen, että tunnet olosi mukavaksi.";
+
+/* Title for the workout override range */
+"Workout" = "Liikunta";
+
+/* Information about workout range format (1: app name) */
+"Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button." = "Liikuntatila on glukoosiarvo tai arvoalue, johon %1$@ tähtää liikunnan aikana. Tämä alue tulee voimaan, kun aktivoit Liikuntatila-painikkeen.";
+
+/* Title text for multi-value workout value warning */
+"Workout Values" = "Liikuntatilan arvot";
+
+/* Description of how to add a ratio */
+"You can add different carb ratios for different times of day by using the ➕." = "Voit lisätä erilaisia hiilihydraattisuhteita eri aikoihin päivästä napauttamalla ➕.";
+
+/* Description of how to add a ratio */
+"You can add different insulin sensitivities for different times of day by using the ➕." = "Voit lisätä erilaisia insuliiniherkkyyksiä eri aikoihin päivästä napauttamalla ➕.";
+
+/* Description of how to add a configuration range */
+"You can add different ranges for different times of day by using the ➕." = "Voit lisätä erilaisia korjausalueita eri aikoihin päivästä napauttamalla ➕.";
+
+/* Description of how to add a range */
+"You can add entries for different times of day by using the ➕." = "Voit lisätä merkintöjä eri aikoihin päivästä napauttamalla ➕.";
+
+/* Description of how to edit setting */
+"You can edit a setting by tapping into any line item." = "Voit muokata asetusta napauttamalla mitä tahansa riviä.";
+
+/* Description of how to edit setting */
+"You can edit the setting by tapping into the line item." = "Voit muokata asetusta napauttamalla riviä.";
+
+/* Information about basal rates */
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Basaalitaso tarkoittaa sitä yksikkömäärää insuliinia tunnissa, jonka tarvitset insuliinin perustarpeen kattamiseen.";
+
+/* Lower bound pre-meal information text */
+"your Glucose Safety Limit" = "glukoosin turvarajasi";
+
+/* Disclaimer */
+"Your healthcare provider can help you choose a Correction Range that's right for you." = "Terveydenhuollon ammattilainen voi auttaa sinua valitsemaan sinulle sopivan korjausalueen.";
+
+/* Description of insulin sensitivity factor */
+"Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Insuliiniherkkyys (ISF) tarkoittaa sitä, kuinka paljon glukoosin odotetaan laskevan yhdellä insuliiniyksiköllä.";
+
+/* Information about pre-meal range format (1: app name) */
+"Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Ennen ateriaa -alueen tulisi olla glukoosiarvo (tai arvoalue), johon %1$@ tähtää insuliinin annosteluhetkestä aterian alkuun. Tämä alue tulee voimaan, kun aktivoit Ennen ateriaa -painikkeen.";
+

@@ -10,7 +10,6 @@ import Foundation
 import CoreData
 import HealthKit
 
-
 class CachedCarbObject: NSManagedObject {
     var absorptionTime: TimeInterval? {
         get {
@@ -139,12 +138,6 @@ extension CachedCarbObject {
 
     // HealthKit
     func update(from sample: HKQuantitySample, replacing object: CachedCarbObject, on date: Date = Date()) {
-        precondition(!object.createdByCurrentApp)
-        precondition(sample.createdByCurrentApp == object.createdByCurrentApp)
-        precondition(sample.provenanceIdentifier == object.provenanceIdentifier)
-        precondition(object.syncIdentifier != nil)
-        precondition(sample.syncIdentifier == object.syncIdentifier)
-
         self.absorptionTime = sample.absorptionTime
         self.createdByCurrentApp = sample.createdByCurrentApp
         self.foodType = sample.foodType

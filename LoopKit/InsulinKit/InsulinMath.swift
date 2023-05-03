@@ -300,6 +300,7 @@ extension DoseEntry {
             syncIdentifier: syncIdentifier,
             scheduledBasalRate: scheduledBasalRate,
             insulinType: insulinType,
+            automatic: automatic,
             isMutable: isMutable,
             wasProgrammedByPumpUI: wasProgrammedByPumpUI
         )
@@ -352,7 +353,7 @@ extension DoseEntry {
                 return self
             }
         }
-        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinType: insulinType, isMutable: isMutable, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
+        return DoseEntry(type: type, startDate: startDate, endDate: endDate, value: value, unit: unit, deliveredUnits: resolvedUnits, description: description, syncIdentifier: syncIdentifier, scheduledBasalRate: scheduledBasalRate, insulinType: insulinType, automatic: automatic, isMutable: isMutable, wasProgrammedByPumpUI: wasProgrammedByPumpUI)
     }
 }
 
@@ -393,6 +394,7 @@ extension Collection where Element == DoseEntry {
                         description: suspend.description ?? dose.description,
                         syncIdentifier: suspend.syncIdentifier,
                         insulinType: suspend.insulinType,
+                        automatic: suspend.automatic,
                         isMutable: suspend.isMutable,
                         wasProgrammedByPumpUI: suspend.wasProgrammedByPumpUI
                     ))
@@ -412,6 +414,7 @@ extension Collection where Element == DoseEntry {
                         description: suspend.description ?? dose.description,
                         syncIdentifier: suspend.syncIdentifier,
                         insulinType: suspend.insulinType,
+                        automatic: suspend.automatic,
                         isMutable: suspend.isMutable,
                         wasProgrammedByPumpUI: suspend.wasProgrammedByPumpUI
                     ))
@@ -452,6 +455,7 @@ extension Collection where Element == DoseEntry {
                         description: last.description,
                         syncIdentifier: last.syncIdentifier,
                         insulinType: last.insulinType,
+                        automatic: last.automatic,
                         isMutable: last.isMutable,
                         wasProgrammedByPumpUI: last.wasProgrammedByPumpUI
                     ))
@@ -596,7 +600,7 @@ extension Collection where Element == DoseEntry {
         if insertingBasalEntries {
             // Create a placeholder entry at our start date, so we know the correct duration of the
             // inserted basal entries
-            lastBasal = DoseEntry(resumeDate: start)
+            lastBasal = DoseEntry(resumeDate: start, automatic: true)
         }
 
         for dose in self {

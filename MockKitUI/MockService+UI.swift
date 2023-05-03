@@ -17,7 +17,7 @@ extension MockService: ServiceUI {
         return UIImage(systemName: "icloud.and.arrow.up")
     }
     
-    public static func setupViewController(colorPalette: LoopUIColorPalette) -> SetupUIResult<ServiceViewController, ServiceUI> {
+    public static func setupViewController(colorPalette: LoopUIColorPalette, pluginHost: PluginHost) -> SetupUIResult<ServiceViewController, ServiceUI> {
         return .userInteractionRequired(ServiceNavigationController(rootViewController: MockServiceTableViewController(service: MockService(), for: .create)))
     }
 

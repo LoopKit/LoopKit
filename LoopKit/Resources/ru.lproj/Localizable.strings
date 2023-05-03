@@ -1,0 +1,267 @@
+/* Format for correction range override therapy setting card */
+"%@ Range" = "%@ Диапазон";
+
+/* Descriptive format string for glucose safety limit (1: app name) */
+"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ будет вводить базу и рекомендовать болюсы, только если прогнозируется, что уровень глюкозы будет выше этого предела в течение следующих трех часов.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Descriptive text for guardrail high value warning for schedule interface */
+"A value you have entered is higher than what is typically recommended for most people." = "Введенное вами значение выше, чем обычно рекомендуется для большинства людей.";
+
+/* Descriptive text for guardrail low value warning for schedule interface */
+"A value you have entered is lower than what is typically recommended for most people." = "Введенное вами значение ниже того, которое обычно рекомендуется для большинства людей.";
+
+/* Brand name for afrezza insulin type
+   Title for Afrezza insulin type */
+"Afrezza" = "Afrezza";
+
+/* Description for afrezza insulin type */
+"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza - это инсулин сверхбыстрого действия во время еды, который вдыхается через легкие с помощью перорального ингалятора и производится MannKind";
+
+/* Brand name for apidra insulin type */
+"Apidra" = "Апидра";
+
+/* Title for Apidra insulin type */
+"Apidra (insulin glulisine)" = "Апидра (инсулин глюлизин)";
+
+/* Description for apidra insulin type */
+"Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis " = "Апидра (инсулин глюлизин) - это инсулин быстрого действия, производимый Sanofi-aventis ";
+
+/* The error description describing when Health sharing was denied */
+"Authorization Denied" = "Авторизация не состоялась";
+
+/* Title for basal dose type */
+"Basal" = "Базал";
+
+/* Title text for basal rates */
+"Basal Rates" = "Скорости базала";
+
+/* Title for bolus dose type */
+"Bolus" = "Болюс";
+
+/* Title text for carb ratios */
+"Carb Ratios" = "Соотношения углеводов";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Авторизация не состоялась";
+
+/* The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Этот экземпляр может быть удален из приложения Здоровье";
+
+/* Generic pump error description */
+"Communication Failure" = "Ошибка связи";
+
+/* Failure reason for uncertain delivery */
+"Communications interrupted during insulin delivery command." = "Связь прервана во время подачи команды на введение инсулина.";
+
+/* Generic pump error description */
+"Connection Failure" = "Ошибка соединения";
+
+/* Title text for glucose target range */
+"Correction Range" = "Диапазон коррекции";
+
+/* Descriptive text for glucose target range (1: app name) */
+"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Диапазон коррекции - это значение глюкозы (или диапазон значений), к которому вы хотите, чтобы %1$@ стремился при корректировке ВБС и расчете болюсов.";
+
+/* Description of critical software update needed */
+"Critical Update" = "Критическое обновление";
+
+/* Title text for delivery limits */
+"Delivery Limits" = "Пределы подачи";
+
+/* Generic pump error description */
+"Device Refused" = "Устройство отклонено";
+
+/* Recovery suggestion for a no data error */
+"Ensure carb data exists for the specified date" = "Убедитесь, что данные об углеводах имеются на указанную дату";
+
+/* Glucose trend down */
+"Falling" = "Падение";
+
+/* Glucose trend down-down */
+"Falling fast" = "Быстрое падение";
+
+/* Glucose trend down-down-down */
+"Falling very fast" = "Очень быстрое падение";
+
+/* Brand name for fiasp insulin type
+   Title for Fiasp insulin type */
+"Fiasp" = "Fiasp";
+
+/* Description for fiasp insulin type */
+"Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" = "Fiasp - это препарат инсулин аспарт с добавлением никотинамида (витамина B3) производства Novo Nordisk";
+
+/* Glucose trend flat */
+"Flat" = "Стабильно";
+
+/* Descriptive text for fast acting insulin model (1: app name) */
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "Для быстродействующего инсулина %1$@ предполагается, что он активно работает в течение 6 часов. Вы можете выбрать различные модели для пика активности.";
+
+/* The short unit display string for grams per U */
+"g/U" = "g/U";
+
+/* Title text for glucose safety limit */
+"Glucose Safety Limit" = "Безопасный предел глюкозы";
+
+/* The long unit display string for a singular hour */
+"Hour" = "Час";
+
+/* The long unit display string for hours */
+"Hours" = "Часы";
+
+/* Brand name for humalog insulin type */
+"Humalog" = "Хумалог";
+
+/* Title for Humalog insulin type */
+"Humalog (insulin lispro)" = "Хумалог (инсулин лизпро)";
+
+/* Description for humalog insulin type */
+"Humalog (insulin lispro) is a rapid-acting insulin made by Eli Lilly" = "Хумалог (инсулин лизпро) - это инсулин быстрого действия, производимый компанией Eli Lilly.";
+
+/* Title text for fast acting insulin model */
+"Insulin Model" = "Модель инсулина";
+
+/* Title text for insulin sensitivity */
+"Insulin Sensitivities" = "Факторы чувствительности инсулина";
+
+/* Generic pump error description */
+"Invalid Configuration" = "Неверная конфигурация";
+
+/* Brand name for lyumjev insulin type
+   Title for Lyumjev insulin type */
+"Lyumjev" = "Lyumjev";
+
+/* Description for lyumjev insulin type */
+"Lyumjev is a mealtime insulin lispro formulation with the addition of citrate and treprostinil made by Eli Lilly" = "Lyumjev представляет собой лекарственную форму инсулина лизпро для приема пищи с добавлением цитрата и трепростинила производства Eli Lilly.";
+
+/* Recovery suggestion for uncertain delivery */
+"Make sure your pump is within communication range of your phone." = "Убедитесь, что помпа находится в пределах досягаемости вашего телефона.";
+
+/* Title text for maximum basal rate configuration */
+"Maximum Basal Rate" = "Максимальная скорость базала";
+
+/* Descriptive text for maximum basal rate (1: app name) */
+"Maximum Basal Rate is the highest temporary basal rate %1$@ is allowed to set." = "Максимальная базальная скорость — это самая высокая ВБС, которую может установить %1$@.";
+
+/* Title text for maximum bolus configuration */
+"Maximum Bolus" = "Максимальный Болюс";
+
+/* Descriptive text for maximum bolus */
+"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Максимальный болюс - это наибольший болюс, который вы можете ввести за один раз, чтобы покрыть углеводы или снизить высокий уровень глюкозы.";
+
+/* The short unit display string for milligrams per deciliter per U */
+"mg/dL/U" = "mg/dL/U";
+
+/* The short unit display string for millimoles per liter */
+"mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per U */
+"mmol/L/U" = "mmol/L/U";
+
+/* Sensor state description for the non-valid state */
+"Needs Attention" = "Требует внимания";
+
+/* Description of no software update needed */
+"No Update" = "Нет обновлений";
+
+/* Describes an error for no data found in a CarbStore request */
+"No values found" = "Данные не найдены";
+
+/* Brand name for novolog insulin type */
+"Novolog" = "Новолог";
+
+/* Title for Novolog insulin type */
+"Novolog (insulin aspart)" = "Новолог (инсулин аспарт)";
+
+/* Description for novolog insulin type */
+"NovoLog (insulin aspart) is a rapid-acting insulin made by Novo Nordisk" = "NovoLog (инсулин аспарт) - инсулин быстрого действия производства Novo Nordisk";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
+
+/* Descriptive text for saving settings outside the recommended range */
+"One or more of the values you have entered is outside of what is typically recommended for most people." = "Одно или несколько введенных вами значений выходят за рамки того, что обычно рекомендуется для большинства людей.";
+
+/* The error recovery suggestion when Health sharing was denied */
+"Please re-enable sharing in Health" = "Пожалуйста повторно разрешите совместное использование в разделе Здоровье";
+
+/* Title for pre-meal mode */
+"Pre-Meal" = "До еды";
+
+/* Description of supported software update needed */
+"Recommended Update" = "Рекомендуемое обновление";
+
+/* Title for resume dose type */
+"Resumed" = "Возобновлено";
+
+/* Glucose trend up */
+"Rising" = "Повышение";
+
+/* Glucose trend up-up */
+"Rising fast" = "Быстрое повышение";
+
+/* Glucose trend up-up-up */
+"Rising very fast" = "Очень быстрое повышение";
+
+/* Descriptive text for guardrail high value warning for schedule interface */
+"Some of the values you have entered are outside of what is typically recommended for most people." = "Некоторые из введенных вами значений выходят за рамки того, что обычно рекомендуется для большинства людей.";
+
+/* Title for suspend dose type */
+"Suspended" = "Остановлено";
+
+/* Title for temp basal dose type */
+"Temp Basal" = "ВБС";
+
+/* Descriptive text for pre-meal correction range override */
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Временно понизьте целевое значение уровня глюкозы перед едой, чтобы уменьшить пики глюкозы после еды.";
+
+/* Descriptive text for workout correction range override */
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Временно повышайте целевой уровень глюкозы до, во время или после физической активности, чтобы снизить риск развития событий, связанных с низким уровнем глюкозы.";
+
+/* Descriptive text for guardrail high value warning */
+"The value you have entered is higher than what is typically recommended for most people." = "Введенное вами значение выше, чем то, которое обычно рекомендуется для большинства людей.";
+
+/* Descriptive text for guardrail low value warning */
+"The value you have entered is lower than what is typically recommended for most people." = "Введенное вами значение ниже того, которое обычно рекомендуется для большинства людей.";
+
+/* Descriptive text for guardrail high value warning */
+"The values you have entered are outside of what is typically recommended for most people." = "Введенные вами значения выходят за рамки того, что обычно рекомендуется для большинства людей.";
+
+/* The short unit display string for international units of insulin */
+"U" = "ед";
+
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "U/hr";
+
+/* Error description for uncertain delivery */
+"Uncertain Delivery" = "Неопределенная подача";
+
+/* The long unit display string for a singular international unit of insulin */
+"Unit" = "Unit";
+
+/* The long unit display string for a singular international unit of insulin per hour */
+"Unit/hour" = "Unit/hour";
+
+/* The long unit display string for international units of insulin */
+"Units" = "Единицы";
+
+/* The long unit display string for international units of insulin per hour */
+"Units/hour" = "Units/hour";
+
+/* Description of informational software update needed */
+"Update Available" = "Доступно обновление";
+
+/* Title for workout mode */
+"Workout" = "Физическая нагрузка";
+
+/* Descriptive text for basal rate */
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Ваша базальная норма инсулина - это количество единиц в час, которое вы хотите использовать для покрытия своих фоновых потребностей в инсулине.";
+
+/* Descriptive text for carb ratio */
+"Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Ваш углеводный коэффициент - это количество граммов углеводов, покрываемых одной единицей инсулина.";
+
+/* Descriptive text for insulin sensitivity */
+"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "Ваша чувствительность к инсулину означает снижение уровня глюкозы, ожидаемое от одной единицы инсулина.";
+

@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import LoopKit
+@testable import LoopKit
 
 class PersistentDeviceLogCriticalEventLogTests: XCTestCase {
     var persistentDeviceLog: PersistentDeviceLog!

@@ -7,6 +7,7 @@
 //
 
 import os.log
+import Foundation
 import LoopKit
 
 public final class MockService: Service {
@@ -82,13 +83,15 @@ public final class MockService: Service {
 }
 
 extension MockService: AnalyticsService {
-    
     public func recordAnalyticsEvent(_ name: String, withProperties properties: [AnyHashable: Any]?, outOfSession: Bool) {
         if analytics {
             record("[AnalyticsService] \(name) \(String(describing: properties)) \(outOfSession)")
         }
     }
-    
+
+    public func recordIdentify(_ property: String, value: String) {
+        record("[AnalyticsService] Identify: \(property) \(value)")
+    }
 }
 
 extension MockService: LoggingService {
@@ -165,8 +168,12 @@ extension MockService: RemoteDataService {
         completion(.success(false))
     }
     
-    public func validatePushNotificationSource(_ notification: [String : AnyObject]) -> Bool {
-        return true
+    public func commandFromPushNotification(_ notification: [String: AnyObject]) async throws -> RemoteCommand {
+        
+        enum MockServicePushNotificationError: LocalizedError {
+            case remoteCommandsNotSupported
+        }
+        
+        throw MockServicePushNotificationError.remoteCommandsNotSupported
     }
-    
 }

@@ -1,0 +1,703 @@
+/* Information about workout range relative to correction range */
+" higher " = "más alta";
+
+/* Information about pre-meal range relative to correction range */
+" lower " = " inferior ";
+
+/* Separator between min and max glucose values */
+"-" = "-";
+
+/* No comment provided by engineer. */
+"－" = "－";
+
+/* The detail text representing no value */
+"–" = "–";
+
+/* No comment provided by engineer. */
+"···" = "···";
+
+/* No comment provided by engineer. */
+"%@" = "%@";
+
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* The format for an insulin needs percentage. */
+"%@%% of normal insulin" = "%@%% de insulina normal";
+
+/* Format string for reservoir volume. (1: The localized volume) */
+"%@U" = "%@U";
+
+/* The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit) */
+"%1$@ – %2$@ %3$@" = "%1$@ – %2$@ %3$@";
+
+/* The format for an override preset cell. (1: symbol)(2: name)
+   The format for an override symbol and name (1: symbol)(2: name) */
+"%1$@ %2$@" = "%1$@ %2$@";
+
+/* Information about insulin action duration (1: app name) */
+"%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%1$@ asume que la insulina que ha administrado está trabajando activamente para reducir el nivel de glucosa durante 6 horas. Esta configuración no se puede cambiar.";
+
+/* Lower bound workout information text format (1: app name) */
+"%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ o su Límite de Seguridad de Glucosa, el que sea mayor";
+
+/* Reservoir entry (1: volume value) */
+"%1$@ U" = "%1$@ U";
+
+/* Accessibility format string for (1: localized volume)(2: time) */
+"%1$@ units remaining at %2$@" = "quedan %1$@ unidades a las %2$@";
+
+/* Description of a basal temp basal dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit)
+   Description of a bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: unit) */
+"%1$@: <b>%2$@</b> %3$@" = "%1$@: <b>%2$@</b> %3$@";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* No comment provided by engineer. */
+"🍽" = "🍽";
+
+/* Premeal override preset title */
+"🍽 Pre-Meal" = "🍽 Pre-Comida";
+
+/* No comment provided by engineer. */
+"🏃‍♂️" = "🏃‍♂️";
+
+/* Workout override preset title */
+"🏃‍♂️ Workout" = "🏃‍♂️ Ejercicio";
+
+/* Information about differences between target range and correction range */
+"A Correction Range is different. This will be a narrower range." = "Un Rango de Corrección es diferente. Este será un rango más estrecho.";
+
+/* Warning text for basal rate of 0 U/hr */
+"A value of 0 U/hr means you will be scheduled to receive no basal insulin." = "Un valor de 0 U/hora significa que se programará que no reciba insulina basal.";
+
+/* Title of the carb entry absorption time cell */
+"Absorption Time" = "Tiempo de Absorción";
+
+/* No comment provided by engineer. */
+"Action Button" = "Botón de acción";
+
+/* The text for the override history duration */
+"Active Duration" = "Duración activa";
+
+/* The title for the override emoji activity section */
+"Activity" = "Actividad";
+
+/* Button text to confirm adding a new schedule item */
+"Add" = "Agregar";
+
+/* The title of the button to add the credentials for a service */
+"Add Account" = "Agregar Cuenta";
+
+/* The title of the view controller to create a new carb entry */
+"Add Carb Entry" = "Agregar Entrada de Carb";
+
+/* Title of insulin model preset - afrezza */
+"Afrezza" = "Afrezza";
+
+/* Action sheet confirmation message for pump history deletion */
+"Are you sure you want to delete all history entries?" = "¿Estás seguro de querer eliminar todos las entradas históricas?";
+
+/* Action sheet confirmation message for reservoir deletion */
+"Are you sure you want to delete all reservoir values?" = "¿Estás seguro de querer eliminar todos los datos del reservorio?";
+
+/* Authentication hint string for therapy settings */
+"Authenticate to save therapy setting" = "Autenticarse para guardar la configuración de la terapia";
+
+/* Back navigation button title */
+"Back" = "Atrás";
+
+/* Title text for multi-value basal rate warning */
+"Basal Rates" = "Tasas basales";
+
+/* Describes a percentage decrease in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are decreased by %@%%." = "Basal, bolos y cantidades de corrección de insulina serán reducidos de %@%%.";
+
+/* Describes a percentage increase in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are increased by %@%%." = "Basal, bolos y cantidades de corrección de insulina serán aumentados de %@%%.";
+
+/* Describes a lack of change in overall insulin needs */
+"Basal, bolus, and correction insulin dose amounts are unaffected." = "Basal, bolos y cantidades de corrección de insulina sin cambio.";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Cancelar";
+
+/* The text for the override cancellation button */
+"Cancel Override" = "Cancelar de Sobreescritura";
+
+/* Title text for suspend resume button when temp basal canceling */
+"Canceling Temp Basal" = "Cancelación de basal temporal";
+
+/* Title text for multi-value carb ratio warning */
+"Carb Ratios" = "Ratios de carbohidratos";
+
+/* Footer text for customizing an override from a preset (1: preset name) */
+"Changes will only apply this time you enable the override. The default settings of %@ will not be affected." = "Los cambios sólo se aplicarán cuando habilite la sobreescritura. Los valores por defecto de %@ no seran afectados.";
+
+/* Footer text for customizing from a preset (1: preset name) */
+"Changes will only apply this time you enable the preset. The default settings of %@ will not be affected." = "Los cambios sólo se aplicarán esta vez cuando habilite el Ajuste Preestablecido. Los valores por defecto de %@ no seran afectados.";
+
+/* Carb entry section footer text explaining absorption time */
+"Choose a longer absorption time for larger meals, or those containing fats and proteins. This is only guidance to the algorithm and need not be exact." = "Elija un tiempo de absorción más largo para comidas más grandes, o aquellas que contienen grasas y proteínas. Esta es solo una guía para el algoritmo y no necesita ser exacta.";
+
+/* Button text to close a modal
+   Text to close informational page */
+"Close" = "Cerrar";
+
+/* The format string describing the date of a COB value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.COBDateLabel" = "a %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.CarbKit.totalDateLabel" = "hace %1$@";
+
+/* The format string describing the date of an IOB value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.IOBDateLabel" = "a %1$@";
+
+/* The format string describing the starting date of a total value. The first format argument is the localized date. */
+"com.loudnate.InsulinKit.totalDateLabel" = "hace %1$@";
+
+/* The title of the action used to dismiss an error alert */
+"com.loudnate.LoopKit.errorAlertActionTitle" = "OK";
+
+/* Accessibility label for ProgressIndicatorView when showIndeterminantProgress */
+"Completed." = "Completado.";
+
+/* The title for the override emoji condition section */
+"Condition" = "Condición";
+
+/* The button text for confirming the setting */
+"Confirm Setting" = "Confirmar ajuste";
+
+/* No comment provided by engineer. */
+"content" = "contenido";
+
+/* Title of the setup button to continue */
+"Continue" = "Continuar";
+
+/* The section footer of correction range schedule */
+"Correction range is the blood glucose range that you would like Loop to correct to." = "El rango de corrección es el rango de glucosa en sangre al que usted le gustaría que Loop corrigiera.";
+
+/* Title text for multi-value correction value warning */
+"Correction Values" = "Valores de corrección";
+
+/* The text for a custom override */
+"Custom" = "Personalizado";
+
+/* The title for the custom override entry screen */
+"Custom Override" = "Sobreescritura personalizada";
+
+/* The title for the custom preset entry screen
+   The title for the custom preset selection screen */
+"Custom Preset" = "Ajuste Preestablecido personalizado";
+
+/* Title of the carb entry date picker cell */
+"Date" = "Fecha";
+
+/* Delete values for Pre-Meal, inactivates Pre-Meal icon
+   Test for table cell delete button
+   The title of the button to remove the credentials for a service */
+"Delete" = "Eliminar";
+
+/* The title of the button to remove the credentials for a service */
+"Delete Account" = "Eliminar Cuenta";
+
+/* Button title to delete all objects */
+"Delete All" = "Eliminar Todos";
+
+/* Title text for crossed thresholds guardrail warning */
+"Delivery Limits" = "Límites de Administración de Insulina";
+
+/* Information about delivery limits */
+"Delivery Limits are safety guardrails for your insulin delivery." = "Los límites de administración es un mecanismo de seguridad para la administración de su insulina.";
+
+/* The text for the custom preset disable button */
+"Disable Preset" = "Desactivar preselección";
+
+/* Text for dismiss button
+   Text for done button
+   Video player done button label */
+"Done" = "Completado";
+
+/* The text for the override duration setting */
+"Duration" = "Duración";
+
+/* Text for edit button
+   The title for the enabled custom preset editing screen */
+"Edit" = "Editar";
+
+/* The title of the view controller to edit an existing carb entry */
+"Edit Carb Entry" = "Editar Entrada de Carb";
+
+/* The title for the override editing screen */
+"Edit Override" = "Editar sobreescritura";
+
+/* Footer text for editing an active override (1: preset name) */
+"Editing affects only the active override. The default settings of %@ will not be affected." = "La edición afecta sólo a la sobreescritura activa. Los ajustes preestablecidos de %@ no se modificarán.";
+
+/* Footer text for editing an enabled custom preset (1: preset name) */
+"Edits persist only until the preset is disabled. The default settings of %@ will not be affected." = "Las ediciones persisten solo hasta que se deshabilita el ajuste preestablecido. La configuración predeterminada de %@ no se verá afectada.";
+
+/* The button text for enabling a temporary override */
+"Enable" = "Activar";
+
+/* The text for the indefinite override duration setting */
+"Enable Indefinitely" = "Habilitar indefinidamente";
+
+/* The detail text describing an enabled setting */
+"Enabled" = "Habilitado";
+
+/* The text for the override start time */
+"End Time" = "Hora de finalización";
+
+/* Format string for accessibility label for value entry. (1: value label) */
+"Enter %1$@ value" = "Introduzca el valor %1$@";
+
+/* The placeholder text instructing users how to enter a maximum bolus */
+"Enter a number of units" = "Ingrese una cantidad de unidades";
+
+/* The placeholder text instructing users how to enter a maximum basal rate */
+"Enter a rate in units per hour" = "Ingrese una tasa de unidade por hora";
+
+/* Segmented button title for insulin delivery log event history */
+"Event History" = "Historial de Eventos";
+
+/* No comment provided by engineer. */
+"Example" = "Ejemplo";
+
+/* Section title for fast absorbing food */
+"Fast" = "Rápido";
+
+/* Title of insulin model preset - fiasp */
+"Fiasp" = "Fiasp";
+
+/* Insulin model setting description (1: app name) (2: number of models) */
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from %2$@ different models for how the app measures the insulin’s peak activity." = "En el caso de la insulina de acción rápida, %1$@ asume que actúa activamente durante 6 horas. Puedes elegir entre %2$@ modelos diferentes para que la aplicación mida el pico de actividad de la insulina.";
+
+/* Information about correction range format (1: app name) */
+"For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin." = "Para este rango, elija el valor de glucosa específico (o el rango de valores) que desea que %1$@ tenga como objetivo para ajustar su insulina basal.";
+
+/* Support button for Therapy Settings */
+"Get help with Therapy Settings" = "Obtener ayuda con la Configuración de la Terapia";
+
+/* Button text to return to editing a schedule after from alert popup when some schedule values are outside the recommended range
+   Text for go back action on confirmation alert */
+"Go Back" = "Volver atrás";
+
+/* Title text for the high basal rate warning */
+"High Basal Rate" = "Tasa basal alta";
+
+/* Title text for the high carb ratio warning */
+"High Carb Ratio" = "Alto ratio de carbohidratos";
+
+/* Title text for the high correction value warning */
+"High Correction Value" = "Alto valor de corrección";
+
+/* Title text for the high glucose safety limit warning */
+"High Glucose Safety Limit" = "Límite de seguridad de glucosa alta";
+
+/* Title text for the high insulin sensitivity warning */
+"High Insulin Sensitivity" = "Alta sensibilidad a la insulina";
+
+/* Title text for high maximum basal rate warning */
+"High Maximum Basal Rate" = "Tasa basal máxima alta";
+
+/* Title text for high maximum bolus warning */
+"High Maximum Bolus" = "Bolo máximo alto";
+
+/* Title text for the low pre-meal value warning */
+"High Pre-Meal Value" = "Alto valor antes de la comida";
+
+/* Title text for the high workout value warning */
+"High Workout Value" = "Alto valor para actividad física";
+
+/* The text for the override history */
+"History" = "Historial";
+
+/* Description of how to interact with summary screen */
+"If these settings look good to you, tap Save Settings to continue." = "Si estos ajustes le parecen bien, pulse Guardar configuración para continuar.";
+
+/* Information about target range */
+"If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Si ha usado un CGM anteriormente, probablemente esté familiarizado con el rango objetivo como un amplio rango de valores que le gustaría para sus alertas de notificación de glucosa, como 70-180 mg/dL o 90-200 mg/dL.";
+
+/* Title text for insulin model */
+"Insulin Model" = "Modelo de Insulina";
+
+/* Title text for multi-value insulin sensitivity warning */
+"Insulin Sensitivities" = "Sensibilidad a la insulina";
+
+/* The description shown on the insulin sensitivity schedule interface. */
+"Insulin sensitivity describes how your blood glucose should respond to a 1 Unit dose of insulin. Smaller values mean more insulin will be given when above target. Values that are too small can cause dangerously low blood glucose." = "La sensibilidad a la insulina describe cómo responde su glucemia a 1 unidad de insulina. Valores menores implican que se administrará más insulina.";
+
+/* Description of an interrupted bolus dose entry (1: title for dose type, 2: value (? if no value) in bold, 3: programmed value (? if no value), 4: unit) */
+"Interrupted %1$@: <b>%2$@</b> of %3$@ %4$@" = "%1$@ interrumpido: <b> %2$@ </b> de %3$@ %4$@";
+
+/* Guardrail info text format */
+"It can be set as low as %1$@. It can be set as high as %2$@." = "Se puede configurar tan bajo como %1$@. \nSe puede configurar tan alto como %2$@.";
+
+/* Title text for the low basal rate warning */
+"Low Basal Rate" = "Tasa basal baja";
+
+/* Title text for the low carb ratio warning */
+"Low Carb Ratio" = "Ratio bajo para carbohidratos";
+
+/* Title text for the low correction value warning */
+"Low Correction Value" = "El Valor de Corrección es bajo";
+
+/* Title text for the low glucose safety limit warning */
+"Low Glucose Safety Limit" = "El valor de Límite de seguridad de Glucosa es bajo";
+
+/* Title text for the low insulin sensitivity warning */
+"Low Insulin Sensitivity" = "El valor de Sensibilidad a la Insulina es bajo";
+
+/* Title text for low maximum basal rate warning */
+"Low Maximum Basal Rate" = "Tasa basal máxima baja";
+
+/* Title text for low maximum bolus warning */
+"Low Maximum Bolus" = "El valor de Bolo Máximo es bajo";
+
+/* Title text for the low pre-meal value warning */
+"Low Pre-Meal Value" = "El valor de Pre-Comidas es bajo";
+
+/* Title text for the low workout value warning */
+"Low Workout Value" = "El valor para actividad física es bajo";
+
+/* Title of insulin model preset - lyumjev */
+"Lyumjev" = "Lyumjev";
+
+/* Placeholder for maximum value in glucose range */
+"max" = "max";
+
+/* The title text for the maximum basal rate value */
+"Maximum Basal Rate" = "Perfil Basal Máximo";
+
+/* Information about maximum basal rate (1: app name) */
+"Maximum Basal Rate is the maximum automatically adjusted basal rate that %1$@ is allowed to enact to help reach your correction range." = "La Tasa Basal Máxima es el máximo ajuste automático que %1$@ tiene permitido habilitar para ayudar a alcanzar tu rango de corrección.";
+
+/* The title text for the maximum bolus value */
+"Maximum Bolus" = "Bolo Máximo";
+
+/* Information about maximum bolus (1: app name) */
+"Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose." = "El Bolo Máximo es la cantidad de bolo más alta que permitirá que %1$@ recomiende de una sola vez para cubrir los carbohidratos o reducir los niveles altos de glucosa.";
+
+/* Section title for medium absorbing food */
+"Medium" = "Medio";
+
+/* Placeholder for minimum value in glucose range */
+"min" = "min";
+
+/* No comment provided by engineer. */
+"more content" = "más contenido";
+
+/* Alert action title to open error help */
+"More Info" = "Más Info";
+
+/* The text for the override preset name setting */
+"Name" = "Nombre";
+
+/* Title for mini-modal to add a new schedule entry */
+"New Entry" = "Nueva entrada";
+
+/* The title for the new override preset entry screen */
+"New Preset" = "Nueva sobreescritura preestablecida";
+
+/* Title text for the zero basal rate warning */
+"No Basal Insulin" = "Sin insulina basal";
+
+/* Section title for no-carb food
+   The title for override emoji miscellaneous section */
+"Other" = "Otro";
+
+/* The title text for the insulin sensitivity scaling setting */
+"Overall Insulin Needs" = "Necesidades de insulina";
+
+/* Title for override history view */
+"Override History" = "Historial de sobreescrituras";
+
+/* The title text for the override presets screen */
+"Override Presets" = "Sobreescrituras preestablecidas";
+
+/* Text directing the user to configure override presets */
+"Override presets can be set up under the 'Configuration' section of the settings screen." = "Las sobreescrituras preestablecidas pueden configurarse en la sección de Configuración de la pantalla de ajustes.";
+
+/* The section title of glucose overrides */
+"Overrides" = "Sobreescrituras";
+
+/* Title for the pre-meal override range */
+"Pre-Meal" = "Pre-Comida";
+
+/* Title text for multi-value pre-meal value warning */
+"Pre-Meal Values" = "Valores Pre-Comidas";
+
+/* title for prescription section */
+"Prescription" = "Prescripción";
+
+/* The section header text override presets */
+"PRESETS" = "PREESTABLECIDAS";
+
+/* Accessibility label for ProgressIndicatorView when showIndeterminantProgress */
+"Progressing." = "Progresando.";
+
+/* The title of the screen displaying a pump event */
+"Pump Event" = "Evento de microinfusadora";
+
+/* Title text for suspend resume button when the basal delivery state is not set */
+"Pump Inoperable" = "Bomba inoperable";
+
+/* Title of insulin model preset - rapid acting adult */
+"Rapid-Acting – Adults" = "Acción Rápida — Adultos";
+
+/* Title of insulin model preset - rapid acting children */
+"Rapid-Acting – Children" = "Acción Rápida — Niños";
+
+/* The default placeholder string for a credential */
+"Required" = "Requerido";
+
+/* Segmented button title for insulin delivery log reservoir history */
+"Reservoir" = "Reservorio";
+
+/* Title text for button to resume insulin delivery */
+"Resume Delivery" = "Resumir la infusión";
+
+/* Title text for button when insulin delivery is in the process of being resumed */
+"Resuming" = "Resumiendo";
+
+/* title for summary description section */
+"Review and Save Settings" = "Revisar y guardar la configuración";
+
+/* Description of how to interact with summary screen */
+"Review your therapy settings below. If you’d like to edit any of these settings, tap Back to go back to that screen." = "Revisa los ajustes de tu terapia a continuación. Si desea modificar alguno de estos ajustes, pulse Atrás para volver a esa pantalla.";
+
+/* The text for the override preset name field placeholder */
+"Running" = "Correr";
+
+/* Button text for saving glucose correction range schedule
+   Button text for saving insulin sensitivity schedule */
+"Save" = "Agregar";
+
+/* Alert title for confirming basal rates outside the recommended range */
+"Save Basal Rates?" = "¿Guardar tasas de insulina basal?";
+
+/* Alert title for confirming carb ratios outside the recommended range */
+"Save Carb Ratios?" = "¿Guardar ratios de carbohidratos?";
+
+/* Alert title for confirming correction ranges outside the recommended range */
+"Save Correction Range(s)?" = "¿Guardar rango(s) de corrección?";
+
+/* Alert title for confirming delivery limits outside the recommended range */
+"Save Delivery Limits?" = "¿Guardar límites de administración?";
+
+/* Alert title for confirming a glucose safety limit outside the recommended range */
+"Save Glucose Safety Limit?" = "¿Guardar límite de seguridad de glucosa?";
+
+/* Alert title for confirming insulin sensitivities outside the recommended range */
+"Save Insulin Sensitivities?" = "¿Guardar sensibilidades a la insulina?";
+
+/* Alert title for confirming pre-meal range overrides outside the recommended range */
+"Save Pre-Meal Range?" = "¿Guardar rango antes de las comidas?";
+
+/* Alert title for confirming workout range overrides outside the recommended range */
+"Save Workout Range?" = "¿Guardar rango para actividad física?";
+
+/* The button text during saving on a configuration page */
+"Saving..." = "Guardando...";
+
+/* The section header text for a scheduled override */
+"SCHEDULED OVERRIDE" = "SOBREESCRITURA PROGRAMADA";
+
+/* The section header text for a scheduled custom preset */
+"SCHEDULED PRESET" = "PRESELECCIÓN PROGRAMADA";
+
+/* Section title for slow absorbing food */
+"Slow" = "Lento";
+
+/* Information about typical maximum basal rates */
+"Some users choose a value 2, 3, or 4 times their highest scheduled basal rate." = "Algunos usuarios eligen un valor 2, 3 o 4 veces su tasa basal programada más alta.";
+
+/* The text for the override start time */
+"Start Time" = "Tiempo de inicio";
+
+/* Title text for suspend resume button when temp basal starting */
+"Starting Temp Basal" = "Inicio de basal temporal";
+
+/* Format for prescription descriptive text (1: providerName, 2: datePrescribed) */
+"Submitted by %1$@, %2$@" = "Enviado por %1$@, %2$@";
+
+/* Title for support section */
+"Support" = "Ayuda";
+
+/* Title text for button to suspend insulin delivery */
+"Suspend Delivery" = "Suspender la infusión";
+
+/* Title text for button when insulin delivery is in the process of being stopped */
+"Suspending" = "Suspendiendo";
+
+/* No comment provided by engineer. */
+"Switch Preview State" = "Cambiar Estado de Vista Previa";
+
+/* The text for the override preset symbol setting */
+"Symbol" = "Símbolo";
+
+/* Text directing the user to configure their first custom preset */
+"Tap '+' to create a new custom preset." = "Pulsa \"+\" para crear un nuevo preajuste personalizado.";
+
+/* The empty-state text for a configuration value */
+"Tap to set" = "Toca para definir";
+
+/* The text for the override target range setting */
+"Target Range" = "Rango objetivo";
+
+/* Description of pre-meal mode */
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Reduzca temporalmente su objetivo de glucosa antes de una comida para reducir los picos de glucosa después de las comidas.";
+
+/* Description of workout mode */
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Aumente temporalmente su objetivo de glucosa antes, durante o después de la actividad física para reducir el riesgo de tener eventos de glucosa baja.";
+
+/* The title for the override selection screen */
+"Temporary Override" = "Sobreescritura temporal";
+
+/* Information about pre-meal range relative to correction range
+   Information about workout range relative to correction range */
+"than your Correction Range." = "que su Rango de Corrección.";
+
+/* Description for selection when no insulin type is selected. */
+"The currently selected fast acting insulin model will be used as a default." = "Se utilizará por defecto el modelo de insulina de acción rápida actualmente seleccionado.";
+
+/* Subtitle description of Walsh insulin model setting */
+"The legacy model used by Loop, allowing customization of action duration." = "El modelo heredado utilizado por Loop, que permite personalizar la duración de la acción de la insulina.";
+
+/* Alert body displayed absorption time greater than max (1: maximum absorption time) */
+"The maximum absorption time is %@" = "El tiempo máximo de absorción es %@";
+
+/* Alert body displayed for quantity greater than max (1: maximum quantity in grams) */
+"The maximum allowed amount is %@ grams" = "La cantidad máxima permitida es %@ gramos";
+
+/* Information about adult insulin model */
+"The rapid-acting adult model assumes peak activity at 75 minutes." = "El modelo de adultos de acción rápida supone un pico de efecto a los 75 minutos.";
+
+/* Information about child insulin model */
+"The rapid-acting child model assumes peak activity at 65 minutes." = "El modelo para niños de acción rápida supone un pico de efecto a los 65 minutos.";
+
+/* Information about basal rate scheduling */
+"The schedule starts at midnight and cannot contain a rate of 0 U/hr." = "El horario comienza a medianoche y no puede contener una tasa de 0 U/h.";
+
+/* Therapy Settings screen title */
+"Therapy Settings" = "Ajustes de la Terapia";
+
+/* No comment provided by engineer. */
+"Therapy Settings Support Placeholder" = "Marcador de ayuda para la configuracion de terapia";
+
+/* Subtitle of afrezza preset */
+"This model assumes peak insulin activity at 19 minutes." = "Este modelo asume la actividad máxima de la insulina a los 19 minutos.";
+
+/* Subtitle of Fiasp preset
+   Subtitle of Lyumjev preset */
+"This model assumes peak insulin activity at 55 minutes." = "Este modelo asume la actividad máxima de la insulina a los 55 minutos.";
+
+/* Subtitle of Rapid-Acting – Children preset */
+"This model assumes peak insulin activity at 65 minutes." = "Este modelo asume la actividad máxima de la insulina a los 65 minutos.";
+
+/* Subtitle of Rapid-Acting – Adult preset */
+"This model assumes peak insulin activity at 75 minutes." = "Este modelo asume como pico de la insulina a los 75 minutos.";
+
+/* Information about pre-meal range relative to correction range
+   Information about workout range relative to correction range */
+"This will typically be" = "Esto será típicamente";
+
+/* Label for offset from midnight picker */
+"Time" = "Hora";
+
+/* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */
+"Times in %1$@%2$@%3$@" = "Horario in %1$@%2$@%3$@";
+
+/* No comment provided by engineer. */
+"To be implemented" = "Por desarrollarse";
+
+/* No comment provided by engineer. */
+"Top component" = "Componente superior";
+
+/* The text indicating Total for Daily Schedule Basal */
+"Total" = "Total";
+
+/* The text indicating U/day for Daily Schedule Basal */
+"U/day" = "U/día";
+
+/* The unit string for units per hour */
+"U/hour" = "U/hora";
+
+/* Alert title when error occurs while saving a schedule */
+"Unable to Save" = "No se puede guardar";
+
+/* The unit string for units */
+"Units" = "Unidades";
+
+/* Accessibility value for an unknown value
+   The default title to use when an entry has none */
+"Unknown" = "Desconocido";
+
+/* Title for selection when no insulin type is selected. */
+"Unset" = "Sin configurar";
+
+/* Placeholder text until value is entered */
+"Value" = "Valor";
+
+/* Label indicating validation is occurring */
+"Verifying" = "Verificando";
+
+/* The title for the override editing screen */
+"View Override" = "Ver la sobreescritura";
+
+/* Title of insulin model setting */
+"Walsh" = "Walsh";
+
+/* Title of an alert containing a validation warning */
+"Warning" = "Aviso";
+
+/* Disclaimer */
+"Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable." = "Trabaje con su proveedor de atención médica para elegir un valor que sea más alto que su tasa basal programada más alta, pero que sea tan conservadora o agresiva segun su preferencia.";
+
+/* Title for the workout override range */
+"Workout" = "Ejercicio";
+
+/* Information about workout range format (1: app name) */
+"Workout Range is the glucose value or range of values you want %1$@ to target during activity. This range will be in effect when you activate the Workout Preset button." = "Rango de ejercicio físico es el valor de glucosa o el rango de valores que desea que %1$@ tenga como objetivo durante la realización de ejercicio físico. Este rango entrará en vigencia cuando active el botón Preajuste de Ejercicio Físico.";
+
+/* Title text for multi-value workout value warning */
+"Workout Values" = "Valores de ejercicio físico";
+
+/* Description of how to add a ratio */
+"You can add different carb ratios for different times of day by using the ➕." = "Puede añadir diferentes proporciones de carbohidratos para diferentes momentos del día utilizando la ➕.";
+
+/* Description of how to add a ratio */
+"You can add different insulin sensitivities for different times of day by using the ➕." = "Puede agregar diferentes sensibilidades de insulina para diferentes momentos del día usando el ➕.";
+
+/* Description of how to add a configuration range */
+"You can add different ranges for different times of day by using the ➕." = "Puede agregar diferentes rangos para diferentes momentos del día usando el ➕.";
+
+/* Description of how to add a range */
+"You can add entries for different times of day by using the ➕." = "Puede agregar entradas para diferentes momentos del día usando el ➕.";
+
+/* Information about insulin model (1: app name) */
+"You can choose how %1$@ measures rapid acting insulin's peak activity according to one of these two insulin models." = "Puedes elegir cómo %1$@ mide el pico del efecto de la insulina de acción rápida en función de uno de estos dos modelos de insulina.";
+
+/* Description of how to edit setting */
+"You can edit a setting by tapping into any line item." = "Puede editar una configuración tocando cualquier elemento de línea.";
+
+/* Description of how to edit setting */
+"You can edit the setting by tapping into the line item." = "Puede editar la configuración pulsando sobre la linea.";
+
+/* Information about basal rates */
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Su tasa basal de insulina es la cantidad de unidades por hora que desea usar para cubrir sus necesidades de insulina de fondo, no relacionadas con las comidas.";
+
+/* Lower bound pre-meal information text */
+"your Glucose Safety Limit" = "su Límite de Seguridad de Glucosa";
+
+/* Disclaimer */
+"Your healthcare provider can help you choose a Correction Range that's right for you." = "Su proveedor de atención médica puede ayudarlo a elegir un rango de corrección adecuado para usted.";
+
+/* Description of insulin sensitivity factor */
+"Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Su Factor de Sensibilidad a la Insulina (ISF, por sus siglas en inglés) es la caída de glucosa que se espera por la administracion de una unidad de insulina.";
+
+/* Information about pre-meal range format (1: app name) */
+"Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Su rango previo a la comida debe ser el valor de glucosa (o el rango de valores) que desea que %1$@ tenga como objetivo para cuando tome su primer bocado de su comida. Este rango entrará en vigencia cuando active el botón Pre-Comida Preajuste.";
+

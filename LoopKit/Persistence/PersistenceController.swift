@@ -52,14 +52,6 @@ public final class PersistenceController {
         }
     }
 
-    private enum ReadyState {
-        case waiting
-        case ready
-        case error(PersistenceControllerError)
-    }
-
-    public typealias ReadyCallback = (_ error: PersistenceControllerError?) -> Void
-
     internal let managedObjectContext: NSManagedObjectContext
 
     public let isReadOnly: Bool
@@ -69,6 +61,34 @@ public final class PersistenceController {
     public weak var delegate: PersistenceControllerDelegate?
 
     private let log = OSLog(category: "PersistenceController")
+
+    private var queue = DispatchQueue(label: "com.loopkit.PersistenceController", qos: .utility)
+
+    // MARK: - ReadyState
+    private enum ReadyState {
+        case waiting
+        case ready
+        case error(PersistenceControllerError)
+    }
+
+    public typealias ReadyCallback = (_ error: PersistenceControllerError?) -> Void
+
+    private var readyCallbacks: [ReadyCallback] = []
+
+    private var readyState: ReadyState = .waiting
+
+    func onReady(_ callback: @escaping ReadyCallback) {
+        queue.async {
+            switch self.readyState {
+            case .waiting:
+                self.readyCallbacks.append(callback)
+            case .ready:
+                callback(nil)
+            case .error(let error):
+                callback(error)
+            }
+        }
+    }
 
     /// Initializes a new persistence controller in the specified directory
     ///
@@ -81,7 +101,7 @@ public final class PersistenceController {
         isReadOnly: Bool = false
     ) {
         
-        guard let url = Bundle(for: PersistenceController.self).url(forResource: "Model", withExtension: "momd") else {
+        guard let url = LocalBundle.main.url(forResource: "Model", withExtension: "momd") else {
             log.error("Could not find Model url")
             fatalError("Unable to find Model url")
         }
@@ -99,25 +119,6 @@ public final class PersistenceController {
         self.isReadOnly = isReadOnly
         
         initializeStack(inDirectory: directoryURL, model: model)
-    }
-
-    private var readyCallbacks: [ReadyCallback] = []
-
-    private var readyState: ReadyState = .waiting
-
-    private var queue = DispatchQueue(label: "com.loopkit.PersistenceController", qos: .utility)
-
-    func onReady(_ callback: @escaping ReadyCallback) {
-        queue.async {
-            switch self.readyState {
-            case .waiting:
-                self.readyCallbacks.append(callback)
-            case .ready:
-                callback(nil)
-            case .error(let error):
-                callback(error)
-            }
-        }
     }
 
     @discardableResult
@@ -193,15 +194,20 @@ public final class PersistenceController {
 
             let storeURL = directoryURL.appendingPathComponent("Model.sqlite")
 
+            var options: [AnyHashable : Any] = [
+                NSMigratePersistentStoresAutomaticallyOption: true,
+                NSInferMappingModelAutomaticallyOption: true
+            ]
+            
+#if os(iOS)
+            options[NSPersistentStoreFileProtectionKey] = FileProtectionType.completeUntilFirstUserAuthentication
+#endif
+
             do {
                 try coordinator.addPersistentStore(ofType: NSSQLiteStoreType,
                     configurationName: nil,
                     at: storeURL,
-                    options: [
-                        NSMigratePersistentStoresAutomaticallyOption: true,
-                        NSInferMappingModelAutomaticallyOption: true,
-                        NSPersistentStoreFileProtectionKey: FileProtectionType.completeUntilFirstUserAuthentication
-                    ]
+                    options: options
                 )
             } catch let storeError as NSError {
                 self.log.error("Failed to initialize persistenceController: %{public}@", storeError)
@@ -263,10 +269,11 @@ extension PersistenceController {
             if let encoded = value as? Data {
                 let anchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: encoded)
                 if anchor == nil {
-                    self.log.error("Decoding anchor from %{public} failed.", String(describing: encoded))
+                    self.log.error("Decoding anchor from %{public}@ failed.", String(describing: encoded))
                 }
                 completion(anchor)
             } else {
+                self.log.error("Anchor metadata invalid %{public}@.", String(describing: value))
                 completion(nil)
             }
         }

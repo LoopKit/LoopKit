@@ -2,19 +2,19 @@
 "Basal Rates" = "Rate bazale";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Raport carbohidrați";
+"Carb Ratios" = "Raport carbohidrați/insulină";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Carbohidrați";
 
 /* The title text for the glucose correction range schedule */
-"Correction Range" = "Interval corecție";
+"Correction Range" = "Interval țintă pentru corecție";
 
 /* The title for the cell displaying diagnostic data */
 "Diagnostic" = "Diagnostic";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Introduceți ID-ul pompei din 6 cifre";
+"Enter the 6-digit pump ID" = "Introduceți ID-ul de pompă din 6 cifre";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Generează date";
@@ -30,7 +30,7 @@
 "Reservoir" = "Rezervor";
 
 /* Title for the cell resetting the data manager */
-"Reset" = "Resetează";
+"Reset" = "Resetare";
 
 /* Title of button to sync basal profile from pump */
 "Sync With Pump" = "Sincronizează cu pompa";

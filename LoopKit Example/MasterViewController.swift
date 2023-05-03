@@ -14,7 +14,15 @@ import HealthKit
 
 class MasterViewController: UITableViewController {
 
-    private var dataManager: DeviceDataManager? = DeviceDataManager()
+    private var dataManager: DeviceDataManager?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil {
+            dataManager = DeviceDataManager()
+        }
+    }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -89,28 +97,28 @@ class MasterViewController: UITableViewController {
         case .configuration:
             switch ConfigurationRow(rawValue: indexPath.row)! {
             case .basalRate:
-                cell.textLabel?.text = LocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
+                cell.textLabel?.text = NSLocalizedString("Basal Rates", comment: "The title text for the basal rate schedule")
             case .carbRatio:
-                cell.textLabel?.text = LocalizedString("Carb Ratios", comment: "The title of the carb ratios schedule screen")
+                cell.textLabel?.text = NSLocalizedString("Carb Ratios", comment: "The title of the carb ratios schedule screen")
             case .correctionRange:
-                cell.textLabel?.text = LocalizedString("Correction Range", comment: "The title text for the glucose correction range schedule")
+                cell.textLabel?.text = NSLocalizedString("Correction Range", comment: "The title text for the glucose correction range schedule")
             case .insulinSensitivity:
-                cell.textLabel?.text = LocalizedString("Insulin Sensitivity", comment: "The title text for the insulin sensitivity schedule")
+                cell.textLabel?.text = NSLocalizedString("Insulin Sensitivity", comment: "The title text for the insulin sensitivity schedule")
             case .pumpID:
-                cell.textLabel?.text = LocalizedString("Pump ID", comment: "The title text for the pump ID")
+                cell.textLabel?.text = NSLocalizedString("Pump ID", comment: "The title text for the pump ID")
             }
         case .data:
             switch DataRow(rawValue: indexPath.row)! {
             case .carbs:
-                cell.textLabel?.text = LocalizedString("Carbs", comment: "The title for the cell navigating to the carbs screen")
+                cell.textLabel?.text = NSLocalizedString("Carbs", comment: "The title for the cell navigating to the carbs screen")
             case .reservoir:
-                cell.textLabel?.text = LocalizedString("Reservoir", comment: "The title for the cell navigating to the reservoir screen")
+                cell.textLabel?.text = NSLocalizedString("Reservoir", comment: "The title for the cell navigating to the reservoir screen")
             case .diagnostic:
-                cell.textLabel?.text = LocalizedString("Diagnostic", comment: "The title for the cell displaying diagnostic data")
+                cell.textLabel?.text = NSLocalizedString("Diagnostic", comment: "The title for the cell displaying diagnostic data")
             case .generate:
-                cell.textLabel?.text = LocalizedString("Generate Data", comment: "The title for the cell displaying data generation")
+                cell.textLabel?.text = NSLocalizedString("Generate Data", comment: "The title for the cell displaying data generation")
             case .reset:
-                cell.textLabel?.text = LocalizedString("Reset", comment: "Title for the cell resetting the data manager")
+                cell.textLabel?.text = NSLocalizedString("Reset", comment: "Title for the cell resetting the data manager")
             }
         }
 
@@ -194,10 +202,10 @@ class MasterViewController: UITableViewController {
 
 //                textFieldVC.delegate = self
                 textFieldVC.title = sender?.textLabel?.text
-                textFieldVC.placeholder = LocalizedString("Enter the 6-digit pump ID", comment: "The placeholder text instructing users how to enter a pump ID")
+                textFieldVC.placeholder = NSLocalizedString("Enter the 6-digit pump ID", comment: "The placeholder text instructing users how to enter a pump ID")
                 textFieldVC.value = dataManager?.pumpID
                 textFieldVC.keyboardType = .numberPad
-                textFieldVC.contextHelp = LocalizedString("The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).", comment: "Instructions on where to find the pump ID on a Minimed pump")
+                textFieldVC.contextHelp = NSLocalizedString("The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).", comment: "Instructions on where to find the pump ID on a Minimed pump")
 
                 show(textFieldVC, sender: sender)
             default:
@@ -206,7 +214,8 @@ class MasterViewController: UITableViewController {
         case .data:
             switch DataRow(rawValue: indexPath.row)! {
             case .carbs:
-                performSegue(withIdentifier: CarbEntryTableViewController.className, sender: sender)
+                //performSegue(withIdentifier: CarbEntryTableViewController.className, sender: sender)
+                break
             case .reservoir:
                 performSegue(withIdentifier: LegacyInsulinDeliveryTableViewController.className, sender: sender)
             case .diagnostic:
@@ -311,13 +320,6 @@ class MasterViewController: UITableViewController {
         }
 
         switch targetViewController {
-        case let vc as CarbEntryTableViewController:
-            vc.carbStore = dataManager?.carbStore
-        case let vc as CarbEntryEditViewController:
-            if let carbStore = dataManager?.carbStore {
-                vc.defaultAbsorptionTimes = carbStore.defaultAbsorptionTimes
-                vc.preferredUnit = carbStore.preferredUnit
-            }
         case let vc as LegacyInsulinDeliveryTableViewController:
             vc.doseStore = dataManager?.doseStore
         default:

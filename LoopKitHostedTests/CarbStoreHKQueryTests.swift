@@ -50,9 +50,18 @@ class CarbStoreHKQueryTestsAuthorized: CarbStoreHKQueryTestsBase {
     }
 
     func testObserverQueryStartup() {
-        // Check that an observer query was registered even before authorize() is called.
+        // Check that an observer query is registered when authorization is already determined.
         XCTAssertFalse(carbStore.authorizationRequired);
-        XCTAssertNotNil(carbStore.observerQuery);
+
+        let observerQueryCreated = expectation(description: "observer query created")
+
+        carbStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
+            let observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            observerQueryCreated.fulfill()
+            return observerQuery
+        }
+
+        waitForExpectations(timeout: 2)
     }
 }
 
@@ -64,8 +73,11 @@ class CarbStoreHKQueryTests: CarbStoreHKQueryTestsBase {
         XCTAssert(carbStore.authorizationRequired);
         XCTAssertNil(carbStore.observerQuery);
 
+        let observerQueryCreated = expectation(description: "observer query created")
+
         carbStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            observerQueryCreated.fulfill()
             return observerQuery!
         }
 
@@ -115,15 +127,16 @@ class CarbStoreHKQueryTests: CarbStoreHKQueryTestsBase {
                                      observationInterval: .hours(1),
                                      provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
-        let newAuthorizationCompletion = expectation(description: "authorization completion")
-
         observerQuery = nil
 
+        let newObserverQueryCreated = expectation(description: "new observer query created")
         newCarbStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            newObserverQueryCreated.fulfill()
             return observerQuery!
         }
 
+        let newAuthorizationCompletion = expectation(description: "authorization completion")
         newCarbStore.authorize { (result) in
             newAuthorizationCompletion.fulfill()
         }

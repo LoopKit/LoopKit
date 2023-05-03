@@ -2,29 +2,29 @@
 "Basal Rates" = "Velocità basali";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Proporzioni carboidrati";
+"Carb Ratios" = "Rapporti carboidrati";
 
 /* The title for the cell navigating to the carbs screen */
-"Carbs" = "Carboidrati";
+"Carbs" = "Carb.";
 
 /* The title text for the glucose correction range schedule */
-"Correction Range" = "Intervallo di correzione";
+"Correction Range" = "Intervallo Glicemico";
 
 /* The title for the cell displaying diagnostic data */
 "Diagnostic" = "Dati diagnostici";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Inserisci ID a 6 cifre della pompa";
+"Enter the 6-digit pump ID" = "Inserire 6-cifre ID micro";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Genera dati";
 
 /* The title of the insulin sensitivity schedule screen
    The title text for the insulin sensitivity schedule */
-"Insulin Sensitivity" = "Sensibilità all’insulina";
+"Insulin Sensitivity" = "Sensibilità insulinica";
 
 /* The title text for the pump ID */
-"Pump ID" = "ID pompa";
+"Pump ID" = "ID microinfusore";
 
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "Serbatoio";
@@ -36,5 +36,5 @@
 "Sync With Pump" = "Sincronizza con la pompa";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
-"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).";
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "L'ID della pompa si trova stampato sul retro o in fondo alla schermata STATO/Esc. È la parte strettamente numerica del numero di serie (indicato come SN o S/N).";
 

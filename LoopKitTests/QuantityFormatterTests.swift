@@ -7,7 +7,7 @@
 
 import XCTest
 import HealthKit
-import LoopKit
+@testable import LoopKit
 
 class QuantityFormatterTests: XCTestCase {
 

@@ -51,19 +51,19 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
 
-        let semaphore = DispatchSemaphore(value: 0)
-        cacheStore.onReady { error in
-            XCTAssertNil(error)
-            semaphore.signal()
-        }
-        semaphore.wait()
-
         healthStore = HKHealthStoreMock()
         healthStore.authorizationStatus = authorizationStatus
         insulinDeliveryStore = InsulinDeliveryStore(healthStore: healthStore,
                                                     cacheStore: cacheStore,
                                                     cacheLength: .hours(1),
                                                     provenanceIdentifier: HKSource.default().bundleIdentifier)
+
+        let semaphore = DispatchSemaphore(value: 0)
+        cacheStore.onReady { error in
+            XCTAssertNil(error)
+            semaphore.signal()
+        }
+        semaphore.wait()
     }
 
     override func tearDown() {
@@ -88,9 +88,18 @@ class InsulinDeliveryStoreTestsAuthorized: InsulinDeliveryStoreTestsBase {
     }
     
     func testObserverQueryStartup() {
-        // Check that an observer query was registered even before authorize() is called.
+        // Check that an observer query is registered when authorization is already determined.
         XCTAssertFalse(insulinDeliveryStore.authorizationRequired);
-        XCTAssertNotNil(insulinDeliveryStore.observerQuery);
+
+        let observerQueryCreated = expectation(description: "observer query created")
+
+        insulinDeliveryStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
+            let observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            observerQueryCreated.fulfill()
+            return observerQuery
+        }
+
+        waitForExpectations(timeout: 2)
     }
 }
 
@@ -104,8 +113,11 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         XCTAssert(insulinDeliveryStore.authorizationRequired);
         XCTAssertNil(insulinDeliveryStore.observerQuery);
 
+        let observerQueryCreated = expectation(description: "observer query created")
+
         insulinDeliveryStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            observerQueryCreated.fulfill()
             return observerQuery!
         }
 
@@ -114,7 +126,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
             authorizationCompletion.fulfill()
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 2)
 
         XCTAssertNotNil(observerQuery)
 
@@ -144,6 +156,7 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
 
         XCTAssertNotNil(insulinDeliveryStore.queryAnchor)
 
+        // Allow any managedObjectContext tasks to complete, like storing the anchor
         cacheStore.managedObjectContext.performAndWait {}
 
         // Create a new glucose store, and ensure it uses the last query anchor
@@ -155,8 +168,11 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
 
         observerQuery = nil
 
+        let newObserverQueryCreationExpectation = expectation(description: "new observer query created")
+
         newInsulinDeliveryStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
             observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
+            newObserverQueryCreationExpectation.fulfill()
             return observerQuery!
         }
 

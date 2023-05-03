@@ -1,0 +1,47 @@
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Confirmation message for deleting a service */
+"Are you sure you want to delete this service?" = "Haluatko varmasti poistaa tämän palvelun?";
+
+/* Back button text on DeliveryUncertaintyRecoveryView */
+"Back" = "Takaisin";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Kumoa";
+
+/* Title for CGM simulator settings */
+"CGM Settings" = "CGM-asetukset";
+
+/* No comment provided by engineer. */
+"Comms Recovery" = "Yhteyksien palautus";
+
+/* Button title to delete a service */
+"Delete Service" = "Poista palvelu";
+
+/* The alert title for a resume error */
+"Error Resuming" = "Virhe jatkamisessa";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Virhe pysäytyksessä";
+
+/* Caption for History
+   History Caption */
+"History" = "Historia";
+
+/* Controller title for insulin type selection screen */
+"Insulin Type" = "Insuliinityyppi";
+
+/* Button title to acknowledge error
+   Default acknowledgement */
+"OK" = "OK";
+
+/* Title for Pump simulator settings */
+"Pump Settings" = "Pumpun asetukset";
+
+/* Button title recovering comms */
+"Recover Simulator" = "Palauta simulaattori";
+

@@ -2,29 +2,29 @@
 "Basal Rates" = "Basaalsnelheden";
 
 /* The title of the carb ratios schedule screen */
-"Carb Ratios" = "Koolhydraten absorptie snelheid";
+"Carb Ratios" = "Koolhydraatratio's";
 
 /* The title for the cell navigating to the carbs screen */
 "Carbs" = "Koolhydraten";
+
+/* The title text for the glucose correction range schedule */
+"Correction Range" = "Correctiebereik";
 
 /* The title for the cell displaying diagnostic data */
 "Diagnostic" = "Diagnose";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Vul de 6 cijferige pomp ID in";
+"Enter the 6-digit pump ID" = "Voer het 6-cijferige pompserienummer in";
 
 /* The title for the cell displaying data generation */
-"Generate Data" = "Genereer data";
+"Generate Data" = "Genereer Gegevens";
 
 /* The title of the insulin sensitivity schedule screen
    The title text for the insulin sensitivity schedule */
-"Insulin Sensitivity" = "Correctie bereik";
-
-/* The title text for the glucose target range schedule */
-"Correction Range" = "Gewenst glucose doelbereik";
+"Insulin Sensitivity" = "Insulinegevoeligheid";
 
 /* The title text for the pump ID */
-"Pump ID" = "Pomp ID";
+"Pump ID" = "Pompserienummer";
 
 /* The title for the cell navigating to the reservoir screen */
 "Reservoir" = "Reservoir";
@@ -36,5 +36,5 @@
 "Sync With Pump" = "Synchroniseer met pomp";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
-"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N).";
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Het pompserienummer vindt je op de achterkant of onderaan het STATUS/Esc-scherm. Het is het strikt numerieke deel van het serienummer (weergegeven als SN of S/N).";
 

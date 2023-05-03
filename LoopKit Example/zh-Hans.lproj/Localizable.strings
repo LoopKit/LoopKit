@@ -14,7 +14,7 @@
 "Diagnostic" = "诊断";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "输入6位数字泵编号";
+"Enter the 6-digit pump ID" = "输入六位数字的泵ID";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "创建日期";
@@ -24,10 +24,10 @@
 "Insulin Sensitivity" = "胰岛素敏感系数";
 
 /* The title text for the pump ID */
-"Pump ID" = "泵编号";
+"Pump ID" = "胰岛素泵序列号";
 
 /* The title for the cell navigating to the reservoir screen */
-"Reservoir" = "储药器";
+"Reservoir" = "胰岛素容量";
 
 /* Title for the cell resetting the data manager */
 "Reset" = "重置";

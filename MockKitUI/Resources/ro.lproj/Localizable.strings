@@ -1,0 +1,74 @@
+/* No comment provided by engineer. */
+"%@ has been unable to communicate with the Simulator Pump since %@.\n\nWithout communication, the app cannot continue to send commands for insulin delivery or display accurate, recent information about your active insulin or the insulin being delivered." = "%1$@ nu a putut comunica cu pompa simulată din %2$@.\n\nFără comunicare, aplicația nu poate continua să trimită comenzi pentru administrarea de insulină sau să afișeze informații exacte și recente despre insulina dumneavoastră activă sau insulina care vi se administrează.";
+
+/* Appends a full-stop to a statement */
+"%@." = "%@.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Alert content body for recurring software update alert */
+"A software update is recommended to continue using the %1$@ app.\n\nGo to %2$@ Settings > Software Update to install the latest version." = "Se recomandă o actualizare a software-ului pentru a continua să utilizați aplicația %1$@.\n\nAccesați %2$@ Setări > Actualizare software pentru a instala cea mai recentă versiune.";
+
+/* Confirmation message for deleting a service */
+"Are you sure you want to delete this service?" = "Ești sigur că vrei să ștergi acest serviciu?";
+
+/* Back button text on DeliveryUncertaintyRecoveryView */
+"Back" = "Înapoi";
+
+/* The title of the cancel action in an action sheet */
+"Cancel" = "Renunță";
+
+/* Title for CGM simulator settings */
+"CGM Settings" = "Setări CGM";
+
+/* No comment provided by engineer. */
+"Clear Last Version Check Alert Date" = "Ștergeți data ultimei alerte de verificare a versiunii";
+
+/* No comment provided by engineer. */
+"Comms Recovery" = "Recuperare comenzi";
+
+/* Button title to delete a service */
+"Delete Service" = "Șterge serviciul";
+
+/* The alert title for a resume error */
+"Error Resuming" = "Eroare în timpul reluării";
+
+/* The alert title for a suspend error */
+"Error Suspending" = "Eroare în timpul suspendării";
+
+/* Caption for History
+   History Caption */
+"History" = "Istoric";
+
+/* No comment provided by engineer. */
+"How should the simulator respond to a version check?" = "Cum ar trebui să răspundă simulatorul la o verificare a versiunii?";
+
+/* Controller title for insulin type selection screen */
+"Insulin Type" = "Tipul de insulină";
+
+/* No comment provided by engineer. */
+"Mock Version Check %@" = "Verificare versiune simulată %@";
+
+/* Button title to acknowledge error
+   Default acknowledgement */
+"OK" = "OK";
+
+/* Title for Pump simulator settings */
+"Pump Settings" = "Setări pompă";
+
+/* Button title recovering comms */
+"Recover Simulator" = "Simulator de recuperare";
+
+/* Caption for Source */
+"Source" = "Sursă";
+
+/* Recurring software update alert title */
+"Update Reminder" = "Memento actualizare";
+
+/* No comment provided by engineer. */
+"Version Check Response" = "Răspuns de verificare a versiunii";
+
+/* Alert content body for first software update alert (1: app name)(2: app name) */
+"Your %1$@ app is out of date. It will continue to work, but we recommend updating to the latest version.\n\nGo to %2$@ Settings > Software Update to complete." = "Aplicația dvs. %1$@ nu este actualizată. Aceasta va continua să funcționeze, dar vă recomandăm să o actualizați la cea mai recentă versiune.\n\nAccesați %2$@ Setări > Actualizare software pentru a finaliza.";
+

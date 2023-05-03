@@ -438,5 +438,58 @@ class LoopMathTests: XCTestCase {
         XCTAssertEqual(expected, calculated)
     }
 
-    
+    func testDateRange() {
+        let formatter = DateFormatter.descriptionFormatter
+        let f = { (input) in
+            return formatter.date(from: input)!
+        }
+        
+        let expected = [
+            f("2018-08-16 01:00:00 +0000"),
+            f("2018-08-16 01:05:00 +0000"),
+            f("2018-08-16 01:10:00 +0000"),
+            f("2018-08-16 01:15:00 +0000"),
+            f("2018-08-16 01:20:00 +0000"),
+            f("2018-08-16 01:25:00 +0000"),
+            f("2018-08-16 01:30:00 +0000"),
+            f("2018-08-16 01:35:00 +0000"),
+            f("2018-08-16 01:40:00 +0000"),
+            f("2018-08-16 01:45:00 +0000"),
+            f("2018-08-16 01:50:00 +0000"),
+            f("2018-08-16 01:55:00 +0000"),
+            f("2018-08-16 02:00:00 +0000"),
+            f("2018-08-16 02:05:00 +0000"),
+            f("2018-08-16 02:10:00 +0000"),
+            f("2018-08-16 02:15:00 +0000"),
+            f("2018-08-16 02:20:00 +0000"),
+            f("2018-08-16 02:25:00 +0000"),
+            f("2018-08-16 02:30:00 +0000"),
+            f("2018-08-16 02:35:00 +0000"),
+            f("2018-08-16 02:40:00 +0000"),
+            f("2018-08-16 02:45:00 +0000"),
+            f("2018-08-16 02:50:00 +0000"),
+            f("2018-08-16 02:55:00 +0000"),
+            f("2018-08-16 03:00:00 +0000"),
+            f("2018-08-16 03:05:00 +0000"),
+            f("2018-08-16 03:10:00 +0000")
+        ]
+        
+        let roundedStartDate = f("2018-08-16 01:00:00 +0000")
+        let unroundedStartDate = f("2018-08-16 01:04:13 +0000")
+        
+        let roundedEndDate = f("2018-08-16 03:10:00 +0000")
+        let unroundedEndDate = f("2018-08-16 03:06:29 +0000")
+
+        let roundedOutput = LoopMath.simulationDateRange(from: roundedStartDate, to: roundedEndDate, delta: .minutes(5))
+        XCTAssertEqual(expected, roundedOutput)
+        
+        let unroundedOutput = LoopMath.simulationDateRange(from: unroundedStartDate, to: unroundedEndDate, delta: .minutes(5))
+        XCTAssertEqual(expected, unroundedOutput)
+        
+        let differentDeltaExpected = expected
+                                        .enumerated()
+                                        .compactMap { $0.offset.isMultiple(of: 2) ? $0.element : nil }
+        let differentDeltaOutput = LoopMath.simulationDateRange(from: unroundedStartDate, to: unroundedEndDate, delta: .minutes(10))
+        XCTAssertEqual(differentDeltaExpected, differentDeltaOutput)
+    }
 }

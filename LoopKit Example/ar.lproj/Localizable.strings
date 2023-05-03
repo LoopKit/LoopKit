@@ -1,0 +1,21 @@
+/* The title text for the basal rate schedule */
+"Basal Rates" = "الضخ المستمر";
+
+/* The title of the carb ratios schedule screen */
+"Carb Ratios" = "معاملات الكارب";
+
+/* The title for the cell navigating to the carbs screen */
+"Carbs" = "Carbs";
+
+/* The title text for the glucose correction range schedule */
+"Correction Range" = "نطاق التصحيح";
+
+/* The placeholder text instructing users how to enter a pump ID */
+"Enter the 6-digit pump ID" = "Enter the 6-digit pump ID";
+
+/* The title text for the pump ID */
+"Pump ID" = "Pump ID";
+
+/* The title for the cell navigating to the reservoir screen */
+"Reservoir" = "الخزان";
+

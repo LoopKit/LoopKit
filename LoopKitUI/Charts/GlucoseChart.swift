@@ -10,7 +10,6 @@ import HealthKit
 import LoopKit
 import SwiftCharts
 
-
 open class GlucoseChart {
     public init() {
     }

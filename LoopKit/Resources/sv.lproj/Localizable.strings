@@ -1,0 +1,223 @@
+/* Format for correction range override therapy setting card */
+"%@ Range" = "%@sintervall";
+
+/* Descriptive format string for glucose safety limit (1: app name) */
+"%1$@ will deliver basal and recommend bolus insulin only if your glucose is predicted to be above this limit for the next three hours." = "%1$@ kommer att tillföra basal och rekommendera insulin endast om ditt blodsocker förväntas ligga över denna gräns under de kommande tre timmarna.";
+
+/* String format for value with units (1: value, 2: separator, 3: units) */
+"%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Descriptive text for guardrail high value warning for schedule interface */
+"A value you have entered is higher than what is typically recommended for most people." = "Det värde du har angett är högre än vad som normalt rekommenderas för de flesta.";
+
+/* Descriptive text for guardrail low value warning for schedule interface */
+"A value you have entered is lower than what is typically recommended for most people." = "Det värde du har angett är lägre än vad som normalt rekommenderas för de flesta.";
+
+/* Brand name for apidra insulin type */
+"Apidra" = "Apidra";
+
+/* Title for Apidra insulin type */
+"Apidra (insulin glulisine)" = "Apidra (insulinglulisin)";
+
+/* The error description describing when Health sharing was denied */
+"Authorization Denied" = "Auktorisation nekad";
+
+/* Title for basal dose type */
+"Basal" = "Basal";
+
+/* Title text for basal rates */
+"Basal Rates" = "Basaldoser";
+
+/* Title for bolus dose type */
+"Bolus" = "Bolus";
+
+/* Title text for carb ratios */
+"Carb Ratios" = "Insulinkvoter";
+
+/* The description of an error returned when attempting to delete a sample not shared by the current app */
+"com.loudnate.CarbKit.deleteCarbEntryUnownedErrorDescription" = "Auktorisation nekad";
+
+/* The error recovery suggestion when attempting to delete a sample not shared by the current app */
+"com.loudnate.carbKit.sharingDeniedErrorRecoverySuggestion" = "Detta värde kan raderas från Hälsa-appen";
+
+/* Generic pump error description */
+"Communication Failure" = "Kommunikationsfel";
+
+/* Failure reason for uncertain delivery */
+"Communications interrupted during insulin delivery command." = "Kommunikation avbruten under insulintillförselkommando.";
+
+/* Generic pump error description */
+"Connection Failure" = "Anslutningsfel";
+
+/* Title text for glucose target range */
+"Correction Range" = "Målvärde";
+
+/* Descriptive text for glucose target range (1: app name) */
+"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Målvärde är det ideala blodsockerintervall som du vill att %1$@ ska hålla dig inom.";
+
+/* Title text for delivery limits */
+"Delivery Limits" = "Maxdoser";
+
+/* Generic pump error description */
+"Device Refused" = "Enhet vägrade";
+
+/* Recovery suggestion for a no data error */
+"Ensure carb data exists for the specified date" = "Kontrollera att kolhydratvärde finns";
+
+/* Glucose trend down */
+"Falling" = "Sjunker";
+
+/* Glucose trend down-down */
+"Falling fast" = "Sjunker snabbt";
+
+/* Glucose trend down-down-down */
+"Falling very fast" = "Sjunker väldigt snabbt";
+
+/* Brand name for fiasp insulin type
+   Title for Fiasp insulin type */
+"Fiasp" = "Fiasp";
+
+/* Description for fiasp insulin type */
+"Fiasp is a mealtime insulin aspart formulation with the addition of nicotinamide (vitamin B3) made by Novo Nordisk" = "Fiasp är ett snabbverkande insulin-aspart med tillägg av nikotinamid (vitamin B3) från Novo Nordisk";
+
+/* Glucose trend flat */
+"Flat" = "Jämnt";
+
+/* Descriptive text for fast acting insulin model (1: app name) */
+"For fast acting insulin, %1$@ assumes it is actively working for 6 hours. You can choose from different models for the peak activity." = "Får snabbverkande insulin, antar %1$@ ett insulin med 6 timmars verkan. Du kan välja mellan olika modeller med olika tid för insulinets maximala blodsockersänkande effekt i minuter.";
+
+/* The short unit display string for grams per U */
+"g/U" = "g/E";
+
+/* Title text for glucose safety limit */
+"Glucose Safety Limit" = "Tröskelvärde för blodsocker";
+
+/* Brand name for humalog insulin type */
+"Humalog" = "Humalog";
+
+/* Title for Humalog insulin type */
+"Humalog (insulin lispro)" = "Humalog (insulin lispro)";
+
+/* Title text for fast acting insulin model */
+"Insulin Model" = "Insulinmodell";
+
+/* Title text for insulin sensitivity */
+"Insulin Sensitivities" = "Insulinkänslighet";
+
+/* Generic pump error description */
+"Invalid Configuration" = "Ogiltig konfiguration";
+
+/* Recovery suggestion for uncertain delivery */
+"Make sure your pump is within communication range of your phone." = "Säkerställ att din pump är inom räckvidd för kommunikation med telefon.";
+
+/* Title text for maximum basal rate configuration */
+"Maximum Basal Rate" = "Maximal basaldos";
+
+/* Title text for maximum bolus configuration */
+"Maximum Bolus" = "Maximal bolus";
+
+/* Descriptive text for maximum bolus */
+"Maximum Bolus is the highest bolus amount you can deliver at one time to cover carbs or bring down high glucose." = "Maximal bolus är den högsta bolusmängd som kan ges vid ett tillfälle för att täcka kolhydrater eller ett högt blodsocker.";
+
+/* The short unit display string for milligrams per deciliter per U */
+"mg/dL/U" = "mg/dl/E";
+
+/* The short unit display string for millimoles per liter */
+"mmol/L" = "mmol/L";
+
+/* The short unit display string for millimoles per liter per U */
+"mmol/L/U" = "mmol/L/E";
+
+/* Sensor state description for the non-valid state */
+"Needs Attention" = "Kräver uppmärksamhet";
+
+/* Describes an error for no data found in a CarbStore request */
+"No values found" = "Inga värden funna";
+
+/* Brand name for novolog insulin type */
+"Novolog" = "Novolog";
+
+/* Title for Novolog insulin type */
+"Novolog (insulin aspart)" = "Novolog (insulin aspart)";
+
+/* Sensor state description for the valid state */
+"OK" = "OK";
+
+/* Descriptive text for saving settings outside the recommended range */
+"One or more of the values you have entered is outside of what is typically recommended for most people." = "Ett eller flera av de värden du har angett är utanför vad som generellt rekommenderas.";
+
+/* The error recovery suggestion when Health sharing was denied */
+"Please re-enable sharing in Health" = "Tillåt delning i Hälsa igen";
+
+/* Title for pre-meal mode */
+"Pre-Meal" = "Före måltid";
+
+/* Title for resume dose type */
+"Resumed" = "Återupptagen";
+
+/* Glucose trend up */
+"Rising" = "Stiger";
+
+/* Glucose trend up-up */
+"Rising fast" = "Stiger snabbt";
+
+/* Glucose trend up-up-up */
+"Rising very fast" = "Stiger väldigt snabbt";
+
+/* Descriptive text for guardrail high value warning for schedule interface */
+"Some of the values you have entered are outside of what is typically recommended for most people." = "Ett eller flera av de värden du har angett är utanför vad som generellt rekommenderas.";
+
+/* Title for suspend dose type */
+"Suspended" = "Pausad";
+
+/* Title for temp basal dose type */
+"Temp Basal" = "Temporär basal";
+
+/* Descriptive text for pre-meal correction range override */
+"Temporarily lower your glucose target before a meal to impact post-meal glucose spikes." = "Sänker tillfälligt ditt målvärde före en måltid för att motverka postprandiella hyperglykemier (stegrade blodsocker efter en måltid).";
+
+/* Descriptive text for workout correction range override */
+"Temporarily raise your glucose target before, during, or after physical activity to reduce the risk of low glucose events." = "Höj tillfälligt ditt målvärde före, under eller efter fysisk aktivitet för att minska risken för låga blodsockervärden.";
+
+/* Descriptive text for guardrail high value warning */
+"The value you have entered is higher than what is typically recommended for most people." = "Det värde du har angett är högre än vad som normalt rekommenderas för de flesta.";
+
+/* Descriptive text for guardrail low value warning */
+"The value you have entered is lower than what is typically recommended for most people." = "Det värde du har angett är lägre än vad som normalt rekommenderas för de flesta.";
+
+/* Descriptive text for guardrail high value warning */
+"The values you have entered are outside of what is typically recommended for most people." = "Ett eller flera av de värden du har angett är utanför vad som generellt rekommenderas.";
+
+/* The short unit display string for international units of insulin */
+"U" = "E";
+
+/* The short unit display string for international units of insulin per hour */
+"U/hr" = "E/timme";
+
+/* Error description for uncertain delivery */
+"Uncertain Delivery" = "Oklart ifall bolus administrerats";
+
+/* The long unit display string for a singular international unit of insulin */
+"Unit" = "Enhet";
+
+/* The long unit display string for a singular international unit of insulin per hour */
+"Unit/hour" = "Enhet/timme";
+
+/* The long unit display string for international units of insulin */
+"Units" = "Eheter";
+
+/* The long unit display string for international units of insulin per hour */
+"Units/hour" = "Enhet/timme";
+
+/* Title for workout mode */
+"Workout" = "Träning";
+
+/* Descriptive text for basal rate */
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Din bassaldos är det antal enheter insulin per timme som krävs för din basala ämnesomsättning.";
+
+/* Descriptive text for carb ratio */
+"Your Carb Ratio is the number of grams of carbohydrates covered by one unit of insulin." = "Din insulinkvot är det antal gram kolhydrater som svarar mot en enhet insulin.";
+
+/* Descriptive text for insulin sensitivity */
+"Your Insulin Sensitivities refer to the drop in glucose expected from one unit of insulin." = "Insulinkänslighet är ett mått på hur mycket ditt blodsocker sänks av en enhet insulin.";
+
