@@ -15,7 +15,7 @@ class VersionCheckServiceTests: XCTestCase {
         // Comparable order is important for VersionUpdate.  Do not reorder!
         XCTAssertGreaterThan(VersionUpdate.required, VersionUpdate.recommended)
         XCTAssertGreaterThan(VersionUpdate.recommended, VersionUpdate.available)
-        XCTAssertGreaterThan(VersionUpdate.available, VersionUpdate.none)
+        XCTAssertGreaterThan(VersionUpdate.available, VersionUpdate.noUpdateNeeded)
     }
 
 }

@@ -29,6 +29,7 @@ public protocol ServiceUI: Service {
     ///
     /// - Parameters:
     ///     - colorPalette: Color palette to use for any UI.
+    ///     - pluginHost: Object that provides namd and version  information about host to the service plugin.
     /// - Returns: Either a conforming view controller to create and onboard the service or a newly created and onboarded service.
     static func setupViewController(colorPalette: LoopUIColorPalette, pluginHost: PluginHost) -> SetupUIResult<ServiceViewController, ServiceUI>
 

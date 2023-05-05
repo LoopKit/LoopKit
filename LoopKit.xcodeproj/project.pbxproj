@@ -632,6 +632,7 @@
 		A9E675F5227140DD00E25293 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E675F4227140DD00E25293 /* HealthKit.framework */; };
 		A9FD046F24E310D00040F203 /* HKObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FD046E24E310D00040F203 /* HKObject.swift */; };
 		A9FD047024E310DD0040F203 /* HKObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9FD046E24E310D00040F203 /* HKObject.swift */; };
+		B400177929F0249D00532398 /* DeviceAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B400177829F0249D00532398 /* DeviceAction.swift */; };
 		B4001CF028CBC200002FB414 /* SingleSelectionCheckList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4001CEF28CBC200002FB414 /* SingleSelectionCheckList.swift */; };
 		B40C43912707408400F5D86C /* DeliveryLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC64C7D24BF6EBC004A63A1 /* DeliveryLimits.swift */; };
 		B40D07CA251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B40D07C8251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.xib */; };
@@ -1524,6 +1525,7 @@
 		A9E675F2227140D800E25293 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/CoreData.framework; sourceTree = DEVELOPER_DIR; };
 		A9E675F4227140DD00E25293 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS.sdk/System/Library/Frameworks/HealthKit.framework; sourceTree = DEVELOPER_DIR; };
 		A9FD046E24E310D00040F203 /* HKObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKObject.swift; sourceTree = "<group>"; };
+		B400177829F0249D00532398 /* DeviceAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceAction.swift; sourceTree = "<group>"; };
 		B4001CEF28CBC200002FB414 /* SingleSelectionCheckList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleSelectionCheckList.swift; sourceTree = "<group>"; };
 		B40D07C8251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DateAndDurationSteppableTableViewCell.xib; sourceTree = "<group>"; };
 		B40D07C9251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateAndDurationSteppableTableViewCell.swift; sourceTree = "<group>"; };
@@ -2751,6 +2753,7 @@
 				C187339D29B948F200519CDF /* HKUnit.swift */,
 				892A5D37222F03CB008961AB /* Info.plist */,
 				892A5D36222F03CB008961AB /* LoopTestingKit.h */,
+				B400177829F0249D00532398 /* DeviceAction.swift */,
 				892A5D55222F0414008961AB /* TestingCGMManager.swift */,
 				892A5D51222F03DB008961AB /* TestingDeviceManager.swift */,
 				892A5D53222F03F9008961AB /* TestingPumpManager.swift */,
@@ -4180,6 +4183,7 @@
 			files = (
 				892A5D54222F03F9008961AB /* TestingPumpManager.swift in Sources */,
 				89ADE12F226BDED40067222B /* DateRelativeBolusEntry.swift in Sources */,
+				B400177929F0249D00532398 /* DeviceAction.swift in Sources */,
 				C187339E29B948F200519CDF /* HKUnit.swift in Sources */,
 				89CA2B38226D4456004D9350 /* DateRelativeQuantity.swift in Sources */,
 				89ADE12D226BDD190067222B /* DateRelativeBasalEntry.swift in Sources */,

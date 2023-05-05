@@ -12,4 +12,7 @@ import HealthKit
 
 public protocol TestingDeviceManager: DeviceManager {
     var testingDevice: HKDevice { get }
+    
+    func acceptDefaultsAndSkipOnboarding()
+    func trigger(action: DeviceAction)
 }

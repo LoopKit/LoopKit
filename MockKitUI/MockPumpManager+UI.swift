@@ -23,7 +23,7 @@ extension MockPumpManager: PumpManagerUI {
 
     public var smallImage: UIImage? { return UIImage(named: "Pump Simulator", in: Bundle(for: MockPumpManagerSettingsViewController.self), compatibleWith: nil) }
     
-    public static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
+    public static func setupViewController(initialSettings settings: PumpManagerSetupSettings, bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, prefersToSkipUserInteraction: Bool,  allowedInsulinTypes: [InsulinType]) -> SetupUIResult<PumpManagerViewController, PumpManagerUI> {
         let mockPumpManager = MockPumpManager()
         mockPumpManager.setMaximumTempBasalRate(settings.maxBasalRateUnitsPerHour)
         mockPumpManager.syncBasalRateSchedule(items: settings.basalSchedule.items, completion: { _ in })

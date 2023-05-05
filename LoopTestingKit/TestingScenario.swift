@@ -9,16 +9,24 @@
 import Foundation
 import LoopKit
 
+public struct ReloadManager: Codable {
+    public let pump: Bool?
+    public let cgm: Bool?
+}
+
 public struct TestingScenario {
     var dateRelativeGlucoseSamples: [DateRelativeGlucoseSample]
     var dateRelativeBasalEntries: [DateRelativeBasalEntry]
     var dateRelativeBolusEntries: [DateRelativeBolusEntry]
     var dateRelativeCarbEntries: [DateRelativeCarbEntry]
-
+    var deviceActions: [DeviceAction]?
+    var shouldReloadManager: ReloadManager?
+    
     public func instantiate(relativeTo referenceDate: Date = Date()) -> TestingScenarioInstance {
         let glucoseSamples = dateRelativeGlucoseSamples
             .map { $0.newGlucoseSample(relativeTo: referenceDate) }
-            .filter { $0.date <= referenceDate }
+        let pastGlucoseSamples = glucoseSamples.filter { $0.date <= referenceDate }
+        let futureGlucoseSamples = glucoseSamples.filter { $0.date > referenceDate }
         let basalEntries = dateRelativeBasalEntries.map { $0.newPumpEvent(relativeTo: referenceDate) }
         let bolusEntries = dateRelativeBolusEntries.map { $0.newPumpEvent(relativeTo: referenceDate) }
         let pumpEvents = (basalEntries + bolusEntries)
@@ -27,7 +35,7 @@ public struct TestingScenario {
         let carbEntries = dateRelativeCarbEntries
             .filter { $0.enteredAt(relativeTo: referenceDate) <= referenceDate }
             .map { $0.newCarbEntry(relativeTo: referenceDate) }
-        return TestingScenarioInstance(glucoseSamples: glucoseSamples, pumpEvents: pumpEvents, carbEntries: carbEntries)
+        return TestingScenarioInstance(pastGlucoseSamples: pastGlucoseSamples, futureGlucoseSamples: futureGlucoseSamples, pumpEvents: pumpEvents, carbEntries: carbEntries, deviceActions: deviceActions ?? [], shouldReloadManager: shouldReloadManager)
     }
 
     public mutating func stepBackward(by offset: TimeInterval) {
@@ -67,6 +75,8 @@ extension TestingScenario: Codable {
         case dateRelativeBasalEntries = "basalDoses"
         case dateRelativeBolusEntries = "bolusDoses"
         case dateRelativeCarbEntries = "carbEntries"
+        case deviceActions = "deviceActions"
+        case shouldReloadManager = "reloadManager"
     }
 }
 

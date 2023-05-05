@@ -11,7 +11,7 @@ import Foundation
 // Note: order is important for VersionUpdate.  Later version updates are more critical than earlier ones.  Do not reorder!
 public enum VersionUpdate: Comparable, CaseIterable {
     /// No version update needed.
-    case none
+    case noUpdateNeeded
     /// A update is available, but it is just informational (supported update).
     case available
     /// The version is unsupported; the app needs to be updated to the latest "supported" version.  Not a critical update.
@@ -24,7 +24,7 @@ extension VersionUpdate: RawRepresentable {
     public typealias RawValue = String
     public init?(rawValue: RawValue) {
         switch rawValue {
-        case "none": self = .none
+        case "noUpdateNeeded": self = .noUpdateNeeded
         case "available": self = .available
         case "recommended": self = .recommended
         case "required": self = .required
@@ -33,7 +33,7 @@ extension VersionUpdate: RawRepresentable {
     }
     public var rawValue: RawValue {
         switch self {
-        case .none: return "none"
+        case .noUpdateNeeded: return "noUpdateNeeded"
         case .available: return "available"
         case .recommended: return "recommended"
         case .required:  return "required"
@@ -42,15 +42,15 @@ extension VersionUpdate: RawRepresentable {
 }
 
 extension VersionUpdate {
-    public static let `default` = VersionUpdate.none
+    public static let `default` = VersionUpdate.noUpdateNeeded
 
-    public var softwareUpdateAvailable: Bool { self > .none }
+    public var softwareUpdateAvailable: Bool { self > .noUpdateNeeded }
 }
 
 extension VersionUpdate {
     public var localizedDescription: String {
         switch self {
-        case .none:
+        case .noUpdateNeeded:
             return LocalizedString("No Update", comment: "Description of no software update needed")
         case .available:
             return LocalizedString("Update Available", comment: "Description of informational software update needed")
