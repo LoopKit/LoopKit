@@ -237,8 +237,7 @@ extension TherapySettingsView {
     private var preMealCorrectionRangeSection: Card {
         card(for: .preMealCorrectionRangeOverride) {
             let correctionRangeOverrides = self.viewModel.correctionRangeOverrides
-            if let schedule = self.viewModel.glucoseTargetRangeSchedule
-            {
+            if let schedule = self.viewModel.glucoseTargetRangeSchedule {
                 SectionDivider()
                 CorrectionRangeOverridesRangeItem(
                     value: correctionRangeOverrides,
@@ -254,8 +253,7 @@ extension TherapySettingsView {
     private var workoutCorrectionRangeSection: Card {
         card(for: .workoutCorrectionRangeOverride) {
             let correctionRangeOverrides = self.viewModel.correctionRangeOverrides
-            if let schedule = self.viewModel.glucoseTargetRangeSchedule
-            {
+            if let schedule = self.viewModel.glucoseTargetRangeSchedule {
                 SectionDivider()
                 CorrectionRangeOverridesRangeItem(
                     value: correctionRangeOverrides,

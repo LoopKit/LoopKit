@@ -569,9 +569,16 @@ public final class MockCGMManager: TestingCGMManager {
         }
     }
 
-    public func injectGlucoseSamples(_ samples: [NewGlucoseSample]) {
-        guard !samples.isEmpty else { return }
-        sendCGMReadingResult(CGMReadingResult.newData(samples.map { NewGlucoseSample($0, device: device) } ))
+    public func injectGlucoseSamples(_ pastSamples: [NewGlucoseSample], futureSamples: [NewGlucoseSample]) {
+        guard !pastSamples.isEmpty else { return }
+        sendCGMReadingResult(CGMReadingResult.newData(pastSamples.map { NewGlucoseSample($0, device: device) } ))
+    }
+    
+    public func trigger(action: DeviceAction) {}
+    
+    public func acceptDefaultsAndSkipOnboarding() {
+        // TODO: Unimplemented as it's not needed for HF. Ticket to complete below.
+        // https://tidepool.atlassian.net/browse/LOOP-4598
     }
 }
 

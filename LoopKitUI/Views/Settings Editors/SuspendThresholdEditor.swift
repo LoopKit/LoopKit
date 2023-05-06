@@ -65,16 +65,21 @@ public struct SuspendThresholdEditor: View {
     }
     
     private var contentWithCancel: some View {
-        if value == initialValue {
-            return AnyView(content
-                .navigationBarBackButtonHidden(false)
-                .navigationBarItems(leading: EmptyView())
-            )
+        content
+            .navigationBarBackButtonHidden(value != initialValue)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    leadingNavigationBarItem
+                }
+            }
+    }
+
+    @ViewBuilder
+    private var leadingNavigationBarItem: some View {
+        if value != initialValue {
+            cancelButton
         } else {
-            return AnyView(content
-                .navigationBarBackButtonHidden(true)
-                .navigationBarItems(leading: cancelButton)
-            )
+            EmptyView()
         }
     }
     
