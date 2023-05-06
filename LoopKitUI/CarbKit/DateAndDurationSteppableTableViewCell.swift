@@ -11,6 +11,13 @@ public class DateAndDurationSteppableTableViewCell: DatePickerTableViewCell {
 
     public weak var delegate: DatePickerTableViewCellDelegate?
 
+    private lazy var timeFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.minute]
+        formatter.unitsStyle = .full
+        return formatter
+    }()
+
     @IBOutlet public weak var titleLabel: UILabel!
 
     @IBOutlet public weak var dateLabel: UILabel! {
@@ -19,10 +26,20 @@ public class DateAndDurationSteppableTableViewCell: DatePickerTableViewCell {
         }
     }
     
-    @IBOutlet weak var incrementButton: UIButton!
+    @IBOutlet weak var incrementButton: UIButton! {
+        didSet {
+            guard let formattedTimeStepSize = timeFormatter.string(from: timeStepSize) else { return }
+            incrementButton.accessibilityLabel = String(format: LocalizedString("Increase time by %1$@", comment: "Accessibility label for button to increase time (1: step size)"), formattedTimeStepSize)
+        }
+    }
 
-    @IBOutlet weak var decrementButton: UIButton! 
-    
+    @IBOutlet weak var decrementButton: UIButton! {
+        didSet {
+            guard let formattedTimeStepSize = timeFormatter.string(from: timeStepSize) else { return }
+            decrementButton.accessibilityLabel = String(format: LocalizedString("Decrease time by %1$@", comment: "Accessibility label for button to decrease time (1: step size)"), formattedTimeStepSize)
+        }
+    }
+
     public var timeStepSize: TimeInterval = .minutes(15)
     
     public override var isDatePickerHidden: Bool {

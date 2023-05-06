@@ -17,6 +17,16 @@ public protocol SupportInfoProvider {
     func generateIssueReport(completion: @escaping (String) -> Void)
 }
 
+public struct LoopScenario: Hashable {
+    public let name: String
+    public let url: URL
+    
+    public init(name: String, url: URL) {
+        self.name = name
+        self.url = url
+    }
+}
+
 public protocol SupportUIDelegate: AlertIssuer { }
 
 public protocol SupportUI: AnyObject {
@@ -35,21 +45,19 @@ public protocol SupportUI: AnyObject {
 
     /// Provides configuration menu items.
     ///
-    /// - Parameters:
-    ///   - supportInfoProvider: A provider of additional support information.
-    ///   - urlHandler: A handler to open any URLs.
     /// - Returns: An array of views that will be added to the configuration section of settings.
     func configurationMenuItems() -> [AnyView]
 
     ///
     /// Check whether the given app version for the given `bundleIdentifier` needs an update.  Services should return their last result, if known.
+    ///  If version cannot be checked or checking version fails, nil should be returned.
     ///
     /// - Parameters:
     ///    - bundleIdentifier: The host app's `bundleIdentifier` (a.k.a. `CFBundleIdentifier`) string.
     ///    - currentVersion: The host app's current version (i.e. `CFBundleVersion`).
-    ///    - completion: The completion function to call with any success result (or `nil` if not known) or failure.
-    func checkVersion(bundleIdentifier: String, currentVersion: String, completion: @escaping (Result<VersionUpdate?, Error>) -> Void)
-    
+    /// - returns: A VersionUpdate object describing the update status
+    func checkVersion(bundleIdentifier: String, currentVersion: String) async -> VersionUpdate?
+
     /// Provides screen for software update UI.
     ///
     /// - Parameters:
@@ -63,7 +71,11 @@ public protocol SupportUI: AnyObject {
                             guidanceColors: GuidanceColors,
                             openAppStore: (() -> Void)?
     ) -> AnyView?
-
+    
+    func getScenarios(from scenarioURLs: [URL]) -> [LoopScenario]
+    
+    func resetLoop()
+    
     /// Initializes the support with the previously-serialized state.
     ///
     /// - Parameters:
@@ -75,6 +87,10 @@ public protocol SupportUI: AnyObject {
  
     /// A delegate for SupportUI to use (see `SupportUIDelegate`).
     var delegate: SupportUIDelegate? { get set }
+
+    var studyProductSelection: String? { get }
+    
+    var loopNeedsReset: Bool { get set }
 }
 
 extension SupportUI {

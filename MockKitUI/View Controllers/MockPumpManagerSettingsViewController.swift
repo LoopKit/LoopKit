@@ -92,6 +92,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         case bolusCancelErrorToggle
         case suspendErrorToggle
         case resumeErrorToggle
+        case crashOnBolus
+        case crashOnTempBasal
         case uncertainDeliveryErrorToggle
         case lastReconciliationDate
     }
@@ -246,6 +248,10 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 return switchTableViewCell(for: indexPath, titled: "Error on Suspend", boundTo: \.deliverySuspensionShouldError)
             case .resumeErrorToggle:
                 return switchTableViewCell(for: indexPath, titled: "Error on Resume", boundTo: \.deliveryResumptionShouldError)
+            case .crashOnBolus:
+                return switchTableViewCell(for: indexPath, titled: "Crash on Bolus", boundTo: \.bolusShouldCrash)
+            case .crashOnTempBasal:
+                return switchTableViewCell(for: indexPath, titled: "Crash on Temp Basal", boundTo: \.tempBasalShouldCrash)
             case .uncertainDeliveryErrorToggle:
                 return switchTableViewCell(for: indexPath, titled: "Next Delivery Command Uncertain", boundTo: \.deliveryCommandsShouldTriggerUncertainDelivery)
             case .lastReconciliationDate:
@@ -381,12 +387,12 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                 vc.indexPath = indexPath
                 vc.percentageDelegate = self
                 show(vc, sender: sender)
-            case .tempBasalErrorToggle, .bolusErrorToggle, .bolusCancelErrorToggle, .suspendErrorToggle, .resumeErrorToggle, .uncertainDeliveryErrorToggle:
-                break
             case .lastReconciliationDate:
                 tableView.deselectRow(at: indexPath, animated: true)
                 tableView.beginUpdates()
                 tableView.endUpdates()
+            default:
+                break
             }
         case .statusProgress:
             let vc = PercentageTextFieldTableViewController()
