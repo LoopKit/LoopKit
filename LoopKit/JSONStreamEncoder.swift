@@ -13,11 +13,11 @@ public enum JSONStreamEncoderError: Error {
 }
 
 public class JSONStreamEncoder {
-    private let stream: OutputStream
+    private let stream: DataOutputStream
     private var encoded: Bool
     private var closed: Bool
 
-    public init(stream: OutputStream) {
+    public init(stream: DataOutputStream) {
         self.stream = stream
         self.encoded = false
         self.closed = false
