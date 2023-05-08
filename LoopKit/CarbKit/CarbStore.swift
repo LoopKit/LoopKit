@@ -1249,7 +1249,7 @@ extension CarbStore: CriticalEventLog {
         return result!
     }
 
-    public func export(startDate: Date, endDate: Date, to stream: OutputStream, progress: Progress) -> Error? {
+    public func export(startDate: Date, endDate: Date, to stream: DataOutputStream, progress: Progress) -> Error? {
         let encoder = JSONStreamEncoder(stream: stream)
         var anchorKey: Int64 = 0
         var fetching = true
