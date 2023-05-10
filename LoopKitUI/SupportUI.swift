@@ -72,8 +72,17 @@ public protocol SupportUI: AnyObject {
                             openAppStore: (() -> Void)?
     ) -> AnyView?
     
+    /// Get the scenario(s) from the provided URL(s)
+    ///
+    ///  - Parameters:
+    ///     - scenarioURLs: the URL(s) of the scenario(s) to get
+    ///  - Returns: The scenario(s) matching the provided scenarioURLs
     func getScenarios(from scenarioURLs: [URL]) -> [LoopScenario]
     
+    
+    ///  Tells the support that now is a good time to reset loop.
+    ///
+    ///  When `resetLoop` is called, the support is responsible for setting `loopNeedsReset` (e.g., if reset was successful then `loopNeedsReset = false`).
     func resetLoop()
     
     /// Initializes the support with the previously-serialized state.
@@ -88,9 +97,11 @@ public protocol SupportUI: AnyObject {
     /// A delegate for SupportUI to use (see `SupportUIDelegate`).
     var delegate: SupportUIDelegate? { get set }
 
+    /// The study product selected (typically selected by another app in the app group). This value could be used to identify which products should be loaded when Loop completes a reset
     var studyProductSelection: String? { get }
     
-    var loopNeedsReset: Bool { get set }
+    /// Indication that the support has determined that loop needs to be reset (e.g., another app in the app group has requested that loop resets, the study product selected changed, etc.)
+    var loopNeedsReset: Bool { get }
 }
 
 extension SupportUI {
