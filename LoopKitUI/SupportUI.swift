@@ -79,11 +79,13 @@ public protocol SupportUI: AnyObject {
     ///  - Returns: The scenario(s) matching the provided scenarioURLs
     func getScenarios(from scenarioURLs: [URL]) -> [LoopScenario]
     
+    /// Called right before Loop resets UserDefaults and Documents storage
+    /// Use this to store any temp values that need to be restored after a reset occurs
+    func loopWillReset()
     
-    ///  Tells the support that now is a good time to reset loop.
-    ///
-    ///  When `resetLoop` is called, the support is responsible for setting `loopNeedsReset` (e.g., if reset was successful then `loopNeedsReset = false`).
-    func resetLoop()
+    /// Called right after Loop resets UserDefaults and Documents storage
+    /// Use this to restore any values that were cached before a reset occurred
+    func loopDidReset()
     
     /// Initializes the support with the previously-serialized state.
     ///
@@ -96,12 +98,6 @@ public protocol SupportUI: AnyObject {
  
     /// A delegate for SupportUI to use (see `SupportUIDelegate`).
     var delegate: SupportUIDelegate? { get set }
-
-    /// The study product selected (typically selected by another app in the app group). This value could be used to identify which products should be loaded when Loop completes a reset
-    var studyProductSelection: String? { get }
-    
-    /// Indication that the support has determined that loop needs to be reset (e.g., another app in the app group has requested that loop resets, the study product selected changed, etc.)
-    var loopNeedsReset: Bool { get }
 }
 
 extension SupportUI {
