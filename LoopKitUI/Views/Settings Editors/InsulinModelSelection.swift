@@ -11,7 +11,7 @@ import SwiftUI
 import LoopKit
 
 public struct InsulinModelSelection: View {
-    @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.appName) private var appName   
     @Environment(\.dismissAction) private var dismiss
     @Environment(\.authenticate) private var authenticate
@@ -27,7 +27,7 @@ public struct InsulinModelSelection: View {
     static let defaultInsulinSensitivitySchedule = InsulinSensitivitySchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue<Double>(startTime: 0, value: 40)])!
     
     private var displayGlucoseUnit: HKUnit {
-        displayGlucoseUnitObservable.displayGlucoseUnit
+        displayGlucosePreference.unit
     }
     
     public init(

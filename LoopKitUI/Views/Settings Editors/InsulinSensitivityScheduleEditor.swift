@@ -12,14 +12,14 @@ import LoopKit
 
 
 public struct InsulinSensitivityScheduleEditor: View {
-    @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.appName) private var appName
 
     let mode: SettingsPresentationMode
     let viewModel: InsulinSensitivityScheduleEditorViewModel
 
     var displayGlucoseUnit: HKUnit {
-        displayGlucoseUnitObservable.displayGlucoseUnit
+        displayGlucosePreference.unit
     }
 
     public init(

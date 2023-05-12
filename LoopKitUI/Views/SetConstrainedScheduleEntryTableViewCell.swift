@@ -73,7 +73,7 @@ class SetConstrainedScheduleEntryTableViewCell: UITableViewCell {
     public var unit: HKUnit? {
         didSet {
             if let unit = unit {
-                valueQuantityFormatter.setPreferredNumberFormatter(for: unit)
+                valueQuantityFormatter = QuantityFormatter(for: unit)
                 picker.reloadAllComponents()
                 updateValuePicker()
             }
@@ -167,10 +167,7 @@ class SetConstrainedScheduleEntryTableViewCell: UITableViewCell {
         return dateFormatter
     }()
 
-    lazy var valueQuantityFormatter: QuantityFormatter = {
-        let formatter = QuantityFormatter()
-        return formatter
-    }()
+    var valueQuantityFormatter: QuantityFormatter?
 
     private func startTimeForTimeComponent(row: Int) -> TimeInterval {
         return minimumStartTime + minimumTimeInterval * TimeInterval(row)
@@ -245,11 +242,11 @@ class SetConstrainedScheduleEntryTableViewCell: UITableViewCell {
     }
 
     private func formatValue(_ value: Double) -> String? {
-        if let unit = unit {
+        if let unit = unit, let formatter = valueQuantityFormatter {
             let quantity = HKQuantity(unit: unit, doubleValue: value)
-            return valueQuantityFormatter.string(from: quantity, for: unit)
+            return formatter.string(from: quantity)
         } else {
-            return valueQuantityFormatter.numberFormatter.string(from: value)
+            return NumberFormatter().string(from: value)
         }
     }
 }

@@ -42,8 +42,7 @@ public struct GuardrailConstrainedQuantityView: View {
         self.isSupportedValue = isSupportedValue
         self.iconSpacing = iconSpacing
         self.formatter = {
-            let quantityFormatter = QuantityFormatter()
-            quantityFormatter.setPreferredNumberFormatter(for: unit)
+            let quantityFormatter = QuantityFormatter(for: unit)
             return quantityFormatter.numberFormatter
         }()
         self.isUnitLabelVisible = isUnitLabelVisible

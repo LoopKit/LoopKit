@@ -65,8 +65,7 @@ public struct GlucoseRangePicker: View {
         self.maxValue = maxValue
         self.guardrail = guardrail
         self.formatter = {
-            let quantityFormatter = QuantityFormatter()
-            quantityFormatter.setPreferredNumberFormatter(for: unit)
+            let quantityFormatter = QuantityFormatter(for: unit)
             return quantityFormatter.numberFormatter
         }()
         self.usageContext = usageContext

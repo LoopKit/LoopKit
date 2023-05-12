@@ -232,8 +232,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
     }
 
     private lazy var quantityFormatter: QuantityFormatter = {
-        let formatter = QuantityFormatter()
-        formatter.setPreferredNumberFormatter(for: glucoseUnit)
+        let formatter = QuantityFormatter(for: glucoseUnit)
         return formatter
     }()
 
@@ -273,7 +272,7 @@ public final class AddEditOverrideTableViewController: UITableViewController {
                 cell.numberFormatter = quantityFormatter.numberFormatter
                 cell.titleLabel.text = LocalizedString("Target Range", comment: "The text for the custom preset target range setting")
                 cell.range = targetRange
-                cell.unitLabel.text = quantityFormatter.string(from: glucoseUnit)
+                cell.unitLabel.text = quantityFormatter.localizedUnitStringWithPlurality()
                 cell.delegate = self
                 return cell
             case .startDate:

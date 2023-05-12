@@ -30,7 +30,8 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private let quantityFormatter = QuantityFormatter()
+    private let reservoirFormatter = QuantityFormatter(for: .internationalUnit())
+    private let rateFormatter = QuantityFormatter(for: .internationalUnit().unitDivided(by: .hour()))
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -146,7 +147,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
             cell.textLabel?.text = "Current Basal Rate"
             if let currentBasalRate = pumpManager.currentBasalRate {
-                cell.detailTextLabel?.text = quantityFormatter.string(from: currentBasalRate, for: HKUnit.internationalUnit().unitDivided(by: .hour()))
+                cell.detailTextLabel?.text = rateFormatter.string(from: currentBasalRate)
             } else {
                 cell.detailTextLabel?.text = "—"
             }
@@ -225,7 +226,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             case .reservoirRemaining:
                 let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath)
                 cell.textLabel?.text = "Reservoir Remaining"
-                cell.detailTextLabel?.text = quantityFormatter.string(from: HKQuantity(unit: .internationalUnit(), doubleValue: pumpManager.state.reservoirUnitsRemaining), for: .internationalUnit())
+                cell.detailTextLabel?.text = reservoirFormatter.string(from: HKQuantity(unit: .internationalUnit(), doubleValue: pumpManager.state.reservoirUnitsRemaining))
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .batteryRemaining:
