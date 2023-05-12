@@ -79,10 +79,12 @@ public protocol SupportUI: AnyObject {
     ///  - Returns: The scenario(s) matching the provided scenarioURLs
     func getScenarios(from scenarioURLs: [URL]) -> [LoopScenario]
     
-    ///
+    /// Called right before Loop resets UserDefaults and Documents storage
+    /// Use this to store any temp values that need to be restored after a reset occurs
     func loopWillReset()
     
-    ///
+    /// Called right after Loop resets UserDefaults and Documents storage
+    /// Use this to reset any temp values that were stored before a reset occurred
     func loopDidReset()
     
     /// Initializes the support with the previously-serialized state.
