@@ -21,7 +21,7 @@ public class MockSupport: SupportUI {
     }
     var lastVersionCheckAlertDate: Date?
     
-    public var loopNeedsReset: Bool = false
+    public var userRequestedLoopReset: Bool = false
 
     public init() { }
 
@@ -62,11 +62,9 @@ public class MockSupport: SupportUI {
         scenarioURLs.map { LoopScenario(name: $0.lastPathComponent, url: $0) }
     }
     
-    public func resetLoop() {
-        // This is left blank intentionally
-    }
+    public func loopWillReset() {}
     
-    public var studyProductSelection: String? = nil
+    public func loopDidReset() {}
 }
 
 extension MockSupport {
