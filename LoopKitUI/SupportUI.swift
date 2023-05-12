@@ -84,7 +84,7 @@ public protocol SupportUI: AnyObject {
     func loopWillReset()
     
     /// Called right after Loop resets UserDefaults and Documents storage
-    /// Use this to reset any temp values that were stored before a reset occurred
+    /// Use this to restore any values that were cached before a reset occurred
     func loopDidReset()
     
     /// Initializes the support with the previously-serialized state.

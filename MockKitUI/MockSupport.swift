@@ -20,8 +20,6 @@ public class MockSupport: SupportUI {
         return self.delegate
     }
     var lastVersionCheckAlertDate: Date?
-    
-    public var userRequestedLoopReset: Bool = false
 
     public init() { }
 
