@@ -26,7 +26,7 @@ extension HKUnit {
         return HKUnit.millimolesPerLiter.unitDivided(by: .minute())
     }()
 
-    static let internationalUnitsPerHour: HKUnit = {
+    public static let internationalUnitsPerHour: HKUnit = {
         return HKUnit.internationalUnit().unitDivided(by: .hour())
     }()
 
