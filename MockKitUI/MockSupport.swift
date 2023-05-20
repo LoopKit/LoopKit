@@ -32,6 +32,8 @@ public class MockSupport: SupportUI {
         rawValue["lastVersionCheckAlertDate"] = lastVersionCheckAlertDate
         return rawValue
     }
+
+    public func initializationComplete(for services: [LoopKit.Service]) { }
    
     public func checkVersion(bundleIdentifier: String, currentVersion: String) async -> VersionUpdate? {
         maybeIssueAlert(versionUpdate ?? .noUpdateNeeded)
@@ -40,7 +42,7 @@ public class MockSupport: SupportUI {
     
     public weak var delegate: SupportUIDelegate?
 
-    public func configurationMenuItems() -> [AnyView] {
+    public func configurationMenuItems() -> [LoopKitUI.CustomMenuItem] {
         return []
     }
 
