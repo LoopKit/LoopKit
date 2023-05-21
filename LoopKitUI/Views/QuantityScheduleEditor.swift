@@ -53,7 +53,8 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
                     value: value,
                     unit: unit,
                     guardrail: guardrail,
-                    isEditing: isEditing
+                    isEditing: isEditing,
+                    isSupportedValue: selectableValues.contains(value.doubleValue(for: unit))
                 )
             },
             valuePicker: { item, availableWidth in
@@ -88,7 +89,8 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
                 DailyQuantitySchedule(unit: unit, dailyQuantities: quantities)!
             },
             mode: mode,
-            therapySettingType: settingType
+            therapySettingType: settingType,
+            hasUnsupportedValue: hasUnsupportedValue
         )
         .simultaneousGesture(TapGesture().onEnded {
             withAnimation {
@@ -139,7 +141,13 @@ struct QuantityScheduleEditor<ActionAreaContent: View>: View {
             }
         }
     }
-
+        
+    private func hasUnsupportedValue(_ scheduleItems: [RepeatingScheduleValue<HKQuantity>]) -> Bool {
+        !scheduleItems.filter { scheduleItem in
+            !selectableValues.contains(scheduleItem.value.doubleValue(for: unit))
+        }.isEmpty
+    }
+    
     private var crossedThresholds: [SafetyClassification.Threshold] {
         scheduleItems.lazy
             .map { $0.value }
