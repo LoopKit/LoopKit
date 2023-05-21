@@ -649,6 +649,14 @@
 		B42C951B24A63B8100857C73 /* DeviceStatusHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42C94FD24A2A2B000857C73 /* DeviceStatusHighlight.swift */; };
 		B43DA43F24D49AA400CAFF4E /* GuidanceColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43DA43E24D49AA400CAFF4E /* GuidanceColors.swift */; };
 		B43DA44224D9CD8500CAFF4E /* Environment+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45AF6EF24D4355A00EEAA4D /* Environment+Colors.swift */; };
+		B451D10D2A161A3E004878F1 /* MockPumpManagerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D10C2A161A3E004878F1 /* MockPumpManagerSettingsView.swift */; };
+		B451D1102A161B84004878F1 /* OpenMockPumpSettingsOnLongPressGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D10F2A161B84004878F1 /* OpenMockPumpSettingsOnLongPressGesture.swift */; };
+		B451D1122A165DA0004878F1 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1112A165DA0004878F1 /* Image.swift */; };
+		B451D1142A166403004878F1 /* DemoPlaceHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1132A166403004878F1 /* DemoPlaceHolderView.swift */; };
+		B451D1162A168C81004878F1 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1152A168C81004878F1 /* Color.swift */; };
+		B451D1182A16A21F004878F1 /* InsulinStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1172A16A21F004878F1 /* InsulinStatusView.swift */; };
+		B451D11B2A16B97C004878F1 /* MockPumpManagerSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D11A2A16B97C004878F1 /* MockPumpManagerSettingsViewModel.swift */; };
+		B451D11D2A171751004878F1 /* MockPumpManagerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D11C2A171751004878F1 /* MockPumpManagerControlsView.swift */; };
 		B455F31825FBEC5F000ED456 /* SuspendThresholdEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F2A125FBE985000ED456 /* SuspendThresholdEditorViewModel.swift */; };
 		B455F35625FC0284000ED456 /* CorrectionRangeOverridesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F35525FC0284000ED456 /* CorrectionRangeOverridesTests.swift */; };
 		B455F3A425FF7FF0000ED456 /* CorrectionRangeOverridesEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F3A325FF7FF0000ED456 /* CorrectionRangeOverridesEditorViewModel.swift */; };
@@ -1538,6 +1546,14 @@
 		B42C94FD24A2A2B000857C73 /* DeviceStatusHighlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusHighlight.swift; sourceTree = "<group>"; };
 		B42C950C24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasurementFrequencyTableViewController.swift; sourceTree = "<group>"; };
 		B43DA43E24D49AA400CAFF4E /* GuidanceColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidanceColors.swift; sourceTree = "<group>"; };
+		B451D10C2A161A3E004878F1 /* MockPumpManagerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsView.swift; sourceTree = "<group>"; };
+		B451D10F2A161B84004878F1 /* OpenMockPumpSettingsOnLongPressGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMockPumpSettingsOnLongPressGesture.swift; sourceTree = "<group>"; };
+		B451D1112A165DA0004878F1 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		B451D1132A166403004878F1 /* DemoPlaceHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoPlaceHolderView.swift; sourceTree = "<group>"; };
+		B451D1152A168C81004878F1 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		B451D1172A16A21F004878F1 /* InsulinStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinStatusView.swift; sourceTree = "<group>"; };
+		B451D11A2A16B97C004878F1 /* MockPumpManagerSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsViewModel.swift; sourceTree = "<group>"; };
+		B451D11C2A171751004878F1 /* MockPumpManagerControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerControlsView.swift; sourceTree = "<group>"; };
 		B455F2A125FBE985000ED456 /* SuspendThresholdEditorViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SuspendThresholdEditorViewModel.swift; path = LoopKitUI/ViewModels/SuspendThresholdEditorViewModel.swift; sourceTree = SOURCE_ROOT; };
 		B455F35525FC0284000ED456 /* CorrectionRangeOverridesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesTests.swift; sourceTree = "<group>"; };
 		B455F3A325FF7FF0000ED456 /* CorrectionRangeOverridesEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesEditorViewModel.swift; sourceTree = "<group>"; };
@@ -2276,6 +2292,10 @@
 			children = (
 				439706E822D2E94800C81566 /* BoundSwitchTableViewCell.swift */,
 				C1E0EEF524EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift */,
+				B451D1132A166403004878F1 /* DemoPlaceHolderView.swift */,
+				B451D1172A16A21F004878F1 /* InsulinStatusView.swift */,
+				B451D11C2A171751004878F1 /* MockPumpManagerControlsView.swift */,
+				B451D10C2A161A3E004878F1 /* MockPumpManagerSettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2787,6 +2807,8 @@
 				8992426421EC138000EA512B /* UIColor.swift */,
 				C1FAEC20264AEEA300A3250B /* UIImage.swift */,
 				C18733C429B94A6300519CDF /* UITableViewCell.swift */,
+				B451D1112A165DA0004878F1 /* Image.swift */,
+				B451D1152A168C81004878F1 /* Color.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2814,15 +2836,17 @@
 		89D2049021CC7C13001238CC /* MockKitUI */ = {
 			isa = PBXGroup;
 			children = (
-				C18733CB29B94A7A00519CDF /* LocalizedString.swift */,
-				C1CEBFE029BB7342007FD8A3 /* Resources */,
 				8992426321EC137900EA512B /* Extensions */,
+				C1CEBFE029BB7342007FD8A3 /* Resources */,
 				89D204B621CC7E77001238CC /* View Controllers */,
 				439706E722D2E8EE00C81566 /* Views */,
-				A9498D9023386D0800DAA9B9 /* MockService+UI.swift */,
-				89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */,
+				B451D1192A16B944004878F1 /* ViewModel */,
+				B451D10E2A161B43004878F1 /* ViewModifier */,
+				C18733CB29B94A7A00519CDF /* LocalizedString.swift */,
 				89CCD4F321A8A2B30068C3FB /* MockCGMManager+UI.swift */,
 				892A5D2D222EF69A008961AB /* MockHUDProvider.swift */,
+				89AB9ECA21A4C36200351324 /* MockPumpManager+UI.swift */,
+				A9498D9023386D0800DAA9B9 /* MockService+UI.swift */,
 				1DFFB987271740EE0075AEAA /* MockSupport.swift */,
 				89D2049121CC7C13001238CC /* MockKitUI.h */,
 				89D2049221CC7C13001238CC /* Info.plist */,
@@ -2933,6 +2957,22 @@
 				B42A7471235885B600247B03 /* LoopNotificationUserInfoKey.swift */,
 			);
 			path = Notification;
+			sourceTree = "<group>";
+		};
+		B451D10E2A161B43004878F1 /* ViewModifier */ = {
+			isa = PBXGroup;
+			children = (
+				B451D10F2A161B84004878F1 /* OpenMockPumpSettingsOnLongPressGesture.swift */,
+			);
+			path = ViewModifier;
+			sourceTree = "<group>";
+		};
+		B451D1192A16B944004878F1 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				B451D11A2A16B97C004878F1 /* MockPumpManagerSettingsViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		B4CEE2E1257129780093111B /* MockKitTests */ = {
@@ -4225,6 +4265,8 @@
 				892A5D2E222EF69A008961AB /* MockHUDProvider.swift in Sources */,
 				C18733C929B94A6400519CDF /* TimeInterval.swift in Sources */,
 				C18733C529B94A6400519CDF /* NumberFormatter.swift in Sources */,
+				B451D1102A161B84004878F1 /* OpenMockPumpSettingsOnLongPressGesture.swift in Sources */,
+				B451D1122A165DA0004878F1 /* Image.swift in Sources */,
 				439706E922D2E94800C81566 /* BoundSwitchTableViewCell.swift in Sources */,
 				89D204B421CC7E74001238CC /* MockCGMManager+UI.swift in Sources */,
 				89D204B521CC7E74001238CC /* MockPumpManager+UI.swift in Sources */,
@@ -4236,13 +4278,19 @@
 				8992426521EC138000EA512B /* UIColor.swift in Sources */,
 				C18733C629B94A6400519CDF /* Comparable.swift in Sources */,
 				89D204BA21CC7F34001238CC /* MockPumpManagerSettingsViewController.swift in Sources */,
+				B451D11D2A171751004878F1 /* MockPumpManagerControlsView.swift in Sources */,
 				C18733CC29B94A7A00519CDF /* LocalizedString.swift in Sources */,
 				89D204BC21CC7F34001238CC /* SineCurveParametersTableViewController.swift in Sources */,
+				B451D11B2A16B97C004878F1 /* MockPumpManagerSettingsViewModel.swift in Sources */,
 				C1FAEC21264AEEA300A3250B /* UIImage.swift in Sources */,
+				B451D1182A16A21F004878F1 /* InsulinStatusView.swift in Sources */,
+				B451D1162A168C81004878F1 /* Color.swift in Sources */,
+				B451D1142A166403004878F1 /* DemoPlaceHolderView.swift in Sources */,
 				89D204BD21CC7F34001238CC /* RandomOutlierTableViewController.swift in Sources */,
 				B42C950E24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift in Sources */,
 				B45774352562CCC6004B9466 /* SupportedRangeTableViewController.swift in Sources */,
 				892A5D28222EF567008961AB /* (null) in Sources */,
+				B451D10D2A161A3E004878F1 /* MockPumpManagerSettingsView.swift in Sources */,
 				C1E0EEF624EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift in Sources */,
 				89D204BB21CC7F34001238CC /* MockCGMManagerSettingsViewController.swift in Sources */,
 				1DABAD3A2453615200ACF708 /* IssueAlertTableViewController.swift in Sources */,

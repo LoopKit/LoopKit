@@ -29,5 +29,4 @@ open class CGMManagerSettingsNavigationViewController: SettingsNavigationViewCon
 open class PumpManagerSettingsNavigationViewController: SettingsNavigationViewController, PumpManagerOnboarding {
 
     open weak var pumpManagerOnboardingDelegate: PumpManagerOnboardingDelegate?
-    
 }

@@ -50,6 +50,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
     var savingMechanism: SavingMechanism<[RepeatingScheduleValue<Value>]>
     var mode: SettingsPresentationMode
     var therapySettingType: TherapySetting
+    var hasUnsupportedValue: ([RepeatingScheduleValue<Value>]) -> Bool
     
     @State var editingIndex: Int?
 
@@ -90,7 +91,8 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         @ViewBuilder actionAreaContent: () -> ActionAreaContent,
         savingMechanism: SavingMechanism<[RepeatingScheduleValue<Value>]>,
         mode: SettingsPresentationMode = .settings,
-        therapySettingType: TherapySetting = .none
+        therapySettingType: TherapySetting = .none,
+        hasUnsupportedValue:  @escaping ([RepeatingScheduleValue<Value>]) -> Bool = { _ in false }
     ) {
         self.title = title
         self.description = description
@@ -105,6 +107,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         self.savingMechanism = savingMechanism
         self.mode = mode
         self.therapySettingType = therapySettingType
+        self.hasUnsupportedValue = hasUnsupportedValue
     }
 
     var body: some View {
@@ -200,6 +203,7 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
                 }
             },
             actionAreaContent: {
+                unsupportedValueWarningIfNecessary
                 actionAreaContent
             },
             action: {
@@ -222,9 +226,24 @@ struct ScheduleEditor<Value: Equatable, ValueContent: View, ValuePicker: View, A
         let isEnabled = !scheduleItems.isEmpty
             && (scheduleItems != initialScheduleItems || mode == .acceptanceFlow)
             && tableDeletionState == .disabled
+            && !hasUnsupportedValue(scheduleItems)
 
         return isEnabled ? .enabled : .disabled
     }
+    
+    private var unsupportedValueWarningIfNecessary: some View {
+        return Group {
+            if hasUnsupportedValue(scheduleItems) {
+                unsupportedValueWarning
+            }
+        }
+    }
+    
+    private var unsupportedValueWarning: some View {
+        WarningView(title: Text("Unsupported \(title)"),
+                    caption: Text(LocalizedString("Correct the highlighted unsupported value(s).", comment: "Instruction to correct unsupported value")))
+    }
+
 
     private func itemView(for item: RepeatingScheduleValue<Value>, at index: Int) -> some View {
         Deletable(
