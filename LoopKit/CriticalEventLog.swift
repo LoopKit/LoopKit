@@ -29,7 +29,7 @@ public protocol CriticalEventLog {
     ///   - stream: The output stream to write the critical event log to. Typically writes JSON UTF-8 text.
     ///   - progressor: The estimated duration progress to use to check if cancelled and report progress.
     /// - Returns: Any error that occurs during the export, or nil if successful.
-    func export(startDate: Date, endDate: Date, to stream: OutputStream, progress: Progress) -> Error?
+    func export(startDate: Date, endDate: Date, to stream: DataOutputStream, progress: Progress) -> Error?
 }
 
 public enum CriticalEventLogError: Error {
