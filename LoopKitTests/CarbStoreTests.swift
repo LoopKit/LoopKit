@@ -22,13 +22,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
 
         let observationInterval: TimeInterval = .hours(6)
 
-        let hkSampleStore = HealthKitSampleStore(
-            healthStore: healthStore,
-            observeHealthKitSamplesFromCurrentApp: true,
-            observeHealthKitSamplesFromOtherApps: false,
-            type: HealthKitSampleStore.carbType,
-            observationStart: Date().addingTimeInterval(-observationInterval),
-            observationEnabled: false)
+        let hkSampleStore = HealthKitSampleStore(healthStore: healthStore, type: HealthKitSampleStore.carbType)
 
         hkSampleStore.testQueryStore = healthStore
 
@@ -1035,13 +1029,7 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
 
         let observationInterval: TimeInterval = .hours(6)
 
-        let hkSampleStore = HealthKitSampleStore(
-            healthStore: healthStore,
-            observeHealthKitSamplesFromCurrentApp: true,
-            observeHealthKitSamplesFromOtherApps: false,
-            type: HealthKitSampleStore.carbType,
-            observationStart: Date().addingTimeInterval(-observationInterval),
-            observationEnabled: false)
+        let hkSampleStore = HealthKitSampleStore(healthStore: healthStore, type: HealthKitSampleStore.carbType)
 
         hkSampleStore.testQueryStore = healthStore
         
@@ -1295,10 +1283,7 @@ class CarbStoreCriticalEventLogTests: PersistenceControllerTestCase {
 
         let hkSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
-            observeHealthKitSamplesFromCurrentApp: true,
-            observeHealthKitSamplesFromOtherApps: false,
             type: HealthKitSampleStore.carbType,
-            observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
 
         hkSampleStore.testQueryStore = healthStore

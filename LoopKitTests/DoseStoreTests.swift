@@ -30,7 +30,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
             observeHealthKitSamplesFromCurrentApp: false,
             observeHealthKitSamplesFromOtherApps: false,
             type: HealthKitSampleStore.insulinQuantityType,
-            observationStart: Date(),
             observationEnabled: false)
 
         let doseStore = DoseStore(
@@ -226,7 +225,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
             observeHealthKitSamplesFromCurrentApp: false,
             observeHealthKitSamplesFromOtherApps: false,
             type: HealthKitSampleStore.insulinQuantityType,
-            observationStart: Date(),
             observationEnabled: false)
 
         let doseStore = DoseStore(
@@ -352,7 +350,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
             observeHealthKitSamplesFromCurrentApp: false,
             observeHealthKitSamplesFromOtherApps: false,
             type: HealthKitSampleStore.insulinQuantityType,
-            observationStart: Date(),
             observationEnabled: false)
 
         let doseStore = DoseStore(
@@ -1426,7 +1423,6 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
             observeHealthKitSamplesFromCurrentApp: false,
             observeHealthKitSamplesFromOtherApps: false,
             type: HealthKitSampleStore.insulinQuantityType,
-            observationStart: Date(),
             observationEnabled: false)
 
         doseStore = DoseStore(

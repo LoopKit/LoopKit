@@ -61,13 +61,7 @@ class GlucoseStoreTestsBase: PersistenceControllerTestCase, GlucoseStoreDelegate
 
         healthStore = HKHealthStoreMock()
 
-        sampleStore = HealthKitSampleStore(
-            healthStore: healthStore,
-            observeHealthKitSamplesFromCurrentApp: true,
-            observeHealthKitSamplesFromOtherApps: true,
-            type: HealthKitSampleStore.glucoseType,
-            observationStart: Date(),
-            observationEnabled: true)
+        sampleStore = HealthKitSampleStore(healthStore: healthStore, type: HealthKitSampleStore.glucoseType)
 
         healthStore.authorizationStatus = authorizationStatus
         glucoseStore = GlucoseStore(healthKitSampleStore: sampleStore,
@@ -202,13 +196,7 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
 
         cacheStore.managedObjectContext.performAndWait {}
 
-        let newSampleStore = HealthKitSampleStore(
-            healthStore: healthStore,
-            observeHealthKitSamplesFromCurrentApp: true,
-            observeHealthKitSamplesFromOtherApps: true,
-            type: HealthKitSampleStore.glucoseType,
-            observationStart: Date(),
-            observationEnabled: true)
+        let newSampleStore = HealthKitSampleStore(healthStore: healthStore, type: HealthKitSampleStore.glucoseType)
 
         // Create a new glucose store, and ensure it uses the last query anchor
         let _ = GlucoseStore(healthKitSampleStore: newSampleStore,

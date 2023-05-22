@@ -21,7 +21,6 @@ class DeviceDataManager {
 
         carbSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
-            observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
             type: HealthKitSampleStore.carbType,
             observationStart: Date().addingTimeInterval(-observationInterval),
@@ -40,7 +39,6 @@ class DeviceDataManager {
 
         doseSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
-            observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
             type: HealthKitSampleStore.insulinQuantityType,
             observationStart: Date().addingTimeInterval(-observationInterval),
@@ -59,7 +57,6 @@ class DeviceDataManager {
 
         glucoseSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
-            observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
             type: HealthKitSampleStore.glucoseType,
             observationStart: Date().addingTimeInterval(-observationInterval),

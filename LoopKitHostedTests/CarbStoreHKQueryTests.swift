@@ -24,13 +24,7 @@ class CarbStoreHKQueryTestsBase: PersistenceControllerTestCase {
 
         let observationInterval: TimeInterval = .hours(1)
 
-        hkSampleStore = HealthKitSampleStore(
-            healthStore: healthStore,
-            observeHealthKitSamplesFromCurrentApp: true,
-            observeHealthKitSamplesFromOtherApps: false,
-            type: HealthKitSampleStore.carbType,
-            observationStart: Date().addingTimeInterval(-observationInterval),
-            observationEnabled: true)
+        hkSampleStore = HealthKitSampleStore(healthStore: healthStore, type: HealthKitSampleStore.carbType)
 
         hkSampleStore.testQueryStore = healthStore
 
@@ -132,14 +126,7 @@ class CarbStoreHKQueryTests: CarbStoreHKQueryTestsBase {
 
         // Create a new carb store, and ensure it uses the last query anchor
 
-        let newSampleStore = HealthKitSampleStore(
-            healthStore: healthStore,
-            observeHealthKitSamplesFromCurrentApp: true,
-            observeHealthKitSamplesFromOtherApps: false,
-            type: HealthKitSampleStore.carbType,
-            observationStart: Date().addingTimeInterval(0),
-            observationEnabled: true)
-
+        let newSampleStore = HealthKitSampleStore(healthStore: healthStore, type: HealthKitSampleStore.carbType)
         newSampleStore.testQueryStore = healthStore
 
         let newCarbStore = CarbStore(healthKitSampleStore: newSampleStore,

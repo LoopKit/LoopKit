@@ -2,7 +2,7 @@
 //  HealthKitSampleStore.swift
 //  LoopKit
 //
-//  Created by Pete Schwamb on 5/22/23.
+//  Created by Nathan Racklyeft on 1/24/16.
 //  Copyright © 2023 LoopKit Authors. All rights reserved.
 //
 
@@ -78,17 +78,17 @@ public class HealthKitSampleStore {
 
     public init(
         healthStore: HKHealthStore,
-        observeHealthKitSamplesFromCurrentApp: Bool,
-        observeHealthKitSamplesFromOtherApps: Bool,
+        observeHealthKitSamplesFromCurrentApp: Bool = true,
+        observeHealthKitSamplesFromOtherApps: Bool = true,
         type: HKSampleType,
-        observationStart: Date,
-        observationEnabled: Bool
+        observationStart: Date? = nil,
+        observationEnabled: Bool = true
     ) {
         self.healthStore = healthStore
         self.observeHealthKitSamplesFromCurrentApp = observeHealthKitSamplesFromCurrentApp
         self.observeHealthKitSamplesFromOtherApps = observeHealthKitSamplesFromOtherApps
         self.sampleType = type
-        self.observationStart = observationStart
+        self.observationStart = observationStart ?? Date().addingTimeInterval(-.hours(24))
         self.observationEnabled = observationEnabled
         self.lockedQueryState = Locked<QueryState>(QueryState(anchorState: .uninitialized, authorizationDetermined: false))
 
