@@ -13,7 +13,7 @@ import XCTest
 class CollectionTests: XCTestCase {
 
     func testChunkedWithEmptyArray() {
-        let result = [].chunked(into: 5)
+        let result = [Int]().chunked(into: 5)
         XCTAssertTrue(result.isEmpty)
     }
     

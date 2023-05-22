@@ -87,7 +87,7 @@ class GlucoseRangeScheduleTests: XCTestCase {
                         75.0,
                         90.0
                     ]
-                ]
+                ] as [String : Any]
             ]
         ]
 
@@ -118,7 +118,7 @@ class GlucoseRangeScheduleTests: XCTestCase {
                         75,
                         90
                     ]
-                ]
+                ] as [String : Any]
             ]
         ]
         XCTAssertNil(GlucoseRangeSchedule(rawValue: rawValue))
@@ -134,7 +134,7 @@ class GlucoseRangeScheduleTests: XCTestCase {
                         75.0,
                         90.0
                     ]
-                ]
+                ] as [String : Any]
             ]
         ]
         XCTAssertNil(GlucoseRangeSchedule(rawValue: rawValue))

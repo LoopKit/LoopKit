@@ -52,7 +52,6 @@ public struct CheckmarkListItem: View {
             selectionIndicator
                 .accessibility(label: Text(isSelected ? "Selected" : "Unselected"))
         }
-        .animation(nil)
     }
 
     @ViewBuilder

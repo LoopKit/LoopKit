@@ -44,14 +44,26 @@ public protocol GlucoseStoreDelegate: AnyObject {
               |–––––––––--->
 ```
  */
-public final class GlucoseStore: HealthKitSampleStore {
+public final class GlucoseStore {
 
     /// Notification posted when glucose samples were changed, either via direct add or from HealthKit
     public static let glucoseSamplesDidChange = NSNotification.Name(rawValue: "com.loopkit.GlucoseStore.glucoseSamplesDidChange")
 
     public weak var delegate: GlucoseStoreDelegate?
 
-    private let glucoseType = HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!
+    /// Current date. Will return the unit-test configured date if set, or the current date otherwise.
+    internal var currentDate: Date {
+        test_currentDate ?? Date()
+    }
+
+    /// Allows for controlling uses of the system date in unit testing
+    internal var test_currentDate: Date?
+
+    internal func currentDate(timeIntervalSinceNow: TimeInterval = 0) -> Date {
+        return currentDate.addingTimeInterval(timeIntervalSinceNow)
+    }
+
+    public let hkSampleStore: HealthKitSampleStore?
 
     /// The oldest interval to include when purging managed data
     private let maxPurgeInterval: TimeInterval = TimeInterval(hours: 24) * 7
@@ -73,9 +85,6 @@ public final class GlucoseStore: HealthKitSampleStore {
     /// The interval of glucose data to use for momentum calculation
     public let momentumDataInterval: TimeInterval
 
-    /// The interval to observe HealthKit data to populate the cache
-    public let observationInterval: TimeInterval
-
     private let queue = DispatchQueue(label: "com.loopkit.GlucoseStore.queue", qos: .utility)
 
     private let log = OSLog(category: "GlucoseStore")
@@ -91,8 +100,6 @@ public final class GlucoseStore: HealthKitSampleStore {
     }
     private let lockedLatestGlucose = Locked<GlucoseSampleValue?>(nil)
 
-    private let storeSamplesToHealthKit: Bool
-
     private let cacheStore: PersistenceController
 
     private let provenanceIdentifier: String
@@ -100,37 +107,31 @@ public final class GlucoseStore: HealthKitSampleStore {
     public var healthKitStorageDelay: TimeInterval = 0
     
     // If HealthKit sharing is not authorized, `nil` will prevent later storage
-    var healthKitStorageDelayIfAllowed: TimeInterval? { storeSamplesToHealthKit && sharingAuthorized ? healthKitStorageDelay : nil }
+    var healthKitStorageDelayIfAllowed: TimeInterval? {
+        guard let hkSampleStore, hkSampleStore.sharingAuthorized else {
+            return nil
+        }
+        return healthKitStorageDelay
+    }
     
     static let healthKitQueryAnchorMetadataKey = "com.loopkit.GlucoseStore.hkQueryAnchor"
 
     public init(
-        healthStore: HKHealthStore,
-        observeHealthKitSamplesFromOtherApps: Bool = true,
-        storeSamplesToHealthKit: Bool = true,
+        healthKitSampleStore: HealthKitSampleStore? = nil,
         cacheStore: PersistenceController,
-        observationEnabled: Bool = true,
         cacheLength: TimeInterval = 60 /* minutes */ * 60 /* seconds */,
         momentumDataInterval: TimeInterval = 15 /* minutes */ * 60 /* seconds */,
-        observationInterval: TimeInterval? = nil,
         provenanceIdentifier: String
     ) {
-        let cacheLength = max(cacheLength, momentumDataInterval, observationInterval ?? 0)
+        let cacheLength = max(cacheLength, momentumDataInterval)
 
         self.cacheStore = cacheStore
         self.momentumDataInterval = momentumDataInterval
-
-        self.storeSamplesToHealthKit = storeSamplesToHealthKit
         self.cacheLength = cacheLength
-        self.observationInterval = observationInterval ?? cacheLength
         self.provenanceIdentifier = provenanceIdentifier
+        self.hkSampleStore = healthKitSampleStore
 
-        super.init(healthStore: healthStore,
-                   observeHealthKitSamplesFromCurrentApp: true,
-                   observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
-                   type: glucoseType,
-                   observationStart: Date(timeIntervalSinceNow: -self.observationInterval),
-                   observationEnabled: observationEnabled)
+        healthKitSampleStore?.delegate = self
 
         cacheStore.onReady { (error) in
             guard error == nil else {
@@ -139,21 +140,22 @@ public final class GlucoseStore: HealthKitSampleStore {
 
             cacheStore.fetchAnchor(key: GlucoseStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
-                    self.setInitialQueryAnchor(anchor)
-
+                    self.hkSampleStore?.setInitialQueryAnchor(anchor)
                     self.updateLatestGlucose()
                 }
             }
         }
     }
+}
 
-    // MARK: - HealthKitSampleStore
+// MARK: - HKSampleStoreCompositionalDelegate
+extension GlucoseStore: HealthKitSampleStoreDelegate {
 
-    override func storeQueryAnchor(_ anchor: HKQueryAnchor) {
+    public func storeQueryAnchor(_ anchor: HKQueryAnchor) {
         cacheStore.storeAnchor(anchor, key: GlucoseStore.healthKitQueryAnchorMetadataKey)
     }
 
-    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
+    public func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
         queue.async {
             var changed = false
             var error: Error?
@@ -365,7 +367,7 @@ extension GlucoseStore {
         dispatchPrecondition(condition: .onQueue(queue))
         var error: Error?
         
-        guard storeSamplesToHealthKit else {
+        guard let hkSampleStore else {
             return
         }
 
@@ -389,7 +391,7 @@ extension GlucoseStore {
                 
                 let dispatchGroup = DispatchGroup()
                 dispatchGroup.enter()
-                self.healthStore.save(quantitySamples) { (_, healthKitError) in
+                hkSampleStore.healthStore.save(quantitySamples) { (_, healthKitError) in
                     error = healthKitError
                     dispatchGroup.leave()
                 }
@@ -549,16 +551,21 @@ extension GlucoseStore {
     public func purgeAllGlucoseSamples(healthKitPredicate: NSPredicate, completion: @escaping (Error?) -> Void) {
         queue.async {
             let storeError = self.purgeCachedGlucoseObjects()
-            self.healthStore.deleteObjects(of: self.glucoseType, predicate: healthKitPredicate) { _, _, healthKitError in
-                self.queue.async {
-                    if let error = storeError ?? healthKitError {
-                        completion(error)
-                        return
-                    }
+            if let hkSampleStore = self.hkSampleStore {
+                hkSampleStore.healthStore.deleteObjects(of: HealthKitSampleStore.glucoseType, predicate: healthKitPredicate) { _, _, healthKitError in
+                    self.queue.async {
+                        if let error = storeError ?? healthKitError {
+                            completion(error)
+                            return
+                        }
 
-                    self.handleUpdatedGlucoseData()
-                    completion(nil)
+                        self.handleUpdatedGlucoseData()
+                        completion(nil)
+                    }
                 }
+            } else {
+                self.handleUpdatedGlucoseData()
+                completion(storeError)
             }
         }
     }
@@ -609,13 +616,13 @@ extension GlucoseStore {
     private func purgeExpiredManagedDataFromHealthKit(before date: Date) {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        guard let managedDataInterval = managedDataInterval else {
+        guard let managedDataInterval = managedDataInterval, let hkSampleStore else {
             return
         }
 
         let end = min(Date(timeIntervalSinceNow: -managedDataInterval), date)
         let predicate = HKQuery.predicateForSamples(withStart: Date(timeIntervalSinceNow: -maxPurgeInterval), end: end)
-        healthStore.deleteObjects(of: glucoseType, predicate: predicate) { (success, count, error) -> Void in
+        hkSampleStore.healthStore.deleteObjects(of: HealthKitSampleStore.glucoseType, predicate: predicate) { (success, count, error) -> Void in
             // error is expected and ignored if protected data is unavailable
             if success {
                 self.log.debug("Successfully purged %d HealthKit objects older than %{public}@", count, String(describing: end))
@@ -889,8 +896,7 @@ extension GlucoseStore {
                 "* managedDataInterval: \(self.managedDataInterval ?? 0)",
                 "* cacheLength: \(self.cacheLength)",
                 "* momentumDataInterval: \(self.momentumDataInterval)",
-                "* observationInterval: \(self.observationInterval)",
-                super.debugDescription,
+                "* HealthKitSampleStore: \(self.hkSampleStore?.debugDescription ?? "nil")",
                 "",
                 "### cachedGlucoseSamples",
             ]

@@ -59,7 +59,7 @@ public protocol CarbStoreDelegate: AnyObject {
  |––––––––––––––––––--->
  ```
  */
-public final class CarbStore: HealthKitSampleStore {
+public final class CarbStore {
     
     /// Notification posted when carb entries were changed, either via add/replace/delete methods or from HealthKit
     public static let carbEntriesDidChange = NSNotification.Name(rawValue: "com.loopkit.CarbStore.carbEntriesDidChange")
@@ -86,11 +86,23 @@ public final class CarbStore: HealthKitSampleStore {
         }
     }
 
-    private let carbType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!
+    /// Current date. Will return the unit-test configured date if set, or the current date otherwise.
+    internal var currentDate: Date {
+        test_currentDate ?? Date()
+    }
+
+    /// Allows for controlling uses of the system date in unit testing
+    internal var test_currentDate: Date?
+
+    internal func currentDate(timeIntervalSinceNow: TimeInterval = 0) -> Date {
+        return currentDate.addingTimeInterval(timeIntervalSinceNow)
+    }
+
+    public let hkSampleStore: HealthKitSampleStore?
 
     /// The preferred unit. iOS currently only supports grams for dietary carbohydrates.
-    public override var preferredUnit: HKUnit! {
-        return super.preferredUnit
+    public var preferredUnit: HKUnit! {
+        return .gram()
     }
 
     /// A history of recently applied schedule overrides.
@@ -162,11 +174,6 @@ public final class CarbStore: HealthKitSampleStore {
     /// The interval of carb data to keep in cache
     public let cacheLength: TimeInterval
 
-    /// The interval to observe HealthKit data to populate the cache
-    public let observationInterval: TimeInterval
-
-    private let storeEntriesToHealthKit: Bool
-
     private let cacheStore: PersistenceController
 
     /// The sync version used for new samples written to HealthKit
@@ -191,13 +198,10 @@ public final class CarbStore: HealthKitSampleStore {
      - returns: A new instance of the store
      */
     public init(
-        healthStore: HKHealthStore,
-        observeHealthKitSamplesFromOtherApps: Bool = true,
-        storeEntriesToHealthKit: Bool = true,
+        healthKitSampleStore: HealthKitSampleStore? = nil,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval,
         defaultAbsorptionTimes: DefaultAbsorptionTimes,
-        observationInterval: TimeInterval,
         carbRatioSchedule: CarbRatioSchedule? = nil,
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
         overrideHistory: TemporaryScheduleOverrideHistory? = nil,
@@ -209,7 +213,7 @@ public final class CarbStore: HealthKitSampleStore {
         provenanceIdentifier: String,
         test_currentDate: Date? = nil
     ) {
-        self.storeEntriesToHealthKit = storeEntriesToHealthKit
+        self.hkSampleStore = healthKitSampleStore
         self.cacheStore = cacheStore
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
         self.lockedCarbRatioSchedule = Locked(carbRatioSchedule)
@@ -220,20 +224,12 @@ public final class CarbStore: HealthKitSampleStore {
         self.delta = calculationDelta
         self.delay = effectDelay
         self.cacheLength = cacheLength
-        self.observationInterval = observationInterval
         self.carbAbsorptionModel = carbAbsorptionModel
         self.provenanceIdentifier = provenanceIdentifier
+        self.test_currentDate = test_currentDate
+
+        healthKitSampleStore?.delegate = self
         
-        let observationEnabled = observationInterval > 0
-
-        super.init(healthStore: healthStore,
-                   observeHealthKitSamplesFromCurrentApp: true,
-                   observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
-                   type: carbType,
-                   observationStart: (test_currentDate ?? Date()).addingTimeInterval(-self.observationInterval),
-                   observationEnabled: observationEnabled,
-                   test_currentDate: test_currentDate)
-
         // Carb model settings based on the selected absorption model
         switch self.carbAbsorptionModel {
         case .linear:
@@ -251,7 +247,7 @@ public final class CarbStore: HealthKitSampleStore {
             
             cacheStore.fetchAnchor(key: CarbStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
-                    self.setInitialQueryAnchor(anchor)
+                    self.hkSampleStore?.setInitialQueryAnchor(anchor)
                     self.migrateLegacyCarbEntryKeys()
                 }
             }
@@ -281,13 +277,16 @@ public final class CarbStore: HealthKitSampleStore {
         UserDefaults.standard.purgeLegacyCarbEntryKeys()
     }
 
-    // MARK: - HealthKitSampleStore
-    
-    override func storeQueryAnchor(_ anchor: HKQueryAnchor) {
+
+}
+
+// MARK: - HKSampleStoreCompositionalDelegate
+extension CarbStore: HealthKitSampleStoreDelegate {
+    public func storeQueryAnchor(_ anchor: HKQueryAnchor) {
         cacheStore.storeAnchor(anchor, key: CarbStore.healthKitQueryAnchorMetadataKey)
     }
 
-    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
+    public func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
         queue.async {
             var changed = false
             var error: CarbStoreError?
@@ -544,7 +543,7 @@ extension CarbStore {
     private func saveEntryToHealthKit(_ object: CachedCarbObject) {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        guard storeEntriesToHealthKit else {
+        guard let hkSampleStore else {
             return
         }
 
@@ -554,7 +553,8 @@ extension CarbStore {
         // Save object to HealthKit, log any errors, but do not fail
         let dispatchGroup = DispatchGroup()
         dispatchGroup.enter()
-        self.healthStore.save(quantitySample) { (_, healthKitError) in
+
+        hkSampleStore.healthStore.save(quantitySample) { (_, healthKitError) in
             error = healthKitError
             dispatchGroup.leave()
         }
@@ -623,7 +623,7 @@ extension CarbStore {
         dispatchPrecondition(condition: .onQueue(queue))
 
         // If the object does not have a UUID, then it was never saved to HealthKit, so no need to delete
-        guard object.uuid != nil else {
+        guard object.uuid != nil, let hkSampleStore else {
             return
         }
 
@@ -632,7 +632,7 @@ extension CarbStore {
         // Delete object from HealthKit, log any errors, but do not fail
         let dispatchGroup = DispatchGroup()
         dispatchGroup.enter()
-        self.healthStore.deleteObjects(of: self.carbType, predicate: HKQuery.predicateForObject(with: object.uuid!)) { (_, _, healthKitError) in
+        hkSampleStore.healthStore.deleteObjects(of: HealthKitSampleStore.carbType, predicate: HKQuery.predicateForObject(with: object.uuid!)) { (_, _, healthKitError) in
             error = healthKitError
             dispatchGroup.leave()
         }
@@ -1372,7 +1372,6 @@ extension CarbStore {
                 "* carbRatioScheduleApplyingOverrideHistory: \(self.carbRatioScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
                 "* cacheLength: \(self.cacheLength)",
                 "* defaultAbsorptionTimes: \(self.defaultAbsorptionTimes)",
-                "* observationInterval: \(self.observationInterval)",
                 "* insulinSensitivitySchedule: \(self.insulinSensitivitySchedule?.debugDescription ?? "")",
                 "* insulinSensitivityScheduleApplyingOverrideHistory: \(self.insulinSensitivityScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
                 "* overrideHistory: \(self.overrideHistory.map(String.init(describing:)) ?? "nil")",
@@ -1382,7 +1381,7 @@ extension CarbStore {
                 "* absorptionTimeOverrun: \(self.absorptionTimeOverrun)",
                 "* carbAbsorptionModel: \(carbAbsorptionModel)",
                 "* Carb absorption model settings: \(self.settings)",
-                super.debugDescription,
+                "* HealthKit Sample Store: \(self.hkSampleStore?.debugDescription ?? "nil")",
                 "",
                 "cachedCarbEntries:"
             ]

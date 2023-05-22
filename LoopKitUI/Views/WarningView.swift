@@ -41,7 +41,6 @@ public struct WarningView: View {
                           .font(Font(UIFont.preferredFont(forTextStyle: .title3)))
                           .bold()
                           .fixedSize(horizontal: false, vertical: true)
-                          .animation(nil)
                   }
                   .padding(.bottom, 2)
 
@@ -49,7 +48,6 @@ public struct WarningView: View {
                       .font(.callout)
                       .foregroundColor(Color(.secondaryLabel))
                       .fixedSize(horizontal: false, vertical: true)
-                      .animation(nil)
               }
               .accessibilityElement(children: .combine)
 
