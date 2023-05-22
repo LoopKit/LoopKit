@@ -146,21 +146,6 @@ public final class DoseStore {
 
     public let insulinDeliveryStore: InsulinDeliveryStore
 
-    /// The HealthKit sample type managed by this store
-    public var sampleType: HKSampleType {
-        return insulinDeliveryStore.sampleType
-    }
-
-    /// True if the store requires authorization
-    public var authorizationRequired: Bool {
-        return insulinDeliveryStore.authorizationRequired
-    }
-
-    /// True if the user has explicitly denied access to any required share types
-    public var sharingDenied: Bool {
-        return insulinDeliveryStore.sharingDenied
-    }
-
     /// The representation of the insulin pump for Health storage
     public var device: HKDevice? {
         get {
@@ -188,11 +173,8 @@ public final class DoseStore {
     /// Initializes and configures a new store
     ///
     /// - Parameters:
-    ///   - healthStore: The HealthKit store for reading & writing insulin delivery
-    ///   - observeHealthKitSamplesFromOtherApps: Whether or not this Store should read HealthKit data written by other apps
-    ///   - storeSamplesToHealthKit: Whether or not this Store should store samples in HealthKit
+    ///   - healthKitSampleStore: The HealthKit store for reading & writing insulin delivery
     ///   - cacheStore: The cache store for reading & writing short-term intermediate data
-    ///   - observationEnabled: Whether the store should observe changes from HealthKit
     ///   - cacheLength: Maximum age of data to keep in the store.
     ///   - insulinModelProvider: A factory for producing insulin models based on insulin type
     ///   - longestEffectDuration: This determines the oldest age of doses to be retrieved for calculating glucose effects
@@ -205,11 +187,8 @@ public final class DoseStore {
     ///   - onReady: A closure that will be called after initialization.
     ///   - test_currentDate: Used for testing to mock current time
     public init(
-        healthStore: HKHealthStore,
-        observeHealthKitSamplesFromOtherApps: Bool = true,
-        storeSamplesToHealthKit: Bool = true,
+        healthKitSampleStore: HKSampleStoreCompositional? = nil,
         cacheStore: PersistenceController,
-        observationEnabled: Bool = true,
         cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
         insulinModelProvider: InsulinModelProvider,
         longestEffectDuration: TimeInterval,
@@ -223,11 +202,8 @@ public final class DoseStore {
         test_currentDate: Date? = nil
     ) {
         self.insulinDeliveryStore = InsulinDeliveryStore(
-            healthStore: healthStore,
-            observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
-            storeSamplesToHealthKit: storeSamplesToHealthKit,
+            healthKitSampleStore: healthKitSampleStore,
             cacheStore: cacheStore,
-            observationEnabled: observationEnabled,
             cacheLength: cacheLength,
             provenanceIdentifier: provenanceIdentifier,
             test_currentDate: test_currentDate

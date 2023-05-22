@@ -26,7 +26,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type:HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!,
+            type: HKSampleStoreCompositional.carbType,
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
 
@@ -478,7 +478,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     addAnchorKey = objects[0].anchorKey
 
                     self.healthStore.setDeletedObjectsHandler({ (objectType, predicate, success, count, error) in
-                        XCTAssertEqual(objectType, HKObjectType.quantityType(forIdentifier: .dietaryCarbohydrates))
+                        XCTAssertEqual(objectType, HKSampleStoreCompositional.carbType)
                         XCTAssertEqual(predicate.predicateFormat, "UUID == \(addUUID!)")
 
                         deleteHealthStoreHandler.fulfill()
@@ -692,7 +692,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     updateAnchorKey = objects[1].anchorKey
 
                     self.healthStore.setDeletedObjectsHandler({ (objectType, predicate, success, count, error) in
-                        XCTAssertEqual(objectType, HKObjectType.quantityType(forIdentifier: .dietaryCarbohydrates))
+                        XCTAssertEqual(objectType, HKSampleStoreCompositional.carbType)
                         XCTAssertEqual(predicate.predicateFormat, "UUID == \(updateUUID!)")
 
                         deleteHealthStoreHandler.fulfill()
@@ -1039,7 +1039,7 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type:HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!,
+            type: HKSampleStoreCompositional.carbType,
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
 
@@ -1297,7 +1297,7 @@ class CarbStoreCriticalEventLogTests: PersistenceControllerTestCase {
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type:HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!,
+            type: HKSampleStoreCompositional.carbType,
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
 

@@ -222,7 +222,7 @@ extension CachedCarbObject {
         metadata[MetadataKeyUserUpdatedDate] = userUpdatedDate
 
         return HKQuantitySample(
-            type: HKObjectType.quantityType(forIdentifier: .dietaryCarbohydrates)!,
+            type: HKSampleStoreCompositional.carbType,
             quantity: quantity,
             start: startDate,
             end: startDate,

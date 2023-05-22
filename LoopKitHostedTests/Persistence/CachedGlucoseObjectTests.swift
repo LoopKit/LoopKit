@@ -49,7 +49,7 @@ class CachedGlucoseObjectOperationsTests: PersistenceControllerTestCase {
 
     func testCreateFromQuantitySample() {
         cacheStore.managedObjectContext.performAndWait {
-            let type = HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!
+            let type = HKSampleStoreCompositional.glucoseType
             let startDate = dateFormatter.date(from: "2020-02-03T04:05:06Z")!
             let quantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.4)
             let device = HKDevice(name: "NAME", manufacturer: "MANUFACTURER", model: "MODEL", hardwareVersion: "HARDWAREVERSION", firmwareVersion: "FIRMWAREVERSION", softwareVersion: "SOFTWAREVERSION", localIdentifier: "LOCALIDENTIFIER", udiDeviceIdentifier: "UDIDEVICEIDENTIFIER")
@@ -87,7 +87,7 @@ class CachedGlucoseObjectOperationsTests: PersistenceControllerTestCase {
     
     func testToHKQuantitySample() {
         cacheStore.managedObjectContext.performAndWait {
-            let type = HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!
+            let type = HKSampleStoreCompositional.glucoseType
             let startDate = dateFormatter.date(from: "2020-02-03T04:05:06Z")!
             let quantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 123.4)
             let device = HKDevice(name: "NAME", manufacturer: "MANUFACTURER", model: "MODEL", hardwareVersion: "HARDWAREVERSION", firmwareVersion: "FIRMWAREVERSION", softwareVersion: "SOFTWAREVERSION", localIdentifier: "LOCALIDENTIFIER", udiDeviceIdentifier: "UDIDEVICEIDENTIFIER")

@@ -32,21 +32,21 @@ class MasterViewController: UITableViewController {
         }
 
         let sampleTypes = Set([
-            dataManager.glucoseStore.sampleType,
-            dataManager.carbStore.carbType,
-            dataManager.doseStore.sampleType,
+            HKSampleStoreCompositional.glucoseType,
+            HKSampleStoreCompositional.carbType,
+            HKSampleStoreCompositional.insulinQuantityType
         ].compactMap { $0 })
 
-        if dataManager.glucoseStore.authorizationRequired ||
+        if dataManager.glucoseSampleStore.authorizationRequired ||
             dataManager.carbSampleStore.authorizationRequired ||
-            dataManager.doseStore.authorizationRequired
+            dataManager.doseSampleStore.authorizationRequired
         {
             dataManager.healthStore.requestAuthorization(toShare: sampleTypes, read: sampleTypes) { (success, error) in
                 if success {
                     // Call the individual authorization methods to trigger query creation
                     dataManager.carbSampleStore.authorizationIsDetermined()
-                    dataManager.doseStore.insulinDeliveryStore.authorize(toShare: true, { _ in })
-                    dataManager.glucoseStore.authorize({ _ in })
+                    dataManager.glucoseSampleStore.authorizationIsDetermined()
+                    dataManager.glucoseSampleStore.authorizationIsDetermined()
                 }
             }
         }

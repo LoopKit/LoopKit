@@ -102,7 +102,7 @@ extension CachedGlucoseObject {
         metadata[MetadataKeyGlucoseTrendRateValue] = trendRateValue
 
         return HKQuantitySample(
-            type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!,
+            type: HKSampleStoreCompositional.glucoseType,
             quantity: quantity,
             start: startDate,
             end: startDate,

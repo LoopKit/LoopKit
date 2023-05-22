@@ -24,6 +24,10 @@ public protocol HKSampleStoreCompositionalDelegate {
 
 public class HKSampleStoreCompositional {
 
+    public static let carbType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!
+    public static let glucoseType = HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!
+    public static let insulinQuantityType = HKQuantityType.quantityType(forIdentifier: .insulinDelivery)!
+
     /// The sample type managed by this store
     public let sampleType: HKSampleType
 
@@ -58,8 +62,8 @@ public class HKSampleStoreCompositional {
 
     public init(
         healthStore: HKHealthStore,
-        observeHealthKitSamplesFromCurrentApp: Bool = true,
-        observeHealthKitSamplesFromOtherApps: Bool = true,
+        observeHealthKitSamplesFromCurrentApp: Bool,
+        observeHealthKitSamplesFromOtherApps: Bool,
         type: HKSampleType,
         observationStart: Date,
         observationEnabled: Bool

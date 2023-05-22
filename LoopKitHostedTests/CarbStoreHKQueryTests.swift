@@ -28,7 +28,7 @@ class CarbStoreHKQueryTestsBase: PersistenceControllerTestCase {
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type:HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!,
+            type: HKSampleStoreCompositional.carbType,
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: true)
 
@@ -136,7 +136,7 @@ class CarbStoreHKQueryTests: CarbStoreHKQueryTestsBase {
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type:HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!,
+            type: HKSampleStoreCompositional.carbType,
             observationStart: Date().addingTimeInterval(0),
             observationEnabled: true)
 

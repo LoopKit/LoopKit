@@ -23,10 +23,9 @@ class DeviceDataManager {
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type:HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!,
+            type: HKSampleStoreCompositional.carbType,
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
-
 
         carbStore = CarbStore(
             healthKitSampleStore: carbSampleStore,
@@ -38,8 +37,17 @@ class DeviceDataManager {
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
         )
-        doseStore = DoseStore(
+
+        doseSampleStore = HKSampleStoreCompositional(
             healthStore: healthStore,
+            observeHealthKitSamplesFromCurrentApp: true,
+            observeHealthKitSamplesFromOtherApps: false,
+            type: HKSampleStoreCompositional.insulinQuantityType,
+            observationStart: Date().addingTimeInterval(-observationInterval),
+            observationEnabled: false)
+
+        doseStore = DoseStore(
+            healthKitSampleStore: doseSampleStore,
             cacheStore: cacheStore,
             insulinModelProvider: PresetInsulinModelProvider(defaultRapidActingModel: ExponentialInsulinModelPreset.rapidActingAdult),
             longestEffectDuration: ExponentialInsulinModelPreset.rapidActingAdult.effectDuration,
@@ -47,9 +55,20 @@ class DeviceDataManager {
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
         )
-        glucoseStore = GlucoseStore(healthStore: healthStore,
-                                    cacheStore: cacheStore,
-                                    provenanceIdentifier: HKSource.default().bundleIdentifier)
+
+
+        glucoseSampleStore = HKSampleStoreCompositional(
+            healthStore: healthStore,
+            observeHealthKitSamplesFromCurrentApp: true,
+            observeHealthKitSamplesFromOtherApps: false,
+            type: HKSampleStoreCompositional.glucoseType,
+            observationStart: Date().addingTimeInterval(-observationInterval),
+            observationEnabled: false)
+
+        glucoseStore = GlucoseStore(
+            healthKitSampleStore: glucoseSampleStore,
+            cacheStore: cacheStore,
+            provenanceIdentifier: HKSource.default().bundleIdentifier)
     }
 
     // Data stores
@@ -58,8 +77,10 @@ class DeviceDataManager {
     let carbSampleStore: HKSampleStoreCompositional!
     let carbStore: CarbStore!
 
+    let doseSampleStore: HKSampleStoreCompositional!
     let doseStore: DoseStore
 
+    let glucoseSampleStore: HKSampleStoreCompositional!
     let glucoseStore: GlucoseStore!
 
     // Settings

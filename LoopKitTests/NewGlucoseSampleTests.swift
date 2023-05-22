@@ -35,7 +35,7 @@ class NewGlucoseSampleTests: XCTestCase {
                                                 syncVersion: 3,
                                                 device: device)
         let quantitySample = newGlucoseSample.quantitySample
-        XCTAssertEqual(quantitySample.quantityType, HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!)
+        XCTAssertEqual(quantitySample.quantityType, HKSampleStoreCompositional.glucoseType)
         XCTAssertEqual(quantitySample.quantity, quantity)
         XCTAssertEqual(quantitySample.startDate, date)
         XCTAssertEqual(quantitySample.endDate, date)

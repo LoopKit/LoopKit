@@ -86,8 +86,6 @@ public final class CarbStore {
         }
     }
 
-    public let carbType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!
-
     /// Current date. Will return the unit-test configured date if set, or the current date otherwise.
     internal var currentDate: Date {
         test_currentDate ?? Date()
@@ -205,7 +203,7 @@ public final class CarbStore {
      - returns: A new instance of the store
      */
     public init(
-        healthKitSampleStore: HKSampleStoreCompositional?,
+        healthKitSampleStore: HKSampleStoreCompositional? = nil,
         storeEntriesToHealthKit: Bool = true,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval,
@@ -643,7 +641,7 @@ extension CarbStore {
         // Delete object from HealthKit, log any errors, but do not fail
         let dispatchGroup = DispatchGroup()
         dispatchGroup.enter()
-        hkSampleStore.healthStore.deleteObjects(of: self.carbType, predicate: HKQuery.predicateForObject(with: object.uuid!)) { (_, _, healthKitError) in
+        hkSampleStore.healthStore.deleteObjects(of: HKSampleStoreCompositional.carbType, predicate: HKQuery.predicateForObject(with: object.uuid!)) { (_, _, healthKitError) in
             error = healthKitError
             dispatchGroup.leave()
         }

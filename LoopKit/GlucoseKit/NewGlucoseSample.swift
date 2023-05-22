@@ -74,7 +74,7 @@ extension NewGlucoseSample {
         }
 
         return HKQuantitySample(
-            type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!,
+            type: HKSampleStoreCompositional.glucoseType,
             quantity: quantity,
             start: date,
             end: date,

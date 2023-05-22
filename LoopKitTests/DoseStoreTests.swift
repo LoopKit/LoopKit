@@ -24,10 +24,18 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
     func defaultStore(testingDate: Date? = nil) -> DoseStore {
         let healthStore = HKHealthStoreMock()
-        let doseStore = DoseStore(
+
+        let sampleStore = HKSampleStoreCompositional(
             healthStore: healthStore,
+            observeHealthKitSamplesFromCurrentApp: false,
+            observeHealthKitSamplesFromOtherApps: false,
+            type: HKSampleStoreCompositional.insulinQuantityType,
+            observationStart: Date(),
+            observationEnabled: false)
+
+        let doseStore = DoseStore(
+            healthKitSampleStore: sampleStore,
             cacheStore: cacheStore,
-            observationEnabled: false,
             insulinModelProvider: StaticInsulinModelProvider(WalshInsulinModel(actionDuration: .hours(4))),
             longestEffectDuration: .hours(4),
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
@@ -213,10 +221,17 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
 
-        let doseStore = DoseStore(
+        let sampleStore = HKSampleStoreCompositional(
             healthStore: healthStore,
+            observeHealthKitSamplesFromCurrentApp: false,
+            observeHealthKitSamplesFromOtherApps: false,
+            type: HKSampleStoreCompositional.insulinQuantityType,
+            observationStart: Date(),
+            observationEnabled: false)
+
+        let doseStore = DoseStore(
+            healthKitSampleStore: sampleStore,
             cacheStore: cacheStore,
-            observationEnabled: false,
             insulinModelProvider: StaticInsulinModelProvider(WalshInsulinModel(actionDuration: .hours(4))),
             longestEffectDuration: .hours(4),
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [ // Timezone = -0800
@@ -332,10 +347,17 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
 
-        let doseStore = DoseStore(
+        let sampleStore = HKSampleStoreCompositional(
             healthStore: healthStore,
+            observeHealthKitSamplesFromCurrentApp: false,
+            observeHealthKitSamplesFromOtherApps: false,
+            type: HKSampleStoreCompositional.insulinQuantityType,
+            observationStart: Date(),
+            observationEnabled: false)
+
+        let doseStore = DoseStore(
+            healthKitSampleStore: sampleStore,
             cacheStore: cacheStore,
-            observationEnabled: false,
             insulinModelProvider: StaticInsulinModelProvider(WalshInsulinModel(actionDuration: .hours(4))),
             longestEffectDuration: .hours(4),
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 68400.0]]]),
@@ -506,12 +528,9 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
 
-
         // 1. Create a DoseStore
         let doseStore = DoseStore(
-            healthStore: HKHealthStoreMock(),
             cacheStore: cacheStore,
-            observationEnabled: false,
             insulinModelProvider: StaticInsulinModelProvider(WalshInsulinModel(actionDuration: .hours(4))),
             longestEffectDuration: .hours(4),
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 37800.0]]]),
@@ -654,9 +673,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         // 1. Create a DoseStore
         let doseStore = DoseStore(
-            healthStore: HKHealthStoreMock(),
             cacheStore: cacheStore,
-            observationEnabled: false,
             insulinModelProvider: StaticInsulinModelProvider(WalshInsulinModel(actionDuration: .hours(4))),
             longestEffectDuration: .hours(4),
             basalProfile: BasalRateSchedule(rawValue: ["timeZone": -28800, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 10800.0], ["value": 0.85, "startTime": 32400.0], ["value": 1.0, "startTime": 37800.0]]]),
@@ -1112,9 +1129,7 @@ class DoseStoreQueryTests: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
         
-        doseStore = DoseStore(healthStore: HKHealthStoreMock(),
-                              cacheStore: cacheStore,
-                              observationEnabled: false,
+        doseStore = DoseStore(cacheStore: cacheStore,
                               insulinModelProvider: StaticInsulinModelProvider(insulinModel),
                               longestEffectDuration: insulinModel.effectDuration,
                               basalProfile: basalProfile,
@@ -1317,9 +1332,7 @@ class DoseStoreCriticalEventLogTests: PersistenceControllerTestCase {
                       PersistedPumpEvent(date: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, persistedDate: persistedDate, dose: nil, isUploaded: false, objectIDURL: url, raw: nil, title: nil, type: nil),
                       PersistedPumpEvent(date: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, persistedDate: persistedDate, dose: nil, isUploaded: false, objectIDURL: url, raw: nil, title: nil, type: nil)]
 
-        doseStore = DoseStore(healthStore: HKHealthStoreMock(),
-                              cacheStore: cacheStore,
-                              observationEnabled: false,
+        doseStore = DoseStore(cacheStore: cacheStore,
                               insulinModelProvider: StaticInsulinModelProvider(insulinModel),
                               longestEffectDuration: insulinModel.effectDuration,
                               basalProfile: basalProfile,
@@ -1408,11 +1421,17 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
         let exponentialInsulinModel: InsulinModel = ExponentialInsulinModelPreset.rapidActingAdult
         let startDate = dateFormatter.date(from: "2015-07-13T12:00:00")!
 
-        doseStore = DoseStore(
+        let sampleStore = HKSampleStoreCompositional(
             healthStore: healthStore,
+            observeHealthKitSamplesFromCurrentApp: false,
             observeHealthKitSamplesFromOtherApps: false,
+            type: HKSampleStoreCompositional.insulinQuantityType,
+            observationStart: Date(),
+            observationEnabled: false)
+
+        doseStore = DoseStore(
+            healthKitSampleStore: sampleStore,
             cacheStore: cacheStore,
-            observationEnabled: false,
             insulinModelProvider: StaticInsulinModelProvider(exponentialInsulinModel),
             longestEffectDuration: exponentialInsulinModel.effectDuration,
             basalProfile: BasalRateSchedule(dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: 1.0)]),

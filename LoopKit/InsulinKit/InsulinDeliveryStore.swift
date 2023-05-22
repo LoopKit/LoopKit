@@ -28,12 +28,10 @@ public protocol InsulinDeliveryStoreDelegate: AnyObject {
 ///
 /// This store data isn't a substitute for an insulin pump's diagnostic event history, but doses fetched
 /// from this store can reduce the amount of repeated communication with an insulin pump.
-public class InsulinDeliveryStore: HealthKitSampleStore {
+public class InsulinDeliveryStore {
     
     /// Notification posted when dose entries were changed, either via direct add or from HealthKit
     public static let doseEntriesDidChange = NSNotification.Name(rawValue: "com.loopkit.InsulinDeliveryStore.doseEntriesDidChange")
-
-    private let insulinQuantityType = HKQuantityType.quantityType(forIdentifier: .insulinDelivery)!
 
     private let queue = DispatchQueue(label: "com.loopkit.InsulinDeliveryStore.queue", qos: .utility)
 
@@ -51,6 +49,24 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
 
     public weak var delegate: InsulinDeliveryStoreDelegate?
 
+    /// Current date. Will return the unit-test configured date if set, or the current date otherwise.
+    internal var currentDate: Date {
+        test_currentDate ?? Date()
+    }
+
+    /// Allows for controlling uses of the system date in unit testing
+    internal var test_currentDate: Date?
+
+    internal func currentDate(timeIntervalSinceNow: TimeInterval = 0) -> Date {
+        return currentDate.addingTimeInterval(timeIntervalSinceNow)
+    }
+
+    private let hkSampleStore: HKSampleStoreCompositional?
+
+    public var preferredUnit: HKUnit! {
+        return hkSampleStore?.preferredUnit ?? .internationalUnit()
+    }
+
     /// The interval of insulin delivery data to keep in cache
     public let cacheLength: TimeInterval
 
@@ -63,8 +79,7 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
     static let healthKitQueryAnchorMetadataKey = "com.loopkit.InsulinDeliveryStore.hkQueryAnchor"
 
     public init(
-        healthStore: HKHealthStore,
-        observeHealthKitSamplesFromOtherApps: Bool = true,
+        healthKitSampleStore: HKSampleStoreCompositional? = nil,
         storeSamplesToHealthKit: Bool = true,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
@@ -76,19 +91,10 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
         self.cacheStore = cacheStore
         self.cacheLength = cacheLength
         self.provenanceIdentifier = provenanceIdentifier
+        self.hkSampleStore = healthKitSampleStore
+        self.test_currentDate = test_currentDate
 
-        // Only observe HK driven changes from last 24 hours
-        let observationStartOffset = min(cacheLength, .hours(24))
-
-        super.init(
-            healthStore: healthStore,
-            observeHealthKitSamplesFromCurrentApp: true,
-            observeHealthKitSamplesFromOtherApps: observeHealthKitSamplesFromOtherApps,
-            type: insulinQuantityType,
-            observationStart: (test_currentDate ?? Date()).addingTimeInterval(-observationStartOffset),
-            observationEnabled: observationEnabled,
-            test_currentDate: test_currentDate
-        )
+        healthKitSampleStore?.delegate = self
 
         cacheStore.onReady { (error) in
             guard error == nil else {
@@ -101,20 +107,23 @@ public class InsulinDeliveryStore: HealthKitSampleStore {
 
             cacheStore.fetchAnchor(key: InsulinDeliveryStore.healthKitQueryAnchorMetadataKey) { (anchor) in
                 self.queue.async {
-                    self.setInitialQueryAnchor(anchor)
+                    self.hkSampleStore?.setInitialQueryAnchor(anchor)
                 }
             }
         }
     }
-    
+}
+
+// MARK: - HKSampleStoreCompositionalDelegate
+extension InsulinDeliveryStore: HKSampleStoreCompositionalDelegate {
     // MARK: - HealthKitSampleStore
 
-    override func storeQueryAnchor(_ anchor: HKQueryAnchor) {
+    public func storeQueryAnchor(_ anchor: HKQueryAnchor) {
         cacheStore.storeAnchor(anchor, key: InsulinDeliveryStore.healthKitQueryAnchorMetadataKey)
         self.log.default("stored query anchor %{public}@", String(describing: anchor))
     }
 
-    override func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
+    public func processResults(from query: HKAnchoredObjectQuery, added: [HKSample], deleted: [HKDeletedObject], anchor: HKQueryAnchor, completion: @escaping (Bool) -> Void) {
         queue.async {
             var changed = false
             var error: Error?
@@ -352,13 +361,13 @@ extension InsulinDeliveryStore {
                         mutableObjects.forEach { $0.deletedAt = now }
                     }
 
-                    let resolvedSampleObjects: [(HKQuantitySample, CachedInsulinDeliveryObject)] = entries.compactMap { entry in
+                    let resolvedSampleObjects: [(HKQuantitySample, CachedInsulinDeliveryObject)] = entries.compactMap { (entry) -> (HKQuantitySample, CachedInsulinDeliveryObject)? in
                         guard entry.syncIdentifier != nil else {
                             self.log.error("Ignored adding dose entry without sync identifier: %{public}@", String(reflecting: entry))
                             return nil
                         }
 
-                        guard let quantitySample = HKQuantitySample(type: self.insulinQuantityType,
+                        guard let quantitySample = HKQuantitySample(type: HKSampleStoreCompositional.insulinQuantityType,
                                                                     unit: HKUnit.internationalUnit(),
                                                                     dose: entry,
                                                                     device: device,
@@ -427,7 +436,7 @@ extension InsulinDeliveryStore {
     private func saveEntriesToHealthKit(_ sampleObjects: [(HKQuantitySample, CachedInsulinDeliveryObject)]) {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        guard storeSamplesToHealthKit, !sampleObjects.isEmpty else {
+        guard storeSamplesToHealthKit, !sampleObjects.isEmpty, let hkSampleStore else {
             return
         }
 
@@ -436,7 +445,7 @@ extension InsulinDeliveryStore {
         // Save objects to HealthKit, log any errors, but do not fail
         let dispatchGroup = DispatchGroup()
         dispatchGroup.enter()
-        self.healthStore.save(sampleObjects.map { (sample, _) in sample }) { (_, healthKitError) in
+        hkSampleStore.healthStore.save(sampleObjects.map { (sample, _) in sample }) { (_, healthKitError) in
             error = healthKitError
             dispatchGroup.leave()
         }
@@ -499,10 +508,12 @@ extension InsulinDeliveryStore {
                     }
                     
                     let healthKitPredicate = HKQuery.predicateForObjects(withMetadataKey: HKMetadataKeySyncIdentifier, allowedValues: [syncIdentifier])
-                    self.healthStore.deleteObjects(of: self.insulinQuantityType, predicate: healthKitPredicate)
-                    { success, deletedObjectCount, error in
-                        if let error = error {
-                            self.log.error("Unable to delete dose from Health: %@", error.localizedDescription)
+                    if let hkSampleStore = self.hkSampleStore {
+                        hkSampleStore.healthStore.deleteObjects(of: HKSampleStoreCompositional.insulinQuantityType, predicate: healthKitPredicate)
+                        { success, deletedObjectCount, error in
+                            if let error = error {
+                                self.log.error("Unable to delete dose from Health: %@", error.localizedDescription)
+                            }
                         }
                     }
                 } catch let error {
@@ -600,12 +611,14 @@ extension InsulinDeliveryStore {
     ///   - healthKitPredicate: The HealthKit device predicate to match HealthKit insulin samples.
     ///   - completion: The completion handler returning any error.
     public func purgeAllDoseEntries(healthKitPredicate: NSPredicate, completion: @escaping (Error?) -> Void) {
-        queue.async {
-            let storeError = self.purgeCachedInsulinDeliveryObjects(matching: nil)
-            self.healthStore.deleteObjects(of: self.insulinQuantityType, predicate: healthKitPredicate) { _, _, healthKitError in
-                self.queue.async {
-                    self.handleUpdatedDoseData()
-                    completion(storeError ?? healthKitError)
+        if let hkSampleStore {
+            queue.async {
+                let storeError = self.purgeCachedInsulinDeliveryObjects(matching: nil)
+                hkSampleStore.healthStore.deleteObjects(of: HKSampleStoreCompositional.insulinQuantityType, predicate: healthKitPredicate) { _, _, healthKitError in
+                    self.queue.async {
+                        self.handleUpdatedDoseData()
+                        completion(storeError ?? healthKitError)
+                    }
                 }
             }
         }
@@ -679,7 +692,7 @@ extension InsulinDeliveryStore {
             var report: [String] = [
                 "### InsulinDeliveryStore",
                 "* cacheLength: \(self.cacheLength)",
-                super.debugDescription,
+                "* HealthKitSampleStore: \(self.hkSampleStore?.debugDescription ?? "nil")",
                 "* lastImmutableBasalEndDate: \(String(describing: self.lastImmutableBasalEndDate))",
                 "",
                 "#### cachedDoseEntries",
