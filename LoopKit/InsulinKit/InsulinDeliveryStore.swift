@@ -61,7 +61,7 @@ public class InsulinDeliveryStore {
         return currentDate.addingTimeInterval(timeIntervalSinceNow)
     }
 
-    private let hkSampleStore: HKSampleStoreCompositional?
+    private let hkSampleStore: HealthKitSampleStore?
 
     public var preferredUnit: HKUnit! {
         return hkSampleStore?.preferredUnit ?? .internationalUnit()
@@ -79,7 +79,7 @@ public class InsulinDeliveryStore {
     static let healthKitQueryAnchorMetadataKey = "com.loopkit.InsulinDeliveryStore.hkQueryAnchor"
 
     public init(
-        healthKitSampleStore: HKSampleStoreCompositional? = nil,
+        healthKitSampleStore: HealthKitSampleStore? = nil,
         storeSamplesToHealthKit: Bool = true,
         cacheStore: PersistenceController,
         observationEnabled: Bool = true,
@@ -115,7 +115,7 @@ public class InsulinDeliveryStore {
 }
 
 // MARK: - HKSampleStoreCompositionalDelegate
-extension InsulinDeliveryStore: HKSampleStoreCompositionalDelegate {
+extension InsulinDeliveryStore: HealthKitSampleStoreDelegate {
     // MARK: - HealthKitSampleStore
 
     public func storeQueryAnchor(_ anchor: HKQueryAnchor) {
@@ -367,7 +367,7 @@ extension InsulinDeliveryStore {
                             return nil
                         }
 
-                        guard let quantitySample = HKQuantitySample(type: HKSampleStoreCompositional.insulinQuantityType,
+                        guard let quantitySample = HKQuantitySample(type: HealthKitSampleStore.insulinQuantityType,
                                                                     unit: HKUnit.internationalUnit(),
                                                                     dose: entry,
                                                                     device: device,
@@ -509,7 +509,7 @@ extension InsulinDeliveryStore {
                     
                     let healthKitPredicate = HKQuery.predicateForObjects(withMetadataKey: HKMetadataKeySyncIdentifier, allowedValues: [syncIdentifier])
                     if let hkSampleStore = self.hkSampleStore {
-                        hkSampleStore.healthStore.deleteObjects(of: HKSampleStoreCompositional.insulinQuantityType, predicate: healthKitPredicate)
+                        hkSampleStore.healthStore.deleteObjects(of: HealthKitSampleStore.insulinQuantityType, predicate: healthKitPredicate)
                         { success, deletedObjectCount, error in
                             if let error = error {
                                 self.log.error("Unable to delete dose from Health: %@", error.localizedDescription)
@@ -614,7 +614,7 @@ extension InsulinDeliveryStore {
         if let hkSampleStore {
             queue.async {
                 let storeError = self.purgeCachedInsulinDeliveryObjects(matching: nil)
-                hkSampleStore.healthStore.deleteObjects(of: HKSampleStoreCompositional.insulinQuantityType, predicate: healthKitPredicate) { _, _, healthKitError in
+                hkSampleStore.healthStore.deleteObjects(of: HealthKitSampleStore.insulinQuantityType, predicate: healthKitPredicate) { _, _, healthKitError in
                     self.queue.async {
                         self.handleUpdatedDoseData()
                         completion(storeError ?? healthKitError)

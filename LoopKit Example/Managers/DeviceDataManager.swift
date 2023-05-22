@@ -19,11 +19,11 @@ class DeviceDataManager {
 
         let observationInterval: TimeInterval = .hours(24)
 
-        carbSampleStore = HKSampleStoreCompositional(
+        carbSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type: HKSampleStoreCompositional.carbType,
+            type: HealthKitSampleStore.carbType,
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
 
@@ -38,11 +38,11 @@ class DeviceDataManager {
             provenanceIdentifier: HKSource.default().bundleIdentifier
         )
 
-        doseSampleStore = HKSampleStoreCompositional(
+        doseSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type: HKSampleStoreCompositional.insulinQuantityType,
+            type: HealthKitSampleStore.insulinQuantityType,
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
 
@@ -57,11 +57,11 @@ class DeviceDataManager {
         )
 
 
-        glucoseSampleStore = HKSampleStoreCompositional(
+        glucoseSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type: HKSampleStoreCompositional.glucoseType,
+            type: HealthKitSampleStore.glucoseType,
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
 
@@ -74,13 +74,13 @@ class DeviceDataManager {
     // Data stores
     let healthStore: HKHealthStore
 
-    let carbSampleStore: HKSampleStoreCompositional!
+    let carbSampleStore: HealthKitSampleStore!
     let carbStore: CarbStore!
 
-    let doseSampleStore: HKSampleStoreCompositional!
+    let doseSampleStore: HealthKitSampleStore!
     let doseStore: DoseStore
 
-    let glucoseSampleStore: HKSampleStoreCompositional!
+    let glucoseSampleStore: HealthKitSampleStore!
     let glucoseStore: GlucoseStore!
 
     // Settings

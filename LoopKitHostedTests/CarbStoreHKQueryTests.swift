@@ -14,7 +14,7 @@ class CarbStoreHKQueryTestsBase: PersistenceControllerTestCase {
     var healthStore: HKHealthStoreMock!
     var carbStore: CarbStore!
     var authorizationStatus: HKAuthorizationStatus = .notDetermined
-    var hkSampleStore: HKSampleStoreCompositional!
+    var hkSampleStore: HealthKitSampleStore!
 
     override func setUp() {
         super.setUp()
@@ -24,11 +24,11 @@ class CarbStoreHKQueryTestsBase: PersistenceControllerTestCase {
 
         let observationInterval: TimeInterval = .hours(1)
 
-        hkSampleStore = HKSampleStoreCompositional(
+        hkSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type: HKSampleStoreCompositional.carbType,
+            type: HealthKitSampleStore.carbType,
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: true)
 
@@ -132,11 +132,11 @@ class CarbStoreHKQueryTests: CarbStoreHKQueryTestsBase {
 
         // Create a new carb store, and ensure it uses the last query anchor
 
-        let newSampleStore = HKSampleStoreCompositional(
+        let newSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type: HKSampleStoreCompositional.carbType,
+            type: HealthKitSampleStore.carbType,
             observationStart: Date().addingTimeInterval(0),
             observationEnabled: true)
 

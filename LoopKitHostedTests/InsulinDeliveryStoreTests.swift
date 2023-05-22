@@ -46,7 +46,7 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
 
     var healthStore: HKHealthStoreMock!
     var insulinDeliveryStore: InsulinDeliveryStore!
-    var sampleStore: HKSampleStoreCompositional!
+    var sampleStore: HealthKitSampleStore!
     var authorizationStatus: HKAuthorizationStatus = .notDetermined
 
     override func setUp() {
@@ -54,11 +54,11 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
 
         healthStore = HKHealthStoreMock()
 
-        sampleStore = HKSampleStoreCompositional(
+        sampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: true,
-            type: HKSampleStoreCompositional.insulinQuantityType,
+            type: HealthKitSampleStore.insulinQuantityType,
             observationStart: Date(),
             observationEnabled: true)
 
@@ -167,11 +167,11 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
         // Allow any managedObjectContext tasks to complete, like storing the anchor
         cacheStore.managedObjectContext.performAndWait {}
 
-        let newSampleStore = HKSampleStoreCompositional(
+        let newSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: true,
-            type: HKSampleStoreCompositional.insulinQuantityType,
+            type: HealthKitSampleStore.insulinQuantityType,
             observationStart: Date(),
             observationEnabled: true)
 

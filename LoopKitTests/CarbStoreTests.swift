@@ -22,11 +22,11 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
 
         let observationInterval: TimeInterval = .hours(6)
 
-        let hkSampleStore = HKSampleStoreCompositional(
+        let hkSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type: HKSampleStoreCompositional.carbType,
+            type: HealthKitSampleStore.carbType,
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
 
@@ -478,7 +478,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     addAnchorKey = objects[0].anchorKey
 
                     self.healthStore.setDeletedObjectsHandler({ (objectType, predicate, success, count, error) in
-                        XCTAssertEqual(objectType, HKSampleStoreCompositional.carbType)
+                        XCTAssertEqual(objectType, HealthKitSampleStore.carbType)
                         XCTAssertEqual(predicate.predicateFormat, "UUID == \(addUUID!)")
 
                         deleteHealthStoreHandler.fulfill()
@@ -692,7 +692,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     updateAnchorKey = objects[1].anchorKey
 
                     self.healthStore.setDeletedObjectsHandler({ (objectType, predicate, success, count, error) in
-                        XCTAssertEqual(objectType, HKSampleStoreCompositional.carbType)
+                        XCTAssertEqual(objectType, HealthKitSampleStore.carbType)
                         XCTAssertEqual(predicate.predicateFormat, "UUID == \(updateUUID!)")
 
                         deleteHealthStoreHandler.fulfill()
@@ -1035,11 +1035,11 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
 
         let observationInterval: TimeInterval = .hours(6)
 
-        let hkSampleStore = HKSampleStoreCompositional(
+        let hkSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type: HKSampleStoreCompositional.carbType,
+            type: HealthKitSampleStore.carbType,
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
 
@@ -1293,11 +1293,11 @@ class CarbStoreCriticalEventLogTests: PersistenceControllerTestCase {
 
         let observationInterval: TimeInterval = .hours(6)
 
-        let hkSampleStore = HKSampleStoreCompositional(
+        let hkSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: false,
-            type: HKSampleStoreCompositional.carbType,
+            type: HealthKitSampleStore.carbType,
             observationStart: Date().addingTimeInterval(-observationInterval),
             observationEnabled: false)
 

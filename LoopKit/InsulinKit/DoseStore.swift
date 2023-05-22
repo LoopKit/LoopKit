@@ -187,7 +187,7 @@ public final class DoseStore {
     ///   - onReady: A closure that will be called after initialization.
     ///   - test_currentDate: Used for testing to mock current time
     public init(
-        healthKitSampleStore: HKSampleStoreCompositional? = nil,
+        healthKitSampleStore: HealthKitSampleStore? = nil,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval = 24 /* hours */ * 60 /* minutes */ * 60 /* seconds */,
         insulinModelProvider: InsulinModelProvider,

@@ -98,7 +98,7 @@ public final class CarbStore {
         return currentDate.addingTimeInterval(timeIntervalSinceNow)
     }
 
-    private let hkSampleStore: HKSampleStoreCompositional?
+    private let hkSampleStore: HealthKitSampleStore?
 
     /// The preferred unit. iOS currently only supports grams for dietary carbohydrates.
     public var preferredUnit: HKUnit! {
@@ -203,7 +203,7 @@ public final class CarbStore {
      - returns: A new instance of the store
      */
     public init(
-        healthKitSampleStore: HKSampleStoreCompositional? = nil,
+        healthKitSampleStore: HealthKitSampleStore? = nil,
         storeEntriesToHealthKit: Bool = true,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval,
@@ -290,7 +290,7 @@ public final class CarbStore {
 }
 
 // MARK: - HKSampleStoreCompositionalDelegate
-extension CarbStore: HKSampleStoreCompositionalDelegate {
+extension CarbStore: HealthKitSampleStoreDelegate {
     public func storeQueryAnchor(_ anchor: HKQueryAnchor) {
         cacheStore.storeAnchor(anchor, key: CarbStore.healthKitQueryAnchorMetadataKey)
     }
@@ -641,7 +641,7 @@ extension CarbStore {
         // Delete object from HealthKit, log any errors, but do not fail
         let dispatchGroup = DispatchGroup()
         dispatchGroup.enter()
-        hkSampleStore.healthStore.deleteObjects(of: HKSampleStoreCompositional.carbType, predicate: HKQuery.predicateForObject(with: object.uuid!)) { (_, _, healthKitError) in
+        hkSampleStore.healthStore.deleteObjects(of: HealthKitSampleStore.carbType, predicate: HKQuery.predicateForObject(with: object.uuid!)) { (_, _, healthKitError) in
             error = healthKitError
             dispatchGroup.leave()
         }

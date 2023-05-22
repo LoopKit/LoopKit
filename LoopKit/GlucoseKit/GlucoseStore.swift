@@ -63,7 +63,7 @@ public final class GlucoseStore {
         return currentDate.addingTimeInterval(timeIntervalSinceNow)
     }
 
-    private let hkSampleStore: HKSampleStoreCompositional?
+    private let hkSampleStore: HealthKitSampleStore?
 
     public var preferredUnit: HKUnit! {
         return hkSampleStore?.preferredUnit ?? .milligramsPerDeciliter
@@ -124,7 +124,7 @@ public final class GlucoseStore {
     static let healthKitQueryAnchorMetadataKey = "com.loopkit.GlucoseStore.hkQueryAnchor"
 
     public init(
-        healthKitSampleStore: HKSampleStoreCompositional? = nil,
+        healthKitSampleStore: HealthKitSampleStore? = nil,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval = 60 /* minutes */ * 60 /* seconds */,
         momentumDataInterval: TimeInterval = 15 /* minutes */ * 60 /* seconds */,
@@ -158,7 +158,7 @@ public final class GlucoseStore {
 }
 
 // MARK: - HKSampleStoreCompositionalDelegate
-extension GlucoseStore: HKSampleStoreCompositionalDelegate {
+extension GlucoseStore: HealthKitSampleStoreDelegate {
 
     public func storeQueryAnchor(_ anchor: HKQueryAnchor) {
         cacheStore.storeAnchor(anchor, key: GlucoseStore.healthKitQueryAnchorMetadataKey)
@@ -561,7 +561,7 @@ extension GlucoseStore {
         queue.async {
             let storeError = self.purgeCachedGlucoseObjects()
             if let hkSampleStore = self.hkSampleStore {
-                hkSampleStore.healthStore.deleteObjects(of: HKSampleStoreCompositional.glucoseType, predicate: healthKitPredicate) { _, _, healthKitError in
+                hkSampleStore.healthStore.deleteObjects(of: HealthKitSampleStore.glucoseType, predicate: healthKitPredicate) { _, _, healthKitError in
                     self.queue.async {
                         if let error = storeError ?? healthKitError {
                             completion(error)
@@ -631,7 +631,7 @@ extension GlucoseStore {
 
         let end = min(Date(timeIntervalSinceNow: -managedDataInterval), date)
         let predicate = HKQuery.predicateForSamples(withStart: Date(timeIntervalSinceNow: -maxPurgeInterval), end: end)
-        hkSampleStore.healthStore.deleteObjects(of: HKSampleStoreCompositional.glucoseType, predicate: predicate) { (success, count, error) -> Void in
+        hkSampleStore.healthStore.deleteObjects(of: HealthKitSampleStore.glucoseType, predicate: predicate) { (success, count, error) -> Void in
             // error is expected and ignored if protected data is unavailable
             if success {
                 self.log.debug("Successfully purged %d HealthKit objects older than %{public}@", count, String(describing: end))

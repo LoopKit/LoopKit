@@ -32,9 +32,9 @@ class MasterViewController: UITableViewController {
         }
 
         let sampleTypes = Set([
-            HKSampleStoreCompositional.glucoseType,
-            HKSampleStoreCompositional.carbType,
-            HKSampleStoreCompositional.insulinQuantityType
+            HealthKitSampleStore.glucoseType,
+            HealthKitSampleStore.carbType,
+            HealthKitSampleStore.insulinQuantityType
         ].compactMap { $0 })
 
         if dataManager.glucoseSampleStore.authorizationRequired ||

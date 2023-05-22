@@ -45,7 +45,7 @@ class GlucoseStoreTestsBase: PersistenceControllerTestCase, GlucoseStoreDelegate
 
     var healthStore: HKHealthStoreMock!
     var glucoseStore: GlucoseStore!
-    var sampleStore: HKSampleStoreCompositional!
+    var sampleStore: HealthKitSampleStore!
     var delegateCompletion: XCTestExpectation?
     var authorizationStatus: HKAuthorizationStatus = .notDetermined
 
@@ -61,11 +61,11 @@ class GlucoseStoreTestsBase: PersistenceControllerTestCase, GlucoseStoreDelegate
 
         healthStore = HKHealthStoreMock()
 
-        sampleStore = HKSampleStoreCompositional(
+        sampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: true,
-            type: HKSampleStoreCompositional.glucoseType,
+            type: HealthKitSampleStore.glucoseType,
             observationStart: Date(),
             observationEnabled: true)
 
@@ -202,11 +202,11 @@ class GlucoseStoreTests: GlucoseStoreTestsBase {
 
         cacheStore.managedObjectContext.performAndWait {}
 
-        let newSampleStore = HKSampleStoreCompositional(
+        let newSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: true,
             observeHealthKitSamplesFromOtherApps: true,
-            type: HKSampleStoreCompositional.glucoseType,
+            type: HealthKitSampleStore.glucoseType,
             observationStart: Date(),
             observationEnabled: true)
 

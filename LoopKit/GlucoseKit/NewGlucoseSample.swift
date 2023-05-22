@@ -74,7 +74,7 @@ extension NewGlucoseSample {
         }
 
         return HKQuantitySample(
-            type: HKSampleStoreCompositional.glucoseType,
+            type: HealthKitSampleStore.glucoseType,
             quantity: quantity,
             start: date,
             end: date,

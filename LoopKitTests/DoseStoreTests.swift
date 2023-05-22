@@ -25,11 +25,11 @@ class DoseStoreTests: PersistenceControllerTestCase {
     func defaultStore(testingDate: Date? = nil) -> DoseStore {
         let healthStore = HKHealthStoreMock()
 
-        let sampleStore = HKSampleStoreCompositional(
+        let sampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: false,
             observeHealthKitSamplesFromOtherApps: false,
-            type: HKSampleStoreCompositional.insulinQuantityType,
+            type: HealthKitSampleStore.insulinQuantityType,
             observationStart: Date(),
             observationEnabled: false)
 
@@ -221,11 +221,11 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
 
-        let sampleStore = HKSampleStoreCompositional(
+        let sampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: false,
             observeHealthKitSamplesFromOtherApps: false,
-            type: HKSampleStoreCompositional.insulinQuantityType,
+            type: HealthKitSampleStore.insulinQuantityType,
             observationStart: Date(),
             observationEnabled: false)
 
@@ -347,11 +347,11 @@ class DoseStoreTests: PersistenceControllerTestCase {
 
         let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
 
-        let sampleStore = HKSampleStoreCompositional(
+        let sampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: false,
             observeHealthKitSamplesFromOtherApps: false,
-            type: HKSampleStoreCompositional.insulinQuantityType,
+            type: HealthKitSampleStore.insulinQuantityType,
             observationStart: Date(),
             observationEnabled: false)
 
@@ -1421,11 +1421,11 @@ class DoseStoreEffectTests: PersistenceControllerTestCase {
         let exponentialInsulinModel: InsulinModel = ExponentialInsulinModelPreset.rapidActingAdult
         let startDate = dateFormatter.date(from: "2015-07-13T12:00:00")!
 
-        let sampleStore = HKSampleStoreCompositional(
+        let sampleStore = HealthKitSampleStore(
             healthStore: healthStore,
             observeHealthKitSamplesFromCurrentApp: false,
             observeHealthKitSamplesFromOtherApps: false,
-            type: HKSampleStoreCompositional.insulinQuantityType,
+            type: HealthKitSampleStore.insulinQuantityType,
             observationStart: Date(),
             observationEnabled: false)
 
