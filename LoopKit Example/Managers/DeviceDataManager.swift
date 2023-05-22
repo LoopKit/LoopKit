@@ -14,13 +14,24 @@ import LoopKit
 class DeviceDataManager {
 
     init() {
-        let healthStore = HKHealthStore()
+        healthStore = HKHealthStore()
         let cacheStore = PersistenceController(directoryURL: FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!)
 
-        carbStore = CarbStore(
+        let observationInterval: TimeInterval = .hours(24)
+
+        carbSampleStore = HKSampleStoreCompositional(
             healthStore: healthStore,
+            observeHealthKitSamplesFromCurrentApp: true,
+            observeHealthKitSamplesFromOtherApps: false,
+            type:HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!,
+            observationStart: Date().addingTimeInterval(-observationInterval),
+            observationEnabled: false)
+
+
+        carbStore = CarbStore(
+            healthKitSampleStore: carbSampleStore,
             cacheStore: cacheStore,
-            cacheLength: .hours(24),
+            cacheLength: observationInterval,
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
             observationInterval: .hours(24),
             carbRatioSchedule: carbRatioSchedule,
@@ -42,7 +53,9 @@ class DeviceDataManager {
     }
 
     // Data stores
+    let healthStore: HKHealthStore
 
+    let carbSampleStore: HKSampleStoreCompositional!
     let carbStore: CarbStore!
 
     let doseStore: DoseStore

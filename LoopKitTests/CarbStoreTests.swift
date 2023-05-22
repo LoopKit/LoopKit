@@ -19,14 +19,26 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
         super.setUp()
 
         healthStore = HKHealthStoreMock()
-        carbStore = CarbStore(
+
+        let observationInterval: TimeInterval = .hours(6)
+
+        let hkSampleStore = HKSampleStoreCompositional(
             healthStore: healthStore,
+            observeHealthKitSamplesFromCurrentApp: true,
+            observeHealthKitSamplesFromOtherApps: false,
+            type:HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!,
+            observationStart: Date().addingTimeInterval(-observationInterval),
+            observationEnabled: false)
+
+        hkSampleStore.testQueryStore = healthStore
+
+        carbStore = CarbStore(
+            healthKitSampleStore: hkSampleStore,
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
-            observationInterval: 0,
+            observationInterval: observationInterval,
             provenanceIdentifier: Bundle.main.bundleIdentifier!)
-        carbStore.testQueryStore = healthStore
         carbStore.delegate = self
 
         let semaphore = DispatchSemaphore(value: 0)
@@ -1018,9 +1030,23 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
     
     override func setUp() {
         super.setUp()
+
+        let healthStore = HKHealthStoreMock()
+
+        let observationInterval: TimeInterval = .hours(6)
+
+        let hkSampleStore = HKSampleStoreCompositional(
+            healthStore: healthStore,
+            observeHealthKitSamplesFromCurrentApp: true,
+            observeHealthKitSamplesFromOtherApps: false,
+            type:HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!,
+            observationStart: Date().addingTimeInterval(-observationInterval),
+            observationEnabled: false)
+
+        hkSampleStore.testQueryStore = healthStore
         
         carbStore = CarbStore(
-            healthStore: HKHealthStoreMock(),
+            healthKitSampleStore: hkSampleStore,
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
@@ -1263,8 +1289,22 @@ class CarbStoreCriticalEventLogTests: PersistenceControllerTestCase {
                        SyncCarbObject(absorptionTime: nil, createdByCurrentApp: true, foodType: nil, grams: 14, startDate: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, uuid: nil, provenanceIdentifier: Bundle.main.bundleIdentifier!, syncIdentifier: nil, syncVersion: nil, userCreatedDate: nil, userUpdatedDate: nil, userDeletedDate: nil, operation: .create, addedDate: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, supercededDate: nil),
                        SyncCarbObject(absorptionTime: nil, createdByCurrentApp: true, foodType: nil, grams: 15, startDate: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, uuid: nil, provenanceIdentifier: Bundle.main.bundleIdentifier!, syncIdentifier: nil, syncVersion: nil, userCreatedDate: nil, userUpdatedDate: nil, userDeletedDate: nil, operation: .create, addedDate: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, supercededDate: nil)]
 
+        let healthStore = HKHealthStoreMock()
+
+        let observationInterval: TimeInterval = .hours(6)
+
+        let hkSampleStore = HKSampleStoreCompositional(
+            healthStore: healthStore,
+            observeHealthKitSamplesFromCurrentApp: true,
+            observeHealthKitSamplesFromOtherApps: false,
+            type:HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!,
+            observationStart: Date().addingTimeInterval(-observationInterval),
+            observationEnabled: false)
+
+        hkSampleStore.testQueryStore = healthStore
+
         carbStore = CarbStore(
-            healthStore: HKHealthStoreMock(),
+            healthKitSampleStore: hkSampleStore,
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),

@@ -762,6 +762,7 @@
 		C191D26325B3815000C26C0B /* AutomaticDoseRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C191D26225B3815000C26C0B /* AutomaticDoseRecommendation.swift */; };
 		C1A174EC23DEAD670034DF11 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C1A174ED23DEAD6A0034DF11 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
+		C1B8E6E52A1BB14E00AF38D0 /* HKSampleStoreCompositional.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B8E6E42A1BB14E00AF38D0 /* HKSampleStoreCompositional.swift */; };
 		C1BECA93285902F5008075C4 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		C1CAB9E926A3254800A57273 /* StoredInsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CAB9E826A3254800A57273 /* StoredInsulinModel.swift */; };
 		C1CB895925C8E7D900782BAC /* Modelv1v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = C1E84B8425C62FB100623C08 /* Modelv1v4.xcmappingmodel */; };
@@ -1721,6 +1722,7 @@
 		C1B0CFDB29C786BF0045B04D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1B2679E2995824000BCB7C1 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C1B761F229C786D90098916A /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B8E6E42A1BB14E00AF38D0 /* HKSampleStoreCompositional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HKSampleStoreCompositional.swift; sourceTree = "<group>"; };
 		C1BCB5BA298309C4001C50FF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Main.strings; sourceTree = "<group>"; };
 		C1BCB5BB298309C4001C50FF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C1C685F929C786B70002E063 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -2447,6 +2449,7 @@
 				89F6E30E244A1A5D00CB9E15 /* Guardrail.swift */,
 				43D8FDED1C7290350073BE78 /* HealthKitSampleStore.swift */,
 				43B17C88208EEC0B00AC27E9 /* HealthStoreUnitCache.swift */,
+				C1B8E6E42A1BB14E00AF38D0 /* HKSampleStoreCompositional.swift */,
 				43D8FDD01C728FDF0073BE78 /* Info.plist */,
 				1D096BFD24C24C140078B6B5 /* Insulin */,
 				43D8FEB21C7294520073BE78 /* InsulinKit */,
@@ -4001,6 +4004,7 @@
 				43D8FDF71C7290350073BE78 /* DailyValueSchedule.swift in Sources */,
 				4322B77D202FA2AF0002837D /* NewPumpEvent.swift in Sources */,
 				A935793F29A2570400246DED /* Action.swift in Sources */,
+				C1B8E6E52A1BB14E00AF38D0 /* HKSampleStoreCompositional.swift in Sources */,
 				434113AA20F171CB00D05747 /* CachedInsulinDeliveryObject+CoreDataClass.swift in Sources */,
 				C140DFFF260276BF000A4FF7 /* ManualBolusRecommendation.swift in Sources */,
 				432CF86F20D76CCF0066B889 /* GlucoseTrend.swift in Sources */,
