@@ -31,8 +31,11 @@ extension MockPumpManager: PumpManagerUI {
     }
 
     public func settingsViewController(bluetoothProvider: BluetoothProvider, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, allowedInsulinTypes: [InsulinType]) -> PumpManagerViewController {
-        let settings = MockPumpManagerSettingsViewController(pumpManager: self, supportedInsulinTypes: allowedInsulinTypes)
-        let nav = PumpManagerSettingsNavigationViewController(rootViewController: settings)
+        let settings = MockPumpManagerSettingsView(pumpManager: self, supportedInsulinTypes: allowedInsulinTypes, appName: appName)
+        let hostingController = DismissibleHostingController(rootView: settings, colorPalette: colorPalette)
+        hostingController.navigationItem.backButtonDisplayMode = .generic
+        let nav = PumpManagerSettingsNavigationViewController(rootViewController: hostingController)
+        nav.navigationBar.prefersLargeTitles = true
         return nav
     }
     
@@ -50,8 +53,6 @@ extension MockPumpManager: PumpManagerUI {
     public static func createHUDView(rawValue: HUDProvider.HUDViewRawState) -> BaseHUDView? {
         return MockHUDProvider.createHUDView(rawValue: rawValue)
     }
-    
-    
 }
 
 public enum MockPumpStatusBadge: DeviceStatusBadge {

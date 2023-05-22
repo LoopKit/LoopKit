@@ -27,26 +27,50 @@ public struct LoopScenario: Hashable {
     }
 }
 
-public protocol SupportUIDelegate: AlertIssuer { }
+public enum SettingsMenuSection: Equatable {
+    case configuration
+    case support
+    case custom(localizedTitle: String)
+
+    public var customLocalizedTitle: String? {
+        switch self {
+        case .custom(let title):
+            return title
+        default:
+            return nil
+        }
+    }
+}
+
+public struct CustomMenuItem {
+    public let section: SettingsMenuSection
+    public let view: AnyView
+
+    public init(section: SettingsMenuSection, view: AnyView) {
+        self.section = section
+        self.view = view
+    }
+}
+
+public protocol SupportUIDelegate: AlertIssuer, SupportInfoProvider  {
+    func openURL(url: URL)
+}
 
 public protocol SupportUI: AnyObject {
+
     typealias RawStateValue = [String: Any]
 
     /// The unique identifier of this type of support.
     static var supportIdentifier: String { get }
 
-    /// Provides support menu item.
-    ///
-    /// - Parameters:
-    ///   - supportInfoProvider: A provider of additional support information.
-    ///   - urlHandler: A handler to open any URLs.
-    /// - Returns: A view that will be used in a support menu for providing user support.
-    func supportMenuItem(supportInfoProvider: SupportInfoProvider, urlHandler: @escaping (URL) -> Void) -> AnyView?
+    /// Support plugins often depend on other services.  This callback allows supports to reference the needed service(s).
+    /// It is called once during app initialization after  services are initialized and again as new services are added and initialized.
+    func initializationComplete(for services: [Service])
 
     /// Provides configuration menu items.
     ///
     /// - Returns: An array of views that will be added to the configuration section of settings.
-    func configurationMenuItems() -> [AnyView]
+    func configurationMenuItems() -> [CustomMenuItem]
 
     ///
     /// Check whether the given app version for the given `bundleIdentifier` needs an update.  Services should return their last result, if known.
@@ -72,9 +96,20 @@ public protocol SupportUI: AnyObject {
                             openAppStore: (() -> Void)?
     ) -> AnyView?
     
+    /// Get the scenario(s) from the provided URL(s)
+    ///
+    ///  - Parameters:
+    ///     - scenarioURLs: the URL(s) of the scenario(s) to get
+    ///  - Returns: The scenario(s) matching the provided scenarioURLs
     func getScenarios(from scenarioURLs: [URL]) -> [LoopScenario]
     
-    func resetLoop()
+    /// Called right before Loop resets UserDefaults and Documents storage
+    /// Use this to store any temp values that need to be restored after a reset occurs
+    func loopWillReset()
+    
+    /// Called right after Loop resets UserDefaults and Documents storage
+    /// Use this to restore any values that were cached before a reset occurred
+    func loopDidReset()
     
     /// Initializes the support with the previously-serialized state.
     ///
@@ -87,10 +122,6 @@ public protocol SupportUI: AnyObject {
  
     /// A delegate for SupportUI to use (see `SupportUIDelegate`).
     var delegate: SupportUIDelegate? { get set }
-
-    var studyProductSelection: String? { get }
-    
-    var loopNeedsReset: Bool { get set }
 }
 
 extension SupportUI {

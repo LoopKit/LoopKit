@@ -25,6 +25,10 @@ extension TimeInterval {
     init(hours: Double) {
         self.init(minutes: hours * 60)
     }
+    
+    init(days: Double) {
+        self.init(hours: days * 24)
+    }
 
     var minutes: Double {
         return self / 60.0
@@ -32,5 +36,9 @@ extension TimeInterval {
 
     var hours: Double {
         return minutes / 60.0
+    }
+    
+    var days: Double {
+        return hours / 24.0
     }
 }
