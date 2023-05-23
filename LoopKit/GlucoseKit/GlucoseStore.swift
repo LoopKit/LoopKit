@@ -63,7 +63,7 @@ public final class GlucoseStore {
         return currentDate.addingTimeInterval(timeIntervalSinceNow)
     }
 
-    private let hkSampleStore: HealthKitSampleStore?
+    public let hkSampleStore: HealthKitSampleStore?
 
     /// The oldest interval to include when purging managed data
     private let maxPurgeInterval: TimeInterval = TimeInterval(hours: 24) * 7
@@ -84,9 +84,6 @@ public final class GlucoseStore {
 
     /// The interval of glucose data to use for momentum calculation
     public let momentumDataInterval: TimeInterval
-
-    /// The interval to observe HealthKit data to populate the cache
-    public let observationInterval: TimeInterval
 
     private let queue = DispatchQueue(label: "com.loopkit.GlucoseStore.queue", qos: .utility)
 
@@ -124,15 +121,13 @@ public final class GlucoseStore {
         cacheStore: PersistenceController,
         cacheLength: TimeInterval = 60 /* minutes */ * 60 /* seconds */,
         momentumDataInterval: TimeInterval = 15 /* minutes */ * 60 /* seconds */,
-        observationInterval: TimeInterval? = nil,
         provenanceIdentifier: String
     ) {
-        let cacheLength = max(cacheLength, momentumDataInterval, observationInterval ?? 0)
+        let cacheLength = max(cacheLength, momentumDataInterval)
 
         self.cacheStore = cacheStore
         self.momentumDataInterval = momentumDataInterval
         self.cacheLength = cacheLength
-        self.observationInterval = observationInterval ?? cacheLength
         self.provenanceIdentifier = provenanceIdentifier
         self.hkSampleStore = healthKitSampleStore
 
@@ -901,7 +896,6 @@ extension GlucoseStore {
                 "* managedDataInterval: \(self.managedDataInterval ?? 0)",
                 "* cacheLength: \(self.cacheLength)",
                 "* momentumDataInterval: \(self.momentumDataInterval)",
-                "* observationInterval: \(self.observationInterval)",
                 "* HealthKitSampleStore: \(self.hkSampleStore?.debugDescription ?? "nil")",
                 "",
                 "### cachedGlucoseSamples",

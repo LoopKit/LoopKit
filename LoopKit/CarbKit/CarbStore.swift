@@ -98,7 +98,7 @@ public final class CarbStore {
         return currentDate.addingTimeInterval(timeIntervalSinceNow)
     }
 
-    private let hkSampleStore: HealthKitSampleStore?
+    public let hkSampleStore: HealthKitSampleStore?
 
     /// The preferred unit. iOS currently only supports grams for dietary carbohydrates.
     public var preferredUnit: HKUnit! {
@@ -174,11 +174,6 @@ public final class CarbStore {
     /// The interval of carb data to keep in cache
     public let cacheLength: TimeInterval
 
-    /// The interval to observe HealthKit data to populate the cache
-    public let observationInterval: TimeInterval
-
-    private let storeEntriesToHealthKit: Bool
-
     private let cacheStore: PersistenceController
 
     /// The sync version used for new samples written to HealthKit
@@ -204,11 +199,9 @@ public final class CarbStore {
      */
     public init(
         healthKitSampleStore: HealthKitSampleStore? = nil,
-        storeEntriesToHealthKit: Bool = true,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval,
         defaultAbsorptionTimes: DefaultAbsorptionTimes,
-        observationInterval: TimeInterval,
         carbRatioSchedule: CarbRatioSchedule? = nil,
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
         overrideHistory: TemporaryScheduleOverrideHistory? = nil,
@@ -221,7 +214,6 @@ public final class CarbStore {
         test_currentDate: Date? = nil
     ) {
         self.hkSampleStore = healthKitSampleStore
-        self.storeEntriesToHealthKit = storeEntriesToHealthKit
         self.cacheStore = cacheStore
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
         self.lockedCarbRatioSchedule = Locked(carbRatioSchedule)
@@ -232,7 +224,6 @@ public final class CarbStore {
         self.delta = calculationDelta
         self.delay = effectDelay
         self.cacheLength = cacheLength
-        self.observationInterval = observationInterval
         self.carbAbsorptionModel = carbAbsorptionModel
         self.provenanceIdentifier = provenanceIdentifier
         self.test_currentDate = test_currentDate
@@ -552,7 +543,7 @@ extension CarbStore {
     private func saveEntryToHealthKit(_ object: CachedCarbObject) {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        guard storeEntriesToHealthKit, let hkSampleStore else {
+        guard let hkSampleStore else {
             return
         }
 
@@ -1381,7 +1372,6 @@ extension CarbStore {
                 "* carbRatioScheduleApplyingOverrideHistory: \(self.carbRatioScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
                 "* cacheLength: \(self.cacheLength)",
                 "* defaultAbsorptionTimes: \(self.defaultAbsorptionTimes)",
-                "* observationInterval: \(self.observationInterval)",
                 "* insulinSensitivitySchedule: \(self.insulinSensitivitySchedule?.debugDescription ?? "")",
                 "* insulinSensitivityScheduleApplyingOverrideHistory: \(self.insulinSensitivityScheduleApplyingOverrideHistory?.debugDescription ?? "nil")",
                 "* overrideHistory: \(self.overrideHistory.map(String.init(describing:)) ?? "nil")",

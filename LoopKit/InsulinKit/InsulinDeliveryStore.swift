@@ -61,7 +61,7 @@ public class InsulinDeliveryStore {
         return currentDate.addingTimeInterval(timeIntervalSinceNow)
     }
 
-    private let hkSampleStore: HealthKitSampleStore?
+    public let hkSampleStore: HealthKitSampleStore?
 
     /// The interval of insulin delivery data to keep in cache
     public let cacheLength: TimeInterval

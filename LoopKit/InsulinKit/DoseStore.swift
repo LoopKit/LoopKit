@@ -164,6 +164,10 @@ public final class DoseStore {
     /// Choose a lower or higher sync version if the same sample might be written twice (e.g. from an extension and from an app) for deterministic conflict resolution
     public let syncVersion: Int
 
+    public var hkSampleStore: HealthKitSampleStore? {
+        return insulinDeliveryStore.hkSampleStore
+    }
+
     /// Window for retrieving historical doses that might be used to reconcile current events
     private let pumpEventReconciliationWindow = TimeInterval(hours: 24)
 

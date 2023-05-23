@@ -13,7 +13,9 @@ import os.log
 public protocol HKHealthStoreProtocol {
     func stop(_ query: HKQuery)
     func execute(_ query: HKQuery)
+#if os(iOS)
     func enableBackgroundDelivery(for type: HKObjectType, frequency: HKUpdateFrequency) async throws
+#endif
     func authorizationStatus(for type: HKObjectType) -> HKAuthorizationStatus
     func save(_ objects: [HKObject], withCompletion completion: @escaping (Bool, Error?) -> Void)
     func save(_ object: HKObject, withCompletion completion: @escaping (Bool, Error?) -> Void)
@@ -397,6 +399,7 @@ extension HealthKitSampleStore {
             self?.observerQueryHandler(query: query, observerQueryCompletionHandler: completionHandler, error: error)
         }
 
+#if os(iOS)
         Task {
             do {
                 try await healthStore.enableBackgroundDelivery(for: sampleType, frequency: .immediate)
@@ -404,6 +407,7 @@ extension HealthKitSampleStore {
                 self.log.error("Error enabling background delivery: %@", error.localizedDescription)
             }
         }
+#endif
     }
 }
 
