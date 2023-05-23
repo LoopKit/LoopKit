@@ -70,7 +70,6 @@ class GlucoseStoreTestsBase: PersistenceControllerTestCase, GlucoseStoreDelegate
         glucoseStore = GlucoseStore(healthKitSampleStore: hkSampleStore,
                                     cacheStore: cacheStore,
                                     cacheLength: .hours(1),
-                                    observationInterval: .minutes(30),
                                     provenanceIdentifier: HKSource.default().bundleIdentifier)
         glucoseStore.delegate = self
     }

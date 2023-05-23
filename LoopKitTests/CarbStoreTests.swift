@@ -29,7 +29,6 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
-            observationInterval: observationInterval,
             provenanceIdentifier: Bundle.main.bundleIdentifier!)
         carbStore.delegate = self
 
@@ -1032,7 +1031,6 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
-            observationInterval: 0,
             provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
         let semaphore = DispatchSemaphore(value: 0)
@@ -1283,7 +1281,6 @@ class CarbStoreCriticalEventLogTests: PersistenceControllerTestCase {
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
-            observationInterval: 0,
             provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
         let dispatchGroup = DispatchGroup()

@@ -22,8 +22,6 @@ class CarbStoreHKQueryTestsBase: PersistenceControllerTestCase {
         mockHealthStore = HKHealthStoreMock()
         mockHealthStore.authorizationStatus = authorizationStatus
 
-        let observationInterval: TimeInterval = .hours(1)
-
         hkSampleStore = HealthKitSampleStore(healthStore: mockHealthStore, type: HealthKitSampleStore.carbType)
 
         hkSampleStore.observerQueryType = MockHKObserverQuery.self
@@ -33,7 +31,6 @@ class CarbStoreHKQueryTestsBase: PersistenceControllerTestCase {
                               cacheStore: cacheStore,
                               cacheLength: .hours(24),
                               defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
-                              observationInterval: observationInterval,
                               provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
         let semaphore = DispatchSemaphore(value: 0)
@@ -122,7 +119,6 @@ class CarbStoreHKQueryTests: CarbStoreHKQueryTestsBase {
                                      cacheStore: cacheStore,
                                      cacheLength: .hours(24),
                                      defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
-                                     observationInterval: .hours(1),
                                      provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
 
