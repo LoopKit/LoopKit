@@ -10,6 +10,25 @@ import Foundation
 import HealthKit
 import os.log
 
+public protocol HKHealthStoreProtocol {
+    func stop(_ query: HKQuery)
+    func execute(_ query: HKQuery)
+    func enableBackgroundDelivery(for type: HKObjectType, frequency: HKUpdateFrequency) async throws
+    func authorizationStatus(for type: HKObjectType) -> HKAuthorizationStatus
+    func save(_ objects: [HKObject], withCompletion completion: @escaping (Bool, Error?) -> Void)
+    func save(_ object: HKObject, withCompletion completion: @escaping (Bool, Error?) -> Void)
+    func deleteObjects(of objectType: HKObjectType, predicate: NSPredicate, withCompletion completion: @escaping (Bool, Int, Error?) -> Void)
+
+    func cachedPreferredUnits(for quantityTypeIdentifier: HKQuantityTypeIdentifier) async -> HKUnit?
+}
+
+extension HKHealthStore: HKHealthStoreProtocol {
+    public func cachedPreferredUnits(for quantityTypeIdentifier: HKQuantityTypeIdentifier) async -> HKUnit? {
+        return HealthStoreUnitCache.unitCache(for: self).preferredUnit(for: quantityTypeIdentifier)
+    }
+}
+
+
 public protocol HealthKitSampleStoreDelegate {
     func storeQueryAnchor(_ anchor: HKQueryAnchor)
 
@@ -27,7 +46,6 @@ extension Notification.Name {
     public static let StoreAuthorizationStatusDidChange = Notification.Name(rawValue: "com.loudnate.LoopKit.AuthorizationStatusDidChangeNotification")
 }
 
-
 public enum HealthKitSampleStoreResult<T> {
     case success(T)
     case failure(HealthKitSampleStore.StoreError)
@@ -40,7 +58,7 @@ public class HealthKitSampleStore {
         case healthKitError(HKError)
     }
 
-    public static let carbType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.dietaryCarbohydrates)!
+    public static let carbType = HKQuantityType.quantityType(forIdentifier: .dietaryCarbohydrates)!
     public static let glucoseType = HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!
     public static let insulinQuantityType = HKQuantityType.quantityType(forIdentifier: .insulinDelivery)!
 
@@ -48,7 +66,7 @@ public class HealthKitSampleStore {
     public let sampleType: HKSampleType
 
     /// The health store used for underlying queries
-    public let healthStore: HKHealthStore
+    public let healthStore: HKHealthStoreProtocol
 
     /// Whether the store should fetch data that was written to HealthKit from current app
     private let observeHealthKitSamplesFromCurrentApp: Bool
@@ -61,23 +79,14 @@ public class HealthKitSampleStore {
 
     public var delegate: HealthKitSampleStoreDelegate?
 
-    /// For unit testing only.
-    internal var testQueryStore: HKSampleQueryTestable?
-
-    /// Declaring this as a var allows unit test to inject a mock for HKObserverQuery
-    internal var createObserverQuery: (HKSampleType, NSPredicate?, @escaping (HKObserverQuery, @escaping HKObserverQueryCompletionHandler, Error?) -> Void) -> HKObserverQuery = { (sampleType, predicate, updateHandler) in
-        return HKObserverQuery(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
-    }
-
-    /// Allows unit test to inject a mock for HKAnchoredObjectQuery
-    internal var createAnchoredObjectQuery: (HKSampleType, NSPredicate?, HKQueryAnchor?, Int, @escaping (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void) -> HKAnchoredObjectQuery = { (sampleType, predicate, anchor, limit, resultsHandler) in
-        return HKAnchoredObjectQuery(type: sampleType, predicate: predicate, anchor: anchor, limit: limit, resultsHandler: resultsHandler)
-    }
+    // Testing
+    public var observerQueryType = HKObserverQuery.self
+    public var anchoredObjectQueryType = HKAnchoredObjectQuery.self
 
     private let log: OSLog
 
     public init(
-        healthStore: HKHealthStore,
+        healthStore: HKHealthStoreProtocol,
         observeHealthKitSamplesFromCurrentApp: Bool = true,
         observeHealthKitSamplesFromOtherApps: Bool = true,
         type: HKSampleType,
@@ -109,7 +118,10 @@ public class HealthKitSampleStore {
 
         // Do not remove this log: it actually triggers a query by calling preferredUnit, and can update the cache
         // And trigger a unit change notification after authorization happens.
-        self.log.default("Checking units after authorization: %{public}@", String(describing: self.preferredUnit))
+        Task {
+            let unit = await self.preferredUnit
+            self.log.default("Checking units after authorization: %{public}@", String(describing: unit))
+        }
     }
 
     // MARK: - Query support
@@ -122,7 +134,7 @@ public class HealthKitSampleStore {
             }
 
             if let query = observerQuery {
-                log.debug("Executing observerQuery %@", query)
+                log.debug("Executing observerQuery %@", String(describing: query))
                 healthStore.execute(query)
             }
         }
@@ -249,7 +261,7 @@ public class HealthKitSampleStore {
 
         let batchSize = 500
 
-        let anchoredObjectQuery = createAnchoredObjectQuery(sampleType, observerQuery.predicate, queryAnchor, batchSize) { [weak self] (query, newSamples, deletedSamples, anchor, error) in
+        let anchoredObjectQuery = anchoredObjectQueryType.init(type: sampleType, predicate: observerQuery.predicate, anchor: queryAnchor, limit: batchSize) { [weak self] (query, newSamples, deletedSamples, anchor, error) in
 
             guard let self else {
                 return
@@ -314,9 +326,11 @@ public class HealthKitSampleStore {
     /// The preferred unit for the sample type
     ///
     /// The unit may be nil if the health store times out while fetching or the sample type is unsupported
-    public var preferredUnit: HKUnit? {
-        let identifier = HKQuantityTypeIdentifier(rawValue: sampleType.identifier)
-        return HealthStoreUnitCache.unitCache(for: healthStore).preferredUnit(for: identifier)
+    var preferredUnit: HKUnit? {
+        get async {
+            let identifier = HKQuantityTypeIdentifier(rawValue: sampleType.identifier)
+            return await healthStore.cachedPreferredUnits(for: identifier)
+        }
     }
 }
 
@@ -328,14 +342,10 @@ extension HealthKitSampleStore: HKSampleQueryTestable {
         matching predicate: NSPredicate,
         limit: Int = HKObjectQueryNoLimit,
         sortDescriptors: [NSSortDescriptor]? = nil,
-        resultsHandler: @escaping (HKSampleQuery, [HKSample]?, Error?) -> Void
-    ) {
-        if let tester = testQueryStore {
-            tester.executeSampleQuery(for: type, matching: predicate, limit: limit, sortDescriptors: sortDescriptors, resultsHandler: resultsHandler)
-        } else {
-            let query = HKSampleQuery(sampleType: type, predicate: predicate, limit: limit, sortDescriptors: sortDescriptors, resultsHandler: resultsHandler)
-            healthStore.execute(query)
-        }
+        resultsHandler: @escaping (HKSampleQuery, [HKSample]?, Error?) -> Void)
+    {
+        let query = HKSampleQuery(sampleType: type, predicate: predicate, limit: limit, sortDescriptors: sortDescriptors, resultsHandler: resultsHandler)
+        healthStore.execute(query)
     }
 }
 
@@ -382,61 +392,18 @@ extension HealthKitSampleStore {
             return
         }
 
-        // Assigning observerQuery here starts the query
-        observerQuery = createObserverQuery(sampleType, predicate) { [weak self] (query, completionHandler, error) in
-            // This is the HKObserverQueryCompletionHandler
+        // Assigning observerQuery starts the query
+        observerQuery = observerQueryType.init(sampleType: sampleType, predicate: predicate) { [weak self] (query, completionHandler, error) in
             self?.observerQueryHandler(query: query, observerQueryCompletionHandler: completionHandler, error: error)
         }
 
-        enableBackgroundDelivery { (result) in
-            switch result {
-            case .failure(let error):
+        Task {
+            do {
+                try await healthStore.enableBackgroundDelivery(for: sampleType, frequency: .immediate)
+            } catch {
                 self.log.error("Error enabling background delivery: %@", error.localizedDescription)
-            case .success:
-                self.log.default("Enabled background delivery for %{public}@", self.sampleType)
             }
         }
-    }
-
-
-    /// Enables the immediate background delivery of updates to samples from HealthKit.
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-    ///
-    /// - Parameter completion: A closure called after the request is completed
-    /// - Parameter result: A boolean indicating the new background delivery state
-    private func enableBackgroundDelivery(_ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
-        #if os(iOS)
-            healthStore.enableBackgroundDelivery(for: sampleType, frequency: .immediate) { (enabled, error) in
-                if let error = error {
-                    completion(.failure(.healthKitError(HKError(_nsError: error as NSError))))
-                } else if enabled {
-                    completion(.success(true))
-                } else {
-                    assertionFailure()
-                }
-            }
-        #endif
-    }
-
-    /// Disables the immediate background delivery of updates to samples from HealthKit.
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-    ///
-    /// - Parameter completion: A closure called after the request is completed
-    /// - Parameter result: A boolean indicating the new background delivery state
-    private func disableBackgroundDelivery(_ completion: @escaping (_ result: HealthKitSampleStoreResult<Bool>) -> Void) {
-        #if os(iOS)
-            healthStore.disableBackgroundDelivery(for: sampleType) { (disabled, error) in
-                if let error = error {
-                    completion(.failure(.healthKitError(HKError(_nsError: error as NSError))))
-                } else if disabled {
-                    completion(.success(false))
-                } else {
-                    assertionFailure()
-                }
-            }
-        #endif
     }
 }
 
@@ -457,49 +424,6 @@ extension HealthKitSampleStore {
     /// True if the store requires authorization
     public var authorizationRequired: Bool {
         return healthStore.authorizationStatus(for: sampleType) == .notDetermined
-    }
-
-    /**
-     Queries the preferred unit for the authorized share types. If more than one unit is retrieved,
-     then the completion contains just one of them.
-
-     - parameter completion: A closure called after the query is completed. This closure takes two arguments:
-        - unit:  The retrieved unit
-        - error: An error object explaining why the retrieval was unsuccessful
-     */
-    @available(*, deprecated, message: "Use HealthKitSampleStore.getter:preferredUnit instead")
-    public func preferredUnit(_ completion: @escaping (_ unit: HKUnit?, _ error: Error?) -> Void) {
-        preferredUnit { result in
-            switch result {
-            case .success(let unit):
-                completion(unit, nil)
-            case .failure(let error):
-                completion(nil, error)
-            }
-        }
-    }
-
-    /// Queries the preferred unit for the sample type.
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-    ///
-    /// - Parameter completion: A closure called after the query is completed
-    /// - Parameter result: The query result
-    @available(*, deprecated, message: "Use HealthKitSampleStore.getter:preferredUnit instead")
-    private func preferredUnit(_ completion: @escaping (_ result: HealthKitSampleStoreResult<HKUnit>) -> Void) {
-        let quantityTypes = [self.sampleType].compactMap { (sampleType) -> HKQuantityType? in
-            return sampleType as? HKQuantityType
-        }
-
-        self.healthStore.preferredUnits(for: Set(quantityTypes)) { (quantityToUnit, error) -> Void in
-            if let error = error {
-                completion(.failure(.healthKitError(HKError(_nsError: error as NSError))))
-            } else if let unit = quantityToUnit.values.first {
-                completion(.success(unit))
-            } else {
-                assertionFailure()
-            }
-        }
     }
 }
 

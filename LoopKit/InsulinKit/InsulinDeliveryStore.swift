@@ -63,10 +63,6 @@ public class InsulinDeliveryStore {
 
     private let hkSampleStore: HealthKitSampleStore?
 
-    public var preferredUnit: HKUnit! {
-        return hkSampleStore?.preferredUnit ?? .internationalUnit()
-    }
-
     /// The interval of insulin delivery data to keep in cache
     public let cacheLength: TimeInterval
 

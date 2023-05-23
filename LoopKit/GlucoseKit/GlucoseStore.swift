@@ -65,10 +65,6 @@ public final class GlucoseStore {
 
     private let hkSampleStore: HealthKitSampleStore?
 
-    public var preferredUnit: HKUnit! {
-        return hkSampleStore?.preferredUnit ?? .milligramsPerDeciliter
-    }
-
     /// The oldest interval to include when purging managed data
     private let maxPurgeInterval: TimeInterval = TimeInterval(hours: 24) * 7
 
