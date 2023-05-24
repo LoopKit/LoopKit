@@ -664,6 +664,11 @@
 		B455F4D32600DA0B000ED456 /* GlucoseRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F4D22600DA0B000ED456 /* GlucoseRange.swift */; };
 		B455F4DF2600E0A8000ED456 /* GlucoseRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F4DE2600E0A8000ED456 /* GlucoseRangeTests.swift */; };
 		B455F4FE2600E5EE000ED456 /* GlucoseRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B455F4D22600DA0B000ED456 /* GlucoseRange.swift */; };
+		B45703C12A1808CD00F615B7 /* MockCGMManagerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D11E2A1718D0004878F1 /* MockCGMManagerSettingsView.swift */; };
+		B45703C22A1808ED00F615B7 /* MockCGMManagerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1222A17193C004878F1 /* MockCGMManagerControlsView.swift */; };
+		B45703C32A1808F600F615B7 /* MockCGMManagerSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1202A17190C004878F1 /* MockCGMManagerSettingsViewModel.swift */; };
+		B45703C42A1808FA00F615B7 /* OpenMockCGMSettingsOnLongPressGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1262A171C51004878F1 /* OpenMockCGMSettingsOnLongPressGesture.swift */; };
+		B45703C52A18091700F615B7 /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1242A171C2A004878F1 /* HKUnit.swift */; };
 		B45774352562CCC6004B9466 /* SupportedRangeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45774342562CCC6004B9466 /* SupportedRangeTableViewController.swift */; };
 		B46B62A723FEFE4D001E69BA /* InstructionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62A623FEFE4D001E69BA /* InstructionList.swift */; };
 		B46B62A923FF05F8001E69BA /* LabeledNumberInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B62A823FF05F8001E69BA /* LabeledNumberInput.swift */; };
@@ -1554,6 +1559,11 @@
 		B451D1172A16A21F004878F1 /* InsulinStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsulinStatusView.swift; sourceTree = "<group>"; };
 		B451D11A2A16B97C004878F1 /* MockPumpManagerSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsViewModel.swift; sourceTree = "<group>"; };
 		B451D11C2A171751004878F1 /* MockPumpManagerControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerControlsView.swift; sourceTree = "<group>"; };
+		B451D11E2A1718D0004878F1 /* MockCGMManagerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManagerSettingsView.swift; sourceTree = "<group>"; };
+		B451D1202A17190C004878F1 /* MockCGMManagerSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManagerSettingsViewModel.swift; sourceTree = "<group>"; };
+		B451D1222A17193C004878F1 /* MockCGMManagerControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCGMManagerControlsView.swift; sourceTree = "<group>"; };
+		B451D1242A171C2A004878F1 /* HKUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKUnit.swift; sourceTree = "<group>"; };
+		B451D1262A171C51004878F1 /* OpenMockCGMSettingsOnLongPressGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMockCGMSettingsOnLongPressGesture.swift; sourceTree = "<group>"; };
 		B455F2A125FBE985000ED456 /* SuspendThresholdEditorViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SuspendThresholdEditorViewModel.swift; path = LoopKitUI/ViewModels/SuspendThresholdEditorViewModel.swift; sourceTree = SOURCE_ROOT; };
 		B455F35525FC0284000ED456 /* CorrectionRangeOverridesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesTests.swift; sourceTree = "<group>"; };
 		B455F3A325FF7FF0000ED456 /* CorrectionRangeOverridesEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionRangeOverridesEditorViewModel.swift; sourceTree = "<group>"; };
@@ -2294,6 +2304,8 @@
 				C1E0EEF524EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift */,
 				B451D1132A166403004878F1 /* DemoPlaceHolderView.swift */,
 				B451D1172A16A21F004878F1 /* InsulinStatusView.swift */,
+				B451D1222A17193C004878F1 /* MockCGMManagerControlsView.swift */,
+				B451D11E2A1718D0004878F1 /* MockCGMManagerSettingsView.swift */,
 				B451D11C2A171751004878F1 /* MockPumpManagerControlsView.swift */,
 				B451D10C2A161A3E004878F1 /* MockPumpManagerSettingsView.swift */,
 			);
@@ -2809,6 +2821,7 @@
 				C18733C429B94A6300519CDF /* UITableViewCell.swift */,
 				B451D1112A165DA0004878F1 /* Image.swift */,
 				B451D1152A168C81004878F1 /* Color.swift */,
+				B451D1242A171C2A004878F1 /* HKUnit.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2962,6 +2975,7 @@
 		B451D10E2A161B43004878F1 /* ViewModifier */ = {
 			isa = PBXGroup;
 			children = (
+				B451D1262A171C51004878F1 /* OpenMockCGMSettingsOnLongPressGesture.swift */,
 				B451D10F2A161B84004878F1 /* OpenMockPumpSettingsOnLongPressGesture.swift */,
 			);
 			path = ViewModifier;
@@ -2970,6 +2984,7 @@
 		B451D1192A16B944004878F1 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				B451D1202A17190C004878F1 /* MockCGMManagerSettingsViewModel.swift */,
 				B451D11A2A16B97C004878F1 /* MockPumpManagerSettingsViewModel.swift */,
 			);
 			path = ViewModel;
@@ -4273,13 +4288,16 @@
 				1DFFB988271740EE0075AEAA /* MockSupport.swift in Sources */,
 				A9498D8F23386CE800DAA9B9 /* MockServiceTableViewController.swift in Sources */,
 				89D204BE21CC7F34001238CC /* GlucoseTrendTableViewController.swift in Sources */,
+				B45703C42A1808FA00F615B7 /* OpenMockCGMSettingsOnLongPressGesture.swift in Sources */,
 				C18733C829B94A6400519CDF /* NibLoadable.swift in Sources */,
 				C18733CA29B94A6400519CDF /* UITableViewCell.swift in Sources */,
 				8992426521EC138000EA512B /* UIColor.swift in Sources */,
 				C18733C629B94A6400519CDF /* Comparable.swift in Sources */,
 				89D204BA21CC7F34001238CC /* MockPumpManagerSettingsViewController.swift in Sources */,
+				B45703C12A1808CD00F615B7 /* MockCGMManagerSettingsView.swift in Sources */,
 				B451D11D2A171751004878F1 /* MockPumpManagerControlsView.swift in Sources */,
 				C18733CC29B94A7A00519CDF /* LocalizedString.swift in Sources */,
+				B45703C52A18091700F615B7 /* HKUnit.swift in Sources */,
 				89D204BC21CC7F34001238CC /* SineCurveParametersTableViewController.swift in Sources */,
 				B451D11B2A16B97C004878F1 /* MockPumpManagerSettingsViewModel.swift in Sources */,
 				C1FAEC21264AEEA300A3250B /* UIImage.swift in Sources */,
@@ -4289,7 +4307,9 @@
 				89D204BD21CC7F34001238CC /* RandomOutlierTableViewController.swift in Sources */,
 				B42C950E24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift in Sources */,
 				B45774352562CCC6004B9466 /* SupportedRangeTableViewController.swift in Sources */,
+				B45703C22A1808ED00F615B7 /* MockCGMManagerControlsView.swift in Sources */,
 				892A5D28222EF567008961AB /* (null) in Sources */,
+				B45703C32A1808F600F615B7 /* MockCGMManagerSettingsViewModel.swift in Sources */,
 				B451D10D2A161A3E004878F1 /* MockPumpManagerSettingsView.swift in Sources */,
 				C1E0EEF624EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift in Sources */,
 				89D204BB21CC7F34001238CC /* MockCGMManagerSettingsViewController.swift in Sources */,

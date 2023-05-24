@@ -16,6 +16,10 @@ import MockKit
 
 extension MockCGMManager: CGMManagerUI {
 
+    fileprivate var appName: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
+    }
+    
     public static var onboardingImage: UIImage? { return UIImage(named: "CGM Simulator", in: Bundle(for: MockCGMManagerSettingsViewController.self), compatibleWith: nil) }
 
     public var smallImage: UIImage? { return UIImage(named: "CGM Simulator", in: Bundle(for: MockCGMManagerSettingsViewController.self), compatibleWith: nil) }
@@ -25,8 +29,11 @@ extension MockCGMManager: CGMManagerUI {
     }
 
     public func settingsViewController(bluetoothProvider: BluetoothProvider, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> CGMManagerViewController {
-        let settings = MockCGMManagerSettingsViewController(cgmManager: self, displayGlucoseUnitObservable: displayGlucoseUnitObservable)
-        let nav = CGMManagerSettingsNavigationViewController(rootViewController: settings)
+        let settings = MockCGMManagerSettingsView(cgmManager: self, displayGlucoseUnitObservable: displayGlucoseUnitObservable, appName: appName)
+        let hostingController = DismissibleHostingController(rootView: settings, colorPalette: colorPalette)
+        hostingController.navigationItem.backButtonDisplayMode = .generic
+        let nav = CGMManagerSettingsNavigationViewController(rootViewController: hostingController)
+        nav.navigationBar.prefersLargeTitles = true
         return nav
     }
 

@@ -95,7 +95,7 @@ struct MockPumpManagerSettingsView: View {
     
     private var expirationText: some View {
         Text("Pump expires in ")
-            .font(.system(size: 15, weight: .medium, design: .default))
+            .font(.subheadline)
             .foregroundColor(.secondary)
     }
     

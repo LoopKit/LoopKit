@@ -15,6 +15,8 @@ import UIKit
 public struct MockCGMState: GlucoseDisplayable {
     public var isStateValid: Bool
 
+    public var currentGlucose: HKQuantity?
+
     public var trendType: GlucoseTrend?
 
     public var trendRate: HKQuantity?
@@ -489,6 +491,7 @@ public final class MockCGMManager: TestingCGMManager {
         if case .newData(let samples) = result,
             let currentValue = samples.first
         {
+            mockSensorState.currentGlucose = currentValue.quantity
             mockSensorState.trendType = currentValue.trend
             mockSensorState.trendRate = currentValue.trendRate
             mockSensorState.glucoseRangeCategory = glucoseRangeCategory(for: currentValue.quantitySample)
@@ -815,6 +818,18 @@ extension MockCGMState: RawRepresentable {
         self.progressCriticalThresholdPercentValue = rawValue["progressCriticalThresholdPercentValue"] as? Double
         self.cgmBatteryChargeRemaining = rawValue["cgmBatteryChargeRemaining"] as? Double
         
+        if let trendRateValue = rawValue["trendRateValue"] as? Double {
+            self.trendRate = HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: trendRateValue)
+        }
+        
+        if let trendTypeRaw = rawValue["trendType"] as? GlucoseTrend.RawValue {
+            self.trendType = GlucoseTrend(rawValue: trendTypeRaw)
+        }
+        
+        if let currentGlucoseValue = rawValue["currentGlucoseValue"] as? Double {
+            self.currentGlucose = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: currentGlucoseValue)
+        }
+        
         setProgressColor()
     }
 
@@ -858,6 +873,10 @@ extension MockCGMState: RawRepresentable {
         if let cgmBatteryChargeRemaining = cgmBatteryChargeRemaining {
             rawValue["cgmBatteryChargeRemaining"] = cgmBatteryChargeRemaining
         }
+        
+        rawValue["trendRateValue"] = trendRate?.doubleValue(for: .milligramsPerDeciliterPerMinute)
+        rawValue["trendType"] = trendType?.rawValue
+        rawValue["currentGlucoseValue"] = currentGlucose?.doubleValue(for: .milligramsPerDeciliter)
         
         return rawValue
     }
