@@ -33,4 +33,9 @@ public extension InsulinSensitivitySchedule {
         precondition(glucoseUnit == .millimolesPerLiter || glucoseUnit == .milligramsPerDeciliter)
         return self.convertTo(unit: glucoseUnit)
     }
+    
+    func value(for glucoseUnit: HKUnit, at time: Date) -> Double {
+        let unconvertedValue = self.value(at: time)
+        return HKQuantity(unit: self.unit, doubleValue: unconvertedValue).doubleValue(for: glucoseUnit)
+    }
 }

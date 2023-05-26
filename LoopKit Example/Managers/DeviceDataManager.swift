@@ -14,21 +14,37 @@ import LoopKit
 class DeviceDataManager {
 
     init() {
-        let healthStore = HKHealthStore()
+        healthStore = HKHealthStore()
         let cacheStore = PersistenceController(directoryURL: FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!)
 
-        carbStore = CarbStore(
+        let observationInterval: TimeInterval = .hours(24)
+
+        carbSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
+            observeHealthKitSamplesFromOtherApps: false,
+            type: HealthKitSampleStore.carbType,
+            observationStart: Date().addingTimeInterval(-observationInterval),
+            observationEnabled: false)
+
+        carbStore = CarbStore(
+            healthKitSampleStore: carbSampleStore,
             cacheStore: cacheStore,
-            cacheLength: .hours(24),
+            cacheLength: observationInterval,
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
-            observationInterval: .hours(24),
             carbRatioSchedule: carbRatioSchedule,
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
         )
-        doseStore = DoseStore(
+
+        doseSampleStore = HealthKitSampleStore(
             healthStore: healthStore,
+            observeHealthKitSamplesFromOtherApps: false,
+            type: HealthKitSampleStore.insulinQuantityType,
+            observationStart: Date().addingTimeInterval(-observationInterval),
+            observationEnabled: false)
+
+        doseStore = DoseStore(
+            healthKitSampleStore: doseSampleStore,
             cacheStore: cacheStore,
             insulinModelProvider: PresetInsulinModelProvider(defaultRapidActingModel: ExponentialInsulinModelPreset.rapidActingAdult),
             longestEffectDuration: ExponentialInsulinModelPreset.rapidActingAdult.effectDuration,
@@ -36,17 +52,31 @@ class DeviceDataManager {
             insulinSensitivitySchedule: insulinSensitivitySchedule,
             provenanceIdentifier: HKSource.default().bundleIdentifier
         )
-        glucoseStore = GlucoseStore(healthStore: healthStore,
-                                    cacheStore: cacheStore,
-                                    provenanceIdentifier: HKSource.default().bundleIdentifier)
+
+
+        glucoseSampleStore = HealthKitSampleStore(
+            healthStore: healthStore,
+            observeHealthKitSamplesFromOtherApps: false,
+            type: HealthKitSampleStore.glucoseType,
+            observationStart: Date().addingTimeInterval(-observationInterval),
+            observationEnabled: false)
+
+        glucoseStore = GlucoseStore(
+            healthKitSampleStore: glucoseSampleStore,
+            cacheStore: cacheStore,
+            provenanceIdentifier: HKSource.default().bundleIdentifier)
     }
 
     // Data stores
+    let healthStore: HKHealthStore
 
+    let carbSampleStore: HealthKitSampleStore!
     let carbStore: CarbStore!
 
+    let doseSampleStore: HealthKitSampleStore!
     let doseStore: DoseStore
 
+    let glucoseSampleStore: HealthKitSampleStore!
     let glucoseStore: GlucoseStore!
 
     // Settings

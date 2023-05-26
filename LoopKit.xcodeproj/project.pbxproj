@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -253,7 +253,6 @@
 		43D8FDF91C7290350073BE78 /* GlucoseEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEA1C7290350073BE78 /* GlucoseEffect.swift */; };
 		43D8FDFA1C7290350073BE78 /* GlucoseRangeSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEB1C7290350073BE78 /* GlucoseRangeSchedule.swift */; };
 		43D8FDFB1C7290350073BE78 /* GlucoseSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEC1C7290350073BE78 /* GlucoseSchedule.swift */; };
-		43D8FDFC1C7290350073BE78 /* HealthKitSampleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDED1C7290350073BE78 /* HealthKitSampleStore.swift */; };
 		43D8FDFE1C7290350073BE78 /* LoopMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDEF1C7290350073BE78 /* LoopMath.swift */; };
 		43D8FDFF1C7290350073BE78 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF01C7290350073BE78 /* Date.swift */; };
 		43D8FE021C7290350073BE78 /* SampleValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDF31C7290350073BE78 /* SampleValue.swift */; };
@@ -503,8 +502,8 @@
 		A95A1D8D246101760079378D /* DoseEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95A1D8C246101760079378D /* DoseEntryTests.swift */; };
 		A963B278252CE2510062AA12 /* StoredCarbEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A963B277252CE2510062AA12 /* StoredCarbEntryTests.swift */; };
 		A9672B5326E80C060025B0CD /* NewGlucoseSampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9672B5226E80C060025B0CD /* NewGlucoseSampleTests.swift */; };
-		A967D94924F99B6A00CDDF8A /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A967D94824F99B6A00CDDF8A /* OutputStream.swift */; };
-		A967D94A24F99B6A00CDDF8A /* OutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A967D94824F99B6A00CDDF8A /* OutputStream.swift */; };
+		A967D94924F99B6A00CDDF8A /* DataOutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A967D94824F99B6A00CDDF8A /* DataOutputStream.swift */; };
+		A967D94A24F99B6A00CDDF8A /* DataOutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = A967D94824F99B6A00CDDF8A /* DataOutputStream.swift */; };
 		A96E6C3727B35BC600F81A5B /* AnyCodableEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E6C3627B35BC600F81A5B /* AnyCodableEquatable.swift */; };
 		A96E6C3827B35BC600F81A5B /* AnyCodableEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E6C3627B35BC600F81A5B /* AnyCodableEquatable.swift */; };
 		A971C89F23C68B030099BEFC /* GlucoseStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */; };
@@ -552,7 +551,6 @@
 		A9E6758422713F4700E25293 /* NewCarbEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE5B1C7291D80073BE78 /* NewCarbEntry.swift */; };
 		A9E6758522713F4700E25293 /* GlucoseMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE861C72934C0073BE78 /* GlucoseMath.swift */; };
 		A9E6758722713F4700E25293 /* CarbEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FE4A1C7291BD0073BE78 /* CarbEntry.swift */; };
-		A9E6758822713F4700E25293 /* HealthKitSampleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDED1C7290350073BE78 /* HealthKitSampleStore.swift */; };
 		A9E6758C22713F4700E25293 /* DoseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A0670E1F23CAC700E9E90F /* DoseType.swift */; };
 		A9E6758D22713F4700E25293 /* CachedCarbObject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437AFEE92036A156008C4892 /* CachedCarbObject+CoreDataClass.swift */; };
 		A9E6758E22713F4700E25293 /* DailyValueSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D8FDE81C7290350073BE78 /* DailyValueSchedule.swift */; };
@@ -767,6 +765,8 @@
 		C191D26325B3815000C26C0B /* AutomaticDoseRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C191D26225B3815000C26C0B /* AutomaticDoseRecommendation.swift */; };
 		C1A174EC23DEAD670034DF11 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C1A174ED23DEAD6A0034DF11 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
+		C1A85A9C2A1C6E4500430101 /* HealthKitSampleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B8E6E42A1BB14E00AF38D0 /* HealthKitSampleStore.swift */; };
+		C1B8E6E52A1BB14E00AF38D0 /* HealthKitSampleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B8E6E42A1BB14E00AF38D0 /* HealthKitSampleStore.swift */; };
 		C1BECA93285902F5008075C4 /* LoopKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43D8FDCB1C728FDF0073BE78 /* LoopKit.framework */; };
 		C1CAB9E926A3254800A57273 /* StoredInsulinModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CAB9E826A3254800A57273 /* StoredInsulinModel.swift */; };
 		C1CB895925C8E7D900782BAC /* Modelv1v4.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = C1E84B8425C62FB100623C08 /* Modelv1v4.xcmappingmodel */; };
@@ -1214,7 +1214,6 @@
 		43D8FDEA1C7290350073BE78 /* GlucoseEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseEffect.swift; sourceTree = "<group>"; };
 		43D8FDEB1C7290350073BE78 /* GlucoseRangeSchedule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseRangeSchedule.swift; sourceTree = "<group>"; };
 		43D8FDEC1C7290350073BE78 /* GlucoseSchedule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseSchedule.swift; sourceTree = "<group>"; };
-		43D8FDED1C7290350073BE78 /* HealthKitSampleStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitSampleStore.swift; sourceTree = "<group>"; };
 		43D8FDEF1C7290350073BE78 /* LoopMath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopMath.swift; sourceTree = "<group>"; };
 		43D8FDF01C7290350073BE78 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		43D8FDF31C7290350073BE78 /* SampleValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleValue.swift; sourceTree = "<group>"; };
@@ -1503,7 +1502,7 @@
 		A95A1D8C246101760079378D /* DoseEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseEntryTests.swift; sourceTree = "<group>"; };
 		A963B277252CE2510062AA12 /* StoredCarbEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredCarbEntryTests.swift; sourceTree = "<group>"; };
 		A9672B5226E80C060025B0CD /* NewGlucoseSampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGlucoseSampleTests.swift; sourceTree = "<group>"; };
-		A967D94824F99B6A00CDDF8A /* OutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputStream.swift; sourceTree = "<group>"; };
+		A967D94824F99B6A00CDDF8A /* DataOutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataOutputStream.swift; sourceTree = "<group>"; };
 		A96E6C3627B35BC600F81A5B /* AnyCodableEquatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodableEquatable.swift; sourceTree = "<group>"; };
 		A971C89E23C68B030099BEFC /* GlucoseStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseStoreTests.swift; sourceTree = "<group>"; };
 		A971C8A123C6B17D0099BEFC /* SettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStoreTests.swift; sourceTree = "<group>"; };
@@ -1731,6 +1730,7 @@
 		C1B0CFDB29C786BF0045B04D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1B2679E2995824000BCB7C1 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C1B761F229C786D90098916A /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C1B8E6E42A1BB14E00AF38D0 /* HealthKitSampleStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitSampleStore.swift; sourceTree = "<group>"; };
 		C1BCB5BA298309C4001C50FF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Main.strings; sourceTree = "<group>"; };
 		C1BCB5BB298309C4001C50FF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C1C685F929C786B70002E063 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -2288,7 +2288,6 @@
 				43CB51B0211EB16C00DB9B4A /* NSUserActivity+CarbKit.swift */,
 				C187338429B9486200519CDF /* NumberFormatter.swift */,
 				C187338829B9486200519CDF /* OSLog.swift */,
-				A967D94824F99B6A00CDDF8A /* OutputStream.swift */,
 				C187339529B9488300519CDF /* Sequence.swift */,
 				C187338229B9486200519CDF /* TimeInterval.swift */,
 				C187339629B9488300519CDF /* TimeZone.swift */,
@@ -2436,6 +2435,7 @@
 				891A3FDA224BEC0D00378B27 /* CarbSensitivitySchedule.swift */,
 				1D1FCE2624BE4DE2000300A8 /* CorrectionRangeOverrides.swift */,
 				A933DB8724BF956F009B417A /* CriticalEventLog.swift */,
+				A967D94824F99B6A00CDDF8A /* DataOutputStream.swift */,
 				43D8FDE71C7290350073BE78 /* DailyQuantitySchedule.swift */,
 				891A3FD4224B047200378B27 /* DailyQuantitySchedule+Override.swift */,
 				43D8FDE81C7290350073BE78 /* DailyValueSchedule.swift */,
@@ -2457,8 +2457,8 @@
 				A9498D7423386C3200DAA9B9 /* GlucoseThreshold.swift */,
 				43D9888A1C87E47800DA4467 /* GlucoseValue.swift */,
 				89F6E30E244A1A5D00CB9E15 /* Guardrail.swift */,
-				43D8FDED1C7290350073BE78 /* HealthKitSampleStore.swift */,
 				43B17C88208EEC0B00AC27E9 /* HealthStoreUnitCache.swift */,
+				C1B8E6E42A1BB14E00AF38D0 /* HealthKitSampleStore.swift */,
 				43D8FDD01C728FDF0073BE78 /* Info.plist */,
 				1D096BFD24C24C140078B6B5 /* Insulin */,
 				43D8FEB21C7294520073BE78 /* InsulinKit */,
@@ -3402,8 +3402,9 @@
 		43D8FDC21C728FDF0073BE78 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1210;
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "LoopKit Authors";
 				TargetAttributes = {
 					1DEE226824A676A300693C32 = {
@@ -4006,7 +4007,6 @@
 				891A3FDB224BEC0D00378B27 /* CarbSensitivitySchedule.swift in Sources */,
 				4322B773202FA2790002837D /* CarbEntry.swift in Sources */,
 				C1E84B8525C62FB100623C08 /* Modelv1v4.xcmappingmodel in Sources */,
-				43D8FDFC1C7290350073BE78 /* HealthKitSampleStore.swift in Sources */,
 				A9498D7E23386C3300DAA9B9 /* GlucoseThreshold.swift in Sources */,
 				4322B789202FA2B30002837D /* DoseType.swift in Sources */,
 				C17F39C723CD256000FA1113 /* PersistentDeviceLog.swift in Sources */,
@@ -4015,6 +4015,7 @@
 				43D8FDF71C7290350073BE78 /* DailyValueSchedule.swift in Sources */,
 				4322B77D202FA2AF0002837D /* NewPumpEvent.swift in Sources */,
 				A935793F29A2570400246DED /* Action.swift in Sources */,
+				C1B8E6E52A1BB14E00AF38D0 /* HealthKitSampleStore.swift in Sources */,
 				434113AA20F171CB00D05747 /* CachedInsulinDeliveryObject+CoreDataClass.swift in Sources */,
 				C140DFFF260276BF000A4FF7 /* ManualBolusRecommendation.swift in Sources */,
 				432CF86F20D76CCF0066B889 /* GlucoseTrend.swift in Sources */,
@@ -4047,7 +4048,7 @@
 				432CF87320D774220066B889 /* PumpManager.swift in Sources */,
 				43D8FE021C7290350073BE78 /* SampleValue.swift in Sources */,
 				43D9888B1C87E47800DA4467 /* GlucoseValue.swift in Sources */,
-				A967D94924F99B6A00CDDF8A /* OutputStream.swift in Sources */,
+				A967D94924F99B6A00CDDF8A /* DataOutputStream.swift in Sources */,
 				43D8FDF41C7290350073BE78 /* BasalRateSchedule.swift in Sources */,
 				A935793B29A2570400246DED /* CarbAction.swift in Sources */,
 				4322B788202FA2B30002837D /* DoseStore.swift in Sources */,
@@ -4341,7 +4342,6 @@
 				A9E6758422713F4700E25293 /* NewCarbEntry.swift in Sources */,
 				A9E6758522713F4700E25293 /* GlucoseMath.swift in Sources */,
 				A9E6758722713F4700E25293 /* CarbEntry.swift in Sources */,
-				A9E6758822713F4700E25293 /* HealthKitSampleStore.swift in Sources */,
 				C17F39CC23CD2D3E00FA1113 /* DeviceLog.xcdatamodeld in Sources */,
 				A93CA89A278D08CC003B5A01 /* PumpAlarmType.swift in Sources */,
 				C1CEBFDC29BA9D9D007FD8A3 /* NumberFormatter.swift in Sources */,
@@ -4358,6 +4358,7 @@
 				A9E6759322713F4700E25293 /* CarbMath.swift in Sources */,
 				A9E6759522713F4700E25293 /* ExponentialInsulinModel.swift in Sources */,
 				B4102D3324ABB0D8005D460B /* DeviceLifecycleProgress.swift in Sources */,
+				C1A85A9C2A1C6E4500430101 /* HealthKitSampleStore.swift in Sources */,
 				A9E6759722713F4700E25293 /* DailyQuantitySchedule.swift in Sources */,
 				C1A174EC23DEAD670034DF11 /* DeviceLogEntry+CoreDataClass.swift in Sources */,
 				A9E6759822713F4700E25293 /* CarbRatioSchedule.swift in Sources */,
@@ -4425,7 +4426,7 @@
 				C1CEBFD229BA9D43007FD8A3 /* TimeInterval.swift in Sources */,
 				A9E675C922713F4700E25293 /* CachedInsulinDeliveryObject+CoreDataProperties.swift in Sources */,
 				C1CEBFD529BA9D62007FD8A3 /* LocalizedString.swift in Sources */,
-				A967D94A24F99B6A00CDDF8A /* OutputStream.swift in Sources */,
+				A967D94A24F99B6A00CDDF8A /* DataOutputStream.swift in Sources */,
 				A9E675CB22713F4700E25293 /* StoredGlucoseSample.swift in Sources */,
 				A9E675CC22713F4700E25293 /* GlucoseEffect.swift in Sources */,
 				A9E675CD22713F4700E25293 /* WeakSynchronizedSet.swift in Sources */,
@@ -4914,6 +4915,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 41;
 				DEFINES_MODULE = YES;
@@ -4921,6 +4923,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LoopKitUI/Info.plist;
@@ -4930,6 +4933,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitUI;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4948,6 +4953,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 41;
 				DEFINES_MODULE = YES;
@@ -4955,6 +4961,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LoopKitUI/Info.plist;
@@ -4964,6 +4971,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKitUI;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -5034,7 +5043,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 4.0;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
 			};
 			name = Debug;
 		};
@@ -5073,6 +5082,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -5095,7 +5105,7 @@
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-				WATCHOS_DEPLOYMENT_TARGET = 4.0;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
 			};
 			name = Release;
 		};
@@ -5112,6 +5122,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -5119,6 +5130,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -5143,6 +5156,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -5150,6 +5164,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -5195,9 +5211,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = MockKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -5227,6 +5243,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -5234,6 +5251,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = LoopTestingKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -5242,6 +5260,8 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++14";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.MockKit;
 				PRODUCT_NAME = MockKit;
 				SKIP_INSTALL = YES;
@@ -5255,6 +5275,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -5278,6 +5299,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -5301,6 +5323,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = NO;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -5325,6 +5348,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -5357,12 +5381,15 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
 				PRODUCT_NAME = LoopKit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -5387,12 +5414,15 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 41;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
 				INFOPLIST_FILE = LoopKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu99 gnu++11";
 				PRODUCT_BUNDLE_IDENTIFIER = com.loopkit.LoopKit;
 				PRODUCT_NAME = LoopKit;
 				PROVISIONING_PROFILE_SPECIFIER = "";

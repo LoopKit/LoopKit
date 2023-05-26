@@ -131,7 +131,6 @@ public struct QuantityPicker: View {
                     .foregroundColor(.gray)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                     .offset(x: pickerValueBounds.union(in: geometry).maxX + unitLabelSpacing)
-                    .animation(.default)
             }
         }
     }
