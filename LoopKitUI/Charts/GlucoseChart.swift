@@ -40,10 +40,9 @@ open class GlucoseChart {
     public private(set) var glucoseDisplayRangePoints: [ChartPoint] = []
 
     public func glucosePointsFromValues(_ glucoseValues: [GlucoseValue]) -> [ChartPoint] {
-        let unitFormatter = QuantityFormatter()
+        let unitFormatter = QuantityFormatter(for: glucoseUnit)
         unitFormatter.unitStyle = .short
-        unitFormatter.setPreferredNumberFormatter(for: glucoseUnit)
-        let unitString = unitFormatter.string(from: glucoseUnit)
+        let unitString = unitFormatter.localizedUnitStringWithPlurality()
         let dateFormatter = DateFormatter(timeStyle: .short)
 
         return glucoseValues.map {

@@ -9,18 +9,14 @@
 import HealthKit
 import LoopKit
 
-fileprivate let mgdLFormatter = QuantityFormatter()
-fileprivate let mmolLFormatter: QuantityFormatter = {
-    let result = QuantityFormatter()
-    result.numberFormatter.maximumFractionDigits = 1
-    return result
-}()
+fileprivate let mgdLFormatter = QuantityFormatter(for: .milligramsPerDeciliter)
+fileprivate let mmolLFormatter = QuantityFormatter(for: .millimolesPerLiter)
 
 extension HKQuantity {
     // TODO: pass in preferredUnit instead of having both units.
     var bothUnitsString: String {
         String(format: "%1$@ (%2$@)",
-               mgdLFormatter.string(from: self, for: .milligramsPerDeciliter)!,
-               mmolLFormatter.string(from: self, for: .millimolesPerLiter)!)
+               mgdLFormatter.string(from: self)!,
+               mmolLFormatter.string(from: self)!)
     }
 }

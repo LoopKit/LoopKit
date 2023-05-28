@@ -20,8 +20,7 @@ public class GlucoseEntryTableViewController: TextFieldTableViewController {
     let glucoseUnit: HKUnit
 
     private lazy var glucoseFormatter: NumberFormatter = {
-        let quantityFormatter = QuantityFormatter()
-        quantityFormatter.setPreferredNumberFormatter(for: glucoseUnit)
+        let quantityFormatter = QuantityFormatter(for: glucoseUnit)
         return quantityFormatter.numberFormatter
     }()
 

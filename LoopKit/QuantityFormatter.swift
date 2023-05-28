@@ -12,12 +12,11 @@ import HealthKit
 /// Formats unit quantities as localized strings
 open class QuantityFormatter {
 
-    public init() {
-    }
+    private var unit: HKUnit
 
-    public convenience init(for unit: HKUnit) {
-        self.init()
-        setPreferredNumberFormatter(for: unit)
+    public init(for unit: HKUnit) {
+        self.unit = unit
+        configureNumberFormatter()
     }
 
     /// The unit style determines how the unit strings are abbreviated, and spacing between the value and unit
@@ -45,10 +44,15 @@ open class QuantityFormatter {
         }
     }
 
-    /// Updates `numberFormatter` configuration for the specified unit
+    /// Updates the `numberFormatter` configuration for the specified unit
     ///
     /// - Parameter unit: The unit
-    open func setPreferredNumberFormatter(for unit: HKUnit) {
+    open func updateUnit(to unit: HKUnit) {
+        self.unit = unit
+        configureNumberFormatter()
+    }
+
+    private func configureNumberFormatter() {
         numberFormatter.numberStyle = .decimal
         numberFormatter.minimumFractionDigits = unit.preferredFractionDigits
         numberFormatter.maximumFractionDigits = unit.maxFractionDigits
@@ -100,10 +104,9 @@ open class QuantityFormatter {
     ///
     /// - Parameters:
     ///   - quantity: The quantity
-    ///   - unit: The unit. An exception is thrown if `quantity` is not compatible with the unit.
     ///   - includeUnit: Whether or not to include the unit in the returned string
     /// - Returns: A localized string, or nil if `numberFormatter` is unable to format the quantity value
-    open func string(from quantity: HKQuantity, for unit: HKUnit, includeUnit: Bool = true) -> String? {
+    open func string(from quantity: HKQuantity, includeUnit: Bool = true) -> String? {
         let value = quantity.doubleValue(for: unit)
 
         if !includeUnit {
@@ -115,17 +118,30 @@ open class QuantityFormatter {
         }
         
         // Pass 'false' for `avoidLineBreaking` because we don't want to do it twice.
-        return numberFormatter.string(from: value, unit: string(from: unit, forValue: value, avoidLineBreaking: false),
+        return numberFormatter.string(from: value, unit: localizedUnitStringWithPlurality(forValue: value, avoidLineBreaking: false),
                                       style: unitStyle, avoidLineBreaking: avoidLineBreaking)
     }
+
 
     /// Formats a unit as a localized string
     ///
     /// - Parameters:
     ///   - unit: The unit
-    ///   - value: An optional value for determining the plurality of the unit string
+    ///   - value: An HKQuantity for determining the plurality of the unit string.
     /// - Returns: A string for the unit. If no localization entry is available, the unlocalized `unitString` is returned.
-    open func string(from unit: HKUnit, forValue value: Double = 10, avoidLineBreaking: Bool? = nil) -> String {
+    open func localizedUnitStringWithPlurality(forQuantity value: HKQuantity, avoidLineBreaking: Bool? = nil) -> String {
+        let doubleValue = value.doubleValue(for: unit)
+        return localizedUnitStringWithPlurality(forValue: doubleValue, avoidLineBreaking: avoidLineBreaking)
+    }
+
+
+    /// Formats a unit as a localized string
+    ///
+    /// - Parameters:
+    ///   - unit: The unit
+    ///   - value: An optional value for determining the plurality of the unit string. Defaults to 10, which will result in pluralizing.
+    /// - Returns: A string for the unit. If no localization entry is available, the unlocalized `unitString` is returned.
+    open func localizedUnitStringWithPlurality(forValue value: Double = 10, avoidLineBreaking: Bool? = nil) -> String {
         let avoidLineBreaking = avoidLineBreaking ?? self.avoidLineBreaking
         if let string = unit.localizedUnitString(in: unitStyle, singular: abs(1.0 - value) < .ulpOfOne, avoidLineBreaking: avoidLineBreaking) {
             return string
@@ -170,6 +186,8 @@ public extension HKUnit {
         case .millimolesPerLiter,
              HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()),
              HKUnit.millimolesPerLiter.unitDivided(by: .minute()):
+            return 1
+        case .milligramsPerDeciliterPerMinute:
             return 1
         default:
             return 0
@@ -320,6 +338,29 @@ public extension HKUnit {
                     break  // Fallback to the MeasurementFormatter localization
                 }
             }
+
+            if self == HKUnit.millimolesPerLiterPerMinute {
+                switch style {
+                case .short, .medium:
+                    return LocalizedString("mmol/L/min", comment: "The short unit display string for millimoles per liter per minute")
+                case .long:
+                    fallthrough
+                @unknown default:
+                    break  // Fallback to the MeasurementFormatter localization
+                }
+            }
+
+            if self == HKUnit.milligramsPerDeciliterPerMinute {
+                switch style {
+                case .short, .medium:
+                    return LocalizedString("mg/dL/min", comment: "The short unit display string for milligrams per liter per minute")
+                case .long:
+                    fallthrough
+                @unknown default:
+                    break  // Fallback to the MeasurementFormatter localization
+                }
+            }
+
             
             return nil
         }
