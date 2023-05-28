@@ -12,11 +12,11 @@ import MockKit
 
 struct MockCGMManagerControlsView: UIViewControllerRepresentable {
     private let cgmManager: MockCGMManager
-    private let displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    private let displayGlucosePreference: DisplayGlucosePreference
 
-    init(cgmManager: MockCGMManager, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable) {
+    init(cgmManager: MockCGMManager, displayGlucosePreference: DisplayGlucosePreference) {
         self.cgmManager = cgmManager
-        self.displayGlucoseUnitObservable = displayGlucoseUnitObservable
+        self.displayGlucosePreference = displayGlucosePreference
     }
 
     final class Coordinator: NSObject {
@@ -28,7 +28,7 @@ struct MockCGMManagerControlsView: UIViewControllerRepresentable {
     }
 
     func makeUIViewController(context: Context) -> UIViewController {
-        return MockCGMManagerSettingsViewController(cgmManager: cgmManager, displayGlucoseUnitObservable: displayGlucoseUnitObservable)
+        return MockCGMManagerSettingsViewController(cgmManager: cgmManager, displayGlucosePreference: displayGlucosePreference)
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}

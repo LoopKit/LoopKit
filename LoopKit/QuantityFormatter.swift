@@ -122,6 +122,19 @@ open class QuantityFormatter {
                                       style: unitStyle, avoidLineBreaking: avoidLineBreaking)
     }
 
+
+    /// Formats a unit as a localized string
+    ///
+    /// - Parameters:
+    ///   - unit: The unit
+    ///   - value: An HKQuantity for determining the plurality of the unit string.
+    /// - Returns: A string for the unit. If no localization entry is available, the unlocalized `unitString` is returned.
+    open func localizedUnitStringWithPlurality(forQuantity value: HKQuantity, avoidLineBreaking: Bool? = nil) -> String {
+        let doubleValue = value.doubleValue(for: unit)
+        return localizedUnitStringWithPlurality(forValue: doubleValue, avoidLineBreaking: avoidLineBreaking)
+    }
+
+
     /// Formats a unit as a localized string
     ///
     /// - Parameters:

@@ -24,14 +24,14 @@ struct MockCGMManagerSettingsView: View {
     
     @State private var showSuspendOptions = false
     @State private var presentedAlert: PresentedAlert?
-    private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    private var displayGlucosePreference: DisplayGlucosePreference
     private let appName: String
     
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
-    init(cgmManager: MockCGMManager, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, appName: String) {
-        viewModel = MockCGMManagerSettingsViewModel(cgmManager: cgmManager, displayGlucoseUnitObservable: displayGlucoseUnitObservable)
-        self.displayGlucoseUnitObservable = displayGlucoseUnitObservable
+    init(cgmManager: MockCGMManager, displayGlucosePreference: DisplayGlucosePreference, appName: String) {
+        viewModel = MockCGMManagerSettingsViewModel(cgmManager: cgmManager, displayGlucosePreference: displayGlucosePreference)
+        self.displayGlucosePreference = displayGlucosePreference
         self.appName = appName
     }
     
@@ -62,7 +62,7 @@ struct MockCGMManagerSettingsView: View {
         Section {
             VStack(spacing: 8) {
                 sensorProgressView
-                    .openMockCGMSettingsOnLongPress(enabled: true, cgmManager: viewModel.cgmManager, displayGlucoseUnitObservable: displayGlucoseUnitObservable)
+                    .openMockCGMSettingsOnLongPress(enabled: true, cgmManager: viewModel.cgmManager, displayGlucosePreference: displayGlucosePreference)
                 Divider()
                 lastReadingInfo
             }
@@ -254,7 +254,7 @@ extension MockCGMManagerSettingsView.PresentedAlert: Identifiable {
 
 struct MockCGMManagerSettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        MockCGMManagerSettingsView(cgmManager: MockCGMManager(), displayGlucoseUnitObservable: DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter), appName: "Loop")
+        MockCGMManagerSettingsView(cgmManager: MockCGMManager(), displayGlucosePreference: DisplayGlucosePreference(displayGlucoseUnit: .milligramsPerDeciliter), appName: "Loop")
     }
 }
 
