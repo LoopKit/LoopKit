@@ -187,6 +187,8 @@ public extension HKUnit {
              HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()),
              HKUnit.millimolesPerLiter.unitDivided(by: .minute()):
             return 1
+        case .milligramsPerDeciliterPerMinute:
+            return 1
         default:
             return 0
         }
@@ -336,6 +338,29 @@ public extension HKUnit {
                     break  // Fallback to the MeasurementFormatter localization
                 }
             }
+
+            if self == HKUnit.millimolesPerLiterPerMinute {
+                switch style {
+                case .short, .medium:
+                    return LocalizedString("mmol/L/min", comment: "The short unit display string for millimoles per liter per minute")
+                case .long:
+                    fallthrough
+                @unknown default:
+                    break  // Fallback to the MeasurementFormatter localization
+                }
+            }
+
+            if self == HKUnit.milligramsPerDeciliterPerMinute {
+                switch style {
+                case .short, .medium:
+                    return LocalizedString("mg/dL/min", comment: "The short unit display string for milligrams per liter per minute")
+                case .long:
+                    fallthrough
+                @unknown default:
+                    break  // Fallback to the MeasurementFormatter localization
+                }
+            }
+
             
             return nil
         }

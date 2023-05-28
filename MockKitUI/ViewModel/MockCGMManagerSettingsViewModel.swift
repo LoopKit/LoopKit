@@ -91,11 +91,7 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
             return
         }
         let glucoseUnitPerMinute = displayGlucosePreference.unit.unitDivided(by: .minute())
-        // This seemingly strange replacement of glucose units is only to display the unit string correctly
-        let trendPerMinute = HKQuantity(unit: displayGlucosePreference.unit, doubleValue: trendRate.doubleValue(for: glucoseUnitPerMinute))
-        if let formatted = displayGlucosePreference.formatter.string(from: trendPerMinute) {
-            lastGlucoseTrendFormatted = String(format: LocalizedString("%@/min", comment: "Format string for glucose trend per minute. (1: glucose value and unit)"), formatted)
-        }
+        lastGlucoseTrendFormatted = displayGlucosePreference.formatMinuteRate(trendRate)
     }
     
     func setLastGlucoseValue(_ lastGlucose: HKQuantity?) {
@@ -105,8 +101,8 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
             return
         }
 
-        lastGlucoseValueWithUnitFormatted = displayGlucosePreference.formatter.string(from: lastGlucose)
-        lastGlucoseValueFormatted = displayGlucosePreference.formatter.string(from: lastGlucose, includeUnit: false) ?? "---"
+        lastGlucoseValueWithUnitFormatted = displayGlucosePreference.format(lastGlucose)
+        lastGlucoseValueFormatted = displayGlucosePreference.format(lastGlucose, includeUnit: false)
     }
 }
 

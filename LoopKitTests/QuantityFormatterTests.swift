@@ -126,10 +126,29 @@ class QuantityFormatterTests: XCTestCase {
         XCTAssertEqual("0.0 millimoles per liter", formatter.string(from: HKQuantity(unit: unit, doubleValue: 0))!)
         XCTAssertEqual("1.0 millimoles per liter", formatter.string(from: HKQuantity(unit: unit, doubleValue: 1))!)
     }
-    
+
+    func testGlucoseRates() {
+        var unit = HKUnit.millimolesPerLiterPerMinute
+        setFormatter(for: unit)
+
+        XCTAssertEqual("mmol/L/min", formatter.localizedUnitStringWithPlurality())
+        XCTAssertEqual("0.5 mmol/L/min", formatter.string(from: HKQuantity(unit: unit, doubleValue: 0.5))!)
+        XCTAssertEqual("0.8 mmol/L/min", formatter.string(from: HKQuantity(unit: unit, doubleValue: 0.8))!)
+        XCTAssertEqual("1.5 mmol/L/min", formatter.string(from: HKQuantity(unit: unit, doubleValue: 1.5))!)
+
+        unit = HKUnit.milligramsPerDeciliterPerMinute
+        setFormatter(for: unit)
+
+        XCTAssertEqual("mg/dL/min", formatter.localizedUnitStringWithPlurality())
+        XCTAssertEqual("1.0 mg/dL/min", formatter.string(from: HKQuantity(unit: unit, doubleValue: 1.0))!)
+        XCTAssertEqual("5.2 mg/dL/min", formatter.string(from: HKQuantity(unit: unit, doubleValue: 5.2))!)
+        XCTAssertEqual("10.1 mg/dL/min", formatter.string(from: HKQuantity(unit: unit, doubleValue: 10.1))!)
+
+    }
+
     func testAvoidLineBreaking() {
-        formatter.avoidLineBreaking = true
         setFormatter(for: .internationalUnit())
+        formatter.avoidLineBreaking = true
         XCTAssertEqual("U", formatter.localizedUnitStringWithPlurality())
         XCTAssertEqual("10\(String.nonBreakingSpace)U", formatter.string(from: HKQuantity(unit: HKUnit.internationalUnit(), doubleValue: 10))!)
         formatter.unitStyle = .short
@@ -140,6 +159,7 @@ class QuantityFormatterTests: XCTestCase {
         
         formatter.unitStyle = .medium
         setFormatter(for: HKUnit.milligramsPerDeciliter)
+        formatter.avoidLineBreaking = true
         XCTAssertEqual("mg\(String.wordJoiner)/\(String.wordJoiner)dL", formatter.localizedUnitStringWithPlurality())
         XCTAssertEqual("60\(String.nonBreakingSpace)mg\(String.wordJoiner)/\(String.wordJoiner)dL", formatter.string(from: HKQuantity(unit: HKUnit.milligramsPerDeciliter, doubleValue: 60))!)
         XCTAssertEqual("180\(String.nonBreakingSpace)mg\(String.wordJoiner)/\(String.wordJoiner)dL", formatter.string(from: HKQuantity(unit: HKUnit.milligramsPerDeciliter, doubleValue: 180))!)
@@ -155,6 +175,7 @@ class QuantityFormatterTests: XCTestCase {
         
         formatter.unitStyle = .medium
         setFormatter(for: HKUnit.millimolesPerLiter)
+        formatter.avoidLineBreaking = true
         XCTAssertEqual("mmol\(String.wordJoiner)/\(String.wordJoiner)L", formatter.localizedUnitStringWithPlurality())
         XCTAssertEqual("6.0\(String.nonBreakingSpace)mmol\(String.wordJoiner)/\(String.wordJoiner)L", formatter.string(from: HKQuantity(unit: HKUnit.millimolesPerLiter, doubleValue: 6))!)
         XCTAssertEqual("7.8\(String.nonBreakingSpace)mmol\(String.wordJoiner)/\(String.wordJoiner)L", formatter.string(from: HKQuantity(unit: HKUnit.millimolesPerLiter, doubleValue: 7.84))!)

@@ -40,7 +40,7 @@ struct InsulinStatusView: View {
         return 65 + subViewSpacing
     }
 
-    let basalRateFormatter = QuantityFormatter(for: .internationalUnit())
+    let basalRateFormatter = QuantityFormatter(for: .internationalUnitsPerHour)
 
     private var inNoDelivery: Bool {
         !viewModel.isDeliverySuspended && viewModel.basalDeliveryRate == nil
