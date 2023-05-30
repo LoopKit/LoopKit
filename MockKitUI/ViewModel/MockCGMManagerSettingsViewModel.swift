@@ -17,7 +17,7 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
     
     let cgmManager: MockCGMManager
     
-    var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    var displayGlucosePreference: DisplayGlucosePreference
 
     static private let dateTimeFormatter: DateFormatter = {
         let timeFormatter = DateFormatter()
@@ -26,14 +26,6 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
         return timeFormatter
     }()
     
-    private lazy var glucoseFormatter: QuantityFormatter = {
-        let formatter = QuantityFormatter()
-        formatter.setPreferredNumberFormatter(for: displayGlucoseUnitObservable.displayGlucoseUnit)
-        formatter.numberFormatter.notANumberSymbol = "–"
-        formatter.avoidLineBreaking = true
-        return formatter
-    }()
- 
     var sensorInsertionDateTimeString: String {
         Self.dateTimeFormatter.string(from: Date().addingTimeInterval(sensorInsertionInterval))
     }
@@ -51,7 +43,7 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
     @Published private(set) var lastGlucoseValueFormatted: String = "---"
     
     var glucoseUnitString: String {
-        displayGlucoseUnitObservable.displayGlucoseUnit.shortLocalizedUnitString()
+        displayGlucosePreference.unit.shortLocalizedUnitString()
     }
     
     @Published private(set) var lastGlucoseDate: Date? {
@@ -81,11 +73,9 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
     
     @Published private(set) var lastGlucoseTrendFormatted: String?
     
-    lazy private var cancellables = Set<AnyCancellable>()
-    
-    init(cgmManager: MockCGMManager, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable) {
+    init(cgmManager: MockCGMManager, displayGlucosePreference: DisplayGlucosePreference) {
         self.cgmManager = cgmManager
-        self.displayGlucoseUnitObservable = displayGlucoseUnitObservable
+        self.displayGlucosePreference = displayGlucosePreference
                 
         lastGlucoseDate = cgmManager.cgmManagerStatus.lastCommunicationDate
         lastGlucoseTrend = cgmManager.mockSensorState.trendType
@@ -93,10 +83,6 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
         setLastGlucoseValue(cgmManager.mockSensorState.currentGlucose)
         
         cgmManager.addStatusObserver(self, queue: .main)
-        
-        self.displayGlucoseUnitObservable.$displayGlucoseUnit
-            .sink { [weak self] in self?.glucoseFormatter.setPreferredNumberFormatter(for: $0) }
-            .store(in: &cancellables)
     }
     
     func setLastGlucoseTrend(_ trendRate: HKQuantity?) {
@@ -104,12 +90,8 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
             lastGlucoseTrendFormatted = nil
             return
         }
-        let glucoseUnitPerMinute = displayGlucoseUnitObservable.displayGlucoseUnit.unitDivided(by: .minute())
-        // This seemingly strange replacement of glucose units is only to display the unit string correctly
-        let trendPerMinute = HKQuantity(unit: displayGlucoseUnitObservable.displayGlucoseUnit, doubleValue: trendRate.doubleValue(for: glucoseUnitPerMinute))
-        if let formatted = glucoseFormatter.string(from: trendPerMinute, for: displayGlucoseUnitObservable.displayGlucoseUnit) {
-            lastGlucoseTrendFormatted = String(format: LocalizedString("%@/min", comment: "Format string for glucose trend per minute. (1: glucose value and unit)"), formatted)
-        }
+        let glucoseUnitPerMinute = displayGlucosePreference.unit.unitDivided(by: .minute())
+        lastGlucoseTrendFormatted = displayGlucosePreference.formatMinuteRate(trendRate)
     }
     
     func setLastGlucoseValue(_ lastGlucose: HKQuantity?) {
@@ -119,8 +101,8 @@ class MockCGMManagerSettingsViewModel: ObservableObject {
             return
         }
 
-        lastGlucoseValueWithUnitFormatted = glucoseFormatter.string(from: lastGlucose, for: displayGlucoseUnitObservable.displayGlucoseUnit)
-        lastGlucoseValueFormatted = glucoseFormatter.string(from: lastGlucose, for: displayGlucoseUnitObservable.displayGlucoseUnit, includeUnit: false) ?? "---"
+        lastGlucoseValueWithUnitFormatted = displayGlucosePreference.format(lastGlucose)
+        lastGlucoseValueFormatted = displayGlucosePreference.format(lastGlucose, includeUnit: false)
     }
 }
 

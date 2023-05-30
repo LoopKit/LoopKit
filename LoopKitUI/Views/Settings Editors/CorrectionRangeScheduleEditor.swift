@@ -12,7 +12,7 @@ import LoopKit
 
 
 public struct CorrectionRangeScheduleEditor: View {
-    @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.appName) private var appName
 
     let mode: SettingsPresentationMode
@@ -23,7 +23,7 @@ public struct CorrectionRangeScheduleEditor: View {
     @State private var userDidTap: Bool = false
 
     var displayGlucoseUnit: HKUnit {
-        displayGlucoseUnitObservable.displayGlucoseUnit
+        displayGlucosePreference.unit
     }
 
     var initialSchedule: GlucoseRangeSchedule? {

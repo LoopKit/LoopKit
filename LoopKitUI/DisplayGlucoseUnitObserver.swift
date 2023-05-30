@@ -10,5 +10,5 @@ import Foundation
 import HealthKit
 
 public protocol DisplayGlucoseUnitObserver {
-    func displayGlucoseUnitDidChange(to displayGlucoseUnit: HKUnit)
+    func unitDidChange(to displayGlucoseUnit: HKUnit)
 }

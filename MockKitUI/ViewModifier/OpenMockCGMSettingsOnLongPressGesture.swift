@@ -11,8 +11,8 @@ import LoopKitUI
 import MockKit
 
 extension View {
-    func openMockCGMSettingsOnLongPress(enabled: Bool = true, minimumDuration: Double = 5, cgmManager: MockCGMManager, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable) -> some View {
-        modifier(OpenMockCGMSettingsOnLongPressGesture(enabled: enabled, minimumDuration: minimumDuration, cgmManager: cgmManager, displayGlucoseUnitObservable: displayGlucoseUnitObservable))
+    func openMockCGMSettingsOnLongPress(enabled: Bool = true, minimumDuration: Double = 5, cgmManager: MockCGMManager, displayGlucosePreference: DisplayGlucosePreference) -> some View {
+        modifier(OpenMockCGMSettingsOnLongPressGesture(enabled: enabled, minimumDuration: minimumDuration, cgmManager: cgmManager, displayGlucosePreference: displayGlucosePreference))
     }
 }
 
@@ -20,14 +20,14 @@ fileprivate struct OpenMockCGMSettingsOnLongPressGesture: ViewModifier {
     private let enabled: Bool
     private let minimumDuration: TimeInterval
     private let cgmManager: MockCGMManager
-    private let displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    private let displayGlucosePreference: DisplayGlucosePreference
     @State private var mockCGMSettingsDisplayed = false
 
-    init(enabled: Bool, minimumDuration: Double, cgmManager: MockCGMManager, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable) {
+    init(enabled: Bool, minimumDuration: Double, cgmManager: MockCGMManager, displayGlucosePreference: DisplayGlucosePreference) {
         self.enabled = enabled
         self.minimumDuration = minimumDuration
         self.cgmManager = cgmManager
-        self.displayGlucoseUnitObservable = displayGlucoseUnitObservable
+        self.displayGlucosePreference = displayGlucosePreference
     }
 
     func body(content: Content) -> some View {
@@ -40,7 +40,7 @@ fileprivate struct OpenMockCGMSettingsOnLongPressGesture: ViewModifier {
                 .onLongPressGesture(minimumDuration: minimumDuration) {
                     mockCGMSettingsDisplayed = true
                 }
-            NavigationLink(destination: MockCGMManagerControlsView(cgmManager: cgmManager, displayGlucoseUnitObservable: displayGlucoseUnitObservable), isActive: $mockCGMSettingsDisplayed) {
+            NavigationLink(destination: MockCGMManagerControlsView(cgmManager: cgmManager, displayGlucosePreference: displayGlucosePreference), isActive: $mockCGMSettingsDisplayed) {
                 EmptyView()
             }
             .opacity(0) // <- Hides the Chevron

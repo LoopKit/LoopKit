@@ -33,8 +33,7 @@ public struct GuardrailConstrainedQuantityRangeView: View {
         self.guardrail = guardrail
         self.isEditing = isEditing
         self.formatter = {
-            let quantityFormatter = QuantityFormatter()
-            quantityFormatter.setPreferredNumberFormatter(for: unit)
+            let quantityFormatter = QuantityFormatter(for: unit)
             return quantityFormatter.numberFormatter
         }()
         self.forceDisableAnimations = forceDisableAnimations

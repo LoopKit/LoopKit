@@ -34,8 +34,7 @@ public struct OverrideSelectionHistory: View {
     public init(model: OverrideHistoryViewModel) {
         self.model = model
         self.quantityFormatter = {
-            let quantityFormatter = QuantityFormatter()
-            quantityFormatter.setPreferredNumberFormatter(for: model.glucoseUnit)
+            let quantityFormatter = QuantityFormatter(for: model.glucoseUnit)
             return quantityFormatter
         }()
         self.glucoseNumberFormatter = quantityFormatter.numberFormatter
@@ -82,7 +81,7 @@ public struct OverrideSelectionHistory: View {
             return ""
         }
 
-        return String(format: LocalizedString("%1$@ – %2$@ %3$@", comment: "The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit)"), minTarget, maxTarget, quantityFormatter.string(from: model.glucoseUnit))
+        return String(format: LocalizedString("%1$@ – %2$@ %3$@", comment: "The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit)"), minTarget, maxTarget, quantityFormatter.localizedUnitStringWithPlurality())
     }
     
     private func createCell(for override: TemporaryScheduleOverride) -> OverrideViewCell {

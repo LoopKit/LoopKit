@@ -40,19 +40,19 @@ public protocol CGMManagerUI: CGMManager, DeviceManagerUI, DisplayGlucoseUnitObs
     ///
     /// - Parameters:
     ///     - bluetoothProvider: The provider of Bluetooth functionality.
-    ///     - displayGlucoseUnitObservable: The glucose units to use for display.
+    ///     - displayGlucosePreference: The glucose units to use for display.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: Either a conforming view controller to create and onboard the CGM manager or a newly created and onboarded CGM manager.
-    static func setupViewController(bluetoothProvider: BluetoothProvider, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, prefersToSkipUserInteraction: Bool) -> SetupUIResult<CGMManagerViewController, CGMManagerUI>
+    static func setupViewController(bluetoothProvider: BluetoothProvider, displayGlucosePreference: DisplayGlucosePreference, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, prefersToSkipUserInteraction: Bool) -> SetupUIResult<CGMManagerViewController, CGMManagerUI>
 
     /// Configure settings for an existing CGM manager.
     ///
     /// - Parameters:
     ///     - bluetoothProvider: The provider of Bluetooth functionality.
-    ///     - displayGlucoseUnitObservable: The glucose units to use for display.
+    ///     - displayGlucosePreference: The glucose units to use for display.
     ///     - colorPalette: Color palette to use for any UI.
     /// - Returns: A view controller to configure an existing CGM manager.
-    func settingsViewController(bluetoothProvider: BluetoothProvider, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> CGMManagerViewController
+    func settingsViewController(bluetoothProvider: BluetoothProvider, displayGlucosePreference: DisplayGlucosePreference, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> CGMManagerViewController
 }
 
 extension CGMManagerUI {
@@ -61,7 +61,7 @@ extension CGMManagerUI {
     }
 
     /// When conformance to the DisplayGlucoseUnitObserver is desired, use this function to be notified when the user display glucose unit changes
-    public func displayGlucoseUnitDidChange(to displayGlucoseUnit: HKUnit) {
+    public func unitDidChange(to displayGlucoseUnit: HKUnit) {
         // optional
     }
 }

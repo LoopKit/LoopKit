@@ -12,7 +12,7 @@ import LoopKit
 import SwiftUI
 
 public struct TherapySettingsView: View {
-    @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.chartColorPalette) var chartColorPalette
     @Environment(\.dismissAction) var dismissAction
     @Environment(\.appName) private var appName
@@ -475,7 +475,7 @@ extension TherapySettingsView {
 extension TherapySettingsView {
     
     private var glucoseUnit: HKUnit {
-        displayGlucoseUnitObservable.displayGlucoseUnit
+        displayGlucosePreference.unit
     }
     
     private var sensitivityUnit: HKUnit {
@@ -648,12 +648,12 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (onboarding)")
-                .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
+                .environmentObject(DisplayGlucosePreference(displayGlucoseUnit: .milligramsPerDeciliter))
             TherapySettingsView(mode: .settings, viewModel: preview_viewModel())
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (settings)")
-                .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
+                .environmentObject(DisplayGlucosePreference(displayGlucoseUnit: .milligramsPerDeciliter))
             TherapySettingsView(mode: .settings, viewModel: preview_viewModel())
                 .colorScheme(.dark)
                 .previewDevice(PreviewDevice(rawValue: "iPhone XS Max"))
@@ -662,7 +662,7 @@ public struct TherapySettingsView_Previews: PreviewProvider {
                 .colorScheme(.light)
                 .previewDevice(PreviewDevice(rawValue: "iPhone SE 2"))
                 .previewDisplayName("SE light (Empty TherapySettings)")
-                .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .millimolesPerLiter))
+                .environmentObject(DisplayGlucosePreference(displayGlucoseUnit: .millimolesPerLiter))
         }
     }
 }

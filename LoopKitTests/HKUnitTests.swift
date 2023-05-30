@@ -22,7 +22,7 @@ class HKUnitTests: XCTestCase {
         XCTAssertEqual(HKUnit.gram().unitDivided(by: .internationalUnit()).preferredFractionDigits, 0)
         XCTAssertEqual(HKUnit.milligramsPerDeciliter.preferredFractionDigits, 0)
         XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()).preferredFractionDigits, 0)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .minute()).preferredFractionDigits, 0)
+        XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .minute()).preferredFractionDigits, 1)
         XCTAssertEqual(HKUnit.internationalUnit().preferredFractionDigits, 0)
         XCTAssertEqual(HKUnit.internationalUnit().unitDivided(by: .hour()).preferredFractionDigits, 0)
     }
@@ -47,7 +47,7 @@ class HKUnitTests: XCTestCase {
         XCTAssertEqual(HKUnit.gram().maxFractionDigits, 0)
         XCTAssertEqual(HKUnit.milligramsPerDeciliter.maxFractionDigits, 0)
         XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()).maxFractionDigits, 0)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .minute()).maxFractionDigits, 0)
+        XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .minute()).maxFractionDigits, 1)
     }
 
     func testPickerFractionDigits() throws {

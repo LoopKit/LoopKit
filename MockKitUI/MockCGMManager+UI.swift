@@ -24,12 +24,12 @@ extension MockCGMManager: CGMManagerUI {
 
     public var smallImage: UIImage? { return UIImage(named: "CGM Simulator", in: Bundle(for: MockCGMManagerSettingsViewController.self), compatibleWith: nil) }
 
-    public static func setupViewController(bluetoothProvider: BluetoothProvider, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, prefersToSkipUserInteraction: Bool) -> SetupUIResult<CGMManagerViewController, CGMManagerUI> {
+    public static func setupViewController(bluetoothProvider: BluetoothProvider, displayGlucosePreference: DisplayGlucosePreference, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool, prefersToSkipUserInteraction: Bool) -> SetupUIResult<CGMManagerViewController, CGMManagerUI> {
         return .createdAndOnboarded(MockCGMManager())
     }
 
-    public func settingsViewController(bluetoothProvider: BluetoothProvider, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> CGMManagerViewController {
-        let settings = MockCGMManagerSettingsView(cgmManager: self, displayGlucoseUnitObservable: displayGlucoseUnitObservable, appName: appName)
+    public func settingsViewController(bluetoothProvider: BluetoothProvider, displayGlucosePreference: DisplayGlucosePreference, colorPalette: LoopUIColorPalette, allowDebugFeatures: Bool) -> CGMManagerViewController {
+        let settings = MockCGMManagerSettingsView(cgmManager: self, displayGlucosePreference: displayGlucosePreference, appName: appName)
         let hostingController = DismissibleHostingController(rootView: settings, colorPalette: colorPalette)
         hostingController.navigationItem.backButtonDisplayMode = .generic
         let nav = CGMManagerSettingsNavigationViewController(rootViewController: hostingController)

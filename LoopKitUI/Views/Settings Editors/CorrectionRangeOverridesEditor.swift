@@ -11,7 +11,7 @@ import HealthKit
 import LoopKit
 
 public struct CorrectionRangeOverridesEditor: View {
-    @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.dismissAction) var dismiss
     @Environment(\.authenticate) var authenticate
 
@@ -41,7 +41,7 @@ public struct CorrectionRangeOverridesEditor: View {
     }
 
     var displayGlucoseUnit: HKUnit {
-        displayGlucoseUnitObservable.displayGlucoseUnit
+        displayGlucosePreference.unit
     }
     
     public init(

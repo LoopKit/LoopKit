@@ -83,8 +83,7 @@ public struct QuantityPicker: View {
         self.unit = unit
         self.selectableValues = selectableValues
         self.formatter = formatter ?? {
-            let quantityFormatter = QuantityFormatter()
-            quantityFormatter.setPreferredNumberFormatter(for: unit)
+            let quantityFormatter = QuantityFormatter(for: unit)
             return quantityFormatter.numberFormatter
         }()
         self.isUnitLabelVisible = isUnitLabelVisible

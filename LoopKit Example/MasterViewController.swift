@@ -182,7 +182,7 @@ class MasterViewController: UITableViewController {
                     self.dataManager?.glucoseTargetRangeSchedule = therapySettingsViewModel.therapySettings.glucoseTargetRangeSchedule
                     self.navigationController?.popToViewController(self, animated: true)
                 })
-                    .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
+                    .environmentObject(DisplayGlucosePreference(displayGlucoseUnit: .milligramsPerDeciliter))
 
                 let scheduleVC = DismissibleHostingController(rootView: view, dismissalMode: .pop(to:  type(of: self)), isModalInPresentation: false)
                 show(scheduleVC, sender: sender)
