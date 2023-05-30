@@ -409,7 +409,7 @@ extension TherapySettingsView {
     
     private var supportSection: some View {
         Section {
-            NavigationLink(destination: Text("Therapy Settings Support Placeholder")) {
+            NavigationLink(destination: DemoPlaceHolderView(appName: appName)) {
                 HStack {
                     Text("Get help with Therapy Settings", comment: "Support button for Therapy Settings")
                         .foregroundColor(.primary)
