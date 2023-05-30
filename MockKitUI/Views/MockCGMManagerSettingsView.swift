@@ -216,7 +216,7 @@ struct MockCGMManagerSettingsView: View {
     private var supportSection: some View {
         Section(header: SectionHeader(label: "Support")) {
             NavigationLink(destination: DemoPlaceHolderView(appName: appName)) {
-                Text("Get help with your pump")
+                Text("Get help with your CGM")
             }
         }
     }
