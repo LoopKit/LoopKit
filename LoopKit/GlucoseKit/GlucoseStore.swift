@@ -105,6 +105,33 @@ public final class GlucoseStore {
     private let provenanceIdentifier: String
 
     public var healthKitStorageDelay: TimeInterval = 0
+
+    // MARK: - ReadyState
+    private enum ReadyState {
+        case waiting
+        case ready
+        case error(Error)
+    }
+
+    public typealias ReadyCallback = (_ error: Error?) -> Void
+
+    private var readyCallbacks: [ReadyCallback] = []
+
+    private var readyState: ReadyState = .waiting
+
+    public func onReady(_ callback: @escaping ReadyCallback) {
+        queue.async {
+            switch self.readyState {
+            case .waiting:
+                self.readyCallbacks.append(callback)
+            case .ready:
+                callback(nil)
+            case .error(let error):
+                callback(error)
+            }
+        }
+    }
+
     
     // If HealthKit sharing is not authorized, `nil` will prevent later storage
     var healthKitStorageDelayIfAllowed: TimeInterval? {
@@ -135,6 +162,13 @@ public final class GlucoseStore {
 
         cacheStore.onReady { (error) in
             guard error == nil else {
+                self.queue.async {
+                    self.readyState = .error(error!)
+                    for callback in self.readyCallbacks {
+                        callback(error)
+                    }
+                    self.readyCallbacks = []
+                }
                 return
             }
 
@@ -142,6 +176,12 @@ public final class GlucoseStore {
                 self.queue.async {
                     self.hkSampleStore?.setInitialQueryAnchor(anchor)
                     self.updateLatestGlucose()
+                    self.readyState = .ready
+                    for callback in self.readyCallbacks {
+                        callback(error)
+                    }
+                    self.readyCallbacks = []
+
                 }
             }
         }
