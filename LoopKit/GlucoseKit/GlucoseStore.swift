@@ -215,6 +215,27 @@ extension GlucoseStore: HealthKitSampleStoreDelegate {
 // MARK: - Fetching
 
 extension GlucoseStore {
+
+    /// Retrieves glucose samples within the specified date range.
+    ///
+    /// - Parameters:
+    ///   - start: The earliest date of glucose samples to retrieve, if provided.
+    ///   - end: The latest date of glucose samples to retrieve, if provided.
+    ///   - returns: An array of glucose samples, in chronological order by startDate, or error.
+    public func getGlucoseSamples(start: Date? = nil, end: Date? = nil) async throws -> [StoredGlucoseSample] {
+        try await withCheckedThrowingContinuation { continuation in
+            queue.async {
+                let result = self.getGlucoseSamples(start: start, end: end)
+                switch result {
+                case .success(let samples):
+                    continuation.resume(returning: samples)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
     /// Retrieves glucose samples within the specified date range.
     ///
     /// - Parameters:

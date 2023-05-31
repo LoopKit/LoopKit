@@ -26,4 +26,7 @@ public protocol GlucoseSampleValue: GlucoseValue {
 
     /// The trend rate of the sample.
     var trendRate: HKQuantity? { get }
+
+    /// The syncIdentifier of the sample.
+    var syncIdentifier: String? { get }
 }
