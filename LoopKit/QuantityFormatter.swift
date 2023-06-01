@@ -183,6 +183,8 @@ public extension HKUnit {
 
     var preferredFractionDigits: Int {
         switch self {
+        case .internationalUnit():
+            return 2
         case .millimolesPerLiter,
              HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()),
              HKUnit.millimolesPerLiter.unitDivided(by: .minute()):
@@ -233,7 +235,7 @@ public extension HKUnit {
     var maxFractionDigits: Int {
         switch self {
         case .internationalUnit(), .internationalUnitsPerHour:
-            return 3
+            return 2
         case HKUnit.gram().unitDivided(by: .internationalUnit()):
             return 1
         default:
