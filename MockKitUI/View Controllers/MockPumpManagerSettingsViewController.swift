@@ -23,7 +23,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         self.pumpManager = pumpManager
         self.supportedInsulinTypes = supportedInsulinTypes
         super.init(style: .grouped)
-        title = LocalizedString("Pump Settings", comment: "Title for Pump simulator settings")
+        title = pumpManager.localizedTitle
     }
 
     required init?(coder aDecoder: NSCoder) {

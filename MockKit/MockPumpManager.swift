@@ -47,7 +47,7 @@ public final class MockPumpManager: TestingPumpManager {
         return MockPumpManager.managerIdentifier
     }
     
-    public static let localizedTitle = "Insulin Pump Simulator"
+    public static let localizedTitle = "Pump Simulator"
     
     public var localizedTitle: String {
         return MockPumpManager.localizedTitle

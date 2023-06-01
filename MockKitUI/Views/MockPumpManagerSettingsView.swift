@@ -27,9 +27,11 @@ struct MockPumpManagerSettingsView: View {
 
     private var supportedInsulinTypes: [InsulinType]
     private var appName: String
+    private var title: String
     
     init(pumpManager: MockPumpManager, supportedInsulinTypes: [InsulinType], appName: String) {
         viewModel = MockPumpManagerSettingsViewModel(pumpManager: pumpManager)
+        title = pumpManager.localizedTitle
         self.supportedInsulinTypes = supportedInsulinTypes
         self.appName = appName
     }
@@ -46,7 +48,7 @@ struct MockPumpManagerSettingsView: View {
         }
         .insetGroupedListStyle()
         .navigationBarItems(trailing: doneButton)
-        .navigationBarTitle(Text("Pump Simulator"), displayMode: .large)
+        .navigationBarTitle(Text(title), displayMode: .large)
         .alert(item: $presentedAlert, content: alert(for:))
     }
     
@@ -205,7 +207,7 @@ struct MockPumpManagerSettingsView: View {
     
     private var pumpTimeSubSection: some View {
         Section {
-            LabeledValueView(label: "Pump Time", value: viewModel.pumpTimeString)
+            TimeView(label: "Pump Time")
         }
     }
     
