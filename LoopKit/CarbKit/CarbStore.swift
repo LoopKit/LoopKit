@@ -726,13 +726,33 @@ extension CarbStore {
 
         return try cacheStore.managedObjectContext.fetch(request)
     }
+
+    // Fetch latest carb entry, based on startDate
+    public func fetchLatestCarbEntry() async throws -> StoredCarbEntry? {
+        return try await withCheckedThrowingContinuation({ continuation in
+            queue.async {
+
+                let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
+                request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
+                request.fetchLimit = 1
+
+                do {
+                    let entries = try self.cacheStore.managedObjectContext.fetch(request).compactMap { StoredCarbEntry(managedObject: $0) }
+                    continuation.resume(returning: entries.first)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        })
+    }
+
 }
 
-// MARK: - Watch Synchronization
+// MARK: - External Store Synchronization
 
 extension CarbStore {
 
-    /// Get carb objects in main app to deliver to Watch extension
+    /// Get carb objects in main app for syncing to another store
     public func getSyncCarbObjects(start: Date? = nil, end: Date? = nil, completion: @escaping (_ result: CarbStoreResult<[SyncCarbObject]>) -> Void) {
         queue.async {
             var objects: [SyncCarbObject] = []
@@ -755,7 +775,7 @@ extension CarbStore {
         }
     }
 
-    /// Store carb objects in Watch extension
+    /// Store carb objects from another store
     public func setSyncCarbObjects(_ objects: [SyncCarbObject], completion: @escaping (CarbStoreError?) -> Void) {
         queue.async {
             if let error = self.purgeCachedCarbObjectsUnconditionally() {
