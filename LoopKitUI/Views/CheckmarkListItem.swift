@@ -15,13 +15,15 @@ public struct CheckmarkListItem: View {
     var description: Text
     @Binding var isSelected: Bool
     let isEnabled: Bool
+    var trailingView: AnyView? = nil
 
-    public init(title: Text, titleFont: Font = .headline, description: Text, isSelected: Binding<Bool>, isEnabled: Bool = true) {
+    public init(title: Text, titleFont: Font = .headline, description: Text, isSelected: Binding<Bool>, isEnabled: Bool = true, trailingView: AnyView? = nil) {
         self.title = title
         self.titleFont = titleFont
         self.description = description
         self._isSelected = isSelected
         self.isEnabled = isEnabled
+        self.trailingView = trailingView
     }
 
     @ViewBuilder
@@ -36,23 +38,29 @@ public struct CheckmarkListItem: View {
     }
     
     private var content: some View {
-        HStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 4) {
-                title
-                    .font(titleFont)
-                description
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .multilineTextAlignment(.leading)
+        VStack(alignment: .leading) {
+            HStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 4) {
+                    title
+                        .font(titleFont)
+                    description
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .multilineTextAlignment(.leading)
+                }
+
+                Spacer(minLength: 12)
+
+                selectionIndicator
+                    .accessibility(label: Text(isSelected ? "Selected" : "Unselected"))
             }
-
-            Spacer(minLength: 12)
-
-            selectionIndicator
-                .accessibility(label: Text(isSelected ? "Selected" : "Unselected"))
+            .animation(nil)
+            if let trailingView = trailingView {
+                trailingView
+                    .padding(.top, 4)
+            }
         }
-        .animation(nil)
     }
 
     @ViewBuilder
