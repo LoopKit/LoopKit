@@ -1221,6 +1221,17 @@ extension DoseStore {
         }
     }
 
+    /// Retrieves most recent bolus
+    ///
+    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+    ///
+    /// - Parameters:
+    ///   - returns: A DoseEntry representing the most recent bolus, or nil, if there is no recent bolus
+    public func getLatestBolus() async throws -> DoseEntry? {
+        return try await insulinDeliveryStore.getLatestBolus()
+    }
+
+
     /// Retrieves the maximum insulin on-board value from the two timeline values nearest to the specified date
     ///
     /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.

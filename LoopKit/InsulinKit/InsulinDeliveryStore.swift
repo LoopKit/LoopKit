@@ -276,6 +276,33 @@ extension InsulinDeliveryStore {
         }
     }
 
+    /// Retrieves most recent bolus
+    ///
+    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+    ///
+    /// - Parameters:
+    ///   - returns: A DoseEntry representing the most recent bolus, or nil, if there is no recent bolus
+    public func getLatestBolus() async throws -> DoseEntry? {
+        return try await withCheckedThrowingContinuation({ continuation in
+            queue.async {
+                self.cacheStore.managedObjectContext.performAndWait {
+                    let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
+                    request.predicate = NSPredicate(format: "reason == %d", HKInsulinDeliveryReason.bolus.rawValue)
+                    request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
+                    request.fetchLimit = 1
+
+                    do {
+                        let doses = try self.cacheStore.managedObjectContext.fetch(request).compactMap{ $0.dose }
+                        continuation.resume(returning: doses.first)
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        })
+    }
+
+
     /// Returns the end date of the most recent basal dose entry.
     ///
     /// - Parameters:

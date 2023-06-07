@@ -90,35 +90,52 @@ public final class PersistenceController {
         }
     }
 
+    // Cache model
+    private static var cachedModel: NSManagedObjectModel?
+
+    private static func model() throws -> NSManagedObjectModel {
+        if cachedModel == nil {
+            guard let modelURL = LocalBundle.main.url(forResource: "Model", withExtension: "momd") else {
+                throw CoreDataError.modelURLNotFound(forResourceName: "Model")
+            }
+            cachedModel = NSManagedObjectModel(contentsOf: modelURL)
+            if cachedModel == nil {
+                throw CoreDataError.modelLoadingFailed(forURL: modelURL)
+            }
+        }
+        return cachedModel!
+    }
+
+    enum CoreDataError: Error {
+        case modelURLNotFound(forResourceName: String)
+        case modelLoadingFailed(forURL: URL)
+    }
+
     /// Initializes a new persistence controller in the specified directory
     ///
     /// - Parameters:
     ///   - directoryURL: The directory where the SQLlite database is stored. Will be created with no file protection if it doesn't exist.
-    ///   - model: The managed object model definition
     ///   - isReadOnly: Whether the persistent store is intended to be read-only. Read-only stores will observe cross-process notifications and reload all contexts when data changes. Writable stores will post these notifications.
     public init(
         directoryURL: URL,
         isReadOnly: Bool = false
     ) {
-        
-        guard let url = LocalBundle.main.url(forResource: "Model", withExtension: "momd") else {
-            log.error("Could not find Model url")
-            fatalError("Unable to find Model url")
-        }
-        
-        guard let model = NSManagedObjectModel(contentsOf: url) else {
-            log.error("Could not open Model url at %@", String(describing: url))
-            fatalError("Unable to find Model url")
-        }
-        
-        managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
-        managedObjectContext.automaticallyMergesChangesFromParent = true
 
-        self.directoryURL = directoryURL
-        self.isReadOnly = isReadOnly
-        
-        initializeStack(inDirectory: directoryURL, model: model)
+        do {
+            let model = try Self.model()
+
+            managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+            managedObjectContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
+            managedObjectContext.automaticallyMergesChangesFromParent = true
+
+            self.directoryURL = directoryURL
+            self.isReadOnly = isReadOnly
+
+            initializeStack(inDirectory: directoryURL, model: model)
+        } catch {
+            log.error("Unable to load model: %{public}@", error.localizedDescription)
+            fatalError("Unable to load model \(error)")
+        }
     }
 
     @discardableResult
