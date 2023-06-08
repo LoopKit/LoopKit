@@ -645,12 +645,13 @@
 		B42C950E24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42C950C24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift */; };
 		B42C951924A508CE00857C73 /* DeviceStatusHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42C94FD24A2A2B000857C73 /* DeviceStatusHighlight.swift */; };
 		B42C951B24A63B8100857C73 /* DeviceStatusHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42C94FD24A2A2B000857C73 /* DeviceStatusHighlight.swift */; };
+		B43606E52A28D8F00026F677 /* TimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43606E42A28D8F00026F677 /* TimeView.swift */; };
+		B43D69D62A26642300DF0925 /* DemoPlaceHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1132A166403004878F1 /* DemoPlaceHolderView.swift */; };
 		B43DA43F24D49AA400CAFF4E /* GuidanceColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43DA43E24D49AA400CAFF4E /* GuidanceColors.swift */; };
 		B43DA44224D9CD8500CAFF4E /* Environment+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45AF6EF24D4355A00EEAA4D /* Environment+Colors.swift */; };
 		B451D10D2A161A3E004878F1 /* MockPumpManagerSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D10C2A161A3E004878F1 /* MockPumpManagerSettingsView.swift */; };
 		B451D1102A161B84004878F1 /* OpenMockPumpSettingsOnLongPressGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D10F2A161B84004878F1 /* OpenMockPumpSettingsOnLongPressGesture.swift */; };
 		B451D1122A165DA0004878F1 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1112A165DA0004878F1 /* Image.swift */; };
-		B451D1142A166403004878F1 /* DemoPlaceHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1132A166403004878F1 /* DemoPlaceHolderView.swift */; };
 		B451D1162A168C81004878F1 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1152A168C81004878F1 /* Color.swift */; };
 		B451D1182A16A21F004878F1 /* InsulinStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D1172A16A21F004878F1 /* InsulinStatusView.swift */; };
 		B451D11B2A16B97C004878F1 /* MockPumpManagerSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B451D11A2A16B97C004878F1 /* MockPumpManagerSettingsViewModel.swift */; };
@@ -1549,6 +1550,7 @@
 		B42A7471235885B600247B03 /* LoopNotificationUserInfoKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopNotificationUserInfoKey.swift; sourceTree = "<group>"; };
 		B42C94FD24A2A2B000857C73 /* DeviceStatusHighlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatusHighlight.swift; sourceTree = "<group>"; };
 		B42C950C24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasurementFrequencyTableViewController.swift; sourceTree = "<group>"; };
+		B43606E42A28D8F00026F677 /* TimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeView.swift; sourceTree = "<group>"; };
 		B43DA43E24D49AA400CAFF4E /* GuidanceColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidanceColors.swift; sourceTree = "<group>"; };
 		B451D10C2A161A3E004878F1 /* MockPumpManagerSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPumpManagerSettingsView.swift; sourceTree = "<group>"; };
 		B451D10F2A161B84004878F1 /* OpenMockPumpSettingsOnLongPressGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenMockPumpSettingsOnLongPressGesture.swift; sourceTree = "<group>"; };
@@ -2150,6 +2152,7 @@
 				43D8FE591C7291D80073BE78 /* DatePickerTableViewCell.swift */,
 				895FE07922011F0B00FCF18A /* DecimalTextFieldTableViewCell.xib */,
 				89904031245B5CA500F1C0A2 /* Deletable.swift */,
+				B451D1132A166403004878F1 /* DemoPlaceHolderView.swift */,
 				B46B62B023FF0CA6001E69BA /* DescriptiveText.swift */,
 				89CAB36A24C9EC25009EE3CE /* DismissibleKeyboardTextField.swift */,
 				895FE07B22011F0C00FCF18A /* DoubleRangeTableViewCell.swift */,
@@ -2301,12 +2304,12 @@
 			children = (
 				439706E822D2E94800C81566 /* BoundSwitchTableViewCell.swift */,
 				C1E0EEF524EB26D800086510 /* DeliveryUncertaintyRecoveryView.swift */,
-				B451D1132A166403004878F1 /* DemoPlaceHolderView.swift */,
 				B451D1172A16A21F004878F1 /* InsulinStatusView.swift */,
 				B451D1222A17193C004878F1 /* MockCGMManagerControlsView.swift */,
 				B451D11E2A1718D0004878F1 /* MockCGMManagerSettingsView.swift */,
 				B451D11C2A171751004878F1 /* MockPumpManagerControlsView.swift */,
 				B451D10C2A161A3E004878F1 /* MockPumpManagerSettingsView.swift */,
+				B43606E42A28D8F00026F677 /* TimeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3824,6 +3827,7 @@
 				892A5DB42231E191008961AB /* LevelMaskView.swift in Sources */,
 				892A5DA02231E130008961AB /* CompletionNotifying.swift in Sources */,
 				E93C86A424C8F79C0073089B /* ChartLineModel+LoopKitUI.swift in Sources */,
+				B43D69D62A26642300DF0925 /* DemoPlaceHolderView.swift in Sources */,
 				E949E38F24B3711E00024DA0 /* InsulinModelInformationView.swift in Sources */,
 				895FE08B22011F0C00FCF18A /* EmojiInputHeaderView.swift in Sources */,
 				43BA7170201E49220058961E /* FoodTypeShortcutCell.swift in Sources */,
@@ -4304,7 +4308,7 @@
 				C1FAEC21264AEEA300A3250B /* UIImage.swift in Sources */,
 				B451D1182A16A21F004878F1 /* InsulinStatusView.swift in Sources */,
 				B451D1162A168C81004878F1 /* Color.swift in Sources */,
-				B451D1142A166403004878F1 /* DemoPlaceHolderView.swift in Sources */,
+				B43606E52A28D8F00026F677 /* TimeView.swift in Sources */,
 				89D204BD21CC7F34001238CC /* RandomOutlierTableViewController.swift in Sources */,
 				B42C950E24A3BD4B00857C73 /* MeasurementFrequencyTableViewController.swift in Sources */,
 				B45774352562CCC6004B9466 /* SupportedRangeTableViewController.swift in Sources */,

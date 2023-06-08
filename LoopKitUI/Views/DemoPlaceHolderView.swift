@@ -1,6 +1,6 @@
 //
 //  DemoPlaceHolderView.swift
-//  MockKitUI
+//  LoopKitUI
 //
 //  Created by Nathaniel Hamming on 2023-05-18.
 //  Copyright © 2023 LoopKit Authors. All rights reserved.
@@ -8,10 +8,14 @@
 
 import SwiftUI
 
-struct DemoPlaceHolderView: View {
+public struct DemoPlaceHolderView: View {
     var appName: String
     
-    var body: some View {
+    public init(appName: String) {
+        self.appName = appName
+    }
+    
+    public var body: some View {
         ZStack {
             Color.accentColor.opacity(0.1).ignoresSafeArea()
 
