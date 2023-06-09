@@ -162,10 +162,11 @@ open class QuantityFormatter {
 }
 
 public extension HKQuantity {
-    func doubleValue(for unit: HKUnit, withRounding: Bool) -> Double {
+    /// if fractionDigits is nil, defaults to the unit maxFractionDigits
+    func doubleValue(for unit: HKUnit, withRounding: Bool, usingFractionDigits fractionDigits: Int? = nil) -> Double {
         var value = self.doubleValue(for: unit)
         if withRounding {
-            value = unit.round(value: value, fractionalDigits: unit.maxFractionDigits)
+            value = unit.round(value: value, fractionDigits: fractionDigits ?? unit.maxFractionDigits)
         }
 
         return value
@@ -194,42 +195,6 @@ public extension HKUnit {
         }
     }
 
-    var pickerFractionDigits: Int {
-        switch self {
-        case .internationalUnit(), .internationalUnitsPerHour:
-            return 3
-        case HKUnit.gram().unitDivided(by: .internationalUnit()):
-            return 1
-        case .millimolesPerLiter,
-             HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()),
-             HKUnit.millimolesPerLiter.unitDivided(by: .minute()):
-            return 1
-        default:
-            return 0
-        }
-    }
-
-    func round(value: Double, fractionalDigits: Int) -> Double {
-        if fractionalDigits == 0 {
-            return value.rounded()
-        } else {
-            let scaleFactor = pow(10.0, Double(fractionalDigits))
-            return (value * scaleFactor).rounded() / scaleFactor
-        }
-    }
-
-    func round(value: Double) -> Double {
-        return roundForPreferredDigits(value: value)
-    }
-
-    func roundForPreferredDigits(value: Double) -> Double {
-        return round(value: value, fractionalDigits: preferredFractionDigits)
-    }
-
-    func roundForPicker(value: Double) -> Double {
-        return round(value: value, fractionalDigits: pickerFractionDigits)
-    }
-
     var maxFractionDigits: Int {
         switch self {
         case .internationalUnit(), .internationalUnitsPerHour:
@@ -239,6 +204,39 @@ public extension HKUnit {
         default:
             return preferredFractionDigits
         }
+    }
+    
+    /// if fractionDigits is nil, defaults to the unit maxFractionDigits
+    func round(value: Double, fractionDigits: Int? = nil) -> Double {
+        let usedFractionDigits: Int = fractionDigits ?? maxFractionDigits
+        if usedFractionDigits == 0 {
+            return value.rounded()
+        } else {
+            let scaleFactor = pow(10.0, Double(usedFractionDigits))
+            return (value * scaleFactor).rounded() / scaleFactor
+        }
+    }
+    
+    /// if fractionDigits is nil, defaults to the unit maxFractionDigits
+    func allValues(from lowerBound: HKQuantity, through upperBound: HKQuantity, usingFractionDigits fractionDigits: Int? = nil) -> [Double] {
+        let usedFractionDigits: Int = fractionDigits ?? maxFractionDigits
+        return Array(stride(
+            from: lowerBound.doubleValue(for: self, withRounding: true, usingFractionDigits: usedFractionDigits),
+            through: upperBound.doubleValue(for: self, withRounding: true, usingFractionDigits: usedFractionDigits),
+            by: 1/pow(10.0, Double(usedFractionDigits))
+        )).map { self.round(value: $0, fractionDigits: usedFractionDigits) }
+    }
+
+    func round(value: Double) -> Double {
+        return roundForPreferredDigits(value: value)
+    }
+
+    func roundForPreferredDigits(value: Double) -> Double {
+        return round(value: value, fractionDigits: preferredFractionDigits)
+    }
+
+    func roundForPicker(value: Double) -> Double {
+        return round(value: value, fractionDigits: maxFractionDigits)
     }
     
     // Short localized unit string with unlocalized fallback
