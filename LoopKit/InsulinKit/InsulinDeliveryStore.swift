@@ -276,24 +276,36 @@ extension InsulinDeliveryStore {
         }
     }
 
-    /// Retrieves most recent bolus
-    ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
+    /// Retrieves boluses
     ///
     /// - Parameters:
-    ///   - returns: A DoseEntry representing the most recent bolus, or nil, if there is no recent bolus
-    public func getLatestBolus() async throws -> DoseEntry? {
+    ///   - start:If non-nil, select boluses that ended after start.
+    ///   - end: If non-nil, select boluses that started before end.
+    ///   - limit: If non-nill, specify the max number of boluses to return.
+    ///   - returns: A list of DoseEntry objects representing the most recent boluses
+    public func getBoluses(start: Date? = nil, end: Date? = nil, limit: Int? = nil) async throws -> [DoseEntry] {
         return try await withCheckedThrowingContinuation({ continuation in
             queue.async {
                 self.cacheStore.managedObjectContext.performAndWait {
                     let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
-                    request.predicate = NSPredicate(format: "reason == %d", HKInsulinDeliveryReason.bolus.rawValue)
+
+                    var predicates = [NSPredicate(format: "deletedAt == NIL"), NSPredicate(format: "reason == %d", HKInsulinDeliveryReason.bolus.rawValue)]
+                    if let start {
+                        predicates.append(NSPredicate(format: "endDate >= %@", start as NSDate))
+                    }
+                    if let end {
+                        predicates.append(NSPredicate(format: "startDate <= %@", end as NSDate))
+                    }
+                    request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+
                     request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: false)]
-                    request.fetchLimit = 1
+                    if let limit {
+                        request.fetchLimit = limit
+                    }
 
                     do {
                         let doses = try self.cacheStore.managedObjectContext.fetch(request).compactMap{ $0.dose }
-                        continuation.resume(returning: doses.first)
+                        continuation.resume(returning: doses)
                     } catch {
                         continuation.resume(throwing: error)
                     }

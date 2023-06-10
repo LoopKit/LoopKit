@@ -1223,12 +1223,21 @@ extension DoseStore {
 
     /// Retrieves most recent bolus
     ///
-    /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
-    ///
     /// - Parameters:
     ///   - returns: A DoseEntry representing the most recent bolus, or nil, if there is no recent bolus
     public func getLatestBolus() async throws -> DoseEntry? {
-        return try await insulinDeliveryStore.getLatestBolus()
+        return try await insulinDeliveryStore.getBoluses().first
+    }
+
+    /// Retrieves boluses
+    ///
+    /// - Parameters:
+    ///   - start:If non-nil, select boluses that ended after start.
+    ///   - end: If non-nil, select boluses that started before end.
+    ///   - limit: If non-nill, specify the max number of boluses to return.
+    ///   - returns: A list of DoseEntry objects representing the boluses that match the query parameters
+    public func getBoluses(start: Date? = nil, end: Date? = nil) async throws -> [DoseEntry] {
+        return try await insulinDeliveryStore.getBoluses(start: start, end: end)
     }
 
 
