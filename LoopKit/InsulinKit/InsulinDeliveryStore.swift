@@ -314,6 +314,44 @@ extension InsulinDeliveryStore {
         })
     }
 
+    /// Retrieves basal doses
+    ///
+    /// - Parameters:
+    ///   - start:If non-nil, select boluses that ended after start.
+    ///   - end: If non-nil, select boluses that started before end.
+    ///   - limit: If non-nill, specify the max number of boluses to return.
+    ///   - returns: A list of DoseEntry objects representing the basal doses matching the passed constraints
+    public func getBasalDoses(start: Date? = nil, end: Date? = nil, limit: Int? = nil) async throws -> [DoseEntry] {
+        return try await withCheckedThrowingContinuation({ continuation in
+            queue.async {
+                self.cacheStore.managedObjectContext.performAndWait {
+                    let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
+
+                    var predicates = [NSPredicate(format: "deletedAt == NIL"), NSPredicate(format: "reason == %d", HKInsulinDeliveryReason.basal.rawValue)]
+                    if let start {
+                        predicates.append(NSPredicate(format: "endDate >= %@", start as NSDate))
+                    }
+                    if let end {
+                        predicates.append(NSPredicate(format: "startDate <= %@", end as NSDate))
+                    }
+                    request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+
+                    request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+                    if let limit {
+                        request.fetchLimit = limit
+                    }
+
+                    do {
+                        let doses = try self.cacheStore.managedObjectContext.fetch(request).compactMap{ $0.dose }
+                        continuation.resume(returning: doses)
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        })
+    }
+
 
     /// Returns the end date of the most recent basal dose entry.
     ///
@@ -467,6 +505,82 @@ extension InsulinDeliveryStore {
             completion(.success(()))
         }
     }
+
+    /// Add doses to store, updating any existing doses that have the same syncIdentifier.
+    ///
+    /// - Parameters:
+    ///   - entries: The new dose entries to add to the store.
+    func syncDoseEntries(_ entries: [DoseEntry]) async throws {
+
+        try await withCheckedThrowingContinuation({ continuation in
+            guard !entries.isEmpty else {
+                continuation.resume()
+                return
+            }
+
+            queue.async {
+                var changed = false
+                var error: Error?
+
+                self.cacheStore.managedObjectContext.performAndWait {
+                    do {
+                        let now = self.currentDate()
+                        let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
+                        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "syncIdentifier IN %@", entries.map { $0.syncIdentifier })])
+                        let objectsToUpdate = try self.cacheStore.managedObjectContext.fetch(request)
+
+                        let resolvedSampleObjects: [CachedInsulinDeliveryObject] = entries.compactMap { (entry) -> CachedInsulinDeliveryObject? in
+                            guard entry.syncIdentifier != nil else {
+                                self.log.error("Ignored adding dose entry without sync identifier: %{public}@", String(reflecting: entry))
+                                return nil
+                            }
+
+                            // If we have a mutable object that matches this sync identifier, then update, it will mark as NOT deleted
+                            if let object = objectsToUpdate.first(where: { $0.syncIdentifier == entry.syncIdentifier }) {
+                                self.log.debug("Update: %{public}@", String(describing: entry))
+                                object.update(from: entry)
+                                return object
+                                // Otherwise, add new object
+                            } else {
+                                let object = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
+                                object.create(from: entry, by: self.provenanceIdentifier, at: now)
+                                self.log.debug("Add: %{public}@", String(describing: entry))
+                                return object
+                            }
+                        }
+
+                        changed = !objectsToUpdate.isEmpty || !resolvedSampleObjects.isEmpty
+                        guard changed else {
+                            return
+                        }
+
+                        error = self.cacheStore.save()
+                        if error != nil {
+                            return
+                        }
+                    } catch let coreDataError {
+                        error = coreDataError
+                    }
+                }
+
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                guard changed else {
+                    continuation.resume()
+                    return
+                }
+
+                self.handleUpdatedDoseData()
+                self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
+
+                continuation.resume()
+            }
+        })
+    }
+
 
     private func saveEntriesToHealthKit(_ sampleObjects: [(HKQuantitySample, CachedInsulinDeliveryObject)]) {
         dispatchPrecondition(condition: .onQueue(queue))

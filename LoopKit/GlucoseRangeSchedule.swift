@@ -116,6 +116,15 @@ public struct GlucoseRangeSchedule: DailySchedule, Equatable {
         return rangeSchedule.between(start: startDate, end: endDate)
     }
 
+    public func truncatingBetween(start startDate: Date, end endDate: Date) -> [AbsoluteScheduleValue<DoubleRange>] {
+        let values = between(start: startDate, end: endDate)
+        return values.map { item in
+            let start = max(item.startDate, startDate)
+            let end = min(item.endDate, endDate)
+            return AbsoluteScheduleValue<T>(startDate: start, endDate: end, value: item.value)
+        }
+    }
+
     public func quantityBetween(start: Date, end: Date) -> [AbsoluteScheduleValue<ClosedRange<HKQuantity>>] {
         var quantitySchedule = [AbsoluteScheduleValue<ClosedRange<HKQuantity>>]()
 

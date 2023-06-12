@@ -858,6 +858,14 @@ extension DoseStore {
         }
     }
 
+    /**
+     Synchronizes entries from a remote authoritative store.  Any existing doses with matching syncIdentifier will be replaced.
+     - parameter entries: An array of dose entries to add.
+     */
+    public func syncDoseEntries(_ entries: [DoseEntry]) async throws {
+        try await self.insulinDeliveryStore.syncDoseEntries(entries)
+    }
+
     /// Deletes one particular manually entered dose from the store
     ///
     /// - Parameter dose: Dose to delete.
@@ -1239,6 +1247,18 @@ extension DoseStore {
     public func getBoluses(start: Date? = nil, end: Date? = nil) async throws -> [DoseEntry] {
         return try await insulinDeliveryStore.getBoluses(start: start, end: end)
     }
+
+    /// Retrieves basal doses
+    ///
+    /// - Parameters:
+    ///   - start:If non-nil, select boluses that ended after start.
+    ///   - end: If non-nil, select boluses that started before end.
+    ///   - limit: If non-nill, specify the max number of boluses to return.
+    ///   - returns: A list of DoseEntry objects representing the basal doses that match the query parameters
+    public func getBasalDoses(start: Date? = nil, end: Date? = nil) async throws -> [DoseEntry] {
+        return try await insulinDeliveryStore.getBasalDoses(start: start, end: end)
+    }
+
 
 
     /// Retrieves the maximum insulin on-board value from the two timeline values nearest to the specified date
