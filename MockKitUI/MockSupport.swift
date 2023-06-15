@@ -20,8 +20,6 @@ public class MockSupport: SupportUI {
         return self.delegate
     }
     var lastVersionCheckAlertDate: Date?
-    
-    public let showsDeleteTestDataUI: Bool = true
 
     public init() { }
 

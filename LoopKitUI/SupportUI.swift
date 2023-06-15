@@ -146,4 +146,8 @@ extension SupportUI {
     public var deviceIdentifierWhitelist: DeviceWhitelist {
         DeviceWhitelist()
     }
+    
+    public var showsDeleteTestDataUI: Bool {
+        true
+    }
 }
