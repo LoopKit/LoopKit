@@ -20,6 +20,9 @@ public class MockSupport: SupportUI {
         return self.delegate
     }
     var lastVersionCheckAlertDate: Date?
+    
+    public let showsDeleteTestDataUI: Bool = true
+    public let onlyAllowSimulatorDevices: Bool = false
 
     public init() { }
 

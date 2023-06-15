@@ -122,6 +122,10 @@ public protocol SupportUI: AnyObject {
  
     /// A delegate for SupportUI to use (see `SupportUIDelegate`).
     var delegate: SupportUIDelegate? { get set }
+    
+    var showsDeleteTestDataUI: Bool { get }
+    
+    var onlyAllowSimulatorDevices: Bool { get }
 }
 
 extension SupportUI {
