@@ -16,32 +16,27 @@ public struct DemoPlaceHolderView: View {
     }
     
     public var body: some View {
-        ZStack {
-            Color.accentColor.opacity(0.1).ignoresSafeArea()
-
-            VStack {
-                Image(frameworkImage: "DemoPlaceholderImage")
-                    .resizable()
-                    .aspectRatio(contentMode: ContentMode.fit)
-                    .padding(.trailing, 80)
-                                
-                VStack(alignment: .center, spacing: 30) {
-                    Text("Nothing to See Here!")
-                        .font(.title2)
-                        .bold()
-                    
-                    Text("This section of the \(appName) app is unavailable in this simulator.")
-                        .multilineTextAlignment(.center)
-                    
-                    Text("Tap back to continue exploring the rest of the \(appName) interface.")
-                        .multilineTextAlignment(.center)
-                }
-                .padding(.horizontal, 40)
-                
-                Spacer()
-            }
-            .padding(.leading, 0)
+        VStack(alignment: .center, spacing: 30) {
+            Spacer()
+            
+            Image(systemName: "minus.circle")
+                .font(Font.system(size: 76, weight: .bold))
+            
+            Text("Nothing to See Here!")
+                .font(.title2)
+                .bold()
+            
+            Text("This section of the \(appName) app is unavailable in this simulator.")
+                .multilineTextAlignment(.center)
+            
+            Text("Tap back to continue exploring the rest of the \(appName) interface.")
+                .multilineTextAlignment(.center)
+            
+            Spacer()
         }
+        .padding(.horizontal, 40)
+        .background(Color(.systemGroupedBackground))
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
