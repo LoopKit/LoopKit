@@ -345,6 +345,26 @@ extension CarbStore: HealthKitSampleStoreDelegate {
 // MARK: - Fetching
 
 extension CarbStore {
+
+    /// Retrieves carb entries within the specified date range
+    ///
+    /// - Parameters:
+    ///   - start: The earliest date of values to retrieve
+    ///   - end: The latest date of values to retrieve, if provided
+    ///   - result: An array of carb entries, in chronological order by startDate, or error
+    public func getCarbEntries(start: Date? = nil, end: Date? = nil) async throws -> [StoredCarbEntry] {
+        try await withCheckedThrowingContinuation { continuation in
+            getCarbEntries(start: start, end: end) { result in
+                switch result {
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                case .success(let entries):
+                    continuation.resume(returning: entries)
+                }
+            }
+        }
+    }
+
     /// Retrieves carb entries within the specified date range
     ///
     /// - Parameters:
@@ -773,6 +793,18 @@ extension CarbStore {
 
             completion(.success(objects))
         }
+    }
+
+    public func setSyncCarbObjects(_ objects: [SyncCarbObject]) async throws {
+        try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Void, Error>) -> Void in
+            self.setSyncCarbObjects(objects) { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            }
+        })
     }
 
     /// Store carb objects from another store

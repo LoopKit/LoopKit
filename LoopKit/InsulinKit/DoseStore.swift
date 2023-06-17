@@ -862,8 +862,8 @@ extension DoseStore {
      Synchronizes entries from a remote authoritative store.  Any existing doses with matching syncIdentifier will be replaced.
      - parameter entries: An array of dose entries to add.
      */
-    public func syncDoseEntries(_ entries: [DoseEntry]) async throws {
-        try await self.insulinDeliveryStore.syncDoseEntries(entries)
+    public func syncDoseEntries(_ entries: [DoseEntry], updateExistingRecords: Bool = true) async throws {
+        try await self.insulinDeliveryStore.syncDoseEntries(entries, updateExistingRecords: updateExistingRecords)
     }
 
     /// Deletes one particular manually entered dose from the store

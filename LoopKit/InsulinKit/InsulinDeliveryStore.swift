@@ -510,7 +510,7 @@ extension InsulinDeliveryStore {
     ///
     /// - Parameters:
     ///   - entries: The new dose entries to add to the store.
-    func syncDoseEntries(_ entries: [DoseEntry]) async throws {
+    func syncDoseEntries(_ entries: [DoseEntry], updateExistingRecords: Bool = true) async throws {
 
         try await withCheckedThrowingContinuation({ continuation in
             guard !entries.isEmpty else {
@@ -519,45 +519,39 @@ extension InsulinDeliveryStore {
             }
 
             queue.async {
-                var changed = false
                 var error: Error?
 
                 self.cacheStore.managedObjectContext.performAndWait {
                     do {
                         let now = self.currentDate()
-                        let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
-                        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "syncIdentifier IN %@", entries.map { $0.syncIdentifier })])
-                        let objectsToUpdate = try self.cacheStore.managedObjectContext.fetch(request)
 
-                        let resolvedSampleObjects: [CachedInsulinDeliveryObject] = entries.compactMap { (entry) -> CachedInsulinDeliveryObject? in
+                        let objectsToUpdate: [CachedInsulinDeliveryObject]
+
+                        if updateExistingRecords {
+                            let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
+                            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "syncIdentifier IN %@", entries.map { $0.syncIdentifier })])
+                            objectsToUpdate = try self.cacheStore.managedObjectContext.fetch(request)
+                        } else {
+                            objectsToUpdate = []
+                        }
+
+                        for entry in entries {
                             guard entry.syncIdentifier != nil else {
                                 self.log.error("Ignored adding dose entry without sync identifier: %{public}@", String(reflecting: entry))
-                                return nil
+                                continue
                             }
 
                             // If we have a mutable object that matches this sync identifier, then update, it will mark as NOT deleted
                             if let object = objectsToUpdate.first(where: { $0.syncIdentifier == entry.syncIdentifier }) {
                                 self.log.debug("Update: %{public}@", String(describing: entry))
                                 object.update(from: entry)
-                                return object
-                                // Otherwise, add new object
                             } else {
                                 let object = CachedInsulinDeliveryObject(context: self.cacheStore.managedObjectContext)
                                 object.create(from: entry, by: self.provenanceIdentifier, at: now)
                                 self.log.debug("Add: %{public}@", String(describing: entry))
-                                return object
                             }
                         }
-
-                        changed = !objectsToUpdate.isEmpty || !resolvedSampleObjects.isEmpty
-                        guard changed else {
-                            return
-                        }
-
                         error = self.cacheStore.save()
-                        if error != nil {
-                            return
-                        }
                     } catch let coreDataError {
                         error = coreDataError
                     }
@@ -568,14 +562,8 @@ extension InsulinDeliveryStore {
                     return
                 }
 
-                guard changed else {
-                    continuation.resume()
-                    return
-                }
-
                 self.handleUpdatedDoseData()
                 self.delegate?.insulinDeliveryStoreHasUpdatedDoseData(self)
-
                 continuation.resume()
             }
         })
