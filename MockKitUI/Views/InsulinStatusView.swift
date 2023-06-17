@@ -40,7 +40,7 @@ struct InsulinStatusView: View {
         return 65 + subViewSpacing
     }
 
-    let basalRateFormatter = QuantityFormatter()
+    let basalRateFormatter = QuantityFormatter(for: .internationalUnitsPerHour)
 
     private var inNoDelivery: Bool {
         !viewModel.isDeliverySuspended && viewModel.basalDeliveryRate == nil
@@ -90,11 +90,11 @@ struct InsulinStatusView: View {
                             .font(.system(size: 28))
                             .fixedSize()
                     }
-                    Text(basalRateFormatter.string(from: quantity, for: unit, includeUnit: false) ?? "")
+                    Text(basalRateFormatter.string(from: quantity, includeUnit: false) ?? "")
                         .font(.system(size: 28))
                         .fontWeight(.heavy)
                         .fixedSize()
-                    Text(basalRateFormatter.string(from: unit))
+                    Text(basalRateFormatter.localizedUnitStringWithPlurality(forQuantity: quantity))
                         .foregroundColor(.secondary)
                 }
                 Group {
@@ -163,7 +163,7 @@ struct InsulinStatusView: View {
                         .fontWeight(.heavy)
                         .fixedSize()
                     let unit = HKUnit.internationalUnit()
-                    Text(basalRateFormatter.string(from: unit))
+                    Text(basalRateFormatter.localizedUnitStringWithPlurality())
                         .foregroundColor(.secondary)
                 }
             }

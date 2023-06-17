@@ -11,7 +11,7 @@ import SwiftUI
 import LoopKit
 
 public struct InsulinModelSelection: View {
-    @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.appName) private var appName   
     @Environment(\.dismissAction) private var dismiss
     @Environment(\.authenticate) private var authenticate
@@ -27,7 +27,7 @@ public struct InsulinModelSelection: View {
     static let defaultInsulinSensitivitySchedule = InsulinSensitivitySchedule(unit: .milligramsPerDeciliter, dailyItems: [RepeatingScheduleValue<Double>(startTime: 0, value: 40)])!
     
     private var displayGlucoseUnit: HKUnit {
-        displayGlucoseUnitObservable.displayGlucoseUnit
+        displayGlucosePreference.unit
     }
     
     public init(
@@ -199,7 +199,7 @@ public struct InsulinModelSelection: View {
     
     private func oneUnitBolusEffectPrediction(using modelPreset: ExponentialInsulinModelPreset) -> [GlucoseValue] {
         let bolus = DoseEntry(type: .bolus, startDate: chartManager.startDate, value: 1, unit: .units, insulinType: .novolog)
-        let startingGlucoseSample = HKQuantitySample(type: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!, quantity: startingGlucoseQuantity, start: chartManager.startDate, end: chartManager.startDate)
+        let startingGlucoseSample = HKQuantitySample(type: HealthKitSampleStore.glucoseType, quantity: startingGlucoseQuantity, start: chartManager.startDate, end: chartManager.startDate)
         let effects = [bolus].glucoseEffects(insulinModelProvider: StaticInsulinModelProvider(modelPreset), longestEffectDuration: .hours(6), insulinSensitivity: insulinSensitivitySchedule)
         return LoopMath.predictGlucose(startingAt: startingGlucoseSample, effects: effects)
     }

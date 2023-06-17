@@ -19,14 +19,15 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
         super.setUp()
 
         healthStore = HKHealthStoreMock()
+
+        let hkSampleStore = HealthKitSampleStore(healthStore: healthStore, type: HealthKitSampleStore.carbType)
+
         carbStore = CarbStore(
-            healthStore: healthStore,
+            healthKitSampleStore: hkSampleStore,
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
-            observationInterval: 0,
             provenanceIdentifier: Bundle.main.bundleIdentifier!)
-        carbStore.testQueryStore = healthStore
         carbStore.delegate = self
 
         let semaphore = DispatchSemaphore(value: 0)
@@ -466,7 +467,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     addAnchorKey = objects[0].anchorKey
 
                     self.healthStore.setDeletedObjectsHandler({ (objectType, predicate, success, count, error) in
-                        XCTAssertEqual(objectType, HKObjectType.quantityType(forIdentifier: .dietaryCarbohydrates))
+                        XCTAssertEqual(objectType, HealthKitSampleStore.carbType)
                         XCTAssertEqual(predicate.predicateFormat, "UUID == \(addUUID!)")
 
                         deleteHealthStoreHandler.fulfill()
@@ -680,7 +681,7 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
                     updateAnchorKey = objects[1].anchorKey
 
                     self.healthStore.setDeletedObjectsHandler({ (objectType, predicate, success, count, error) in
-                        XCTAssertEqual(objectType, HKObjectType.quantityType(forIdentifier: .dietaryCarbohydrates))
+                        XCTAssertEqual(objectType, HealthKitSampleStore.carbType)
                         XCTAssertEqual(predicate.predicateFormat, "UUID == \(updateUUID!)")
 
                         deleteHealthStoreHandler.fulfill()
@@ -1018,13 +1019,16 @@ class CarbStoreQueryTests: PersistenceControllerTestCase {
     
     override func setUp() {
         super.setUp()
-        
+
+        let healthStore = HKHealthStoreMock()
+
+        let hkSampleStore = HealthKitSampleStore(healthStore: healthStore, type: HealthKitSampleStore.carbType)
+
         carbStore = CarbStore(
-            healthStore: HKHealthStoreMock(),
+            healthKitSampleStore: hkSampleStore,
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
-            observationInterval: 0,
             provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
         let semaphore = DispatchSemaphore(value: 0)
@@ -1263,12 +1267,18 @@ class CarbStoreCriticalEventLogTests: PersistenceControllerTestCase {
                        SyncCarbObject(absorptionTime: nil, createdByCurrentApp: true, foodType: nil, grams: 14, startDate: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, uuid: nil, provenanceIdentifier: Bundle.main.bundleIdentifier!, syncIdentifier: nil, syncVersion: nil, userCreatedDate: nil, userUpdatedDate: nil, userDeletedDate: nil, operation: .create, addedDate: dateFormatter.date(from: "2100-01-02T03:06:00Z")!, supercededDate: nil),
                        SyncCarbObject(absorptionTime: nil, createdByCurrentApp: true, foodType: nil, grams: 15, startDate: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, uuid: nil, provenanceIdentifier: Bundle.main.bundleIdentifier!, syncIdentifier: nil, syncVersion: nil, userCreatedDate: nil, userUpdatedDate: nil, userDeletedDate: nil, operation: .create, addedDate: dateFormatter.date(from: "2100-01-02T03:02:00Z")!, supercededDate: nil)]
 
+        let healthStore = HKHealthStoreMock()
+
+        let hkSampleStore = HealthKitSampleStore(
+            healthStore: healthStore,
+            type: HealthKitSampleStore.carbType,
+            observationEnabled: false)
+
         carbStore = CarbStore(
-            healthStore: HKHealthStoreMock(),
+            healthKitSampleStore: hkSampleStore,
             cacheStore: cacheStore,
             cacheLength: .hours(24),
             defaultAbsorptionTimes: (fast: .minutes(30), medium: .hours(3), slow: .hours(5)),
-            observationInterval: 0,
             provenanceIdentifier: Bundle.main.bundleIdentifier!)
 
         let dispatchGroup = DispatchGroup()

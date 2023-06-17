@@ -16,22 +16,24 @@ import MockKit
 final class MockCGMManagerSettingsViewController: UITableViewController {
     let cgmManager: MockCGMManager
 
-    private let displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    private let displayGlucosePreference: DisplayGlucosePreference
 
     private lazy var cancellables = Set<AnyCancellable>()
 
     private var glucoseUnit: HKUnit {
-        displayGlucoseUnitObservable.displayGlucoseUnit
+        displayGlucosePreference.unit
     }
 
-    init(cgmManager: MockCGMManager, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable) {
+    init(cgmManager: MockCGMManager, displayGlucosePreference: DisplayGlucosePreference) {
         self.cgmManager = cgmManager
-        self.displayGlucoseUnitObservable = displayGlucoseUnitObservable
+        self.displayGlucosePreference = displayGlucosePreference
+
+        self.quantityFormatter = QuantityFormatter(for: displayGlucosePreference.unit)
 
         super.init(style: .grouped)
         title = LocalizedString("CGM Settings", comment: "Title for CGM simulator settings")
 
-        displayGlucoseUnitObservable.$displayGlucoseUnit
+        displayGlucosePreference.$unit
             .sink { [weak self] _ in self?.tableView.reloadData() }
             .store(in: &cancellables)
     }
@@ -197,7 +199,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
         }
     }
 
-    private lazy var quantityFormatter = QuantityFormatter()
+    private var quantityFormatter: QuantityFormatter
 
     private lazy var percentageFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -221,7 +223,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .constant:
                 cell.textLabel?.text = "Constant"
                 if case .constant(let glucose) = cgmManager.dataSource.model {
-                    cell.detailTextLabel?.text = quantityFormatter.string(from: glucose, for: glucoseUnit)
+                    cell.detailTextLabel?.text = quantityFormatter.string(from: glucose)
                     cell.accessoryType = .checkmark
                 } else {
                     cell.accessoryType = .disclosureIndicator
@@ -230,7 +232,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 cell.textLabel?.text = "Sine Curve"
                 if case .sineCurve(parameters: (baseGlucose: let baseGlucose, amplitude: let amplitude, period: _, referenceDate: _)) = cgmManager.dataSource.model {
                     if let baseGlucoseText = quantityFormatter.numberFormatter.string(from: baseGlucose.doubleValue(for: glucoseUnit)),
-                        let amplitudeText = quantityFormatter.string(from: amplitude, for: glucoseUnit) {
+                        let amplitudeText = quantityFormatter.string(from: amplitude) {
                         cell.detailTextLabel?.text = "\(baseGlucoseText) ± \(amplitudeText)"
                     }
                     cell.accessoryType = .checkmark
@@ -272,19 +274,19 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 return cell
             case .cgmLowerLimit:
                 cell.textLabel?.text = "CGM Lower Limit"
-                cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.cgmLowerLimit, for: glucoseUnit)
+                cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.cgmLowerLimit)
             case .urgentLowGlucoseThreshold:
                 cell.textLabel?.text = "Urgent Low Glucose Threshold"
-                cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.urgentLowGlucoseThreshold, for: glucoseUnit)
+                cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.urgentLowGlucoseThreshold)
             case .lowGlucoseThreshold:
                 cell.textLabel?.text = "Low Glucose Threshold"
-                cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.lowGlucoseThreshold, for: glucoseUnit)
+                cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.lowGlucoseThreshold)
             case .highGlucoseThreshold:
                 cell.textLabel?.text = "High Glucose Threshold"
-                cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.highGlucoseThreshold, for: glucoseUnit)
+                cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.highGlucoseThreshold)
             case .cgmUpperLimit:
                 cell.textLabel?.text = "CGM Upper Limit"
-                cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.cgmUpperLimit, for: glucoseUnit)
+                cell.detailTextLabel?.text = quantityFormatter.string(from: cgmManager.mockSensorState.cgmUpperLimit)
             }
             cell.accessoryType = .disclosureIndicator
             return cell
@@ -294,7 +296,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .noise:
                 cell.textLabel?.text = "Glucose Noise"
                 if let maximumDeltaMagnitude = cgmManager.dataSource.effects.glucoseNoise {
-                    cell.detailTextLabel?.text = quantityFormatter.string(from: maximumDeltaMagnitude, for: glucoseUnit)
+                    cell.detailTextLabel?.text = quantityFormatter.string(from: maximumDeltaMagnitude)
                 } else {
                     cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
                 }

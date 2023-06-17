@@ -13,8 +13,9 @@ project_directory: &project_directory ~/project
 jobs:
   test:
     working_directory: *project_directory
+    resource_class: macos.x86.medium.gen2
     macos:
-      xcode: 14.2.0
+      xcode: 14.3.0
     steps:
       - checkout
       - run:

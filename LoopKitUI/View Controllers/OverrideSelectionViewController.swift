@@ -151,8 +151,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
     }
 
     private lazy var quantityFormatter: QuantityFormatter = {
-        let quantityFormatter = QuantityFormatter()
-        quantityFormatter.setPreferredNumberFormatter(for: glucoseUnit)
+        let quantityFormatter = QuantityFormatter(for: glucoseUnit)
         return quantityFormatter
     }()
 
@@ -250,7 +249,7 @@ public final class OverrideSelectionViewController: UICollectionViewController, 
             return ""
         }
 
-        return String(format: LocalizedString("%1$@ – %2$@ %3$@", comment: "The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit)"), minTarget, maxTarget, quantityFormatter.string(from: glucoseUnit))
+        return String(format: LocalizedString("%1$@ – %2$@ %3$@", comment: "The format for a glucose target range. (1: min target)(2: max target)(3: glucose unit)"), minTarget, maxTarget, quantityFormatter.localizedUnitStringWithPlurality())
     }
 
     public override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

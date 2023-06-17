@@ -44,16 +44,22 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
                                    localIdentifier: UUID().uuidString,
                                    udiDeviceIdentifier: UUID().uuidString)
 
-    var healthStore: HKHealthStoreMock!
+    var mockHealthStore: HKHealthStoreMock!
     var insulinDeliveryStore: InsulinDeliveryStore!
+    var hkSampleStore: HealthKitSampleStore!
     var authorizationStatus: HKAuthorizationStatus = .notDetermined
 
     override func setUp() {
         super.setUp()
 
-        healthStore = HKHealthStoreMock()
-        healthStore.authorizationStatus = authorizationStatus
-        insulinDeliveryStore = InsulinDeliveryStore(healthStore: healthStore,
+        mockHealthStore = HKHealthStoreMock()
+
+        hkSampleStore = HealthKitSampleStore(healthStore: mockHealthStore, type: HealthKitSampleStore.insulinQuantityType)
+        hkSampleStore.observerQueryType = MockHKObserverQuery.self
+        hkSampleStore.anchoredObjectQueryType = MockHKAnchoredObjectQuery.self
+
+        mockHealthStore.authorizationStatus = authorizationStatus
+        insulinDeliveryStore = InsulinDeliveryStore(healthKitSampleStore: hkSampleStore,
                                                     cacheStore: cacheStore,
                                                     cacheLength: .hours(1),
                                                     provenanceIdentifier: HKSource.default().bundleIdentifier)
@@ -75,7 +81,7 @@ class InsulinDeliveryStoreTestsBase: PersistenceControllerTestCase {
         semaphore.wait()
 
         insulinDeliveryStore = nil
-        healthStore = nil
+        mockHealthStore = nil
 
         super.tearDown()
     }
@@ -89,17 +95,13 @@ class InsulinDeliveryStoreTestsAuthorized: InsulinDeliveryStoreTestsBase {
     
     func testObserverQueryStartup() {
         // Check that an observer query is registered when authorization is already determined.
-        XCTAssertFalse(insulinDeliveryStore.authorizationRequired);
+        XCTAssertFalse(hkSampleStore.authorizationRequired);
 
-        let observerQueryCreated = expectation(description: "observer query created")
-
-        insulinDeliveryStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
-            let observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
-            observerQueryCreated.fulfill()
-            return observerQuery
-        }
+        mockHealthStore.observerQueryStartedExpectation = expectation(description: "observer query started")
 
         waitForExpectations(timeout: 2)
+
+        XCTAssertNotNil(mockHealthStore.observerQuery)
     }
 }
 
@@ -107,98 +109,81 @@ class InsulinDeliveryStoreTests: InsulinDeliveryStoreTestsBase {
     // MARK: - HealthKitSampleStore
 
     func testHealthKitQueryAnchorPersistence() {
-        var observerQuery: HKObserverQueryMock? = nil
-        var anchoredObjectQuery: HKAnchoredObjectQueryMock? = nil
-        
-        XCTAssert(insulinDeliveryStore.authorizationRequired);
-        XCTAssertNil(insulinDeliveryStore.observerQuery);
 
-        let observerQueryCreated = expectation(description: "observer query created")
+        XCTAssert(hkSampleStore.authorizationRequired);
+        XCTAssertNil(hkSampleStore.observerQuery);
 
-        insulinDeliveryStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
-            observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
-            observerQueryCreated.fulfill()
-            return observerQuery!
-        }
+        mockHealthStore.observerQueryStartedExpectation = expectation(description: "observer query started")
 
-        let authorizationCompletion = expectation(description: "authorization completion")
-        insulinDeliveryStore.authorize { (result) in
-            authorizationCompletion.fulfill()
-        }
+        mockHealthStore.authorizationStatus = .sharingAuthorized
+        hkSampleStore.authorizationIsDetermined()
 
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 3)
 
-        XCTAssertNotNil(observerQuery)
+        XCTAssertNotNil(mockHealthStore.observerQuery)
 
-        let anchoredObjectQueryCreationExpectation = expectation(description: "anchored object query creation")
-        insulinDeliveryStore.createAnchoredObjectQuery = { (sampleType, predicate, anchor, limit, resultsHandler) -> HKAnchoredObjectQuery in
-            anchoredObjectQuery = HKAnchoredObjectQueryMock(type: sampleType, predicate: predicate, anchor: anchor, limit: limit, resultsHandler: resultsHandler)
-            anchoredObjectQueryCreationExpectation.fulfill()
-            return anchoredObjectQuery!
-        }
+        mockHealthStore.anchorQueryStartedExpectation = expectation(description: "anchored object query started")
 
         let observerQueryCompletionExpectation = expectation(description: "observer query completion")
 
         let observerQueryCompletionHandler = {
             observerQueryCompletionExpectation.fulfill()
         }
+
+        let mockObserverQuery = mockHealthStore.observerQuery as! MockHKObserverQuery
+
         // This simulates a signal marking the arrival of new HK Data.
-        observerQuery!.updateHandler(observerQuery!, observerQueryCompletionHandler, nil)
+        mockObserverQuery.updateHandler?(mockObserverQuery, observerQueryCompletionHandler, nil)
 
-        wait(for: [anchoredObjectQueryCreationExpectation], timeout: 10)
+        wait(for: [mockHealthStore.anchorQueryStartedExpectation!])
 
-        // Trigger results handler for anchored object query
-        let returnedAnchor = HKQueryAnchor(fromValue: 5)
-        anchoredObjectQuery!.resultsHandler(anchoredObjectQuery!, [], [], returnedAnchor, nil)
+        let currentAnchor = HKQueryAnchor(fromValue: 5)
+
+        let mockAnchoredObjectQuery = mockHealthStore.anchoredObjectQuery as! MockHKAnchoredObjectQuery
+        mockAnchoredObjectQuery.resultsHandler?(mockAnchoredObjectQuery, [], [], currentAnchor, nil)
 
         // Wait for observerQueryCompletionExpectation
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 3)
 
-        XCTAssertNotNil(insulinDeliveryStore.queryAnchor)
+        XCTAssertNotNil(hkSampleStore.queryAnchor)
 
-        // Allow any managedObjectContext tasks to complete, like storing the anchor
         cacheStore.managedObjectContext.performAndWait {}
 
+        // Create a new carb store, and ensure it uses the last query anchor
+
+        let newSampleStore = HealthKitSampleStore(healthStore: mockHealthStore, type: HealthKitSampleStore.insulinQuantityType)
+        newSampleStore.observerQueryType = MockHKObserverQuery.self
+        newSampleStore.anchoredObjectQueryType = MockHKAnchoredObjectQuery.self
+
         // Create a new glucose store, and ensure it uses the last query anchor
-        let newInsulinDeliveryStore = InsulinDeliveryStore(healthStore: healthStore,
-                                                           cacheStore: cacheStore,
-                                                           provenanceIdentifier: HKSource.default().bundleIdentifier)
+        let _ = InsulinDeliveryStore(healthKitSampleStore: newSampleStore,
+                                     cacheStore: cacheStore,
+                                     provenanceIdentifier: HKSource.default().bundleIdentifier)
 
-        let newAuthorizationCompletion = expectation(description: "authorization completion")
+        mockHealthStore.observerQueryStartedExpectation = expectation(description: "new observer query started")
 
-        observerQuery = nil
+        mockHealthStore.authorizationStatus = .sharingAuthorized
+        newSampleStore.authorizationIsDetermined()
 
-        let newObserverQueryCreationExpectation = expectation(description: "new observer query created")
+        // Wait for observerQueryCompletionExpectation
+        waitForExpectations(timeout: 3)
 
-        newInsulinDeliveryStore.createObserverQuery = { (sampleType, predicate, updateHandler) -> HKObserverQuery in
-            observerQuery = HKObserverQueryMock(sampleType: sampleType, predicate: predicate, updateHandler: updateHandler)
-            newObserverQueryCreationExpectation.fulfill()
-            return observerQuery!
-        }
+        mockHealthStore.anchorQueryStartedExpectation = expectation(description: "new anchored object query started")
 
-        newInsulinDeliveryStore.authorize { (result) in
-            newAuthorizationCompletion.fulfill()
-        }
-        waitForExpectations(timeout: 10)
-
-        anchoredObjectQuery = nil
-
-        let newAnchoredObjectQueryCreationExpectation = expectation(description: "new anchored object query creation")
-        newInsulinDeliveryStore.createAnchoredObjectQuery = { (sampleType, predicate, anchor, limit, resultsHandler) -> HKAnchoredObjectQuery in
-            anchoredObjectQuery = HKAnchoredObjectQueryMock(type: sampleType, predicate: predicate, anchor: anchor, limit: limit, resultsHandler: resultsHandler)
-            newAnchoredObjectQueryCreationExpectation.fulfill()
-            return anchoredObjectQuery!
-        }
+        let mockObserverQuery2 = mockHealthStore.observerQuery as! MockHKObserverQuery
 
         // This simulates a signal marking the arrival of new HK Data.
-        observerQuery!.updateHandler(observerQuery!, {}, nil)
+        mockObserverQuery2.updateHandler?(mockObserverQuery2, {}, nil)
 
-        waitForExpectations(timeout: 10)
+        // Wait for anchorQueryStartedExpectation
+        waitForExpectations(timeout: 3)
 
-        // Assert new glucose store is querying with the last anchor that our HealthKit mock returned
-        XCTAssertEqual(returnedAnchor, anchoredObjectQuery?.anchor)
+        // Assert new carb store is querying with the last anchor that our HealthKit mock returned
+        let mockAnchoredObjectQuery2 = mockHealthStore.anchoredObjectQuery as! MockHKAnchoredObjectQuery
+        XCTAssertEqual(currentAnchor, mockAnchoredObjectQuery2.anchor)
 
-        anchoredObjectQuery!.resultsHandler(anchoredObjectQuery!, [], [], returnedAnchor, nil)
+
+        mockAnchoredObjectQuery2.resultsHandler?(mockAnchoredObjectQuery2, [], [], currentAnchor, nil)
     }
 
     // MARK: - Fetching
@@ -830,10 +815,7 @@ class InsulinDeliveryStoreQueryTests: PersistenceControllerTestCase {
     override func setUp() {
         super.setUp()
 
-        insulinDeliveryStore = InsulinDeliveryStore(healthStore: HKHealthStoreMock(),
-                                                    storeSamplesToHealthKit: false,
-                                                    cacheStore: cacheStore,
-                                                    observationEnabled: false,
+        insulinDeliveryStore = InsulinDeliveryStore(cacheStore: cacheStore,
                                                     provenanceIdentifier: HKSource.default().bundleIdentifier)
         completion = expectation(description: "Completion")
         queryAnchor = InsulinDeliveryStore.QueryAnchor()

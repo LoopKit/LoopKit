@@ -33,13 +33,12 @@ public struct QuantityPicker: View {
     public init(
         value: Binding<HKQuantity>,
         unit: HKUnit,
-        stride: HKQuantity,
         guardrail: Guardrail<HKQuantity>,
         formatter: NumberFormatter? = nil,
         isUnitLabelVisible: Bool = true,
         guidanceColors: GuidanceColors = GuidanceColors()
     ) {
-        let selectableValues = guardrail.allValues(stridingBy: stride, unit: unit)
+        let selectableValues = guardrail.allValues(forUnit: unit)
         self.init(value: value,
                   unit: unit,
                   guardrail: guardrail,
@@ -83,8 +82,7 @@ public struct QuantityPicker: View {
         self.unit = unit
         self.selectableValues = selectableValues
         self.formatter = formatter ?? {
-            let quantityFormatter = QuantityFormatter()
-            quantityFormatter.setPreferredNumberFormatter(for: unit)
+            let quantityFormatter = QuantityFormatter(for: unit)
             return quantityFormatter.numberFormatter
         }()
         self.isUnitLabelVisible = isUnitLabelVisible
@@ -131,7 +129,6 @@ public struct QuantityPicker: View {
                     .foregroundColor(.gray)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                     .offset(x: pickerValueBounds.union(in: geometry).maxX + unitLabelSpacing)
-                    .animation(.default)
             }
         }
     }

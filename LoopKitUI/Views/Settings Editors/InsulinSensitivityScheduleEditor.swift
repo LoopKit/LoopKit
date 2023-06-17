@@ -12,14 +12,14 @@ import LoopKit
 
 
 public struct InsulinSensitivityScheduleEditor: View {
-    @EnvironmentObject private var displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
+    @EnvironmentObject private var displayGlucosePreference: DisplayGlucosePreference
     @Environment(\.appName) private var appName
 
     let mode: SettingsPresentationMode
     let viewModel: InsulinSensitivityScheduleEditorViewModel
 
     var displayGlucoseUnit: HKUnit {
-        displayGlucoseUnitObservable.displayGlucoseUnit
+        displayGlucosePreference.unit
     }
 
     public init(
@@ -40,7 +40,6 @@ public struct InsulinSensitivityScheduleEditor: View {
             schedule: viewModel.insulinSensitivitySchedule?.schedule(for: displayGlucoseUnit),
             unit: sensitivityUnit,
             guardrail: .insulinSensitivity,
-            selectableValueStride: stride,
             defaultFirstScheduleItemValue: Guardrail.insulinSensitivity.startingSuggestion ?? Guardrail.insulinSensitivity.recommendedBounds.upperBound,
             confirmationAlertContent: confirmationAlertContent,
             guardrailWarning: InsulinSensitivityGuardrailWarning.init(crossedThresholds:),
@@ -64,20 +63,6 @@ public struct InsulinSensitivityScheduleEditor: View {
 
     private var sensitivityUnit: HKUnit {
         displayGlucoseUnit.unitDivided(by: .internationalUnit())
-    }
-
-    private var stride: HKQuantity {
-        let doubleValue: Double
-        switch displayGlucoseUnit {
-        case .milligramsPerDeciliter:
-            doubleValue = 1
-        case .millimolesPerLiter:
-            doubleValue = 0.1
-        case let otherUnit:
-            fatalError("Unsupported glucose unit \(otherUnit)")
-        }
-
-        return HKQuantity(unit: sensitivityUnit, doubleValue: doubleValue)
     }
 
     private var confirmationAlertContent: AlertContent {

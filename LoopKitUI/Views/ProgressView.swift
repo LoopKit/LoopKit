@@ -45,7 +45,6 @@ struct ProgressTestView: View {
     
     var body: some View {
         VStack {
-            
             ProgressView(progress: madeProgress ? 0.9 : 0.5)
                 .animation(.linear(duration: 2))
                 .padding()

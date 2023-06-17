@@ -72,7 +72,7 @@ final class SineCurveParametersTableViewController: UITableViewController {
 
     weak var delegate: SineCurveParametersTableViewControllerDelegate?
 
-    private lazy var glucoseFormatter = QuantityFormatter()
+    private var glucoseFormatter: QuantityFormatter
 
     private lazy var durationFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
@@ -90,6 +90,7 @@ final class SineCurveParametersTableViewController: UITableViewController {
 
     init(glucoseUnit: HKUnit) {
         self.glucoseUnit = glucoseUnit
+        self.glucoseFormatter = QuantityFormatter(for: glucoseUnit)
         super.init(style: .grouped)
     }
 
@@ -124,7 +125,7 @@ final class SineCurveParametersTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.className, for: indexPath) as! SettingsTableViewCell
-        let formatGlucose = { self.glucoseFormatter.string(from: $0, for: self.glucoseUnit) }
+        let formatGlucose = { self.glucoseFormatter.string(from: $0) }
 
         switch Row(rawValue: indexPath.row)! {
         case .baseGlucose:

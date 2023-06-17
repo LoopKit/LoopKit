@@ -106,7 +106,7 @@ public struct TemporaryScheduleOverride: Hashable {
         return date > actualEndDate
     }
 
-    public init(context: Context, settings: TemporaryScheduleOverrideSettings, startDate: Date, duration: Duration, enactTrigger: EnactTrigger, syncIdentifier: UUID) {
+    public init(context: Context, settings: TemporaryScheduleOverrideSettings, startDate: Date, duration: Duration, enactTrigger: EnactTrigger, syncIdentifier: UUID, actualEnd: End = .natural) {
         precondition(duration.timeInterval > 0)
         self.context = context
         self.settings = settings
@@ -114,6 +114,7 @@ public struct TemporaryScheduleOverride: Hashable {
         self.duration = duration
         self.enactTrigger = enactTrigger
         self.syncIdentifier = syncIdentifier
+        self.actualEnd = actualEnd
     }
     
     public func isActive(at date: Date = Date()) -> Bool {

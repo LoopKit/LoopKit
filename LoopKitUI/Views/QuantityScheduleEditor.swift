@@ -204,7 +204,6 @@ extension QuantityScheduleEditor {
         schedule: DailyQuantitySchedule<Double>?,
         unit: HKUnit,
         guardrail: Guardrail<HKQuantity>,
-        selectableValueStride: HKQuantity,
         quantitySelectionMode: QuantitySelectionMode = .whole,
         defaultFirstScheduleItemValue: HKQuantity,
         scheduleItemLimit: Int = 48,
@@ -214,7 +213,7 @@ extension QuantityScheduleEditor {
         mode: SettingsPresentationMode = .settings,
         settingType: TherapySetting = .none
     ) {
-        let selectableValues = guardrail.allValues(stridingBy: selectableValueStride, unit: unit)
+        let selectableValues = guardrail.allValues(forUnit: unit)
         self.init(
             title: title,
             description: description,

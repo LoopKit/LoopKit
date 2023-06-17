@@ -59,10 +59,11 @@ final class RandomOutlierTableViewController: UITableViewController {
         return formatter
     }()
 
-    private lazy var glucoseFormatter = QuantityFormatter()
+    private var glucoseFormatter: QuantityFormatter
 
     init(glucoseUnit: HKUnit) {
         self.glucoseUnit = glucoseUnit
+        self.glucoseFormatter = QuantityFormatter(for: glucoseUnit)
         super.init(style: .grouped)
     }
 
@@ -106,7 +107,7 @@ final class RandomOutlierTableViewController: UITableViewController {
         case .delta:
             cell.textLabel?.text = "Delta"
             if let delta = delta {
-                cell.detailTextLabel?.text = glucoseFormatter.string(from: delta, for: glucoseUnit)
+                cell.detailTextLabel?.text = glucoseFormatter.string(from: delta)
             } else {
                 cell.detailTextLabel?.text = SettingsTableViewCell.NoValueString
             }

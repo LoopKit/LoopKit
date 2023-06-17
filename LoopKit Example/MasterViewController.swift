@@ -32,21 +32,21 @@ class MasterViewController: UITableViewController {
         }
 
         let sampleTypes = Set([
-            dataManager.glucoseStore.sampleType,
-            dataManager.carbStore.sampleType,
-            dataManager.doseStore.sampleType,
+            HealthKitSampleStore.glucoseType,
+            HealthKitSampleStore.carbType,
+            HealthKitSampleStore.insulinQuantityType
         ].compactMap { $0 })
 
-        if dataManager.glucoseStore.authorizationRequired ||
-            dataManager.carbStore.authorizationRequired ||
-            dataManager.doseStore.authorizationRequired
+        if dataManager.glucoseSampleStore.authorizationRequired ||
+            dataManager.carbSampleStore.authorizationRequired ||
+            dataManager.doseSampleStore.authorizationRequired
         {
-            dataManager.carbStore.healthStore.requestAuthorization(toShare: sampleTypes, read: sampleTypes) { (success, error) in
+            dataManager.healthStore.requestAuthorization(toShare: sampleTypes, read: sampleTypes) { (success, error) in
                 if success {
                     // Call the individual authorization methods to trigger query creation
-                    dataManager.carbStore.authorize({ _ in })
-                    dataManager.doseStore.insulinDeliveryStore.authorize(toShare: true, { _ in })
-                    dataManager.glucoseStore.authorize({ _ in })
+                    dataManager.carbSampleStore.authorizationIsDetermined()
+                    dataManager.glucoseSampleStore.authorizationIsDetermined()
+                    dataManager.glucoseSampleStore.authorizationIsDetermined()
                 }
             }
         }
@@ -182,12 +182,12 @@ class MasterViewController: UITableViewController {
                     self.dataManager?.glucoseTargetRangeSchedule = therapySettingsViewModel.therapySettings.glucoseTargetRangeSchedule
                     self.navigationController?.popToViewController(self, animated: true)
                 })
-                    .environmentObject(DisplayGlucoseUnitObservable(displayGlucoseUnit: .milligramsPerDeciliter))
+                    .environmentObject(DisplayGlucosePreference(displayGlucoseUnit: .milligramsPerDeciliter))
 
                 let scheduleVC = DismissibleHostingController(rootView: view, dismissalMode: .pop(to:  type(of: self)), isModalInPresentation: false)
                 show(scheduleVC, sender: sender)
             case .insulinSensitivity:
-                let unit = dataManager?.insulinSensitivitySchedule?.unit ?? dataManager?.glucoseStore.preferredUnit ?? HKUnit.milligramsPerDeciliter
+                let unit = dataManager?.insulinSensitivitySchedule?.unit ?? HKUnit.milligramsPerDeciliter
                 let scheduleVC = InsulinSensitivityScheduleViewController(allowedValues: unit.allowedSensitivityValues, unit: unit)
 
                 scheduleVC.unit = unit

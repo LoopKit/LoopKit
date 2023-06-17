@@ -19,6 +19,8 @@ public struct GlucoseFixtureValue: GlucoseSampleValue {
     public let provenanceIdentifier: String
     public let condition: GlucoseCondition?
     public let trendRate: HKQuantity?
+    public var trend: LoopKit.GlucoseTrend?
+    public var syncIdentifier: String?
 
     public init(startDate: Date, quantity: HKQuantity, isDisplayOnly: Bool, wasUserEntered: Bool, provenanceIdentifier: String?, condition: GlucoseCondition?, trendRate: HKQuantity?) {
         self.startDate = startDate
