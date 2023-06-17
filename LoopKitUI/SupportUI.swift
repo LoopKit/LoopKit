@@ -56,6 +56,16 @@ public protocol SupportUIDelegate: AlertIssuer, SupportInfoProvider  {
     func openURL(url: URL)
 }
 
+public struct DeviceWhitelist: Hashable {
+    public let cgmDevices: [String]
+    public let pumpDevices: [String]
+    
+    public init(cgmDevices: [String] = [], pumpDevices: [String] = []) {
+        self.cgmDevices = cgmDevices
+        self.pumpDevices = pumpDevices
+    }
+}
+
 public protocol SupportUI: AnyObject {
 
     typealias RawStateValue = [String: Any]
@@ -122,10 +132,22 @@ public protocol SupportUI: AnyObject {
  
     /// A delegate for SupportUI to use (see `SupportUIDelegate`).
     var delegate: SupportUIDelegate? { get set }
+    
+    var showsDeleteTestDataUI: Bool { get }
+    
+    var deviceIdentifierWhitelist: DeviceWhitelist { get }
 }
 
 extension SupportUI {
     public var identifier: String {
         return Self.supportIdentifier
+    }
+    
+    public var deviceIdentifierWhitelist: DeviceWhitelist {
+        DeviceWhitelist()
+    }
+    
+    public var showsDeleteTestDataUI: Bool {
+        true
     }
 }

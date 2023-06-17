@@ -33,13 +33,12 @@ public struct QuantityPicker: View {
     public init(
         value: Binding<HKQuantity>,
         unit: HKUnit,
-        stride: HKQuantity,
         guardrail: Guardrail<HKQuantity>,
         formatter: NumberFormatter? = nil,
         isUnitLabelVisible: Bool = true,
         guidanceColors: GuidanceColors = GuidanceColors()
     ) {
-        let selectableValues = guardrail.allValues(stridingBy: stride, unit: unit)
+        let selectableValues = guardrail.allValues(forUnit: unit)
         self.init(value: value,
                   unit: unit,
                   guardrail: guardrail,

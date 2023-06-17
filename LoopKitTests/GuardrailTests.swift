@@ -268,25 +268,25 @@ class GuardrailTests: XCTestCase {
 
     func testAllValuesOfQuantity() {
         var guardrail = Guardrail.carbRatio
-        var allValues = guardrail.allValues(
-            stridingBy: HKQuantity(unit: .gramsPerUnit, doubleValue: 0.1),
-            unit: .gramsPerUnit)
+        var unit: HKUnit = .gramsPerUnit
+        var increment = 0.1
+        var allValues = guardrail.allValues(forUnit: unit)
         var expectedValues = Array(stride(
-            from: guardrail.absoluteBounds.lowerBound.doubleValue(for: .gramsPerUnit, withRounding: true),
-            through: guardrail.absoluteBounds.upperBound.doubleValue(for: .gramsPerUnit, withRounding: true),
-            by: 0.1
-        ))
+            from: guardrail.absoluteBounds.lowerBound.doubleValue(for: unit, withRounding: true),
+            through: guardrail.absoluteBounds.upperBound.doubleValue(for: unit, withRounding: true),
+            by: increment
+        )).map { unit.round(value: $0, fractionDigits: unit.maxFractionDigits) }
         XCTAssertEqual(allValues, expectedValues)
 
         guardrail = Guardrail.insulinSensitivity
-        allValues = guardrail.allValues(
-            stridingBy: HKQuantity(unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()), doubleValue: 1),
-            unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()))
+        unit = HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit())
+        increment = 1
+        allValues = guardrail.allValues(forUnit: unit)
         expectedValues = Array(stride(
-            from: guardrail.absoluteBounds.lowerBound.doubleValue(for: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()), withRounding: true),
-            through: guardrail.absoluteBounds.upperBound.doubleValue(for: HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()), withRounding: true),
-            by: 1
-        ))
+            from: guardrail.absoluteBounds.lowerBound.doubleValue(for: unit, withRounding: true),
+            through: guardrail.absoluteBounds.upperBound.doubleValue(for: unit, withRounding: true),
+            by: increment
+        )).map { unit.round(value: $0, fractionDigits: unit.maxFractionDigits) }
         XCTAssertEqual(allValues, expectedValues)
     }
 }

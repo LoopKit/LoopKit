@@ -43,25 +43,10 @@ class HKUnitTests: XCTestCase {
         XCTAssertEqual(HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()).maxFractionDigits, 1)
         XCTAssertEqual(HKUnit.millimolesPerLiter.unitDivided(by: .minute()).maxFractionDigits, 1)
         XCTAssertEqual(HKUnit.gram().unitDivided(by: .internationalUnit()).maxFractionDigits, 1)
+        XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .minute()).maxFractionDigits, 1)
 
         XCTAssertEqual(HKUnit.gram().maxFractionDigits, 0)
         XCTAssertEqual(HKUnit.milligramsPerDeciliter.maxFractionDigits, 0)
         XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()).maxFractionDigits, 0)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .minute()).maxFractionDigits, 1)
-    }
-
-    func testPickerFractionDigits() throws {
-        XCTAssertEqual(HKUnit.internationalUnit().pickerFractionDigits, 3)
-        XCTAssertEqual(HKUnit.internationalUnit().unitDivided(by: .hour()).pickerFractionDigits, 3)
-
-        XCTAssertEqual(HKUnit.millimolesPerLiter.pickerFractionDigits, 1)
-        XCTAssertEqual(HKUnit.millimolesPerLiter.unitDivided(by: .internationalUnit()).pickerFractionDigits, 1)
-        XCTAssertEqual(HKUnit.millimolesPerLiter.unitDivided(by: .minute()).pickerFractionDigits, 1)
-        XCTAssertEqual(HKUnit.gram().unitDivided(by: .internationalUnit()).pickerFractionDigits, 1)
-
-        XCTAssertEqual(HKUnit.gram().pickerFractionDigits, 0)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.pickerFractionDigits, 0)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .internationalUnit()).pickerFractionDigits, 0)
-        XCTAssertEqual(HKUnit.milligramsPerDeciliter.unitDivided(by: .minute()).pickerFractionDigits, 0)
     }
 }
