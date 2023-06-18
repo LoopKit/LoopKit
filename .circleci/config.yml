@@ -15,7 +15,7 @@ jobs:
     working_directory: *project_directory
     resource_class: macos.x86.medium.gen2
     macos:
-      xcode: 14.3.0
+      xcode: 14.3.1
     steps:
       - checkout
       - run:
