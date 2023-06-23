@@ -107,7 +107,7 @@ public protocol RemoteDataService: Service {
      Handle a push notification
      - Parameter notification: The push notification dictionary
      */
-    func handleRemoteNotification(_ notification: [String: AnyObject]) async throws
+    func remoteNotificationWasReceived(_ notification: [String: AnyObject]) async throws
     
      /// Process pending remote commands
     func processPendingRemoteCommands() async throws

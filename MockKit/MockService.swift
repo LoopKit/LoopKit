@@ -168,7 +168,7 @@ extension MockService: RemoteDataService {
         completion(.success(false))
     }
     
-    public func handleRemoteNotification(_ notification: [String: AnyObject]) async throws {
+    public func remoteNotificationWasReceived(_ notification: [String: AnyObject]) async throws {
     }
     
     public func processPendingRemoteCommands() async throws {
