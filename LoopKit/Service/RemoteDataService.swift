@@ -109,7 +109,7 @@ public protocol RemoteDataService: Service {
      */
     func remoteNotificationWasReceived(_ notification: [String: AnyObject]) async throws
     
-     /// Process pending remote commands
+     /// Notify when Loop completed
     func loopDidComplete() async throws
 
 }
