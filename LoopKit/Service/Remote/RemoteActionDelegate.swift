@@ -9,10 +9,10 @@
 import Foundation
 
 public protocol RemoteActionDelegate: AnyObject {
-    func handleRemoteOverride(name: String, durationTime: TimeInterval?, remoteAddress: String) async throws
-    func handleRemoteOverrideCancel() async throws
-    func handleRemoteCarb(amountInGrams: Double, absorptionTime: TimeInterval?, foodType: String?, startDate: Date?) async throws
-    func handleRemoteBolus(amountInUnits: Double) async throws
-    func handleRemoteClosedLoop(activate: Bool) async throws
-    func handleRemoteAutobolus(activate: Bool) async throws
+    func updateRemoteOverride(name: String, durationTime: TimeInterval?, remoteAddress: String) async throws
+    func cancelRemoteOverride() async throws
+    func deliverRemoteCarbs(amountInGrams: Double, absorptionTime: TimeInterval?, foodType: String?, startDate: Date?) async throws
+    func deliverRemoteBolus(amountInUnits: Double) async throws
+    func updateRemoteClosedLoop(activate: Bool) async throws
+    func updateRemoteAutobolus(activate: Bool) async throws
 }
