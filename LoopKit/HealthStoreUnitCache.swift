@@ -15,6 +15,7 @@ public extension Notification.Name {
 
 public class HealthStoreUnitCache {
     private static var cacheCache = NSMapTable<HKHealthStore, HealthStoreUnitCache>.weakToStrongObjects()
+    private static var cacheCacheLock = UnfairLock()
 
     public let healthStore: HKHealthStore
 
@@ -38,13 +39,15 @@ public class HealthStoreUnitCache {
     }
 
     public class func unitCache(for healthStore: HKHealthStore) -> HealthStoreUnitCache {
-        if let cache = cacheCache.object(forKey: healthStore) {
+        cacheCacheLock.withLock {
+            if let cache = cacheCache.object(forKey: healthStore) {
+                return cache
+            }
+
+            let cache = HealthStoreUnitCache(healthStore: healthStore)
+            cacheCache.setObject(cache, forKey: healthStore)
             return cache
         }
-
-        let cache = HealthStoreUnitCache(healthStore: healthStore)
-        cacheCache.setObject(cache, forKey: healthStore)
-        return cache
     }
 
     public func preferredUnit(for quantityTypeIdentifier: HKQuantityTypeIdentifier) -> HKUnit? {
