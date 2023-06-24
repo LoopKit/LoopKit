@@ -108,9 +108,6 @@ public protocol RemoteDataService: Service {
      - Parameter notification: The push notification dictionary
      */
     func remoteNotificationWasReceived(_ notification: [String: AnyObject]) async throws
-    
-     /// Notify when Loop completed
-    func loopDidComplete() async throws
 
 }
 

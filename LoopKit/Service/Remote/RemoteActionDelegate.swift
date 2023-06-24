@@ -13,6 +13,4 @@ public protocol RemoteActionDelegate: AnyObject {
     func cancelRemoteOverride() async throws
     func deliverRemoteCarbs(amountInGrams: Double, absorptionTime: TimeInterval?, foodType: String?, startDate: Date?) async throws
     func deliverRemoteBolus(amountInUnits: Double) async throws
-    func updateRemoteClosedLoop(activate: Bool) async throws
-    func updateRemoteAutobolus(activate: Bool) async throws
 }
