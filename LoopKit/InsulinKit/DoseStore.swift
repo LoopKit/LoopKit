@@ -1117,10 +1117,6 @@ extension DoseStore {
     /// - Returns: An array of doses from pump events
     /// - Throws: An error describing the failure to fetch objects
     private func getNormalizedPumpEventDoseEntriesForSavingToInsulinDeliveryStore(basalStart: Date, end: Date) throws -> [DoseEntry] {
-        guard let basalProfile = self.basalProfileApplyingOverrideHistory else {
-            throw DoseStoreError.configurationError
-        }
-
         self.log.info("Fetching Pump events between %{public}@ and %{public}@ for saving to InsulinDeliveryStore", String(describing: basalStart), String(describing: end))
 
         // Make sure we look far back enough to have prior temp basal records to reconcile
@@ -1137,7 +1133,7 @@ extension DoseStore {
         // Ignore any doses which have not yet ended by the specified date.
         // Also, since we are retrieving dosing history older than basalStart for
         // reconciliation purposes, we need to filter that out after reconciliation.
-        let normalizedDoses = doses.reconciled().filter({ $0.endDate <= end || $0.isMutable }).annotated(with: basalProfile).filter({ $0.startDate >= basalStart || $0.type == .bolus })
+        let normalizedDoses = doses.reconciled().filter({ $0.endDate <= end || $0.isMutable }).filter({ $0.startDate >= basalStart || $0.type == .bolus })
 
         return normalizedDoses
     }
@@ -1327,7 +1323,10 @@ extension DoseStore {
     ///   - completion: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completion: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
-        guard let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory else {
+        guard
+            let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory,
+            let basalProfile = self.basalProfileApplyingOverrideHistory
+        else {
             completion(.failure(.configurationError))
             return
         }
@@ -1339,7 +1338,7 @@ extension DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-                let trimmedDoses = doses.map { (dose) -> DoseEntry in
+                let trimmedDoses = doses.annotated(with: basalProfile).map { (dose) -> DoseEntry in
                     guard dose.type != .bolus else {
                         return dose
                     }

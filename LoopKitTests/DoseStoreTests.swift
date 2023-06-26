@@ -426,7 +426,7 @@ class DoseStoreTests: PersistenceControllerTestCase {
         let addPumpEvents3 = expectation(description: "add pumpEvents3")
         addPumpEvents3.expectedFulfillmentCount = 3
         healthStore.setSaveHandler({ (objects, success, error) in
-            XCTAssertEqual(3, objects.count)
+            XCTAssertEqual(2, objects.count)
             let basal = objects[0] as! HKQuantitySample
             XCTAssertEqual(HKInsulinDeliveryReason.basal, basal.insulinDeliveryReason)
             XCTAssertEqual(f("2018-11-29 10:54:28 +0000"), basal.startDate)
@@ -435,15 +435,9 @@ class DoseStoreTests: PersistenceControllerTestCase {
             let temp1 = objects[1] as! HKQuantitySample
             XCTAssertEqual(HKInsulinDeliveryReason.basal, temp1.insulinDeliveryReason)
             XCTAssertEqual(f("2018-11-29 10:59:28 +0000"), temp1.startDate)
-            XCTAssertEqual(f("2018-11-29 11:00:00 +0000"), temp1.endDate)
-            XCTAssertEqual("5bffc7cace53e48e87f7cfcb 1/2", temp1.metadata![HKMetadataKeySyncIdentifier] as! String)
-            XCTAssertEqual(0.003, temp1.quantity.doubleValue(for: .internationalUnit()), accuracy: 0.01)
-            let temp2 = objects[2] as! HKQuantitySample
-            XCTAssertEqual(HKInsulinDeliveryReason.basal, temp2.insulinDeliveryReason)
-            XCTAssertEqual(f("2018-11-29 11:00:00 +0000"), temp2.startDate)
-            XCTAssertEqual(f("2018-11-29 11:09:27 +0000"), temp2.endDate)
-            XCTAssertEqual("5bffc7cace53e48e87f7cfcb 2/2", temp2.metadata![HKMetadataKeySyncIdentifier] as! String)
-            XCTAssertEqual(0.047, temp2.quantity.doubleValue(for: .internationalUnit()), accuracy: 0.01)
+            XCTAssertEqual(f("2018-11-29 11:09:27 +0000"), temp1.endDate)
+            XCTAssertEqual("5bffc7cace53e48e87f7cfcb", temp1.metadata![HKMetadataKeySyncIdentifier] as! String)
+            XCTAssertEqual(0.05, temp1.quantity.doubleValue(for: .internationalUnit()), accuracy: 0.01)
             XCTAssertNil(error)
             addPumpEvents3.fulfill()
         })
@@ -568,7 +562,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     XCTAssertEqual(doseEntries[0].value, 2.125)
                     XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
                     XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertFalse(doseEntries[0].isMutable)
                 }
                 addPumpEvents1.fulfill();
@@ -585,7 +578,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     XCTAssertEqual(doseEntries[0].value, 2.125)
                     XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
                     XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertFalse(doseEntries[0].isMutable)
                     XCTAssertTrue(doseEntries[0].wasProgrammedByPumpUI)
                 }
@@ -656,8 +648,68 @@ class DoseStoreTests: PersistenceControllerTestCase {
         }
 
         waitForExpectations(timeout: 3)
-
     }
+
+    func testUnfinalizedTempBasalCrossingScheduleChange() {
+        let formatter = DateFormatter.descriptionFormatter
+        let f = { (input) in
+            return formatter.date(from: input)!
+        }
+
+        let doseStoreInitialization = expectation(description: "Expect DoseStore to finish initialization")
+
+        let doseStart = f("2018-12-12 16:45:00 +0000")
+        let currentTime = doseStart.addingTimeInterval(.minutes(2))
+
+        // 1. Create a DoseStore
+        let doseStore = DoseStore(
+            cacheStore: cacheStore,
+            insulinModelProvider: PresetInsulinModelProvider(defaultRapidActingModel: nil),
+            longestEffectDuration: .hours(6),
+            basalProfile: BasalRateSchedule(rawValue: ["timeZone": 0, "items": [["value": 0.75, "startTime": 0.0], ["value": 0.8, "startTime": 61200.0]]]),
+            insulinSensitivitySchedule: InsulinSensitivitySchedule(rawValue: ["unit": "mg/dL", "timeZone": 0, "items": [["value": 40.0, "startTime": 0.0]]]),
+            syncVersion: 1,
+            provenanceIdentifier: Bundle.main.bundleIdentifier!,
+
+            onReady: { _ in doseStoreInitialization.fulfill() },
+            // Set the current date
+            test_currentDate: currentTime
+        )
+
+        // Wait for dose store to initialize
+        waitForExpectations(timeout: 3)
+
+        doseStore.insulinDeliveryStore.test_lastImmutableBasalEndDate = doseStart //.addingTimeInterval(.minutes(-2))
+
+        let pumpEvent = [
+            NewPumpEvent(date: doseStart, dose: DoseEntry(type: .tempBasal, startDate: doseStart, endDate: doseStart.addingTimeInterval(.minutes(30)), value: 2.125, unit: .unitsPerHour, isMutable: true), raw: Data(hexadecimalString: "1234567890")!, title: "TempBasal Test Data", type: .tempBasal)
+        ]
+
+        let addPumpEvent = expectation(description: "addPumpEvent")
+        doseStore.addPumpEvents(pumpEvent, lastReconciliation: currentTime) { (error) in
+            XCTAssertNil(error)
+            doseStore.insulinDeliveryStore.getDoseEntries(includeMutable: true) { result in
+                switch result {
+                case .failure:
+                    XCTFail()
+                case .success(let doseEntries):
+                    XCTAssertEqual(doseEntries.count, 1)
+                    XCTAssertEqual(doseEntries[0].type, .tempBasal)
+                    XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 16:45:00 +0000"))
+                    XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 17:15:00 +0000"))
+                    XCTAssertEqual(doseEntries[0].value, 2.125)
+                    XCTAssertEqual(doseEntries[0].deliveredUnits, nil)
+                    XCTAssertEqual(doseEntries[0].syncIdentifier, "1234567890")
+                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, nil)
+                    XCTAssertTrue(doseEntries[0].isMutable)
+                }
+                addPumpEvent.fulfill();
+            }
+        }
+
+        waitForExpectations(timeout: 3)
+    }
+
 
     func testAddPumpEventsPurgesMutableDosesFromInsulinDeliveryStore() {
         let formatter = DateFormatter.descriptionFormatter
@@ -710,7 +762,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     XCTAssertEqual(doseEntries[0].value, 2.125)
                     XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
                     XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertFalse(doseEntries[0].isMutable)
                 }
                 addPumpEvents1.fulfill();
@@ -727,7 +778,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     XCTAssertEqual(doseEntries[0].value, 2.125)
                     XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
                     XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertFalse(doseEntries[0].isMutable)
                 }
                 addPumpEvents1.fulfill();
@@ -762,7 +812,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     XCTAssertEqual(doseEntries[0].value, 2.125)
                     XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
                     XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertFalse(doseEntries[0].isMutable)
                     XCTAssertFalse(doseEntries[0].wasProgrammedByPumpUI)
                 }
@@ -780,7 +829,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     XCTAssertEqual(doseEntries[0].value, 2.125)
                     XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
                     XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertFalse(doseEntries[0].isMutable)
                     XCTAssertEqual(doseEntries[1].type, .tempBasal)
                     XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
@@ -788,7 +836,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     XCTAssertEqual(doseEntries[1].value, 1.375)
                     XCTAssertNil(doseEntries[1].deliveredUnits)
                     XCTAssertEqual(doseEntries[1].syncIdentifier, "3094c121601fa2")
-                    XCTAssertEqual(doseEntries[1].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertTrue(doseEntries[1].isMutable)
                     XCTAssertTrue(doseEntries[1].wasProgrammedByPumpUI)
                 }
@@ -824,7 +871,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     XCTAssertEqual(doseEntries[0].value, 2.125)
                     XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
                     XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertFalse(doseEntries[0].isMutable)
                 }
                 addPumpEvents3.fulfill();
@@ -834,31 +880,21 @@ class DoseStoreTests: PersistenceControllerTestCase {
                 case .failure:
                     XCTFail()
                 case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 3)
+                    XCTAssertEqual(doseEntries.count, 2)
                     XCTAssertEqual(doseEntries[0].type, .tempBasal)
                     XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
                     XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
                     XCTAssertEqual(doseEntries[0].value, 2.125)
                     XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
                     XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertFalse(doseEntries[0].isMutable)
                     XCTAssertEqual(doseEntries[1].type, .tempBasal)
                     XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
-                    XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:30:00 +0000"))
+                    XCTAssertEqual(doseEntries[1].endDate, f("2018-12-12 18:35:00 +0000"))
                     XCTAssertEqual(doseEntries[1].value, 0.875)
                     XCTAssertNil(doseEntries[1].deliveredUnits)
-                    XCTAssertEqual(doseEntries[1].syncIdentifier, "3094c121601fa2 1/2")
-                    XCTAssertEqual(doseEntries[1].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
+                    XCTAssertEqual(doseEntries[1].syncIdentifier, "3094c121601fa2")
                     XCTAssertTrue(doseEntries[1].isMutable)
-                    XCTAssertEqual(doseEntries[2].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[2].startDate, f("2018-12-12 18:30:00 +0000"))
-                    XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:35:00 +0000"))
-                    XCTAssertEqual(doseEntries[2].value, 0.875)
-                    XCTAssertNil(doseEntries[2].deliveredUnits)
-                    XCTAssertEqual(doseEntries[2].syncIdentifier, "3094c121601fa2 2/2")
-                    XCTAssertEqual(doseEntries[2].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.0))
-                    XCTAssertTrue(doseEntries[2].isMutable)
                 }
                 addPumpEvents3.fulfill();
             }
@@ -894,7 +930,6 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     XCTAssertEqual(doseEntries[0].value, 2.125)
                     XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
                     XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertFalse(doseEntries[0].isMutable)
                     XCTAssertEqual(doseEntries[1].type, .basal)
                     XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
@@ -914,14 +949,13 @@ class DoseStoreTests: PersistenceControllerTestCase {
                 case .failure:
                     XCTFail()
                 case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 4)
+                    XCTAssertEqual(doseEntries.count, 3)
                     XCTAssertEqual(doseEntries[0].type, .tempBasal)
                     XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
                     XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
                     XCTAssertEqual(doseEntries[0].value, 2.125)
                     XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
                     XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertFalse(doseEntries[0].isMutable)
                     XCTAssertEqual(doseEntries[1].type, .basal)
                     XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
@@ -933,20 +967,11 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     XCTAssertFalse(doseEntries[1].isMutable)
                     XCTAssertEqual(doseEntries[2].type, .tempBasal)
                     XCTAssertEqual(doseEntries[2].startDate, f("2018-12-12 18:15:00 +0000"))
-                    XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:30:00 +0000"))
+                    XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:45:00 +0000"))
                     XCTAssertEqual(doseEntries[2].value, 0.5)
                     XCTAssertNil(doseEntries[2].deliveredUnits)
-                    XCTAssertEqual(doseEntries[2].syncIdentifier, "121601f3094ca2 1/2")
-                    XCTAssertEqual(doseEntries[2].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
+                    XCTAssertEqual(doseEntries[2].syncIdentifier, "121601f3094ca2")
                     XCTAssertTrue(doseEntries[2].isMutable)
-                    XCTAssertEqual(doseEntries[3].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[3].startDate, f("2018-12-12 18:30:00 +0000"))
-                    XCTAssertEqual(doseEntries[3].endDate, f("2018-12-12 18:45:00 +0000"))
-                    XCTAssertEqual(doseEntries[3].value, 0.5)
-                    XCTAssertNil(doseEntries[3].deliveredUnits)
-                    XCTAssertEqual(doseEntries[3].syncIdentifier, "121601f3094ca2 2/2")
-                    XCTAssertEqual(doseEntries[3].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.0))
-                    XCTAssertTrue(doseEntries[3].isMutable)
                 }
                 addPumpEvents4.fulfill();
             }
@@ -984,14 +1009,13 @@ class DoseStoreTests: PersistenceControllerTestCase {
                 case .failure:
                     XCTFail()
                 case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 4)
+                    XCTAssertEqual(doseEntries.count, 3)
                     XCTAssertEqual(doseEntries[0].type, .tempBasal)
                     XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
                     XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
                     XCTAssertEqual(doseEntries[0].value, 2.125)
                     XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
                     XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertFalse(doseEntries[0].isMutable)
                     XCTAssertEqual(doseEntries[1].type, .basal)
                     XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
@@ -1003,20 +1027,11 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     XCTAssertFalse(doseEntries[1].isMutable)
                     XCTAssertEqual(doseEntries[2].type, .tempBasal)
                     XCTAssertEqual(doseEntries[2].startDate, f("2018-12-12 18:25:00 +0000"))
-                    XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:30:00 +0000"))
+                    XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:40:00 +0000"))
                     XCTAssertEqual(doseEntries[2].value, 0.75)
-                    XCTAssertEqual(doseEntries[2].deliveredUnits, 0.06666666666666667)
-                    XCTAssertEqual(doseEntries[2].syncIdentifier, "1201f3094c16a2 1/2")
-                    XCTAssertEqual(doseEntries[2].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
+                    XCTAssertEqual(doseEntries[2].deliveredUnits, 0.2)
+                    XCTAssertEqual(doseEntries[2].syncIdentifier, "1201f3094c16a2")
                     XCTAssertFalse(doseEntries[2].isMutable)
-                    XCTAssertEqual(doseEntries[3].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[3].startDate, f("2018-12-12 18:30:00 +0000"))
-                    XCTAssertEqual(doseEntries[3].endDate, f("2018-12-12 18:40:00 +0000"))
-                    XCTAssertEqual(doseEntries[3].value, 0.75)
-                    XCTAssertEqual(doseEntries[3].deliveredUnits, 0.13333333333333333)
-                    XCTAssertEqual(doseEntries[3].syncIdentifier, "1201f3094c16a2 2/2")
-                    XCTAssertEqual(doseEntries[3].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.0))
-                    XCTAssertFalse(doseEntries[3].isMutable)
                 }
                 addPumpEvents6.fulfill();
             }
@@ -1025,14 +1040,13 @@ class DoseStoreTests: PersistenceControllerTestCase {
                 case .failure:
                     XCTFail()
                 case .success(let doseEntries):
-                    XCTAssertEqual(doseEntries.count, 4)
+                    XCTAssertEqual(doseEntries.count, 3)
                     XCTAssertEqual(doseEntries[0].type, .tempBasal)
                     XCTAssertEqual(doseEntries[0].startDate, f("2018-12-12 17:35:00 +0000"))
                     XCTAssertEqual(doseEntries[0].endDate, f("2018-12-12 18:05:00 +0000"))
                     XCTAssertEqual(doseEntries[0].value, 2.125)
                     XCTAssertEqual(doseEntries[0].deliveredUnits, 1.05)
                     XCTAssertEqual(doseEntries[0].syncIdentifier, "1601fa23094c12")
-                    XCTAssertEqual(doseEntries[0].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
                     XCTAssertFalse(doseEntries[0].isMutable)
                     XCTAssertEqual(doseEntries[1].type, .basal)
                     XCTAssertEqual(doseEntries[1].startDate, f("2018-12-12 18:05:00 +0000"))
@@ -1044,20 +1058,11 @@ class DoseStoreTests: PersistenceControllerTestCase {
                     XCTAssertFalse(doseEntries[1].isMutable)
                     XCTAssertEqual(doseEntries[2].type, .tempBasal)
                     XCTAssertEqual(doseEntries[2].startDate, f("2018-12-12 18:25:00 +0000"))
-                    XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:30:00 +0000"))
+                    XCTAssertEqual(doseEntries[2].endDate, f("2018-12-12 18:40:00 +0000"))
                     XCTAssertEqual(doseEntries[2].value, 0.75)
-                    XCTAssertEqual(doseEntries[2].deliveredUnits, 0.06666666666666667)
-                    XCTAssertEqual(doseEntries[2].syncIdentifier, "1201f3094c16a2 1/2")
-                    XCTAssertEqual(doseEntries[2].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 0.85))
+                    XCTAssertEqual(doseEntries[2].deliveredUnits, 0.2)
+                    XCTAssertEqual(doseEntries[2].syncIdentifier, "1201f3094c16a2")
                     XCTAssertFalse(doseEntries[2].isMutable)
-                    XCTAssertEqual(doseEntries[3].type, .tempBasal)
-                    XCTAssertEqual(doseEntries[3].startDate, f("2018-12-12 18:30:00 +0000"))
-                    XCTAssertEqual(doseEntries[3].endDate, f("2018-12-12 18:40:00 +0000"))
-                    XCTAssertEqual(doseEntries[3].value, 0.75)
-                    XCTAssertEqual(doseEntries[3].deliveredUnits, 0.13333333333333333)
-                    XCTAssertEqual(doseEntries[3].syncIdentifier, "1201f3094c16a2 2/2")
-                    XCTAssertEqual(doseEntries[3].scheduledBasalRate, HKQuantity(unit: .internationalUnitsPerHour, doubleValue: 1.0))
-                    XCTAssertFalse(doseEntries[3].isMutable)
                 }
                 addPumpEvents6.fulfill();
             }
