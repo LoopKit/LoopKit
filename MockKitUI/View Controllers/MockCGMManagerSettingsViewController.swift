@@ -11,6 +11,7 @@ import Combine
 import HealthKit
 import LoopKit
 import LoopKitUI
+import LoopTestingKit
 import MockKit
 
 final class MockCGMManagerSettingsViewController: UITableViewController {
@@ -84,6 +85,7 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
     private enum ModelRow: Int, CaseIterable {
         case constant = 0
         case sineCurve
+        case scenario
         case noData
         case signalLoss
         case unreliableData
@@ -238,6 +240,11 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                     cell.accessoryType = .checkmark
                 } else {
                     cell.accessoryType = .disclosureIndicator
+                }
+            case .scenario:
+                cell.textLabel?.text = "Scenario"
+                if case .scenario = cgmManager.dataSource.model {
+                    cell.accessoryType = .checkmark
                 }
             case .noData:
                 cell.textLabel?.text = "No Data"
@@ -467,6 +474,10 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
                 vc.contextHelp = "The sine curve parameters describe a mathematical model for glucose value production."
                 vc.delegate = self
                 show(vc, sender: sender)
+            case .scenario:
+                cgmManager.dataSource.model = .scenario(pastSamples: [], futureSamples: [])
+                tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
+                NotificationCenter.default.post(name: .init("showScenarioSelector"), object: nil)
             case .noData:
                 cgmManager.dataSource.model = .noData
                 cgmManager.retractSignalLossAlert()
