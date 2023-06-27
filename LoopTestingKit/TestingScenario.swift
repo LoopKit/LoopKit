@@ -9,25 +9,9 @@
 import Foundation
 import LoopKit
 
-public struct ReloadManager: Codable, RawRepresentable {
-    public typealias RawValue = [String: Any]
-    
+public struct ReloadManager: Codable {
     public let pump: Bool?
     public let cgm: Bool?
-    
-    public init?(rawValue: [String : Any]) {
-        pump = rawValue["pump"] as? Bool
-        cgm = rawValue["cgm"] as? Bool
-    }
-    
-    public var rawValue: [String : Any] {
-        var rawValue: [String: Any] = [:]
-        
-        rawValue["pump"] = pump
-        rawValue["cgm"] = cgm
-        
-        return rawValue
-    }
 }
 
 public struct TestingScenario {

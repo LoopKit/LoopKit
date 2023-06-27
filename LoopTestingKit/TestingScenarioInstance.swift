@@ -9,9 +9,7 @@
 import Foundation
 import LoopKit
 
-public struct TestingScenarioInstance: RawRepresentable {
-    
-    public typealias RawValue = [String: Any]
+public struct TestingScenarioInstance {
     
     public var pastGlucoseSamples: [NewGlucoseSample]
     public var futureGlucoseSamples: [NewGlucoseSample]
@@ -34,28 +32,6 @@ public struct TestingScenarioInstance: RawRepresentable {
         self.carbEntries = carbEntries
         self.deviceActions = deviceActions
         self.shouldReloadManager = shouldReloadManager
-    }
-    
-    public init?(rawValue: [String : Any]) {
-        self.pastGlucoseSamples = (rawValue["pastGlucoseSamples"] as? [NewGlucoseSample.RawValue])?.compactMap { NewGlucoseSample(rawValue: $0) } ?? []
-        self.futureGlucoseSamples = (rawValue["futureGlucoseSamples"] as? [NewGlucoseSample.RawValue])?.compactMap { NewGlucoseSample(rawValue: $0) } ?? []
-        self.pumpEvents = (rawValue["pumpEvents"] as? [NewPumpEvent.RawValue])?.compactMap { NewPumpEvent(rawValue: $0) } ?? []
-        self.carbEntries = (rawValue["carbEntries"] as? [NewCarbEntry.RawValue])?.compactMap { NewCarbEntry(rawValue: $0) } ?? []
-        self.deviceActions = (rawValue["deviceActions"] as? [DeviceAction.RawValue])?.compactMap { DeviceAction(rawValue: $0) } ?? []
-        self.shouldReloadManager = rawValue["shouldReloadManager"] as? ReloadManager ?? nil
-    }
-    
-    public var rawValue: [String : Any] {
-        var rawValue: [String: Any] = [:]
-        
-        rawValue["pastGlucoseSamples"] = pastGlucoseSamples.map(\.rawValue)
-        rawValue["futureGlucoseSamples"] = futureGlucoseSamples.map(\.rawValue)
-        rawValue["pumpEvents"] = pumpEvents.map(\.rawValue)
-        rawValue["carbEntries"] = carbEntries.map(\.rawValue)
-        rawValue["deviceActions"] = deviceActions.map(\.rawValue)
-        rawValue["shouldReloadManager"] = shouldReloadManager?.rawValue
-        
-        return rawValue
     }
     
     public var hasCGMData: Bool {

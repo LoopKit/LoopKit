@@ -8,25 +8,7 @@
 
 import Foundation
 
-public struct DeviceAction: Equatable, Codable, RawRepresentable {
-    public typealias RawValue = [String: Any]
-    
+public struct DeviceAction: Equatable, Codable {
     public let managerIdentifier: String
     public let details: String
-    
-    public init?(rawValue: [String : Any]) {
-        guard let managerIdentifier = rawValue["managerIdentifier"] as? String, let details = rawValue["details"] as? String else {
-            return nil
-        }
-        
-        self.managerIdentifier = managerIdentifier
-        self.details = details
-    }
-    
-    public var rawValue: [String : Any] {
-        [
-            "managerIdentifier": managerIdentifier,
-            "details": details
-        ]
-    }
 }
