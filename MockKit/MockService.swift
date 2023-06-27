@@ -83,6 +83,10 @@ public final class MockService: Service {
 }
 
 extension MockService: AnalyticsService {
+    public func recordIdentify(_ property: String, array: [String]) {
+        record("[AnalyticsService] Identify: \(property) \(array)")
+    }
+
     public func recordAnalyticsEvent(_ name: String, withProperties properties: [AnyHashable: Any]?, outOfSession: Bool) {
         if analytics {
             record("[AnalyticsService] \(name) \(String(describing: properties)) \(outOfSession)")
