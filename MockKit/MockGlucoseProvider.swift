@@ -8,6 +8,7 @@
 
 import HealthKit
 import LoopKit
+import LoopTestingKit
 
 
 /// Returns a value based on the result of a random coin flip.
@@ -146,6 +147,24 @@ extension MockGlucoseProvider {
             completion(.newData([sample]))
         }
     }
+    
+    fileprivate static func scenario(pastSamples: [NewGlucoseSample], futureSamples: [NewGlucoseSample]) -> MockGlucoseProvider {
+        var localSamples = futureSamples
+        return MockGlucoseProvider { date, completion in
+            if localSamples.isEmpty {
+                localSamples = pastSamples + futureSamples
+            }
+            
+            guard let nextValue = localSamples.first?.quantity else {
+                completion(.noData)
+                return
+            }
+            
+            let sample = glucoseSample(at: date, quantity: nextValue, condition: nil, trend: .flat, trendRate: HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: 0))
+            localSamples = Array(localSamples.dropFirst())
+            completion(.newData([sample]))
+        }
+    }
 
     fileprivate static var noData: MockGlucoseProvider {
         return MockGlucoseProvider { _, completion in completion(.noData) }
@@ -257,6 +276,8 @@ private extension MockCGMDataSource.Model {
             return .constant(quantity)
         case .sineCurve(parameters: let parameters):
             return .sineCurve(parameters: parameters)
+        case .scenario(let pastSamples, let futureSamples):
+            return .scenario(pastSamples: pastSamples, futureSamples: futureSamples)
         case .noData:
             return .noData
         case .signalLoss:
