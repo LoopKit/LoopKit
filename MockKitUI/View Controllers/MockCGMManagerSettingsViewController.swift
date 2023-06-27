@@ -477,7 +477,6 @@ final class MockCGMManagerSettingsViewController: UITableViewController {
             case .scenario:
                 cgmManager.dataSource.model = .scenario(pastSamples: [], futureSamples: [])
                 tableView.reloadRows(at: indexPaths(forSection: .model, rows: ModelRow.self), with: .automatic)
-                NotificationCenter.default.post(name: .init("showScenarioSelector"), object: nil)
             case .noData:
                 cgmManager.dataSource.model = .noData
                 cgmManager.retractSignalLossAlert()
