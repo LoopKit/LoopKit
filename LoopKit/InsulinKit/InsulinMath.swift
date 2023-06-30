@@ -560,7 +560,7 @@ extension Collection where Element == DoseEntry {
         return values
     }
 
-    /// Calculates the timeline of glucose effects for a collection of doses
+    /// Calculates the timeline of glucose effects for a collection of doses. The ISF used for a given dose is based on the ISF in effect at the dose start time.
     ///
     /// - Parameters:
     ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
@@ -571,6 +571,46 @@ extension Collection where Element == DoseEntry {
     ///   - delta: The interval between returned effects
     /// - Returns: An array of glucose effects for the duration of the doses
     public func glucoseEffects(
+        insulinModelProvider: InsulinModelProvider,
+        longestEffectDuration: TimeInterval,
+        insulinSensitivity: InsulinSensitivitySchedule,
+        from start: Date? = nil,
+        to end: Date? = nil,
+        delta: TimeInterval = TimeInterval(/* minutes: */60 * 5)
+    ) -> [GlucoseEffect] {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(self.filter({ entry in
+            entry.netBasalUnits != 0
+        }), from: start, to: end, duration: longestEffectDuration, delta: delta) else {
+            return []
+        }
+
+        var date = start
+        var values = [GlucoseEffect]()
+        let unit = HKUnit.milligramsPerDeciliter
+
+        repeat {
+            let value = reduce(0) { (value, dose) -> Double in
+                return value + dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delta: delta)
+            }
+
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
+            date = date.addingTimeInterval(delta)
+        } while date <= end
+
+        return values
+    }
+
+    /// Calculates the timeline of glucose effects for a collection of doses. For each forecast point, the ISF in effect at that time will be used.
+    ///
+    /// - Parameters:
+    ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
+    ///   - longestEffectDuration: The longest duration that a dose could be active.
+    ///   - insulinSensitivity: The schedule of glucose effect per unit of insulin
+    ///   - start: The earliest date of effects to return
+    ///   - end: The latest date of effects to return
+    ///   - delta: The interval between returned effects
+    /// - Returns: An array of glucose effects for the duration of the doses
+    public func glucoseEffectsAccountingForScheduledSensitivityChanges(
         insulinModelProvider: InsulinModelProvider,
         longestEffectDuration: TimeInterval,
         insulinSensitivity: InsulinSensitivitySchedule,
@@ -606,6 +646,7 @@ extension Collection where Element == DoseEntry {
 
         return values
     }
+
 
     /// Applies the current basal schedule to a collection of reconciled doses in chronological order
     ///
