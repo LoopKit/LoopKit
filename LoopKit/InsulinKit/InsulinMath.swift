@@ -84,6 +84,24 @@ extension DoseEntry {
         }
     }
 
+    func glucoseEffect(during interval: DateInterval, model: InsulinModel, insulinSensitivity: Double, delta: TimeInterval) -> Double {
+        let start = interval.start.timeIntervalSince(startDate)
+        let end = interval.end.timeIntervalSince(startDate)
+
+        guard end-start >= 0 else {
+            return 0
+        }
+
+        // Consider doses within the delta time window as momentary
+        if endDate.timeIntervalSince(startDate) <= 1.05 * delta {
+            let effect = model.percentEffectRemaining(at: start) - model.percentEffectRemaining(at: end)
+            return netBasalUnits * -insulinSensitivity * effect
+        } else {
+            return netBasalUnits * -insulinSensitivity * continuousDeliveryGlucoseEffect(at: interval.end, model: model, delta: delta)
+        }
+    }
+
+
     func trimmed(from start: Date? = nil, to end: Date? = nil, syncIdentifier: String? = nil) -> DoseEntry {
 
         let originalDuration = endDate.timeIntervalSince(startDate)
@@ -566,16 +584,23 @@ extension Collection where Element == DoseEntry {
             return []
         }
 
+        var lastDate = start
         var date = start
+        var effectSum: Double = 0
         var values = [GlucoseEffect]()
         let unit = HKUnit.milligramsPerDeciliter
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
-                return value + dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delta: delta)
+                guard date != lastDate else {
+                    return 0
+                }
+                return value + dose.glucoseEffect(during: DateInterval(start: lastDate, end: date), model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: insulinSensitivity.quantity(at: date).doubleValue(for: unit), delta: delta)
             }
 
-            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
+            effectSum += value
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: effectSum)))
+            lastDate = date
             date = date.addingTimeInterval(delta)
         } while date <= end
 
