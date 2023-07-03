@@ -470,7 +470,19 @@ extension Collection where Element == DoseEntry {
         }
 
         if let suspend = lastSuspend {
-            reconciled.append(suspend)
+            reconciled.append(DoseEntry(
+                type: suspend.type,
+                startDate: suspend.startDate,
+                endDate: nil,
+                value: suspend.value,
+                unit: suspend.unit,
+                description: suspend.description,
+                syncIdentifier: suspend.syncIdentifier,
+                insulinType: suspend.insulinType,
+                automatic: suspend.automatic,
+                isMutable: true,  // Consider mutable until paired resume
+                wasProgrammedByPumpUI: suspend.wasProgrammedByPumpUI
+            ))
         } else if let last = lastBasal, last.endDate > last.startDate {
             reconciled.append(last)
         }
