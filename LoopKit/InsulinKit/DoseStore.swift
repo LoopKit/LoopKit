@@ -1076,17 +1076,13 @@ extension DoseStore {
     /// - Returns: An array of doses from pump events
     /// - Throws: An error describing the failure to fetch objects
     private func getNormalizedPumpEventDoseEntries(start: Date, end: Date? = nil) throws -> [DoseEntry] {
-        guard let basalProfile = self.basalProfileApplyingOverrideHistory else {
-            throw DoseStoreError.configurationError
-        }
-
         let queryStart = start.addingTimeInterval(-pumpEventReconciliationWindow)
 
         let doses = try getPumpEventObjects(
             matching: NSPredicate(format: "date >= %@ && doseType != nil", queryStart as NSDate),
             chronological: true
         ).compactMap({ $0.dose })
-        let normalizedDoses = doses.reconciled().annotated(with: basalProfile)
+        let normalizedDoses = doses.reconciled()
 
         return normalizedDoses.filterDateRange(start, end)
     }
@@ -1207,7 +1203,7 @@ extension DoseStore {
 
                 self.persistenceController.managedObjectContext.perform {
                     do {
-                        let doses: [DoseEntry]
+                        var doses: [DoseEntry]
 
                         // Reservoir data is used only if it's continuous and the pumpmanager hasn't reconciled since the last reservoir reading
                         if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {
@@ -1220,6 +1216,16 @@ extension DoseStore {
                             // Deduplicates doses by syncIdentifier
                             doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
                         }
+
+                        // Extend an unfinished suspend out to end time
+                        doses = doses.map { dose in
+                            var dose = dose
+                            if dose.type == .suspend && dose.startDate == dose.endDate {
+                                dose.endDate = end ?? Date()
+                            }
+                            return dose
+                        }
+
                         completion(.success(doses.annotated(with: basalProfile)))
                     } catch let error as DoseStoreError {
                         completion(.failure(error))
