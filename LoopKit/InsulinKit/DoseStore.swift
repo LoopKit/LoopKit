@@ -1192,6 +1192,12 @@ extension DoseStore {
     ///   - completion: A closure called once the entries have been retrieved
     ///   - result: An array of dose entries, in chronological order by startDate
     public func getNormalizedDoseEntries(start: Date, end: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[DoseEntry]>) -> Void) {
+
+        guard let basalProfile = self.basalProfileApplyingOverrideHistory else {
+            completion(.failure(.configurationError))
+            return
+        }
+
         insulinDeliveryStore.getDoseEntries(start: start, end: end, includeMutable: true) { (result) in
             switch result {
             case .failure(let error):
@@ -1214,7 +1220,7 @@ extension DoseStore {
                             // Deduplicates doses by syncIdentifier
                             doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
                         }
-                        completion(.success(doses))
+                        completion(.success(doses.annotated(with: basalProfile)))
                     } catch let error as DoseStoreError {
                         completion(.failure(error))
                     } catch {
@@ -1323,10 +1329,7 @@ extension DoseStore {
     ///   - completion: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completion: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
-        guard
-            let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory,
-            let basalProfile = self.basalProfileApplyingOverrideHistory
-        else {
+        guard let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory else {
             completion(.failure(.configurationError))
             return
         }
@@ -1338,7 +1341,7 @@ extension DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-                let trimmedDoses = doses.annotated(with: basalProfile).map { (dose) -> DoseEntry in
+                let trimmedDoses = doses.map { (dose) -> DoseEntry in
                     guard dose.type != .bolus else {
                         return dose
                     }
