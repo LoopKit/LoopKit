@@ -14,7 +14,7 @@ public protocol PluginHost {
     var hostVersion: String { get }
 }
 
-public protocol ServiceDelegate: AnyObject, PluginHost, AlertIssuer {
+public protocol ServiceDelegate: AnyObject, PluginHost, AlertIssuer, RemoteActionDelegate {
     /// Informs the delegate that the state of the specified service was updated and the delegate should persist the service. May
     /// be invoked prior to the service completing setup.
     ///

@@ -1076,17 +1076,13 @@ extension DoseStore {
     /// - Returns: An array of doses from pump events
     /// - Throws: An error describing the failure to fetch objects
     private func getNormalizedPumpEventDoseEntries(start: Date, end: Date? = nil) throws -> [DoseEntry] {
-        guard let basalProfile = self.basalProfileApplyingOverrideHistory else {
-            throw DoseStoreError.configurationError
-        }
-
         let queryStart = start.addingTimeInterval(-pumpEventReconciliationWindow)
 
         let doses = try getPumpEventObjects(
             matching: NSPredicate(format: "date >= %@ && doseType != nil", queryStart as NSDate),
             chronological: true
         ).compactMap({ $0.dose })
-        let normalizedDoses = doses.reconciled().annotated(with: basalProfile)
+        let normalizedDoses = doses.reconciled()
 
         return normalizedDoses.filterDateRange(start, end)
     }
@@ -1192,6 +1188,12 @@ extension DoseStore {
     ///   - completion: A closure called once the entries have been retrieved
     ///   - result: An array of dose entries, in chronological order by startDate
     public func getNormalizedDoseEntries(start: Date, end: Date? = nil, completion: @escaping (_ result: DoseStoreResult<[DoseEntry]>) -> Void) {
+
+        guard let basalProfile = self.basalProfileApplyingOverrideHistory else {
+            completion(.failure(.configurationError))
+            return
+        }
+
         insulinDeliveryStore.getDoseEntries(start: start, end: end, includeMutable: true) { (result) in
             switch result {
             case .failure(let error):
@@ -1201,7 +1203,7 @@ extension DoseStore {
 
                 self.persistenceController.managedObjectContext.perform {
                     do {
-                        let doses: [DoseEntry]
+                        var doses: [DoseEntry]
 
                         // Reservoir data is used only if it's continuous and the pumpmanager hasn't reconciled since the last reservoir reading
                         if self.areReservoirValuesValid, let reservoirEndDate = self.lastStoredReservoirValue?.startDate, reservoirEndDate > self.lastPumpEventsReconciliation ?? .distantPast {
@@ -1214,7 +1216,17 @@ extension DoseStore {
                             // Deduplicates doses by syncIdentifier
                             doses = insulinDeliveryDoses.appendedUnion(with: try self.getNormalizedPumpEventDoseEntries(start: filteredStart, end: end))
                         }
-                        completion(.success(doses))
+
+                        // Extend an unfinished suspend out to end time
+                        doses = doses.map { dose in
+                            var dose = dose
+                            if dose.type == .suspend && dose.startDate == dose.endDate {
+                                dose.endDate = end ?? Date()
+                            }
+                            return dose
+                        }
+
+                        completion(.success(doses.annotated(with: basalProfile)))
                     } catch let error as DoseStoreError {
                         completion(.failure(error))
                     } catch {
@@ -1323,10 +1335,7 @@ extension DoseStore {
     ///   - completion: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
     public func getGlucoseEffects(start: Date, end: Date? = nil, basalDosingEnd: Date? = Date(), completion: @escaping (_ result: DoseStoreResult<[GlucoseEffect]>) -> Void) {
-        guard
-            let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory,
-            let basalProfile = self.basalProfileApplyingOverrideHistory
-        else {
+        guard let insulinSensitivitySchedule = self.insulinSensitivityScheduleApplyingOverrideHistory else {
             completion(.failure(.configurationError))
             return
         }
@@ -1338,7 +1347,7 @@ extension DoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let doses):
-                let trimmedDoses = doses.annotated(with: basalProfile).map { (dose) -> DoseEntry in
+                let trimmedDoses = doses.map { (dose) -> DoseEntry in
                     guard dose.type != .bolus else {
                         return dose
                     }
