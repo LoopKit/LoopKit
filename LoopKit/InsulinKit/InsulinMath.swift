@@ -308,32 +308,6 @@ extension DoseEntry {
 }
 
 extension DoseEntry {
-    /// Calculates the timeline of glucose effects for a temp basal dose
-    /// Use case: predict glucose effects of zero temping
-    ///
-    /// - Parameters:
-    ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
-    ///   - longestEffectDuration: The longest duration that a dose could be active.
-    ///   - defaultInsulinModelSetting: The model of insulin activity over time
-    ///   - insulinSensitivity: The schedule of glucose effect per unit of insulin
-    ///   - basalRateSchedule: The schedule of basal rates
-    /// - Returns: An array of glucose effects for the duration of the temp basal dose plus the duration of insulin action
-    public func tempBasalGlucoseEffects(
-        insulinModelProvider: InsulinModelProvider,
-        longestEffectDuration: TimeInterval,
-        insulinSensitivity: InsulinSensitivitySchedule,
-        basalRateSchedule: BasalRateSchedule
-        ) -> [GlucoseEffect] {
-
-        guard case .tempBasal = type else {
-            return []
-        }
-        
-        let netTempBasalDoses = self.annotated(with: basalRateSchedule)
-
-        return netTempBasalDoses.glucoseEffects(insulinModelProvider: insulinModelProvider, longestEffectDuration: longestEffectDuration, insulinSensitivity: insulinSensitivity)
-    }
-
     fileprivate var resolvingDelivery: DoseEntry {
         guard !isMutable, deliveredUnits == nil else {
             return self
