@@ -8,7 +8,7 @@
 
 import HealthKit
 import LoopKit
-
+import LoopTestingKit
 
 public struct MockCGMDataSource {
     public enum Model {
@@ -16,6 +16,7 @@ public struct MockCGMDataSource {
 
         case constant(_ glucose: HKQuantity)
         case sineCurve(parameters: SineCurveParameters)
+        case scenario(pastSamples: [NewGlucoseSample], futureSamples: [NewGlucoseSample])
         case noData
         case signalLoss
         case unreliableData
@@ -145,6 +146,7 @@ extension MockCGMDataSource.Model: RawRepresentable {
     private enum Kind: String {
         case constant
         case sineCurve
+        case scenario
         case noData
         case signalLoss
         case unreliableData
@@ -186,6 +188,11 @@ extension MockCGMDataSource.Model: RawRepresentable {
 
             let referenceDate = Date(timeIntervalSince1970: referenceDateSeconds)
             self = .sineCurve(parameters: (baseGlucose: baseGlucose, amplitude: amplitude, period: period, referenceDate: referenceDate))
+        case .scenario:
+            let pastGlucoseValues = (rawValue["pastGlucoseValues"] as? [NewGlucoseSample.RawValue])?.compactMap({ NewGlucoseSample(rawValue: $0) }) ?? []
+            let futureGlucoseValues = (rawValue["futureGlucoseValues"] as? [NewGlucoseSample.RawValue])?.compactMap({ NewGlucoseSample(rawValue: $0) }) ?? []
+            
+            self = .scenario(pastSamples: pastGlucoseValues, futureSamples: futureGlucoseValues)
         case .noData:
             self = .noData
         case .signalLoss:
@@ -207,6 +214,9 @@ extension MockCGMDataSource.Model: RawRepresentable {
             rawValue["amplitude"] = amplitude.doubleValue(for: unit)
             rawValue["period"] = period
             rawValue["referenceDate"] = referenceDate.timeIntervalSince1970
+        case .scenario(let pastGlucoseValues, let futureGlucoseValues):
+            rawValue["pastGlucoseValues"] = pastGlucoseValues.map(\.rawValue)
+            rawValue["futureGlucoseValues"] = futureGlucoseValues.map(\.rawValue)
         case .noData, .signalLoss, .unreliableData:
             break
         }
@@ -220,6 +230,8 @@ extension MockCGMDataSource.Model: RawRepresentable {
             return .constant
         case .sineCurve:
             return .sineCurve
+        case .scenario:
+            return .scenario
         case .noData:
             return .noData
         case .signalLoss:

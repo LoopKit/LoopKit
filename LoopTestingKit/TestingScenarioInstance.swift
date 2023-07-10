@@ -16,6 +16,22 @@ public struct TestingScenarioInstance {
     public var deviceActions: [DeviceAction]
     public let shouldReloadManager: ReloadManager?
     
+    public init(
+        pastGlucoseSamples: [NewGlucoseSample],
+        futureGlucoseSamples: [NewGlucoseSample],
+        pumpEvents: [NewPumpEvent],
+        carbEntries: [NewCarbEntry],
+        deviceActions: [DeviceAction],
+        shouldReloadManager: ReloadManager?
+    ) {
+        self.pastGlucoseSamples = pastGlucoseSamples
+        self.futureGlucoseSamples = futureGlucoseSamples
+        self.pumpEvents = pumpEvents
+        self.carbEntries = carbEntries
+        self.deviceActions = deviceActions
+        self.shouldReloadManager = shouldReloadManager
+    }
+    
     public var hasCGMData: Bool {
         !(pastGlucoseSamples + futureGlucoseSamples).isEmpty
     }
