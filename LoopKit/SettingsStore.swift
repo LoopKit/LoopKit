@@ -193,6 +193,46 @@ extension SettingsStore {
         case failure(Error)
     }
 
+    /// Retrieves stored settings
+    ///
+    /// - Parameters:
+    ///   - start:If non-nil, select boluses that ended after start.
+    ///   - end: If non-nil, select boluses that started before end.
+    ///   - limit: If non-nill, specify the max number of boluses to return.
+    ///   - returns: A list of DoseEntry objects representing the most recent boluses
+    public func getStoredSettings(start: Date? = nil, end: Date? = nil, limit: Int? = nil) async throws -> [StoredSettings] {
+        return try await withCheckedThrowingContinuation({ continuation in
+            self.store.managedObjectContext.performAndWait {
+                let request: NSFetchRequest<SettingsObject> = SettingsObject.fetchRequest()
+
+                var predicates = [NSPredicate]()
+                if let start {
+                    predicates.append(NSPredicate(format: "date >= %@", start as NSDate))
+                }
+                if let end {
+                    predicates.append(NSPredicate(format: "date <= %@", end as NSDate))
+                }
+                if predicates.count > 1 {
+                    request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+                } else {
+                    request.predicate = predicates.first
+                }
+
+                request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+                if let limit {
+                    request.fetchLimit = limit
+                }
+
+                do {
+                    let stored = try self.store.managedObjectContext.fetch(request)
+                    continuation.resume(returning: stored.compactMap { self.decodeSettings(fromData: $0.data) })
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        })
+    }
+
     public func executeSettingsQuery(fromQueryAnchor queryAnchor: QueryAnchor?, limit: Int, completion: @escaping (SettingsQueryResult) -> Void) {
         dataAccessQueue.async {
             var queryAnchor = queryAnchor ?? QueryAnchor()

@@ -45,7 +45,15 @@ extension HKQuantitySample {
         ]
         
         switch dose.type {
-        case .basal, .tempBasal, .suspend:
+        case .suspend:
+            metadata[HKMetadataKeyInsulinDeliveryReason] = HKInsulinDeliveryReason.basal.rawValue
+
+            if let basalRate = dose.scheduledBasalRate {
+                metadata[MetadataKeyScheduledBasalRate] = basalRate
+            }
+            metadata[MetadataKeyIsSuspend] = true
+
+        case .basal, .tempBasal:
             // Ignore 0-duration basal entries
             guard dose.endDate.timeIntervalSince(dose.startDate) > .ulpOfOne else {
                 return nil
