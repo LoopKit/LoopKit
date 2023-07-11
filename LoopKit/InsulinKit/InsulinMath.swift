@@ -362,6 +362,27 @@ extension DoseEntry {
     }
 }
 
+extension Collection where Element: TimelineValue {
+    public var timespan: DateInterval {
+
+        guard count > 0 else {
+            return DateInterval(start: Date(), duration: 0)
+        }
+
+        var min: Date = .distantFuture
+        var max: Date = .distantPast
+        for value in self {
+            if value.startDate < min {
+                min = value.startDate
+            }
+            if value.endDate > max {
+                max = value.endDate
+            }
+        }
+        return DateInterval(start: min, end: max)
+    }
+}
+
 extension Collection where Element == DoseEntry {
 
     /**
@@ -547,16 +568,16 @@ extension Collection where Element == DoseEntry {
      - parameter longestEffectDuration: The longest duration that a dose could be active.
      - parameter start:                 The date to start the timeline
      - parameter end:                   The date to end the timeline
-     - parameter delta:                 The differential between timeline entries
+     - parameter delta:                 The differential between timeline entries, Defaults to 5 minutes.
 
      - returns: A sequence of insulin amount remaining
      */
-    func insulinOnBoard(
+    public func insulinOnBoard(
         insulinModelProvider: InsulinModelProvider,
         longestEffectDuration: TimeInterval,
         from start: Date? = nil,
         to end: Date? = nil,
-        delta: TimeInterval = TimeInterval(minutes: 5)
+        delta: TimeInterval = TimeInterval(5*60)
     ) -> [InsulinValue] {
         guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: longestEffectDuration, delta: delta) else {
             return []
@@ -617,6 +638,56 @@ extension Collection where Element == DoseEntry {
         return values
     }
 
+    /// Calculates the timeline of glucose effects for a collection of doses. The ISF used for a given dose is based on the ISF in effect at the dose start time.
+    ///
+    /// - Parameters:
+    ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
+    ///   - longestEffectDuration: The longest duration that a dose could be active.
+    ///   - insulinSensitivityHistory: The history of glucose effect per unit of insulin
+    ///   - start: The earliest date of effects to return
+    ///   - end: The latest date of effects to return
+    ///   - delta: The interval between returned effects
+    /// - Returns: An array of glucose effects for the duration of the doses
+    public func glucoseEffects(
+        insulinModelProvider: InsulinModelProvider,
+        longestEffectDuration: TimeInterval,
+        insulinSensitivityHistory: [AbsoluteScheduleValue<HKQuantity>],
+        from start: Date? = nil,
+        to end: Date? = nil,
+        delta: TimeInterval = TimeInterval(/* minutes: */60 * 5)
+    ) -> [GlucoseEffect] {
+
+        let activeEntries = self.filter({ entry in
+            entry.netBasalUnits != 0
+        })
+
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(activeEntries, from: start, to: end, duration: longestEffectDuration, delta: delta) else {
+            return []
+        }
+
+        var date = start
+        var values = [GlucoseEffect]()
+        let unit = HKUnit.milligramsPerDeciliter
+
+        repeat {
+            let value = reduce(0) { (value, dose) -> Double in
+
+                guard let isf = insulinSensitivityHistory.closestPrior(to: dose.startDate), isf.endDate >= dose.startDate else {
+                    preconditionFailure("ISF History must cover dose startDates")
+                }
+                let doseEffect = dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: isf.value.doubleValue(for: unit), delta: delta)
+                //print("dose insulin effect \(date) = \(doseEffect) isf=\(isf.value.doubleValue(for: unit)) dose.startDate=\(dose.startDate)")
+                return value + doseEffect
+            }
+
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
+            date = date.addingTimeInterval(delta)
+        } while date <= end
+
+        return values
+    }
+
+
     /// Calculates the timeline of glucose effects for a collection of doses. For each forecast point, the ISF in effect at that time will be used.
     ///
     /// - Parameters:
@@ -674,10 +745,6 @@ extension Collection where Element == DoseEntry {
     ///   - gapPatchInterval: if the gap between two temp basals is less than this, then the start date of the second dose will be fudged to fill the gap. Used for display purposes.
     /// - Returns: An array of doses, with new doses created for any gaps between basalHistory.first.startDate and the end date.
     public func infill(with basalHistory: [AbsoluteScheduleValue<Double>], endDate: Date? = nil, gapPatchInterval: TimeInterval = 0) -> [DoseEntry] {
-
-        print("**** infill ending \(String(describing: endDate))")
-
-
         guard basalHistory.count > 0 else {
             return Array(self)
         }
@@ -699,8 +766,6 @@ extension Collection where Element == DoseEntry {
                 }
 
                 if lastDate != entryEnd {
-                    print("**** adding basal \(lastDate) to \(entryEnd)")
-                    
                     newEntries.append(
                         DoseEntry(
                             type: .basal,
@@ -712,7 +777,6 @@ extension Collection where Element == DoseEntry {
                     lastDate = entryEnd
                 }
             }
-            print("**** filled \(startDate) to \(endDate) with basal")
         }
 
         for dose in self {
@@ -731,8 +795,6 @@ extension Collection where Element == DoseEntry {
                     value: dose.unitsPerHour,
                     unit: .unitsPerHour)
                 )
-                print("**** added \(dose.startDate) to \(dose.endDate) from dose (\(dose.unitsPerHour))")
-
                 lastDate = dose.endDate
             case .resume:
                 assertionFailure("No resume events should be present in reconciled doses")

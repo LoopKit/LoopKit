@@ -11,6 +11,7 @@ import HealthKit
 
 
 public enum LoopMath {
+
     static func simulationDateRangeForSamples<T: Collection>(
         _ samples: T,
         from start: Date? = nil,
@@ -19,13 +20,13 @@ public enum LoopMath {
         delay: TimeInterval = 0,
         delta: TimeInterval
     ) -> (start: Date, end: Date)? where T.Element: TimelineValue {
-        guard samples.count > 0 else {
-            return nil
-        }
 
         if let start = start, let end = end {
             return (start: start.dateFlooredToTimeInterval(delta), end: end.dateCeiledToTimeInterval(delta))
         } else {
+            guard samples.count > 0 else {
+                return nil
+            }
             var minDate = samples.first!.startDate
             var maxDate = minDate
 
