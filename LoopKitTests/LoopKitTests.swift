@@ -18,7 +18,9 @@ extension XCTestCase {
     }
 
     public func loadFixture<T>(_ resourceName: String) -> T {
-        let path = bundle.path(forResource: resourceName, ofType: "json")!
+        guard let path = bundle.path(forResource: resourceName, ofType: "json") else {
+            preconditionFailure("Could not find fixture: \(resourceName)")
+        }
         return try! JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: path)), options: []) as! T
     }
 }

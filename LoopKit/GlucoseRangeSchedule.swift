@@ -222,6 +222,14 @@ extension GlucoseRangeSchedule: Codable {}
 
 extension GlucoseRangeSchedule.Override: Codable {}
 
+extension ClosedRange where Bound == HKQuantity {
+    public func averageValue(for unit: HKUnit) -> Double {
+        let minValue = lowerBound.doubleValue(for: unit)
+        let maxValue = upperBound.doubleValue(for: unit)
+        return (maxValue + minValue) / 2
+    }
+}
+
 extension DoubleRange {
     public func quantityRange(for unit: HKUnit) -> ClosedRange<HKQuantity> {
         let lowerBound = HKQuantity(unit: unit, doubleValue: minValue)

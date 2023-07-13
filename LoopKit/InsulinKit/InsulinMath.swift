@@ -193,13 +193,13 @@ extension Collection where Element: ReservoirValue {
 
     /**
      Whether a span of chronological reservoir values is considered continuous and therefore reliable.
-     
+
      Reservoir values of 0 are automatically considered unreliable due to the assumption that an unknown amount of insulin can be delivered after the 0 marker.
 
      - parameter startDate:       The beginning of the interval in which to validate continuity
      - parameter endDate:         The end of the interval in which to validate continuity
      - parameter maximumDuration: The maximum interval to consider reliable for a reservoir-derived dose
-     
+
      - returns: Whether the reservoir values meet the critera for continuity
      */
     func isContinuous(from start: Date?, to end: Date, within maximumDuration: TimeInterval) -> Bool {
@@ -314,7 +314,7 @@ extension DoseEntry {
         let basalItems = basalSchedule.between(start: startDate, end: endDate)
         return annotated(with: basalItems)
     }
-    
+
     /// Annotates a dose with the specified insulin type.
     ///
     /// - Parameter insulinType: The insulin type to annotate the dose with.
@@ -549,7 +549,7 @@ extension Collection where Element == DoseEntry {
         return annotatedDoses
     }
 
-    
+
     /**
      Calculates the total insulin delivery for a collection of doses
 
@@ -643,7 +643,7 @@ extension Collection where Element == DoseEntry {
     /// - Parameters:
     ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
     ///   - longestEffectDuration: The longest duration that a dose could be active.
-    ///   - insulinSensitivityHistory: The history of glucose effect per unit of insulin
+    ///   - insulinSensitivityHistory: The timeline of glucose effect per unit of insulin
     ///   - start: The earliest date of effects to return
     ///   - end: The latest date of effects to return
     ///   - delta: The interval between returned effects
@@ -688,20 +688,20 @@ extension Collection where Element == DoseEntry {
     }
 
 
-    /// Calculates the timeline of glucose effects for a collection of doses. For each forecast point, the ISF in effect at that time will be used.
+    /// Calculates the timeline of glucose effects for a collection of doses. Dose effects will consider the timeline of insulin sensitivity.
     ///
     /// - Parameters:
     ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
     ///   - longestEffectDuration: The longest duration that a dose could be active.
-    ///   - insulinSensitivity: The schedule of glucose effect per unit of insulin
+    ///   - insulinSensitivityTimeline: A timeline of glucose effect per unit of insulin
     ///   - start: The earliest date of effects to return
     ///   - end: The latest date of effects to return
     ///   - delta: The interval between returned effects
     /// - Returns: An array of glucose effects for the duration of the doses
-    public func glucoseEffectsApplyingSensitivityChangesDuringDoseAbsorption(
+    public func glucoseEffects(
         insulinModelProvider: InsulinModelProvider,
         longestEffectDuration: TimeInterval,
-        insulinSensitivity: InsulinSensitivitySchedule,
+        insulinSensitivityTimeline: [AbsoluteScheduleValue<HKQuantity>],
         from start: Date? = nil,
         to end: Date? = nil,
         delta: TimeInterval = TimeInterval(/* minutes: */60 * 5)
@@ -719,11 +719,21 @@ extension Collection where Element == DoseEntry {
         let unit = HKUnit.milligramsPerDeciliter
 
         repeat {
+            // Sum effects over doses
             let value = reduce(0) { (value, dose) -> Double in
                 guard date != lastDate else {
                     return 0
                 }
-                return value + dose.glucoseEffect(during: DateInterval(start: lastDate, end: date), model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: insulinSensitivity.quantity(at: date).doubleValue(for: unit), delta: delta)
+
+                let model = insulinModelProvider.model(for: dose.insulinType)
+
+                // Sum effects over pertinent ISF timeline segments
+                let isfSegments = insulinSensitivityTimeline.filterDateRange(lastDate, date)
+                return value + isfSegments.reduce(0, { partialResult, segment in
+                    let start = Swift.max(lastDate, segment.startDate)
+                    let end = Swift.min(date, segment.endDate)
+                    return partialResult + dose.glucoseEffect(during: DateInterval(start: start, end: end), model: model, insulinSensitivity: segment.value.doubleValue(for: unit), delta: delta)
+                })
             }
 
             effectSum += value
@@ -773,7 +783,7 @@ extension Collection where Element == DoseEntry {
                             endDate: entryEnd,
                             value: curRate,
                             unit: .unitsPerHour))
-                    
+
                     lastDate = entryEnd
                 }
             }
@@ -820,7 +830,7 @@ extension Collection where Element == DoseEntry {
     ///   - start: The earliest date to apply the basal schedule
     ///   - end: The latest date to include. Doses must end before this time to be included.
     ///   - insertingBasalEntries: Whether basal doses should be created from the schedule. Pass true only for pump models that do not report their basal rates in event history.
-    /// - Returns: An array of doses, 
+    /// - Returns: An array of doses,
     public func overlayBasalSchedule(_ basalSchedule: BasalRateSchedule, startingAt start: Date, endingAt end: Date = .distantFuture, insertingBasalEntries: Bool) -> [DoseEntry] {
         let dateFormatter = ISO8601DateFormatter()  // GMT-based ISO formatting
         var newEntries = [DoseEntry]()

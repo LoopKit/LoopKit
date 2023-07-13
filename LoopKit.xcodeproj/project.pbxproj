@@ -702,6 +702,25 @@
 		C164A56022F14C73000E3FA5 /* UnfinalizedDose.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A55F22F14C73000E3FA5 /* UnfinalizedDose.swift */; };
 		C164A56422F21081000E3FA5 /* MockPumpManagerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C164A56322F21081000E3FA5 /* MockPumpManagerState.swift */; };
 		C168CA7A280DD00F002BD2A7 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C168CA77280DD00F002BD2A7 /* Model.xcdatamodeld */; };
+		C16BC0B52A5FA9D200BDC713 /* DoseMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16BC0B42A5FA9D200BDC713 /* DoseMath.swift */; };
+		C16BC0B72A5FAB6F00BDC713 /* DoseMathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16BC0B62A5FAB6E00BDC713 /* DoseMathTests.swift */; };
+		C16BC0CA2A60351B00BDC713 /* far_future_high_bg_forecast_after_6_hours.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0B92A60351900BDC713 /* far_future_high_bg_forecast_after_6_hours.json */; };
+		C16BC0CB2A60351B00BDC713 /* recommend_temp_basal_no_change_glucose.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0BA2A60351900BDC713 /* recommend_temp_basal_no_change_glucose.json */; };
+		C16BC0CC2A60351B00BDC713 /* recommend_temp_basal_start_low_end_high.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0BB2A60351900BDC713 /* recommend_temp_basal_start_low_end_high.json */; };
+		C16BC0CD2A60351B00BDC713 /* recommend_temp_basal_start_very_low_end_high.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0BC2A60351900BDC713 /* recommend_temp_basal_start_very_low_end_high.json */; };
+		C16BC0CE2A60351B00BDC713 /* read_selected_basal_profile.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0BD2A60351900BDC713 /* read_selected_basal_profile.json */; };
+		C16BC0CF2A60351B00BDC713 /* recommended_temp_start_low_end_just_above_range.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0BE2A60351A00BDC713 /* recommended_temp_start_low_end_just_above_range.json */; };
+		C16BC0D02A60351B00BDC713 /* recommend_temp_basal_dropping_then_rising.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0BF2A60351A00BDC713 /* recommend_temp_basal_dropping_then_rising.json */; };
+		C16BC0D12A60351B00BDC713 /* recommend_temp_basal_flat_and_high.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0C02A60351A00BDC713 /* recommend_temp_basal_flat_and_high.json */; };
+		C16BC0D22A60351B00BDC713 /* recommend_temp_basal_correct_low_at_min.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0C12A60351A00BDC713 /* recommend_temp_basal_correct_low_at_min.json */; };
+		C16BC0D32A60351B00BDC713 /* recommend_temp_basal_in_range_and_rising.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0C22A60351A00BDC713 /* recommend_temp_basal_in_range_and_rising.json */; };
+		C16BC0D42A60351B00BDC713 /* recommend_temp_basal_high_and_falling.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0C32A60351A00BDC713 /* recommend_temp_basal_high_and_falling.json */; };
+		C16BC0D52A60351B00BDC713 /* recommend_temp_basal_very_low_end_in_range.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0C42A60351A00BDC713 /* recommend_temp_basal_very_low_end_in_range.json */; };
+		C16BC0D62A60351B00BDC713 /* recommend_temp_basal_start_high_end_low.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0C52A60351A00BDC713 /* recommend_temp_basal_start_high_end_low.json */; };
+		C16BC0D72A60351B00BDC713 /* recommend_temp_basal_high_and_rising.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0C62A60351A00BDC713 /* recommend_temp_basal_high_and_rising.json */; };
+		C16BC0D82A60351B00BDC713 /* recommend_temp_basal_start_high_end_in_range.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0C72A60351A00BDC713 /* recommend_temp_basal_start_high_end_in_range.json */; };
+		C16BC0D92A60351B00BDC713 /* recommend_temp_basal_start_low_end_in_range.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0C82A60351A00BDC713 /* recommend_temp_basal_start_low_end_in_range.json */; };
+		C16BC0DA2A60351B00BDC713 /* far_future_high_bg_forecast.json in Resources */ = {isa = PBXBuildFile; fileRef = C16BC0C92A60351A00BDC713 /* far_future_high_bg_forecast.json */; };
 		C16DA83F22E8D88F008624C2 /* LoopPluginBundleKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16DA83E22E8D88F008624C2 /* LoopPluginBundleKey.swift */; };
 		C16DA84522E9330A008624C2 /* LoopUIPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */; };
 		C17F39C123CD24A000FA1113 /* DeviceLog.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C17F39BF23CD24A000FA1113 /* DeviceLog.xcdatamodeld */; };
@@ -1647,6 +1666,25 @@
 		C16529002981EE40000B130A /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C168CA78280DD00F002BD2A7 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		C168CA79280DD00F002BD2A7 /* Modelv4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Modelv4.xcdatamodel; sourceTree = "<group>"; };
+		C16BC0B42A5FA9D200BDC713 /* DoseMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseMath.swift; sourceTree = "<group>"; };
+		C16BC0B62A5FAB6E00BDC713 /* DoseMathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseMathTests.swift; sourceTree = "<group>"; };
+		C16BC0B92A60351900BDC713 /* far_future_high_bg_forecast_after_6_hours.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = far_future_high_bg_forecast_after_6_hours.json; sourceTree = "<group>"; };
+		C16BC0BA2A60351900BDC713 /* recommend_temp_basal_no_change_glucose.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_no_change_glucose.json; sourceTree = "<group>"; };
+		C16BC0BB2A60351900BDC713 /* recommend_temp_basal_start_low_end_high.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_start_low_end_high.json; sourceTree = "<group>"; };
+		C16BC0BC2A60351900BDC713 /* recommend_temp_basal_start_very_low_end_high.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_start_very_low_end_high.json; sourceTree = "<group>"; };
+		C16BC0BD2A60351900BDC713 /* read_selected_basal_profile.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = read_selected_basal_profile.json; sourceTree = "<group>"; };
+		C16BC0BE2A60351A00BDC713 /* recommended_temp_start_low_end_just_above_range.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommended_temp_start_low_end_just_above_range.json; sourceTree = "<group>"; };
+		C16BC0BF2A60351A00BDC713 /* recommend_temp_basal_dropping_then_rising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_dropping_then_rising.json; sourceTree = "<group>"; };
+		C16BC0C02A60351A00BDC713 /* recommend_temp_basal_flat_and_high.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_flat_and_high.json; sourceTree = "<group>"; };
+		C16BC0C12A60351A00BDC713 /* recommend_temp_basal_correct_low_at_min.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_correct_low_at_min.json; sourceTree = "<group>"; };
+		C16BC0C22A60351A00BDC713 /* recommend_temp_basal_in_range_and_rising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_in_range_and_rising.json; sourceTree = "<group>"; };
+		C16BC0C32A60351A00BDC713 /* recommend_temp_basal_high_and_falling.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_high_and_falling.json; sourceTree = "<group>"; };
+		C16BC0C42A60351A00BDC713 /* recommend_temp_basal_very_low_end_in_range.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_very_low_end_in_range.json; sourceTree = "<group>"; };
+		C16BC0C52A60351A00BDC713 /* recommend_temp_basal_start_high_end_low.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_start_high_end_low.json; sourceTree = "<group>"; };
+		C16BC0C62A60351A00BDC713 /* recommend_temp_basal_high_and_rising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_high_and_rising.json; sourceTree = "<group>"; };
+		C16BC0C72A60351A00BDC713 /* recommend_temp_basal_start_high_end_in_range.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_start_high_end_in_range.json; sourceTree = "<group>"; };
+		C16BC0C82A60351A00BDC713 /* recommend_temp_basal_start_low_end_in_range.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = recommend_temp_basal_start_low_end_in_range.json; sourceTree = "<group>"; };
+		C16BC0C92A60351A00BDC713 /* far_future_high_bg_forecast.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = far_future_high_bg_forecast.json; sourceTree = "<group>"; };
 		C16DA83E22E8D88F008624C2 /* LoopPluginBundleKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopPluginBundleKey.swift; sourceTree = "<group>"; };
 		C16DA84422E9330A008624C2 /* LoopUIPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopUIPlugin.swift; sourceTree = "<group>"; };
 		C16DFA45297E494500D56397 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -2487,6 +2525,7 @@
 				89AE222A228BC56A00BDFD85 /* WeakSet.swift */,
 				C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */,
 				43CACE0D2247F89100F90AF5 /* WeakSynchronizedSet.swift */,
+				C16BC0B42A5FA9D200BDC713 /* DoseMath.swift */,
 			);
 			path = LoopKit;
 			sourceTree = "<group>";
@@ -2508,6 +2547,7 @@
 				A9BFA03D245CCCB9001E4AE3 /* DailyQuantityScheduleTests.swift */,
 				891A3FD6224BE62100378B27 /* DailyValueScheduleTests.swift */,
 				A95A1D8C246101760079378D /* DoseEntryTests.swift */,
+				C16BC0B62A5FAB6E00BDC713 /* DoseMathTests.swift */,
 				B4CEE2A4256E91290093111B /* DoseProgressTests.swift */,
 				43A067121F245A2F00E9E90F /* DoseStoreTests.swift */,
 				A971C8A323C6B1890099BEFC /* DosingDecisionStoreTests.swift */,
@@ -2736,6 +2776,7 @@
 		43D988911C87FEFF00DA4467 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				C16BC0B82A6034FA00BDC713 /* DoseMathTests */,
 				43D8FE431C7291930073BE78 /* CarbKit */,
 				43D8FE9B1C7293EB0073BE78 /* GlucoseKit */,
 				43D8FECA1C7294670073BE78 /* InsulinKit */,
@@ -2990,6 +3031,30 @@
 				1D1FCE2424BD42EF000300A8 /* TherapySettingsViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		C16BC0B82A6034FA00BDC713 /* DoseMathTests */ = {
+			isa = PBXGroup;
+			children = (
+				C16BC0B92A60351900BDC713 /* far_future_high_bg_forecast_after_6_hours.json */,
+				C16BC0C92A60351A00BDC713 /* far_future_high_bg_forecast.json */,
+				C16BC0BD2A60351900BDC713 /* read_selected_basal_profile.json */,
+				C16BC0C12A60351A00BDC713 /* recommend_temp_basal_correct_low_at_min.json */,
+				C16BC0BF2A60351A00BDC713 /* recommend_temp_basal_dropping_then_rising.json */,
+				C16BC0C02A60351A00BDC713 /* recommend_temp_basal_flat_and_high.json */,
+				C16BC0C32A60351A00BDC713 /* recommend_temp_basal_high_and_falling.json */,
+				C16BC0C62A60351A00BDC713 /* recommend_temp_basal_high_and_rising.json */,
+				C16BC0C22A60351A00BDC713 /* recommend_temp_basal_in_range_and_rising.json */,
+				C16BC0BA2A60351900BDC713 /* recommend_temp_basal_no_change_glucose.json */,
+				C16BC0C72A60351A00BDC713 /* recommend_temp_basal_start_high_end_in_range.json */,
+				C16BC0C52A60351A00BDC713 /* recommend_temp_basal_start_high_end_low.json */,
+				C16BC0BB2A60351900BDC713 /* recommend_temp_basal_start_low_end_high.json */,
+				C16BC0C82A60351A00BDC713 /* recommend_temp_basal_start_low_end_in_range.json */,
+				C16BC0BC2A60351900BDC713 /* recommend_temp_basal_start_very_low_end_high.json */,
+				C16BC0C42A60351A00BDC713 /* recommend_temp_basal_very_low_end_in_range.json */,
+				C16BC0BE2A60351A00BDC713 /* recommended_temp_start_low_end_just_above_range.json */,
+			);
+			path = DoseMathTests;
 			sourceTree = "<group>";
 		};
 		C17F39BD23CD239000FA1113 /* DeviceManager */ = {
@@ -3562,8 +3627,11 @@
 				4322B7A8202FA3D20002837D /* momentum_effect_mixed_provenance_glucose_input.json in Resources */,
 				435D2929205F3C760026F401 /* momentum_effect_rising_glucose_double_entries_input.json in Resources */,
 				4322B7AB202FA3D20002837D /* momentum_effect_stable_glucose_input.json in Resources */,
+				C16BC0CD2A60351B00BDC713 /* recommend_temp_basal_start_very_low_end_high.json in Resources */,
 				E9DFB92E24E8A75C00468917 /* iob_from_multiple_curves_output.json in Resources */,
 				43D988A61C87FFA300DA4467 /* glucose_from_effects_momentum_flat_glucose_input.json in Resources */,
+				C16BC0CF2A60351B00BDC713 /* recommended_temp_start_low_end_just_above_range.json in Resources */,
+				C16BC0D22A60351B00BDC713 /* recommend_temp_basal_correct_low_at_min.json in Resources */,
 				9E784341236656770016C583 /* ice_35_min_partial_piecewiselinear_output.json in Resources */,
 				437874D5202FDD2D00A3D8B9 /* suspend_dose_reconciled_normalized.json in Resources */,
 				435D2925205F3A670026F401 /* counteraction_effect_falling_glucose_almost_duplicates_input.json in Resources */,
@@ -3574,6 +3642,9 @@
 				43DC87BE1C8AD41D005BC30D /* glucose_from_effects_non_zero_output.json in Resources */,
 				4322B79B202FA3CC0002837D /* ice_1_hour_output.json in Resources */,
 				43DC87B81C8AD058005BC30D /* glucose_from_effects_non_zero_glucose_input.json in Resources */,
+				C16BC0CE2A60351B00BDC713 /* read_selected_basal_profile.json in Resources */,
+				C16BC0D02A60351B00BDC713 /* recommend_temp_basal_dropping_then_rising.json in Resources */,
+				C16BC0CA2A60351B00BDC713 /* far_future_high_bg_forecast_after_6_hours.json in Resources */,
 				437874D1202FDD2D00A3D8B9 /* reservoir_history_with_rewind_and_prime_input.json in Resources */,
 				43C9805A212BDEE4003B5D17 /* ice_minus_carb_effect_with_gaps_output.json in Resources */,
 				4322B797202FA3CC0002837D /* grouped_by_overlapping_absorption_times_border_case_output.json in Resources */,
@@ -3611,6 +3682,7 @@
 				437874C3202FDD2D00A3D8B9 /* iob_from_bolus_420min_output.json in Resources */,
 				437874C5202FDD2D00A3D8B9 /* iob_from_doses_exponential_output.json in Resources */,
 				437874C2202FDD2D00A3D8B9 /* iob_from_bolus_360min_output.json in Resources */,
+				C16BC0D92A60351B00BDC713 /* recommend_temp_basal_start_low_end_in_range.json in Resources */,
 				43026D642132404900A332E2 /* ice_minus_flat_carb_effect_output.json in Resources */,
 				9E784343236659BD0016C583 /* ice_slow_absorption_piecewiselinear_output.json in Resources */,
 				43DC87BB1C8AD0ED005BC30D /* glucose_from_effects_non_zero_insulin_input.json in Resources */,
@@ -3621,9 +3693,11 @@
 				4322B796202FA3CC0002837D /* grouped_by_overlapping_absorption_times_border_case_input.json in Resources */,
 				437874BA202FDD2D00A3D8B9 /* effect_from_basal_output.json in Resources */,
 				4322B798202FA3CC0002837D /* grouped_by_overlapping_absorption_times_input.json in Resources */,
+				C16BC0CB2A60351B00BDC713 /* recommend_temp_basal_no_change_glucose.json in Resources */,
 				E93E866024DC82A600FF40C8 /* dose_history_with_delivered_units.json in Resources */,
 				437874C9202FDD2D00A3D8B9 /* normalize_edge_case_doses_output.json in Resources */,
 				43D988A11C87FFA300DA4467 /* glucose_from_effects_no_momentum_output.json in Resources */,
+				C16BC0D62A60351B00BDC713 /* recommend_temp_basal_start_high_end_low.json in Resources */,
 				43D988A81C87FFA300DA4467 /* glucose_from_effects_momentum_down_input.json in Resources */,
 				E93E865E24DC797A00FF40C8 /* basal_dose_with_delivered.json in Resources */,
 				437874BB202FDD2D00A3D8B9 /* effect_from_bolus_output.json in Resources */,
@@ -3631,6 +3705,7 @@
 				43D988AA1C87FFA300DA4467 /* glucose_from_effects_momentum_blend_momentum_input.json in Resources */,
 				43439521205F2D910056DC37 /* counteraction_effect_falling_glucose_input.json in Resources */,
 				4322B792202FA3CC0002837D /* carb_effect_from_history_input.json in Resources */,
+				C16BC0DA2A60351B00BDC713 /* far_future_high_bg_forecast.json in Resources */,
 				E93E865C24DC75EF00FF40C8 /* basal_dose_with_expired.json in Resources */,
 				E9E5E56724D362E900B5DFFE /* dynamic_glucose_effect_partially_observed_output.json in Resources */,
 				43D988A41C87FFA300DA4467 /* glucose_from_effects_momentum_flat_output.json in Resources */,
@@ -3641,25 +3716,32 @@
 				4322B793202FA3CC0002837D /* carb_effect_from_history_output.json in Resources */,
 				43D988A51C87FFA300DA4467 /* glucose_from_effects_momentum_flat_input.json in Resources */,
 				43D988A21C87FFA300DA4467 /* glucose_from_effects_momentum_up_output.json in Resources */,
+				C16BC0D82A60351B00BDC713 /* recommend_temp_basal_start_high_end_in_range.json in Resources */,
 				43D988A71C87FFA300DA4467 /* glucose_from_effects_momentum_down_output.json in Resources */,
 				E9E5E56624D362E900B5DFFE /* dynamic_glucose_effect_never_fully_observed_output.json in Resources */,
 				43D8FE691C7292B00073BE78 /* read_carb_ratios.json in Resources */,
 				43D988AB1C87FFA300DA4467 /* glucose_from_effects_momentum_blend_insulin_effect_input.json in Resources */,
+				C16BC0D52A60351B00BDC713 /* recommend_temp_basal_very_low_end_in_range.json in Resources */,
 				A914472727BF044C0054A39D /* normalize_edge_case_doses_mutable_output.json in Resources */,
 				E9E5E56524D362E900B5DFFE /* dynamic_glucose_effect_none_observed_output.json in Resources */,
 				437874C4202FDD2D00A3D8B9 /* iob_from_bolus_exponential_output.json in Resources */,
+				C16BC0CC2A60351B00BDC713 /* recommend_temp_basal_start_low_end_high.json in Resources */,
 				437874CE202FDD2D00A3D8B9 /* reconcile_resume_before_rewind_input.json in Resources */,
 				4322B79E202FA3CC0002837D /* ice_35_min_partial_output.json in Resources */,
 				435D292B205F46180026F401 /* counteraction_effect_falling_glucose_almost_duplicates_output.json in Resources */,
 				B46FA3F3253F00DC00D993E2 /* momentum_effect_impossible_rising_glucose_output.json in Resources */,
 				E9E5E56824D362E900B5DFFE /* dynamic_glucose_effect_fully_observed_output.json in Resources */,
 				4322B7AC202FA3D20002837D /* momentum_effect_stable_glucose_output.json in Resources */,
+				C16BC0D42A60351B00BDC713 /* recommend_temp_basal_high_and_falling.json in Resources */,
 				437874BC202FDD2D00A3D8B9 /* effect_from_history_output.json in Resources */,
+				C16BC0D72A60351B00BDC713 /* recommend_temp_basal_high_and_rising.json in Resources */,
 				437874C7202FDD2D00A3D8B9 /* iob_from_reservoir_output.json in Resources */,
 				4322B794202FA3CC0002837D /* carb_entry_input.json in Resources */,
 				437874B8202FDD2D00A3D8B9 /* bolus_dose.json in Resources */,
+				C16BC0D12A60351B00BDC713 /* recommend_temp_basal_flat_and_high.json in Resources */,
 				43D8FEF71C7295500073BE78 /* basal.json in Resources */,
 				4322B79D202FA3CC0002837D /* ice_35_min_none_output.json in Resources */,
+				C16BC0D32A60351B00BDC713 /* recommend_temp_basal_in_range_and_rising.json in Resources */,
 				9E78434523665B5A0016C583 /* ice_35_min_partial_piecewiselinear_adaptiverate_output.json in Resources */,
 				43D988A31C87FFA300DA4467 /* glucose_from_effects_momentum_up_input.json in Resources */,
 			);
@@ -4018,6 +4100,7 @@
 				4322B78A202FA2B30002837D /* DoseUnit.swift in Sources */,
 				C187339029B9486200519CDF /* Guardrail+Settings.swift in Sources */,
 				A95A1D7F2460BBC70079378D /* DosingDecisionObject+CoreDataClass.swift in Sources */,
+				C16BC0B52A5FA9D200BDC713 /* DoseMath.swift in Sources */,
 				432762741D60505F0083215A /* HKQuantitySample.swift in Sources */,
 				43D8FDF81C7290350073BE78 /* Double.swift in Sources */,
 				A95A1D822460BBDC0079378D /* DosingDecisionObject+CoreDataProperties.swift in Sources */,
@@ -4182,6 +4265,7 @@
 				A9DF02C524F6FA5100B7C988 /* PumpEventTests.swift in Sources */,
 				A985464B251442010099C1A6 /* OutputStreamTests.swift in Sources */,
 				A971C8A223C6B17D0099BEFC /* SettingsStoreTests.swift in Sources */,
+				C16BC0B72A5FAB6F00BDC713 /* DoseMathTests.swift in Sources */,
 				C1E7035D24FFFA5C00DAB534 /* CollectionTests.swift in Sources */,
 				1DFB99D6245CB2E900DCC8C9 /* AlertTests.swift in Sources */,
 				B455F35625FC0284000ED456 /* CorrectionRangeOverridesTests.swift in Sources */,
