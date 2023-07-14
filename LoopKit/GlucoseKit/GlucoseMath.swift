@@ -153,7 +153,7 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
     ///
     /// - Parameter effects: Glucose effects to be countered, in chronological order
     /// - Returns: An array of velocities describing the change in glucose samples compared to the specified effects
-    func counteractionEffects(to effects: [GlucoseEffect]) -> [GlucoseEffectVelocity] {
+    public func counteractionEffects(to effects: [GlucoseEffect]) -> [GlucoseEffectVelocity] {
         let mgdL = HKUnit.milligramsPerDeciliter
         let velocityUnit = GlucoseEffectVelocity.perSecondUnit
         var velocities = [GlucoseEffectVelocity]()

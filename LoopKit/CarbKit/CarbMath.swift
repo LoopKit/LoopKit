@@ -77,17 +77,17 @@ public protocol CarbAbsorptionComputable {
 
 
 extension CarbAbsorptionComputable {
-    func absorbedCarbs(of total: Double, atTime time: TimeInterval, absorptionTime: TimeInterval) -> Double {
+    public func absorbedCarbs(of total: Double, atTime time: TimeInterval, absorptionTime: TimeInterval) -> Double {
         let percentTime = time / absorptionTime
         return total * percentAbsorptionAtPercentTime(percentTime)
     }
 
-    func unabsorbedCarbs(of total: Double, atTime time: TimeInterval, absorptionTime: TimeInterval) -> Double {
+    public func unabsorbedCarbs(of total: Double, atTime time: TimeInterval, absorptionTime: TimeInterval) -> Double {
         let percentTime = time / absorptionTime
         return total * (1.0 - percentAbsorptionAtPercentTime(percentTime))
     }
     
-    func absorptionTime(forPercentAbsorption percentAbsorption: Double, atTime time: TimeInterval) -> TimeInterval {
+    public func absorptionTime(forPercentAbsorption percentAbsorption: Double, atTime time: TimeInterval) -> TimeInterval {
         let percentTime = max(percentTimeAtPercentAbsorption(percentAbsorption), .ulpOfOne)
         return time / percentTime
     }
@@ -181,15 +181,18 @@ struct LinearAbsorption: CarbAbsorptionComputable {
 /// - Parameters:
 ///   - percentEndOfRise: the percentage of absorption time when absorption rate reaches maximum, must be strictly between 0 and 1
 ///   - percentStartOfFall: the percentage of absorption time when absorption rate starts to decay, must be stritctly between 0 and 1 and  greater than percentEndOfRise
-struct PiecewiseLinearAbsorption: CarbAbsorptionComputable {
+public struct PiecewiseLinearAbsorption: CarbAbsorptionComputable {
     
     let percentEndOfRise = 0.15
     let percentStartOfFall = 0.5
+
     var scale: Double {
         return 2.0 / (1.0 + percentStartOfFall - percentEndOfRise)
     }
+
+    public init() { }
     
-    func percentAbsorptionAtPercentTime(_ percentTime: Double) -> Double {
+    public func percentAbsorptionAtPercentTime(_ percentTime: Double) -> Double {
         switch percentTime {
         case let t where t <= 0.0:
             return 0.0
@@ -205,7 +208,7 @@ struct PiecewiseLinearAbsorption: CarbAbsorptionComputable {
         }
     }
     
-    func percentTimeAtPercentAbsorption(_ percentAbsorption: Double) -> Double {
+    public func percentTimeAtPercentAbsorption(_ percentAbsorption: Double) -> Double {
         switch percentAbsorption {
         case let a where a <= 0:
             return 0.0
@@ -221,7 +224,7 @@ struct PiecewiseLinearAbsorption: CarbAbsorptionComputable {
         }
     }
     
-    func percentRateAtPercentTime(_ percentTime: Double) -> Double {
+    public func percentRateAtPercentTime(_ percentTime: Double) -> Double {
         switch percentTime {
         case let t where t > 0 && t < percentEndOfRise:
             return scale * t / percentEndOfRise
@@ -804,13 +807,13 @@ extension Collection where Element: CarbEntry {
         to effectVelocities: [GlucoseEffectVelocity],
         carbRatio: [AbsoluteScheduleValue<Double>],
         insulinSensitivity: [AbsoluteScheduleValue<HKQuantity>],
-        absorptionTimeOverrun: Double,
-        defaultAbsorptionTime: TimeInterval,
-        delay: TimeInterval,
-        initialAbsorptionTimeOverrun: Double,
-        absorptionModel: CarbAbsorptionComputable,
-        adaptiveAbsorptionRateEnabled: Bool,
-        adaptiveRateStandbyIntervalFraction: Double
+        absorptionTimeOverrun: Double = 1.5,
+        defaultAbsorptionTime: TimeInterval = TimeInterval(3 /* hours */ * 60 /* minutes */ * 60 /* seconds */),
+        delay: TimeInterval = TimeInterval(5 /* minutes */ * 60 /* seconds */),
+        initialAbsorptionTimeOverrun: Double = 1.5,
+        absorptionModel: CarbAbsorptionComputable = PiecewiseLinearAbsorption(),
+        adaptiveAbsorptionRateEnabled: Bool = false,
+        adaptiveRateStandbyIntervalFraction: Double = 0.2
     ) -> [CarbStatus<Element>] {
         guard count > 0 else {
             // TODO: Apply unmatched effects to meal prediction
