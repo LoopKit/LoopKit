@@ -435,13 +435,13 @@ extension Collection where Element: CarbEntry {
 
 // MARK: - Dyanamic absorption overrides
 extension Collection {
-    func dynamicCarbsOnBoard<T>(
+    public func dynamicCarbsOnBoard<T>(
         from start: Date? = nil,
         to end: Date? = nil,
-        defaultAbsorptionTime: TimeInterval,
-        absorptionModel: CarbAbsorptionComputable,
-        delay: TimeInterval = TimeInterval(minutes: 10),
-        delta: TimeInterval = TimeInterval(minutes: 5)
+        defaultAbsorptionTime: TimeInterval = TimeInterval(3 /* hours */ * 60 /* minutes */ * 60 /* seconds */),
+        absorptionModel: CarbAbsorptionComputable = PiecewiseLinearAbsorption(),
+        delay: TimeInterval = TimeInterval(10 /* minutes */ * 60 /* seconds */),
+        delta: TimeInterval = TimeInterval(5 /* minutes */ * 60 /* seconds */)
     ) -> [CarbValue] where Element == CarbStatus<T> {
         guard let (startDate, endDate) = simulationDateRange(from: start, to: end, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, delta: delta) else {
             return []
@@ -468,15 +468,15 @@ extension Collection {
         return values
     }
 
-    func dynamicGlucoseEffects<T>(
+    public func dynamicGlucoseEffects<T>(
         from start: Date? = nil,
         to end: Date? = nil,
         carbRatios: [AbsoluteScheduleValue<Double>],
         insulinSensitivities: [AbsoluteScheduleValue<HKQuantity>],
-        defaultAbsorptionTime: TimeInterval,
-        absorptionModel: CarbAbsorptionComputable,
-        delay: TimeInterval = TimeInterval(minutes: 10),
-        delta: TimeInterval = TimeInterval(minutes: 5)
+        defaultAbsorptionTime: TimeInterval = TimeInterval(3 /* hours */ * 60 /* minutes */ * 60 /* seconds */),
+        absorptionModel: CarbAbsorptionComputable = PiecewiseLinearAbsorption(),
+        delay: TimeInterval = TimeInterval(10 /* minutes */ * 60 /* seconds */),
+        delta: TimeInterval = TimeInterval(5 /* minutes */ * 60 /* seconds */)
     ) -> [GlucoseEffect] where Element == CarbStatus<T> {
         guard let (startDate, endDate) = simulationDateRange(from: start, to: end, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, delta: delta) else {
             return []

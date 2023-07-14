@@ -271,7 +271,7 @@ extension BidirectionalCollection where Element == GlucoseEffectVelocity {
     ///   - otherEffects: The array of glucose effects to subtract
     ///   - effectInterval: The time interval between elements in the otherEffects array
     /// - Returns: A resulting array of glucose effects
-    public func subtracting(_ otherEffects: [GlucoseEffect], withUniformInterval effectInterval: TimeInterval) -> [GlucoseEffect] {
+    public func subtracting(_ otherEffects: [GlucoseEffect], withUniformInterval effectInterval: TimeInterval = TimeInterval(5 /* minutes */ * 60 /* seconds */)) -> [GlucoseEffect] {
         // Trim both collections to match
         let otherEffects = otherEffects.filterDateRange(self.first?.endDate, nil)
         let effects = self.filterDateRange(otherEffects.first?.startDate, nil)
