@@ -49,7 +49,7 @@ public extension Sequence where Element: TimelineValue {
         var after: Iterator.Element?
 
         for value in self {
-            if value.startDate < date {
+            if value.startDate <= date {
                 before = value
             } else {
                 after = value
