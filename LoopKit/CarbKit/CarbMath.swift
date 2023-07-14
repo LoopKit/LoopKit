@@ -485,7 +485,6 @@ extension Collection {
         var date = startDate
         var values = [GlucoseEffect]()
         let mgdL = HKUnit.milligramsPerDeciliter
-        let gram = HKUnit.gram()
 
         repeat {
             let value = reduce(0.0) { (value, entry) -> Double in
@@ -797,7 +796,7 @@ extension Collection where Element: CarbEntry {
     ///
     /// - Parameters:
     ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
-    ///   - carbRatio: The schedule of carb ratios, in grams per unit
+    ///   - carbRatio: The timeline of carb ratios, in grams per unit
     ///   - insulinSensitivity: The timeline of insulin sensitivities, in units of insulin per glucose-unit, covering the carb entries
     ///   - absorptionTimeOverrun: A multiplier for determining the minimum absorption time from the specified absorption time
     ///   - defaultAbsorptionTime: The absorption time to use for unspecified carb entries
