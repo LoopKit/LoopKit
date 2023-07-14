@@ -778,6 +778,9 @@
 		C18733D229B94B8E00519CDF /* HKUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18733D129B94B8E00519CDF /* HKUnit.swift */; };
 		C188B83422CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C188B83322CC16AC0051760A /* InsulinSensitivityScheduleViewController.swift */; };
 		C191D26325B3815000C26C0B /* AutomaticDoseRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C191D26225B3815000C26C0B /* AutomaticDoseRecommendation.swift */; };
+		C19E776A2A61FD8A003F06C5 /* IntegralRetrospectiveCorrection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19E77672A61FD8A003F06C5 /* IntegralRetrospectiveCorrection.swift */; };
+		C19E776B2A61FD8A003F06C5 /* RetrospectiveCorrection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19E77682A61FD8A003F06C5 /* RetrospectiveCorrection.swift */; };
+		C19E776C2A61FD8A003F06C5 /* StandardRetrospectiveCorrection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19E77692A61FD8A003F06C5 /* StandardRetrospectiveCorrection.swift */; };
 		C1A174EC23DEAD670034DF11 /* DeviceLogEntry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403723DB84B700673141 /* DeviceLogEntry+CoreDataClass.swift */; };
 		C1A174ED23DEAD6A0034DF11 /* DeviceLogEntry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F8403823DB84B700673141 /* DeviceLogEntry+CoreDataProperties.swift */; };
 		C1A85A9C2A1C6E4500430101 /* HealthKitSampleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1B8E6E42A1BB14E00AF38D0 /* HealthKitSampleStore.swift */; };
@@ -1753,6 +1756,9 @@
 		C192C60529C78711001EFEA6 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C19951DA29C786C8001983C9 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C19E387F298638CE00851444 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C19E77672A61FD8A003F06C5 /* IntegralRetrospectiveCorrection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntegralRetrospectiveCorrection.swift; sourceTree = "<group>"; };
+		C19E77682A61FD8A003F06C5 /* RetrospectiveCorrection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetrospectiveCorrection.swift; sourceTree = "<group>"; };
+		C19E77692A61FD8A003F06C5 /* StandardRetrospectiveCorrection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardRetrospectiveCorrection.swift; sourceTree = "<group>"; };
 		C1A1C7A529C786D1001A0FA5 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1A4ED662981EE36008F4B1A /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
 		C1AA4E0F2981EE4400888F32 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -2456,6 +2462,7 @@
 		43D8FDCD1C728FDF0073BE78 /* LoopKit */ = {
 			isa = PBXGroup;
 			children = (
+				C19E77662A61FD78003F06C5 /* RetrospectiveCorrection */,
 				1DA649AA2445174400F61E75 /* Alert.swift */,
 				A96E6C3627B35BC600F81A5B /* AnyCodableEquatable.swift */,
 				C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */,
@@ -3087,6 +3094,16 @@
 				C17F39CF23CE34B100FA1113 /* StoredDeviceLogEntry.swift */,
 			);
 			path = DeviceLog;
+			sourceTree = "<group>";
+		};
+		C19E77662A61FD78003F06C5 /* RetrospectiveCorrection */ = {
+			isa = PBXGroup;
+			children = (
+				C19E77682A61FD8A003F06C5 /* RetrospectiveCorrection.swift */,
+				C19E77692A61FD8A003F06C5 /* StandardRetrospectiveCorrection.swift */,
+				C19E77672A61FD8A003F06C5 /* IntegralRetrospectiveCorrection.swift */,
+			);
+			path = RetrospectiveCorrection;
 			sourceTree = "<group>";
 		};
 		C1CEBFDD29BB6C84007FD8A3 /* Resources */ = {
@@ -4117,6 +4134,7 @@
 				C187338E29B9486200519CDF /* ClosedRange.swift in Sources */,
 				A93CA899278D08CC003B5A01 /* PumpAlarmType.swift in Sources */,
 				4322B781202FA2AF0002837D /* PumpEvent+CoreDataProperties.swift in Sources */,
+				C19E776A2A61FD8A003F06C5 /* IntegralRetrospectiveCorrection.swift in Sources */,
 				A9498D8223386C3300DAA9B9 /* Service.swift in Sources */,
 				C187338F29B9486200519CDF /* NumberFormatter.swift in Sources */,
 				4322B785202FA2AF0002837D /* ReservoirValue.swift in Sources */,
@@ -4143,6 +4161,7 @@
 				4322B790202FA2B30002837D /* InsulinValue.swift in Sources */,
 				4322B78C202FA2B30002837D /* HKQuantitySample+InsulinKit.swift in Sources */,
 				C187339229B9486200519CDF /* MutableCollection.swift in Sources */,
+				C19E776C2A61FD8A003F06C5 /* StandardRetrospectiveCorrection.swift in Sources */,
 				89AE2226228BC54C00BDFD85 /* TemporaryScheduleOverridePreset.swift in Sources */,
 				4322B78F202FA2B30002837D /* InsulinModel.swift in Sources */,
 				1D096C0324C24C220078B6B5 /* ExponentialInsulinModelPreset.swift in Sources */,
@@ -4172,6 +4191,7 @@
 				43D8FDF91C7290350073BE78 /* GlucoseEffect.swift in Sources */,
 				A932803B2798D63B0091D0A1 /* SyncAlertObject.swift in Sources */,
 				1D841AAD24577EE10069DBFF /* AlertSoundPlayer.swift in Sources */,
+				C19E776B2A61FD8A003F06C5 /* RetrospectiveCorrection.swift in Sources */,
 				C187339A29B9488300519CDF /* UUID.swift in Sources */,
 				C1CAB9E926A3254800A57273 /* StoredInsulinModel.swift in Sources */,
 				43CACE0E2247F89100F90AF5 /* WeakSynchronizedSet.swift in Sources */,
