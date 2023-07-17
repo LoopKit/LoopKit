@@ -12,7 +12,6 @@ import HealthKit
 let MetadataKeyGlucoseIsDisplayOnly = "com.loudnate.GlucoseKit.HKMetadataKey.GlucoseIsDisplayOnly"
 let MetadataKeyGlucoseCondition = "com.LoopKit.GlucoseKit.HKMetadataKey.GlucoseCondition"
 let MetadataKeyGlucoseTrend = "com.LoopKit.GlucoseKit.HKMetadataKey.GlucoseTrend"
-let MetadataKeyGlucoseTrendRateUnit = "com.LoopKit.GlucoseKit.HKMetadataKey.GlucoseTrendRateUnit"
 let MetadataKeyGlucoseTrendRateValue = "com.LoopKit.GlucoseKit.HKMetadataKey.GlucoseTrendRateValue"
 
 
@@ -44,10 +43,9 @@ extension HKQuantitySample: GlucoseSampleValue {
     }
 
     public var trendRate: HKQuantity? {
-        guard let unit = metadata?[MetadataKeyGlucoseTrendRateUnit] as? String,
-              let value = metadata?[MetadataKeyGlucoseTrendRateValue] as? Double else {
+        guard let value = metadata?[MetadataKeyGlucoseTrendRateValue] as? Double else {
             return nil
         }
-        return HKQuantity(unit: HKUnit(from: unit), doubleValue: value)
+        return HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: value)
     }
 }
