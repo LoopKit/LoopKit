@@ -346,7 +346,7 @@ extension CarbStore: HealthKitSampleStoreDelegate {
 
 extension CarbStore {
 
-    /// Retrieves carb entries within the specified date range
+    /// Retrieves carb entries that have a `startDate` within the specified date range
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
@@ -378,7 +378,7 @@ extension CarbStore {
         }
     }
 
-    /// Retrieves carb entries within the specified date range
+    /// Retrieves carb entries that have a `startDate` within the specified date range
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
@@ -405,7 +405,7 @@ extension CarbStore {
         return .success(entries)
     }
 
-    /// Retrieves active (not superceded, non-delete operation) cached carb objects within the specified date range
+    /// Retrieves active (not superceded, non-delete operation) cached carb objects that have a `startDate` within the specified date range
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
