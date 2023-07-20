@@ -779,7 +779,6 @@ extension Collection where Element == DoseEntry {
                     let start = Swift.max(lastDate, segment.startDate)
                     let end = Swift.min(date, segment.endDate)
                     let effect = dose.glucoseEffect(during: DateInterval(start: start, end: end), model: model, insulinSensitivity: segment.value.doubleValue(for: unit), delta: delta)
-                    print("dose \(dose.type) \(dose.startDate) \(dose.value) ISF:\(segment.value.doubleValue(for: .milligramsPerDeciliter)) from \(start) to \(end) = \(effect)")
                     return partialResult + effect
                 })
             }
