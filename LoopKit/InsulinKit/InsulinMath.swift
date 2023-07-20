@@ -714,7 +714,6 @@ extension Collection where Element == DoseEntry {
 
         var lastDate = start
         var date = start
-        var effectSum: Double = 0
         var values = [GlucoseEffect]()
         let unit = HKUnit.milligramsPerDeciliter
 
@@ -736,11 +735,58 @@ extension Collection where Element == DoseEntry {
                 })
             }
 
-            effectSum += value
-            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: effectSum)))
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
             lastDate = date
             date = date.addingTimeInterval(delta)
         } while date <= end
+
+        return values
+    }
+
+    /// Calculates the timeline of glucose effects for a collection of doses at specified points in time. Dose effects will consider the timeline of insulin sensitivity.
+    ///
+    /// - Parameters:
+    ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
+    ///   - longestEffectDuration: The longest duration that a dose could be active.
+    ///   - insulinSensitivityTimeline: A timeline of glucose effect per unit of insulin
+    ///   - effectDates: The dates at which to calculate glucose effects
+    ///   - delta: The interval below which to consider doses as momentary
+    /// - Returns: An array of glucose effects for the duration of the doses
+    public func glucoseEffects(
+        insulinModelProvider: InsulinModelProvider,
+        longestEffectDuration: TimeInterval,
+        insulinSensitivityTimeline: [AbsoluteScheduleValue<HKQuantity>],
+        effectDates: [Date],
+        delta: TimeInterval = TimeInterval(/* minutes: */60 * 5)
+    ) -> [GlucoseEffect] {
+
+        var lastDate = effectDates.first!
+        var values = [GlucoseEffect]()
+        let unit = HKUnit.milligramsPerDeciliter
+
+        for date in effectDates {
+            // Sum effects over doses
+            let value = reduce(0) { (value, dose) -> Double in
+                guard date != lastDate else {
+                    return 0
+                }
+
+                let model = insulinModelProvider.model(for: dose.insulinType)
+
+                // Sum effects over pertinent ISF timeline segments
+                let isfSegments = insulinSensitivityTimeline.filterDateRange(lastDate, date)
+                return value + isfSegments.reduce(0, { partialResult, segment in
+                    let start = Swift.max(lastDate, segment.startDate)
+                    let end = Swift.min(date, segment.endDate)
+                    let effect = dose.glucoseEffect(during: DateInterval(start: start, end: end), model: model, insulinSensitivity: segment.value.doubleValue(for: unit), delta: delta)
+                    print("dose \(dose.type) \(dose.startDate) \(dose.value) ISF:\(segment.value.doubleValue(for: .milligramsPerDeciliter)) from \(start) to \(end) = \(effect)")
+                    return partialResult + effect
+                })
+            }
+
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
+            lastDate = date
+        }
 
         return values
     }
