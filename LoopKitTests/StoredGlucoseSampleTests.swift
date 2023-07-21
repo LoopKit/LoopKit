@@ -120,7 +120,6 @@ class StoredGlucoseSampleManagedObjectInitializerTests: PersistenceControllerTes
             managedObject.device = device
             managedObject.condition = .aboveRange
             managedObject.trend = .downDownDown
-            managedObject.trendRateUnit = HKUnit.milligramsPerDeciliterPerMinute.unitString
             managedObject.trendRateValue = -4.0
             managedObject.healthKitEligibleDate = startDate.addingTimeInterval(.hours(3))
             let sample = StoredGlucoseSample(managedObject: managedObject)

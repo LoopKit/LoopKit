@@ -39,7 +39,6 @@ class CachedGlucoseObjectOperationsTests: PersistenceControllerTestCase {
             XCTAssertEqual(object.wasUserEntered, false)
             XCTAssertEqual(object.condition, .belowRange)
             XCTAssertEqual(object.trend, .flat)
-            XCTAssertEqual(object.trendRateUnit, HKUnit.milligramsPerDeciliterPerMinute.unitString)
             XCTAssertEqual(object.trendRateValue, 0.1)
             XCTAssertEqual(object.modificationCounter, 1)
             XCTAssertEqual(object.device, device)
@@ -60,7 +59,6 @@ class CachedGlucoseObjectOperationsTests: PersistenceControllerTestCase {
                 HKMetadataKeyWasUserEntered: true,
                 MetadataKeyGlucoseCondition: "belowRange",
                 MetadataKeyGlucoseTrend: "→",
-                MetadataKeyGlucoseTrendRateUnit: HKUnit.milligramsPerDeciliterPerMinute.unitString,
                 MetadataKeyGlucoseTrendRateValue: 0.1
             ]
             let quantitySample = HKQuantitySample(type: type, quantity: quantity, start: startDate, end: startDate, device: device, metadata: metadata)
@@ -77,7 +75,6 @@ class CachedGlucoseObjectOperationsTests: PersistenceControllerTestCase {
             XCTAssertEqual(object.wasUserEntered, true)
             XCTAssertEqual(object.condition, .belowRange)
             XCTAssertEqual(object.trend, .flat)
-            XCTAssertEqual(object.trendRateUnit, HKUnit.milligramsPerDeciliterPerMinute.unitString)
             XCTAssertEqual(object.trendRateValue, 0.1)
             XCTAssertEqual(object.modificationCounter, 1)
             XCTAssertEqual(object.device, device)
@@ -98,7 +95,6 @@ class CachedGlucoseObjectOperationsTests: PersistenceControllerTestCase {
                 HKMetadataKeyWasUserEntered: true,
                 MetadataKeyGlucoseCondition: "belowRange",
                 MetadataKeyGlucoseTrend: "→",
-                MetadataKeyGlucoseTrendRateUnit: HKUnit.milligramsPerDeciliterPerMinute.unitString,
                 MetadataKeyGlucoseTrendRateValue: 0.1
             ]
             let quantitySample = HKQuantitySample(type: type, quantity: quantity, start: startDate, end: startDate, device: device, metadata: metadata)

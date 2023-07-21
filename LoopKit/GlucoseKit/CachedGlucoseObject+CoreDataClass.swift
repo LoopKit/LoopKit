@@ -98,7 +98,6 @@ extension CachedGlucoseObject {
         }
         metadata[MetadataKeyGlucoseCondition] = condition?.rawValue
         metadata[MetadataKeyGlucoseTrend] = trend?.symbol
-        metadata[MetadataKeyGlucoseTrendRateUnit] = trendRateUnit
         metadata[MetadataKeyGlucoseTrendRateValue] = trendRateValue
 
         return HKQuantitySample(
@@ -113,19 +112,17 @@ extension CachedGlucoseObject {
 
     var trendRate: HKQuantity? {
         get {
-            guard let trendRateUnit = trendRateUnit, let trendRateValue = trendRateValue else {
+            guard let trendRateValue = trendRateValue else {
                 return nil
             }
-            return HKQuantity(unit: HKUnit(from: trendRateUnit), doubleValue: trendRateValue.doubleValue)
+            return HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: trendRateValue.doubleValue)
         }
 
         set {
             if let newValue = newValue {
                 let unit = HKUnit(from: unitString).unitDivided(by: .minute())
-                trendRateUnit = unit.unitString
                 trendRateValue = NSNumber(value: newValue.doubleValue(for: unit))
             } else {
-                trendRateUnit = nil
                 trendRateValue = nil
             }
         }

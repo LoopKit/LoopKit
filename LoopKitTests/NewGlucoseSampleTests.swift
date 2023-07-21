@@ -44,7 +44,6 @@ class NewGlucoseSampleTests: XCTestCase {
         XCTAssertEqual(quantitySample.metadata?[HKMetadataKeySyncVersion] as? Int, 3)
         XCTAssertEqual(quantitySample.metadata?[MetadataKeyGlucoseCondition] as? String, "aboveRange")
         XCTAssertEqual(quantitySample.metadata?[MetadataKeyGlucoseTrend] as? String, GlucoseTrend.up.symbol)
-        XCTAssertEqual(quantitySample.metadata?[MetadataKeyGlucoseTrendRateUnit] as? String, HKUnit.milligramsPerDeciliterPerMinute.unitString)
         XCTAssertEqual(quantitySample.metadata?[MetadataKeyGlucoseTrendRateValue] as? Double, 1.1)
         XCTAssertNil(quantitySample.metadata?[MetadataKeyGlucoseIsDisplayOnly])
         XCTAssertEqual(quantitySample.metadata?[HKMetadataKeyWasUserEntered] as? Bool, true)
