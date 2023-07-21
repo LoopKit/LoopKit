@@ -16,25 +16,28 @@ public struct DemoPlaceHolderView: View {
     }
     
     public var body: some View {
-        VStack(alignment: .center, spacing: 30) {
+        VStack {
             Spacer()
             
-            Image(systemName: "minus.circle")
-                .font(Font.system(size: 76, weight: .bold))
-            
-            Text("Nothing to See Here!")
-                .font(.title2)
-                .bold()
-            
-            Text("This section of the \(appName) app is unavailable in this simulator.")
-                .multilineTextAlignment(.center)
-            
-            Text("Tap back to continue exploring the rest of the \(appName) interface.")
-                .multilineTextAlignment(.center)
+            VStack(alignment: .center, spacing: 30) {
+                Image(systemName: "minus.circle")
+                    .font(Font.system(size: 76, weight: .bold))
+                
+                Text("Nothing to See Here!")
+                    .font(.title2)
+                    .bold()
+                
+                Text("This section of the \(appName) app is unavailable in this simulator.")
+                    .multilineTextAlignment(.center)
+                
+                Text("Tap back to continue exploring the rest of the \(appName) interface.")
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.horizontal, 40)
+            .padding(.top, -130) // to center the copy
             
             Spacer()
         }
-        .padding(.horizontal, 40)
         .background(Color(.systemGroupedBackground))
         .navigationBarTitleDisplayMode(.inline)
     }
