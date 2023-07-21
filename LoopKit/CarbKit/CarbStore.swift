@@ -803,9 +803,9 @@ extension CarbStore {
         }
     }
 
-    public func setSyncCarbObjects(_ objects: [SyncCarbObject]) async throws {
+    public func syncCarbObjects(_ objects: [SyncCarbObject]) async throws {
         try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Void, Error>) -> Void in
-            self.setSyncCarbObjects(objects) { error in
+            self.syncCarbObjects(objects) { error in
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else {
@@ -815,7 +815,32 @@ extension CarbStore {
         })
     }
 
-    /// Store carb objects from another store
+    /// Add/update carb objects from another store
+    public func syncCarbObjects(_ objects: [SyncCarbObject], completion: @escaping (CarbStoreError?) -> Void) {
+        queue.async {
+            var error: CarbStoreError?
+
+            self.cacheStore.managedObjectContext.performAndWait {
+                guard !objects.isEmpty else {
+                    return
+                }
+
+                objects.forEach {
+                    let object = CachedCarbObject(context: self.cacheStore.managedObjectContext)
+                    object.update(from: $0)
+                }
+
+                error = CarbStoreError(error: self.cacheStore.save())
+            }
+
+            completion(error)
+
+            self.handleUpdatedCarbData()
+        }
+    }
+
+
+    /// Replace all carb objects from another store
     public func setSyncCarbObjects(_ objects: [SyncCarbObject], completion: @escaping (CarbStoreError?) -> Void) {
         queue.async {
             if let error = self.purgeCachedCarbObjectsUnconditionally() {
