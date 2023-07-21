@@ -688,7 +688,8 @@ extension Collection where Element == DoseEntry {
     }
 
 
-    /// Calculates the timeline of glucose effects for a collection of doses. Dose effects will consider the timeline of insulin sensitivity.
+    /// Calculates the timeline of glucose effects for a collection of doses.  Effects for a specific dose will vary over the course
+    /// of that dose's absoption interval based on the timeline of insulin sensitivity.
     ///
     /// - Parameters:
     ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
@@ -714,6 +715,7 @@ extension Collection where Element == DoseEntry {
 
         var lastDate = start
         var date = start
+        var effectSum: Double = 0
         var values = [GlucoseEffect]()
         let unit = HKUnit.milligramsPerDeciliter
 
@@ -735,7 +737,8 @@ extension Collection where Element == DoseEntry {
                 })
             }
 
-            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
+            effectSum += value
+            values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: effectSum)))
             lastDate = date
             date = date.addingTimeInterval(delta)
         } while date <= end
@@ -743,7 +746,8 @@ extension Collection where Element == DoseEntry {
         return values
     }
 
-    /// Calculates the timeline of glucose effects for a collection of doses at specified points in time. Dose effects will consider the timeline of insulin sensitivity.
+    /// Calculates the timeline of glucose effects for a collection of doses at specified points in time. Effects for a specific dose will vary over the course
+    /// of that dose's absoption interval based on the timeline of insulin sensitivity.
     ///
     /// - Parameters:
     ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
