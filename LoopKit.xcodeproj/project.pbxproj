@@ -543,6 +543,8 @@
 		A9D3FF162A6C1A16000C891D /* ChartPointsTouchHighlightLayerViewCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3FF152A6C1A16000C891D /* ChartPointsTouchHighlightLayerViewCache.swift */; };
 		A9D3FF192A6C2C85000C891D /* PredictedGlucoseChartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3FF182A6C2C85000C891D /* PredictedGlucoseChartTests.swift */; };
 		A9D3FF1B2A6C2CA9000C891D /* ChartAxisValuesStaticGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D3FF1A2A6C2CA9000C891D /* ChartAxisValuesStaticGeneratorTests.swift */; };
+		A9D3FF1D2A6C307E000C891D /* SwiftCharts in Frameworks */ = {isa = PBXBuildFile; productRef = A9D3FF1C2A6C307E000C891D /* SwiftCharts */; };
+		A9D3FF1F2A6C307E000C891D /* SwiftCharts in Embed Frameworks */ = {isa = PBXBuildFile; productRef = A9D3FF1C2A6C307E000C891D /* SwiftCharts */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A9DCF2CA25B0F38000C89088 /* LoopUIColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DCF2C925B0F38000C89088 /* LoopUIColorPalette.swift */; };
 		A9DF02C324F6EEE400B7C988 /* DeviceLogEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DF02C224F6EEE400B7C988 /* DeviceLogEntryTests.swift */; };
 		A9DF02C524F6FA5100B7C988 /* PumpEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9DF02C424F6FA5100B7C988 /* PumpEventTests.swift */; };
@@ -994,6 +996,17 @@
 				892A5D4A222F03CC008961AB /* LoopTestingKit.framework in Embed Frameworks */,
 				4301581A1C7ECB5E00B64B63 /* LoopKit.framework in Embed Frameworks */,
 				43BA715C201E484D0058961E /* LoopKitUI.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9D3FF1E2A6C307E000C891D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A9D3FF1F2A6C307E000C891D /* SwiftCharts in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1966,6 +1979,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D8FDD61C728FDF0073BE78 /* LoopKit.framework in Frameworks */,
+				A9D3FF1D2A6C307E000C891D /* SwiftCharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3328,6 +3342,7 @@
 				43D8FDD11C728FDF0073BE78 /* Sources */,
 				43D8FDD21C728FDF0073BE78 /* Frameworks */,
 				43D8FDD31C728FDF0073BE78 /* Resources */,
+				A9D3FF1E2A6C307E000C891D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3335,6 +3350,9 @@
 				43D8FDD81C728FDF0073BE78 /* PBXTargetDependency */,
 			);
 			name = LoopKitTests;
+			packageProductDependencies = (
+				A9D3FF1C2A6C307E000C891D /* SwiftCharts */,
+			);
 			productName = LoopKitTests;
 			productReference = 43D8FDD51C728FDF0073BE78 /* LoopKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -5624,6 +5642,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A9D3FF1C2A6C307E000C891D /* SwiftCharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */;
+			productName = SwiftCharts;
+		};
 		C1CCF1052858F07A0035389C /* SwiftCharts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C1CCF1042858F07A0035389C /* XCRemoteSwiftPackageReference "SwiftCharts" */;
