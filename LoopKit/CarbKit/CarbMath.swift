@@ -24,7 +24,7 @@ struct CarbModelSettings {
     }
 }
 
-protocol CarbAbsorptionComputable {
+public protocol CarbAbsorptionComputable {
     /// Returns the percentage of total carbohydrates absorbed as blood glucose at a specified interval after eating.
     ///
     /// - Parameters:
@@ -468,8 +468,8 @@ extension Collection {
     func dynamicGlucoseEffects<T>(
         from start: Date? = nil,
         to end: Date? = nil,
-        carbRatios: CarbRatioSchedule,
-        insulinSensitivities: InsulinSensitivitySchedule,
+        carbRatios: [AbsoluteScheduleValue<Double>],
+        insulinSensitivities: [AbsoluteScheduleValue<HKQuantity>],
         defaultAbsorptionTime: TimeInterval,
         absorptionModel: CarbAbsorptionComputable,
         delay: TimeInterval = TimeInterval(minutes: 10),
@@ -486,7 +486,10 @@ extension Collection {
 
         repeat {
             let value = reduce(0.0) { (value, entry) -> Double in
-                let csf = insulinSensitivities.quantity(at: entry.startDate).doubleValue(for: mgdL) / carbRatios.quantity(at: entry.startDate).doubleValue(for: gram)
+                guard let isf = insulinSensitivities.closestPrior(to: entry.startDate), let cr = carbRatios.closestPrior(to: entry.startDate) else {
+                    preconditionFailure("Insulin Sensitivities and Carb Ratios must cover all CarbStatus start dates")
+                }
+                let csf = isf.value.doubleValue(for: mgdL) / cr.value
 
                 return value + csf * entry.dynamicAbsorbedCarbs(
                     at: date,
@@ -792,15 +795,15 @@ extension Collection where Element: CarbEntry {
     /// - Parameters:
     ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
     ///   - carbRatio: The schedule of carb ratios, in grams per unit
-    ///   - insulinSensitivity: The schedule of insulin sensitivities, in units of insulin per glucose-unit
+    ///   - insulinSensitivity: The timeline of insulin sensitivities, in units of insulin per glucose-unit, covering the carb entries
     ///   - absorptionTimeOverrun: A multiplier for determining the minimum absorption time from the specified absorption time
     ///   - defaultAbsorptionTime: The absorption time to use for unspecified carb entries
     ///   - delay: The time to delay the dose effect
     /// - Returns: A new array of `CarbStatus` values describing the absorbed carb quantities
-    func map(
+    public func map(
         to effectVelocities: [GlucoseEffectVelocity],
-        carbRatio: CarbRatioSchedule?,
-        insulinSensitivity: InsulinSensitivitySchedule?,
+        carbRatio: [AbsoluteScheduleValue<Double>],
+        insulinSensitivity: [AbsoluteScheduleValue<HKQuantity>],
         absorptionTimeOverrun: Double,
         defaultAbsorptionTime: TimeInterval,
         delay: TimeInterval,
@@ -814,25 +817,24 @@ extension Collection where Element: CarbEntry {
             return []
         }
 
-        guard let carbRatios = carbRatio, let insulinSensitivities = insulinSensitivity else {
-            return map { (entry) in
-                CarbStatus(entry: entry, absorption: nil, observedTimeline: nil)
-            }
-        }
-        
         // for computation
         let glucoseUnit = HKUnit.milligramsPerDeciliter
         let carbUnit = HKUnit.gram()
 
         let builders: [CarbStatusBuilder<Element>] = map { (entry) in
-            let carbRatio = carbRatios.quantity(at: entry.startDate)
-            let insulinSensitivity = insulinSensitivities.quantity(at: entry.startDate)
+            guard
+                let entryCarbRatio = carbRatio.closestPrior(to: entry.startDate),
+                let entryInsulinSensitivity = insulinSensitivity.closestPrior(to: entry.startDate) else
+            {
+                preconditionFailure("Insulin sensitivity and carb ratio timelines must cover carb entry start dates")
+            }
+
             let initialAbsorptionTimeOverrun = initialAbsorptionTimeOverrun
 
             return CarbStatusBuilder(
                 entry: entry,
                 carbUnit: carbUnit,
-                carbohydrateSensitivityFactor: insulinSensitivity.doubleValue(for: glucoseUnit) / carbRatio.doubleValue(for: carbUnit),
+                carbohydrateSensitivityFactor: entryInsulinSensitivity.value.doubleValue(for: glucoseUnit) / entryCarbRatio.value,
                 initialAbsorptionTime: (entry.absorptionTime ?? defaultAbsorptionTime) * initialAbsorptionTimeOverrun,
                 maxAbsorptionTime: (entry.absorptionTime ?? defaultAbsorptionTime) * absorptionTimeOverrun,
                 delay: delay,

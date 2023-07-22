@@ -1,5 +1,5 @@
 //
-//  QuantitySchedule.swift
+//  DailyValueSchedule.swift
 //  Naterade
 //
 //  Created by Nathan Racklyeft on 1/18/16.

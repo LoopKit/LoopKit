@@ -128,8 +128,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [carbEntry].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: carbEntry.startDate, end: carbEntry.startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: carbEntry.startDate, end: carbEntry.startDate),
             absorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -188,8 +188,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [futureCarbEntry].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: futureCarbEntry.startDate, end: futureCarbEntry.startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: futureCarbEntry.startDate, end: futureCarbEntry.startDate),
             absorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -207,8 +207,8 @@ class CarbMathTests: XCTestCase {
         let effects = statuses.dynamicGlucoseEffects(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 6)),
-            carbRatios: carbRatios,
-            insulinSensitivities: insulinSensitivities,
+            carbRatios: carbRatios.between(start: futureCarbEntry.startDate, end: futureCarbEntry.startDate),
+            insulinSensitivities: insulinSensitivities.quantitiesBetween(start: futureCarbEntry.startDate, end: futureCarbEntry.startDate),
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             absorptionModel: LinearAbsorption(),
             delay: 0
@@ -238,8 +238,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [futureCarbEntry].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: futureCarbEntry.startDate, end: futureCarbEntry.startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: futureCarbEntry.startDate, end: futureCarbEntry.startDate),
             absorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -289,8 +289,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [carbEntries[0]].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
             absorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -344,8 +344,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [carbEntries[0]].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
             absorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -366,8 +366,8 @@ class CarbMathTests: XCTestCase {
         let effects = statuses.dynamicGlucoseEffects(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 6)),
-            carbRatios: carbRatios,
-            insulinSensitivities: insulinSensitivities,
+            carbRatios: carbRatios.between(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
+            insulinSensitivities: insulinSensitivities.quantitiesBetween(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             absorptionModel: LinearAbsorption()
         )
@@ -395,8 +395,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [carbEntries[0]].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
             absorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -457,8 +457,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [carbEntries[0]].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
             absorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -483,8 +483,8 @@ class CarbMathTests: XCTestCase {
         let effects = statuses.dynamicGlucoseEffects(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 6)),
-            carbRatios: carbRatios,
-            insulinSensitivities: insulinSensitivities,
+            carbRatios: carbRatios.between(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
+            insulinSensitivities: insulinSensitivities.quantitiesBetween(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             absorptionModel: LinearAbsorption()
         )
@@ -511,8 +511,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [carbEntries[1]].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: carbEntries[1].startDate, end: carbEntries[1].startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: carbEntries[1].startDate, end: carbEntries[1].startDate),
             absorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -564,8 +564,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [carbEntries[1]].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: carbEntries[1].startDate, end: carbEntries[1].startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: carbEntries[1].startDate, end: carbEntries[1].startDate),
             absorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -583,8 +583,8 @@ class CarbMathTests: XCTestCase {
         let effects = statuses.dynamicGlucoseEffects(
             from: inputICE[0].startDate,
             to: inputICE[0].startDate.addingTimeInterval(TimeInterval(hours: 18)),
-            carbRatios: carbRatios,
-            insulinSensitivities: insulinSensitivities,
+            carbRatios: carbRatios.between(start: carbEntries[1].startDate, end: carbEntries[1].startDate),
+            insulinSensitivities: insulinSensitivities.quantitiesBetween(start: carbEntries[1].startDate, end: carbEntries[1].startDate),
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             absorptionModel: LinearAbsorption()
         )
@@ -641,8 +641,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [futureCarbEntry].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: futureCarbEntry.startDate, end: futureCarbEntry.startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: futureCarbEntry.startDate, end: futureCarbEntry.startDate),
             absorptionTimeOverrun: 1.5,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -692,8 +692,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [carbEntries[0]].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
             absorptionTimeOverrun: 1.5,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -747,8 +747,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [carbEntries[0]].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
             absorptionTimeOverrun: 1.5,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -809,8 +809,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [carbEntries[1]].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: carbEntries[1].startDate, end: carbEntries[1].startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: carbEntries[1].startDate, end: carbEntries[1].startDate),
             absorptionTimeOverrun: 1.5,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -862,8 +862,8 @@ class CarbMathTests: XCTestCase {
         
         let statuses = [carbEntries[0]].map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: carbEntries[0].startDate, end: carbEntries[0].startDate),
             absorptionTimeOverrun: 1.5,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),
@@ -913,11 +913,15 @@ class CarbMathTests: XCTestCase {
             medium: TimeInterval(hours: 2),
             slow: TimeInterval(hours: 4)
         )
-        
+
+        let carbTimes = carbEntries.map { $0.startDate }
+        let start = carbTimes.min()!
+        let end = carbTimes.max()!
+
         let statuses = carbEntries.map(
             to: inputICE,
-            carbRatio: carbRatios,
-            insulinSensitivity: insulinSensitivities,
+            carbRatio: carbRatios.between(start: start, end: end),
+            insulinSensitivity: insulinSensitivities.quantitiesBetween(start: start, end: end),
             absorptionTimeOverrun: defaultAbsorptionTimes.slow / defaultAbsorptionTimes.medium,
             defaultAbsorptionTime: defaultAbsorptionTimes.medium,
             delay: TimeInterval(minutes: 0),

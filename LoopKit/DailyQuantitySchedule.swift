@@ -201,3 +201,11 @@ extension DailyQuantitySchedule where T: FloatingPoint {
         return DailyQuantitySchedule(unit: unit, valueSchedule: schedule)
     }
 }
+
+extension DailyQuantitySchedule where T == Double {
+    func quantitiesBetween(start: Date, end: Date) -> [AbsoluteScheduleValue<HKQuantity>] {
+        return between(start: start, end: end).map {
+            AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: HKQuantity(unit: unit, doubleValue: $0.value))
+        }
+    }
+}
