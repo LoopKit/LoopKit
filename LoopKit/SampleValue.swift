@@ -95,6 +95,22 @@ public extension Sequence where Element: TimelineValue {
             return true
         }
     }
+
+    /**
+     Returns an array of elements filtered by the specified DateInterval.
+
+     This behavior mimics HKQueryOptionNone, where the value must merely overlap the specified range,
+     not strictly exist inside of it.
+
+     - parameter startDate: The earliest date of elements to return
+     - parameter endDate:   The latest date of elements to return
+
+     - returns: A new array of elements
+     */
+    func filterDateInterval(interval: DateInterval) -> [Iterator.Element] {
+        return filterDateRange(interval.start, interval.end)
+    }
+
 }
 
 public extension Sequence where Element: SampleValue {

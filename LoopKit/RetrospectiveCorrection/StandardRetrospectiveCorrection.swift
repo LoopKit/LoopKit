@@ -15,7 +15,7 @@ import HealthKit
  In the above summary, "discrepancy" is a difference between the actual glucose and the model predicted glucose over retrospective correction grouping interval (set to 30 min in LoopSettings)
  */
 public class StandardRetrospectiveCorrection: RetrospectiveCorrection {
-    public let retrospectionInterval = TimeInterval(minutes: 30)
+    public static let retrospectionInterval = TimeInterval(minutes: 30)
 
     /// RetrospectiveCorrection protocol variables
     /// Standard effect duration

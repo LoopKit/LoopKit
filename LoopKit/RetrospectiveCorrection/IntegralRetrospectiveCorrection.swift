@@ -16,7 +16,7 @@ import HealthKit
  
  */
 public class IntegralRetrospectiveCorrection: RetrospectiveCorrection {
-    public let retrospectionInterval = TimeInterval(minutes: 180)
+    public static let retrospectionInterval = TimeInterval(minutes: 180)
 
     /// RetrospectiveCorrection protocol variables
     /// Standard effect duration
@@ -116,7 +116,7 @@ public class IntegralRetrospectiveCorrection: RetrospectiveCorrection {
         integralCorrectionEffectDuration = effectDuration
         
         // Calculate integral retrospective correction if past discrepancies over integration interval are available and if user settings are available
-        if  let pastDiscrepancies = retrospectiveGlucoseDiscrepanciesSummed?.filterDateRange(glucoseDate.addingTimeInterval(-retrospectionInterval), glucoseDate) {
+        if  let pastDiscrepancies = retrospectiveGlucoseDiscrepanciesSummed?.filterDateRange(glucoseDate.addingTimeInterval(-Self.retrospectionInterval), glucoseDate) {
             ircStatus = "effect computed successfully."
             
             // To reduce response delay, integral retrospective correction is computed over an array of recent contiguous discrepancy values having the same sign as the latest discrepancy value

@@ -164,6 +164,8 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
         var effectIndex = 0
         var startGlucose: Element! = self.first
 
+        precondition(startGlucose.startDate >= effects.first!.startDate, "Effects must cover glucose values")
+
         for endGlucose in self.dropFirst() {
             // Find a valid change in glucose, requiring identical provenance and no calibration
             let glucoseChange = endGlucose.quantity.doubleValue(for: mgdL) - startGlucose.quantity.doubleValue(for: mgdL)

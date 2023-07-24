@@ -12,7 +12,7 @@ import HealthKit
 /// Derives a continued glucose effect from recent prediction discrepancies
 public protocol RetrospectiveCorrection: CustomDebugStringConvertible {
     /// The maximum interval of historical glucose discrepancies that should be provided to the computation
-    var retrospectionInterval: TimeInterval { get }
+    static var retrospectionInterval: TimeInterval { get }
 
     /// Overall retrospective correction effect
     var totalGlucoseCorrectionEffect: HKQuantity? { get }
