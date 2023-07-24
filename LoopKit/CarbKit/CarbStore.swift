@@ -692,7 +692,7 @@ extension CarbStore {
         }
 
         // Find all objects being replaced
-        let replacedObjects = try fetchRelatedCarbObjects(for: sample)
+        let replacedObjects = try fetchRelatedCarbObjects(syncIdentifier: sample.syncIdentifier, provenanceIdentifier: sample.provenanceIdentifier)
 
         // Mark all objects as superceded, as necessary
         replacedObjects.filter({ $0.supercededDate == nil }).forEach({ $0.supercededDate = date })
@@ -740,15 +740,15 @@ extension CarbStore {
     }
 
     // Fetch all objects that are different versions of the specified sample, using sync identifier
-    private func fetchRelatedCarbObjects(for sample: HKQuantitySample) throws -> [CachedCarbObject] {
+    private func fetchRelatedCarbObjects(syncIdentifier: String?, provenanceIdentifier: String) throws -> [CachedCarbObject] {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        guard let syncIdentifier = sample.syncIdentifier else {
+        guard let syncIdentifier else {
             return []
         }
 
         let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", sample.provenanceIdentifier),
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", provenanceIdentifier),
                                                                                 NSPredicate(format: "syncIdentifier == %@", syncIdentifier)])
         request.sortDescriptors = [NSSortDescriptor(key: "anchorKey", ascending: true)]
 
@@ -825,9 +825,16 @@ extension CarbStore {
                     return
                 }
 
-                objects.forEach {
-                    let object = CachedCarbObject(context: self.cacheStore.managedObjectContext)
-                    object.update(from: $0)
+                do {
+                    try objects.forEach {
+                        let object = try self.fetchRelatedCarbObjects(syncIdentifier: $0.syncIdentifier, provenanceIdentifier: $0.provenanceIdentifier).first ??
+                            CachedCarbObject(context: self.cacheStore.managedObjectContext)
+
+                        object.update(from: $0)
+                    }
+                } catch let coreDataError {
+                    error = .coreDataError(coreDataError)
+                    return
                 }
 
                 error = CarbStoreError(error: self.cacheStore.save())
