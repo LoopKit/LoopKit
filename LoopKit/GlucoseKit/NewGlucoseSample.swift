@@ -8,7 +8,7 @@
 import HealthKit
 
 
-public struct NewGlucoseSample: Equatable {
+public struct NewGlucoseSample: Equatable, RawRepresentable {
     public let date: Date
     public let quantity: HKQuantity
     public let condition: GlucoseCondition?
@@ -49,6 +49,50 @@ public struct NewGlucoseSample: Equatable {
         self.syncIdentifier = syncIdentifier
         self.syncVersion = syncVersion
         self.device = device
+    }
+    
+    public init?(rawValue: [String : Any]) {
+        guard let dateInterval = rawValue["dateInterval"] as? TimeInterval,
+              let quantityValue = rawValue["quantityValue"] as? Double,
+              let isDisplayOnly = rawValue["isDisplayOnly"] as? Bool,
+              let wasUserEntered = rawValue["wasUserEntered"] as? Bool,
+              let syncIdentifier = rawValue["syncIdentifier"] as? String,
+              let syncVersion = rawValue["syncVersion"] as? Int else {
+            return nil
+        }
+        
+        self.date = Date(timeIntervalSince1970: dateInterval)
+        self.quantity = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: quantityValue)
+        self.condition = rawValue["condition"] as? GlucoseCondition ?? nil
+        self.trend = rawValue["trend"] as? GlucoseTrend ?? nil
+        
+        if let trendRateValue = rawValue["trendRateValue"] as? Double {
+            self.trendRate = HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: trendRateValue)
+        } else {
+            self.trendRate = nil
+        }
+        
+        self.isDisplayOnly = isDisplayOnly
+        self.wasUserEntered = wasUserEntered
+        self.syncIdentifier = syncIdentifier
+        self.syncVersion = syncVersion
+        self.device = nil
+    }
+    
+    public var rawValue: [String : Any] {
+        var rawValue: [String: Any] = [:]
+        
+        rawValue["dateInterval"] = date.timeIntervalSince1970
+        rawValue["quantityValue"] = quantity.doubleValue(for: .milligramsPerDeciliter)
+        rawValue["condition"] = condition
+        rawValue["trend"] = trend
+        rawValue["trendRateValue"] = trendRate?.doubleValue(for: .milligramsPerDeciliterPerMinute)
+        rawValue["isDisplayOnly"] = isDisplayOnly
+        rawValue["wasUserEntered"] = wasUserEntered
+        rawValue["syncIdentifier"] = syncIdentifier
+        rawValue["syncVersion"] = syncVersion
+        
+        return rawValue
     }
 }
 

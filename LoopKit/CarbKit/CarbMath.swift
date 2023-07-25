@@ -796,7 +796,11 @@ extension Collection where Element: CarbEntry {
     ///
     /// - Parameters:
     ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
+<<<<<<< HEAD
     ///   - carbRatio: The timeline of carb ratios, in grams per unit
+=======
+    ///   - carbRatio: The schedule of carb ratios, in grams per unit
+>>>>>>> origin/dev
     ///   - insulinSensitivity: The timeline of insulin sensitivities, in units of insulin per glucose-unit, covering the carb entries
     ///   - absorptionTimeOverrun: A multiplier for determining the minimum absorption time from the specified absorption time
     ///   - defaultAbsorptionTime: The absorption time to use for unspecified carb entries
@@ -806,6 +810,7 @@ extension Collection where Element: CarbEntry {
         to effectVelocities: [GlucoseEffectVelocity],
         carbRatio: [AbsoluteScheduleValue<Double>],
         insulinSensitivity: [AbsoluteScheduleValue<HKQuantity>],
+<<<<<<< HEAD
         absorptionTimeOverrun: Double = 1.5,
         defaultAbsorptionTime: TimeInterval = TimeInterval(3 /* hours */ * 60 /* minutes */ * 60 /* seconds */),
         delay: TimeInterval = TimeInterval(5 /* minutes */ * 60 /* seconds */),
@@ -813,6 +818,15 @@ extension Collection where Element: CarbEntry {
         absorptionModel: CarbAbsorptionComputable = PiecewiseLinearAbsorption(),
         adaptiveAbsorptionRateEnabled: Bool = false,
         adaptiveRateStandbyIntervalFraction: Double = 0.2
+=======
+        absorptionTimeOverrun: Double,
+        defaultAbsorptionTime: TimeInterval,
+        delay: TimeInterval,
+        initialAbsorptionTimeOverrun: Double,
+        absorptionModel: CarbAbsorptionComputable,
+        adaptiveAbsorptionRateEnabled: Bool,
+        adaptiveRateStandbyIntervalFraction: Double
+>>>>>>> origin/dev
     ) -> [CarbStatus<Element>] {
         guard count > 0 else {
             // TODO: Apply unmatched effects to meal prediction
