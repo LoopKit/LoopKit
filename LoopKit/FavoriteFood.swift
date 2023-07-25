@@ -1,5 +1,5 @@
 //
-//  Meal.swift
+//  FavoriteFood.swift
 //  LoopKit
 //
 //  Created by Noah Brauner on 7/13/23.
@@ -9,7 +9,7 @@
 import Foundation
 import HealthKit
 
-public struct Meal: Identifiable {
+public struct FavoriteFood: Identifiable {
     public var id = UUID().uuidString
     
     public var carbsQuantity: HKQuantity
@@ -53,8 +53,8 @@ public struct Meal: Identifiable {
     }
 }
 
-extension Meal: Equatable {
-    public static func == (lhs: Meal, rhs: Meal) -> Bool {
+extension FavoriteFood: Equatable {
+    public static func == (lhs: FavoriteFood, rhs: FavoriteFood) -> Bool {
         return lhs.id == rhs.id
     }
 }

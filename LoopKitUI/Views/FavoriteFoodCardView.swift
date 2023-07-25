@@ -1,5 +1,5 @@
 //
-//  MealCardView.swift
+//  FavoriteFoodCardView.swift
 //  LoopKitUI
 //
 //  Created by Noah Brauner on 7/12/23.
@@ -9,46 +9,46 @@
 import SwiftUI
 import LoopKit
 
-public struct MealCardView: View {
+public struct FavoriteFoodCardView: View {
     @Environment(\.editMode) var editMode
     
     private let cornerRadius: CGFloat = 10
     
-    let meal: Meal
-    @Binding var mealToConfirmDeleteId: String?
+    let food: FavoriteFood
+    @Binding var foodToConfirmDeleteId: String?
     
-    let onTap: (Meal) -> ()
-    let onDelete: (Meal) -> ()
+    let onTap: (FavoriteFood) -> ()
+    let onDelete: (FavoriteFood) -> ()
 
-    public init(meal: Meal, mealToConfirmDeleteId: Binding<String?>, onMealTap: @escaping (Meal) -> Void, onMealDelete: @escaping (Meal) -> Void) {
-        self.meal = meal
-        self._mealToConfirmDeleteId = mealToConfirmDeleteId
-        self.onTap = onMealTap
-        self.onDelete = onMealDelete
+    public init(food: FavoriteFood, foodToConfirmDeleteId: Binding<String?>, onFoodTap: @escaping (FavoriteFood) -> Void, onFoodDelete: @escaping (FavoriteFood) -> Void) {
+        self.food = food
+        self._foodToConfirmDeleteId = foodToConfirmDeleteId
+        self.onTap = onFoodTap
+        self.onDelete = onFoodDelete
     }
     
     public var body: some View {
         let isEditing = editMode?.wrappedValue == .active
-        let isConfirmingDelete = mealToConfirmDeleteId == meal.id
+        let isConfirmingDelete = foodToConfirmDeleteId == food.id
         
         HStack(spacing: 0) {
             if isEditing {
                 deleteButton
                 .onTapGesture {
                     if isConfirmingDelete {
-                        onDelete(meal)
+                        onDelete(food)
                     }
                     else {
                         withAnimation(.easeInOut(duration: 0.3)) {
-                            mealToConfirmDeleteId = meal.id
+                            foodToConfirmDeleteId = food.id
                         }
                     }
                 }
             }
             
-            Button(action: { onTap(meal) }) {
+            Button(action: { onTap(food) }) {
                 HStack {
-                    mealCardContent
+                    foodCardContent
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     if isEditing {
@@ -72,14 +72,14 @@ public struct MealCardView: View {
     }
 }
 
-extension MealCardView {
-    private var mealCardContent: some View {
+extension FavoriteFoodCardView {
+    private var foodCardContent: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(meal.name)
+            Text(food.name)
                 .foregroundColor(.primary)
                 .fontWeight(.semibold)
             
-            Text(meal.foodType)
+            Text(food.foodType)
                 .fontWeight(.semibold)
             
             HStack(spacing: 8) {
@@ -88,7 +88,7 @@ extension MealCardView {
                         .font(.caption2)
                         .foregroundColor(.gray)
                     
-                    Text(meal.carbsString)
+                    Text(food.carbsString)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                 }
@@ -103,7 +103,7 @@ extension MealCardView {
                         .font(.caption2)
                         .foregroundColor(.gray)
                     
-                    Text(meal.absorptionTimeString)
+                    Text(food.absorptionTimeString)
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                 }
@@ -113,7 +113,7 @@ extension MealCardView {
     
     private var deleteButton: some View {
         let isEditing = editMode?.wrappedValue == .active
-        let isConfirmingDelete = mealToConfirmDeleteId == meal.id
+        let isConfirmingDelete = foodToConfirmDeleteId == food.id
         let deleteButtonWidth: CGFloat = isEditing ? isConfirmingDelete ? 72 : 32 : 0
         
         return ZStack {

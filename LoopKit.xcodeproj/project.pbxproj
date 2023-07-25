@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		142CB75D2A60C01E0075748A /* ListButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142CB75C2A60C01E0075748A /* ListButtonStyle.swift */; };
-		142CB75F2A60C0240075748A /* MealCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142CB75E2A60C0240075748A /* MealCardView.swift */; };
-		142CB7612A60C0440075748A /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142CB7602A60C0440075748A /* Meal.swift */; };
+		142CB75F2A60C0240075748A /* FavoriteFoodCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142CB75E2A60C0240075748A /* FavoriteFoodCardView.swift */; };
+		142CB7612A60C0440075748A /* FavoriteFood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142CB7602A60C0440075748A /* FavoriteFood.swift */; };
 		14B33265293ED44C009B8746 /* GlucoseRangeSchedule+SafeBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B33264293ED44C009B8746 /* GlucoseRangeSchedule+SafeBounds.swift */; };
 		1D096BFA24C242300078B6B5 /* CheckmarkListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */; };
 		1D096C0224C24C220078B6B5 /* InsulinModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D096BFF24C24C220078B6B5 /* InsulinModelProvider.swift */; };
@@ -1003,8 +1003,8 @@
 
 /* Begin PBXFileReference section */
 		142CB75C2A60C01E0075748A /* ListButtonStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListButtonStyle.swift; sourceTree = "<group>"; };
-		142CB75E2A60C0240075748A /* MealCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MealCardView.swift; sourceTree = "<group>"; };
-		142CB7602A60C0440075748A /* Meal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
+		142CB75E2A60C0240075748A /* FavoriteFoodCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteFoodCardView.swift; sourceTree = "<group>"; };
+		142CB7602A60C0440075748A /* FavoriteFood.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteFood.swift; sourceTree = "<group>"; };
 		14B33264293ED44C009B8746 /* GlucoseRangeSchedule+SafeBounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GlucoseRangeSchedule+SafeBounds.swift"; sourceTree = "<group>"; };
 		1D096BF924C242300078B6B5 /* CheckmarkListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmarkListItem.swift; sourceTree = "<group>"; };
 		1D096BFF24C24C220078B6B5 /* InsulinModelProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsulinModelProvider.swift; sourceTree = "<group>"; };
@@ -2170,6 +2170,7 @@
 				E9F54FC52581C50C0034795E /* ExpandableDatePicker.swift */,
 				E9DFB92B24E634E800468917 /* ExpandablePicker.swift */,
 				899012C0246F1D8F007B88BA /* ExpandableSetting.swift */,
+				142CB75E2A60C0240075748A /* FavoriteFoodCardView.swift */,
 				89653C7F2473527100E1BAA5 /* FractionalQuantityPicker.swift */,
 				43177D0B1D3734040006E908 /* GlucoseRangeOverrideTableViewCell.swift */,
 				43177D071D37306D0006E908 /* GlucoseRangeOverrideTableViewCell.xib */,
@@ -2199,7 +2200,6 @@
 				892A5DB12231E191008961AB /* LevelMaskView.swift */,
 				142CB75C2A60C01E0075748A /* ListButtonStyle.swift */,
 				892A5DAF2231E191008961AB /* LoadingTableViewCell.swift */,
-				142CB75E2A60C0240075748A /* MealCardView.swift */,
 				89BE75C024649C2E00B145D9 /* ModalHeaderButtonBar.swift */,
 				B4A2AAB2240832350066563F /* MultipleSelectionList.swift */,
 				89BE75C424649C8100B145D9 /* NewScheduleItemEditor.swift */,
@@ -2457,6 +2457,7 @@
 				A919889E2355016B00B75EEE /* DosingDecisionStore.swift */,
 				891A3FD8224BEB4500378B27 /* EGPSchedule.swift */,
 				437AFF22203BE382008C4892 /* Extensions */,
+				142CB7602A60C0440075748A /* FavoriteFood.swift */,
 				43C9805B212D216A003B5D17 /* GlucoseChange.swift */,
 				43D8FDEA1C7290350073BE78 /* GlucoseEffect.swift */,
 				4378B64A1ED61965000AE785 /* GlucoseEffectVelocity.swift */,
@@ -2480,7 +2481,6 @@
 				43D8FDCE1C728FDF0073BE78 /* LoopKit.h */,
 				43D8FDEF1C7290350073BE78 /* LoopMath.swift */,
 				C16DA83E22E8D88F008624C2 /* LoopPluginBundleKey.swift */,
-				142CB7602A60C0440075748A /* Meal.swift */,
 				B42A74702358858D00247B03 /* Notification */,
 				A985464E251449FE0099C1A6 /* NotificationSettings.swift */,
 				437874B4202FDC8300A3D8B9 /* Persistence */,
@@ -3987,7 +3987,7 @@
 				43BA7162201E490D0058961E /* ErrorBackgroundView.swift in Sources */,
 				892A5D9A2231E0E4008961AB /* SettingsNavigationViewController.swift in Sources */,
 				B46B62B123FF0CA6001E69BA /* DescriptiveText.swift in Sources */,
-				142CB75F2A60C0240075748A /* MealCardView.swift in Sources */,
+				142CB75F2A60C0240075748A /* FavoriteFoodCardView.swift in Sources */,
 				B40D07CB251BD89D00C1C6D7 /* DateAndDurationSteppableTableViewCell.swift in Sources */,
 				E949E38924AFC82F00024DA0 /* DeliveryLimitsInformationView.swift in Sources */,
 				1DC9240F2575EF9A004F132A /* QuantityFormatter+Guardrails.swift in Sources */,
@@ -4155,7 +4155,7 @@
 				4322B780202FA2AF0002837D /* PumpEvent+CoreDataClass.swift in Sources */,
 				89AE2227228BC54C00BDFD85 /* TemporaryScheduleOverride.swift in Sources */,
 				4322B784202FA2AF0002837D /* Reservoir+CoreDataProperties.swift in Sources */,
-				142CB7612A60C0440075748A /* Meal.swift in Sources */,
+				142CB7612A60C0440075748A /* FavoriteFood.swift in Sources */,
 				A99A116229AA2C2B007919CE /* RemoteCommand.swift in Sources */,
 				4322B778202FA2790002837D /* HKQuantitySample+CarbKit.swift in Sources */,
 				4322B771202FA26F0002837D /* HKQuantitySample+GlucoseKit.swift in Sources */,

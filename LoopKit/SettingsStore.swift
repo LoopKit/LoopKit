@@ -263,7 +263,6 @@ public struct StoredSettings: Equatable {
     public let deviceToken: String?
     public let insulinType: InsulinType?
     public let defaultRapidActingModel: StoredInsulinModel?
-    public let favoriteFoodsEnabled: Bool
     public let basalRateSchedule: BasalRateSchedule?
     public let insulinSensitivitySchedule: InsulinSensitivitySchedule?
     public let carbRatioSchedule: CarbRatioSchedule?
@@ -291,7 +290,6 @@ public struct StoredSettings: Equatable {
                 deviceToken: String? = nil,
                 insulinType: InsulinType? = nil,
                 defaultRapidActingModel: StoredInsulinModel? = nil,
-                favoriteFoodsEnabled: Bool = false,
                 basalRateSchedule: BasalRateSchedule? = nil,
                 insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
                 carbRatioSchedule: CarbRatioSchedule? = nil,
@@ -317,7 +315,6 @@ public struct StoredSettings: Equatable {
         self.deviceToken = deviceToken
         self.insulinType = insulinType
         self.defaultRapidActingModel = defaultRapidActingModel
-        self.favoriteFoodsEnabled = favoriteFoodsEnabled
         self.basalRateSchedule = basalRateSchedule
         self.insulinSensitivitySchedule = insulinSensitivitySchedule
         self.carbRatioSchedule = carbRatioSchedule
@@ -352,7 +349,6 @@ extension StoredSettings: Codable {
                   deviceToken: try container.decodeIfPresent(String.self, forKey: .deviceToken),
                   insulinType: try container.decodeIfPresent(InsulinType.self, forKey: .insulinType),
                   defaultRapidActingModel: try container.decodeIfPresent(StoredInsulinModel.self, forKey: .defaultRapidActingModel),
-                  favoriteFoodsEnabled: try container.decodeIfPresent(Bool.self, forKey: .favoriteFoodsEnabled) ?? false,
                   basalRateSchedule: try container.decodeIfPresent(BasalRateSchedule.self, forKey: .basalRateSchedule),
                   insulinSensitivitySchedule: try container.decodeIfPresent(InsulinSensitivitySchedule.self, forKey: .insulinSensitivitySchedule),
                   carbRatioSchedule: try container.decodeIfPresent(CarbRatioSchedule.self, forKey: .carbRatioSchedule),
@@ -383,7 +379,6 @@ extension StoredSettings: Codable {
         try container.encodeIfPresent(insulinType, forKey: .insulinType)
         try container.encodeIfPresent(deviceToken, forKey: .deviceToken)
         try container.encodeIfPresent(defaultRapidActingModel, forKey: .defaultRapidActingModel)
-        try container.encodeIfPresent(favoriteFoodsEnabled, forKey: .favoriteFoodsEnabled)
         try container.encodeIfPresent(basalRateSchedule, forKey: .basalRateSchedule)
         try container.encodeIfPresent(insulinSensitivitySchedule, forKey: .insulinSensitivitySchedule)
         try container.encodeIfPresent(carbRatioSchedule, forKey: .carbRatioSchedule)
@@ -428,7 +423,6 @@ extension StoredSettings: Codable {
         case deviceToken
         case insulinType
         case defaultRapidActingModel
-        case favoriteFoodsEnabled
         case basalRateSchedule
         case insulinSensitivitySchedule
         case carbRatioSchedule
