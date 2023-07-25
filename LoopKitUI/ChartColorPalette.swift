@@ -15,12 +15,14 @@ public struct ChartColorPalette {
     public let grid: UIColor
     public let glucoseTint: UIColor
     public let insulinTint: UIColor
+    public let carbTint: UIColor
 
-    public init(axisLine: UIColor, axisLabel: UIColor, grid: UIColor, glucoseTint: UIColor, insulinTint: UIColor) {
+    public init(axisLine: UIColor, axisLabel: UIColor, grid: UIColor, glucoseTint: UIColor, insulinTint: UIColor, carbTint: UIColor) {
         self.axisLine = axisLine
         self.axisLabel = axisLabel
         self.grid = grid
         self.glucoseTint = glucoseTint
         self.insulinTint = insulinTint
+        self.carbTint = carbTint
     }
 }
