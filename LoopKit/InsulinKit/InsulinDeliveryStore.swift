@@ -314,20 +314,20 @@ extension InsulinDeliveryStore {
         })
     }
 
-    /// Retrieves basal doses
+    /// Retrieves doses overlapping supplied range
     ///
     /// - Parameters:
     ///   - start:If non-nil, select boluses that ended after start.
     ///   - end: If non-nil, select boluses that started before end.
     ///   - limit: If non-nill, specify the max number of boluses to return.
     ///   - returns: A list of DoseEntry objects representing the basal doses matching the passed constraints
-    public func getBasalDoses(start: Date? = nil, end: Date? = nil, limit: Int? = nil) async throws -> [DoseEntry] {
+    public func getDoses(start: Date? = nil, end: Date? = nil, limit: Int? = nil) async throws -> [DoseEntry] {
         return try await withCheckedThrowingContinuation({ continuation in
             queue.async {
                 self.cacheStore.managedObjectContext.performAndWait {
                     let request: NSFetchRequest<CachedInsulinDeliveryObject> = CachedInsulinDeliveryObject.fetchRequest()
 
-                    var predicates = [NSPredicate(format: "deletedAt == NIL"), NSPredicate(format: "reason == %d", HKInsulinDeliveryReason.basal.rawValue)]
+                    var predicates = [NSPredicate(format: "deletedAt == NIL")]
                     if let start {
                         predicates.append(NSPredicate(format: "endDate >= %@", start as NSDate))
                     }

@@ -49,19 +49,19 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
     }
 
     public init(
-        uuid: UUID?,
-        provenanceIdentifier: String,
-        syncIdentifier: String?,
-        syncVersion: Int?,
+        uuid: UUID? = nil,
+        provenanceIdentifier: String = "com.LoopKit.Loop",
+        syncIdentifier: String? = nil,
+        syncVersion: Int? = nil,
         startDate: Date,
         quantity: HKQuantity,
-        condition: GlucoseCondition?,
-        trend: GlucoseTrend?,
-        trendRate: HKQuantity?,
-        isDisplayOnly: Bool,
-        wasUserEntered: Bool,
-        device: HKDevice?,
-        healthKitEligibleDate: Date?) {
+        condition: GlucoseCondition? = nil,
+        trend: GlucoseTrend? = nil,
+        trendRate: HKQuantity? = nil,
+        isDisplayOnly: Bool = false,
+        wasUserEntered: Bool = false,
+        device: HKDevice? = nil,
+        healthKitEligibleDate: Date? = nil) {
         self.uuid = uuid
         self.provenanceIdentifier = provenanceIdentifier
         self.syncIdentifier = syncIdentifier

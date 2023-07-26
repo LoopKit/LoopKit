@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftCharts
-
+import UIKit
 
 final class ChartPointsTouchHighlightLayerViewCache {
     private lazy var containerView = UIView(frame: .zero)

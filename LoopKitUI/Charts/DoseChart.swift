@@ -8,6 +8,7 @@
 import Foundation
 import LoopKit
 import SwiftCharts
+import UIKit
 
 fileprivate struct DosePointsCache {
     let basal: [ChartPoint]

@@ -1256,15 +1256,15 @@ extension DoseStore {
         return try await insulinDeliveryStore.getBoluses(start: start, end: end)
     }
 
-    /// Retrieves basal doses
+    /// Retrieves doses overlapping supplied range
     ///
     /// - Parameters:
     ///   - start:If non-nil, select boluses that ended after start.
     ///   - end: If non-nil, select boluses that started before end.
     ///   - limit: If non-nill, specify the max number of boluses to return.
     ///   - returns: A list of DoseEntry objects representing the basal doses that match the query parameters
-    public func getBasalDoses(start: Date? = nil, end: Date? = nil) async throws -> [DoseEntry] {
-        return try await insulinDeliveryStore.getBasalDoses(start: start, end: end)
+    public func getDoses(start: Date? = nil, end: Date? = nil) async throws -> [DoseEntry] {
+        return try await insulinDeliveryStore.getDoses(start: start, end: end)
     }
 
 

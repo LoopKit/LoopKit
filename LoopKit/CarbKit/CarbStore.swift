@@ -346,7 +346,7 @@ extension CarbStore: HealthKitSampleStoreDelegate {
 
 extension CarbStore {
 
-    /// Retrieves carb entries within the specified date range
+    /// Retrieves carb entries that have a `startDate` within the specified date range
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
@@ -378,7 +378,7 @@ extension CarbStore {
         }
     }
 
-    /// Retrieves carb entries within the specified date range
+    /// Retrieves carb entries that have a `startDate` within the specified date range
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
@@ -405,7 +405,7 @@ extension CarbStore {
         return .success(entries)
     }
 
-    /// Retrieves active (not superceded, non-delete operation) cached carb objects within the specified date range
+    /// Retrieves active (not superceded, non-delete operation) cached carb objects that have a `startDate` within the specified date range
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
@@ -692,7 +692,7 @@ extension CarbStore {
         }
 
         // Find all objects being replaced
-        let replacedObjects = try fetchRelatedCarbObjects(for: sample)
+        let replacedObjects = try fetchRelatedCarbObjects(syncIdentifier: sample.syncIdentifier, provenanceIdentifier: sample.provenanceIdentifier)
 
         // Mark all objects as superceded, as necessary
         replacedObjects.filter({ $0.supercededDate == nil }).forEach({ $0.supercededDate = date })
@@ -740,15 +740,15 @@ extension CarbStore {
     }
 
     // Fetch all objects that are different versions of the specified sample, using sync identifier
-    private func fetchRelatedCarbObjects(for sample: HKQuantitySample) throws -> [CachedCarbObject] {
+    private func fetchRelatedCarbObjects(syncIdentifier: String?, provenanceIdentifier: String) throws -> [CachedCarbObject] {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        guard let syncIdentifier = sample.syncIdentifier else {
+        guard let syncIdentifier else {
             return []
         }
 
         let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", sample.provenanceIdentifier),
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", provenanceIdentifier),
                                                                                 NSPredicate(format: "syncIdentifier == %@", syncIdentifier)])
         request.sortDescriptors = [NSSortDescriptor(key: "anchorKey", ascending: true)]
 
@@ -803,9 +803,9 @@ extension CarbStore {
         }
     }
 
-    public func setSyncCarbObjects(_ objects: [SyncCarbObject]) async throws {
+    public func syncCarbObjects(_ objects: [SyncCarbObject]) async throws {
         try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Void, Error>) -> Void in
-            self.setSyncCarbObjects(objects) { error in
+            self.syncCarbObjects(objects) { error in
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else {
@@ -815,7 +815,39 @@ extension CarbStore {
         })
     }
 
-    /// Store carb objects from another store
+    /// Add/update carb objects from another store
+    public func syncCarbObjects(_ objects: [SyncCarbObject], completion: @escaping (CarbStoreError?) -> Void) {
+        queue.async {
+            var error: CarbStoreError?
+
+            self.cacheStore.managedObjectContext.performAndWait {
+                guard !objects.isEmpty else {
+                    return
+                }
+
+                do {
+                    try objects.forEach {
+                        let object = try self.fetchRelatedCarbObjects(syncIdentifier: $0.syncIdentifier, provenanceIdentifier: $0.provenanceIdentifier).first ??
+                            CachedCarbObject(context: self.cacheStore.managedObjectContext)
+
+                        object.update(from: $0)
+                    }
+                } catch let coreDataError {
+                    error = .coreDataError(coreDataError)
+                    return
+                }
+
+                error = CarbStoreError(error: self.cacheStore.save())
+            }
+
+            completion(error)
+
+            self.handleUpdatedCarbData()
+        }
+    }
+
+
+    /// Replace all carb objects from another store
     public func setSyncCarbObjects(_ objects: [SyncCarbObject], completion: @escaping (CarbStoreError?) -> Void) {
         queue.async {
             if let error = self.purgeCachedCarbObjectsUnconditionally() {

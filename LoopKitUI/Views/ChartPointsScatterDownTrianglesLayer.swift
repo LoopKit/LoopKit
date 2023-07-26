@@ -7,7 +7,8 @@
 //
 
 import SwiftCharts
-
+import CoreGraphics
+import UIKit
 
 public class ChartPointsScatterDownTrianglesLayer<T: ChartPoint>: ChartPointsScatterLayer<T> {
     public required init(
