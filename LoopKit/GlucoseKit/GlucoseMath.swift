@@ -162,9 +162,14 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
         var velocities = [GlucoseEffectVelocity]()
 
         var effectIndex = 0
+
+        guard self.count > 0 else {
+            return []
+        }
+
         var startGlucose: Element! = self.first
 
-        precondition(startGlucose.startDate >= effects.first!.startDate, "Effects must cover glucose values")
+        precondition(startGlucose.startDate >= effects.first!.startDate, "Effects must cover glucose values. Start glucose date: \(startGlucose.startDate) < \(effects.first!.startDate)")
 
         for endGlucose in self.dropFirst() {
             // Find a valid change in glucose, requiring identical provenance and no calibration
