@@ -162,7 +162,6 @@ struct InsulinStatusView: View {
                         .font(.system(size: 28))
                         .fontWeight(.heavy)
                         .fixedSize()
-                    let unit = HKUnit.internationalUnit()
                     Text(basalRateFormatter.localizedUnitStringWithPlurality())
                         .foregroundColor(.secondary)
                 }

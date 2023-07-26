@@ -7,6 +7,7 @@
 //
 
 import SwiftCharts
+import UIKit
 
 extension ChartAxisValuesStaticGenerator {
     // This is the same as SwiftChart ChartAxisValuesStaticGenerator.generateAxisValuesWithChartPoints(...) with the exception that the `currentMultiple` is calculated linearly instead of quadratically

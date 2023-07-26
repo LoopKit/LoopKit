@@ -6,7 +6,8 @@
 //
 
 import SwiftCharts
-
+import CoreGraphics
+import UIKit
 
 struct ChartPointsFill {
     let chartPoints: [ChartPoint]

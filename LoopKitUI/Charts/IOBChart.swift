@@ -9,6 +9,7 @@ import Foundation
 import LoopKit
 import SwiftCharts
 import HealthKit
+import UIKit
 
 
 public class IOBChart: ChartProviding {
