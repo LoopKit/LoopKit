@@ -163,7 +163,7 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
 
         var effectIndex = 0
 
-        guard self.count > 0 else {
+        guard self.count > 0, effects.count > 0 else {
             return []
         }
 
