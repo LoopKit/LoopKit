@@ -1354,7 +1354,7 @@ extension DoseStore {
                     return dose.trimmed(to: basalDosingEnd)
                 }
 
-                let glucoseEffects = trimmedDoses.glucoseEffects(insulinModelProvider: self.insulinModelProvider, longestEffectDuration: self.longestEffectDuration, insulinSensitivity: insulinSensitivitySchedule)
+                let glucoseEffects = trimmedDoses.glucoseEffects(insulinModelProvider: self.insulinModelProvider, longestEffectDuration: self.longestEffectDuration, insulinSensitivity: insulinSensitivitySchedule, from: start, to: end)
                 completion(.success(glucoseEffects.filterDateRange(start, end)))
             }
         }
