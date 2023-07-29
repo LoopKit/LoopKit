@@ -289,3 +289,6 @@ extension DailyValueSchedule {
             && Swift.zip(lhs.items, rhs.items).allSatisfy(==)
     }
 }
+
+extension AbsoluteScheduleValue: Codable where T: Codable {
+}

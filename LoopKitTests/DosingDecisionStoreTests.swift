@@ -263,7 +263,6 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
         "softwareVersion" : "Device Software Version",
         "udiDeviceIdentifier" : "Device UDI Device Identifier"
       },
-      "isDisplayOnly" : false,
       "provenanceIdentifier" : "com.loopkit.loop",
       "quantity" : 400,
       "startDate" : "2020-05-14T22:09:00Z",
@@ -877,7 +876,6 @@ class StoredDosingDecisionCodableTests: XCTestCase {
       "softwareVersion" : "Device Software Version",
       "udiDeviceIdentifier" : "Device UDI Device Identifier"
     },
-    "isDisplayOnly" : false,
     "provenanceIdentifier" : "com.loopkit.loop",
     "quantity" : 400,
     "startDate" : "2020-05-14T22:09:00Z",
