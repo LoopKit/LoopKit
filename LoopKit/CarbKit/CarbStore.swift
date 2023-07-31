@@ -206,9 +206,9 @@ public final class CarbStore {
         insulinSensitivitySchedule: InsulinSensitivitySchedule? = nil,
         overrideHistory: TemporaryScheduleOverrideHistory? = nil,
         syncVersion: Int = 1,
-        absorptionTimeOverrun: Double = 1.5,
-        calculationDelta: TimeInterval = 5 /* minutes */ * 60,
-        effectDelay: TimeInterval = 10 /* minutes */ * 60,
+        absorptionTimeOverrun: Double = CarbMath.defaultAbsorptionTimeOverrun,
+        calculationDelta: TimeInterval = GlucoseMath.defaultDelta,
+        effectDelay: TimeInterval = CarbMath.defaultEffectDelay,
         carbAbsorptionModel: CarbAbsorptionModel = .nonlinear,
         provenanceIdentifier: String,
         test_currentDate: Date? = nil
