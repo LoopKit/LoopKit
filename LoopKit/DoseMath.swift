@@ -307,7 +307,6 @@ extension Collection where Element: GlucoseValue {
                 let percentEffected = model.percentEffectRemaining(at: start) - model.percentEffectRemaining(at: end)
                 return percentEffected * segment.value.doubleValue(for: unit)
             }
-            print("Correcting from \(predictedGlucoseValue) to \(targetValue), effectedSensitivity = \(effectedSensitivity)")
 
             // Update range statistics
             if minGlucose == nil || prediction.quantity < minGlucose!.quantity {
@@ -322,7 +321,6 @@ extension Collection where Element: GlucoseValue {
             ), correctionUnits > 0 else {
                 continue
             }
-            print("Correction = \(correctionUnits)")
 
             // Update the correction only if we've found a new minimum
             guard minCorrectionUnits == nil || correctionUnits < minCorrectionUnits! else {
