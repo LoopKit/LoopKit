@@ -255,7 +255,7 @@ extension DoseEntry {
     /// If the dose crosses a schedule boundary, it will be split into multiple doses so each dose has a
     /// single scheduled basal rate.
     ///
-    /// - Parameter basalHistory: The history of basal schedule valures to apply.  Only schedule values overlapping the dose should be included.
+    /// - Parameter basalHistory: The history of basal schedule valuees to apply.  Only schedule values overlapping the dose should be included.
     /// - Returns: An array of annotated doses
     fileprivate func annotated(with basalHistory: [AbsoluteScheduleValue<Double>]) -> [DoseEntry] {
 
