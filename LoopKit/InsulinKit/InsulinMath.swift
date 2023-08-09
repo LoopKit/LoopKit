@@ -255,7 +255,7 @@ extension DoseEntry {
     /// If the dose crosses a schedule boundary, it will be split into multiple doses so each dose has a
     /// single scheduled basal rate.
     ///
-    /// - Parameter basalHistory: The history of basal schedule valuees to apply.  Only schedule values overlapping the dose should be included.
+    /// - Parameter basalHistory: The history of basal schedule values to apply. Only schedule values overlapping the dose should be included.
     /// - Returns: An array of annotated doses
     fileprivate func annotated(with basalHistory: [AbsoluteScheduleValue<Double>]) -> [DoseEntry] {
 
@@ -676,7 +676,6 @@ extension Collection where Element == DoseEntry {
                     preconditionFailure("ISF History must cover dose startDates")
                 }
                 let doseEffect = dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: isf.value.doubleValue(for: unit), delta: delta)
-                //print("dose insulin effect \(date) = \(doseEffect) isf=\(isf.value.doubleValue(for: unit)) dose.startDate=\(dose.startDate)")
                 return value + doseEffect
             }
 
@@ -858,7 +857,7 @@ extension Collection where Element == DoseEntry {
             case .resume:
                 assertionFailure("No resume events should be present in reconciled doses")
             case .bolus:
-                break //newEntries.append(dose)
+                break
             }
         }
 
