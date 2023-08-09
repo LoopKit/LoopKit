@@ -142,6 +142,15 @@ public extension DailyQuantitySchedule where T == Double {
                                                value: HKQuantity(unit: unit, doubleValue: $0.value))
         }
     }
+
+    func truncatingBetween(start startDate: Date, end endDate: Date) -> [AbsoluteScheduleValue<T>] {
+        let values = between(start: startDate, end: endDate)
+        return values.map { item in
+            let start = max(item.startDate, startDate)
+            let end = min(item.endDate, endDate)
+            return AbsoluteScheduleValue<T>(startDate: start, endDate: end, value: item.value)
+        }
+    }
     
     init?(unit: HKUnit,
           dailyQuantities: [RepeatingScheduleValue<HKQuantity>],
@@ -199,5 +208,13 @@ extension DailyQuantitySchedule where T: FloatingPoint {
         let unit = lhs.unit.unitDivided(by: rhs.unit)
         let schedule = DailyValueSchedule.zip(lhs.valueSchedule, rhs.valueSchedule).map(/)
         return DailyQuantitySchedule(unit: unit, valueSchedule: schedule)
+    }
+}
+
+extension DailyQuantitySchedule where T == Double {
+    func quantitiesBetween(start: Date, end: Date) -> [AbsoluteScheduleValue<HKQuantity>] {
+        return between(start: start, end: end).map {
+            AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: HKQuantity(unit: unit, doubleValue: $0.value))
+        }
     }
 }

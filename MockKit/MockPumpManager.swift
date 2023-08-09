@@ -566,7 +566,7 @@ public final class MockPumpManager: TestingPumpManager {
 
 
             let suspendDate = Date()
-            let suspend = UnfinalizedDose(suspendStartTime: suspendDate)
+            let suspend = UnfinalizedDose(suspendStartTime: suspendDate, automatic: false)
             self.state.finalizedDoses.append(suspend)
             self.state.suspendState = .suspended(suspendDate)
             logDeviceComms(.receive, message: "Suspend accepted")
@@ -587,7 +587,7 @@ public final class MockPumpManager: TestingPumpManager {
             completion(error)
         } else {
             let resumeDate = Date()
-            let resume = UnfinalizedDose(resumeStartTime: resumeDate, insulinType: state.insulinType)
+            let resume = UnfinalizedDose(resumeStartTime: resumeDate, insulinType: state.insulinType, automatic: false)
             self.state.finalizedDoses.append(resume)
             self.state.suspendState = .resumed(resumeDate)
             storePumpEvents { (error) in

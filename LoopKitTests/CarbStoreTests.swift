@@ -20,8 +20,6 @@ class CarbStorePersistenceTests: PersistenceControllerTestCase, CarbStoreDelegat
 
         healthStore = HKHealthStoreMock()
 
-        let observationInterval: TimeInterval = .hours(6)
-
         let hkSampleStore = HealthKitSampleStore(healthStore: healthStore, type: HealthKitSampleStore.carbType)
 
         carbStore = CarbStore(

@@ -13,13 +13,17 @@ import LoopKit
 
 public class DisplayGlucosePreference: ObservableObject {
     @Published public private(set) var unit: HKUnit
+    @Published public private(set) var rateUnit: HKUnit
     @Published public private(set) var formatter: QuantityFormatter
     @Published public private(set) var minuteRateFormatter: QuantityFormatter
 
     public init(displayGlucoseUnit: HKUnit) {
+        let rateUnit = displayGlucoseUnit.unitDivided(by: .minute())
+
         self.unit = displayGlucoseUnit
+        self.rateUnit = rateUnit
         self.formatter = QuantityFormatter(for: displayGlucoseUnit)
-        self.minuteRateFormatter = QuantityFormatter(for: displayGlucoseUnit.unitDivided(by: .minute()))
+        self.minuteRateFormatter = QuantityFormatter(for: rateUnit)
         self.formatter.numberFormatter.notANumberSymbol = "–"
         self.minuteRateFormatter.numberFormatter.notANumberSymbol = "–"
     }

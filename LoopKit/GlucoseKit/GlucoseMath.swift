@@ -87,13 +87,16 @@ extension BidirectionalCollection where Element: GlucoseSampleValue, Index == In
     /// - Parameters:
     ///   - duration: The duration of the effects
     ///   - delta: The time differential for the returned values
-    ///   - velocityMaximum: The limit on how fast the momentum effect can rise. Defaults to 4 mg/dL/min based on physiological rates
+    ///   - velocityMaximum: The limit on how fast the momentum effect can be. Defaults to 4 mg/dL/min based on physiological rates, if nil passed.
     /// - Returns: An array of glucose effects
-    func linearMomentumEffect(
-        duration: TimeInterval = TimeInterval(minutes: 30),
-        delta: TimeInterval = TimeInterval(minutes: 5),
-        velocityMaximum: HKQuantity = HKQuantity(unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .minute()), doubleValue: 4.0)
+    public func linearMomentumEffect(
+        duration: TimeInterval = TimeInterval(15 /* minutes */ * 60 /* seconds */),
+        delta: TimeInterval = TimeInterval(5 /* minutes */ * 60 /* seconds */),
+        velocityMaximum: HKQuantity? = nil
     ) -> [GlucoseEffect] {
+
+        let velocityMax = velocityMaximum ?? HKQuantity(unit: HKUnit.milligramsPerDeciliter.unitDivided(by: .minute()), doubleValue: 4.0)
+
         guard
             self.count > 2,  // Linear regression isn't much use without 3 or more entries.
             isContinuous() && isCalibrated && hasSingleProvenance,
@@ -116,7 +119,7 @@ extension BidirectionalCollection where Element: GlucoseSampleValue, Index == In
             return []
         }
 
-        let limitedSlope = Swift.min(slope, velocityMaximum.doubleValue(for: unit.unitDivided(by: .second())))
+        let limitedSlope = Swift.min(slope, velocityMax.doubleValue(for: unit.unitDivided(by: .second())))
         
         var date = startDate
         var values = [GlucoseEffect]()
@@ -153,13 +156,20 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
     ///
     /// - Parameter effects: Glucose effects to be countered, in chronological order
     /// - Returns: An array of velocities describing the change in glucose samples compared to the specified effects
-    func counteractionEffects(to effects: [GlucoseEffect]) -> [GlucoseEffectVelocity] {
+    public func counteractionEffects(to effects: [GlucoseEffect]) -> [GlucoseEffectVelocity] {
         let mgdL = HKUnit.milligramsPerDeciliter
         let velocityUnit = GlucoseEffectVelocity.perSecondUnit
         var velocities = [GlucoseEffectVelocity]()
 
         var effectIndex = 0
+
+        guard self.count > 0, effects.count > 0 else {
+            return []
+        }
+
         var startGlucose: Element! = self.first
+
+        precondition(startGlucose.startDate >= effects.first!.startDate, "Effects must cover glucose values. Start glucose date: \(startGlucose.startDate) < \(effects.first!.startDate)")
 
         for endGlucose in self.dropFirst() {
             // Find a valid change in glucose, requiring identical provenance and no calibration

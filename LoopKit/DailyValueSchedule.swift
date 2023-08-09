@@ -1,5 +1,5 @@
 //
-//  QuantitySchedule.swift
+//  DailyValueSchedule.swift
 //  Naterade
 //
 //  Created by Nathan Racklyeft on 1/18/16.
@@ -36,6 +36,12 @@ public struct AbsoluteScheduleValue<T>: TimelineValue {
     public let startDate: Date
     public let endDate: Date
     public let value: T
+
+    public init(startDate: Date, endDate: Date, value: T) {
+        self.startDate = startDate
+        self.endDate = endDate
+        self.value = value
+    }
 }
 
 extension AbsoluteScheduleValue: Equatable where T: Equatable {}
@@ -174,6 +180,16 @@ public struct DailyValueSchedule<T>: DailySchedule {
             )
         }
     }
+
+    public func truncatingBetween(start startDate: Date, end endDate: Date) -> [AbsoluteScheduleValue<T>] {
+        let values = between(start: startDate, end: endDate)
+        return values.map { item in
+            let start = max(item.startDate, startDate)
+            let end = min(item.endDate, endDate)
+            return AbsoluteScheduleValue<T>(startDate: start, endDate: end, value: item.value)
+        }
+    }
+
 
     public func map<U>(_ transform: (T) -> U) -> DailyValueSchedule<U> {
         return DailyValueSchedule<U>(

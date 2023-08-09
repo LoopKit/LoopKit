@@ -7,14 +7,14 @@
 //
 
 public protocol PluginHost {
-    /// An identifier for the host of this service. Usually something that identifies the app. Example: "com.loopkit.Loop", or "org.tidepool.Loop"
+    /// An identifier for the host (app) of this service. Should something that uniquely identifies the app. Example: "com.loopkit.Loop", or "org.tidepool.Loop"
     var hostIdentifier: String { get }
 
     /// The version of the host of this service.
     var hostVersion: String { get }
 }
 
-public protocol ServiceDelegate: AnyObject, PluginHost, AlertIssuer {
+public protocol ServiceDelegate: AnyObject, PluginHost, AlertIssuer, RemoteActionDelegate {
     /// Informs the delegate that the state of the specified service was updated and the delegate should persist the service. May
     /// be invoked prior to the service completing setup.
     ///

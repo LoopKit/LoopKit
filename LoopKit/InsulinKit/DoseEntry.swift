@@ -13,7 +13,7 @@ import HealthKit
 public struct DoseEntry: TimelineValue, Equatable {
     public let type: DoseType
     public let startDate: Date
-    public let endDate: Date
+    public var endDate: Date
     internal let value: Double
     public let unit: DoseUnit
     public let deliveredUnits: Double?

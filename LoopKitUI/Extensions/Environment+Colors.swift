@@ -110,7 +110,8 @@ private struct ChartColorPaletteKey: EnvironmentKey {
                                                                    axisLabel: .secondaryLabel,
                                                                    grid: .systemGray3,
                                                                    glucoseTint: .systemTeal,
-                                                                   insulinTint: .orange)
+                                                                   insulinTint: .orange,
+                                                                   carbTint: .systemGreen)
 }
 
 public extension EnvironmentValues {

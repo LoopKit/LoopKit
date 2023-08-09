@@ -345,6 +345,26 @@ extension CarbStore: HealthKitSampleStoreDelegate {
 // MARK: - Fetching
 
 extension CarbStore {
+
+    /// Retrieves carb entries that have a `startDate` within the specified date range
+    ///
+    /// - Parameters:
+    ///   - start: The earliest date of values to retrieve
+    ///   - end: The latest date of values to retrieve, if provided
+    ///   - result: An array of carb entries, in chronological order by startDate, or error
+    public func getCarbEntries(start: Date? = nil, end: Date? = nil) async throws -> [StoredCarbEntry] {
+        try await withCheckedThrowingContinuation { continuation in
+            getCarbEntries(start: start, end: end) { result in
+                switch result {
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                case .success(let entries):
+                    continuation.resume(returning: entries)
+                }
+            }
+        }
+    }
+
     /// Retrieves carb entries within the specified date range
     ///
     /// - Parameters:
@@ -358,7 +378,7 @@ extension CarbStore {
         }
     }
 
-    /// Retrieves carb entries within the specified date range
+    /// Retrieves carb entries that have a `startDate` within the specified date range
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
@@ -385,7 +405,7 @@ extension CarbStore {
         return .success(entries)
     }
 
-    /// Retrieves active (not superceded, non-delete operation) cached carb objects within the specified date range
+    /// Retrieves active (not superceded, non-delete operation) cached carb objects that have a `startDate` within the specified date range
     ///
     /// - Parameters:
     ///   - start: The earliest date of values to retrieve
@@ -425,13 +445,21 @@ extension CarbStore {
         effectVelocities: [GlucoseEffectVelocity]? = nil,
         completion: @escaping (_ result: CarbStoreResult<[CarbStatus<StoredCarbEntry>]>) -> Void
     ) {
+        let now = Date()
+        guard let carbRatio = self.carbRatioScheduleApplyingOverrideHistory?.between(start: start, end: end ?? now),
+              let insulinSensitivity = self.insulinSensitivityScheduleApplyingOverrideHistory?.quantitiesBetween(start: start, end: end ?? now) else
+        {
+            completion(.failure(.notConfigured))
+            return
+        }
+
         getCarbEntries(start: start, end: end) { (result) in
             switch result {
             case .success(let entries):
                 let status = entries.map(
                     to: effectVelocities ?? [],
-                    carbRatio: self.carbRatioScheduleApplyingOverrideHistory,
-                    insulinSensitivity: self.insulinSensitivityScheduleApplyingOverrideHistory,
+                    carbRatio: carbRatio,
+                    insulinSensitivity: insulinSensitivity,
                     absorptionTimeOverrun: self.absorptionTimeOverrun,
                     defaultAbsorptionTime: self.defaultAbsorptionTimes.medium,
                     delay: self.delay,
@@ -664,7 +692,7 @@ extension CarbStore {
         }
 
         // Find all objects being replaced
-        let replacedObjects = try fetchRelatedCarbObjects(for: sample)
+        let replacedObjects = try fetchRelatedCarbObjects(syncIdentifier: sample.syncIdentifier, provenanceIdentifier: sample.provenanceIdentifier)
 
         // Mark all objects as superceded, as necessary
         replacedObjects.filter({ $0.supercededDate == nil }).forEach({ $0.supercededDate = date })
@@ -712,15 +740,15 @@ extension CarbStore {
     }
 
     // Fetch all objects that are different versions of the specified sample, using sync identifier
-    private func fetchRelatedCarbObjects(for sample: HKQuantitySample) throws -> [CachedCarbObject] {
+    private func fetchRelatedCarbObjects(syncIdentifier: String?, provenanceIdentifier: String) throws -> [CachedCarbObject] {
         dispatchPrecondition(condition: .onQueue(queue))
 
-        guard let syncIdentifier = sample.syncIdentifier else {
+        guard let syncIdentifier else {
             return []
         }
 
         let request: NSFetchRequest<CachedCarbObject> = CachedCarbObject.fetchRequest()
-        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", sample.provenanceIdentifier),
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "provenanceIdentifier == %@", provenanceIdentifier),
                                                                                 NSPredicate(format: "syncIdentifier == %@", syncIdentifier)])
         request.sortDescriptors = [NSSortDescriptor(key: "anchorKey", ascending: true)]
 
@@ -775,7 +803,51 @@ extension CarbStore {
         }
     }
 
-    /// Store carb objects from another store
+    public func syncCarbObjects(_ objects: [SyncCarbObject]) async throws {
+        try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Void, Error>) -> Void in
+            self.syncCarbObjects(objects) { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume()
+                }
+            }
+        })
+    }
+
+    /// Add/update carb objects from another store
+    public func syncCarbObjects(_ objects: [SyncCarbObject], completion: @escaping (CarbStoreError?) -> Void) {
+        queue.async {
+            var error: CarbStoreError?
+
+            self.cacheStore.managedObjectContext.performAndWait {
+                guard !objects.isEmpty else {
+                    return
+                }
+
+                do {
+                    try objects.forEach {
+                        let object = try self.fetchRelatedCarbObjects(syncIdentifier: $0.syncIdentifier, provenanceIdentifier: $0.provenanceIdentifier).first ??
+                            CachedCarbObject(context: self.cacheStore.managedObjectContext)
+
+                        object.update(from: $0)
+                    }
+                } catch let coreDataError {
+                    error = .coreDataError(coreDataError)
+                    return
+                }
+
+                error = CarbStoreError(error: self.cacheStore.save())
+            }
+
+            completion(error)
+
+            self.handleUpdatedCarbData()
+        }
+    }
+
+
+    /// Replace all carb objects from another store
     public func setSyncCarbObjects(_ objects: [SyncCarbObject], completion: @escaping (CarbStoreError?) -> Void) {
         queue.async {
             if let error = self.purgeCachedCarbObjectsUnconditionally() {
@@ -989,14 +1061,26 @@ extension CarbStore {
         endingAt end: Date? = nil,
         effectVelocities: [GlucoseEffectVelocity]? = nil
     ) -> [CarbValue] {
-        if  let velocities = effectVelocities,
-            let carbRatioSchedule = carbRatioScheduleApplyingOverrideHistory,
-            let insulinSensitivitySchedule = insulinSensitivityScheduleApplyingOverrideHistory
+        if  let velocities = effectVelocities
         {
+            guard samples.count > 0 else {
+                return []
+            }
+
+            let carbDates = samples.map { $0.startDate }
+            let maxCarbDate = carbDates.max()!
+            let minCarbDate = carbDates.min()!
+
+            guard let carbRatio = self.carbRatioScheduleApplyingOverrideHistory?.between(start: minCarbDate, end: maxCarbDate),
+                  let insulinSensitivity = self.insulinSensitivityScheduleApplyingOverrideHistory?.quantitiesBetween(start: minCarbDate, end: maxCarbDate) else
+            {
+                return []
+            }
+
             return samples.map(
                 to: velocities,
-                carbRatio: carbRatioSchedule,
-                insulinSensitivity: insulinSensitivitySchedule,
+                carbRatio: carbRatio,
+                insulinSensitivity: insulinSensitivity,
                 absorptionTimeOverrun: absorptionTimeOverrun,
                 defaultAbsorptionTime: defaultAbsorptionTimes.medium,
                 delay: delay,
@@ -1054,7 +1138,7 @@ extension CarbStore {
     ///   - effectVelocities: A timeline of glucose effect velocities, ordered by start date
     ///   - completion: A closure called once the effects have been retrieved
     ///   - result: An array of effects, in chronological order
-    public func getGlucoseEffects(start: Date, end: Date? = nil, effectVelocities: [GlucoseEffectVelocity]? = nil, completion: @escaping(_ result: CarbStoreResult<(entries: [StoredCarbEntry], effects: [GlucoseEffect])>) -> Void) {
+    public func getGlucoseEffects(start: Date, end: Date? = nil, effectVelocities: [GlucoseEffectVelocity], completion: @escaping(_ result: CarbStoreResult<(entries: [StoredCarbEntry], effects: [GlucoseEffect])>) -> Void) {
         queue.async {
             guard self.carbRatioSchedule != nil, self.insulinSensitivitySchedule != nil else {
                 completion(.failure(.notConfigured))
@@ -1091,49 +1175,44 @@ extension CarbStore {
         of samples: [Sample],
         startingAt start: Date,
         endingAt end: Date? = nil,
-        effectVelocities: [GlucoseEffectVelocity]? = nil
+        effectVelocities: [GlucoseEffectVelocity]
     ) throws -> [GlucoseEffect] {
-        guard
-            let carbRatioSchedule = carbRatioScheduleApplyingOverrideHistory,
-            let insulinSensitivitySchedule = insulinSensitivityScheduleApplyingOverrideHistory
-        else {
+
+        guard samples.count > 0 else {
+            return []
+        }
+
+        let carbDates = samples.map { $0.startDate }
+        let maxCarbDate = carbDates.max()!
+        let minCarbDate = carbDates.min()!
+
+        guard let carbRatio = self.carbRatioScheduleApplyingOverrideHistory?.between(start: minCarbDate, end: maxCarbDate),
+              let insulinSensitivity = self.insulinSensitivityScheduleApplyingOverrideHistory?.quantitiesBetween(start: minCarbDate, end: maxCarbDate) else
+        {
             throw CarbStoreError.notConfigured
         }
 
-        if let effectVelocities = effectVelocities {
-            return samples.map(
-                to: effectVelocities,
-                carbRatio: carbRatioSchedule,
-                insulinSensitivity: insulinSensitivitySchedule,
-                absorptionTimeOverrun: absorptionTimeOverrun,
-                defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-                delay: delay,
-                initialAbsorptionTimeOverrun: settings.initialAbsorptionTimeOverrun,
-                absorptionModel: settings.absorptionModel,
-                adaptiveAbsorptionRateEnabled: settings.adaptiveAbsorptionRateEnabled,
-                adaptiveRateStandbyIntervalFraction: settings.adaptiveRateStandbyIntervalFraction
-            ).dynamicGlucoseEffects(
-                from: start,
-                to: end,
-                carbRatios: carbRatioSchedule,
-                insulinSensitivities: insulinSensitivitySchedule,
-                defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-                absorptionModel: settings.absorptionModel,
-                delay: delay,
-                delta: delta
-            )
-        } else {
-            return samples.glucoseEffects(
-                from: start,
-                to: end,
-                carbRatios: carbRatioSchedule,
-                insulinSensitivities: insulinSensitivitySchedule,
-                defaultAbsorptionTime: defaultAbsorptionTimes.medium,
-                absorptionModel: settings.absorptionModel,
-                delay: delay,
-                delta: delta
-            )
-        }
+        return samples.map(
+            to: effectVelocities,
+            carbRatio: carbRatio,
+            insulinSensitivity: insulinSensitivity,
+            absorptionTimeOverrun: absorptionTimeOverrun,
+            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+            delay: delay,
+            initialAbsorptionTimeOverrun: settings.initialAbsorptionTimeOverrun,
+            absorptionModel: settings.absorptionModel,
+            adaptiveAbsorptionRateEnabled: settings.adaptiveAbsorptionRateEnabled,
+            adaptiveRateStandbyIntervalFraction: settings.adaptiveRateStandbyIntervalFraction
+        ).dynamicGlucoseEffects(
+            from: start,
+            to: end,
+            carbRatios: carbRatio,
+            insulinSensitivities: insulinSensitivity,
+            defaultAbsorptionTime: defaultAbsorptionTimes.medium,
+            absorptionModel: settings.absorptionModel,
+            delay: delay,
+            delta: delta
+        )
     }
 
     /// Retrieves the total number of recorded carbohydrates for the specified period.

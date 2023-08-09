@@ -73,7 +73,7 @@ public extension Sequence where Element: TimelineValue {
 
     /**
      Returns an array of elements filtered by the specified date range.
-     
+
      This behavior mimics HKQueryOptionNone, where the value must merely overlap the specified range,
      not strictly exist inside of it.
 
@@ -95,6 +95,22 @@ public extension Sequence where Element: TimelineValue {
             return true
         }
     }
+
+    /**
+     Returns an array of elements filtered by the specified DateInterval.
+
+     This behavior mimics HKQueryOptionNone, where the value must merely overlap the specified range,
+     not strictly exist inside of it.
+
+     - parameter startDate: The earliest date of elements to return
+     - parameter endDate:   The latest date of elements to return
+
+     - returns: A new array of elements
+     */
+    func filterDateInterval(interval: DateInterval) -> [Iterator.Element] {
+        return filterDateRange(interval.start, interval.end)
+    }
+
 }
 
 public extension Sequence where Element: SampleValue {
@@ -103,13 +119,13 @@ public extension Sequence where Element: SampleValue {
             result.0 += element.quantity.doubleValue(for: unit)
             result.1 += 1
         }
-        
+
         guard count > 0 else {
             return nil
         }
-        
+
         let average = sum / Double(count)
-        
+
         return HKQuantity(unit: unit, doubleValue: average)
     }
 }
