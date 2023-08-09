@@ -38,7 +38,7 @@ public extension Array where Element == GlucoseEffect {
 
         var velocities = [GlucoseEffectVelocity]()
 
-        for effect in self {
+        for effect in dropFirst() {
             let value = effect.quantity.doubleValue(for: unit)
             let delta = value - previousEffectValue
             let timespan = effect.startDate.timeIntervalSince(previousEffectDate).minutes
