@@ -16,6 +16,8 @@
 		1452F4B82A8525E300F8B9E4 /* EmojiRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1452F4B72A8525E300F8B9E4 /* EmojiRow.swift */; };
 		1452F4BA2A85266500F8B9E4 /* CarbQuantityRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1452F4B92A85266500F8B9E4 /* CarbQuantityRow.swift */; };
 		1452F4BC2A85274800F8B9E4 /* FavoriteFoodDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1452F4BB2A85274800F8B9E4 /* FavoriteFoodDetailView.swift */; };
+		149A28BF2A85430F00052EDF /* DatePickerRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149A28BE2A85430F00052EDF /* DatePickerRow.swift */; };
+		149A28C12A85432700052EDF /* FoodTypeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149A28C02A85432700052EDF /* FoodTypeRow.swift */; };
 		14B33265293ED44C009B8746 /* GlucoseRangeSchedule+SafeBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B33264293ED44C009B8746 /* GlucoseRangeSchedule+SafeBounds.swift */; };
 		14D906EE2A84579B006EB79A /* NewFavoriteFood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D906ED2A84579B006EB79A /* NewFavoriteFood.swift */; };
 		14D906F02A8457AB006EB79A /* StoredFavoriteFood.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D906EF2A8457AB006EB79A /* StoredFavoriteFood.swift */; };
@@ -1067,6 +1069,8 @@
 		1452F4B72A8525E300F8B9E4 /* EmojiRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiRow.swift; sourceTree = "<group>"; };
 		1452F4B92A85266500F8B9E4 /* CarbQuantityRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbQuantityRow.swift; sourceTree = "<group>"; };
 		1452F4BB2A85274800F8B9E4 /* FavoriteFoodDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFoodDetailView.swift; sourceTree = "<group>"; };
+		149A28BE2A85430F00052EDF /* DatePickerRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerRow.swift; sourceTree = "<group>"; };
+		149A28C02A85432700052EDF /* FoodTypeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodTypeRow.swift; sourceTree = "<group>"; };
 		14B33264293ED44C009B8746 /* GlucoseRangeSchedule+SafeBounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GlucoseRangeSchedule+SafeBounds.swift"; sourceTree = "<group>"; };
 		14D906ED2A84579B006EB79A /* NewFavoriteFood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFavoriteFood.swift; sourceTree = "<group>"; };
 		14D906EF2A8457AB006EB79A /* StoredFavoriteFood.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredFavoriteFood.swift; sourceTree = "<group>"; };
@@ -2498,8 +2502,10 @@
 				1452F4AF2A85219100F8B9E4 /* AbsorptionTimePickerRow.swift */,
 				1452F4B92A85266500F8B9E4 /* CarbQuantityRow.swift */,
 				432711371EDE826A00171F6A /* CustomInputTextField.swift */,
+				149A28BE2A85430F00052EDF /* DatePickerRow.swift */,
 				1452F4B72A8525E300F8B9E4 /* EmojiRow.swift */,
 				4359E74D1EEA1FBC0022EF0C /* FoodEmojiDataSource.swift */,
+				149A28C02A85432700052EDF /* FoodTypeRow.swift */,
 				1452F4B12A8521CD00F8B9E4 /* TextFieldRow.swift */,
 				1452F4B32A8522D700F8B9E4 /* RowTextfield.swift */,
 				1452F4B52A8523A800F8B9E4 /* RowEmojiTextField.swift */,
@@ -4132,12 +4138,14 @@
 				E9086B3524B3A8820062F5C8 /* ChartContainerView.swift in Sources */,
 				89AF78C624482269002B4FCC /* ActionButtonStyle.swift in Sources */,
 				1D60355E24D39ED10095DC2A /* Environment+AppName.swift in Sources */,
+				149A28BF2A85430F00052EDF /* DatePickerRow.swift in Sources */,
 				8997B4F523727E8A00061132 /* CustomOverrideCollectionViewCell.swift in Sources */,
 				1DD1964E248AE88000420876 /* HorizontalSizeClassOverride.swift in Sources */,
 				892A5D9C2231E118008961AB /* UIAlertController.swift in Sources */,
 				43BA7181201EE7090058961E /* RepeatingScheduleValueTableViewCell.swift in Sources */,
 				142CB75D2A60C01E0075748A /* ListButtonStyle.swift in Sources */,
 				C18733B629B9495400519CDF /* LocalizedString.swift in Sources */,
+				149A28C12A85432700052EDF /* FoodTypeRow.swift in Sources */,
 				1DC64C7C24BF6BFD004A63A1 /* CorrectionRangeOverridesExtension.swift in Sources */,
 				43BA716E201E49220058961E /* DecimalTextFieldTableViewCell.swift in Sources */,
 				895FE08722011F0C00FCF18A /* EmojiInputCell.swift in Sources */,
