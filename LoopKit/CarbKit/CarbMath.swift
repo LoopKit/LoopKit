@@ -9,6 +9,12 @@
 import Foundation
 import HealthKit
 
+public struct CarbMath {
+    public static let maximumAbsorptionTimeInterval: TimeInterval = .hours(10)
+    public static let defaultAbsorptionTime: TimeInterval = .hours(3)
+    public static let defaultAbsorptionTimeOverrun: Double = 1.5
+    public static let defaultEffectDelay: TimeInterval = .minutes(10)
+}
 
 struct CarbModelSettings {
     var absorptionModel: CarbAbsorptionComputable
@@ -473,10 +479,10 @@ extension Collection {
         to end: Date? = nil,
         carbRatios: [AbsoluteScheduleValue<Double>],
         insulinSensitivities: [AbsoluteScheduleValue<HKQuantity>],
-        defaultAbsorptionTime: TimeInterval = TimeInterval(3 /* hours */ * 60 /* minutes */ * 60 /* seconds */),
+        defaultAbsorptionTime: TimeInterval = CarbMath.defaultAbsorptionTime,
         absorptionModel: CarbAbsorptionComputable = PiecewiseLinearAbsorption(),
-        delay: TimeInterval = TimeInterval(10 /* minutes */ * 60 /* seconds */),
-        delta: TimeInterval = TimeInterval(5 /* minutes */ * 60 /* seconds */)
+        delay: TimeInterval = CarbMath.defaultEffectDelay,
+        delta: TimeInterval = GlucoseMath.defaultDelta
     ) -> [GlucoseEffect] where Element == CarbStatus<T> {
         guard let (startDate, endDate) = simulationDateRange(from: start, to: end, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, delta: delta) else {
             return []
@@ -806,10 +812,10 @@ extension Collection where Element: CarbEntry {
         to effectVelocities: [GlucoseEffectVelocity],
         carbRatio: [AbsoluteScheduleValue<Double>],
         insulinSensitivity: [AbsoluteScheduleValue<HKQuantity>],
-        absorptionTimeOverrun: Double = 1.5,
-        defaultAbsorptionTime: TimeInterval = TimeInterval(3 /* hours */ * 60 /* minutes */ * 60 /* seconds */),
-        delay: TimeInterval = TimeInterval(5 /* minutes */ * 60 /* seconds */),
-        initialAbsorptionTimeOverrun: Double = 1.5,
+        absorptionTimeOverrun: Double = CarbMath.defaultAbsorptionTimeOverrun,
+        defaultAbsorptionTime: TimeInterval = CarbMath.defaultAbsorptionTime,
+        delay: TimeInterval = CarbMath.defaultEffectDelay,
+        initialAbsorptionTimeOverrun: Double = CarbMath.defaultAbsorptionTimeOverrun,
         absorptionModel: CarbAbsorptionComputable = PiecewiseLinearAbsorption(),
         adaptiveAbsorptionRateEnabled: Bool = false,
         adaptiveRateStandbyIntervalFraction: Double = 0.2

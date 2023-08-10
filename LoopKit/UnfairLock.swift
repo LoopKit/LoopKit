@@ -28,6 +28,15 @@ public class UnfairLock {
         return try f()
     }
 
+    public func withLockIfAvailable<ReturnValue>(_ f: () throws -> ReturnValue) rethrows -> ReturnValue? {
+        if os_unfair_lock_trylock(_lock) {
+            defer { os_unfair_lock_unlock(_lock) }
+            return try f()
+        } else {
+            return nil
+        }
+    }
+
     public func assertOwned() {
         os_unfair_lock_assert_owner(_lock)
     }

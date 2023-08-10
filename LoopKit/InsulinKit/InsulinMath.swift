@@ -102,7 +102,7 @@ extension DoseEntry {
     }
 
 
-    func trimmed(from start: Date? = nil, to end: Date? = nil, syncIdentifier: String? = nil) -> DoseEntry {
+    public func trimmed(from start: Date? = nil, to end: Date? = nil, syncIdentifier: String? = nil) -> DoseEntry {
 
         let originalDuration = endDate.timeIntervalSince(startDate)
 

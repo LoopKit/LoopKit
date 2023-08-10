@@ -9,6 +9,11 @@
 import Foundation
 import HealthKit
 
+public struct GlucoseMath {
+    public static let momentumDataInterval: TimeInterval = .minutes(15)
+    public static let momentumDuration: TimeInterval = .minutes(15)
+    public static let defaultDelta: TimeInterval = .minutes(5)
+}
 
 fileprivate extension Collection where Element == (x: Double, y: Double) {
     /**
@@ -90,8 +95,8 @@ extension BidirectionalCollection where Element: GlucoseSampleValue, Index == In
     ///   - velocityMaximum: The limit on how fast the momentum effect can be. Defaults to 4 mg/dL/min based on physiological rates, if nil passed.
     /// - Returns: An array of glucose effects
     public func linearMomentumEffect(
-        duration: TimeInterval = TimeInterval(15 /* minutes */ * 60 /* seconds */),
-        delta: TimeInterval = TimeInterval(5 /* minutes */ * 60 /* seconds */),
+        duration: TimeInterval = GlucoseMath.momentumDuration,
+        delta: TimeInterval = GlucoseMath.defaultDelta,
         velocityMaximum: HKQuantity? = nil
     ) -> [GlucoseEffect] {
 
