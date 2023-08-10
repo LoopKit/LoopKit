@@ -11,7 +11,7 @@ func OverrideSymbolInputController() -> EmojiInputController {
 }
 
 
-private final class OverrideEmojiDataSource: EmojiDataSource {
+final class OverrideEmojiDataSource: EmojiDataSource {
 
     private static let activity = [
         "🚶‍♀️", "🚶‍♂️", "🏃‍♀️", "🏃‍♂️", "💃", "🕺",
