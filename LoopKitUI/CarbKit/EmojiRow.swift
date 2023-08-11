@@ -8,20 +8,17 @@
 
 import SwiftUI
 
-public struct EmojiRow<Row: Equatable>: View {
-    private let emojiType: EmojiDataSourceType
+public struct EmojiRow: View {
     @Binding private var text: String
+    @Binding private var isFocused: Bool
+    private let emojiType: EmojiDataSourceType
     private let title: String
     
-    @Binding private var expandedRow: Row?
-    private let row: Row
-    
-    public init(emojiType: EmojiDataSourceType, text: Binding<String>, title: String, expandedRow: Binding<Row?>, row: Row) {
-        self.emojiType = emojiType
+    public init(text: Binding<String>, isFocused: Binding<Bool>, emojiType: EmojiDataSourceType, title: String) {
         self._text = text
+        self._isFocused = isFocused
+        self.emojiType = emojiType
         self.title = title
-        self._expandedRow = expandedRow
-        self.row = row
     }
     
     public var body: some View {
@@ -31,7 +28,7 @@ public struct EmojiRow<Row: Equatable>: View {
             
             Spacer()
             
-            RowEmojiTextField(text: $text, placeholder: SettingsTableViewCell.NoValueString, expandedRow: $expandedRow, row: row, emojiType: emojiType)
+            RowEmojiTextField(text: $text, isFocused: $isFocused, placeholder: SettingsTableViewCell.NoValueString, emojiType: emojiType)
         }
         .onTapGesture {
             rowTapped()
@@ -40,12 +37,7 @@ public struct EmojiRow<Row: Equatable>: View {
     
     private func rowTapped() {
         withAnimation {
-            if expandedRow == row {
-                expandedRow = nil
-            }
-            else {
-                expandedRow = row
-            }
+            isFocused.toggle()
         }
     }
 }

@@ -9,15 +9,14 @@
 import SwiftUI
 
 /// A text field that supports custom input keyboards, moves the cursor to the end of the text, becomes the first responder when it's the focused row, and loses first responder when it's not
-struct RowTextField<Row: Equatable>: UIViewRepresentable {
+struct RowTextField: UIViewRepresentable {
     @Binding var text: String
-    @Binding var expandedRow: Row?
-    let thisRow: Row
+    @Binding var isFocused: Bool
     var maxLength: Int? = nil
     var configuration = { (view: CustomInputTextField) in }
     
     func makeCoordinator() -> Coordinator {
-        return Coordinator(text: $text, expandedRow: $expandedRow, thisRow: thisRow, maxLength: maxLength)
+        return Coordinator(text: $text, isFocused: $isFocused, maxLength: maxLength)
     }
 
     func makeUIView(context: UIViewRepresentableContext<RowTextField>) -> CustomInputTextField {
@@ -31,9 +30,9 @@ struct RowTextField<Row: Equatable>: UIViewRepresentable {
         textField.text = text
         configuration(textField)
         DispatchQueue.main.async {
-            if expandedRow == thisRow && !textField.isFirstResponder {
+            if isFocused && !textField.isFirstResponder {
                 textField.becomeFirstResponder()
-            } else if expandedRow != thisRow && textField.isFirstResponder {
+            } else if !isFocused && textField.isFirstResponder {
                 textField.resignFirstResponder()
             }
         }
@@ -41,14 +40,12 @@ struct RowTextField<Row: Equatable>: UIViewRepresentable {
     
     class Coordinator: NSObject, UITextFieldDelegate {
         @Binding var text: String
-        @Binding var expandedRow: Row?
-        let thisRow: Row
+        @Binding var isFocused: Bool
         let maxLength: Int?
         
-        init(text: Binding<String>, expandedRow: Binding<Row?>, thisRow: Row, maxLength: Int?) {
-            _text = text
-            _expandedRow = expandedRow
-            self.thisRow = thisRow
+        init(text: Binding<String>, isFocused: Binding<Bool>, maxLength: Int?) {
+            self._text = text
+            self._isFocused = isFocused
             self.maxLength = maxLength
         }
         
@@ -61,13 +58,13 @@ struct RowTextField<Row: Equatable>: UIViewRepresentable {
                 textField?.selectedTextRange = textField?.textRange(from: textField!.endOfDocument, to: textField!.endOfDocument)
             }
             withAnimation {
-                expandedRow = thisRow
+                isFocused = true
             }
         }
         
         func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-            if expandedRow == thisRow {
-                expandedRow = nil
+            if isFocused {
+                isFocused = false
             }
             return true
         }

@@ -8,11 +8,9 @@
 
 import SwiftUI
 
-public struct AbsorptionTimePickerRow<Row: Equatable>: View {
+public struct AbsorptionTimePickerRow: View {
     @Binding private var absorptionTime: TimeInterval
-    
-    @Binding private var expandedRow: Row?
-    private let row: Row
+    @Binding private var isFocused: Bool
     
     private let validDurationRange: ClosedRange<TimeInterval>
     private let minuteStride: Int
@@ -26,25 +24,22 @@ public struct AbsorptionTimePickerRow<Row: Equatable>: View {
         return formatter
     }()
     
-    public init(absorptionTime: Binding<TimeInterval>, validDurationRange: ClosedRange<TimeInterval>, minuteStride: Int = 30, expandedRow: Binding<Row?>, row: Row, showHowAbsorptionTimeWorks: Binding<Bool>? = nil) {
+    public init(absorptionTime: Binding<TimeInterval>, isFocused: Binding<Bool>, validDurationRange: ClosedRange<TimeInterval>, minuteStride: Int = 30, showHowAbsorptionTimeWorks: Binding<Bool>? = nil) {
         self._absorptionTime = absorptionTime
+        self._isFocused = isFocused
         self.validDurationRange = validDurationRange
         self.minuteStride = minuteStride
-        self._expandedRow = expandedRow
-        self.row = row
-        self.showHowAbsorptionTimeWorks = showHowAbsorptionTimeWorks
     }
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            let isExpanded = row == expandedRow
             HStack {
                 Text("Absoprtion Time")
                     .foregroundColor(.primary)
                 
                 if showHowAbsorptionTimeWorks != nil {
                     Button(action: {
-                        expandedRow = nil
+                        isFocused = false
                         showHowAbsorptionTimeWorks?.wrappedValue = true
                     }) {
                         Image(systemName: "info.circle")
@@ -59,28 +54,19 @@ public struct AbsorptionTimePickerRow<Row: Equatable>: View {
                     .foregroundColor(Color(UIColor.secondaryLabel))
             }
             
-            if isExpanded {
+            if isFocused {
                 DurationPicker(duration: $absorptionTime, validDurationRange: validDurationRange, minuteInterval: minuteStride)
                     .frame(maxWidth: .infinity)
             }
         }
         .onTapGesture {
-            rowTapped()
+            withAnimation {
+                isFocused.toggle()
+            }
         }
     }
     
     private func durationString() -> String {
         return durationFormatter.string(from: absorptionTime) ?? ""
-    }
-    
-    private func rowTapped() {
-        withAnimation {
-            if expandedRow == row {
-                expandedRow = nil
-            }
-            else {
-                expandedRow = row
-            }
-        }
     }
 }

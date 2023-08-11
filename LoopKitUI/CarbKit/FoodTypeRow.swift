@@ -9,12 +9,13 @@
 import SwiftUI
 import LoopKit
 
-public struct FoodTypeRow<Row: Equatable>: View {
+public struct FoodTypeRow: View {
     @Binding private var foodType: String
     @Binding private var absorptionTime: TimeInterval
     @Binding private var selectedDefaultAbsorptionTimeEmoji: String
     @Binding private var usesCustomFoodType: Bool
     @Binding private var absorptionTimeWasEdited: Bool
+    @Binding private var isFocused: Bool
     
     private var defaultAbsorptionTimes: CarbStore.DefaultAbsorptionTimes
     private var orderedAbsorptionTimes: [TimeInterval] {
@@ -23,23 +24,18 @@ public struct FoodTypeRow<Row: Equatable>: View {
     
     private let emojiShortcuts = FoodEmojiShortcut.all
     
-    @Binding private var expandedRow: Row?
-    private let row: Row
-    
     @State private var selectedEmojiIndex = 1
     
     /// Contains emoji shortcuts, an emoji keyboard, and modifies absorption time to match emoji
-    public init(foodType: Binding<String>, absorptionTime: Binding<TimeInterval>, selectedDefaultAbsorptionTimeEmoji: Binding<String>, usesCustomFoodType: Binding<Bool>, absorptionTimeWasEdited: Binding<Bool>, defaultAbsorptionTimes: CarbStore.DefaultAbsorptionTimes, expandedRow: Binding<Row?>, row: Row) {
+    public init(foodType: Binding<String>, absorptionTime: Binding<TimeInterval>, selectedDefaultAbsorptionTimeEmoji: Binding<String>, usesCustomFoodType: Binding<Bool>, absorptionTimeWasEdited: Binding<Bool>, isFocused: Binding<Bool>, defaultAbsorptionTimes: CarbStore.DefaultAbsorptionTimes) {
         self._foodType = foodType
         self._absorptionTime = absorptionTime
         self._selectedDefaultAbsorptionTimeEmoji = selectedDefaultAbsorptionTimeEmoji
         self._usesCustomFoodType = usesCustomFoodType
         self._absorptionTimeWasEdited = absorptionTimeWasEdited
+        self._isFocused = isFocused
         
         self.defaultAbsorptionTimes = defaultAbsorptionTimes
-
-        self._expandedRow = expandedRow
-        self.row = row
     }
     
     public var body: some View {
@@ -50,7 +46,7 @@ public struct FoodTypeRow<Row: Equatable>: View {
             Spacer()
             
             if usesCustomFoodType {
-                RowEmojiTextField(text: $foodType, expandedRow: $expandedRow, row: row, emojiType: .food, didSelectItemInSection: didSelectEmojiInSection)
+                RowEmojiTextField(text: $foodType, isFocused: $isFocused, emojiType: .food, didSelectItemInSection: didSelectEmojiInSection)
             }
             else {
                 HStack(spacing: 5) {
@@ -97,13 +93,10 @@ public struct FoodTypeRow<Row: Equatable>: View {
     
     private func rowTapped() {
         withAnimation {
-            if expandedRow == row {
-                expandedRow = nil
-            }
-            else {
+            if !isFocused {
                 usesCustomFoodType = true
-                expandedRow = row
             }
+            isFocused.toggle()
         }
     }
 }

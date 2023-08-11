@@ -9,13 +9,11 @@
 import SwiftUI
 
 /// Has the same functions as `RowTextField` and uses an `EmojiInputController` as the keyboard. This struct handles `standardInputMode` as well.
-struct RowEmojiTextField<Row: Equatable>: View {
+struct RowEmojiTextField: View {
     @Binding private var text: String
+    @Binding private var isFocused: Bool
+    
     private var placeholder: String
-    
-    @Binding private var expandedRow: Row?
-    private let row: Row
-    
     private let emojiType: EmojiDataSourceType
     
     @StateObject private var viewModel: EmojiTextFieldViewModel
@@ -37,11 +35,10 @@ struct RowEmojiTextField<Row: Equatable>: View {
         }
     }
     
-    init(text: Binding<String>, placeholder: String = "", expandedRow: Binding<Row?>, row: Row, emojiType: EmojiDataSourceType, didSelectItemInSection: ((Int) -> Void)? = nil) {
+    init(text: Binding<String>, isFocused: Binding<Bool>, placeholder: String = "", emojiType: EmojiDataSourceType, didSelectItemInSection: ((Int) -> Void)? = nil) {
         self._text = text
+        self._isFocused = isFocused
         self.placeholder = placeholder
-        self._expandedRow = expandedRow
-        self.row = row
         self.emojiType = emojiType
         self._viewModel = StateObject(wrappedValue: EmojiTextFieldViewModel(didSelectItemInSection: didSelectItemInSection))
     }
@@ -49,7 +46,7 @@ struct RowEmojiTextField<Row: Equatable>: View {
     var body: some View {
         // this if statement cannot be moved into the RowTextField closure because the closure does not refresh on state changes
         if viewModel.standardInputMode {
-            RowTextField(text: $text, expandedRow: $expandedRow, thisRow: row, maxLength: 16) { textField in
+            RowTextField(text: $text, isFocused: $isFocused, maxLength: 16) { textField in
                 textField.textAlignment = .right
                 textField.font = UIFont.preferredFont(forTextStyle: .title3)
                 textField.autocorrectionType = .no
@@ -58,7 +55,7 @@ struct RowEmojiTextField<Row: Equatable>: View {
             }
         }
         else {
-            RowTextField(text: $text, expandedRow: $expandedRow, thisRow: row, maxLength: 16) { textField in
+            RowTextField(text: $text, isFocused: $isFocused, maxLength: 16) { textField in
                 textField.textAlignment = .right
                 textField.font = UIFont.preferredFont(forTextStyle: .title3)
                 let emojiController = EmojiInputController.instance(withEmojis: emojiType.dataSource())

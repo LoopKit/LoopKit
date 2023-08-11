@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct DatePickerRow<Row: Equatable>: View {
+public struct DatePickerRow: View {
     @Binding var date: Date
     private var datePickerDate: Binding<Date> {
         Binding<Date>(
@@ -17,11 +17,10 @@ public struct DatePickerRow<Row: Equatable>: View {
         )
     }
     
+    @Binding var isFocused: Bool
+    
     private let maximumDate: Date
     private let minimumDate: Date
-    
-    @Binding var expandedRow: Row?
-    private let row: Row
     
     @State var incrementButtonEnabled = true
     @State var decrementButtonEnabled = true
@@ -43,17 +42,15 @@ public struct DatePickerRow<Row: Equatable>: View {
     
     private let timeStepSize: TimeInterval = .minutes(15)
     
-    public init(date: Binding<Date>, minimumDate: Date, maximumDate: Date, expandedRow: Binding<Row?>, row: Row) {
+    public init(date: Binding<Date>, isFocused: Binding<Bool>, minimumDate: Date, maximumDate: Date) {
         self._date = date
+        self._isFocused = isFocused
         self.minimumDate = minimumDate
         self.maximumDate = maximumDate
-        self._expandedRow = expandedRow
-        self.row = row
     }
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            let isExpanded = row == expandedRow
             HStack {
                 Text("Time")
                     .foregroundColor(.primary)
@@ -68,7 +65,7 @@ public struct DatePickerRow<Row: Equatable>: View {
                 }
                 .disabled(!decrementButtonEnabled)
                 
-                let dateTextColor: Color = isExpanded ? .accentColor : Color(UIColor.secondaryLabel)
+                let dateTextColor: Color = isFocused ? .accentColor : Color(UIColor.secondaryLabel)
                 Text(dateString())
                     .foregroundColor(dateTextColor)
                 
@@ -81,11 +78,11 @@ public struct DatePickerRow<Row: Equatable>: View {
                 .disabled(!incrementButtonEnabled)
             }
             
-            if isExpanded {
+            if isFocused {
                 DatePicker(selection: datePickerDate, in: minimumDate...maximumDate, label: { EmptyView() })
                     .datePickerStyle(.wheel)
                     .labelsHidden()
-                    .opacity(isExpanded ? 1 : 0)
+                    .opacity(isFocused ? 1 : 0)
             }
         }
         .onAppear {
@@ -147,12 +144,7 @@ public struct DatePickerRow<Row: Equatable>: View {
     
     private func rowTapped() {
         withAnimation {
-            if expandedRow == row {
-                expandedRow = nil
-            }
-            else {
-                expandedRow = row
-            }
+            isFocused.toggle()
         }
     }
 }

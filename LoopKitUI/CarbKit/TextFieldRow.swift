@@ -8,20 +8,18 @@
 
 import SwiftUI
 
-public struct TextFieldRow<Row: Equatable>: View {
+public struct TextFieldRow: View {
     @Binding private var text: String
+    @Binding private var isFocused: Bool
+    
     let title: String
     let placeholder: String
     
-    @Binding private var expandedRow: Row?
-    private let row: Row
-    
-    public init(text: Binding<String>, title: String, placeholder: String, expandedRow: Binding<Row?>, row: Row) {
+    public init(text: Binding<String>, isFocused: Binding<Bool>, title: String, placeholder: String) {
         self._text = text
+        self._isFocused = isFocused
         self.title = title
         self.placeholder = placeholder
-        self._expandedRow = expandedRow
-        self.row = row
     }
 
     public var body: some View {
@@ -31,7 +29,7 @@ public struct TextFieldRow<Row: Equatable>: View {
             
             Spacer()
             
-            RowTextField(text: $text, expandedRow: $expandedRow, thisRow: row) {
+            RowTextField(text: $text, isFocused: $isFocused) {
                 $0.textAlignment = .right
                 $0.placeholder = placeholder
             }
@@ -44,7 +42,7 @@ public struct TextFieldRow<Row: Equatable>: View {
     
     private func rowTapped() {
         withAnimation {
-            expandedRow = nil
+            isFocused.toggle()
         }
     }
 }

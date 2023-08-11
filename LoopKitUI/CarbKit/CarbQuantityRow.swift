@@ -10,16 +10,14 @@ import SwiftUI
 import LoopKit
 import HealthKit
 
-public struct CarbQuantityRow<Row: Equatable>: View {
+public struct CarbQuantityRow: View {
     @Binding private var quantity: Double?
+    @Binding private var isFocused: Bool
     
     private let title: String
     private let preferredCarbUnit: HKUnit
     
     @State private var carbInput: String = ""
-    
-    @Binding var expandedRow: Row?
-    private let row: Row
     
     private let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -28,12 +26,11 @@ public struct CarbQuantityRow<Row: Equatable>: View {
         return formatter
     }()
     
-    public init(quantity: Binding<Double?>, title: String, preferredCarbUnit: HKUnit = .gram(), expandedRow: Binding<Row?>, row: Row) {
+    public init(quantity: Binding<Double?>, isFocused: Binding<Bool>, title: String, preferredCarbUnit: HKUnit = .gram()) {
         self._quantity = quantity
+        self._isFocused = isFocused
         self.title = title
         self.preferredCarbUnit = preferredCarbUnit
-        self._expandedRow = expandedRow
-        self.row = row
     }
 
     public var body: some View {
@@ -43,7 +40,7 @@ public struct CarbQuantityRow<Row: Equatable>: View {
             
             Spacer()
             
-            RowTextField(text: $carbInput, expandedRow: $expandedRow, thisRow: row, maxLength: 5) {
+            RowTextField(text: $carbInput, isFocused: $isFocused, maxLength: 5) {
                 $0.textAlignment = .right
                 $0.keyboardType = .decimalPad
                 $0.placeholder = "0"
@@ -96,7 +93,7 @@ public struct CarbQuantityRow<Row: Equatable>: View {
     
     private func rowTapped() {
         withAnimation {
-            expandedRow = nil
+            isFocused.toggle()
         }
     }
 }
