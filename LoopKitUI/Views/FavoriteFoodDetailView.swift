@@ -16,12 +16,16 @@ public struct FavoriteFoodDetailView: View {
     
     @State private var isConfirmingDelete = false
     
-    var preferredCarbUnit = HKUnit.gram()
+    let carbFormatter: QuantityFormatter
+    let absorptionTimeFormatter: DateComponentsFormatter
+    let preferredCarbUnit: HKUnit
     
-    public init(food: StoredFavoriteFood?, onFoodDelete: @escaping (StoredFavoriteFood) -> Void, isConfirmingDelete: Bool = false, preferredCarbUnit: HKUnit = HKUnit.gram()) {
+    public init(food: StoredFavoriteFood?, onFoodDelete: @escaping (StoredFavoriteFood) -> Void, isConfirmingDelete: Bool = false, carbFormatter: QuantityFormatter, absorptionTimeFormatter: DateComponentsFormatter, preferredCarbUnit: HKUnit = HKUnit.gram()) {
         self.food = food
         self.onFoodDelete = onFoodDelete
         self.isConfirmingDelete = isConfirmingDelete
+        self.carbFormatter = carbFormatter
+        self.absorptionTimeFormatter = absorptionTimeFormatter
         self.preferredCarbUnit = preferredCarbUnit
     }
     
@@ -32,9 +36,9 @@ public struct FavoriteFoodDetailView: View {
                     VStack(spacing: 16) {
                         let rows: [(field: String, value: String)] = [
                             ("Name", food.name),
-                            ("Carb Quantity", food.carbsString(for: preferredCarbUnit)),
+                            ("Carb Quantity", food.carbsString(formatter: carbFormatter)),
                             ("Food Type", food.foodType),
-                            ("Absorption Time", food.absorptionTimeString)
+                            ("Absorption Time", food.absorptionTimeString(formatter: absorptionTimeFormatter))
                         ]
                         ForEach(rows, id: \.field) { row in
                             HStack {

@@ -20,21 +20,16 @@ extension FavoriteFood {
         return name + " " + foodType
     }
     
-    public var absorptionTimeString: String {
-        if Int(absorptionTime.hours) == 0 {
-            return "\(Int(absorptionTime.minutes)) min"
+    public func absorptionTimeString(formatter: DateComponentsFormatter) -> String {
+        guard let string = formatter.string(from: absorptionTime) else {
+            assertionFailure("Unable to format \(String(describing: absorptionTime))")
+            return ""
         }
-        else if absorptionTime.minutes.truncatingRemainder(dividingBy: 60) == 0 {
-            return "\(Int(absorptionTime.hours)) hr"
-        }
-        else {
-            let totalHours = floor(absorptionTime.hours) + absorptionTime.minutes.truncatingRemainder(dividingBy: 60) / 60.0
-            return String(format: "%.1f hr", totalHours)
-        }
+        return string
     }
     
-    public func carbsString(for unit: HKUnit) -> String {
-        guard let string = QuantityFormatter(for: unit).string(from: carbsQuantity) else {
+    public func carbsString(formatter: QuantityFormatter) -> String {
+        guard let string = formatter.string(from: carbsQuantity) else {
             assertionFailure("Unable to format \(String(describing: carbsQuantity)) into gram format")
             return ""
         }

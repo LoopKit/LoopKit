@@ -21,13 +21,17 @@ public struct FavoriteFoodListRow: View {
     let onTap: (StoredFavoriteFood) -> ()
     let onDelete: (StoredFavoriteFood) -> ()
     
-    var preferredCarbUnit: HKUnit
+    let carbFormatter: QuantityFormatter
+    let absorptionTimeFormatter: DateComponentsFormatter
+    let preferredCarbUnit: HKUnit
 
-    public init(food: StoredFavoriteFood, foodToConfirmDeleteId: Binding<String?>, onFoodTap: @escaping (StoredFavoriteFood) -> Void, onFoodDelete: @escaping (StoredFavoriteFood) -> Void, preferredCarbUnit: HKUnit = .gram()) {
+    public init(food: StoredFavoriteFood, foodToConfirmDeleteId: Binding<String?>, onFoodTap: @escaping (StoredFavoriteFood) -> Void, onFoodDelete: @escaping (StoredFavoriteFood) -> Void, carbFormatter: QuantityFormatter, absorptionTimeFormatter: DateComponentsFormatter, preferredCarbUnit: HKUnit = .gram()) {
         self.food = food
         self._foodToConfirmDeleteId = foodToConfirmDeleteId
         self.onTap = onFoodTap
         self.onDelete = onFoodDelete
+        self.carbFormatter = carbFormatter
+        self.absorptionTimeFormatter = absorptionTimeFormatter
         self.preferredCarbUnit = preferredCarbUnit
     }
     
@@ -38,16 +42,16 @@ public struct FavoriteFoodListRow: View {
         HStack(spacing: 0) {
             if isEditing {
                 deleteButton
-                .onTapGesture {
-                    if isConfirmingDelete {
-                        onDelete(food)
-                    }
-                    else {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            foodToConfirmDeleteId = food.id
+                    .onTapGesture {
+                        if isConfirmingDelete {
+                            onDelete(food)
+                        }
+                        else {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                foodToConfirmDeleteId = food.id
+                            }
                         }
                     }
-                }
             }
                         
             HStack {
@@ -76,7 +80,7 @@ extension FavoriteFoodListRow {
         VStack(alignment: .leading, spacing: 6) {
             Text(food.title)
             
-            Text("\(food.carbsString(for: preferredCarbUnit)) carbs, \(food.absorptionTimeString) absorption")
+            Text("\(food.carbsString(formatter: carbFormatter)) carbs, \(food.absorptionTimeString(formatter: absorptionTimeFormatter)) absorption")
                 .font(.footnote)
         }
         .foregroundColor(.primary)
