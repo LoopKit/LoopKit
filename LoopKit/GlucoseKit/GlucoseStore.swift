@@ -147,7 +147,7 @@ public final class GlucoseStore {
         healthKitSampleStore: HealthKitSampleStore? = nil,
         cacheStore: PersistenceController,
         cacheLength: TimeInterval = 60 /* minutes */ * 60 /* seconds */,
-        momentumDataInterval: TimeInterval = 15 /* minutes */ * 60 /* seconds */,
+        momentumDataInterval: TimeInterval = GlucoseMath.momentumDataInterval,
         provenanceIdentifier: String
     ) {
         let cacheLength = max(cacheLength, momentumDataInterval)
@@ -721,10 +721,7 @@ extension GlucoseStore {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let samples):
-                let effects = samples.linearMomentumEffect(
-                    duration: self.momentumDataInterval,
-                    delta: TimeInterval(minutes: 5)
-                )
+                let effects = samples.linearMomentumEffect()
                 completion(.success(effects))
             }
         }

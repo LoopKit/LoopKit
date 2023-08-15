@@ -152,16 +152,13 @@ class PumpManagerStatusBasalDeliveryStateCodableTests: XCTestCase {
         "deliveredUnits" : 0.5,
         "description" : "Temporary Basal",
         "endDate" : "2020-05-14T13:43:14Z",
-        "isMutable" : false,
-        "manuallyEntered" : false,
         "scheduledBasalRate" : 1,
         "scheduledBasalRateUnit" : "IU/hr",
         "startDate" : "2020-05-14T13:13:14Z",
         "syncIdentifier" : "238E41EA-9576-4981-A1A4-51E10228584F",
         "type" : "tempBasal",
         "unit" : "U/hour",
-        "value" : 1.25,
-        "wasProgrammedByPumpUI" : false
+        "value" : 1.25
       }
     }
   }
@@ -274,13 +271,11 @@ class PumpManagerStatusBolusStateCodableTests: XCTestCase {
         "description" : "Bolus",
         "endDate" : "2020-05-14T22:38:16Z",
         "isMutable" : true,
-        "manuallyEntered" : false,
         "startDate" : "2020-05-14T22:38:16Z",
         "syncIdentifier" : "2A67A303-5203-4CB8-8123-79498265368E",
         "type" : "bolus",
         "unit" : "U",
-        "value" : 2.5,
-        "wasProgrammedByPumpUI" : false
+        "value" : 2.5
       }
     }
   }
