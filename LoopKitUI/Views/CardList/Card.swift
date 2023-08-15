@@ -131,17 +131,23 @@ extension Card {
     }
 }
 
-private struct CardBackground: View {
-    var color: Color = Color(.secondarySystemGroupedBackground)
+public struct CardBackground: View {
+    var color: Color
+    
+    public init(color: Color = Color(.secondarySystemGroupedBackground)) {
+        self.color = color
+    }
 
-    var body: some View {
-        RoundedRectangle(cornerRadius: 10)
+    public var body: some View {
+        RoundedRectangle(cornerRadius: 10, style: .continuous)
             .foregroundColor(color)
     }
 }
 
-private struct CardSectionDivider: View {
-    var body: some View {
+public struct CardSectionDivider: View {
+    public init() {}
+    
+    public var body: some View {
         Divider()
             .padding(.trailing, -16)
     }

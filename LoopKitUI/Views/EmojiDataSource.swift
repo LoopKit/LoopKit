@@ -15,3 +15,17 @@ struct EmojiSection {
 protocol EmojiDataSource {
     var sections: [EmojiSection] { get }
 }
+
+public enum EmojiDataSourceType {
+    case food
+    case override
+    
+    func dataSource() -> EmojiDataSource {
+        switch self {
+        case .food:
+            return FoodEmojiDataSource()
+        case .override:
+            return OverrideEmojiDataSource()
+        }
+    }
+}

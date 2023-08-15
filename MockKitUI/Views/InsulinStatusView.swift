@@ -41,6 +41,7 @@ struct InsulinStatusView: View {
     }
 
     let basalRateFormatter = QuantityFormatter(for: .internationalUnitsPerHour)
+    let reservoirVolumeFormatter = QuantityFormatter(for: .internationalUnit())
 
     private var inNoDelivery: Bool {
         !viewModel.isDeliverySuspended && viewModel.basalDeliveryRate == nil
@@ -162,7 +163,7 @@ struct InsulinStatusView: View {
                         .font(.system(size: 28))
                         .fontWeight(.heavy)
                         .fixedSize()
-                    Text(basalRateFormatter.localizedUnitStringWithPlurality())
+                    Text(reservoirVolumeFormatter.localizedUnitStringWithPlurality())
                         .foregroundColor(.secondary)
                 }
             }

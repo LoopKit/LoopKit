@@ -196,10 +196,10 @@ extension SettingsStore {
     /// Retrieves stored settings
     ///
     /// - Parameters:
-    ///   - start:If non-nil, select boluses that ended after start.
-    ///   - end: If non-nil, select boluses that started before end.
-    ///   - limit: If non-nill, specify the max number of boluses to return.
-    ///   - returns: A list of DoseEntry objects representing the most recent boluses
+    ///   - start:If non-nil, select stored settings with a date after or equal to start.
+    ///   - end: If non-nil, select stored settings with a date before or equal to end.
+    ///   - limit: If non-nill, specify the max number of stored settings to return.
+    ///   - returns: A list of `StoredSettings` objects.
     public func getStoredSettings(start: Date? = nil, end: Date? = nil, limit: Int? = nil) async throws -> [StoredSettings] {
         return try await withCheckedThrowingContinuation({ continuation in
             self.store.managedObjectContext.performAndWait {

@@ -107,7 +107,6 @@ extension NewGlucoseSample {
         metadata[MetadataKeyGlucoseCondition] = condition?.rawValue
         metadata[MetadataKeyGlucoseTrend] = trend?.symbol
         if let trendRate = trendRate {
-            metadata[MetadataKeyGlucoseTrendRateUnit] = HKUnit.milligramsPerDeciliterPerMinute.unitString
             metadata[MetadataKeyGlucoseTrendRateValue] = trendRate.doubleValue(for: .milligramsPerDeciliterPerMinute)
         }
         if isDisplayOnly {

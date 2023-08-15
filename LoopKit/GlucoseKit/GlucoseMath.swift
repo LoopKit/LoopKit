@@ -57,19 +57,6 @@ extension BidirectionalCollection where Element: GlucoseSampleValue, Index == In
         return filter({ $0.isDisplayOnly }).count == 0
     }
 
-    /// Filters a timeline of glucose samples to only include those after the last calibration.
-    func filterAfterCalibration() -> [Element] {
-        var postCalibration = true
-
-        return reversed().filter({ (sample) in
-            if sample.isDisplayOnly {
-                postCalibration = false
-            }
-
-            return postCalibration
-        }).reversed()
-    }
-
     /// Whether the collection can be considered continuous
     ///
     /// - Parameters:
