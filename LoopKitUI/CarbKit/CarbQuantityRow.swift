@@ -37,8 +37,7 @@ public struct CarbQuantityRow: View {
         HStack(spacing: 2) {
             Text(title)
                 .foregroundColor(.primary)
-            
-            Spacer()
+                .frame(maxWidth: .infinity, alignment: .leading)
             
             RowTextField(text: $carbInput, isFocused: $isFocused, maxLength: 5) {
                 $0.textAlignment = .right
