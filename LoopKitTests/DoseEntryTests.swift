@@ -20,13 +20,10 @@ class DoseEntryCodableTests: XCTestCase {
         encodesJSON: """
 {
   "endDate" : "2020-05-14T22:07:19Z",
-  "isMutable" : false,
-  "manuallyEntered" : false,
   "startDate" : "2020-05-14T22:07:19Z",
   "type" : "bolus",
   "unit" : "U",
-  "value" : 2.5,
-  "wasProgrammedByPumpUI" : false
+  "value" : 2.5
 }
 """
         )

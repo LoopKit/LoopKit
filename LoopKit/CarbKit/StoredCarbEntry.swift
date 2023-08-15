@@ -84,14 +84,14 @@ extension StoredCarbEntry: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.init(uuid: try container.decodeIfPresent(UUID.self, forKey: .uuid),
-                  provenanceIdentifier: try container.decode(String.self, forKey: .provenanceIdentifier),
+                  provenanceIdentifier: (try container.decodeIfPresent(String.self, forKey: .provenanceIdentifier)) ?? "com.LoopKit.Loop",
                   syncIdentifier: try container.decodeIfPresent(String.self, forKey: .syncIdentifier),
                   syncVersion: try container.decodeIfPresent(Int.self, forKey: .syncVersion),
                   startDate: try container.decode(Date.self, forKey: .startDate),
                   quantity: HKQuantity(unit: .gram(), doubleValue: try container.decode(Double.self, forKey: .quantity)),
                   foodType: try container.decodeIfPresent(String.self, forKey: .foodType),
                   absorptionTime: try container.decodeIfPresent(TimeInterval.self, forKey: .absorptionTime),
-                  createdByCurrentApp: try container.decode(Bool.self, forKey: .createdByCurrentApp),
+                  createdByCurrentApp: (try container.decodeIfPresent(Bool.self, forKey: .createdByCurrentApp)) ?? true,
                   userCreatedDate: try container.decodeIfPresent(Date.self, forKey: .userCreatedDate),
                   userUpdatedDate: try container.decodeIfPresent(Date.self, forKey: .userUpdatedDate)
         )

@@ -38,7 +38,7 @@ let package = Package(
             path: "LoopKit"),
         .testTarget(
             name: "LoopKitTests",
-            dependencies: ["LoopKit"],
+            dependencies: ["LoopKitUI", "LoopKit", "SwiftCharts"],
             path: "LoopKitTests",
             resources: [
                 .copy("Fixtures")

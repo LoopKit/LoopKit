@@ -191,9 +191,15 @@ extension DoseEntry: Codable {
             try container.encode(DoseEntry.unitsPerHour.unitString, forKey: .scheduledBasalRateUnit)
         }
         try container.encodeIfPresent(automatic, forKey: .automatic)
-        try container.encode(manuallyEntered, forKey: .manuallyEntered)
-        try container.encode(isMutable, forKey: .isMutable)
-        try container.encode(wasProgrammedByPumpUI, forKey: .wasProgrammedByPumpUI)
+        if manuallyEntered {
+            try container.encode(manuallyEntered, forKey: .manuallyEntered)
+        }
+        if isMutable {
+            try container.encode(isMutable, forKey: .isMutable)
+        }
+        if wasProgrammedByPumpUI {
+            try container.encode(wasProgrammedByPumpUI, forKey: .wasProgrammedByPumpUI)
+        }
     }
 
     private enum CodingKeys: String, CodingKey {
