@@ -47,6 +47,12 @@ public struct FoodTypeRow: View {
             
             if usesCustomFoodType {
                 RowEmojiTextField(text: $foodType, isFocused: $isFocused, emojiType: .food, didSelectItemInSection: didSelectEmojiInSection)
+                    .onTapGesture {
+                        // so that row does not lose focus on cursor move
+                        if !isFocused {
+                            rowTapped()
+                        }
+                    }
             }
             else {
                 HStack(spacing: 5) {
