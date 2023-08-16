@@ -33,6 +33,12 @@ public struct TextFieldRow: View {
                 $0.textAlignment = .right
                 $0.placeholder = placeholder
             }
+            .onTapGesture {
+                // so that row does not lose focus on cursor move
+                if !isFocused {
+                    rowTapped()
+                }
+            }
         }
         .accessibilityElement(children: .combine)
         .onTapGesture {

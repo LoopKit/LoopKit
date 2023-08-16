@@ -44,6 +44,12 @@ public struct CarbQuantityRow: View {
                 $0.keyboardType = .decimalPad
                 $0.placeholder = "0"
             }
+            .onTapGesture {
+                // so that row does not lose focus on cursor move
+                if !isFocused {
+                    rowTapped()
+                }
+            }
             
             carbUnitsLabel
         }
