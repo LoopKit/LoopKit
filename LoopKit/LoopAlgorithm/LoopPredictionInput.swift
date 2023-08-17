@@ -9,10 +9,7 @@
 import Foundation
 import HealthKit
 
-public struct LoopPredictionInput: GlucosePredictionInput {
-    public var glucoseHistory: [StoredGlucoseSample]
-    public var doses: [DoseEntry]
-    public var carbEntries: [StoredCarbEntry]
+public struct LoopAlgorithmSettings {
     var basal: [AbsoluteScheduleValue<Double>]
     var sensitivity: [AbsoluteScheduleValue<HKQuantity>]
     var carbRatio: [AbsoluteScheduleValue<Double>]
@@ -25,9 +22,6 @@ public struct LoopPredictionInput: GlucosePredictionInput {
     var suspendThreshold: GlucoseThreshold? = nil
 
     public init(
-        glucoseHistory: [StoredGlucoseSample],
-        doses: [DoseEntry],
-        carbEntries: [StoredCarbEntry],
         basal: [AbsoluteScheduleValue<Double>],
         sensitivity: [AbsoluteScheduleValue<HKQuantity>],
         carbRatio: [AbsoluteScheduleValue<Double>],
@@ -37,11 +31,8 @@ public struct LoopPredictionInput: GlucosePredictionInput {
         algorithmEffectsOptions: AlgorithmEffectsOptions = .all,
         maximumBasalRatePerHour: Double? = nil,
         maximumBolus: Double? = nil,
-        suspendThreshold: GlucoseThreshold? = nil) 
+        suspendThreshold: GlucoseThreshold? = nil)
     {
-        self.glucoseHistory = glucoseHistory
-        self.doses = doses
-        self.carbEntries = carbEntries
         self.basal = basal
         self.sensitivity = sensitivity
         self.carbRatio = carbRatio
@@ -55,14 +46,11 @@ public struct LoopPredictionInput: GlucosePredictionInput {
     }
 }
 
+extension LoopAlgorithmSettings: Codable {
 
-extension LoopPredictionInput: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.glucoseHistory = try container.decode([StoredGlucoseSample].self, forKey: .glucoseHistory)
-        self.doses = try container.decode([DoseEntry].self, forKey: .doses)
-        self.carbEntries = try container.decode([StoredCarbEntry].self, forKey: .carbEntries)
         self.basal = try container.decode([AbsoluteScheduleValue<Double>].self, forKey: .basal)
         let sensitivityMgdl = try container.decode([AbsoluteScheduleValue<Double>].self, forKey: .sensitivity)
         self.sensitivity = sensitivityMgdl.map { AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.value))}
@@ -80,9 +68,7 @@ extension LoopPredictionInput: Codable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(glucoseHistory, forKey: .glucoseHistory)
-        try container.encode(doses, forKey: .doses)
-        try container.encode(carbEntries, forKey: .carbEntries)
+
         try container.encode(basal, forKey: .basal)
         let sensitivityMgdl = sensitivity.map { AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: $0.value.doubleValue(for: .milligramsPerDeciliter)) }
         try container.encode(sensitivityMgdl, forKey: .sensitivity)
@@ -96,9 +82,6 @@ extension LoopPredictionInput: Codable {
     }
 
     private enum CodingKeys: String, CodingKey {
-        case glucoseHistory
-        case doses
-        case carbEntries
         case basal
         case sensitivity
         case carbRatio
@@ -106,6 +89,64 @@ extension LoopPredictionInput: Codable {
         case delta
         case insulinActivityDuration
         case algorithmEffectsOptions
+    }
+}
+
+extension LoopAlgorithmSettings {
+
+    var simplifiedForFixture: LoopAlgorithmSettings {
+        return LoopAlgorithmSettings(
+            basal: basal,
+            sensitivity: sensitivity,
+            carbRatio: carbRatio,
+            target: target)
+    }
+}
+
+
+public struct LoopPredictionInput: GlucosePredictionInput {
+    public var glucoseHistory: [StoredGlucoseSample]
+    public var doses: [DoseEntry]
+    public var carbEntries: [StoredCarbEntry]
+    public var settings: LoopAlgorithmSettings
+
+    public init(
+        glucoseHistory: [StoredGlucoseSample],
+        doses: [DoseEntry],
+        carbEntries: [StoredCarbEntry],
+        settings: LoopAlgorithmSettings)
+    {
+        self.glucoseHistory = glucoseHistory
+        self.doses = doses
+        self.carbEntries = carbEntries
+        self.settings = settings
+    }
+}
+
+
+extension LoopPredictionInput: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        self.glucoseHistory = try container.decode([StoredGlucoseSample].self, forKey: .glucoseHistory)
+        self.doses = try container.decode([DoseEntry].self, forKey: .doses)
+        self.carbEntries = try container.decode([StoredCarbEntry].self, forKey: .carbEntries)
+        self.settings = try container.decode(LoopAlgorithmSettings.self, forKey: .settings)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(glucoseHistory, forKey: .glucoseHistory)
+        try container.encode(doses, forKey: .doses)
+        try container.encode(carbEntries, forKey: .carbEntries)
+        try container.encode(settings, forKey: .settings)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case glucoseHistory
+        case doses
+        case carbEntries
+        case settings
     }
 }
 
@@ -122,10 +163,8 @@ extension LoopPredictionInput {
             carbEntries: carbEntries.map {
                 StoredCarbEntry(startDate: $0.startDate, quantity: $0.quantity)
             },
-            basal: basal,
-            sensitivity: sensitivity,
-            carbRatio: carbRatio,
-            target: target)
+            settings: settings.simplifiedForFixture
+        )
     }
 
     public func printFixture() {

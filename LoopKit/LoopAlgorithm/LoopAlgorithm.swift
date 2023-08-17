@@ -99,18 +99,20 @@ public actor LoopAlgorithm {
 
         let insulinModelProvider = PresetInsulinModelProvider(defaultRapidActingModel: nil)
 
+        let settings = input.settings
+
         let effectsInterval = DateInterval(
             start: Self.treatmentHistoryDateInterval(for: start).start,
-            end: start.addingTimeInterval(input.insulinActivityDuration).dateCeiledToTimeInterval(input.delta)
+            end: start.addingTimeInterval(settings.insulinActivityDuration).dateCeiledToTimeInterval(settings.delta)
         )
 
         // Overlay basal history on basal doses, splitting doses to get amount delivered relative to basal
-        let annotatedDoses = input.doses.annotated(with: input.basal)
+        let annotatedDoses = input.doses.annotated(with: input.settings.basal)
 
         let insulinEffects = annotatedDoses.glucoseEffects(
             insulinModelProvider: insulinModelProvider,
-            longestEffectDuration: input.insulinActivityDuration,
-            insulinSensitivityHistory: input.sensitivity,
+            longestEffectDuration: settings.insulinActivityDuration,
+            insulinSensitivityHistory: settings.sensitivity,
             from: effectsInterval.start,
             to: effectsInterval.end)
 
@@ -128,11 +130,11 @@ public actor LoopAlgorithm {
         // Carb Effects
         let carbEffects = input.carbEntries.map(
             to: insulinCounteractionEffects,
-            carbRatio: input.carbRatio,
-            insulinSensitivity: input.sensitivity
+            carbRatio: settings.carbRatio,
+            insulinSensitivity: settings.sensitivity
         ).dynamicGlucoseEffects(
-            carbRatios: input.carbRatio,
-            insulinSensitivities: input.sensitivity
+            carbRatios: settings.carbRatio,
+            insulinSensitivities: settings.sensitivity
         )
 
 
@@ -143,9 +145,9 @@ public actor LoopAlgorithm {
 
         let rc = StandardRetrospectiveCorrection(effectDuration: TimeInterval(hours: 1))
 
-        guard let curSensitivity = input.sensitivity.closestPrior(to: start)?.value,
-              let curBasal = input.basal.closestPrior(to: start)?.value,
-              let curTarget = input.target.closestPrior(to: start)?.value else
+        guard let curSensitivity = settings.sensitivity.closestPrior(to: start)?.value,
+              let curBasal = settings.basal.closestPrior(to: start)?.value,
+              let curTarget = settings.target.closestPrior(to: start)?.value else
         {
             throw AlgorithmError.incompleteSchedules
         }
@@ -162,21 +164,21 @@ public actor LoopAlgorithm {
 
         var effects = [[GlucoseEffect]]()
 
-        if input.algorithmEffectsOptions.contains(.carbs) {
+        if settings.algorithmEffectsOptions.contains(.carbs) {
             effects.append(carbEffects)
         }
 
-        if input.algorithmEffectsOptions.contains(.insulin) {
+        if settings.algorithmEffectsOptions.contains(.insulin) {
             effects.append(insulinEffects)
         }
 
-        if input.algorithmEffectsOptions.contains(.retrospection) {
+        if settings.algorithmEffectsOptions.contains(.retrospection) {
             effects.append(rcEffect)
         }
 
         // Glucose Momentum
         let momentumEffects: [GlucoseEffect]
-        if input.algorithmEffectsOptions.contains(.momentum) {
+        if settings.algorithmEffectsOptions.contains(.momentum) {
             let momentumInputData = input.glucoseHistory.filterDateRange(start.addingTimeInterval(-momentumDataInterval), start)
             momentumEffects = momentumInputData.linearMomentumEffect()
         } else {
