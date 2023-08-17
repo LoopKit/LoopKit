@@ -9,6 +9,9 @@
 import Foundation
 import HealthKit
 
+public struct InsulinMath {
+    public static var defaultInsulinActivityDuration: TimeInterval = TimeInterval(hours: 6) + TimeInterval(minutes: 10)
+}
 
 extension DoseEntry {
     private func continuousDeliveryInsulinOnBoard(at date: Date, model: InsulinModel, delta: TimeInterval) -> Double {
