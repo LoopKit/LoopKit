@@ -29,6 +29,12 @@ public struct EmojiRow: View {
             Spacer()
             
             RowEmojiTextField(text: $text, isFocused: $isFocused, placeholder: SettingsTableViewCell.NoValueString, emojiType: emojiType)
+                .onTapGesture {
+                    // so that row does not lose focus on cursor move
+                    if !isFocused {
+                        rowTapped()
+                    }
+                }
         }
         .onTapGesture {
             rowTapped()

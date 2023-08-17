@@ -13,9 +13,9 @@ import Foundation
 /// Mutations and iterations are thread-safe
 public class WeakSynchronizedSet<Element> {
     private typealias Identifier = ObjectIdentifier
-    private typealias ElementContainer = ElementDispatchContainer<Element>
+    private typealias ElementContainer = ElementDispatchContainer
 
-    private class ElementDispatchContainer<Element> {
+    private class ElementDispatchContainer {
         private weak var _element: AnyObject?
         weak var queue: DispatchQueue?
 
