@@ -10,7 +10,7 @@ import Foundation
 
 
 /// A subset of pump event types
-public enum PumpEventType {
+public enum PumpEventType: CaseIterable, Equatable {
    typealias RawValue = String
     
     case alarm
@@ -75,6 +75,41 @@ public enum PumpEventType {
             return "TempBasal"
         case let .replaceComponent(componentType):
             return "Replace\(componentType.rawValue)"
+        }
+    }
+    
+    public static var allCases: [PumpEventType] {
+        return [.alarm, .alarmClear, .basal, .bolus, .prime, .resume, .rewind, .suspend, .tempBasal, .replaceComponent(componentType: .reservoir), .replaceComponent(componentType: .pump), .replaceComponent(componentType: .infusionSet)]
+    }
+    
+    public static func == (lhs: PumpEventType, rhs: PumpEventType) -> Bool {
+        switch (lhs, rhs) {
+        case (.alarm, .alarm):
+            return true
+        case (.alarmClear, .alarmClear):
+            return true
+        case (.basal, .basal):
+            return true
+        case (.bolus, .bolus):
+            return true
+        case (.prime, .prime):
+            return true
+        case (.resume, .resume):
+            return true
+        case (.rewind, .rewind):
+            return true
+        case (.suspend, .suspend):
+            return true
+        case (.tempBasal, .tempBasal):
+            return true
+        case (.replaceComponent(.reservoir), .replaceComponent(.reservoir)):
+            return true
+        case (.replaceComponent(.pump), .replaceComponent(.pump)):
+            return true
+        case (.replaceComponent(.infusionSet), .replaceComponent(.infusionSet)):
+            return true
+        default:
+            return false
         }
     }
 }
