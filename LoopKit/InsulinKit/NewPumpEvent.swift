@@ -10,48 +10,6 @@ import Foundation
 
 
 public struct NewPumpEvent: Equatable {
-    public static func == (lhs: NewPumpEvent, rhs: NewPumpEvent) -> Bool {
-        switch (lhs.type, rhs.type) {
-        case (.alarm, .alarm):
-            return true
-        case (.alarmClear, .alarmClear):
-            return true
-        case (.basal, .basal):
-            if rhs.date == rhs.date && lhs.dose == rhs.dose {
-                return true
-            } else {
-                return false
-            }
-        case (.bolus, .bolus):
-            if rhs.date == rhs.date && lhs.dose == rhs.dose {
-                return true
-            } else {
-                return false
-            }
-        case (.prime, .prime):
-            return true
-        case (.resume, .resume):
-            return true
-        case (.rewind, .rewind):
-            return true
-        case (.suspend, .suspend):
-            return true
-        case (.tempBasal, .tempBasal):
-            if rhs.date == rhs.date && lhs.dose == rhs.dose {
-                return true
-            } else {
-                return false
-            }
-        case (.replaceComponent(.reservoir), .replaceComponent(.reservoir)):
-            return true
-        case (.replaceComponent(.pump), .replaceComponent(.pump)):
-            return true
-        case (.replaceComponent(.infusionSet), .replaceComponent(.infusionSet)):
-            return true
-        default:
-            return false
-        }
-    }
     /// The date of the event
     public let date: Date
     /// The insulin dose described by the event, if applicable

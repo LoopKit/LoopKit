@@ -81,43 +81,12 @@ public enum PumpEventType: CaseIterable, Equatable {
     public static var allCases: [PumpEventType] {
         return [.alarm, .alarmClear, .basal, .bolus, .prime, .resume, .rewind, .suspend, .tempBasal, .replaceComponent(componentType: .reservoir), .replaceComponent(componentType: .pump), .replaceComponent(componentType: .infusionSet)]
     }
-    
-    public static func == (lhs: PumpEventType, rhs: PumpEventType) -> Bool {
-        switch (lhs, rhs) {
-        case (.alarm, .alarm):
-            return true
-        case (.alarmClear, .alarmClear):
-            return true
-        case (.basal, .basal):
-            return true
-        case (.bolus, .bolus):
-            return true
-        case (.prime, .prime):
-            return true
-        case (.resume, .resume):
-            return true
-        case (.rewind, .rewind):
-            return true
-        case (.suspend, .suspend):
-            return true
-        case (.tempBasal, .tempBasal):
-            return true
-        case (.replaceComponent(.reservoir), .replaceComponent(.reservoir)):
-            return true
-        case (.replaceComponent(.pump), .replaceComponent(.pump)):
-            return true
-        case (.replaceComponent(.infusionSet), .replaceComponent(.infusionSet)):
-            return true
-        default:
-            return false
-        }
-    }
 }
 
 /// A subset of replaceable component types
 public enum ReplaceableComponent: String {
     case reservoir
-    case pump // base/ pod/ patch
+    case pump // Base, pod or patch full replacement
     case infusionSet
 }
 
@@ -149,11 +118,11 @@ extension PumpEventType {
         case .basal:
             return 9
         case .replaceComponent(componentType: .reservoir):
-            return 4
+            return 10
         case .replaceComponent(componentType: .pump):
-            return 4
+            return 11
         case .replaceComponent(componentType: .infusionSet):
-            return 4
+            return 12
         }
     }
 }
