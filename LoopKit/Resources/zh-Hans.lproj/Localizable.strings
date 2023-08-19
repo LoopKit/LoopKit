@@ -1,9 +1,6 @@
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
-/* The error description describing when Health sharing was denied */
-"Authorization Denied" = "没有权限";
-
 /* Title text for basal rates */
 "Basal Rates" = "基础率";
 
@@ -60,9 +57,6 @@
 
 /* Describes an error for no data found in a CarbStore request */
 "No values found" = "未发现数据";
-
-/* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "请先在Health Kit中允许Loop读写数据";
 
 /* Glucose trend up */
 "Rising" = "上升";
