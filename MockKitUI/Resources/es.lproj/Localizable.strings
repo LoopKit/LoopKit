@@ -48,9 +48,6 @@
    Default acknowledgement */
 "OK" = "OK";
 
-/* Title for Pump simulator settings */
-"Pump Settings" = "Configuración de la bomba";
-
 /* Button title recovering comms */
 "Recover Simulator" = "Recuperar Simulador";
 

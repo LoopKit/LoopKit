@@ -14,7 +14,7 @@
 "Diagnostic" = "Diagnosedaten";
 
 /* The placeholder text instructing users how to enter a pump ID */
-"Enter the 6-digit pump ID" = "Geben Sie die 6-stellige Pumpen-ID ein";
+"Enter the 6-digit pump ID" = "Gib die 6-stellige Pumpen-ID ein";
 
 /* The title for the cell displaying data generation */
 "Generate Data" = "Erzeuge Daten";
@@ -30,11 +30,11 @@
 "Reservoir" = "Reservoir";
 
 /* Title for the cell resetting the data manager */
-"Reset" = "Reset";
+"Reset" = "Zurücksetzen";
 
 /* Title of button to sync basal profile from pump */
 "Sync With Pump" = "Mit der Pumpe synchronisieren";
 
 /* Instructions on where to find the pump ID on a Minimed pump */
-"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Die Pumpen-ID finden Sie auf der Rückseite oder am unteren Rand des STATUS / Esc-Bildschirms. Dies ist der streng numerische Teil der Seriennummer (gezeigt als SN oder S/N).";
+"The pump ID can be found printed on the back, or near the bottom of the STATUS/Esc screen. It is the strictly numerical portion of the serial number (shown as SN or S/N)." = "Die Pumpen-ID findest Du auf der Rückseite oder am unteren Rand des STATUS / Esc-Bildschirms. Dies ist der numerische Teil der Seriennummer (angezeigt als SN oder S/N).";
 

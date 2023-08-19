@@ -620,9 +620,6 @@
 /* Therapy Settings screen title */
 "Therapy Settings" = "Настройки терапии";
 
-/* No comment provided by engineer. */
-"Therapy Settings Support Placeholder" = "Заполнитель поддержки настроек терапии";
-
 /* Subtitle of afrezza preset */
 "This model assumes peak insulin activity at 19 minutes." = "Эта модель предполагает пик активности инсулина на 19 минуте.";
 
@@ -729,7 +726,7 @@
 "You can edit the setting by tapping into the line item." = "Вы можете изменить настройку, коснувшись самой строки.";
 
 /* Information about basal rates */
-"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Ваша базальная норма инсулина - это количество единиц в час, которое вы хотите использовать для покрытия своих фоновых потребностей в инсулине.";
+"Your Basal Rate of insulin is the number of units per hour that you want to use to cover your background insulin needs." = "Ваш базальный инсулин - это количество единиц в час, которое вы хотите использовать для покрытия своих фоновых потребностей в инсулине.";
 
 /* Lower bound pre-meal information text */
 "your Glucose Safety Limit" = "Ваш безопасный предел ГК";
@@ -738,7 +735,7 @@
 "Your healthcare provider can help you choose a Correction Range that's right for you." = "Ваш лечащий врач поможет вам выбрать подходящий для Вас диапазон коррекции.";
 
 /* Description of insulin sensitivity factor */
-"Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Ваш фактор чувствительности к инсулину (ISF) - это снижение уровня глюкозы, ожидаемое от одной единицы инсулина.";
+"Your Insulin Sensitivity Factor (ISF) is the drop in glucose expected from one unit of insulin." = "Ваш фактор чувствительности к инсулину (ISF) - это снижение уровня глюкозы, ожидаемое от ввода одной единицы инсулина.";
 
 /* Information about pre-meal range format (1: app name) */
 "Your Pre-Meal Range should be the glucose value (or range of values) you want %1$@ to target by the time you take your first bite of your meal. This range will be in effect when you activate the Pre-Meal Preset button." = "Диапазон до еды - это значение глюкозы (или диапазон значений), которое Вы хотите, чтобы %1$@ было целевым к моменту приема пищи. Этот диапазон будет действовать, только когда Вы активируете кнопку предварительной настройки до еды и будет выключен после ввода углеводов.";

@@ -620,9 +620,6 @@
 /* Therapy Settings screen title */
 "Therapy Settings" = "Tedavi Ayarları";
 
-/* No comment provided by engineer. */
-"Therapy Settings Support Placeholder" = "Tedavi Ayarları Destek Yer Tutucusu";
-
 /* Subtitle of afrezza preset */
 "This model assumes peak insulin activity at 19 minutes." = "Bu model, 19. dakikada en yüksek insülin aktivitesini varsayar.";
 

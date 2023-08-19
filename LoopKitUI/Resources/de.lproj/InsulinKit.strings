@@ -11,7 +11,7 @@
 "dZi-Ta-IHm.text" = "IE IOB";
 
 /* Class = "UILabel"; text = "No pump configured"; ObjectID = "jSc-64-2tZ"; */
-"jSc-64-2tZ.text" = "No pump configured";
+"jSc-64-2tZ.text" = "Keine Pumpe konfiguriert";
 
 /* Class = "UILabel"; text = "U Total"; ObjectID = "kys-by-14s"; */
 "kys-by-14s.text" = "IE Gesamt";
@@ -29,5 +29,5 @@
 "TyZ-xm-mVN.segmentTitles[2]" = "Externes Insulin";
 
 /* Class = "UINavigationItem"; title = "Insulin Delivery"; ObjectID = "vls-EW-uwI"; */
-"vls-EW-uwI.title" = "Insulin Delivery";
+"vls-EW-uwI.title" = "Insulinabgabe";
 

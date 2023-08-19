@@ -4,6 +4,9 @@
 /* Information about insulin action duration (1: app name) */
 "%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%1$@ předpokládá, že inzulín, který podal, aktivně pracuje na snížení hladiny glukózy po dobu 6 hodin. Toto nastavení nelze změnit.";
 
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "%1$d procent dokončeno.";
+
 /* The title of the button to add the credentials for a service */
 "Add Account" = "Přidat účet";
 

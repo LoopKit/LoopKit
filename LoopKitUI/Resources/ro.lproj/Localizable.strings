@@ -620,9 +620,6 @@
 /* Therapy Settings screen title */
 "Therapy Settings" = "Setări Terapie";
 
-/* No comment provided by engineer. */
-"Therapy Settings Support Placeholder" = "Suport Setări de Terapie Substituent";
-
 /* Subtitle of afrezza preset */
 "This model assumes peak insulin activity at 19 minutes." = "Acest model presupune vârful de acțiune al insulinei la 19 minute.";
 
