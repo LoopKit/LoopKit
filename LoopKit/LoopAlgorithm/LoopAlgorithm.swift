@@ -187,11 +187,6 @@ public actor LoopAlgorithm {
 
         let prediction = LoopMath.predictGlucose(startingAt: latestGlucose, momentum: momentumEffects, effects: effects)
 
-//        print("**********")
-//        print("carbEffects = \(carbEffects)")
-//        print("retrospectiveGlucoseDiscrepancies = \(retrospectiveGlucoseDiscrepancies)")
-//        print("rc = \(rcEffect)")
-
         return LoopPrediction(
             glucose: prediction,
             effects: LoopAlgorithmEffects(

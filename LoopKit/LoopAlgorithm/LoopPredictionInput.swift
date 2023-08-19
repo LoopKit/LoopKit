@@ -158,7 +158,7 @@ extension LoopPredictionInput {
                 StoredGlucoseSample(startDate: $0.startDate, quantity: $0.quantity)
             },
             doses: doses.map {
-                DoseEntry(type: $0.type, startDate: $0.startDate, value: $0.value, unit: $0.unit)
+                DoseEntry(type: $0.type, startDate: $0.startDate, endDate: $0.endDate, value: $0.value, unit: $0.unit)
             },
             carbEntries: carbEntries.map {
                 StoredCarbEntry(startDate: $0.startDate, quantity: $0.quantity)
