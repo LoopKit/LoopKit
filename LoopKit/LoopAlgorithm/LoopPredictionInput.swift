@@ -155,13 +155,16 @@ extension LoopPredictionInput {
     var simplifiedForFixture: LoopPredictionInput {
         return LoopPredictionInput(
             glucoseHistory: glucoseHistory.map {
-                StoredGlucoseSample(startDate: $0.startDate, quantity: $0.quantity)
+                return StoredGlucoseSample(
+                    startDate: $0.startDate,
+                    quantity: $0.quantity,
+                    isDisplayOnly: $0.isDisplayOnly)
             },
             doses: doses.map {
                 DoseEntry(type: $0.type, startDate: $0.startDate, endDate: $0.endDate, value: $0.value, unit: $0.unit)
             },
             carbEntries: carbEntries.map {
-                StoredCarbEntry(startDate: $0.startDate, quantity: $0.quantity)
+                StoredCarbEntry(startDate: $0.startDate, quantity: $0.quantity, absorptionTime: $0.absorptionTime)
             },
             settings: settings.simplifiedForFixture
         )
@@ -169,7 +172,7 @@ extension LoopPredictionInput {
 
     public func printFixture() {
         let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         encoder.dateEncodingStrategy = .iso8601
         if let data = try? encoder.encode(self.simplifiedForFixture),
            let json = String(data: data, encoding: .utf8)

@@ -13,6 +13,8 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
 
     public let uuid: UUID?
 
+    public static let defaultProvenanceIdentifier = "com.LoopKit.Loop"
+
     // MARK: - HealthKit Sync Support
 
     public let provenanceIdentifier: String
@@ -39,7 +41,7 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
         startDate: Date,
         quantity: HKQuantity,
         uuid: UUID? = nil,
-        provenanceIdentifier: String = "com.loopkit.Loop",
+        provenanceIdentifier: String = Self.defaultProvenanceIdentifier,
         syncIdentifier: String? = nil,
         syncVersion: Int? = nil,
         foodType: String? = nil,
@@ -87,7 +89,7 @@ extension StoredCarbEntry: Codable {
             startDate: try container.decode(Date.self, forKey: .startDate),
             quantity: HKQuantity(unit: .gram(), doubleValue: try container.decode(Double.self, forKey: .quantity)),
             uuid: try container.decodeIfPresent(UUID.self, forKey: .uuid),
-            provenanceIdentifier: (try container.decodeIfPresent(String.self, forKey: .provenanceIdentifier)) ?? "com.LoopKit.Loop",
+            provenanceIdentifier: (try container.decodeIfPresent(String.self, forKey: .provenanceIdentifier)) ?? Self.defaultProvenanceIdentifier,
             syncIdentifier: try container.decodeIfPresent(String.self, forKey: .syncIdentifier),
             syncVersion: try container.decodeIfPresent(Int.self, forKey: .syncVersion),
             foodType: try container.decodeIfPresent(String.self, forKey: .foodType),
@@ -101,14 +103,18 @@ extension StoredCarbEntry: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(uuid, forKey: .uuid)
-        try container.encode(provenanceIdentifier, forKey: .provenanceIdentifier)
+        if provenanceIdentifier != Self.defaultProvenanceIdentifier {
+            try container.encode(provenanceIdentifier, forKey: .provenanceIdentifier)
+        }
         try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
         try container.encodeIfPresent(syncVersion, forKey: .syncVersion)
         try container.encode(startDate, forKey: .startDate)
         try container.encode(quantity.doubleValue(for: .gram()), forKey: .quantity)
         try container.encodeIfPresent(foodType, forKey: .foodType)
         try container.encodeIfPresent(absorptionTime, forKey: .absorptionTime)
-        try container.encode(createdByCurrentApp, forKey: .createdByCurrentApp)
+        if !createdByCurrentApp {
+            try container.encode(createdByCurrentApp, forKey: .createdByCurrentApp)
+        }
         try container.encodeIfPresent(userCreatedDate, forKey: .userCreatedDate)
         try container.encodeIfPresent(userUpdatedDate, forKey: .userUpdatedDate)
     }
