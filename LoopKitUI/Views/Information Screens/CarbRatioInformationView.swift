@@ -39,6 +39,5 @@ public struct CarbRatioInformationView: View {
             Text(LocalizedString("You can add different carb ratios for different times of day by using the ➕.", comment: "Description of how to add a ratio"))
         }
         .accentColor(.secondary)
-        .foregroundColor(.accentColor)
     }
 }

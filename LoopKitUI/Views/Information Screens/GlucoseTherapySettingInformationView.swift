@@ -60,8 +60,6 @@ public struct GlucoseTherapySettingInformationView: View {
             text ?? AnyView(Text(therapySetting.descriptiveText(appName: appName)))
             Text(therapySetting.guardrailInformationText)
         }
-        .accentColor(.secondary)
-        .foregroundColor(.accentColor)
         .fixedSize(horizontal: false, vertical: true)
     }
     

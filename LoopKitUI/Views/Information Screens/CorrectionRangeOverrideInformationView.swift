@@ -42,7 +42,6 @@ public struct CorrectionRangeOverrideInformationView: View {
     private func section(for preset: CorrectionRangeOverrides.Preset) -> some View {
         VStack(alignment: .leading, spacing: 15) {
             description(for: preset)
-                .foregroundColor(.secondary)
         }
     }
         
