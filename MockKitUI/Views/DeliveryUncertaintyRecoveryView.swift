@@ -59,25 +59,42 @@ struct DeliveryUncertaintyRecoveryView_Previews: PreviewProvider {
     }
 }
 
+struct _DeliveryUncertaintyRecoveryView: View {
+    
+    let appName: String
+    let uncertaintyStartedAt: Date
+    let recoverCommsTapped: () -> Void
+    
+    var dismiss: () -> Void = {}
+    
+    var body: some View {
+        DeliveryUncertaintyRecoveryView(
+            appName: appName,
+            uncertaintyStartedAt: uncertaintyStartedAt
+        ) {
+            recoverCommsTapped()
+            dismiss()
+        }
+        .environment(\.dismissAction, { dismiss() })
+    }
+}
 
 // Wrapper to provide a CompletionNotifying ViewController
-class DeliveryUncertaintyRecoveryViewController: UIHostingController<AnyView>, CompletionNotifying {
+class DeliveryUncertaintyRecoveryViewController: UIHostingController<_DeliveryUncertaintyRecoveryView>, CompletionNotifying {
     
     public weak var completionDelegate: CompletionDelegate?
     
     init(appName: String, uncertaintyStartedAt: Date, recoverCommsTapped: @escaping () -> Void) {
         
-        var dismiss = {}
+        var view = _DeliveryUncertaintyRecoveryView(
+            appName: appName,
+            uncertaintyStartedAt: uncertaintyStartedAt,
+            recoverCommsTapped: recoverCommsTapped
+        )
         
-        let view = DeliveryUncertaintyRecoveryView(appName: appName, uncertaintyStartedAt: uncertaintyStartedAt) {
-            recoverCommsTapped()
-            dismiss()
-        }
-        .environment(\.dismissAction, { dismiss() })
+        super.init(rootView: view)
         
-        super.init(rootView: AnyView(view))
-        
-        dismiss = {
+        view.dismiss = {
             self.completionDelegate?.completionNotifyingDidComplete(self)
         }
     }
