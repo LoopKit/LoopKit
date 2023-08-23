@@ -46,7 +46,7 @@ struct RowEmojiTextField: View {
     var body: some View {
         // this if statement cannot be moved into the RowTextField closure because the closure does not refresh on state changes
         if viewModel.standardInputMode {
-            RowTextField(text: $text, isFocused: $isFocused, maxLength: 16) { textField in
+            RowTextField(text: $text, isFocused: $isFocused, maxLength: 20) { textField in
                 textField.textAlignment = .right
                 textField.font = UIFont.preferredFont(forTextStyle: .title3)
                 textField.autocorrectionType = .no
@@ -55,7 +55,7 @@ struct RowEmojiTextField: View {
             }
         }
         else {
-            RowTextField(text: $text, isFocused: $isFocused, maxLength: 16) { textField in
+            RowTextField(text: $text, isFocused: $isFocused, maxLength: 20) { textField in
                 textField.textAlignment = .right
                 textField.font = UIFont.preferredFont(forTextStyle: .title3)
                 let emojiController = EmojiInputController.instance(withEmojis: emojiType.dataSource())
