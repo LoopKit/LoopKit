@@ -145,6 +145,7 @@ public struct MockPumpManagerState: Equatable {
     public var bolusShouldCrash: Bool
     public var tempBasalShouldCrash: Bool
     public var deliveryCommandsShouldTriggerUncertainDelivery: Bool
+    public var replacePumpComponent: Bool
     public var maximumBolus: Double
     public var maximumBasalRatePerHour: Double
     public var suspendState: SuspendState
@@ -184,6 +185,7 @@ public struct MockPumpManagerState: Equatable {
                 bolusShouldCrash: Bool = false,
                 tempBasalShouldCrash: Bool = false,
                 deliveryCommandsShouldTriggerUncertainDelivery: Bool = false,
+                replacePumpComponent: Bool = false,
                 maximumBolus: Double = 25.0,
                 maximumBasalRatePerHour: Double = 5.0,
                 suspendState: SuspendState = .resumed(Date()),
@@ -208,6 +210,7 @@ public struct MockPumpManagerState: Equatable {
         self.bolusShouldCrash = bolusShouldCrash
         self.tempBasalShouldCrash = tempBasalShouldCrash
         self.deliveryCommandsShouldTriggerUncertainDelivery = deliveryCommandsShouldTriggerUncertainDelivery
+        self.replacePumpComponent = replacePumpComponent
         self.maximumBolus = maximumBolus
         self.maximumBasalRatePerHour = maximumBasalRatePerHour
         self.suspendState = suspendState
@@ -255,6 +258,7 @@ extension MockPumpManagerState: RawRepresentable {
         self.bolusShouldCrash = rawValue["bolusShouldCrash"] as? Bool ?? false
         self.tempBasalShouldCrash = rawValue["tempBasalShouldCrash"] as? Bool ?? false
         self.deliveryCommandsShouldTriggerUncertainDelivery = rawValue["deliveryCommandsShouldTriggerUncertainDelivery"] as? Bool ?? false
+        self.replacePumpComponent = rawValue["replacePumpComponent"] as? Bool ?? false
         self.maximumBolus = rawValue["maximumBolus"] as? Double ?? 25.0
         self.maximumBasalRatePerHour = rawValue["maximumBasalRatePerHour"] as? Double ?? 5.0
         self.pumpBatteryChargeRemaining = rawValue["pumpBatteryChargeRemaining"] as? Double ?? nil
@@ -346,6 +350,10 @@ extension MockPumpManagerState: RawRepresentable {
         
         if deliveryCommandsShouldTriggerUncertainDelivery {
             raw["deliveryCommandsShouldTriggerUncertainDelivery"] = true
+        }
+        
+        if replacePumpComponent {
+            raw["replacePumpComponent"] = true
         }
 
         if deliveryIsUncertain {

@@ -53,7 +53,7 @@ public enum PumpEventType: CaseIterable, Equatable {
         }
     }
     
-    var rawValue: String {
+    public var rawValue: String {
         switch self {
         case .alarm:
             return "AlarmPump"

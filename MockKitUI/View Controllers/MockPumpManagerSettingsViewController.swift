@@ -79,6 +79,7 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
         case suspendResume = 0
         case occlusion
         case pumpError
+        case pumpComponentReplacement
     }
 
     private enum SettingsRow: Int, CaseIterable {
@@ -173,6 +174,14 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
                     cell.textLabel?.text = "Resolve Pump Error"
                 } else {
                     cell.textLabel?.text = "Cause Pump Error"
+                }
+                return cell
+            case .pumpComponentReplacement:
+                let cell = tableView.dequeueReusableCell(withIdentifier: TextButtonTableViewCell.className, for: indexPath) as! TextButtonTableViewCell
+                if pumpManager.state.replacePumpComponent {
+                    cell.textLabel?.text = "Resume Therapy"
+                } else {
+                    cell.textLabel?.text = "Replace Pump Component"
                 }
                 return cell
             }
@@ -337,6 +346,11 @@ final class MockPumpManagerSettingsViewController: UITableViewController {
             case .pumpError:
                 pumpManager.injectPumpEvents(pumpManager.state.pumpErrorDetected ? [NewPumpEvent(alarmClearAt: Date())] : [NewPumpEvent(alarmAt: Date(), alarmType: .other("Mock Pump Error"))])
                 pumpManager.state.pumpErrorDetected = !pumpManager.state.pumpErrorDetected
+                tableView.deselectRow(at: indexPath, animated: true)
+                tableView.reloadRows(at: [indexPath], with: .automatic)
+            case .pumpComponentReplacement:
+                pumpManager.injectPumpEvents(pumpManager.state.replacePumpComponent ? [NewPumpEvent(type: .replaceComponent(componentType: .pump))] : [NewPumpEvent(type: .replaceComponent(componentType: .pump))])
+                pumpManager.state.replacePumpComponent = !pumpManager.state.replacePumpComponent
                 tableView.deselectRow(at: indexPath, animated: true)
                 tableView.reloadRows(at: [indexPath], with: .automatic)
             }
@@ -629,5 +643,13 @@ fileprivate extension NewPumpEvent {
                   raw: Data(UUID().uuidString.utf8),
                   title: "alarmClear",
                   type: .alarmClear)
+    }
+    
+    init(type: PumpEventType) {
+        self.init(date: Date(),
+                  dose: nil,
+                  raw: Data(UUID().uuidString.utf8),
+                  title: "type[\(type.rawValue)]",
+                  type: type)
     }
 }
