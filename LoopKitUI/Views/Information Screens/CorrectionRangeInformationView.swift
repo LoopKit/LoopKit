@@ -27,7 +27,7 @@ public struct CorrectionRangeInformationView: View {
             onExit: onExit,
             mode: mode,
             appName: appName,
-            text: AnyView(text)
+            text: text
         )
     }
     

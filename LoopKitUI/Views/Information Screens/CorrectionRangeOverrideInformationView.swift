@@ -35,7 +35,7 @@ public struct CorrectionRangeOverrideInformationView: View {
             onExit: onExit,
             mode: mode,
             appName: appName,
-            text: AnyView(section(for: preset))
+            text: section(for: preset)
         )
     }
     

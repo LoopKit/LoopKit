@@ -10,8 +10,8 @@ import HealthKit
 import SwiftUI
 import LoopKit
 
-public struct GlucoseTherapySettingInformationView: View {
-    var text: AnyView?
+public struct GlucoseTherapySettingInformationView<Content: View>: View {
+    var text: Content?
     let onExit: (() -> Void)?
     let mode: SettingsPresentationMode
     let therapySetting: TherapySetting
@@ -26,8 +26,24 @@ public struct GlucoseTherapySettingInformationView: View {
         onExit: (() -> Void)?,
         mode: SettingsPresentationMode = .acceptanceFlow,
         appName: String,
-        text: AnyView? = nil
+        text: Content? = nil
     ){
+        self.therapySetting = therapySetting
+        self.preferredUnit = preferredUnit ?? .milligramsPerDeciliter
+        self.onExit = onExit
+        self.mode = mode
+        self.appName = appName
+        self.text = text
+    }
+    
+    public init(
+        therapySetting: TherapySetting,
+        preferredUnit: HKUnit? = nil,
+        onExit: (() -> Void)?,
+        mode: SettingsPresentationMode = .acceptanceFlow,
+        appName: String,
+        text: Content? = nil
+    ) where Content == EmptyView {
         self.therapySetting = therapySetting
         self.preferredUnit = preferredUnit ?? .milligramsPerDeciliter
         self.onExit = onExit
@@ -57,7 +73,12 @@ public struct GlucoseTherapySettingInformationView: View {
     
     private var bodyText: some View {
         VStack(alignment: .leading, spacing: 25) {
-            text ?? AnyView(Text(therapySetting.descriptiveText(appName: appName)))
+            if let text {
+                text
+            } else {
+                Text(therapySetting.descriptiveText(appName: appName))
+            }
+            
             Text(therapySetting.guardrailInformationText)
         }
         .fixedSize(horizontal: false, vertical: true)
