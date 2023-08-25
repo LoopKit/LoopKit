@@ -89,7 +89,7 @@ public actor LoopAlgorithm {
     static var momentumDataInterval: TimeInterval = .minutes(15)
 
     // Generates a forecast predicting glucose.
-    public static func getForecast(input: LoopPredictionInput, startDate: Date? = nil) throws -> LoopPrediction {
+    public static func generatePrediction(input: LoopPredictionInput, startDate: Date? = nil) throws -> LoopPrediction {
 
         guard let latestGlucose = input.glucoseHistory.last else {
             throw AlgorithmError.missingGlucose
@@ -116,7 +116,9 @@ public actor LoopAlgorithm {
             from: effectsInterval.start,
             to: effectsInterval.end)
 
-        // Try calculating insulin effects at glucose sample timestamps. This should produce more accurate samples to compare against glucose.
+        print("Insulin effects(\(insulinEffects.count)): \(insulinEffects)")
+
+        // Future TODO: Calculate historic insulin effects at glucose sample timestamps. This will produce more accurate velocity samples.
 //        let effectDates = input.glucoseHistory.map { $0.startDate }
 //        let insulinEffectsAtGlucoseTimestamps = annotatedDoses.glucoseEffects(
 //            insulinModelProvider: insulinModelProvider,

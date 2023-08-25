@@ -25,7 +25,7 @@ public protocol GlucosePredictionAlgorithm {
     static func treatmentHistoryDateInterval(for startDate: Date) -> DateInterval
     static func glucoseHistoryDateInterval(for startDate: Date) -> DateInterval
 
-    static func getForecast(input: InputType, startDate: Date?) throws -> OutputType
+    static func generatePrediction(input: InputType, startDate: Date?) throws -> OutputType
 }
 
 
