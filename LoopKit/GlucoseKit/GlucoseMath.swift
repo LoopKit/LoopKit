@@ -51,10 +51,10 @@ fileprivate extension Collection where Element == (x: Double, y: Double) {
 
 extension BidirectionalCollection where Element: GlucoseSampleValue, Index == Int {
 
-    /// Whether the collection contains no calibration entries
+    /// Whether the collection contains any calibration entries
     /// Runtime: O(n)
-    var isCalibrated: Bool {
-        return filter({ $0.isDisplayOnly }).count == 0
+    public func containsCalibrations() -> Bool {
+        return filter({ $0.isDisplayOnly }).count > 0
     }
 
     /// Whether the collection can be considered continuous
@@ -91,7 +91,7 @@ extension BidirectionalCollection where Element: GlucoseSampleValue, Index == In
 
         guard
             self.count > 2,  // Linear regression isn't much use without 3 or more entries.
-            isContinuous() && isCalibrated && hasSingleProvenance,
+            isContinuous() && !containsCalibrations() && hasSingleProvenance,
             let firstSample = self.first,
             let lastSample = self.last,
             let (startDate, endDate) = LoopMath.simulationDateRangeForSamples([lastSample], duration: duration, delta: delta)

@@ -29,12 +29,13 @@ public struct AbsorptionTimePickerRow: View {
         self._isFocused = isFocused
         self.validDurationRange = validDurationRange
         self.minuteStride = minuteStride
+        self.showHowAbsorptionTimeWorks = showHowAbsorptionTimeWorks
     }
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("Absoprtion Time")
+                Text("Absorption Time")
                     .foregroundColor(.primary)
                 
                 if showHowAbsorptionTimeWorks != nil {

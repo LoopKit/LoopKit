@@ -29,9 +29,6 @@
 /* Description for apidra insulin type */
 "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis " = "Apidra (insulin glulisin) er et hurtigvirkende insulin laget av Sanofi-aventis";
 
-/* The error description describing when Health sharing was denied */
-"Authorization Denied" = "Autorisasjon avslått";
-
 /* Title for basal dose type */
 "Basal" = "Basal";
 
@@ -183,9 +180,6 @@
 
 /* Descriptive text for saving settings outside the recommended range */
 "One or more of the values you have entered is outside of what is typically recommended for most people." = "En verdi du har lagt inn er lavere enn det som vanligvis anbefales for de fleste.";
-
-/* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "Vennligst aktiver deling i Helse-appen på nytt";
 
 /* Title for pre-meal mode */
 "Pre-Meal" = "Pre-måltid";

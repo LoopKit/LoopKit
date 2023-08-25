@@ -19,9 +19,6 @@
 /* Title for Apidra insulin type */
 "Apidra (insulin glulisine)" = "Apidra (glulisinsuliini)";
 
-/* The error description describing when Health sharing was denied */
-"Authorization Denied" = "Valtuutus hylättiin";
-
 /* Title for basal dose type */
 "Basal" = "Basaali";
 
@@ -145,9 +142,6 @@
 
 /* Descriptive text for saving settings outside the recommended range */
 "One or more of the values you have entered is outside of what is typically recommended for most people." = "Yksi tai useampi antamistasi arvoista on sen ulkopuolella, mitä useimmille ihmisille yleensä suositellaan.";
-
-/* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "Ota jakaminen uudelleen käyttöön Terveys-sovelluksessa";
 
 /* Title for pre-meal mode */
 "Pre-Meal" = "Ennen ateriaa";

@@ -1,9 +1,6 @@
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
-/* The error description describing when Health sharing was denied */
-"Authorization Denied" = "認証が拒否されました";
-
 /* Title text for basal rates */
 "Basal Rates" = "基礎レート";
 
@@ -88,9 +85,6 @@
 
 /* Sensor state description for the valid state */
 "OK" = "OK";
-
-/* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "ヘルスケアの共有を有効にしてください";
 
 /* Title for pre-meal mode */
 "Pre-Meal" = "食前";

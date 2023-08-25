@@ -27,7 +27,7 @@
 "Pump ID" = "Идентификатор ID помпы";
 
 /* The title for the cell navigating to the reservoir screen */
-"Reservoir" = "Reservoir";
+"Reservoir" = "Резервуар";
 
 /* Title for the cell resetting the data manager */
 "Reset" = "Сброс";
