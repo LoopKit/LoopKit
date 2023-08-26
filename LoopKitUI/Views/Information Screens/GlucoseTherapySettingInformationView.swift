@@ -81,8 +81,6 @@ public struct GlucoseTherapySettingInformationView<Content: View>: View {
             
             Text(therapySetting.guardrailInformationText)
         }
-        .accentColor(.secondary)
-        .foregroundColor(.accentColor)
         .fixedSize(horizontal: false, vertical: true)
     }
     

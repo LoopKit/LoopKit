@@ -38,7 +38,6 @@ public struct InsulinSensitivityInformationView: View {
             Text(LocalizedString("You can add different insulin sensitivities for different times of day by using the ➕.", comment: "Description of how to add a ratio"))
         }
         .accentColor(.secondary)
-        .foregroundColor(.accentColor)
     }
 }
 
