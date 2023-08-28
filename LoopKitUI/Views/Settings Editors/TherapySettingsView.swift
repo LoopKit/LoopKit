@@ -450,8 +450,6 @@ extension TherapySettingsView {
         case .none:
             EmptyView()
         }
-        
-        Text("\(setting.title)")
     }
 }
 

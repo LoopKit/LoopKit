@@ -34,7 +34,7 @@ public struct _DismissibleHostingView<Content: View>: View {
     
     public var body: some View {
         content
-            .environment(\.dismissAction, { dismiss() })
+            .environment(\.dismissAction, dismiss)
             .environment(\.guidanceColors, guidanceColors)
             .environment(\.carbTintColor, carbTintColor)
             .environment(\.glucoseTintColor, glucoseTintColor)
@@ -77,7 +77,7 @@ public class DismissibleHostingController<Content: View>: UIHostingController<_D
         glucoseTintColor: Color = Color(.systemTeal),
         insulinTintColor: Color = .orange
     ) {
-        var view = _DismissibleHostingView(
+        let view = _DismissibleHostingView(
             content: content,
             guidanceColors: guidanceColors,
             carbTintColor: carbTintColor,
@@ -90,9 +90,9 @@ public class DismissibleHostingController<Content: View>: UIHostingController<_D
 
         switch dismissalMode {
         case .modalDismiss:
-            view.dismiss = { [weak self] in self?.dismiss(animated: true) }
+            self.rootView.dismiss = { [weak self] in self?.dismiss(animated: true) }
         case .pop(to: let PredecessorViewController):
-            view.dismiss = { [weak self] in
+            self.rootView.dismiss = { [weak self] in
                 guard
                     let navigationController = self?.navigationController,
                     let predecessor = navigationController.viewControllers.last(where: { $0.isKind(of: PredecessorViewController) })
