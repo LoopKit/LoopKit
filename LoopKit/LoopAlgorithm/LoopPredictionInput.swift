@@ -10,16 +10,16 @@ import Foundation
 import HealthKit
 
 public struct LoopAlgorithmSettings {
-    var basal: [AbsoluteScheduleValue<Double>]
-    var sensitivity: [AbsoluteScheduleValue<HKQuantity>]
-    var carbRatio: [AbsoluteScheduleValue<Double>]
-    var target: [AbsoluteScheduleValue<ClosedRange<HKQuantity>>]
-    var delta: TimeInterval
-    var insulinActivityDuration: TimeInterval
+    public var basal: [AbsoluteScheduleValue<Double>]
+    public var sensitivity: [AbsoluteScheduleValue<HKQuantity>]
+    public var carbRatio: [AbsoluteScheduleValue<Double>]
+    public var target: [AbsoluteScheduleValue<ClosedRange<HKQuantity>>]
+    public var delta: TimeInterval
+    public var insulinActivityDuration: TimeInterval
     public var algorithmEffectsOptions: AlgorithmEffectsOptions
-    var maximumBasalRatePerHour: Double? = nil
-    var maximumBolus: Double? = nil
-    var suspendThreshold: GlucoseThreshold? = nil
+    public var maximumBasalRatePerHour: Double? = nil
+    public var maximumBolus: Double? = nil
+    public var suspendThreshold: GlucoseThreshold? = nil
 
     public init(
         basal: [AbsoluteScheduleValue<Double>],

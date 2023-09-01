@@ -525,7 +525,7 @@ extension Collection where Element == DoseEntry {
     ///
     /// - Parameter basalSchedule: The basal rate schedule
     /// - Returns: An array of annotated dose entries
-    func annotated(with basalSchedule: BasalRateSchedule) -> [DoseEntry] {
+    public func annotated(with basalSchedule: BasalRateSchedule) -> [DoseEntry] {
         var annotatedDoses: [DoseEntry] = []
 
         for dose in self {

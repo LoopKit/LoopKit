@@ -116,9 +116,7 @@ public actor LoopAlgorithm {
             from: effectsInterval.start,
             to: effectsInterval.end)
 
-        print("Insulin effects(\(insulinEffects.count)): \(insulinEffects)")
-
-        // Future TODO: Calculate historic insulin effects at glucose sample timestamps. This will produce more accurate velocity samples.
+        // Future TODO: Calculate historic insulin effects for ICE at glucose sample timestamps. This will produce more accurate velocity samples.
 //        let effectDates = input.glucoseHistory.map { $0.startDate }
 //        let insulinEffectsAtGlucoseTimestamps = annotatedDoses.glucoseEffects(
 //            insulinModelProvider: insulinModelProvider,
@@ -130,20 +128,24 @@ public actor LoopAlgorithm {
         let insulinCounteractionEffects = input.glucoseHistory.counteractionEffects(to: insulinEffects)
 
         // Carb Effects
-        let carbEffects = input.carbEntries.map(
+        let retrospectionStart = start.addingTimeInterval(-.hours(3))
+        let foodStart = retrospectionStart.addingTimeInterval(-CarbMath.maximumAbsorptionTimeInterval)
+        let carbSamples = input.carbEntries.filterDateRange(foodStart, nil)
+
+        let carbEffects = carbSamples.map(
             to: insulinCounteractionEffects,
             carbRatio: settings.carbRatio,
             insulinSensitivity: settings.sensitivity
         ).dynamicGlucoseEffects(
+            from: retrospectionStart,
             carbRatios: settings.carbRatio,
             insulinSensitivities: settings.sensitivity
         )
 
 
         // RC
-        let retrospectiveCorrectionGroupingInterval: TimeInterval = .minutes(30)
         let retrospectiveGlucoseDiscrepancies = insulinCounteractionEffects.subtracting(carbEffects)
-        let retrospectiveGlucoseDiscrepanciesSummed = retrospectiveGlucoseDiscrepancies.combinedSums(of: retrospectiveCorrectionGroupingInterval * 1.01)
+        let retrospectiveGlucoseDiscrepanciesSummed = retrospectiveGlucoseDiscrepancies.combinedSums(of: LoopMath.retrospectiveCorrectionGroupingInterval * 1.01)
 
         let rc = StandardRetrospectiveCorrection(effectDuration: TimeInterval(hours: 1))
 
@@ -161,7 +163,7 @@ public actor LoopAlgorithm {
             insulinSensitivity: curSensitivity,
             basalRate: curBasal,
             correctionRange: curTarget,
-            retrospectiveCorrectionGroupingInterval: retrospectiveCorrectionGroupingInterval
+            retrospectiveCorrectionGroupingInterval: LoopMath.retrospectiveCorrectionGroupingInterval
         )
 
         var effects = [[GlucoseEffect]]()
@@ -185,6 +187,15 @@ public actor LoopAlgorithm {
             momentumEffects = momentumInputData.linearMomentumEffect()
         } else {
             momentumEffects = []
+        }
+
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        encoder.dateEncodingStrategy = .iso8601
+        if let data = try? encoder.encode(effects),
+           let json = String(data: data, encoding: .utf8)
+        {
+            print(json)
         }
 
         let prediction = LoopMath.predictGlucose(startingAt: latestGlucose, momentum: momentumEffects, effects: effects)
