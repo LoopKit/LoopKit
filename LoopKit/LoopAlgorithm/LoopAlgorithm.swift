@@ -26,11 +26,7 @@ public struct AlgorithmEffectSummary {
     let date: Date
 
     let netInsulinEffect: HKQuantity
-//    let carbsOnBoard: Double // grams
     let insulinOnBoard: Double // IU
-//    let momentumEffect: HKQuantity
-//    let insulinCounteractionEffects: HKQuantity
-//    let retrospectiveCorrection: HKQuantity
 
     public init(date: Date, netInsulinEffect: HKQuantity, insulinOnBoard: Double) {
         self.date = date
