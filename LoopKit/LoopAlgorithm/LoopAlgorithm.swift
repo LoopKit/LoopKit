@@ -189,15 +189,6 @@ public actor LoopAlgorithm {
             momentumEffects = []
         }
 
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        encoder.dateEncodingStrategy = .iso8601
-        if let data = try? encoder.encode(effects),
-           let json = String(data: data, encoding: .utf8)
-        {
-            print(json)
-        }
-
         let prediction = LoopMath.predictGlucose(startingAt: latestGlucose, momentum: momentumEffects, effects: effects)
 
         return LoopPrediction(

@@ -115,7 +115,6 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
     },
     "carbEntry" : {
       "absorptionTime" : 18000,
-      "createdByCurrentApp" : true,
       "foodType" : "Pizza",
       "provenanceIdentifier" : "com.loopkit.loop",
       "quantity" : 29,
@@ -275,7 +274,6 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
     },
     "originalCarbEntry" : {
       "absorptionTime" : 18000,
-      "createdByCurrentApp" : true,
       "foodType" : "Pizza",
       "provenanceIdentifier" : "com.loopkit.loop",
       "quantity" : 19,
@@ -728,7 +726,6 @@ class StoredDosingDecisionCodableTests: XCTestCase {
   },
   "carbEntry" : {
     "absorptionTime" : 18000,
-    "createdByCurrentApp" : true,
     "foodType" : "Pizza",
     "provenanceIdentifier" : "com.loopkit.loop",
     "quantity" : 29,
@@ -888,7 +885,6 @@ class StoredDosingDecisionCodableTests: XCTestCase {
   },
   "originalCarbEntry" : {
     "absorptionTime" : 18000,
-    "createdByCurrentApp" : true,
     "foodType" : "Pizza",
     "provenanceIdentifier" : "com.loopkit.loop",
     "quantity" : 19,

@@ -26,7 +26,6 @@ class StoredCarbEntryCodableTests: XCTestCase {
         try! assertStoredCarbEntryCodable(storedCarbEntry, encodesJSON: """
 {
   "absorptionTime" : 18000,
-  "createdByCurrentApp" : true,
   "foodType" : "Pizza",
   "provenanceIdentifier" : "com.loopkit.loop",
   "quantity" : 19,
