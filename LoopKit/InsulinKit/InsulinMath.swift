@@ -576,8 +576,8 @@ extension Collection where Element == DoseEntry {
      - returns: A sequence of insulin amount remaining
      */
     public func insulinOnBoard(
-        insulinModelProvider: InsulinModelProvider,
-        longestEffectDuration: TimeInterval,
+        insulinModelProvider: InsulinModelProvider = PresetInsulinModelProvider(defaultRapidActingModel: nil),
+        longestEffectDuration: TimeInterval = InsulinMath.defaultInsulinActivityDuration,
         from start: Date? = nil,
         to end: Date? = nil,
         delta: TimeInterval = TimeInterval(5*60)
