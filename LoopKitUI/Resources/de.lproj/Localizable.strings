@@ -646,7 +646,8 @@
    Information about workout range relative to correction range */
 "This will typically be" = "Ist in der Regel ";
 
-/* Label for offset from midnight picker */
+/* Label for offset from midnight picker
+   Label Time in CarbKit */
 "Time" = "Zeit";
 
 /* The schedule table view header describing the configured time zone difference from the default time zone. The substitution parameters are: (1: time zone name)(2: +/-)(3: time interval) */

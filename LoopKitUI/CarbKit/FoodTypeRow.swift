@@ -41,7 +41,7 @@ public struct FoodTypeRow: View {
     public var body: some View {
         HStack {
             Text("Food Type")
-                .foregroundColor(.primary)
+            .foregroundColor(.primary)
             
             Spacer()
             
