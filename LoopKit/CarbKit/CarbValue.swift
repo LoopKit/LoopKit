@@ -12,12 +12,16 @@ import HealthKit
 public struct CarbValue: SampleValue {
     public let startDate: Date
     public let endDate: Date
-    public var quantity: HKQuantity
+    public var value: Double
 
-    public init(startDate: Date, endDate: Date? = nil, quantity: HKQuantity) {
+    public var quantity: HKQuantity {
+        return HKQuantity(unit: .gram(), doubleValue: value)
+    }
+
+    public init(startDate: Date, endDate: Date? = nil, value: Double) {
         self.startDate = startDate
         self.endDate = endDate ?? startDate
-        self.quantity = quantity
+        self.value = value
     }
 }
 
@@ -28,22 +32,19 @@ extension CarbValue: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.startDate = try container.decode(Date.self, forKey: .startDate)
         self.endDate = try container.decode(Date.self, forKey: .endDate)
-        self.quantity = HKQuantity(unit: HKUnit(from: try container.decode(String.self, forKey: .quantityUnit)),
-                                   doubleValue: try container.decode(Double.self, forKey: .quantity))
+        self.value = try container.decode(Double.self, forKey: .value)
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(startDate, forKey: .startDate)
         try container.encode(endDate, forKey: .endDate)
-        try container.encode(quantity.doubleValue(for: .gram()), forKey: .quantity)
-        try container.encode(HKUnit.gram().unitString, forKey: .quantityUnit)
+        try container.encode(value, forKey: .value)
     }
 
     private enum CodingKeys: String, CodingKey {
         case startDate
         case endDate
-        case quantity
-        case quantityUnit
+        case value
     }
 }
