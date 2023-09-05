@@ -10,10 +10,19 @@ import Foundation
 import HealthKit
 
 public struct LoopAlgorithmSettings {
+    // Algorithm input time range: t-16h to t
     public var basal: [AbsoluteScheduleValue<Double>]
+
+    // Algorithm input time range: t-10h to t
     public var sensitivity: [AbsoluteScheduleValue<HKQuantity>]
+
+    // Algorithm input time range: t-10h to t
     public var carbRatio: [AbsoluteScheduleValue<Double>]
+
+    // Algorithm input time range: t to t+6
     public var target: [AbsoluteScheduleValue<ClosedRange<HKQuantity>>]
+
+
     public var delta: TimeInterval
     public var insulinActivityDuration: TimeInterval
     public var algorithmEffectsOptions: AlgorithmEffectsOptions
@@ -122,9 +131,15 @@ extension LoopAlgorithmSettings {
 
 
 public struct LoopPredictionInput: GlucosePredictionInput {
+    // Algorithm input time range: t-10h to t
     public var glucoseHistory: [StoredGlucoseSample]
+
+    // Algorithm input time range: t-16h to t
     public var doses: [DoseEntry]
+
+    // Algorithm input time range: t-10h to t
     public var carbEntries: [StoredCarbEntry]
+
     public var settings: LoopAlgorithmSettings
 
     public init(

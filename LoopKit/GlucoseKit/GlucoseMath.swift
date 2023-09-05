@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 
 public struct GlucoseMath {
-    public static let momentumDataInterval: TimeInterval = .minutes(15)
+    public static let momentumDataInterval: TimeInterval = .minutes(16)
     public static let momentumDuration: TimeInterval = .minutes(15)
     public static let defaultDelta: TimeInterval = .minutes(5)
 }

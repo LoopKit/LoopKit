@@ -22,9 +22,6 @@ public protocol GlucosePredictionAlgorithm {
     associatedtype InputType: GlucosePredictionInput
     associatedtype OutputType: GlucosePrediction
 
-    static func treatmentHistoryDateInterval(for startDate: Date) -> DateInterval
-    static func glucoseHistoryDateInterval(for startDate: Date) -> DateInterval
-
     static func generatePrediction(input: InputType, startDate: Date?) throws -> OutputType
 }
 

@@ -47,22 +47,6 @@ public actor LoopAlgorithm {
     public typealias InputType = LoopPredictionInput
     public typealias OutputType = LoopPrediction
 
-    private static var treatmentHistoryInterval: TimeInterval = .hours(24)
-
-    public static func treatmentHistoryDateInterval(for startDate: Date) -> DateInterval {
-        return DateInterval(
-            start: startDate.addingTimeInterval(-LoopAlgorithm.treatmentHistoryInterval).dateFlooredToTimeInterval(.minutes(5)),
-            end: startDate)
-    }
-
-    public static func glucoseHistoryDateInterval(for startDate: Date) -> DateInterval {
-        return DateInterval(
-            start: startDate.addingTimeInterval(InsulinMath.defaultInsulinActivityDuration-LoopAlgorithm.treatmentHistoryInterval),
-            end: startDate)
-    }
-
-    static var momentumDataInterval: TimeInterval = .minutes(15)
-
     // Generates a forecast predicting glucose.
     public static func generatePrediction(input: LoopPredictionInput, startDate: Date? = nil) throws -> LoopPrediction {
 
@@ -76,10 +60,11 @@ public actor LoopAlgorithm {
 
         let settings = input.settings
 
-        let effectsInterval = DateInterval(
-            start: Self.treatmentHistoryDateInterval(for: start).start,
-            end: start.addingTimeInterval(settings.insulinActivityDuration).dateCeiledToTimeInterval(settings.delta)
-        )
+        if let doseStart = input.doses.first?.startDate {
+            assert(!input.settings.basal.isEmpty, "Missing basal history input.")
+            let basalStart = input.settings.basal.first!.startDate
+            precondition(basalStart <= doseStart, "Basal history must cover historic dose range. First dose date: \(doseStart) > \(basalStart)")
+        }
 
         // Overlay basal history on basal doses, splitting doses to get amount delivered relative to basal
         let annotatedDoses = input.doses.annotated(with: input.settings.basal)
@@ -88,8 +73,8 @@ public actor LoopAlgorithm {
             insulinModelProvider: insulinModelProvider,
             longestEffectDuration: settings.insulinActivityDuration,
             insulinSensitivityHistory: settings.sensitivity,
-            from: effectsInterval.start,
-            to: effectsInterval.end)
+            from: start.addingTimeInterval(-CarbMath.maximumAbsorptionTimeInterval).dateFlooredToTimeInterval(settings.delta),
+            to: start.addingTimeInterval(InsulinMath.defaultInsulinActivityDuration).dateCeiledToTimeInterval(settings.delta))
 
         // Future TODO: Calculate historic insulin effects for ICE at glucose sample timestamps. This will produce more accurate velocity samples.
 //        let effectDates = input.glucoseHistory.map { $0.startDate }
@@ -103,20 +88,15 @@ public actor LoopAlgorithm {
         let insulinCounteractionEffects = input.glucoseHistory.counteractionEffects(to: insulinEffects)
 
         // Carb Effects
-        let retrospectionStart = start.addingTimeInterval(-.hours(3))
-        let foodStart = retrospectionStart.addingTimeInterval(-CarbMath.maximumAbsorptionTimeInterval)
-        let carbSamples = input.carbEntries.filterDateRange(foodStart, nil)
-
-        let carbEffects = carbSamples.map(
+        let carbEffects = input.carbEntries.map(
             to: insulinCounteractionEffects,
             carbRatio: settings.carbRatio,
             insulinSensitivity: settings.sensitivity
         ).dynamicGlucoseEffects(
-            from: retrospectionStart,
+            from: start.addingTimeInterval(-IntegralRetrospectiveCorrection.retrospectionInterval),
             carbRatios: settings.carbRatio,
             insulinSensitivities: settings.sensitivity
         )
-
 
         // RC
         let retrospectiveGlucoseDiscrepancies = insulinCounteractionEffects.subtracting(carbEffects)
@@ -164,7 +144,7 @@ public actor LoopAlgorithm {
         // Glucose Momentum
         let momentumEffects: [GlucoseEffect]
         if settings.algorithmEffectsOptions.contains(.momentum) {
-            let momentumInputData = input.glucoseHistory.filterDateRange(start.addingTimeInterval(-momentumDataInterval), start)
+            let momentumInputData = input.glucoseHistory.filterDateRange(start.addingTimeInterval(-GlucoseMath.momentumDataInterval), start)
             momentumEffects = momentumInputData.linearMomentumEffect()
         } else {
             momentumEffects = []
