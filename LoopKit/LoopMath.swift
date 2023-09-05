@@ -14,6 +14,7 @@ public enum LoopMath {
 
     /// The interval over which to aggregate changes in glucose for retrospective correction
     public static let retrospectiveCorrectionGroupingInterval = TimeInterval(minutes: 30)
+    public static let retrospectiveCorrectionEffectDuration = TimeInterval(hours: 1)
 
 
     static func simulationDateRangeForSamples<T: Collection>(

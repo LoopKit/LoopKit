@@ -122,8 +122,13 @@ public actor LoopAlgorithm {
         let retrospectiveGlucoseDiscrepancies = insulinCounteractionEffects.subtracting(carbEffects)
         let retrospectiveGlucoseDiscrepanciesSummed = retrospectiveGlucoseDiscrepancies.combinedSums(of: LoopMath.retrospectiveCorrectionGroupingInterval * 1.01)
 
-        // TODO: Support IRC
-        let rc = StandardRetrospectiveCorrection(effectDuration: TimeInterval(hours: 1))
+        let rc: RetrospectiveCorrection
+
+        if input.settings.useIntegralRetrospectiveCorrection {
+            rc = IntegralRetrospectiveCorrection(effectDuration: LoopMath.retrospectiveCorrectionEffectDuration)
+        } else {
+            rc = StandardRetrospectiveCorrection(effectDuration: LoopMath.retrospectiveCorrectionEffectDuration)
+        }
 
         guard let curSensitivity = settings.sensitivity.closestPrior(to: start)?.value,
               let curBasal = settings.basal.closestPrior(to: start)?.value,
