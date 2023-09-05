@@ -127,9 +127,8 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
     },
     "carbsOnBoard" : {
       "endDate" : "2020-05-14T23:18:41Z",
-      "quantity" : 45.5,
-      "quantityUnit" : "g",
-      "startDate" : "2020-05-14T22:48:41Z"
+      "startDate" : "2020-05-14T22:48:41Z",
+      "value" : 45.5
     },
     "cgmManagerStatus" : {
       "device" : {
@@ -738,9 +737,8 @@ class StoredDosingDecisionCodableTests: XCTestCase {
   },
   "carbsOnBoard" : {
     "endDate" : "2020-05-14T23:18:41Z",
-    "quantity" : 45.5,
-    "quantityUnit" : "g",
-    "startDate" : "2020-05-14T22:48:41Z"
+    "startDate" : "2020-05-14T22:48:41Z",
+    "value" : 45.5
   },
   "cgmManagerStatus" : {
     "device" : {
@@ -1133,7 +1131,7 @@ fileprivate extension StoredDosingDecision {
                                                       healthKitEligibleDate: nil)
         let carbsOnBoard = CarbValue(startDate: dateFormatter.date(from: "2020-05-14T22:48:41Z")!,
                                      endDate: dateFormatter.date(from: "2020-05-14T23:18:41Z")!,
-                                     quantity: HKQuantity(unit: .gram(), doubleValue: 45.5))
+                                     value: 45.5)
         let insulinOnBoard = InsulinValue(startDate: dateFormatter.date(from: "2020-05-14T22:38:26Z")!, value: 1.5)
         let glucoseTargetRangeSchedule = GlucoseRangeSchedule(rangeSchedule: DailyQuantitySchedule(unit: .milligramsPerDeciliter,
                                                                                                    dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: DoubleRange(minValue: 100.0, maxValue: 110.0)),
