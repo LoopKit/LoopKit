@@ -22,19 +22,6 @@ public struct LoopAlgorithmEffects {
     public var insulinCounteraction: [GlucoseEffectVelocity]
 }
 
-public struct AlgorithmEffectSummary {
-    let date: Date
-
-    let netInsulinEffect: HKQuantity
-    let insulinOnBoard: Double // IU
-
-    public init(date: Date, netInsulinEffect: HKQuantity, insulinOnBoard: Double) {
-        self.date = date
-        self.netInsulinEffect = netInsulinEffect
-        self.insulinOnBoard = insulinOnBoard
-    }
-}
-
 public struct AlgorithmEffectsOptions: OptionSet {
     public let rawValue: UInt8
 
@@ -47,14 +34,6 @@ public struct AlgorithmEffectsOptions: OptionSet {
 
     public init(rawValue: UInt8) {
         self.rawValue = rawValue
-    }
-}
-
-public struct AlgorithmEffectsTimeline {
-    let summaries: [AlgorithmEffectSummary]
-
-    public init(summaries: [AlgorithmEffectSummary]) {
-        self.summaries = summaries
     }
 }
 
@@ -143,6 +122,7 @@ public actor LoopAlgorithm {
         let retrospectiveGlucoseDiscrepancies = insulinCounteractionEffects.subtracting(carbEffects)
         let retrospectiveGlucoseDiscrepanciesSummed = retrospectiveGlucoseDiscrepancies.combinedSums(of: LoopMath.retrospectiveCorrectionGroupingInterval * 1.01)
 
+        // TODO: Support IRC
         let rc = StandardRetrospectiveCorrection(effectDuration: TimeInterval(hours: 1))
 
         guard let curSensitivity = settings.sensitivity.closestPrior(to: start)?.value,

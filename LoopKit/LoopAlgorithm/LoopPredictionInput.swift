@@ -20,6 +20,7 @@ public struct LoopAlgorithmSettings {
     public var maximumBasalRatePerHour: Double? = nil
     public var maximumBolus: Double? = nil
     public var suspendThreshold: GlucoseThreshold? = nil
+    public var useIntegralRetrospectiveCorrection: Bool = false
 
     public init(
         basal: [AbsoluteScheduleValue<Double>],
@@ -31,7 +32,8 @@ public struct LoopAlgorithmSettings {
         algorithmEffectsOptions: AlgorithmEffectsOptions = .all,
         maximumBasalRatePerHour: Double? = nil,
         maximumBolus: Double? = nil,
-        suspendThreshold: GlucoseThreshold? = nil)
+        suspendThreshold: GlucoseThreshold? = nil,
+        useIntegralRetrospectiveCorrection: Bool = false)
     {
         self.basal = basal
         self.sensitivity = sensitivity
@@ -43,6 +45,7 @@ public struct LoopAlgorithmSettings {
         self.maximumBasalRatePerHour = maximumBasalRatePerHour
         self.maximumBolus = maximumBolus
         self.suspendThreshold = suspendThreshold
+        self.useIntegralRetrospectiveCorrection = useIntegralRetrospectiveCorrection
     }
 }
 
@@ -64,6 +67,10 @@ extension LoopAlgorithmSettings: Codable {
         self.delta = TimeInterval(minutes: 5)
         self.insulinActivityDuration = InsulinMath.defaultInsulinActivityDuration
         self.algorithmEffectsOptions = .all
+        self.maximumBasalRatePerHour = try container.decodeIfPresent(Double.self, forKey: .maximumBasalRatePerHour)
+        self.maximumBolus = try container.decodeIfPresent(Double.self, forKey: .maximumBolus)
+        self.suspendThreshold = try container.decodeIfPresent(GlucoseThreshold.self, forKey: .suspendThreshold)
+        self.useIntegralRetrospectiveCorrection = try container.decodeIfPresent(Bool.self, forKey: .useIntegralRetrospectiveCorrection) ?? false
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -79,6 +86,12 @@ extension LoopAlgorithmSettings: Codable {
             return AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: DoubleRange(minValue: min, maxValue: max))
         }
         try container.encode(targetMgdl, forKey: .target)
+        try container.encode(maximumBasalRatePerHour, forKey: .maximumBasalRatePerHour)
+        try container.encode(maximumBolus, forKey: .maximumBolus)
+        try container.encode(suspendThreshold, forKey: .suspendThreshold)
+        if useIntegralRetrospectiveCorrection {
+            try container.encode(useIntegralRetrospectiveCorrection, forKey: .useIntegralRetrospectiveCorrection)
+        }
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -89,6 +102,10 @@ extension LoopAlgorithmSettings: Codable {
         case delta
         case insulinActivityDuration
         case algorithmEffectsOptions
+        case maximumBasalRatePerHour
+        case maximumBolus
+        case suspendThreshold
+        case useIntegralRetrospectiveCorrection
     }
 }
 
