@@ -183,6 +183,10 @@ public actor LoopAlgorithm {
             )
         )
     }
+
+//    // TODO: Generate recommendation from a prediction
+//    public static func generateRecommendation(prediction: LoopPrediction) throws -> LoopDosingRecommendation {
+//    }
 }
 
 
