@@ -576,8 +576,8 @@ extension Collection where Element == DoseEntry {
      - returns: A sequence of insulin amount remaining
      */
     public func insulinOnBoard(
-        insulinModelProvider: InsulinModelProvider,
-        longestEffectDuration: TimeInterval,
+        insulinModelProvider: InsulinModelProvider = PresetInsulinModelProvider(defaultRapidActingModel: nil),
+        longestEffectDuration: TimeInterval = InsulinMath.defaultInsulinActivityDuration,
         from start: Date? = nil,
         to end: Date? = nil,
         delta: TimeInterval = TimeInterval(5*60)
@@ -702,8 +702,8 @@ extension Collection where Element == DoseEntry {
     ///   - delta: The interval between returned effects
     /// - Returns: An array of glucose effects for the duration of the doses
     public func glucoseEffects(
-        insulinModelProvider: InsulinModelProvider,
-        longestEffectDuration: TimeInterval,
+        insulinModelProvider: InsulinModelProvider = PresetInsulinModelProvider(defaultRapidActingModel: nil),
+        longestEffectDuration: TimeInterval = InsulinMath.defaultInsulinActivityDuration,
         insulinSensitivityTimeline: [AbsoluteScheduleValue<HKQuantity>],
         from start: Date? = nil,
         to end: Date? = nil,
@@ -759,8 +759,8 @@ extension Collection where Element == DoseEntry {
     ///   - delta: The interval below which to consider doses as momentary
     /// - Returns: An array of glucose effects for the duration of the doses
     public func glucoseEffects(
-        insulinModelProvider: InsulinModelProvider,
-        longestEffectDuration: TimeInterval,
+        insulinModelProvider: InsulinModelProvider = PresetInsulinModelProvider(defaultRapidActingModel: nil),
+        longestEffectDuration: TimeInterval = InsulinMath.defaultInsulinActivityDuration,
         insulinSensitivityTimeline: [AbsoluteScheduleValue<HKQuantity>],
         effectDates: [Date],
         delta: TimeInterval = TimeInterval(/* minutes: */60 * 5)

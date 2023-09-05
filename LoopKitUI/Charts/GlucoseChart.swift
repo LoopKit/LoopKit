@@ -1,5 +1,5 @@
 //
-//  GlucoseChart.swift
+//  LoopGlucoseChart.swift
 //  LoopUI
 //
 //  Copyright © 2019 LoopKit Authors. All rights reserved.
