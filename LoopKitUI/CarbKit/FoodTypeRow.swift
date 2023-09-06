@@ -47,6 +47,12 @@ public struct FoodTypeRow: View {
             
             if usesCustomFoodType {
                 RowEmojiTextField(text: $foodType, isFocused: $isFocused, emojiType: .food, didSelectItemInSection: didSelectEmojiInSection)
+                    .onTapGesture {
+                        // so that row does not lose focus on cursor move
+                        if !isFocused {
+                            rowTapped()
+                        }
+                    }
             }
             else {
                 HStack(spacing: 5) {
@@ -83,8 +89,8 @@ public struct FoodTypeRow: View {
     }
     
     private func didSelectEmojiInSection(_ section: Int) {
-        // only adjust if it wasn't already edited
-        guard !absorptionTimeWasEdited else {
+        // only adjust if it wasn't already edited, food selected was not in other category
+        guard !absorptionTimeWasEdited, section < orderedAbsorptionTimes.count else {
             return
         }
         

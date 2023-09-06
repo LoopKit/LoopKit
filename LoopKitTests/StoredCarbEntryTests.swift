@@ -12,12 +12,12 @@ import HealthKit
 
 class StoredCarbEntryCodableTests: XCTestCase {
     func testCodable() throws {
-        let storedCarbEntry = StoredCarbEntry(uuid: UUID(uuidString: "18CF3948-0B3D-4B12-8BFE-14986B0E6784")!,
+        let storedCarbEntry = StoredCarbEntry(startDate: dateFormatter.date(from: "2020-01-02T03:00:23Z")!,
+                                              quantity: HKQuantity(unit: .gram(), doubleValue: 19),
+                                               uuid: UUID(uuidString: "18CF3948-0B3D-4B12-8BFE-14986B0E6784")!,
                                               provenanceIdentifier: "com.loopkit.loop",
                                               syncIdentifier: "2B03D96C-6F5D-4140-99CD-80C3E64D6010",
                                               syncVersion: 2,
-                                              startDate: dateFormatter.date(from: "2020-01-02T03:00:23Z")!,
-                                              quantity: HKQuantity(unit: .gram(), doubleValue: 19),
                                               foodType: "Pizza",
                                               absorptionTime: .hours(5),
                                               createdByCurrentApp: true,
@@ -26,7 +26,6 @@ class StoredCarbEntryCodableTests: XCTestCase {
         try! assertStoredCarbEntryCodable(storedCarbEntry, encodesJSON: """
 {
   "absorptionTime" : 18000,
-  "createdByCurrentApp" : true,
   "foodType" : "Pizza",
   "provenanceIdentifier" : "com.loopkit.loop",
   "quantity" : 19,
@@ -42,12 +41,12 @@ class StoredCarbEntryCodableTests: XCTestCase {
     }
 
     func testCodableOptional() throws {
-        let storedCarbEntry = StoredCarbEntry(uuid: nil,
+        let storedCarbEntry = StoredCarbEntry(startDate: dateFormatter.date(from: "2020-02-03T04:16:18Z")!,
+                                              quantity: HKQuantity(unit: .gram(), doubleValue: 19),
+                                              uuid: nil,
                                               provenanceIdentifier: "com.loopkit.loop",
                                               syncIdentifier: nil,
                                               syncVersion: nil,
-                                              startDate: dateFormatter.date(from: "2020-02-03T04:16:18Z")!,
-                                              quantity: HKQuantity(unit: .gram(), doubleValue: 19),
                                               foodType: nil,
                                               absorptionTime: nil,
                                               createdByCurrentApp: false,

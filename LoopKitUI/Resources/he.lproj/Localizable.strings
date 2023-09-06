@@ -27,7 +27,7 @@
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
 /* Format string for progress accessibility label (1: duration in seconds) */
-"%1$d percent complete." = "%1$d אחוז בוצע";
+"%1$d percent complete." = "%1$d אחוז בוצע.";
 
 /* No comment provided by engineer. */
 "🍽" = "🍽";
@@ -45,10 +45,10 @@
 "Add Carb Entry" = "Add Carb Entry";
 
 /* Action sheet confirmation message for pump history deletion */
-"Are you sure you want to delete all history entries?" = "Are you sure you want to delete all history entries?";
+"Are you sure you want to delete all history entries?" = "בטוח שברצונך למחוק את כל ערכי ההיסטוריה?";
 
 /* Action sheet confirmation message for reservoir deletion */
-"Are you sure you want to delete all reservoir values?" = "Are you sure you want to delete all reservoir values?";
+"Are you sure you want to delete all reservoir values?" = "בטוח שברצונך למחוק את כל ערכי המאגר?";
 
 /* Title text for multi-value basal rate warning */
 "Basal Rates" = "Basal Rates";
@@ -113,11 +113,16 @@
 /* Title of the carb entry date picker cell */
 "Date" = "Date";
 
+/* Delete values for Pre-Meal, inactivates Pre-Meal icon
+   Test for table cell delete button
+   The title of the button to remove the credentials for a service */
+"Delete" = "מחק";
+
 /* The title of the button to remove the credentials for a service */
-"Delete Account" = "Delete Account";
+"Delete Account" = "מחק חשבון";
 
 /* Button title to delete all objects */
-"Delete All" = "Delete All";
+"Delete All" = "מחק הכל";
 
 /* Title text for crossed thresholds guardrail warning */
 "Delivery Limits" = "Delivery Limits";
@@ -157,6 +162,9 @@
 
 /* Title text for the high glucose safety limit warning */
 "High Glucose Safety Limit" = "ערך הבטיחות גבוה";
+
+/* Information about target range */
+"If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "אם השתמשת בחיישן (מד סוכר רציף), אתה בטח מכיר טווח יעד עם רצועה רחבה שמשמשת אותך להתראות, כמו 70-180mg/dL או 90-200mg/dL.";
 
 /* Title text for insulin model */
 "Insulin Model" = "Insulin Model";

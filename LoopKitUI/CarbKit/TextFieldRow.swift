@@ -32,6 +32,13 @@ public struct TextFieldRow: View {
             RowTextField(text: $text, isFocused: $isFocused) {
                 $0.textAlignment = .right
                 $0.placeholder = placeholder
+                $0.font = .preferredFont(forTextStyle: .body)
+            }
+            .onTapGesture {
+                // so that row does not lose focus on cursor move
+                if !isFocused {
+                    rowTapped()
+                }
             }
         }
         .accessibilityElement(children: .combine)

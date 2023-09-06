@@ -51,6 +51,9 @@
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
 
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "%1$d% terminé.";
+
 /* No comment provided by engineer. */
 "🍽" = "🍽";
 
@@ -583,9 +586,6 @@
 
 /* Therapy Settings screen title */
 "Therapy Settings" = "Réglages Thérapeutique";
-
-/* No comment provided by engineer. */
-"Therapy Settings Support Placeholder" = "Therapy Settings Support Placeholder";
 
 /* Subtitle of afrezza preset */
 "This model assumes peak insulin activity at 19 minutes." = "Ce modèle est basé sur un pic d'activité de l’insuline à 19 minutes.";

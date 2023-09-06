@@ -13,6 +13,8 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
 
     public let uuid: UUID?
 
+    public static let defaultProvenanceIdentifier = "com.LoopKit.Loop"
+
     // MARK: - HealthKit Sync Support
 
     public let provenanceIdentifier: String
@@ -36,17 +38,17 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
     public let userUpdatedDate: Date?
 
     public init(
-        uuid: UUID?,
-        provenanceIdentifier: String,
-        syncIdentifier: String?,
-        syncVersion: Int?,
         startDate: Date,
         quantity: HKQuantity,
-        foodType: String?,
-        absorptionTime: TimeInterval?,
-        createdByCurrentApp: Bool,
-        userCreatedDate: Date?,
-        userUpdatedDate: Date?
+        uuid: UUID? = nil,
+        provenanceIdentifier: String = Self.defaultProvenanceIdentifier,
+        syncIdentifier: String? = nil,
+        syncVersion: Int? = nil,
+        foodType: String? = nil,
+        absorptionTime: TimeInterval? = nil,
+        createdByCurrentApp: Bool = true,
+        userCreatedDate: Date? = nil,
+        userUpdatedDate: Date? = nil
     ) {
         self.uuid = uuid
         self.provenanceIdentifier = provenanceIdentifier
@@ -65,12 +67,12 @@ public struct StoredCarbEntry: CarbEntry, Equatable {
 extension StoredCarbEntry {
     init(managedObject: CachedCarbObject) {
         self.init(
+            startDate: managedObject.startDate,
+            quantity: managedObject.quantity,
             uuid: managedObject.uuid,
             provenanceIdentifier: managedObject.provenanceIdentifier,
             syncIdentifier: managedObject.syncIdentifier,
             syncVersion: managedObject.syncVersion,
-            startDate: managedObject.startDate,
-            quantity: managedObject.quantity,
             foodType: managedObject.foodType,
             absorptionTime: managedObject.absorptionTime,
             createdByCurrentApp: managedObject.createdByCurrentApp,
@@ -83,31 +85,36 @@ extension StoredCarbEntry {
 extension StoredCarbEntry: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.init(uuid: try container.decodeIfPresent(UUID.self, forKey: .uuid),
-                  provenanceIdentifier: (try container.decodeIfPresent(String.self, forKey: .provenanceIdentifier)) ?? "com.LoopKit.Loop",
-                  syncIdentifier: try container.decodeIfPresent(String.self, forKey: .syncIdentifier),
-                  syncVersion: try container.decodeIfPresent(Int.self, forKey: .syncVersion),
-                  startDate: try container.decode(Date.self, forKey: .startDate),
-                  quantity: HKQuantity(unit: .gram(), doubleValue: try container.decode(Double.self, forKey: .quantity)),
-                  foodType: try container.decodeIfPresent(String.self, forKey: .foodType),
-                  absorptionTime: try container.decodeIfPresent(TimeInterval.self, forKey: .absorptionTime),
-                  createdByCurrentApp: (try container.decodeIfPresent(Bool.self, forKey: .createdByCurrentApp)) ?? true,
-                  userCreatedDate: try container.decodeIfPresent(Date.self, forKey: .userCreatedDate),
-                  userUpdatedDate: try container.decodeIfPresent(Date.self, forKey: .userUpdatedDate)
+        self.init(
+            startDate: try container.decode(Date.self, forKey: .startDate),
+            quantity: HKQuantity(unit: .gram(), doubleValue: try container.decode(Double.self, forKey: .quantity)),
+            uuid: try container.decodeIfPresent(UUID.self, forKey: .uuid),
+            provenanceIdentifier: (try container.decodeIfPresent(String.self, forKey: .provenanceIdentifier)) ?? Self.defaultProvenanceIdentifier,
+            syncIdentifier: try container.decodeIfPresent(String.self, forKey: .syncIdentifier),
+            syncVersion: try container.decodeIfPresent(Int.self, forKey: .syncVersion),
+            foodType: try container.decodeIfPresent(String.self, forKey: .foodType),
+            absorptionTime: try container.decodeIfPresent(TimeInterval.self, forKey: .absorptionTime),
+            createdByCurrentApp: (try container.decodeIfPresent(Bool.self, forKey: .createdByCurrentApp)) ?? true,
+            userCreatedDate: try container.decodeIfPresent(Date.self, forKey: .userCreatedDate),
+            userUpdatedDate: try container.decodeIfPresent(Date.self, forKey: .userUpdatedDate)
         )
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(uuid, forKey: .uuid)
-        try container.encode(provenanceIdentifier, forKey: .provenanceIdentifier)
+        if provenanceIdentifier != Self.defaultProvenanceIdentifier {
+            try container.encode(provenanceIdentifier, forKey: .provenanceIdentifier)
+        }
         try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)
         try container.encodeIfPresent(syncVersion, forKey: .syncVersion)
         try container.encode(startDate, forKey: .startDate)
         try container.encode(quantity.doubleValue(for: .gram()), forKey: .quantity)
         try container.encodeIfPresent(foodType, forKey: .foodType)
         try container.encodeIfPresent(absorptionTime, forKey: .absorptionTime)
-        try container.encode(createdByCurrentApp, forKey: .createdByCurrentApp)
+        if !createdByCurrentApp {
+            try container.encode(createdByCurrentApp, forKey: .createdByCurrentApp)
+        }
         try container.encodeIfPresent(userCreatedDate, forKey: .userCreatedDate)
         try container.encodeIfPresent(userUpdatedDate, forKey: .userUpdatedDate)
     }
@@ -153,12 +160,12 @@ extension StoredCarbEntry {
         }
 
         self.init(
+            startDate: startDate,
+            quantity: HKQuantity(unit: HKUnit(from: unitString), doubleValue: value),
             uuid: uuid,
             provenanceIdentifier: createdByCurrentApp ? HKSource.default().bundleIdentifier : "",
             syncIdentifier: syncIdentifier,
             syncVersion: syncVersion,
-            startDate: startDate,
-            quantity: HKQuantity(unit: HKUnit(from: unitString), doubleValue: value),
             foodType: rawValue["foodType"] as? String,
             absorptionTime: rawValue["absorptionTime"] as? TimeInterval,
             createdByCurrentApp: createdByCurrentApp,

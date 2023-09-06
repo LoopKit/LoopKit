@@ -23,7 +23,7 @@
 "CGM Settings" = "CGM-Einstellungen";
 
 /* No comment provided by engineer. */
-"Clear Last Version Check Alert Date" = "Löschen Sie das Datum der letzten Versionsprüfungswarnung";
+"Clear Last Version Check Alert Date" = "Lösche das Datum der letzten Versionsprüfungswarnung";
 
 /* No comment provided by engineer. */
 "Comms Recovery" = "Kommunikationswiederherstellung";
@@ -53,9 +53,6 @@
 /* Button title to acknowledge error
    Default acknowledgement */
 "OK" = "OK";
-
-/* Title for Pump simulator settings */
-"Pump Settings" = "Pumpeneinstellungen";
 
 /* Button title recovering comms */
 "Recover Simulator" = "Simulator wiederherstellen";

@@ -373,7 +373,7 @@ extension Collection where Element: CarbEntry {
                 return value + entry.carbsOnBoard(at: date, defaultAbsorptionTime: defaultAbsorptionTime, delay: delay, absorptionModel: absorptionModel)
             }
 
-            values.append(CarbValue(startDate: date, quantity: HKQuantity(unit: HKUnit.gram(), doubleValue: value)))
+            values.append(CarbValue(startDate: date, value: value))
             date = date.addingTimeInterval(delta)
         } while date <= endDate
 
@@ -434,7 +434,7 @@ extension Collection where Element: CarbEntry {
             }
         }
 
-        return CarbValue(startDate: startDate, quantity: HKQuantity(unit: unit, doubleValue: totalGrams))
+        return CarbValue(startDate: startDate, value: totalGrams)
     }
 }
 
@@ -467,7 +467,7 @@ extension Collection {
                 )
             }
 
-            values.append(CarbValue(startDate: date, quantity: HKQuantity(unit: HKUnit.gram(), doubleValue: value)))
+            values.append(CarbValue(startDate: date, value: value))
             date = date.addingTimeInterval(delta)
         } while date <= endDate
         
@@ -534,7 +534,7 @@ extension Collection {
             remainingTotalGrams += absorption.remaining.doubleValue(for: gram)
         }
 
-        return CarbValue(startDate: maxObservedEndDate, quantity: HKQuantity(unit: gram, doubleValue: remainingTotalGrams))
+        return CarbValue(startDate: maxObservedEndDate, value: remainingTotalGrams)
     }
 }
 
@@ -743,14 +743,13 @@ fileprivate class CarbStatusBuilder<T: CarbEntry> {
 
         if observedCompletionDate == nil {
             // Continue recording the timeline until 100% of the carbs have been observed
-            observedTimeline.append(CarbValue(
-                startDate: start,
-                endDate: end,
-                quantity: HKQuantity(
-                    unit: carbUnit,
-                    doubleValue: effect / carbohydrateSensitivityFactor
+            observedTimeline.append(
+                CarbValue(
+                    startDate: start,
+                    endDate: end,
+                    value: effect / carbohydrateSensitivityFactor
                 )
-            ))
+            )
 
             // Once 100% of the carbs are observed, track the endDate
             if observedEffect + Double(Float.ulpOfOne) >= entryEffect {

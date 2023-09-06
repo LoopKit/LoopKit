@@ -18,7 +18,7 @@
 "Afrezza" = "Afrezza";
 
 /* Description for afrezza insulin type */
-"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza ist ein ultraschnell wirkendes Mahlzeiteninsulin, das mit einem oralen Inhalator durch Ihre Lungen eingeatmet wird und von MannKind hergestellt wird.";
+"Afrezza is an ultra rapid-acting mealtime insulin that is breathed in through your lungs using an oral inhaler and made by MannKind" = "Afrezza ist ein ultraschnell wirkendes Mahlzeiteninsulin, das mit einem oralen Inhalator durch Deine Lungen eingeatmet wird und von MannKind hergestellt wird.";
 
 /* Brand name for apidra insulin type */
 "Apidra" = "Apidra";
@@ -28,9 +28,6 @@
 
 /* Description for apidra insulin type */
 "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis " = "Apidra (Insulinglulisin) ist ein schnell wirkendes Insulin, das von Sanofi-aventis hergestellt wird";
-
-/* The error description describing when Health sharing was denied */
-"Authorization Denied" = "Autorisierung verweigert";
 
 /* Title for basal dose type */
 "Basal" = "Basal";
@@ -63,7 +60,7 @@
 "Correction Range" = "Korrekturbereich";
 
 /* Descriptive text for glucose target range (1: app name) */
-"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Der Korrekturbereich ist der Blutzuckerbereich, den %1$@ bei der Anpassung Deines Basalinsulins anstreben und Dir bei der Berechnung der Boli helfen soll.";
+"Correction Range is the glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin and helping you calculate your boluses." = "Der Korrekturbereich ist der Blutzuckerbereich, den %1$@ bei der Anpassung Deines Basalinsulins anstrebt und Dir bei der Berechnung der Boli helfen soll.";
 
 /* Description of critical software update needed */
 "Critical Update" = "Kritisches Update";
@@ -75,7 +72,7 @@
 "Device Refused" = "Gerät verweigert";
 
 /* Recovery suggestion for a no data error */
-"Ensure carb data exists for the specified date" = "Stelle sicher, das die Kohlenhydrate für den ausgewählten Zeitraum eingegeben wurden";
+"Ensure carb data exists for the specified date" = "Stelle sicher, dass die Kohlenhydrate für den ausgewählten Zeitraum eingegeben wurden";
 
 /* Glucose trend down */
 "Falling" = "Fällt";
@@ -183,9 +180,6 @@
 
 /* Descriptive text for saving settings outside the recommended range */
 "One or more of the values you have entered is outside of what is typically recommended for most people." = "Mindestens einer der eingegebenen Werte liegt außerhalb dessen, was normalerweise für die meisten Menschen empfohlen wird.";
-
-/* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "Bitte aktiviere das Teilen in HealthKit erneut";
 
 /* Title for pre-meal mode */
 "Pre-Meal" = "Vor dem Essen";

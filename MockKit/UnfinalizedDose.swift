@@ -126,7 +126,9 @@ public struct UnfinalizedDose: RawRepresentable, Equatable, CustomStringConverti
         }
 
         scheduledUnits = units
-        let newDuration = date.timeIntervalSince(startTime)
+
+        // Guard against negative duration if clock has changed
+        let newDuration = max(0, date.timeIntervalSince(startTime))
 
         switch doseType {
         case .bolus:

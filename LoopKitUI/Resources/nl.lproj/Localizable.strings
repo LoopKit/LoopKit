@@ -36,7 +36,7 @@
 "%1$@ %2$@" = "%1$@ %2$@";
 
 /* Information about insulin action duration (1: app name) */
-"%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%1$@ gaat ervan uit dat de toegediende insuline actief bezig is om uw glucose gedurende 6 uur te verlagen. Deze instelling kan niet worden gewijzigd.";
+"%1$@ assumes that the insulin it has delivered is actively working to lower your glucose for 6 hours. This setting cannot be changed." = "%1$@ gaat ervan uit dat de toegediende insuline actief bezig is om je glucose gedurende 6 uur te verlagen. Deze instelling kan niet worden gewijzigd.";
 
 /* Lower bound workout information text format (1: app name) */
 "%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ of je Glucoseveiligheidslimiet, afhankelijk van welke hoger is";
@@ -619,9 +619,6 @@
 
 /* Therapy Settings screen title */
 "Therapy Settings" = "Therapieinstellingen";
-
-/* No comment provided by engineer. */
-"Therapy Settings Support Placeholder" = "Tijdelijke aanduiding voor Ondersteuning van Therapie-instellingen";
 
 /* Subtitle of afrezza preset */
 "This model assumes peak insulin activity at 19 minutes." = "Dit model gaat uit van een piek in de insulineactiviteit op 19 minuten.";

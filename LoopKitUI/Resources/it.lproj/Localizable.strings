@@ -587,9 +587,6 @@
 /* Therapy Settings screen title */
 "Therapy Settings" = "Impostazioni Terapia";
 
-/* No comment provided by engineer. */
-"Therapy Settings Support Placeholder" = "Segnaposto di supporto per le impostazioni di terapia";
-
 /* Subtitle of afrezza preset */
 "This model assumes peak insulin activity at 19 minutes." = "Questo modello presuppone il picco di attività insulinica a 19 minuti.";
 
