@@ -13,7 +13,7 @@ public struct LoopAlgorithmSettings {
     // Algorithm input time range: t-16h to t
     public var basal: [AbsoluteScheduleValue<Double>]
 
-    // Algorithm input time range: t-10h to t
+    // Algorithm input time range: t-16h to t (eventually with mid-absorption isf changes, it will be t-10h to h)
     public var sensitivity: [AbsoluteScheduleValue<HKQuantity>]
 
     // Algorithm input time range: t-10h to t

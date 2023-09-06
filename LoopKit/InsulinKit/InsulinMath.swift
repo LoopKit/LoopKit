@@ -631,7 +631,9 @@ extension Collection where Element == DoseEntry {
 
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
-                return value + dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit), delta: delta)
+                let isf = insulinSensitivity.quantity(at: dose.startDate).doubleValue(for: unit)
+                let doseEffect = dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: isf, delta: delta)
+                return value + doseEffect
             }
 
             values.append(GlucoseEffect(startDate: date, quantity: HKQuantity(unit: unit, doubleValue: value)))
@@ -648,7 +650,7 @@ extension Collection where Element == DoseEntry {
     ///   - longestEffectDuration: The longest duration that a dose could be active.
     ///   - insulinSensitivityHistory: The timeline of glucose effect per unit of insulin
     ///   - start: The earliest date of effects to return
-    ///   - end: The latest date of effects to return
+    ///   - end: The latest date of effects to return. If nil is passed, it will be calculated from the last sample end date plus the longestEffectDuration.
     ///   - delta: The interval between returned effects
     /// - Returns: An array of glucose effects for the duration of the doses
     public func glucoseEffects(
@@ -675,10 +677,11 @@ extension Collection where Element == DoseEntry {
         repeat {
             let value = reduce(0) { (value, dose) -> Double in
 
-                guard let isf = insulinSensitivityHistory.closestPrior(to: dose.startDate), isf.endDate >= dose.startDate else {
+                guard let isfScheduleValue = insulinSensitivityHistory.closestPrior(to: dose.startDate), isfScheduleValue.endDate >= dose.startDate else {
                     preconditionFailure("ISF History must cover dose startDates")
                 }
-                let doseEffect = dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: isf.value.doubleValue(for: unit), delta: delta)
+                let isf = isfScheduleValue.value.doubleValue(for: unit)
+                let doseEffect = dose.glucoseEffect(at: date, model: insulinModelProvider.model(for: dose.insulinType), insulinSensitivity: isf, delta: delta)
                 return value + doseEffect
             }
 

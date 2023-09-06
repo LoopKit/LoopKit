@@ -74,7 +74,7 @@ public actor LoopAlgorithm {
             longestEffectDuration: settings.insulinActivityDuration,
             insulinSensitivityHistory: settings.sensitivity,
             from: start.addingTimeInterval(-CarbMath.maximumAbsorptionTimeInterval).dateFlooredToTimeInterval(settings.delta),
-            to: start.addingTimeInterval(InsulinMath.defaultInsulinActivityDuration).dateCeiledToTimeInterval(settings.delta))
+            to: nil)
 
         // Future TODO: Calculate historic insulin effects for ICE at glucose sample timestamps. This will produce more accurate velocity samples.
 //        let effectDates = input.glucoseHistory.map { $0.startDate }
@@ -150,7 +150,14 @@ public actor LoopAlgorithm {
             momentumEffects = []
         }
 
-        let prediction = LoopMath.predictGlucose(startingAt: latestGlucose, momentum: momentumEffects, effects: effects)
+        var prediction = LoopMath.predictGlucose(startingAt: latestGlucose, momentum: momentumEffects, effects: effects)
+
+        // Dosing requires prediction entries at least as long as the insulin model duration.
+        // If our prediction is shorter than that, then extend it here.
+        let finalDate = latestGlucose.startDate.addingTimeInterval(InsulinMath.defaultInsulinActivityDuration)
+        if let last = prediction.last, last.startDate < finalDate {
+            prediction.append(PredictedGlucoseValue(startDate: finalDate, quantity: last.quantity))
+        }
 
         return LoopPrediction(
             glucose: prediction,
