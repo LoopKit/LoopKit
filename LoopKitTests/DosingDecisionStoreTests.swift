@@ -115,7 +115,6 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
     },
     "carbEntry" : {
       "absorptionTime" : 18000,
-      "createdByCurrentApp" : true,
       "foodType" : "Pizza",
       "provenanceIdentifier" : "com.loopkit.loop",
       "quantity" : 29,
@@ -128,9 +127,8 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
     },
     "carbsOnBoard" : {
       "endDate" : "2020-05-14T23:18:41Z",
-      "quantity" : 45.5,
-      "quantityUnit" : "g",
-      "startDate" : "2020-05-14T22:48:41Z"
+      "startDate" : "2020-05-14T22:48:41Z",
+      "value" : 45.5
     },
     "cgmManagerStatus" : {
       "device" : {
@@ -275,7 +273,6 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
     },
     "originalCarbEntry" : {
       "absorptionTime" : 18000,
-      "createdByCurrentApp" : true,
       "foodType" : "Pizza",
       "provenanceIdentifier" : "com.loopkit.loop",
       "quantity" : 19,
@@ -728,7 +725,6 @@ class StoredDosingDecisionCodableTests: XCTestCase {
   },
   "carbEntry" : {
     "absorptionTime" : 18000,
-    "createdByCurrentApp" : true,
     "foodType" : "Pizza",
     "provenanceIdentifier" : "com.loopkit.loop",
     "quantity" : 29,
@@ -741,9 +737,8 @@ class StoredDosingDecisionCodableTests: XCTestCase {
   },
   "carbsOnBoard" : {
     "endDate" : "2020-05-14T23:18:41Z",
-    "quantity" : 45.5,
-    "quantityUnit" : "g",
-    "startDate" : "2020-05-14T22:48:41Z"
+    "startDate" : "2020-05-14T22:48:41Z",
+    "value" : 45.5
   },
   "cgmManagerStatus" : {
     "device" : {
@@ -888,7 +883,6 @@ class StoredDosingDecisionCodableTests: XCTestCase {
   },
   "originalCarbEntry" : {
     "absorptionTime" : 18000,
-    "createdByCurrentApp" : true,
     "foodType" : "Pizza",
     "provenanceIdentifier" : "com.loopkit.loop",
     "quantity" : 19,
@@ -1093,23 +1087,23 @@ fileprivate extension StoredDosingDecision {
                                                         quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 119.5)),
                                  HistoricalGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T22:38:15Z")!,
                                                         quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 121.8))]
-        let originalCarbEntry = StoredCarbEntry(uuid: UUID(uuidString: "18CF3948-0B3D-4B12-8BFE-14986B0E6784")!,
+        let originalCarbEntry = StoredCarbEntry(startDate: dateFormatter.date(from: "2020-01-02T03:00:23Z")!,
+                                                quantity: HKQuantity(unit: .gram(), doubleValue: 19),
+                                                uuid: UUID(uuidString: "18CF3948-0B3D-4B12-8BFE-14986B0E6784")!,
                                                 provenanceIdentifier: "com.loopkit.loop",
                                                 syncIdentifier: "2B03D96C-6F5D-4140-99CD-80C3E64D6010",
                                                 syncVersion: 1,
-                                                startDate: dateFormatter.date(from: "2020-01-02T03:00:23Z")!,
-                                                quantity: HKQuantity(unit: .gram(), doubleValue: 19),
                                                 foodType: "Pizza",
                                                 absorptionTime: .hours(5),
                                                 createdByCurrentApp: true,
                                                 userCreatedDate: dateFormatter.date(from: "2020-05-14T22:06:12Z")!,
                                                 userUpdatedDate: nil)
-        let carbEntry = StoredCarbEntry(uuid: UUID(uuidString: "135CDABE-9343-7242-4233-1020384789AE")!,
+        let carbEntry = StoredCarbEntry(startDate: dateFormatter.date(from: "2020-01-02T03:00:23Z")!,
+                                        quantity: HKQuantity(unit: .gram(), doubleValue: 29),
+                                        uuid: UUID(uuidString: "135CDABE-9343-7242-4233-1020384789AE")!,
                                         provenanceIdentifier: "com.loopkit.loop",
                                         syncIdentifier: "2B03D96C-6F5D-4140-99CD-80C3E64D6010",
                                         syncVersion: 2,
-                                        startDate: dateFormatter.date(from: "2020-01-02T03:00:23Z")!,
-                                        quantity: HKQuantity(unit: .gram(), doubleValue: 29),
                                         foodType: "Pizza",
                                         absorptionTime: .hours(5),
                                         createdByCurrentApp: true,
@@ -1137,7 +1131,7 @@ fileprivate extension StoredDosingDecision {
                                                       healthKitEligibleDate: nil)
         let carbsOnBoard = CarbValue(startDate: dateFormatter.date(from: "2020-05-14T22:48:41Z")!,
                                      endDate: dateFormatter.date(from: "2020-05-14T23:18:41Z")!,
-                                     quantity: HKQuantity(unit: .gram(), doubleValue: 45.5))
+                                     value: 45.5)
         let insulinOnBoard = InsulinValue(startDate: dateFormatter.date(from: "2020-05-14T22:38:26Z")!, value: 1.5)
         let glucoseTargetRangeSchedule = GlucoseRangeSchedule(rangeSchedule: DailyQuantitySchedule(unit: .milligramsPerDeciliter,
                                                                                                    dailyItems: [RepeatingScheduleValue(startTime: .hours(0), value: DoubleRange(minValue: 100.0, maxValue: 110.0)),

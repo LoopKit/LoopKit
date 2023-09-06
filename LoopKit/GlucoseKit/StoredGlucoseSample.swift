@@ -10,6 +10,8 @@ import HealthKit
 public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
     public let uuid: UUID?  // Note this is the UUID from HealthKit.  Nil if not (yet) stored in HealthKit.
 
+    public static let defaultProvenanceIdentifier = "com.LoopKit.Loop"
+
     // MARK: - HealthKit Sync Support
 
     public let provenanceIdentifier: String
@@ -50,7 +52,7 @@ public struct StoredGlucoseSample: GlucoseSampleValue, Equatable {
 
     public init(
         uuid: UUID? = nil,
-        provenanceIdentifier: String = "com.LoopKit.Loop",
+        provenanceIdentifier: String = Self.defaultProvenanceIdentifier,
         syncIdentifier: String? = nil,
         syncVersion: Int? = nil,
         startDate: Date,
@@ -102,7 +104,7 @@ extension StoredGlucoseSample: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         let uuid = try container.decodeIfPresent(UUID.self, forKey: .uuid)
-        let provenanceIdentifier = try container.decodeIfPresent(String.self, forKey: .provenanceIdentifier) ?? "com.LoopKit.Loop"
+        let provenanceIdentifier = try container.decodeIfPresent(String.self, forKey: .provenanceIdentifier) ?? Self.defaultProvenanceIdentifier
         let wasUserEntered = try container.decodeIfPresent(Bool.self, forKey: .wasUserEntered) ?? false
         let isDisplayOnly = try container.decodeIfPresent(Bool.self, forKey: .isDisplayOnly) ?? false
 
@@ -124,7 +126,7 @@ extension StoredGlucoseSample: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(uuid, forKey: .uuid)
-        if provenanceIdentifier != "com.LoopKit.Loop" {
+        if provenanceIdentifier != Self.defaultProvenanceIdentifier {
             try container.encode(provenanceIdentifier, forKey: .provenanceIdentifier)
         }
         try container.encodeIfPresent(syncIdentifier, forKey: .syncIdentifier)

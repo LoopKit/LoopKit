@@ -10,7 +10,7 @@ import Foundation
 import HealthKit
 
 public struct GlucoseMath {
-    public static let momentumDataInterval: TimeInterval = .minutes(15)
+    public static let momentumDataInterval: TimeInterval = .minutes(16)
     public static let momentumDuration: TimeInterval = .minutes(15)
     public static let defaultDelta: TimeInterval = .minutes(5)
 }
@@ -159,21 +159,30 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
             return []
         }
 
-        var startGlucose: Element! = self.first
+        let startGlucoseIdx = self.firstIndex { $0.startDate >= effects.first!.startDate }
 
-        precondition(startGlucose.startDate >= effects.first!.startDate, "Effects must cover glucose values. Start glucose date: \(startGlucose.startDate) < \(effects.first!.startDate)")
+        guard var startGlucoseIdx else {
+            return []
+        }
 
-        for endGlucose in self.dropFirst() {
+        var endGlucoseIdx = startGlucoseIdx + 1
+
+        while endGlucoseIdx != self.endIndex {
             // Find a valid change in glucose, requiring identical provenance and no calibration
+            let startGlucose = self[startGlucoseIdx]
+            let endGlucose = self[endGlucoseIdx]
+
             let glucoseChange = endGlucose.quantity.doubleValue(for: mgdL) - startGlucose.quantity.doubleValue(for: mgdL)
             let timeInterval = endGlucose.startDate.timeIntervalSince(startGlucose.startDate)
 
             guard timeInterval > .minutes(4) else {
+                endGlucoseIdx += 1
                 continue
             }
 
             defer {
-                startGlucose = endGlucose
+                startGlucoseIdx = endGlucoseIdx
+                endGlucoseIdx += 1
             }
 
             guard startGlucose.provenanceIdentifier == endGlucose.provenanceIdentifier,

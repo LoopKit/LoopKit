@@ -12,6 +12,11 @@ import HealthKit
 
 public enum LoopMath {
 
+    /// The interval over which to aggregate changes in glucose for retrospective correction
+    public static let retrospectiveCorrectionGroupingInterval = TimeInterval(minutes: 30)
+    public static let retrospectiveCorrectionEffectDuration = TimeInterval(hours: 1)
+
+
     static func simulationDateRangeForSamples<T: Collection>(
         _ samples: T,
         from start: Date? = nil,
@@ -271,7 +276,7 @@ extension BidirectionalCollection where Element == GlucoseEffectVelocity {
     ///   - otherEffects: The array of glucose effects to subtract
     ///   - effectInterval: The time interval between elements in the otherEffects array
     /// - Returns: A resulting array of glucose effects
-    public func subtracting(_ otherEffects: [GlucoseEffect], withUniformInterval effectInterval: TimeInterval = TimeInterval(5 /* minutes */ * 60 /* seconds */)) -> [GlucoseEffect] {
+    public func subtracting(_ otherEffects: [GlucoseEffect], withUniformInterval effectInterval: TimeInterval = GlucoseMath.defaultDelta) -> [GlucoseEffect] {
         // Trim both collections to match
         let otherEffects = otherEffects.filterDateRange(self.first?.endDate, nil)
         let effects = self.filterDateRange(otherEffects.first?.startDate, nil)

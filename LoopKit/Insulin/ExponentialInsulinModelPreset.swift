@@ -81,6 +81,6 @@ extension ExponentialInsulinModelPreset: InsulinModel {
 
 extension ExponentialInsulinModelPreset: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "\(self.rawValue)(\(String(reflecting: model))"
+        return "\(self.rawValue)(\(String(reflecting: model)))"
     }
 }

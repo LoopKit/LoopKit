@@ -88,7 +88,7 @@ class CarbMathTests: XCTestCase {
         let dateFormatter = ISO8601DateFormatter.localTimeDate()
 
         return fixture.map {
-            return CarbValue(startDate: dateFormatter.date(from: $0["date"] as! String)!, quantity: HKQuantity(unit: HKUnit(from: $0["unit"] as! String), doubleValue:$0["amount"] as! Double))
+            return CarbValue(startDate: dateFormatter.date(from: $0["date"] as! String)!, value: $0["amount"] as! Double)
         }
     }
 
