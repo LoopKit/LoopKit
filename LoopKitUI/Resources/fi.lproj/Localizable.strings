@@ -575,9 +575,6 @@
 /* Therapy Settings screen title */
 "Therapy Settings" = "Hoitoasetukset";
 
-/* No comment provided by engineer. */
-"Therapy Settings Support Placeholder" = "Hoitoasetusten tuen paikkamerkki";
-
 /* Subtitle of Fiasp preset
    Subtitle of Lyumjev preset */
 "This model assumes peak insulin activity at 55 minutes." = "Tässä mallissa oletetaan, että insuliinin vaikutushuippu on 55 minuutissa.";

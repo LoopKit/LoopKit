@@ -45,9 +45,6 @@
    Default acknowledgement */
 "OK" = "OK";
 
-/* Title for Pump simulator settings */
-"Pump Settings" = "Paramètres de la pompe";
-
 /* Button title recovering comms */
 "Recover Simulator" = "Rétablissement du simulateur";
 

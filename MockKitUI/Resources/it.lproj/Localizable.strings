@@ -45,9 +45,6 @@
    Default acknowledgement */
 "OK" = "OK";
 
-/* Title for Pump simulator settings */
-"Pump Settings" = "impostazione del microinfusore";
-
 /* Button title recovering comms */
 "Recover Simulator" = "Simulatore di recupero";
 

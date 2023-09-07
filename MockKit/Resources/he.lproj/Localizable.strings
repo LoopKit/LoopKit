@@ -1,5 +1,5 @@
 /* Pump Event title for UnfinalizedDose with doseType of .bolus */
-"Bolus" = "Bolus";
+"Bolus" = "בולוס";
 
 /* Status highlight that a pump error occurred. */
 "Pump Error" = "Pump Error";

@@ -29,9 +29,6 @@
 /* Description for apidra insulin type */
 "Apidra (insulin glulisine) is a rapid-acting insulin made by Sanofi-aventis " = "Apidra (insulina glulizină) este o insulină cu acțiune rapidă produsă de Sanofi-aventis";
 
-/* The error description describing when Health sharing was denied */
-"Authorization Denied" = "Autorizare refuzată";
-
 /* Title for basal dose type */
 "Basal" = "Bazală";
 
@@ -183,9 +180,6 @@
 
 /* Descriptive text for saving settings outside the recommended range */
 "One or more of the values you have entered is outside of what is typically recommended for most people." = "Unele dintre valorile introduse sunt în afara a ceea ce este recomandat de obicei pentru majoritatea oamenilor.";
-
-/* The error recovery suggestion when Health sharing was denied */
-"Please re-enable sharing in Health" = "Vă rugăm să re-activați partajarea datelor în Sănătate";
 
 /* Title for pre-meal mode */
 "Pre-Meal" = "Preprandial";

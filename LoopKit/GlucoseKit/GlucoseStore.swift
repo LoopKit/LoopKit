@@ -713,10 +713,12 @@ extension GlucoseStore {
     /// This operation is performed asynchronously and the completion will be executed on an arbitrary background queue.
     ///
     /// - Parameters:
+    ///   - date: A Date object representing the end of the momentumDataInterval used to fetch glucose samples for calculating momentum.  If nil, the current date is used.
     ///   - completion: A closure called once the calculation has completed.
     ///   - result: The calculated effect values, or an empty array if the glucose data isn't suitable for momentum calculation, or error.
-    public func getRecentMomentumEffect(_ completion: @escaping (_ result: Result<[GlucoseEffect], Error>) -> Void) {
-        getGlucoseSamples(start: Date(timeIntervalSinceNow: -momentumDataInterval)) { (result) in
+    public func getRecentMomentumEffect(for date: Date? = nil, _ completion: @escaping (_ result: Result<[GlucoseEffect], Error>) -> Void) {
+
+        getGlucoseSamples(start: (date ?? Date()).addingTimeInterval(-momentumDataInterval)) { (result) in
             switch result {
             case .failure(let error):
                 completion(.failure(error))

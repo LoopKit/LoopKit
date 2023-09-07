@@ -15,13 +15,12 @@ class CarbValueCodableTests: XCTestCase {
     func testCodable() throws {
         try assertCarbValueCodable(CarbValue(startDate: dateFormatter.date(from: "2020-05-14T12:18:14Z")!,
                                              endDate: dateFormatter.date(from: "2020-05-14T13:18:14Z")!,
-                                             quantity: HKQuantity(unit: .gram(), doubleValue: 34.5)),
+                                             value: 34.5),
                                    encodesJSON: """
 {
   "endDate" : "2020-05-14T13:18:14Z",
-  "quantity" : 34.5,
-  "quantityUnit" : "g",
-  "startDate" : "2020-05-14T12:18:14Z"
+  "startDate" : "2020-05-14T12:18:14Z",
+  "value" : 34.5
 }
 """
         )

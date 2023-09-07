@@ -39,9 +39,6 @@
    Default acknowledgement */
 "OK" = "OK";
 
-/* Title for Pump simulator settings */
-"Pump Settings" = "Pumpun asetukset";
-
 /* Button title recovering comms */
 "Recover Simulator" = "Palauta simulaattori";
 

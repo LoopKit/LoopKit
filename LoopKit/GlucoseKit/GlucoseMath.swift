@@ -51,10 +51,10 @@ fileprivate extension Collection where Element == (x: Double, y: Double) {
 
 extension BidirectionalCollection where Element: GlucoseSampleValue, Index == Int {
 
-    /// Whether the collection contains no calibration entries
+    /// Whether the collection contains any calibration entries
     /// Runtime: O(n)
-    var isCalibrated: Bool {
-        return filter({ $0.isDisplayOnly }).count == 0
+    public func containsCalibrations() -> Bool {
+        return filter({ $0.isDisplayOnly }).count > 0
     }
 
     /// Whether the collection can be considered continuous
@@ -91,7 +91,7 @@ extension BidirectionalCollection where Element: GlucoseSampleValue, Index == In
 
         guard
             self.count > 2,  // Linear regression isn't much use without 3 or more entries.
-            isContinuous() && isCalibrated && hasSingleProvenance,
+            isContinuous() && !containsCalibrations() && hasSingleProvenance,
             let firstSample = self.first,
             let lastSample = self.last,
             let (startDate, endDate) = LoopMath.simulationDateRangeForSamples([lastSample], duration: duration, delta: delta)
@@ -159,21 +159,30 @@ extension Collection where Element: GlucoseSampleValue, Index == Int {
             return []
         }
 
-        var startGlucose: Element! = self.first
+        let startGlucoseIdx = self.firstIndex { $0.startDate >= effects.first!.startDate }
 
-        precondition(startGlucose.startDate >= effects.first!.startDate, "Effects must cover glucose values. Start glucose date: \(startGlucose.startDate) < \(effects.first!.startDate)")
+        guard var startGlucoseIdx else {
+            return []
+        }
 
-        for endGlucose in self.dropFirst() {
+        var endGlucoseIdx = startGlucoseIdx + 1
+
+        while endGlucoseIdx != self.endIndex {
             // Find a valid change in glucose, requiring identical provenance and no calibration
+            let startGlucose = self[startGlucoseIdx]
+            let endGlucose = self[endGlucoseIdx]
+
             let glucoseChange = endGlucose.quantity.doubleValue(for: mgdL) - startGlucose.quantity.doubleValue(for: mgdL)
             let timeInterval = endGlucose.startDate.timeIntervalSince(startGlucose.startDate)
 
             guard timeInterval > .minutes(4) else {
+                endGlucoseIdx += 1
                 continue
             }
 
             defer {
-                startGlucose = endGlucose
+                startGlucoseIdx = endGlucoseIdx
+                endGlucoseIdx += 1
             }
 
             guard startGlucose.provenanceIdentifier == endGlucose.provenanceIdentifier,

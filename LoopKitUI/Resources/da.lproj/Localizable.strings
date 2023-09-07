@@ -41,6 +41,9 @@
 /* Lower bound workout information text format (1: app name) */
 "%1$@ or your Glucose Safety Limit, whichever is higher" = "%1$@ eller din glukose sikkerhedsgrænse afhængigt af, hvad der er højest";
 
+/* Information about max number of basal rates (1: app name) (2: maximum schedule entry count) */
+"%1$@ supports 1 to %2$@ rates per day." = "%1$@ understøtter 1 til %2$@ basalrater pr. dag.";
+
 /* Reservoir entry (1: volume value) */
 "%1$@ U" = "%1$@ E";
 
@@ -53,6 +56,15 @@
 
 /* String format for value with units (1: value, 2: separator, 3: units) */
 "%1$@%2$@%3$@" = "%1$@%2$@%3$@";
+
+/* Format string for progress accessibility label (1: duration in seconds) */
+"%1$d percent complete." = "%1$d procent færdig.";
+
+/* No comment provided by engineer. */
+"%lld" = "%lld";
+
+/* No comment provided by engineer. */
+"%lld, " = "%lld, ";
 
 /* No comment provided by engineer. */
 "🍽" = "🍽";
@@ -201,7 +213,7 @@
 
 /* The title for the custom preset entry screen
    The title for the custom preset selection screen */
-"Custom Preset" = "Brugerdefineret forudindstilling";
+"Custom Preset" = "Overrides";
 
 /* Title of the carb entry date picker cell */
 "Date" = "Dato";
@@ -233,6 +245,9 @@
 
 /* The text for the override duration setting */
 "Duration" = "Varighed";
+
+/* No comment provided by engineer. */
+"Dynamic component #%lld" = "Dynamisk komponent #%lld";
 
 /* Text for edit button
    The title for the enabled custom preset editing screen */
@@ -332,6 +347,9 @@
 /* Information about target range */
 "If you've used a CGM before, you're likely familiar with target range as a wide range of values you'd like for your glucose notification alerts, such as 70-180 mg/dL or 90-200 mg/dL." = "Hvis du har brugt en CGM tidligere, er du sandsynligvis bekendt med at få advarsler ud fra et blodsukkerinterval, såsom 5-10 mmol/L eller 6-12 mmol/L.";
 
+/* No comment provided by engineer. */
+"info" = "info";
+
 /* Title text for insulin model */
 "Insulin Model" = "Insulinmodel";
 
@@ -411,7 +429,7 @@
 "New Entry" = "Ny indtastning";
 
 /* The title for the new override preset entry screen */
-"New Preset" = "Ny Forudindstilling";
+"New Preset" = "Ny Override";
 
 /* Title text for the zero basal rate warning */
 "No Basal Insulin" = "Ingen basalinsulin";
@@ -520,6 +538,9 @@
 /* The section header text for a scheduled custom preset */
 "SCHEDULED PRESET" = "PLANLAGT FORUDINDSTILLING";
 
+/* No comment provided by engineer. */
+"Selected" = "Valgte";
+
 /* Section title for slow absorbing food */
 "Slow" = "Langsom";
 
@@ -568,6 +589,9 @@
 /* The title for the override selection screen */
 "Temporary Override" = "Midlertidig Override";
 
+/* No comment provided by engineer. */
+"Test" = "Test";
+
 /* Information about pre-meal range relative to correction range
    Information about workout range relative to correction range */
 "than your Correction Range." = "end dit korrektionsområde.";
@@ -596,9 +620,6 @@
 /* Therapy Settings screen title */
 "Therapy Settings" = "Behandlingsindstillinger";
 
-/* No comment provided by engineer. */
-"Therapy Settings Support Placeholder" = "Placeholder for behandlingsindstillinger";
-
 /* Subtitle of afrezza preset */
 "This model assumes peak insulin activity at 19 minutes." = "Denne model forudsætter peak insulinaktivitet på 19 minutter.";
 
@@ -611,6 +632,9 @@
 
 /* Subtitle of Rapid-Acting – Adult preset */
 "This model assumes peak insulin activity at 75 minutes." = "Denne model forudsætter maksimal effekt ved 75 minutter.";
+
+/* Information about maximum automated insulin on board (1: app name) */
+"This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus." = "Denne indstilling bestemmer også en sikkerhedsgrænse for automatisk dosering. %1$@ begrænser den automatiske tilførsel for at holde mængden af aktivt insulin under det dobbelte af din maksimale bolus.";
 
 /* Information about pre-meal range relative to correction range
    Information about workout range relative to correction range */
@@ -646,6 +670,9 @@
 /* Accessibility value for an unknown value
    The default title to use when an entry has none */
 "Unknown" = "Ukendt";
+
+/* No comment provided by engineer. */
+"Unselected" = "Ikke-valgt";
 
 /* Title for selection when no insulin type is selected. */
 "Unset" = "Ikke-indstillet";
