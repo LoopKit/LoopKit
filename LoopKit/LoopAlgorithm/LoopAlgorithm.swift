@@ -76,14 +76,6 @@ public actor LoopAlgorithm {
             from: start.addingTimeInterval(-CarbMath.maximumAbsorptionTimeInterval).dateFlooredToTimeInterval(settings.delta),
             to: nil)
 
-        // Future TODO: Calculate historic insulin effects for ICE at glucose sample timestamps. This will produce more accurate velocity samples.
-//        let effectDates = input.glucoseHistory.map { $0.startDate }
-//        let insulinEffectsAtGlucoseTimestamps = annotatedDoses.glucoseEffects(
-//            insulinModelProvider: insulinModelProvider,
-//            longestEffectDuration: input.insulinActivityDuration,
-//            insulinSensitivityTimeline: input.sensitivity,
-//            effectDates: effectDates)
-
         // ICE
         let insulinCounteractionEffects = input.glucoseHistory.counteractionEffects(to: insulinEffects)
 
@@ -170,10 +162,6 @@ public actor LoopAlgorithm {
             )
         )
     }
-
-//    // TODO: Generate recommendation from a prediction
-//    public static func generateRecommendation(prediction: LoopPrediction) throws -> LoopDosingRecommendation {
-//    }
 }
 
 

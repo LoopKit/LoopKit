@@ -46,8 +46,9 @@ public class MockSupport: SupportUI {
         return []
     }
 
-    public func supportMenuItem(supportInfoProvider: SupportInfoProvider, urlHandler: @escaping (URL) -> Void) -> AnyView? {
-        return AnyView(SupportMenuItem(mockSupport: self))
+    @ViewBuilder
+    public func supportMenuItem(supportInfoProvider: SupportInfoProvider, urlHandler: @escaping (URL) -> Void) -> some View {
+        SupportMenuItem(mockSupport: self)
     }
     
     public func softwareUpdateView(bundleIdentifier: String, currentVersion: String, guidanceColors: GuidanceColors, openAppStore: (() -> Void)?) -> AnyView? {

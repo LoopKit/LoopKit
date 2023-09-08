@@ -35,14 +35,13 @@ public struct CorrectionRangeOverrideInformationView: View {
             onExit: onExit,
             mode: mode,
             appName: appName,
-            text: AnyView(section(for: preset))
+            text: section(for: preset)
         )
     }
     
     private func section(for preset: CorrectionRangeOverrides.Preset) -> some View {
         VStack(alignment: .leading, spacing: 15) {
             description(for: preset)
-                .foregroundColor(.secondary)
         }
     }
         

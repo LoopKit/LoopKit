@@ -426,48 +426,30 @@ extension TherapySettingsView {
 
 extension TherapySettingsView {
 
-    func screen(for setting: TherapySetting) -> (_ dismiss: @escaping () -> Void) -> AnyView {
+    @ViewBuilder
+    func screen(for setting: TherapySetting, dismiss: @escaping () -> Void) -> some View {
         switch setting {
         case .suspendThreshold:
-            return { dismiss in
-                AnyView(SuspendThresholdEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
-            }
+            SuspendThresholdEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .glucoseTargetRange:
-            return { dismiss in
-                AnyView(CorrectionRangeScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
-            }
+           CorrectionRangeScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .preMealCorrectionRangeOverride:
-            return { dismiss in
-                AnyView(CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss).environment(\.dismissAction, dismiss))
-            }
+            CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .preMeal, didSave: dismiss)
         case .workoutCorrectionRangeOverride:
-            return { dismiss in
-                AnyView(CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .workout, didSave: dismiss).environment(\.dismissAction, dismiss))
-            }
+           CorrectionRangeOverridesEditor(mode: mode, therapySettingsViewModel: viewModel, preset: .workout, didSave: dismiss)
         case .basalRate:
-            return { dismiss in
-                AnyView(BasalRateScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
-            }
+            BasalRateScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .deliveryLimits:
-            return { dismiss in
-                AnyView(DeliveryLimitsEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
-            }
+            DeliveryLimitsEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .insulinModel:
-            return { dismiss in
-                AnyView(InsulinModelSelection(mode: mode, therapySettingsViewModel: viewModel, chartColors: chartColorPalette, didSave: dismiss).environment(\.dismissAction, dismiss))
-            }
+            InsulinModelSelection(mode: mode, therapySettingsViewModel: viewModel, chartColors: chartColorPalette, didSave: dismiss)
         case .carbRatio:
-            return { dismiss in
-                AnyView(CarbRatioScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
-            }
+            CarbRatioScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .insulinSensitivity:
-            return { dismiss in
-                AnyView(InsulinSensitivityScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss).environment(\.dismissAction, dismiss))
-            }
+            InsulinSensitivityScheduleEditor(mode: mode, therapySettingsViewModel: viewModel, didSave: dismiss)
         case .none:
-            break
+            EmptyView()
         }
-        return { _ in AnyView(Text("\(setting.title)")) }
     }
 }
 
@@ -484,11 +466,16 @@ extension TherapySettingsView {
     
     private func card<Content>(for therapySetting: TherapySetting, @ViewBuilder content: @escaping () -> Content) -> Card where Content: View {
         Card {
-            SectionWithTapToEdit(isEnabled: mode != .acceptanceFlow,
-                                 title: therapySetting.title,
-                                 descriptiveText: therapySetting.descriptiveText(appName: appName),
-                                 destination: screen(for: therapySetting),
-                                 content: content)
+            SectionWithTapToEdit(
+                isEnabled: mode != .acceptanceFlow,
+                title: therapySetting.title,
+                descriptiveText: therapySetting.descriptiveText(appName: appName),
+                destination: { dismiss in
+                    screen(for: therapySetting, dismiss: dismiss)
+                        .environment(\.dismissAction, dismiss)
+                },
+                content: content
+            )
         }
     }
 }

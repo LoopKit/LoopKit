@@ -27,7 +27,7 @@ public struct CorrectionRangeInformationView: View {
             onExit: onExit,
             mode: mode,
             appName: appName,
-            text: AnyView(text)
+            text: text
         )
     }
     
@@ -39,7 +39,6 @@ public struct CorrectionRangeInformationView: View {
             Text(String(format: LocalizedString("For this range, choose the specific glucose value (or range of values) that you want %1$@ to aim for in adjusting your basal insulin.", comment: "Information about correction range format (1: app name)"), appName))
             Text(LocalizedString("Your healthcare provider can help you choose a Correction Range that's right for you.", comment: "Disclaimer"))
         }
-        .foregroundColor(.secondary)
     }
 }
 

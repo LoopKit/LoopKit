@@ -38,7 +38,6 @@ public struct BasalRatesInformationView: View {
             Text(String(format: LocalizedString("%1$@ supports 1 to %2$@ rates per day.", comment: "Information about max number of basal rates (1: app name) (2: maximum schedule entry count)"), appName, String(describing: maximumScheduleEntryCount)))
             Text(LocalizedString("The schedule starts at midnight and cannot contain a rate of 0 U/hr.", comment: "Information about basal rate scheduling"))
         }
-        .foregroundColor(.secondary)
     }
 }
 

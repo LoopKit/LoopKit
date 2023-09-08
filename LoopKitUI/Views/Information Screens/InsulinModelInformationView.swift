@@ -29,7 +29,6 @@ public struct InsulinModelInformationView: View {
                     diaInfo
                     modelPeakInfo
                 }
-                .foregroundColor(.secondary)
             },
             onExit: onExit ?? { self.presentationMode.wrappedValue.dismiss() },
             mode: mode

@@ -97,18 +97,16 @@ public struct FractionalQuantityPicker: View {
     public var body: some View {
         switch usageContext {
         case .component(availableWidth: let availableWidth):
-            return AnyView(body(availableWidth: availableWidth))
+            body(availableWidth: availableWidth)
         case .independent:
-            return AnyView(
-                GeometryReader { geometry in
-                    HStack {
-                        Spacer()
-                        self.body(availableWidth: geometry.size.width)
-                        Spacer()
-                    }
+            GeometryReader { geometry in
+                HStack {
+                    Spacer()
+                    self.body(availableWidth: geometry.size.width)
+                    Spacer()
                 }
-                .frame(height: 216)
-            )
+            }
+            .frame(height: 216)
         }
     }
 

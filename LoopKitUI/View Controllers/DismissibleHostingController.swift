@@ -8,7 +8,41 @@
 
 import SwiftUI
 
-public class DismissibleHostingController: UIHostingController<AnyView> {
+public struct _DismissibleHostingView<Content: View>: View {
+    
+    let content: Content
+    let guidanceColors: GuidanceColors
+    let carbTintColor: Color
+    let glucoseTintColor: Color
+    let insulinTintColor: Color
+    
+    public var dismiss: () -> Void = {}
+    
+    public init(
+        content: Content,
+        guidanceColors: GuidanceColors,
+        carbTintColor: Color,
+        glucoseTintColor: Color,
+        insulinTintColor: Color
+    ) {
+        self.content = content
+        self.guidanceColors = guidanceColors
+        self.carbTintColor = carbTintColor
+        self.glucoseTintColor = glucoseTintColor
+        self.insulinTintColor = insulinTintColor
+    }
+    
+    public var body: some View {
+        content
+            .environment(\.dismissAction, dismiss)
+            .environment(\.guidanceColors, guidanceColors)
+            .environment(\.carbTintColor, carbTintColor)
+            .environment(\.glucoseTintColor, glucoseTintColor)
+            .environment(\.insulinTintColor, insulinTintColor)
+    }
+}
+
+public class DismissibleHostingController<Content: View>: UIHostingController<_DismissibleHostingView<Content>> {
     public enum DismissalMode {
         case modalDismiss
         case pop(to: UIViewController.Type)
@@ -16,14 +50,14 @@ public class DismissibleHostingController: UIHostingController<AnyView> {
 
     private var onDisappear: () -> Void = {}
 
-    public convenience init<Content: View> (
-        rootView: Content,
+    public convenience init (
+        content: Content,
         dismissalMode: DismissalMode = .modalDismiss,
         isModalInPresentation: Bool = true,
         onDisappear: @escaping () -> Void = {},
         colorPalette: LoopUIColorPalette
     ) {
-        self.init(rootView: rootView,
+        self.init(content: content,
                   dismissalMode: dismissalMode,
                   isModalInPresentation: isModalInPresentation,
                   onDisappear: onDisappear,
@@ -33,8 +67,8 @@ public class DismissibleHostingController: UIHostingController<AnyView> {
                   insulinTintColor: colorPalette.insulinTintColor)
     }
 
-    public convenience init<Content: View>(
-        rootView: Content,
+    public convenience init(
+        content: Content,
         dismissalMode: DismissalMode = .modalDismiss,
         isModalInPresentation: Bool = true,
         onDisappear: @escaping () -> Void = {},
@@ -43,19 +77,22 @@ public class DismissibleHostingController: UIHostingController<AnyView> {
         glucoseTintColor: Color = Color(.systemTeal),
         insulinTintColor: Color = .orange
     ) {
+        let view = _DismissibleHostingView(
+            content: content,
+            guidanceColors: guidanceColors,
+            carbTintColor: carbTintColor,
+            glucoseTintColor: glucoseTintColor,
+            insulinTintColor: insulinTintColor
+        )
+        
         // Delay initialization of dismissal closure pushed into SwiftUI Environment until after calling the designated initializer
-        var dismiss = {}
-        self.init(rootView: AnyView(rootView.environment(\.dismissAction, { dismiss() })
-            .environment(\.guidanceColors, guidanceColors)
-            .environment(\.carbTintColor, carbTintColor)
-            .environment(\.glucoseTintColor, glucoseTintColor)
-            .environment(\.insulinTintColor, insulinTintColor)))
+        self.init(rootView: view)
 
         switch dismissalMode {
         case .modalDismiss:
-            dismiss = { [weak self] in self?.dismiss(animated: true) }
+            self.rootView.dismiss = { [weak self] in self?.dismiss(animated: true) }
         case .pop(to: let PredecessorViewController):
-            dismiss = { [weak self] in
+            self.rootView.dismiss = { [weak self] in
                 guard
                     let navigationController = self?.navigationController,
                     let predecessor = navigationController.viewControllers.last(where: { $0.isKind(of: PredecessorViewController) })

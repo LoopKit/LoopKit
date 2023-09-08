@@ -19,28 +19,29 @@ extension TherapySetting {
         }
     }
     
+    @ViewBuilder
     public func helpScreen() -> some View {
         switch self {
         case .glucoseTargetRange:
-            return AnyView(CorrectionRangeInformationView(onExit: nil, mode: .settings))
+            CorrectionRangeInformationView(onExit: nil, mode: .settings)
         case .preMealCorrectionRangeOverride:
-            return AnyView(CorrectionRangeOverrideInformationView(preset: .preMeal, onExit: nil, mode: .settings))
+            CorrectionRangeOverrideInformationView(preset: .preMeal, onExit: nil, mode: .settings)
         case .workoutCorrectionRangeOverride:
-            return AnyView(CorrectionRangeOverrideInformationView(preset: .workout, onExit: nil, mode: .settings))
+            CorrectionRangeOverrideInformationView(preset: .workout, onExit: nil, mode: .settings)
         case .suspendThreshold:
-            return AnyView(SuspendThresholdInformationView(onExit: nil, mode: .settings))
+            SuspendThresholdInformationView(onExit: nil, mode: .settings)
         case .basalRate(let maximumScheduleEntryCount):
-            return AnyView(BasalRatesInformationView(onExit: nil, mode: .settings, maximumScheduleEntryCount: maximumScheduleEntryCount))
+            BasalRatesInformationView(onExit: nil, mode: .settings, maximumScheduleEntryCount: maximumScheduleEntryCount)
         case .deliveryLimits:
-            return AnyView(DeliveryLimitsInformationView(onExit: nil, mode: .settings))
+            DeliveryLimitsInformationView(onExit: nil, mode: .settings)
         case .insulinModel:
-            return AnyView(InsulinModelInformationView(onExit: nil, mode: .settings))
+            InsulinModelInformationView(onExit: nil, mode: .settings)
         case .carbRatio:
-            return AnyView(CarbRatioInformationView(onExit: nil, mode: .settings))
+            CarbRatioInformationView(onExit: nil, mode: .settings)
         case .insulinSensitivity:
-            return AnyView(InsulinSensitivityInformationView(onExit: nil, mode: .settings))
+            InsulinSensitivityInformationView(onExit: nil, mode: .settings)
         case .none:
-            return AnyView(Text("To be implemented"))
+            Text("To be implemented")
         }
     }
 }

@@ -39,7 +39,6 @@ public struct DeliveryLimitsInformationView: View {
     
     private var deliveryLimitDescription: some View {
         Text(LocalizedString("Delivery Limits are safety guardrails for your insulin delivery.", comment: "Information about delivery limits"))
-        .foregroundColor(.secondary)
     }
     
     private var maxBasalDescription: some View {
@@ -51,7 +50,6 @@ public struct DeliveryLimitsInformationView: View {
                 Text(LocalizedString("Some users choose a value 2, 3, or 4 times their highest scheduled basal rate.", comment: "Information about typical maximum basal rates"))
                 Text(LocalizedString("Work with your healthcare provider to choose a value that is higher than your highest scheduled basal rate, but as conservative or aggressive as you feel comfortable.", comment: "Disclaimer"))
             }
-            .foregroundColor(.secondary)
         }
     }
     
@@ -63,7 +61,6 @@ public struct DeliveryLimitsInformationView: View {
                     Text(String(format: LocalizedString("Maximum Bolus is the highest bolus amount that you will allow %1$@ to recommend at one time to cover carbs or bring down high glucose.", comment: "Information about maximum bolus (1: app name)"), appName))
                     Text(String(format: LocalizedString("This setting will also determine a safety limit for automatic dosing. %1$@ will limit automatic delivery to keep the amount of active insulin below twice your maximum bolus.", comment: "Information about maximum automated insulin on board (1: app name)"), appName))
             }
-           .foregroundColor(.secondary)
         }
     }
 }
