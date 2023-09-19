@@ -66,16 +66,9 @@ public struct DeviceWhitelist: Hashable {
     }
 }
 
-public protocol SupportUI: AnyObject {
+public protocol SupportUI: Pluggable {
 
     typealias RawStateValue = [String: Any]
-
-    /// The unique identifier of this type of support.
-    static var supportIdentifier: String { get }
-
-    /// Support plugins often depend on other services.  This callback allows supports to reference the needed service(s).
-    /// It is called once during app initialization after  services are initialized and again as new services are added and initialized.
-    func initializationComplete(for services: [Service])
 
     /// Provides configuration menu items.
     ///
@@ -138,11 +131,7 @@ public protocol SupportUI: AnyObject {
     var deviceIdentifierWhitelist: DeviceWhitelist { get }
 }
 
-extension SupportUI {
-    public var identifier: String {
-        return Self.supportIdentifier
-    }
-    
+extension SupportUI {    
     public var deviceIdentifierWhitelist: DeviceWhitelist {
         DeviceWhitelist()
     }
