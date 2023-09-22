@@ -17,22 +17,6 @@ public protocol PumpManagerStatusObserver: AnyObject {
     func pumpManager(_ pumpManager: PumpManager, didUpdate status: PumpManagerStatus, oldStatus: PumpManagerStatus)
 }
 
-public enum BolusActivationType: String, Codable {
-    case manualNoRecommendation
-    case manualRecommendationAccepted
-    case manualRecommendationChanged
-    case automatic
-
-    public var isAutomatic: Bool {
-        self == .automatic
-    }
-
-    static public func activationTypeFor(recommendedAmount: Double?, bolusAmount: Double) -> BolusActivationType {
-        guard let recommendedAmount = recommendedAmount else { return .manualNoRecommendation }
-        return recommendedAmount =~ bolusAmount ? .manualRecommendationAccepted : .manualRecommendationChanged
-    }
-}
-
 public protocol PumpManagerDelegate: DeviceManagerDelegate, PumpManagerStatusObserver {
     func pumpManagerBLEHeartbeatDidFire(_ pumpManager: PumpManager)
 
@@ -144,7 +128,7 @@ public protocol PumpManager: DeviceManager {
     
     /// The most-recent status
     var status: PumpManagerStatus { get }
-    
+
     /// Adds an observer of changes in PumpManagerStatus
     ///
     /// Observers are held by weak reference.
@@ -266,5 +250,4 @@ public extension PumpManager {
             completion()
         }
     }
-
 }
