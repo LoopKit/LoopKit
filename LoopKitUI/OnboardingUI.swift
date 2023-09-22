@@ -136,7 +136,7 @@ public protocol SupportProvider: AnyObject {
     var availableSupports: [SupportUI] { get }
 }
 
-public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, ServiceProvider, TherapySettingsProvider, SupportProvider {
+public protocol OnboardingProvider: NotificationAuthorizationProvider, HealthStoreAuthorizationProvider, BluetoothProvider, CGMManagerProvider, PumpManagerProvider, StatefulPluggableProvider, ServiceProvider, TherapySettingsProvider, SupportProvider {
     var allowDebugFeatures: Bool { get }   // NOTE: DEBUG FEATURES - DEBUG AND TEST ONLY
 }
 
@@ -171,7 +171,7 @@ public protocol OnboardingDelegate: AnyObject {
 
 public typealias OnboardingViewController = (UIViewController & CGMManagerOnboarding & PumpManagerOnboarding & ServiceOnboarding & CompletionNotifying)
 
-public protocol OnboardingUI: AnyObject {
+public protocol OnboardingUI: Pluggable {
     typealias RawState = [String: Any]
 
     /// Create a new onboarding.
@@ -181,9 +181,6 @@ public protocol OnboardingUI: AnyObject {
 
     /// Delegate to notify about onboarding changes.
     var onboardingDelegate: OnboardingDelegate? { get set }
-
-    /// The unique identifier of this type of onboarding.
-    var onboardingIdentifier: String { get }
 
     /// Initializes the onboarding with the previously-serialized state.
     ///
