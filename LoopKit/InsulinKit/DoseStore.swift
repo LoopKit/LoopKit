@@ -672,10 +672,11 @@ extension DoseStore {
 
      - parameter events: An array of new pump events. Pump events should have end times reflective of when delivery is actually expected to be finished, as doses that end prior to a reservoir reading are ignored when reservoir data is being used.
      - parameter lastReconciliation: The date that pump events were most recently reconciled against recorded pump history. Pump events are assumed to be reflective of delivery up until this point in time. If reservoir values are recorded after this time, they may be used to supplement event based delivery.
+     - parameter replacePendingEvents: If true, any existing pending events will be removed.
      - parameter completion: A closure called after the events are saved. The closure takes a single argument:
      - parameter error: An error object explaining why the events could not be saved.
      */
-    public func addPumpEvents(_ events: [NewPumpEvent], lastReconciliation: Date?, completion: @escaping (_ error: DoseStoreError?) -> Void) {
+    public func addPumpEvents(_ events: [NewPumpEvent], lastReconciliation: Date?, replacePendingEvents: Bool = true, completion: @escaping (_ error: DoseStoreError?) -> Void) {
         lastPumpEventsReconciliation = lastReconciliation
 
         guard events.count > 0 else {
@@ -694,14 +695,15 @@ extension DoseStore {
             var firstMutableDate: Date?
             var primeValueAdded = false
 
-            // Remove any stored mutable pumpEvents; any that are still valid should be included in events
-            do {
-                try self.purgePumpEventObjects(matching: NSPredicate(format: "mutable == YES"))
-            } catch let error {
-                completion(DoseStoreError(error: .coreDataError(error as NSError)))
-                return
+            if replacePendingEvents {
+                do {
+                    try self.purgePumpEventObjects(matching: NSPredicate(format: "mutable == YES"))
+                } catch let error {
+                    completion(DoseStoreError(error: .coreDataError(error as NSError)))
+                    return
+                }
             }
-            
+
             // Remove old doses
             self.purgePumpEventObjects(before: self.cacheStartDate, completion: { error in
                 if let error = error {
