@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -726,6 +726,9 @@
 		B4D4C20D25F95A8700DA809D /* DisplayGlucosePreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D4C20C25F95A8700DA809D /* DisplayGlucosePreference.swift */; };
 		C109240F286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */; };
 		C1092410286A4ADB00FAD2B8 /* AutomaticDosingStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C109240E286A4AD500FAD2B8 /* AutomaticDosingStrategy.swift */; };
+		C13ACA0C2AC077F000F05D08 /* LoopAlgorithmInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13ACA092AC077F000F05D08 /* LoopAlgorithmInput.swift */; };
+		C13ACA0D2AC077F000F05D08 /* LoopAlgorithmSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13ACA0A2AC077F000F05D08 /* LoopAlgorithmSettings.swift */; };
+		C13ACA0E2AC077F000F05D08 /* LoopPredictionOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13ACA0B2AC077F000F05D08 /* LoopPredictionOutput.swift */; };
 		C140DFFF260276BF000A4FF7 /* ManualBolusRecommendation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C140DFFE260276BF000A4FF7 /* ManualBolusRecommendation.swift */; };
 		C140E0522602908A000A4FF7 /* SettingsPresentationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C140E0512602908A000A4FF7 /* SettingsPresentationMode.swift */; };
 		C1475B33264C30800040C7B1 /* LoopKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BA7154201E484D0058961E /* LoopKitUI.framework */; };
@@ -1717,6 +1720,9 @@
 		C13493B6297E498700D87305 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C13493B7297E498700D87305 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C1394BA6297E49630042F1A9 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C13ACA092AC077F000F05D08 /* LoopAlgorithmInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopAlgorithmInput.swift; sourceTree = "<group>"; };
+		C13ACA0A2AC077F000F05D08 /* LoopAlgorithmSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopAlgorithmSettings.swift; sourceTree = "<group>"; };
+		C13ACA0B2AC077F000F05D08 /* LoopPredictionOutput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoopPredictionOutput.swift; sourceTree = "<group>"; };
 		C13E6D291EEB1CB9006F5880 /* ice_slow_absorption.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ice_slow_absorption.json; sourceTree = "<group>"; };
 		C13F89C4297E495B00C71398 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C140DFFE260276BF000A4FF7 /* ManualBolusRecommendation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualBolusRecommendation.swift; sourceTree = "<group>"; };
@@ -2644,7 +2650,6 @@
 				89AE222A228BC56A00BDFD85 /* WeakSet.swift */,
 				C1814B8B226371DF008D2D8E /* WeakSynchronizedDelegate.swift */,
 				43CACE0D2247F89100F90AF5 /* WeakSynchronizedSet.swift */,
-				C16BC0B42A5FA9D200BDC713 /* DoseMath.swift */,
 				B4A2ABEE2AAB5160007E3EC1 /* Pluggable.swift */,
 			);
 			path = LoopKit;
@@ -3281,9 +3286,13 @@
 		C1D476B52A8ED3E8002C1C87 /* LoopAlgorithm */ = {
 			isa = PBXGroup;
 			children = (
-				C1D476B62A8ED3E8002C1C87 /* LoopAlgorithm.swift */,
+				C16BC0B42A5FA9D200BDC713 /* DoseMath.swift */,
 				C1D476B72A8ED3E8002C1C87 /* GlucosePredictionAlgorithm.swift */,
+				C1D476B62A8ED3E8002C1C87 /* LoopAlgorithm.swift */,
+				C13ACA092AC077F000F05D08 /* LoopAlgorithmInput.swift */,
+				C13ACA0A2AC077F000F05D08 /* LoopAlgorithmSettings.swift */,
 				C1D476B82A8ED3E8002C1C87 /* LoopPredictionInput.swift */,
+				C13ACA0B2AC077F000F05D08 /* LoopPredictionOutput.swift */,
 			);
 			path = LoopAlgorithm;
 			sourceTree = "<group>";
@@ -4342,6 +4351,7 @@
 				4322B790202FA2B30002837D /* InsulinValue.swift in Sources */,
 				4322B78C202FA2B30002837D /* HKQuantitySample+InsulinKit.swift in Sources */,
 				C187339229B9486200519CDF /* MutableCollection.swift in Sources */,
+				C13ACA0D2AC077F000F05D08 /* LoopAlgorithmSettings.swift in Sources */,
 				C19E776C2A61FD8A003F06C5 /* StandardRetrospectiveCorrection.swift in Sources */,
 				89AE2226228BC54C00BDFD85 /* TemporaryScheduleOverridePreset.swift in Sources */,
 				4322B78F202FA2B30002837D /* InsulinModel.swift in Sources */,
@@ -4354,6 +4364,7 @@
 				C17F39D023CE34B100FA1113 /* StoredDeviceLogEntry.swift in Sources */,
 				43B17C89208EEC0B00AC27E9 /* HealthStoreUnitCache.swift in Sources */,
 				A912BE29245B9CD500CBE199 /* SettingsObject+CoreDataClass.swift in Sources */,
+				C13ACA0C2AC077F000F05D08 /* LoopAlgorithmInput.swift in Sources */,
 				89AE222E228BC68000BDFD85 /* DoseProgressReporter.swift in Sources */,
 				1DD9CE9926B8CC2A008B4A46 /* HKDevice+Encodable.swift in Sources */,
 				4322B775202FA2790002837D /* CarbStatus.swift in Sources */,
@@ -4385,6 +4396,7 @@
 				43D8FDFF1C7290350073BE78 /* Date.swift in Sources */,
 				C191D26325B3815000C26C0B /* AutomaticDoseRecommendation.swift in Sources */,
 				C187339429B9486200519CDF /* DateFormatter.swift in Sources */,
+				C13ACA0E2AC077F000F05D08 /* LoopPredictionOutput.swift in Sources */,
 				A919889C2354E5EB00B75EEE /* SettingsStore.swift in Sources */,
 				C187338A29B9486200519CDF /* Collection.swift in Sources */,
 				B42A7472235885B600247B03 /* LoopNotificationUserInfoKey.swift in Sources */,
