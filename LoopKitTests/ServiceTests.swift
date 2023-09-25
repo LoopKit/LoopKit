@@ -36,7 +36,7 @@ fileprivate class TestError: Error {}
 
 fileprivate class TestService: Service {
 
-    static var pluginIdentifier: String { return "TestService" }
+    var pluginIdentifier: String { return "TestService" }
 
     static var localizedTitle: String { return "Test Service" }
 

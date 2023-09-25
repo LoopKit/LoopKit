@@ -40,7 +40,9 @@ public enum MockPumpManagerError: LocalizedError {
 }
 
 public final class MockPumpManager: TestingPumpManager {
-    public static let pluginIdentifier = "MockPumpManager"
+    public static let managerIdentifier = "MockPumpManager"
+    
+    public var pluginIdentifier: String { Self.managerIdentifier }
     
     public static let localizedTitle = "Pump Simulator"
     
@@ -65,7 +67,7 @@ public final class MockPumpManager: TestingPumpManager {
     }
 
     private static let device = HKDevice(
-        name: MockPumpManager.pluginIdentifier,
+        name: MockPumpManager.managerIdentifier,
         manufacturer: nil,
         model: nil,
         hardwareVersion: nil,
