@@ -12,7 +12,9 @@ import LoopKitUI
 import SwiftUI
 
 public class MockSupport: SupportUI {
-    public static let pluginIdentifier = "MockSupport"
+    public static let supportIdentifier = "MockSupport"
+    
+    public var pluginIdentifier: String { Self.supportIdentifier }
     
     var versionUpdate: VersionUpdate?
     var alertIssuer: AlertIssuer? {
@@ -81,7 +83,7 @@ extension MockSupport {
             return
         }
         
-        let alertIdentifier = Alert.Identifier(managerIdentifier: MockSupport.pluginIdentifier, alertIdentifier: versionUpdate.rawValue)
+        let alertIdentifier = Alert.Identifier(managerIdentifier: MockSupport.supportIdentifier, alertIdentifier: versionUpdate.rawValue)
         let alertContent: LoopKit.Alert.Content
         if firstAlert {
             alertContent = Alert.Content(title: versionUpdate.localizedDescription,
