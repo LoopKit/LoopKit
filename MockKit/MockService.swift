@@ -12,7 +12,7 @@ import LoopKit
 
 public final class MockService: Service {
     public static let serviceIdentifier = "MockService"
-
+    
     public var pluginIdentifier: String { Self.serviceIdentifier }
     
     public static let localizedTitle = "Simulator"

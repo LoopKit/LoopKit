@@ -13,9 +13,9 @@ import SwiftUI
 
 public class MockSupport: SupportUI {
     public static let supportIdentifier = "MockSupport"
-
+    
     public var pluginIdentifier: String { Self.supportIdentifier }
-
+    
     var versionUpdate: VersionUpdate?
     var alertIssuer: AlertIssuer? {
         return self.delegate
