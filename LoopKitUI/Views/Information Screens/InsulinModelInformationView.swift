@@ -55,7 +55,8 @@ public struct InsulinModelInformationView: View {
     
     private var bulletCircle: some View {
         Image(systemName: "circle.fill")
-        .resizable()
-        .frame(width: 10, height: 10)
+            .resizable()
+            .foregroundColor(.accentColor.opacity(0.5))
+            .frame(width: 8, height: 8)
     }
 }
