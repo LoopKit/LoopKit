@@ -102,7 +102,15 @@ public protocol RemoteDataService: Service {
      - Parameter completion: The completion function to call with any success or failure.
      */
     func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
-    
+
+    /**
+     Upload cgm event data to the remote data service.
+
+     - Parameter stored: The stored alert data to upload.
+     - Parameter completion: The completion function to call with any success or failure.
+     */
+    func uploadCgmEventData(_ stored: [PersistedCgmEvent], completion: @escaping (_ result: Result<Bool, Error>) -> Void)
+
     /**
      Handle a push notification
      - Parameter notification: The push notification dictionary

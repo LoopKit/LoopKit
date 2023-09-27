@@ -116,7 +116,6 @@ extension MockService: LoggingService {
 }
 
 extension MockService: RemoteDataService {
-
     public func uploadTemporaryOverrideData(updated: [TemporaryScheduleOverride], deleted: [TemporaryScheduleOverride], completion: @escaping (Result<Bool, Error>) -> Void) {
         if remoteData {
             record("[RemoteDataService] Upload temporary override data (updated: \(updated.count), deleted: \(deleted.count))")
@@ -171,6 +170,13 @@ extension MockService: RemoteDataService {
     public func uploadSettingsData(_ stored: [StoredSettings], completion: @escaping (Result<Bool, Error>) -> Void) {
         if remoteData {
             record("[RemoteDataService] Upload settings data (stored: \(stored.count))")
+        }
+        completion(.success(false))
+    }
+
+    public func uploadCgmEventData(_ stored: [LoopKit.PersistedCgmEvent], completion: @escaping (Result<Bool, Error>) -> Void) {
+        if remoteData {
+            record("[RemoteDataService] Upload cgm event data (stored: \(stored.count))")
         }
         completion(.success(false))
     }

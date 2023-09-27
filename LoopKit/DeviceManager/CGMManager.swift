@@ -80,6 +80,13 @@ public protocol CGMManagerDelegate: DeviceManagerDelegate, CGMManagerStatusObser
     ///   - result: The result of the update
     func cgmManager(_ manager: CGMManager, hasNew readingResult: CGMReadingResult) -> Void
 
+    /// Informs the delegate that the device has reported a new event
+    ///
+    /// - Parameters:
+    ///   - manager: The manager instance
+    ///   - event: The new event
+    func cgmManager(_ manager: CGMManager, hasNew events: [PersistedCgmEvent]) -> Void
+
     /// Informs the delegate that the manager is deactivating and should be deleted
     ///
     /// - Parameter manager: The manager instance
