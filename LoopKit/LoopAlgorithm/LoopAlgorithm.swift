@@ -86,7 +86,7 @@ public actor LoopAlgorithm {
         if let doseStart = input.doses.first?.startDate {
             assert(!input.settings.basal.isEmpty, "Missing basal history input.")
             let basalStart = input.settings.basal.first!.startDate
-            precondition(basalStart <= doseStart, "Basal history must cover historic dose range. First dose date: \(doseStart) > \(basalStart)")
+            precondition(basalStart <= doseStart, "Basal history must cover historic dose range. First dose date: \(doseStart) < \(basalStart)")
         }
 
         // Overlay basal history on basal doses, splitting doses to get amount delivered relative to basal
