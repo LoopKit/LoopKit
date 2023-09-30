@@ -13,7 +13,7 @@ project_directory: &project_directory ~/project
 jobs:
   test:
     working_directory: *project_directory
-    resource_class: macos.x86.medium.gen2
+    resource_class: macos.m1.medium.gen1
     macos:
       xcode: 15.0.0
     steps:
