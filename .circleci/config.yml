@@ -25,11 +25,11 @@ jobs:
       - run:
           name: Build LoopKit Package
           command: |
-            set -o pipefail && xcodebuild build -scheme LoopKit -sdk iphonesimulator17.0 -destination "OS=17.0,name=iPhone 14,OS=16.4" | xcpretty
+            set -o pipefail && xcodebuild build -scheme LoopKit -destination "name=iPhone 14,OS=16.4" | xcpretty
       - run:
           name: Build LoopKitUI Package
           command: |
-            set -o pipefail && xcodebuild build -scheme LoopKitUI -sdk iphonesimulator17.0 -destination "OS=17.0,name=iPhone 14,OS=16.4" | xcpretty
+            set -o pipefail && xcodebuild build -scheme LoopKitUI -destination "name=iPhone 14,OS=16.4" | xcpretty
 #
 # Workflows
 #
