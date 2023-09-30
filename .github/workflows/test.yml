@@ -2,9 +2,9 @@ name: CICD Demo
 on:
   push:
 jobs:
- build-and-test:
-  runs-on: macos-latest
- steps:
+  build-and-test:
+    runs-on: macos-latest
+  steps:
   - uses: actions/checkout@v3
   - name: Select Xcode
     run: "sudo xcode-select --switch /Applications/Xcode_15.0.app/Contents/Developer"
