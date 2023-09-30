@@ -3,10 +3,12 @@ on:
   push:
 jobs:
   build-and-test:
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
     - name: Checkout target repo
       uses: actions/checkout@v3
+    - name: Show available xcode versions
+      run: "ls -al /Applications/Xcode*"
     - name: Select Xcode
       run: "sudo xcode-select --switch /Applications/Xcode_15.0.app/Contents/Developer"
     - name: Run Tests
