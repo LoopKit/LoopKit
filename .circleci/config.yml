@@ -1,33 +1,35 @@
 version: 2.1
 
 #
-# Variables
-#
-
-project_directory: &project_directory ~/project
-
-#
 # Jobs
 #
 
 jobs:
   test:
-    working_directory: *project_directory
-    resource_class: macos.x86.medium.gen2
     macos:
-      xcode: 14.3.1
+      xcode: 15.0.0
     steps:
       - checkout
       - run:
           name: Test
           command: |
-            set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 14' test | xcpretty
-      - run:
-          name: Build Swift Package
-          command: |
-            swift build -v -Xswiftc "-sdk" -Xswiftc "`xcrun --sdk iphonesimulator --show-sdk-path`" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios15.0-simulator" | xcpretty
+            set -o pipefail && xcodebuild -project LoopKit.xcodeproj -scheme Shared build -destination 'name=iPhone 14,OS=16.4' test | xcpretty
       - store_test_results:
           path: test_output
+  package:
+    macos:
+      xcode: 15.0.0
+    steps:
+      - checkout
+      - run: rm -rf LoopKit.xcodeproj
+      - run:
+          name: Build LoopKit Package
+          command: |
+            set -o pipefail && xcodebuild build -scheme LoopKit -destination "name=iPhone 14,OS=16.4" | xcpretty
+      - run:
+          name: Build LoopKitUI Package
+          command: |
+            set -o pipefail && xcodebuild build -scheme LoopKitUI -destination "name=iPhone 14,OS=16.4" | xcpretty
 #
 # Workflows
 #
@@ -37,3 +39,4 @@ workflows:
   build_and_test:
     jobs:
       - test
+      - package
