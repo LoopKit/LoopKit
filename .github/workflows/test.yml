@@ -1,4 +1,4 @@
-name: CICD Demo
+name: Test LoopKit Build
 on:
   push:
 jobs:
