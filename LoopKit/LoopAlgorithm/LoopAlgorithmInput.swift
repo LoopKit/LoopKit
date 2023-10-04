@@ -18,4 +18,5 @@ public struct LoopAlgorithmInput {
     public var predictionInput: LoopPredictionInput
     public var predictionDate: Date
     public var doseRecommendationType: DoseRecommendationType
+    public var insulinType: InsulinType
 }

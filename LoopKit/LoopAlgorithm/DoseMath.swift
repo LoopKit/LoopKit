@@ -86,20 +86,10 @@ extension InsulinCorrection {
     /// - Parameters:
     ///   - pendingInsulin: The number of units expected to be delivered, but not yet reflected in the correction
     ///   - maxBolus: The maximum allowable bolus value in units
-    ///   - volumeRounder: Method to round computed dose to deliverable volume
     /// - Returns: A bolus recommendation
-    fileprivate func asManualBolus(
-        pendingInsulin: Double,
-        maxBolus: Double,
-        volumeRounder: ((Double) -> Double)?
-    ) -> ManualBolusRecommendation {
-        var units = self.units - pendingInsulin
-        units = Swift.min(maxBolus, Swift.max(0, units))
-        units = volumeRounder?(units) ?? units
-
+    fileprivate func asManualBolus(maxBolus: Double) -> ManualBolusRecommendation {
         return ManualBolusRecommendation(
-            amount: units,
-            pendingInsulin: pendingInsulin,
+            amount: Swift.min(maxBolus, Swift.max(0, units)),
             notice: bolusRecommendationNotice
         )
     }
@@ -215,7 +205,7 @@ private func targetGlucoseValue(percentEffectDuration: Double, minValue: Double,
 
 
 extension Collection where Element: GlucoseValue {
-
+    @available(*, deprecated, message: "Being replaced by method using timelines for correction range, suspend threshold, and sensitivity")
     /// For a collection of glucose prediction, determine the least amount of insulin delivered at
     /// `date` to correct the predicted glucose to the middle of `correctionRange` at the time of prediction.
     ///
@@ -234,12 +224,14 @@ extension Collection where Element: GlucoseValue {
         model: InsulinModel
     ) -> InsulinCorrection? {
         let effectDuration = model.effectDuration
-        let timeline = [AbsoluteScheduleValue(startDate: date, endDate: date.addingTimeInterval(effectDuration), value: sensitivity)]
+        let endDate = date.addingTimeInterval(effectDuration)
+        let sensitivityTimeline = [AbsoluteScheduleValue(startDate: date, endDate: endDate, value: sensitivity)]
+        let correctionRangeTimeline = correctionRange.quantityBetween(start: date, end: endDate)
         return insulinCorrection(
-            to: correctionRange,
+            to: correctionRangeTimeline,
             at: date,
             suspendThreshold: suspendThreshold,
-            insulinSensitivityTimeline: timeline,
+            insulinSensitivity: sensitivityTimeline,
             model: model)
     }
 
@@ -247,17 +239,17 @@ extension Collection where Element: GlucoseValue {
     /// `date` to correct the predicted glucose to the middle of `correctionRange` at the time of prediction.
     ///
     /// - Parameters:
-    ///   - correctionRange: The schedule of glucose values used for correction
+    ///   - correctionRange: The timeline of glucose ranges used for correction
     ///   - date: The date the insulin correction is delivered
     ///   - suspendThreshold: The glucose value below which only suspension is returned
     ///   - insulinSensitivityTimeline: The timeline of expected insulin sensitivity over the period of dose absorption
     ///   - model: The insulin effect model
     /// - Returns: A correction value in units, or nil if no correction needed
     private func insulinCorrection(
-        to correctionRange: GlucoseRangeSchedule,
+        to correctionRange: GlucoseRangeTimeline,
         at date: Date,
         suspendThreshold: HKQuantity,
-        insulinSensitivityTimeline: [AbsoluteScheduleValue<HKQuantity>],
+        insulinSensitivity: [AbsoluteScheduleValue<HKQuantity>],
         model: InsulinModel
     ) -> InsulinCorrection? {
         var minGlucose: GlucoseValue?
@@ -269,7 +261,8 @@ extension Collection where Element: GlucoseValue {
         // Only consider predictions within the model's effect duration
         let validDateRange = DateInterval(start: date, duration: model.effectDuration)
 
-        let unit = correctionRange.unit
+        let unit = HKUnit.milligramsPerDeciliter
+
         let suspendThresholdValue = suspendThreshold.doubleValue(for: unit)
 
         // For each prediction above target, determine the amount of insulin necessary to correct glucose based on the modeled effectiveness of the insulin at that time
@@ -277,6 +270,7 @@ extension Collection where Element: GlucoseValue {
             guard validDateRange.contains(prediction.startDate) else {
                 continue
             }
+
 
             // If any predicted value is below the suspend threshold, return immediately
             guard prediction.quantity >= suspendThreshold else {
@@ -289,17 +283,21 @@ extension Collection where Element: GlucoseValue {
             let predictedGlucoseValue = prediction.quantity.doubleValue(for: unit)
             let time = prediction.startDate.timeIntervalSince(date)
 
+            guard let correctionRangeItem = correctionRange.closestPrior(to: prediction.startDate) else {
+                preconditionFailure("Correction range must cover date: \(prediction.startDate)")
+            }
+
             // Compute the target value as a function of time since the dose started
             let targetValue = targetGlucoseValue(
                 percentEffectDuration: time / model.effectDuration,
                 minValue: suspendThresholdValue,
-                maxValue: correctionRange.quantityRange(at: prediction.startDate).averageValue(for: unit)
+                maxValue: correctionRangeItem.value.averageValue(for: unit)
             )
 
             // Compute the dose required to bring this prediction to target:
             // dose = (Glucose Δ) / (% effect × sensitivity)
 
-            let isfSegments = insulinSensitivityTimeline.filterDateRange(date, prediction.startDate)
+            let isfSegments = insulinSensitivity.filterDateRange(date, prediction.startDate)
 
             let effectedSensitivity = isfSegments.reduce(0) { partialResult, segment in
                 let start = Swift.max(date, segment.startDate).timeIntervalSince(date)
@@ -322,6 +320,8 @@ extension Collection where Element: GlucoseValue {
                 continue
             }
 
+            print("CorrectionUnits at \(prediction.startDate) = \(correctionUnits)")
+
             // Update the correction only if we've found a new minimum
             guard minCorrectionUnits == nil || correctionUnits < minCorrectionUnits! else {
                 continue
@@ -336,8 +336,8 @@ extension Collection where Element: GlucoseValue {
         }
 
         // Choose either the minimum glucose or eventual glucose as the correction delta
-        let minGlucoseTargets = correctionRange.quantityRange(at: minGlucose.startDate)
-        let eventualGlucoseTargets = correctionRange.quantityRange(at: eventualGlucose.startDate)
+        let minGlucoseTargets = correctionRange.closestPrior(to: minGlucose.startDate)!.value
+        let eventualGlucoseTargets = correctionRange.closestPrior(to: eventualGlucose.startDate)!.value
 
         // Treat the mininum glucose when both are below range
         if minGlucose.quantity < minGlucoseTargets.lowerBound &&
@@ -543,9 +543,7 @@ extension Collection where Element: GlucoseValue {
         suspendThreshold: HKQuantity?,
         sensitivity: InsulinSensitivitySchedule,
         model: InsulinModel,
-        pendingInsulin: Double,
-        maxBolus: Double,
-        volumeRounder: ((Double) -> Double)? = nil
+        maxBolus: Double
     ) -> ManualBolusRecommendation {
         guard let correction = self.insulinCorrection(
             to: correctionRange,
@@ -554,14 +552,10 @@ extension Collection where Element: GlucoseValue {
             sensitivity: sensitivity.quantity(at: date),
             model: model
         ) else {
-            return ManualBolusRecommendation(amount: 0, pendingInsulin: pendingInsulin)
+            return ManualBolusRecommendation(amount: 0)
         }
 
-        var bolus = correction.asManualBolus(
-            pendingInsulin: pendingInsulin,
-            maxBolus: maxBolus,
-            volumeRounder: volumeRounder
-        )
+        var bolus = correction.asManualBolus(maxBolus: maxBolus)
 
         // Handle the "current BG below target" notice here
         // TODO: Don't assume in the future that the first item in the array is current BG
@@ -573,4 +567,47 @@ extension Collection where Element: GlucoseValue {
 
         return bolus
     }
+
+    /// Recommends a bolus to conform a glucose prediction timeline to a correction range
+    ///
+    /// - Parameters:
+    ///   - correctionRange: The timeline of correction ranges
+    ///   - date: The date at which the bolus would apply, defaults to now
+    ///   - suspendThreshold: A glucose value causing a recommendation of no insulin if any prediction falls below
+    ///   - insulinSensitivityTimeline: The timeline of insulin sensitivities
+    ///   - model: The insulin absorption model to be used for the recommended dose
+    ///   - pendingInsulin: The number of units expected to be delivered, but not yet reflected in the correction
+    ///   - maxBolus: The maximum bolus to return
+    /// - Returns: A bolus recommendation
+    public func recommendedManualBolus(
+        to correctionRangeTimeline: GlucoseRangeTimeline,
+        at date: Date = Date(),
+        suspendThreshold: HKQuantity,
+        insulinSensitivity: [AbsoluteScheduleValue<HKQuantity>],
+        model: InsulinModel,
+        maxBolus: Double
+    ) -> ManualBolusRecommendation {
+        guard let correction = self.insulinCorrection(
+            to: correctionRangeTimeline,
+            at: date,
+            suspendThreshold: suspendThreshold,
+            insulinSensitivity: insulinSensitivity,
+            model: model
+        ) else {
+            return ManualBolusRecommendation(amount: 0)
+        }
+
+        var bolus = correction.asManualBolus(maxBolus: maxBolus)
+
+        // Handle the "current BG below target" notice here
+        // TODO: Don't assume in the future that the first item in the array is current BG
+        if case .predictedGlucoseBelowTarget? = bolus.notice,
+           let first = first, first.quantity < correctionRangeTimeline.closestPrior(to: first.startDate)!.value.lowerBound
+        {
+            bolus.notice = .currentGlucoseBelowTarget(glucose: first)
+        }
+
+        return bolus
+    }
+
 }

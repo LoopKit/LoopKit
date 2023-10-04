@@ -10,37 +10,37 @@ import Foundation
 import HealthKit
 
 public struct LoopAlgorithmSettings {
-    // Algorithm input time range: t-16h to t
+    // Expected time range coverage: t-16h to t
     public var basal: [AbsoluteScheduleValue<Double>]
 
-    // Algorithm input time range: t-16h to t (eventually with mid-absorption isf changes, it will be t-10h to h)
+    // Expected time range coverage: t-16h to t (eventually with mid-absorption isf changes, it will be t-10h to h)
     public var sensitivity: [AbsoluteScheduleValue<HKQuantity>]
 
-    // Algorithm input time range: t-10h to t
+    // Expected time range coverage: t-10h to t
     public var carbRatio: [AbsoluteScheduleValue<Double>]
 
-    // Algorithm input time range: t to t+6
-    public var target: [AbsoluteScheduleValue<ClosedRange<HKQuantity>>]
+    // Expected time range coverage: t to t+6
+    public var target: GlucoseRangeTimeline
 
     public var delta: TimeInterval
     public var insulinActivityDuration: TimeInterval
     public var algorithmEffectsOptions: AlgorithmEffectsOptions
     public var maximumBasalRatePerHour: Double? = nil
-    public var maximumBolus: Double? = nil
-    public var suspendThreshold: GlucoseThreshold? = nil
+    public var maximumBolus: Double
+    public var suspendThreshold: GlucoseThreshold
     public var useIntegralRetrospectiveCorrection: Bool = false
 
     public init(
         basal: [AbsoluteScheduleValue<Double>],
         sensitivity: [AbsoluteScheduleValue<HKQuantity>],
         carbRatio: [AbsoluteScheduleValue<Double>],
-        target: [AbsoluteScheduleValue<ClosedRange<HKQuantity>>],
+        target: GlucoseRangeTimeline,
         delta: TimeInterval = GlucoseMath.defaultDelta,
         insulinActivityDuration: TimeInterval = InsulinMath.defaultInsulinActivityDuration,
         algorithmEffectsOptions: AlgorithmEffectsOptions = .all,
         maximumBasalRatePerHour: Double? = nil,
-        maximumBolus: Double? = nil,
-        suspendThreshold: GlucoseThreshold? = nil,
+        maximumBolus: Double,
+        suspendThreshold: GlucoseThreshold,
         useIntegralRetrospectiveCorrection: Bool = false)
     {
         self.basal = basal
@@ -76,8 +76,8 @@ extension LoopAlgorithmSettings: Codable {
         self.insulinActivityDuration = InsulinMath.defaultInsulinActivityDuration
         self.algorithmEffectsOptions = .all
         self.maximumBasalRatePerHour = try container.decodeIfPresent(Double.self, forKey: .maximumBasalRatePerHour)
-        self.maximumBolus = try container.decodeIfPresent(Double.self, forKey: .maximumBolus)
-        self.suspendThreshold = try container.decodeIfPresent(GlucoseThreshold.self, forKey: .suspendThreshold)
+        self.maximumBolus = try container.decode(Double.self, forKey: .maximumBolus)
+        self.suspendThreshold = try container.decode(GlucoseThreshold.self, forKey: .suspendThreshold)
         self.useIntegralRetrospectiveCorrection = try container.decodeIfPresent(Bool.self, forKey: .useIntegralRetrospectiveCorrection) ?? false
     }
 
@@ -124,6 +124,9 @@ extension LoopAlgorithmSettings {
             basal: basal,
             sensitivity: sensitivity,
             carbRatio: carbRatio,
-            target: target)
+            target: target,
+            maximumBolus: maximumBolus,
+            suspendThreshold: suspendThreshold
+        )
     }
 }

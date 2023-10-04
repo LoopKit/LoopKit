@@ -244,8 +244,7 @@ class DosingDecisionStorePersistenceTests: PersistenceControllerTestCase, Dosing
               "startDate" : "2020-05-14T23:03:15Z"
             }
           }
-        },
-        "pendingInsulin" : 0.75
+        }
       }
     },
     "manualBolusRequested" : 0.80000000000000004,
@@ -854,8 +853,7 @@ class StoredDosingDecisionCodableTests: XCTestCase {
             "startDate" : "2020-05-14T23:03:15Z"
           }
         }
-      },
-      "pendingInsulin" : 0.75
+      }
     }
   },
   "manualBolusRequested" : 0.80000000000000004,
@@ -1035,7 +1033,7 @@ extension ManualBolusRecommendationWithDate: Equatable {
 
 extension ManualBolusRecommendation: Equatable {
     public static func == (lhs: ManualBolusRecommendation, rhs: ManualBolusRecommendation) -> Bool {
-        return lhs.amount == rhs.amount && lhs.pendingInsulin == rhs.pendingInsulin && lhs.notice == rhs.notice
+        return lhs.amount == rhs.amount && lhs.notice == rhs.notice
     }
 }
 
@@ -1151,7 +1149,6 @@ fileprivate extension StoredDosingDecision {
                                                               duration: .minutes(30))
         let automaticDoseRecommendation = AutomaticDoseRecommendation(basalAdjustment: tempBasalRecommendation, bolusUnits: 1.25)
         let manualBolusRecommendation = ManualBolusRecommendationWithDate(recommendation: ManualBolusRecommendation(amount: 1.2,
-                                                                                                                    pendingInsulin: 0.75,
                                                                                                                     notice: .predictedGlucoseBelowTarget(minGlucose: PredictedGlucoseValue(startDate: dateFormatter.date(from: "2020-05-14T23:03:15Z")!,
                                                                                                                                                                                            quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: 75.5)))),
                                                                           date: dateFormatter.date(from: "2020-05-14T22:38:16Z")!)

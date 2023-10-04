@@ -57,18 +57,30 @@ public actor LoopAlgorithm {
     public typealias InputType = LoopPredictionInput
     public typealias OutputType = LoopPrediction
 
-//    public static func generateRecommendation(input: LoopAlgorithmInput) throws -> DoseRecommendation {
-//        let prediction = try generatePrediction(input: input.predictionInput, startDate: input.predictionDate)
-//
-//        switch input.doseRecommendationType {
-//        case .manualBolus:
-//            prediction.glucose.recommendedManualBolus(to: <#T##GlucoseRangeSchedule#>, suspendThreshold: <#T##HKQuantity?#>, sensitivity: <#T##InsulinSensitivitySchedule#>, model: <#T##InsulinModel#>, pendingInsulin: <#T##Double#>, maxBolus: <#T##Double#>)
-//        case .automaticBolus:
-//            <#code#>
-//        case .tempBasal:
-//            <#code#>
-//        }
-//    }
+
+    static let insulinModelProvider = PresetInsulinModelProvider(defaultRapidActingModel: nil)
+
+    public static func generateRecommendation(input: LoopAlgorithmInput) throws -> DoseRecommendation {
+        let prediction = try generatePrediction(input: input.predictionInput, startDate: input.predictionDate)
+
+        let insulinModel = insulinModelProvider.model(for: input.insulinType)
+
+        switch input.doseRecommendationType {
+        case .manualBolus:
+            let recommendation = prediction.glucose.recommendedManualBolus(
+                to: input.predictionInput.settings.target,
+                suspendThreshold: input.predictionInput.settings.suspendThreshold.quantity,
+                insulinSensitivity: input.predictionInput.settings.sensitivity,
+                model: insulinModel,
+                maxBolus: input.predictionInput.settings.maximumBolus
+            )
+        case .automaticBolus:
+            print("todo")
+        case .tempBasal:
+            print("todo")
+        }
+        return DoseRecommendation(basalAdjustment: nil)
+    }
 
     // Generates a forecast predicting glucose.
     public static func generatePrediction(input: LoopPredictionInput, startDate: Date? = nil) throws -> LoopPrediction {
@@ -78,8 +90,6 @@ public actor LoopAlgorithm {
         }
 
         let start = startDate ?? latestGlucose.startDate
-
-        let insulinModelProvider = PresetInsulinModelProvider(defaultRapidActingModel: nil)
 
         let settings = input.settings
 
