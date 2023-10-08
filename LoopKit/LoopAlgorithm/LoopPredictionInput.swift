@@ -9,7 +9,7 @@
 import Foundation
 import HealthKit
 
-public struct LoopPredictionInput: GlucosePredictionInput {
+public struct LoopPredictionInput {
     // Algorithm input time range: t-10h to t
     public var glucoseHistory: [StoredGlucoseSample]
 

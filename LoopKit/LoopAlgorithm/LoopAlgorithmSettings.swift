@@ -13,10 +13,10 @@ public struct LoopAlgorithmSettings {
     // Expected time range coverage: t-16h to t
     public var basal: [AbsoluteScheduleValue<Double>]
 
-    // Expected time range coverage: t-16h to t (eventually with mid-absorption isf changes, it will be t-10h to h)
+    // Expected time range coverage: t-16h to t (eventually with mid-absorption isf changes, it will be t-10h to t+6h)
     public var sensitivity: [AbsoluteScheduleValue<HKQuantity>]
 
-    // Expected time range coverage: t-10h to t
+    // Expected time range coverage: t-10h to t+6h
     public var carbRatio: [AbsoluteScheduleValue<Double>]
 
     // Expected time range coverage: t to t+6

@@ -23,18 +23,12 @@ public protocol RetrospectiveCorrection: CustomDebugStringConvertible {
     ///   - startingAt: Initial glucose value
     ///   - retrospectiveGlucoseDiscrepanciesSummed: Timeline of past discepancies
     ///   - recencyInterval: how recent discrepancy data must be, otherwise effect will be cleared
-    ///   - insulinSensitivity: Insulin sensitivity at time of initial glucose value
-    ///   - basalRate: Basal rate at time of initial glucose value
-    ///   - correctionRange: Correction range at time of initial glucose value
     ///   - retrospectiveCorrectionGroupingInterval: Duration of discrepancy measurements
     /// - Returns: Glucose correction effects
     func computeEffect(
         startingAt startingGlucose: GlucoseValue,
         retrospectiveGlucoseDiscrepanciesSummed: [GlucoseChange]?,
         recencyInterval: TimeInterval,
-        insulinSensitivity: HKQuantity,
-        basalRate: Double,
-        correctionRange: ClosedRange<HKQuantity>,
         retrospectiveCorrectionGroupingInterval: TimeInterval
     ) -> [GlucoseEffect]
 }

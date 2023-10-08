@@ -37,7 +37,7 @@ public struct AlgorithmEffectsOptions: OptionSet {
     }
 }
 
-public struct LoopPrediction: GlucosePrediction {
+public struct LoopPrediction {
     public var glucose: [PredictedGlucoseValue]
     public var effects: LoopAlgorithmEffects
 }
@@ -57,30 +57,10 @@ public actor LoopAlgorithm {
     public typealias InputType = LoopPredictionInput
     public typealias OutputType = LoopPrediction
 
+    // Percentage of recommended dose to apply as bolus when using automatic bolus dosing strategy
+    static public let bolusPartialApplicationFactor = 0.4
 
     static let insulinModelProvider = PresetInsulinModelProvider(defaultRapidActingModel: nil)
-
-    public static func generateRecommendation(input: LoopAlgorithmInput) throws -> DoseRecommendation {
-        let prediction = try generatePrediction(input: input.predictionInput, startDate: input.predictionDate)
-
-        let insulinModel = insulinModelProvider.model(for: input.insulinType)
-
-        switch input.doseRecommendationType {
-        case .manualBolus:
-            let recommendation = prediction.glucose.recommendedManualBolus(
-                to: input.predictionInput.settings.target,
-                suspendThreshold: input.predictionInput.settings.suspendThreshold.quantity,
-                insulinSensitivity: input.predictionInput.settings.sensitivity,
-                model: insulinModel,
-                maxBolus: input.predictionInput.settings.maximumBolus
-            )
-        case .automaticBolus:
-            print("todo")
-        case .tempBasal:
-            print("todo")
-        }
-        return DoseRecommendation(basalAdjustment: nil)
-    }
 
     // Generates a forecast predicting glucose.
     public static func generatePrediction(input: LoopPredictionInput, startDate: Date? = nil) throws -> LoopPrediction {
@@ -135,20 +115,10 @@ public actor LoopAlgorithm {
             rc = StandardRetrospectiveCorrection(effectDuration: LoopMath.retrospectiveCorrectionEffectDuration)
         }
 
-        guard let curSensitivity = settings.sensitivity.closestPrior(to: start)?.value,
-              let curBasal = settings.basal.closestPrior(to: start)?.value,
-              let curTarget = settings.target.closestPrior(to: start)?.value else
-        {
-            throw AlgorithmError.incompleteSchedules
-        }
-
         let rcEffect = rc.computeEffect(
             startingAt: latestGlucose,
             retrospectiveGlucoseDiscrepanciesSummed: retrospectiveGlucoseDiscrepanciesSummed,
             recencyInterval: TimeInterval(minutes: 15),
-            insulinSensitivity: curSensitivity,
-            basalRate: curBasal,
-            correctionRange: curTarget,
             retrospectiveCorrectionGroupingInterval: LoopMath.retrospectiveCorrectionGroupingInterval
         )
 
@@ -195,6 +165,22 @@ public actor LoopAlgorithm {
             )
         )
     }
+
+    // Computes an amount of insulin to correct
+    public static func insulinCorrection(for input: LoopAlgorithmInput) throws -> InsulinCorrection {
+        let prediction = try generatePrediction(input: input.predictionInput, startDate: input.predictionDate)
+
+        let insulinModel = insulinModelProvider.model(for: input.insulinType)
+
+        return prediction.glucose.insulinCorrection(
+            to: input.predictionInput.settings.target,
+            at: input.predictionDate,
+            suspendThreshold: input.predictionInput.settings.suspendThreshold.quantity,
+            insulinSensitivity: input.predictionInput.settings.sensitivity,
+            model: insulinModel)
+    }
+
+
 }
 
 

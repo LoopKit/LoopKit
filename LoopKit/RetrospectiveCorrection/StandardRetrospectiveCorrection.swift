@@ -34,9 +34,6 @@ public class StandardRetrospectiveCorrection: RetrospectiveCorrection {
         startingAt startingGlucose: GlucoseValue,
         retrospectiveGlucoseDiscrepanciesSummed: [GlucoseChange]?,
         recencyInterval: TimeInterval,
-        insulinSensitivity: HKQuantity,
-        basalRate: Double,
-        correctionRange: ClosedRange<HKQuantity>,
         retrospectiveCorrectionGroupingInterval: TimeInterval
     ) -> [GlucoseEffect] {
         // Last discrepancy should be recent, otherwise clear the effect and return
