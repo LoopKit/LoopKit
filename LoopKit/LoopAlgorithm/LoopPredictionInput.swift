@@ -19,18 +19,38 @@ public struct LoopPredictionInput {
     // Algorithm input time range: t-10h to t
     public var carbEntries: [StoredCarbEntry]
 
-    public var settings: LoopAlgorithmSettings
+    // Expected time range coverage: t-16h to t
+    public var basal: [AbsoluteScheduleValue<Double>]
+
+    // Expected time range coverage: t-16h to t (eventually with mid-absorption isf changes, it will be t-10h to t)
+    public var sensitivity: [AbsoluteScheduleValue<HKQuantity>]
+
+    // Expected time range coverage: t-10h to t+6h
+    public var carbRatio: [AbsoluteScheduleValue<Double>]
+
+    public var algorithmEffectsOptions: AlgorithmEffectsOptions
+
+    public var useIntegralRetrospectiveCorrection: Bool = false
 
     public init(
         glucoseHistory: [StoredGlucoseSample],
         doses: [DoseEntry],
         carbEntries: [StoredCarbEntry],
-        settings: LoopAlgorithmSettings)
+        basal: [AbsoluteScheduleValue<Double>],
+        sensitivity: [AbsoluteScheduleValue<HKQuantity>],
+        carbRatio: [AbsoluteScheduleValue<Double>],
+        algorithmEffectsOptions: AlgorithmEffectsOptions,
+        useIntegralRetrospectiveCorrection: Bool
+    )
     {
         self.glucoseHistory = glucoseHistory
         self.doses = doses
         self.carbEntries = carbEntries
-        self.settings = settings
+        self.basal = basal
+        self.sensitivity = sensitivity
+        self.carbRatio = carbRatio
+        self.algorithmEffectsOptions = algorithmEffectsOptions
+        self.useIntegralRetrospectiveCorrection = useIntegralRetrospectiveCorrection
     }
 }
 
@@ -42,7 +62,16 @@ extension LoopPredictionInput: Codable {
         self.glucoseHistory = try container.decode([StoredGlucoseSample].self, forKey: .glucoseHistory)
         self.doses = try container.decode([DoseEntry].self, forKey: .doses)
         self.carbEntries = try container.decode([StoredCarbEntry].self, forKey: .carbEntries)
-        self.settings = try container.decode(LoopAlgorithmSettings.self, forKey: .settings)
+        self.basal = try container.decode([AbsoluteScheduleValue<Double>].self, forKey: .basal)
+        let sensitivityMgdl = try container.decode([AbsoluteScheduleValue<Double>].self, forKey: .sensitivity)
+        self.sensitivity = sensitivityMgdl.map { AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: $0.value))}
+        self.carbRatio = try container.decode([AbsoluteScheduleValue<Double>].self, forKey: .carbRatio)
+        if let algorithmEffectsOptionsRaw = try container.decodeIfPresent(AlgorithmEffectsOptions.RawValue.self, forKey: .algorithmEffectsOptions) {
+            self.algorithmEffectsOptions = AlgorithmEffectsOptions(rawValue: algorithmEffectsOptionsRaw)
+        } else {
+            self.algorithmEffectsOptions = .all
+        }
+        self.useIntegralRetrospectiveCorrection = try container.decodeIfPresent(Bool.self, forKey: .useIntegralRetrospectiveCorrection) ?? false
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -50,14 +79,27 @@ extension LoopPredictionInput: Codable {
         try container.encode(glucoseHistory, forKey: .glucoseHistory)
         try container.encode(doses, forKey: .doses)
         try container.encode(carbEntries, forKey: .carbEntries)
-        try container.encode(settings, forKey: .settings)
+        try container.encode(basal, forKey: .basal)
+        let sensitivityMgdl = sensitivity.map { AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: $0.value.doubleValue(for: .milligramsPerDeciliter)) }
+        try container.encode(sensitivityMgdl, forKey: .sensitivity)
+        try container.encode(carbRatio, forKey: .carbRatio)
+        if algorithmEffectsOptions != .all {
+            try container.encode(algorithmEffectsOptions.rawValue, forKey: .algorithmEffectsOptions)
+        }
+        if useIntegralRetrospectiveCorrection {
+            try container.encode(useIntegralRetrospectiveCorrection, forKey: .useIntegralRetrospectiveCorrection)
+        }
     }
 
     private enum CodingKeys: String, CodingKey {
         case glucoseHistory
         case doses
         case carbEntries
-        case settings
+        case basal
+        case sensitivity
+        case carbRatio
+        case algorithmEffectsOptions
+        case useIntegralRetrospectiveCorrection
     }
 }
 
@@ -77,7 +119,11 @@ extension LoopPredictionInput {
             carbEntries: carbEntries.map {
                 StoredCarbEntry(startDate: $0.startDate, quantity: $0.quantity, absorptionTime: $0.absorptionTime)
             },
-            settings: settings.simplifiedForFixture
+            basal: basal,
+            sensitivity: sensitivity,
+            carbRatio: carbRatio,
+            algorithmEffectsOptions: algorithmEffectsOptions,
+            useIntegralRetrospectiveCorrection: useIntegralRetrospectiveCorrection
         )
     }
 

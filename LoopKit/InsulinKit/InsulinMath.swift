@@ -11,6 +11,7 @@ import HealthKit
 
 public struct InsulinMath {
     public static var defaultInsulinActivityDuration: TimeInterval = TimeInterval(hours: 6) + TimeInterval(minutes: 10)
+    public static var longestInsulinActivityDuration: TimeInterval = TimeInterval(hours: 6) + TimeInterval(minutes: 10)
 }
 
 extension DoseEntry {
@@ -647,7 +648,6 @@ extension Collection where Element == DoseEntry {
     ///
     /// - Parameters:
     ///   - insulinModelProvider: A factory that can provide an insulin model given an insulin type
-    ///   - longestEffectDuration: The longest duration that a dose could be active.
     ///   - insulinSensitivityHistory: The timeline of glucose effect per unit of insulin
     ///   - start: The earliest date of effects to return
     ///   - end: The latest date of effects to return. If nil is passed, it will be calculated from the last sample end date plus the longestEffectDuration.
@@ -655,7 +655,6 @@ extension Collection where Element == DoseEntry {
     /// - Returns: An array of glucose effects for the duration of the doses
     public func glucoseEffects(
         insulinModelProvider: InsulinModelProvider,
-        longestEffectDuration: TimeInterval,
         insulinSensitivityHistory: [AbsoluteScheduleValue<HKQuantity>],
         from start: Date? = nil,
         to end: Date? = nil,
@@ -666,7 +665,7 @@ extension Collection where Element == DoseEntry {
             entry.netBasalUnits != 0
         })
 
-        guard let (start, end) = LoopMath.simulationDateRangeForSamples(activeEntries, from: start, to: end, duration: longestEffectDuration, delta: delta) else {
+        guard let (start, end) = LoopMath.simulationDateRangeForSamples(activeEntries, from: start, to: end, duration: InsulinMath.longestInsulinActivityDuration, delta: delta) else {
             return []
         }
 

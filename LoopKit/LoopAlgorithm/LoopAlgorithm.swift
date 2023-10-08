@@ -71,22 +71,19 @@ public actor LoopAlgorithm {
 
         let start = startDate ?? latestGlucose.startDate
 
-        let settings = input.settings
-
         if let doseStart = input.doses.first?.startDate {
-            assert(!input.settings.basal.isEmpty, "Missing basal history input.")
-            let basalStart = input.settings.basal.first!.startDate
+            assert(!input.basal.isEmpty, "Missing basal history input.")
+            let basalStart = input.basal.first!.startDate
             precondition(basalStart <= doseStart, "Basal history must cover historic dose range. First dose date: \(doseStart) > \(basalStart)")
         }
 
         // Overlay basal history on basal doses, splitting doses to get amount delivered relative to basal
-        let annotatedDoses = input.doses.annotated(with: input.settings.basal)
+        let annotatedDoses = input.doses.annotated(with: input.basal)
 
         let insulinEffects = annotatedDoses.glucoseEffects(
             insulinModelProvider: insulinModelProvider,
-            longestEffectDuration: settings.insulinActivityDuration,
-            insulinSensitivityHistory: settings.sensitivity,
-            from: start.addingTimeInterval(-CarbMath.maximumAbsorptionTimeInterval).dateFlooredToTimeInterval(settings.delta),
+            insulinSensitivityHistory: input.sensitivity,
+            from: start.addingTimeInterval(-CarbMath.maximumAbsorptionTimeInterval).dateFlooredToTimeInterval(GlucoseMath.defaultDelta),
             to: nil)
 
         // ICE
@@ -95,12 +92,12 @@ public actor LoopAlgorithm {
         // Carb Effects
         let carbEffects = input.carbEntries.map(
             to: insulinCounteractionEffects,
-            carbRatio: settings.carbRatio,
-            insulinSensitivity: settings.sensitivity
+            carbRatio: input.carbRatio,
+            insulinSensitivity: input.sensitivity
         ).dynamicGlucoseEffects(
             from: start.addingTimeInterval(-IntegralRetrospectiveCorrection.retrospectionInterval),
-            carbRatios: settings.carbRatio,
-            insulinSensitivities: settings.sensitivity
+            carbRatios: input.carbRatio,
+            insulinSensitivities: input.sensitivity
         )
 
         // RC
@@ -109,7 +106,7 @@ public actor LoopAlgorithm {
 
         let rc: RetrospectiveCorrection
 
-        if input.settings.useIntegralRetrospectiveCorrection {
+        if input.useIntegralRetrospectiveCorrection {
             rc = IntegralRetrospectiveCorrection(effectDuration: LoopMath.retrospectiveCorrectionEffectDuration)
         } else {
             rc = StandardRetrospectiveCorrection(effectDuration: LoopMath.retrospectiveCorrectionEffectDuration)
@@ -124,21 +121,21 @@ public actor LoopAlgorithm {
 
         var effects = [[GlucoseEffect]]()
 
-        if settings.algorithmEffectsOptions.contains(.carbs) {
+        if input.algorithmEffectsOptions.contains(.carbs) {
             effects.append(carbEffects)
         }
 
-        if settings.algorithmEffectsOptions.contains(.insulin) {
+        if input.algorithmEffectsOptions.contains(.insulin) {
             effects.append(insulinEffects)
         }
 
-        if settings.algorithmEffectsOptions.contains(.retrospection) {
+        if input.algorithmEffectsOptions.contains(.retrospection) {
             effects.append(rcEffect)
         }
 
         // Glucose Momentum
         let momentumEffects: [GlucoseEffect]
-        if settings.algorithmEffectsOptions.contains(.momentum) {
+        if input.algorithmEffectsOptions.contains(.momentum) {
             let momentumInputData = input.glucoseHistory.filterDateRange(start.addingTimeInterval(-GlucoseMath.momentumDataInterval), start)
             momentumEffects = momentumInputData.linearMomentumEffect()
         } else {
@@ -166,21 +163,26 @@ public actor LoopAlgorithm {
         )
     }
 
-    // Computes an amount of insulin to correct
-    public static func insulinCorrection(for input: LoopAlgorithmInput) throws -> InsulinCorrection {
-        let prediction = try generatePrediction(input: input.predictionInput, startDate: input.predictionDate)
-
-        let insulinModel = insulinModelProvider.model(for: input.insulinType)
+    // Computes an amount of insulin to correct the given prediction
+    public static func insulinCorrection(
+        prediction: LoopPrediction,
+        at deliveryDate: Date,
+        target: GlucoseRangeTimeline,
+        suspendThreshold: GlucoseThreshold,
+        sensitivity: [AbsoluteScheduleValue<HKQuantity>],
+        insulinType: InsulinType
+    ) throws -> InsulinCorrection {
+        let insulinModel = insulinModelProvider.model(for: insulinType)
 
         return prediction.glucose.insulinCorrection(
-            to: input.predictionInput.settings.target,
-            at: input.predictionDate,
-            suspendThreshold: input.predictionInput.settings.suspendThreshold.quantity,
-            insulinSensitivity: input.predictionInput.settings.sensitivity,
+            to: target,
+            at: deliveryDate,
+            suspendThreshold: suspendThreshold.quantity,
+            insulinSensitivity: sensitivity,
             model: insulinModel)
     }
 
-
+    
 }
 
 
