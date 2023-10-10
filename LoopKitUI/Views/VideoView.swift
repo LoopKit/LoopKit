@@ -30,6 +30,8 @@ public struct VideoView: View {
         }
         
         func destroy() {
+            player?.pause()
+            
             if let prevCategory = prevCategory {
                 try? AVAudioSession.sharedInstance().setCategory(prevCategory)
             }
