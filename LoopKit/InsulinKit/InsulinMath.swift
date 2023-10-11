@@ -581,7 +581,7 @@ extension Collection where Element == DoseEntry {
         longestEffectDuration: TimeInterval = InsulinMath.defaultInsulinActivityDuration,
         from start: Date? = nil,
         to end: Date? = nil,
-        delta: TimeInterval = TimeInterval(5*60)
+        delta: TimeInterval = GlucoseMath.defaultDelta
     ) -> [InsulinValue] {
         guard let (start, end) = LoopMath.simulationDateRangeForSamples(self, from: start, to: end, duration: longestEffectDuration, delta: delta) else {
             return []
@@ -601,6 +601,27 @@ extension Collection where Element == DoseEntry {
 
         return values
     }
+
+    /**
+     Calculates insulin remaining at a given point in time for a collection of doses
+
+     - parameter insulinModelProvider:  A factory that can provide an insulin model given an insulin type
+     - parameter date:                  The date at which to calculate remaining insulin.  If nil, current date is used.
+
+     - returns: A sequence of insulin amount remaining
+     */
+    public func insulinOnBoard(
+        insulinModelProvider: InsulinModelProvider = PresetInsulinModelProvider(defaultRapidActingModel: nil),
+        at date: Date? = nil
+    ) -> Double {
+
+        let date = date ?? Date()
+
+        return reduce(0) { (value, dose) -> Double in
+            return value + dose.insulinOnBoard(at: date, model: insulinModelProvider.model(for: dose.insulinType), delta: GlucoseMath.defaultDelta)
+        }
+    }
+
 
     /// Calculates the timeline of glucose effects for a collection of doses. The ISF used for a given dose is based on the ISF in effect at the dose start time.
     ///

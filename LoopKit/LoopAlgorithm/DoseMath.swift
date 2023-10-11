@@ -29,8 +29,6 @@ extension InsulinCorrection {
         }
     }
 
-
-
     /// Determines the temp basal over `duration` needed to perform the correction.
     ///
     /// - Parameters:
@@ -39,7 +37,7 @@ extension InsulinCorrection {
     ///   - duration: The duration of the temporary basal
     ///   - rateRounder: The smallest fraction of a unit supported in basal delivery
     /// - Returns: A temp basal recommendation
-    fileprivate func asTempBasal(
+    public func asTempBasal(
         scheduledBasalRate: Double,
         maxBasalRate: Double,
         duration: TimeInterval,
@@ -87,7 +85,7 @@ extension InsulinCorrection {
     ///   - pendingInsulin: The number of units expected to be delivered, but not yet reflected in the correction
     ///   - maxBolus: The maximum allowable bolus value in units
     /// - Returns: A bolus recommendation
-    fileprivate func asManualBolus(maxBolus: Double) -> ManualBolusRecommendation {
+    public func asManualBolus(maxBolus: Double) -> ManualBolusRecommendation {
         return ManualBolusRecommendation(
             amount: Swift.min(maxBolus, Swift.max(0, units)),
             notice: bolusRecommendationNotice
@@ -101,7 +99,7 @@ extension InsulinCorrection {
     ///   - maxBolus: The maximum allowable bolus value in units
     ///   - volumeRounder: Method to round computed dose to deliverable volume
     /// - Returns: A bolus recommendation
-    fileprivate func asPartialBolus(
+    public func asPartialBolus(
         partialApplicationFactor: Double,
         maxBolusUnits: Double,
         volumeRounder: ((Double) -> Double)?
@@ -134,7 +132,7 @@ extension TempBasalRecommendation {
     ///                                    If `false` and the recommendation matches `scheduledBasalRate`, the temp will be recommended
     ///                                    at the scheduled basal rate rather than recommending no temp.
     /// - Returns: A temp basal recommendation
-    func ifNecessary(
+    public func ifNecessary(
         at date: Date,
         scheduledBasalRate: Double,
         lastTempBasal: DoseEntry?,
@@ -448,6 +446,7 @@ extension Collection where Element: GlucoseValue {
         )
     }
 
+
     @available(*, deprecated, message: "Being replaced by method using timelines for correction range, suspend threshold, and sensitivity")
     /// Recommends a dose suitable for automatic enactment. Uses boluses for high corrections, and temp basals for low corrections.
     ///
@@ -584,7 +583,7 @@ extension Collection where Element: GlucoseValue {
     ///   - correctionRange: The timeline of correction ranges
     ///   - date: The date at which the bolus would apply, defaults to now
     ///   - suspendThreshold: A glucose value causing a recommendation of no insulin if any prediction falls below
-    ///   - insulinSensitivityTimeline: The timeline of insulin sensitivities
+    ///   - insulinSensitivity: The timeline of insulin sensitivities
     ///   - model: The insulin absorption model to be used for the recommended dose
     ///   - pendingInsulin: The number of units expected to be delivered, but not yet reflected in the correction
     ///   - maxBolus: The maximum bolus to return

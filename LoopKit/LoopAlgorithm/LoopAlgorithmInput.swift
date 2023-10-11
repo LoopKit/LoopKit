@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import HealthKit
 
 public enum DoseRecommendationType: String {
     case manualBolus
@@ -15,7 +16,19 @@ public enum DoseRecommendationType: String {
 }
 
 public struct LoopAlgorithmInput {
-    public var predictionInput: LoopPredictionInput
-    public var predictionDate: Date
-    public var insulinType: InsulinType
+    public var predictionStart: Date
+    public var glucoseHistory: [StoredGlucoseSample]
+    public var doses: [DoseEntry]
+    public var carbEntries: [StoredCarbEntry]
+    public var basal: [AbsoluteScheduleValue<Double>]
+    public var sensitivity: [AbsoluteScheduleValue<HKQuantity>]
+    public var carbRatio: [AbsoluteScheduleValue<Double>]
+    public var target: GlucoseRangeTimeline
+    public var suspendThreshold: GlucoseThreshold
+    public var maxBolus: Double
+    public var maxBasalRate: Double
+    public var algorithmEffectsOptions: AlgorithmEffectsOptions
+    public var useIntegralRetrospectiveCorrection: Bool = false
+    public var recommendedDoseInsulinType: InsulinType
+    public var recommendationType: DoseRecommendationType = .automaticBolus
 }

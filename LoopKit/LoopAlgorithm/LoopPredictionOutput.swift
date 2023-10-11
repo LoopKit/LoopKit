@@ -9,12 +9,12 @@
 import Foundation
 
 
-public struct LoopAlgorithmOutput {
+public struct LoopPredictionOutput {
     public var predictedGlucose: [PredictedGlucoseValue]
     public var doseRecommendation: AutomaticDoseRecommendation
 }
 
-extension LoopAlgorithmOutput: Codable {
+extension LoopPredictionOutput: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -34,7 +34,7 @@ extension LoopAlgorithmOutput: Codable {
     }
 }
 
-extension LoopAlgorithmOutput {
+extension LoopPredictionOutput {
 
     public func printFixture() {
         let encoder = JSONEncoder()
