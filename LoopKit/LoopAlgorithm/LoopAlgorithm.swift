@@ -197,6 +197,19 @@ public struct LoopAlgorithm {
         )
     }
 
+    // Helper to generate prediction with LoopPredictionInput struct
+    public static func generatePrediction(input: LoopPredictionInput) -> LoopPrediction {
+        return generatePrediction(
+            glucoseHistory: input.glucoseHistory,
+            doses: input.doses,
+            carbEntries: input.carbEntries,
+            basal: input.basal,
+            sensitivity: input.sensitivity,
+            carbRatio: input.carbRatio,
+            algorithmEffectsOptions: input.algorithmEffectsOptions,
+            useIntegralRetrospectiveCorrection: input.useIntegralRetrospectiveCorrection)
+    }
+
     // Computes an amount of insulin to correct the given prediction
     public static func insulinCorrection(
         prediction: LoopPrediction,
