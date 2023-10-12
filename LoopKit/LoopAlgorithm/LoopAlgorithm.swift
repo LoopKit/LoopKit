@@ -358,7 +358,7 @@ public struct LoopAlgorithm {
             target: input.target,
             suspendThreshold: input.suspendThreshold,
             sensitivity: input.sensitivity,
-            insulinType: input.recommendedDoseInsulinType)
+            insulinType: input.recommendationInsulinType)
 
         let dosesForIOB = input.doses.filterDateRange (nil, input.predictionStart)
         let activeInsulin = dosesForIOB.insulinOnBoard(insulinModelProvider: insulinModelProvider, at: input.predictionStart)
