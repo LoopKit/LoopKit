@@ -13,6 +13,7 @@ public enum AlgorithmError: Error {
     case missingGlucose
     case glucoseTooOld
     case basalTimelineIncomplete
+    case missingSuspendThreshold
 }
 
 public struct LoopAlgorithmEffects {
@@ -41,16 +42,6 @@ public struct AlgorithmEffectsOptions: OptionSet {
 public struct LoopPrediction {
     public var glucose: [PredictedGlucoseValue]
     public var effects: LoopAlgorithmEffects
-}
-
-public struct DoseRecommendation: Equatable {
-    public let basalAdjustment: TempBasalRecommendation?
-    public let bolusUnits: Double?
-
-    public init(basalAdjustment: TempBasalRecommendation?, bolusUnits: Double? = nil) {
-        self.basalAdjustment = basalAdjustment
-        self.bolusUnits = bolusUnits
-    }
 }
 
 public struct LoopAlgorithm {
@@ -215,7 +206,7 @@ public struct LoopAlgorithm {
         prediction: LoopPrediction,
         at deliveryDate: Date,
         target: GlucoseRangeTimeline,
-        suspendThreshold: GlucoseThreshold,
+        suspendThreshold: HKQuantity,
         sensitivity: [AbsoluteScheduleValue<HKQuantity>],
         insulinType: InsulinType
     ) -> InsulinCorrection {
@@ -224,7 +215,7 @@ public struct LoopAlgorithm {
         return prediction.glucose.insulinCorrection(
             to: target,
             at: deliveryDate,
-            suspendThreshold: suspendThreshold.quantity,
+            suspendThreshold: suspendThreshold,
             insulinSensitivity: sensitivity,
             model: insulinModel)
     }
@@ -342,7 +333,11 @@ public struct LoopAlgorithm {
         return bolus
     }
 
-    static func run(input: LoopAlgorithmInput) throws -> LoopAlgorithmOutput {
+    public static func recommendDose(input: LoopAlgorithmInput) throws -> LoopAlgorithmDoseRecommendation {
+        return try run(input: input).doseRecommendation
+    }
+
+    public static func run(input: LoopAlgorithmInput) throws -> LoopAlgorithmOutput {
 
         guard let latestGlucose = input.glucoseHistory.last else {
             throw AlgorithmError.missingGlucose
@@ -365,16 +360,20 @@ public struct LoopAlgorithm {
             sensitivity: input.sensitivity,
             carbRatio: input.carbRatio)
 
+        guard let suspendThreshold = input.suspendThreshold ?? input.target.closestPrior(to: input.predictionStart)?.value.lowerBound else {
+            throw AlgorithmError.missingSuspendThreshold
+        }
+
         let correction = insulinCorrection(
             prediction: prediction,
             at: input.predictionStart,
             target: input.target,
-            suspendThreshold: input.suspendThreshold,
+            suspendThreshold: suspendThreshold,
             sensitivity: input.sensitivity,
             insulinType: input.recommendationInsulinType)
 
-        let dosesForIOB = input.doses.filterDateRange (nil, input.predictionStart)
-        let activeInsulin = dosesForIOB.insulinOnBoard(insulinModelProvider: insulinModelProvider, at: input.predictionStart)
+        let activeDoses = input.doses.filterDateRange (nil, input.predictionStart)
+        let activeInsulin = activeDoses.insulinOnBoard(insulinModelProvider: insulinModelProvider, at: input.predictionStart)
 
 
         // Round to 0.05 values for now; maybe eventually precision can be specified in input struct/file
@@ -385,6 +384,8 @@ public struct LoopAlgorithm {
 
         let lastTempBasal = input.doses.first { $0.type == .tempBasal && $0.startDate < input.predictionStart && $0.endDate > input.predictionStart }
 
+        let doseRecommendation: LoopAlgorithmDoseRecommendation
+
         switch input.recommendationType {
         case .manualBolus:
             let recommendation = recommendManualBolus(
@@ -392,7 +393,7 @@ public struct LoopAlgorithm {
                 maxBolus: input.maxBolus,
                 currentGlucose: latestGlucose, 
                 target: input.target)
-            return .manualBolus(recommendation)
+            doseRecommendation = .manualBolus(recommendation)
         case .automaticBolus:
             let recommendation = recommendAutomaticDose(
                 for: correction,
@@ -405,9 +406,8 @@ public struct LoopAlgorithm {
                 volumeRounder: deliveryRounder,
                 lastTempBasal: lastTempBasal,
                 overrideIsActive: false)
-            return .automaticBolus(recommendation)
+            doseRecommendation = .automaticBolus(recommendation)
         case .tempBasal:
-
             let recommendation = recommendTempBasal(
                 for: correction,
                 at: input.predictionStart,
@@ -418,9 +418,14 @@ public struct LoopAlgorithm {
                 rateRounder: deliveryRounder,
                 lastTempBasal: lastTempBasal,
                 overrideIsActive: false)
-
-            return .tempBasal(recommendation)
+            doseRecommendation = .tempBasal(recommendation)
         }
+
+        return LoopAlgorithmOutput(
+            doseRecommendation: doseRecommendation,
+            predictedGlucose: prediction.glucose,
+            effects: prediction.effects,
+            activeInsulin: activeInsulin)
     }
 }
 

@@ -23,12 +23,44 @@ public struct LoopAlgorithmInput {
     public var sensitivity: [AbsoluteScheduleValue<HKQuantity>]
     public var carbRatio: [AbsoluteScheduleValue<Double>]
     public var target: GlucoseRangeTimeline
-    public var suspendThreshold: GlucoseThreshold
+    public var suspendThreshold: HKQuantity?
     public var maxBolus: Double
     public var maxBasalRate: Double
     public var useIntegralRetrospectiveCorrection: Bool = false
     public var recommendationInsulinType: InsulinType = .novolog
     public var recommendationType: DoseRecommendationType = .automaticBolus
+
+    public init(
+        predictionStart: Date,
+        glucoseHistory: [StoredGlucoseSample],
+        doses: [DoseEntry],
+        carbEntries: [StoredCarbEntry],
+        basal: [AbsoluteScheduleValue<Double>],
+        sensitivity: [AbsoluteScheduleValue<HKQuantity>],
+        carbRatio: [AbsoluteScheduleValue<Double>],
+        target: GlucoseRangeTimeline,
+        suspendThreshold: HKQuantity?,
+        maxBolus: Double,
+        maxBasalRate: Double,
+        useIntegralRetrospectiveCorrection: Bool,
+        recommendationInsulinType: InsulinType,
+        recommendationType: DoseRecommendationType)
+    {
+        self.predictionStart = predictionStart
+        self.glucoseHistory = glucoseHistory
+        self.doses = doses
+        self.carbEntries = carbEntries
+        self.basal = basal
+        self.sensitivity = sensitivity
+        self.carbRatio = carbRatio
+        self.target = target
+        self.suspendThreshold = suspendThreshold
+        self.maxBolus = maxBolus
+        self.maxBasalRate = maxBasalRate
+        self.useIntegralRetrospectiveCorrection = useIntegralRetrospectiveCorrection
+        self.recommendationInsulinType = recommendationInsulinType
+        self.recommendationType = recommendationType
+    }
 }
 
 extension LoopAlgorithmInput: Codable {
@@ -50,7 +82,9 @@ extension LoopAlgorithmInput: Codable {
             let range = ClosedRange(uncheckedBounds: (lower: lower, upper: upper))
             return AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: range)
         }
-        self.suspendThreshold = try container.decode(GlucoseThreshold.self, forKey: .suspendThreshold)
+        if let suspendThresholdMgdl = try container.decodeIfPresent(Double.self, forKey: .suspendThreshold) {
+            self.suspendThreshold = HKQuantity(unit: .milligramsPerDeciliter, doubleValue: suspendThresholdMgdl)
+        }
         self.maxBolus = try container.decode(Double.self, forKey: .maxBolus)
         self.maxBasalRate = try container.decode(Double.self, forKey: .maxBasalRate)
         self.useIntegralRetrospectiveCorrection = try container.decodeIfPresent(Bool.self, forKey: .useIntegralRetrospectiveCorrection) ?? false
@@ -92,7 +126,7 @@ extension LoopAlgorithmInput: Codable {
             return AbsoluteScheduleValue(startDate: $0.startDate, endDate: $0.endDate, value: range)
         }
         try container.encode(targetMgdl, forKey: .target)
-        try container.encode(suspendThreshold, forKey: .suspendThreshold)
+        try container.encode(suspendThreshold?.doubleValue(for: .milligramsPerDeciliter), forKey: .suspendThreshold)
         try container.encode(maxBolus, forKey: .maxBolus)
         try container.encode(maxBasalRate, forKey: .maxBasalRate)
         if useIntegralRetrospectiveCorrection {
@@ -157,6 +191,49 @@ extension InsulinType {
             self = .lyumjev
         default:
             return nil
+        }
+    }
+}
+
+
+extension LoopAlgorithmInput {
+
+    var simplifiedForFixture: LoopAlgorithmInput {
+        return LoopAlgorithmInput(
+            predictionStart: predictionStart,
+            glucoseHistory: glucoseHistory.map {
+                return StoredGlucoseSample(
+                    startDate: $0.startDate,
+                    quantity: $0.quantity,
+                    isDisplayOnly: $0.isDisplayOnly)
+            },
+            doses: doses.map {
+                DoseEntry(type: $0.type, startDate: $0.startDate, endDate: $0.endDate, value: $0.value, unit: $0.unit)
+            },
+            carbEntries: carbEntries.map {
+                StoredCarbEntry(startDate: $0.startDate, quantity: $0.quantity, absorptionTime: $0.absorptionTime)
+            },
+            basal: basal,
+            sensitivity: sensitivity,
+            carbRatio: carbRatio,
+            target: target,
+            suspendThreshold: suspendThreshold,
+            maxBolus: maxBolus,
+            maxBasalRate: maxBasalRate,
+            useIntegralRetrospectiveCorrection: useIntegralRetrospectiveCorrection,
+            recommendationInsulinType: recommendationInsulinType,
+            recommendationType: recommendationType
+        )
+    }
+
+    public func printFixture() {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        encoder.dateEncodingStrategy = .iso8601
+        if let data = try? encoder.encode(self.simplifiedForFixture),
+           let json = String(data: data, encoding: .utf8)
+        {
+            print(json)
         }
     }
 }
