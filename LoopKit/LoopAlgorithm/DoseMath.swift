@@ -324,8 +324,6 @@ extension Collection where Element: GlucoseValue {
                 continue
             }
 
-            print("CorrectionUnits at \(prediction.startDate) = \(correctionUnits)")
-
             // Update the correction only if we've found a new minimum
             guard minCorrectionUnits == nil || correctionUnits < minCorrectionUnits! else {
                 continue
