@@ -14,6 +14,7 @@ public enum AlgorithmError: Error {
     case glucoseTooOld
     case basalTimelineIncomplete
     case missingSuspendThreshold
+    case sensitivityTimelineIncomplete
 }
 
 public struct LoopAlgorithmEffects {
@@ -349,6 +350,12 @@ public struct LoopAlgorithm {
 
         guard let scheduledBasalRate = input.basal.closestPrior(to: input.predictionStart)?.value else {
             throw AlgorithmError.basalTimelineIncomplete
+        }
+
+        let forecastEnd = input.predictionStart.addingTimeInterval(InsulinMath.defaultInsulinActivityDuration)
+
+        guard let sensitivityEndDate = input.sensitivity.last?.endDate, sensitivityEndDate >= forecastEnd else {
+            throw AlgorithmError.sensitivityTimelineIncomplete
         }
 
         let prediction = generatePrediction(

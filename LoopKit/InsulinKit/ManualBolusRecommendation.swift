@@ -91,6 +91,10 @@ public struct ManualBolusRecommendation {
     public var amount: Double
     public var notice: BolusRecommendationNotice?
 
+    public var quantity: HKQuantity {
+        return HKQuantity(unit: .internationalUnit(), doubleValue: amount)
+    }
+
     public init(amount: Double, notice: BolusRecommendationNotice? = nil) {
         self.amount = amount
         self.notice = notice

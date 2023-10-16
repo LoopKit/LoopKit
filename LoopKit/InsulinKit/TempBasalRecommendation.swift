@@ -7,10 +7,15 @@
 //
 
 import Foundation
+import HealthKit
 
 public struct TempBasalRecommendation: Equatable {
     public let unitsPerHour: Double
     public let duration: TimeInterval
+
+    public var rateQuantity: HKQuantity {
+        return HKQuantity(unit: .internationalUnitsPerHour, doubleValue: unitsPerHour)
+    }
 
     /// A special command which cancels any existing temp basals
     public static var cancel: TempBasalRecommendation {
