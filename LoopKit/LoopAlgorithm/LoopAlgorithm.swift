@@ -400,7 +400,7 @@ public struct LoopAlgorithm {
                 maxBolus: input.maxBolus,
                 currentGlucose: latestGlucose, 
                 target: input.target)
-            doseRecommendation = .manualBolus(recommendation)
+            doseRecommendation = LoopAlgorithmDoseRecommendation(manualBolus: recommendation)
         case .automaticBolus:
             let recommendation = recommendAutomaticDose(
                 for: correction,
@@ -413,7 +413,7 @@ public struct LoopAlgorithm {
                 volumeRounder: deliveryRounder,
                 lastTempBasal: lastTempBasal,
                 overrideIsActive: false)
-            doseRecommendation = .automaticBolus(recommendation)
+            doseRecommendation = LoopAlgorithmDoseRecommendation(automaticBolus: recommendation)
         case .tempBasal:
             let recommendation = recommendTempBasal(
                 for: correction,
@@ -425,7 +425,7 @@ public struct LoopAlgorithm {
                 rateRounder: deliveryRounder,
                 lastTempBasal: lastTempBasal,
                 overrideIsActive: false)
-            doseRecommendation = .tempBasal(recommendation)
+            doseRecommendation = LoopAlgorithmDoseRecommendation(tempBasal: recommendation)
         }
 
         return LoopAlgorithmOutput(
